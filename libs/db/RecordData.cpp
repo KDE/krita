@@ -34,7 +34,7 @@ QString RecordData::debugString() const
     int i = 0;
     foreach(const QVariant& value, *this) {
         i++;
-        s.append(QString::number(i) + ":[" + value.typeName() + "]" + value.toString() + " ");
+        s.append(QString::number(i) + ":[" + value.typeName() + ']' + value.toString() + ' ');
     }
     return s;
 }

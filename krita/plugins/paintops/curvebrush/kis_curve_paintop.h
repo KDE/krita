@@ -37,7 +37,7 @@ public:
     KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisCurvePaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:

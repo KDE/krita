@@ -23,8 +23,6 @@
 #include <qtest_kde.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSpace.h>
-
 
 #include "kis_image_view_converter.h"
 #include "kis_paint_device.h"

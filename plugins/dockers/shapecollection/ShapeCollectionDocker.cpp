@@ -434,7 +434,7 @@ void ShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu)
     } else {
         QAction* action = menu->addAction(QIcon(dir.absoluteFilePath(icon)), name, this, SLOT(loadCollection()));
         action->setIconText(name);
-        action->setData(type + ':' + path + QDir::separator());
+        action->setData(QVariant(type + ':' + path + QDir::separator()));
         action->setEnabled(!m_modelMap.contains(action->data().toString()));
     }
 }

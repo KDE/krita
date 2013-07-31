@@ -61,7 +61,7 @@ public:
      * Only meaningful if mode is Write, and if backend!=Directory.
      */
     static KoStore *createStore(const QString &fileName, Mode mode,
-                                const QByteArray &appIdentification = "", Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
 
     /**
      * Create a store for any kind of QIODevice: file, memory buffer...
@@ -69,7 +69,7 @@ public:
      * This method doesn't support the Directory store!
      */
     static KoStore *createStore(QIODevice *device, Mode mode,
-                                const QByteArray &appIdentification = "", Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
 
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).
@@ -91,7 +91,7 @@ public:
      * @bug saving not completely implemented (fixed temporary file)
      */
     static KoStore *createStore(QWidget *window, const KUrl &url, Mode mode,
-                                const QByteArray &appIdentification = "", Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)

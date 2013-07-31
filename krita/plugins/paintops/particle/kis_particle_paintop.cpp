@@ -61,9 +61,9 @@ KisParticlePaintOp::~KisParticlePaintOp()
 {
 }
 
-qreal KisParticlePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info).spacing;
+    return paintLine(info, info, KisDistanceInformation()).spacing();
 }
 
 
@@ -91,6 +91,5 @@ KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc,m_dab);
 
-    QPointF diff = pi2.pos() - pi1.pos();
-    return KisDistanceInformation(0, sqrt( diff.x()*diff.x() + diff.y()*diff.y() ));
+    return KisDistanceInformation();
 }

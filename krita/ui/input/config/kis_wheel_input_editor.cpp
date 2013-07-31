@@ -24,6 +24,8 @@
 #include <QWidgetAction>
 #include <QTimer>
 
+#include "KoIcon.h"
+
 class KisWheelInputEditor::Private
 {
 public:
@@ -40,6 +42,9 @@ KisWheelInputEditor::KisWheelInputEditor(QWidget *parent)
     d->ui = new Ui::KisWheelInputEditor;
     d->ui->setupUi(popup);
     d->ui->wheelButton->setType(KisInputButton::WheelType);
+
+    d->ui->clearModifiersButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
+    d->ui->clearWheelButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

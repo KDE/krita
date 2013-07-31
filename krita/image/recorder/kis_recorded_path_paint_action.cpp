@@ -127,7 +127,8 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
         switch(slice.type)
         {
             case Private::BezierCurveSlice::Point:
-                savedDist = KisDistanceInformation(0, painter->paintAt(slice.point1));
+                savedDist = KisDistanceInformation();
+                painter->paintAt(slice.point1);
                 break;
             case Private::BezierCurveSlice::Line:
                 savedDist = painter->paintLine(slice.point1, slice.point2, savedDist);

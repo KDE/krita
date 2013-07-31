@@ -93,9 +93,7 @@ void yyerror(const char *str)
             || otherError)
     {
         KexiDBDbg << parser->statement();
-        QString ptrline = "";
-        for (int i = 0; i < current; ++i)
-            ptrline += " ";
+        QString ptrline(current, QLatin1Char(' '));
 
         ptrline += "^";
 

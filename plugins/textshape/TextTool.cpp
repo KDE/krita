@@ -647,6 +647,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
     shapeMatrix.scale(zoomX, zoomY);
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
+    shapeMatrix.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
 
     // Possibly draw table dragging visual cues
     const qreal boxHeight = 20;
@@ -1212,6 +1213,7 @@ KoPointedAt TextTool::hitTest(const QPointF & point) const
     }
     QPointF p = m_textShape->convertScreenPos(point);
     KoTextLayoutRootArea *rootArea = m_textShapeData->rootArea();
+    p -= QPointF(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     return rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : KoPointedAt();
 }
 
@@ -1688,7 +1690,8 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
-        rect.moveTop(rect.top() - m_textShapeData->documentOffset());
+        rect.moveTop(rect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+        rect.moveLeft(rect.left() + m_textShapeData->leftPadding());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
@@ -1775,7 +1778,8 @@ void TextTool::ensureCursorVisible(bool moveView)
         m_delayedEnsureVisible = true;
         return; // we shouldn't move to an obsolete position
     }
-    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
+    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+    cRect.moveLeft(cRect.left() + m_textShapeData->leftPadding());
     canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
 }
 
@@ -1976,7 +1980,8 @@ void TextTool::repaintCaret()
 
     bool upToDate;
     QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
-    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
+    repaintRect.moveLeft(repaintRect.left() + m_textShapeData->leftPadding());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 

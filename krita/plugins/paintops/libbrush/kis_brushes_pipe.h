@@ -61,14 +61,14 @@ public:
         return chooseNextBrush(info);
     }
 
-    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const {
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskWidth(scale, angle, info) : 0;
+        return brush ? brush->maskWidth(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
-    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const {
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskHeight(scale, angle, info) : 0;
+        return brush ? brush->maskHeight(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
     void setAngle(qreal angle) {

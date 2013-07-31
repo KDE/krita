@@ -129,7 +129,7 @@ private:
  *
  * @see KoXmlStreamReader
  */
-class KoXmlStreamAttribute
+class KOODF_EXPORT KoXmlStreamAttribute
 {
     friend class QVector<KoXmlStreamAttribute>;       // For the default constructor
     friend class KoXmlStreamAttributes;               // For the normal constructor
@@ -173,7 +173,7 @@ class KoXmlStreamAttribute
  *
  * @see KoXmlStreamReader
  */
-class KoXmlStreamAttributes
+class KOODF_EXPORT KoXmlStreamAttributes
 {
     friend class KoXmlStreamReader;
 
@@ -216,7 +216,7 @@ class KoXmlStreamAttributes
 };
 
 
-void prepareForOdf(KoXmlStreamReader &reader);
+void KOODF_EXPORT prepareForOdf(KoXmlStreamReader &reader);
 
 
 #endif /* KOGENCHANGES_H */

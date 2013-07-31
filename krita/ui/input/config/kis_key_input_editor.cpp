@@ -23,6 +23,8 @@
 #include <QMenu>
 #include <QTimer>
 
+#include "KoIcon.h"
+
 #include "ui_kis_key_input_editor.h"
 
 class KisKeyInputEditor::Private
@@ -40,6 +42,8 @@ KisKeyInputEditor::KisKeyInputEditor(QWidget *parent)
 
     d->ui = new Ui::KisKeyInputEditor;
     d->ui->setupUi(popup);
+
+    d->ui->clearKeysButton->setIcon(koIcon("edit-clear-locationbar-rtl"));
 
     QWidgetAction *action = new QWidgetAction(this);
     action->setDefaultWidget(popup);

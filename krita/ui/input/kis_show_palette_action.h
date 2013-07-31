@@ -32,6 +32,8 @@ public:
     explicit KisShowPaletteAction();
     virtual ~KisShowPaletteAction();
 
+    virtual int priority() const;
+
     virtual void begin(int, QEvent *);
 };
 

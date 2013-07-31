@@ -107,8 +107,7 @@ inline QString KoStyleStack::property(const QString &nsURI, const QString &name,
 {
     QString fullName(name);
     if (detail) {
-        fullName += '-';
-        fullName += *detail;
+        fullName += '-' + *detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
@@ -144,8 +143,7 @@ inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name,
 {
     QString fullName(name);
     if (detail) {
-        fullName += '-';
-        fullName += *detail;
+        fullName += '-' + *detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {

@@ -332,7 +332,7 @@ Value& Value::operator+=(const Value & v)
                 *d->value.variant = v1.toPointF() + v2.toPointF();
                 break;
             case QVariant::String:
-                *d->value.variant = v1.toString() + v2.toString();
+                *d->value.variant = QVariant(v1.toString() + v2.toString());
                 break;
             case QVariant::StringList:
                 *d->value.variant = v1.toStringList() + v2.toStringList();

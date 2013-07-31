@@ -46,7 +46,7 @@ KisCurvePaintOp::~KisCurvePaintOp()
     delete m_painter;
 }
 
-qreal KisCurvePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;
@@ -75,11 +75,7 @@ KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-
-    return KisDistanceInformation(0, dragVec.norm());
+    return KisDistanceInformation();
 }
 
 void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation &pi1, const KisPaintInformation &pi2) {

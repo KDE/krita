@@ -108,7 +108,7 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& transactionName = "");
+    void beginTransaction(const QString& transactionName = QString());
 
     /// Return the transaction's text message
     QString transactionText();
@@ -492,7 +492,7 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    qreal paintAt(const KisPaintInformation &pos);
+    KisSpacingInformation paintAt(const KisPaintInformation &pos);
 
     /**
      * Stroke the given QPainterPath.

@@ -267,7 +267,7 @@ QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
 {
     KoTableStyle *originalTableStyle = styleManager->tableStyle(table.format().intProperty(KoTableStyle::StyleId));
     QString generatedName;
-    QString internalName = "";
+    QString internalName;
     if (originalTableStyle)
     {
         internalName = QString(QUrl::toPercentEncoding(originalTableStyle->name(), "", " ")).replace('%', '_');
@@ -458,7 +458,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             if ((!previousFragmentLink.isEmpty()) && (charFormat.anchorHref() != previousFragmentLink || !charFormat.isAnchor())) {
                 // Close the current text:a
                 closeTagRegion();
-                previousFragmentLink = "";
+                previousFragmentLink.clear();
             }
 
             if (charFormat.isAnchor() && charFormat.anchorHref() != previousFragmentLink) {

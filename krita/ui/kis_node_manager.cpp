@@ -784,12 +784,21 @@ void KisNodeManager::saveNodeAsImage()
 
     d.prepareForImport();
 
-    KisImageWSP dst = new KisImage(d.createUndoStore(), savedRect.width(), savedRect.height(), node->paintDevice()->compositionSourceColorSpace(), node->name());
+    KisPaintDeviceSP device = node->paintDevice();
+    if (!device) {
+        device = node->projection();
+    }
+
+    KisImageSP dst = new KisImage(d.createUndoStore(),
+                                  savedRect.width(),
+                                  savedRect.height(),
+                                  device->compositionSourceColorSpace(),
+                                  node->name());
     dst->setResolution(image->xRes(), image->yRes());
     d.setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", node->opacity());
     KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), node->paintDevice(), savedRect);
+    gc.bitBlt(QPoint(0, 0), device, savedRect);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
     dst->initialRefreshGraph();

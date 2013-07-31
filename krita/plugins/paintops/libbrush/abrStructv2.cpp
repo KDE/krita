@@ -184,10 +184,9 @@ static QString p_enum(QDataStream &buf){
 
 static quint32 parseEntry(QDataStream &buf){
     quint32 nlen;
-    
-    QString value = "";
-    
-    
+
+    QString value;
+
     buf >> nlen;
     if (nlen == 0){
         nlen = 4;

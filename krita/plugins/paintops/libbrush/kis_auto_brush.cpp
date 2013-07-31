@@ -169,8 +169,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     quint32 pixelSize = cs->pixelSize();
 
     // mask dimension methods already includes KisBrush::angle()
-    int dstWidth = maskWidth(scaleX, angle, info);
-    int dstHeight = maskHeight(scaleY, angle, info);
+    int dstWidth = maskWidth(scaleX, angle, subPixelX, subPixelY, info);
+    int dstHeight = maskHeight(scaleY, angle, subPixelX, subPixelY, info);
 
     angle += KisBrush::angle();
 
@@ -275,8 +275,8 @@ QImage KisAutoBrush::createBrushPreview()
 {
     srand(0);
     srand48(0);
-    int width = maskWidth(1.0, 0.0, KisPaintInformation());
-    int height = maskHeight(1.0, 0.0, KisPaintInformation());
+    int width = maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
+    int height = maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
 
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 
@@ -307,7 +307,7 @@ qreal KisAutoBrush::randomness() const
 void KisAutoBrush::setImage(const QImage& image)
 {
     m_image = image;
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 
 QPainterPath KisAutoBrush::outline() const

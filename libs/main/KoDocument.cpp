@@ -1438,7 +1438,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         return false;
     }
     if (!fileInfo.isFile()) {
-        file = file += "/content.xml";
+        file += "/content.xml";
         QFileInfo fileInfo2(file);
         if (!fileInfo2.exists() || !fileInfo2.isFile()) {
             d->lastErrorMessage = i18n("%1 is not a file." , file_);

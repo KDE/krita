@@ -88,7 +88,7 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
 bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     const QString localName(element.localName());
-    QString dateFormat = "";
+    QString dateFormat;
     QString dataStyle = element.attributeNS(KoXmlNS::style, "data-style-name");
     if (!dataStyle.isEmpty()) {
         if (context.odfLoadingContext().stylesReader().dataFormats().contains(dataStyle)) {

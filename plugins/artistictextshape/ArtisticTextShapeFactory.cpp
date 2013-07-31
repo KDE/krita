@@ -38,7 +38,7 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
 KoShape *ArtisticTextShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     ArtisticTextShape * text = new ArtisticTextShape();
-    text->setBackground( new KoColorBackground( QColor( Qt::black) ) );
+    text->setBackground(QSharedPointer<KoShapeBackground>(new KoColorBackground( QColor( Qt::black))));
     text->setPlainText(i18n("Artistic Text"));
     return text;
 }

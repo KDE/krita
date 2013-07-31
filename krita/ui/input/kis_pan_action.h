@@ -43,6 +43,8 @@ public:
     explicit KisPanAction();
     virtual ~KisPanAction();
 
+    virtual int priority() const;
+
     void activate();
     void deactivate();
 

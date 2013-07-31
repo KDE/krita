@@ -114,7 +114,7 @@ void Imagesplit::slotImagesplit()
                 {
                     KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType( listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url( QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+mimeTypeSelected->mainExtension();
+                    QString fileName = dlgImagesplit->suffix()+'_'+ QString::number(k)+mimeTypeSelected->mainExtension();
                     url.addPath( fileName );
                     KUrl kurl=url.url();
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(dlgImagesplit->cmbIndex),kurl);

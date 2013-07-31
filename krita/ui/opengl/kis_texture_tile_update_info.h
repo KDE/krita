@@ -18,8 +18,6 @@
 #ifndef KIS_TEXTURE_TILE_UPDATE_INFO_H_
 #define KIS_TEXTURE_TILE_UPDATE_INFO_H_
 
-#ifdef HAVE_OPENGL
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
@@ -45,6 +43,7 @@ public:
         m_patchRect = m_tileRect & updateRect;
         m_currentImageRect = currentImageRect;
         m_patchPixels = 0;
+        m_numPixels = m_patchRect.width() * m_patchRect.height();
     }
 
     ~KisTextureTileUpdateInfo() {
@@ -52,6 +51,7 @@ public:
 
     void destroy() {
         delete[] m_patchPixels;
+        m_patchPixels = 0;
     }
 
     void retrieveData(KisImageWSP image) {
@@ -64,18 +64,23 @@ public:
 
     void convertTo(const KoColorSpace* dstCS,
                    KoColorConversionTransformation::Intent renderingIntent,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags) {
-        const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-        /**
-         * FIXME: is it possible to do an in-place conversion?
-         */
-        quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
-        // FIXME: rendering intent
-        Q_ASSERT(dstBuffer && m_patchPixels);
-        m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
-        delete[] m_patchPixels;
-        m_patchColorSpace = dstCS;
-        m_patchPixels = dstBuffer;
+                   KoColorConversionTransformation::ConversionFlags conversionFlags)
+    {
+
+        if (m_numPixels > 0) {
+            /**
+             * FIXME: is it possible to do an in-place conversion?
+             */
+            quint8* dstBuffer = dstCS->allocPixelBuffer(m_numPixels);
+
+            // FIXME: rendering intent
+            Q_ASSERT(dstBuffer);
+            Q_ASSERT(m_patchPixels);
+            m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, m_numPixels, renderingIntent, conversionFlags);
+            delete[] m_patchPixels;
+            m_patchColorSpace = dstCS;
+            m_patchPixels = dstBuffer;
+        }
     }
 
     inline quint8* data() const {
@@ -115,7 +120,12 @@ public:
         return m_patchColorSpace->pixelSize();
     }
 
+    bool valid() {
+        return m_numPixels > 0;
+    }
+
 private:
+    qint32 m_numPixels;
     qint32 m_tileCol;
     qint32 m_tileRow;
     QRect m_currentImageRect;
@@ -126,7 +136,6 @@ private:
 };
 
 
-#endif /* HAVE_OPENGL */
 
 #endif /* KIS_TEXTURE_TILE_UPDATE_INFO_H_ */
 

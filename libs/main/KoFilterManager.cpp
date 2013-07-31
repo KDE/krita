@@ -496,9 +496,7 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
 
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
-    QString key(entry->service()->name());
-    key += " - ";
-    key += entry->service()->library();
+    QString key = entry->service()->name() + " - " + entry->service()->library();
 
     if (!m_filterAvailable.contains(key)) {
         //kDebug( 30500 ) <<"Not cached, checking...";

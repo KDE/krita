@@ -117,7 +117,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     // Handle if this is the special block before a table
     bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
     if (hiddenTableHandling) {
-        // Easy solution is to go back the the end of previous block and do the insertion from there.
+        // Easy solution is to go back to the end of previous block and do the insertion from there.
         // However if there is no block before we have a problem. This may be the case if there is
         // a table before or we are at the beginning of a cell or a document.
         // So here is a better approach
@@ -695,7 +695,7 @@ void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)
     KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
 
     // Find out if we should track changes or not
-    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+//    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
 //    bool trackChanges = false;
 //    if (changeTracker && changeTracker->recordChanges()) {
 //        trackChanges = true;

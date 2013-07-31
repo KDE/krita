@@ -113,7 +113,7 @@ bool SQLiteDriver::drv_isSystemFieldName(const QString& n) const
 
 QString SQLiteDriver::escapeString(const QString& str) const
 {
-    return QString("'") + QString(str).replace('\'', "''") + "'";
+    return QLatin1Char('\'') + QString(str).replace('\'', "''") +QLatin1Char('\'');
 }
 
 QByteArray SQLiteDriver::escapeString(const QByteArray& str) const

@@ -24,6 +24,7 @@
 
 #include <QWidget>
 #include <QTime>
+#include <QSharedPointer>
 
 class QToolButton;
 class QStackedWidget;
@@ -49,7 +50,7 @@ public:
     explicit StrokeFillWidget(QWidget * parent = 0L);
     virtual ~StrokeFillWidget();
 
-    void updateWidget(KoShapeStrokeModel *stroke, KoShapeBackground *fill, int opacity,
+    void updateWidget(KoShapeStrokeModel *stroke, QSharedPointer<KoShapeBackground> fill, int opacity,
                       QColor &currentColor, int activeStyle);
 
     /// Useful when in changing circumstances like in a set of dock widgets
@@ -83,7 +84,7 @@ private:
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
 
-    static KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+    static QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
     static QBrush applyStrokeGradientStops(KoShape *shape, const QGradientStops &stops);
 
     void updateStyleButtons(int activeStyle);
@@ -99,7 +100,7 @@ private:
     QGridLayout *m_layout;
     KoSliderCombo *m_opacity;
 
-    KoColorBackground *m_lastColorFill;
+    QSharedPointer<KoColorBackground> m_lastColorFill;
 };
 
 #endif // STROKEFILLWIDGET_H

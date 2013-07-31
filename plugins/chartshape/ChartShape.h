@@ -32,7 +32,6 @@
 #include <KoFrameShape.h>
 
 // KChart
-#include "kchart_export.h"
 #include "kchart_global.h"
 #include "KoChartInterface.h"
 
@@ -94,7 +93,7 @@ QColor defaultDataSetColor(int dataSetNum);
 const char * odfCharttype(int charttype);
 
 
-class CHARTSHAPELIB_EXPORT ChartShape
+class ChartShape
     : public QObject
     , public KoChart::ChartInterface // The public interface within Calligra
     , public KoFrameShape            // For saving as a frame

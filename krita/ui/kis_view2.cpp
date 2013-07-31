@@ -123,13 +123,11 @@
 
 #include <QDebug>
 #include <QPoint>
-#include "kis_paintop_box.h"
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
-#include "kis_paintop_box.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -1113,7 +1111,7 @@ void KisView2::slotSaveIncremental()
                 ++letterCh;
                 letter = QString(QChar(letterCh));
             } else {
-                letter = "a";
+                letter = 'a';
             }
         }
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
@@ -1180,7 +1178,7 @@ void KisView2::slotSaveIncrementalBackup()
                     ++letterCh;
                     letter = QString(QChar(letterCh));
                 } else {
-                    letter = "a";
+                    letter = 'a';
                 }
             }
         } while (fileAlreadyExists && letter != "{");  // x, y, z, {...

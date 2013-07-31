@@ -177,7 +177,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
         d->activeId = id;
-        blockSignals(true);
+        d->tabBar->blockSignals(true);
         int i = 0;
         foreach (const KoToolButton &button, d->addedButtons) {
             if (button.buttonGroupId == d->activeId) {
@@ -187,7 +187,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
             }
             ++i;
         }
-        blockSignals(false);
+        d->tabBar->blockSignals(false);
         return;
     }
 }
@@ -308,7 +308,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     }
     d->iconTextFitted = true;
 
-    blockSignals(true);
+    d->tabBar->blockSignals(true);
 
     while (d->tabBar->count()) {
         d->tabBar->removeTab(0);
@@ -350,7 +350,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     if (newIndex != -1) {
         d->tabBar->setCurrentIndex(newIndex);
     }
-    blockSignals(false);
+    d->tabBar->blockSignals(false);
 
     if (!d->iconTextFitted &&  d->fittingIterations++ < 8) {
         updateShownTools(canvas, codes);

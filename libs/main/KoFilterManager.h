@@ -81,7 +81,7 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = "",
+    explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
                              KoFilterChain * const parentChain = 0);
 
     virtual ~KoFilterManager();

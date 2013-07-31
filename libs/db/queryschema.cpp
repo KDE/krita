@@ -49,7 +49,7 @@ QString QueryColumnInfo::debugString() const
 {
     QString res;
     if (field->table()) {
-        res += field->table()->name() + QLatin1String(".");
+        res += field->table()->name() + QLatin1Char('.');
     }
     res += field->debugString() +
            (alias.isEmpty() ? QString()
@@ -839,8 +839,9 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
     if (!asterisk)
         return *this;
     //make unique name
-    asterisk->m_name = (asterisk->table() ? asterisk->table()->name() + ".*" : "*")
-                       + QString::number(asterisks()->count());
+    asterisk->m_name =
+        (asterisk->table() ? asterisk->table()->name() + ".*" : QString(QLatin1Char('*')))
+        + QString::number(asterisks()->count());
     return addField(asterisk, visible);
 }
 
@@ -856,10 +857,10 @@ QString QuerySchema::debugString() const
     dbg.reserve(1024);
     //fields
     TableSchema *mt = masterTable();
-    dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
+    dbg = QString("QUERY ") + schemaDataDebugString() + '\n'
           + "-masterTable=" + (mt ? mt->name() : "<NULL>")
           + "\n-COLUMNS:\n"
-          + ((fieldCount() > 0) ? FieldList::debugString() : "<NONE>") + "\n"
+          + ((fieldCount() > 0) ? FieldList::debugString() : "<NONE>") + '\n'
           + "-FIELDS EXPANDED ";
 
     QString dbg1;
@@ -899,8 +900,8 @@ QString QuerySchema::debugString() const
         }
     }
     if (!dbg2.isEmpty()) {
-        dbg += "\n-BINDINGS:\n";
-        dbg += dbg2;
+        dbg += "\n-BINDINGS:\n" +
+               dbg2;
     }
 
     //tables
@@ -909,7 +910,7 @@ QString QuerySchema::debugString() const
     foreach(TableSchema *table, d->tables) {
         if (!table_names.isEmpty())
             table_names += ", ";
-        table_names += (QString("'") + table->name() + "'");
+        table_names += (QLatin1Char('\'') + table->name() + QLatin1Char('\''));
     }
     if (d->tables.isEmpty())
         table_names = "<NONE>";
@@ -933,7 +934,7 @@ QString QuerySchema::debugString() const
     if (d->tableAliases.isEmpty())
         aliases = "<NONE>";
     else {
-        aliases = "";
+        aliases.clear();
         int i = -1;
         foreach(TableSchema* table, d->tables) {
             i++;
@@ -1260,8 +1261,8 @@ inline QString lookupColumnKey(Field *foreignField, Field* field)
 {
     QString res;
     if (field->table()) // can be 0 for anonymous fields built as joined multiple visible columns
-        res = field->table()->name() + ".";
-    return res + field->name() + "_" + foreignField->table()->name() + "." + foreignField->name();
+        res = field->table()->name() + QLatin1Char('.');
+    return res + field->name() + QLatin1Char('_') + foreignField->table()->name() + QLatin1Char('.') + foreignField->name();
 }
 
 void QuerySchema::computeFieldsExpanded()
@@ -1707,7 +1708,7 @@ QString QuerySchema::sqlColumnsList(QueryColumnInfo::List* infolist, const Drive
     bool start = true;
     foreach(QueryColumnInfo* ci, *infolist) {
         if (!start)
-            result += ",";
+            result += ',';
         else
             start = false;
         result += KexiDB::escapeIdentifier(driver, ci->field->name());

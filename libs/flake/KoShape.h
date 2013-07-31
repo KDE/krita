@@ -27,6 +27,7 @@
 #include "KoFlake.h"
 #include "KoConnectionPoint.h"
 
+#include <QSharedPointer>
 #include <QTransform>
 #include <QVector>
 #include <QSet>
@@ -484,7 +485,7 @@ public:
      * if it is transparent or not.
      * @param background the new shape background.
      */
-    void setBackground(KoShapeBackground *background);
+    void setBackground(QSharedPointer<KoShapeBackground> background);
 
     /**
      * return the brush used to paint te background of this shape with.
@@ -493,7 +494,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    KoShapeBackground *background() const;
+    QSharedPointer<KoShapeBackground> background() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -1163,7 +1164,7 @@ protected:
     KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /// Loads the shadow style
-    KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
+    QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;
 
     /// Loads the connection points
     void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);

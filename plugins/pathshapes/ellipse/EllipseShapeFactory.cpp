@@ -57,7 +57,7 @@ KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) co
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
-    ellipse->setBackground(new KoGradientBackground(gradient));
+    ellipse->setBackground(QSharedPointer<KoGradientBackground>(new KoGradientBackground(gradient)));
 
     return ellipse;
 }

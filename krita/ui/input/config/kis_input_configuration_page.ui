@@ -50,11 +50,6 @@
        <property name="text">
         <string>Edit Profiles</string>
        </property>
-       <property name="icon">
-        <iconset theme="document-edit">
-         <normaloff/>
-        </iconset>
-       </property>
        <property name="iconSize">
         <size>
          <width>18</width>

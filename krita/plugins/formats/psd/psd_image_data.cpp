@@ -67,7 +67,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
         }
 
-    switch (m_header->colormode) {
+        switch (m_header->colormode) {
         case Bitmap:
             break;
         case Grayscale:
@@ -243,6 +243,22 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            if (channelInfo->size() == 1) {
+            } else if (channelInfo->size() == 2) {
+                quint16 *dataPtr = reinterpret_cast<quint16 *>(uncompressed.data());
+                for (int i = 0; i < rc.width(); i++) {
+                    quint16 val = htons(*dataPtr);
+                    *dataPtr = val;
+                    ++dataPtr;
+                }
+            } else if (channelInfo->size() == 4) {
+                quint32 *dataPtr = reinterpret_cast<quint32 *>(uncompressed.data());
+                for (int i = 0; i < rc.width(); i++) {
+                    quint32 val = htonl(*dataPtr);
+                    *dataPtr = val;
+                    ++dataPtr;
+                }
+            }
             QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
 
             io->seek(channelLengthPos);
@@ -340,14 +356,14 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
             // XXX see implementation Openexr
             else if (m_channelSize == 4) {
 
-                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setRed(it->rawData(), red);
+                quint32 red = ntohl(reinterpret_cast<const quint32 *>(channelBytes.constData())[col]);
+                KoBgrTraits<quint32>::setRed(it->rawData(), red);
 
-                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setGreen(it->rawData(), green);
+                quint32 green = ntohl(reinterpret_cast<const quint32 *>(channelBytes.constData())[col]);
+                KoBgrTraits<quint32>::setGreen(it->rawData(), green);
 
-                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setBlue(it->rawData(), blue);
+                quint32 blue = ntohl(reinterpret_cast<const quint32 *>(channelBytes.constData())[col]);
+                KoBgrTraits<quint32>::setBlue(it->rawData(), blue);
 
             }
 
@@ -445,16 +461,16 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
             }
             else if (m_channelSize == 4) {
 
-                quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                quint32 C = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
                 KoCmykTraits<quint32>::setC(it->rawData(),C);
 
-                quint32 M = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
+                quint32 M = ntohl(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
                 KoCmykTraits<quint32>::setM(it->rawData(),M);
 
-                quint32 Y = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
+                quint32 Y = ntohl(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
                 KoCmykTraits<quint32>::setY(it->rawData(),Y);
 
-                quint32 K = ntohs(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
+                quint32 K = ntohl(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
                 KoCmykTraits<quint32>::setK(it->rawData(),K);
 
             }
@@ -523,15 +539,14 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
             if (m_channelSize == 1) {
 
-                quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint16>::setL(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(L));
+                quint8 L = channelBytes[0].constData()[col];
+                KoLabTraits<quint8>::setL(it->rawData(), L);
 
-                quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint16>::setA(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(A));
+                quint8 A = channelBytes[1].constData()[col];
+                KoLabTraits<quint8>::setA(it->rawData(), A);
 
-                quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint16>::setB(it->rawData(),KoColorSpaceMaths<quint8, quint16 >::scaleToA(B));
-
+                quint8 B = channelBytes[2].constData()[col];
+                KoLabTraits<quint8>::setB(it->rawData(), B);
             }
 
             else if (m_channelSize == 2) {
@@ -549,13 +564,13 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
             else if (m_channelSize == 4) {
 
-                quint32 L = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                quint32 L = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
                 KoLabTraits<quint32>::setL(it->rawData(),L);
 
-                quint32 A = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
+                quint32 A = ntohl(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
                 KoLabTraits<quint32>::setA(it->rawData(),A);
 
-                quint32 B = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
+                quint32 B = ntohl(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
                 KoLabTraits<quint32>::setB(it->rawData(),B);
 
             }

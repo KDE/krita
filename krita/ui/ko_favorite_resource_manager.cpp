@@ -198,7 +198,7 @@ int KoFavoriteResourceManager::numFavoritePresets()
 void KoFavoriteResourceManager::saveFavoritePresets()
 {
 
-    QString favoriteList = "";
+    QString favoriteList;
 
     for (int pos = 0; pos < m_favoritePresetsList.size(); pos++)
     {

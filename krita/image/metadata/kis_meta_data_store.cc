@@ -29,7 +29,6 @@
 #include "kis_meta_data_value.h"
 
 using namespace KisMetaData;
-#include "kis_meta_data_schema_registry.h"
 
 uint qHash(const Entry& e)
 {

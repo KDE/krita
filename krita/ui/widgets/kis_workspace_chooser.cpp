@@ -131,7 +131,7 @@ void KisWorkspaceChooser::slotSave()
     }
     workspace->setFilename(fileInfo.filePath());
     if(newName) {
-        name = i18n("Workspace %1").arg(i);
+        name = i18n("Workspace %1", i);
     }
     workspace->setName(name);
     rserver->addResource(workspace);

@@ -37,7 +37,6 @@
 
 #include "kis_external_layer_iface.h"
 
-#include "kis_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_transform_worker.h"

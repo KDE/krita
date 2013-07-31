@@ -180,9 +180,9 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf){
     if (nlen == 0){
         nlen = 4;
     }
-    
-    QString value = "";
-   
+
+    QString value;
+
     if (nlen == MAGIC_OBJC_LENGTH){
         value = p_objc(buf);
         qDebug() << ABR_PRESET_START  << ABR_OBJECT << value;

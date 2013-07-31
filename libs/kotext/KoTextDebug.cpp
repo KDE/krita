@@ -407,7 +407,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             break;
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
-            value = "";
+            value.clear();
             foreach(const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
@@ -653,7 +653,7 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
                     value = "justify";
                     break;
                 default:
-                    value = "";
+                    value.clear();
                     break;
             }
             break;

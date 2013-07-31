@@ -56,7 +56,7 @@ class KDChartModel;
  * section refers to the data-point number.
  */
 
-class CHARTSHAPELIB_EXPORT DataSet
+class DataSet
 {
 public:
     explicit DataSet(int dataSetNr);

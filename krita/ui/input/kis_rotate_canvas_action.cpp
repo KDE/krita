@@ -56,6 +56,11 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
     delete d;
 }
 
+int KisRotateCanvasAction::priority() const
+{
+    return 3;
+}
+
 void KisRotateCanvasAction::activate()
 {
     QApplication::setOverrideCursor(KisCursor::rotateCursor());

@@ -40,12 +40,10 @@
 #include <KoID.h>
 #include <kglobal.h>
 #include "kis_paintop_box.h"
-#include "KoID.h"
 #include "KoInputDevice.h"
 #include "kis_image.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
-#include "kis_paintop_settings_widget.h"
 #include "kis_shared_ptr.h"
 #include "ko_favorite_resource_manager.h"
 #include "KoResourceModel.h"

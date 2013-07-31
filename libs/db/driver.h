@@ -421,7 +421,7 @@ CALLIGRADB_EXPORT inline QString dateTimeToSQL(const QDateTime& v)
         (e.g. "1994-11-05T13:15:30" not "1994-11-05 13:15:30")
         @todo add support for time zones?
     */
-    return QLatin1String("\'") + v.toString(Qt::ISODate) + QLatin1String("\'");
+    return QLatin1Char('\'') + v.toString(Qt::ISODate) + QLatin1Char('\'');
 }
 
 inline QString Driver::dateTimeToSQL(const QDateTime& v) const {

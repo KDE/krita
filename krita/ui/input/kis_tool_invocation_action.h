@@ -38,6 +38,8 @@ public:
     explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();
 
+    virtual int priority() const;
+
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
     void inputEvent(QEvent* event);

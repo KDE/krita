@@ -67,7 +67,7 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
     delete m_hatchingBrush;
 }
 
-qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
@@ -187,9 +187,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 
-    /*-----It took me very long to realize the importance of this line, this is
-    the line that makes all brushes be slow, even if they're small, yay!-------*/
-    return spacing(scale);
+    return effectiveSpacing(sw, sh);
 }
 
 double KisHatchingPaintOp::spinAngle(double spin)

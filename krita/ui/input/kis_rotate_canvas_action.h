@@ -44,6 +44,8 @@ public:
     explicit KisRotateCanvasAction();
     virtual ~KisRotateCanvasAction();
 
+    virtual int priority() const;
+
     void activate();
     void deactivate();
     void begin(int shortcut, QEvent *event);

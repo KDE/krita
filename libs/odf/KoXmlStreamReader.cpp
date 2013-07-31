@@ -397,8 +397,7 @@ void KoXmlStreamAttribute::Private::generateQName()
 {
     qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
     prefixLen = qName.size();
-    qName += ':';
-    qName += qAttr->name();
+    qName += ':' + qAttr->name();
 }
 
 

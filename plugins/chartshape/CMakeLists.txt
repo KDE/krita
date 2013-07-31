@@ -58,22 +58,22 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/FormatErrorBarDialog.ui
 )
 
-kde4_add_library(calligrachartshape SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(calligrachartshape ${KDCHART_LIBS} komain kotextlayout)
-target_link_libraries(calligrachartshape LINK_INTERFACE_LIBRARIES ${KDCHART_LIBS})
-set_target_properties(calligrachartshape PROPERTIES
-    VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
-    SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
-)
+kde4_add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
+target_link_libraries(chartshapecore ${KDCHART_LIBS} komain kotextlayout)
+if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-KPIC")
+    else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
+    endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+endif(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
-install(TARGETS calligrachartshape ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_plugin(calligra_shape_chart ChartShapeFactory.cpp )
-target_link_libraries(calligra_shape_chart calligrachartshape ${KDCHART_LIBS} flake)
+target_link_libraries(calligra_shape_chart chartshapecore ${KDCHART_LIBS} flake)
 install(TARGETS calligra_shape_chart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

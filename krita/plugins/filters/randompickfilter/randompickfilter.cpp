@@ -51,7 +51,6 @@
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
 K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))

@@ -1357,7 +1357,7 @@ QList<int> KexiDB::stringListToIntList(const QStringList &list, bool *ok)
 // Based on KConfigGroupPrivate::serializeList() from kconfiggroup.cpp (kdelibs 4)
 QString KexiDB::serializeList(const QStringList &list)
 {
-    QString value = "";
+    QString value;
 
     if (!list.isEmpty()) {
         QStringList::ConstIterator it = list.constBegin();
@@ -1370,8 +1370,7 @@ QString KexiDB::serializeList(const QStringList &list)
             // Doing it repeatedly is a pretty cheap operation.
             value.reserve(4096);
 
-            value += ',';
-            value += QString(*it).replace('\\', "\\\\").replace(',', "\\,");
+            value += ',' + QString(*it).replace('\\', "\\\\").replace(',', "\\,");
         }
 
         // To be able to distinguish an empty list from a list with one empty element.

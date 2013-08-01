@@ -56,7 +56,7 @@ public:
     QRect bounds() const;
 
 private:
-    Q_DISABLE_COPY(KisSelectionDefaultBounds);
+    Q_DISABLE_COPY(KisSelectionDefaultBounds)
 
     struct Private;
     Private * const m_d;

@@ -66,6 +66,8 @@ class KoSnapData;
 class KoClipPath;
 class KoShapePaintingContext;
 class KoShapeAnchor;
+class KoBorder;
+
 
 /**
  *
@@ -127,6 +129,7 @@ public:
         StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
+        BorderChanged, ///< the shapes border has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
@@ -188,6 +191,15 @@ public:
      * @param paintcontext the painting context.
      */
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+
+    /**
+     * @brief Paint the shape's border
+     * This is a helper function that could be called from the paint() method of all shapes. 
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
+     * @see applyConversion()
+     */
+    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * Load a shape from odf
@@ -750,6 +762,12 @@ public:
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
 
+    /// Sets the new border, removing the old one.
+    void setBorder(KoBorder *border);
+
+    /// Returns the currently set border or 0 if there is no border set
+    KoBorder *border() const;
+
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);
 
@@ -1163,7 +1181,7 @@ protected:
     /// Loads the stroke style
     KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
-    /// Loads the shadow style
+    /// Loads the fill style
     QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;
 
     /// Loads the connection points

@@ -62,6 +62,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfLoadingContext.h>
+#include <KoBorder.h>
 
 #include <QPainter>
 #include <QVariant>
@@ -84,6 +85,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       appData(0),
       stroke(0),
       shadow(0),
+      border(0),
       clipPath(0),
       filterEffectStack(0),
       transparency(0.0),
@@ -1196,6 +1198,24 @@ KoShapeShadow *KoShape::shadow() const
     return d->shadow;
 }
 
+void KoShape::setBorder(KoBorder *border)
+{
+    Q_D(KoShape);
+    if (d->border) {
+        // The shape owns the border.
+        delete d->border;
+    }
+    d->border = border;
+    d->shapeChanged(BorderChanged);
+    notifyChanged();
+}
+
+KoBorder *KoShape::border() const
+{
+    Q_D(const KoShape);
+    return d->border;
+}
+
 void KoShape::setClipPath(KoClipPath *clipPath)
 {
     Q_D(KoShape);
@@ -1255,14 +1275,28 @@ bool KoShape::isEditable() const
     return true;
 }
 
+// painting
+void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
+{
+    KoBorder *bd = border();
+    if (!bd) {
+        return;
+    }
+
+    QRectF borderRect = QRectF(QPointF(0, 0), size());
+    // Paint the border.
+    bd->paint(painter, borderRect, KoBorder::PaintInsideLine);
+}
+
+
 // loading & saving methods
 QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     Q_D(const KoShape);
     // and fill the style
-    KoShapeStrokeModel *b = stroke();
-    if (b) {
-        b->fillStyle(style, context);
+    KoShapeStrokeModel *sm = stroke();
+    if (sm) {
+        sm->fillStyle(style, context);
     }
     else {
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
@@ -1277,6 +1311,11 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
     else {
         style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
+    }
+
+    KoBorder *b = border();
+    if (b) {
+        b->saveOdf(style);
     }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
@@ -1390,6 +1429,7 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     setBackground(loadOdfFill(context));
     setStroke(loadOdfStroke(element, context));
     setShadow(d->loadOdfShadow(context));
+    setBorder(d->loadOdfBorder(context));
 
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
     setGeometryProtected(protect.contains("position") || protect.contains("size"));
@@ -1677,6 +1717,19 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
     }
     return 0;
 }
+
+KoBorder *KoShapePrivate::loadOdfBorder(KoShapeLoadingContext &context) const
+{
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+
+    KoBorder *border = new KoBorder();
+    if (border->loadOdf(styleStack)) {
+        return border;
+    }
+    delete border;
+    return 0;
+}
+
 
 void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context)
 {

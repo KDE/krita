@@ -136,7 +136,7 @@ void TestDocumentLayout::testRootAreaZeroWidth()
     setupTest("a");
 
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
-    provider->setSuggestedSize(QSizeF(0.,200.));
+    provider->setSuggestedRect(QRectF(10., 10., 0., 200.));
 
     m_layout->layout();
 
@@ -157,7 +157,7 @@ void TestDocumentLayout::testRootAreaZeroHeight()
     setupTest("a");
 
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
-    provider->setSuggestedSize(QSizeF(200.,0.));
+    provider->setSuggestedRect(QRectF(10., 10., 200.,0.));
 
     m_layout->layout();
 
@@ -176,7 +176,7 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     setupTest("a");
 
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
-    provider->setSuggestedSize(QSizeF(0.,0.));
+    provider->setSuggestedRect(QRectF(10., 10., 0., 0.));
 
     m_layout->layout();
 

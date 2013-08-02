@@ -40,7 +40,6 @@ set(koodf_LIB_SRCS
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
-    KoXmlStreamReader.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
@@ -101,7 +100,6 @@ install( FILES
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
-    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h

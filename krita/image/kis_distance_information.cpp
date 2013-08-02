@@ -30,11 +30,47 @@ inline QPointF qAbs(const QPointF &pt) {
     return QPointF(qAbs(pt.x()), qAbs(pt.y()));
 }
 
+struct KisDistanceInformation::Private {
+    QPointF distance;
+    KisSpacingInformation spacing;
+};
+
+KisDistanceInformation::KisDistanceInformation()
+    : m_d(new Private)
+{
+}
+
+KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs)
+    : m_d(new Private(*rhs.m_d))
+{
+
+}
+
+KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInformation &rhs)
+{
+    *m_d = *rhs.m_d;
+    return *this;
+}
+
+KisDistanceInformation::~KisDistanceInformation()
+{
+    delete m_d;
+}
+
+const KisSpacingInformation& KisDistanceInformation::spacing() const
+{
+    return m_d->spacing;
+}
+
+void KisDistanceInformation::setSpacing(const KisSpacingInformation &spacing)
+{
+    m_d->spacing = spacing;
+}
 
 qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
                                                    const QPointF &end)
 {
-    return m_spacing.isIsotropic() ?
+    return m_d->spacing.isIsotropic() ?
         getNextPointPositionIsotropic(start, end) :
         getNextPointPositionAnisotropic(start, end);
 }
@@ -42,8 +78,8 @@ qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
 qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start,
                                                             const QPointF &end)
 {
-    qreal distance = m_distance.x();
-    qreal spacing = qMax(0.5, m_spacing.spacing().x());
+    qreal distance = m_d->distance.x();
+    qreal spacing = qMax(0.5, m_d->spacing.spacing().x());
 
     if (start == end) {
         return -1;
@@ -56,10 +92,10 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
 
     if (nextPointDistance <= dragVecLength) {
         t = nextPointDistance / dragVecLength;
-        m_distance = QPointF();
+        m_d->distance = QPointF();
     } else {
         t = -1;
-        m_distance.rx() += dragVecLength;
+        m_d->distance.rx() += dragVecLength;
     }
 
     return t;
@@ -72,11 +108,11 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
         return -1;
     }
 
-    qreal a_rev = 1.0 / qMax(0.5, m_spacing.spacing().x());
-    qreal b_rev = 1.0 / qMax(0.5, m_spacing.spacing().y());
+    qreal a_rev = 1.0 / qMax(0.5, m_d->spacing.spacing().x());
+    qreal b_rev = 1.0 / qMax(0.5, m_d->spacing.spacing().y());
 
-    qreal x = m_distance.x();
-    qreal y = m_distance.y();
+    qreal x = m_d->distance.x();
+    qreal y = m_d->distance.y();
 
     qreal dx = qAbs(end.x() - start.x());
     qreal dy = qAbs(end.y() - start.y());
@@ -94,9 +130,9 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
 
         if (k >= 0.0 && k <= 1.0) {
             t = k;
-            m_distance = QPointF();
+            m_d->distance = QPointF();
         } else {
-            m_distance += qAbs(end - start);
+            m_d->distance += qAbs(end - start);
         }
     } else {
         qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";

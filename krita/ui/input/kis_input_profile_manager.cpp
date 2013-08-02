@@ -28,6 +28,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 
 #include "kis_config.h"
 #include "kis_alternate_invocation_action.h"

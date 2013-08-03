@@ -18,26 +18,35 @@
  */
 
 #include "kis_distance_information.h"
+#include "kis_paint_information.h"
 #include "kis_debug.h"
 #include <QtCore/qmath.h>
+#include <QVector2D>
 
-inline qreal pow2(qreal x) {
-    return x * x;
-}
-
-template<>
-inline QPointF qAbs(const QPointF &pt) {
-    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
-}
 
 struct KisDistanceInformation::Private {
+    Private() : lastDabInfoValid(false) {}
+
     QPointF distance;
     KisSpacingInformation spacing;
+    QPointF lastPosition;
+    int lastTime;
+    bool lastDabInfoValid;
 };
 
 KisDistanceInformation::KisDistanceInformation()
     : m_d(new Private)
 {
+}
+
+KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
+                                               int lastTime)
+    : m_d(new Private)
+{
+    m_d->lastPosition = lastPosition;
+    m_d->lastTime = lastTime;
+
+    m_d->lastDabInfoValid = true;
 }
 
 KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs)
@@ -57,13 +66,33 @@ KisDistanceInformation::~KisDistanceInformation()
     delete m_d;
 }
 
-const KisSpacingInformation& KisDistanceInformation::spacing() const
+const KisSpacingInformation& KisDistanceInformation::currentSpacing() const
 {
     return m_d->spacing;
 }
 
-void KisDistanceInformation::setSpacing(const KisSpacingInformation &spacing)
+bool KisDistanceInformation::hasLastDabInformation() const
 {
+    return m_d->lastDabInfoValid;
+}
+
+QPointF KisDistanceInformation::lastPosition() const
+{
+    return m_d->lastPosition;
+}
+
+int KisDistanceInformation::lastTime() const
+{
+    return m_d->lastTime;
+}
+
+void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
+                                                const KisSpacingInformation &spacing)
+{
+    m_d->lastPosition = info.pos();
+    m_d->lastTime = info.currentTime();
+    m_d->lastDabInfoValid = true;
+
     m_d->spacing = spacing;
 }
 

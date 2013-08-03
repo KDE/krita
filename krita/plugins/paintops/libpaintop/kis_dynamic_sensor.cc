@@ -206,3 +206,8 @@ bool KisDynamicSensor::hasCustomCurve() const
 {
     return m_customCurve;
 }
+
+bool KisDynamicSensor::dependsOnCanvasRotation() const
+{
+    return true;
+}

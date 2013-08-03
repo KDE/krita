@@ -108,9 +108,8 @@ void KisImagePipeBrushTest::testChangingBrushes()
     brush->load();
     QVERIFY(brush->valid());
 
-    KisVector2D movement = KisVector2D::Zero();
     qreal rotation = 0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
 
     for (int i = 0; i < 100; i++) {
         checkConsistency(brush);
@@ -130,9 +129,8 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
 
     KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(cs);
 
-    KisVector2D movement = KisVector2D::Zero();
     qreal rotation = 0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
 
     for (int i = 0; i < 20; i++) {
         int maskWidth = brush->maskWidth(realScale, realAngle, info);
@@ -208,9 +206,8 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D movement = KisVector2D::Zero();
     qreal rotation = 0;
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, movement, rotation, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
 
     KisPaintDeviceSP layer = new KisPaintDevice(cs);
     KisPainter painter(layer);

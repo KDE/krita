@@ -42,7 +42,7 @@ public:
     KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-    KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
     KisHairyProperties m_properties;

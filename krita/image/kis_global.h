@@ -65,5 +65,34 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 #define INTENT_SATURATION                 2
 #define INTENT_ABSOLUTE_COLORIMETRIC      3
 
+#include <cmath>
+#include <QPointF>
+
+// converts \p a to [0, 2 * M_PI) range
+inline qreal normalizeAngle(qreal a) {
+    if (a < 0.0) {
+        a = 2 * M_PI + fmod(a, 2 * M_PI);
+    }
+
+    return a > 2 * M_PI ? fmod(a, 2 * M_PI) : a;
+}
+
+inline qreal shortestAngularDistance(qreal a, qreal b) {
+    qreal dist = fmod(qAbs(a - b), 2 * M_PI);
+    if (dist > M_PI) dist = 2 * M_PI - dist;
+
+    return dist;
+}
+
+template<typename T>
+inline T pow2(T x) {
+    return x * x;
+}
+
+template<>
+inline QPointF qAbs(const QPointF &pt) {
+    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
+}
+
 #endif // KISGLOBAL_H_
 

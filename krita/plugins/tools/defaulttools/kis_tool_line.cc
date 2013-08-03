@@ -116,7 +116,6 @@ void KisToolLine::mousePressEvent(KoPointerEvent *event)
             PRESSURE_DEFAULT,
             m_cbTilt->isChecked() ? event->xTilt() : 0.0,
             m_cbTilt->isChecked() ? event->yTilt() : 0.0,
-            nullKisVector2D(),
             m_cbRotation->isChecked() ? event->rotation() : 0.0,
             m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
         );
@@ -171,7 +170,6 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
                 PRESSURE_DEFAULT,
                 m_cbTilt->isChecked() ? event->xTilt() : 0.0,
                 m_cbTilt->isChecked() ? event->yTilt() : 0.0,
-                nullKisVector2D(),
                 m_cbRotation->isChecked() ? event->rotation() : 0.0,
                 m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
             );

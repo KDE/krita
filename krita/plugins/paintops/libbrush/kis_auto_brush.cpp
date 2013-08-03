@@ -278,7 +278,7 @@ QImage KisAutoBrush::createBrushPreview()
     int width = maskWidth(1.0, 0.0, KisPaintInformation());
     int height = maskHeight(1.0, 0.0, KisPaintInformation());
 
-    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
+    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, 0, 0);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
     fdev->setRect(QRect(0, 0, width, height));

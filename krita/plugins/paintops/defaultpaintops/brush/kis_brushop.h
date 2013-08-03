@@ -55,7 +55,7 @@ public:
     ~KisBrushOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-    KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
     KisColorSource *m_colorSource;

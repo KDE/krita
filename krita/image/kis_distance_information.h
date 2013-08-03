@@ -24,6 +24,8 @@
 #include <QVector2D>
 #include "krita_export.h"
 
+class KisPaintInformation;
+
 
 /**
  * This structure containg information about the desired spacing
@@ -72,16 +74,23 @@ private:
 class KRITAIMAGE_EXPORT KisDistanceInformation {
 public:
     KisDistanceInformation();
+    KisDistanceInformation(const QPointF &lastPosition, int lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
     KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
 
     ~KisDistanceInformation();
 
+    const KisSpacingInformation& currentSpacing() const;
+    bool hasLastDabInformation() const;
+    QPointF lastPosition() const;
+    int lastTime() const;
+
+    void registerPaintedDab(const KisPaintInformation &info,
+                            const KisSpacingInformation &spacing);
+
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end);
 
-    const KisSpacingInformation& spacing() const;
-    void setSpacing(const KisSpacingInformation &spacing);
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,

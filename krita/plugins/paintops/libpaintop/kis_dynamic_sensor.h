@@ -116,6 +116,7 @@ public:
     const KisCubicCurve& curve() const;
     void removeCurve();
     bool hasCustomCurve() const;
+    virtual bool dependsOnCanvasRotation() const;
 protected:
     virtual qreal value(const KisPaintInformation& info) = 0;
 protected:

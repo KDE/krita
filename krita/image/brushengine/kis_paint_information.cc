@@ -17,41 +17,54 @@
  */
 
 #include "kis_paint_information.h"
+
 #include <QDomElement>
+
+#include "kis_paintop.h"
+#include "kis_distance_information.h"
+
 
 struct KisPaintInformation::Private {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+    Private() : currentDistanceInfo(0) {}
 
     QPointF pos;
     qreal pressure;
     qreal xTilt;
     qreal yTilt;
-    KisVector2D movement;
-    qreal angle;
     qreal rotation;
     qreal tangentialPressure;
     qreal perspective;
     int time;
+
+    KisDistanceInformation *currentDistanceInfo;
+
+    void registerDistanceInfo(KisDistanceInformation *di) {
+        currentDistanceInfo = di;
+    }
+
+    void unregisterDistanceInfo() {
+        currentDistanceInfo = 0;
+    }
 };
 
-KisPaintInformation::KisPaintInformation(const QPointF & pos_, qreal pressure_,
-        qreal xTilt_, qreal yTilt_,
-        const KisVector2D& movement_,
-        qreal rotation_,
-        qreal tangentialPressure_,
-        qreal perspective_,
-        int   time)
-        : d(new Private)
+KisPaintInformation::KisPaintInformation(const QPointF & pos_,
+                                         qreal pressure_,
+                                         qreal xTilt_, qreal yTilt_,
+                                         qreal rotation_,
+                                         qreal tangentialPressure_,
+                                         qreal perspective_,
+                                         int time)
+    : d(new Private)
 {
     d->pos = pos_;
     d->pressure = pressure_;
     d->xTilt = xTilt_;
     d->yTilt = yTilt_;
-    d->movement = movement_;
     d->rotation = rotation_;
     d->tangentialPressure = tangentialPressure_;
     d->perspective = perspective_;
-    d->angle = atan2(movement_.y(), movement_.x());
     d->time = time;
 }
 
@@ -77,8 +90,6 @@ void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
     e.setAttribute("pressure", QString::number(pressure(), 'g', 15));
     e.setAttribute("xTilt", QString::number(xTilt(), 'g', 15));
     e.setAttribute("yTilt", QString::number(yTilt(), 'g', 15));
-    e.setAttribute("movementX", QString::number(movement().x(), 'g', 15));
-    e.setAttribute("movementY", QString::number(movement().y(), 'g', 15));
     e.setAttribute("rotation", QString::number(rotation(), 'g', 15));
     e.setAttribute("tangentialPressure", QString::number(tangentialPressure(), 'g', 15));
     e.setAttribute("perspective", QString::number(perspective(), 'g', 15));
@@ -95,12 +106,19 @@ KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
     qreal perspective = qreal(e.attribute("perspective", "0.0").toDouble());
     qreal xTilt = qreal(e.attribute("xTilt", "0.0").toDouble());
     qreal yTilt = qreal(e.attribute("yTilt", "0.0").toDouble());
-    qreal movementX = qreal(e.attribute("movementX", "0.0").toDouble());
-    qreal movementY = qreal(e.attribute("movementY", "0.0").toDouble());
     int time = e.attribute("time", "0").toInt();
 
-    return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY),
+    return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt,
                                rotation, tangentialPressure, perspective, time);
+}
+
+void KisPaintInformation::paintAt(KisPaintOp *op, KisDistanceInformation *distanceInfo)
+{
+    d->registerDistanceInfo(distanceInfo);
+    KisSpacingInformation spacingInfo = op->paintAt(*this);
+    d->unregisterDistanceInfo();
+
+    distanceInfo->registerPaintedDab(*this, spacingInfo);
 }
 
 const QPointF& KisPaintInformation::pos() const
@@ -111,11 +129,6 @@ const QPointF& KisPaintInformation::pos() const
 void KisPaintInformation::setPos(const QPointF& p)
 {
     d->pos = p;
-}
-
-void KisPaintInformation::setMovement(const KisVector2D& m)
-{
-    d->movement = m;
 }
 
 qreal KisPaintInformation::pressure() const
@@ -138,14 +151,37 @@ qreal KisPaintInformation::yTilt() const
     return d->yTilt;
 }
 
-KisVector2D KisPaintInformation::movement() const
+qreal KisPaintInformation::drawingAngle() const
 {
-    return d->movement;
+    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingAngle()", "Distance info should be initialized *before* the painting");
+    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+
+    QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    return atan2(diff.y(), diff.x());
 }
 
-qreal KisPaintInformation::angle() const
+qreal KisPaintInformation::drawingDistance() const
 {
-    return d->angle;
+    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingDistance()", "Distance info should be initialized *before* the painting");
+    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+
+    QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    return diff.length();
+}
+
+qreal KisPaintInformation::drawingSpeed() const
+{
+    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingSpeed()", "Distance info should be initialized *before* the painting");
+    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+
+    int timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
+
+    if (timeDiff <= 0) {
+        return 6.66;
+    }
+
+    QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
+    return diff.length() / timeDiff;
 }
 
 qreal KisPaintInformation::rotation() const
@@ -177,17 +213,18 @@ QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
     dbg.nospace() << ", Pressure: " << info.pressure();
     dbg.nospace() << ", X Tilt: " << info.xTilt();
     dbg.nospace() << ", Y Tilt: " << info.yTilt();
-    dbg.nospace() << ", Movement: " << toQPointF(info.movement());
     dbg.nospace() << ", Rotation: " << info.rotation();
     dbg.nospace() << ", Tangential Pressure: " << info.tangentialPressure();
     dbg.nospace() << ", Perspective: " << info.perspective();
-    dbg.nospace() << ", Angle: " << info.angle();
+    dbg.nospace() << ", Drawing Angle: " << info.drawingAngle();
+    dbg.nospace() << ", Drawing Speed: " << info.drawingSpeed();
+    dbg.nospace() << ", Drawing Distance: " << info.drawingDistance();
     dbg.nospace() << ", Time: " << info.currentTime();
 #endif
     return dbg.space();
 }
 
-KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisVector2D& movement)
+KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2)
 {
     qreal pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
     qreal xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
@@ -196,7 +233,7 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
     int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
-    return KisPaintInformation(p, pressure, xTilt, yTilt, movement, rotation, tangentialPressure, perspective, time);
+    return KisPaintInformation(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
 }
 
 qreal KisPaintInformation::ascension(const KisPaintInformation& info, bool normalize)

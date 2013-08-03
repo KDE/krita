@@ -44,8 +44,7 @@ void KisAutoBrushTest::testMaskGeneration()
     KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);

@@ -59,6 +59,7 @@ public:
     KisDynamicSensorDrawingAngle();
     virtual ~KisDynamicSensorDrawingAngle() { }
     virtual qreal value(const KisPaintInformation& info);
+    virtual bool dependsOnCanvasRotation() const;
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor

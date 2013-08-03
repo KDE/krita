@@ -58,6 +58,8 @@ public:
 private:
     bool m_enableVerticalMirror;
     bool m_enableHorizontalMirror;
+    bool m_canvasAxisXMirrored;
+    bool m_canvasAxisYMirrored;
 };
 
 #endif

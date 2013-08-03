@@ -171,8 +171,14 @@ public:
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();
 
+    /**
+     * These methods are populating properties with runtime
+     * information about canvas rotation/mirroring. This information
+     * is set directly by KisToolFreehand. Later the data is accessed
+     * by the pressure options to make a final decision.
+     */
     void setCanvasRotation(qreal angle);
-    qreal canvasRotation() const;
+    void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
 
 protected:
      /**

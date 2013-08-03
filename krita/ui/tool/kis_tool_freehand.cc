@@ -230,7 +230,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             canvas2->view()->disableControls();
 
 
-        currentPaintOpPreset()->settings()->setCanvasRotation( static_cast<KisCanvas2*>(canvas())->rotationAngle() );
+        const KisCoordinatesConverter *converter = static_cast<KisCanvas2*>(canvas())->coordinatesConverter();
+        currentPaintOpPreset()->settings()->setCanvasRotation(converter->rotationAngle());
+        currentPaintOpPreset()->settings()->setCanvasMirroring(converter->xAxisMirrored(),
+                                                               converter->yAxisMirrored());
         initStroke(e);
 
         e->accept();

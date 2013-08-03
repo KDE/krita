@@ -21,6 +21,8 @@
 #include <kis_animation_doc.h>
 #include <kis_animation_part.h>
 #include <kis_animation.h>
+#include <KoStore.h>
+#include <kis_layer.h>
 
 using namespace KRANIM;
 
@@ -28,6 +30,7 @@ struct KisKranimSaver::Private{
 public:
     KisAnimation* animation;
     KisAnimationDoc* doc;
+    KoStore* store;
 };
 
 KisKranimSaver::KisKranimSaver(KisAnimationDoc *document) : m_d(new Private)
@@ -66,5 +69,23 @@ QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc){
 
 bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){
     kWarning() << "Saving binary data";
+
+    m_d->store = store;
+
+    QString location = "mimetype";
+    const QByteArray mimetype = "application/x-kritaanimation";
+
+    if(store->open(location)){
+        store->write(mimetype);
+        store->close();
+    }
+
     return true;
+}
+
+void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame){
+    if(frame){
+
+        kWarning() << "Saving frame:" << frame->name();
+    }
 }

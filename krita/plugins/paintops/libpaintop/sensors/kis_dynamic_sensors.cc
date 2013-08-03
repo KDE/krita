@@ -39,8 +39,14 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     const qreal blendExponent = 0.05;
 
     qreal currentSpeed = info.drawingSpeed() / maxSpeed;
-    m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
-                         currentSpeed * blendExponent));
+
+    if (m_speed >= 0.0) {
+        m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
+                             currentSpeed * blendExponent));
+    } else {
+        m_speed = currentSpeed;
+    }
+
     return m_speed;
 }
 

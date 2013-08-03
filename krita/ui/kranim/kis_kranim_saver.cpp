@@ -23,6 +23,7 @@
 #include <kis_animation.h>
 #include <KoStore.h>
 #include <kis_layer.h>
+#include <kis_store_paintdevice_writer.h>
 
 using namespace KRANIM;
 
@@ -87,5 +88,30 @@ void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame){
     if(frame){
 
         kWarning() << "Saving frame:" << frame->name();
+
+        KisPaintDeviceSP device = frame->paintDevice();
+        QString location = "frame";
+        KisStorePaintDeviceWriter* writer = new KisStorePaintDeviceWriter(store);
+
+        store->setCompressionEnabled(false);
+        store->enterDirectory("layer1");
+
+        if(store->open(location)){
+
+            if(!device->write(*writer)){
+                device->disconnect();
+                store->close();
+            }
+
+            store->close();
+        }
+
+        if(store->open(location+".defaultpixel")){
+            store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
+            store->close();
+        }
+
+        store->setCompressionEnabled(true);
+
     }
 }

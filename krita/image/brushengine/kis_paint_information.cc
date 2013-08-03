@@ -153,8 +153,10 @@ qreal KisPaintInformation::yTilt() const
 
 qreal KisPaintInformation::drawingAngle() const
 {
-    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingAngle()", "Distance info should be initialized *before* the painting");
-    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
+        qWarning() << "KisPaintInformation::drawingAngle()" << "Cannot access Distance Info last dab data";
+        return 0.0;
+    }
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return atan2(diff.y(), diff.x());
@@ -162,8 +164,10 @@ qreal KisPaintInformation::drawingAngle() const
 
 qreal KisPaintInformation::drawingDistance() const
 {
-    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingDistance()", "Distance info should be initialized *before* the painting");
-    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
+        qWarning() << "KisPaintInformation::drawingDistance()" << "Cannot access Distance Info last dab data";
+        return 1.0;
+    }
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());
     return diff.length();
@@ -171,13 +175,15 @@ qreal KisPaintInformation::drawingDistance() const
 
 qreal KisPaintInformation::drawingSpeed() const
 {
-    Q_ASSERT_X(d->currentDistanceInfo, "KisPaintInformation::drawingSpeed()", "Distance info should be initialized *before* the painting");
-    Q_ASSERT(d->currentDistanceInfo->hasLastDabInformation());
+    if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
+        qWarning() << "KisPaintInformation::drawingSpeed()" << "Cannot access Distance Info last dab data";
+        return 0.5;
+    }
 
     int timeDiff = currentTime() - d->currentDistanceInfo->lastTime();
 
     if (timeDiff <= 0) {
-        return 6.66;
+        return 0.5;
     }
 
     QVector2D diff(pos() - d->currentDistanceInfo->lastPosition());

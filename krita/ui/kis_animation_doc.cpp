@@ -25,8 +25,6 @@
 #include <kis_group_layer.h>
 #include <kranim/kis_kranim_saver.h>
 #include <kranim/kis_kranim_loader.h>
-#include <kranim/kis_kranim_frame_loader.h>
-#include <kranim/kis_kranim_frame_saver.h>
 #include <KoFilterManager.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
@@ -49,8 +47,6 @@ public:
     QDomElement root;
     KisKranimSaver* kranimSaver;
     KisKranimLoader* kranimLoader;
-    KisKranimFrameLoader* frameLoader;
-    KisKranimFrameSaver* frameSaver;
     KisLayer* newFrame;
     bool saved;
 };

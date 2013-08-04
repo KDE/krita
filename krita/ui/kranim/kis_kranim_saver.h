@@ -40,7 +40,7 @@ public:
 
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 
-    void saveFrame(KoStore* store, KisLayer* frame);
+    void saveFrame(KoStore* store, KisLayer* frame, QRect framePosition);
 
 private:
     struct Private;

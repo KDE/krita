@@ -84,17 +84,21 @@ bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QSt
     return true;
 }
 
-void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame){
+void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame, QRect framePosition){
     if(frame){
 
         kWarning() << "Saving frame:" << frame->name();
 
         KisPaintDeviceSP device = frame->paintDevice();
-        QString location = "frame";
+        QString location = "frame"+QString::number(framePosition.x());
+        QString dir = "layer"+QString::number(framePosition.y());
+
+        kWarning() << location << dir;
+        kWarning() << store;
         KisStorePaintDeviceWriter* writer = new KisStorePaintDeviceWriter(store);
 
         store->setCompressionEnabled(false);
-        store->enterDirectory("layer1");
+        store->enterDirectory(dir);
 
         if(store->open(location)){
 
@@ -111,6 +115,7 @@ void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame){
             store->close();
         }
 
+        store->leaveDirectory();
         store->setCompressionEnabled(true);
 
     }

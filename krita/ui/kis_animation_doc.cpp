@@ -48,6 +48,7 @@ public:
     KisKranimSaver* kranimSaver;
     KisKranimLoader* kranimLoader;
     KisLayer* newFrame;
+    QRect newFramePosition;
     bool saved;
 };
 
@@ -87,7 +88,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame){
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(animation->resolution(), animation->resolution());
 
-
+    m_d_anim->newFramePosition = frame;
     m_d_anim->newFrame = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     m_d_anim->newFrame->setName("testFrame");
     m_d_anim->newFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
@@ -111,9 +112,10 @@ bool KisAnimationDoc::completeSaving(KoStore *store)
     }
     else{
         QDomElement e = m_d_anim->doc.createElement("frame");
-        e.setAttribute("number", 1);
+        e.setAttribute("number", m_d_anim->newFramePosition.x());
+        e.setAttribute("layer", m_d_anim->newFramePosition.y());
         m_d_anim->root.appendChild(e);
-        m_d_anim->kranimSaver->saveFrame(store, m_d_anim->newFrame);
+        m_d_anim->kranimSaver->saveFrame(store, m_d_anim->newFrame, m_d_anim->newFramePosition);
     }
 
     return true;
@@ -121,16 +123,18 @@ bool KisAnimationDoc::completeSaving(KoStore *store)
 
 QDomDocument KisAnimationDoc::saveXML()
 {
-    m_d_anim->doc = createDomDocument("animation", CURRENT_DTD_VERSION);
+    if(!m_d_anim->saved){
+        m_d_anim->doc = createDomDocument("animation", CURRENT_DTD_VERSION);
 
-    m_d_anim->root = m_d_anim->doc.documentElement();
+        m_d_anim->root = m_d_anim->doc.documentElement();
 
-    m_d_anim->root.setAttribute("editor","Krita Animation");
+        m_d_anim->root.setAttribute("editor","Krita Animation");
 
-    m_d_anim->root.setAttribute("syntaxVersion", "1");
+        m_d_anim->root.setAttribute("syntaxVersion", "1");
 
-    m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveMetaData(m_d_anim->doc));
-    m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveXML(m_d_anim->doc, this->image()));
+        m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveMetaData(m_d_anim->doc));
+        //m_d_anim->root.appendChild(m_d_anim->kranimSaver->saveXML(m_d_anim->doc, this->image()));
+    }
 
     return m_d_anim->doc;
 }

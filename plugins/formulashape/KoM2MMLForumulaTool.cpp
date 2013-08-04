@@ -147,10 +147,10 @@ QWidget* KoM2MMLFormulaTool::createOptionWidget()
 
 // Not sure why but the toStdString/fromStdString in QString are not accessible
 inline std::string QStringtoStdString(const QString& str)
-{ const QByteArray asc = str.toAscii(); return std::string(asc.constData(), asc.length()); }
+{ const QByteArray latin1 = str.toLatin1(); return std::string(latin1.constData(), latin1.length()); }
 
 inline QString QStringfromStdString(const std::string &s)
-{ return QString::fromAscii(s.data(), int(s.size())); }
+{ return QString::fromLatin1(s.data(), int(s.size())); }
 
 void KoM2MMLFormulaTool::textEdited()
 {

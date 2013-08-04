@@ -100,13 +100,15 @@ endif(NOT PRODUCTSET)
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
+# building tools
+calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
-calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
+calligra_define_product(CALLIGRA_LIBS "Calligra core libs"  NEEDS RNG2CPP)
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_KOODF2 "libkoodf2"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_KOODFREADER "libkoodfreader"  NEEDS LIB_KOODF2 CALLIGRA_LIBS)

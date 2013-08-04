@@ -1,18 +1,33 @@
+/* This file is part of the KDE project
+   Copyright (C) 2013 Jos van den Oever <jos@vandenoever.info>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
 #ifndef ODFWRITER_H
 #define ODFWRITER_H
 
 #include <KoXmlWriter.h>
-#include <QtCore/QUrl>
-#include <QtCore/QDate>
-#include <QtCore/QStringList>
+#include <QUrl>
+#include <QDate>
+#include <QStringList>
 
 class OdfWriter {
 private:
-    OdfWriter* child;
-    OdfWriter* parent;
     void operator=(const OdfWriter&);
 protected:
-    mutable KoXmlWriter* xml;
     OdfWriter(KoXmlWriter* xml_, const char* tag, bool indent) :child(0), parent(0), xml(xml_) {
         xml->startElement(tag, indent);
     }
@@ -33,7 +48,7 @@ protected:
             child = 0;
         }
     }
-    // ideally, the copy constructor would never be called
+    // in c++11, we would use a move constructor instead of a copy constructor
     OdfWriter(const OdfWriter&o) :child(o.child), parent(o.parent), xml(o.xml) {
         // disable o and make the parent refer to this new copy
         o.xml = 0;
@@ -84,9 +99,9 @@ public:
         Q_ASSERT(!child);
         xml->addAttribute(name, value.toString(Qt::ISODate));
     }
-    void addAttribute(const char* name, const QStringList& /*value*/) {
+    void addAttribute(const char* name, const QStringList& value) {
         Q_ASSERT(!child);
-        xml->addAttribute(name, "");
+        xml->addAttribute(name, value.join(QChar(' ')));
     }
     void addProcessingInstruction(const char* cstr) {
         endChild();
@@ -97,5 +112,10 @@ public:
         endChild();
         xml->addCompleteElement(cstr);
     }
+private:
+    OdfWriter* child;
+    OdfWriter* parent;
+protected:
+    mutable KoXmlWriter* xml;
 };
 #endif

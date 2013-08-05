@@ -20,6 +20,7 @@
 #define WRITEODF_ODFWRITER_H
 
 #include "writeodf/writeodfconfig.h"
+#include "writeodf/writeodftext.h"
 
 namespace writeodf {
 
@@ -70,6 +71,29 @@ void addConfigItem(T& config, const QString & configName, short value)
 {
     config_config_item item(config.add_config_config_item(configName, "short"));
     item.addTextNode(QString::number(value));
+}
+
+/**
+ * Overloaded version of addTextSpan which takes an additional tabCache map.
+ * @param text the text to write
+ * @param tabCache optional map allowing to find a tab for a given character index
+ */
+void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
+                              const QString& text,
+                              const QMap<int, int>& tabCache);
+
+/**
+ * @brief Adds a text span as nodes of the current odf paragraph.
+ *
+ * It handles tabulations, linebreaks, and multiple spaces by using the
+ * appropriate OASIS tags.
+ *
+ * @param text the text to write
+ */
+void addTextSpan(group_paragraph_content& e, const QString& text)
+{
+    QMap<int, int> tabCache;
+    addTextSpan(e, text, tabCache);
 }
 
 }

@@ -34,6 +34,7 @@ public:
 
     void setPrecisionEnabled(bool value);
     void addTextureOptions();
+    void addMirrorOption();
 
     KisBrushSP brush();
 

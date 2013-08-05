@@ -50,18 +50,16 @@ void KisPaintingInformationBuilder::updateSettings()
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
-KisPaintInformation
-KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
-                                           int timeElapsed)
+KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
+                                                               int timeElapsed)
 {
     m_startPoint = event->point;
     return createPaintingInformation(event, timeElapsed);
 
 }
 
-KisPaintInformation
-KisPaintingInformationBuilder::continueStroke(KoPointerEvent *event,
-                                              int timeElapsed)
+KisPaintInformation KisPaintingInformationBuilder::continueStroke(KoPointerEvent *event,
+                                                                  int timeElapsed)
 {
     return createPaintingInformation(event, timeElapsed);
 }

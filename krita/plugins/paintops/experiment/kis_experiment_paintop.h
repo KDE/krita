@@ -38,7 +38,7 @@ public:
     KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     ~KisExperimentPaintOp();
 
-    KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
+    void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance);
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:

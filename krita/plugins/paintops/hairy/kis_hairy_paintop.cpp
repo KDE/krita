@@ -113,12 +113,10 @@ KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 }
 
 
-KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    // spacing is ignored in hairy, maybe todo
-    Q_UNUSED(savedDist);
-
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -142,6 +140,4 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    return KisDistanceInformation();
 }

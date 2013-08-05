@@ -530,12 +530,12 @@ qreal KisBrush::scale() const
 
 void KisBrush::setAngle(qreal _rotation)
 {
-  d->angle = _rotation;
+    d->angle = _rotation;
 }
 
 qreal KisBrush::angle() const
 {
-  return d->angle;
+    return d->angle;
 }
 
 QPainterPath KisBrush::outline() const

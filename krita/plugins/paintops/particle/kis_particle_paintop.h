@@ -38,7 +38,7 @@ public:
     ~KisParticlePaintOp();
 
     KisSpacingInformation paintAt(const KisPaintInformation& info);
-    KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
     const KisParticlePaintOpSettings* m_settings;

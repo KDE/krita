@@ -369,11 +369,12 @@ inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
     QPointF startPoint(0.10 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
     QPointF endPoint(0.90 * TEST_IMAGE_WIDTH, 0.5 * TEST_IMAGE_HEIGHT);
 
+    KisDistanceInformation currentDistance;
     KisPaintInformation pi1(startPoint, 0.0);
     KisPaintInformation pi2(endPoint, 1.0);
 
     QBENCHMARK{
-        m_painter->paintLine(pi1,pi2);
+        m_painter->paintLine(pi1, pi2, &currentDistance);
     }
 
 #ifdef SAVE_OUTPUT
@@ -408,26 +409,25 @@ QBENCHMARK{
     QPointF first(center.x()+radius,center.y());
 
     srand48(0);
+    for (int k = 0; k < rounds; k++){
+        KisDistanceInformation currentDistance;
+        m_painter->paintLine(center, first, &currentDistance);
+        QPointF prev = first;
+        for (int i = 1; i < steps; i++) {
+            qreal cx = cos(i * step * 2 * M_PI);
+            qreal cy = sin(i * step * 2 * M_PI);
 
-for (int k = 0; k < rounds; k++){
-    m_painter->paintLine(center, first);
-    QPointF prev = first;
-    for (int i = 1; i < steps; i++) {
-        qreal cx = cos(i * step * 2 * M_PI);
-        qreal cy = sin(i * step * 2 * M_PI);
+            cx *= (radius + drand48() * randomOffset);
+            cy *= (radius + drand48() * randomOffset);
 
-        cx *= (radius + drand48() * randomOffset);
-        cy *= (radius + drand48() * randomOffset);
+            cx += center.x();
+            cy += center.y();
 
-        cx += center.x();
-        cy += center.y();
-
-        m_painter->paintLine(prev, QPointF(cx,cy));
-        prev = QPointF(cx,cy);
+            m_painter->paintLine(prev, QPointF(cx,cy), &currentDistance);
+            prev = QPointF(cx,cy);
+        }
+        m_painter->paintLine(prev, first, &currentDistance);
     }
-    m_painter->paintLine(prev, first);
-}
-
 }
 
 #ifdef SAVE_OUTPUT
@@ -453,10 +453,11 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
     m_painter->setPaintOpPreset(preset, m_image);
 
     QBENCHMARK{
+        KisDistanceInformation currentDistance;
         for (int i = 0; i < LINES; i++){
             KisPaintInformation pi1(m_startPoints[i], 0.0);
             KisPaintInformation pi2(m_endPoints[i], 1.0);
-            m_painter->paintLine(pi1, pi2);
+            m_painter->paintLine(pi1, pi2, &currentDistance);
         }
     }
 
@@ -480,8 +481,9 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
     m_painter->setPaintOpPreset(preset, m_image);
 
     QBENCHMARK{
-        m_painter->paintBezierCurve(m_pi1, m_c1, m_c1, m_pi2, KisDistanceInformation());
-        m_painter->paintBezierCurve(m_pi2, m_c2, m_c2, m_pi3, KisDistanceInformation());
+        KisDistanceInformation currentDistance;
+        m_painter->paintBezierCurve(m_pi1, m_c1, m_c1, m_pi2, &currentDistance);
+        m_painter->paintBezierCurve(m_pi2, m_c2, m_c2, m_pi3, &currentDistance);
     }
 
 #ifdef SAVE_OUTPUT

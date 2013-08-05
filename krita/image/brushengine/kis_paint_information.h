@@ -28,6 +28,8 @@
 
 class QDomDocument;
 class QDomElement;
+class KisPaintOp;
+class KisDistanceInformation;
 
 /**
  * KisPaintInformation contains information about the input event that
@@ -65,7 +67,6 @@ public:
                         qreal pressure = PRESSURE_DEFAULT,
                         qreal xTilt = 0.0,
                         qreal yTilt = 0.0,
-                        const KisVector2D& movement = nullKisVector2D(),
                         qreal rotation = 0.0,
                         qreal tangentialPressure = 0.0,
                         qreal perspective = 1.0,
@@ -77,10 +78,10 @@ public:
 
     ~KisPaintInformation();
 
-    const QPointF& pos() const;
+    void paintAt(KisPaintOp *op, KisDistanceInformation *distanceInfo);
 
+    const QPointF& pos() const;
     void setPos(const QPointF& p);
-    void setMovement(const KisVector2D& m);
 
     /// The pressure of the value (from 0.0 to 1.0)
     qreal pressure() const;
@@ -94,11 +95,29 @@ public:
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
     qreal yTilt() const;
 
-    /// The movement of the pen is equal to current position minus the last position of the call to paintAt
-    KisVector2D movement() const;
+    /**
+     * Current brush direction computed from the cursor movement
+     *
+     * WARNING: this method is available *only* inside paintAt() call,
+     * that is when the distance information is registered.
+     */
+    qreal drawingAngle() const;
 
-    /// Rotation computed from the movement
-    qreal angle() const;
+    /**
+     * Current brush speed computed from the cursor movement
+     *
+     * WARNING: this method is available *only* inside paintAt() call,
+     * that is when the distance information is registered.
+     */
+    qreal drawingSpeed() const;
+
+    /**
+     * Current distance from the previous dab
+     *
+     * WARNING: this method is available *only* inside paintAt() call,
+     * that is when the distance information is registered.
+     */
+    qreal drawingDistance() const;
 
     /// rotation as given by the tablet event
     qreal rotation() const;
@@ -117,7 +136,7 @@ public:
     static KisPaintInformation fromXML(const QDomElement&);
     
     /// (1-t) * p1 + t * p2
-    static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2, const KisVector2D& movement);
+    static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
     static qreal ascension(const KisPaintInformation& info, bool normalize=true);
     static qreal declination(const KisPaintInformation& info, qreal maxTiltX=60.0, qreal maxTiltY=60.0, bool normalize=true);
 

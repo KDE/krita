@@ -637,7 +637,7 @@ void testRotationImpl(qreal angle, QString filePrefix)
         qDebug() << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
-        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

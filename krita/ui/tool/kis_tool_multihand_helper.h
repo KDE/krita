@@ -33,7 +33,9 @@ public:
     void setupTransformations(const QVector<QTransform> &transformations);
 
 protected:
-    void createPainters(QVector<PainterInfo*> &painterInfos);
+    void createPainters(QVector<PainterInfo*> &painterInfos,
+                        const QPointF &lastPosition,
+                        int lastTime);
 
     void paintAt(const QVector<PainterInfo*> &painterInfos,
                  const KisPaintInformation &pi);

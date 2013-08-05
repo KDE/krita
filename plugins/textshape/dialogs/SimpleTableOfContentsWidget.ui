@@ -30,19 +30,25 @@
      </property>
      <item row="0" column="0">
       <widget class="FormattingButton" name="addToC">
+       <property name="text">
+        <string>Contents</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
        <property name="popupMode">
         <enum>QToolButton::InstantPopup</enum>
        </property>
        <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextOnly</enum>
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
        </property>
        <property name="autoRaise">
         <bool>false</bool>
        </property>
       </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QToolButton" name="configureToC"/>
      </item>
     </layout>
    </item>

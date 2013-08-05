@@ -1,4 +1,5 @@
 add_subdirectory( tests )
+add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
 
@@ -40,7 +41,6 @@ set(koodf_LIB_SRCS
     KoTarStore.cpp
     KoDirectoryStore.cpp
     KoZipStore.cpp
-    KoXmlStreamReader.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
@@ -54,6 +54,7 @@ set(koodf_LIB_SRCS
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
+add_dependencies(koodf writeodf.h-target)
 
 target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
 target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
@@ -101,7 +102,6 @@ install( FILES
     KoColumns.h
     KoStore.h
     KoStoreDevice.h
-    KoXmlStreamReader.h
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h

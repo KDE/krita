@@ -709,10 +709,10 @@ bool KoTextDocumentLayout::doLayout()
         }
 
         if (shouldLayout) {
-            QSizeF size = d->provider->suggestSize(rootArea);
+            QRectF rect = d->provider->suggestRect(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
 
-            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+            rootArea->setReferenceRect(rect.left(), rect.right(), d->y + rect.top(), d->y + rect.bottom());
 
             beginAnchorCollecting(rootArea);
 
@@ -797,10 +797,10 @@ bool KoTextDocumentLayout::doLayout()
 
         if (rootArea) {
             d->rootAreaList.append(rootArea);
-            QSizeF size = d->provider->suggestSize(rootArea);
+            QRectF rect = d->provider->suggestRect(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
 
-            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+            rootArea->setReferenceRect(rect.left(), rect.right(), d->y + rect.top(), d->y + rect.bottom());
 
             beginAnchorCollecting(rootArea);
 

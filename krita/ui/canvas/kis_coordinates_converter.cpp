@@ -256,6 +256,16 @@ QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mi
     return m_d->documentOffset.toPoint();
 }
 
+bool KisCoordinatesConverter::xAxisMirrored() const
+{
+    return m_d->isXAxisMirrored;
+}
+
+bool KisCoordinatesConverter::yAxisMirrored() const
+{
+    return m_d->isYAxisMirrored;
+}
+
 QPoint KisCoordinatesConverter::resetRotation(QPointF center)
 {
     QTransform rot;

@@ -188,7 +188,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             if (m_shapeDynamicsProperties->followDrawingAngle){
 
-                rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
+                rotationZ = linearInterpolation( rotationZ,info.drawingAngle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
             }
 
             // random size - scale

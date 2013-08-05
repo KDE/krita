@@ -30,12 +30,23 @@ KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 }
 
 qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
-    int deltaTime = qMax(1, info.currentTime() - m_lastTime); // make sure deltaTime > 1
-    m_lastTime = info.currentTime();
-    double currentMove = info.movement().norm() / deltaTime;
-    // Average it to get nicer result, at the price of being less mathematically correct,
-    // but we quickly reach a situation where dt = 1 and currentMove = 1
-    m_speed = qMin(1.0, (m_speed * 0.9 + currentMove * 0.1));
+    /**
+     * The value of maximum speed was measured empirically. This is
+     * the speed that is quite easy to get with an A6 tablet and quite
+     * a big image. If you need smaller speeds, just change the curve.
+     */
+    const qreal maxSpeed = 30.0; // px / ms
+    const qreal blendExponent = 0.05;
+
+    qreal currentSpeed = info.drawingSpeed() / maxSpeed;
+
+    if (m_speed >= 0.0) {
+        m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
+                             currentSpeed * blendExponent));
+    } else {
+        m_speed = currentSpeed;
+    }
+
     return m_speed;
 }
 
@@ -45,16 +56,21 @@ KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(
     setMaximumLabel(i18n("360°"));
 }
 
+qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
+{
+    /* so that we are in 0.0..1.0 */
+    return 0.5 + info.drawingAngle() / (2.0 * M_PI);
+}
+
+bool KisDynamicSensorDrawingAngle::dependsOnCanvasRotation() const
+{
+    return false;
+}
+
 KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(RotationId)
 {
     setMinimumLabel(i18n("0°"));
     setMaximumLabel(i18n("360°"));
-}
-
-qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
-{
-    /* so that we are in 0.0..1.0 */
-    return 0.5 + info.angle() / (2.0 * M_PI);
 }
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)

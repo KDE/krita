@@ -51,12 +51,9 @@ protected:
             break;
         case KisParasite::Angular:
             // + m_d->PI_2 to be compatible with the gimp
-            angle = info.angle() + M_PI_2;
-            // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
-            if (angle < 0)
-                angle += 2.0 * M_PI;
-            else if (angle > 2.0 * M_PI)
-                angle -= 2.0 * M_PI;
+            angle = info.drawingAngle() + M_PI_2;
+            angle = normalizeAngle(angle);
+
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
             break;
         case KisParasite::TiltX:
@@ -373,11 +370,8 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
 {
-    if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary.
-            // What is the correct order of magnitude?
-            && m_d->brushesPipe.parasite().needsMovement)
-        return false;
-    return true;
+    return !m_d->brushesPipe.parasite().needsMovement ||
+        info.drawingDistance() >= 0.5;
 }
 
 KisImagePipeBrush* KisImagePipeBrush::clone() const

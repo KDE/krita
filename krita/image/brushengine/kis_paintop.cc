@@ -103,14 +103,13 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
-                               const KisPaintInformation &pi1,
-                               const KisVector2D &control1,
-                               const KisVector2D &control2,
-                               const KisPaintInformation &pi2,
-                               const KisDistanceInformation& savedDist)
+static void paintBezierCurve(KisPaintOp *paintOp,
+                             const KisPaintInformation &pi1,
+                             const KisVector2D &control1,
+                             const KisVector2D &control2,
+                             const KisPaintInformation &pi2,
+                             KisDistanceInformation *currentDistance)
 {
-    KisDistanceInformation newDistance;
     LineEquation line = LineEquation::Through(toKisVector2D(pi1.pos()), toKisVector2D(pi2.pos()));
     qreal d1 = line.absDistance(control1);
     qreal d2 = line.absDistance(control2);
@@ -121,7 +120,7 @@ static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
 #else
             || std::isnan(d1) || std::isnan(d2)) {
 #endif
-        newDistance = paintOp->paintLine(pi1, pi2, savedDist);
+        paintOp->paintLine(pi1, pi2, currentDistance);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508
         KisVector2D l2 = (toKisVector2D(pi1.pos()) + control1) / 2;
@@ -131,50 +130,51 @@ static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
         KisVector2D r2 = (h + r3) / 2;
         KisVector2D l4 = (l3 + r2) / 2;
 
-        KisVector2D midMovement = (pi1.movement() + pi2.movement()) * 0.5;
+        KisPaintInformation middlePI = KisPaintInformation::mix(toQPointF(l4), 0.5, pi1, pi2);
 
-        KisPaintInformation middlePI = KisPaintInformation::mix(toQPointF(l4), 0.5, pi1, pi2, midMovement);
-
-        newDistance = paintBezierCurve(paintOp, pi1, l2, l3, middlePI, savedDist);
-        newDistance = paintBezierCurve(paintOp, middlePI, r2, r3, pi2, newDistance);
+        paintBezierCurve(paintOp, pi1, l2, l3, middlePI, currentDistance);
+        paintBezierCurve(paintOp, middlePI, r2, r3, pi2, currentDistance);
     }
-
-    return newDistance;
 }
 
-KisDistanceInformation KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
-                                    const QPointF &control1,
-                                    const QPointF &control2,
-                                    const KisPaintInformation &pi2,
-                                    const KisDistanceInformation& savedDist)
+void KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance)
 {
-    return ::paintBezierCurve(this, pi1, toKisVector2D(control1), toKisVector2D(control2), pi2, savedDist);
+    return ::paintBezierCurve(this, pi1, toKisVector2D(control1), toKisVector2D(control2), pi2, currentDistance);
 }
 
 
-KisDistanceInformation KisPaintOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             const KisDistanceInformation& savedDist)
+void KisPaintOp::paintLine(const KisPaintInformation &pi1,
+                           const KisPaintInformation &pi2,
+                           KisDistanceInformation *currentDistance)
 {
-    KisDistanceInformation currentDistance = savedDist;
-    QPointF start = pi1.pos();
     QPointF end = pi2.pos();
-    QVector2D dragVecNorm = QVector2D(end - start).normalized();
 
     KisPaintInformation pi = pi1;
-    QPointF pt = start;
+    QPointF pt = pi1.pos();
     qreal t = 0.0;
 
-    while ((t = currentDistance.getNextPointPosition(pt, end)) >= 0.0) {
-        qreal spacingApproximation = currentDistance.spacing().scalarApprox();
-        KisVector2D movement = toKisVector2D((dragVecNorm * spacingApproximation).toPointF());
+    while ((t = currentDistance->getNextPointPosition(pt, end)) >= 0.0) {
         pt = pt + t * (end - pt);
-        pi = KisPaintInformation::mix(pt, t, pi, pi2, movement);
+        pi = KisPaintInformation::mix(pt, t, pi, pi2);
 
-        currentDistance.setSpacing(paintAt(pi));
+        /**
+         * A bit complicated part to ensure the registration
+         * of the distance information is done in right order
+         */
+        pi.paintAt(this, currentDistance);
     }
+}
 
-    return currentDistance;
+void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance)
+{
+    Q_ASSERT(currentDistance);
+
+    KisPaintInformation pi(info);
+    pi.paintAt(this, currentDistance);
 }
 
 KisPainter* KisPaintOp::painter() const

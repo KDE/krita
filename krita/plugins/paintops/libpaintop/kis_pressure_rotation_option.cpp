@@ -31,11 +31,14 @@ KisPressureRotationOption::KisPressureRotationOption()
     setMaximumLabel(i18n("360°"));
 }
 
-
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return m_defaultAngle;
-    return fmod( (1.0 - computeValue(info)) * 2.0 * M_PI + m_defaultAngle, 2.0 * M_PI);
+
+    qreal baseAngle = sensor()->dependsOnCanvasRotation() ?
+        m_defaultAngle : 0;
+
+    return fmod( (1.0 - computeValue(info)) * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
 }
 
 void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)

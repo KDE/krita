@@ -110,21 +110,17 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal d
         result = QPointF(jitter, jitterY);
         return info.pos() + result;
     }
-    
-    QVector2D movement = toQVector2D( info.movement() ).normalized();
-    if (m_axisX)
-    {
+
+    qreal drawingAngle = info.drawingAngle();
+    QVector2D movement(cos(drawingAngle), sin(drawingAngle));
+    if (m_axisX) {
         movement *= jitter;
         result = movement.toPointF();
-        
-    }
-    else if (m_axisY)
-    {
-        QVector2D movementNormal( -movement.y(), movement.x() );    
+    } else if (m_axisY) {
+        QVector2D movementNormal( -movement.y(), movement.x() );
         movementNormal *= jitter;
         result = movementNormal.toPointF();
     }
 
-    
     return info.pos() + result;
 }

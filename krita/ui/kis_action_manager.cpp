@@ -133,7 +133,7 @@ void KisActionManager::updateGUI()
 
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
-                if (node->inherits(type.toAscii())) {
+                if (node->inherits(type.toLatin1())) {
                     enable = false;
                     break;
                 }

@@ -170,7 +170,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                             m_spacingOption, info);
 }
 
-KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
 {
     if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
@@ -186,8 +186,7 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-
-        return KisDistanceInformation();
+    } else {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
     }
-    return KisPaintOp::paintLine(pi1, pi2, savedDist);
 }

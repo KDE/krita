@@ -24,6 +24,7 @@
 #include "TableOfContentsPreview.h"
 
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoIcon.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -43,13 +44,11 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 
     m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
-    widget.addToC->setDefaultAction(tool->action("insert_tableofcontents"));
-    widget.configureToC->setDefaultAction(tool->action("format_tableofcontents"));
+    widget.addToC->setIcon(koIcon("insert-tableofcontents"));
     widget.addToC->setNumColumns(1);
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
-    connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
 }
 
 SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
@@ -60,25 +59,6 @@ SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-}
-
-void SimpleTableOfContentsWidget::setToCConfigureMenu(QMenu *tocMenu)
-{
-    if (widget.configureToC->menu()) {
-        widget.configureToC->menu()->disconnect();
-    }
-
-    widget.configureToC->setMenu(tocMenu);
-}
-
-QMenu *SimpleTableOfContentsWidget::ToCConfigureMenu()
-{
-    return widget.configureToC->menu();
-}
-
-void SimpleTableOfContentsWidget::showMenu()
-{
-    widget.configureToC->showMenu();
 }
 
 void SimpleTableOfContentsWidget::prepareTemplateMenu()
@@ -119,6 +99,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
         widget.addToC->addSeparator();
         widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
         connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()), Qt::UniqueConnection);
+        widget.addToC->addAction(m_referenceTool->action("format_tableofcontents"));
     }
 }
 

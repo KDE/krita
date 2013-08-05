@@ -68,6 +68,8 @@ public:
     
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);

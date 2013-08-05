@@ -24,6 +24,16 @@
 #include <QDate>
 #include <QStringList>
 
+class Duration {
+private:
+    QTime m_time;
+public:
+    explicit Duration(const QTime& t) :m_time(t) {}
+    QString toString() const {
+        return m_time.toString("'PT'hh'H'mm'M'ss'S'");
+    }
+};
+
 class OdfWriter {
 private:
     void operator=(const OdfWriter&);
@@ -102,6 +112,10 @@ public:
     void addAttribute(const char* name, const QStringList& value) {
         Q_ASSERT(!child);
         xml->addAttribute(name, value.join(QChar(' ')));
+    }
+    void addAttribute(const char* name, const Duration& value) {
+        Q_ASSERT(!child);
+        xml->addAttribute(name, value.toString());
     }
     void addProcessingInstruction(const char* cstr) {
         endChild();

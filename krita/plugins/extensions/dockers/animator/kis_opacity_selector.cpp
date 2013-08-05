@@ -28,65 +28,75 @@ KisOpacitySelector::KisOpacitySelector(int x, int y, int width, int height, QGra
     m_frames = frames;
     this->setPos(m_x, m_y);
     QList<int> l;
-    for(int i = 0; i < frames; i++){
-        l.append((i*50)/frames);
+    for(int i = 0; i < frames; i++) {
+        l.append((i * 50) / frames);
     }
     this->setOpacityValue(l);
     setAcceptHoverEvents(true);
 }
 
-KisOpacitySelector::~KisOpacitySelector(){
+KisOpacitySelector::~KisOpacitySelector()
+{
 
 }
 
-void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+void KisOpacitySelector::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
     int step = m_width / m_frames;
     int j = 0;
     int opacityVal = 0;
     int nextOpacityVal = 0;
-    for(int i = 0; i < m_width; i+=step){
+    for(int i = 0; i < m_width; i += step) {
         painter->setPen(Qt::gray);
-        painter->drawLine(i,0,i,m_height);
+        painter->drawLine(i, 0, i, m_height);
         painter->setPen(Qt::green);
         //To fix assertion
-        if(j < m_opacityValues->length()){
+        if(j < m_opacityValues->length()) {
             opacityVal = m_opacityValues->at(j);
-        }else{
+        }
+        else {
             opacityVal = 0;
         }
 
-        if(j < m_opacityValues->length()-1){
+        if(j < m_opacityValues->length() - 1) {
             nextOpacityVal = m_opacityValues->at(j+1);
-        }else{
+        }
+        else {
             nextOpacityVal = 0;
         }
 
-        painter->drawEllipse(i+(step/2),m_height - (opacityVal*(m_height))/100, 2,2);
-        if(j<m_opacityValues->length()-1)
-            painter->drawLine(i+(step/2),m_height-(opacityVal*(m_height))/100,i+(3*step/2), m_height-(nextOpacityVal*(m_height))/100);
+        painter->drawEllipse(i + (step / 2),m_height - (opacityVal * (m_height)) / 100, 2, 2);
+        if(j<m_opacityValues->length() - 1) {
+            painter->drawLine(i + (step / 2), m_height - (opacityVal * (m_height)) / 100, i + (3 * step / 2), m_height - (nextOpacityVal * (m_height)) / 100);
+        }
         j++;
     }
 }
 
-QRectF KisOpacitySelector::boundingRect() const{
+QRectF KisOpacitySelector::boundingRect() const
+{
     return QRectF(m_x, m_y, m_width, m_height);
 }
 
-QPainterPath KisOpacitySelector::shape() const{
+QPainterPath KisOpacitySelector::shape() const
+{
     QPainterPath path;
     path.addRect(m_x, m_y, m_width, m_height);
     return path;
 }
 
-void KisOpacitySelector::setOpacityValue(QList<int> l){
+void KisOpacitySelector::setOpacityValue(QList<int> l)
+{
     m_opacityValues = new QList<int>(l);
 }
 
-void KisOpacitySelector::setOpacityValue(int frame, int val){
+void KisOpacitySelector::setOpacityValue(int frame, int val)
+{
     m_opacityValues->replace(frame, val);
     this->update(m_x, m_y, m_width, m_height);
 }
 
-QList<int>* KisOpacitySelector::getOpacityValues(){
+QList<int>* KisOpacitySelector::getOpacityValues()
+{
     return m_opacityValues;
 }

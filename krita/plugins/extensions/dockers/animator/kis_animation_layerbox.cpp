@@ -42,10 +42,11 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
 
     KisAnimationLayer* firstLayer = new KisAnimationLayer(this);
     m_layers << firstLayer;
-    firstLayer->setGeometry(QRect(0,this->m_layers.length()*20,width(),20));
+    firstLayer->setGeometry(QRect(0,this->m_layers.length()*20, width(), 20));
 }
 
-inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const QString &id){
+inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const QString &id)
+{
     Q_ASSERT(m_dock->getCanvas());
 
     KisAction *action = m_dock->getCanvas()->view()->actionManager()->actionByName(id);
@@ -53,7 +54,8 @@ inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const Q
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
 }
 
-void KisAnimationLayerBox::onCanvasReady(){
+void KisAnimationLayerBox::onCanvasReady()
+{
     this->connectActionToButton(m_dock->m_addPaintLayerAction, "add_new_paint_layer");
     connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
 
@@ -63,12 +65,13 @@ void KisAnimationLayerBox::onCanvasReady(){
     m_nodeManager = m_dock->getCanvas()->view()->nodeManager();
 }
 
-void KisAnimationLayerBox::updateUI(){
+void KisAnimationLayerBox::updateUI()
+{
     KisAnimationLayer* newLayer = new KisAnimationLayer(this);
     m_layers << newLayer;
     int y;
     int noLayers = m_layers.length();
-    for(int i = 0; i < noLayers-1; i++){
+    for(int i = 0; i < noLayers-1; i++) {
         y = m_layers.at(i)->geometry().y();
         m_layers.at(i)->setGeometry(QRect(0, y+20, width(), 20));
     }
@@ -76,12 +79,14 @@ void KisAnimationLayerBox::updateUI(){
     newLayer->show();
 }
 
-void KisAnimationLayerBox::resizeEvent(QResizeEvent *event){
-    for(int i = 0; i < m_layers.length(); i++){
+void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
+{
+    for(int i = 0; i < m_layers.length(); i++) {
         m_layers.at(i)->setFixedSize(width(), 20);
     }
 }
 
-QList<KisAnimationLayer*> KisAnimationLayerBox::getLayers(){
+QList<KisAnimationLayer*> KisAnimationLayerBox::getLayers()
+{
     return this->m_layers;
 }

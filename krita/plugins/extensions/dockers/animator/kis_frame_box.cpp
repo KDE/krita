@@ -34,31 +34,34 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
 
     KisLayerContents* firstContents = new KisLayerContents(this);
     m_layerContents << firstContents;
-    firstContents->setGeometry(QRect(0, m_layerContents.length()*20,10000, 20));
+    firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 10000, 20));
 }
 
-void KisFrameBox::onCanvasReady(){
+void KisFrameBox::onCanvasReady()
+{
     connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
     connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
 }
 
-void KisFrameBox::updateUI(){
+void KisFrameBox::updateUI()
+{
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;
     int y;
     int noLayers = m_layerContents.length();
 
-    for(int i = 0; i < noLayers - 1; i++){
+    for(int i = 0; i < noLayers - 1; i++) {
         y = m_layerContents.at(i)->geometry().y();
-        m_layerContents.at(i)->setGeometry(QRect(0, y+20, 10000, 20));
+        m_layerContents.at(i)->setGeometry(QRect(0, y + 20, 10000, 20));
     }
     newContents->setGeometry(QRect(0, 20, 10000, 20));
     newContents->show();
 }
 
-void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame){
+void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame)
+{
     this->m_selectedFrame = selectedFrame;
-    if(this->m_selectedFrame){
+    if(this->m_selectedFrame) {
         int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
         QRect globalPosition(this->m_selectedFrame->x(),
                              layerIndex, this->m_selectedFrame->width(), this->m_selectedFrame->height());
@@ -66,19 +69,22 @@ void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame){
     }
 }
 
-KisAnimationFrame* KisFrameBox::getSelectedFrame(){
+KisAnimationFrame* KisFrameBox::getSelectedFrame()
+{
     return m_selectedFrame;
 }
 
-KisLayerContents* KisFrameBox::getFirstLayer(){
+KisLayerContents* KisFrameBox::getFirstLayer()
+{
 
-    if(m_layerContents.isEmpty()){
+    if(m_layerContents.isEmpty()) {
         return 0;
     }
 
     return m_layerContents.at(0);
 }
 
-QList<KisLayerContents*> KisFrameBox::getLayerContents(){
+QList<KisLayerContents*> KisFrameBox::getLayerContents()
+{
     return this->m_layerContents;
 }

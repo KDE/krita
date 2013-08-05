@@ -78,24 +78,29 @@ public:
 
 class OnionSkinDockFactory : public KoDockFactoryBase{
 public:
-    OnionSkinDockFactory(){
+    OnionSkinDockFactory()
+    {
     }
 
-    virtual QString id() const{
+    virtual QString id() const
+    {
         return QString("Onion Skin");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const{
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::LeftDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget(){
+    virtual QDockWidget* createDockWidget()
+    {
         OnionSkinDock* dockWidget = new OnionSkinDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const{
+    DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };

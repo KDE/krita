@@ -29,90 +29,112 @@ KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
 {
 }
 
-void KisAnimation::setName(const QString &name){
+void KisAnimation::setName(const QString &name)
+{
     m_name = name;
 }
 
-QString KisAnimation::name() const{
+QString KisAnimation::name() const
+{
     return m_name;
 }
 
-void KisAnimation::setAuthor(const QString &author){
+void KisAnimation::setAuthor(const QString &author)
+{
     m_author = author;
 }
 
-QString KisAnimation::author() const{
+QString KisAnimation::author() const
+{
     return m_author;
 }
 
-void KisAnimation::setDescription(const QString &description){
+void KisAnimation::setDescription(const QString &description)
+{
     m_description = description;
 }
 
-QString KisAnimation::description() const{
+QString KisAnimation::description() const
+{
     return m_description;
 }
 
-void KisAnimation::setFps(int fps){
+void KisAnimation::setFps(int fps)
+{
     m_fps = fps;
 }
 
-int KisAnimation::fps() const{
+int KisAnimation::fps() const
+{
     return m_fps;
 }
 
-void KisAnimation::setTime(int time){
+void KisAnimation::setTime(int time)
+{
     m_time = time;
 }
 
-int KisAnimation::time() const{
+int KisAnimation::time() const
+{
     return m_time;
 }
 
-void KisAnimation::setColorSpace(const KoColorSpace *colorSpace){
+void KisAnimation::setColorSpace(const KoColorSpace *colorSpace)
+{
     this->m_colorSpace = colorSpace;
 }
 
-const KoColorSpace *KisAnimation::colorSpace(){
+const KoColorSpace *KisAnimation::colorSpace()
+{
     return m_colorSpace;
 }
 
-void KisAnimation::setWidth(qint32 w){
+void KisAnimation::setWidth(qint32 w)
+{
     this->m_width = w;
 }
 
-qint32 KisAnimation::width() const{
+qint32 KisAnimation::width() const
+{
     return this->m_width;
 }
 
-void KisAnimation::setHeight(qint32 h){
+void KisAnimation::setHeight(qint32 h)
+{
     this->m_height = h;
 }
 
-qint32 KisAnimation::height() const{
+qint32 KisAnimation::height() const
+{
     return this->m_height;
 }
 
-void KisAnimation::setResolution(double res){
+void KisAnimation::setResolution(double res)
+{
     this->m_resolution = res;
 }
 
-double KisAnimation::resolution() const{
+double KisAnimation::resolution() const
+{
     return this->m_resolution;
 }
 
-void KisAnimation::setBgColor(KoColor bgColor){
+void KisAnimation::setBgColor(KoColor bgColor)
+{
     this->m_bgColor = bgColor;
 }
 
-KoColor KisAnimation::bgColor() const{
+KoColor KisAnimation::bgColor() const
+{
     return this->m_bgColor;
 }
 
-void KisAnimation::load(const QString &url){
+void KisAnimation::load(const QString &url)
+{
 
 }
 
-void KisAnimation::save(const QString &url){
+void KisAnimation::save(const QString &url)
+{
 
 }

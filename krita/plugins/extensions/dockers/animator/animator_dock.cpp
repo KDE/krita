@@ -47,11 +47,12 @@ AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_ani
     this->setWidget(m_mainWidget);
 }
 
-void AnimatorDock::setCanvas(KoCanvasBase *canvas){
+void AnimatorDock::setCanvas(KoCanvasBase *canvas)
+{
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()){
+    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
         m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
-        if(m_animation){
+        if(m_animation) {
             m_mainWidget->setCanvas(m_canvas);
             m_mainWidget->getLayerBox()->onCanvasReady();
             m_mainWidget->getFrameBox()->onCanvasReady();
@@ -61,7 +62,8 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas){
     }
 }
 
-void AnimatorDock::updateNumberOfFrames(){
+void AnimatorDock::updateNumberOfFrames()
+{
 
 }
 #include "animator_dock.moc"

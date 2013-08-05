@@ -19,7 +19,8 @@
 #include "kis_kranim_loader.h"
 #include <kis_image.h>
 
-struct KisKranimLoader::Private{
+struct KisKranimLoader::Private
+{
 public:
     KisAnimationDoc* document;
     QString animationName;
@@ -31,15 +32,18 @@ KisKranimLoader::KisKranimLoader(KisAnimationDoc *doc)
     m_d->document = doc;
 }
 
-KisKranimLoader::~KisKranimLoader(){
+KisKranimLoader::~KisKranimLoader()
+{
     delete m_d;
 }
 
-void KisKranimLoader::loadBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){
+void KisKranimLoader::loadBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external)
+{
     kWarning() << "Load binary data";
 }
 
-KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem){
+KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
+{
     kWarning() << "Load XML";
     KisImageWSP image = 0;
     return image;

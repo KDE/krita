@@ -30,11 +30,13 @@ KisAnimationPart::KisAnimationPart(QObject* parent)
 
 }
 
-KisAnimationPart::~KisAnimationPart(){
+KisAnimationPart::~KisAnimationPart()
+{
     delete m_animation;
 }
 
-QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWidgets(QWidget *parent){
+QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWidgets(QWidget *parent)
+{
     KisConfig cfg;
     int w = cfg.defImageWidth();
     int h = cfg.defImageHeight();
@@ -51,6 +53,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWi
     return widgetlist;
 }
 
-void KisAnimationPart::setAnimation(KisAnimation *animation){
+void KisAnimationPart::setAnimation(KisAnimation *animation)
+{
     m_animation = animation;
 }

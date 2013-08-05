@@ -169,40 +169,50 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
 }
 
-void KisTimeline::frameSelectionChanged(QRect frame){
+void KisTimeline::frameSelectionChanged(QRect frame)
+{
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->frameSelectionChanged(frame);
 }
 
-void KisTimeline::resizeEvent(QResizeEvent *event){
+void KisTimeline::resizeEvent(QResizeEvent *event)
+{
 
 }
 
-void KisTimeline::setCanvas(KisCanvas2 *canvas){
+void KisTimeline::setCanvas(KisCanvas2 *canvas)
+{
     m_canvas = canvas;
 }
 
-void KisTimeline::setModel(KisAnimation *animation){
+void KisTimeline::setModel(KisAnimation *animation)
+{
     this->m_animation = animation;
 }
 
-KisCanvas2* KisTimeline::getCanvas(){
+KisCanvas2* KisTimeline::getCanvas()
+{
     return m_canvas;
 }
 
-KisAnimationLayerBox* KisTimeline::getLayerBox(){
+KisAnimationLayerBox* KisTimeline::getLayerBox()
+{
     return m_list;
 }
 
-KisFrameBox* KisTimeline::getFrameBox(){
+KisFrameBox* KisTimeline::getFrameBox()
+{
     return m_cells;
 }
-void KisTimeline::updateHeight(){
+
+void KisTimeline::updateHeight()
+{
     m_list->setFixedHeight(m_list->height()+20);
     m_cells->setFixedHeight(m_cells->height()+20);
 }
 
-void KisTimeline::blankFramePressed(){
-    if(m_cells->getSelectedFrame()){
+void KisTimeline::blankFramePressed()
+{
+    if(m_cells->getSelectedFrame()) {
         KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
         KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
@@ -213,8 +223,9 @@ void KisTimeline::blankFramePressed(){
     }
 }
 
-void KisTimeline::keyFramePressed(){
-    if(m_cells->getSelectedFrame()){
+void KisTimeline::keyFramePressed()
+{
+    if(m_cells->getSelectedFrame()) {
         KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
         KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
@@ -225,8 +236,9 @@ void KisTimeline::keyFramePressed(){
     }
 }
 
-void KisTimeline::addframePressed(){
-    if(m_cells->getSelectedFrame()){
+void KisTimeline::addframePressed()
+{
+    if(m_cells->getSelectedFrame()) {
         KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         this->m_cells->getSelectedFrame()->expandWidth();
         KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
@@ -236,6 +248,7 @@ void KisTimeline::addframePressed(){
     }
 }
 
-void KisTimeline::documentModified(){
+void KisTimeline::documentModified()
+{
     emit canvasModified();
 }

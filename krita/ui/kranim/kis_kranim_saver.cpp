@@ -27,32 +27,35 @@
 
 using namespace KRANIM;
 
-struct KisKranimSaver::Private {
+struct KisKranimSaver::Private
+{
     KisAnimation *animation;
     KisAnimationDoc *doc;
     KoStore *store;
 };
 
-KisKranimSaver::KisKranimSaver(KisAnimationDoc *document) : m_d(new Private)
+KisKranimSaver::KisKranimSaver(KisAnimationDoc *document)
+    : m_d(new Private)
 {
     m_d->doc = document;
     m_d->animation = dynamic_cast<KisAnimationPart*>(document->documentPart())->animation();
 }
 
-KisKranimSaver::~KisKranimSaver(){
+KisKranimSaver::~KisKranimSaver()
+{
     delete m_d;
 }
 
-QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image){
-
+QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image)
+{
     QDomElement layersElement = doc.createElement("layers");
-
     QDomElement layer = doc.createElement("layer");
     layersElement.appendChild(layer);
     return layersElement;
 }
 
-QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc){
+QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc)
+{
     QDomElement metaDataElement = doc.createElement("metadata");
     metaDataElement.setAttribute(MIME, NATIVE_MIMETYPE);
     metaDataElement.setAttribute(NAME, m_d->animation->name());
@@ -67,15 +70,14 @@ QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc){
     return metaDataElement;
 }
 
-bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external){
-    kWarning() << "Saving binary data";
-
+bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external)
+{
     m_d->store = store;
 
     QString location = "mimetype";
     const QByteArray mimetype = "application/x-kritaanimation";
 
-    if(store->open(location)){
+    if(store->open(location)) {
         store->write(mimetype);
         store->close();
     }
@@ -83,10 +85,9 @@ bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QSt
     return true;
 }
 
-void KisKranimSaver::saveFrame(KoStore *store, KisLayerSP frame, QRect framePosition){
-    if(frame){
-
-        kWarning() << "Saving frame:" << frame->name();
+void KisKranimSaver::saveFrame(KoStore *store, KisLayerSP frame, QRect framePosition)
+{
+    if(frame) {
 
         KisPaintDeviceSP device = frame->paintDevice();
         QString location = "frame" + QString::number(framePosition.x());
@@ -109,7 +110,7 @@ void KisKranimSaver::saveFrame(KoStore *store, KisLayerSP frame, QRect framePosi
             store->close();
         }
 
-        if(store->open(location+".defaultpixel")){
+        if(store->open(location+".defaultpixel")) {
             store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
             store->close();
         }

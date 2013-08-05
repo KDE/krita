@@ -58,14 +58,16 @@ KisAnimationFactory::KisAnimationFactory(QObject *parent) : KPluginFactory(*abou
     (void)componentData();
 }
 
-KisAnimationFactory::~KisAnimationFactory(){
+KisAnimationFactory::~KisAnimationFactory()
+{
     delete s_aboutData;
     s_aboutData = 0;
     delete s_instance;
     s_instance = 0;
 }
 
-QObject* KisAnimationFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword){
+QObject* KisAnimationFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
+{
     Q_UNUSED( args );
     Q_UNUSED( keyword);
 
@@ -74,20 +76,25 @@ QObject* KisAnimationFactory::create(const char *iface, QWidget *parentWidget, Q
     return doc->documentPart();
 }
 
-KAboutData* KisAnimationFactory::aboutData(){
-    if(!s_aboutData){
+KAboutData* KisAnimationFactory::aboutData()
+{
+    if(!s_aboutData) {
         s_aboutData = newKritaAnimatorAboutData();
     }
 
     return s_aboutData;
 }
 
-const KComponentData &KisAnimationFactory::componentData(){
-    if(!s_instance){
-        if(s_aboutData)
+const KComponentData &KisAnimationFactory::componentData()
+{
+    if(!s_instance) {
+        if(s_aboutData) {
             s_instance = new KComponentData(s_aboutData);
-        else
+        }
+        else {
             s_instance = new KComponentData(newKritaAnimatorAboutData());
+        }
+
         Q_CHECK_PTR(s_instance);
 
         KisExiv2::initialize();

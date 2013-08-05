@@ -66,7 +66,9 @@
 #include "kis_animation.h"
 #include <stdlib.h>
 
-KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName) : WdgAnimationSelector(parent){
+KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName)
+    : WdgAnimationSelector(parent)
+{
     setObjectName("KisAnimationSelector");
     m_document = document;
     txtAnimationName->setText(animationName);
@@ -109,12 +111,14 @@ KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *doc
     connect(bnCreateAnimation, SIGNAL(clicked()), this, SLOT(createAnimation()));
 }
 
-KisAnimationSelector::~KisAnimationSelector(){
+KisAnimationSelector::~KisAnimationSelector()
+{
     qDeleteAll(m_predefined);
     m_predefined.clear();
 }
 
-void KisAnimationSelector::createAnimation(){
+void KisAnimationSelector::createAnimation()
+{
     const KoColorSpace* cs = colorSpaceSelector->currentColorSpace();
     QColor qc = inputBackground->color();
     qint32 width, height;
@@ -162,26 +166,28 @@ void KisAnimationSelector::createAnimation(){
     emit documentSelected();
 }
 
-void KisAnimationSelector::resolutionChanged(double value){
-    if(m_widthUnit.type() == KoUnit::Pixel){
+void KisAnimationSelector::resolutionChanged(double value)
+{
+    if(m_widthUnit.type() == KoUnit::Pixel) {
         m_widthUnit.setFactor(value / 72.0);
         m_width = m_widthUnit.fromUserValue(inputWidth->value());
     }
 
-    if(m_heightUnit.type() == KoUnit::Pixel){
+    if(m_heightUnit.type() == KoUnit::Pixel) {
         m_heightUnit.setFactor(value / 72.0);
         m_height = m_heightUnit.fromUserValue(inputHeight->value());
     }
 }
 
-void KisAnimationSelector::widthUnitChanged(int index){
+void KisAnimationSelector::widthUnitChanged(int index)
+{
     inputWidth->blockSignals(true);
     m_widthUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
-    if(m_widthUnit.type() == KoUnit::Pixel){
+    if(m_widthUnit.type() == KoUnit::Pixel) {
         inputWidth->setDecimals(0);
         m_widthUnit.setFactor(inputResolution->value() / 72.0);
     }
-    else{
+    else {
         inputWidth->setDecimals(2);
     }
 
@@ -189,15 +195,16 @@ void KisAnimationSelector::widthUnitChanged(int index){
     inputWidth->blockSignals(false);
 }
 
-void KisAnimationSelector::heightUnitChanged(int index){
+void KisAnimationSelector::heightUnitChanged(int index)
+{
     inputHeight->blockSignals(true);
 
     m_heightUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
-    if(m_heightUnit.type() == KoUnit::Pixel){
+    if(m_heightUnit.type() == KoUnit::Pixel) {
         inputHeight->setDecimals(0);
         m_heightUnit.setFactor(inputResolution->value() / 72.0);
     }
-    else{
+    else {
         inputHeight->setDecimals(2);
     }
 
@@ -205,18 +212,21 @@ void KisAnimationSelector::heightUnitChanged(int index){
     inputHeight->blockSignals(false);
 }
 
-void KisAnimationSelector::heightChanged(double value){
+void KisAnimationSelector::heightChanged(double value)
+{
     m_height = m_heightUnit.fromUserValue(value);
 }
 
-void KisAnimationSelector::widthChanged(double value){
+void KisAnimationSelector::widthChanged(double value)
+{
     m_width = m_widthUnit.fromUserValue(value);
 }
 
-quint8 KisAnimationSelector::backgroundOpacity(){
+quint8 KisAnimationSelector::backgroundOpacity()
+{
     qint32 opacity = inputOpacity->value();
 
-    if(!opacity){
+    if(!opacity) {
         return 0;
     }
 

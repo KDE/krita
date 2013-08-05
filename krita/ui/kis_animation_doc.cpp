@@ -31,7 +31,8 @@
 static const char CURRENT_DTD_VERSION[] = "1.0";
 
 
-class KisAnimationDoc::KisAnimationDocPrivate{
+class KisAnimationDoc::KisAnimationDocPrivate
+{
 public:
     KisAnimationDocPrivate()
         :kranimSaver(0),
@@ -109,10 +110,10 @@ bool KisAnimationDoc::completeSaving(KoStore *store)
 {
     QString uri = url().url();
 
-    if(!d->saved){
+    if(!d->saved) {
         d->kranimSaver->saveBinaryData(store, this->image(), uri, isStoredExtern());
     }
-    else{
+    else {
         QDomElement e = d->doc.createElement("frame");
         e.setAttribute("number", d->newFramePosition.x());
         e.setAttribute("layer", d->newFramePosition.y());
@@ -165,12 +166,12 @@ void KisAnimationDoc::preSaveAnimation()
     QStringList mimeFilter = KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Export,
                                                          this->extraNativeMimeTypes(KoDocument::ForExport));
     kWarning() << nativeFormat;
-    if(!mimeFilter.contains(nativeFormat)){
+    if(!mimeFilter.contains(nativeFormat)) {
         kWarning() << "No output filter";
     }
     this->setOutputMimeType(nativeFormat, 0);
 
-    KUrl newUrl(url.directory()+"/"+animation->name()+".kranim");
+    KUrl newUrl(url.directory() + "/" + animation->name() + ".kranim");
 
     d->saved = this->documentPart()->saveAs(newUrl);
 }

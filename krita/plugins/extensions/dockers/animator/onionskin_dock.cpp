@@ -72,11 +72,12 @@ OnionSkinDock::OnionSkinDock() : QDockWidget(i18n("Onion Skin")), m_canvas(0), m
     connect(m_nextFramesInput, SIGNAL(valueChanged(int)), m_nextOpacitySelectorView, SLOT(setNumberOfFrames(int)));
 }
 
-void OnionSkinDock::setCanvas(KoCanvasBase *canvas){
+void OnionSkinDock::setCanvas(KoCanvasBase *canvas)
+{
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()){
+    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
         m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
-        if(m_animation){
+        if(m_animation) {
 
         }
     }

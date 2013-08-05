@@ -28,12 +28,13 @@ KisTimelineHeader::KisTimelineHeader(KisFrameBox *parent)
     this->setParent(parent);
 }
 
-void KisTimelineHeader::paintEvent(QPaintEvent *event){
+void KisTimelineHeader::paintEvent(QPaintEvent *event)
+{
     QPainter painter(this);
 
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < 1000; i++) {
         if(i % 5 == 0){
-            painter.drawText(10*i, 15, QString("%1").arg(i));
+            painter.drawText(10 * i, 15, QString("%1").arg(i));
         }
     }
 }

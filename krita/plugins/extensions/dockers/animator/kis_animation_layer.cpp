@@ -42,14 +42,16 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent)
     connect(m_inputLayerName, SIGNAL(returnPressed()), this, SLOT(onLayerNameEdited()));
 }
 
-void KisAnimationLayer::paintEvent(QPaintEvent *event){
+void KisAnimationLayer::paintEvent(QPaintEvent *event)
+{
     QPainter painter(this);
     painter.setPen(Qt::darkGray);
     painter.setBrush(Qt::lightGray);
     painter.drawRect(QRect(0,0,width(), height()));
 }
 
-void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event){
+void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event)
+{
     lay->removeWidget(m_lblLayerName);
     m_lblLayerName->hide();
     m_inputLayerName->setText(m_lblLayerName->text());
@@ -57,7 +59,8 @@ void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event){
     m_inputLayerName->show();
 }
 
-void KisAnimationLayer::onLayerNameEdited(){
+void KisAnimationLayer::onLayerNameEdited()
+{
     lay->removeWidget(m_inputLayerName);
     m_inputLayerName->hide();
     m_lblLayerName->setText(m_inputLayerName->text());

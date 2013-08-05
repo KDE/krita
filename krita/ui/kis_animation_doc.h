@@ -45,7 +45,7 @@ private:
 
 private:
     class KisAnimationDocPrivate;
-    KisAnimationDocPrivate* const m_d_anim;
+    KisAnimationDocPrivate* const d;
 
 };
 

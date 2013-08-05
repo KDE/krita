@@ -27,11 +27,10 @@
 
 using namespace KRANIM;
 
-struct KisKranimSaver::Private{
-public:
-    KisAnimation* animation;
-    KisAnimationDoc* doc;
-    KoStore* store;
+struct KisKranimSaver::Private {
+    KisAnimation *animation;
+    KisAnimationDoc *doc;
+    KoStore *store;
 };
 
 KisKranimSaver::KisKranimSaver(KisAnimationDoc *document) : m_d(new Private)
@@ -84,14 +83,14 @@ bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QSt
     return true;
 }
 
-void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame, QRect framePosition){
+void KisKranimSaver::saveFrame(KoStore *store, KisLayerSP frame, QRect framePosition){
     if(frame){
 
         kWarning() << "Saving frame:" << frame->name();
 
         KisPaintDeviceSP device = frame->paintDevice();
-        QString location = "frame"+QString::number(framePosition.x());
-        QString dir = "layer"+QString::number(framePosition.y());
+        QString location = "frame" + QString::number(framePosition.x());
+        QString dir = "layer" + QString::number(framePosition.y());
 
         kWarning() << location << dir;
         kWarning() << store;
@@ -100,9 +99,9 @@ void KisKranimSaver::saveFrame(KoStore *store, KisLayer *frame, QRect framePosit
         store->setCompressionEnabled(false);
         store->enterDirectory(dir);
 
-        if(store->open(location)){
+        if (store->open(location)) {
 
-            if(!device->write(*writer)){
+            if (!device->write(*writer)) {
                 device->disconnect();
                 store->close();
             }

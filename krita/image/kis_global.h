@@ -68,6 +68,11 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 #include <cmath>
 #include <QPointF>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+
 // converts \p a to [0, 2 * M_PI) range
 inline qreal normalizeAngle(qreal a) {
     if (a < 0.0) {

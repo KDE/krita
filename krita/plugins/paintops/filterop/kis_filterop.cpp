@@ -61,6 +61,8 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
     m_filterConfiguration = settings->filterConfig();
     m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
+
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisFilterOp::~KisFilterOp()

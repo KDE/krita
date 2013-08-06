@@ -85,6 +85,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_scatterOption.sensor()->reset();
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisBrushOp::~KisBrushOp()

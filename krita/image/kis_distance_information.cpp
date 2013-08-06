@@ -25,13 +25,18 @@
 
 
 struct KisDistanceInformation::Private {
-    Private() : lastDabInfoValid(false) {}
+    Private() : lastDabInfoValid(false),
+                lastPaintInfoValid(false) {}
 
     QPointF distance;
     KisSpacingInformation spacing;
     QPointF lastPosition;
     int lastTime;
     bool lastDabInfoValid;
+
+    KisPaintInformation lastPaintInformation;
+    qreal lastAngle;
+    bool lastPaintInfoValid;
 };
 
 KisDistanceInformation::KisDistanceInformation()
@@ -86,9 +91,28 @@ int KisDistanceInformation::lastTime() const
     return m_d->lastTime;
 }
 
+qreal KisDistanceInformation::lastDrawingAngle() const
+{
+    return m_d->lastAngle;
+}
+
+bool KisDistanceInformation::hasLastPaintInformation() const
+{
+    return m_d->lastPaintInfoValid;
+}
+
+const KisPaintInformation& KisDistanceInformation::lastPaintInformation() const
+{
+    return m_d->lastPaintInformation;
+}
+
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
                                                 const KisSpacingInformation &spacing)
 {
+    m_d->lastAngle = info.drawingAngleSafe(*this);
+    m_d->lastPaintInformation = info;
+    m_d->lastPaintInfoValid = true;
+
     m_d->lastPosition = info.pos();
     m_d->lastTime = info.currentTime();
     m_d->lastDabInfoValid = true;

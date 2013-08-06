@@ -57,6 +57,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_embedded_pattern_manager.cpp
     kis_pressure_texture_strength_option.cpp
     sensors/kis_dynamic_sensors.cc
+    sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc
     sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc

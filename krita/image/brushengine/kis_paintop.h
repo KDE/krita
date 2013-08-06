@@ -115,7 +115,6 @@ protected:
      */
     virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
 
-
     void setCurrentScale(qreal scale);
     /**
     * Set rotation in radians
@@ -134,6 +133,10 @@ protected:
      * Return the paintdevice the painter this paintop is owned by
      */
     KisPaintDeviceSP source() const;
+
+private:
+    friend class KisPressureRotationOption;
+    void setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep);
 
 private:
     Private* const d;

@@ -26,6 +26,7 @@
 #include <kranim/kis_kranim_saver.h>
 #include <kranim/kis_kranim_loader.h>
 #include <KoFilterManager.h>
+#include <kranimstore/kis_animation_store.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 static const char CURRENT_DTD_VERSION[] = "1.0";
@@ -51,6 +52,7 @@ public:
     KisLayerSP newFrame;
     QRect newFramePosition;
     bool saved;
+    KisAnimationStore* store;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -70,11 +72,15 @@ KisAnimationDoc::~KisAnimationDoc()
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
     kWarning() << frame;
     if (!d->saved) {
         kWarning() << this->documentPart()->url();
         d->kranimSaver = new KisKranimSaver(this);
         this->preSaveAnimation();
+
+        KUrl url = this->documentPart()->url();
+        d->store = new KisAnimationStore(url.directory() + "/" + animation->name() + ".kranim");
     }
 }
 
@@ -171,7 +177,7 @@ void KisAnimationDoc::preSaveAnimation()
     }
     this->setOutputMimeType(nativeFormat, 0);
 
-    KUrl newUrl(url.directory() + "/" + animation->name() + ".kranim");
+    KUrl newUrl(url.directory() + "/" + animation->name() + ".kranime");
 
     d->saved = this->documentPart()->saveAs(newUrl);
 }

@@ -46,3 +46,12 @@ void KisAnimationStore::leaveDirectory()
 {
 
 }
+
+void KisAnimationStore::writeDataToFile(QByteArray data, QString filename)
+{
+    m_zip->open(QIODevice::ReadWrite);
+
+    m_zip->writeFile(filename, "user", "group", data.data(), data.size());
+
+    m_zip->close();
+}

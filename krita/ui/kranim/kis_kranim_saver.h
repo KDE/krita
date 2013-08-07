@@ -34,7 +34,7 @@ public:
 
     ~KisKranimSaver();
 
-    QDomElement saveXML(QDomDocument& doc, KisImageWSP image);
+    QDomElement saveXML(QDomDocument& doc);
 
     QDomElement saveMetaData(QDomDocument& doc);
 

@@ -46,7 +46,7 @@ KisKranimSaver::~KisKranimSaver()
     delete m_d;
 }
 
-QDomElement KisKranimSaver::saveXML(QDomDocument &doc, KisImageWSP image)
+QDomElement KisKranimSaver::saveXML(QDomDocument &doc)
 {
     QDomElement layersElement = doc.createElement("layers");
     QDomElement layer = doc.createElement("layer");

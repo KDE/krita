@@ -85,6 +85,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     //Save the previous frame over here
     kWarning() << "Done";
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
     KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -95,7 +96,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->currentFrame->setName("testFrame");
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     image->addNode(d->currentFrame/*.data()*/, image->rootLayer().data());
-
+    kWarning() << "Layer added";
     //Load all the layers here
 
     setCurrentImage(image);

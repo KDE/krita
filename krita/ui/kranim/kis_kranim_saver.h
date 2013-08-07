@@ -20,6 +20,8 @@
 #define KIS_KRANIM_SAVER_H
 
 #include <kis_types.h>
+#include <../kranimstore/kis_animation_store.h>
+#include <../kranimstore/kis_animation_store_writer.h>
 
 class KisAnimationDoc;
 class QDomElement;
@@ -40,11 +42,12 @@ public:
 
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 
-    void saveFrame(KoStore* store, KisLayerSP frame, QRect framePosition);
+    void saveFrame(KisAnimationStore* store, KisLayerSP frame, QRect framePosition);
 
 private:
     struct Private;
     Private *const m_d;
+    KisAnimationStoreWriter* m_writer;
 };
 
 #endif // KIS_KRANIM_SAVER_H

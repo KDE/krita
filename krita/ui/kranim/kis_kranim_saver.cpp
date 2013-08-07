@@ -85,38 +85,14 @@ bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QSt
     return true;
 }
 
-void KisKranimSaver::saveFrame(KoStore *store, KisLayerSP frame, QRect framePosition)
+void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect framePosition)
 {
     if(frame) {
 
         KisPaintDeviceSP device = frame->paintDevice();
-        QString location = "frame" + QString::number(framePosition.x());
-        QString dir = "layer" + QString::number(framePosition.y());
+        QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
 
-        kWarning() << location << dir;
-        kWarning() << store;
-        KisStorePaintDeviceWriter* writer = new KisStorePaintDeviceWriter(store);
-
-        store->setCompressionEnabled(false);
-        store->enterDirectory(dir);
-
-        if (store->open(location)) {
-
-            if (!device->write(*writer)) {
-                device->disconnect();
-                store->close();
-            }
-
-            store->close();
-        }
-
-        if(store->open(location+".defaultpixel")) {
-            store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
-            store->close();
-        }
-
-        store->leaveDirectory();
-        store->setCompressionEnabled(true);
-
+        m_writer = new KisAnimationStoreWriter(store, location);
+        device->write(*m_writer);
     }
 }

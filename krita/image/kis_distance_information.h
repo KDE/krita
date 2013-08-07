@@ -28,7 +28,7 @@ class KisPaintInformation;
 
 
 /**
- * This structure containg information about the desired spacing
+ * This structure contains information about the desired spacing
  * requested by the paintAt call
  */
 class KisSpacingInformation {

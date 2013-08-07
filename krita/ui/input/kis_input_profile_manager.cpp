@@ -215,15 +215,17 @@ void KisInputProfileManager::loadProfiles()
 
     KisConfig cfg;
     QString currentProfile = cfg.currentInputProfile();
-
-    if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
-        d->currentProfile = d->profiles.begin().value();
+    if (d->profiles.size() > 0) {
+        if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
+            d->currentProfile = d->profiles.begin().value();
+        }
+        else {
+            d->currentProfile = d->profiles.value(currentProfile);
+        }
     }
-    else {
-        d->currentProfile = d->profiles.value(currentProfile);
+    if (d->currentProfile) {
+        emit currentProfileChanged();
     }
-
-    emit currentProfileChanged();
 }
 
 void KisInputProfileManager::saveProfiles()

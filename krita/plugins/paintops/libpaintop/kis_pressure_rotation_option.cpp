@@ -18,8 +18,11 @@
  */
 #include "kis_pressure_rotation_option.h"
 #include "kis_pressure_opacity_option.h"
+#include "sensors/kis_dynamic_sensor_list.h"
+#include "sensors/kis_dynamic_sensor_drawing_angle.h"
 #include <klocale.h>
 #include <kis_painter.h>
+#include <kis_paintop.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
@@ -45,4 +48,26 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
 {
     m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     KisCurveOption::readOptionSetting(setting);
+}
+
+void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)
+{
+    KisDynamicSensor *sensor = this->sensor();
+    KisDynamicSensorList *sensorList;
+
+    /**
+     * A special case for the Drawing Angle sensor, because it
+     * changes the behavior of KisPaintOp::paintLine()
+     */
+
+    if (sensor->id() == DrawingAngleId.id() ||
+        ((sensorList = dynamic_cast<KisDynamicSensorList*>(sensor)) &&
+         (sensor = sensorList->getSensor(DrawingAngleId.id())))) {
+
+        KisDynamicSensorDrawingAngle *s =
+            dynamic_cast<KisDynamicSensorDrawingAngle*>(sensor);
+        Q_ASSERT(s);
+
+        op->setFanCornersInfo(s->fanCornersEnabled(), qreal(s->fanCornersStep()) * M_PI / 180.0);
+    }
 }

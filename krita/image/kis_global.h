@@ -88,6 +88,16 @@ inline qreal shortestAngularDistance(qreal a, qreal b) {
     return dist;
 }
 
+inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
+    qreal b1 = a + inc;
+    qreal b2 = a - inc;
+
+    qreal d1 = shortestAngularDistance(b1, direction);
+    qreal d2 = shortestAngularDistance(b2, direction);
+
+    return d1 < d2 ? b1 : b2;
+}
+
 template<typename T>
 inline T pow2(T x) {
     return x * x;

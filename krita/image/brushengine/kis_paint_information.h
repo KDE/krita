@@ -95,6 +95,10 @@ public:
     /// The tilt of the pen on the vertical axis (from 0.0 to 1.0)
     qreal yTilt() const;
 
+    void overrideDrawingAngle(qreal angle);
+
+    qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
+
     /**
      * Current brush direction computed from the cursor movement
      *

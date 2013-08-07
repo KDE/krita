@@ -24,6 +24,7 @@
 #include "kis_brush.h"
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
+#include "kis_pressure_mirror_option.h"
 
 
 class KisPropertiesConfiguration;
@@ -55,6 +56,7 @@ protected: // XXX: make private!
 
     KisBrushSP m_brush;
     KisTextureProperties m_textureProperties;
+    KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
     KisDabCache *m_dabCache;
 };

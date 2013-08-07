@@ -20,6 +20,7 @@
 
 #include <QDomElement>
 
+#include <boost/scoped_ptr.hpp>
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 
@@ -28,6 +29,33 @@ struct KisPaintInformation::Private {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     Private() : currentDistanceInfo(0) {}
+    ~Private() {
+        Q_ASSERT(!currentDistanceInfo);
+    }
+    Private(const Private &rhs) {
+        copy(rhs);
+    }
+    Private& operator=(const Private &rhs) {
+        copy(rhs);
+        return *this;
+    }
+
+    void copy(const Private &rhs) {
+        pos = rhs.pos;
+        pressure = rhs.pressure;
+        xTilt = rhs.xTilt;
+        yTilt = rhs.yTilt;
+        rotation = rhs.rotation;
+        tangentialPressure = rhs.tangentialPressure;
+        perspective = rhs.perspective;
+        time = rhs.time;
+        currentDistanceInfo = rhs.currentDistanceInfo;
+
+        if (rhs.drawingAngleOverride) {
+            drawingAngleOverride.reset(new qreal(*rhs.drawingAngleOverride));
+        }
+    }
+
 
     QPointF pos;
     qreal pressure;
@@ -38,6 +66,7 @@ struct KisPaintInformation::Private {
     qreal perspective;
     int time;
 
+    boost::scoped_ptr<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
@@ -151,8 +180,23 @@ qreal KisPaintInformation::yTilt() const
     return d->yTilt;
 }
 
+void KisPaintInformation::overrideDrawingAngle(qreal angle)
+{
+    d->drawingAngleOverride.reset(new qreal(angle));
+}
+
+qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distance) const
+{
+    if (d->drawingAngleOverride) return *d->drawingAngleOverride;
+
+    QVector2D diff(pos() - distance.lastPosition());
+    return atan2(diff.y(), diff.x());
+}
+
 qreal KisPaintInformation::drawingAngle() const
 {
+    if (d->drawingAngleOverride) return *d->drawingAngleOverride;
+
     if (!d->currentDistanceInfo || !d->currentDistanceInfo->hasLastDabInformation()) {
         qWarning() << "KisPaintInformation::drawingAngle()" << "Cannot access Distance Info last dab data";
         return 0.0;

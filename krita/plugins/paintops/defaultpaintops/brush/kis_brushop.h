@@ -30,7 +30,6 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_hsv_option.h>
-#include <kis_pressure_mirror_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
@@ -61,7 +60,6 @@ private:
     KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
-    KisPressureMirrorOption m_mirrorOption;
     KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;

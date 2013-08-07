@@ -31,7 +31,6 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option.h>
-#include <kis_pressure_mirror_option_widget.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
@@ -52,7 +51,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisFlowOpacityOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPressureSpacingOptionWidget());
-    addPaintOpOption(new KisPressureMirrorOptionWidget());
+    addMirrorOption();
+
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption()));
     addPaintOpOption(new KisPressureSharpnessOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));

@@ -69,7 +69,6 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
-    m_mirrorOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -79,15 +78,14 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
-    m_mirrorOption.sensor()->reset();
     m_softnessOption.sensor()->reset();
     m_sharpnessOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
 
-    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisBrushOp::~KisBrushOp()

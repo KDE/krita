@@ -50,23 +50,6 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     return m_speed;
 }
 
-KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId)
-{
-    setMinimumLabel(i18n("0°"));
-    setMaximumLabel(i18n("360°"));
-}
-
-qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
-{
-    /* so that we are in 0.0..1.0 */
-    return 0.5 + info.drawingAngle() / (2.0 * M_PI);
-}
-
-bool KisDynamicSensorDrawingAngle::dependsOnCanvasRotation() const
-{
-    return false;
-}
-
 KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(RotationId)
 {
     setMinimumLabel(i18n("0°"));

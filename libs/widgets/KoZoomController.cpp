@@ -240,7 +240,9 @@ QSize KoZoomController::documentToViewport(const QSizeF &size)
 
 void KoZoomController::setAspectMode(bool status)
 {
-    d->action->setAspectMode(status);
+    if (d->action) {
+        d->action->setAspectMode(status);
+    }
 }
 
 #include <KoZoomController.moc>

@@ -84,6 +84,10 @@ public:
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
     int lastTime() const;
+    qreal lastDrawingAngle() const;
+
+    bool hasLastPaintInformation() const;
+    const KisPaintInformation& lastPaintInformation() const;
 
     void registerPaintedDab(const KisPaintInformation &info,
                             const KisSpacingInformation &spacing);

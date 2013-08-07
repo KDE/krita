@@ -308,7 +308,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 void KisConvolutionPainterTest::testGaussian(bool useFftw)
 {
 
-    QImage referenceImage(TestUtil::fetchDataFileLazy("lena.png"));
+    QImage referenceImage(TestUtil::fetchDataFileLazy("kritaTransparent.png"));
 
    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
    dev->convertFromQImage(referenceImage, 0, 0, 0);

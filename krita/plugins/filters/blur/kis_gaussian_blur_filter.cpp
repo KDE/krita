@@ -74,11 +74,11 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
 
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
-    QVariant value;
+    QVariant value; 
     config->getProperty("horizRadius", value);
-    uint horizontalRadius = value.toUInt();
+    float horizontalRadius = value.toFloat();
     config->getProperty("vertRadius", value);
-    uint verticalRadius = value.toUInt();
+    float verticalRadius = value.toFloat();
 
     QBitArray channelFlags;
     if (config) {
@@ -89,7 +89,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
     }
 
     // compute horizontal kernel
-    uint horizKernelSize = horizontalRadius * 2 + 1;
+    uint horizKernelSize = ceil(horizontalRadius) * 2 + 1;
     Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
 
     qreal horizSigma = horizontalRadius;
@@ -103,7 +103,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
     }
 
     // compute vertical kernel
-    uint verticalKernelSize = verticalRadius * 2 + 1;
+    uint verticalKernelSize = ceil(verticalRadius) * 2 + 1;
     Matrix<qreal, Dynamic, Dynamic> verticalGaussian(verticalKernelSize, 1);
 
     qreal verticalSigma = verticalRadius;

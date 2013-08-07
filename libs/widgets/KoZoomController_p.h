@@ -37,7 +37,7 @@ class KoZoomController::Private
 {
 public:
     Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
-        : canvasController(0), zoomHandler(0), textMinX(1), textMaxX(600), fitMargin(0), parent(p)
+        : canvasController(0), zoomHandler(0), action(0), textMinX(1), textMaxX(600), fitMargin(0), parent(p)
     {
         action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), p);
         action->setSpecialButtons(specialButtons);

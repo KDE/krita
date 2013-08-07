@@ -6,64 +6,65 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>592</width>
-    <height>197</height>
+    <width>407</width>
+    <height>150</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="1">
-      <widget class="KoAspectButton" name="aspectButton" native="true">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="2">
+      <widget class="KisDoubleSliderSpinBox" name="horizontalRadius" native="true">
        <zorder>verticalRadius</zorder>
+       <zorder>verticalRadius</zorder>
+       <zorder>aspectButton</zorder>
+       <zorder>aspectButton</zorder>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Vertical Radius</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="0" column="0">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Horizontal Radius</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Vertical Radius</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="KisDoubleSliderSpinBox" name="horizontalRadius" native="true"/>
-       </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="KisDoubleSliderSpinBox" name="verticalRadius" native="true">
-         <zorder>aspectButton</zorder>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Horizontal Radius</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="KisDoubleSliderSpinBox" name="verticalRadius" native="true">
+       <zorder>aspectButton</zorder>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="KoAspectButton" name="aspectButton" native="true"/>
+   </item>
   </layout>
-  <zorder>aspectButton</zorder>
-  <zorder>horizontalRadius</zorder>
-  <zorder>verticalRadius</zorder>
-  <zorder>label_2</zorder>
-  <zorder>label</zorder>
-  <zorder>horizontalRadius</zorder>
-  <zorder>aspectButton</zorder>
-  <zorder>aspectButton</zorder>
-  <zorder>aspectButton</zorder>
-  <zorder>aspectButton</zorder>
-  <zorder>aspectButton</zorder>
  </widget>
  <customwidgets>
   <customwidget>

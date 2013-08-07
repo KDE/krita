@@ -59,9 +59,9 @@ public:
         , toolProxy(0)
         , setMirrorMode(false)
         , forwardAllEventsToTool(false)
-#ifdef Q_WS_X11
+    #ifdef Q_WS_X11
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
-#endif
+    #endif
         , lastTabletEvent(0)
     { }
 
@@ -119,7 +119,7 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
                                                  Qt::MouseButtons buttons)
 {
     KisStrokeShortcut *strokeShortcut =
-        new KisStrokeShortcut(action, index);
+            new KisStrokeShortcut(action, index);
 
     QList<Qt::MouseButton> buttonList;
     if(buttons & Qt::LeftButton) {
@@ -146,7 +146,7 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
                                               const QList<Qt::Key> &keys)
 {
     KisSingleActionShortcut *keyShortcut =
-        new KisSingleActionShortcut(action, index);
+            new KisSingleActionShortcut(action, index);
 
     QList<Qt::Key> modifiers = keys.mid(1);
     keyShortcut->setKey(modifiers, keys.at(0));
@@ -158,24 +158,24 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
                                                 KisShortcutConfiguration::MouseWheelMovement wheelAction)
 {
     KisSingleActionShortcut *keyShortcut =
-        new KisSingleActionShortcut(action, index);
+            new KisSingleActionShortcut(action, index);
 
     KisSingleActionShortcut::WheelAction a;
     switch(wheelAction) {
-        case KisShortcutConfiguration::WheelUp:
-            a = KisSingleActionShortcut::WheelUp;
-            break;
-        case KisShortcutConfiguration::WheelDown:
-            a = KisSingleActionShortcut::WheelDown;
-            break;
-        case KisShortcutConfiguration::WheelLeft:
-            a = KisSingleActionShortcut::WheelLeft;
-            break;
-        case KisShortcutConfiguration::WheelRight:
-            a = KisSingleActionShortcut::WheelRight;
-            break;
-        default:
-            return;
+    case KisShortcutConfiguration::WheelUp:
+        a = KisSingleActionShortcut::WheelUp;
+        break;
+    case KisShortcutConfiguration::WheelDown:
+        a = KisSingleActionShortcut::WheelDown;
+        break;
+    case KisShortcutConfiguration::WheelLeft:
+        a = KisSingleActionShortcut::WheelLeft;
+        break;
+    case KisShortcutConfiguration::WheelRight:
+        a = KisSingleActionShortcut::WheelRight;
+        break;
+    default:
+        return;
     }
 
     keyShortcut->setWheel(modifiers, a);
@@ -202,8 +202,8 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
     bool retval = false;
 
     if (forwardAllEventsToTool ||
-        event->type() == QEvent::KeyPress ||
-        event->type() == QEvent::KeyRelease) {
+            event->type() == QEvent::KeyPress ||
+            event->type() == QEvent::KeyRelease) {
 
         defaultInputAction->inputEvent(event);
         retval = true;
@@ -217,7 +217,7 @@ Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *ke
     Qt::Key key = (Qt::Key)keyEvent->key();
 
     if (keyEvent->key() == Qt::Key_Meta &&
-        keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
+            keyEvent->modifiers().testFlag(Qt::ShiftModifier)) {
 
         key = Qt::Key_Alt;
     }
@@ -277,24 +277,24 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 #endif
 
     lastTabletEvent =
-        new QTabletEvent(event->type(),
-                         event->pos(),
-                         event->globalPos(),
-#ifdef Q_WS_X11
-                         multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
-#else
-                         event->hiResGlobalPos(),
-#endif
-                         event->device(),
-                         event->pointerType(),
-                         event->pressure(),
-                         event->xTilt(),
-                         event->yTilt(),
-                         event->tangentialPressure(),
-                         event->rotation(),
-                         event->z(),
-                         event->modifiers(),
-                         event->uniqueId());
+            new QTabletEvent(event->type(),
+                             event->pos(),
+                             event->globalPos(),
+                         #ifdef Q_WS_X11
+                             multiplyPoints(event->hiResGlobalPos(), hiResEventsWorkaroundCoeff),
+                         #else
+                             event->hiResGlobalPos(),
+                         #endif
+                             event->device(),
+                             event->pointerType(),
+                             event->pressure(),
+                             event->xTilt(),
+                             event->yTilt(),
+                             event->tangentialPressure(),
+                             event->rotation(),
+                             event->z(),
+                             event->modifiers(),
+                             event->uniqueId());
 }
 
 void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
@@ -403,8 +403,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
          * we handle it ourselves.
          */
         retval |= !d->forwardAllEventsToTool &&
-            (keyEvent->key() == Qt::Key_Space ||
-             keyEvent->key() == Qt::Key_Escape);
+                (keyEvent->key() == Qt::Key_Space ||
+                 keyEvent->key() == Qt::Key_Escape);
 
         break;
     }
@@ -533,9 +533,11 @@ void KisInputManager::profileChanged()
     d->matcher.reset();
     d->matcher.clearShortcuts();
 
-    QList<KisShortcutConfiguration*> shortcuts = KisInputProfileManager::instance()->currentProfile()->allShortcuts();
-    foreach(KisShortcutConfiguration *shortcut, shortcuts) {
-        switch(shortcut->type()) {
+    KisInputProfile *profile = KisInputProfileManager::instance()->currentProfile();
+    if (profile) {
+        QList<KisShortcutConfiguration*> shortcuts = profile->allShortcuts();
+        foreach(KisShortcutConfiguration *shortcut, shortcuts) {
+            switch(shortcut->type()) {
             case KisShortcutConfiguration::KeyCombinationType:
                 d->addKeyShortcut(shortcut->action(), shortcut->mode(), shortcut->keys());
                 break;
@@ -547,6 +549,11 @@ void KisInputManager::profileChanged()
                 break;
             default:
                 break;
+            }
         }
+    }
+    else {
+        kWarning() << "No Input Profile Found: canvas interaction will be impossible";
+
     }
 }

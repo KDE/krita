@@ -94,8 +94,9 @@ void KisOpenGL::createContext()
         qDebug() << "Using the core profile";
     if (format.profile() == 2)
         qDebug() << "Using the compatibility profile";
-
+#ifndef Q_OS_WIN
     format.setDoubleBuffer(false);
+#endif
 
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->setObjectName("Krita OpenGL Shared Context Widget");

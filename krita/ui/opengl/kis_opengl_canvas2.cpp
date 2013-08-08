@@ -159,14 +159,12 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
         qWarning() << "WARNING: affect the quality of the final image, though.";
         qWarning();
-#endif
         if (doubleBuffer()) {
             qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
             qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
             qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
             qCritical();
         }
-#ifndef Q_WS_WIN
     }
 #endif
 

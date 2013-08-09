@@ -323,6 +323,9 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
    
    for(int i = 0; i < 10 ; i++, horizontalRadius++, verticalRadius++)
    {
+       QTime timer;
+       timer.start();
+
        gc.beginTransaction("");
        uint horizKernelSize = horizontalRadius * 2 + 1;
        Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
@@ -389,6 +392,7 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
 
            gc.deleteTransaction();
        }
+       qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
     }
 }
 

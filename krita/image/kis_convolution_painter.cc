@@ -73,7 +73,8 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
     #define THRESHOLD_SIZE 5
 
     if(m_enginePreference == SPATIAL ||
-       (kernel->width() <= THRESHOLD_SIZE &&
+       (m_enginePreference != FFTW &&
+        kernel->width() <= THRESHOLD_SIZE &&
         kernel->height() <= THRESHOLD_SIZE)) {
 
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);

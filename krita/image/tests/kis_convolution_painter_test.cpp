@@ -305,14 +305,8 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     }
 }
 
-void KisConvolutionPainterTest::testGaussian(bool useFftw)
+void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix)
 {
-
-    QImage referenceImage(TestUtil::fetchDataFileLazy("kritaTransparent.png"));
-
-   KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-   dev->convertFromQImage(referenceImage, 0, 0, 0);
-
    QBitArray channelFlags =
        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
 
@@ -321,7 +315,7 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
 
    uint horizontalRadius = 1, verticalRadius = 1;
    
-   for(int i = 0; i < 10 ; i++, horizontalRadius++, verticalRadius++)
+   for(int i = 0; i < 20 ; i++, horizontalRadius++, verticalRadius++)
    {
        QTime timer;
        timer.start();
@@ -380,20 +374,30 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
                                        applyRect.topLeft(),
                                        applyRect.size(), BORDER_REPEAT);
 
-           QImage result = dev->convertToQImage(0, 0, 0, referenceImage.width(), referenceImage.height());
+           QImage result = dev->convertToQImage(0, applyRect.x(), applyRect.y(), applyRect.width(), applyRect.height());
 
            QString engine = useFftw ? "fftw" : "spatial";
            QString testCaseName = QString("test_gaussian_%1_%2_%3.png").arg(horizontalRadius).arg(verticalRadius).arg(engine);
 
            TestUtil::checkQImage(result,
                                  "convolution_painter_test",
-                                 "gaussian",
+                                 QString("gaussian_") + prefix,
                                  testCaseName);
 
            gc.revertTransaction();
        }
        qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
     }
+}
+
+
+void KisConvolutionPainterTest::testGaussian(bool useFftw)
+{
+    QImage referenceImage(TestUtil::fetchDataFileLazy("kritaTransparent.png"));
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    dev->convertFromQImage(referenceImage, 0, 0, 0);
+
+    testGaussianBase(dev, useFftw, "");
 }
 
 void KisConvolutionPainterTest::testGaussianSpatial()
@@ -404,6 +408,35 @@ void KisConvolutionPainterTest::testGaussianSpatial()
 void KisConvolutionPainterTest::testGaussianFFTW()
 {
     testGaussian(true);
+}
+
+void KisConvolutionPainterTest::testGaussianSmall(bool useFftw)
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    KoColor c(Qt::yellow, dev->colorSpace());
+
+    for (int i = 0; i < 50; i++) {
+        quint8 baseOpacity = 75;
+        KoColor c(Qt::magenta, dev->colorSpace());
+
+        for (int j = 0; j <= 6; j++) {
+            c.setOpacity(static_cast<quint8>(baseOpacity + 30 * j));
+            dev->setPixel(i + j, i, c);
+        }
+    }
+
+    testGaussianBase(dev, useFftw, "reduced");
+}
+
+void KisConvolutionPainterTest::testGaussianSmallSpatial()
+{
+    testGaussianSmall(false);
+}
+
+void KisConvolutionPainterTest::testGaussianSmallFFTW()
+{
+    testGaussianSmall(true);
 }
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)

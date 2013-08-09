@@ -189,8 +189,16 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
     m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
 
-bool SpellCheck::addWordToPersonal(const QString &word)
+bool SpellCheck::addWordToPersonal(const QString &word, int startPosition)
 {
+    QTextBlock block = m_document->findBlock(startPosition);
+    if (!block.isValid())
+        return false;
+
+    KoTextBlockData blockData(block);
+    blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
+    checkSection(m_document, block.position(), block.position() + block.length() - 1);
+    // TODO we should probably recheck the entire document so other occurences are also removed, but then again we should recheck every document (footer,header etc) not sure how to do this
     return m_bgSpellCheck->addWordToPersonal(word);
 }
 

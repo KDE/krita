@@ -34,6 +34,7 @@ private:
     void testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix);
     void testGaussian(bool useFftw);
     void testGaussianSmall(bool useFftw);
+    void testGaussianDetails(bool useFftw);
 
 private slots:
 
@@ -52,6 +53,9 @@ private slots:
 
     void testGaussianSmallSpatial();
     void testGaussianSmallFFTW();
+
+    void testGaussianDetailsSpatial();
+    void testGaussianDetailsFFTW();
 };
 
 #endif

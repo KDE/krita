@@ -390,7 +390,7 @@ void KisConvolutionPainterTest::testGaussian(bool useFftw)
                                  "gaussian",
                                  testCaseName);
 
-           gc.deleteTransaction();
+           gc.revertTransaction();
        }
        qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
     }

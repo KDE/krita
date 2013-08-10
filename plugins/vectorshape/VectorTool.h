@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PICTURE_TOOL
-#define PICTURE_TOOL
+#ifndef VECTOR_TOOL
+#define VECTOR_TOOL
 
 #include <KoToolBase.h>
 #include <kjob.h>

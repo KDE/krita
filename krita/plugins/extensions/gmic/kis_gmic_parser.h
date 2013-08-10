@@ -32,12 +32,14 @@ class Category;
 class Command;
 class Parameter;
 
+class QTextStream;
+
 const QString GIMP_COMMENT = "#@gimp";
 
 // category match example : #@gimp _<b>Lights &amp; Shadows</b>
 const QRegExp CATEGORY_NAME_RX("#@gimp\\s+[^:]+$");
 // command match example: #@gimp Poster edges : gimp_poster_edges, gimp_poster_edges_preview(0)
-const QRegExp COMMAND_NAME_RX("#@gimp\\s+\\w+[^:]+:\\s*\\w+,\\s*\\w+\\(?[0-2]?\\)?");
+const QRegExp COMMAND_NAME_RX("#@gimp\\s+\\w+[^:]+:\\s*\\w+\\s*,\\s*\\w+\\(?[0-2]?\\)?");
 // parameter match example:  #@gimp : Fast approximation = bool(0)
 //                           #@gimp : X-size = float(0.9,0,2)
 const QRegExp PARAMETER_RX("#@gimp\\s+:\\s*[^=]*=\\s*[\\w]*");
@@ -57,11 +59,13 @@ public:
 
 private:
     bool isCategory(const QString &line);
+    /* Parses gmic command names for preview and for the filter itself */
     bool isCommand(const QString &line);
     bool isParameter(const QString &line);
     bool matchesRegExp(const QRegExp &regExp, const QString& line);
     QString parseCategoryName(const QString &line);
 
+    QString fetchLine(QTextStream &input, int &lineCounter);
 
 private:
     QVector<int> cosik;

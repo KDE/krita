@@ -92,15 +92,13 @@ Component* KisGmicParser::createFilterTree()
     Category * category = rootCategory;
     int lineNum = 0;
     while(!in.atEnd()) {
-        QString line = in.readLine();
-        lineNum++;
+        QString line = fetchLine(in, lineNum);
 
         if (line.startsWith(GIMP_COMMENT))
         {
             if (isCategory(line))
             {
                 QString categoryName = parseCategoryName(line);
-                qDebug() << categoryName;
 
                 if (categoryName.startsWith("_"))
                 {
@@ -124,25 +122,51 @@ Component* KisGmicParser::createFilterTree()
                     category->add(childCategory);
                     category = childCategory; // set current category to child
                 }
-            } else if (isCommand(line))
+            }
+            else if (isCommand(line))
             {
                 // qDebug() << "command" << line;
                 command = new Command(category);
                 command->processCommandName(line);
                 category->add(command);
-
-
-            } else if (isParameter(line))
+            }
+            else if (isParameter(line))
             {
-                // qDebug() << "Parameter" << line;
                 if (command)
                 {
-                    command->processParameter(line);
-                }else
+                    QStringList block;
+                    block.append(line);
+                    bool parameterIsComplete = false;
+                    while (!parameterIsComplete)
+                    {
+                        parameterIsComplete = command->processParameter(block);
+                        if (!parameterIsComplete)
+                        {
+
+                            QString anotherLine = fetchLine(in, lineNum);
+                            if (!anotherLine.isNull())
+                            {
+                                block.append(anotherLine);
+                            }
+                            else
+                            {
+                                qDebug() << "We are and the end of the file unexpectedly"; // we are at the end of the file
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
                 {
                     qDebug() << "No command for given parameter, invalid gmic definition file";
                 }
-            }else{
+            }
+            else if (line.startsWith(GIMP_COMMENT+"_"))
+            {
+                // TODO: do something with those translations
+            }
+            else
+            {
                 qDebug() << "IGNORING:" << line;
             }
         }
@@ -153,4 +177,16 @@ Component* KisGmicParser::createFilterTree()
     file.close();
 
     return rootCategory;
+}
+
+
+QString KisGmicParser::fetchLine(QTextStream& input, int& lineCounter)
+{
+    if (!input.atEnd())
+    {
+        QString line = input.readLine();
+        lineCounter++;
+        return line;
+    }
+    return QString();
 }

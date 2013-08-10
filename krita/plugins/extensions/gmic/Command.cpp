@@ -65,21 +65,20 @@ void Command::processCommandName(const QString& line)
 
 // sep = separator(),
 // Preview type = choice("Full","Forward horizontal","Forward vertical","Backward horizontal","Backward vertical","Duplicate horizontal","Duplicate vertical")
-QStringList Command::breakIntoTokens(const QString& line)
+QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclosed)
 {
     QStringList result;
 
-
+    lastTokenEnclosed = true;
     int index = 0;
     int lastIndex = 0;
-    while (index < line.size()){
+    while (index < line.size())
+    {
         // find index of =
         index = line.indexOf("=", index);
-        //qDebug() << "=" << " at " << index;
 
         if (index == -1)
         {
-            // qDebug() << "done, no more = at " << index;
             break;
         }
 
@@ -91,8 +90,6 @@ QStringList Command::breakIntoTokens(const QString& line)
         {
             index++;
         }
-
-        // qDebug() << "spaces eatin til " << index ;
 
         // skip typedef
         int helperIndex = index;
@@ -106,9 +103,8 @@ QStringList Command::breakIntoTokens(const QString& line)
         if (typeDefs.contains(typeName)){
             // point to next character
             index = helperIndex;
-            // qDebug() << "found" << typeName;
         }else {
-            //qDebug() << "Unknown type" << typeName;
+            // qDebug() << "Unknown type" << typeName;
         }
 
 
@@ -139,11 +135,14 @@ QStringList Command::breakIntoTokens(const QString& line)
             }
         }
 
-        // qDebug() << "delimiter" << delimiter << "closing" << closingdelimiter;
-
         while (line.at(index) != closingdelimiter && index < line.size())
         {
             index++;
+        }
+
+        if (line.at(index) != closingdelimiter)
+        {
+            lastTokenEnclosed = false;
         }
 
         // clean ","
@@ -163,15 +162,21 @@ QStringList Command::breakIntoTokens(const QString& line)
 }
 
 
-void Command::processParameter(const QString& line)
+bool Command::processParameter(const QStringList& block)
 {
-    QString parameterLine = line;
+    QString parameterLine = mergeBlockToLine(block);
     // remove gimp prefix and " :"
     parameterLine = parameterLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
-    // qDebug() << parameterLine;
     // break into parameter tokens
-    QStringList tokens = breakIntoTokens(parameterLine);
-    // qDebug() << "tokens" << tokens.size() << tokens;
+    bool lastTokenEnclosed = true;
+    QStringList tokens = breakIntoTokens(parameterLine, lastTokenEnclosed);
+    if (!lastTokenEnclosed)
+    {
+        // we need more lines of command parameters
+        return false;
+    }
+
+    static int unhandledParameters = 0;
 
     Parameter * parameter = 0;
     foreach (QString token, tokens)
@@ -180,10 +185,11 @@ void Command::processParameter(const QString& line)
         QStringList tokenSplit = token.split("=");
         Q_ASSERT(tokenSplit.size() == 2);
 
+
         QString paramName = tokenSplit.at(0).trimmed();
         QString typeDefinition = tokenSplit.at(1).trimmed();
-        bool showPreviewOnChange = true;
 
+        bool showPreviewOnChange = true;
         if (typeDefinition.startsWith("_"))
         {
             showPreviewOnChange = false;
@@ -193,20 +199,51 @@ void Command::processParameter(const QString& line)
         if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FLOAT_P]))
         {
             parameter = new FloatParameter(paramName, showPreviewOnChange);
-        } else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::INT_P]))
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::INT_P]))
         {
             parameter = new IntParameter(paramName, showPreviewOnChange);
-        } else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::SEPARATOR_P]))
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::SEPARATOR_P]))
         {
             parameter = new SeparatorParameter(paramName, showPreviewOnChange);
-        } else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CHOICE_P]))
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::CHOICE_P]))
         {
             parameter = new ChoiceParameter(paramName, showPreviewOnChange);
-        } else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::NOTE_P]))
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::TEXT_P]))
+        {
+            parameter = new TextParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::NOTE_P]))
         {
             parameter = new NoteParameter(paramName, showPreviewOnChange);
-        } else {
-            //qDebug() << "Unhandled parameter" << typeDefinition;
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::LINK_P]))
+        {
+            parameter = new LinkParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::BOOL_P]))
+        {
+            parameter = new BoolParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::COLOR_P]))
+        {
+            parameter = new ColorParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FOLDER_P]))
+        {
+            parameter = new FolderParameter(paramName, showPreviewOnChange);
+        }
+        else if (typeDefinition.startsWith(PARAMETER_NAMES[Parameter::FILE_P]))
+        {
+            parameter = new FileParameter(paramName, showPreviewOnChange);
+        }
+        else
+        {
+            unhandledParameters++;
+            qDebug() << "Unhandled parameter " << unhandledParameters << parent()->name() << "\\" << name() << paramName << typeDefinition;
         }
 
         if (parameter)
@@ -219,7 +256,7 @@ void Command::processParameter(const QString& line)
 
     }
     // let's ignore tokens
-
+    return true;
 }
 
 
@@ -387,7 +424,12 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
         }
         else
         {
-            qDebug() << "Skipping parameter " << p->toString();
+            if (!p->isPresentationalOnly())
+            {
+                // implement for given parameter value()!
+                qDebug() << "UNHANDLED command parameter: " << p->m_name << p->toString();
+            }
+
         }
     }
 
@@ -397,4 +439,22 @@ void Command::writeConfiguration(KisGmicFilterSetting* setting)
     }
 
     setting->setGmicCommand(command);
+}
+
+QString Command::mergeBlockToLine(const QStringList& block)
+{
+    Q_ASSERT(block.size() > 0);
+    if (block.size() == 1)
+    {
+        return block.at(0);
+    }
+
+    QString result = block.at(0);
+    for (int i = 1; i < block.size(); i++)
+    {
+        QString nextLine = block.at(i);
+        nextLine = nextLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+        result = result + "<br />" + nextLine;
+    }
+    return result;
 }

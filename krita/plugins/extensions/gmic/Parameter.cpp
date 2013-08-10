@@ -45,16 +45,23 @@ QStringList Parameter::getValues(const QString& typeDefinition)
     QString currentType = PARAMETER_NAMES[m_type];
     Q_ASSERT(typeDefinition.startsWith(currentType));
 
-    //qDebug() << currentType << currentType.size();
-
     // get rid of '(', '{' and '['
     QString onlyValues = typeDefinition;
     onlyValues = onlyValues.remove(0, currentType.size() + 1);
     onlyValues.chop(1);
     QStringList result = onlyValues.split(",");
+
     return result;
 }
 
+bool Parameter::isPresentationalOnly() const
+{
+    if ((m_type == NOTE_P) || (m_type == SEPARATOR_P) || (m_type == LINK_P))
+    {
+        return true;
+    }
+    return false;
+}
 
 
 FloatParameter::FloatParameter(const QString& name, bool updatePreview): Parameter(name,updatePreview)
@@ -214,8 +221,15 @@ NoteParameter::NoteParameter(const QString& name, bool updatePreview): Parameter
 
 void NoteParameter::parseValues(const QString& typeDefinition)
 {
-    QStringList values = getValues(typeDefinition);
-    m_label = values.at(0);
+    QString currentType = PARAMETER_NAMES[m_type];
+    Q_ASSERT(typeDefinition.startsWith(currentType));
+
+    // get rid of '(', '{' and '['
+    QString onlyValues = typeDefinition;
+    onlyValues = onlyValues.remove(0, currentType.size() + 1);
+    onlyValues.chop(1);
+
+    m_label = onlyValues;
 }
 
 QString NoteParameter::toString()
@@ -226,3 +240,217 @@ QString NoteParameter::toString()
     return result;
 }
 
+
+BoolParameter::BoolParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = BOOL_P;
+}
+
+void BoolParameter::parseValues(const QString& typeDefinition)
+{
+    QString currentType = PARAMETER_NAMES[m_type];
+    Q_ASSERT(typeDefinition.startsWith(currentType));
+
+    QStringList values = getValues(typeDefinition);
+
+    QString boolValue = values.at(0);
+    if (boolValue == "0" || boolValue == "false")
+    {
+        m_value = false;
+    }
+    else if (boolValue == "1" || boolValue == "true")
+    {
+        m_value = true;
+    } else
+    {
+        qDebug() << "Invalid bool value, assuming true " << m_name << ":" << boolValue;
+        m_value = true;
+    }
+}
+
+QString BoolParameter::toString()
+{
+    QString result;
+    result.append(m_name+";");
+    result.append(m_value+";");
+    return result;
+}
+
+QString BoolParameter::value() const
+{
+    if (m_value)
+    {
+        return QString("1");
+    }
+    return QString("0");
+}
+
+ColorParameter::ColorParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = COLOR_P;
+}
+
+void ColorParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+    Q_ASSERT(values.size() >= 3);
+
+    bool isOk = true;
+    int r = values.at(0).toInt(&isOk);
+    int g = values.at(1).toInt(&isOk);
+    int b = values.at(2).toInt(&isOk);
+    int a = 255;
+    if (values.size() == 4)
+    {
+        a = values.at(2).toInt(&isOk);
+    }
+    m_value.setRgb(r,g,b,a);
+}
+
+QString ColorParameter::toString()
+{
+    QString result;
+    result.append(m_name+";");
+    result.append(m_value.name() + ";");
+    return result;
+}
+
+QString ColorParameter::value() const
+{
+    QString result =     QString::number(m_value.red()) + ","
+                        +QString::number(m_value.green()) + ","
+                        +QString::number(m_value.blue()) + ","
+                        +QString::number(m_value.alpha());
+    return result;
+}
+
+
+LinkParameter::LinkParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = LINK_P;
+}
+
+void LinkParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+    QString link = "<a href=%1>%2</a>";
+
+    if (values.size() == 1)
+    {
+        m_link = link.arg(values.at(0)).arg(values.at(0));
+    }
+    else if (values.size() == 2)
+    {
+        m_link = link.arg(values.at(1)).arg(values.at(0));
+    }
+    else if (values.size() == 3)
+    {
+        //TODO: ignored aligment at values.at(0) , mostly 0
+        m_link = link.arg(values.at(2)).arg(values.at(1));
+    }
+}
+
+QString LinkParameter::toString()
+{
+    return m_link;
+}
+
+
+TextParameter::TextParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview), m_multiline(false)
+{
+    m_type = TEXT_P;
+}
+
+void TextParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+
+    if (values.size() == 1)
+    {
+        m_value = values.at(0);
+    }
+    else if (values.size() == 2)
+    {
+        bool isOk = true;
+        if (values.at(0).toInt(&isOk) == 1)
+        {
+            m_multiline = true;
+        }
+        m_value = values.at(1);
+    }
+    // remove first and last "
+    m_value = m_value.remove(0,1);
+    m_value.chop(1);
+}
+
+QString TextParameter::value() const
+{
+    return m_value;
+}
+
+QString TextParameter::toString()
+{
+    QString result;
+    result.append(m_name+";");
+    result.append(m_value + ";");
+    result.append(m_multiline + ";");
+    return result;
+}
+
+FolderParameter::FolderParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = FOLDER_P;
+}
+
+
+void FolderParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+    if (!values.isEmpty())
+    {
+        m_folderPath = values.at(0);
+    }
+}
+
+
+QString FolderParameter::value() const
+{
+    return m_folderPath;
+}
+
+
+QString FolderParameter::toString()
+{
+    QString result;
+    result.append(m_name+";");
+    result.append(m_folderPath + ";");
+    return result;
+}
+
+
+FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+{
+    m_type = FILE_P;
+}
+
+void FileParameter::parseValues(const QString& typeDefinition)
+{
+    QStringList values = getValues(typeDefinition);
+    if (!values.isEmpty())
+    {
+        m_filePath = values.at(0);
+    }
+}
+
+QString FileParameter::value() const
+{
+    return m_filePath;
+}
+
+QString FileParameter::toString()
+{
+    QString result;
+    result.append(m_name+";");
+    result.append(m_filePath + ";");
+    return result;
+}

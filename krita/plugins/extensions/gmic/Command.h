@@ -31,6 +31,7 @@ class QStringList;
 
 class Parameter;
 
+/* This class represents one filter definition: command for preview and filter and parameters for filter */
 class Command : public Component
 {
 public:
@@ -52,14 +53,24 @@ public:
     void print(int level);
 
     void processCommandName(const QString &line);
-    void processParameter(const QString &line);
+    /* return true if the parameter parsed is complete */
+    bool processParameter(const QStringList &block);
 
     QWidget * createSettingsWidget();
     void writeConfiguration(KisGmicFilterSetting * setting);
 
 private:
+    QString mergeBlockToLine(const QStringList &block);
+
+private:
     Component * m_parent;
-    QStringList breakIntoTokens(const QString &line);
+    /*
+        param [in] line
+        param [out] lastTokenEnclosed if the last token-parameter is not enclosed
+                    and continue on the next line, this flag is false, true otherwise
+     */
+    QStringList breakIntoTokens(const QString &line, bool &lastTokenEnclosed);
+
 };
 
 Q_DECLARE_METATYPE(Command*)

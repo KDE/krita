@@ -22,6 +22,7 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QColor>
 
 class Parameter
 {
@@ -57,6 +58,7 @@ public:
     virtual void parseValues(const QString& typeDefinition);
 
     QString name() const { return m_name; }
+    bool isPresentationalOnly() const;
 
 protected:
     QStringList getValues(const QString& typeDefinition);
@@ -151,5 +153,72 @@ public:
     QString m_label;
 
 };
+
+class LinkParameter : public Parameter
+{
+public:
+    LinkParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+
+    QString m_link;
+};
+
+class BoolParameter : public Parameter
+{
+public:
+    BoolParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    bool m_value;
+};
+
+class ColorParameter : public Parameter
+{
+public:
+    ColorParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QColor m_value;
+};
+
+class TextParameter : public Parameter
+{
+public:
+    TextParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QString m_value;
+    bool m_multiline;
+};
+
+class FolderParameter : public Parameter
+{
+public:
+    FolderParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QString m_folderPath;
+};
+
+class FileParameter : public Parameter
+{
+public:
+    FileParameter(const QString& name, bool updatePreview = true);
+    virtual void parseValues(const QString& typeDefinition);
+    virtual QString toString();
+    virtual QString value() const;
+
+    QString m_filePath;
+};
+
 
 #endif

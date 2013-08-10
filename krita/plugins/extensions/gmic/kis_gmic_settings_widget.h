@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QHash>
 
+#include <KUrl>
+
 #include <Command.h>
 #include <kis_config_widget.h>
 
@@ -37,7 +39,12 @@ private:
 private slots:
     void setIntValue(int value);
     void setFloatValue(qreal value);
+    void setBoolValue(bool value);
     void setChoiceIndex(int index);
+    void setColorValue(const QColor &color);
+    void setTextValue();
+    void setFolderPathValue(const KUrl &kurl);
+    void setFilePathValue(const KUrl &kurl);
 
 };
 

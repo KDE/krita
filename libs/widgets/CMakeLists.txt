@@ -133,7 +133,6 @@ install( FILES
     KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
-    KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
 
     DESTINATION

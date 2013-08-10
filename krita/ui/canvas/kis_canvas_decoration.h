@@ -63,7 +63,7 @@ public slots:
     /**
      * If decoration is visible, hide it, if not show it.
      */
-    virtual void toggleVisibility();
+    void toggleVisibility();
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
 

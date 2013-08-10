@@ -39,7 +39,6 @@ public:
 
     void setMode(Mode mode);
     void setVisible(bool v);
-    void toggleVisibility();
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);

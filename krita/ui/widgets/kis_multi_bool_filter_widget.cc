@@ -63,7 +63,8 @@ void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration
 {
     if (!config) return;
     for (int i = 0; i < nbValues(); ++i) {
-        m_boolWidgets[i]->setChecked(true);
+        double val = config->getBool(m_boolWidgets[i]->objectName(), true);
+        m_boolWidgets[i]->setChecked(val);
     }
 }
 

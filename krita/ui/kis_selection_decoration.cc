@@ -156,11 +156,6 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.restore();
 }
 
-void KisSelectionDecoration::toggleVisibility()
-{
-    setVisible(!visible());
-}
-
 void KisSelectionDecoration::setVisible(bool v)
 {
     KisCanvasDecoration::setVisible(v);

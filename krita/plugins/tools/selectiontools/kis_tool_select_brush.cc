@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_brush.h"
+
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -41,7 +43,6 @@ USING_PART_OF_NAMESPACE_EIGEN
 #include "kis_pixel_selection.h"
 #include "kis_image.h"
 #include "kis_selection_options.h"
-#include "kis_tool_select_brush.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_paintop_preset.h"
 

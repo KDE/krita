@@ -451,6 +451,7 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         m_eraseModeButton->defaultAction()->blockSignals(true);
         m_eraseModeButton->blockSignals(true);
         m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
+        m_eraseModeButton->defaultAction()->setChecked(compositeOpID == COMPOSITE_ERASE);
         m_eraseModeButton->blockSignals(false);
         m_eraseModeButton->defaultAction()->blockSignals(false);
 

@@ -88,8 +88,8 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
 
     MirrorProperties mirrors;
 
-    mirrors.verticalMirror = mirrorXIncrement % 2;
-    mirrors.horizontalMirror = mirrorYIncrement % 2;
+    mirrors.verticalMirror = mirrorYIncrement % 2;
+    mirrors.horizontalMirror = mirrorXIncrement % 2;
 
     return mirrors;
 }

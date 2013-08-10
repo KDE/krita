@@ -241,7 +241,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     KisConfig cfg;
-    canvasController->setZoomWithWheel(cfg.zoomWithWheel());
     canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
@@ -866,7 +865,6 @@ void KisView2::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
         KisConfig cfg;
-        static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during

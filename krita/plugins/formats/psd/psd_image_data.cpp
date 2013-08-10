@@ -15,6 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+#include <psd_image_data.h>
+
 #include <netinet/in.h> // htonl
 
 #include <QFile>
@@ -28,7 +30,6 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 
-#include <psd_image_data.h>
 #include "psd_utils.h"
 #include "compression.h"
 

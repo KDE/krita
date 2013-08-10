@@ -37,7 +37,8 @@ private slots:
     void testBltFixedSmall();
     void testColorSpaceConversion();
     void testBltPerformance();
-
+    void testMirroring_data();
+    void testMirroring();
 };
 
 #endif

@@ -90,3 +90,13 @@ void KisAnimationStore::writeDataToFile(const char *data, qint64 length, QString
 
     m_zip->close();
 }
+
+void KisAnimationStore::setCompressionEnabled(bool e)
+{
+    if(e) {
+        m_zip->setCompression(KZip::DeflateCompression);
+    }
+    else {
+        m_zip->setCompression(KZip::NoCompression);
+    }
+}

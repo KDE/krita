@@ -95,7 +95,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->currentFrame = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("testFrame");
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
-    image->addNode(d->currentFrame/*.data()*/, image->rootLayer().data());
+    image->addNode(d->currentFrame.data(), image->rootLayer().data());
     kWarning() << "Layer added";
     //Load all the layers here
 

@@ -51,7 +51,42 @@ void KisAnimationStore::writeDataToFile(QByteArray data, QString filename)
 {
     m_zip->open(QIODevice::ReadWrite);
 
-    m_zip->writeFile(filename, "user", "group", data.data(), data.size());
+    int length = data.length();
+    QByteArray prevData;
+
+    if(m_zip->directory()->entry(filename)) {
+        prevData = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->data();
+        length += prevData.length();
+    }
+
+    m_zip->prepareWriting(filename, "", "", length);
+
+    m_zip->writeData(prevData.data(), prevData.length());
+    m_zip->writeData(data.data(), data.length());
+
+    m_zip->finishWriting(length);
+
+    m_zip->close();
+}
+
+void KisAnimationStore::writeDataToFile(const char *data, qint64 length, QString filename)
+{
+    m_zip->open(QIODevice::ReadWrite);
+
+    int dataLength = length;
+    QByteArray prevData;
+
+    if(m_zip->directory()->entry(filename)) {
+        prevData = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->data();
+        dataLength += prevData.length();
+    }
+
+    m_zip->prepareWriting(filename, "", "", dataLength);
+
+    m_zip->writeData(prevData.data(), prevData.length());
+    m_zip->writeData(data, length);
+
+    m_zip->finishWriting(dataLength);
 
     m_zip->close();
 }

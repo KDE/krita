@@ -31,9 +31,10 @@ public:
     {
     }
 
-    qint64 write(const char*, qint64)
+    qint64 write(const char* data, qint64 length)
     {
-        return 1;
+        m_store->writeDataToFile(data, length, m_filename);
+        return length;
     }
 
     qint64 write(const QByteArray &data)

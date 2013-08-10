@@ -32,6 +32,7 @@ public:
     void enterDirectory(QString directory);
     void leaveDirectory();
     void writeDataToFile(QByteArray data, QString filename);
+    void writeDataToFile(const char *data, qint64 length, QString filename);
 
 private:
     KZip* m_zip;

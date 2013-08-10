@@ -1,5 +1,5 @@
-* fix parser, there are still crazy cases where we do not parse notes and separators correctly (multi-line notes)
-* add support for missing parameters (int, float, choice, note supported)
+[DONE] * fix parser, there are still crazy cases where we do not parse notes and separators correctly (multi-line notes)
+[DONE] * add support for missing parameters (int, float, choice, note supported)
 * add support for layer modes: so far current layer is filtered
     * modes like current layer+above, all visible, etc.
 * implement preview and it's modes

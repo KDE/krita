@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_HLINEITERATOR_BENCHMARK_H
-#define KIS_HLINEITERATOR_BENCHMARK_H
+#ifndef KIS_RANDOM_ITERATOR_BENCHMARK_H
+#define KIS_RANDOM_ITERATOR_BENCHMARK_H
 
 #include <QtTest>
 

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ACTION_RECORDER_TEST_H
-#define KIS_ACTION_RECORDER_TEST_H
+#ifndef KIS_RANDOM_GENERATOR_TEST_H
+#define KIS_RANDOM_GENERATOR_TEST_H
 
 #include <QtTest>
 

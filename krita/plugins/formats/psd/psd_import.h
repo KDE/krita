@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _IMPORT_H_
-#define _IMPORT_H_
+#ifndef PSD_IMPORT_H_
+#define PSD_IMPORT_H_
 
 #include <QVariant>
 

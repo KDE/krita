@@ -21,4 +21,4 @@ target_link_libraries(calligra_textediting_autocorrect komain)
 
 install(TARGETS calligra_textediting_autocorrect DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES autocorrect.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_textediting_autocorrect.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

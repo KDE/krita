@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Overview Docker
-Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

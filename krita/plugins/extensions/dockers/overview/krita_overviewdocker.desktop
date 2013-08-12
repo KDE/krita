@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Overview Docker
+Name[kk]=Шолу докері
+Name[pt]=Área de Visão Geral
+Name[sk]=Panel prehľadu
+Name[uk]=Панель ескіза
+Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
+Comment[kk]=Кескіннің жалпы шолуын көрсететін докері
+Comment[pt]=Área de apresentação da visão geral da imagem
+Comment[sk]=Panel na zobrazenie prehľadu obrázku
+Comment[uk]=Панель для показу ескіза зображення
+Comment[x-test]=xxDocker for showing an image overviewxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritaoverviewdocker

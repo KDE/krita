@@ -246,7 +246,7 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
                         }
                     }
                 }
-                if(rightType) {
+                if (rightType) {
                     nodes.append(*iter);
                 }
             }

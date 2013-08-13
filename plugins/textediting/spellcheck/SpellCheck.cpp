@@ -198,7 +198,7 @@ bool SpellCheck::addWordToPersonal(const QString &word, int startPosition)
     KoTextBlockData blockData(block);
     blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
     checkSection(m_document, block.position(), block.position() + block.length() - 1);
-    // TODO we should probably recheck the entire document so other occurences are also removed, but then again we should recheck every document (footer,header etc) not sure how to do this
+    // TODO we should probably recheck the entire document so other occurrences are also removed, but then again we should recheck every document (footer,header etc) not sure how to do this
     return m_bgSpellCheck->addWordToPersonal(word);
 }
 

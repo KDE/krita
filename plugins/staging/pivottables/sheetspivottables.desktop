@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Sheets Pivot Plugin
+Name[hu]=Sheets pivot bővítmény
+Name[pt]='Plugin' de Pivot do Sheets
+Name[sk]=Plugin stredu Sheets
+Name[uk]=Додаток зведених таблиць для Sheets
+Name[x-test]=xxSheets Pivot Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=sheetssolver

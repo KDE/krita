@@ -72,6 +72,7 @@ private:
     QLabel * m_label;
     KLineEdit * m_editBox;
 };
+
 class NewTagAction : public KoLineEditAction
 {
     Q_OBJECT
@@ -88,6 +89,7 @@ protected slots:
 private:
     KoResource * m_resource;
 };
+
 class KoResourceItemChooserContextMenu :  public QMenu
 {
     Q_OBJECT

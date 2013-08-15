@@ -13,6 +13,9 @@ if(NEPOMUK)
 endif(NEPOMUK)
 
 set(kowidgets_LIB_SRCS
+    KoTagChooserWidget.cpp
+    KoTagFilterWidget.cpp
+    KoResourceTaggingInterface.cpp
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
@@ -101,6 +104,7 @@ install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     KoResourceItemChooserContextMenu.h
+    KoTagWidget.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h

@@ -19,7 +19,8 @@
 #ifndef PARTICLE_PAINTOP_PLUGIN_H_
 #define PARTICLE_PAINTOP_PLUGIN_H_
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariantList>
 
 /**
  * A plugin wrapper that adds the paintop factories to the paintop registry.

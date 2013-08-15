@@ -49,7 +49,7 @@ obviously does not work if there is more then one class in the file.
 When there is a private class that is not used outside the file it's ok to have it
 in the same file as another class.
 Private classes that should never be exported or used outside the library and should be
-placed in a header file with the extention _p.h  (like KoRuler_p.h)
+placed in a header file with the extension _p.h  (like KoRuler_p.h)
 This makes it very obvious this file is not part of the public API of Calligra.
 
 

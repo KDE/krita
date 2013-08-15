@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PICTURE_TOOL_FACTORY
-#define PICTURE_TOOL_FACTORY
+#ifndef VECTOR_TOOL_FACTORY
+#define VECTOR_TOOL_FACTORY
 
 #include <KoToolFactoryBase.h>
 

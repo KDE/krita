@@ -30,8 +30,10 @@
 #include <QAction>
 #include <QPixmap>
 
-#include <kactioncollection.h>
 #include <kis_debug.h>
+
+#include <kactioncollection.h>
+#include <kaction.h>
 #include <kacceleratormanager.h>
 #include <kseparator.h>
 

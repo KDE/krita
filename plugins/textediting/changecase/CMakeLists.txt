@@ -14,4 +14,4 @@ target_link_libraries(calligra_textediting_changecase kotext)
 
 install(TARGETS calligra_textediting_changecase DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES changecase.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_textediting_changecase.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

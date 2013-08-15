@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SHIVAPLUGIN_H_
-#define _SHIVAPLUGIN_H_
+#ifndef _SHIVA_GENERATORS_PLUGIN_H_
+#define _SHIVA_GENERATORS_PLUGIN_H_
 
 #include <QObject>
 #include <QVariant>

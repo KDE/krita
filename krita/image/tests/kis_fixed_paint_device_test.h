@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PAINT_DEVICE_TESTER_H
-#define KIS_PAINT_DEVICE_TESTER_H
+#ifndef KIS_FIXED_PAINT_DEVICE_TESTER_H
+#define KIS_FIXED_PAINT_DEVICE_TESTER_H
 
 #include <QtTest>
 

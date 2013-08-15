@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
- #ifndef _KIS_BURN_HIGHLIGHTS_ADJUSTMENT_H_
- #define _KIS_BURN_HIGHLIGHTS_ADJUSTMENT_H_
+#ifndef _KIS_BURN_HIGHLIGHTS_ADJUSTMENT_H_
+#define _KIS_BURN_HIGHLIGHTS_ADJUSTMENT_H_
 
- #include "KoColorTransformationFactory.h"
+#include "KoColorTransformationFactory.h"
 
- class KisBurnHighlightsAdjustmentFactory : public KoColorTransformationFactory
- {
- public:
+class KisBurnHighlightsAdjustmentFactory : public KoColorTransformationFactory
+{
+public:
 
- 	KisBurnHighlightsAdjustmentFactory();
+    KisBurnHighlightsAdjustmentFactory();
 
- 	virtual QList< QPair< KoID, KoID > > supportedModels() const;
+    virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
- 	virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
 
- };
+};
 
- #endif
+#endif

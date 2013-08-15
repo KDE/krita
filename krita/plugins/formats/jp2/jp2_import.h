@@ -16,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _IMPORT_H_
-#define _IMPORT_H_
+#ifndef JP2_IMPORT_H_
+#define JP2_IMPORT_H_
 
 #include <QVariant>
 

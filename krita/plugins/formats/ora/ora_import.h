@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _IMPORT_H_
-#define _IMPORT_H_
+#ifndef ORA_IMPORT_H_
+#define ORA_IMPORT_H_
 
 #include <QVariant>
 

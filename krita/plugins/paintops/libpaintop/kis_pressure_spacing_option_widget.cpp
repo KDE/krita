@@ -37,6 +37,7 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
 
     QVBoxLayout* vl = new QVBoxLayout;
+    vl->setMargin(0);
     vl->addWidget(isotropicSpacing);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 

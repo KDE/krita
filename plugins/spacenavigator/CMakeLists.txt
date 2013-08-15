@@ -18,4 +18,4 @@ install(TARGETS calligra_device_spacenavigator DESTINATION ${PLUGIN_INSTALL_DIR}
 
 ########### install files ###############
 
-install( FILES spacenavigator.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_device_spacenavigator.desktop DESTINATION ${SERVICES_INSTALL_DIR})

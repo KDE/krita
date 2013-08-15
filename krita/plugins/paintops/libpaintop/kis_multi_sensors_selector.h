@@ -14,7 +14,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_MULTI_SENSORS_SELECTOR_H
+#define KIS_MULTI_SENSORS_SELECTOR_H
 #include <QWidget>
 
 class KisCubicCurve;
@@ -44,3 +45,4 @@ private:
     struct Private;
     Private* const d;
 };
+#endif

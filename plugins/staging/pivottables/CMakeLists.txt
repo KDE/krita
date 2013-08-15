@@ -17,5 +17,7 @@ kde4_add_plugin(sheetspivottables ${pivottables_SRCS})
 target_link_libraries(sheetspivottables calligrasheetscommon)
 
 install(TARGETS sheetspivottables DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES  pivottables.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/kpartplugins)
+install( FILES  pivottables.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
+install( FILES  sheetspivottables.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
 

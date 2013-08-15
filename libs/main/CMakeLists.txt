@@ -23,7 +23,6 @@ set(komain_LIB_SRCS
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
-    KoFactory.cpp
     KoFileDialog.cpp
     KoGlobal.cpp
     KoGridData.cpp
@@ -150,7 +149,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoFactory.h
     KoFilter.h
     KoFilterChain.h
     KoFilterChainLinkList.h

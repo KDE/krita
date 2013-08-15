@@ -95,22 +95,6 @@
 
 #include "calligraversion.h"
 
-class KoPartManager : public KParts::PartManager
-{
-public:
-    KoPartManager(QWidget * parent)
-            : KParts::PartManager(parent) {
-        setSelectionPolicy(KParts::PartManager::TriState);
-        setAllowNestedParts(false);
-        setIgnoreScrollBars(true);
-    }
-    virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj || !ev || !obj->isWidgetType())
-            return false;
-        return KParts::PartManager::eventFilter(obj, ev);
-    }
-};
-
 class KoMainWindowPrivate
 {
 public:
@@ -255,7 +239,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    d->manager = new KoPartManager(this);
+    d->manager = new KParts::PartManager(this);
 
     connect(d->manager, SIGNAL(activePartChanged(KParts::Part *)),
             this, SLOT(slotActivePartChanged(KParts::Part *)));

@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CHANGEIMAGECOMMAND_H
-#define CHANGEIMAGECOMMAND_H
+#ifndef CHANGEVECTORDATACOMMAND_H
+#define CHANGEVECTORDATACOMMAND_H
 
 #include <kundo2command.h>
 #include <QByteArray>
@@ -45,4 +45,4 @@ private:
     VectorShape::VectorType m_newVectorType;
 };
 
-#endif /* CHANGEIMAGECOMMAND_H */
+#endif /* CHANGEVECTORDATACOMMAND_H */

@@ -51,9 +51,6 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
@@ -966,8 +963,8 @@ void KisView2::loadPlugins()
         dbgUI << "Load plugin " << service->name();
         QString error;
 
-        KParts::Plugin* plugin =
-                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {

@@ -72,8 +72,7 @@ public:
 };
 
 KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringList&)
-    : KParts::Plugin(module)
-    , d(new Private())
+    : d(new Private())
 {
     d->module = module;
     Q_ASSERT(d->module);

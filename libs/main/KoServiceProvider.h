@@ -43,7 +43,7 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QByteArray readNativeFormatMimeType(const KComponentData &instance = KComponentData());
+    static QByteArray readNativeFormatMimeType();
 
     /**
      * Used by KoMainWindow, when no document exists yet.
@@ -55,14 +55,13 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QStringList readExtraNativeMimeTypes(const KComponentData &instance = KComponentData());
+    static QStringList readExtraNativeMimeTypes();
 
     /**
-     * With the help of @p instance or KApplication::componentData() this
-     * method figures out which .desktop file matches this application,
-     * and returns the KService instance for it.
+     * This method figures out which .desktop file matches this application,
+     * and returns the KService instance for it: the format is appname + "part.desktop"
      */
-    static KService::Ptr readNativeService(const KComponentData &instance = KComponentData());
+    static KService::Ptr readNativeService();
 
 };
 

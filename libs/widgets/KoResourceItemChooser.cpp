@@ -4,7 +4,7 @@
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
-   Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+   Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -106,6 +106,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
     d->splitter->addWidget(d->view);
     d->splitter->addWidget(d->previewScroller);
+    d->splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     d->buttonGroup = new QButtonGroup(this);
@@ -154,7 +155,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setMargin(0);
 
     d->tagChooser = new KoResourceTaggingInterface(d->model, this);
-    
+
     layout->addWidget(d->tagChooser->tagChooserWidget());
     layout->addWidget(d->splitter);
     layout->addWidget(d->tagChooser->tagFilterWidget());
@@ -162,6 +163,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
+    showTaggingBar(false,false);
     activated(d->model->index(0, 0));
 }
 

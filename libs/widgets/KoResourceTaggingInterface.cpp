@@ -183,7 +183,7 @@ void KoResourceTaggingInterface::removeTagFromComboBox(const QString &tag)
         removeResourceTag(resource, tag);
     }
     d->model->tagCategoryRemoved(tag);
-    d->lastDeletedTag = TaggedResourceSet(tag,resources);
+    d->lastDeletedTag = TaggedResourceSet(tag, resources);
     d->tagChooser->setUndeletionCandidate(tag);
 }
 
@@ -205,7 +205,7 @@ void KoResourceTaggingInterface::renameTag(const QString &oldName, const QString
 
         foreach(KoResource* resource, resources) {
             removeResourceTag(resource, oldName);
-            addResourceTag(resource,newName);
+            addResourceTag(resource, newName);
         }
         contextCreateNewTag(newName);
         d->model->tagCategoryRemoved(oldName);

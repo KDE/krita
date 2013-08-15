@@ -112,7 +112,6 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
 
     d->tagToolButton->setMenu(popup);
     buttonLayout->addWidget(d->tagToolButton);
-   // this->setLayout(buttonLayout);
 }
 
 KoTagToolButton::~KoTagToolButton()

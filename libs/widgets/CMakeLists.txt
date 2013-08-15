@@ -104,7 +104,7 @@ install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     KoResourceItemChooserContextMenu.h
-    KoTagWidget.h
+    KoResourceTaggingInterface.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h

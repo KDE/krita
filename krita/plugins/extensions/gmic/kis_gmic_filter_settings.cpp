@@ -20,7 +20,7 @@
 #include <kis_gmic_filter_settings.h>
 
 
-KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(NONE)
+KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE)
 {
 
 }
@@ -48,4 +48,14 @@ InputLayerMode KisGmicFilterSetting::inputLayerMode()
 void KisGmicFilterSetting::setInputLayerMode(InputLayerMode mode)
 {
     m_inputLayerMode = mode;
+}
+
+OutputMode KisGmicFilterSetting::outputMode()
+{
+     return m_outputMode;
+}
+
+void KisGmicFilterSetting::setOutputMode(OutputMode mode)
+{
+    m_outputMode = mode;
 }

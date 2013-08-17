@@ -2,6 +2,7 @@ set(kritagmic_shared_PART_SRCS kis_gmic_parser.cpp
 kis_gmic_filter_model.cpp
 kis_gmic_filter_settings.cpp
 kis_gmic_settings_widget.cpp
+kis_gmic_input_output_widget.cpp
 kis_gmic_widget.cpp
 Component.h
 Category.cpp
@@ -9,7 +10,14 @@ Command.cpp
 Filters.cpp
 Parameter.cpp
 )
-set(kritagmic_PART_SRCS kis_gmic.cpp dlg_gmic.cpp kis_gmic_plugin.cpp gmic.cpp ${kritagmic_shared_PART_SRCS})
+
+set(kritagmic_PART_SRCS
+    dlg_gmic.cpp
+    kis_gmic.cpp
+    kis_gmic_processing_visitor.cpp
+    kis_gmic_plugin.cpp gmic.cpp ${kritagmic_shared_PART_SRCS}
+)
+
 set(gmicparser_PART_SRCS main.cpp ${kritagmic_shared_PART_SRCS})
 
 kde4_add_ui_files(kritagmic_PART_SRCS wdg_gmic.ui )

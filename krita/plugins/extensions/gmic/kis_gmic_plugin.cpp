@@ -34,6 +34,8 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
+#include <kis_image_signal_router.h>
+#include <kis_processing_applicator.h>
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
@@ -53,18 +55,22 @@ K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 #include "Component.h"
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
+#include "kis_gmic_processing_visitor.h"
 
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/gmic.rc")
+        : KisViewPlugin(parent, "kritaplugins/gmic.rc"),m_gmicWidget(0)
 {
     qDebug() << "\tGMIC\tLoading GMIC";
     KisAction *action  = new KisAction(i18n("Apply G'Mic Action..."), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("gmic", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotGmic()));
 }
 
 KisGmicPlugin::~KisGmicPlugin()
 {
+    delete m_gmicWidget;
 }
 
 void KisGmicPlugin::slotGmic()
@@ -78,23 +84,54 @@ void KisGmicPlugin::slotGmic()
     KisGmicParser parser("gmic_def.gmic");
     Component * root = parser.createFilterTree();
     KisGmicFilterModel * model = new KisGmicFilterModel(root);
-    KisGmicWidget * gmicWidget = new KisGmicWidget(model);
+    m_gmicWidget = new KisGmicWidget(model);
 
-    connect(gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
-    gmicWidget->show();
+    connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
+    m_gmicWidget->show();
 }
 
 
 void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 {
-    KisGmic gmic(m_view);
+    KisImageWSP image = m_view->image();
 
-    KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start();
+    if (image)
+    {
+        QString actionName;
+        KisNodeSP node;
 
-    QPointer<KoUpdater> u = updater->startSubtask();
-    gmic.processGmic(u, setting->gmicCommand());
-    updater->deleteLater();
+        if (setting->inputLayerMode() == ACTIVE_LAYER)
+        {
+            actionName = i18n("Gmic: Active Layer");
+            node = m_view->activeNode();
+        }
+        else
+        {
+            KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
+            return;
+        }
+
+        qDebug() << "Input mode" << setting->inputLayerMode();
+        qDebug() << "Output mode" << setting->outputMode();
+
+        if (setting->outputMode() != IN_PLACE)
+        {
+            KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
+            return;
+        }
+
+        KisImageSignalVector emitSignals;
+        emitSignals << ModifiedSignal;
+
+        KisProcessingApplicator applicator(m_view->image(), node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
+
+        KisProcessingVisitorSP visitor = new KisGmicProcessingVisitor(setting->gmicCommand(), m_view);
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+        applicator.end();
+    }
 }
 
 

@@ -22,12 +22,31 @@
 #include <QStringList>
 #include <QMetaType>
 
-enum InputLayerMode
-{
-        NONE = 0, ACTIVE, ALL, ACTIVE_AND_BELOW, ACTIVE_AND_ABOVE, ALL_VISIBLE, ALL_VISIBLE_DECR, ALL_INVISIBLE_DECR, ALL_DECR
+enum OutputMode {   IN_PLACE = 0,
+                        NEW_LAYERS,
+                        NEW_ACTIVE_LAYERS,
+                        NEW_IMAGE
 };
 
-static QStringList LAYER_MODE_STRINGS = QStringList() << "None"
+static QStringList OUTPUT_MODE_STRINGS = QStringList() << "In place (default)"
+    << "New layer(s)"
+    << "New active layer(s)"
+    << "New image";
+
+// this enum is also index in LAYER_MODE_STRINGS list
+enum InputLayerMode {   NONE = 0,
+                        ACTIVE_LAYER,
+                        ALL_LAYERS,
+                        ACTIVE_LAYER_BELOW_LAYER,
+                        ACTIVE_LAYER_ABOVE_LAYER,
+                        ALL_VISIBLE_LAYERS,
+                        ALL_INVISIBLE_LAYERS,
+                        ALL_VISIBLE_LAYERS_DECR,
+                        ALL_INVISIBLE_DECR,
+                        ALL_DECR
+};
+
+static QStringList INPUT_MODE_STRINGS = QStringList() << "None"
     << "Active (default)"
     << "All"
     << "Active & below"
@@ -36,7 +55,7 @@ static QStringList LAYER_MODE_STRINGS = QStringList() << "None"
     << "All invisibles"
     << "All visibles (decr.)"
     << "All invisibles (decr.)"
-    <<"All (decr.)";
+    << "All (decr.)";
 
 class KisGmicFilterSetting
 {
@@ -50,9 +69,13 @@ public:
     InputLayerMode inputLayerMode();
     void setInputLayerMode(InputLayerMode mode);
 
+    OutputMode outputMode();
+    void setOutputMode(OutputMode mode);
+
 private:
     QString m_gmicCommand;
     InputLayerMode m_inputLayerMode;
+    OutputMode m_outputMode;
 };
 
 Q_DECLARE_METATYPE(KisGmicFilterSetting *)

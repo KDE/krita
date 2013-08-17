@@ -43,18 +43,6 @@ public:
 
 private:
     KisView2 * m_view;
-
-
-    QImage convertToQImage(gmic_image<float>& gmicImage);
-    void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
-
-    void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-
-    void convertToGmicImageOpti(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-
-    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage);
-
-
 };
 
 #endif

@@ -71,202 +71,12 @@ KisGmic::KisGmic(KisView2 * view)
 {
 }
 
-QImage KisGmic::convertToQImage(gmic_image<float>& gmicImage)
-{
-
-    QImage image = QImage(gmicImage._width, gmicImage._height, QImage::Format_ARGB32);
-
-    qDebug() << image.format() <<"first pixel:"<< gmicImage._data[0] << gmicImage._width << gmicImage._height << gmicImage._spectrum;
-
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int pos = 0;
-
-    for (int y = 0; y < gmicImage._height; y++)
-    {
-        QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
-        for (int x = 0; x < gmicImage._width; x++)
-        {
-            pos = y * gmicImage._width + x;
-            float r = gmicImage._data[pos];
-            float g = gmicImage._data[pos + greenOffset];
-            float b = gmicImage._data[pos + blueOffset];
-            pixel[x] = qRgb(int(r),int(g), int(b));
-        }
-    }
-    return image;
-}
-
-
-void KisGmic::convertFromQImage(const QImage& image, CImg< float >& gmicImage)
-{
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-    int pos = 0;
-
-    Q_ASSERT(image.width() == gmicImage._width);
-    Q_ASSERT(image.height() == gmicImage._height);
-    Q_ASSERT(image.format() == QImage::Format_ARGB32);
-    Q_ASSERT(gmicImage._spectrum == 4);
-
-    for (int y = 0; y < image.height(); y++)
-    {
-        const QRgb *pixel = reinterpret_cast<const QRgb *>(image.scanLine(y));
-        for (int x = 0; x < image.width(); x++)
-        {
-            pos = y * gmicImage._width + x;
-            gmicImage._data[pos]                = qRed(pixel[x]);
-            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]);
-            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]);
-            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]);
-        }
-    }
-
-}
-
-
-KisPaintDeviceSP KisGmic::convertFromGmicImage(CImg< float >& gmicImage)
-{
-    const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                                                                Float32BitsColorDepthID.id(),
-                                                                                                KoColorSpaceRegistry::instance()->rgb8()->profile());
-
-    KisPaintDeviceSP dev = new KisPaintDevice(rgbaFloat32bitcolorSpace);
-    // TODO: let's reuse planes from readPlanarBytes ;)
-    int channelBytes = gmicImage._width * gmicImage._height * sizeof(float);
-
-    QVector< quint8 * > planes;
-    planes.resize(rgbaFloat32bitcolorSpace->channelCount());
-    for (int i=0; i<rgbaFloat32bitcolorSpace->channelCount();i++)
-    {
-        planes[i] = new quint8[channelBytes];
-    }
-
-    // copy red channel
-    float * gmicPixelData = gmicImage._data;
-
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    quint8 * alphaChannelBytes = planes[3];
-
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-    int pos = 0;
-
-    float r,g,b,a;
-    for (int y = 0; y < gmicImage._height; y++)
-    {
-        for (int x = 0; x < gmicImage._width; x++){
-            pos = y * gmicImage._width + x;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = gmicImage._data[pos]                / 255.0;
-            g = gmicImage._data[pos + greenOffset]  / 255.0;
-            b = gmicImage._data[pos + blueOffset]   / 255.0;
-            a = gmicImage._data[pos + alphaOffset]  / 255.0;
-
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
-        }
-    }
-
-    dev->writePlanarBytes(planes, 0, 0, gmicImage._width, gmicImage._height);
-    return dev;
-}
-
-
-void KisGmic::convertToGmicImage(KisPaintDeviceSP dev, CImg< float >& gmicImage)
-{
-
-    const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                                                                Float32BitsColorDepthID.id(),
-                                                                                                KoColorSpaceRegistry::instance()->rgb8()->profile());
-
-    Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
-    dev->convertTo(rgbaFloat32bitcolorSpace);
-    QRect rc = dev->exactBounds();
-
-    QVector<quint8 *> planarBytes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
-
-    float * gmicPixelData = gmicImage._data;
-
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-    int pos = 0;
-
-    quint8 * redChannelBytes = planarBytes.at(KoRgbF32Traits::red_pos);
-    quint8 * greenChannelBytes = planarBytes.at(KoRgbF32Traits::green_pos);
-    quint8 * blueChannelBytes = planarBytes.at(KoRgbF32Traits::blue_pos);
-    quint8 * alphaChannelBytes = planarBytes.at(KoRgbF32Traits::alpha_pos);
-
-    float r,g,b,a;
-    for (int y = 0; y < gmicImage._height; y++)
-    {
-        for (int x = 0; x < gmicImage._width; x++){
-            pos = y * gmicImage._width + x;
-
-            memcpy(&r, redChannelBytes, 4); redChannelBytes     += 4;
-            memcpy(&g, greenChannelBytes, 4); greenChannelBytes += 4;
-            memcpy(&b, blueChannelBytes, 4); blueChannelBytes   += 4;
-            memcpy(&a, alphaChannelBytes, 4); alphaChannelBytes += 4;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            gmicImage._data[pos]                = r * 255.0;
-            gmicImage._data[pos + greenOffset]  = g * 255.0;
-            gmicImage._data[pos + blueOffset]   = b * 255.0;
-            gmicImage._data[pos + alphaOffset]  = a * 255.0;
-        }
-    }
-
-    qDeleteAll(planarBytes);
-    planarBytes.clear();
-
-}
-
-void KisGmic::convertToGmicImageOpti(KisPaintDeviceSP dev, CImg< float >& gmicImage)
-{
-    const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                                                                Float32BitsColorDepthID.id(),
-                                                                                                KoColorSpaceRegistry::instance()->rgb8()->profile());
-
-    Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
-    dev->convertTo(rgbaFloat32bitcolorSpace);
-
-    QRect rc = dev->exactBounds();
-    QVector<quint8 *> planarBytes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
-
-    float * gmicPixelData = gmicImage._data;
-
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-    quint8 * redChannelBytes = planarBytes.at(KoRgbF32Traits::red_pos);
-    quint8 * greenChannelBytes = planarBytes.at(KoRgbF32Traits::green_pos);
-    quint8 * blueChannelBytes = planarBytes.at(KoRgbF32Traits::blue_pos);
-    quint8 * alphaChannelBytes = planarBytes.at(KoRgbF32Traits::alpha_pos);
-
-    unsigned int channelSize = sizeof(float);
-
-    memcpy(gmicImage._data                  ,redChannelBytes    ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + greenOffset    ,greenChannelBytes  ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + blueOffset     ,blueChannelBytes   ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + alphaOffset    ,alphaChannelBytes  ,gmicImage._width * gmicImage._height * channelSize);
-
-    qDeleteAll(planarBytes);
-    planarBytes.clear();
-}
 
 
 
 void KisGmic::processGmic(KoUpdater * progressUpdater, const QString &gmicString)
 {
-    if(!m_view) return;
+/*    if(!m_view) return;
 
     KisImageWSP image = m_view->image();
     if (!image) return;
@@ -275,16 +85,6 @@ void KisGmic::processGmic(KoUpdater * progressUpdater, const QString &gmicString
     if (!src) return;
 
     bool conversionNeeded = (src->colorSpace()->colorModelId() != RGBAColorModelID || src->colorSpace()->colorDepthId() != Integer8BitsColorDepthID);
-
-    /*if (conversionNeeded) {
-        if (KMessageBox::warningContinueCancel(m_view,
-                                               i18n("Applying a G'Mic action will convert your layer to 8 bit RGBA and back. You will lose color information."),
-                                               i18n("Krita"))
-                == KMessageBox::Cancel) {
-            return;
-        }
-    }*/
-
 
     KisPaintDeviceSP dev = src->projection();
     if (!dev) return;
@@ -396,7 +196,7 @@ void KisGmic::processGmic(KoUpdater * progressUpdater, const QString &gmicString
 
     progressUpdater->setProgress(100);
     transaction.commit(image->undoAdapter());
-    src->setDirty(rc);
+    src->setDirty(rc);*/
 }
 
 

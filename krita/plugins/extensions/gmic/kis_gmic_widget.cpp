@@ -25,6 +25,7 @@
 
 #include <kis_gmic_filter_settings.h>
 #include "kis_gmic_settings_widget.h"
+#include <kis_gmic_input_output_widget.h>
 
 KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters): QWidget(),m_filterModel(filters)
 {
@@ -42,6 +43,12 @@ void KisGmicWidget::createMainLayout()
 {
     m_filterConfigLayout = new QGridLayout;
 
+    int column = 0;
+    int row = 0;
+    m_inputOutputOptions = new KisGmicInputOutputWidget();
+    m_filterConfigLayout->addWidget(m_inputOutputOptions, row, column);
+    column++;
+
     m_filterTree = new QTreeView();
     m_filterTree->setModel(m_filterModel);
 
@@ -49,13 +56,13 @@ void KisGmicWidget::createMainLayout()
     connect(selectionModel, SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
             this, SLOT(selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 
-
-
-    m_filterConfigLayout->addWidget(m_filterTree,0,0);
+    m_filterConfigLayout->addWidget(m_filterTree, row, column);
+    column++;
 
     m_filterOptions = new QWidget();
-    m_filterConfigLayout->addWidget(m_filterOptions,0,1);
-
+    m_filterConfigLayout->addWidget(m_filterOptions,row, column);
+    m_filterOptionsRow = row;
+    m_filterOptionsColumn = column;
 
     QDialogButtonBox * controlButtonBox = new QDialogButtonBox;
     QPushButton * maximize = new QPushButton("Maximize");
@@ -69,7 +76,8 @@ void KisGmicWidget::createMainLayout()
 
     controlButtonBox->addButton(QDialogButtonBox::Cancel);
     controlButtonBox->addButton(QDialogButtonBox::Reset);
-    m_filterConfigLayout->addWidget(controlButtonBox,1, 1, 1, 2);
+    m_filterConfigLayout->addWidget(controlButtonBox,row + 1, column, 1, 2);
+    column++;
 
     setLayout(m_filterConfigLayout);
 }
@@ -97,7 +105,7 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
         delete m_filterOptions;
 
         m_filterOptions = new KisGmicSettingsWidget(gmicCommand);
-        m_filterConfigLayout->addWidget(m_filterOptions,0,1);
+        m_filterConfigLayout->addWidget(m_filterOptions,m_filterOptionsRow,m_filterOptionsColumn);
         m_filterConfigLayout->update();
     } else {
         qDebug() << "Command is null";
@@ -123,12 +131,17 @@ void KisGmicWidget::applyFilterSlot()
     if (settings.isValid())
     {
         KisGmicFilterSetting * filterSettings = settings.value<KisGmicFilterSetting * >();
+        filterSettings->setInputLayerMode(m_inputOutputOptions->inputMode());
+        filterSettings->setOutputMode(m_inputOutputOptions->outputMode());
+
+
         qDebug() << "Valid settings!";
         qDebug() << "GMIC command : " << filterSettings->gmicCommand();
 
         emit sigApplyCommand(filterSettings);
     }
-    else{
+    else
+    {
         qDebug() << "InValid settings!";
     }
 

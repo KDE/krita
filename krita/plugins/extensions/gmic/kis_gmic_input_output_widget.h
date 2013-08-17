@@ -15,29 +15,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef _KIS_GMIC_PLUGIN_H_
-#define _KIS_GMIC_PLUGIN_H_
+#ifndef KIS_INPUT_OUTPUT_WIDGET
+#define KIS_INPUT_OUTPUT_WIDGET
 
-#include <QVariant>
+#include <QWidget>
+#include <QHash>
+#include "kis_gmic_filter_settings.h"
 
-#include <kis_view_plugin.h>
-#include <kis_gmic_filter_settings.h>
-
-class KisGmicWidget;
-
-class KisGmicPlugin : public KisViewPlugin
+/**
+ * creates GUI for Input/Output configuration
+ */
+class KisGmicInputOutputWidget : public QWidget
 {
     Q_OBJECT
+
 public:
-    KisGmicPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisGmicPlugin();
+    KisGmicInputOutputWidget();
+    ~KisGmicInputOutputWidget();
+
+    InputLayerMode inputMode() const { return m_inputMode; };
+    OutputMode outputMode() const { return m_outputMode; };
+
+signals:
+    void sigConfigurationChanged();
 
 private:
-    KisGmicWidget * m_gmicWidget;
+    void createMainLayout();
 
 private slots:
-    void slotGmic();
-    void slotApplyGmicCommand(KisGmicFilterSetting* setting);
+    void setIntputMode(int index);
+    void setOutputMode(int index);
+
+private:
+    InputLayerMode m_inputMode;
+    OutputMode m_outputMode;
+
 };
 
+
+
 #endif
+

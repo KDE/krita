@@ -23,6 +23,7 @@
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_filter_settings.h"
 
+class KisGmicInputOutputWidget;
 class QPushButton;
 class KisGmicWidget : public QWidget
 {
@@ -46,13 +47,16 @@ private slots:
     void cancelFilterSlot();
 
 private:
+    QGridLayout * m_filterConfigLayout;
+
     QTreeView * m_filterTree;
     QWidget * m_filterOptions;
-    QGridLayout * m_filterConfigLayout;
+    KisGmicInputOutputWidget * m_inputOutputOptions;
 
     KisGmicFilterModel * m_filterModel;
 
-
+    int m_filterOptionsRow;
+    int m_filterOptionsColumn;
 };
 
 #endif

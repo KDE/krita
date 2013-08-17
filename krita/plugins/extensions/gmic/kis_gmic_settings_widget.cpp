@@ -164,6 +164,7 @@ void KisGmicSettingsWidget::createSettingsWidget()
             {
                 ColorParameter * colorParam = static_cast<ColorParameter *>(p);
                 KColorButton *colorButton = new KColorButton(colorParam->m_value);
+                colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
 
 
                 m_widgetToParameterIndexMapper[colorParam] = i;

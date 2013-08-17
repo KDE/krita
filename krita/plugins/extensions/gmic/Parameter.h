@@ -184,6 +184,7 @@ public:
     virtual QString value() const;
 
     QColor m_value;
+    bool m_hasAlpha;
 };
 
 class TextParameter : public Parameter

@@ -285,7 +285,7 @@ QString BoolParameter::value() const
     return QString("0");
 }
 
-ColorParameter::ColorParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
+ColorParameter::ColorParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview),m_hasAlpha(true)
 {
     m_type = COLOR_P;
 }
@@ -303,6 +303,11 @@ void ColorParameter::parseValues(const QString& typeDefinition)
     if (values.size() == 4)
     {
         a = values.at(2).toInt(&isOk);
+        m_hasAlpha = true;
+    }
+    else
+    {
+        m_hasAlpha = false;
     }
     m_value.setRgb(r,g,b,a);
 }
@@ -319,8 +324,11 @@ QString ColorParameter::value() const
 {
     QString result =     QString::number(m_value.red()) + ","
                         +QString::number(m_value.green()) + ","
-                        +QString::number(m_value.blue()) + ","
-                        +QString::number(m_value.alpha());
+                        +QString::number(m_value.blue());
+    if (m_hasAlpha)
+    {
+        result  += "," + QString::number(m_value.alpha());
+    }
     return result;
 }
 

@@ -130,7 +130,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
             }
             default:
             {
-                Q_ASSERT_X(false,"Unhandled separator", delimiter);
+                //Q_ASSERT_X(false,"Unhandled separator", delimiter);
                 break;
             }
         }

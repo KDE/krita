@@ -135,11 +135,15 @@ void KisAnimationDoc::preSaveAnimation()
 
     d->store = new KisAnimationStore(url.directory() + "/" + animation->name() + ".kranim");
 
-    d->doc = this->createDomDocument("krita-animation","1.0");
+    d->doc = this->createDomDocument("krita-animation", "1.0");
 
     d->kranimSaver->saveMetaData(d->doc);
 
-    d->store->writeDataToFile(d->doc.toByteArray(), "maindoc.xml");
+    d->store->openFile("maindoc.xml");
+
+    d->store->writeDataToFile(d->doc.toByteArray());
+
+    d->store->closeFile();
 
     d->saved = true;
 

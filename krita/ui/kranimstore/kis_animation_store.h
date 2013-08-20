@@ -31,13 +31,16 @@ public:
 public:
     void enterDirectory(QString directory);
     void leaveDirectory();
-    void writeDataToFile(QByteArray data, QString filename);
-    void writeDataToFile(const char *data, qint64 length, QString filename);
+    void writeDataToFile(QByteArray data);
+    void writeDataToFile(const char *data, qint64 length);
     void setCompressionEnabled(bool e);
+    void openFile(QString filename);
+    void closeFile();
 
 private:
     KZip* m_zip;
     KArchiveDirectory* m_currentDir;
+    int m_dataLength;
 };
 
 #endif // KIS_ANIMATION_STORE_H

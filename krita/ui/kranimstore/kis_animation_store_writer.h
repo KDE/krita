@@ -25,26 +25,24 @@ class KisAnimationStoreWriter
         : public KisPaintDeviceWriter
 {
 public:
-    KisAnimationStoreWriter(KisAnimationStore* store, QString filename)
+    KisAnimationStoreWriter(KisAnimationStore* store)
         : m_store(store)
-        , m_filename(filename)
     {
     }
 
     qint64 write(const char* data, qint64 length)
     {
-        m_store->writeDataToFile(data, length, m_filename);
+        m_store->writeDataToFile(data, length);
         return length;
     }
 
     qint64 write(const QByteArray &data)
     {
-        m_store->writeDataToFile(data, m_filename);
+        m_store->writeDataToFile(data);
         return data.length();
     }
 
     KisAnimationStore* m_store;
-    QString m_filename;
 };
 
 #endif // KIS_ANIMATION_STORE_WRITER_H

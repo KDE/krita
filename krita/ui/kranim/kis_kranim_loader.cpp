@@ -18,6 +18,8 @@
 
 #include "kis_kranim_loader.h"
 #include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_types.h>
 
 struct KisKranimLoader::Private
 {
@@ -47,4 +49,16 @@ KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
     kWarning() << "Load XML";
     KisImageWSP image = 0;
     return image;
+}
+
+void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRect framePosition)
+{
+    kWarning() << "Loading frame" << framePosition.x() << framePosition.y();
+    KisPaintDeviceSP dev = layer->paintDevice();
+    QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
+    if(store->getDevice(location)) {
+        if(!dev->read(store->getDevice(location))) {
+            dev->disconnect();
+        }
+    }
 }

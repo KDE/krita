@@ -69,7 +69,6 @@ void KisAnimationStore::closeFile()
 {
     m_zip->finishWriting(m_dataLength);
     m_zip->close();
-
 }
 
 void KisAnimationStore::setCompressionEnabled(bool e)
@@ -80,4 +79,24 @@ void KisAnimationStore::setCompressionEnabled(bool e)
     else {
         m_zip->setCompression(KZip::NoCompression);
     }
+}
+
+QIODevice* KisAnimationStore::getDevice(QString location)
+{
+    m_zip->open(QIODevice::ReadWrite);
+    if(m_zip->directory()->entry(location)) {
+        QIODevice* dev = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(location))->createDevice();
+        return dev;
+    } else {
+        return 0;
+    }
+    m_zip->close();
+}
+
+bool KisAnimationStore::hasFile(QString location) const
+{
+    m_zip->open(QIODevice::ReadWrite);
+    bool f = m_zip->directory()->entries().contains(location);
+    m_zip->close();
+    return f;
 }

@@ -36,6 +36,8 @@ public:
     void setCompressionEnabled(bool e);
     void openFile(QString filename);
     void closeFile();
+    bool hasFile(QString location) const;
+    QIODevice* getDevice(QString location);
 
 private:
     KZip* m_zip;

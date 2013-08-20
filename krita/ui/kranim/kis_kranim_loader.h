@@ -25,6 +25,7 @@ class KoStore;
 
 #include <kis_animation_doc.h>
 #include <kis_types.h>
+#include <../kranimstore/kis_animation_store.h>
 
 class KisKranimLoader
 {
@@ -36,6 +37,8 @@ public:
     KisImageWSP loadXML(const KoXmlElement &elem);
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
+
+    void loadFrame(KisLayerSP layer,KisAnimationStore* store, QRect framePosition);
 
 private:
     struct Private;

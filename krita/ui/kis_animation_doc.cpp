@@ -76,15 +76,39 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     if (!d->saved) {
         d->kranimSaver = new KisKranimSaver(this);
         this->preSaveAnimation();
+        return;
+    }
+
+    QString location = "frame" + QString::number(frame.x()) +"layer" + QString::number(frame.y());
+
+    kWarning() << location << d->store->hasFile(location);
+
+    if(d->store->hasFile(location)) {
+        d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+
+        KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+        connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+        image->setResolution(animation->resolution(), animation->resolution());
+
+        d->currentFramePosition = frame;
+        d->currentFrame = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+        d->currentFrame->setName("testFrame");
+        d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+        image->addNode(d->currentFrame.data(), image->rootLayer().data());
+
+        //Load all the layers here
+
+        d->kranimLoader->loadFrame(d->currentFrame, d->store, d->currentFramePosition);
+
+        setCurrentImage(image);
     }
 }
 
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
 
-    //Save the previous frame over here
-    kWarning() << "Done";
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
     KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
@@ -98,6 +122,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     image->addNode(d->currentFrame.data(), image->rootLayer().data());
     kWarning() << "Layer added";
     //Load all the layers here
+
+    //d->kranimLoader->loadFrame(d->currentFrame, d->store, d->currentFramePosition);
 
     setCurrentImage(image);
 }

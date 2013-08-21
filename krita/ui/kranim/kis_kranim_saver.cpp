@@ -93,10 +93,16 @@ void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect
         QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
 
         store->setCompressionEnabled(true);
+
         store->openFile(location);
         m_writer = new KisAnimationStoreWriter(store);
         device->write(*m_writer);
         store->closeFile();
+
+        store->openFile(location + ".defaultpixel");
+        store->writeDataToFile((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
+        store->closeFile();
+
         store->setCompressionEnabled(false);
     }
 }

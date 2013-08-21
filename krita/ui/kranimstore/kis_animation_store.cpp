@@ -100,3 +100,8 @@ bool KisAnimationStore::hasFile(QString location) const
     m_zip->close();
     return f;
 }
+
+void KisAnimationStore::readFromFile(char *buffer, qint64 length)
+{
+    m_zip->device()->read(buffer, length);
+}

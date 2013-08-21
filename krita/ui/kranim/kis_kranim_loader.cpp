@@ -56,9 +56,19 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRec
     kWarning() << "Loading frame" << framePosition.x() << framePosition.y();
     KisPaintDeviceSP dev = layer->paintDevice();
     QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
-    if(store->getDevice(location)) {
+    if(store->hasFile(location)) {
         if(!dev->read(store->getDevice(location))) {
             dev->disconnect();
         }
+
+        store->openFile(location + ".defaultpixel");
+        int pixelSize = dev->colorSpace()->pixelSize();
+
+        quint8* defPixel = new quint8[pixelSize];
+        store->readFromFile((char*)defPixel, pixelSize);
+        dev->setDefaultPixel(defPixel);
+        delete[] defPixel;
+
+        store->closeFile();
     }
 }

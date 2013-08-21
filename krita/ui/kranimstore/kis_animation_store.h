@@ -33,6 +33,7 @@ public:
     void leaveDirectory();
     void writeDataToFile(QByteArray data);
     void writeDataToFile(const char *data, qint64 length);
+    void readFromFile(char* buffer, qint64 length);
     void setCompressionEnabled(bool e);
     void openFile(QString filename);
     void closeFile();

@@ -61,14 +61,11 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRec
             dev->disconnect();
         }
 
-        store->openFile(location + ".defaultpixel");
         int pixelSize = dev->colorSpace()->pixelSize();
 
         quint8* defPixel = new quint8[pixelSize];
-        store->readFromFile((char*)defPixel, pixelSize);
+        store->readFromFile(location + ".defaultpixel", (char*)defPixel, pixelSize);
         dev->setDefaultPixel(defPixel);
         delete[] defPixel;
-
-        store->closeFile();
     }
 }

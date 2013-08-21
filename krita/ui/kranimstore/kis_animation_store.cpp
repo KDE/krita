@@ -59,15 +59,23 @@ void KisAnimationStore::writeDataToFile(const char *data, qint64 length)
     m_zip->writeData(data, length);
 }
 
-void KisAnimationStore::openFile(QString filename)
+void KisAnimationStore::openFileWriting(QString filename)
 {
-    m_zip->open(QIODevice::ReadWrite);
     m_zip->prepareWriting(filename, "", "", 0);
 }
 
-void KisAnimationStore::closeFile()
+void KisAnimationStore::openStore()
+{
+    m_zip->open(QIODevice::ReadWrite);
+}
+
+void KisAnimationStore::closeFileWriting()
 {
     m_zip->finishWriting(m_dataLength);
+}
+
+void KisAnimationStore::closeStore()
+{
     m_zip->close();
 }
 
@@ -101,7 +109,9 @@ bool KisAnimationStore::hasFile(QString location) const
     return f;
 }
 
-void KisAnimationStore::readFromFile(char *buffer, qint64 length)
+void KisAnimationStore::readFromFile(QString filename, char *buffer, qint64 length)
 {
-    m_zip->device()->read(buffer, length);
+    m_zip->open(QIODevice::ReadWrite);
+    static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice()->read(buffer, length);
+    m_zip->close();
 }

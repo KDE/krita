@@ -123,8 +123,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     kWarning() << "Layer added";
     //Load all the layers here
 
-    //d->kranimLoader->loadFrame(d->currentFrame, d->store, d->currentFramePosition);
-
     setCurrentImage(image);
 }
 
@@ -165,11 +163,13 @@ void KisAnimationDoc::preSaveAnimation()
 
     d->kranimSaver->saveMetaData(d->doc);
 
-    d->store->openFile("maindoc.xml");
+    d->store->openStore();
+    d->store->openFileWriting("maindoc.xml");
 
     d->store->writeDataToFile(d->doc.toByteArray());
 
-    d->store->closeFile();
+    d->store->closeFileWriting();
+    d->store->closeStore();
 
     d->saved = true;
 

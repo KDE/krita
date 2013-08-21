@@ -83,7 +83,10 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
     kWarning() << location << d->store->hasFile(location);
 
-    if(d->store->hasFile(location)) {
+    d->store->openStore();
+    bool hasFile = d->store->hasFile(location);
+    d->store->closeStore();
+    if(hasFile) {
         d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
         KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());

@@ -91,27 +91,21 @@ void KisAnimationStore::setCompressionEnabled(bool e)
 
 QIODevice* KisAnimationStore::getDevice(QString location)
 {
-    m_zip->open(QIODevice::ReadWrite);
     if(m_zip->directory()->entry(location)) {
         QIODevice* dev = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(location))->createDevice();
         return dev;
     } else {
         return 0;
     }
-    m_zip->close();
 }
 
 bool KisAnimationStore::hasFile(QString location) const
 {
-    m_zip->open(QIODevice::ReadWrite);
     bool f = m_zip->directory()->entries().contains(location);
-    m_zip->close();
     return f;
 }
 
 void KisAnimationStore::readFromFile(QString filename, char *buffer, qint64 length)
 {
-    m_zip->open(QIODevice::ReadWrite);
     static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice()->read(buffer, length);
-    m_zip->close();
 }

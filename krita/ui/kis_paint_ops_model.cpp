@@ -43,7 +43,11 @@ QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
             return item->data()->icon;
         }
     } else if (role == SortRole) {
-        return item->isCategory() ? item->name() : item->parentCategory()->name() + item->data()->priority + item->name();
+        return item->isCategory() ? item->name() :
+            QString("%1%2%3")
+            .arg(item->parentCategory()->name())
+            .arg(item->data()->priority, 4)
+            .arg(item->name());
     }
 
     return BasePaintOpCategorizedListModel::data(idx, role);

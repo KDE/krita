@@ -443,13 +443,11 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
     if(node && node->paintDevice()) {
         if(!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
-        
-        int index = m_cmbCompositeOp->indexOf(KoID(compositeOpID));
-        
+
         m_cmbCompositeOp->blockSignals(true);
-        m_cmbCompositeOp->setCurrentIndex(index);
+        m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
         m_cmbCompositeOp->blockSignals(false);
-        
+
         m_eraseModeButton->defaultAction()->blockSignals(true);
         m_eraseModeButton->blockSignals(true);
         m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
@@ -635,7 +633,7 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
 
 void KisPaintopBox::slotColorSpaceChanged(const KoColorSpace* colorSpace)
 {
-    m_cmbCompositeOp->getModel()->validateCompositeOps(colorSpace);
+    m_cmbCompositeOp->validate(colorSpace);
 }
 
 void KisPaintopBox::slotToggleEraseMode(bool checked)
@@ -648,11 +646,11 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
 
 void KisPaintopBox::slotSetCompositeMode(int index)
 {
-    if(m_activePreset->settings()->hasProperty("CompositeOp")) {
-        KoID compositeOp;
+    Q_UNUSED(index);
 
-        if(m_cmbCompositeOp->entryAt(compositeOp, index))
-            updateCompositeOp(compositeOp.id());
+    if(m_activePreset->settings()->hasProperty("CompositeOp")) {
+        QString compositeOp = m_cmbCompositeOp->selectedCompositeOp().id();
+        updateCompositeOp(compositeOp);
     }
 }
 

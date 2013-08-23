@@ -22,37 +22,49 @@
 #ifndef KIS_COMPOSITEOP_WIDGETS_H_
 #define KIS_COMPOSITEOP_WIDGETS_H_
 
-#include <krita_export.h>
 #include <QComboBox>
+#include <krita_export.h>
 #include "kis_categorized_list_view.h"
-#include "../kis_composite_ops_model.h"
 
-class KisCompositeOpListModel;
+class KoID;
+class KoColorSpace;
+class KisSortedCompositeOpListModel;
 
-class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView, public KisCategorizedWidgetBase<KisCompositeOpListModel>
+
+class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
 public:
      KisCompositeOpListWidget(QWidget* parent=0);
     ~KisCompositeOpListWidget();
+
+    KoID selectedCompositeOp() const;
+
+private:
+    KisSortedCompositeOpListModel *m_model;
 };
 
 
-class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox, public KisCategorizedWidgetBase<KisCompositeOpListModel>
+class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
 {
     Q_OBJECT
 public:
      KisCompositeOpComboBox(QWidget* parent=0);
     ~KisCompositeOpComboBox();
-    
+
     virtual void hidePopup();
-    
+
+    void validate(const KoColorSpace *cs);
+    void selectCompositeOp(const KoID &op);
+    KoID selectedCompositeOp() const;
+
 private slots:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     void slotEntryChecked(const QModelIndex& index);
-    
+
 private:
-    KisCategorizedListView* m_view;
-    bool                    m_allowToHidePopup;
+    KisSortedCompositeOpListModel *m_model;
+    KisCategorizedListView *m_view;
+    bool m_allowToHidePopup;
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

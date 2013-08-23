@@ -21,60 +21,32 @@
 #include "kis_paintop_options_model.h"
 #include "kis_paintop_option.h"
 
+KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
+    : BaseOptionCategorizedListModel(parent)
+{
+}
+
 void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int widgetIndex)
 {
-    BaseClass::addEntry(option->category(), KisOptionInfo(option, widgetIndex));
-}
+    DataItem *item = categoriesMapper()->addEntry(option->category(), KisOptionInfo(option, widgetIndex));
 
-QString KisPaintOpOptionListModel::categoryToString(const QString& val) const
-{
-    return val;
-}
-
-QString KisPaintOpOptionListModel::entryToString(const KisOptionInfo& val) const
-{
-    return val.option->label();
-}
-
-QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
-{
-    if (idx.isValid() && role == Qt::CheckStateRole) {
-        KisOptionInfo info;
-
-        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable())
-            return info.option->isChecked() ? Qt::Checked : Qt::Unchecked;
-
-        return QVariant();
+    if (option->isCheckable()) {
+        item->setCheckable(true);
     }
 
-    return BaseClass::data(idx, role);
+    categoriesMapper()->expandAllCategories();
 }
 
 bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-    if (idx.isValid() && role == Qt::CheckStateRole) {
-        KisOptionInfo info;
+    if (!idx.isValid()) return false;
 
-        if (BaseClass::entryAt(info, idx.row()) && info.option->isCheckable()) {
-            info.option->setChecked(value.toInt() == Qt::Checked);
-            return true;
-        }
+    DataItem *item = categoriesMapper()->itemFromRow(idx.row());
+    Q_ASSERT(item);
 
-        return false;
+    if (role == Qt::CheckStateRole && item->checkable()) {
+        item->data()->option->setChecked(value.toInt() == Qt::Checked);
     }
 
-    return BaseClass::setData(idx, value, role);
-}
-
-Qt::ItemFlags KisPaintOpOptionListModel::flags(const QModelIndex& idx) const
-{
-    Qt::ItemFlags flags = 0;
-    KisOptionInfo info;
-
-    if (idx.isValid() && BaseClass::entryAt(info, idx.row())) {
-        if (info.option->isCheckable())
-            flags |= Qt::ItemIsUserCheckable;
-    }
-
-    return BaseClass::flags(idx) | flags;
+    return BaseOptionCategorizedListModel::setData(idx, value, role);
 }

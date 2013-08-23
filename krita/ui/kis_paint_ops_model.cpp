@@ -26,48 +26,46 @@
 #include <kstandarddirs.h>
 #include "kis_factory2.h"
 
-bool categorySortFunc(const QString& a, const QString& b) {
-    return a > b;
+KisPaintOpListModel::KisPaintOpListModel(QObject *parent)
+    : BasePaintOpCategorizedListModel(parent)
+{
 }
 
 QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 {
-    if(idx.isValid() && role == Qt::DecorationRole) {
-        BaseClass::Index index = getIndex(idx.row());
-        
-        if(!BaseClass::isHeader(index))
-            return BaseClass::m_categories[index.first].entries[index.second].data.icon;
-        
-        return QVariant();
+    if (!idx.isValid()) return QVariant();
+
+    DataItem *item = categoriesMapper()->itemFromRow(idx.row());
+    Q_ASSERT(item);
+
+    if(role == Qt::DecorationRole) {
+        if (!item->isCategory()) {
+            return item->data()->icon;
+        }
+    } else if (role == SortRole) {
+        return item->isCategory() ? item->name() : item->parentCategory()->name() + item->data()->priority + item->name();
     }
-    
-    return BaseClass::data(idx, role);
+
+    return BasePaintOpCategorizedListModel::data(idx, role);
 }
 
 void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
 {
-    BaseClass::clear();
-    
-    typedef QList<KisPaintOpFactory*>::const_iterator Iterator;
-    
-    for(Iterator itr=list.begin(); itr!=list.end(); ++itr) {
-        KisPaintOpFactory* op       = *itr;
-        QString            fileName = KisFactory2::componentData().dirs()->findResource("kis_images", op->pixmap());
-        QPixmap            pixmap(fileName);
-        
+    foreach (KisPaintOpFactory *factory, list) {
+        QString fileName = KisFactory2::componentData().dirs()->findResource("kis_images", factory->pixmap());
+        QPixmap pixmap(fileName);
+
         if(pixmap.isNull()){
             pixmap = QPixmap(22,22);
             pixmap.fill();
         }
-        
-        BaseClass::addEntry(op->category(), KisPaintOpInfo(op->id(), op->name(), op->category(), pixmap, op->priority()));
-    }
-    
-    BaseClass::sortCategories(categorySortFunc);
-    BaseClass::sortEntries();
-}
 
-int KisPaintOpListModel::indexOf(const KisPaintOpFactory* op) const
-{
-    return BaseClass::indexOf(KisPaintOpInfo(op->id(), op->category())).row();
+        categoriesMapper()->addEntry(factory->category(),
+                                     KisPaintOpInfo(factory->id(),
+                                                    factory->name(),
+                                                    factory->category(),
+                                                    pixmap,
+                                                    factory->priority()));
+    }
+    categoriesMapper()->expandAllCategories();
 }

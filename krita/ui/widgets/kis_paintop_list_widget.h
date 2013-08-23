@@ -25,13 +25,13 @@
 #include "kis_categorized_list_view.h"
 
 class KisPaintOpFactory;
-class KisPaintOpListModel;
+class KisSortedPaintOpListModel;
 
 /**
  * A ListBox filled with the paintops
  */
 //*
-class KRITAUI_EXPORT KisPaintOpListWidget: public KisCategorizedListView, public KisCategorizedWidgetBase<KisPaintOpListModel>
+class KRITAUI_EXPORT KisPaintOpListWidget: public KisCategorizedListView
 {
     Q_OBJECT
 public:
@@ -52,6 +52,9 @@ private slots:
     
 protected:
     QString itemAt(int idx) const;
+
+private:
+    KisSortedPaintOpListModel *m_model;
 };
 
 #endif // KIS_PAINTOP_LIST_WIDGET_H_

@@ -32,6 +32,7 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int w
 
     if (option->isCheckable()) {
         item->setCheckable(true);
+        item->setChecked(option->isChecked());
     }
 
     categoriesMapper()->expandAllCategories();

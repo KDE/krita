@@ -110,7 +110,13 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
 
     m_d->strokeTime.start();
 
-    createPainters(m_d->painterInfos);
+    m_d->previousPaintInformation =
+            m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
+
+    createPainters(m_d->painterInfos,
+                   m_d->previousPaintInformation.pos(),
+                   m_d->previousPaintInformation.currentTime());
+
     m_d->resources = new KisResourcesSnapshot(image,
                                               undoAdapter,
                                               resourceManager,
@@ -131,9 +137,6 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                        m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
-
-    m_d->previousPaintInformation =
-            m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
 
     m_d->history.clear();
     m_d->history.append(m_d->previousPaintInformation);
@@ -241,7 +244,6 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 {
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
-                                             m_d->previousPaintInformation.pos(),
                                              m_d->strokeTime.elapsed());
 
     // Smooth the coordinates out using the history and the velocity. See
@@ -277,13 +279,20 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 
                 if (qIsNaN(velocity)) {
 
-                    int previousTime = nextInfo.currentTime();
+                    QPointF prevPos = nextInfo.pos();
+                    int prevTime = nextInfo.currentTime();
+
                     if (i > 0) {
-                        previousTime = m_d->history.at(i - 1).currentTime();
+                        const KisPaintInformation &prevPi = m_d->history.at(i - 1);
+                        prevPos = prevPi.pos();
+                        prevTime = prevPi.currentTime();
+                    } else {
+                        prevPos = m_d->previousPaintInformation.pos();
+                        prevTime = m_d->previousPaintInformation.currentTime();
                     }
 
-                    int deltaTime = qMax(1, nextInfo.currentTime() - previousTime); // make sure deltaTime > 1
-                    velocity = info.movement().norm() / deltaTime;
+                    int deltaTime = qMax(1, nextInfo.currentTime() - prevTime); // make sure deltaTime > 1
+                    velocity = QVector2D(nextInfo.pos() - prevPos).length() / deltaTime;
                     m_d->velocityHistory[i] = velocity;
                 }
 
@@ -329,7 +338,6 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             }
 
             if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
-                info.setMovement(toKisVector2D(info.pos() - QPointF(x, y)));
                 info.setPos(QPointF(x, y));
                 if (m_d->smoothingOptions.smoothPressure) {
                     info.setPressure(pressure);
@@ -495,9 +503,13 @@ void KisToolFreehandHelper::paintBezierCurve(PainterInfo *painterInfo,
     }
 }
 
-void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos)
+void KisToolFreehandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
+                                           const QPointF &lastPosition,
+                                           int lastTime)
 {
-    painterInfos << new PainterInfo(new KisPainter(), new KisDistanceInformation());
+    painterInfos <<
+        new PainterInfo(new KisPainter(),
+                        new KisDistanceInformation(lastPosition, lastTime));
 }
 
 void KisToolFreehandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,

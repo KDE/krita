@@ -34,7 +34,8 @@
 #include "KoXmlReaderForward.h"
 #include "KoGenStyle.h"
 
-class KoGenStyle;
+class QPainter;
+class KoStyleStack;
 class KoBorderPrivate;
 
 
@@ -94,14 +95,14 @@ public:
     /// Holds data about one border line.
     struct KOODF_EXPORT BorderData {
         BorderData();
-        BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
-        qreal spacing;
-
-        QPen innerPen;
-        QPen outerPen;
 
         /// Compare the border data with another one
         bool operator==(const BorderData &other) const;
+
+        BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
+        QPen outerPen;      ///< Holds the outer line when borderstyle is double and the whole line otherwise
+        QPen innerPen;      ///< Holds the inner line when borderstyle is double
+        qreal spacing;      ///< Holds the spacing between the outer and inner lines.
     };
 
 
@@ -114,7 +115,8 @@ public:
 
     /// Assignment
     KoBorder &operator=(const KoBorder &other);
-    /// Compare the border with the other one
+
+    /// Compare the border with another one
     bool operator==(const KoBorder &other) const;
     bool operator!=(const KoBorder &other) const { return !operator==(other); }
 
@@ -124,6 +126,8 @@ public:
     QColor borderColor(BorderSide side) const;
     void setBorderWidth(BorderSide side, qreal width);
     qreal borderWidth(BorderSide side) const;
+    void setOuterBorderWidth(BorderSide side, qreal width);
+    qreal outerBorderWidth(BorderSide side) const;
     void setInnerBorderWidth(BorderSide side, qreal width);
     qreal innerBorderWidth(BorderSide side) const;
     void setBorderSpacing(BorderSide side, qreal width);
@@ -135,6 +139,13 @@ public:
     bool hasBorder() const;
     bool hasBorder(BorderSide side) const;
 
+    enum BorderPaintArea {
+        PaintOnLine,
+        PaintInsideLine
+    };
+    void paint(QPainter &painter, const QRectF &borderRect,
+               BorderPaintArea whereToPaint = PaintInsideLine) const;
+
     /**
      * Load the style from the element
      *
@@ -142,6 +153,7 @@ public:
      * @return true when border attributes were found
      */
     bool loadOdf(const KoXmlElement &style);
+    bool loadOdf(const KoStyleStack &styleStack);
     void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
 
@@ -151,6 +163,17 @@ public:
     static BorderStyle odfBorderStyle(const QString &borderstyle, bool *converted = 0);
     static QString odfBorderStyleString(BorderStyle borderstyle);
     static QString msoBorderStyleString(BorderStyle borderstyle);
+
+ private:
+    void paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
+                         BorderData *borderData, bool isVertical,
+                         BorderData *neighbour1, BorderData *neighbor2,
+                         int inwardsAcross) const;
+
+    void parseAndSetBorder(const QString &border,
+                           bool hasSpecialBorder, const QString &specialBorderString);
+    void parseAndSetBorder(const BorderSide borderSide, const QString &border,
+                           bool hasSpecialBorder, const QString &specialBorderString);
 
 private:
     QSharedDataPointer<KoBorderPrivate> d;

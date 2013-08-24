@@ -102,9 +102,10 @@ QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation& 
     return m_savedSpeedPoint;
 }
 
-KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& /*savedDist*/)
+void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (m_firstRun){
         m_firstRun = false;
@@ -223,8 +224,6 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
             m_lastPaintTime = pi2.currentTime();
         }
     }
-
-    return KisDistanceInformation();
 }
 
 

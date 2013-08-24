@@ -130,7 +130,7 @@ void ReferencesTool::createActions()
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
-    action = new KAction(i18n("Configure..."), this);
+    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
@@ -236,7 +236,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
     connect(m_slw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    m_stocw->setWindowTitle(i18n("Table of Contents"));
+    m_stocw->setWindowTitle(i18nc("as in table of contents, list of pictures, index", "Tables, Lists & Indexes"));
     widgets.append(m_stocw);
 
     m_sfenw->setWindowTitle(i18n("Footnotes and Endnotes"));
@@ -270,34 +270,9 @@ void ReferencesTool::configureBibliography()
 
 void ReferencesTool::formatTableOfContents()
 {
-    const QTextDocument *document = textEditor()->document();
-    QMenu *tocList = new QMenu(m_stocw);
-    int i = 0;
-    QTextBlock firstToCTextBlock;
-    for (QTextBlock it = document->begin(); it != document->end(); it = it.next())
-    {
-        if (it.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsData)) {
-            KoTableOfContentsGeneratorInfo *info = it.blockFormat().property(KoParagraphStyle::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-            if (i == 0) {
-                firstToCTextBlock = it;
-            }
-            QAction *action = new QAction(info->m_indexTitleTemplate.text, tocList);
-            action->setData(QVariant::fromValue<QTextBlock>(it));
-            tocList->addAction(action);
-            i++;
-        }
-    }
-
-    if (i == 0) {
-        //no ToCs in the document
-        return;
-    } else if (i == 1 && firstToCTextBlock.isValid()) {
-        m_configure = new TableOfContentsConfigure(textEditor(), firstToCTextBlock, m_stocw);
+    if (textEditor()->block().blockFormat().hasProperty(KoParagraphStyle::TableOfContentsData)) {
+        m_configure = new TableOfContentsConfigure(textEditor(), textEditor()->block(), m_stocw);
         connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
-    } else {
-        m_stocw->setToCConfigureMenu(tocList);
-        connect(m_stocw->ToCConfigureMenu(), SIGNAL(triggered(QAction *)), SLOT(showConfigureDialog(QAction*)));
-        m_stocw->showMenu();
     }
 }
 
@@ -360,6 +335,12 @@ void ReferencesTool::updateButtons()
         m_sfenw->widget.addFootnote->setEnabled(true);
         m_sfenw->widget.addEndnote->setEnabled(true);
     }
+    if (textEditor()->block().blockFormat().hasProperty(KoParagraphStyle::TableOfContentsData)) {
+        action("format_tableofcontents")->setEnabled(true);
+    } else {
+        action("format_tableofcontents")->setEnabled(false);
+    }
+
 }
 
 KoTextEditor *ReferencesTool::editor()

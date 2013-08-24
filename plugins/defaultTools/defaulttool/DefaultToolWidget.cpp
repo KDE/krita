@@ -186,7 +186,7 @@ void DefaultToolWidget::sizeHasChanged()
 
         QTransform resizeMatrix;
         resizeMatrix.translate( scaleCenter.x(), scaleCenter.y() );
-        // make sure not to devide by 0 in case the selection is a line and has no width. In this case just scale by 1.
+        // make sure not to divide by 0 in case the selection is a line and has no width. In this case just scale by 1.
         resizeMatrix.scale( rect.width() ? newSize.width() / rect.width() : 1, rect.height() ? newSize.height() / rect.height() : 1);
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 

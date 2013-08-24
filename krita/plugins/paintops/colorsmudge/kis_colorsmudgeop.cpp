@@ -74,6 +74,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     // Smudge Painter works in default COMPOSITE_OVER mode
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
+
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()

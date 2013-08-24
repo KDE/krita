@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,430 +16,224 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CATEGORIZED_LIST_MODEL_H
-#define KIS_CATEGORIZED_LIST_MODEL_H
+#ifndef __KIS_CATEGORIZED_LIST_MODEL_H
+#define __KIS_CATEGORIZED_LIST_MODEL_H
 
-#include <krita_export.h>
 #include <QAbstractListModel>
-#include <QStyledItemDelegate>
-#include <QList>
-#include <QIcon>
-#include <QString>
-#include <QBitArray>
-#include <utility>
-#include <iterator>
+#include <QSortFilterProxyModel>
+#include "kis_categories_mapper.h"
 
-enum
+class KRITAUI_EXPORT __CategorizedListModelBase : public QAbstractListModel
 {
-    IsHeaderRole       = Qt::UserRole + 1,
-    ExpandCategoryRole = Qt::UserRole + 2,
-    CategoryBeginRole  = Qt::UserRole + 3,
-    CategoryEndRole    = Qt::UserRole + 4
-};
-
-template<class TCategory, class TEntry>
-class KisCategorizedListModel: public QAbstractListModel
-{
-protected:
-    struct Entry
-    {
-        Entry(const TEntry& n):
-            data(n), disabled(false), checkable(false), checked(false) { }
-
-        bool operator <  (const Entry& c) const { return data <  c.data; }
-        bool operator == (const Entry& c) const { return data == c.data; }
-
-        TEntry data;
-        bool   disabled;
-        bool   checkable;
-        bool   checked;
-    };
-
-    struct Category
-    {
-        Category(const TCategory& n):
-            data(n), expanded(true) { };
-
-        bool operator <  (const Category& c) const { return data <  c.data; }
-        bool operator == (const Category& c) const { return data == c.data; }
-        int  size() const { return entries.size() + 1; }
-
-        TCategory    data;
-        QList<Entry> entries;
-        bool         expanded;
-    };
-
-    template<class TCompFunc>
-    struct ComparatorAdapter
-    {
-        ComparatorAdapter(TCompFunc func): compareFunc(func) { }
-        template<class T>
-        bool operator()(const T& a, const T& b) { return compareFunc(a.data, b.data); }
-        TCompFunc compareFunc;
-    };
-
-    typedef QList<Category>                       CategoryList;
-    typedef typename CategoryList::iterator       Iterator;
-    typedef typename CategoryList::const_iterator ConstIterator;
-    typedef std::pair<qint32,qint32>              Index;
+    Q_OBJECT
 
 public:
-    void clear() {
-        emit beginResetModel();
-        m_categories.clear();
-        emit endResetModel();
+    enum AdditionalRoles {
+        IsHeaderRole       = Qt::UserRole + 1,
+        ExpandCategoryRole = Qt::UserRole + 2,
+        SortRole           = Qt::UserRole + 3,
+    };
+
+public:
+    __CategorizedListModelBase(QObject *parent);
+    virtual ~__CategorizedListModelBase();
+
+private slots:
+
+    void slotRowChanged(int row) {
+        QModelIndex changedIndex(index(row));
+        emit dataChanged(changedIndex, changedIndex);
     }
 
-    QModelIndex firstIndex() const {
-        return QAbstractListModel::index(0);
+    void slotBeginInsertRow(int row) {
+        beginInsertRows(QModelIndex(), row, row);
     }
 
-    QModelIndex lastIndex() const {
-        if(!m_categories.empty()) {
-            int end = getCategoryBegin(m_categories.size()-1) + m_categories.last().entries.size() - 1;
-            return QAbstractListModel::index(end);
-        }
-        return QAbstractListModel::index(0);
+    void slotEndInsertRow() {
+        endInsertRows();
     }
 
-    void expandCategory(const TCategory& category, bool expand) {
-        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-        if(itr != m_categories.end()) {
-            itr->expanded = expand;
-            emit dataChanged(firstIndex(), lastIndex());
-        }
+    void slotBeginRemoveRow(int row) {
+        beginRemoveRows(QModelIndex(), row, row);
     }
 
-    void expandAllCategories(bool expand) {
-        for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat)
-            cat->expanded = expand;
-        emit dataChanged(firstIndex(), lastIndex());
+    void slotEndRemoveRow() {
+        endRemoveRows();
+    }
+};
+
+template<class TEntry, class TEntryToQStringConverter>
+class KRITAUI_EXPORT KisCategorizedListModel : public __CategorizedListModelBase
+{
+public:
+    typedef TEntry Entry_Type;
+    typedef KisCategoriesMapper<TEntry, TEntryToQStringConverter> SpecificCategoriesMapper;
+    typedef typename SpecificCategoriesMapper::DataItem DataItem;
+
+public:
+    KisCategorizedListModel(QObject *parent = 0)
+        : __CategorizedListModelBase(parent)
+    {
+        connect(&m_mapper, SIGNAL(rowChanged(int)), SLOT(slotRowChanged(int)));
+        connect(&m_mapper, SIGNAL(beginInsertRow(int)), SLOT(slotBeginInsertRow(int)));
+        connect(&m_mapper, SIGNAL(endInsertRow()), SLOT(slotEndInsertRow()));
+        connect(&m_mapper, SIGNAL(beginRemoveRow(int)), SLOT(slotBeginRemoveRow(int)));
+        connect(&m_mapper, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
     }
 
-    void addCategory(const TCategory& category, bool expandCategories=true) {
-        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-        if(itr == m_categories.end()) {
-            m_categories.push_back(category);
-            m_categories.last().expanded = expandCategories;
-        }
-    }
-
-    void addEntry(const TCategory& category, const TEntry& entry, bool checkable=false) {
-        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-
-        if(itr == m_categories.end()) {
-            m_categories.push_back(category);
-            itr = --m_categories.end();
-        }
-
-        int pos = getCategoryBegin(std::distance(m_categories.begin(), itr)) + itr->entries.size();
-
-        emit beginInsertRows(QModelIndex(), pos, pos);
-        itr->entries.push_back(entry);
-        itr->entries.back().checkable = checkable;
-        emit endInsertRows();
-    }
-
-    void removeEntry(const TCategory& category, const TEntry& entry) {
-        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-
-        if(itr != m_categories.end()) {
-            typedef typename QList<Entry>::iterator EntryItr;
-            EntryItr found = qFind(itr->entries.begin(), itr->entries.end(), entry);
-
-            if(found != itr->entries.end()) {
-                int pos = getCategoryBegin(std::distance(m_categories.begin(), itr)) + std::distance(itr->entries.begin(), found);
-                emit beginRemoveRows(QModelIndex(), pos, pos);
-                itr->entries.erase(found, found+1);
-                emit endRemoveRows();
-            }
-        }
-    }
-
-    void addEntries(const QMap<TCategory,TEntry>& map, bool expandCategories=false, bool checkable=false) {
-        typedef typename QList<TCategory>::const_iterator       ListItr;
-        typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
-
-        QList<TCategory> categories = map.uniqueKeys();
-        QModelIndex      beg        = lastIndex();
-
-        for(ListItr cat=categories.constBegin(); cat!=categories.constEnd(); ++cat) {
-            MapItr   beg = map.find(*cat);
-            MapItr   end = beg + map.count(*cat);
-            Iterator itr = qFind(m_categories.begin(), m_categories.end(), *cat);
-
-            if(itr == m_categories.end()) {
-                m_categories.push_back(*cat);
-                m_categories.last().expanded = expandCategories;
-                itr = m_categories.end() - 1;
-            }
-
-            for(; beg!=end; ++beg) {
-                itr->entries.push_back(*beg);
-                itr->entries.last().checkable = checkable;
-            }
-        }
-
-        emit dataChanged(beg, lastIndex());
-    }
-
-    void fill(const QMap<TCategory,TEntry>& map, bool expandCategories=false, bool checkable=false) {
-        typedef typename QList<TCategory>::const_iterator       ListItr;
-        typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
-
-        m_categories.clear();
-        QList<TCategory> categories = map.uniqueKeys();
-
-        for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
-            MapItr beg = map.find(*cat);
-            MapItr end = beg + map.count(*cat);
-
-            m_categories.push_back(*cat);
-            m_categories.last().expanded = expandCategories;
-
-            for(; beg!=end; ++beg) {
-                m_categories.last().entries.push_back(*beg);
-                m_categories.last().entries.last().checkable = checkable;
-            }
-        }
-
-        emit dataChanged(firstIndex(), lastIndex());
-    }
-
-    void clearCategory(const TCategory& category) {
-        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-
-        if(itr != m_categories.end() && !itr->entries.empty()) {
-            int pos = getCategoryBegin(std::distance(m_categories.begin(), itr));
-            emit beginRemoveRows(QModelIndex(), pos, pos + itr->entries.size() - 1);
-            itr->entries.clear();
-            emit endRemoveRows();
-        }
-    }
-
-    template<class TLessThan>
-    void sortCategories(TLessThan comparator) {
-        emit layoutAboutToBeChanged();
-        qSort(m_categories.begin(), m_categories.end(), ComparatorAdapter<TLessThan>(comparator));
-        emit layoutChanged();
-    }
-
-    template<class TLessThan>
-    void sortEntries(TLessThan comparator) {
-        emit layoutAboutToBeChanged();
-        for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat)
-            qSort(cat->entries.begin(), cat->entries.end(), ComparatorAdapter<TLessThan>(comparator));
-        emit layoutChanged();
-    }
-
-    void sortCategories() {
-        emit layoutAboutToBeChanged();
-        qSort(m_categories.begin(), m_categories.end());
-        emit layoutChanged();
-    }
-
-    void sortEntries() {
-        emit layoutAboutToBeChanged();
-        for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat)
-            qSort(cat->entries.begin(), cat->entries.end());
-        emit layoutChanged();
-    }
-
-    bool getCategory(QList<TEntry>& result, const TCategory& category) const {
-        ConstIterator itr = qFind(m_categories.begin(), m_categories.end(), category);
-
-        if(itr != m_categories.end()) {
-            typedef typename QList<Entry>::const_iterator EntryItr;
-
-            for(EntryItr i=itr->entries.begin(); i!=itr->entries.end(); ++i)
-                result.push_back(i->data);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    bool entryAt(TEntry& entry, int idx) const {
-        Index index = getIndex(idx);
-
-        if(isValidIndex(index) && !isHeader(index)) {
-            entry = m_categories[index.first].entries[index.second].data;
-            return true;
-        }
-        return false;
-    }
-
-    QModelIndex indexOf(const TEntry& entry) const {
-        typedef typename QList<Entry>::const_iterator Itr;
-        qint32 row = 0;
-
-        for(ConstIterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat) {
-            Itr itr = qFind(cat->entries.begin(), cat->entries.end(), entry);
-
-            if(itr != cat->entries.end())
-                return index(row + std::distance(cat->entries.begin(), itr) + 1);
-
-            row += cat->size();
-        }
-        return index(-1);
-    }
-
-    virtual int rowCount(const QModelIndex& parent) const {
+    int rowCount(const QModelIndex& parent) const {
         Q_UNUSED(parent);
-
-        int numRows = 0;
-
-        for(ConstIterator itr=m_categories.begin(); itr!=m_categories.end(); ++itr)
-            numRows += itr->size();
-
-        return numRows;
+        return m_mapper.rowCount();
     }
 
-    virtual QVariant data(const QModelIndex& idx, int role=Qt::DisplayRole) const {
-        Index index = getIndex(idx.row());
+    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const {
+        if (!idx.isValid()) return QVariant();
 
-        if(!isValidIndex(index))
-            return QVariant();
+        typename SpecificCategoriesMapper::DataItem *item =
+            m_mapper.itemFromRow(idx.row());
+        Q_ASSERT(item);
 
-        switch(role)
-        {
-        case CategoryBeginRole:
-            return getCategoryBegin(idx.row());
-        case CategoryEndRole:
-            return getCategoryBegin(idx.row()) + m_categories[index.first].entries.size();
+        switch (role) {
+        case IsHeaderRole:
+            return item->isCategory();
         case ExpandCategoryRole:
-            return m_categories[index.first].expanded;
-        }
-
-        if(isHeader(index)) {
-            switch(role)
-            {
-            case Qt::ToolTipRole:
-            case Qt::DisplayRole:
-                return categoryToString(m_categories[index.first].data);
-            case IsHeaderRole:
-                return true;
-            }
-        }
-        else {
-            switch(role)
-            {
-            case Qt::ToolTipRole:
-            case Qt::DisplayRole:
-                return entryToString(m_categories[index.first].entries[index.second].data);
-            case IsHeaderRole:
-                return false;
-            case Qt::CheckStateRole:
-            {
-                bool isCheckable = m_categories[index.first].entries[index.second].checkable;
-                bool isChecked   = m_categories[index.first].entries[index.second].checked;
-
-                if(isCheckable)
-                    return isChecked ? Qt::Checked : Qt::Unchecked;
-            }
-                break;
-            }
+            return item->isCategory() ? item->expanded() : item->parentCategory()->expanded();
+        case Qt::ToolTipRole:
+        case Qt::DisplayRole:
+            return item->name();
+        case Qt::CheckStateRole:
+            return item->checkable() ? item->checked() ? Qt::Checked : Qt::Unchecked : QVariant();
+        case SortRole:
+            return item->isCategory() ? item->name() : item->parentCategory()->name() + item->name();
         }
 
         return QVariant();
     }
 
-    virtual bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) {
-        if(!idx.isValid())
-            return false;
+    bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) {
+        if (!idx.isValid()) return false;
 
-        Index index = getIndex(idx.row());
-        bool  isHdr = isHeader(index);
+        typename SpecificCategoriesMapper::DataItem *item =
+            m_mapper.itemFromRow(idx.row());
+        Q_ASSERT(item);
 
-        if(role == ExpandCategoryRole && isHdr) {
-            int beg = getCategoryBegin(idx.row());
-            int end = beg - 1 + m_categories[index.first].entries.size();
-
-            m_categories[index.first].expanded = value.toBool();
-            emit dataChanged(QAbstractListModel::index(beg), QAbstractListModel::index(end));
+        switch (role) {
+        case ExpandCategoryRole:
+            Q_ASSERT(item->isCategory());
+            item->setExpanded(value.toBool());
+            break;
+        case Qt::CheckStateRole:
+            Q_ASSERT(item->checkable());
+            item->setChecked(value.toInt() == Qt::Checked);
+            break;
         }
-        else if(role == Qt::CheckStateRole && !isHdr) {
-            if(m_categories[index.first].entries[index.second].checkable) {
-                m_categories[index.first].entries[index.second].checked = bool(value.toInt() == Qt::Checked);
-                emit dataChanged(idx, idx);
+
+        return true;
+    }
+
+    Qt::ItemFlags flags(const QModelIndex& idx) const {
+        if (!idx.isValid()) return Qt::NoItemFlags;
+
+        typename SpecificCategoriesMapper::DataItem *item =
+            m_mapper.itemFromRow(idx.row());
+        Q_ASSERT(item);
+
+        Qt::ItemFlags flags = Qt::NoItemFlags;
+
+        if (item->enabled()) {
+            flags |= Qt::ItemIsEnabled;
+        }
+
+        if (!item->isCategory()) {
+            flags |= Qt::ItemIsSelectable;
+
+            if (item->checkable()) {
+                flags |= Qt::ItemIsUserCheckable;
             }
+        }
+
+        return flags;
+    }
+
+    QModelIndex indexOf(const TEntry& entry) const {
+        typename SpecificCategoriesMapper::DataItem *item =
+            m_mapper.fetchOneEntry(entry);
+
+        return index(m_mapper.rowFromItem(item));
+    }
+
+    bool entryAt(TEntry& entry, QModelIndex index) const {
+        int row = index.row();
+        if (row < 0 || row >= m_mapper.rowCount()) return false;
+
+        typename SpecificCategoriesMapper::DataItem *item =
+            m_mapper.itemFromRow(row);
+
+        if (!item->isCategory()) {
+            entry = *item->data();
+            return true;
         }
 
         return false;
     }
 
-    virtual Qt::ItemFlags flags(const QModelIndex& idx) const {
-        if(!idx.isValid())
-            return 0;
-
-        Index index = getIndex(idx.row());
-
-        if(isHeader(index))
-            return Qt::ItemIsEnabled;
-
-        Qt::ItemFlags flags = 0;
-
-        if(!m_categories[index.first].entries[index.second].disabled)
-            flags |= Qt::ItemIsEnabled|Qt::ItemIsSelectable;
-        if(m_categories[index.first].entries[index.second].checkable)
-            flags |= Qt::ItemIsUserCheckable;
-
-        return flags;
+    SpecificCategoriesMapper* categoriesMapper() {
+        return &m_mapper;
     }
 
-protected:
-    bool isValidIndex(const Index& index) const { return index.first >= 0;                     }
-    bool isHeader(const Index& index)     const { return index.first >= 0 && index.second < 0; }
-
-    const Index getIndex(int index) const {
-        if(index >= 0) {
-            int    currRow       = 0;
-            qint32 categoryIndex = 0;
-
-            for(ConstIterator itr=m_categories.begin(); itr!=m_categories.end(); ++itr) {
-                int endRow = currRow + itr->size();
-
-                if(index >= currRow && index < endRow)
-                    return Index(categoryIndex, index - currRow - 1);
-
-                currRow = endRow;
-                ++categoryIndex;
-            }
-        }
-        return Index(-1,-1);
+    const SpecificCategoriesMapper* categoriesMapper() const {
+        return &m_mapper;
     }
 
-    int getCategoryBegin(int index) const {
-        if(index >= 0) {
-            int currRow = 0;
-
-            for(ConstIterator itr=m_categories.begin(); itr!=m_categories.end(); ++itr) {
-                int endRow = currRow + itr->size();
-
-                if(index >= currRow && index < endRow)
-                    return currRow + 1;
-
-                currRow = endRow;
-            }
-        }
-        return -1;
-    }
-
-    int getCategoryBegin(ConstIterator category) const {
-        int currRow = 0;
-
-        for(ConstIterator itr=m_categories.begin(); itr!=category; ++itr)
-            currRow += itr->size();
-
-        return currRow + 1;
-    }
-
-    virtual QString categoryToString(const TCategory& val) const = 0;
-    virtual QString entryToString   (const TEntry&    val) const = 0;
-
-protected:
-    CategoryList m_categories;
+private:
+    SpecificCategoriesMapper m_mapper;
 };
 
-#endif // KIS_CATEGORIZED_LIST_MODEL_H
+template<class TModel>
+class KisSortedCategorizedListModel : public QSortFilterProxyModel
+{
+    typedef typename TModel::Entry_Type Entry_Type;
+
+public:
+
+    KisSortedCategorizedListModel(QObject *parent)
+        : QSortFilterProxyModel(parent)
+    {
+    }
+
+    QModelIndex indexOf(const Entry_Type& entry) const {
+        QModelIndex srcIndex = m_model->indexOf(entry);
+        return mapFromSource(srcIndex);
+    }
+
+    bool entryAt(Entry_Type &entry, QModelIndex index) const {
+        QModelIndex srcIndex = mapToSource(index);
+        return m_model->entryAt(entry, srcIndex);
+    }
+
+protected:
+    void initializeModel(TModel *model) {
+        m_model = model;
+        setSourceModel(model);
+        setSortRole(TModel::SortRole);
+    }
+
+    bool lessThanPriority(const QModelIndex &left,
+                          const QModelIndex &right,
+                          const QString &priorityCategory) const {
+
+        QString leftKey = sourceModel()->data(left, sortRole()).toString();
+        QString rightKey = sourceModel()->data(right, sortRole()).toString();
+
+        bool leftIsSpecial = leftKey.startsWith(priorityCategory);
+        bool rightIsSpecial = rightKey.startsWith(priorityCategory);
+
+        return leftIsSpecial != rightIsSpecial ?
+            leftIsSpecial : leftKey < rightKey;
+    }
+
+private:
+    TModel *m_model;
+};
+
+#endif /* __KIS_CATEGORIZED_LIST_MODEL_H */

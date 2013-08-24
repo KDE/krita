@@ -46,6 +46,7 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
+    addMirrorOption();
 
     m_filterOption = new KisFilterOption();
     addPaintOpOption(m_filterOption);

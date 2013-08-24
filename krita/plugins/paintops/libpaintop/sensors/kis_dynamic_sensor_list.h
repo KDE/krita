@@ -36,7 +36,8 @@ public:
 
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
-    
+    virtual bool dependsOnCanvasRotation() const;
+
     /**
      * Remove the sensor corrseponnding to the id from the list of sensors.
      * And return it. It becomes the responsibility of the caller to delete

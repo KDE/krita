@@ -69,7 +69,6 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
-    m_mirrorOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
@@ -79,15 +78,14 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
 
     m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
-    m_mirrorOption.sensor()->reset();
     m_softnessOption.sensor()->reset();
     m_sharpnessOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
 
-    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisBrushOp::~KisBrushOp()
@@ -170,7 +168,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                             m_spacingOption, info);
 }
 
-KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
 {
     if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
@@ -186,8 +184,7 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-
-        return KisDistanceInformation();
+    } else {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
     }
-    return KisPaintOp::paintLine(pi1, pi2, savedDist);
 }

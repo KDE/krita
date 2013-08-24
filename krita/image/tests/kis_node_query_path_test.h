@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_CUBIC_CURVE_TEST_H_
-#define _KIS_CUBIC_CURVE_TEST_H_
+#ifndef _KIS_NODE_QUERY_PATH_TEST_H_
+#define _KIS_NODE_QUERY_PATH_TEST_H_
 
 #include <QtTest>
 

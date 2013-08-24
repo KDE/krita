@@ -420,9 +420,9 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    KisDistanceInformation paintLine(const KisPaintInformation &pi1,
-                     const KisPaintInformation &pi2,
-                     const KisDistanceInformation& savedDist = KisDistanceInformation());
+    void paintLine(const KisPaintInformation &pi1,
+                   const KisPaintInformation &pi2,
+                   KisDistanceInformation *curentDistance);
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
@@ -431,11 +431,11 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    KisDistanceInformation paintBezierCurve(const KisPaintInformation &pi1,
-                            const QPointF &control1,
-                            const QPointF &control2,
-                            const KisPaintInformation &pi2,
-                            const KisDistanceInformation& savedDist = KisDistanceInformation());
+    void paintBezierCurve(const KisPaintInformation &pi1,
+                          const QPointF &control1,
+                          const QPointF &control2,
+                          const KisPaintInformation &pi2,
+                          KisDistanceInformation *currentDistance);
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
@@ -492,7 +492,8 @@ public:
     void paintPolygon(const vQPointF& points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
-    KisSpacingInformation paintAt(const KisPaintInformation &pos);
+    void paintAt(const KisPaintInformation &pos,
+                 KisDistanceInformation *savedDist);
 
     /**
      * Stroke the given QPainterPath.

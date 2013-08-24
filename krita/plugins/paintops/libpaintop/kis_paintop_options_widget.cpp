@@ -36,7 +36,6 @@ struct KisPaintOpOptionsWidget::Private
     QList<KisPaintOpOption*>    paintOpOptions;
     KisCategorizedListView*     optionsList;
     KisPaintOpOptionListModel*  model;
-    KisCategorizedItemDelegate* delegate;
     QStackedWidget*             optionsStack;
 };
 
@@ -46,11 +45,10 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
 {
     setObjectName("KisPaintOpPresetsWidget");
     
-    m_d->model       = new KisPaintOpOptionListModel();
-    m_d->delegate    = new KisCategorizedItemDelegate(false);
-    m_d->optionsList = new KisCategorizedListView();
+    m_d->model       = new KisPaintOpOptionListModel(this);
+    m_d->optionsList = new KisCategorizedListView(false, this);
     m_d->optionsList->setModel(m_d->model);
-    m_d->optionsList->setItemDelegate(m_d->delegate);
+    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(false, this));
     m_d->optionsList->setFixedWidth(128);
     
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -74,8 +72,6 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 {
     qDeleteAll(m_d->paintOpOptions);
-    delete m_d->model;
-    delete m_d->delegate;
     delete m_d;
 }
 
@@ -94,9 +90,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
-    
-    m_d->model->reset();
-    
+
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
     }
@@ -120,7 +114,7 @@ void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
 {
     KisOptionInfo info;
     
-    if(m_d->model->entryAt(info, index.row())) {
+    if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
         emit sigConfigurationItemChanged();
     }

@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIMIGRATIONTXTMIGRATE_H
-#define KEXIMIGRATIONTXTMIGRATE_H
+#ifndef KEXIMIGRATIONSPREADSHEETMIGRATE_H
+#define KEXIMIGRATIONSPREADSHEETMIGRATE_H
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>

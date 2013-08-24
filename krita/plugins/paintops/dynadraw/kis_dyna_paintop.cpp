@@ -75,10 +75,10 @@ KisDynaPaintOp::~KisDynaPaintOp()
 {
 }
 
-KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -98,11 +98,11 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc,m_dab);
-
-    return KisDistanceInformation();
 }
 
 KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info, KisDistanceInformation()).spacing();
+    KisDistanceInformation di;
+    paintLine(info, info, &di);
+    return di.currentSpacing();
 }

@@ -53,12 +53,10 @@ KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 }
 
 
-KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-    if (!painter()) {
-        return KisDistanceInformation();
-    }
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -74,8 +72,6 @@ KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    return KisDistanceInformation();
 }
 
 void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation &pi1, const KisPaintInformation &pi2) {

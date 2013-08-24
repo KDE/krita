@@ -18,7 +18,6 @@
 #ifndef _SHIVAGENERATOR_H_
 #define _SHIVAGENERATOR_H_
 
-#include <kparts/plugin.h>
 #include "generator/kis_generator.h"
 
 class KisConfigWidget;

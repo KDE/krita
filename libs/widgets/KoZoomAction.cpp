@@ -50,6 +50,13 @@
 class KoZoomAction::Private
 {
 public:
+
+    Private()
+        : slider(0)
+        , input(0)
+        , aspectButton(0)
+    {}
+
     KoZoomMode::Modes zoomModes;
     QSlider *slider;
     QList<qreal> sliderLookup;
@@ -111,7 +118,7 @@ QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoo
 
 void KoZoomAction::Private::syncSliderWithZoom()
 {
-    if(slider) {
+    if (slider) {
         const qreal eps = 1e-5;
         int i = sliderLookup.size() - 1;
         while (effectiveZoom < sliderLookup[i] + eps && i > 0) i--;
@@ -124,11 +131,12 @@ void KoZoomAction::Private::syncSliderWithZoom()
 
 KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
     : KSelectAction(text, parent)
-    ,d(new Private)
+    , d(new Private)
 {
     d->zoomModes = zoomModes;
     d->slider = 0;
     d->input = 0;
+    d->aspectButton = 0;
     d->specialButtons = 0;
     setIcon(koIcon("zoom-original"));
     setEditable( true );
@@ -383,7 +391,7 @@ void KoZoomAction::setAspectMode(bool status)
      * It means that the result of this function is
      * ALWAYS an emitted signal
      */
-    if(d->aspectButton->isChecked() != status)
+    if(d->aspectButton && d->aspectButton->isChecked() != status)
         d->aspectButton->setChecked(status);
     else
         emit aspectModeChanged(status);

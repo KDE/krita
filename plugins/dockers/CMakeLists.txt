@@ -42,4 +42,4 @@ target_link_libraries(calligra_docker_defaults komain ${EXTRA_LIBS})
 
 install(TARGETS calligra_docker_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES calligradockers.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_docker_defaults.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

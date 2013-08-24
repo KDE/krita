@@ -22,9 +22,6 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kparts/componentfactory.h>
 
 #include <KoPluginLoader.h>
 

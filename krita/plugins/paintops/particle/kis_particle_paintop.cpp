@@ -63,14 +63,15 @@ KisParticlePaintOp::~KisParticlePaintOp()
 
 KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info, KisDistanceInformation()).spacing();
+    KisDistanceInformation di;
+    paintLine(info, info, &di);
+    return di.currentSpacing();
 }
 
-
-KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -90,6 +91,4 @@ KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& 
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc,m_dab);
-
-    return KisDistanceInformation();
 }

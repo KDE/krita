@@ -24,10 +24,11 @@
 #include <QStringList>
 #include <QDir>
 
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
 
 #include "kis_config.h"
 #include "kis_alternate_invocation_action.h"
@@ -180,7 +181,7 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::NoDuplicates | KStandardDirs::Recursive);
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::NoDuplicates | KStandardDirs::Recursive);
     Q_FOREACH(const QString & p, profiles) {
         //Open the file
         KConfig config(p, KConfig::SimpleConfig);
@@ -214,15 +215,17 @@ void KisInputProfileManager::loadProfiles()
 
     KisConfig cfg;
     QString currentProfile = cfg.currentInputProfile();
-
-    if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
-        d->currentProfile = d->profiles.begin().value();
+    if (d->profiles.size() > 0) {
+        if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
+            d->currentProfile = d->profiles.begin().value();
+        }
+        else {
+            d->currentProfile = d->profiles.value(currentProfile);
+        }
     }
-    else {
-        d->currentProfile = d->profiles.value(currentProfile);
+    if (d->currentProfile) {
+        emit currentProfileChanged();
     }
-
-    emit currentProfileChanged();
 }
 
 void KisInputProfileManager::saveProfiles()

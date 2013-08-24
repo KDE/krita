@@ -21,6 +21,6 @@ install(TARGETS calligra_textediting_thesaurus  DESTINATION ${PLUGIN_INSTALL_DIR
 
 ########### install files ###############
 
-install( FILES  thesaurustool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_textediting_thesaurus.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/calligra/thesaurus)
 

@@ -170,7 +170,7 @@ public:
     /**
      * Mirrors the device.
      */
-    void mirror( bool horizontal = false, bool vertical = true );
+    void mirror(bool horizontal, bool vertical);
 
 private:
 

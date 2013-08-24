@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
 
 class KDialog;
 class KoScriptingModule;
@@ -40,7 +40,7 @@ namespace Kross {
 * functionality to integrate scripting using Kross into a Calligra
 * application.
 */
-class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
+class KOKROSS_EXPORT KoScriptingPart : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:

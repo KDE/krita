@@ -51,8 +51,9 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addMirrorOption();
     addPaintOpOption(new KisPaintActionTypeOption());
 
     addTextureOptions();

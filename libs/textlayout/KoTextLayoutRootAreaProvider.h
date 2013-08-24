@@ -58,8 +58,8 @@ public:
     ///    use with care - it eats a lot of processing for no real gain
     virtual void updateAll() = 0;
 
-    /// Returns a suggested a size for the root area
-    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
+    /// Returns a suggested offset and size for the root area
+    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea) = 0;
 
     /// Return a list of obstructions intersecting root area
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) = 0;

@@ -22,8 +22,6 @@
 #include <krita_export.h>
 #include <QListView>
 
-class QStyledItemDelegate;
-class KoID;
 
 class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
@@ -47,25 +45,6 @@ protected slots:
 
 private:
     bool m_useCheckBoxHack;
-};
-
-
-template<class TModel>
-class KRITAUI_EXPORT KisCategorizedWidgetBase
-{
-public:
-    KisCategorizedWidgetBase():
-        m_model(0), m_delegate(0) { }
-
-    int  indexOf(const KoID& entry)       const { return m_model->indexOf(entry).row();  }
-    bool entryAt(KoID& result, int index) const { return m_model->entryAt(result,index); }
-
-    const TModel* getModel() const { return m_model; }
-    TModel*       getModel()       { return m_model; }
-
-protected:
-    TModel*              m_model;
-    QStyledItemDelegate* m_delegate;
 };
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H_

@@ -106,7 +106,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
-    chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
 
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
@@ -137,7 +136,6 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
-    chkZoomWithWheel->setChecked(true);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
@@ -747,7 +745,6 @@ bool KisDlgPreferences::editPreferences()
             doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
-        cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

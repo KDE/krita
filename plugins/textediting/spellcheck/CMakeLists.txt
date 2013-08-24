@@ -17,4 +17,4 @@ target_link_libraries(calligra_textediting_spellcheck kotext kotextlayout)
 
 install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES spellcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_textediting_spellcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

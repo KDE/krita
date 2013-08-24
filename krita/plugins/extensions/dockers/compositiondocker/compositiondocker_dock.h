@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TASKSETDOCKER_DOCK_H
-#define TASKSETDOCKER_DOCK_H
+#ifndef COMPOSITIONDOCKER_DOCK_H
+#define COMPOSITIONDOCKER_DOCK_H
 
 #include <QDockWidget>
 #include <QModelIndex>

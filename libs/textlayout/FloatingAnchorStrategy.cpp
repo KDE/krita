@@ -108,20 +108,23 @@ bool FloatingAnchorStrategy::moveSubject()
     }
 
     // Set shape horizontal alignment inside anchor bounding rectangle
-    countHorizontalPos(newPosition, anchorBoundingRect, containerBoundingRect);
+    countHorizontalPos(newPosition, anchorBoundingRect);
 
     // Set shape vertical alignment inside anchor bounding rectangle
-    countVerticalPos(newPosition, anchorBoundingRect, containerBoundingRect);
+    countVerticalPos(newPosition, anchorBoundingRect);
 
-    newPosition = newPosition + offset;
+    newPosition += offset;
+
+    //check the border of page and move the shape back to have it visible
+    checkPageBorder(newPosition);
+
+    newPosition -= containerBoundingRect.topLeft();
 
     //check the border of layout environment and move the shape back to have it within
     if (m_anchor->flowWithText()) {
         checkLayoutEnvironment(newPosition, data);
     }
 
-    //check the border of page and move the shape back to have it visible
-    checkPageBorder(newPosition, containerBoundingRect);
 
     checkStacking(newPosition);
 
@@ -246,45 +249,43 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
     return true;
 }
 
-void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect)
 {
     switch (m_anchor->horizontalPos()) {
     case KoShapeAnchor::HCenter:
-        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2 
-         - m_anchor->shape()->size().width()/2 - containerBoundingRect.x());
+        newPosition.setX(anchorBoundingRect.x() + anchorBoundingRect.width()/2
+         - m_anchor->shape()->size().width()/2);
         break;
 
     case KoShapeAnchor::HFromInside:
     case KoShapeAnchor::HInside:
     {
         if (pageNumber()%2 == 1) {
-            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
+            newPosition.setX(anchorBoundingRect.x());
         } else {
-            newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x() -
+            newPosition.setX(anchorBoundingRect.right() -
                     m_anchor->shape()->size().width() - 2*m_anchor->offset().x() );
         }
         break;
     }
     case KoShapeAnchor::HLeft:
     case KoShapeAnchor::HFromLeft:
-        newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x());
+        newPosition.setX(anchorBoundingRect.x());
         break;
 
     case KoShapeAnchor::HOutside:
     {
         if (pageNumber()%2 == 1) {
-            newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x());
+            newPosition.setX(anchorBoundingRect.right());
         } else {
             QSizeF size = m_anchor->shape()->boundingRect().size();
-            newPosition.setX(anchorBoundingRect.x() - containerBoundingRect.x() -
-                             size.width() - m_anchor->offset().x());
+            newPosition.setX(anchorBoundingRect.x() - size.width() - m_anchor->offset().x());
         }
         break;
     }
     case KoShapeAnchor::HRight: {
         QSizeF size = m_anchor->shape()->boundingRect().size();
-        newPosition.setX(anchorBoundingRect.right() - containerBoundingRect.x()
-                           - size.width());
+        newPosition.setX(anchorBoundingRect.right() - size.width());
         break;
     }
     default :
@@ -362,24 +363,23 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     return true;
 }
 
-void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect)
 {
     switch (m_anchor->verticalPos()) {
     case KoShapeAnchor::VBottom:
-        newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y()
-        - m_anchor->shape()->size().height());
+        newPosition.setY(anchorBoundingRect.bottom() - m_anchor->shape()->size().height());
         break;
     case KoShapeAnchor::VBelow:
-        newPosition.setY(anchorBoundingRect.bottom() - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.bottom());
         break;
 
     case KoShapeAnchor::VMiddle:
-        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2 - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.y() + anchorBoundingRect.height()/2 - m_anchor->shape()->size().height()/2);
         break;
 
     case KoShapeAnchor::VFromTop:
     case KoShapeAnchor::VTop:
-        newPosition.setY(anchorBoundingRect.y() - containerBoundingRect.y());
+        newPosition.setY(anchorBoundingRect.y());
         break;
 
     default :
@@ -413,28 +413,28 @@ void FloatingAnchorStrategy::checkLayoutEnvironment(QPointF &newPosition, KoText
     }
 }
 
-void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, const QRectF &containerBoundingRect)
+void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition)
 {
     QSizeF size = m_anchor->shape()->boundingRect().size();
 
     //check left border and move the shape back to have the whole shape visible
-    if (newPosition.x() < pageRect().x() - containerBoundingRect.x()) {
-        newPosition.setX(pageRect().x() - containerBoundingRect.x());
+    if (newPosition.x() < pageRect().x()) {
+        newPosition.setX(pageRect().x());
     }
 
     //check right border and move the shape back to have the whole shape visible
-    if ((newPosition.x() + size.width()) > (pageRect().x() + pageRect().width() - containerBoundingRect.x())) {
-        newPosition.setX(pageRect().x() + pageRect().width() - size.width() - containerBoundingRect.x());
+    if (newPosition.x() + size.width() > pageRect().x() + pageRect().width()) {
+        newPosition.setX(pageRect().x() + pageRect().width() - size.width());
     }
 
     //check top border and move the shape back to have the whole shape visible
-    if (newPosition.y() < (pageRect().y() - containerBoundingRect.y())) {
-        newPosition.setY(pageRect().y() - containerBoundingRect.y());
+    if (newPosition.y() < pageRect().y()) {
+        newPosition.setY(pageRect().y());
     }
 
     //check bottom border and move the shape back to have the whole shape visible
-    if ((newPosition.y() + size.height()) > (pageRect().y() + pageRect().height() - containerBoundingRect.y())) {
-        newPosition.setY(pageRect().y() + pageRect().height() - size.height() - containerBoundingRect.y());
+    if (newPosition.y() + size.height() > pageRect().y() + pageRect().height()) {
+        newPosition.setY(pageRect().y() + pageRect().height() - size.height());
     }
 }
 

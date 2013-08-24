@@ -3,7 +3,6 @@ set(MAPS_PLUG koreport_mapsplugin)
 
 include_directories(
     ${MARBLE_INCLUDE_DIR}
-    ${KORDF_INCLUDES}
     ${KOPROPERTY_INCLUDES}
     ${KOREPORT_INCLUDES}
 )
@@ -18,7 +17,7 @@ set(koreport_mapsplugin_LIB_SRCS
 
 kde4_add_plugin(${MAPS_PLUG} ${koreport_mapsplugin_LIB_SRCS})
 
-target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kordf ${KOREPORT_LIBS} ${KOPROPERTY_LIBS} ${MARBLE_LIBRARIES})
+target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${KOREPORT_LIBS} ${KOPROPERTY_LIBS} ${MARBLE_LIBRARIES})
 
 
 ########### install files ###############

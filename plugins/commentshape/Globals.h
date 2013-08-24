@@ -17,6 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
+
 #include <QPointF>
 #include <QSizeF>
 
@@ -26,3 +30,6 @@ const QPointF commentBoxPoint = QPointF(22.0,0.0);
 const QSizeF commentBoxSize = QSizeF(100.0,100.0);
 
 const QSizeF wholeSize = QSizeF(120.0,100.0);
+
+
+#endif

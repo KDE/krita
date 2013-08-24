@@ -40,4 +40,4 @@ target_link_libraries(calligra_shape_paths flake kowidgets)
 
 install(TARGETS calligra_shape_paths  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES pathshapes.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_shape_paths.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

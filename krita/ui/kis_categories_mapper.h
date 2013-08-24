@@ -93,7 +93,7 @@ public:
             return m_category;
         }
 
-        bool expanded() const {
+        bool isExpanded() const {
             return m_expanded;
         }
 
@@ -104,7 +104,7 @@ public:
             m_parent->notifyCategoryExpanded(this);
         }
 
-        bool enabled() const {
+        bool isEnabled() const {
             return m_enabled;
         }
 
@@ -113,7 +113,7 @@ public:
             notifyItemChanged();
         }
 
-        bool checkable() const {
+        bool isCheckable() const {
             return m_checkable;
         }
 
@@ -122,7 +122,7 @@ public:
             notifyItemChanged();
         }
 
-        bool checked() const {
+        bool isChecked() const {
             return m_checked;
         }
 

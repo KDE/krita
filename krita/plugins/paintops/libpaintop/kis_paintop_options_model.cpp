@@ -45,7 +45,7 @@ bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
 
-    if (role == Qt::CheckStateRole && item->checkable()) {
+    if (role == Qt::CheckStateRole && item->isCheckable()) {
         item->data()->option->setChecked(value.toInt() == Qt::Checked);
     }
 

@@ -97,12 +97,12 @@ public:
         case IsHeaderRole:
             return item->isCategory();
         case ExpandCategoryRole:
-            return item->isCategory() ? item->expanded() : item->parentCategory()->expanded();
+            return item->isCategory() ? item->isExpanded() : item->parentCategory()->isExpanded();
         case Qt::ToolTipRole:
         case Qt::DisplayRole:
             return item->name();
         case Qt::CheckStateRole:
-            return item->checkable() ? item->checked() ? Qt::Checked : Qt::Unchecked : QVariant();
+            return item->isCheckable() ? item->isChecked() ? Qt::Checked : Qt::Unchecked : QVariant();
         case SortRole:
             return item->isCategory() ? item->name() : item->parentCategory()->name() + item->name();
         }
@@ -123,7 +123,7 @@ public:
             item->setExpanded(value.toBool());
             break;
         case Qt::CheckStateRole:
-            Q_ASSERT(item->checkable());
+            Q_ASSERT(item->isCheckable());
             item->setChecked(value.toInt() == Qt::Checked);
             break;
         }
@@ -140,14 +140,14 @@ public:
 
         Qt::ItemFlags flags = Qt::NoItemFlags;
 
-        if (item->enabled()) {
+        if (item->isEnabled()) {
             flags |= Qt::ItemIsEnabled;
         }
 
         if (!item->isCategory()) {
             flags |= Qt::ItemIsSelectable;
 
-            if (item->checkable()) {
+            if (item->isCheckable()) {
                 flags |= Qt::ItemIsUserCheckable;
             }
         }

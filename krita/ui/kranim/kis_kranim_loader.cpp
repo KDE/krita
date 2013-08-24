@@ -58,10 +58,14 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRec
     QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
 
     store->openStore();
+
     if(store->hasFile(location)) {
-        if(!dev->read(store->getDevice(location))) {
+        QIODevice* file = store->getDevice(location);
+        if(!dev->read(file)) {
             dev->disconnect();
         }
+        file->close();
+        delete file;
 
         int pixelSize = dev->colorSpace()->pixelSize();
 

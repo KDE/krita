@@ -119,6 +119,7 @@ set(kritaui_LIB_SRCS
     kis_animation_factory.cpp
     kis_animation_doc.cpp
     kis_animation_part.cpp
+    kis_animation_player.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp

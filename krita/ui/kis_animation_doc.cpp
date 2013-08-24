@@ -27,6 +27,7 @@
 #include <kranim/kis_kranim_loader.h>
 #include <KoFilterManager.h>
 #include <kranimstore/kis_animation_store.h>
+#include <kis_animation_player.h>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 static const char CURRENT_DTD_VERSION[] = "1.0";
@@ -53,6 +54,7 @@ public:
     QRect currentFramePosition;
     bool saved;
     KisAnimationStore* store;
+    KisAnimationPlayer* player;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -62,6 +64,7 @@ KisAnimationDoc::KisAnimationDoc()
     setMimeType(APP_MIMETYPE);
     d->kranimLoader = 0;
     d->saved = false;
+    d->player = new KisAnimationPlayer(this);
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -87,7 +90,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     bool hasFile = d->store->hasFile(location);
     d->store->closeStore();
     if(hasFile) {
-        d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+        //d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
         KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
         connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));

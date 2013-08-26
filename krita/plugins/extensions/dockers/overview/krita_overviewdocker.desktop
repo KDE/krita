@@ -11,6 +11,7 @@ Name[sv]=Dockningsfönster med översikt
 Name[uk]=Панель ескіза
 Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
+Comment[it]=Area di aggancio per mostra l'anteprima di un'immagine
 Comment[kk]=Кескіннің жалпы шолуын көрсететін докері
 Comment[nl]=Vastzetter voor het tonen van een overzicht van afbeeldingen
 Comment[pt]=Área de apresentação da visão geral da imagem

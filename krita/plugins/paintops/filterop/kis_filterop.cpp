@@ -110,8 +110,8 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    qint32 maskWidth = brush->maskWidth(scale, rotation, info);
-    qint32 maskHeight = brush->maskHeight(scale, rotation, info);
+    qint32 maskWidth = brush->maskWidth(scale, rotation, xFraction, yFraction, info);
+    qint32 maskHeight = brush->maskHeight(scale, rotation, xFraction, yFraction, info);
 
     // Filter the paint device
     QRect rect = QRect(0, 0, maskWidth, maskHeight);

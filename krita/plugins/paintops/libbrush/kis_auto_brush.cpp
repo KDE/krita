@@ -169,9 +169,11 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     quint32 pixelSize = cs->pixelSize();
 
     // mask dimension methods already includes KisBrush::angle()
-    int dstWidth = maskWidth(scaleX, angle, info);
-    int dstHeight = maskHeight(scaleY, angle, info);
+    int dstWidth = maskWidth(scaleX, angle, subPixelX, subPixelY, info);
+    int dstHeight = maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+    QPointF hotSpot = this->hotSpot(scaleX, scaleY, angle, info);
 
+    // mask size and hotSpot function take the KisBrush rotation into account
     angle += KisBrush::angle();
 
     // if there's coloring information, we merely change the alpha: in that case,
@@ -211,8 +213,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
 
-    double centerX = dstWidth  * 0.5 - 0.5 + subPixelX;
-    double centerY = dstHeight * 0.5 - 0.5 + subPixelY;
+    double centerX = hotSpot.x() - 0.5 + subPixelX;
+    double centerY = hotSpot.y() - 0.5 + subPixelY;
 
     d->shape->setSoftness( softnessFactor );
 
@@ -275,8 +277,8 @@ QImage KisAutoBrush::createBrushPreview()
 {
     srand(0);
     srand48(0);
-    int width = maskWidth(1.0, 0.0, KisPaintInformation());
-    int height = maskHeight(1.0, 0.0, KisPaintInformation());
+    int width = maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
+    int height = maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
 
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, 0, 0);
 

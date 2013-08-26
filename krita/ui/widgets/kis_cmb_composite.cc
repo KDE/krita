@@ -19,67 +19,90 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoCompositeOp.h>
-
 #include "kis_cmb_composite.h"
-#include "kis_categorized_list_model.h"
-#include "../kis_categorized_item_delegate.h"
 
-#include <QMouseEvent>
+#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
+#include "kis_composite_ops_model.h"
+#include "kis_categorized_item_delegate.h"
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
 
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
-    KisCategorizedListView(parent)
+    KisCategorizedListView(false, parent),
+    m_model(new KisSortedCompositeOpListModel(this))
 {
-    m_model    = KisCompositeOpListModel::sharedInstance();
-    m_delegate = new KisCategorizedItemDelegate(true);
-    
     setModel(m_model);
-    setItemDelegate(m_delegate);
+    setItemDelegate(new KisCategorizedItemDelegate(true, this));
 }
-
 
 KisCompositeOpListWidget::~KisCompositeOpListWidget()
 {
-    delete m_delegate;
 }
 
+KoID KisCompositeOpListWidget::selectedCompositeOp() const {
+    KoID op;
+
+    if (m_model->entryAt(op, currentIndex())) {
+        return op;
+    }
+
+    return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
-    QComboBox(parent), m_allowToHidePopup(true)
+    QComboBox(parent),
+    m_model(new KisSortedCompositeOpListModel(this)),
+    m_allowToHidePopup(true)
 {
-    m_model    = KisCompositeOpListModel::sharedInstance();
-    m_view     = new KisCategorizedListView(true);
-    m_delegate = new KisCategorizedItemDelegate(true);
-    
+    m_view = new KisCategorizedListView(true);
+
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);
     m_view->setResizeMode(QListView::Adjust);
-    
-    setView(m_view);
+
     setModel(m_model);
-    setItemDelegate(m_delegate);
-    
+    setView(m_view);
+    setItemDelegate(new KisCategorizedItemDelegate(true, this));
+
     connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
-    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&))         , SLOT(slotEntryChecked(const QModelIndex&)));
+    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
 {
     delete m_view;
-    delete m_delegate;
+}
+
+void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
+    m_model->validate(cs);
+}
+
+void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
+    QModelIndex index = m_model->indexOf(op);
+    setCurrentIndex(index.row());
+}
+
+KoID KisCompositeOpComboBox::selectedCompositeOp() const {
+    KoID op;
+
+    if (m_model->entryAt(op, m_model->index(currentIndex(), 0))) {
+        return op;
+    }
+
+    return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
 void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool toggled)
 {
     Q_UNUSED(index);
     Q_UNUSED(toggled);
-    
+
     //NOTE: this will (should) fit the size of the
     //      popup widget to the view
     //      don't know if this is expected behaviour
@@ -98,6 +121,6 @@ void KisCompositeOpComboBox::hidePopup()
 {
     if(m_allowToHidePopup) { QComboBox::hidePopup(); }
     else                   { QComboBox::showPopup(); }
-    
+
     m_allowToHidePopup = true;
 }

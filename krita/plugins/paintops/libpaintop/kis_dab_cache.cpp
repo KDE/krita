@@ -244,6 +244,12 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         if (mirrorProperties.verticalMirror) {
             subPixelY = 1.0 - subPixelY;
         }
+
+        if (mirrorProperties.horizontalMirror !=
+            mirrorProperties.verticalMirror) {
+
+            angle = 2 * M_PI - angle;
+        }
     }
 
     if (!m_d->dab || !(*m_d->dab->colorSpace() == *cs)) {

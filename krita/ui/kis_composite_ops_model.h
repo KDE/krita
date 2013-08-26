@@ -21,27 +21,57 @@
 #define _KIS_COMPOSITE_OPS_MODEL_H_
 
 #include <KoID.h>
-#include <QAbstractListModel>
 #include "kis_categorized_list_model.h"
 
 class KoCompositeOp;
 class KoColorSpace;
 
-class KRITAUI_EXPORT KisCompositeOpListModel: public KisCategorizedListModel<KoID,KoID>
-{
-    typedef KisCategorizedListModel<KoID,KoID> BaseClass;
+struct KoIDToQStringConverter {
+    QString operator() (const KoID &id) {
+        return id.name();
+    }
+};
 
+typedef KisCategorizedListModel<KoID,KoIDToQStringConverter> BaseKoIDCategorizedListModel;
+
+class KRITAUI_EXPORT KisCompositeOpListModel: public BaseKoIDCategorizedListModel
+{
 public:
     static KisCompositeOpListModel* sharedInstance();
-    
+
     virtual QString  categoryToString(const KoID& val) const { return val.name(); }
     virtual QString  entryToString   (const KoID& val) const { return val.name(); }
     virtual bool     setData         (const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
     virtual QVariant data            (const QModelIndex& idx, int role=Qt::DisplayRole) const;
-    
-    void validateCompositeOps(const KoColorSpace* colorSpace);
+
+    void validate(const KoColorSpace *cs);
     void readFavoriteCompositeOpsFromConfig();
     void writeFavoriteCompositeOpsToConfig() const;
+
+    static KoID favoriteCategory();
+
+private:
+    void addFavoriteEntry(const KoID &entry);
+    void removeFavoriteEntry(const KoID &entry);
+};
+
+class KRITAUI_EXPORT KisSortedCompositeOpListModel : public KisSortedCategorizedListModel<KisCompositeOpListModel>
+{
+public:
+    KisSortedCompositeOpListModel(QObject *parent)
+        : KisSortedCategorizedListModel<KisCompositeOpListModel>(parent)
+    {
+        initializeModel(KisCompositeOpListModel::sharedInstance());
+    }
+
+    void validate(const KoColorSpace *cs) {
+        KisCompositeOpListModel::sharedInstance()->validate(cs);
+    }
+
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+        return lessThanPriority(left, right, KisCompositeOpListModel::favoriteCategory().name());
+    }
 };
 
 #endif

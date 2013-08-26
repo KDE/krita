@@ -30,7 +30,6 @@
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <marble/MarbleWidget.h>
-#include <RdfForward.h>
 #include <QMap>
 
 class QImage;

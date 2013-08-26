@@ -172,3 +172,15 @@ set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
 kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
 target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_categories_mapper_test_SRCS kis_categories_mapper_test.cpp testing_categories_mapper.cpp)
+kde4_add_unit_test(KisCategoriesMapperTest TESTNAME krita-ui-KisCategoriesMapperTest  ${kis_categories_mapper_test_SRCS})
+target_link_libraries(KisCategoriesMapperTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_categorized_list_model_test_SRCS kis_categorized_list_model_test.cpp modeltest.cpp)
+kde4_add_unit_test(KisCategorizedListModelTest TESTNAME krita-ui-KisCategorizedListModelTest  ${kis_categorized_list_model_test_SRCS})
+target_link_libraries(KisCategorizedListModelTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+

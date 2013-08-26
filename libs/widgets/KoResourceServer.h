@@ -5,7 +5,7 @@
     Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
     Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-    Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

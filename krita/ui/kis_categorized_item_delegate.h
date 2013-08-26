@@ -30,7 +30,7 @@
 class KRITAUI_EXPORT KisCategorizedItemDelegate: public QStyledItemDelegate
 {
 public:
-    KisCategorizedItemDelegate(bool indicateError);
+    KisCategorizedItemDelegate(bool indicateError, QObject *parent);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     

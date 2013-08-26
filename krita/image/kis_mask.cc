@@ -25,7 +25,7 @@
 // to prevent incomplete class types on "delete selection->flatten();"
 #include <kundo2command.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <QScopedPointer>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -78,7 +78,7 @@ struct KisMask::Private {
      * lost, since the selection doen not exist at the moment. That is
      * why we save it separately.
      */
-    boost::scoped_ptr<QPoint> deferredSelectionOffset;
+    QScopedPointer<QPoint> deferredSelectionOffset;
 
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };

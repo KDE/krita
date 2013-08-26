@@ -20,7 +20,7 @@
 #define __KIS_CATEGORIES_MAPPER_H
 
 #include <QObject>
-#include <boost/scoped_ptr.hpp>
+#include <QScopedPointer>
 #include <krita_export.h>
 
 
@@ -77,7 +77,7 @@ public:
         }
 
         TEntry* data() const {
-            return m_data.get();
+            return m_data.data();
         }
 
         QString name() const {
@@ -138,7 +138,7 @@ public:
 
     private:
         QString m_name;
-        boost::scoped_ptr<TEntry> m_data;
+        QScopedPointer<TEntry> m_data;
         DataItem *m_category;
 
         bool m_expanded;

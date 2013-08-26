@@ -390,6 +390,24 @@ void KisPaintDeviceTest::testThumbnail()
     }
 }
 
+void KisPaintDeviceTest::testThumbnailDeviceWithOffset()
+{
+    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->convertFromQImage(image, 0);
+    dev->setX(10);
+    dev->setY(10);
+
+    QImage thumb = dev->createThumbnail(640,441,QRect(10,10,640,441));
+
+    image.save("oring.png");
+    thumb.save("thumb.png");
+
+    QPoint pt;
+    QVERIFY(TestUtil::compareQImages(pt, thumb, image));
+}
+
 void KisPaintDeviceTest::testCaching()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();

@@ -25,6 +25,8 @@
 // to prevent incomplete class types on "delete selection->flatten();"
 #include <kundo2command.h>
 
+#include <boost/scoped_ptr.hpp>
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
@@ -67,6 +69,16 @@ struct KisMask::Private {
     mutable KisSelectionSP selection;
     CachedPaintDevice paintDeviceCache;
     KisMask *q;
+
+    /**
+     * Due to the design of the Kra format the X,Y offset of the paint
+     * device belongs to the node, but not to the device itself.  So
+     * the offset is set when the node is created, but not when the
+     * selection is initialized. This causes the X,Y values to be
+     * lost, since the selection doen not exist at the moment. That is
+     * why we save it separately.
+     */
+    boost::scoped_ptr<QPoint> deferredSelectionOffset;
 
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
@@ -161,6 +173,12 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
         quint8 newDefaultPixel = MAX_SELECTED;
         selection->pixelSelection()->setDefaultPixel(&newDefaultPixel);
+
+        if (deferredSelectionOffset) {
+            selection->setX(deferredSelectionOffset->x());
+            selection->setY(deferredSelectionOffset->y());
+            deferredSelectionOffset.reset();
+        }
     }
     selection->setParentNode(q);
     selection->updateProjection();
@@ -289,25 +307,37 @@ QRect KisMask::exactBounds() const
 qint32 KisMask::x() const
 {
     return m_d->selection ? m_d->selection->x() :
+           m_d->deferredSelectionOffset ? m_d->deferredSelectionOffset->x() :
            parent() ? parent()->x() : 0;
 }
 
 qint32 KisMask::y() const
 {
     return m_d->selection ? m_d->selection->y() :
+           m_d->deferredSelectionOffset ? m_d->deferredSelectionOffset->y() :
            parent() ? parent()->y() : 0;
 }
 
 void KisMask::setX(qint32 x)
 {
-    if (m_d->selection)
+    if (m_d->selection) {
         m_d->selection->setX(x);
+    } else if (!m_d->deferredSelectionOffset) {
+        m_d->deferredSelectionOffset.reset(new QPoint(x, 0));
+    } else {
+        m_d->deferredSelectionOffset->rx() = x;
+    }
 }
 
 void KisMask::setY(qint32 y)
 {
-    if (m_d->selection)
+    if (m_d->selection) {
         m_d->selection->setY(y);
+    } else if (!m_d->deferredSelectionOffset) {
+        m_d->deferredSelectionOffset.reset(new QPoint(0, y));
+    } else {
+        m_d->deferredSelectionOffset->ry() = y;
+    }
 }
 
 QImage KisMask::createThumbnail(qint32 w, qint32 h)

@@ -182,7 +182,6 @@ void KisImage::aboutToAddANode(KisNode *parent, int index)
 {
     KisNodeGraphListener::aboutToAddANode(parent, index);
     SANITY_CHECK_LOCKED("aboutToAddANode");
-    stopIsolatedMode();
 }
 
 void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
@@ -191,11 +190,20 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
     SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter->emitNodeHasBeenAdded(parent, index);
+
+    KisNodeSP newNode = parent->at(index);
+    if (!dynamic_cast<KisSelectionMask*>(newNode.data())) {
+        stopIsolatedMode();
+    }
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
-    stopIsolatedMode();
+    KisNodeSP deletedNode = parent->at(index);
+    if (!dynamic_cast<KisSelectionMask*>(deletedNode.data())) {
+        stopIsolatedMode();
+    }
+
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
 
     SANITY_CHECK_LOCKED("aboutToRemoveANode");

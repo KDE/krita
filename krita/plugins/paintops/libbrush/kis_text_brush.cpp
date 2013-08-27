@@ -92,6 +92,8 @@ public:
     }
 
     KisGbrBrush* firstBrush() const{
+        Q_ASSERT(m_text.size() > 0);
+        Q_ASSERT(m_brushesMap.size() > 0);
         return m_brushesMap.value(m_text.at(0));
     }
 

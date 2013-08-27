@@ -35,6 +35,7 @@ void KisCategorizedListView::setModel(QAbstractItemModel* model)
 {
     QListView::setModel(model);
     updateRows(0, model->rowCount());
+    model->sort(0);
 }
 
 void KisCategorizedListView::updateRows(int begin, int end)
@@ -45,7 +46,6 @@ void KisCategorizedListView::updateRows(int begin, int end)
         bool        expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
         setRowHidden(begin, !expanded && !isHeader);
     }
-    model()->sort(0);
 }
 
 void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
@@ -67,6 +67,13 @@ void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, 
 {
     QListView::rowsInserted(parent, start, end);
     updateRows(0, model()->rowCount());
+    model()->sort(0);
+}
+
+void KisCategorizedListView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
+{
+    QListView::rowsAboutToBeRemoved(parent, start, end);
+    model()->sort(0);
 }
 
 void KisCategorizedListView::mousePressEvent(QMouseEvent* event)

@@ -56,7 +56,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
 void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *event)
 {
     if (!m_widgetHelper.processKeyPressEvent(event)) {
-        KisTool::keyPressEvent(event);
+        KisToolPolylineBase::keyPressEvent(event);
     }
 }
 

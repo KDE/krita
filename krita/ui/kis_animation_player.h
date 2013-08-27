@@ -25,6 +25,12 @@ class KisAnimationPlayer
 public:
     KisAnimationPlayer(KisAnimationDoc* doc);
 
+    void play();
+
+    void stop();
+
+    void pause();
+
 private:
     struct Private;
     Private* d;

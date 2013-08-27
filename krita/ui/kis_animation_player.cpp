@@ -16,14 +16,36 @@
  */
 
 #include "kis_animation_player.h"
+#include <./kranimstore/kis_animation_store.h>
+#include <QTimer>
+#include <kis_animation.h>
 
 struct KisAnimationPlayer::Private
 {
 public:
     KisAnimationDoc* doc;
+    KisAnimationStore* store;
+    KisAnimation* animation;
 };
 
 KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
 {
     d->doc = doc;
+    d->store = doc->getStore();
+    d->animation = doc->getAnimation();
+}
+
+void KisAnimationPlayer::play()
+{
+
+}
+
+void KisAnimationPlayer::pause()
+{
+
+}
+
+void KisAnimationPlayer::stop()
+{
+
 }

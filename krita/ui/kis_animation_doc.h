@@ -23,6 +23,7 @@
 #include <krita_export.h>
 #include "kis_doc2.h"
 #include "kis_animation_part.h"
+#include <./kranimstore/kis_animation_store.h>
 
 class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 {
@@ -33,6 +34,8 @@ public:
     void frameSelectionChanged(QRect frame);
     void addKeyFrame(QRect frame);
     void addBlankFrame(QRect frame);
+    KisAnimationStore* getStore();
+    KisAnimation* getAnimation();
 
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*store);

@@ -181,4 +181,14 @@ void KisAnimationDoc::preSaveAnimation()
 
 }
 
+KisAnimationStore* KisAnimationDoc::getStore()
+{
+    return d->store;
+}
+
+KisAnimation* KisAnimationDoc::getAnimation()
+{
+    return dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+}
+
 #include "kis_animation_doc.moc"

@@ -84,13 +84,11 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
     QString location = "frame" + QString::number(frame.x()) +"layer" + QString::number(frame.y());
 
-    kWarning() << location << d->store->hasFile(location);
-
     d->store->openStore();
     bool hasFile = d->store->hasFile(location);
     d->store->closeStore();
+
     if(hasFile) {
-        //d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
         KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
         connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -126,7 +124,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->currentFrame->setName("testFrame");
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     image->addNode(d->currentFrame.data(), image->rootLayer().data());
-    kWarning() << "Layer added";
+
     //Load all the layers here
 
     setCurrentImage(image);
@@ -189,6 +187,33 @@ KisAnimationStore* KisAnimationDoc::getStore()
 KisAnimation* KisAnimationDoc::getAnimation()
 {
     return dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+}
+
+void KisAnimationDoc::play()
+{
+    if(!d->player->isCached()) {
+        d->player->createCache(300);
+    }
+
+    d->player->play();
+
+    d->player->dropCache();
+}
+
+void KisAnimationDoc::pause()
+{
+    if(d->player->isPlaying()) {
+        d->player->pause();
+    }
+}
+
+void KisAnimationDoc::stop()
+{
+    if(d->player->isPlaying()) {
+        d->player->stop();
+    }
+
+    d->player->dropCache();
 }
 
 #include "kis_animation_doc.moc"

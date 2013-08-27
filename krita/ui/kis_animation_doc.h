@@ -43,6 +43,11 @@ public:
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
+public slots:
+    void play();
+    void pause();
+    void stop();
+
 private:
     void preSaveAnimation();
 

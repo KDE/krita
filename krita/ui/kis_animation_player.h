@@ -19,9 +19,11 @@
 #define KIS_ANIMATION_PLAYER_H
 
 #include <kis_animation_doc.h>
+#include <QObject>
 
-class KisAnimationPlayer
+class KisAnimationPlayer : public QObject
 {
+    Q_OBJECT
 public:
     KisAnimationPlayer(KisAnimationDoc* doc);
 
@@ -30,6 +32,14 @@ public:
     void stop();
 
     void pause();
+
+    void createCache(int length);
+
+    void dropCache();
+
+    bool isCached();
+
+    bool isPlaying();
 
 private:
     struct Private;

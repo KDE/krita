@@ -112,21 +112,21 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 
 KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1.0;
+    if (!painter()->device()) return 1.0;
+
+    KisBrushSP brush = m_brush;
+    if (!brush)
+        return 1.0;
+
+    if (!brush->canPaintFor(info))
+        return 1.0;
 
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
         m_duplicateStart = info.pos();
     }
 
-    if (!source()) return 1.0;
-
-    KisBrushSP brush = m_brush;
-    if (!brush)
-        return 1.0;
-
-    if (! brush->canPaintFor(info))
-        return 1.0;
+    KisPaintDeviceSP realSourceDevice = settings->node()->paintDevice();
 
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
@@ -193,7 +193,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
         KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(0, 0, sw, sh);
-        KisRandomSubAccessorSP srcAcc = source()->createRandomSubAccessor();
+        KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {
             QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + x, dstIt->y() + y)) + translat);
@@ -205,7 +205,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     } else {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);
-        copyPainter.bitBltOldData(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);
         copyPainter.end();
     }
 
@@ -216,9 +216,9 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         quint16 tmpData[4];
         qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
-        const KoColorSpace* srcCs = source()->colorSpace();
-        const KoColorSpace* tmpCs = source()->colorSpace();
-        KisHLineConstIteratorSP srcIt = source()->createHLineConstIteratorNG(x, y, sw);
+        const KoColorSpace* srcCs = realSourceDevice->colorSpace();
+        const KoColorSpace* tmpCs = m_srcdev->colorSpace();
+        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(x, y, sw);
         KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
@@ -255,7 +255,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
 
         // Finaly multiply
-        KisHLineIteratorSP srcIt2 = source()->createHLineIteratorNG(x, y, sw);
+        KisHLineIteratorSP srcIt2 = realSourceDevice->createHLineIteratorNG(x, y, sw);
         KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {

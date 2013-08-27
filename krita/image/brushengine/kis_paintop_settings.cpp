@@ -26,6 +26,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_node.h"
@@ -138,6 +139,10 @@ bool KisPaintOpSettings::isValid()
 bool KisPaintOpSettings::isLoadable()
 {
     return isValid();
+}
+
+QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
+    return COMPOSITE_ALPHA_DARKEN;
 }
 
 QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const

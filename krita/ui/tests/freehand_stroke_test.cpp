@@ -19,6 +19,7 @@
 #include "freehand_stroke_test.h"
 
 #include <qtest_kde.h>
+#include <KoCompositeOpRegistry.h>
 #include "stroke_testing_utils.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_resources_snapshot.h"
@@ -46,7 +47,7 @@ protected:
             new FreehandStrokeStrategy::PainterInfo(painter,
                                                     new KisDistanceInformation());
 
-        return new FreehandStrokeStrategy(indirectPainting, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
+        return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {

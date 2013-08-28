@@ -70,7 +70,7 @@ KisGridPaintOp::~KisGridPaintOp()
     delete m_painter;
 }
 
-qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
 {
 #ifdef BENCHMARK
     QTime time;

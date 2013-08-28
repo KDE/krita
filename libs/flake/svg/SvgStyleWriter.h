@@ -31,7 +31,7 @@
 
 #include "flake_export.h"
 #include <QGradient>
-#include <QPointer>
+#include <QSharedPointer>
 
 class SvgSavingContext;
 class KoShape;
@@ -59,7 +59,7 @@ protected:
     /// Saves gradient
     static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
     /// Saves pattern
-    static QString saveSvgPattern(QPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
+    static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
 };
 
 #endif // SVGSTYLEWRITER_H

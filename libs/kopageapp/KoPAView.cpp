@@ -496,7 +496,7 @@ void KoPAView::importDocument()
         dialog->setCaption(i18n("Import Document"));
     }
 
-    // TODO make it possible to select also other supported types (then the default format) here.
+    // TODO make it possible to select also other supported types (than the default format) here.
     // this needs to go via the filters to get the file in the correct format.
     // For now we only support the native mime types
     QStringList mimeFilter;
@@ -882,7 +882,7 @@ void KoPAView::insertPage()
     KoPAPageBase * page = 0;
     if ( viewMode()->masterMode() ) {
         KoPAMasterPage * masterPage = d->doc->newMasterPage();
-        masterPage->setBackground( new KoColorBackground( Qt::white ) );
+        masterPage->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::white)));
         // use the layout of the current active page for the new page
         KoPageLayout & layout = masterPage->pageLayout();
         KoPAMasterPage * activeMasterPage = dynamic_cast<KoPAMasterPage *>( d->activePage );

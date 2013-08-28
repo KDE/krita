@@ -25,7 +25,7 @@ install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES vectorshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_vector.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if (SHARED_MIME_INFO_FOUND)

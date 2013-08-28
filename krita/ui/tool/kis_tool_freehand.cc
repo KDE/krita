@@ -194,9 +194,8 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         }
     }
     bool eventIgnored = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
-                                                                                               pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
-                                                                                               KisVector2D::Zero(),
-                                                                                               e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
+                                                                                                pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
+                                                                                                e->rotation(), e->tangentialPressure(), perspective, 0),e->modifiers());
     if (!eventIgnored){
         e->accept();
         return;
@@ -231,7 +230,10 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             canvas2->view()->disableControls();
 
 
-        currentPaintOpPreset()->settings()->setCanvasRotation( static_cast<KisCanvas2*>(canvas())->rotationAngle() );
+        const KisCoordinatesConverter *converter = static_cast<KisCanvas2*>(canvas())->coordinatesConverter();
+        currentPaintOpPreset()->settings()->setCanvasRotation(converter->rotationAngle());
+        currentPaintOpPreset()->settings()->setCanvasMirroring(converter->xAxisMirrored(),
+                                                               converter->yAxisMirrored());
         initStroke(e);
 
         e->accept();

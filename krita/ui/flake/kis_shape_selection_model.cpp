@@ -69,7 +69,7 @@ void KisShapeSelectionModel::add(KoShape *child)
         return;
 
     child->setStroke(0);
-    child->setBackground(0);
+    child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);
 

@@ -35,11 +35,11 @@ class KisParticlePaintOp : public KisPaintOp
 public:
 
     KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisParticlePaintOp();
+    ~KisParticlePaintOp();
 
-    virtual qreal paintAt(const KisPaintInformation& info);
-    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
-    
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+
 private:
     const KisParticlePaintOpSettings* m_settings;
     KisParticleBrushProperties m_properties;

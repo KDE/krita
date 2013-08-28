@@ -23,14 +23,14 @@
 
 KisSensorsTest::KisSensorsTest()
 {
-    paintInformations.append(KisPaintInformation(QPointF(0,0), 0, 0, 0, KisVector2D(0,1), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(0,1), 0, 0, 0, KisVector2D(1,1), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(1,2), 0, 0, 0, KisVector2D(1,0), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(2,2), 0, 0, 0, KisVector2D(1,-1), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(3,1), 0, 0, 0, KisVector2D(0,-1), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(3,0), 0, 0, 0, KisVector2D(-1,-1), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(2,-1), 0, 0, 0, KisVector2D(-1,0), 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(1,-1), 0, 0, 0, KisVector2D(-1,1), 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(0,0), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(0,1), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(1,2), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(2,2), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(3,1), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(3,0), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(2,-1), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(1,-1), 0, 0, 0, 0.0, 0.0, 1.0 ));
 }
 
 void KisSensorsTest::testDrawingAngle()

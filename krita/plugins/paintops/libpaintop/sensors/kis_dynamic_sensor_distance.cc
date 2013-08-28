@@ -25,7 +25,7 @@
 #include "kis_paint_information.h"
 #include "kis_sensor_selector.h"
 
-KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_time(0.0), m_length(30), m_periodic(true)
+KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_measuredDistance(0.0), m_length(30), m_periodic(true)
 {
     setMinimumLabel(i18n("0 px"));
     setMaximumLabel(i18n("30 px"));
@@ -33,22 +33,18 @@ KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(Distance
 
 qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
 {
-    m_time += pi.movement().norm();
-    if (m_time > m_length) {
-        if (m_periodic) {
-            do {
-                m_time -= m_length; // TODO: replace by a modulo when I am a little bit more awake
-            } while (m_time > m_length);
-        } else {
-            m_time = m_length;
-        }
-    }
-    return 1.0 - m_time / m_length;
+    m_measuredDistance += pi.drawingDistance();
+
+    m_measuredDistance = m_periodic ?
+        fmod(m_measuredDistance, m_length) :
+        qMin(m_measuredDistance, (qreal)m_length);
+
+    return 1.0 - m_measuredDistance / m_length;
 }
 
 void KisDynamicSensorDistance::reset()
 {
-    m_time = 0;
+    m_measuredDistance = 0;
 }
 
 void KisDynamicSensorDistance::setPeriodic(bool periodic)

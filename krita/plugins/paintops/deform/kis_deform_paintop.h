@@ -41,7 +41,7 @@ public:
     KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisDeformPaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
     qreal spacing(qreal pressure) const;
 
 

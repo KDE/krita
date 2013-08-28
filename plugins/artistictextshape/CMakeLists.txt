@@ -39,4 +39,4 @@ install( TARGETS calligra_shape_artistictext DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES artistictextshape.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES calligra_shape_artistictext.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

@@ -76,10 +76,17 @@ void KisDynamicSensorList::fromXML(const QDomElement& elt)
     }
 }
 
+bool KisDynamicSensorList::dependsOnCanvasRotation() const
+{
+    foreach(KisDynamicSensor* sensor, m_list) {
+        if (!sensor->dependsOnCanvasRotation()) return false;
+    }
+    return true;
+}
+
 bool KisDynamicSensorList::hasSensor(const QString& id)
 {
-    foreach(KisDynamicSensor* sensor, m_list)
-    {
+    foreach(KisDynamicSensor* sensor, m_list) {
         if(sensor->id() == id) return true;
     }
     return false;

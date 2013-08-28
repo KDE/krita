@@ -39,8 +39,7 @@ void KisBrushTest::testMaskGenerationNoColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -74,8 +73,7 @@ void KisBrushTest::testMaskGenerationSingleColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -103,8 +101,7 @@ void KisBrushTest::testMaskGenerationDevColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -137,8 +134,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -171,8 +167,7 @@ void KisBrushTest::testImageGeneration()
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     for (int i = 0; i < 200; i++) {
@@ -216,8 +211,7 @@ void KisBrushTest::benchmarkScaling()
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
@@ -235,8 +229,7 @@ void KisBrushTest::benchmarkRotation()
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
@@ -253,8 +246,7 @@ void KisBrushTest::benchmarkMaskScaling()
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(cs);
 
     QBENCHMARK {

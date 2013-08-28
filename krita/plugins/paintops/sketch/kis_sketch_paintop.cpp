@@ -107,12 +107,11 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
     m_brushBoundingBox.translate(info.pos() - m_hotSpot);
 }
 
-KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
+    Q_UNUSED(currentDistance);
 
-    if (!m_brush || !painter())
-        return KisDistanceInformation();
+    if (!m_brush || !painter()) return;
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
@@ -132,10 +131,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
     const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
 
-    KisVector2D endVec = toKisVector2D(pi2.pos());
-    KisVector2D startVec = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = endVec - startVec;
-    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return KisDistanceInformation(0, dragVec.norm());
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return;
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
@@ -263,13 +259,13 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    return KisDistanceInformation(0, dragVec.norm());
 }
 
 
 
-qreal KisSketchPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info).spacing;
+    KisDistanceInformation di;
+    paintLine(info, info, &di);
+    return di.currentSpacing();
 }

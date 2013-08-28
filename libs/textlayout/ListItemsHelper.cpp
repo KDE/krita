@@ -35,17 +35,20 @@ using namespace Lists;
 
 QString Lists::intToRoman(int n)
 {
-    static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-    static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-    static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-    static const QByteArray RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
+    static const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+    static const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+    static const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+    static const QString RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
 
     if (n <= 0) {
         kWarning(32500) << "intToRoman called with negative number: n=" << n;
         return QString::number(n);
     }
-    return QString::fromLatin1(RNThousands[(n / 1000)] + RNHundreds[(n / 100) % 10 ] +
-                               RNTens[(n / 10) % 10 ] + RNUnits[(n) % 10 ]);
+
+    return RNThousands[(n / 1000)] +
+           RNHundreds[(n / 100) % 10 ] +
+           RNTens[(n / 10) % 10 ] +
+           RNUnits[(n) % 10 ];
 }
 
 QString Lists::intToAlpha(int n, Capitalisation caps, bool letterSynchronization)

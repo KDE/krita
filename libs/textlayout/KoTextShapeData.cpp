@@ -147,7 +147,16 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
 qreal KoTextShapeData::documentOffset() const
 {
     Q_D(const KoTextShapeData);
-    return d->rootArea ? d->rootArea->top() : 0.0;
+    if (d->rootArea) {
+        KoBorder *border = d->rootArea->associatedShape()->border();
+        if (border) {
+            return d->rootArea->top() - topPadding() - border->borderWidth(KoBorder::TopBorder);
+        } else {
+            return d->rootArea->top() - topPadding();
+        }
+    } else {
+        return 0.0;
+    }
 }
 
 void KoTextShapeData::setDirty()

@@ -177,7 +177,11 @@ void KisPaintOpSettings::setCanvasRotation(qreal angle)
     setPropertyNotSaved("runtimeCanvasRotation");
 }
 
-qreal KisPaintOpSettings::canvasRotation() const
+void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
 {
-    return getDouble("runtimeCanvasRotation");
+    setProperty("runtimeCanvasMirroredX", xAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredX");
+
+    setProperty("runtimeCanvasMirroredY", yAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredY");
 }

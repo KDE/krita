@@ -24,7 +24,8 @@
 
 #include <kstandarddirs.h>
 
-KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile): KParts::Plugin(parent), m_view(0)
+KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile)
+    : m_view(0)
 {
     if (parent->inherits("KisView2")) {
         setXMLFile(KStandardDirs::locate("data", rcFile), true);

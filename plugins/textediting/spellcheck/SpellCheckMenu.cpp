@@ -97,6 +97,7 @@ void SpellCheckMenu::ignoreWord()
     if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
+    // see comment in ctor why this will never work
     m_speller.addToSession(m_currentMisspelled);
 
     emit clearHighlightingForWord(m_currentMisspelledPosition);
@@ -110,10 +111,7 @@ void SpellCheckMenu::addWordToDictionary()
     if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
         return;
 
-    // see comment in ctor above why this will never work
-    m_spellCheck->addWordToPersonal(m_currentMisspelled);
-
-    emit clearHighlightingForWord(m_currentMisspelledPosition);
+    m_spellCheck->addWordToPersonal(m_currentMisspelled, m_currentMisspelledPosition);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

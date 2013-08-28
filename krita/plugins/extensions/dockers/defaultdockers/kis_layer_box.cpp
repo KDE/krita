@@ -417,17 +417,16 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
-    KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
-    int  index = m_wdgLayerBox->cmbComposite->indexOf(cmpOp);
-    
+    KoID opId = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
+
     m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
+    m_wdgLayerBox->cmbComposite->selectCompositeOp(opId);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
 void KisLayerBox::slotFillCompositeOps(const KoColorSpace* colorSpace)
 {
-    m_wdgLayerBox->cmbComposite->getModel()->validateCompositeOps(colorSpace);
+    m_wdgLayerBox->cmbComposite->validate(colorSpace);
 }
 
 // range: 0-100
@@ -580,11 +579,11 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::slotCompositeOpChanged(int index)
 {
+    Q_UNUSED(index);
     if(!m_canvas) return;
 
-    KoID compositeOp;
-    if(m_wdgLayerBox->cmbComposite->entryAt(compositeOp, index))
-        m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
+    QString compositeOp = m_wdgLayerBox->cmbComposite->selectedCompositeOp().id();
+    m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp));
 }
 
 void KisLayerBox::slotOpacityChanged()

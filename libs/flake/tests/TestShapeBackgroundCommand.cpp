@@ -27,9 +27,9 @@
 void TestShapeBackgroundCommand::refCounting()
 {
     MockShape * shape1 = new MockShape();
-    QPointer<KoShapeBackground>  whiteFill = new KoColorBackground(QColor(Qt::white));
-    QPointer<KoShapeBackground>  blackFill = new KoColorBackground(QColor(Qt::black));
-    QPointer<KoShapeBackground>  redFill = new KoColorBackground(QColor(Qt::red));
+    QSharedPointer<KoShapeBackground> whiteFill(new KoColorBackground(QColor(Qt::white)));
+    QSharedPointer<KoShapeBackground> blackFill(new KoColorBackground(QColor(Qt::black)));
+    QSharedPointer<KoShapeBackground> redFill  (new KoColorBackground(QColor(Qt::red)));
 
     shape1->setBackground(whiteFill);
     QVERIFY(shape1->background() == whiteFill);

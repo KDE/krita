@@ -46,10 +46,9 @@ class KisDuplicateOp : public KisBrushBasedPaintOp
 public:
 
     KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter * painter);
+    ~KisDuplicateOp();
 
-    virtual ~KisDuplicateOp();
-
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
 

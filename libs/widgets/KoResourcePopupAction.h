@@ -23,7 +23,7 @@
 
 #include <kaction.h>
 
-#include <QPointer>
+#include <QSharedPointer>
 
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
@@ -46,12 +46,12 @@ public:
      */
     virtual ~KoResourcePopupAction();
 
-    QPointer<KoShapeBackground> currentBackground() const;
-    void setCurrentBackground(QPointer<KoShapeBackground> background);
+    QSharedPointer<KoShapeBackground> currentBackground() const;
+    void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected(QPointer<KoShapeBackground>  background);
+    void resourceSelected(QSharedPointer<KoShapeBackground>  background);
 
 public slots:
     void updateIcon();

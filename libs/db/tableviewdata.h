@@ -33,7 +33,7 @@ namespace KexiDB
 class RowEditBuffer;
 class Cursor;
 
-typedef AutodeletedList<RecordData*> TableViewDataBase;
+typedef AutodeletedList<KexiDB::RecordData*> TableViewDataBase;
 
 /*! Reimplements list of records to allow configurable sorting and more.
 */
@@ -158,12 +158,12 @@ public:
      for a lookup field (only reasonable if col->visibleLookupColumnInfo != 0).
      Note that \a newval may be changed in aboutToChangeCell() signal handler.
      \sa KexiDB::RowEditBuffer */
-    bool updateRowEditBufferRef(RecordData *record,
+    bool updateRowEditBufferRef(KexiDB::RecordData *record,
                                 int colnum, TableViewColumn* col, QVariant& newval, bool allowSignals = true,
                                 QVariant *visibleValueForLookupField = 0);
 
     /*! Added for convenience. Like above but \a newval is passed by value. */
-    inline bool updateRowEditBuffer(RecordData *record, int colnum, TableViewColumn* col,
+    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum, TableViewColumn* col,
                                     QVariant newval, bool allowSignals = true) {
         QVariant newv(newval);
         return updateRowEditBufferRef(record, colnum, col, newv, allowSignals);
@@ -171,23 +171,23 @@ public:
 
     /*! Added for convenience. Like above but it's assumed that \a record record's columns are ordered
      like in table view, not like in form view. Don't use this with form views. */
-    inline bool updateRowEditBuffer(RecordData *record, int colnum,
+    inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
                                     QVariant newval, bool allowSignals = true) {
         TableViewColumn* col = m_columns.value(colnum);
         return col ? updateRowEditBufferRef(record, colnum, col, newval, allowSignals) : false;
     }
 
     //! \return row edit buffer for currently edited record. Can be 0 or empty.
-    RowEditBuffer* rowEditBuffer() const;
+    KexiDB::RowEditBuffer* rowEditBuffer() const;
 
     /*! \return last operation's result information (always not null). */
-    const ResultInfo& result() const;
+    const KexiDB::ResultInfo& result() const;
 
-    bool saveRowChanges(RecordData& record, bool repaint = false);
+    bool saveRowChanges(KexiDB::RecordData& record, bool repaint = false);
 
-    bool saveNewRow(RecordData& record, bool repaint = false);
+    bool saveNewRow(KexiDB::RecordData& record, bool repaint = false);
 
-    bool deleteRow(RecordData& record, bool repaint = false);
+    bool deleteRow(KexiDB::RecordData& record, bool repaint = false);
 
     /*! Deletes rows (by number) passed with \a rowsToDelete.
      Currently, this method is only for non data-aware tables. */
@@ -214,7 +214,7 @@ public:
     /*! Inserts new \a record at index \a index.
      \a record will be owned by this data object.
      Note: Reasonable only for not not-db-aware version. */
-    void insertRow(RecordData& record, uint index, bool repaint = false);
+    void insertRow(KexiDB::RecordData& record, uint index, bool repaint = false);
 
     //! @todo add this as well? void insertRow(KexiDB::RecordData& record, KexiDB::RecordData& aboveRecord)
 
@@ -228,7 +228,7 @@ public:
         emit reloadRequested();
     }
 
-    inline RecordData* at(uint index) {
+    inline KexiDB::RecordData* at(uint index) {
         return TableViewDataBase::at(index);
     }
     inline virtual uint count() const {
@@ -237,14 +237,14 @@ public:
     inline bool isEmpty() const {
         return TableViewDataBase::isEmpty();
     }
-    inline RecordData* first() {
+    inline KexiDB::RecordData* first() {
         return TableViewDataBase::first();
     }
-    inline RecordData* last() {
+    inline KexiDB::RecordData* last() {
         return TableViewDataBase::last();
     }
-    inline int indexOf(const RecordData* record, int from = 0) const {
-        return TableViewDataBase::indexOf(const_cast<RecordData*>(record), from);
+    inline int indexOf(const KexiDB::RecordData* record, int from = 0) const {
+        return TableViewDataBase::indexOf(const_cast<KexiDB::RecordData*>(record), from);
     }
     inline void removeFirst() {
         TableViewDataBase::removeFirst();
@@ -252,10 +252,10 @@ public:
     inline void removeLast() {
         TableViewDataBase::removeLast();
     }
-    inline void append(RecordData* record) {
+    inline void append(KexiDB::RecordData* record) {
         TableViewDataBase::append(record);
     }
-    inline void prepend(RecordData* record) {
+    inline void prepend(KexiDB::RecordData* record) {
         TableViewDataBase::prepend(record);
     }
     inline TableViewData::Iterator constBegin() const {
@@ -273,8 +273,8 @@ public:
      so every KexiDB::RecordData's length is expanded by one. */
     bool containsROWIDInfo() const;
 
-    inline RecordData* createItem() const {
-        return new RecordData(m_itemSize);
+    inline KexiDB::RecordData* createItem() const {
+        return new KexiDB::RecordData(m_itemSize);
     }
 
 public slots:
@@ -288,31 +288,31 @@ signals:
      Connect this signal to your slot and set \a result->success to false
      to disallow this change. You can also change \a newValue to other value,
      or change other columns in \a record. */
-    void aboutToChangeCell(RecordData *record, int colnum, QVariant& newValue,
-                           ResultInfo* result);
+    void aboutToChangeCell(KexiDB::RecordData *record, int colnum, QVariant& newValue,
+                           KexiDB::ResultInfo* result);
 
     /*! Emitted before inserting of a new, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this inserting. You can also change columns in \a record. */
-    void aboutToInsertRow(RecordData *record, ResultInfo* result, bool repaint);
+    void aboutToInsertRow(KexiDB::RecordData *record, KexiDB::ResultInfo* result, bool repaint);
 
     /*! Emitted before changing of an edited, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this change. You can also change columns in \a record. */
-    void aboutToUpdateRow(RecordData *record, RowEditBuffer* buffer,
-                          ResultInfo* result);
+    void aboutToUpdateRow(KexiDB::RecordData *record, KexiDB::RowEditBuffer* buffer,
+                          KexiDB::ResultInfo* result);
 
-    void rowUpdated(RecordData*); //!< Current row has been updated
+    void rowUpdated(KexiDB::RecordData*); //!< Current row has been updated
 
-    void rowInserted(RecordData*, bool repaint); //!< A row has been inserted
+    void rowInserted(KexiDB::RecordData*, bool repaint); //!< A row has been inserted
 
     //! A row has been inserted at \a index position (not db-aware data only)
-    void rowInserted(RecordData*, uint index, bool repaint);
+    void rowInserted(KexiDB::RecordData*, uint index, bool repaint);
 
     /*! Emitted before deleting of a current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this deleting. */
-    void aboutToDeleteRow(RecordData& record, ResultInfo* result, bool repaint);
+    void aboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
 
     //! Current row has been deleted
     void rowDeleted();
@@ -323,7 +323,7 @@ signals:
     //! Displayed data needs to be reloaded in all presenters.
     void reloadRequested();
 
-    void rowRepaintRequested(RecordData&);
+    void rowRepaintRequested(KexiDB::RecordData&);
 
 private:
     void init();
@@ -332,7 +332,7 @@ private:
         Field::Type keyType, Field::Type valueType);
 
     //! @internal for saveRowChanges() and saveNewRow()
-    bool saveRow(RecordData& record, bool insert, bool repaint);
+    bool saveRow(KexiDB::RecordData& record, bool insert, bool repaint);
 
     //! Number of physical columns
     int m_itemSize;

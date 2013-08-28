@@ -20,17 +20,16 @@
 #include "kis_categorized_item_delegate.h"
 #include "kis_categorized_list_model.h"
 
-// #include <kstandardguiitem.h>
-
 #include <QPainter>
 #include <QStyle>
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItemV4>
 #include <QApplication>
 
-KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError):
-    m_indicateError(indicateError),
-    m_minimumItemHeight(0)
+KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
+    : QStyledItemDelegate(parent),
+      m_indicateError(indicateError),
+      m_minimumItemHeight(0)
 {
 }
 
@@ -38,7 +37,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
 {
     painter->resetTransform();
 
-    if(!index.data(IsHeaderRole).toBool()) {
+    if(!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
 
         if(m_indicateError)
@@ -61,7 +60,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             option.rect.x(),
             option.rect.y(),
             option.rect.height(),
-            !index.data(ExpandCategoryRole).toBool()
+            !index.data(__CategorizedListModelBase::ExpandCategoryRole).toBool()
         );
     }
 

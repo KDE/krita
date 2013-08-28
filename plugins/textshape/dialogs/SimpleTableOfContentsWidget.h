@@ -42,9 +42,6 @@ class SimpleTableOfContentsWidget : public QWidget
 public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
     ~SimpleTableOfContentsWidget();
-    void setToCConfigureMenu(QMenu *tocMenu);
-    QMenu *ToCConfigureMenu();
-    void showMenu();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -53,7 +50,6 @@ public slots:
 
 signals:
     void doneWithFocus();
-    void showConfgureOptions();
 
 private slots:
     void applyTemplate(int templateId);

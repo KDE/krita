@@ -47,5 +47,5 @@ install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES videoshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_video.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

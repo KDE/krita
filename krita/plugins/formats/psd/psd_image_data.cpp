@@ -15,6 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+#include <psd_image_data.h>
+
 #include <netinet/in.h> // htonl
 
 #include <QFile>
@@ -28,7 +30,6 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 
-#include <psd_image_data.h>
 #include "psd_utils.h"
 #include "compression.h"
 
@@ -45,7 +46,6 @@ PSDImageData::~PSDImageData() {
 }
 
 bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-
     psdread(io, &m_compression);
     quint64 start = io->pos();
     m_channelSize = m_header->channelDepth/8;
@@ -71,6 +71,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         case Bitmap:
             break;
         case Grayscale:
+            readGrayscale(io,dev);
             break;
         case Indexed:
             break;
@@ -134,6 +135,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         case Bitmap:
             break;
         case Grayscale:
+            readGrayscale(io,dev);
             break;
         case Indexed:
             break;
@@ -456,7 +458,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
                 KoCmykTraits<quint16>::setY(it->rawData(),Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-               KoCmykTraits<quint16>::setK(it->rawData(),K);
+                KoCmykTraits<quint16>::setK(it->rawData(),K);
 
             }
             else if (m_channelSize == 4) {
@@ -577,6 +579,81 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
             dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
             it->nextPixel();;
+        }
+
+    }
+
+    return true;
+}
+
+bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev) {
+    int channelid = 0;
+
+    for (quint32 row = 0; row < m_header->height; row++) {
+
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(0, row, m_header->width);
+        QVector<QByteArray> channelBytes;
+
+        for (int channel = 0; channel < m_header->nChannels; channel++) {
+
+            switch (m_compression) {
+            case Compression::Uncompressed:
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
+                channelBytes.append(io->read(m_header->width*m_channelSize));
+            }
+                break;
+            case Compression::RLE:
+            {
+                io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
+                int uncompressedLength = m_header->width * m_header->channelDepth / 8;
+                QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, m_channelInfoRecords[channel].compressionType);
+                channelBytes.append(uncompressedBytes);
+                m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
+
+            }
+                break;
+            case Compression::ZIP:
+                break;
+            case Compression::ZIPWithPrediction:
+                break;
+
+            default:
+                break;
+            }
+
+        }
+
+        if (m_channelInfoRecords[channelid].compressionType == 0) {
+            m_channelOffsets[channelid] += (m_header->width * m_channelSize);
+        }
+
+        for (quint32 col = 0; col < m_header->width; col++) {
+
+            if (m_channelSize == 1) {
+
+                quint8 Gray = channelBytes[0].constData()[col];
+                KoGrayU8Traits::setGray(it->rawData(), Gray);
+
+            }
+
+            else if (m_channelSize == 2) {
+
+                quint16 Gray = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                KoGrayU16Traits::setGray(it->rawData(), Gray);
+
+            }
+
+            else if (m_channelSize == 4) {
+
+                quint32 Gray = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                KoGrayTraits<quint32>::setGray(it->rawData(), Gray);
+
+            }
+
+            dev->colorSpace()->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+            it->nextPixel();
         }
 
     }

@@ -247,15 +247,15 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
         int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
         int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
 
+        m_d->openGLImageTextures->activateHDRExposureProgram();
+
         for (int col = firstColumn; col <= lastColumn; col++) {
             for (int row = firstRow; row <= lastRow; row++) {
 
                 KisTextureTile *tile =
                         m_d->openGLImageTextures->getTextureTileCR(col, row);
 
-                m_d->openGLImageTextures->activateHDRExposureProgram();
-
-                glActiveTexture(GL_TEXTURE1);
+                glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
                 if(SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {

@@ -170,7 +170,7 @@ bool parseTagName(const QString &tagString,
     int numSubNames = tagString.count('/') + 1;
 
     if (numSubNames == 1) {
-        structName = QString();
+        structName.clear();
         tagName = tagString;
         typeInfo = schema->propertyType(tagName);
         return true;

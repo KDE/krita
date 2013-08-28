@@ -90,10 +90,10 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
 void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 {
-    KoID compositeOp;
-    
-    if(m_list->entryAt(compositeOp, index.row()))
-        changeCompositeOp(compositeOp);
+    Q_UNUSED(index);
+
+    KoID compositeOp = m_list->selectedCompositeOp();
+    changeCompositeOp(compositeOp);
 }
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)

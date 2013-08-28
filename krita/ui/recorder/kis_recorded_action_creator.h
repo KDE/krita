@@ -15,7 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_RECORDED_ACTION_CREATOR
+#define KIS_RECORDED_ACTION_CREATOR
 #include <QWidget>
 
 class KisRecordedAction;
@@ -34,3 +35,5 @@ private:
     Private * const d;
 };
 
+
+#endif

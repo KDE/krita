@@ -19,9 +19,11 @@
 #ifndef PIVOTPLUGIN_H
 #define PIVOTPLUGIN_H
 
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
+#include <QObject>
+#include <QVariantList>
 
-class PivotPlugin : public KParts::Plugin
+class PivotPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:

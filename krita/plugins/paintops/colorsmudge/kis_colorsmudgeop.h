@@ -47,7 +47,7 @@ public:
     KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image);
     virtual ~KisColorSmudgeOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     void updateMask(const KisPaintInformation& info, double scale, double rotation);

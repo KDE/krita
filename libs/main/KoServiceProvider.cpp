@@ -25,9 +25,9 @@
 #include <kservicetype.h>
 #include <kdebug.h>
 
-QByteArray KoServiceProvider::readNativeFormatMimeType(const KComponentData &componentData)   //static
+QByteArray KoServiceProvider::readNativeFormatMimeType()   //static
 {
-    KService::Ptr service = readNativeService(componentData);
+    KService::Ptr service = readNativeService();
     if (!service)
         return QByteArray();
 
@@ -45,33 +45,31 @@ QByteArray KoServiceProvider::readNativeFormatMimeType(const KComponentData &com
 }
 
 
-QStringList KoServiceProvider::readExtraNativeMimeTypes(const KComponentData &componentData)   //static
+QStringList KoServiceProvider::readExtraNativeMimeTypes()   //static
 {
-    KService::Ptr service = readNativeService(componentData);
-    if (!service)
-        return QStringList();
-    return service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+    QStringList mimetypes;
+    KService::Ptr service = readNativeService();
+    if (service)
+        mimetypes = service->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+    return mimetypes;
 }
 
-KService::Ptr KoServiceProvider::readNativeService(const KComponentData &componentData)
+KService::Ptr KoServiceProvider::readNativeService()
 {
-    QString instname = componentData.isValid() ? componentData.componentName() : KGlobal::mainComponent().componentName();
+    QString instname = QCoreApplication::applicationName();
+
+    if (instname.isEmpty() && QCoreApplication::instance()) {
+        instname = qAppName();
+    }
+    if (instname.isEmpty()) {
+        instname = QString::fromLatin1("kde");
+    }
 
     // The new way is: we look for a foopart.desktop in the kde_services dir.
     QString servicepartname = instname + "part.desktop";
     KService::Ptr service = KService::serviceByDesktopPath(servicepartname);
-    if (service)
-        kDebug(30003) << servicepartname << " found.";
-    if (!service) {
-        // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
-        // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
-        // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
-        service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
-    }
-    if (!service)
-        service = KService::serviceByDesktopName(instname);
+    Q_ASSERT(service);
 
     return service;
 }

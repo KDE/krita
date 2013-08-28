@@ -59,7 +59,7 @@ public slots:
     /**
      * Set if the decoration is visible or not.
      */
-    void setVisible(bool v);
+    virtual void setVisible(bool v);
     /**
      * If decoration is visible, hide it, if not show it.
      */

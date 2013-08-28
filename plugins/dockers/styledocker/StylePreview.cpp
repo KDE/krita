@@ -136,7 +136,7 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void StylePreview::update(KoShapeStrokeModel * stroke, QPointer<KoShapeBackground> fill)
+void StylePreview::update(KoShapeStrokeModel * stroke, QSharedPointer<KoShapeBackground> fill)
 {
     bool updateNeeded = false;
     if (fill != m_fill) {
@@ -161,12 +161,12 @@ void StylePreview::update(KoShapeStrokeModel * stroke, QPointer<KoShapeBackgroun
     }
 }
 
-void StylePreview::drawFill(QPainter & painter,  QPointer<KoShapeBackground> fill)
+void StylePreview::drawFill(QPainter & painter,  QSharedPointer<KoShapeBackground> fill)
 {
     painter.save();
 
     if (fill) {
-        const QPointer<KoGradientBackground> gradientFill = dynamic_cast<KoGradientBackground*>(fill.data());
+        const QSharedPointer<KoGradientBackground> gradientFill = qSharedPointerDynamicCast<KoGradientBackground>(fill);
         if (gradientFill) {
             const QGradient * gradient = gradientFill->gradient();
             QBrush brush(Qt::white);

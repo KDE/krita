@@ -52,17 +52,16 @@ MyPaint::~MyPaint()
     delete m_surface;
 }
 
-qreal MyPaint::paintAt(const KisPaintInformation& info)
+KisSpacingInformation MyPaint::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 1.0;
 }
 
-KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+void MyPaint::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if(m_firstPoint){
         m_brush->stroke_to(m_surface,
@@ -77,10 +76,4 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
                        pi2.pressure(),
                        pi2.xTilt() / 60.0, pi2.yTilt() / 60.0,
                        qreal(pi2.currentTime() - pi1.currentTime()) / 1000);
-
-    // not sure what to do with these...
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-    return KisDistanceInformation(0, dragVec.norm());
 }

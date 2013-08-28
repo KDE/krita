@@ -131,12 +131,14 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
             painter->beginTransaction("test transaction");
         }
 
+        KisDistanceInformation currentDistance;
+
         while(line.y1() < rectBottom) {
             lineTime.restart();
 
             KisPaintInformation pi1(line.p1(), 0.0);
             KisPaintInformation pi2(line.p2(), 1.0);
-            painter->paintLine(pi1, pi2);
+            painter->paintLine(pi1, pi2, &currentDistance);
 
             logStream << "L 1" << i << lineTime.elapsed()
                       << KisTileDataStore::instance()->numTilesInMemory() * 16

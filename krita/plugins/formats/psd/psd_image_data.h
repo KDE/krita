@@ -48,7 +48,8 @@ private:
     bool readRGB(QIODevice *io, KisPaintDeviceSP dev);
     bool readCMYK(QIODevice *io, KisPaintDeviceSP dev);
     bool readLAB(QIODevice *io, KisPaintDeviceSP dev);
-    
+    bool readGrayscale(QIODevice *io, KisPaintDeviceSP dev);
+
     PSDHeader *m_header;
     
     quint16 m_compression;

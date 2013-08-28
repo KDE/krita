@@ -43,22 +43,10 @@ public:
     virtual ~KisDynamicSensorSpeed() { }
     virtual qreal value(const KisPaintInformation& info);
     void reset() {
-        m_lastTime = 0;
-        m_lastMove = 0.0;
-        m_speed = 0.0;
+        m_speed = -1.0;
     }
 private:
     double m_speed;
-    double m_lastMove;
-    int m_lastTime;
-};
-
-class KisDynamicSensorDrawingAngle : public KisDynamicSensor
-{
-public:
-    KisDynamicSensorDrawingAngle();
-    virtual ~KisDynamicSensorDrawingAngle() { }
-    virtual qreal value(const KisPaintInformation& info);
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor

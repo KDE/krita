@@ -23,7 +23,6 @@
 #include <kdebug.h>
 #include <kurl.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 #include <kpluginfactory.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -32,7 +31,6 @@
 #include <KoDocument.h>
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
-#include <onlinedocument.moc>
 
 #include "loginwindow.h"
 #include "googledocumentservice.h"
@@ -103,3 +101,4 @@ void OnlineDocument::receivedOnlineDocument(QString  path)
     url.setPath(path);
     view->shell()->openDocument(url);
 }
+#include <onlinedocument.moc>

@@ -5,7 +5,7 @@
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
-   Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+   Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -85,8 +85,6 @@ public:
 
     void showButtons( bool show );
 
-    void enableContextMenu(bool enable);
-
     /// shows the aside preview with the resource's image
     void showPreview(bool show);
     /// determines whether the preview right or below the splitter
@@ -106,9 +104,7 @@ public:
 
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize() const;
-    /// Gets the tag Names from tag Object for setting the Completer Object
-    QStringList tagNamesList(const QString &lineEditText) const;
-    QStringList availableTags() const;
+
     KoResourceItemView *itemView() const;
 
 signals:
@@ -120,38 +116,12 @@ public slots:
 
 private slots:
     void activated ( const QModelIndex & index );
-
-    void tagSearchLineEditActivated(const QString& lineEditText);
-    void tagSearchLineEditTextChanged(const QString& lineEditText);
-
-    void tagChooserIndexChanged(const QString& lineEditText);
-    void tagChooserReturnPressed(const QString& lineEditText);
-
     void contextMenuRequested(const QPoint &pos);
 
-    void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
-    void contextAddTagToResource(KoResource* resource, const QString& tag);
-    void contextCreateNewTag(KoResource* resource, const QString& tag);
-    void contextCreateNewTag(const QString& tag);
-
-    void syncTagBoxEntryRemoval(const QString& tag);
-    void syncTagBoxEntryAddition(const QString& tag);
-
-    void tagSaveButtonPressed();
-    void tagBoxEntryDeletionRequested();
-    void renameCurrentlySelectedTag(const QString &newName);
-
-    void tagOptionsContextMenuAboutToShow();
-    void undeleteLastDeletedTag();
-    void purgeTagUndeleteList();
-
 private:
-    void removeTagFromComboBox();
     void updateButtonState();
     void updatePreview(KoResource *resource);
-    void updateTaggedResourceView();
-    void addResourceTag(KoResource* resource, const QString& tagName);
-    void removeResourceTag(KoResource* resource, const QString& tagName);
+
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

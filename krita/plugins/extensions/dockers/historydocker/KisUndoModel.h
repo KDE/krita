@@ -56,6 +56,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#ifndef KIS_UNDO_MODEL_H
+#define KIS_UNDO_MODEL_H
 #include <QAbstractItemModel>
 
 #include <kundo2qstack.h>
@@ -112,3 +114,4 @@ private:
     KisCanvas2* m_canvas;
     QMap<const KUndo2Command*, QImage> imageMap;
 };
+#endif

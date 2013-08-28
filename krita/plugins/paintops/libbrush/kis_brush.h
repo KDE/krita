@@ -134,16 +134,6 @@ public:
     }
 
     /**
-     * @return the horizontal spacing
-     */
-    double xSpacing(double scale = 1.0) const;
-
-    /**
-     * @return the vertical spacing
-     */
-    double ySpacing(double scale = 1.0) const;
-
-    /**
      * @return a preview of the brush
      */
     virtual QImage image() const;
@@ -173,12 +163,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
 
     /**
      * @return the angle of the mask adding the given angle

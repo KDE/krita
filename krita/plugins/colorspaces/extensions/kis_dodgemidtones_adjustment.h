@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
- #ifndef _KIS_DODGE_MIDTONES_ADJUSTMENT_H_
- #define _KIS_DODGE_MIDTONES_ADJUSTMENT_H_
+#ifndef _KIS_DODGE_MIDTONES_ADJUSTMENT_H_
+#define _KIS_DODGE_MIDTONES_ADJUSTMENT_H_
 
- #include "KoColorTransformationFactory.h"
+#include "KoColorTransformationFactory.h"
 
- class KisDodgeMidtonesAdjustmentFactory : public KoColorTransformationFactory
- {
- public:
+class KisDodgeMidtonesAdjustmentFactory : public KoColorTransformationFactory
+{
+public:
 
- 	KisDodgeMidtonesAdjustmentFactory();
+    KisDodgeMidtonesAdjustmentFactory();
 
- 	virtual QList< QPair< KoID, KoID > > supportedModels() const;
+    virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
- 	virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
 
- };
+};
 
- #endif
+#endif

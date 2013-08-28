@@ -17,59 +17,77 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoCompositeOp.h>
+#include "kis_composite_ops_model.h"
 
+#include <KoCompositeOp.h>
 #include <KoIcon.h>
 
-#include "kis_composite_ops_model.h"
 #include "kis_debug.h"
 #include "kis_config.h"
 
-struct CompositeOpModelInitializer
-{
-    CompositeOpModelInitializer() {
-        model.addEntries(KoCompositeOpRegistry::instance().getCompositeOps(), false, true);
-        model.expandAllCategories(false);
-        model.addCategory(KoID("favorites", i18n("Favorites")));
-        model.readFavoriteCompositeOpsFromConfig();
-        model.expandCategory(KoID("favorites"), true);
-    }
-    
-    KisCompositeOpListModel model;
-};
+KoID KisCompositeOpListModel::favoriteCategory() {
+    static KoID category("favorites", i18n("Favorites"));
+    return category;
+}
 
 KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
 {
-    static CompositeOpModelInitializer initializer;
-    return &initializer.model;
+    static KisCompositeOpListModel *model = 0;
+
+    if (!model) {
+        model = new KisCompositeOpListModel();
+
+        QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getCompositeOps();
+        QMapIterator<KoID, KoID> it(ops);
+
+        while (it.hasNext()) {
+            KoID op = *it.next();
+            KoID category = it.key();
+
+            BaseKoIDCategorizedListModel::DataItem *item =
+                model->categoriesMapper()->addEntry(category.name(), op);
+
+            item->setCheckable(true);
+        }
+
+        BaseKoIDCategorizedListModel::DataItem *item =
+            model->categoriesMapper()->addCategory(favoriteCategory().name());
+        item->setExpanded(true);
+
+        model->readFavoriteCompositeOpsFromConfig();
+    }
+
+    return model;
 }
 
-void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpace)
+void KisCompositeOpListModel::validate(const KoColorSpace *cs)
 {
-    typedef QList<Category>::iterator Itr;
-    
-    emit layoutAboutToBeChanged();
-    
-    for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat) {
-        for(int i=0; i<cat->entries.size(); ++i) {
-            bool enable = KoCompositeOpRegistry::instance().colorSpaceHasCompositeOp(colorSpace, cat->entries[i].data);
-            cat->entries[i].disabled = !enable;
+    for (int i = 0, size = categoriesMapper()->rowCount(); i < size; i++) {
+        DataItem *item = categoriesMapper()->itemFromRow(i);
+
+        if (!item->isCategory()) {
+            bool value = KoCompositeOpRegistry::instance().colorSpaceHasCompositeOp(cs, *item->data());
+            item->setEnabled(value);
         }
     }
-    
-    emit layoutChanged();
 }
 
 bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-    KoID entry;
-    bool result = BaseClass::setData(idx, value, role);
+    if (!idx.isValid()) return false;
 
-    if(role == Qt::CheckStateRole && BaseClass::entryAt(entry, idx.row())) {
-        if(value.toInt() == Qt::Checked)
-            BaseClass::addEntry(KoID("favorites"), entry);
-        else
-            BaseClass::removeEntry(KoID("favorites"), entry);
+    bool result = BaseKoIDCategorizedListModel::setData(idx, value, role);
+
+    DataItem *item = categoriesMapper()->itemFromRow(idx.row());
+    Q_ASSERT(item);
+
+
+    if(role == Qt::CheckStateRole) {
+        if (item->isChecked()) {
+            addFavoriteEntry(*item->data());
+        } else {
+            removeFavoriteEntry(*item->data());
+        }
 
         writeFavoriteCompositeOpsToConfig();
     }
@@ -79,40 +97,56 @@ bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& va
 
 QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
 {
-    if(idx.isValid() && role == Qt::DecorationRole) {
-        BaseClass::Index index = BaseClass::getIndex(idx.row());
-        
-        if(!BaseClass::isHeader(index) && BaseClass::m_categories[index.first].entries[index.second].disabled)
+    if (!idx.isValid()) return QVariant();
+
+    if(role == Qt::DecorationRole) {
+        DataItem *item = categoriesMapper()->itemFromRow(idx.row());
+        Q_ASSERT(item);
+
+        if (!item->isCategory() && !item->isEnabled()) {
             return koIcon("dialog-warning");
+        }
     }
-    
-    return BaseClass::data(idx, role);
+
+    return BaseKoIDCategorizedListModel::data(idx, role);
+}
+
+void KisCompositeOpListModel::addFavoriteEntry(const KoID &entry)
+{
+    DataItem *item = categoriesMapper()->addEntry(favoriteCategory().name(), entry);
+    item->setCheckable(false);
+}
+
+void KisCompositeOpListModel::removeFavoriteEntry(const KoID &entry)
+{
+    categoriesMapper()->removeEntry(favoriteCategory().name(), entry);
 }
 
 void KisCompositeOpListModel::readFavoriteCompositeOpsFromConfig()
 {
     KisConfig   config;
-    QStringList compositeOps = config.favoriteCompositeOps();
+    foreach (const QString &op, config.favoriteCompositeOps()) {
+        KoID entry = KoCompositeOpRegistry::instance().getKoID(op);
 
-    BaseClass::clearCategory(KoID("favorites"));
+        DataItem *item = categoriesMapper()->fetchOneEntry(entry);
+        if (item) {
+            item->setChecked(true);
+        }
 
-    for(QStringList::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i) {
-        KoID entry = KoCompositeOpRegistry::instance().getKoID(*i);
-        setData(BaseClass::indexOf(entry), Qt::Checked, Qt::CheckStateRole);
+        addFavoriteEntry(entry);
     }
 }
 
 void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
 {
-    QList<KoID> compositeOps;
+    QStringList list;
+    QVector<DataItem*> filteredItems =
+        categoriesMapper()->itemsForCategory(favoriteCategory().name());
 
-    if(BaseClass::getCategory(compositeOps, KoID("favorites"))) {
-        QStringList list;
-        KisConfig   config;
-
-        for(QList<KoID>::iterator i=compositeOps.begin(); i!=compositeOps.end(); ++i)
-            list.push_back(i->id());
-
-        config.setFavoriteCompositeOps(list);
+    foreach (DataItem *item, filteredItems) {
+        list.append(item->data()->id());
     }
+
+    KisConfig config;
+    config.setFavoriteCompositeOps(list);
 }

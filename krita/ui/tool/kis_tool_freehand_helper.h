@@ -67,7 +67,9 @@ public:
 
 protected:
 
-    virtual void createPainters(QVector<PainterInfo*> &painterInfos);
+    virtual void createPainters(QVector<PainterInfo*> &painterInfos,
+                                const QPointF &lastPosition,
+                                int lastTime);
 
     virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
                          const KisPaintInformation &pi);

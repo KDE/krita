@@ -25,37 +25,23 @@
 #include <QPixmap>
 #include <krita_export.h>
 #include "kis_categorized_list_model.h"
+#include "kis_paintop_factory.h"
 
 class KisPaintOpFactory;
 
 struct KRITAUI_EXPORT KisPaintOpInfo
 {
     KisPaintOpInfo() { }
-    KisPaintOpInfo(const KisPaintOpInfo& v):
-        id(v.id),  name(v.name), category(v.category), icon(v.icon), priority(v.priority) { }
-    
     KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority):
         id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
-    
+
     KisPaintOpInfo(const QString& _id):
         id(_id) { }
-    
-        KisPaintOpInfo(const QString& _id, const QString& _category) :
-            id(_id), category(_category) { }
-    
+
     bool operator==(const KisPaintOpInfo info) const{
-        return (info.id == id);// && (info.category == category); //((info.id == id) && (info.name == name) && (info.category == category) && (info.priority == priority));
+        return (info.id == id);
     }
-    
-    bool operator<( const KisPaintOpInfo& other ) const{
-        if(priority < other.priority)
-            return true;
-        else if((priority == other.priority) && (name < other.name))
-            return true;
-    
-        return false;
-    }
-    
+
     QString id;
     QString name;
     QString category;
@@ -63,18 +49,43 @@ struct KRITAUI_EXPORT KisPaintOpInfo
     qint32  priority;
 };
 
-class KRITAUI_EXPORT KisPaintOpListModel: public KisCategorizedListModel<QString,KisPaintOpInfo>
+struct PaintOpInfoToQStringConverter {
+    QString operator() (const KisPaintOpInfo &info) {
+        return info.name;
+    }
+};
+
+typedef KisCategorizedListModel<KisPaintOpInfo, PaintOpInfoToQStringConverter> BasePaintOpCategorizedListModel;
+
+class KRITAUI_EXPORT KisPaintOpListModel : public BasePaintOpCategorizedListModel
 {
-    typedef KisCategorizedListModel<QString,KisPaintOpInfo> BaseClass;
-    
 public:
+    KisPaintOpListModel(QObject *parent);
     virtual QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
     void fill(const QList<KisPaintOpFactory*>& list);
-    int indexOf(const KisPaintOpFactory* op) const;
-    using BaseClass::indexOf;
-    
-    virtual QString categoryToString (const QString&        val) const { return val;      }
-    virtual QString entryToString    (const KisPaintOpInfo& val) const { return val.name; }
+};
+
+class KRITAUI_EXPORT KisSortedPaintOpListModel : public KisSortedCategorizedListModel<KisPaintOpListModel>
+{
+public:
+    KisSortedPaintOpListModel(QObject *parent)
+        : KisSortedCategorizedListModel<KisPaintOpListModel>(parent),
+          m_model(new KisPaintOpListModel(this))
+    {
+        initializeModel(m_model);
+    }
+
+    void fill(const QList<KisPaintOpFactory*> &list) {
+        m_model->fill(list);
+    }
+
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+        return lessThanPriority(left, right, KisPaintOpFactory::categoryStable());
+    }
+
+private:
+    KisPaintOpListModel *m_model;
 };
 
 #endif //_KIS_PAINTOP_LIST_MODEL_H_

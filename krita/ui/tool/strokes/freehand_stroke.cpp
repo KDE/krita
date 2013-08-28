@@ -58,20 +58,17 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
     switch(d->type) {
     case Data::POINT:
-        *info->dragDistance = KisDistanceInformation(0,0);
-        info->painter->paintAt(d->pi1);
+        info->painter->paintAt(d->pi1, info->dragDistance);
         break;
     case Data::LINE:
-        *info->dragDistance =
-            info->painter->paintLine(d->pi1, d->pi2, *info->dragDistance);
+        info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
         break;
     case Data::CURVE:
-        *info->dragDistance =
-            info->painter->paintBezierCurve(d->pi1,
-                                            d->control1,
-                                            d->control2,
-                                            d->pi2,
-                                            *info->dragDistance);
+        info->painter->paintBezierCurve(d->pi1,
+                                        d->control1,
+                                        d->control2,
+                                        d->pi2,
+                                        info->dragDistance);
         break;
     case Data::POLYLINE:
         info->painter->paintPolyline(d->points, 0, d->points.size());

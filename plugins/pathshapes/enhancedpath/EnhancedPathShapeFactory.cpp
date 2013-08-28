@@ -107,7 +107,7 @@ KoShape *EnhancedPathShapeFactory::createShape(const KoProperties *params, KoDoc
 
     QVariant color;
     if (params->property("background", color))
-        shape->setBackground(new KoColorBackground(color.value<QColor>()));
+        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.value<QColor>())));
     QSizeF size = shape->size();
     if (size.width() > size.height())
         shape->setSize(QSizeF(100, 100 * size.height() / size.width()));

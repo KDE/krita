@@ -61,13 +61,15 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
     m_filterConfiguration = settings->filterConfig();
     m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
+
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisFilterOp::~KisFilterOp()
 {
 }
 
-qreal KisFilterOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
         return 1.0;
@@ -88,7 +90,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
 
@@ -108,8 +110,8 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    qint32 maskWidth = brush->maskWidth(scale, rotation, xFraction, yFraction, info);
-    qint32 maskHeight = brush->maskHeight(scale, rotation, xFraction, yFraction, info);
+    qint32 maskWidth = brush->maskWidth(scale, rotation, info);
+    qint32 maskHeight = brush->maskHeight(scale, rotation, info);
 
     // Filter the paint device
     QRect rect = QRect(0, 0, maskWidth, maskHeight);
@@ -148,5 +150,5 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
                                  0,0,
                                  maskWidth, maskHeight);
 
-    return spacing(scale);
+    return effectiveSpacing(maskWidth, maskHeight);
 }

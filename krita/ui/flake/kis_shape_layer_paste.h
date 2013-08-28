@@ -15,7 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_SHAPE_LAYER_PASTE_H
+#define KIS_SHAPE_LAYER_PASTE_H
 #include <KoDrag.h>
 #include <KoOdf.h>
 #include <KoOdfLoadingContext.h>
@@ -59,3 +60,4 @@ private:
     KoShapeLayer* m_container;
     KoShapeBasedDocumentBase* m_controller;
 };
+#endif

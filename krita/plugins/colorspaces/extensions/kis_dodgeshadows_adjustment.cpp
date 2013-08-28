@@ -22,6 +22,9 @@
 
 #include <kis_debug.h>
 #include <klocale.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 #include <KoColorConversions.h>
 #include <KoColorModelStandardIds.h>
@@ -30,14 +33,14 @@
 #include <KoColorTransformation.h>
 #include <KoID.h>
 
-template<typename _channel_type_>
+template<typename _channel_type_, typename traits>
 class KisDodgeShadowsAdjustment : public KoColorTransformation
 {
-    typedef KoBgrTraits<_channel_type_> RGBTrait;
+    typedef traits RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
- 	KisDodgeShadowsAdjustment(){};
+    KisDodgeShadowsAdjustment(){}
 
  	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
  	{
@@ -106,6 +109,7 @@ QList< QPair< KoID, KoID > > KisDodgeShadowsAdjustmentFactory::supportedModels()
     QList< QPair< KoID, KoID > > l;
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
     return l;
 }
@@ -118,11 +122,17 @@ KoColorTransformation* KisDodgeShadowsAdjustmentFactory::createTransformation(co
         return 0;
     }
     if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        adj = new KisDodgeShadowsAdjustment < float >();
-    } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisDodgeShadowsAdjustment< quint16 >();
+        adj = new KisDodgeShadowsAdjustment < float, KoRgbTraits < float > >();
+    }
+#ifdef HAVE_OPENEXR
+    else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
+        adj = new KisDodgeShadowsAdjustment< half, KoRgbTraits < half > >();
+    }
+#endif
+    else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
+        adj = new KisDodgeShadowsAdjustment< quint16, KoBgrTraits < quint16 > >();
     } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        adj = new KisDodgeShadowsAdjustment< quint8 >();
+        adj = new KisDodgeShadowsAdjustment< quint8, KoBgrTraits < quint8 > >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeShadowsAdjustmentFactory::createTransformation";
         return 0;

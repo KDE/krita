@@ -55,7 +55,7 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
 
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
-    rect->setBackground(new KoGradientBackground(gradient));
+    rect->setBackground(QSharedPointer<KoGradientBackground>(new KoGradientBackground(gradient)));
 
     return rect;
 }

@@ -87,7 +87,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter() || !m_isPresetValid) {
         return m_spacing;

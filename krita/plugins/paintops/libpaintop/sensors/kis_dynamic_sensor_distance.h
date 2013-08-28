@@ -44,7 +44,7 @@ public slots:
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
 private:
-    double m_time;
+    qreal m_measuredDistance;
     int m_length;
     bool m_periodic;
     bool m_firstPos;

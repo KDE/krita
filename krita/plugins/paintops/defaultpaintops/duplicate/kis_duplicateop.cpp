@@ -110,7 +110,7 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 
-qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return 1.0;
 
@@ -129,7 +129,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(info.pressure());
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
     QPointF pt = info.pos() - hotSpot;
@@ -155,8 +155,8 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
                           static_cast<qint32>(settings->position().y() - hotSpot.y()));
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0, xFraction, yFraction, info);
-    qint32 sh = brush->maskHeight(scale, 0.0, xFraction, yFraction, info);
+    qint32 sw = brush->maskWidth(scale, 0.0, info);
+    qint32 sh = brush->maskHeight(scale, 0.0, info);
 
     if (srcPoint.x() < 0)
         srcPoint.setX(0);
@@ -295,5 +295,5 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return spacing(scale);
+    return effectiveSpacing(dstRect.width(), dstRect.height());
 }

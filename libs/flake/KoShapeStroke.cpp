@@ -54,7 +54,7 @@ public:
 
 void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, const QPen &pen) const
 {
-    if (!pen.isCosmetic()) {
+    if (!pen.isCosmetic() && pen.style() != Qt::NoPen) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             QPainterPath path = pathShape->pathStroke(pen);

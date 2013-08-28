@@ -214,11 +214,5 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
     return m_chooser;
 }
 
-void KisPresetChooser::enableContextMenu(bool enable)
-{
-    m_chooser->enableContextMenu(enable);
-}
-
-
 #include "kis_preset_chooser.moc"
 

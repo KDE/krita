@@ -67,6 +67,9 @@ public:
     virtual int documentLastPage() const {
         return 1;
     }
+    virtual int documentCurrentPage() const {
+        return 1;
+    }
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 

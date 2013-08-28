@@ -54,10 +54,11 @@ public:
      * Paint at the subpixel point pos using the specified paint
      * information..
      *
-     * The distance between two calls of the paintAt is always specified by spacing;
-     * xSpacing and ySpacing is 1.0 by default, negative values causes infinite loops (it is checked by Q_ASSERT)
+     * The distance between two calls of the paintAt is always
+     * specified by spacing, which is automatically saved into the
+     * current distance information object
      */
-    virtual qreal paintAt(const KisPaintInformation& info) = 0;
+    void paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance);
 
     /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
@@ -68,9 +69,9 @@ public:
      * between p1 and p2 not covered because the currenlty set brush
      * has a spacing greater than that distance.
      */
-    virtual KisDistanceInformation paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             const KisDistanceInformation& savedDist = KisDistanceInformation());
+    virtual void paintLine(const KisPaintInformation &pi1,
+                           const KisPaintInformation &pi2,
+                           KisDistanceInformation *currentDistance);
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
@@ -79,11 +80,11 @@ public:
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
      * because the currenlty set brush has a spacing greater than that distance.
      */
-    virtual KisDistanceInformation paintBezierCurve(const KisPaintInformation &pi1,
-                                    const QPointF &control1,
-                                    const QPointF &control2,
-                                    const KisPaintInformation &pi2,
-                                    const KisDistanceInformation& savedDist = KisDistanceInformation());
+    virtual void paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance);
 
 
      /**
@@ -108,6 +109,11 @@ public:
     qreal currentRotation() const;
 
 protected:
+    friend class KisPaintInformation;
+    /**
+     * The implementation of painting of a dab
+     */
+    virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
 
     void setCurrentScale(qreal scale);
     /**
@@ -127,6 +133,10 @@ protected:
      * Return the paintdevice the painter this paintop is owned by
      */
     KisPaintDeviceSP source() const;
+
+private:
+    friend class KisPressureRotationOption;
+    void setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep);
 
 private:
     Private* const d;

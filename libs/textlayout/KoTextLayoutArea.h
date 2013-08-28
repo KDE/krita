@@ -212,7 +212,7 @@ private:
 
     void drawListItem(QPainter *painter, QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacter);
+    void decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacter, bool showSpellChecking);
 
     void drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 

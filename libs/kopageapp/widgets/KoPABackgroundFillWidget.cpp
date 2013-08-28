@@ -26,7 +26,7 @@
 #include <KoShape.h>
 #include <KoDocumentResourceManager.h>
 
-#include <KLocale>
+#include <klocale.h>
 
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 : KoFillConfigWidget(parent)

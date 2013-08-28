@@ -190,7 +190,7 @@ private:
 };
 
 template<class TModel>
-class KisSortedCategorizedListModel : public QSortFilterProxyModel
+class KRITAUI_EXPORT KisSortedCategorizedListModel : public QSortFilterProxyModel
 {
     typedef typename TModel::Entry_Type Entry_Type;
 

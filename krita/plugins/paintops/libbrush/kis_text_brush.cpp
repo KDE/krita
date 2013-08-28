@@ -92,6 +92,8 @@ public:
     }
 
     KisGbrBrush* firstBrush() const{
+        Q_ASSERT(m_text.size() > 0);
+        Q_ASSERT(m_brushesMap.size() > 0);
         return m_brushesMap.value(m_text.at(0));
     }
 
@@ -216,18 +218,18 @@ quint32 KisTextBrush::brushIndex(const KisPaintInformation& info) const
     return brushType() == MASK ? 0 : 1 + m_brushesPipe->brushIndex(info);
 }
 
-qint32 KisTextBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisTextBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
     return brushType() == MASK ?
-        KisBrush::maskWidth(scale, angle, info) :
-        m_brushesPipe->maskWidth(scale, angle, info);
+        KisBrush::maskWidth(scale, angle, subPixelX, subPixelY, info) :
+        m_brushesPipe->maskWidth(scale, angle, subPixelX, subPixelY, info);
 }
 
-qint32 KisTextBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisTextBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
 {
     return brushType() == MASK ?
-        KisBrush::maskHeight(scale, angle, info) :
-        m_brushesPipe->maskHeight(scale, angle, info);
+        KisBrush::maskHeight(scale, angle, subPixelX, subPixelY, info) :
+        m_brushesPipe->maskHeight(scale, angle, subPixelX, subPixelY, info);
 }
 
 void KisTextBrush::setAngle(qreal _angle)

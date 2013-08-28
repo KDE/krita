@@ -83,7 +83,8 @@ KisSelectionSP KisPainterBasedStrokeStrategy::activeSelection()
 
 void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
                                                  KisSelectionSP selection,
-                                                 bool hasIndirectPainting)
+                                                 bool hasIndirectPainting,
+                                                 const QString &indirectPaintingCompositeOp)
 {
     foreach(PainterInfo *info, m_painterInfos) {
         KisPainter *painter = info->painter;
@@ -92,7 +93,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
         m_resources->setupPainter(painter);
 
         if(hasIndirectPainting) {
-            painter->setCompositeOp(targetDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+            painter->setCompositeOp(targetDevice->colorSpace()->compositeOp(indirectPaintingCompositeOp));
             painter->setOpacity(OPACITY_OPAQUE_U8);
             painter->setChannelFlags(QBitArray());
         }
@@ -146,7 +147,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 
     m_transaction = new KisTransaction(name(), targetDevice);
 
-    initPainters(targetDevice, selection, hasIndirectPainting);
+    initPainters(targetDevice, selection, hasIndirectPainting, indirectPaintingCompositeOp());
 
     m_targetDevice = targetDevice;
     m_activeSelection = selection;

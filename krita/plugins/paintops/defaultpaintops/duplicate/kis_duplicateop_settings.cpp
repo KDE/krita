@@ -28,6 +28,7 @@
 #include <QDomDocument>
 
 #include <KoPointerEvent.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_image.h>
 #include <kis_brush_option_widget.h>
@@ -50,9 +51,13 @@ KisDuplicateOpSettings::~KisDuplicateOpSettings()
 
 bool KisDuplicateOpSettings::paintIncremental()
 {
-    return true;
+    return false;
 }
 
+QString KisDuplicateOpSettings::indirectPaintingCompositeOp() const
+{
+    return COMPOSITE_COPY;
+}
 
 QPointF KisDuplicateOpSettings::offset() const
 {

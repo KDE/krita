@@ -720,11 +720,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        foreach(KoPart* part, app->partList()) {
-            KoDocument *doc = part->document();
-            doc->setAutoSave(dialog->m_general->autoSaveInterval());
-            doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-            doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+        if (app) {
+            foreach(KoPart* part, app->partList()) {
+                KoDocument *doc = part->document();
+                doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+            }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
 

@@ -33,6 +33,7 @@ private slots:
     void testClear();
     void testCrop();
     void testThumbnail();
+    void testThumbnailDeviceWithOffset();
     void testCaching();
     void testRegion();
     void testPixel();

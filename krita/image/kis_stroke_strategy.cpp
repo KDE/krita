@@ -17,11 +17,13 @@
  */
 
 #include "kis_stroke_strategy.h"
+#include <KoCompositeOpRegistry.h>
 
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, QString name)
     : m_exclusive(false),
       m_needsIndirectPainting(false),
+      m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_id(id),
       m_name(name)
 {
@@ -77,6 +79,11 @@ bool KisStrokeStrategy::needsIndirectPainting() const
     return m_needsIndirectPainting;
 }
 
+QString KisStrokeStrategy::indirectPaintingCompositeOp() const
+{
+    return m_indirectPaintingCompositeOp;
+}
+
 QString KisStrokeStrategy::id() const
 {
     return m_id;
@@ -95,4 +102,9 @@ void KisStrokeStrategy::setExclusive(bool value)
 void KisStrokeStrategy::setNeedsIndirectPainting(bool value)
 {
     m_needsIndirectPainting = value;
+}
+
+void KisStrokeStrategy::setIndirectPaintingCompositeOp(const QString &id)
+{
+    m_indirectPaintingCompositeOp = id;
 }

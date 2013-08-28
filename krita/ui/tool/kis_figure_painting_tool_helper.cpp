@@ -46,10 +46,10 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const QString &name,
         new PainterInfo(new KisPainter(),
                         new KisDistanceInformation());
 
-    bool indirectPainting = m_resources->needsIndirectPainting();
-
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(indirectPainting, m_resources, m_painterInfo, name);
+        new FreehandStrokeStrategy(m_resources->needsIndirectPainting(),
+                                   m_resources->indirectPaintingCompositeOp(),
+                                   m_resources, m_painterInfo, name);
 
     m_strokeId = m_strokesFacade->startStroke(stroke);
 }

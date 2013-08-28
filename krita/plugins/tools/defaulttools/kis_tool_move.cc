@@ -123,8 +123,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         m_dragStart = pos;
         m_lastDragPos = m_dragStart;
 
-        if (m_strokeId) return;
-
         KisNodeSP node;
         KisImageSP image = this->image();
 
@@ -142,6 +140,17 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
         if((!node && !(node = currentNode())) || !node->isEditable()) return;
 
+        /**
+         * If the target node has changed, the stroke should be
+         * restarted. Otherwise just continue processing current node.
+         */
+        if (m_strokeId) {
+            if (node == m_currentlyProcessingNode) {
+                return;
+            } else {
+                endStroke();
+            }
+        }
 
         KisStrokeStrategy *strategy;
 
@@ -164,6 +173,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         }
 
         m_strokeId = image->startStroke(strategy);
+        m_currentlyProcessingNode = node;
     }
     else {
         KisTool::mousePressEvent(event);
@@ -217,6 +227,7 @@ void KisToolMove::endStroke()
     KisImageWSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
+    m_currentlyProcessingNode.clear();
 }
 
 void KisToolMove::cancelStroke()
@@ -226,6 +237,7 @@ void KisToolMove::cancelStroke()
     KisImageWSP image = currentImage();
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
+    m_currentlyProcessingNode.clear();
 }
 
 QWidget* KisToolMove::createOptionWidget()

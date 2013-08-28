@@ -106,11 +106,13 @@ public:
 
 public:
     FreehandStrokeStrategy(bool needsIndirectPainting,
+                           const QString &indirectPaintingCompositeOp,
                            KisResourcesSnapshotSP resources,
                            PainterInfo *painterInfo,
                            const QString &name);
 
     FreehandStrokeStrategy(bool needsIndirectPainting,
+                           const QString &indirectPaintingCompositeOp,
                            KisResourcesSnapshotSP resources,
                            QVector<PainterInfo*> painterInfos,
                            const QString &name);
@@ -118,7 +120,7 @@ public:
     void doStrokeCallback(KisStrokeJobData *data);
 
 private:
-    void init(bool needsIndirectPainting);
+    void init(bool needsIndirectPainting, const QString &indirectPaintingCompositeOp);
 };
 
 #endif /* __FREEHAND_STROKE_H */

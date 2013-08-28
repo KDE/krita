@@ -206,6 +206,11 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
     return !m_d->currentPaintOpPreset->settings()->paintIncremental();
 }
 
+QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
+{
+    return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+}
+
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
     return m_d->currentPaintOpPreset->settings()->isAirbrushing();

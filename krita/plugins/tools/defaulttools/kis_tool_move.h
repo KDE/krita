@@ -91,6 +91,7 @@ private:
     QPoint m_lastDragPos;
 
     KisStrokeId m_strokeId;
+    KisNodeSP m_currentlyProcessingNode;
 };
 
 

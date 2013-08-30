@@ -45,9 +45,8 @@ template<class TEntry, class TEntryToQStringConverter>
 class KRITAUI_EXPORT KisCategoriesMapper : public __CategoriesSignalsBase
 {
 public:
-    class DataItem;
 
-    class DataItem
+    class KRITAUI_EXPORT DataItem
     {
     public:
         DataItem(const QString &categoryName, KisCategoriesMapper *parent)

@@ -35,7 +35,7 @@ class QString;
  *
  * Options are disabled by default.
  */
-class PAINTOP_EXPORT KisPaintOpOption : public QObject
+class KRITAUI_EXPORT KisPaintOpOption : public QObject
 {
     Q_OBJECT
 public:

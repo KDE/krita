@@ -98,6 +98,9 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc
     kis_painting_assistants_manager.cc
     kis_paintop_box.cc
+    kis_paintop_option.cpp
+    kis_paintop_options_model.cpp
+    kis_paintop_options_widget.cpp
     kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
@@ -362,4 +365,7 @@ install( FILES
 #    kis_tool_types.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
+    kis_paintop_option.h
+    kis_paintop_options_model.h
+    kis_paintop_options_widget.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

@@ -49,15 +49,20 @@
 #include "kis_gmic.h"
 #include "dlg_gmic.h"
 
-K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
-K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
-
 #include "gmic.h"
 #include "kis_gmic_parser.h"
 #include "Component.h"
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
 #include "kis_gmic_processing_visitor.h"
+
+#include "kis_export_gmic_processing_visitor.h"
+#include "kis_gmic_command.h"
+#include "kis_import_gmic_processing_visitor.h"
+
+
+K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
+K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/gmic.rc"),m_gmicWidget(0)
@@ -102,7 +107,7 @@ void KisGmicPlugin::slotGmic()
 }
 
 
-void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
+void KisGmicPlugin::slotApplyGmicCommandOld(KisGmicFilterSetting* setting)
 {
     KisImageWSP image = m_view->image();
 
@@ -142,5 +147,64 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         applicator.end();
     }
 }
+
+void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
+{
+    QString actionName;
+    KisNodeSP node;
+
+    if (setting->inputLayerMode() == ACTIVE_LAYER)
+    {
+        //TODO: Undo string for gimp plug-in is G'MIC, I would like to use G'MIC+filtername
+        actionName = i18n("Gmic: Active Layer");
+        node = m_view->activeNode();
+    }
+    else
+    {
+        KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
+        return;
+    }
+
+    if (setting->outputMode() != IN_PLACE)
+    {
+        KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
+        return;
+    }
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+
+    KisProcessingApplicator applicator(m_view->image(), node,
+                                   KisProcessingApplicator::RECURSIVE,
+                                   emitSignals, actionName);
+
+    QList<KisNodeSP> kritaNodes;
+    kritaNodes.append(m_view->activeNode());
+
+    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
+    gmicLayers->assign(kritaNodes.size());
+
+
+    KisProcessingVisitorSP visitor;
+    visitor = new KisExportGmicProcessingVisitor(kritaNodes, gmicLayers);
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+
+    applicator.applyCommand(new KisGmicCommand(setting->gmicCommand(), gmicLayers));
+
+    visitor = new KisImportGmicProcessingVisitor(kritaNodes, gmicLayers);
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
+    applicator.end();
+
+    // TODO: applicator.applyCommand(new CleanTheData(images));
+
+    /*CleanTheData::redo() {
+        m_images->clear();
+    }/*/
+
+
+
+}
+
 
 #include "kis_gmic_plugin.moc"

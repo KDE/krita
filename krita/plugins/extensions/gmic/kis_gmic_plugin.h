@@ -39,6 +39,7 @@ private:
 
 private slots:
     void slotGmic();
+    void slotApplyGmicCommandOld(KisGmicFilterSetting* setting);
     void slotApplyGmicCommand(KisGmicFilterSetting* setting);
 };
 

@@ -603,10 +603,19 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
     // to work
     // if not change the current tool to the default tool
     if (!(canvasData->activationShapeId.isNull() && shapes.size() > 0)
-        && canvasData->activationShapeId != "flake/always"
-        && canvasData->activationShapeId != "flake/edit"
-        && ! types.contains(canvasData->activationShapeId)) {
-        switchTool(KoInteractionTool_ID, false);
+                && canvasData->activationShapeId != "flake/always"
+                && canvasData->activationShapeId != "flake/edit") {
+
+        bool currentToolWorks = false;
+        foreach (const QString &type, types) {
+            if (canvasData->activationShapeId.split(',').contains(type)) {
+                currentToolWorks = true;
+                break;
+            }
+        }
+        if (!currentToolWorks) {
+            switchTool(KoInteractionTool_ID, false);
+        }
     }
 
     emit q->toolCodesSelected(canvasData->canvas, types);
@@ -884,7 +893,15 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
             continue;
         if (helper->toolType() == KoToolFactoryBase::mainToolType())
             continue;
-        if (types.contains(helper->activationShapeId())) {
+
+        bool toolWillWork = false;
+        foreach (const QString &type, types) {
+            if (helper->activationShapeId().split(',').contains(type)) {
+                toolWillWork = true;
+                break;
+            }
+        }
+        if (toolWillWork) {
             toolType = helper->id();
             prio = helper->priority();
         }

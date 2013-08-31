@@ -36,7 +36,7 @@ KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters): QWidget(),m_filterMo
 
 KisGmicWidget::~KisGmicWidget()
 {
-
+    delete m_filterModel;
 }
 
 void KisGmicWidget::createMainLayout()

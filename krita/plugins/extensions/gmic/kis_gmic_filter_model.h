@@ -40,6 +40,7 @@ class KisGmicFilterModel : public QAbstractItemModel
      Q_OBJECT
 
 public:
+    // takes ownershop of component
     KisGmicFilterModel(Component * rootComponent, QObject *parent = 0);
     ~KisGmicFilterModel();
 

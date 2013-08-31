@@ -23,6 +23,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
+#include <kglobal.h>
+
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -60,11 +62,15 @@ K_EXPORT_PLUGIN(KisGmicPluginFactory("krita"))
 KisGmicPlugin::KisGmicPlugin(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/gmic.rc"),m_gmicWidget(0)
 {
-    qDebug() << "\tGMIC\tLoading GMIC";
     KisAction *action  = new KisAction(i18n("Apply G'Mic Action..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     addAction("gmic", action);
+
+    QString standardSettings("gmic_def.gmic");
+    KGlobal::dirs()->addResourceType("gmic_definitions", "data", "krita/gmic/");
+    m_gmicDefinitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings);
+
     connect(action, SIGNAL(triggered()), this, SLOT(slotGmic()));
 }
 
@@ -81,9 +87,14 @@ void KisGmicPlugin::slotGmic()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    KisGmicParser parser("gmic_def.gmic");
+    if (m_gmicWidget)
+    {
+        delete m_gmicWidget;
+    }
+
+    KisGmicParser parser(m_gmicDefinitionFilePath);
     Component * root = parser.createFilterTree();
-    KisGmicFilterModel * model = new KisGmicFilterModel(root);
+    KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes owner ship
     m_gmicWidget = new KisGmicWidget(model);
 
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
@@ -102,6 +113,7 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 
         if (setting->inputLayerMode() == ACTIVE_LAYER)
         {
+            //TODO: Undo string for gimp plug-in is G'MIC, I would like to use G'MIC+filtername
             actionName = i18n("Gmic: Active Layer");
             node = m_view->activeNode();
         }
@@ -110,9 +122,6 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
             KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
             return;
         }
-
-        qDebug() << "Input mode" << setting->inputLayerMode();
-        qDebug() << "Output mode" << setting->outputMode();
 
         if (setting->outputMode() != IN_PLACE)
         {
@@ -133,6 +142,5 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         applicator.end();
     }
 }
-
 
 #include "kis_gmic_plugin.moc"

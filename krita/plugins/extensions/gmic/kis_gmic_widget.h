@@ -30,6 +30,7 @@ class KisGmicWidget : public QWidget
     Q_OBJECT
 
 public:
+    // takes ownership of filter model
     KisGmicWidget(KisGmicFilterModel * filters);
     ~KisGmicWidget();
 

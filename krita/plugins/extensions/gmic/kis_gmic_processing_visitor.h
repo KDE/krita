@@ -30,6 +30,57 @@ class KisView2;
 class QString;
 class QImage;
 
+
+// manages planes of pixels for RGBA 32 float image used as working colorspace for gmic
+class KisPlaneManager
+{
+public:
+    KisPlaneManager():m_channelSize(0) {};
+    ~KisPlaneManager() { deletePlanes(); };
+
+    void releaseAlphaChannel()
+    {
+        // alphaPos == 3
+        delete m_planarBytes[3];
+        m_planarBytes[3] = 0;
+    }
+
+    void deletePlanes()
+    {
+        qDeleteAll(m_planarBytes);
+        m_planarBytes.clear();
+    }
+
+    void accumulate(unsigned int channelSize, bool alphaChannelEnabled = true)
+    {
+        setChannelSize(channelSize);
+        m_planarBytes.resize(4);
+
+        int channelCount = 4;
+        if (!alphaChannelEnabled)
+        {
+            m_planarBytes[3] = 0;
+            channelCount = 3;
+        }
+
+        for (int i=0;i<channelCount;i++)
+        {
+            m_planarBytes[i] = new quint8[channelSize * sizeof(float)];
+        }
+    }
+
+    void setChannelSize(unsigned int channelSize) { m_channelSize = channelSize; }
+    // count of float pixels per channel
+    unsigned int channelSize() {return m_channelSize;}
+
+public:
+    QVector<quint8 *> m_planarBytes;
+private:
+    unsigned int m_channelSize;
+
+};
+
+
 class KisGmicProcessingVisitor : public KisProcessingVisitor
 {
 public:
@@ -57,13 +108,21 @@ private:
     void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
     void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
     void convertToGmicImageOpti(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage);
 
+
+    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage, bool &preserveAlpha);
+
+    // re-align functions
+    void grayscale2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
+    void grayscaleAlpha2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
+    void rgb2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
+    void rgba2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
 
 
 private:
     QString m_gmicCommandStr;
     KisView2 * m_view;
+    KisPlaneManager m_planeManager;
 
 };
 

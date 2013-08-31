@@ -37,7 +37,7 @@ KisGmicFilterModel::KisGmicFilterModel(Component * rootComponent, QObject* paren
 
 KisGmicFilterModel::~KisGmicFilterModel()
 {
-
+    delete m_rootComponent;
 }
 
 

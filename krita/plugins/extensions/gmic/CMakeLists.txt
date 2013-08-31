@@ -34,7 +34,8 @@ if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
 
-
+set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
+install(FILES gmic_def.gmic DESTINATION ${GMIC_INSTALL_DIR} )
 
 ##
 # compile Krita plug-in and link static library in
@@ -79,3 +80,5 @@ install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
+# tests
+# add_subdirectory(tests)

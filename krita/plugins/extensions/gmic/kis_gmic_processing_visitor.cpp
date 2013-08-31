@@ -17,6 +17,7 @@
  */
 
 #include <QImage>
+#include <QDebug>
 
 #include <kis_gmic_processing_visitor.h>
 
@@ -191,6 +192,8 @@ void KisGmicProcessingVisitor::applyGmicToDevice(KisPaintDeviceSP src, QString g
     timer.start();
 
     convertToGmicImageOpti(src, gimg);
+    qDebug() << "INPUT" <<  gimg._width << gimg._height << gimg._depth << gimg._spectrum;
+
     //something happens here
     milisec = timer.elapsed() * 0.001;
     qDebug() << "convert to gmic; time: " << milisec << "sec";
@@ -233,7 +236,8 @@ void KisGmicProcessingVisitor::applyGmicToDevice(KisPaintDeviceSP src, QString g
     qDebug() << "apply gmic; time: " << milisec *  0.001 << "sec";
     timer.restart();
 
-    KisPaintDeviceSP dstDev = convertFromGmicImage(images._data[0]);
+    bool preserveAlpha = false;
+    KisPaintDeviceSP dstDev = convertFromGmicImage(images._data[0], preserveAlpha);
 
     milisec = timer.elapsed();
     qDebug() << "convert from gmic; time: " << milisec * 0.001 << "sec";
@@ -252,6 +256,12 @@ void KisGmicProcessingVisitor::applyGmicToDevice(KisPaintDeviceSP src, QString g
     // unselected pixels are not overwritten.
     KisPainter gc(src);
     gc.setCompositeOp(COMPOSITE_COPY);
+
+    // preserve alpha if grayscale or RGB output
+    if (preserveAlpha)
+    {
+        gc.setLockAlpha(true);
+    }
     gc.bitBlt(rc.topLeft(), dstDev, rc);
     gc.end();
 
@@ -315,55 +325,6 @@ void KisGmicProcessingVisitor::convertFromQImage(const QImage& image, CImg< floa
 }
 
 
-KisPaintDeviceSP KisGmicProcessingVisitor::convertFromGmicImage(CImg< float >& gmicImage)
-{
-    const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
-                                                                                                Float32BitsColorDepthID.id(),
-                                                                                                KoColorSpaceRegistry::instance()->rgb8()->profile());
-
-    KisPaintDeviceSP dev = new KisPaintDevice(rgbaFloat32bitcolorSpace);
-    // TODO: let's reuse planes from readPlanarBytes ;)
-    int channelBytes = gmicImage._width * gmicImage._height * sizeof(float);
-
-    QVector< quint8 * > planes;
-    planes.resize(rgbaFloat32bitcolorSpace->channelCount());
-    for (quint32 i=0; i<rgbaFloat32bitcolorSpace->channelCount();i++)
-    {
-        planes[i] = new quint8[channelBytes];
-    }
-
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    quint8 * alphaChannelBytes = planes[3];
-
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-    int pos = 0;
-
-    float r,g,b,a;
-    for (unsigned int y = 0; y < gmicImage._height; y++)
-    {
-        for (unsigned int x = 0; x < gmicImage._width; x++){
-            pos = y * gmicImage._width + x;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = gmicImage._data[pos]                / 255.0;
-            g = gmicImage._data[pos + greenOffset]  / 255.0;
-            b = gmicImage._data[pos + blueOffset]   / 255.0;
-            a = gmicImage._data[pos + alphaOffset]  / 255.0;
-
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
-        }
-    }
-
-    dev->writePlanarBytes(planes, 0, 0, gmicImage._width, gmicImage._height);
-    return dev;
-}
 
 
 void KisGmicProcessingVisitor::convertToGmicImage(KisPaintDeviceSP dev, CImg< float >& gmicImage)
@@ -423,15 +384,16 @@ void KisGmicProcessingVisitor::convertToGmicImageOpti(KisPaintDeviceSP dev, CImg
     dev->convertTo(rgbaFloat32bitcolorSpace);
 
     QRect rc = dev->exactBounds();
-    QVector<quint8 *> planarBytes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+    m_planeManager.m_planarBytes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+    m_planeManager.setChannelSize(rc.width() * rc.height());
 
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
-    quint8 * redChannelBytes = planarBytes.at(KoRgbF32Traits::red_pos);
-    quint8 * greenChannelBytes = planarBytes.at(KoRgbF32Traits::green_pos);
-    quint8 * blueChannelBytes = planarBytes.at(KoRgbF32Traits::blue_pos);
-    quint8 * alphaChannelBytes = planarBytes.at(KoRgbF32Traits::alpha_pos);
+    quint8 * redChannelBytes   = m_planeManager.m_planarBytes.at(KoRgbF32Traits::red_pos);
+    quint8 * greenChannelBytes = m_planeManager.m_planarBytes.at(KoRgbF32Traits::green_pos);
+    quint8 * blueChannelBytes  = m_planeManager.m_planarBytes.at(KoRgbF32Traits::blue_pos);
+    quint8 * alphaChannelBytes = m_planeManager.m_planarBytes.at(KoRgbF32Traits::alpha_pos);
 
     unsigned int channelSize = sizeof(float);
 
@@ -440,6 +402,195 @@ void KisGmicProcessingVisitor::convertToGmicImageOpti(KisPaintDeviceSP dev, CImg
     memcpy(gmicImage._data + blueOffset     ,blueChannelBytes   ,gmicImage._width * gmicImage._height * channelSize);
     memcpy(gmicImage._data + alphaOffset    ,alphaChannelBytes  ,gmicImage._width * gmicImage._height * channelSize);
 
-    qDeleteAll(planarBytes);
-    planarBytes.clear();
+}
+
+
+KisPaintDeviceSP KisGmicProcessingVisitor::convertFromGmicImage(CImg< float >& gmicImage, bool &preserveAlpha)
+{
+    const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                                                                Float32BitsColorDepthID.id(),
+                                                                                                KoColorSpaceRegistry::instance()->rgb8()->profile());
+
+    KisPaintDeviceSP dev = new KisPaintDevice(rgbaFloat32bitcolorSpace);
+
+    QVector< quint8 * > planes = m_planeManager.m_planarBytes;
+
+    unsigned int channelBytes = gmicImage._width * gmicImage._height * sizeof(float);
+    if (channelBytes == m_planeManager.channelSize() * sizeof(float))
+    {
+        // ok, we can reuse read plannar bytes here
+        qDebug() << "[krita] Re-using read plannar bytes";
+        if ((gmicImage._spectrum == 1) || (gmicImage._spectrum == 3))
+        {
+            qDebug() << "[krita] Releasing alpha channel";
+            // we can delete alpha channel
+            m_planeManager.releaseAlphaChannel();
+        }
+
+    }
+    else
+    {
+        // re-accumullate buffers, output image has different dimension..not sure if this ever happens
+        m_planeManager.deletePlanes();
+        bool alphaChannelEnabled = ((gmicImage._spectrum == 2) || (gmicImage._spectrum == 4));
+        m_planeManager.accumulate(alphaChannelEnabled);
+    }
+
+    switch (gmicImage._spectrum)
+    {
+        case 1:
+        {
+            grayscale2rgb(gmicImage, planes);
+            preserveAlpha = true;
+            break;
+        }
+        case 2:
+        {
+            grayscaleAlpha2rgba(gmicImage, planes);
+            break;
+        }
+        case 3:
+        {
+            rgb2rgb(gmicImage, planes);
+            preserveAlpha = true;
+            break;
+        }
+        case 4:
+            rgba2rgba(gmicImage, planes);
+            break;
+        default:
+        {
+            qDebug() << "Unsupported gmic output format : " <<  gmicImage._width << gmicImage._height << gmicImage._depth << gmicImage._spectrum;
+        }
+    }
+
+    dev->writePlanarBytes(planes, 0, 0, gmicImage._width, gmicImage._height);
+
+    // release planes
+    m_planeManager.deletePlanes();
+    return dev;
+}
+
+void KisGmicProcessingVisitor::grayscale2rgb(CImg< float >& gmicImage, QVector< quint8 * > &planes)
+{
+    quint8 * redChannelBytes = planes[0];
+    quint8 * greenChannelBytes = planes[1];
+    quint8 * blueChannelBytes = planes[2];
+    // alphaChannel will be preserved
+
+    int pos = 0;
+    float r,g,b;
+
+    // iterate over gmic image and fill plane buffers
+    for (unsigned int y = 0; y < gmicImage._height; y++)
+    {
+        for (unsigned int x = 0; x < gmicImage._width; x++)
+        {
+            pos = y * gmicImage._width + x;
+            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
+            r = g = b = gmicImage._data[pos]                / 255.0;
+            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
+            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
+            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
+        }
+    }
+    // TODO: check performance if memcpy whole channel is faster
+}
+
+
+void KisGmicProcessingVisitor::grayscaleAlpha2rgba(CImg< float >& gmicImage, QVector< quint8 * > &planes)
+{
+    quint8 * redChannelBytes = planes[0];
+    quint8 * greenChannelBytes = planes[1];
+    quint8 * blueChannelBytes = planes[2];
+    quint8 * alphaChannelBytes = planes[3];
+
+    int pos = 0;
+    int alphaOffset = gmicImage._width * gmicImage._height;
+    float r,g,b,a;
+
+    // iterate over gmic image and fill plane buffers
+    for (unsigned int y = 0; y < gmicImage._height; y++)
+    {
+        for (unsigned int x = 0; x < gmicImage._width; x++){
+            pos = y * gmicImage._width + x;
+
+            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
+            r = g = b = gmicImage._data[pos]                / 255.0;
+            a = gmicImage._data[pos + alphaOffset]   / 255.0;
+
+            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
+            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
+            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
+            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
+        }
+    }
+}
+
+
+void KisGmicProcessingVisitor::rgb2rgb(CImg< float >& gmicImage, QVector< quint8 * > &planes)
+{
+    quint8 * redChannelBytes = planes[0];
+    quint8 * greenChannelBytes = planes[1];
+    quint8 * blueChannelBytes = planes[2];
+    // alphaChannel will be preserved
+
+    int pos = 0;
+    int greenOffset = gmicImage._width * gmicImage._height;
+    int blueOffset = greenOffset * 2;
+
+    float r,g,b;
+
+    // iterate over gmic image and fill plane buffers
+    for (unsigned int y = 0; y < gmicImage._height; y++)
+    {
+        for (unsigned int x = 0; x < gmicImage._width; x++)
+        {
+            pos = y * gmicImage._width + x;
+
+            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
+            r = gmicImage._data[pos]                / 255.0;
+            g = gmicImage._data[pos + greenOffset]  / 255.0;
+            b = gmicImage._data[pos + blueOffset]   / 255.0;
+
+            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
+            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
+            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
+        }
+    }
+}
+
+void KisGmicProcessingVisitor::rgba2rgba(CImg< float >& gmicImage, QVector< quint8 * > &planes)
+{
+    quint8 * redChannelBytes = planes[0];
+    quint8 * greenChannelBytes = planes[1];
+    quint8 * blueChannelBytes = planes[2];
+    quint8 * alphaChannelBytes = planes[3];
+
+    int pos = 0;
+    int greenOffset = gmicImage._width * gmicImage._height;
+    int blueOffset = greenOffset * 2;
+    int alphaOffset = greenOffset * 3;
+
+    float r,g,b,a;
+
+    // iterate over gmic image and fill plane buffers
+    for (unsigned int y = 0; y < gmicImage._height; y++)
+    {
+        for (unsigned int x = 0; x < gmicImage._width; x++)
+        {
+            pos = y * gmicImage._width + x;
+
+            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
+            r = gmicImage._data[pos]                / 255.0;
+            g = gmicImage._data[pos + greenOffset]  / 255.0;
+            b = gmicImage._data[pos + blueOffset]   / 255.0;
+            a = gmicImage._data[pos + alphaOffset]  / 255.0;
+
+            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
+            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
+            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
+            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
+        }
+    }
 }

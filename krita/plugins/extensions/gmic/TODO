@@ -2,10 +2,9 @@
 [DONE] * add support for missing parameters (int, float, choice, note supported)
 * add support for layer modes: so far current layer is filtered
     * modes like current layer+above, all visible, etc.
+* UNDO does not work correctly sometimes
 * implement preview and it's modes
+* implement progress
 * figure out on-line updates for filter defintions
 * separate included gmic code to stand-alone library and link dynamically 
-
-
-
 

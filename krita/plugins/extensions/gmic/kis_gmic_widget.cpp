@@ -19,6 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <qdialogbuttonbox.h>
+#include <QLabel>
 #include <QDebug>
 
 #include <QMetaType>
@@ -92,24 +93,32 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
 
     QVariant var = index.data(WidgetRole);
 
+    Command * gmicCommand(0);
     if (!var.isValid())
     {
+        gmicCommand = 0;
         qDebug() << "Invalid QVariant, invalid command? : ';' ";
     }
+    else
+    {
+        gmicCommand = var.value<Command *>();
+    }
 
-    Command * gmicCommand = var.value<Command *>();
+    m_filterConfigLayout->removeWidget(m_filterOptions);
+    delete m_filterOptions;
 
     if (gmicCommand)
     {
-        m_filterConfigLayout->removeWidget(m_filterOptions);
-        delete m_filterOptions;
-
         m_filterOptions = new KisGmicSettingsWidget(gmicCommand);
-        m_filterConfigLayout->addWidget(m_filterOptions,m_filterOptionsRow,m_filterOptionsColumn);
-        m_filterConfigLayout->update();
-    } else {
-        qDebug() << "Command is null";
     }
+    else
+    {
+        m_filterOptions = new QLabel("Select a filter...");
+    }
+
+    m_filterConfigLayout->addWidget(m_filterOptions,m_filterOptionsRow,m_filterOptionsColumn);
+    m_filterConfigLayout->update();
+
 
      //find out the hierarchy level of the selected item
      int hierarchyLevel=1;
@@ -142,7 +151,7 @@ void KisGmicWidget::applyFilterSlot()
     }
     else
     {
-        qDebug() << "InValid settings!";
+        qDebug() << "Filter is not selected!";
     }
 
 }

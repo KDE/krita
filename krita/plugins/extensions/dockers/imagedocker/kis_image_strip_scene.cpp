@@ -92,7 +92,10 @@ void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     }
     
     if(isSelected())
-        painter->fillRect(boundingRect(), Qt::Dense5Pattern);
+    {
+        QPen pen(palette().color(QPalette::Active, QPalette::Highlight), 3);
+        painter->setPen(pen);
+    }
     
     painter->drawRect(boundingRect());
 }

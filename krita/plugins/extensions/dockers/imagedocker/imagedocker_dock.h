@@ -75,6 +75,9 @@ private slots:
     void slotCloseZoomPopup();
     void slotChangeRoot(const QString& path);
     
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+    
 private:
     void addCurrentPathToHistory();
     void updatePath(const QString& path);

@@ -473,12 +473,7 @@ KisGbrBrush* KisGbrBrush::clone() const
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "gbr_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", QString::number(spacing()));
-    e.setAttribute("angle", QString::number(angle()));
-    e.setAttribute("scale", QString::number(scale()));
+    predefinedBrushToXML("gdr_brush", e);
     KisBrush::toXML(d, e);
 }
 

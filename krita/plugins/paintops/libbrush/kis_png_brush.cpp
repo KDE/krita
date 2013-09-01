@@ -22,10 +22,8 @@
 #include <QFileInfo>
 #include <QImageReader>
 
-struct KisPngBrush::Private {
-};
-
-KisPngBrush::KisPngBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisPngBrush::KisPngBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);

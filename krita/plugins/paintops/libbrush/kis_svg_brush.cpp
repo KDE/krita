@@ -24,10 +24,8 @@
 #include <QImageReader>
 #include <QSvgRenderer>
 
-struct KisSvgBrush::Private {
-};
-
-KisSvgBrush::KisSvgBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisSvgBrush::KisSvgBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);

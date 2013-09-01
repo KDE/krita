@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,48 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_png_brush_factory.h"
+#include "kis_predefined_brush_factory.h"
 
 #include <QDomDocument>
-
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
-
 #include "kis_brush_server.h"
 
 
-KisPngBrushFactory::KisPngBrushFactory()
+KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
+    : m_id(brushType)
 {
 }
 
-KisBrushSP KisPngBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+QString KisPredefinedBrushFactory::id() const
 {
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
+    return m_id;
+}
+
+KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+{
+    KoResourceServer<KisBrush> *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
     KisBrushSP brush = rServer->resourceByFilename(brushFileName);
-    if(!brush)
-        return 0;
-    
+
+    //Fallback for files that still use the old format
+    if(!brush) {
+        QFileInfo info(brushFileName);
+        brush = rServer->resourceByFilename(info.fileName());
+    }
+
+    if(!brush) {
+        brush = rServer->resources().first();
+    }
+
+    Q_ASSERT(brush);
+
     double spacing = brushDefinition.attribute("spacing", "0.25").toDouble();
     brush->setSpacing(spacing);
+
+    double angle = brushDefinition.attribute("angle", "0.0").toDouble();
+    brush->setAngle(angle);
+
+    double scale = brushDefinition.attribute("scale", "1.0").toDouble();
+    brush->setScale(scale);
 
     return brush;
 }

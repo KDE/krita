@@ -181,8 +181,18 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     if (m_buttonGroup->checkedId() == AUTOBRUSH){
         m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
-    }else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH){
+    } else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH) {
         m_brushChooser->setBrushSize(dxPixels, dyPixels);
+    } else if (m_buttonGroup->checkedId() == CUSTOMBRUSH ||
+               m_buttonGroup->checkedId() == CLIPBOARDBRUSH) {
+
+        // switch to the predefined brush and resize it
+        KisBrushSP brush = this->brush();
+        if (brush) {
+            setCurrentWidget(m_brushChooser);
+            m_brushChooser->setBrush(brush);
+            m_brushChooser->setBrushSize(dxPixels, dyPixels);
+        }
     }
 }
 

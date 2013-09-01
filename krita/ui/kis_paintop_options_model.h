@@ -50,7 +50,8 @@ class KRITAUI_EXPORT KisPaintOpOptionListModel : public BaseOptionCategorizedLis
 public:
     KisPaintOpOptionListModel(QObject *parent);
     void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);
-    virtual bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
+    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_

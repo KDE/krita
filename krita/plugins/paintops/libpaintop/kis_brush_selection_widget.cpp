@@ -95,7 +95,7 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrushSP KisBrushSelectionWidget::brush()
+KisBrushSP KisBrushSelectionWidget::brush() const
 {
     KisBrushSP theBrush;
     switch (m_buttonGroup->checkedId()) {
@@ -189,17 +189,14 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 
 QSizeF KisBrushSelectionWidget::brushSize() const
 {
-    switch (m_buttonGroup->checkedId()) {
-        case AUTOBRUSH: {
-            return m_autoBrushWidget->brushSize();
-        }
-        case PREDEFINEDBRUSH: {
-            return m_brushChooser->brushSize();
-        }
-        default: {
-            break;
-        }
+    if (m_buttonGroup->checkedId() == AUTOBRUSH) {
+        return m_autoBrushWidget->brushSize();
+    } else if (KisBrushSP brush = this->brush()) {
+        qreal width = brush->width() * brush->scale();
+        qreal height = brush->height() * brush->scale();
+        return QSizeF(width, height);
     }
+
     // return neutral value
     return QSizeF(1.0, 1.0);
 }

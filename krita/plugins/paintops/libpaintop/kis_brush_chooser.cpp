@@ -271,12 +271,5 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     m_slScale->setValue(newScale);
 }
 
-QSizeF KisBrushChooser::brushSize() const
-{
-    qreal width = m_brush->width() * m_brush->scale();
-    qreal height = m_brush->height() * m_brush->scale();
-    return QSizeF(width, height);
-}
-
 
 #include "kis_brush_chooser.moc"

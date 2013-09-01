@@ -46,7 +46,6 @@ public:
 
     void setBrush(KisBrushSP _brush);
     void setBrushSize(qreal xPixels,qreal yPixels);
-    QSizeF brushSize() const;
 
 private slots:
 

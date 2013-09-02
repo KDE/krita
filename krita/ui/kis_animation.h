@@ -41,6 +41,7 @@ public:
     void setWidth(qint32 w);
     void setResolution(double res);
     void setBgColor(KoColor bgColor);
+    void setLocation(QString location);
 
     QString name() const;
     QString author() const;
@@ -52,6 +53,7 @@ public:
     qint32 height() const;
     double resolution() const;
     KoColor bgColor() const;
+    QString location();
 
     void load(const QString &url);
     void save(const QString &url);
@@ -66,6 +68,7 @@ private:
     qint32 m_width, m_height;
     double m_resolution;
     KoColor m_bgColor;
+    QString m_location;
 };
 
 #endif // KIS_ANIMATION_H

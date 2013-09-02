@@ -129,6 +129,16 @@ KoColor KisAnimation::bgColor() const
     return this->m_bgColor;
 }
 
+void KisAnimation::setLocation(QString location)
+{
+    m_location = location;
+}
+
+QString KisAnimation::location()
+{
+    return m_location;
+}
+
 void KisAnimation::load(const QString &url)
 {
 

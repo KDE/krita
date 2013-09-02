@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>611</width>
-     <height>91</height>
+     <height>116</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -29,6 +29,13 @@
        <widget class="QLabel" name="lblAnimationName">
         <property name="text">
          <string>Animation name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblLocation">
+        <property name="text">
+         <string>Location:</string>
         </property>
        </widget>
       </item>
@@ -57,6 +64,20 @@
        <widget class="QLineEdit" name="txtAnimationName"/>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLineEdit" name="txtLocation"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="locationButton">
+          <property name="text">
+           <string>Change...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QLineEdit" name="txtAuthor"/>
       </item>
       <item>
@@ -70,7 +91,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>100</y>
+     <y>120</y>
      <width>611</width>
      <height>111</height>
     </rect>
@@ -84,7 +105,7 @@
       <x>100</x>
       <y>20</y>
       <width>441</width>
-      <height>81</height>
+      <height>88</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -162,7 +183,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>220</y>
+     <y>230</y>
      <width>611</width>
      <height>141</height>
     </rect>

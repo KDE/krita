@@ -55,6 +55,7 @@ private slots:
     void heightUnitChanged(int index);
     void widthChanged(double value);
     void heightChanged(double value);
+    void changeLocation();
 
 private:
     quint8 backgroundOpacity();

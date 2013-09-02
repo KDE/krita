@@ -65,6 +65,7 @@
 #include "widgets/squeezedcombobox.h"
 #include "kis_animation.h"
 #include <stdlib.h>
+#include <QDesktopServices>
 
 KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *document, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &animationName)
     : WdgAnimationSelector(parent)
@@ -72,6 +73,8 @@ KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *doc
     setObjectName("KisAnimationSelector");
     m_document = document;
     txtAnimationName->setText(animationName);
+
+    txtLocation->setText(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     inputWidth->setValue(defWidth);
@@ -109,12 +112,25 @@ KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *doc
     connect(inputHeight, SIGNAL(valueChanged(double)), this, SLOT(heightChanged(double)));
     connect(inputWidth, SIGNAL(valueChanged(double)), this, SLOT(widthChanged(double)));
     connect(bnCreateAnimation, SIGNAL(clicked()), this, SLOT(createAnimation()));
+    connect(locationButton, SIGNAL(clicked()), this, SLOT(changeLocation()));
 }
 
 KisAnimationSelector::~KisAnimationSelector()
 {
     qDeleteAll(m_predefined);
     m_predefined.clear();
+}
+
+void KisAnimationSelector::changeLocation()
+{
+    QFileDialog folderSelector;
+    folderSelector.setFileMode(QFileDialog::Directory);
+    folderSelector.setOption(QFileDialog::ShowDirsOnly);
+    folderSelector.setDirectory(txtLocation->text());
+
+    QString location = folderSelector.getExistingDirectory();
+
+    txtLocation->setText(location);
 }
 
 void KisAnimationSelector::createAnimation()
@@ -141,6 +157,7 @@ void KisAnimationSelector::createAnimation()
     animation->setHeight(height);
     animation->setResolution(resolution);
     animation->setBgColor(bgColor);
+    animation->setLocation(txtLocation->text());
 
     static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation); 
 

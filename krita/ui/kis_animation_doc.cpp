@@ -161,14 +161,14 @@ void KisAnimationDoc::preSaveAnimation()
 
     KUrl url = this->documentPart()->url();
 
-    QString filename = url.directory() + "/" + animation->name() + ".kranim";
+    QString filename = animation->location() + "/" + animation->name() + ".kranim";
 
     QFile* fout = new QFile(filename);
 
     int i = 1;
 
     while(fout->exists()) {
-        filename = url.directory() + "/" + animation->name() + "("+ QString::number(i) +").kranim";
+        filename = animation->location() + "/" + animation->name() + "("+ QString::number(i) +").kranim";
         i++;
         fout = new QFile(filename);
     }

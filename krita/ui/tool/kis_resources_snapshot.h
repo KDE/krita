@@ -51,6 +51,7 @@ public:
     KisNodeSP currentNode() const;
     KisImageWSP image() const;
     bool needsIndirectPainting() const;
+    QString indirectPaintingCompositeOp() const;
 
     bool needsAirbrushing() const;
     int airbrushingRate() const;

@@ -811,6 +811,11 @@ set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
 )
 
+# libodfreader
+set(KOODFREADER_INCLUDES
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
+)
+
  #########################################
 ##########################################
 ## Detect which products can be compile ##

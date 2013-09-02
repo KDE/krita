@@ -19,8 +19,8 @@
 #include "kis_paint_information.h"
 
 #include <QDomElement>
+#include <QScopedPointer>
 
-#include <boost/scoped_ptr.hpp>
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 
@@ -66,7 +66,7 @@ struct KisPaintInformation::Private {
     qreal perspective;
     int time;
 
-    boost::scoped_ptr<qreal> drawingAngleOverride;
+    QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     void registerDistanceInfo(KisDistanceInformation *di) {

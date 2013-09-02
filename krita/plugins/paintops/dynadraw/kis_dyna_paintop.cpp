@@ -78,6 +78,7 @@ KisDynaPaintOp::~KisDynaPaintOp()
 void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
     Q_UNUSED(currentDistance);
+    Q_UNUSED(pi2);
     if (!painter()) return;
 
     if (!m_dab) {

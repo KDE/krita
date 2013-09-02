@@ -22,10 +22,8 @@
 #include <QFileInfo>
 #include <QImageReader>
 
-struct KisPngBrush::Private {
-};
-
-KisPngBrush::KisPngBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisPngBrush::KisPngBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
@@ -69,9 +67,6 @@ QString KisPngBrush::defaultFileExtension() const
 
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "png_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", spacing());
+    predefinedBrushToXML("png_brush", e);
     KisBrush::toXML(d, e);
 }

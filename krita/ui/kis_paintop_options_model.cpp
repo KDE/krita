@@ -32,9 +32,31 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int w
 
     if (option->isCheckable()) {
         item->setCheckable(true);
+        item->setChecked(option->isChecked());
     }
 
     categoriesMapper()->expandAllCategories();
+}
+
+QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
+{
+    if (!idx.isValid()) return false;
+
+    DataItem *item = categoriesMapper()->itemFromRow(idx.row());
+    Q_ASSERT(item);
+
+    // Lazy fetching of the real checked value (there are no notifications
+    // when changing the pointop preset)
+
+    if (role == Qt::CheckStateRole && item->isCheckable()) {
+        bool realChecked = item->data()->option->isChecked();
+
+        if (realChecked != item->isChecked()) {
+            item->setChecked(realChecked);
+        }
+    }
+
+    return BaseOptionCategorizedListModel::data(idx, role);
 }
 
 bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
@@ -44,7 +66,7 @@ bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
 
-    if (role == Qt::CheckStateRole && item->checkable()) {
+    if (role == Qt::CheckStateRole && item->isCheckable()) {
         item->data()->option->setChecked(value.toInt() == Qt::Checked);
     }
 

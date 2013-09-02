@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PNG_BRUSH_FACTORY
-#define KIS_PNG_BRUSH_FACTORY
+
+#ifndef __KIS_PREDEFINED_BRUSH_FACTORY_H
+#define __KIS_PREDEFINED_BRUSH_FACTORY_H
 
 #include <QString>
 #include <QDomElement>
@@ -24,35 +25,17 @@
 #include "kis_brush_factory.h"
 #include "kis_brush.h"
 
-/**
- * A brush factory can create a new brush instance based
- * on a properties object that contains a serialized representation
- * of the object.
- */
-class BRUSH_EXPORT KisPngBrushFactory : public KisBrushFactory
+
+class KisPredefinedBrushFactory : public KisBrushFactory
 {
-
 public:
+    KisPredefinedBrushFactory(const QString &brushType);
 
-    /**
-     * Creating the KisBrushFactory will load all png
-     * brushes.
-     */
-    KisPngBrushFactory();
-    virtual ~KisPngBrushFactory() {}
-
-    virtual QString id() const {
-        return "png_brush";
-    }
-
-    /**
-     * Create a new brush from the given data or return an existing KisBrush
-     * object. If this call leads to the creation of a resource, it should be
-     * added to the resource provider, too.
-     */
+    QString id() const;
     KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition);
 
-
+private:
+    const QString m_id;
 };
 
-#endif
+#endif /* __KIS_PREDEFINED_BRUSH_FACTORY_H */

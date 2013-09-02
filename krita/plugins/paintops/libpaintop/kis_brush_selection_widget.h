@@ -46,7 +46,7 @@ public:
 
     ~KisBrushSelectionWidget();
 
-    KisBrushSP brush();
+    KisBrushSP brush() const;
 
     void setAutoBrush(bool on);
     void setPredefinedBrushes(bool on);

@@ -33,9 +33,8 @@ class QListWidgetItem;
  * the effect of tablet pressure, tilt and rotation and
  * other paintop settings.
  */
-class PAINTOP_EXPORT KisPaintOpOptionsWidget : public KisPaintOpSettingsWidget
+class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisPaintOpSettingsWidget
 {
-
     Q_OBJECT
 
 public:

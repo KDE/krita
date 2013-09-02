@@ -30,6 +30,8 @@ private slots:
     void testSelection();
     void testCropUpdateBySelection();
     void testSelectionParent();
+
+    void testDeferredOffsetInitialization();
 };
 
 #endif

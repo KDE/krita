@@ -23,8 +23,9 @@
 
 #include <kis_categorized_list_model.h>
 #include <kis_paintop_option.h>
+#include <krita_export.h>
 
-struct KisOptionInfo
+struct KRITAUI_EXPORT KisOptionInfo
 {
     KisOptionInfo() { }
     KisOptionInfo(KisPaintOpOption* o, int i): option(o), index(i) { }
@@ -33,7 +34,7 @@ struct KisOptionInfo
     int               index;
 };
 
-struct OptionInfoToQStringConverter {
+struct KRITAUI_EXPORT OptionInfoToQStringConverter {
     QString operator() (const KisOptionInfo &info) {
         return info.option->label();
     }
@@ -44,12 +45,13 @@ typedef KisCategorizedListModel<KisOptionInfo, OptionInfoToQStringConverter> Bas
 /**
  * This model can be use to show a list of visible composite op in a list view.
  */
-class KisPaintOpOptionListModel : public BaseOptionCategorizedListModel
+class KRITAUI_EXPORT KisPaintOpOptionListModel : public BaseOptionCategorizedListModel
 {
 public:
     KisPaintOpOptionListModel(QObject *parent);
     void addPaintOpOption(KisPaintOpOption* option, int widgetIndex);
-    virtual bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
+    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_

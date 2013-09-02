@@ -83,7 +83,7 @@ bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& va
 
 
     if(role == Qt::CheckStateRole) {
-        if (item->checked()) {
+        if (item->isChecked()) {
             addFavoriteEntry(*item->data());
         } else {
             removeFavoriteEntry(*item->data());
@@ -103,7 +103,7 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
         DataItem *item = categoriesMapper()->itemFromRow(idx.row());
         Q_ASSERT(item);
 
-        if (!item->isCategory() && !item->enabled()) {
+        if (!item->isCategory() && !item->isEnabled()) {
             return koIcon("dialog-warning");
         }
     }

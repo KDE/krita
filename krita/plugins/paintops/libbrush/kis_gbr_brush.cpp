@@ -473,7 +473,7 @@ KisGbrBrush* KisGbrBrush::clone() const
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    predefinedBrushToXML("gdr_brush", e);
+    predefinedBrushToXML("gbr_brush", e);
     KisBrush::toXML(d, e);
 }
 

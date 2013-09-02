@@ -161,7 +161,19 @@ void KisAnimationDoc::preSaveAnimation()
 
     KUrl url = this->documentPart()->url();
 
-    d->store = new KisAnimationStore(url.directory() + "/" + animation->name() + ".kranim");
+    QString filename = url.directory() + "/" + animation->name() + ".kranim";
+
+    QFile* fout = new QFile(filename);
+
+    int i = 1;
+
+    while(fout->exists()) {
+        filename = url.directory() + "/" + animation->name() + "("+ QString::number(i) +").kranim";
+        i++;
+        fout = new QFile(filename);
+    }
+
+    d->store = new KisAnimationStore(filename);
 
     d->doc = this->createDomDocument("krita-animation", "1.0");
 

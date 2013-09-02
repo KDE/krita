@@ -38,7 +38,7 @@ public:
     void openFileWriting(QString filename);
     void closeFileWriting();
 
-    void openStore();
+    void openStore(QIODevice::OpenMode mode = QIODevice::ReadWrite);
     void closeStore();
 
     bool hasFile(QString location) const;

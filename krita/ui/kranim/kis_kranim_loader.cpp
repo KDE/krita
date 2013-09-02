@@ -57,7 +57,7 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRec
     KisPaintDeviceSP dev = layer->paintDevice();
     QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
 
-    store->openStore();
+    store->openStore(QIODevice::ReadOnly);
 
     if(store->hasFile(location)) {
         QIODevice* file = store->getDevice(location);

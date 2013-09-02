@@ -64,9 +64,9 @@ void KisAnimationStore::openFileWriting(QString filename)
     m_zip->prepareWriting(filename, "", "", 0);
 }
 
-void KisAnimationStore::openStore()
+void KisAnimationStore::openStore(QIODevice::OpenMode mode)
 {
-    m_zip->open(QIODevice::ReadWrite);
+    m_zip->open(mode);
 }
 
 void KisAnimationStore::closeFileWriting()

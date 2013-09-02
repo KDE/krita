@@ -108,7 +108,7 @@ bool KisAnimationStore::hasFile(QString location) const
 void KisAnimationStore::readFromFile(QString filename, char *buffer, qint64 length)
 {
     QIODevice* file = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice();
-    //static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice()->read(buffer, length);
     file->read(buffer, length);
     file->close();
+    delete file;
 }

@@ -1,4 +1,11 @@
 install( FILES
+3_brush.png
+3_dotted-flat.png
+3_eroded.gih
+3_flat-brush.png
+3_rake.png
+3_splat.png
+3_texture.png
 A_abstract-textured1.gbr                                                     
 A_abstract-textured2.gbr                                                   
 A_Angular_church.gbr                                                    

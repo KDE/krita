@@ -35,9 +35,11 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     m_brush->toXML( d, e );
     d.appendChild(e);
     setting->setProperty( "brush_definition", d.toString() );
-    if (!m_brush->filename().isEmpty()) {
-        setting->setProperty( "requiredBrushFile", m_brush->shortFilename() );
-    }
+
+    QString brushFileName = !m_brush->filename().isEmpty() ?
+        m_brush->shortFilename() : QString();
+
+    setting->setProperty("requiredBrushFile", brushFileName);
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)

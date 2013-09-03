@@ -22,65 +22,55 @@
 #include <KoCreatePathTool.h>
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
+#include "kis_delegated_tool.h"
 
-#include <KoPointerEvent.h>
 #include <KoIcon.h>
 
 class KoCanvasBase;
 class KoShapeStroke;
+class KisToolSelectPath;
 
-#define REDIRECT_EVENT_0P(name)              \
-    void name() {                            \
-        m_localTool->name();                 \
-        KisToolSelectBase::name();           \
+
+class __KisToolSelectPathLocalTool : public KoCreatePathTool {
+public:
+    __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
+    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+    virtual void addPathShape(KoPathShape* pathShape);
+
+    using KoCreatePathTool::createOptionWidgets;
+    using KoCreatePathTool::endPathWithoutLastPoint;
+    using KoCreatePathTool::endPath;
+    using KoCreatePathTool::cancelPath;
+
+private:
+    KisToolSelectPath* const m_selectionTool;
+    KoShapeStroke* m_borderBackup;
+};
+
+struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
+    __KisToolSelectBaseWrapper(KoCanvasBase *canvas,
+                               const QCursor &cursor)
+        : KisToolSelectBase(canvas, cursor, i18n("Path Selection"))
+    {
     }
+};
 
-#define REDIRECT_EVENT_1P(name, P1)          \
-    void name(P1 p1) {                       \
-        m_localTool->name(p1);               \
-        KisToolSelectBase::name(p1);         \
-    }
+typedef KisDelegatedTool<__KisToolSelectBaseWrapper, __KisToolSelectPathLocalTool> DelegatedSelectPathTool;
 
-#define REDIRECT_EVENT_2P(name, P1, P2)      \
-    void name(P1 p1, P2 p2) {                \
-        m_localTool->name(p1, p2);           \
-        KisToolSelectBase::name(p1, p2);     \
-    }
-
-class KisToolSelectPath : public KisToolSelectBase
+class KisToolSelectPath : public DelegatedSelectPathTool
 {
     Q_OBJECT
 
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
-    virtual ~KisToolSelectPath();
-
-    void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool->paint(gc, converter);}
-
     void mousePressEvent(KoPointerEvent* event);
-    REDIRECT_EVENT_1P(mouseMoveEvent, KoPointerEvent*);
-    REDIRECT_EVENT_1P(mouseReleaseEvent, KoPointerEvent*);
-    REDIRECT_EVENT_1P(keyPressEvent, QKeyEvent*);
-    REDIRECT_EVENT_1P(keyReleaseEvent, QKeyEvent*);
-    REDIRECT_EVENT_2P(activate, ToolActivation, const QSet<KoShape*>&);
-    REDIRECT_EVENT_0P(deactivate);
 
-private:
-    /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+protected:
+    void requestStrokeCancellation();
+    void requestStrokeEnd();
 
-    class LocalTool : public KoCreatePathTool {
-        friend class KisToolSelectPath;
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
-        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-        virtual void addPathShape(KoPathShape* pathShape);
-    private:
-        KisToolSelectPath* const m_selectionTool;
-        KoShapeStroke* m_borderBackup;
-    };
-    LocalTool* const m_localTool;
-
+    friend class __KisToolSelectPathLocalTool;
+    QList<QWidget *> createOptionWidgets();
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase

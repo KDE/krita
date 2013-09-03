@@ -24,45 +24,44 @@
 
 #include "flake/kis_node_shape.h"
 #include "kis_tool_shape.h"
+#include "kis_delegated_tool.h"
 #include <KoIcon.h>
 
-class KisSelectionOptions;
 class KoCanvasBase;
+class KisToolPath;
 
-class KisToolPath : public KisToolShape
+
+class __KisToolPathLocalTool : public KoCreatePathTool {
+public:
+    __KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool);
+    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+    virtual void addPathShape(KoPathShape* pathShape);
+
+    using KoCreatePathTool::createOptionWidgets;
+    using KoCreatePathTool::endPathWithoutLastPoint;
+    using KoCreatePathTool::endPath;
+    using KoCreatePathTool::cancelPath;
+
+private:
+    KisToolPath* const m_parentTool;
+};
+
+typedef KisDelegatedTool<KisToolShape, __KisToolPathLocalTool> DelegatedPathTool;
+
+class KisToolPath : public DelegatedPathTool
 {
-
     Q_OBJECT
 
 public:
     KisToolPath(KoCanvasBase * canvas);
-    virtual ~KisToolPath();
-
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+
+protected:
+    void requestStrokeCancellation();
+    void requestStrokeEnd();
 
 private:
-    /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
-
-    class LocalTool : public KoCreatePathTool {
-        friend class KisToolPath;
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool);
-        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-        virtual void addPathShape(KoPathShape* pathShape);
-    private:
-        KisToolPath* const m_parentTool;
-    };
-    LocalTool* const m_localTool;
-
+    friend class __KisToolPathLocalTool;
 };
 
 class KisToolPathFactory : public KoToolFactoryBase

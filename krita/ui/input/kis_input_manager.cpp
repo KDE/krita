@@ -63,6 +63,7 @@ public:
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
     #endif
         , lastTabletEvent(0)
+        , logTabletEvents(false)
     { }
 
     bool tryHidePopupPalette();
@@ -92,6 +93,8 @@ public:
     QTabletEvent *lastTabletEvent;
 
     KisAbstractInputAction *defaultInputAction;
+
+    bool logTabletEvents;
 };
 
 static inline QList<Qt::Key> KEYS() {
@@ -257,6 +260,7 @@ inline QPointF multiplyPoints(const QPointF &pt1, const QPointF &pt2) {
 
 void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
 {
+    if (logTabletEvents) qDebug() << "saveTabletEvent" << event;
     delete lastTabletEvent;
 
 #ifdef Q_WS_X11
@@ -317,6 +321,8 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
     Q_UNUSED(type);
 #endif
 
+    qDebug() << "resetSavedTabletEvent. Need tot reset:" << needResetSavedEvent;
+
     if (needResetSavedEvent) {
         delete lastTabletEvent;
         lastTabletEvent = 0;
@@ -357,6 +363,17 @@ KisInputManager::~KisInputManager()
     delete d;
 }
 
+void KisInputManager::toggleTabletLogger()
+{
+    d->logTabletEvents = !d->logTabletEvents;
+    if (d->logTabletEvents) {
+        qDebug() << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
+    }
+    else {
+        qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
+    }
+}
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object);
@@ -370,7 +387,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:
+        if (d->logTabletEvents) qDebug() << "MouseButtonPress";
     case QEvent::MouseButtonDblClick: {
+        if (d->logTabletEvents) qDebug() << "MouseButtonDblClick";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
         if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToPixel(mouseEvent->posF()))) {
@@ -382,12 +401,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseButtonRelease: {
+        if (d->logTabletEvents) qDebug() << "MouseButtonRelease";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
         d->resetSavedTabletEvent(event->type());
         break;
     }
     case QEvent::KeyPress: {
+        if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
@@ -409,6 +430,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
+        if (d->logTabletEvents) qDebug() << "KeyRelease";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
@@ -417,6 +439,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseMove: {
+        if (d->logTabletEvents) qDebug() << "MouseMove";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
             //Update the current tool so things like the brush outline gets updated.
@@ -427,6 +450,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Wheel: {
+        if (d->logTabletEvents) qDebug() << "Wheel";
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
         KisSingleActionShortcut::WheelAction action;
 
@@ -461,13 +485,31 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         d->matcher.reset();
         break;
     case QEvent::TabletPress:
+        if (d->logTabletEvents) qDebug() << "TabletPress";
     case QEvent::TabletMove:
+        if (d->logTabletEvents) qDebug() << "TabletMove";
     case QEvent::TabletRelease: {
+        if (d->logTabletEvents) qDebug() << "TabletRelease";
         //We want both the tablet information and the mouse button state.
         //Since QTabletEvent only provides the tablet information, we
         //save that and then ignore the event so it will generate a mouse
         //event.
         QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
+        if (d->logTabletEvents)
+            qDebug() << "Tablet Event Details"
+                     << "\tdevice" << tabletEvent->device()
+                     << "\tglobalPos" << tabletEvent->globalPos()
+                     << "\thiResGlobalPos" << tabletEvent->hiResGlobalPos()
+                     << "\tpointerType" << tabletEvent->pointerType()
+                     << "\tpos" << tabletEvent->pos()
+                     << "\tpressure" << tabletEvent->pressure()
+                     << "\trotation" << tabletEvent->rotation()
+                     << "\ttangentialPressure" << tabletEvent->tangentialPressure()
+                     << "\tuniqueId" << tabletEvent->uniqueId()
+                     << "\txTilt" << tabletEvent->xTilt()
+                     << "\tyTilt" << tabletEvent->yTilt()
+                     << "\tType" << tabletEvent->type();
+
         d->saveTabletEvent(tabletEvent);
 
 #ifdef Q_OS_WIN
@@ -557,3 +599,4 @@ void KisInputManager::profileChanged()
 
     }
 }
+

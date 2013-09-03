@@ -293,6 +293,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
+
+    KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
+    actionCollection()->addAction("tablet_debugger", tabletDebugger );
+    tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletTester()));
+
     m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
@@ -1316,6 +1322,11 @@ void KisView2::showJustTheCanvas(bool toggled)
                                                                           actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
         floatingMessage->showMessage();
     }
+}
+
+void KisView2::toggleTabletTester()
+{
+
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

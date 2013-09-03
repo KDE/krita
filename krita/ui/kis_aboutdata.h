@@ -29,13 +29,13 @@
 KAboutData * newKritaAboutData()
 {
     KAboutData * aboutData = new KAboutData("krita", 0,
-                                            ki18n("Krita"),
+                                            ki18n("Krita Studio"),
                                             CALLIGRA_VERSION_STRING,
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2012 The Krita team.\n"),
+                                            ki18n("(c) 1999-2012 The Krita team and KO GmbH.\n"),
                                             KLocalizedString(),
-                                            "http://www.krita.org",
+                                            "http://www.kogmbh.com/krita",
                                             "submit@bugs.kde.org");
     aboutData->setProgramIconName(koIconName("calligrakrita"));
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");

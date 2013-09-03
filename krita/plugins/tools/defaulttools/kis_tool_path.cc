@@ -20,103 +20,35 @@
 #include "kis_tool_path.h"
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
-#include <KoPointerEvent.h>
 #include <kis_cursor.h>
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
-        : KisToolShape(canvas, Qt::ArrowCursor), m_localTool(new LocalTool(canvas, this))
+    : DelegatedPathTool(canvas, Qt::ArrowCursor,
+                        new __KisToolPathLocalTool(canvas, this))
 {
 }
 
-KisToolPath::~KisToolPath()
+void KisToolPath::requestStrokeEnd()
 {
-    delete m_localTool;
+    localTool()->endPathWithoutLastPoint();
 }
 
-void KisToolPath::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolPath::requestStrokeCancellation()
 {
-    KisToolShape::activate(toolActivation, shapes);
-    m_localTool->activate(toolActivation, shapes);
-}
-
-void KisToolPath::deactivate()
-{
-    KisToolShape::deactivate();
-    m_localTool->deactivate();
+    localTool()->cancelPath();
 }
 
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::ShiftModifier |
-                          Qt::ControlModifier | Qt::AltModifier)) {
-
-        setMode(KisTool::PAINT_MODE);
-
-        if (!nodeEditable()) {
-            return;
-        }
-
-        Q_ASSERT(m_localTool);
-        m_localTool->mousePressEvent(event);
-    }
-    else {
-        KisToolShape::mousePressEvent(event);
-    }
+    if (!nodeEditable()) return;
+    DelegatedPathTool::mousePressEvent(event);
 }
 
-void KisToolPath::mouseDoubleClickEvent(KoPointerEvent *event)
-{
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::ShiftModifier |
-                          Qt::ControlModifier | Qt::AltModifier)) {
 
-        Q_ASSERT(m_localTool);
-        m_localTool->mouseDoubleClickEvent(event);
-    }
-    else {
-        KisToolShape::mouseDoubleClickEvent(event);
-    }
-}
+__KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool)
+        : KoCreatePathTool(canvas), m_parentTool(parentTool) {}
 
-void KisToolPath::mouseMoveEvent(KoPointerEvent *event)
-{
-    Q_ASSERT(m_localTool);
-    m_localTool->mouseMoveEvent(event);
-
-    KisToolShape::mouseMoveEvent(event);
-}
-
-void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-
-        Q_ASSERT(m_localTool);
-        m_localTool->mouseReleaseEvent(event);
-    }
-    else {
-        KisToolShape::mouseReleaseEvent(event);
-    }
-}
-
-void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
-{
-    Q_ASSERT(m_localTool);
-    m_localTool->paint(painter, converter);
-}
-
-QList<QWidget *> KisToolPath::createOptionWidgets()
-{
-    QList<QWidget *> list = KisToolShape::createOptionWidgets();
-    list.append(m_localTool->createOptionWidgets());
-    return list;
-}
-
-KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool)
-        : KoCreatePathTool(canvas), m_parentTool(selectingTool) {}
-
-void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
+void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
@@ -126,7 +58,7 @@ void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void KisToolPath::LocalTool::addPathShape(KoPathShape* pathShape)
+void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
     m_parentTool->addPathShape(pathShape, i18n("Path"));
 }

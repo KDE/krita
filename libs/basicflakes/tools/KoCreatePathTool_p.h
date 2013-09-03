@@ -383,6 +383,8 @@ public:
 
     void addPathShape()
     {
+        if (!shape) return;
+
         if (shape->pointCount() < 2) {
             cleanUp();
             return;

@@ -84,6 +84,10 @@ protected:
       */
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
+    void endPath();
+    void endPathWithoutLastPoint();
+    void cancelPath();
+
     /// reimplemented
     virtual QList<QWidget *> createOptionWidgets();
 

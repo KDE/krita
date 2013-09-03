@@ -315,6 +315,9 @@ protected:
 
     void resetBoundary();
 
+protected:
+    void predefinedBrushToXML(const QString &type, QDomElement& e) const;
+
 private:
     friend class KisImagePipeBrushTest;
 

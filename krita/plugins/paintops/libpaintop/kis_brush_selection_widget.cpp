@@ -95,7 +95,7 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrushSP KisBrushSelectionWidget::brush()
+KisBrushSP KisBrushSelectionWidget::brush() const
 {
     KisBrushSP theBrush;
     switch (m_buttonGroup->checkedId()) {
@@ -181,25 +181,32 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     if (m_buttonGroup->checkedId() == AUTOBRUSH){
         m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
-    }else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH){
+    } else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH) {
         m_brushChooser->setBrushSize(dxPixels, dyPixels);
+    } else if (m_buttonGroup->checkedId() == CUSTOMBRUSH ||
+               m_buttonGroup->checkedId() == CLIPBOARDBRUSH) {
+
+        // switch to the predefined brush and resize it
+        KisBrushSP brush = this->brush();
+        if (brush) {
+            setCurrentWidget(m_brushChooser);
+            m_brushChooser->setBrush(brush);
+            m_brushChooser->setBrushSize(dxPixels, dyPixels);
+        }
     }
 }
 
 
 QSizeF KisBrushSelectionWidget::brushSize() const
 {
-    switch (m_buttonGroup->checkedId()) {
-        case AUTOBRUSH: {
-            return m_autoBrushWidget->brushSize();
-        }
-        case PREDEFINEDBRUSH: {
-            return m_brushChooser->brushSize();
-        }
-        default: {
-            break;
-        }
+    if (m_buttonGroup->checkedId() == AUTOBRUSH) {
+        return m_autoBrushWidget->brushSize();
+    } else if (KisBrushSP brush = this->brush()) {
+        qreal width = brush->width() * brush->scale();
+        qreal height = brush->height() * brush->scale();
+        return QSizeF(width, height);
     }
+
     // return neutral value
     return QSizeF(1.0, 1.0);
 }

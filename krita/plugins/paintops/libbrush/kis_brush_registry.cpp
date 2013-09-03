@@ -30,11 +30,9 @@
 #include "kis_brush_server.h"
 #include "kis_brush_factory.h"
 #include "kis_auto_brush_factory.h"
-#include "kis_gbr_brush_factory.h"
-#include "kis_abr_brush_factory.h"
 #include "kis_text_brush_factory.h"
-#include "kis_png_brush_factory.h"
-#include "kis_svg_brush_factory.h"
+#include "kis_predefined_brush_factory.h"
+
 
 KisBrushRegistry::KisBrushRegistry()
 {
@@ -54,11 +52,11 @@ KisBrushRegistry* KisBrushRegistry::instance()
     K_GLOBAL_STATIC(KisBrushRegistry, s_instance);
     if (!s_instance.exists()) {
         s_instance->add(new KisAutoBrushFactory());
-        s_instance->add(new KisGbrBrushFactory());
-        s_instance->add(new KisAbrBrushFactory());
+        s_instance->add(new KisPredefinedBrushFactory("gbr_brush"));
+        s_instance->add(new KisPredefinedBrushFactory("abr_brush"));
         s_instance->add(new KisTextBrushFactory());
-        s_instance->add(new KisPngBrushFactory());
-        s_instance->add(new KisSvgBrushFactory());
+        s_instance->add(new KisPredefinedBrushFactory("png_brush"));
+        s_instance->add(new KisPredefinedBrushFactory("svg_brush"));
         KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 28)");
     }
     return s_instance;

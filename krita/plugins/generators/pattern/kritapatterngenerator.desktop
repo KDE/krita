@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Solid Pattern Layer
 Name[hu]=Egyszínű minta réteg
+Name[it]=Livello con modello solido
 Name[kk]=Тұтас өрнек қабаты
 Name[nl]=Laag van gevuld patroon
 Name[pt]=Área de Padrão Sólido
@@ -11,6 +12,7 @@ Name[uk]=Шар суцільного візерунка
 Name[x-test]=xxSolid Pattern Layerxx
 Comment=generates a pattern layer
 Comment[hu]=egy minta réteget állít elő
+Comment[it]=genera un livello con modello
 Comment[kk]=өрнек қабатты құру
 Comment[nl]=genereert een patroonlaag
 Comment[pt]=gera uma camada de padrão

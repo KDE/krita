@@ -266,6 +266,15 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
+void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
+{
+    e.setAttribute("type", type);
+    e.setAttribute("filename", shortFilename());
+    e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("angle", QString::number(angle()));
+    e.setAttribute("scale", QString::number(scale()));
+}
+
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");

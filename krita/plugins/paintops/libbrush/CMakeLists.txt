@@ -1,6 +1,7 @@
 add_subdirectory( tests )
 
 set(kritalibbrush_LIB_SRCS
+    kis_predefined_brush_factory.cpp
     kis_auto_brush.cpp
     kis_boundary.cc
     kis_brush.cpp
@@ -12,15 +13,11 @@ set(kritalibbrush_LIB_SRCS
     kis_imagepipe_brush.cpp
     kis_imagepipe_brush_p.cpp
     kis_png_brush.cpp
-    kis_png_brush_factory.cpp
     kis_svg_brush.cpp
-    kis_svg_brush_factory.cpp
     kis_qimage_pyramid.cpp
     kis_text_brush.cpp
     kis_auto_brush_factory.cpp
     kis_text_brush_factory.cpp
-    kis_gbr_brush_factory.cpp
-    kis_abr_brush_factory.cpp
 )
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )

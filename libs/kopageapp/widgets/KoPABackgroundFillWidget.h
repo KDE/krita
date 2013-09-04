@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
+ * Copyright (C) 2013 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,32 +18,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "StyleDockerFactory.h"
-#include "StyleDocker.h"
+#ifndef KOPABACKGROUNDFILLWIDGET_H
+#define KOPABACKGROUNDFILLWIDGET_H
 
-StyleDockerFactory::StyleDockerFactory()
+#include <KoFillConfigWidget.h>
+
+#include "kopageapp_export.h"
+
+class KoShape;
+class KoPAViewBase;
+
+class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
 {
-}
+public:
+    KoPABackgroundFillWidget(QWidget *parent);
 
-QString StyleDockerFactory::id() const
-{
-    return QString("StyleDocker");
-}
+    void setView(KoPAViewBase *view);
 
-KoDockFactoryBase::DockPosition StyleDockerFactory::defaultDockPosition() const
-{
-    return DockRight;
-}
+    QList<KoShape*> currentShapes();
 
-QDockWidget* StyleDockerFactory::createDockWidget()
-{
-    StyleDocker * widget = new StyleDocker();
-    widget->setObjectName(id());
+    KoShape *currentShape();
+};
 
-    return widget;
-}
-
-bool StyleDockerFactory::isCollapsable() const
-{
-    return false;
-}
+#endif /* KOPABACKGROUNDFILLWIDGET_H */

@@ -18,12 +18,6 @@ set(calligradockers_SRCS
     shapecollection/CollectionItemModel.cpp
     shapecollection/OdfCollectionLoader.cpp
 
-    styledocker/StyleDockerFactory.cpp
-    styledocker/StyleDocker.cpp
-    styledocker/StrokeFillWidget.cpp
-    styledocker/StylePreview.cpp
-    styledocker/StyleButtonBox.cpp
-
     Plugin.cpp
 )
 

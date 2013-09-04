@@ -39,6 +39,7 @@ class KoUnit;
 class KoShapeStrokeModel;
 class KoMarker;
 class KoCanvasBase;
+class KoShapeStroke;
 
 /// A widget for configuring the stroke of a shape
 class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
@@ -56,8 +57,11 @@ public:
     qreal miterLimit() const;
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
+    Qt::PenCapStyle capStyle() const;
+    Qt::PenJoinStyle joinStyle() const;
 
-    void setCanvas( KoCanvasBase *canvas );
+    void setCanvas(KoCanvasBase *canvas);
+    void setActive(bool active);
 
 private slots:
     void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);

@@ -33,7 +33,7 @@
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
 */
-#define CALLIGRA_VERSION_STRING "Krita 2.8 Studio Edition"
+#define CALLIGRA_VERSION_STRING "2.8 Pre-Alpha"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
@@ -63,7 +63,7 @@
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in alpha stage
  */
-//#define CALLIGRA_ALPHA 1
+#define CALLIGRA_ALPHA 1
 
 /**
  * @def CALLIGRA_BETA
@@ -84,7 +84,7 @@
  * @ingroup CalligraMacros
  * @brief If defined (>=0), indicates at compile time that Calligra is in stable stage
  */
-#define CALLIGRA_STABLE 0
+// #define CALLIGRA_STABLE 0
 
 // -- WARNING: do not edit values below this line --
 

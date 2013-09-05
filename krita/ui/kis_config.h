@@ -123,9 +123,6 @@ public:
     bool useOpenGL() const;
     void setUseOpenGL(bool useOpenGL);
 
-    bool useOpenGLToolOutlineWorkaround() const;
-    void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
-
     int openGLFilteringMode() const;
     void setOpenGLFilteringMode(int filteringMode);
 

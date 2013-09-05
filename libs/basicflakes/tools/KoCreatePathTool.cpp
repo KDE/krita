@@ -31,6 +31,7 @@
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoStrokeConfigWidget.h"
+#include "KoShapeStroke.h"
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -56,6 +57,10 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 {
     Q_D(KoCreatePathTool);
     if (d->shape) {
+        KoShapeStroke *stroke(createStroke());
+        if (stroke) {
+            d->shape->setStroke(stroke);
+        }
         painter.save();
         paintPath(*(d->shape), painter, converter);
         painter.restore();
@@ -358,6 +363,7 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     d->existingStartPoint.validate(canvas());
     d->existingEndPoint.validate(canvas());
 
+    pathShape->setStroke(createStroke());
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
         if (d->existingStartPoint.isValid())
             startShape = d->existingStartPoint.path;
@@ -406,16 +412,34 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Line"));
-    strokeWidget->setCanvas(canvas());
-    list.append(strokeWidget);
+    d->strokeWidget = new KoStrokeConfigWidget(0);
+    d->strokeWidget->setWindowTitle(i18n("Line"));
+    d->strokeWidget->setCanvas(canvas());
+    d->strokeWidget->setActive(false);
+    list.append(d->strokeWidget);
 
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;
+}
+
+KoShapeStroke *KoCreatePathTool::createStroke()
+{
+    Q_D(KoCreatePathTool);
+
+    KoShapeStroke *stroke = 0;
+    if (d->strokeWidget) {
+        stroke = new KoShapeStroke();
+        stroke->setColor(d->strokeWidget->color());
+        stroke->setLineWidth(d->strokeWidget->lineWidth());
+        stroke->setCapStyle(d->strokeWidget->capStyle());
+        stroke->setJoinStyle(d->strokeWidget->joinStyle());
+        stroke->setMiterLimit(d->strokeWidget->miterLimit());
+        stroke->setLineStyle(d->strokeWidget->lineStyle(), d->strokeWidget->lineDashes());
+    }
+    return stroke;
 }
 
 #include <KoCreatePathTool.moc>

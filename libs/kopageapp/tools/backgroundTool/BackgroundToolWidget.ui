@@ -1,63 +1,74 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>BackgroundToolWidget</class>
- <widget class="QWidget" name="BackgroundToolWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="BackgroundToolWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>192</width>
-    <height>114</height>
+    <width>226</width>
+    <height>120</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>120</height>
+   </size>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QVBoxLayout">
      <item>
-      <widget class="QCheckBox" name="useMasterBackground" >
-      </widget>
+      <widget class="QCheckBox" name="useMasterBackground"/>
      </item>
      <item>
-      <widget class="QPushButton" name="backgroundImage" >
-       <property name="text" >
+      <widget class="KoPABackgroundFillWidget" name="fillBackground" native="true"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="backgroundImage">
+       <property name="text">
         <string>Set image ...</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="useStrokeAndFillDockerLabel" >
-       <property name="text" >
-        <string>To change background color use Stroke and Fill docker.</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="displayMasterShapes" >
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer" >
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+      <widget class="QCheckBox" name="displayMasterShapes"/>
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="QWidget" name="SpecialSpacer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
   </layout>
-  <zorder>backgroundImage</zorder>
-  <zorder>useMasterBackground</zorder>
-  <zorder>displayMasterShapes</zorder>
-  <zorder>backgroundImage</zorder>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoPABackgroundFillWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/KoPABackgroundFillWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

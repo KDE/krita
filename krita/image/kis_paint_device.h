@@ -739,8 +739,6 @@ protected:
     KisNodeWSP parentNode() const;
 
 private:
-    KisDataManagerSP m_datamanager;
-
     struct Private;
     Private * const m_d;
 

@@ -316,7 +316,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channels. If there
@@ -400,7 +400,7 @@ private:
                               qint32 x, qint32 y, qint32 w, qint32 h);
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
                                          qint32 x, qint32 y,
-                                         qint32 w, qint32 h);
+                                         qint32 w, qint32 h) const;
 public:
     void debugPrintInfo() {
         m_mementoManager->debugPrintInfo();

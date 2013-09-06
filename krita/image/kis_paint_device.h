@@ -386,7 +386,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -732,7 +732,7 @@ private:
      * Return a vector with in order the size in bytes of the channels
      * in the colorspace of this paint device.
      */
-    QVector<qint32> channelSizes();
+    QVector<qint32> channelSizes() const;
 
 protected:
     friend class KisSelectionTest;

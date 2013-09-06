@@ -708,7 +708,7 @@ void KisTiledDataManager::readBytes(quint8 *data,
 QVector<quint8*>
 KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
                                      qint32 x, qint32 y,
-                                     qint32 width, qint32 height)
+                                     qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header

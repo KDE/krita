@@ -995,7 +995,7 @@ void KisPaintDevice::writeBytes(const quint8 * data, const QRect &rect)
     writeBytes(data, rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-QVector<quint8*> KisPaintDevice::readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h)
+QVector<quint8*> KisPaintDevice::readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const
 {
     return m_d->dataManager->readPlanarBytes(channelSizes(), x, y, w, h);
 }
@@ -1077,7 +1077,7 @@ qint32 KisPaintDevice::y() const
     return m_d->y;
 }
 
-QVector<qint32> KisPaintDevice::channelSizes()
+QVector<qint32> KisPaintDevice::channelSizes() const
 {
     QVector<qint32> sizes;
     QList<KoChannelInfo*> channels = colorSpace()->channels();

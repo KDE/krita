@@ -230,7 +230,7 @@ void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > plan
 
 QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channelSizes,
                                                           qint32 x, qint32 y,
-                                                          qint32 width, qint32 height)
+                                                          qint32 width, qint32 height) const
 {
     Q_ASSERT(channelSizes.size() > 0);
 
@@ -271,7 +271,8 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channe
             const qint32 tileRowStride = rowStride(imageX, imageY) -
                     columnsToWork * pixelSize;
 
-            KisTileDataWrapper tw(this, imageX, imageY,
+            // XXX: Ugly const cast because of the old pixelPtr design copied from tiles1.
+            KisTileDataWrapper tw(const_cast<KisTiledDataManager*>(this), imageX, imageY,
                                   KisTileDataWrapper::READ);
             quint8 *tileItStart = tw.data();
 

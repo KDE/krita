@@ -502,9 +502,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 dstX_ = dstX;
             qint32 srcX_ = srcX;
             qint32 columnsRemaining = srcWidth;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
-            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
-            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
+            qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(srcY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -512,21 +512,21 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
-                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
-                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(srcX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                qint32 srcRowStride = srcIt->rowStride(srcX_, srcY_);
                 srcIt->moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                qint32 dstRowStride = dstIt->rowStride(dstX_, dstY_);
                 dstIt->moveTo(dstX_, dstY_);
 
-                qint32 maskRowStride = selectionProjection->rowStride(dstX_, dstY_);
+                qint32 maskRowStride = maskIt->rowStride(dstX_, dstY_);
                 maskIt->moveTo(dstX_, dstY_);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
@@ -557,24 +557,24 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 dstX_ = dstX;
             qint32 srcX_ = srcX;
             qint32 columnsRemaining = srcWidth;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
-            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
+            qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, rowsRemaining);
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
-                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                qint32 srcRowStride = srcIt->rowStride(srcX_, srcY_);
                 srcIt->moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                qint32 dstRowStride = dstIt->rowStride(dstX_, dstY_);
                 dstIt->moveTo(dstX_, dstY_);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
@@ -653,22 +653,22 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
 
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
-            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(dstY);
             qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
             rows = qMin(rows, rowsRemaining);
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
-                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(dstX);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
+                qint32 dstRowStride = dstIt->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
-                qint32 maskRowStride = selectionProjection->rowStride(dstX, dstY);
+                qint32 maskRowStride = maskIt->rowStride(dstX, dstY);
 
                 maskIt->moveTo(dstX, dstY);
 
@@ -696,14 +696,14 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
 
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
             qint32 rows                 = qMin(numContiguousDstRows, rowsRemaining);
 
             while(columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
                 qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
-                qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
+                qint32 dstRowStride            = dstIt->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();

@@ -572,6 +572,9 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     h = rc.height();
 
 
+    KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
+    KisRandomAccessorSP dstIt = dst.createRandomAccessorNG(x, y);
+
     for (qint32 row = y; row < y + h; ++row) {
 
         qint32 column = x;
@@ -579,14 +582,14 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
 
         while (columnsRemaining > 0) {
 
-            qint32 numContiguousDstColumns = dst.numContiguousColumns(column, row, row);
-            qint32 numContiguousSrcColumns = numContiguousColumns(column, row, row);
+            qint32 numContiguousDstColumns = dstIt->numContiguousColumns(column);
+            qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(column);
 
             qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
             columns = qMin(columns, columnsRemaining);
 
-            KisHLineConstIteratorSP srcIt = createHLineConstIteratorNG(column, row, columns);
-            KisHLineIteratorSP dstIt = dst.createHLineIteratorNG(column, row, columns);
+            srcIt->moveTo(column, row);
+            dstIt->moveTo(column, row);
 
             const quint8 *srcData = srcIt->rawDataConst();
             quint8 *dstData = dstIt->rawData();
@@ -667,9 +670,6 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, KoColor
     qint32 y1;
     qint32 w;
     qint32 h;
-
-    x1 = - x();
-    y1 = - y();
 
     QRect rc = exactBounds();
     x1 = rc.x();
@@ -922,23 +922,6 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
     return true;
 }
 
-
-
-
-qint32 KisPaintDevice::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
-{
-    return m_datamanager->numContiguousColumns(x - m_d->x, minY - m_d->y, maxY - m_d->y);
-}
-
-qint32 KisPaintDevice::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
-{
-    return m_datamanager->numContiguousRows(y - m_d->y, minX - m_d->x, maxX - m_d->x);
-}
-
-qint32 KisPaintDevice::rowStride(qint32 x, qint32 y) const
-{
-    return m_datamanager->rowStride(x - m_d->x, y - m_d->y);
-}
 
 void KisPaintDevice::setX(qint32 x)
 {

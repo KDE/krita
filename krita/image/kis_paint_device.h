@@ -729,24 +729,6 @@ private:
     friend class KisPainter;
 
     /**
-     * Get the number of contiguous columns starting at x, valid for all values
-     * of y between minY and maxY.
-     */
-    qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const;
-
-    /**
-     * Get the number of contiguous rows starting at y, valid for all values
-     * of x between minX and maxX.
-     */
-    qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const;
-
-    /**
-     * Get the row stride at pixel (x, y). This is the number of bytes to add to a
-     * pointer to pixel (x, y) to access (x, y + 1).
-     */
-    qint32 rowStride(qint32 x, qint32 y) const;
-
-    /**
      * Return a vector with in order the size in bytes of the channels
      * in the colorspace of this paint device.
      */

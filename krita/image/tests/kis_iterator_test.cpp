@@ -444,14 +444,14 @@ public:
                 qint32 columnsRemaining = m_rect.width();
                 qint32 x = m_rect.x();
 
-                qint32 numContiguousRows = m_device->numContiguousRows(y, x, x + m_rect.width() - 1);
+                qint32 numContiguousRows = iter->numContiguousRows(y);
                 qint32 rows = qMin(numContiguousRows, rowsRemaining);
 
                 while (columnsRemaining > 0) {
-                    qint32 numContiguousColumns = m_device->numContiguousColumns(x, y, y + rows - 1);
+                    qint32 numContiguousColumns = iter->numContiguousColumns(x);
                     qint32 columns = qMin(numContiguousColumns, columnsRemaining);
 
-                    qint32 rowStride = m_device->rowStride(x, y);
+                    qint32 rowStride = iter->rowStride(x, y);
                     iter->moveTo(x, y);
 
                     // qDebug() << "BitBlt:" << ppVar(x) << ppVar(y)

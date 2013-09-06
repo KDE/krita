@@ -128,12 +128,20 @@ KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, q
     return kti;
 }
 
-qint32 KisRandomAccessor2::nConseqPixels() const
+qint32 KisRandomAccessor2::numContiguousColumns(qint32 x) const
 {
-    qFatal("Not implemented.");
-    return 0;
+    return m_ktm->numContiguousColumns(x - m_offsetX, 0, 0);
 }
 
+qint32 KisRandomAccessor2::numContiguousRows(qint32 y) const
+{
+    return m_ktm->numContiguousRows(y - m_offsetY, 0, 0);
+}
+
+qint32 KisRandomAccessor2::rowStride(qint32 x, qint32 y) const
+{
+    return m_ktm->rowStride(x - m_offsetX, y - m_offsetY);
+}
 
 qint32 KisRandomAccessor2::x() const
 {

@@ -40,10 +40,6 @@ public:
      */
     virtual const quint8 * rawDataConst() const = 0;
 
-    /**
-     * @return return number of consequential numbers of pixels, useful for optimization
-     */
-    virtual qint32 nConseqPixels() const = 0;
     virtual qint32 x() const = 0;
     virtual qint32 y() const = 0;
 };

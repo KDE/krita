@@ -32,6 +32,7 @@ class KoDetailsPane;
 class KUrl;
 class QTreeWidgetItem;
 class QString;
+class QStringList;
 
 /// \internal
 class KoOpenPane : public QWidget
@@ -91,7 +92,7 @@ protected:
     void initTemplates(const QString& templateType);
 
 private:
-    QString m_nameFiletrs;
+    QStringList m_mimeFiletr;
 
     KoOpenPanePrivate * const d;
 };

@@ -131,7 +131,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
     d->m_componentData = componentData;
     d->setupUi(this);
 
-    m_nameFiletrs = KoFileDialog::getNameFilters(mimeFilter);
+    m_mimeFiletr = mimeFilter;
     d->m_openExistingButton->setText(i18n("Open Existing Document"));
 
     connect(d->m_openExistingButton, SIGNAL(clicked()),
@@ -193,10 +193,11 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
-    QString url = QFileDialog::getOpenFileName(this,
+    KoFileDialog openDialog;
+    QString url = openDialog.getOpenFileName(this,
                                                i18n("Open Existing Document"),
                                                "",
-                                               m_nameFiletrs);
+                                               m_mimeFiletr);
     emit openExistingFile(KUrl(url));
 }
 

@@ -21,10 +21,10 @@
 #include <QDebug>
 #include <kmimetype.h>
 
-const QString KoFileDialog::getNameFilters(const QStringList &mimeFilter)
+const QString KoFileDialog::getFilterString(const QStringList &mimeList)
 {
     QString filter;
-    for (QStringList::ConstIterator it = mimeFilter.begin(); it != mimeFilter.end(); ++it) {
+    for (QStringList::ConstIterator it = mimeList.begin(); it != mimeList.end(); ++it) {
         KMimeType::Ptr type = KMimeType::mimeType( *it );
         if(!type)
             continue;
@@ -41,66 +41,159 @@ const QString KoFileDialog::getNameFilters(const QStringList &mimeFilter)
     return filter;
 }
 
-QString KoFileDialog::getOpenFileName(QWidget * parent, const QString & caption,
-                                           const QString & dir, const QString &filter,
-                                           QString *selectedFilter, QFileDialog::Options options)
+const QString KoFileDialog::getFilterString(const QString &selectedMime)
 {
-    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
-    dialog->setAcceptMode(QFileDialog::AcceptOpen);
-    dialog->setFileMode(QFileDialog::ExistingFile);
-    if (selectedFilter)
-        dialog->selectNameFilter(*selectedFilter);
-    if (options)
-        dialog->setOptions(options);
-    dialog->open(this, SLOT(getFileName(QString)));
+    QString filter;
+    KMimeType::Ptr type = KMimeType::mimeType(selectedMime);
+    if(type) {
+        filter.append(type->comment() + " (");
+        QStringList patterns = type->patterns();
+        QStringList::ConstIterator jt;
+        for (jt = patterns.begin(); jt != patterns.end(); ++jt)
+            filter.append(*jt + " ");
+        filter.append(")");
+    }
 
+    qDebug() << "nameFilter: " + filter;
+    return filter;
+}
+
+QFileDialog *KoFileDialog::initDialog(QWidget *parent,
+                                      const QString &caption,
+                                      const QString &dir,
+                                      const QStringList &mimeList,
+                                      const QString &selectedMime,
+                                      QFileDialog::AcceptMode aMode,
+                                      QFileDialog::FileMode fMode)
+{
+    QFileDialog *dialog = new QFileDialog(parent,
+                                          caption,
+                                          dir,
+                                          getFilterString(mimeList));
+    dialog->setAcceptMode(aMode);
+    dialog->setFileMode(fMode);
+    if (!selectedMime.isEmpty()) {
+        QString *str = new QString(getFilterString(selectedMime));
+        dialog->selectNameFilter(*str);
+    }
+    return dialog;
+}
+
+QString KoFileDialog::getOpenFileName(QWidget *parent,
+                                      const QString &caption,
+                                      const QString &dir,
+                                      const QStringList &mimeList,
+                                      const QString &selectedMime)
+{
+    QString str = getFilterString(selectedMime);
+    return QFileDialog::getOpenFileName(parent,
+                                        caption,
+                                        dir,
+                                        getFilterString(mimeList),
+                                        &str);
+}
+
+QStringList KoFileDialog::getOpenFileNames(QWidget *parent,
+                                           const QString &caption,
+                                           const QString &dir,
+                                           const QStringList &mimeList,
+                                           const QString &selectedMime)
+{
+    QString str = getFilterString(selectedMime);
+    return QFileDialog::getOpenFileNames(parent,
+                                         caption,
+                                         dir,
+                                         getFilterString(mimeList),
+                                         &str);
+}
+
+QString KoFileDialog::getOpenDirectory(QWidget *parent,
+                                       const QString &caption,
+                                       const QString &dir)
+{
+    return QFileDialog::getExistingDirectory(parent, caption, dir);
+}
+
+QString KoFileDialog::getImportFileName(QWidget *parent,
+                                        const QString &caption,
+                                        const QString &dir,
+                                        const QStringList &mimeList,
+                                        const QString &selectedMime)
+{
+    QFileDialog* dialog =
+            initDialog(parent,
+                       caption,
+                       dir,
+                       mimeList,
+                       selectedMime,
+                       QFileDialog::AcceptOpen,
+                       QFileDialog::ExistingFile);
+
+    dialog->open(this, SLOT(getFileName(QString)));
     return m_fileName;
 }
 
-QStringList KoFileDialog::getOpenFileNames(QWidget * parent, const QString & caption,
-                                                const QString & dir, const QString &filter,
-                                                QString *selectedFilter, QFileDialog::Options options)
+QStringList KoFileDialog::getImportFileNames(QWidget *parent,
+                                         const QString &caption,
+                                         const QString &dir,
+                                         const QStringList &mimeList,
+                                         const QString &selectedMime)
 {
-    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
-    dialog->setAcceptMode(QFileDialog::AcceptOpen);
-    dialog->setFileMode(QFileDialog::ExistingFiles);
-    if (selectedFilter)
-        dialog->selectNameFilter(*selectedFilter);
-    if (options)
-        dialog->setOptions(options);
-    dialog->open(this, SLOT(getFileNames(QStringList)));
+    QFileDialog* dialog =
+            initDialog(parent,
+                       caption,
+                       dir,
+                       mimeList,
+                       selectedMime,
+                       QFileDialog::AcceptOpen,
+                       QFileDialog::ExistingFiles);
 
+    dialog->open(this, SLOT(getFileNames(QStringList)));
     return m_fileNames;
 }
-QString KoFileDialog::getSaveFileName(QWidget * parent, const QString & caption,
-                                           const QString & dir, const QString & filter,
-                                           QString *selectedFilter, QFileDialog::Options options)
-{
-    QFileDialog* dialog = new QFileDialog(parent, caption, dir, filter);
-    dialog->setAcceptMode(QFileDialog::AcceptSave);
-    dialog->setFileMode(QFileDialog::AnyFile);
-    if (selectedFilter)
-        dialog->selectNameFilter(*selectedFilter);
-    if (options)
-        dialog->setOptions(options);
-    dialog->open(this, SLOT(getFileName(QString)));
 
+QString KoFileDialog::getImportDirectory(QWidget *parent,
+                                         const QString &caption,
+                                         const QString &dir)
+{
+    QFileDialog *dialog = new QFileDialog(parent, caption, dir);
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setFileMode(QFileDialog::Directory);
+    dialog->setOption(QFileDialog::ShowDirsOnly, true);
+    dialog->open(this, SLOT(getFileName(QString)));
     return m_fileName;
 }
 
-QString KoFileDialog::getExistingDirectory(QWidget * parent, const QString & caption,
-                                                const QString & dir, QFileDialog::Options options)
+QString KoFileDialog::getSaveFileName(QWidget *parent,
+                                      const QString &caption,
+                                      const QString &dir,
+                                      const QStringList &mimeList,
+                                      const QString &selectedMime)
 {
-    QFileDialog* dialog = new QFileDialog(parent, caption, dir);
-    dialog->setAcceptMode(QFileDialog::AcceptSave);
-    dialog->setFileMode(QFileDialog::Directory);
-    if (options)
-        dialog->setOptions(options);
-    else
-        dialog->setOption(QFileDialog::ShowDirsOnly, true);
+    QFileDialog* dialog =
+            initDialog(parent,
+                       caption,
+                       dir,
+                       mimeList,
+                       selectedMime,
+                       QFileDialog::AcceptSave,
+                       QFileDialog::AnyFile);
     dialog->open(this, SLOT(getFileName(QString)));
-
     return m_fileName;
+}
+
+QString KoFileDialog::getExportFileName(QWidget *parent,
+                                        const QString &caption,
+                                        const QString &dir,
+                                        const QStringList &mimeList,
+                                        const QString &selectedMime)
+{
+    QString str = getFilterString(selectedMime);
+    return QFileDialog::getSaveFileName(parent,
+                                        caption,
+                                        dir,
+                                        getFilterString(mimeList),
+                                        &str);
 }
 
 void KoFileDialog::getFileName(QString fileName)

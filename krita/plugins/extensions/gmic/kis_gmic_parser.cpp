@@ -28,7 +28,6 @@
 #include <Command.h>
 #include <Filters.h>
 #include <Category.h>
-#include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
 
 

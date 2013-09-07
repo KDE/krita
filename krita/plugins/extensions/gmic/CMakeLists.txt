@@ -43,6 +43,7 @@ install(FILES gmic_def.gmic DESTINATION ${GMIC_INSTALL_DIR} )
 
 set(kritagmic_shared_PART_SRCS kis_gmic_parser.cpp
 kis_gmic_filter_model.cpp
+kis_html_delegate.cpp
 kis_gmic_filter_settings.cpp
 kis_gmic_settings_widget.cpp
 kis_gmic_input_output_widget.cpp

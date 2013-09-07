@@ -24,6 +24,8 @@
 
 #include <QMetaType>
 
+#include <kis_html_delegate.h>
+
 #include <kis_gmic_filter_settings.h>
 #include "kis_gmic_settings_widget.h"
 #include <kis_gmic_input_output_widget.h>
@@ -52,6 +54,7 @@ void KisGmicWidget::createMainLayout()
 
     m_filterTree = new QTreeView();
     m_filterTree->setModel(m_filterModel);
+    m_filterTree->setItemDelegate(new HtmlDelegate());
 
     QItemSelectionModel *selectionModel= m_filterTree->selectionModel();
     connect(selectionModel, SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),

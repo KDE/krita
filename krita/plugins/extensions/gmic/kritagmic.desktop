@@ -3,4 +3,4 @@ Name=Gmic
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritagmic
-X-Krita-Version=27
+X-Krita-Version=28

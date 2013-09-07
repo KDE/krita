@@ -434,24 +434,51 @@ TextParameter::TextParameter(const QString& name, bool updatePreview): Parameter
 
 void TextParameter::parseValues(const QString& typeDefinition)
 {
-    QStringList values = getValues(typeDefinition);
+    QString currentType = PARAMETER_NAMES[m_type];
+    Q_ASSERT(typeDefinition.startsWith(currentType));
+
+    // get rid of '(', '{' and '['
+    QString onlyValues = typeDefinition;
+    onlyValues = onlyValues.remove(0, currentType.size() + 1);
+    onlyValues.chop(1);
+    QStringList values = onlyValues.split(",");
 
     if (values.size() == 1)
     {
         m_value = values.at(0);
     }
-    else if (values.size() == 2)
+    else
     {
         bool isOk = true;
-        if (values.at(0).toInt(&isOk) == 1)
+        int multilineFlag = values.at(0).toInt(&isOk);
+        if (isOk && (values.size() == 2))
         {
-            m_multiline = true;
+            m_multiline = (multilineFlag == 1);
+            m_value = values.at(1);
         }
-        m_value = values.at(1);
+        // e.g typeDefinition is text("0,1,0;1,-4,1;0,1,0")
+        // e.g typeDefinition is text(1, "0,1,0;1,-4,1;0,1,0")
+        // e.g. text("1,1")
+        else
+        {
+            // flag is there
+            if (isOk)
+            {
+                m_multiline = (multilineFlag == 1);
+                m_value = onlyValues.mid(onlyValues.indexOf(","));
+            }
+            else
+            {
+                m_value = onlyValues;
+            }
+        }
     }
+
+    dbgPlugins << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<HEY!!!!";
+    dbgPlugins << values.size() << " " << values << "m_value" << m_value;
+
     // remove first and last "
-    m_value = m_value.remove(0,1);
-    m_value.chop(1);
+    m_value = stripQuotes(m_value);
     m_defaultValue = m_value;
 }
 

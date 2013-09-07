@@ -53,7 +53,6 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {

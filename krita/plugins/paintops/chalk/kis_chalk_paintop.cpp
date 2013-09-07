@@ -58,7 +58,7 @@ KisChalkPaintOp::~KisChalkPaintOp()
     delete m_chalkBrush;
 }
 
-qreal KisChalkPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return 1.0;
 

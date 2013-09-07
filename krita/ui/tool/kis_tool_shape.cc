@@ -128,18 +128,18 @@ void KisToolShape::addShape(KoShape* shape)
     KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
     switch(fillStyle()) {
         case KisPainter::FillStyleForegroundColor:
-            shape->setBackground(new KoColorBackground(currentFgColor().toQColor()));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
             break;
         case KisPainter::FillStyleBackgroundColor:
-            shape->setBackground(new KoColorBackground(currentBgColor().toQColor()));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
             break;
         case KisPainter::FillStylePattern:
             if (imageCollection) {
-                KoPatternBackground* fill = new KoPatternBackground(imageCollection);
+                QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
                 fill->setPattern(currentPattern()->image());
                 shape->setBackground(fill);
             } else {
-                shape->setBackground(0);
+                shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             }
             break;
         case KisPainter::FillStyleGradient:
@@ -147,13 +147,13 @@ void KisToolShape::addShape(KoShape* shape)
                 QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
                 gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
                 gradient->setStops(currentGradient()->toQGradient()->stops());
-                KoGradientBackground* gradientFill = new KoGradientBackground(gradient);
+                QSharedPointer<KoGradientBackground>  gradientFill(new KoGradientBackground(gradient));
                 shape->setBackground(gradientFill);
             }
             break;
         case KisPainter::FillStyleNone:
         default:
-            shape->setBackground(0);
+            shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
     }
     KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);

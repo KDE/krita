@@ -81,7 +81,7 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 void Imagesplit::slotImagesplit()
 {
     // Taking the title - url from caption function and removing file extension
-    QStringList strList = ((m_view->document())->caption()).split(".");
+    QStringList strList = ((m_view->document())->caption()).split('.');
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
@@ -114,7 +114,7 @@ void Imagesplit::slotImagesplit()
                 {
                     KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType( listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url( QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+mimeTypeSelected->mainExtension();
+                    QString fileName = dlgImagesplit->suffix()+'_'+ QString::number(k)+mimeTypeSelected->mainExtension();
                     url.addPath( fileName );
                     KUrl kurl=url.url();
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(dlgImagesplit->cmbIndex),kurl);

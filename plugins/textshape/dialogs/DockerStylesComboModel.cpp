@@ -110,42 +110,26 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
     m_usedStyles.clear();
     m_usedStylesId.clear();
 
+    QVector<int> usedStyles;
     if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
-        KoCharacterStyle *compareStyle;
-        foreach(int i, m_styleManager->usedCharacterStyles()) {
-            if (!m_usedStylesId.contains(i)) {
-                QVector<int>::iterator begin = m_usedStyles.begin();
-                compareStyle = m_styleManager->characterStyle(i);
-                for ( ; begin != m_usedStyles.end(); ++begin) {
-                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                        KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
-                            break;
-                        }
-                    }
-                }
-                m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*compareStyle).row());
-                m_usedStylesId.append(i);
-            }
-        }
+        usedStyles = m_styleManager->usedCharacterStyles();
+    } else {
+        usedStyles = m_styleManager->usedParagraphStyles();
     }
-    else {
-        KoParagraphStyle *compareStyle;
-        foreach(int i, m_styleManager->usedParagraphStyles()) {
-            if (!m_usedStylesId.contains(i)) {
-                QVector<int>::iterator begin = m_usedStyles.begin();
-                compareStyle = m_styleManager->paragraphStyle(i);
-                for ( ; begin != m_usedStyles.end(); ++begin) {
-                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                        KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
-                            break;
-                        }
+    foreach(int i, usedStyles) {
+        if (!m_usedStylesId.contains(i)) {
+            QVector<int>::iterator begin = m_usedStyles.begin();
+            KoCharacterStyle *compareStyle = findStyle(i);
+            for ( ; begin != m_usedStyles.end(); ++begin) {
+                const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
+                if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
+                    if (KStringHandler::naturalCompare(compareStyle->name(), findStyle(styleId)->name()) < 0) {
+                        break;
                     }
                 }
-                m_usedStyles.insert(begin, m_sourceModel->indexForParagraphStyle(*compareStyle).row());
-                m_usedStylesId.append(i);
             }
+            m_usedStyles.insert(begin, m_sourceModel->indexOf(*compareStyle).row());
+            m_usedStylesId.append(i);
         }
     }
     createMapping();
@@ -153,40 +137,28 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
-    if (style == m_styleManager->defaultCharacterStyle() ||
-        style == m_styleManager->defaultParagraphStyle()) {
-        // Ignore the default styles. They're never present in the source model.
-        return;
+    QModelIndex sourceIndex = m_sourceModel->indexOf(*style);
+    if (!sourceIndex.isValid()) {
+        return; // Probably default style.
     }
+    if (m_usedStylesId.contains(style->styleId())) {
+        return; // Style already among used styles.
+    }
+    QVector<int>::iterator begin = m_usedStyles.begin();
+    for ( ; begin != m_usedStyles.end(); ++begin) {
+        const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
+        if (styleId != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
+            if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
+                break;
+            }
+        }
+    }
+    m_usedStyles.insert(begin, sourceIndex.row());
+    m_usedStylesId.append(style->styleId());
 
-    if (!m_usedStylesId.contains(style->styleId())) {
-        m_usedStylesId.append(style->styleId());
-        if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
-            QVector<int>::iterator begin = m_usedStyles.begin();
-            for ( ; begin != m_usedStyles.end(); ++begin) {
-                if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                    KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                    if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
-                        break;
-                    }
-                }
-            }
-            m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*style).row());
-        }
-        else {
-            QVector<int>::iterator begin = m_usedStyles.begin();
-            for ( ; begin != m_usedStyles.end(); ++begin) {
-                KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
-                    break;
-                }
-            }
-            m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*(style)).row());   // We use the ForCharacterStyle variant also for parag styles because the signal exist only in charStyle variant. TODO merge these functions in StylesModel. they use the styleId anyway.
-        }
-        beginResetModel();
-        createMapping();
-        endResetModel();
-    }
+    beginResetModel();
+    createMapping();
+    endResetModel();
 }
 
 void DockerStylesComboModel::createMapping()
@@ -214,42 +186,26 @@ void DockerStylesComboModel::createMapping()
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
         if (!m_usedStylesId.contains(id)) {
-            if (m_sourceModel->stylesType() == AbstractStylesModel::ParagraphStyle) {
-                KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-                if (paragStyle) {
-                    if (!m_unusedStyles.empty()) {
-                        QVector<int>::iterator begin = m_unusedStyles.begin();
-                        for ( ; begin != m_unusedStyles.end(); ++begin) {
-                            KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (KStringHandler::naturalCompare(paragStyle->name(), style->name()) < 0) {
-                                break;
-                            }
+            KoCharacterStyle *style = findStyle(id);
+            if (!style) {
+                continue;
+            }
+            if (!m_unusedStyles.empty()) {
+                QVector<int>::iterator begin = m_unusedStyles.begin();
+                for ( ; begin != m_unusedStyles.end(); ++begin) {
+                    const int styleId = m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
+                    if (styleId == -1) {
+                        if (KStringHandler::naturalCompare(style->name(), findStyle(styleId)->name()) < 0) {
+                            break;
                         }
-                        m_unusedStyles.insert(begin, i);
-                    }
-                    else {
-                        m_unusedStyles.append(i);
                     }
                 }
+                m_unusedStyles.insert(begin, i);
             }
             else {
-                KoCharacterStyle *charStyle = m_styleManager->characterStyle(id);
-                if (charStyle) {
-                    if (!m_unusedStyles.empty()) {
-                        QVector<int>::iterator begin = m_unusedStyles.begin();
-                        for ( ; begin != m_unusedStyles.end(); ++begin) {
-                            KoCharacterStyle *style = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (KStringHandler::naturalCompare(charStyle->name(), style->name()) < 0) {
-                                break;
-                            }
-                        }
-                        m_unusedStyles.insert(begin, i);
-                    }
-                    else {
-                        m_unusedStyles.append(i);
-                    }
-                }
+                m_unusedStyles.append(i);
             }
+
         }
     }
     if (!m_usedStyles.isEmpty()) {
@@ -263,5 +219,14 @@ void DockerStylesComboModel::createMapping()
         if (m_proxyToSource.at(i) >= 0) { //we do not need to map to the titles
             m_sourceToProxy[m_proxyToSource.at(i)] = i;
         }
+    }
+}
+
+KoCharacterStyle *DockerStylesComboModel::findStyle(int styleId) const
+{
+    if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+        return m_styleManager->characterStyle(styleId);
+    } else {
+        return m_styleManager->paragraphStyle(styleId);
     }
 }

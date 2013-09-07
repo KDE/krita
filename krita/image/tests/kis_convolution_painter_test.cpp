@@ -31,7 +31,6 @@
 #include "kis_paint_device.h"
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
-#include "kis_paint_device.h"
 #include <kis_mask_generator.h>
 #include "testutil.h"
 
@@ -102,7 +101,7 @@ void printPixel(QString prefix, int pixelSize, quint8 *data) {
     QString str = prefix;
 
     for(int i = 0; i < pixelSize; i++) {
-        str += " ";
+        str += ' ';
         str += QString::number(data[i]);
     }
 

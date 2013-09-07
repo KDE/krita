@@ -45,7 +45,7 @@ public:
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgFileLayer(const QString & name, QWidget *parent = 0);
+    KisDlgFileLayer(const QString &basePath, const QString &name, QWidget *parent = 0);
     QString fileName() const;
     QString layerName() const;
     bool scaleToImageResolution() const;
@@ -58,6 +58,7 @@ protected slots:
 private:
 
     Ui_WdgDlgFileLayer dlgWidget;
+    QString m_basePath;
     bool m_customName;
     bool m_freezeName;
 };

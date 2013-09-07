@@ -15,7 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_RECT_ITERATOR
+#define KIS_RECT_ITERATOR
 #include "kis_base_iterator.h"
 
 #include "kis_iterator_ng.h"
@@ -81,3 +82,4 @@ private:
     void nextTile();
     void fetchTileData(qint32 col, qint32 row);
 };
+#endif

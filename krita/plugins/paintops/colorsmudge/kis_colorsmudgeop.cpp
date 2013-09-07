@@ -74,6 +74,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
     // Smudge Painter works in default COMPOSITE_OVER mode
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
+
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -106,7 +108,7 @@ inline void KisColorSmudgeOp::getTopLeftAligned(const QPointF &pos, const QPoint
     splitCoordinate(topLeft.y(), y, &yFraction);
 }
 
-qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
 
@@ -119,7 +121,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
     qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
 
-    // don't paint anything if the brush is too samll
+    // don't paint anything if the brush is too small
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
         return 1.0;
 
@@ -138,12 +140,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // Save the hot spot point for the next iteration
     m_lastPaintPos = scatteredPos;
 
-    qreal coveredDistance = m_spacingOption.isChecked() ?
-        spacing(m_spacingOption.apply(info)) : spacing(scale);
+    KisSpacingInformation spacingInfo =
+        effectiveSpacing(m_maskBounds.width(), m_maskBounds.height(),
+                         m_spacingOption, info);
 
     if (m_firstRun) {
         m_firstRun = false;
-        return coveredDistance;
+        return spacingInfo;
     }
 
 
@@ -224,5 +227,5 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldModeId);
 
-    return coveredDistance;
+    return spacingInfo;
 }

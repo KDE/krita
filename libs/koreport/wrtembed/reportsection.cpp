@@ -46,7 +46,7 @@
 
 #include <kdebug.h>
 
-static const char *arrow_xpm[] = {
+static const char * const arrow_xpm[] = {
     /* width height num_colors chars_per_pixel */
     "    11    12       2            1",
     /* colors */

@@ -39,7 +39,7 @@ public:
 
     virtual void updateAll();
 
-    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
+    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
 
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 

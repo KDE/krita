@@ -36,10 +36,12 @@ public:
 };
 
 
-KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager), d(new Private())
+KisRotateCanvasAction::KisRotateCanvasAction()
+    : d(new Private())
 {
     setName(i18n("Rotate Canvas"));
+    setDescription(i18n("The <i>Rotate Canvas</i> action rotates the canvas."));
+
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Toggle Rotate Mode"), RotateToggleShortcut);
     shortcuts.insert(i18n("Toggle Discrete Rotate Mode"), DiscreteRotateToggleShortcut);
@@ -52,6 +54,11 @@ KisRotateCanvasAction::KisRotateCanvasAction(KisInputManager* manager)
 KisRotateCanvasAction::~KisRotateCanvasAction()
 {
     delete d;
+}
+
+int KisRotateCanvasAction::priority() const
+{
+    return 3;
 }
 
 void KisRotateCanvasAction::activate()

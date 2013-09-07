@@ -135,7 +135,7 @@ void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
-void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;

@@ -25,7 +25,7 @@
 #include "krita_export.h"
 #include "kis_paint_information.h"
 #include "strokes/freehand_stroke.h"
-
+#include "kis_default_bounds.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -58,7 +58,8 @@ public:
                    KisImageWSP image,
                    KisStrokesFacade *strokesFacade,
                    KisPostExecutionUndoAdapter *undoAdapter,
-                   KisNodeSP overrideNode = 0);
+                   KisNodeSP overrideNode = 0,
+                   KisDefaultBoundsBaseSP bounds = 0);
     void paint(KoPointerEvent *event);
     void endPaint();
 
@@ -66,7 +67,9 @@ public:
 
 protected:
 
-    virtual void createPainters(QVector<PainterInfo*> &painterInfos);
+    virtual void createPainters(QVector<PainterInfo*> &painterInfos,
+                                const QPointF &lastPosition,
+                                int lastTime);
 
     virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
                          const KisPaintInformation &pi);
@@ -93,6 +96,10 @@ protected:
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);
+
+private:
+    void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
+                                                   QPointF tangent1, QPointF tangent2);
 
 private slots:
 

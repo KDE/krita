@@ -119,7 +119,7 @@ namespace KChart {
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
 
-static const char *ODF_CHARTTYPES[NUM_CHARTTYPES] = {
+static const char * const ODF_CHARTTYPES[NUM_CHARTTYPES] = {
     "chart:bar",
     "chart:line",
     "chart:area",
@@ -222,7 +222,7 @@ const char * odfCharttype(int charttype)
 
 static const int NUM_DEFAULT_DATASET_COLORS = 12;
 
-static const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
+static const char * const defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
 {
     "#004586",
     "#ff420e",
@@ -555,7 +555,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
 //FIXME        doc.setResizeMethod(KoTextDocument::AutoResize);
     }
 
-    KoColorBackground *background = new KoColorBackground(Qt::white);
+    QSharedPointer<KoColorBackground> background(new KoColorBackground(Qt::white));
     setBackground(background);
 
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
@@ -1022,7 +1022,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!background()) {
         const QColor color = KoOdfWorkaround::fixMissingFillColor(chartElement, context);
         if (color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
-            setBackground(new KoColorBackground(color));
+            setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color)));
     }
 #endif
 

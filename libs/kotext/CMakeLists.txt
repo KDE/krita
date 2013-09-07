@@ -117,18 +117,18 @@ set(kotext_LIB_SRCS
     KoTextCommandBase.cpp
 )
 
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
     set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
         KoTextRdfCore.cpp
     )
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake)
-if( Soprano_FOUND )
+if( SHOULD_BUILD_RDF )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
-endif( Soprano_FOUND )
+endif( SHOULD_BUILD_RDF )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
 
 if( FONTCONFIG_FOUND )
@@ -147,7 +147,7 @@ install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariableplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES texteditingplugin.desktop inlinetextobject.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install(
     FILES
@@ -187,7 +187,7 @@ install(
     KoTextTableTemplate.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )
 
 install(
@@ -203,7 +203,7 @@ install(
     styles/KoStyleManager.h
     styles/KoTableStyle.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
 )
 
 install(
@@ -215,5 +215,5 @@ install(
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/changetracker COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
 )

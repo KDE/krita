@@ -27,7 +27,6 @@
 #include "kis_gbr_brush.h"
 
 #include "kis_brush.h"
-#include "kis_qimage_mask.h"
 
 #include <QDomElement>
 #include <QFile>
@@ -464,7 +463,7 @@ void KisGbrBrush::makeMaskImage()
     setHasColor(false);
     setUseColorAsMask(false);
     resetBoundary();
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 
 KisGbrBrush* KisGbrBrush::clone() const
@@ -474,12 +473,7 @@ KisGbrBrush* KisGbrBrush::clone() const
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "gbr_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", QString::number(spacing()));
-    e.setAttribute("angle", QString::number(KisBrush::angle()));
-    e.setAttribute("scale", QString::number(KisBrush::scale()));
+    predefinedBrushToXML("gbr_brush", e);
     KisBrush::toXML(d, e);
 }
 
@@ -487,7 +481,7 @@ void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
 {
     d->useColorAsMask = useColorAsMask;
     resetBoundary();
-    clearScaledBrushes();
+    clearBrushPyramid();
 }
 bool KisGbrBrush::useColorAsMask() const
 {

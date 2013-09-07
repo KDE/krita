@@ -380,6 +380,7 @@ QRect KisPaintDevice::extent() const
     extent = QRect(x, y, w, h);
 
     quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+
     if (defaultOpacity != OPACITY_TRANSPARENT_U8)
         extent |= m_d->defaultBounds->bounds();
 
@@ -713,13 +714,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, QRect
 
     int srcWidth, srcHeight;
     int srcX0, srcY0;
-    QRect e;
-    if (!rect.isValid())
-        e = extent();
-    else
-        e = rect.translated(-m_d->x, -m_d->y);
+    QRect e = rect.isValid() ? rect : extent();
     e.getRect(&srcX0, &srcY0, &srcWidth, &srcHeight);
-
 
     if (w > srcWidth) {
         w = srcWidth;

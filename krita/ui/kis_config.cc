@@ -48,7 +48,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 
 
 namespace
@@ -706,16 +706,6 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
 
-bool KisConfig::zoomWithWheel() const
-{
-    return m_cfg.readEntry("ZoomWithWheel", true);
-}
-
-void KisConfig::setZoomWithWheel(const bool zoom) const
-{
-    m_cfg.writeEntry("ZoomWithWheel", zoom);
-}
-
 qreal KisConfig::vastScrolling() const
 {
     return m_cfg.readEntry("vastScrolling", 0.9);
@@ -933,6 +923,15 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+QString KisConfig::currentInputProfile() const
+{
+    return m_cfg.readEntry("currentInputProfile", QString());
+}
+
+void KisConfig::setCurrentInputProfile(const QString& name)
+{
+    m_cfg.writeEntry("currentInputProfile", name);
+}
 
 bool KisConfig::useSystemMonitorProfile() const
 {

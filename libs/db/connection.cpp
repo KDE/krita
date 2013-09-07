@@ -652,7 +652,7 @@ bool Connection::useDatabase(const QString &dbName, bool kexiCompatible, bool *c
     if (!d->usedDatabase.isEmpty() && !closeDatabase()) //close db if already used
         return false;
 
-    d->usedDatabase = "";
+    d->usedDatabase.clear();
 
     if (!drv_useDatabase(my_dbName, cancelled, msgHandler)) {
         if (cancelled && *cancelled)
@@ -752,7 +752,7 @@ bool Connection::closeDatabase()
     if (!drv_closeDatabase())
         return false;
 
-    d->usedDatabase = "";
+    d->usedDatabase.clear();
 // KexiDBDbg << "Connection::closeDatabase(): " << ret;
     return ret;
 }
@@ -974,15 +974,15 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
             first = false;
         else
             sql += ", ";
-        QString v = escapeIdentifier(field->name()) + " ";
+        QString v = escapeIdentifier(field->name()) + ' ';
         const bool autoinc = field->isAutoIncrement();
         const bool pk = field->isPrimaryKey() || (autoinc && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
 //TODO: warning: ^^^^^ this allows only one autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
         if (autoinc && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
             if (pk)
-                v += m_driver->beh->AUTO_INCREMENT_TYPE + " " + m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
+                v += m_driver->beh->AUTO_INCREMENT_TYPE + ' ' + m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
             else
-                v += m_driver->beh->AUTO_INCREMENT_TYPE + " " + m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
+                v += m_driver->beh->AUTO_INCREMENT_TYPE + ' ' + m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
         } else {
             if (autoinc && !m_driver->beh->AUTO_INCREMENT_TYPE.isEmpty())
                 v += m_driver->beh->AUTO_INCREMENT_TYPE;
@@ -990,7 +990,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
                 v += m_driver->sqlTypeName(field->type(), field->precision());
 
             if (field->isUnsigned())
-                v += (" " + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
+                v += (' ' + m_driver->beh->UNSIGNED_TYPE_KEYWORD);
 
             if (field->isFPNumericType() && field->precision() > 0) {
                 if (field->scale() > 0)
@@ -1017,7 +1017,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
             }
 
             if (autoinc)
-                v += (" " +
+                v += (' ' +
                       (pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));
             else
                 //TODO: here is automatically a single-field key created
@@ -1036,7 +1036,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
         }
         sql += v;
     }
-    sql += ")";
+    sql += QLatin1Char(')');
     return sql;
 }
 
@@ -1044,7 +1044,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
 #define C_A(a) , const QVariant& c ## a
 
 #define V_A0 m_driver->valueToSQL( tableSchema.field(0), c0 )
-#define V_A(a) +","+m_driver->valueToSQL( \
+#define V_A(a) +QLatin1Char(',')+m_driver->valueToSQL( \
         tableSchema.field(a) ? tableSchema.field(a)->type() : Field::Text, c ## a )
 
 //  KexiDBDbg << "******** " << QString("INSERT INTO ") +
@@ -1058,7 +1058,7 @@ QString Connection::createTableStatement(const KexiDB::TableSchema& tableSchema)
         \
         bool res = executeSQL(                                      \
                    QLatin1String("INSERT INTO ") + escapeIdentifier(tableSchema.name()) \
-                   + " (" + tableSchema.sqlFieldsList(m_driver) + ") VALUES (" + vals + ")"      \
+                   + " (" + tableSchema.sqlFieldsList(m_driver) + ") VALUES (" + vals + ')'      \
                              ); \
         \
         if ( !drv_afterInsert( tableSchema.name(),tableSchema ) ) \
@@ -1084,7 +1084,7 @@ C_INS_REC_ALL
 #undef C_INS_REC
 
 #define V_A0 value += m_driver->valueToSQL( it.next(), c0 );
-#define V_A( a ) value += ("," + m_driver->valueToSQL( it.next(), c ## a ));
+#define V_A( a ) value += (QLatin1Char(',') + m_driver->valueToSQL( it.next(), c ## a ));
 
 #define C_INS_REC(args, vals) \
     bool Connection::insertRecord(FieldList& fields args) \
@@ -1099,7 +1099,7 @@ C_INS_REC_ALL
             return false;                                       \
         bool res = executeSQL(                                  \
                    QLatin1String("INSERT INTO ") + escapeIdentifier(tableName) \
-                   + "(" + fields.sqlFieldsList(m_driver) + ") VALUES (" + value + ")" \
+                   + QLatin1Char('(') + fields.sqlFieldsList(m_driver) + ") VALUES (" + value + QLatin1Char(')') \
                              ); \
         if ( !drv_afterInsert( tableName, fields ) )    \
             return false;                               \
@@ -1133,13 +1133,13 @@ bool Connection::insertRecord(TableSchema &tableSchema, const QList<QVariant>& v
                     escapeIdentifier(tableSchema.name()) +
                     QLatin1String(" VALUES (");
         else
-            m_sql += ",";
+            m_sql += QLatin1Char(',');
         m_sql += m_driver->valueToSQL(f, *it);
 //  KexiDBDbg << "val" << i++ << ": " << m_driver->valueToSQL( f, *it );
         ++it;
         ++fieldsIt;
     }
-    m_sql += ")";
+    m_sql += QLatin1Char(')');
 
 // KexiDBDbg<<"******** "<< m_sql;
     if (!drv_beforeInsert(tableSchema.name(), tableSchema))
@@ -1168,7 +1168,7 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
         Field *f = *fieldsIt;
         if (m_sql.isEmpty())
             m_sql = QLatin1String("INSERT INTO ") +
-                    tableName + "(" +
+                    tableName + QLatin1Char('(') +
                     fields.sqlFieldsList(m_driver) + ") VALUES (";
         else
             m_sql += ",";
@@ -1177,7 +1177,7 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
         ++it;
         ++fieldsIt;
     }
-    m_sql += ")";
+    m_sql += QLatin1Char(')');
 
     if (!drv_beforeInsert(tableName, fields))
         return false;
@@ -1257,7 +1257,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                     sql += escapeIdentifier(f->table()->name(), options.identifierEscaping) +
                            QLatin1String(".*");
                 else //all-tables * (or simplified table.* when there's only one table)
-                    sql += QLatin1String("*");
+                    sql += QLatin1Char('*');
             } else {
                 if (f->isExpression()) {
                     sql += f->expression()->toString();
@@ -1273,7 +1273,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                         tableName = f->table()->name();
 
                     if (!singleTable) {
-                        sql += (escapeIdentifier(tableName, options.identifierEscaping) + ".");
+                        sql += (escapeIdentifier(tableName, options.identifierEscaping) + QLatin1Char('.'));
                     }
                     sql += escapeIdentifier(f->name(), options.identifierEscaping);
                 }
@@ -1300,8 +1300,8 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                             && (boundField = lookupTable->field(lookupFieldSchema->boundColumn()))) {
                         //add LEFT OUTER JOIN
                         if (!s_additional_joins.isEmpty())
-                            s_additional_joins += QLatin1String(" ");
-                        QString internalUniqueTableAlias(QLatin1String("__kexidb_") + lookupTable->name() + "_"
+                            s_additional_joins += QLatin1Char(' ');
+                        QString internalUniqueTableAlias(QLatin1String("__kexidb_") + lookupTable->name() + '_'
                                                          + QString::number(internalUniqueTableAliasNumber++));
                         s_additional_joins += QString::fromLatin1("LEFT OUTER JOIN %1 AS %2 ON %3.%4=%5.%6")
                                               .arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
@@ -1356,9 +1356,9 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                     }
                     //add LEFT OUTER JOIN
                     if (!s_additional_joins.isEmpty())
-                        s_additional_joins += QLatin1String(" ");
+                        s_additional_joins += QLatin1Char(' ');
                     QString internalUniqueQueryAlias(
-                        kexidb_subquery_prefix + lookupQuery->name() + "_"
+                        kexidb_subquery_prefix + lookupQuery->name() + '_'
                         + QString::number(internalUniqueQueryAliasNumber++));
                     s_additional_joins += QString::fromLatin1("LEFT OUTER JOIN (%1) AS %2 ON %3.%4=%5.%6")
                         .arg(KexiDB::selectStatement(driver, *lookupQuery, params, options))
@@ -1382,7 +1382,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                         }
                         if (!expression.isEmpty())
                             expression += " || ' ' || ";
-                        expression += (internalUniqueQueryAlias + "." +
+                        expression += (internalUniqueQueryAlias + QLatin1Char('.') +
                                        escapeIdentifier(fieldsExpanded.value(visibleColumnIndex)->aliasOrName(),
                                                         options.identifierEscaping));
                     }
@@ -1407,7 +1407,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         if (!sql.isEmpty())
             s = QLatin1String(", ");
         if (querySchema.masterTable())
-            s += (escapeIdentifier(querySchema.masterTable()->name()) + ".");
+            s += (escapeIdentifier(querySchema.masterTable()->name()) + QLatin1Char('.'));
         s += driver->behaviour()->ROW_ID_FIELD_NAME;
         sql += s;
     }
@@ -1439,9 +1439,9 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         foreach(QuerySchema* subQuery, subqueries_for_lookup_data) {
             if (!s_from.isEmpty())
                 s_from += QLatin1String(", ");
-            s_from += QLatin1String("(");
-            s_from += selectStatement(driver, *subQuery, params, options);
-            s_from += QString::fromLatin1(") AS %1%2")
+            s_from += QLatin1Char('(') +
+                      selectStatement(driver, *subQuery, params, options) +
+                      QString::fromLatin1(") AS %1%2")
                       .arg(kexidb_subquery_prefix).arg(subqueries_for_lookup_data_counter++);
         }
         sql += s_from;
@@ -1451,7 +1451,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
 
     //JOINS
     if (!s_additional_joins.isEmpty()) {
-        sql += QLatin1String(" ") + s_additional_joins + QLatin1String(" ");
+        sql += QLatin1Char(' ') + s_additional_joins + QLatin1Char(' ');
     }
 
 //@todo: we're using WHERE for joins now; use INNER/LEFT/RIGHT JOIN later
@@ -1469,16 +1469,15 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                 s_where_sub += QLatin1String(" AND ");
             s_where_sub += (
                                escapeIdentifier(pair.first->table()->name(), options.identifierEscaping) +
-                               QLatin1String(".") +
+                               QLatin1Char('.') +
                                escapeIdentifier(pair.first->name(), options.identifierEscaping) +
                                QLatin1String(" = ")  +
                                escapeIdentifier(pair.second->table()->name(), options.identifierEscaping) +
-                               QLatin1String(".") +
+                               QLatin1Char('.') +
                                escapeIdentifier(pair.second->name(), options.identifierEscaping));
         }
         if (rel->fieldPairs()->count() > 1) {
-            s_where_sub.prepend("(");
-            s_where_sub += QLatin1String(")");
+            s_where_sub = QLatin1Char('(') + s_where_sub + QLatin1Char(')');
         }
         s_where += s_where_sub;
     }
@@ -1488,7 +1487,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
         if (wasWhere) {
 //TODO: () are not always needed
-            s_where = "(" + s_where + ") AND (" + querySchema.whereExpression()->toString(paramValuesItPtr) + ")";
+            s_where = '(' + s_where + ") AND (" + querySchema.whereExpression()->toString(paramValuesItPtr) + ')';
         } else {
             s_where = querySchema.whereExpression()->toString(paramValuesItPtr);
         }
@@ -1554,8 +1553,8 @@ quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const Q
     }
     RecordData rdata;
     if (row_id <= 0 || true != querySingleRecord(
-                QLatin1String("SELECT ") + tableName + QLatin1String(".") + aiFieldName + QLatin1String(" FROM ") + tableName
-                + QLatin1String(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QLatin1String("=") + QString::number(row_id), rdata)) {
+                QLatin1String("SELECT ") + tableName + QLatin1Char('.') + aiFieldName + QLatin1String(" FROM ") + tableName
+                + QLatin1String(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QLatin1Char('=') + QString::number(row_id), rdata)) {
 //  KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()";
         return (quint64) - 1; //ULL;
     }
@@ -1632,7 +1631,7 @@ bool Connection::storeMainFieldSchema(Field *field)
     QString sql = "UPDATE kexi__fields SET ";
     foreach(Field *f, *fl->fields()) {
         sql.append((first ? QString() : QLatin1String(", ")) +
-                   f->name() + "=" + m_driver->valueToSQL(f, *valsIt));
+                   f->name() + QLatin1Char('=') + m_driver->valueToSQL(f, *valsIt));
         if (first)
             first = false;
         ++valsIt;
@@ -1649,7 +1648,7 @@ bool Connection::storeMainFieldSchema(Field *field)
         setError(this, i18n("Creating table failed.")); \
         rollbackAutoCommitTransaction(tg.transaction()); \
         return false; }
-//setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg());
+//setError( errorNum(), i18n("Creating table failed.") + ' ' + errorMsg());
 
 //! Creates a table according to the given schema
 /*! Creates a table according to the given TableSchema, adding the table and
@@ -2649,7 +2648,7 @@ bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo
     if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
         //this is at least for sqlite
         if (addLimitTo1 && sql.left(6).toUpper() == "SELECT")
-            m_sql = m_driver->addLimitTo1(QString::fromLatin1("SELECT 1 FROM (") + sql + ")", addLimitTo1);
+            m_sql = m_driver->addLimitTo1(QString::fromLatin1("SELECT 1 FROM (") + sql + QLatin1Char(')'), addLimitTo1);
         else
             m_sql = sql;
     } else {
@@ -3114,8 +3113,8 @@ bool Connection::storeDataBlock(int objectID, const QString &dataString, const Q
     }
     return executeSQL(
                QString::fromLatin1("INSERT INTO kexi__objectdata (o_id, o_data, o_sub_id) VALUES (")
-               + QString::number(objectID) + "," + m_driver->valueToSQL(KexiDB::Field::LongText, dataString)
-               + "," + m_driver->valueToSQL(KexiDB::Field::Text, dataID) + ")");
+               + QString::number(objectID) + QLatin1Char(',') + m_driver->valueToSQL(KexiDB::Field::LongText, dataString)
+               + QLatin1Char(',') + m_driver->valueToSQL(KexiDB::Field::Text, dataID) + QLatin1Char(')'));
 }
 
 bool Connection::copyDataBlock(int sourceObjectID, int destObjectID, const QString& dataID)
@@ -3397,7 +3396,7 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
         if (it.key()->field->table() != mt)
             continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
         if (!sqlset.isEmpty())
-            sqlset += ",";
+            sqlset += ',';
         Field* currentField = it.key()->field;
         affectedFields.addField(currentField);
         sqlset += (escapeIdentifier(currentField->name()) + "=" +
@@ -3424,13 +3423,13 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
                     //js todo: pass the field's name somewhere!
                     return false;
                 }
-                sqlwhere += (escapeIdentifier(f->name()) + "=" +
+                sqlwhere += (escapeIdentifier(f->name()) + QLatin1Char('=') +
                              m_driver->valueToSQL(f, val));
                 i++;
             }
         }
     } else {//use ROWID
-        sqlwhere = (escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "="
+        sqlwhere = (escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + QLatin1Char('=')
                     + m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
     }
     m_sql += (sqlset + " WHERE " + sqlwhere);
@@ -3540,8 +3539,8 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
             if (it.key()->field->table() != mt)
                 continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
             if (!sqlcols.isEmpty()) {
-                sqlcols += ",";
-                sqlvals += ",";
+                sqlcols += ',';
+                sqlvals += ',';
             }
             Field* currentField = it.key()->field;
             affectedFields.addField(currentField);
@@ -3549,7 +3548,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
             sqlvals += m_driver->valueToSQL(currentField, it.value());
         }
     }
-    m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
+    m_sql += (sqlcols + ") VALUES (" + sqlvals + ')');
 // KexiDBDbg << " -- SQL == " << m_sql;
 
     // do driver specific pre-processing
@@ -3590,7 +3589,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
                                              + QLatin1String(" FROM ")
                                              + escapeIdentifier(id_columnInfo->field->table()->name())
                                              + QLatin1String(" WHERE ")
-                                             + escapeIdentifier(id_columnInfo->field->name()) + "="
+                                             + escapeIdentifier(id_columnInfo->field->name()) + QLatin1Char('=')
                                              + QString::number(last_id);
         if (true != querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
             //! @todo show error
@@ -3665,12 +3664,12 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
 //js todo: pass the field's name somewhere!
                 return false;
             }
-            sqlwhere += (escapeIdentifier(f->name()) + "=" +
+            sqlwhere += (escapeIdentifier(f->name()) + QLatin1Char('=') +
                          m_driver->valueToSQL(f, val));
             i++;
         }
     } else {//use ROWID
-        sqlwhere = (escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + "="
+        sqlwhere = (escapeIdentifier(m_driver->beh->ROW_ID_FIELD_NAME) + QLatin1Char('=')
                     + m_driver->valueToSQL(Field::BigInteger, data[data.size()-1]));
     }
     m_sql += sqlwhere;

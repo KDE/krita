@@ -18,6 +18,8 @@
 
 #include "kis_single_action_shortcut.h"
 
+#include "kis_abstract_input_action.h"
+
 class KisSingleActionShortcut::Private
 {
 public:
@@ -41,7 +43,7 @@ KisSingleActionShortcut::~KisSingleActionShortcut()
 
 int KisSingleActionShortcut::priority() const
 {
-    return m_d->modifiers.size() * 2 + 1;
+    return m_d->modifiers.size() * 2 + 1 + action()->priority();
 }
 
 void KisSingleActionShortcut::setKey(const QList<Qt::Key> &modifiers, Qt::Key key)

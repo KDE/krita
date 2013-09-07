@@ -555,7 +555,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 }
 
 // This method is called by KoTextLauoutArea every time it encounters a KoAnchorTextRange
-void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
+void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument)
 {
     if (!d->allowPositionInlineObject)
         return;
@@ -563,7 +563,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length)
     if (!textRangeManager()) {
         return;
     }
-    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(document(), pos, pos+length, pos, pos+length);
+    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
 
     foreach(KoTextRange *range, ranges.values()) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
@@ -709,10 +709,10 @@ bool KoTextDocumentLayout::doLayout()
         }
 
         if (shouldLayout) {
-            QSizeF size = d->provider->suggestSize(rootArea);
+            QRectF rect = d->provider->suggestRect(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
 
-            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+            rootArea->setReferenceRect(rect.left(), rect.right(), d->y + rect.top(), d->y + rect.bottom());
 
             beginAnchorCollecting(rootArea);
 
@@ -797,10 +797,10 @@ bool KoTextDocumentLayout::doLayout()
 
         if (rootArea) {
             d->rootAreaList.append(rootArea);
-            QSizeF size = d->provider->suggestSize(rootArea);
+            QRectF rect = d->provider->suggestRect(rootArea);
             d->freeObstructions = d->provider->relevantObstructions(rootArea);
 
-            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+            rootArea->setReferenceRect(rect.left(), rect.right(), d->y + rect.top(), d->y + rect.bottom());
 
             beginAnchorCollecting(rootArea);
 

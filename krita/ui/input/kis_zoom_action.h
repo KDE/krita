@@ -41,8 +41,10 @@ public:
         ZoomToPageShortcut, ///< Zoom fit to page.
         ZoomToWidthShortcut ///< Zoom fit to width.
     };
-    explicit KisZoomAction(KisInputManager* manager);
+    explicit KisZoomAction();
     virtual ~KisZoomAction();
+
+    virtual int priority() const;
 
     void activate();
     void deactivate();

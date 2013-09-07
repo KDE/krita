@@ -22,7 +22,6 @@
 #include <qtest_kde.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
 

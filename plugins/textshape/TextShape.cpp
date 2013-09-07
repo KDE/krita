@@ -38,9 +38,9 @@
 #include <KoParagraphStyle.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoSelection.h>
-#include <KoShapeBackground.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeManager.h>
+#include <KoShapeBackground.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoText.h>
@@ -92,11 +92,18 @@ TextShape::~TextShape()
 {
 }
 
-void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                               KoShapePaintingContext &paintContext)
 {
-    if (paintContext.showTextShapeOutlines) {
-        painter.save();
-        applyConversion(painter, converter);
+    painter.save();
+    applyConversion(painter, converter);
+    KoBorder *border = this->border();
+
+    if (border) {
+       paintBorder(painter, converter);
+    }
+    else if (paintContext.showTextShapeOutlines) {
+        // No need to paint the outlines if there is a real border.
         if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
@@ -105,8 +112,8 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
         painter.setPen(pen);
         painter.drawRect(rect);
-        painter.restore();
     }
+    painter.restore();
 
     if (m_textShapeData->isDirty()) { // not layouted yet.
         return;
@@ -170,7 +177,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    painter.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 

@@ -1,4 +1,3 @@
-install( PROGRAMS  krita_flipbook.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 set(kritaflipbookimport_PART_SRCS
     kis_flipbook_import.cpp

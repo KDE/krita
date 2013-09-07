@@ -902,8 +902,14 @@ QString KoDocument::autoSaveFile(const QString & path) const
     if (extension.isEmpty()) extension = mime->mainExtension();
 
     if (path.isEmpty()) {
-        // Never saved? Use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
+        // Never saved?
+#ifdef Q_OS_WIN
+        // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+#else
+        // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
         retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(kapp->applicationPid()).arg(objectName()).arg(extension);
+#endif
     } else {
         KUrl url = KUrl::fromPath(path);
         Q_ASSERT(url.isLocalFile());
@@ -1428,7 +1434,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
         return false;
     }
     if (!fileInfo.isFile()) {
-        file = file += "/content.xml";
+        file += "/content.xml";
         QFileInfo fileInfo2(file);
         if (!fileInfo2.exists() || !fileInfo2.isFile()) {
             d->lastErrorMessage = i18n("%1 is not a file." , file_);
@@ -1897,7 +1903,7 @@ QDomDocument KoDocument::saveXML()
 KService::Ptr KoDocument::nativeService()
 {
     if (!d->nativeService)
-        d->nativeService = KoServiceProvider::readNativeService(d->parentPart->componentData());
+        d->nativeService = KoServiceProvider::readNativeService();
 
     return d->nativeService;
 }

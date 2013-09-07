@@ -44,12 +44,12 @@ kde4_add_ui_files(defaulttools_SRCS
     connectionTool/ConnectionPointWidget.ui
 )
 
-kde4_add_plugin(defaulttools ${defaulttools_SRCS})
-target_link_libraries(defaulttools flake kowidgets)
-install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_plugin(calligra_tool_defaults ${defaulttools_SRCS})
+target_link_libraries(calligra_tool_defaults flake kowidgets)
+install(TARGETS calligra_tool_defaults DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES defaulttools.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_tool_defaults.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

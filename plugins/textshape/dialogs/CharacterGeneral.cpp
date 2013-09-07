@@ -103,7 +103,7 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexForCharacterStyle(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(*parentStyle).row());
         }
     }
 
@@ -170,7 +170,10 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
 
 void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 {
-    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*style).row());
+    if (!style)
+        return;
+
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
 }
 
@@ -179,8 +182,16 @@ int CharacterGeneral::nextStyleId()
     if (!m_styleManager) {
         return 0;
     }
-
-    return m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.nextStyle->currentIndex()).internalId())->styleId();
+    int nextStyleIndex = widget.nextStyle->currentIndex();
+    QModelIndex paragraphStyleIndex = m_paragraphStyleModel->index(nextStyleIndex);
+    quint64 internalId = paragraphStyleIndex.internalId();
+    KoParagraphStyle * paragraphStyle = m_styleManager->paragraphStyle(internalId);
+    if (paragraphStyle) {
+        return paragraphStyle->styleId();
+    }
+    else {
+        return 0;
+    }
 }
 
 KoCharacterStyle *CharacterGeneral::style() const

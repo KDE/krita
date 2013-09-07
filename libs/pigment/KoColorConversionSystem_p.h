@@ -130,7 +130,7 @@ private:
 
 struct KoColorConversionSystem::NodeKey {
 
-    NodeKey(QString _modelId, QString _depthId, QString _profileName)
+    NodeKey(const QString &_modelId, const QString &_depthId, const QString &_profileName)
         : modelId(_modelId)
         , depthId(_depthId)
         , profileName(_profileName) {}

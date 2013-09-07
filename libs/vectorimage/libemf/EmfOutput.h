@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUT_H
 #define EMFOUTPUT_H
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include <QList>
 #include <QPainter>
@@ -46,7 +46,7 @@ namespace Libemf
 /**
     Abstract output strategy for EMF Parser
 */
-class VECTORIMAGE_EXPORT AbstractOutput
+class KOVECTORIMAGE_EXPORT AbstractOutput
 {
 public:
     AbstractOutput() {};
@@ -331,7 +331,7 @@ public:
     virtual void extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW ) = 0;
 
     /**
-       Handler for text rendering, as described in the the
+       Handler for text rendering, as described in the
        EMR_EXTTEXTOUTW and EMR_EXTTEXTOUTA record types.
 
        \param bounds the bounds used for e.g. clipping 

@@ -47,7 +47,6 @@ KoItemToolTip::KoItemToolTip()
     d->document = new QTextDocument(this);
     setWindowFlags(Qt::FramelessWindowHint  | Qt::ToolTip
                   | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
-    setPalette(QToolTip::palette());
     QApplication::instance()->installEventFilter(this);
 }
 

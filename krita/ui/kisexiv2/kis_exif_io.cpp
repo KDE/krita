@@ -386,7 +386,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
         try {
             const KisMetaData::Entry& entry = *it;
             dbgFile << "Trying to save: " << entry.name() << " of " << entry.schema()->prefix() << ":" << entry.schema()->uri();
-            QString exivKey = "";
+            QString exivKey;
             if (entry.schema()->uri() == KisMetaData::Schema::TIFFSchemaUri) {
                 exivKey = "Exif.Image." + entry.name();
             } else if (entry.schema()->uri() == KisMetaData::Schema::EXIFSchemaUri) { // Distinguish between exif and gps

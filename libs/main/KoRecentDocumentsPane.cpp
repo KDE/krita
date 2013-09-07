@@ -174,15 +174,15 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
         m_previewLabel->setPixmap(preview);
 
         if (!fileItem.isNull()) {
-            QString details = QString("<center>%1<br>").arg(fileItem.url().path());
-            details += "<table border=\"0\">";
-            details += i18nc("File modification date and time. %1 is date time",
-                             "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
-                             QString(fileItem.timeString(KFileItem::ModificationTime)));
-            details += i18nc("File access date and time. %1 is date time",
-                             "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
-                             QString(fileItem.timeString(KFileItem::AccessTime)));
-            details += "</table></center>";
+            QString details = QString("<center>%1<br>").arg(fileItem.url().path()) +
+                "<table border=\"0\">" +
+                i18nc("File modification date and time. %1 is date time",
+                      "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
+                      QString(fileItem.timeString(KFileItem::ModificationTime))) +
+                i18nc("File access date and time. %1 is date time",
+                      "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
+                      QString(fileItem.timeString(KFileItem::AccessTime))) +
+                "</table></center>";
             m_detailsLabel->setHtml(details);
         } else {
             m_detailsLabel->clear();

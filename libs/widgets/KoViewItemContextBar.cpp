@@ -212,7 +212,7 @@ void KoViewItemContextBar::update()
     }
 }
 
-QToolButton * KoViewItemContextBar::addContextButton(QString text, QString iconName)
+QToolButton * KoViewItemContextBar::addContextButton(const QString &text, const QString &iconName)
 {
     KoContextBarButton *newContexButton = new KoContextBarButton(iconName);
     newContexButton->setToolTip(text);

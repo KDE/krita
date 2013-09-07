@@ -15,7 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_META_DATA_MODEL_H
+#define KIS_META_DATA_MODEL_H
 #include <QAbstractTableModel>
 
 namespace KisMetaData
@@ -35,3 +36,4 @@ public:
 private:
     KisMetaData::Store* m_store;
 };
+#endif

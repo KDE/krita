@@ -26,11 +26,10 @@
 
 #include "kis_input_manager.h"
 
-KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager)
+KisAlternateInvocationAction::KisAlternateInvocationAction()
 {
     setName(i18n("Alternate Invocation"));
-    setDescription(i18n("Alternate Invocation performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
+    setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Toggle Primary Mode"), PrimaryAlternateToggleShortcut);
     shortcuts.insert(i18n("Toggle Secondary Mode"), SecondaryAlternateToggleShortcut);
@@ -39,6 +38,11 @@ KisAlternateInvocationAction::KisAlternateInvocationAction(KisInputManager *mana
 
 KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
+}
+
+int KisAlternateInvocationAction::priority() const
+{
+    return 9;
 }
 
 void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)

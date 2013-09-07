@@ -75,6 +75,7 @@ public:
     /// Unused
     virtual bool saveOdf(SavingContext &documentContext);
 
+    bool saveNativeFormat(const QString &file);
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 

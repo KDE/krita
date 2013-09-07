@@ -21,10 +21,14 @@
 #define KOSHAPEPRIVATE_H
 
 #include "KoShape.h"
+
 #include <QPoint>
 #include <QPaintDevice>
 
 #include <KoCanvasBase.h>
+
+class KoBorder;
+
 
 class KoShapePrivate
 {
@@ -48,6 +52,9 @@ public:
     /// Loads the shadow style
     KoShapeShadow *loadOdfShadow(KoShapeLoadingContext &context) const;
 
+    // Loads the border style.
+    KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
+
     /// calls update on the shape where the stroke is.
     void updateStroke();
 
@@ -69,9 +76,10 @@ public:
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
     KoShapeStrokeModel *stroke; ///< points to a stroke, or 0 if there is no stroke
-    KoShapeBackground * fill; ///< Stands for the background color / fill etc.
+    QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
+    KoBorder *border; ///< the current shape border
     KoClipPath * clipPath; ///< the current clip path
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;

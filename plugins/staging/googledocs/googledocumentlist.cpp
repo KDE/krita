@@ -69,7 +69,7 @@ QString GoogleDocumentList::author ()
 void GoogleDocumentList::append(GoogleDocument *entry)
 {
     if (entry != 0 ) {
-        QString iconPath = "";
+        QString iconPath;
         if (QString::compare(entry->documentType(), "document", Qt::CaseInsensitive) == 0) {
             iconPath = ":/images/document.png";
         } else if (QString::compare(entry->documentType(), "spreadsheet", Qt::CaseInsensitive) == 0) {

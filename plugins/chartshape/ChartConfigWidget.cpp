@@ -1152,9 +1152,13 @@ void ChartConfigWidget::update()
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
 
+    // This is used in a couple of places.
+    QList<DataSet*> newDataSets = d->shape->plotArea()->dataSets();
+
     // Update "Pie Properties" in "Data Sets" tab
-    d->ui.pieExplodeFactor->setValue(
-                (int)(d->shape->plotArea()->dataSets().at(0)->pieAttributes().explodeFactor()*100));
+    if (newDataSets.size() > 0) {
+        d->ui.pieExplodeFactor->setValue((int)(newDataSets.at(0)->pieAttributes().explodeFactor()*100));
+    }
 
     if (   d->type    != d->shape->chartType()
         || d->subtype != d->shape->chartSubType())
@@ -1217,8 +1221,8 @@ void ChartConfigWidget::update()
     }
 
     // If the datasets have changed, set up the new ones.
-    if (d->shape->plotArea()->dataSets() != d->dataSets) {
-        d->dataSets = d->shape->plotArea()->dataSets();
+    if (newDataSets != d->dataSets) {
+        d->dataSets = newDataSets;
         d->ui.dataSets->clear();
         d->cellRegionDialog.dataSets->clear();
         foreach (DataSet *dataSet, d->dataSets) {

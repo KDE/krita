@@ -25,10 +25,10 @@
 #include <klineedit.h>
 #include <klocale.h>
 
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KFileDialog>
-#include <KUrl>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
+#include <kurl.h>
 
 #include <KoFilterManager.h>
 #include <KoServiceProvider.h>
@@ -38,8 +38,9 @@
 #include <kis_transaction.h>
 #include <kis_node.h>
 
-KisDlgFileLayer::KisDlgFileLayer(const QString & name, QWidget * parent)
+KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
     : KDialog(parent)
+    , m_basePath(basePath)
     , m_customName(false)
     , m_freezeName(false)
 {
@@ -85,9 +86,21 @@ void KisDlgFileLayer::slotSelectFile()
                                    KoFilterManager::Import,
                                    KoServiceProvider::readExtraNativeMimeTypes());
 
-    QString url = KFileDialog::getOpenFileName(KUrl("kfiledialog:///OpenDialog"),
-                                               mimeFilter.join(" "), this, i18n("Select file to use as dynamic file layer."));
-    dlgWidget.txtFileName->setText(url);
+    KUrl startUrl("kfiledialog:///OpenDialog");
+    if (!m_basePath.isEmpty()) {
+        startUrl.setPath(m_basePath);
+    }
+    QString url = KFileDialog::getOpenFileName(startUrl,
+                                               mimeFilter.join(" "),
+                                               this,
+                                               i18n("Select file to use as dynamic file layer."));
+    if (m_basePath.isEmpty()) {
+        dlgWidget.txtFileName->setText(url);
+    }
+    else {
+        QDir d(m_basePath);
+        dlgWidget.txtFileName->setText(d.relativeFilePath(url));
+    }
 }
 
 #include "kis_dlg_file_layer.moc"

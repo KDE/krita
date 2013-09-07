@@ -28,38 +28,59 @@
 
 #include "kis_tool_polyline_base.h"
 
+#define SNAPPING_THRESHOLD 10
+#define SNAPPING_HANDLE_RADIUS 8
 #define PREVIEW_LINE_WIDTH 1
 
 KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolylineBase::ToolType type, const QCursor & cursor)
     : KisToolShape(canvas, cursor),
       m_dragging(false),
-      m_type(type)
+      m_type(type),
+      m_closeSnappingActivated(false)
 {
+}
+
+void KisToolPolylineBase::deactivate()
+{
+    cancelStroke();
+    KisToolShape::deactivate();
+}
+
+void KisToolPolylineBase::requestStrokeEnd()
+{
+    endStroke();
+}
+
+void KisToolPolylineBase::requestStrokeCancellation()
+{
+    cancelStroke();
 }
 
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
-    if (m_type == PAINT) {
-        if (!nodeEditable() || nodePaintAbility() == NONE) {
-            return;
-        }
-    } else {
-        if (!selectionEditable()) {
-            return;
-        }
+    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
+        (m_type == SELECT && !selectionEditable())) {
+
+        return;
     }
+
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                           Qt::LeftButton, Qt::ShiftModifier)) {
 
-        if(event->modifiers() == Qt::ShiftModifier) {
-            finish();
-        }
-        else {
+        if(m_dragging &&
+           (m_closeSnappingActivated ||
+            event->modifiers() == Qt::ShiftModifier)) {
+
+            if (m_closeSnappingActivated) {
+                m_points.append(m_points.first());
+            }
+
+            endStroke();
+        } else {
             setMode(KisTool::PAINT_MODE);
             m_dragging = true;
         }
-    }
-    else {
+    } else {
         KisToolShape::mousePressEvent(event);
     }
 }
@@ -74,6 +95,14 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
         // draw new lines on canvas
         updateRect |= dragBoundingRect();
         updateCanvasViewRect(updateRect);
+
+
+        QPointF basePoint = pixelToView(m_points.first());
+        m_closeSnappingActivated =
+            m_points.size() > 1 &&
+            (basePoint - pixelToView(m_dragEnd)).manhattanLength() < SNAPPING_THRESHOLD;
+
+        updateCanvasViewRect(QRectF(basePoint, 2 * QSize(SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH, SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH)).translated(-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH,-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH));
     }
 
     KisToolShape::mouseMoveEvent(event);
@@ -100,21 +129,11 @@ void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        finish();
+        endStroke();
     }
     else {
         KisToolShape::mousePressEvent(event);
     }
-}
-
-void KisToolPolylineBase::keyPressEvent(QKeyEvent *e)
-{
-    if (e->key() == Qt::Key_Escape) {
-        cancel();
-        e->accept();
-    }
-
-    KisToolShape::keyPressEvent(e);
 }
 
 void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
@@ -150,14 +169,13 @@ void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)
             start = end;
         }
     }
-    paintToolOutline(&gc, path);
-}
 
-void KisToolPolylineBase::cancel()
-{
-    m_dragging = false;
-    m_points.clear();
-    updateArea();
+    if (m_closeSnappingActivated) {
+        QPointF basePoint = pixelToView(m_points.first());
+        path.addEllipse(basePoint, SNAPPING_HANDLE_RADIUS, SNAPPING_HANDLE_RADIUS);
+    }
+
+    paintToolOutline(&gc, path);
 }
 
 void KisToolPolylineBase::updateArea()
@@ -165,16 +183,27 @@ void KisToolPolylineBase::updateArea()
     updateCanvasPixelRect(image()->bounds());
 }
 
-void KisToolPolylineBase::finish()
+void KisToolPolylineBase::endStroke()
 {
-    Q_ASSERT(canvas() && currentImage());
+    if (!m_dragging) return;
 
     m_dragging = false;
-    updateArea();
     if(m_points.count() > 1) {
         finishPolyline(m_points);
     }
     m_points.clear();
+    m_closeSnappingActivated = false;
+    updateArea();
+}
+
+void KisToolPolylineBase::cancelStroke()
+{
+    if (!m_dragging) return;
+
+    m_dragging = false;
+    m_points.clear();
+    m_closeSnappingActivated = false;
+    updateArea();
 }
 
 QRectF KisToolPolylineBase::dragBoundingRect()

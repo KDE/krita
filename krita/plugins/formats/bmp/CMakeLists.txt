@@ -11,8 +11,6 @@ target_link_libraries(kritabmpexport kritaui)
 install(TARGETS kritabmpexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  krita_bmp_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS  krita_bmp.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-
 set(kritabmpimport_PART_SRCS
     kis_bmp_import.cpp
     )

@@ -60,7 +60,7 @@ KoListLevelProperties::KoListLevelProperties()
         : QObject()
         , d(new Private())
 {
-    QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
+    QSharedPointer<KoCharacterStyle> charStyle(new KoCharacterStyle);
     setCharacterProperties(charStyle);
 
     setRelativeBulletSize(100);
@@ -575,7 +575,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
-            setRelativeBulletSize(size.replace('%', "").toInt());
+            setRelativeBulletSize(size.remove('%').toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
@@ -778,7 +778,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 setHeight(KoUnit::parseValue(height));
 
         } else if (localName == "text-properties") {
-            QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
+            QSharedPointer<KoCharacterStyle> charStyle(new KoCharacterStyle);
             charStyle->loadOdf(&style, scontext);
             setCharacterProperties(charStyle);
         }
@@ -791,8 +791,7 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
     if (isNumber || isOutlineList()) {
         if (isOutlineList()) {
-            writer->startElement("text:outline-level-style");
-        } else {
+            writer->startElement("text:outline-level-style"); } else {
             writer->startElement("text:list-level-style-number");
         }
 

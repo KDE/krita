@@ -78,11 +78,15 @@ public:
     {
     }
 
-    QRect bounds() const {
+    virtual ~KisScratchPadDefaultBounds() {}
+
+    virtual QRect bounds() const {
         return m_scratchPad->imageBounds();
     }
 
 private:
+    Q_DISABLE_COPY(KisScratchPadDefaultBounds)
+
     KisScratchPad *m_scratchPad;
 };
 
@@ -193,11 +197,13 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
     KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
-    m_helper->initPaint(event, resourceManager,
+    m_helper->initPaint(event,
+                        resourceManager,
                         0,
                         m_updateScheduler,
                         m_undoAdapter,
-                        m_paintLayer);
+                        m_paintLayer,
+                        m_paintLayer->paintDevice()->defaultBounds());
 }
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
@@ -339,7 +345,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    m_paintLayer->paintDevice()->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }

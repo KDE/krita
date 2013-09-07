@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef FILESTEST
+#define FILESTEST
 
 #include "testutil.h"
 
@@ -91,7 +93,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.documentPart()->saveAs("file://" + tmpFile.fileName());
+            doc.documentPart()->saveAs(KUrl("file://" + tmpFile.fileName()));
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
@@ -120,3 +122,4 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 }
 
 }
+#endif

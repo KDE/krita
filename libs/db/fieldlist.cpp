@@ -160,8 +160,7 @@ QString FieldList::debugString() const
             dbg += ",\n";
         else
             start = false;
-        dbg += "  ";
-        dbg += field->debugString();
+        dbg += "  " + field->debugString();
     }
     return dbg;
 }

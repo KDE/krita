@@ -70,7 +70,7 @@ K_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
 
 //---------
 
-static const char *SIZEPOLICY_MASK = "%1, %2, %3, %4";
+static const char SIZEPOLICY_MASK[] = "%1, %2, %3, %4";
 
 QString SizePolicyDelegate::displayText( const QVariant& value ) const
 {

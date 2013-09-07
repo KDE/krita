@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+ * Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -71,6 +71,7 @@ public:
     void updateServer();
     int resourcesCount() const;
     QList<KoResource *> currentlyVisibleResources() const;
+    QList<KoResource *> serverResources() const;
     void tagCategoryMembersChanged();
     void tagCategoryAdded(const QString& tag);
     void tagCategoryRemoved(const QString& tag);

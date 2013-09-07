@@ -19,8 +19,9 @@
 #include "kis_shape_selection_model.h"
 #include "kis_debug.h"
 
-#include "KoShapeContainer.h"
-#include "KoShapeManager.h"
+#include <KoShapeContainer.h>
+#include <KoShapeBackground.h>
+#include <KoShapeManager.h>
 
 #include "kis_shape_selection.h"
 #include "kis_selection.h"
@@ -68,7 +69,7 @@ void KisShapeSelectionModel::add(KoShape *child)
         return;
 
     child->setStroke(0);
-    child->setBackground(0);
+    child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);
 

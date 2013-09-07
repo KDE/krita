@@ -12,6 +12,7 @@ Name[et]=Skripti sündmustoimingute plugin
 Name[fr]=Module externe d'action de script d'évènement
 Name[gl]=Complemento de accións do evento de script
 Name[hne]=स्क्रिप्ट घटना काम प्लगइन
+Name[hu]=Parancsfájl esemény művelet bővítmény
 Name[it]=Estensione per azioni d'evento degli script
 Name[ja]=スクリプトイベントアクションプラグイン
 Name[kk]=Оқиғаға жауап әрекеті скрипті плагині
@@ -68,3 +69,5 @@ Comment[zh_TW]=包含文稿事件動作的外掛程式
 Type=int
 [PropertyDef::X-ScriptEventAction-PluginVersion]
 Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

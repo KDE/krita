@@ -93,13 +93,15 @@ private:
         const QString &as = left.toString();
         const QString &bs = right.toString();
 
-        const QChar *a = as.unicode();
-        const QChar *b = bs.unicode();
+        const QChar *a = as.isEmpty() ? 0 : as.unicode();
+        const QChar *b = bs.isEmpty() ? 0 : bs.unicode();
 
-        if (a == b || b == 0)
+        if (a == 0) {
+            return b != 0;
+        }
+        if (a == b || b == 0) {
             return false;
-        if (a == 0 && b != 0)
-            return true;
+        }
 
         unsigned short au;
         unsigned short bu;

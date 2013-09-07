@@ -418,4 +418,3 @@ void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
         }
     }
 }
-

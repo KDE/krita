@@ -34,10 +34,9 @@ class QImage;
  *
  * This is an abstract class supposed to be inherited only. DO NOT instentiate this class directly.
  *
- * On top of the standard QAbstractItemModel methods to re-implement, there are 4 specific methods which need to be re-implemented in order to be used with the styles widgets:
+ * On top of the standard QAbstractItemModel methods to re-implement, there are 3 specific methods which need to be re-implemented in order to be used with the styles widgets:
  * - setStyleThumbnailer: a @class KoStyleThumbnailer is used to layout/draw a preview of the style
- * - indexForParagraphStyle: for a given paragraph style, returns corresponding the QModelIndex
- * - indexForCharacterStyle: as above for character styles
+ * - indexOf: for a given character or paragraph style, returns the corresponding QModelIndex
  * - stylePreview: returns a QImage, preview of the given style (given as row number in the list model)
  *
  * Following assumptions are made:
@@ -76,11 +75,10 @@ public:
     /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
     virtual void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer) = 0;
 
-    /** Return a @class QModelIndex for the specified @param style. */
-    virtual QModelIndex indexForParagraphStyle(const KoParagraphStyle &style) const = 0;
-
-    /** Return a @class QModelIndex for the specified @param style. */
-    virtual QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const = 0;
+    /** Return a @class QModelIndex for the specified @param style.
+      * @param style may be either a character or paragraph style.
+    */
+    virtual QModelIndex indexOf(const KoCharacterStyle &style) const = 0;
 
     /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.

@@ -98,11 +98,11 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
-    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(",");
+    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
     wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
     wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
 
-    frm.setEnabledFilters(cfg.getString("filters").split(","));
+    frm.setEnabledFilters(cfg.getString("filters").split(','));
 
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
@@ -149,7 +149,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.filters = frm.enabledFilters();
     QString enabledFilters;
     foreach(const KisMetaData::Filter* filter, options.filters) {
-        enabledFilters = enabledFilters + filter->id() + ",";
+        enabledFilters = enabledFilters + filter->id() + ',';
     }
 
     cfg.setProperty("filters", enabledFilters);

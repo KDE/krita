@@ -2,7 +2,7 @@
 
     Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-    Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,7 @@ public:
 
     virtual void connectToResourceServer() = 0;
     virtual QList<KoResource*> resources() = 0;
+    virtual QList<KoResource*> serverResources() = 0;
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
@@ -269,11 +270,16 @@ public:
     {
         m_resourceServer->tagCategoryAdded(tag);
     }
+
     void tagCategoryRemoved(const QString& tag)
     {
         m_resourceServer->tagCategoryRemoved(tag);
     }
 
+    virtual QList<KoResource*> serverResources()
+    {
+        return m_serverResources;
+    }
 
 protected:
     KoResourceServer<T>* resourceServer() const

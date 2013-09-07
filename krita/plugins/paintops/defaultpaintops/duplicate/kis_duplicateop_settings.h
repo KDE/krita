@@ -41,6 +41,7 @@ public:
 
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
+    QString indirectPaintingCompositeOp() const;
 
     QPointF offset() const;
     QPointF position() const;

@@ -24,9 +24,11 @@
 #include "kis_brush.h"
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
+#include "kis_pressure_mirror_option.h"
 
 
 class KisPropertiesConfiguration;
+class KisPressureSpacingOption;
 
 /**
  * This is a base class for paintops that use a KisBrush or derived
@@ -40,7 +42,12 @@ public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
     ~KisBrushBasedPaintOp();
-    double spacing(double scale) const;
+
+    bool checkSizeTooSmall(qreal scale);
+
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;
@@ -49,6 +56,7 @@ protected: // XXX: make private!
 
     KisBrushSP m_brush;
     KisTextureProperties m_textureProperties;
+    KisPressureMirrorOption m_mirrorOption;
     KisPrecisionOption m_precisionOption;
     KisDabCache *m_dabCache;
 };

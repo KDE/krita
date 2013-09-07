@@ -37,7 +37,7 @@ using namespace KexiDB;
 
 /*! @internal Used in Driver::defaultSQLTypeName(int)
  when we do not have Driver instance yet, or when we cannot get one */
-static const char* KexiDB_defaultSQLTypeNames[] = {
+static const char* const KexiDB_defaultSQLTypeNames[] = {
     "InvalidType",
     "Byte",
     "ShortInteger",
@@ -259,7 +259,7 @@ static QString valueToSQLInternal(const KexiDB::Driver *driver, uint ftype, cons
         if (v.type() == QVariant::String) {
             //workaround for values stored as string that should be casted to floating-point
             QString s(v.toString());
-            return s.replace(',', ".");
+            return s.replace(',', '.');
         }
         return v.toString();
     }
@@ -267,9 +267,9 @@ static QString valueToSQLInternal(const KexiDB::Driver *driver, uint ftype, cons
     case Field::Boolean:
         return QString::number(v.toInt() ? 1 : 0); //0 or 1
     case Field::Time:
-        return QString("\'") + v.toTime().toString(Qt::ISODate) + "\'";
+        return QLatin1Char('\'') + v.toTime().toString(Qt::ISODate) + QLatin1Char('\'');
     case Field::Date:
-        return QString("\'") + v.toDate().toString(Qt::ISODate) + "\'";
+        return QLatin1Char('\'') + v.toDate().toString(Qt::ISODate) + QLatin1Char('\'');
     case Field::DateTime:
         return driver ? driver->dateTimeToSQL(v.toDateTime())
                       : KexiDB::dateTimeToSQL(v.toDateTime());
@@ -378,7 +378,7 @@ CALLIGRADB_EXPORT bool KexiDB::isKexiSQLKeyword(const QByteArray& word)
 
 CALLIGRADB_EXPORT QString KexiDB::escapeString(const QString& str)
 {
-    return QLatin1String("'") + QString(str).replace('\'', "''") + QLatin1String("'");
+    return QLatin1Char('\'') + QString(str).replace('\'', "''") + QLatin1Char('\'');
 }
 
 CALLIGRADB_EXPORT QString KexiDB::escapeIdentifier(const QString& str, int options)

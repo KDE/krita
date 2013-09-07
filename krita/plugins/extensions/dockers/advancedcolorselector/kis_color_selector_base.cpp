@@ -171,8 +171,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     }
     m_canvas = canvas;
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+            this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
     }
 
     update();
@@ -441,7 +441,7 @@ void KisColorSelectorBase::updateColorPreview(const QColor& color)
     m_colorPreviewPopup->setColor(color);
 }
 
-void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
+void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());

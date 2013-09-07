@@ -39,9 +39,9 @@ class KisFilterOp : public KisBrushBasedPaintOp
 public:
 
     KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisFilterOp();
+    ~KisFilterOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
 

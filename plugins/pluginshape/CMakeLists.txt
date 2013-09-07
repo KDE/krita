@@ -8,13 +8,13 @@ SET (pluginshape_LIB_SRCS
     Plugin.cpp
 )
 
-kde4_add_plugin(pluginshape ${pluginshape_LIB_SRCS})
+kde4_add_plugin(calligra_shape_plugin ${pluginshape_LIB_SRCS})
 
-target_link_libraries(pluginshape komain
+target_link_libraries(calligra_shape_plugin komain
   )
-install(TARGETS pluginshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligra_shape_plugin DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES pluginshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_plugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

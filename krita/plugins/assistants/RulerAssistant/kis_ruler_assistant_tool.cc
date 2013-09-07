@@ -138,25 +138,25 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             if(m_handleDrag && assistant->id() == "perspective") {
                 // Look for the handle which was pressed
 
-                if (m_handleDrag ==assistant->topLeft()) {
+                if (m_handleDrag == assistant->topLeft()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->topRight()) {
+                } else if (m_handleDrag == assistant->topRight()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomLeft()) {
+                } else if (m_handleDrag == assistant->bottomLeft()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
                     }
                     m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomRight()) {
+                } else if (m_handleDrag == assistant->bottomRight()) {
                     double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
                     if (dist < minDist) {
                         minDist = dist;
@@ -373,7 +373,7 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
             addAssistant();
-            m_internalMode==MODE_CREATION;
+            m_internalMode = MODE_CREATION;
             m_canvas->updateCanvas();
         }
         else {
@@ -414,6 +414,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     }
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         if(assistant->id()=="perspective") {
+            assistant->findHandleLocation();
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
             topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
             bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;

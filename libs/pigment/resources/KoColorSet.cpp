@@ -150,7 +150,7 @@ bool KoColorSet::init()
             if (lines[i].startsWith('#')) {
                 m_comment += lines[i].mid(1).trimmed() + ' ';
             } else if (!lines[i].isEmpty()) {
-                QStringList a = lines[i].replace(QChar('\t'), " ").split(' ', QString::SkipEmptyParts);
+                QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
                 if (a.count() < 3) {
                     break;
@@ -163,11 +163,9 @@ bool KoColorSet::init()
                 b = a[0].toInt();
                 a.pop_front();
 
-                if (r < 0 || r > 255 ||
-                        g < 0 || g > 255 ||
-                        b < 0 || b > 255) {
-                    break;
-                }
+                r = qBound(0, r, 255);
+                g = qBound(0, g, 255);
+                b = qBound(0, b, 255);
 
                 e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
                 e.color.fromQColor(QColor(r, g, b));
@@ -211,4 +209,14 @@ void KoColorSet::remove(const KoColorSetEntry & c)
 KoColorSetEntry KoColorSet::getColor(quint32 index)
 {
     return m_colors[index];
+}
+
+int KoColorSet::columnCount()
+{
+    return m_columns;
+}
+
+QString KoColorSet::defaultFileExtension() const
+{
+    return QString(".gpl");
 }

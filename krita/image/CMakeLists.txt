@@ -60,6 +60,7 @@ endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
    brushengine/kis_paint_information.cc
@@ -314,4 +315,4 @@ install( FILES
     filter/kis_filter_configuration.h
     generator/kis_generator.h
     generator/kis_generator_registry.h
-    DESTINATION ${INCLUDE_INSTALL_DIR})
+    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

@@ -292,7 +292,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
             profileName = aliases.value(profileName);
         }
         if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
-            profileName = "";
+            profileName.clear();
         }
     }
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);

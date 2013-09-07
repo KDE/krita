@@ -198,7 +198,7 @@ int KoFavoriteResourceManager::numFavoritePresets()
 void KoFavoriteResourceManager::saveFavoritePresets()
 {
 
-    QString favoriteList = "";
+    QString favoriteList;
 
     for (int pos = 0; pos < m_favoritePresetsList.size(); pos++)
     {
@@ -289,8 +289,8 @@ void KoFavoriteResourceManager::setBlockUpdates(bool block)
 
 void KoFavoriteResourceManager::syncTaggedResourceView(){}
 
-void KoFavoriteResourceManager::syncTagAddition(const QString& tag){}
+void KoFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
 
-void KoFavoriteResourceManager::syncTagRemoval(const QString& tag){}
+void KoFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
 
 #include "ko_favorite_resource_manager.moc"

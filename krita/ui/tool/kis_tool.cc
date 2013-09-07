@@ -34,7 +34,6 @@
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolBase.h>
-#include <KoColor.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
@@ -59,7 +58,6 @@
 #include <kis_paintop_settings.h>
 #include <kis_pattern.h>
 #include <kis_transaction.h>
-#include <kis_selection.h>
 #include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
@@ -199,7 +197,7 @@ void KisTool::requestStrokeEnd()
 {
 }
 
-void KisTool::resourceChanged(int key, const QVariant & v)
+void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
 
     switch (key) {

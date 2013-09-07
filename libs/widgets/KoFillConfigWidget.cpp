@@ -27,6 +27,7 @@
 #include <QSizePolicy>
 #include <QBitmap>
 #include <QAction>
+#include <QSharedPointer>
 
 #include <klocale.h>
 
@@ -167,6 +168,31 @@ public:
     : canvas(0)
     {
     }
+    /// Apply the gradient stops using the shape background
+    QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
+    {
+        if (! shape || ! stops.count()) {
+            return QSharedPointer<KoShapeBackground>();
+        }
+
+        KoGradientBackground *newGradient = 0;
+        QSharedPointer<KoGradientBackground> oldGradient = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
+        if (oldGradient) {
+            // just copy the gradient and set the new stops
+            QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
+            g->setStops(stops);
+            newGradient = new KoGradientBackground(g);
+            newGradient->setTransform(oldGradient->transform());
+        }
+        else {
+            // No gradient yet, so create a new one.
+            QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+            g->setCoordinateMode(QGradient::ObjectBoundingMode);
+            g->setStops(stops);
+            newGradient = new KoGradientBackground(g);
+        }
+        return QSharedPointer<KoGradientBackground>(newGradient);
+    }
 
     KoColorPopupButton *colorButton;
     QAction *noFillAction;
@@ -246,14 +272,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     KoAbstractResourceServerAdapter *gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling color"));
-    connect(d->gradientAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(gradientChanged(KoShapeBackground*)));
+    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground> )));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
 
     // Pattern selector
     KoAbstractResourceServerAdapter *patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling color"));
-    connect(d->patternAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(patternChanged(KoShapeBackground*)));
+    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground> )));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
     // Spacer
@@ -283,6 +309,26 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
 
     d->canvas = canvas;
 }
+
+KoCanvasBase* KoFillConfigWidget::canvas()
+{
+    return d->canvas;
+}
+
+QList<KoShape*> KoFillConfigWidget::currentShapes()
+{
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    return selection->selectedShapes();
+}
+
+KoShape *KoFillConfigWidget::currentShape()
+{
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    return selection->firstSelectedShape();
+}
+
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
@@ -314,37 +360,22 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
 
 void KoFillConfigWidget::noColorSelected()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    if (!selection || !selection->count()) {
-        return;
-    }
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
-
-    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, 0));
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, QSharedPointer<KoShapeBackground>(0)));
 }
 
 void KoFillConfigWidget::colorChanged()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    if (!selection || !selection->count()) {
-        return;
-    }
-
-    KoShapeBackground *fill = new KoColorBackground(d->colorAction->currentColor());
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
 
+    QSharedPointer<KoShapeBackground> fill(new KoColorBackground(d->colorAction->currentColor()));
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
         if (! firstCommand) {
@@ -353,34 +384,29 @@ void KoFillConfigWidget::colorChanged()
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
         }
     }
+
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
+void KoFillConfigWidget::gradientChanged(QSharedPointer<KoShapeBackground>  background)
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    if (!selection || !selection->count()) {
-        return;
-    }
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
 
-    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
-    if (! gradientBackground) {
+    QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
+    if (!gradientBackground) {
         return;
     }
 
     QGradientStops newStops = gradientBackground->gradient()->stops();
-    delete gradientBackground;
+    gradientBackground.clear();
 
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
-        KoShapeBackground *fill = applyFillGradientStops(shape, newStops);
+        QSharedPointer<KoShapeBackground> fill = d->applyFillGradientStops(shape, newStops);
         if (! fill) {
             continue;
         }
@@ -390,31 +416,26 @@ void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
             new KoShapeBackgroundCommand(shape, fill, firstCommand);
         }
     }
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
+void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  background)
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    if (!selection || !selection->count()) {
-        return;
-    }
-
-    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
+    QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
     if (! patternBackground) {
         return;
     }
 
-    QList<KoShape*> selectedShapes = canvasController->canvas()->shapeManager()->selection()->selectedShapes();
+    QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         return;
     }
 
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
-        KoPatternBackground *fill = new KoPatternBackground(imageCollection);
+        QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
         fill->setPattern(patternBackground->pattern());
         canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
     }
@@ -422,9 +443,7 @@ void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
 
 void KoFillConfigWidget::shapeChanged()
 {
-    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape *shape = selection->firstSelectedShape();
+    KoShape *shape = currentShape();
     if (! shape) {
         d->group->button(KoFillConfigWidget::None)->setChecked(false);
         d->group->button(KoFillConfigWidget::Solid)->setChecked(false);
@@ -454,7 +473,7 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     shape->waitUntilReady(zoomHandler, false);
 
     d->colorButton->setEnabled(true);
-    KoShapeBackground *background = shape->background();
+    QSharedPointer<KoShapeBackground> background = shape->background();
     if (! background) {
         // No Fill
         d->group->button(KoFillConfigWidget::None)->setChecked(true);
@@ -464,9 +483,9 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
         return;
     }
 
-    KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(background);
-    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
-    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
+    QSharedPointer<KoColorBackground> colorBackground = qSharedPointerDynamicCast<KoColorBackground>(background);
+    QSharedPointer<KoGradientBackground> gradientBackground = qSharedPointerDynamicCast<KoGradientBackground>(background);
+    QSharedPointer<KoPatternBackground> patternBackground = qSharedPointerDynamicCast<KoPatternBackground>(background);
 
     if (colorBackground) {
         d->colorAction->setCurrentColor(colorBackground->color());
@@ -488,40 +507,5 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
-
-KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
-{
-    if (! shape || ! stops.count()) {
-        return 0;
-    }
-
-    KoGradientBackground *newGradient = 0;
-    KoGradientBackground *oldGradient = dynamic_cast<KoGradientBackground*>(shape->background());
-    if (oldGradient) {
-        // just copy the gradient and set the new stops
-        QGradient *g = KoFlake::cloneGradient(oldGradient->gradient());
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-        newGradient->setTransform(oldGradient->transform());
-    }
-    else {
-        // No gradient yet, so create a new one.
-        QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
-        g->setCoordinateMode(QGradient::ObjectBoundingMode);
-        g->setStops(stops);
-        newGradient = new KoGradientBackground(g);
-    }
-    return newGradient;
-}
-
-void KoFillConfigWidget::blockChildSignals(bool block)
-{
-    d->colorButton->blockSignals(block);
-    d->colorAction->blockSignals(block);
-    d->gradientAction->blockSignals(block);
-    d->patternAction->blockSignals(block);
-    d->group->blockSignals(block);
-}
-
 
 #include <KoFillConfigWidget.moc>

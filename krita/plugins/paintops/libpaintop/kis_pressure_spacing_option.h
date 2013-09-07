@@ -33,6 +33,15 @@ class PAINTOP_EXPORT KisPressureSpacingOption : public KisCurveOption
 public:
     KisPressureSpacingOption();
     double apply(const KisPaintInformation & info) const;
+
+    void setIsotropicSpacing(bool isotropic);
+    bool isotropicSpacing() const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
+private:
+    bool m_isotropicSpacing;
 };
 
 #endif

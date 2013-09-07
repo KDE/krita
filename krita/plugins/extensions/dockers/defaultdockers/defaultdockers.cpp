@@ -34,7 +34,7 @@ KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVar
         : QObject(parent)
 {
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
-    KoDockRegistry::instance()->add(new KisPaletteDockerFactory());
+//     KoDockRegistry::instance()->add(new KisPaletteDockerFactory());
 }
 
 KritaDefaultDockersPlugin::~KritaDefaultDockersPlugin()

@@ -23,7 +23,7 @@
 
 void KoPropertiesTest::testDeserialization()
 {
-    QString test = "";
+    QString test;
     KoProperties props;
     props.setProperty("bla", "bla");
 

@@ -38,10 +38,10 @@
 #include <kurl.h>
 #endif
 
-KoResourceTagging::KoResourceTagging(const QString& extensions)
+KoResourceTagging::KoResourceTagging(const QString& resourceType, const QString& extensions)
 {
     m_serverExtensions = extensions;
-    m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+    m_tagsXMLFile =  KStandardDirs::locateLocal("data", "krita/tags/" + resourceType + "_tags.xml");
     m_config = KConfigGroup( KGlobal::config(), "resource tagging" );
     m_nepomukOn = m_config.readEntry("nepomuk_usage_for_resource_tagging", false);
 
@@ -258,7 +258,17 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
 
 void KoResourceTagging::readXMLFile(bool serverIdentity)
 {
-    QFile f(m_tagsXMLFile);
+
+    QString inputFile;
+
+    if (QFile::exists(m_tagsXMLFile)) {
+        inputFile = m_tagsXMLFile;
+    }
+    else {
+        inputFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+    }
+
+    QFile f(inputFile);
     if (!f.open(QIODevice::ReadOnly)) {
         return;
     }
@@ -441,24 +451,19 @@ void KoResourceTagging::delNepomukTag(const QString &fileName, const QString &ta
     }
 }
 
-QString KoResourceTagging::adjustedNepomukFileName(QString fileName) const
+QString KoResourceTagging::adjustedNepomukFileName(const QString &fileName) const
 {
-    if(fileName.contains(" ")) {
-        fileName.replace(" ","_k_");
-    }
-    return fileName;
+    return QString(fileName).replace(' ', "_k_");
 }
 
-QString KoResourceTagging::correctedNepomukFileName(QString fileName) const
+QString KoResourceTagging::correctedNepomukFileName(const QString &fileName) const
 {
-    if(fileName.contains("_k_")) {
-        fileName.replace("_k_"," ");
-    }
-    return fileName;
+    return QString(fileName).replace("_k_", " ");
 }
 
 void KoResourceTagging::updateNepomukXML(bool nepomukOn)
 {
+
     if(nepomukOn) {
         m_tagRepo.clear();
         m_tagList.clear();

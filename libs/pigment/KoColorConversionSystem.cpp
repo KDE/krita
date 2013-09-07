@@ -419,11 +419,11 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     }
     Path* p = findBestPath(srcNode, dstNode);
     Q_ASSERT(p);
-    QString dot = "digraph CCS {\n";
-    dot += QString("  \"%1\" [color=red]\n").arg(srcNode->id());
-    dot += QString("  \"%1\" [color=red]\n").arg(dstNode->id());
+    QString dot = "digraph CCS {\n" +
+                  QString("  \"%1\" [color=red]\n").arg(srcNode->id()) +
+                  QString("  \"%1\" [color=red]\n").arg(dstNode->id());
     foreach(Vertex* oV, d->vertexes) {
-        QString options = "";
+        QString options;
         if (p->vertexes.contains(oV)) {
             options = "[color=red]";
         }

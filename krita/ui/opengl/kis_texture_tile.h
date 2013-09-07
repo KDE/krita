@@ -26,7 +26,6 @@
 
 #include <QRect>
 #include <QRectF>
-#include <opengl/kis_opengl.h>
 
 
 struct KisGLTexturesInfo {
@@ -38,6 +37,7 @@ struct KisGLTexturesInfo {
 
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
 };

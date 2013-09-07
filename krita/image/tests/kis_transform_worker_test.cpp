@@ -637,7 +637,7 @@ void testRotationImpl(qreal angle, QString filePrefix)
         qDebug() << filePrefix;
         image.save(refFileName);
         result.save(resFileName);
-        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to rotate the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -841,7 +841,7 @@ void generateTestImage(QString inputFileName, qreal scale, qreal rotation, qreal
     tw.run();
 
     if (saveImage) {
-        QStringList tmp = inputFileName.split(".");
+        QStringList tmp = inputFileName.split('.');
         QString filename =
             QString("transform_%1_%2_%3_%4_%5_new.png")
             .arg(tmp[0]).arg(scale).arg(rotation).arg(xshear).arg(filter->name());

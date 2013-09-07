@@ -246,7 +246,7 @@ void KisMyPaintShadeSelector::setColor(const QColor &c) {
     m_updateTimer->start();
 }
 
-void KisMyPaintShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;

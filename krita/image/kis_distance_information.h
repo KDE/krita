@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,30 +20,90 @@
 #ifndef _KIS_DISTANCE_INFORMATION_H_
 #define _KIS_DISTANCE_INFORMATION_H_
 
+#include <QPointF>
+#include <QVector2D>
+#include "krita_export.h"
+
+class KisPaintInformation;
+
+
 /**
- * This function is used as return of paintLine to contains information that need
- * to be passed for the next call.
+ * This structure contains information about the desired spacing
+ * requested by the paintAt call
  */
-struct KisDistanceInformation {
-
-    KisDistanceInformation()
-        : distance(0)
-        , spacing(0)
-    {}
-
-    KisDistanceInformation(double _distance, double _spacing)
-        : distance(_distance)
-        , spacing(_spacing)
-    {}
-
-    void clear()
+class KisSpacingInformation {
+public:
+    KisSpacingInformation()
+        : m_isIsotropic(true)
     {
-        distance = 0;
-        spacing = 0;
     }
 
-    double distance;
-    double spacing;
+    KisSpacingInformation(qreal isotropicSpacing)
+        : m_spacing(isotropicSpacing, isotropicSpacing),
+          m_isIsotropic(true)
+    {
+    }
+
+    KisSpacingInformation(const QPointF &anisotropicSpacing)
+        : m_spacing(anisotropicSpacing),
+          m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y())
+    {
+    }
+
+    inline QPointF spacing() const {
+        return m_spacing;
+    }
+
+    inline bool isIsotropic() const {
+        return m_isIsotropic;
+    }
+
+    inline qreal scalarApprox() const {
+        return m_isIsotropic ? m_spacing.x() : QVector2D(m_spacing).length();
+    }
+
+private:
+    QPointF m_spacing;
+    bool m_isIsotropic;
+};
+
+/**
+ * This structure is used as return value of paintLine to contain
+ * information that is needed to be passed for the next call.
+ */
+class KRITAIMAGE_EXPORT KisDistanceInformation {
+public:
+    KisDistanceInformation();
+    KisDistanceInformation(const QPointF &lastPosition, int lastTime);
+    KisDistanceInformation(const KisDistanceInformation &rhs);
+    KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
+
+    ~KisDistanceInformation();
+
+    const KisSpacingInformation& currentSpacing() const;
+    bool hasLastDabInformation() const;
+    QPointF lastPosition() const;
+    int lastTime() const;
+    qreal lastDrawingAngle() const;
+
+    bool hasLastPaintInformation() const;
+    const KisPaintInformation& lastPaintInformation() const;
+
+    void registerPaintedDab(const KisPaintInformation &info,
+                            const KisSpacingInformation &spacing);
+
+    qreal getNextPointPosition(const QPointF &start,
+                               const QPointF &end);
+
+
+private:
+    qreal getNextPointPositionIsotropic(const QPointF &start,
+                                        const QPointF &end);
+    qreal getNextPointPositionAnisotropic(const QPointF &start,
+                                          const QPointF &end);
+private:
+    class Private;
+    Private * const m_d;
 };
 
 #endif

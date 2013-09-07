@@ -27,8 +27,16 @@
 
 
 struct MirrorProperties{
+    MirrorProperties()
+        : horizontalMirror(false),
+          verticalMirror(false) {}
+
     bool horizontalMirror;
     bool verticalMirror;
+
+    bool isEmpty() const {
+        return !horizontalMirror && !verticalMirror;
+    }
 };
 
 const QString MIRROR_HORIZONTAL_ENABLED = "HorizontalMirrorEnabled";
@@ -58,6 +66,8 @@ public:
 private:
     bool m_enableVerticalMirror;
     bool m_enableHorizontalMirror;
+    bool m_canvasAxisXMirrored;
+    bool m_canvasAxisYMirrored;
 };
 
 #endif

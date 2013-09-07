@@ -23,7 +23,6 @@ set(komain_LIB_SRCS
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
-    KoFactory.cpp
     KoFileDialog.cpp
     KoGlobal.cpp
     KoGridData.cpp
@@ -114,7 +113,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
-    textlayout
+    kotextlayout
 )
 
 if( KActivities_FOUND )
@@ -149,7 +148,6 @@ install( FILES
     KoDocumentEntry.h
     KoDocumentInfo.h
     KoDocumentSectionModel.h
-    KoFactory.h
     KoFilter.h
     KoFilterChain.h
     KoFilterChainLinkList.h
@@ -177,12 +175,11 @@ install( FILES
     calligraversion.h
     KoStandardAction.h
     komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
-

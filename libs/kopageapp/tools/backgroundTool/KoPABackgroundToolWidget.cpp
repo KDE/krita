@@ -45,6 +45,8 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
     setObjectName( "KoPABackgroundToolWidget" );
     widget.setupUi( this );
 
+    widget.fillBackground->setView(m_tool->view());
+
     // adapt texts to type of pages
     const bool isSlideType = (m_tool->view()->kopaDocument()->pageType() == KoPageApp::Slide);
     const QString useMasterBackgroundText =
@@ -81,14 +83,12 @@ void KoPABackgroundToolWidget::slotActivePageChanged()
 
         const bool enableBackgroundEditing = (! normalPage->displayMasterBackground());
         widget.backgroundImage->setEnabled(enableBackgroundEditing);
-        widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
     }
     else {
         widget.useMasterBackground->setChecked( false );
         widget.displayMasterShapes->setChecked( false );
 
         widget.backgroundImage->setEnabled(true);
-        widget.useStrokeAndFillDockerLabel->setEnabled(true);
     }
 }
 
@@ -114,7 +114,7 @@ void KoPABackgroundToolWidget::setBackgroundImage()
                     i18nc( "(qtundo-format)", "Change slide background image") :
                     i18nc( "(qtundo-format)", "Change page background image");
                 KUndo2Command * cmd = new KUndo2Command(commandTitle);
-                KoPatternBackground * bg = new KoPatternBackground( collection );
+                QSharedPointer<KoPatternBackground> bg(new KoPatternBackground( collection ));
                 bg->setPattern( image );
                 QSizeF imageSize = bg->patternOriginalSize();
                 QSizeF pageSize = m_tool->view()->activePage()->size();
@@ -152,7 +152,6 @@ void KoPABackgroundToolWidget::useMasterBackground(bool doUse)
 
     const bool enableBackgroundEditing = (! doUse);
     widget.backgroundImage->setEnabled(enableBackgroundEditing);
-    widget.useStrokeAndFillDockerLabel->setEnabled(enableBackgroundEditing);
 }
 
 void KoPABackgroundToolWidget::displayMasterShapes(bool doDisplay)

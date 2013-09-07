@@ -221,9 +221,6 @@ public:
     QString pressureTabletCurve() const;
     void setPressureTabletCurve(const QString& curveString) const;
 
-    bool zoomWithWheel() const;
-    void setZoomWithWheel(const bool zoom) const;
-
     qreal vastScrolling() const;
     void setVastScrolling(const qreal factor) const;
 
@@ -286,6 +283,9 @@ public:
 
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
+
+    QString currentInputProfile() const;
+    void setCurrentInputProfile(const QString& name);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

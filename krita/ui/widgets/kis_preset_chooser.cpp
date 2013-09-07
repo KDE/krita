@@ -38,8 +38,6 @@
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
 
-#include <KoResourceFiltering.h>
-
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
 #include "kis_resource_server_provider.h"
@@ -108,6 +106,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         const KIcon icon(koIconName("broken-preset"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
+    if (option.state & QStyle::State_Selected) {
+        painter->setOpacity(0.25);
+        painter->fillRect(option.rect, option.palette.highlight());
+    }
     painter->restore();
 }
 
@@ -149,11 +151,6 @@ void KisPresetChooser::filterPaletteFavorites(const QStringList& filteredNames)
     m_adapter->updateServer();
 
     updateViewSettings();
-}
-
-QStringList KisPresetChooser::tagNamesList(const QString& searchString)
-{
-    return m_chooser->tagNamesList(searchString);
 }
 
 void KisPresetChooser::showButtons(bool show)
@@ -216,12 +213,6 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 {
     return m_chooser;
 }
-
-void KisPresetChooser::enableContextMenu(bool enable)
-{
-    m_chooser->enableContextMenu(enable);
-}
-
 
 #include "kis_preset_chooser.moc"
 

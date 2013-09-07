@@ -38,10 +38,11 @@ public:
     const int panDistance;
 };
 
-KisPanAction::KisPanAction(KisInputManager *manager)
-    : KisAbstractInputAction(manager), d(new Private)
+KisPanAction::KisPanAction()
+    : d(new Private)
 {
     setName(i18n("Pan Canvas"));
+    setDescription(i18n("The <i>Pan Canvas</i> action pans the canvas."));
 
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Toggle Pan Mode"), PanToggleShortcut);
@@ -55,6 +56,11 @@ KisPanAction::KisPanAction(KisInputManager *manager)
 KisPanAction::~KisPanAction()
 {
     delete d;
+}
+
+int KisPanAction::priority() const
+{
+    return 5;
 }
 
 void KisPanAction::activate()

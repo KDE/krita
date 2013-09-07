@@ -39,7 +39,7 @@ namespace KChart
  * This is the tool for the chart shape, which is a flake-based plugin.
  */
 
-class CHARTSHAPELIB_EXPORT ChartTool : public KoToolBase
+class ChartTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -97,7 +97,7 @@ private slots:
     void setPieExplodeFactor(DataSet *dataSet, int percent);
     
     // Axes
-    void addAxis(AxisDimension, const QString& title = "");
+    void addAxis(AxisDimension, const QString& title = QString());
     void removeAxis(Axis *axis);
     void setAxisShowTitle(Axis *axis, bool show);
     void setAxisTitle(Axis *axis, const QString& title);

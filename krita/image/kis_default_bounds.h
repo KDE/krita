@@ -41,6 +41,8 @@ protected:
     static const QRect infiniteRect;
 
 private:
+    Q_DISABLE_COPY(KisDefaultBounds)
+
     struct Private;
     Private * const m_d;
 };
@@ -54,6 +56,8 @@ public:
     QRect bounds() const;
 
 private:
+    Q_DISABLE_COPY(KisSelectionDefaultBounds)
+
     struct Private;
     Private * const m_d;
 };

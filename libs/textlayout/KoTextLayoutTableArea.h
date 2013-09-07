@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTTABLEAREA_H
 #define KOTEXTLAYOUTTABLEAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 #include "KoPointedAt.h"
@@ -33,7 +33,7 @@ class TableIterator;
 /**
  * This class represent a (full width) piece of a table
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 {
 public:
     /// constructor

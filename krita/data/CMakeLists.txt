@@ -9,6 +9,7 @@ add_subdirectory( cursors )
 add_subdirectory( workspaces )
 add_subdirectory( themes )
 add_subdirectory( predefined_image_sizes )
+add_subdirectory( input )
 ########### install files ###############
 
 install( FILES  
@@ -32,5 +33,5 @@ install( FILES
 
 install( FILES
     krita.xml
-    DESTINATION ${DATA_INSTALL_DIR}/mime/packages
-)
+    DESTINATION ${XDG_MIME_INSTALL_DIR})
+update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

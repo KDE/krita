@@ -19,7 +19,7 @@
 #ifndef EMFOUTPUTPAINTERSTRATEGY_H
 #define EMFOUTPUTPAINTERSTRATEGY_H
 
-#include "vectorimage_export.h"
+#include "kovectorimage_export.h"
 
 #include <QList>
 #include <QPainter>
@@ -52,7 +52,7 @@ class EmrTextObject;
 
     This class allows rendering of an EMF file to a QPixmap or any other QPaintDevice.
 */
-class VECTORIMAGE_EXPORT OutputPainterStrategy : public AbstractOutput
+class KOVECTORIMAGE_EXPORT OutputPainterStrategy : public AbstractOutput
 {
 public:
     /**

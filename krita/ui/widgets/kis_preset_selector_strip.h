@@ -45,47 +45,19 @@ public:
     KisPresetSelectorStrip(QWidget *parent);
     virtual ~KisPresetSelectorStrip();
 
-    virtual void showEvent(QShowEvent *event);
-    
-public slots:
-    /// Updates the contents of the strip item view, show only presets for @param paintOpID
-    void currentPaintopChanged(QString paintOpID);
-    
-    /**
-    * startRefreshingTimer() and repaintDeleteButton() are heuristics
-    * to reposition the delete button when the strip auto-scrolls 
-    * to show a selected item that's partly outside the item view
-    */
-    void startRefreshingTimer();
-    void repaintDeleteButton();
-
 private slots:
-    /**
-    * Properly position the delete button on the bottom right corner of the currently
-    * selected preset item
-    */
-    void prepareDeleteButton();
-    
     /// Scrolls the strip's item view to the left
     void on_leftScrollBtn_pressed();
     
     /// Scrolls the strip's item view to the right
     void on_rightScrollBtn_pressed();
-    
-    /**
-    * This small button will hover over a preset when it is selected;
-    * and will remove the preset when clicked
-    */
-    void on_deletePresetBtn_clicked();
-    
+
 private:
     /**
     * This is a workaround to access members of KisPresetChooser using the QObject tree
     * instead of class methods
     */
     KoResourceItemView* m_resourceItemView;
-    
-    QTimer* m_refresher;
 };
 
 

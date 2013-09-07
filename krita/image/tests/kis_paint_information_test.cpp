@@ -34,7 +34,7 @@ void KisPaintInformationTest::testCreation()
 
 void KisPaintInformationTest::testSerialisation()
 {
-    KisPaintInformation test(QPointF(double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, KisVector2D::Random(), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX);
+    KisPaintInformation test(QPointF(double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX);
 
     QDomDocument doc = QDomDocument("pi");
     QDomElement root = doc.createElement("pi");
@@ -46,11 +46,13 @@ void KisPaintInformationTest::testSerialisation()
     QCOMPARE(test.pressure() , testUnS.pressure());
     QCOMPARE(test.xTilt() , testUnS.xTilt());
     QCOMPARE(test.yTilt() , testUnS.yTilt());
-    QCOMPARE(test.movement().x() , testUnS.movement().x());
-    QCOMPARE(test.movement().y() , testUnS.movement().y());
-    QCOMPARE(test.angle() , testUnS.angle());
     QCOMPARE(test.rotation() , testUnS.rotation());
     QCOMPARE(test.tangentialPressure() , testUnS.tangentialPressure());
+    /**
+     * drawingAngle(), velocity() and distance() are calculated basing
+     * on the KisDistanceInformation data and are not available without
+     * it
+     */
 }
 
 

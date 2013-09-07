@@ -20,7 +20,8 @@
 #ifndef KO_LCMS_ENGINE_PLUGIN_H
 #define KO_LCMS_ENGINE_PLUGIN_H
 
-#include <kparts/plugin.h>
+#include <QObject>
+#include <QVariantList>
 
 class LcmsEnginePlugin : public QObject
 {

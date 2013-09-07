@@ -43,6 +43,7 @@ public:
 
     bool isExclusive() const;
     bool needsIndirectPainting() const;
+    QString indirectPaintingCompositeOp() const;
 
     QString id() const;
     QString name() const;
@@ -68,10 +69,12 @@ protected:
 
     void setExclusive(bool value);
     void setNeedsIndirectPainting(bool value);
+    void setIndirectPaintingCompositeOp(const QString &id);
 
 private:
     bool m_exclusive;
     bool m_needsIndirectPainting;
+    QString m_indirectPaintingCompositeOp;
 
     QString m_id;
     QString m_name;

@@ -68,33 +68,29 @@ void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration
     KisCurveOption::readOptionSetting(setting);
     m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED,false);
     m_enableVerticalMirror = setting->getBool(MIRROR_VERTICAL_ENABLED, false);
+
+    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 }
 
 MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info) const
 {
-    
+    int mirrorXIncrement = m_canvasAxisXMirrored;
+    int mirrorYIncrement = m_canvasAxisYMirrored;
+
+    if (isChecked() && (m_enableHorizontalMirror || m_enableVerticalMirror)){
+        qreal sensorResult = computeValue(info);
+        bool result = (sensorResult >= 0.5);
+
+        mirrorXIncrement += result && m_enableHorizontalMirror;
+        mirrorYIncrement += result && m_enableVerticalMirror;
+    }
+
     MirrorProperties mirrors;
-    if ((!m_enableHorizontalMirror && !m_enableVerticalMirror) || (!isChecked())){
-        mirrors.horizontalMirror = false;
-        mirrors.verticalMirror = false;
-        return mirrors;
-    }
-    
-    double sensorResult = computeValue(info);
-    bool result = (sensorResult >= 0.5);
-    
-    if (m_enableHorizontalMirror){
-        mirrors.horizontalMirror = result;
-    }else{
-        mirrors.horizontalMirror = false;
-    }
-    
-    if (m_enableVerticalMirror){
-        mirrors.verticalMirror = result;
-    }else{
-        mirrors.verticalMirror = false;
-    }
-    
+
+    mirrors.verticalMirror = mirrorYIncrement % 2;
+    mirrors.horizontalMirror = mirrorXIncrement % 2;
+
     return mirrors;
 }
 

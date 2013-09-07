@@ -26,6 +26,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_node.h"
@@ -140,6 +141,10 @@ bool KisPaintOpSettings::isLoadable()
     return isValid();
 }
 
+QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
+    return COMPOSITE_ALPHA_DARKEN;
+}
+
 QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
@@ -177,7 +182,11 @@ void KisPaintOpSettings::setCanvasRotation(qreal angle)
     setPropertyNotSaved("runtimeCanvasRotation");
 }
 
-qreal KisPaintOpSettings::canvasRotation() const
+void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
 {
-    return getDouble("runtimeCanvasRotation");
+    setProperty("runtimeCanvasMirroredX", xAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredX");
+
+    setProperty("runtimeCanvasMirroredY", yAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredY");
 }

@@ -171,7 +171,6 @@ void KoRdfLocation::updateFromEditorData()
     }
     if (!m_isGeo84) {
         if (!m_joiner.isValid()) {
-            QString tmp = "";
             Node newV = createNewUUIDNode();
 
             QSharedPointer<Soprano::Model> m = m_rdf->model();
@@ -313,7 +312,6 @@ void KoRdfLocation::setName(const QString &name)
     }
     if (!m_isGeo84) {
         if (!m_joiner.isValid()) {
-            QString tmp = "";
             Node newV = createNewUUIDNode();
 
             QSharedPointer<Soprano::Model> m = m_rdf->model();
@@ -354,7 +352,6 @@ void KoRdfLocation::setDlat(double dlat)
     }
     if (!m_isGeo84) {
         if (!m_joiner.isValid()) {
-            QString tmp = "";
             Node newV = createNewUUIDNode();
 
             QSharedPointer<Soprano::Model> m = m_rdf->model();

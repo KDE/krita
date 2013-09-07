@@ -97,20 +97,9 @@ void StylesFilteredModelBase::setStyleThumbnailer(KoStyleThumbnailer *thumbnaile
     Q_UNUSED(thumbnailer);
 }
 
-QModelIndex StylesFilteredModelBase::indexForParagraphStyle(const KoParagraphStyle &style) const
+QModelIndex StylesFilteredModelBase::indexOf(const KoCharacterStyle &style) const
 {
-    QModelIndex sourceIndex(m_sourceModel->indexForParagraphStyle(style));
-
-    if (!sourceIndex.isValid() || (m_sourceToProxy.at(sourceIndex.row()) < 0)) {
-        return QModelIndex();
-    }
-
-    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style.styleId());
-}
-
-QModelIndex StylesFilteredModelBase::indexForCharacterStyle(const KoCharacterStyle &style) const
-{
-    QModelIndex sourceIndex(m_sourceModel->indexForCharacterStyle(style));
+    QModelIndex sourceIndex(m_sourceModel->indexOf(style));
 
     if (!sourceIndex.isValid() || m_sourceToProxy.at(sourceIndex.row()) < 0) {
         return QModelIndex();

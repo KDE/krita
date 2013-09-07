@@ -16,15 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <KoColorProfile.h>
 #include "kis_crash_filter_test.h"
+#include <KoColorProfile.h>
 #include <qtest_kde.h>
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
-#include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include <KoColorSpaceRegistry.h>
 

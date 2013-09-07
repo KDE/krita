@@ -27,6 +27,8 @@ class KisPressureSharpnessOption;
 class KisTextureProperties;
 class KisPressureMirrorOption;
 class KisPrecisionOption;
+struct MirrorProperties;
+
 
 class PAINTOP_EXPORT KisDabCache
 {
@@ -66,7 +68,8 @@ private:
                                                double angle,
                                                const KisPaintInformation& info,
                                                double subPixelX, double subPixelY,
-                                               qreal softnessFactor);
+                                               qreal softnessFactor,
+                                               MirrorProperties mirrorProperties);
 
     inline KisFixedPaintDeviceSP tryFetchFromCache(const KisColorSource *colorSource,
                                                    const KoColor& color,
@@ -74,7 +77,8 @@ private:
                                                    double angle,
                                                    const KisPaintInformation& info,
                                                    double subPixelX, double subPixelY,
-                                                   qreal softnessFactor);
+                                                   qreal softnessFactor,
+                                                   MirrorProperties mirrorProperties);
 
     inline KisFixedPaintDeviceSP fetchDabCommon(const KoColorSpace *cs,
                                                 const KisColorSource *colorSource,

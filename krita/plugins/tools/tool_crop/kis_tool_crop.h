@@ -33,6 +33,7 @@
 #include "ui_wdg_tool_crop.h"
 
 class QRect;
+class DecorationLine;
 
 class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
 {
@@ -73,7 +74,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void mouseDoubleClickEvent(KoPointerEvent *e);
     virtual void keyReleaseEvent(QKeyEvent* event);
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -104,6 +105,8 @@ private:
     QRectF rightHandleRect(QRectF cropBorderRect);
     QRectF upperHandleRect(QRectF cropBorderRect);
     QRectF leftHandleRect(QRectF cropBorderRect);
+    void drawDecorationLine(QPainter *p, DecorationLine *decorLine, QRectF rect);
+
 private slots:
 
     void crop();
@@ -112,6 +115,7 @@ private slots:
     void setCropWidth(int x);
     void setCropHeight(int y);
     void setRatio(double ratio);
+    void setDecoration(int i);
 
 private:
     QRect m_rectCrop; // Is the coordinate of the region to crop.
@@ -135,6 +139,7 @@ private:
         Right = 8,
         Inside = 9
     };
+    QList<DecorationLine *> m_decorations;
 };
 
 class KisToolCropFactory : public KoToolFactoryBase

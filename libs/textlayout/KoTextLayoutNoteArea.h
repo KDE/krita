@@ -25,7 +25,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoInlineNote.h>
 
-class TEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {
 public:
     explicit KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);

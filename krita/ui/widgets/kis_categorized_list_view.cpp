@@ -17,8 +17,9 @@
  */
 
 #include "kis_categorized_list_view.h"
-#include "../kis_categorized_list_model.h"
+#include "kis_categorized_list_model.h"
 #include <QMouseEvent>
+
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
     QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
@@ -34,23 +35,24 @@ void KisCategorizedListView::setModel(QAbstractItemModel* model)
 {
     QListView::setModel(model);
     updateRows(0, model->rowCount());
+    model->sort(0);
 }
 
 void KisCategorizedListView::updateRows(int begin, int end)
 {
     for(; begin!=end; ++begin) {
         QModelIndex index    = model()->index(begin, 0);
-        bool        isHeader = model()->data(index, IsHeaderRole).toBool();
-        bool        expanded = model()->data(index, ExpandCategoryRole).toBool();
+        bool        isHeader = model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool();
+        bool        expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
         setRowHidden(begin, !expanded && !isHeader);
     }
 }
 
 void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
 {
-    if(model()->data(index, IsHeaderRole).toBool()) {
-        bool expanded = model()->data(index, ExpandCategoryRole).toBool();
-        model()->setData(index, !expanded, ExpandCategoryRole);
+    if(model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool()) {
+        bool expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
+        model()->setData(index, !expanded, __CategorizedListModelBase::ExpandCategoryRole);
         emit sigCategoryToggled(index, !expanded);
     }
 }
@@ -65,6 +67,13 @@ void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, 
 {
     QListView::rowsInserted(parent, start, end);
     updateRows(0, model()->rowCount());
+    model()->sort(0);
+}
+
+void KisCategorizedListView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
+{
+    QListView::rowsAboutToBeRemoved(parent, start, end);
+    model()->sort(0);
 }
 
 void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
@@ -73,16 +82,22 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
         QModelIndex index = QListView::indexAt(event->pos());
 
         if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
-            int role = model()->data(index, Qt::CheckStateRole).toInt();
-            
-            if (role == Qt::Checked) { model()->setData(index, Qt::Unchecked, Qt::CheckStateRole); }
-            else                     { model()->setData(index, Qt::Checked  , Qt::CheckStateRole); }
-            
+            QListView::mousePressEvent(event);
+
+            QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
+                                     event->pos(),
+                                     event->globalPos(),
+                                     event->button(),
+                                     event->button() | event->buttons(),
+                                     event->modifiers());
+
+            QListView::mouseReleaseEvent(&releaseEvent);
+
             emit sigEntryChecked(index);
             return;
         }
     }
-    
+
     QListView::mousePressEvent(event);
 }
 

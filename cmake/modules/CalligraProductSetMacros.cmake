@@ -49,12 +49,12 @@ endmacro()
 
 
 macro(calligra_drop_unbuildable_products)
-  # first drop all staging products if not in debug build
-  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+  # first drop all staging products if not enabled
+  if(NOT CALLIGRA_SHOULD_BUILD_STAGING)
     foreach(_product_id ${CALLIGRA_STAGING_PRODUCTS})
       calligra_disable_product(${_product_id} "Not ready for release")
     endforeach(_product_id)
-  endif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT CMAKE_BUILD_TYPE STREQUAL "DebugFull")
+  endif(NOT CALLIGRA_SHOULD_BUILD_STAGING)
 
   # can assume calligra_all_products has products in down-up order
   # 1. check all wanted products and see if they will be built,

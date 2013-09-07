@@ -76,10 +76,11 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
     }
 }
 
-KisZoomAction::KisZoomAction(KisInputManager* manager)
-    : KisAbstractInputAction(manager), d(new Private(this))
+KisZoomAction::KisZoomAction()
+    : d(new Private(this))
 {
     setName(i18n("Zoom Canvas"));
+    setDescription(i18n("The <i>Zoom Canvas</i> action zooms the canvas."));
 
     QHash< QString, int > shortcuts;
     shortcuts.insert(i18n("Toggle Zoom Mode"), ZoomToggleShortcut);
@@ -95,6 +96,11 @@ KisZoomAction::KisZoomAction(KisInputManager* manager)
 KisZoomAction::~KisZoomAction()
 {
     delete d;
+}
+
+int KisZoomAction::priority() const
+{
+    return 4;
 }
 
 void KisZoomAction::activate()

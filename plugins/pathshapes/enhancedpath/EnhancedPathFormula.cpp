@@ -349,12 +349,12 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
             } else if (ch == '(') { // a '(' ? then this must be a function identifier
                 tokens.append(FormulaToken(FormulaToken::TypeFunction, tokenText, tokenStart));
                 tokenStart = i;
-                tokenText = "";
+                tokenText.clear();
                 state = Start;
             } else { // we're done with identifier
                 tokens.append(FormulaToken(FormulaToken::TypeReference, tokenText, tokenStart));
                 tokenStart = i;
-                tokenText = "";
+                tokenText.clear();
                 state = Start;
             }
             break;
@@ -372,7 +372,7 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
                 state = InExpIndicator;
             } else { // we're done with integer number
                 tokens.append(FormulaToken(FormulaToken::TypeNumber, tokenText, tokenStart));
-                tokenText = "";
+                tokenText.clear();
                 state = Start;
             };
             break;
@@ -386,7 +386,7 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
                 state = InExpIndicator;
             } else { // we're done with floating-point number
                 tokens.append(FormulaToken(FormulaToken::TypeNumber, tokenText, tokenStart));
-                tokenText = "";
+                tokenText.clear();
                 state = Start;
             };
             break;
@@ -406,7 +406,7 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
                 tokenText.append(expr[i++]);
             } else { // we're done with floating-point number
                 tokens.append(FormulaToken(FormulaToken::TypeNumber, tokenText, tokenStart));
-                tokenText = "";
+                tokenText.clear();
                 state = Start;
             }
             break;

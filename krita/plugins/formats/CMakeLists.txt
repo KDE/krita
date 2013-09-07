@@ -22,8 +22,6 @@ macro_log_feature( KDCRAW_FOUND "kdcraw" "The KDCraw library" "http://www.digika
 macro_optional_find_package(OpenJPEG)
 macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
 
-include_directories(${KRITA_INCLUDES})
-
 if(KDCRAW_FOUND)
     add_subdirectory( raw )
 endif(KDCRAW_FOUND)

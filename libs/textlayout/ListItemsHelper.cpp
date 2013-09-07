@@ -35,17 +35,20 @@ using namespace Lists;
 
 QString Lists::intToRoman(int n)
 {
-    static const QByteArray RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-    static const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-    static const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-    static const QByteArray RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
+    static const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+    static const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+    static const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+    static const QString RNThousands[] = {"", "m", "mm", "mmm", "mmmm", "mmmmm", "mmmmmm", "mmmmmmm", "mmmmmmmm", "mmmmmmmmm"};
 
     if (n <= 0) {
         kWarning(32500) << "intToRoman called with negative number: n=" << n;
         return QString::number(n);
     }
-    return QString::fromLatin1(RNThousands[(n / 1000)] + RNHundreds[(n / 100) % 10 ] +
-                               RNTens[(n / 10) % 10 ] + RNUnits[(n) % 10 ]);
+
+    return RNThousands[(n / 1000)] +
+           RNHundreds[(n / 100) % 10 ] +
+           RNTens[(n / 10) % 10 ] +
+           RNUnits[(n) % 10 ];
 }
 
 QString Lists::intToAlpha(int n, Capitalisation caps, bool letterSynchronization)
@@ -132,20 +135,20 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
-    static const char* Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
                                    "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
                                  };
-    static const char* Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
                                     "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
                                   };
-    static const char* ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
                                            "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
                                           };
 
     /*
     // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
-    static const char* chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
-    static const char* chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
+    static const char* const chinese1[] = { '零','壹','貳','叄','肆','伍','陸','柒','捌','玖' };
+    static const char* const chinese2[] = { '〇','一','二','三','四','五','六','七','八','九' };
 
     TODO: http://en.wikipedia.org/wiki/Korean_numerals
     http://en.wikipedia.org/wiki/Japanese_numerals

@@ -24,6 +24,7 @@
 
 #include <QVector>
 
+class KoCharacterStyle;
 class KoStyleManager;
 
 class DockerStylesComboModel : public StylesFilteredModelBase
@@ -57,6 +58,7 @@ protected:
     virtual void createMapping();
 
 private:
+    KoCharacterStyle *findStyle(int styleId) const;
     KoStyleManager *m_styleManager;
     QVector<int> m_usedStylesId;
     QVector<int> m_usedStyles;

@@ -36,9 +36,9 @@ class KisSprayPaintOp : public KisPaintOp
 public:
 
     KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisSprayPaintOp();
+    ~KisSprayPaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     KisShapeProperties m_shapeProperties;

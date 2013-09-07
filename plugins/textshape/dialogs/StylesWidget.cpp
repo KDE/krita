@@ -105,7 +105,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     m_blockSignals = true;
 //    m_stylesModel->setCurrentParagraphStyle(id, unchanged);
     m_blockSignals = false;
-    widget.stylesView->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*usedStyle));
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexOf(*usedStyle));
 }
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
@@ -136,7 +136,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_blockSignals = true;
 //    m_stylesModel->setCurrentCharacterStyle(id, unchanged);
     m_blockSignals = false;
-    widget.stylesView->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*usedStyle));
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexOf(*usedStyle));
 }
 
 void StylesWidget::applyParagraphStyle()

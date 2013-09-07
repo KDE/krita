@@ -39,7 +39,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
                                        KisSelectionSP selection)
     : KisSelectionBasedLayer(image.data(), name, selection, kfc)
 {
-    // by default Adjustmen Layers have a copy composition,
+    // by default Adjustment Layers have a copy composition,
     // which is more natural for users
     setCompositeOp(COMPOSITE_COPY);
 }

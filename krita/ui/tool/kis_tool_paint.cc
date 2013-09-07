@@ -69,7 +69,6 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
-#include "kis_canvas_resource_provider.h"
 
 const int STEP = 25;
 
@@ -133,9 +132,9 @@ int KisToolPaint::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
 }
 
-void KisToolPaint::resourceChanged(int key, const QVariant& v)
+void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 {
-    KisTool::resourceChanged(key, v);
+    KisTool::canvasResourceChanged(key, v);
 
     switch(key){
     case(KisCanvasResourceProvider::Opacity):

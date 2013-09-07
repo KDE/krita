@@ -50,7 +50,7 @@ private:
 
 typedef QMap<QString, Table*> TableMap;
 
-class CHARTSHAPELIB_EXPORT TableSource : public QObject
+class TableSource : public QObject
 {
     Q_OBJECT
 

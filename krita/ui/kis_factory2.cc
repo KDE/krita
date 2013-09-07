@@ -32,8 +32,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kparts/plugin.h>
-#include <kparts/componentfactory.h>
 #include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>
@@ -77,6 +75,7 @@ KisFactory2::~KisFactory2()
 QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                               const QVariantList& args, const QString& keyword )
 {
+    Q_UNUSED( parent );
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 

@@ -1,4 +1,4 @@
-include_directories( ${KRITA_INCLUDES} ${OCIO_INCLUDE_DIRECTORY})
+include_directories( ${OCIO_INCLUDE_DIRECTORY})
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 set(KRITA_LUTDOCKER_PART_SRCS lutdocker.cpp lutdocker_dock.cpp ocio_display_filter.cpp )

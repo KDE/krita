@@ -29,9 +29,6 @@ public:
     virtual bool load();
     virtual QString defaultFileExtension() const;
     void toXML(QDomDocument& d, QDomElement& e) const;
-private:
-    struct Private;
-    Private* const d;
 };
 
 #endif

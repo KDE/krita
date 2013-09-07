@@ -30,7 +30,6 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPoint>
-#include <QPainter>
 #include <QTransform>
 
 #include <kxmlguifactory.h>
@@ -243,12 +242,12 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
 
         QRect wr = widgetRectInImagePixels.toAlignedRect() & m_d->openGLImageTextures->storedImageBounds();
 
-        m_d->openGLImageTextures->activateHDRExposureProgram();
-
         int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
         int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
         int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
         int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
+
+        m_d->openGLImageTextures->activateHDRExposureProgram();
 
         for (int col = firstColumn; col <= lastColumn; col++) {
             for (int row = firstRow; row <= lastRow; row++) {
@@ -256,6 +255,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *)
                 KisTextureTile *tile =
                         m_d->openGLImageTextures->getTextureTileCR(col, row);
 
+                glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, tile->textureId());
 
                 if(SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {

@@ -70,14 +70,19 @@ qreal KisMultipliersDoubleSliderSpinBox::value()
 
 void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
 {
-    for(int i = 0; i < d->form.comboBox->count(); ++i) {
-        qreal m = d->form.comboBox->itemData(i).toDouble();
-        if (value >= m * d->min && value <= m * d->max) {
-            d->form.comboBox->setCurrentIndex(i);
-            d->updateRange();
-            break;
+    qreal m = d->currentMultiplier();
+
+    if (value < m * d->min || value > m * d->max) {
+        for(int i = 0; i < d->form.comboBox->count(); ++i) {
+            qreal m = d->form.comboBox->itemData(i).toDouble();
+            if (value >= m * d->min && value <= m * d->max) {
+                d->form.comboBox->setCurrentIndex(i);
+                d->updateRange();
+                break;
+            }
         }
     }
+
     d->form.sliderSpinBox->setValue(value);
 }
 

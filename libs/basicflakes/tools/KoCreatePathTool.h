@@ -29,6 +29,7 @@
 
 class KoPathShape;
 class KoPathPoint;
+class KoShapeStroke;
 
 class KoCreatePathToolPrivate;
 
@@ -84,10 +85,16 @@ protected:
       */
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
+    void endPath();
+    void endPathWithoutLastPoint();
+    void cancelPath();
+
     /// reimplemented
     virtual QList<QWidget *> createOptionWidgets();
 
 private:
+    KoShapeStroke *createStroke();
+
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))

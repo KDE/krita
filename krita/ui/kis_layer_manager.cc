@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QFileInfo>
+#include <QDesktopServices>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -49,7 +50,6 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
-#include <KoDocument.h>
 #include <KoPart.h>
 
 #include <filter/kis_filter_configuration.h>
@@ -70,7 +70,6 @@
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
-#include <kis_file_layer.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -202,7 +201,7 @@ public:
             KUrl url = m_url;
             url.adjustPath(KUrl::AddTrailingSlash);
 
-            url.setFileName(m_baseName + "_" + layer->name().replace(" ", "_") + "." + m_extension);
+            url.setFileName(m_baseName + '_' + layer->name().replace(' ', '_') + '.' + m_extension);
 
             d.exportDocument(url);
 
@@ -876,9 +875,16 @@ bool KisLayerManager::activeLayerHasSelection()
 
 void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
+
+    QString basePath;
+    KUrl url = m_view->document()->url();
+    qDebug() << "url" << url << url.isEmpty();
+    if (url.isLocalFile()) {
+        basePath = QFileInfo(url.toLocalFile()).absolutePath();
+    }
     KisImageWSP image = m_view->image();
 
-    KisDlgFileLayer dlg(image->nextLayerName(), m_view);
+    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view);
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -893,7 +899,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
         bool scaleToImageResolution = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,
-                       new KisFileLayer(image, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
+                       new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
     }
 
 }

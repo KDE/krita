@@ -526,7 +526,10 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
     bool scale = (element.attribute("scale", "true")  == "true");
-    KisLayer *layer = new KisFileLayer(image, filename, scale, name, opacity);
+
+    QString documentPath = m_d->document->url().toLocalFile();
+    QFileInfo info(documentPath);
+    KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, scale, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;
@@ -714,19 +717,22 @@ KisNodeSP KisKraLoader::loadSelectionMask(KisImageWSP image, const KoXmlElement&
 void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
 {
     KoXmlNode child;
+
     for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+
         KoXmlElement e = child.toElement();
         QString name = e.attribute("name");
+
         KisLayerComposition* composition = new KisLayerComposition(image, name);
-        {
-            KoXmlNode child;
-            for (child = elem.lastChild(); !child.isNull(); child = child.previousSibling()) {
-                KoXmlElement e = child.toElement();
-                QUuid uuid(e.attribute("uuid"));
-                bool visible = e.attribute("visible", "1") == "0" ? false : true;
-                composition->setVisible(uuid, visible);
-            }
+
+        KoXmlNode value;
+        for (value = child.lastChild(); !value.isNull(); value = value.previousSibling()) {
+            KoXmlElement e = value.toElement();
+            QUuid uuid(e.attribute("uuid"));
+            bool visible = e.attribute("visible", "1") == "0" ? false : true;
+            composition->setVisible(uuid, visible);
         }
+
         image->addComposition(composition);
     }
 }

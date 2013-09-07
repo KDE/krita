@@ -189,18 +189,14 @@ void KisAutoBrushWidget::setStackedWidget(int index)
 void KisAutoBrushWidget::spinBoxHorizontalChanged(qreal a)
 {
     if (m_linkFade) {
-        inputHFade->blockSignals(true);
-        inputHFade->setValue(a);
-        inputHFade->blockSignals(false);
         inputVFade->blockSignals(true);
         inputVFade->setValue(a);
         inputVFade->blockSignals(false);
     }
-    else {
-        inputHFade->blockSignals(true);
-        inputHFade->setValue(a);
-        inputHFade->blockSignals(false);
-    }
+
+    inputHFade->blockSignals(true);
+    inputHFade->setValue(a);
+    inputHFade->blockSignals(false);
     paramChanged();
 }
 
@@ -210,15 +206,11 @@ void KisAutoBrushWidget::spinBoxVerticalChanged(qreal a)
         inputHFade->blockSignals(true);
         inputHFade->setValue(a);
         inputHFade->blockSignals(false);
-        inputVFade->blockSignals(true);
-        inputVFade->setValue(a);
-        inputVFade->blockSignals(false);
     }
-    else {
-        inputVFade->blockSignals(true);
-        inputVFade->setValue(a);
-        inputVFade->blockSignals(false);
-    }
+
+    inputVFade->blockSignals(true);
+    inputVFade->setValue(a);
+    inputVFade->blockSignals(false);
     paramChanged();
 }
 
@@ -228,7 +220,6 @@ void KisAutoBrushWidget::spinBoxRatioChanged(qreal a)
     inputRatio->setValue(a);
     inputRatio->blockSignals(false);
     paramChanged();
-
 }
 
 void KisAutoBrushWidget::spinBoxRandomnessChanged(qreal a)

@@ -37,8 +37,6 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
 
-#include <netinet/in.h> // htonl
-
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
 {

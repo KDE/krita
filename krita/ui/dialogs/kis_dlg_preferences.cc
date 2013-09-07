@@ -81,11 +81,11 @@
 #include "kis_factory2.h"
 #include "KoID.h"
 
-#include "KoColorProfile.h"
-
 // for the performance update
 #include <kis_cubic_curve.h>
 #include <config-ocio.h>
+
+#include "input/config/kis_input_configuration_page.h"
 
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
@@ -106,7 +106,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
-    chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
 
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
@@ -137,7 +136,6 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
-    chkZoomWithWheel->setChecked(true);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
@@ -677,6 +675,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setHeader(i18n("Author"));
     page->setIcon(koIcon("user-identity"));
 
+    m_inputConfiguration = new KisInputConfigurationPage();
+    page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
+    page->setHeader(i18n("Canvas Input"));
+    page->setIcon(koIcon("input-tablet"));
+    connect(this, SIGNAL(okClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(applyClicked()), m_inputConfiguration, SLOT(saveChanges()));
+    connect(this, SIGNAL(cancelClicked()), m_inputConfiguration, SLOT(revertChanges()));
+    connect(this, SIGNAL(defaultClicked()), m_inputConfiguration, SLOT(setDefaults()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
@@ -732,14 +738,15 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        foreach(KoPart* part, app->partList()) {
-            KoDocument *doc = part->document();
-            doc->setAutoSave(dialog->m_general->autoSaveInterval());
-            doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-            doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+        if (app) {
+            foreach(KoPart* part, app->partList()) {
+                KoDocument *doc = part->document();
+                doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+            }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
-        cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

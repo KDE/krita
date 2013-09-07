@@ -72,7 +72,7 @@ namespace KChart {
   * data sets column-wise, which is done by calling setDataDirection(Qt::Vertical).
   */
 
-class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
+class KDChartModel : public QAbstractItemModel
 {
     Q_OBJECT
 

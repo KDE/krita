@@ -34,7 +34,7 @@
 
 namespace KChart {
 
-class CHARTSHAPELIB_EXPORT Legend : public QObject, public KoShape
+class Legend : public QObject, public KoShape
 {
     Q_OBJECT
 

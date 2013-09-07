@@ -64,6 +64,7 @@ public:
 
 protected:
     QStringList getValues(const QString& typeDefinition);
+    QString stripQuotes(const QString &str);
 
 };
 

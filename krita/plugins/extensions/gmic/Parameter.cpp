@@ -63,6 +63,16 @@ bool Parameter::isPresentationalOnly() const
     return false;
 }
 
+QString Parameter::stripQuotes(const QString& str)
+{
+    if (str.startsWith("\"") && str.endsWith("\""))
+    {
+        return str.mid(1, str.size() - 2);
+    }
+    return str;
+}
+
+
 /**************************
     == FloatParameter ==
  ***************************/
@@ -208,16 +218,11 @@ void ChoiceParameter::parseValues(const QString& typeDefinition)
         m_value = m_defaultValue = 0;
     }
 
-
     m_choices = values;
 
     for (int i = 0; i < values.size(); i++)
     {
-        m_choices[i] = m_choices[i].trimmed();
-        if (m_choices.at(i).startsWith("\"") && m_choices.at(i).endsWith("\""))
-        {
-            m_choices[i] = m_choices.at(i).mid(1, m_choices.at(i).size() - 2);
-        }
+        m_choices[i] = stripQuotes(m_choices[i].trimmed());
     }
 }
 
@@ -255,15 +260,8 @@ NoteParameter::NoteParameter(const QString& name, bool updatePreview): Parameter
 
 void NoteParameter::parseValues(const QString& typeDefinition)
 {
-    QString currentType = PARAMETER_NAMES[m_type];
-    Q_ASSERT(typeDefinition.startsWith(currentType));
-
-    // get rid of '(', '{' and '['
-    QString onlyValues = typeDefinition;
-    onlyValues = onlyValues.remove(0, currentType.size() + 1);
-    onlyValues.chop(1);
-
-    m_label = onlyValues;
+    QStringList values = getValues(typeDefinition);
+    m_label = stripQuotes(values.at(0));
 }
 
 QString NoteParameter::toString()

@@ -55,9 +55,6 @@ Parameter.cpp
 )
 
 set(kritagmic_PART_SRCS
-    dlg_gmic.cpp
-    kis_gmic.cpp
-    kis_gmic_processing_visitor.cpp
     kis_gmic_simple_convertor.cpp
     kis_export_gmic_processing_visitor.cpp
     kis_gmic_command.cpp

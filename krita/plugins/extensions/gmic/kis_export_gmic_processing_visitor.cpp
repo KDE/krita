@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -23,6 +23,7 @@
 
 #include <kis_gmic_simple_convertor.h>
 #include <kis_node.h>
+#include <kis_debug.h>
 
 KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const QList<KisNodeSP> &nodes, QSharedPointer<gmic_list<float> > images)
     : m_nodes(nodes),
@@ -38,7 +39,7 @@ void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     int index = m_nodes.indexOf(node);
     if (index >= 0)
     {
-        qDebug() << "Found the LAYEEEEEEEEEEEEEEEEER!";
+        dbgPlugins << "Found the LAYEEEEEEEEEEEEEEEEER!";
 
         /* fill the image with data here */
         KisGmicSimpleConvertor convertor;

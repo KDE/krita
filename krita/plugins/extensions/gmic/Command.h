@@ -56,7 +56,7 @@ public:
     /* return true if the parameter parsed is complete */
     bool processParameter(const QStringList &block);
 
-    QWidget * createSettingsWidget();
+    // QWidget * createSettingsWidget();
     void writeConfiguration(KisGmicFilterSetting * setting);
 
 private:

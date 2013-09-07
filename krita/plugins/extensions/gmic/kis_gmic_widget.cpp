@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <qdialogbuttonbox.h>
 #include <QLabel>
-#include <QDebug>
+#include <kis_debug.h>
 
 #include <QMetaType>
 
@@ -97,7 +97,7 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
     if (!var.isValid())
     {
         gmicCommand = 0;
-        qDebug() << "Invalid QVariant, invalid command? : ';' ";
+        dbgPlugins << "Invalid QVariant, invalid command? : ';' ";
     }
     else
     {
@@ -144,14 +144,14 @@ void KisGmicWidget::applyFilterSlot()
         filterSettings->setOutputMode(m_inputOutputOptions->outputMode());
 
 
-        qDebug() << "Valid settings!";
-        qDebug() << "GMIC command : " << filterSettings->gmicCommand();
+        dbgPlugins << "Valid settings!";
+        dbgPlugins << "GMIC command : " << filterSettings->gmicCommand();
 
         emit sigApplyCommand(filterSettings);
     }
     else
     {
-        qDebug() << "Filter is not selected!";
+        dbgPlugins << "Filter is not selected!";
     }
 
 }

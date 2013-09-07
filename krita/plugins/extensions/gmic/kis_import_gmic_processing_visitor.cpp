@@ -21,6 +21,7 @@
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
+#include <kis_debug.h>
 
 #include <gmic.h>
 #include "kis_gmic_simple_convertor.h"
@@ -41,7 +42,7 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     {
         gmic_image<float> &gimg = m_images->_data[index];
 
-        qDebug() << "Importing: " << gimg._width << gimg._height << gimg._spectrum;
+        dbgPlugins << "Importing: " << gimg._width << gimg._height << gimg._spectrum;
 
 
         KisPaintDeviceSP src = node->paintDevice();

@@ -25,8 +25,6 @@
 #include "kis_gmic_settings_widget.h"
 
 // debug
-#include <typeinfo>
-#include <iostream>
 
 KisGmicFilterModel::KisGmicFilterModel(Component * rootComponent, QObject* parent):
     QAbstractItemModel(parent),
@@ -132,7 +130,7 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
             //KisGmicSettingsWidget * filterSettingsWidget = new  KisGmicSettingsWidget(commandItem);
             /*if (filterSettingsWidget)
             {
-                std::cout << "Sending QWidget" << std::endl;
+                dbgPlugins << "Sending QWidget";
                 return QVariant::fromValue(filterSettingsWidget);
             }*/
             return QVariant::fromValue(commandItem);

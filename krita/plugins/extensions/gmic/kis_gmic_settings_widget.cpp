@@ -11,6 +11,7 @@
 #include <QFileDialog>
 
 #include <kis_gmic_settings_widget.h>
+#include <kis_debug.h>
 
 #include <Parameter.h>
 
@@ -21,8 +22,6 @@
 //
 #include <kurlrequester.h>
 
-// debug
-#include <iostream>
 #include <kcolorbutton.h>
 #include <kfiledialog.h>
 
@@ -46,7 +45,7 @@ void KisGmicSettingsWidget::createSettingsWidget()
 
     if (parameters.size() == 0)
     {
-        std::cout << "Parameters ZERO!!! exiting...." << std::endl;
+        dbgPlugins << "Parameters ZERO!!! exiting....";
         return;
     }
 
@@ -56,7 +55,7 @@ void KisGmicSettingsWidget::createSettingsWidget()
     for (int i = 0; i < parameters.size();i++)
     {
         Parameter * p = parameters.at(i);
-        std::cout << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << qPrintable(p->toString()) << std::endl;
+        dbgPlugins << "Processing: " << qPrintable(PARAMETER_NAMES[p->m_type]) << " " << qPrintable(p->toString());
         switch (p->m_type)
         {
 
@@ -252,7 +251,7 @@ void KisGmicSettingsWidget::createSettingsWidget()
             }
 
             default:{
-                std::cout << "IGNORING : " << qPrintable(PARAMETER_NAMES[p->m_type]) << std::endl;
+                dbgPlugins << "IGNORING : " << qPrintable(PARAMETER_NAMES[p->m_type]);
                 break;
             }
 
@@ -260,7 +259,7 @@ void KisGmicSettingsWidget::createSettingsWidget()
 
     }
 
-    std::cout << "Setting layout" << std::endl;
+    dbgPlugins << "Setting layout";
     setLayout(gridLayout);
 }
 
@@ -315,7 +314,7 @@ void KisGmicSettingsWidget::setBoolValue(bool value)
 
 void KisGmicSettingsWidget::setChoiceIndex(int index)
 {
-    qDebug() << "setting choice param: failed?";
+    dbgPlugins << "setting choice param: failed?";
     Parameter * p = parameter(sender());
     if (!p)
     {
@@ -326,8 +325,7 @@ void KisGmicSettingsWidget::setChoiceIndex(int index)
     {
         return;
     }
-    qDebug() << "NO!";
-    qDebug() << "Setting " << index;
+    dbgPlugins << "NO!" << "Setting " << index;
 
     ChoiceParameter * choiceParam = static_cast<ChoiceParameter *>(p);
     choiceParam->m_value = index;

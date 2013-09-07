@@ -16,11 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QFile>
-#include <qregexp.h>
+#include <QRegExp>
 #include <QStringList>
-
 #include <QTreeView>
 
 #include "kis_gmic_parser.h"
@@ -77,7 +76,7 @@ Component* KisGmicParser::createFilterTree()
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        qDebug() << "Can't open file " << m_fileName << file.errorString();
+        dbgPlugins << "Can't open file " << m_fileName << file.errorString();
         return 0;
     }
 
@@ -125,7 +124,7 @@ Component* KisGmicParser::createFilterTree()
             }
             else if (isCommand(line))
             {
-                // qDebug() << "command" << line;
+                // dbgPlugins << "command" << line;
                 command = new Command(category);
                 command->processCommandName(line);
                 category->add(command);
@@ -150,7 +149,7 @@ Component* KisGmicParser::createFilterTree()
                             }
                             else
                             {
-                                qDebug() << "We are and the end of the file unexpectedly"; // we are at the end of the file
+                                warnPlugins << "We are and the end of the file unexpectedly"; // we are at the end of the file
                                 break;
                             }
                         }
@@ -158,7 +157,7 @@ Component* KisGmicParser::createFilterTree()
                 }
                 else
                 {
-                    qDebug() << "No command for given parameter, invalid gmic definition file";
+                    dbgPlugins << "No command for given parameter, invalid gmic definition file";
                 }
             }
             else if (line.startsWith(GIMP_COMMENT+"_"))
@@ -167,7 +166,7 @@ Component* KisGmicParser::createFilterTree()
             }
             else
             {
-                qDebug() << "IGNORING:" << line;
+                dbgPlugins << "IGNORING:" << line;
             }
         }
     }

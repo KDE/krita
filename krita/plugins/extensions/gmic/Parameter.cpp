@@ -20,7 +20,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <QDebug>
+#include <kis_debug.h>
 
 Parameter::Parameter(const QString& name, bool updatePreview)
     :m_name(name),
@@ -74,7 +74,7 @@ void FloatParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
-    //qDebug() << values;
+
     m_value = m_defaultValue = values.at(0).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toFloat(&isOk);
@@ -109,7 +109,7 @@ void IntParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
     bool isOk = true;
-    //qDebug() << values;
+
     m_value = m_defaultValue = values.at(0).toInt(&isOk);
     Q_ASSERT(isOk);
     m_minValue = values.at(1).toInt(&isOk);
@@ -165,7 +165,7 @@ void ChoiceParameter::parseValues(const QString& typeDefinition)
     QStringList values = getValues(typeDefinition);
     if (values.isEmpty())
     {
-        qDebug() << "Wrong gmic_def" << typeDefinition << " not parsed correctly";
+        dbgPlugins << "Wrong gmic_def" << typeDefinition << " not parsed correctly";
         return;
     }
 
@@ -263,7 +263,7 @@ void BoolParameter::parseValues(const QString& typeDefinition)
         m_value = true;
     } else
     {
-        qDebug() << "Invalid bool value, assuming true " << m_name << ":" << boolValue;
+        dbgPlugins << "Invalid bool value, assuming true " << m_name << ":" << boolValue;
         m_value = true;
     }
 }

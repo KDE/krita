@@ -21,7 +21,6 @@
 
 #include <QVector>
 
-#include <iostream>
 #include "Parameter.h"
 
 #include <QString>

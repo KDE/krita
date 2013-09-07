@@ -16,12 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kis_gmic.h>
-
 #include <QVector>
 
 #ifndef __KIS_GMIC_SIMPLE_CONVERTOR_H
 #define __KIS_GMIC_SIMPLE_CONVERTOR_H
+
+#include <gmic.h>
+#include <kis_paint_device.h>
+
 
 class KisGmicSimpleConvertor
 {
@@ -39,6 +41,8 @@ public:
     void grayscaleAlpha2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
     void rgb2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
     void rgba2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
+    QImage convertToQImage(gmic_image<float>& gmicImage);
+    void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
 
 
     void releaseAlphaChannel()

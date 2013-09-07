@@ -17,9 +17,9 @@
  */
 
 #include <Category.h>
-
 #include <QList>
-#include <iostream>
+
+#include <kis_debug.h>
 
 void Category::add(Component* c)
 {
@@ -48,9 +48,12 @@ void Category::print(int level)
 {
     if(!m_components.isEmpty())
     {
-        for(int x=0; x < level; ++x) {std::cout << "\t";}
+        for(int x=0; x < level; ++x)
+        {
+            dbgPlugins << "\t";
+        }
 
-        std::cout << "Category " << qPrintable(name()) << ":\n";
+        dbgPlugins << "Category " << qPrintable(name()) << ":\n";
         ++level;
         for (int i = 0; i < m_components.size(); ++i)
             m_components[i]->print(level);

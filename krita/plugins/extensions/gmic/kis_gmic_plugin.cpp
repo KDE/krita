@@ -46,15 +46,11 @@
 #include <KoUpdater.h>
 
 
-#include "kis_gmic.h"
-#include "dlg_gmic.h"
-
 #include "gmic.h"
 #include "kis_gmic_parser.h"
 #include "Component.h"
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
-#include "kis_gmic_processing_visitor.h"
 
 #include "kis_export_gmic_processing_visitor.h"
 #include "kis_gmic_command.h"
@@ -106,47 +102,6 @@ void KisGmicPlugin::slotGmic()
     m_gmicWidget->show();
 }
 
-
-void KisGmicPlugin::slotApplyGmicCommandOld(KisGmicFilterSetting* setting)
-{
-    KisImageWSP image = m_view->image();
-
-    if (image)
-    {
-        QString actionName;
-        KisNodeSP node;
-
-        if (setting->inputLayerMode() == ACTIVE_LAYER)
-        {
-            //TODO: Undo string for gimp plug-in is G'MIC, I would like to use G'MIC+filtername
-            actionName = i18n("Gmic: Active Layer");
-            node = m_view->activeNode();
-        }
-        else
-        {
-            KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
-            return;
-        }
-
-        if (setting->outputMode() != IN_PLACE)
-        {
-            KMessageBox::sorry(m_gmicWidget,QString("Sorry, this output mode is not implemented"),"Krita");
-            return;
-        }
-
-        KisImageSignalVector emitSignals;
-        emitSignals << ModifiedSignal;
-
-        KisProcessingApplicator applicator(m_view->image(), node,
-                                       KisProcessingApplicator::RECURSIVE,
-                                       emitSignals, actionName);
-
-
-        KisProcessingVisitorSP visitor = new KisGmicProcessingVisitor(setting->gmicCommand(), m_view);
-        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
-        applicator.end();
-    }
-}
 
 void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 {

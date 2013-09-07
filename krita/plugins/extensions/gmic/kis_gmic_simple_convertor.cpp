@@ -18,9 +18,10 @@
 
 #include <QRect>
 
+#include <kis_debug.h>
+
 #include <kis_gmic_simple_convertor.h>
 
-#include <kis_paint_device.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
@@ -84,10 +85,10 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
     if (channelBytes == channelSize() * sizeof(float))
     {
         // ok, we can reuse read plannar bytes here
-        qDebug() << "[krita] Re-using read plannar bytes";
+        dbgPlugins << "[krita] Re-using read plannar bytes";
         if ((gmicImage._spectrum == 1) || (gmicImage._spectrum == 3))
         {
-            qDebug() << "[krita] Releasing alpha channel";
+            dbgPlugins << "[krita] Releasing alpha channel";
             // we can delete alpha channel
             releaseAlphaChannel();
         }
@@ -98,7 +99,7 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
         // re-accumullate buffers, output image has different dimension..not sure if this ever happens
         deletePlanes();
         bool alphaChannelEnabled = ((gmicImage._spectrum == 2) || (gmicImage._spectrum == 4));
-        qDebug() << "Accumulating...!";
+        dbgPlugins << "Accumulating...!";
         accumulate(gmicImage._width * gmicImage._height, alphaChannelEnabled);
     }
 
@@ -126,7 +127,7 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
             break;
         default:
         {
-            qDebug() << "Unsupported gmic output format : " <<  gmicImage._width << gmicImage._height << gmicImage._depth << gmicImage._spectrum;
+            dbgPlugins << "Unsupported gmic output format : " <<  gmicImage._width << gmicImage._height << gmicImage._depth << gmicImage._spectrum;
         }
     }
 
@@ -228,7 +229,7 @@ void KisGmicSimpleConvertor::rgb2rgb(CImg< float >& gmicImage, QVector< quint8 *
 
 void KisGmicSimpleConvertor::rgba2rgba(CImg< float >& gmicImage, QVector< quint8 * > &planes)
 {
-    qDebug() <<"planes-size"<< planes.size();
+    dbgPlugins <<"planes-size"<< planes.size();
 
     quint8 * redChannelBytes = planes[0];
     quint8 * greenChannelBytes = planes[1];
@@ -261,4 +262,59 @@ void KisGmicSimpleConvertor::rgba2rgba(CImg< float >& gmicImage, QVector< quint8
             memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
         }
     }
+}
+
+
+QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage)
+{
+
+    QImage image = QImage(gmicImage._width, gmicImage._height, QImage::Format_ARGB32);
+
+    dbgPlugins << image.format() <<"first pixel:"<< gmicImage._data[0] << gmicImage._width << gmicImage._height << gmicImage._spectrum;
+
+    int greenOffset = gmicImage._width * gmicImage._height;
+    int blueOffset = greenOffset * 2;
+    int pos = 0;
+
+    for (unsigned int y = 0; y < gmicImage._height; y++)
+    {
+        QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
+        for (unsigned int x = 0; x < gmicImage._width; x++)
+        {
+            pos = y * gmicImage._width + x;
+            float r = gmicImage._data[pos];
+            float g = gmicImage._data[pos + greenOffset];
+            float b = gmicImage._data[pos + blueOffset];
+            pixel[x] = qRgb(int(r),int(g), int(b));
+        }
+    }
+    return image;
+}
+
+
+void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float >& gmicImage)
+{
+    int greenOffset = gmicImage._width * gmicImage._height;
+    int blueOffset = greenOffset * 2;
+    int alphaOffset = greenOffset * 3;
+    int pos = 0;
+
+    Q_ASSERT(image.width() == gmicImage._width);
+    Q_ASSERT(image.height() == gmicImage._height);
+    Q_ASSERT(image.format() == QImage::Format_ARGB32);
+    Q_ASSERT(gmicImage._spectrum == 4);
+
+    for (int y = 0; y < image.height(); y++)
+    {
+        const QRgb *pixel = reinterpret_cast<const QRgb *>(image.scanLine(y));
+        for (int x = 0; x < image.width(); x++)
+        {
+            pos = y * gmicImage._width + x;
+            gmicImage._data[pos]                = qRed(pixel[x]);
+            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]);
+            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]);
+            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]);
+        }
+    }
+
 }

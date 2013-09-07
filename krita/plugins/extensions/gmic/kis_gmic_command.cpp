@@ -18,6 +18,7 @@
  */
 
 #include "kis_gmic_command.h"
+#include <kis_debug.h>
 
 #include <QString>
 
@@ -49,13 +50,13 @@ void KisGmicCommand::redo()
         {
             QString gmicCmd = "-+ -n 0,255 ";
             gmicCmd.append(m_gmicCommandString);
-            qDebug() << m_gmicCommandString;
+            dbgPlugins << m_gmicCommandString;
             gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names);
         }
         // Catch exception, if an error occured in the interpreter.
         catch (gmic_exception &e)
         {
-            qDebug() << "\n- Error encountered when calling G'MIC : '%s'\n" << e.what();
+            dbgPlugins << "\n- Error encountered when calling G'MIC : '%s'\n" << e.what();
             return;
         }
 

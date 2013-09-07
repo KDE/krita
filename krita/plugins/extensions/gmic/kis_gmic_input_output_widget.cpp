@@ -16,13 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
 #include <kis_gmic_input_output_widget.h>
+
+#include <kis_debug.h>
+#include <kis_gmic_filter_settings.h>
+
 #include <QGridLayout>
 #include <QComboBox>
 #include <QStringListModel>
 #include <QLabel>
-#include <QDebug>
-
-#include <kis_gmic_filter_settings.h>
 
 KisGmicInputOutputWidget::KisGmicInputOutputWidget(): QWidget(), m_inputMode(ACTIVE_LAYER), m_outputMode(IN_PLACE)
 {
@@ -63,7 +64,7 @@ void KisGmicInputOutputWidget::createMainLayout()
 void KisGmicInputOutputWidget::setIntputMode(int index)
 {
         m_inputMode = static_cast<InputLayerMode>(index);
-        qDebug() << "Selecting " << INPUT_MODE_STRINGS.at(index);
+        dbgPlugins << "Selecting " << INPUT_MODE_STRINGS.at(index);
         emit sigConfigurationChanged();
 
 }
@@ -72,6 +73,6 @@ void KisGmicInputOutputWidget::setIntputMode(int index)
 void KisGmicInputOutputWidget::setOutputMode(int index)
 {
         m_outputMode = static_cast<OutputMode>(index);
-        qDebug() << "Selecting " << OUTPUT_MODE_STRINGS.at(index);
+        dbgPlugins << "Selecting " << OUTPUT_MODE_STRINGS.at(index);
         emit sigConfigurationChanged();
 }

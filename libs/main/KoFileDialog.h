@@ -78,10 +78,10 @@ public:
                               const QString &defaultMime = QString());
 
     QStringList getImportFileNames(QWidget *parent = 0,
-                               const QString &caption = QString(),
-                               const QString &dir = QString(),
-                               const QStringList &mimeList = QStringList(),
-                               const QString &defaultMime = QString());
+                                   const QString &caption = QString(),
+                                   const QString &dir = QString(),
+                                   const QStringList &mimeList = QStringList(),
+                                   const QString &defaultMime = QString());
 
     QString getImportDirectory(QWidget *parent = 0,
                                const QString &caption = QString(),
@@ -118,23 +118,17 @@ public:
                               const QStringList &mimeList = QStringList(),
                               const QString &defaultMime = QString());
 
-private slots:
-    void getFileName(QString filename);
-    void getFileNames(QStringList filenames);
-
 private:
     const QString getFilterString(const QStringList &mimeList);
     const QString getFilterString(const QString &defaultMime);
-    QFileDialog *initDialog(QWidget *parent,
-                            const QString &caption,
-                            const QString &dir,
-                            const QStringList &mimeList,
-                            const QString &defaultMime,
-                            QFileDialog::AcceptMode aMode,
-                            QFileDialog::FileMode fMode);
+    QStringList getFileNames(QWidget *parent,
+                             const QString &caption,
+                             const QString &dir,
+                             const QStringList &mimeList,
+                             const QString &defaultMime,
+                             QFileDialog::AcceptMode aMode,
+                             QFileDialog::FileMode fMode);
 
-    QString m_fileName;
-    QStringList m_fileNames;
     QString m_selectedFilter;
 };
 

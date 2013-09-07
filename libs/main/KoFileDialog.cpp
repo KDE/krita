@@ -55,7 +55,7 @@ const QString KoFileDialog::getFilterString(const QString &defaultMime)
         filter.append(")");
     }
 
-    qDebug() << "nameFilter: " + filter;
+    qDebug() << "selectedFilter: " + filter;
     return filter;
 }
 
@@ -67,25 +67,25 @@ QStringList KoFileDialog::getFileNames(QWidget *parent,
                                        QFileDialog::AcceptMode aMode,
                                        QFileDialog::FileMode fMode)
 {
-    QFileDialog *dialog = new QFileDialog(parent,
-                                          caption,
-                                          dir,
-                                          getFilterString(mimeList));
-    dialog->setAcceptMode(aMode);
-    dialog->setFileMode(fMode);
+    QFileDialog dialog(parent,
+                                     caption,
+                                     dir,
+                                     getFilterString(mimeList));
+    dialog.setAcceptMode(aMode);
+    dialog.setFileMode(fMode);
 
     if (!defaultMime.isEmpty()) {
         m_selectedFilter = getFilterString(defaultMime);
-        dialog->selectNameFilter(m_selectedFilter);
+        dialog.selectNameFilter(m_selectedFilter);
     }
     if (fMode == QFileDialog::Directory) {
-        dialog->setOption(QFileDialog::ShowDirsOnly, true);
+        dialog.setOption(QFileDialog::ShowDirsOnly, true);
     }
 
     // osx sheet dialog style
-    dialog->setWindowModality(Qt::WindowModal);
-    if (dialog->exec())
-        return dialog->selectedFiles();
+    dialog.setWindowModality(Qt::WindowModal);
+    if (dialog.exec())
+        return dialog.selectedFiles();
     return QStringList();
 }
 

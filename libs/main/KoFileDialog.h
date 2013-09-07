@@ -30,9 +30,8 @@
  * Wrapper around QFileDialog providing native file dialogs
  * on KDE/Gnome/Qt/Windows/OSX
  */
-class KOMAIN_EXPORT KoFileDialog : QObject
+class KOMAIN_EXPORT KoFileDialog
 {
-    Q_OBJECT
 public:
     KoFileDialog() {}
     ~KoFileDialog() {}

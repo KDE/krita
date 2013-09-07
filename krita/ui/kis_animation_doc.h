@@ -47,6 +47,7 @@ public slots:
     void play();
     void pause();
     void stop();
+    void slotFrameModified();
 
 private:
     void preSaveAnimation();
@@ -55,6 +56,8 @@ private:
     class KisAnimationDocPrivate;
     KisAnimationDocPrivate* const d;
 
+signals:
+    void sigFrameModified();
 };
 
 #endif // KIS_ANIMATION_DOC_H

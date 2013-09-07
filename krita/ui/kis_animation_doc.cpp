@@ -126,9 +126,13 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
-    //Load all the layers here
-
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     setCurrentImage(d->image);
+}
+
+void KisAnimationDoc::slotFrameModified()
+{
+    emit sigFrameModified();
 }
 
 void KisAnimationDoc::addKeyFrame(QRect frame)

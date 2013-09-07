@@ -50,6 +50,8 @@ public:
     virtual int columnCount() const;
     virtual QVariant data(int column);
 
+    // reset to default values
+    void reset();
     void print(int level);
 
     void processCommandName(const QString &line);

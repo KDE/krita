@@ -25,6 +25,7 @@
 
 class KisGmicInputOutputWidget;
 class QPushButton;
+
 class KisGmicWidget : public QWidget
 {
     Q_OBJECT
@@ -38,6 +39,7 @@ public:
 
 signals:
     void sigApplyCommand(KisGmicFilterSetting * setting);
+    void sigClose();
 
 private slots:
     void selectionChangedSlot(const QItemSelection & newSelection, const QItemSelection & oldSelection);

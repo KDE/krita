@@ -368,3 +368,12 @@ QString Command::mergeBlockToLine(const QStringList& block)
     }
     return result;
 }
+
+void Command::reset()
+{
+    foreach(Parameter * p, m_parameters)
+    {
+        p->reset();
+    }
+
+}

@@ -63,6 +63,9 @@ bool Parameter::isPresentationalOnly() const
     return false;
 }
 
+/**************************
+    == FloatParameter ==
+ ***************************/
 
 FloatParameter::FloatParameter(const QString& name, bool updatePreview): Parameter(name,updatePreview)
 {
@@ -100,6 +103,17 @@ QString FloatParameter::toString()
     return result;
 }
 
+
+void FloatParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+
+/**************************
+    == IntParameter ==
+ ***************************/
+
 IntParameter::IntParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
     m_type = INT_P;
@@ -136,6 +150,14 @@ QString IntParameter::toString()
     return result;
 }
 
+void IntParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+/**************************
+    == SeparatorParameter ==
+ ***************************/
 
 SeparatorParameter::SeparatorParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
@@ -154,6 +176,9 @@ QString SeparatorParameter::toString()
     return result;
 }
 
+/**************************
+    == ChoiceParameter ==
+ ***************************/
 
 ChoiceParameter::ChoiceParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
@@ -205,7 +230,7 @@ QString ChoiceParameter::value() const
 QString ChoiceParameter::toString()
 {
     QString result;
-    result.append(m_name+";"+QString::number(m_defaultValue));
+    result.append(m_name+";"+QString::number(m_defaultValue)+";"+QString::number(m_value));
     foreach (QString choice, m_choices)
     {
         result.append(choice+";");
@@ -213,6 +238,15 @@ QString ChoiceParameter::toString()
     return result;
 }
 
+
+void ChoiceParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+/**************************
+    == NoteParameter ==
+ ***************************/
 
 NoteParameter::NoteParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
@@ -240,10 +274,19 @@ QString NoteParameter::toString()
     return result;
 }
 
+/**************************
+    == BoolParameter ==
+ ***************************/
 
 BoolParameter::BoolParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
     m_type = BOOL_P;
+}
+
+
+void BoolParameter::initValue(bool value)
+{
+    m_value = m_defaultValue = value;
 }
 
 void BoolParameter::parseValues(const QString& typeDefinition)
@@ -256,15 +299,15 @@ void BoolParameter::parseValues(const QString& typeDefinition)
     QString boolValue = values.at(0);
     if (boolValue == "0" || boolValue == "false")
     {
-        m_value = false;
+        initValue(false);
     }
     else if (boolValue == "1" || boolValue == "true")
     {
-        m_value = true;
+        initValue(true);
     } else
     {
         dbgPlugins << "Invalid bool value, assuming true " << m_name << ":" << boolValue;
-        m_value = true;
+        initValue(true);
     }
 }
 
@@ -284,6 +327,16 @@ QString BoolParameter::value() const
     }
     return QString("0");
 }
+
+void BoolParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+
+/**************************
+    == ColorParameter ==
+ ***************************/
 
 ColorParameter::ColorParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview),m_hasAlpha(true)
 {
@@ -310,6 +363,7 @@ void ColorParameter::parseValues(const QString& typeDefinition)
         m_hasAlpha = false;
     }
     m_value.setRgb(r,g,b,a);
+    m_defaultValue = m_value;
 }
 
 QString ColorParameter::toString()
@@ -332,6 +386,14 @@ QString ColorParameter::value() const
     return result;
 }
 
+void ColorParameter::reset()
+{
+    m_value = m_defaultValue;
+}
+
+/**************************
+    == LinkParameter ==
+ ***************************/
 
 LinkParameter::LinkParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
@@ -363,6 +425,9 @@ QString LinkParameter::toString()
     return m_link;
 }
 
+/**************************
+    == TextParameter ==
+ ***************************/
 
 TextParameter::TextParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview), m_multiline(false)
 {
@@ -389,6 +454,7 @@ void TextParameter::parseValues(const QString& typeDefinition)
     // remove first and last "
     m_value = m_value.remove(0,1);
     m_value.chop(1);
+    m_defaultValue = m_value;
 }
 
 QString TextParameter::value() const
@@ -405,6 +471,15 @@ QString TextParameter::toString()
     return result;
 }
 
+void TextParameter::reset()
+{
+    m_defaultValue = m_value;
+}
+
+/**************************
+    == FolderParameter ==
+ ***************************/
+
 FolderParameter::FolderParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
     m_type = FOLDER_P;
@@ -418,6 +493,7 @@ void FolderParameter::parseValues(const QString& typeDefinition)
     {
         m_folderPath = values.at(0);
     }
+    m_defaultFolderPath = m_folderPath;
 }
 
 
@@ -435,6 +511,14 @@ QString FolderParameter::toString()
     return result;
 }
 
+void FolderParameter::reset()
+{
+    m_folderPath = m_defaultFolderPath;
+}
+
+/**************************
+    == FileParameter ==
+ ***************************/
 
 FileParameter::FileParameter(const QString& name, bool updatePreview): Parameter(name, updatePreview)
 {
@@ -448,6 +532,8 @@ void FileParameter::parseValues(const QString& typeDefinition)
     {
         m_filePath = values.at(0);
     }
+    m_defaultFilePath = m_filePath;
+
 }
 
 QString FileParameter::value() const
@@ -461,4 +547,9 @@ QString FileParameter::toString()
     result.append(m_name+";");
     result.append(m_filePath + ";");
     return result;
+}
+
+void FileParameter::reset()
+{
+    m_filePath = m_defaultFilePath;
 }

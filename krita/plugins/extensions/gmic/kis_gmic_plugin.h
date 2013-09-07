@@ -40,6 +40,7 @@ private:
 private slots:
     void slotGmic();
     void slotApplyGmicCommand(KisGmicFilterSetting* setting);
+    void slotClose();
 };
 
 #endif

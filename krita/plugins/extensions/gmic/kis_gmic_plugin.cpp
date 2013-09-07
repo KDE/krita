@@ -90,7 +90,8 @@ void KisGmicPlugin::slotGmic()
 
     if (m_gmicWidget)
     {
-        delete m_gmicWidget;
+        // restart here?
+        slotClose();
     }
 
     KisGmicParser parser(m_gmicDefinitionFilePath);
@@ -98,7 +99,14 @@ void KisGmicPlugin::slotGmic()
     KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes owner ship
     m_gmicWidget = new KisGmicWidget(model);
 
+    // apply
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
+    // cancel
+    connect(m_gmicWidget, SIGNAL(sigClose()),this, SLOT(slotClose()));
+    // ok
+
+    // reset
+
     m_gmicWidget->show();
 }
 
@@ -160,6 +168,21 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 
 
 }
+
+void KisGmicPlugin::slotClose()
+{
+    bool result = m_gmicWidget->close();
+    if (!result)
+    {
+        dbgPlugins << "Windows was not closed?";
+    }
+    else
+    {
+        // close event deletes widget
+        m_gmicWidget = 0;
+    }
+}
+
 
 
 #include "kis_gmic_plugin.moc"

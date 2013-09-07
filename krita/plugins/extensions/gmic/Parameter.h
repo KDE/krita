@@ -60,6 +60,8 @@ public:
     QString name() const { return m_name; }
     bool isPresentationalOnly() const;
 
+    virtual void reset() { };
+
 protected:
     QStringList getValues(const QString& typeDefinition);
 
@@ -99,6 +101,7 @@ public:
     virtual QString value() const;
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
+    virtual void reset();
 };
 
 class IntParameter : public Parameter
@@ -115,6 +118,7 @@ public:
     virtual QString value() const;
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
+    virtual void reset();
 };
 
 class SeparatorParameter : public Parameter
@@ -141,6 +145,7 @@ public:
 
     virtual QString value() const;
     virtual QString toString();
+    virtual void reset();
 };
 
 class NoteParameter : public Parameter
@@ -161,6 +166,7 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
 
+
     QString m_link;
 };
 
@@ -171,8 +177,13 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void reset();
+
+    void initValue(bool value);
 
     bool m_value;
+    bool m_defaultValue;
+
 };
 
 class ColorParameter : public Parameter
@@ -182,8 +193,10 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void reset();
 
     QColor m_value;
+    QColor m_defaultValue;
     bool m_hasAlpha;
 };
 
@@ -194,8 +207,10 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void reset();
 
     QString m_value;
+    QString m_defaultValue;
     bool m_multiline;
 };
 
@@ -206,8 +221,10 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void reset();
 
     QString m_folderPath;
+    QString m_defaultFolderPath;
 };
 
 class FileParameter : public Parameter
@@ -217,8 +234,10 @@ public:
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual QString value() const;
+    virtual void reset();
 
     QString m_filePath;
+    QString m_defaultFilePath;
 };
 
 

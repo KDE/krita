@@ -121,7 +121,7 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
         return item->data(index.column());
     }
 
-    if (role == WidgetRole)
+    if (role == CommandRole)
     {
         Component *item = static_cast<Component*>(index.internalPointer());
         Command * commandItem = dynamic_cast<Command *>(item);
@@ -179,20 +179,3 @@ QVariant KisGmicFilterModel::headerData(int section, Qt::Orientation orientation
     Q_UNUSED(role);
     return m_rootComponent->name();
 }
-
-
-/*bool KisGmicFilterModel::setData(const QModelIndex& index, const QVariant& value, int role)
-{
-    if (role == Qt::EditRole)
-    {
-        Component *item = static_cast<Component*>(index.internalPointer());
-        Command * commandItem = dynamic_cast<Command *>(item);
-        if (commandItem)
-        {
-            //TODO
-        }
-
-
-    }
-}
-*/

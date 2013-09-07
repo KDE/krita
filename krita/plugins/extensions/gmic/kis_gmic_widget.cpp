@@ -23,6 +23,7 @@
 #include <kis_debug.h>
 
 #include <QMetaType>
+#include <klocalizedstring.h>
 
 #include <kis_html_delegate.h>
 
@@ -30,15 +31,17 @@
 #include "kis_gmic_settings_widget.h"
 #include <kis_gmic_input_output_widget.h>
 
+static const QString maximizeStr = i18n("Maximize");
+
 KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters): QWidget(),m_filterModel(filters)
 {
     createMainLayout();
-
-
+    setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 KisGmicWidget::~KisGmicWidget()
 {
+    dbgPlugins << "I'm dying...";
     delete m_filterModel;
 }
 
@@ -69,9 +72,13 @@ void KisGmicWidget::createMainLayout()
     m_filterOptionsColumn = column;
 
     QDialogButtonBox * controlButtonBox = new QDialogButtonBox;
-    QPushButton * maximize = new QPushButton("Maximize");
+    QPushButton * maximize = new QPushButton(maximizeStr);
+    connect(maximize, SIGNAL(clicked(bool)), this, SLOT(maximizeSlot()));
+
     controlButtonBox->addButton(maximize, QDialogButtonBox::AcceptRole);
     controlButtonBox->addButton(QDialogButtonBox::Ok);
+    QAbstractButton *okButton = controlButtonBox->button(QDialogButtonBox::Ok);
+    connect(okButton, SIGNAL(clicked(bool)), this, SLOT(okFilterSlot()));
 
     controlButtonBox->addButton(QDialogButtonBox::Apply);
     QAbstractButton *applyButton = controlButtonBox->button(QDialogButtonBox::Apply);
@@ -79,7 +86,13 @@ void KisGmicWidget::createMainLayout()
 
 
     controlButtonBox->addButton(QDialogButtonBox::Cancel);
+    QAbstractButton *cancelButton = controlButtonBox->button(QDialogButtonBox::Cancel);
+    connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(cancelFilterSlot()));
+
     controlButtonBox->addButton(QDialogButtonBox::Reset);
+    QAbstractButton *resetButton = controlButtonBox->button(QDialogButtonBox::Reset);
+    connect(resetButton, SIGNAL(clicked(bool)), this, SLOT(resetFilterSlot()));
+
     m_filterConfigLayout->addWidget(controlButtonBox,row + 1, column, 1, 2);
     column++;
 
@@ -94,7 +107,7 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
     QString selectedText = index.data(Qt::DisplayRole).toString();
 
 
-    QVariant var = index.data(WidgetRole);
+    QVariant var = index.data(CommandRole);
 
     Command * gmicCommand(0);
     if (!var.isValid())
@@ -161,20 +174,56 @@ void KisGmicWidget::applyFilterSlot()
 
 void KisGmicWidget::cancelFilterSlot()
 {
-
+    emit sigClose();
 }
 
-void KisGmicWidget::maximizeSlot()
-{
-
-}
 
 void KisGmicWidget::okFilterSlot()
 {
-
+    applyFilterSlot();
+    emit sigClose();
 }
 
 void KisGmicWidget::resetFilterSlot()
 {
+    const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
+    QVariant var = index.data(CommandRole);
+    Command * gmicCommand(0);
+    if (!var.isValid())
+    {
+        gmicCommand = 0;
+        dbgPlugins << "Filter not selected!";
+        return;
+    }
+    else
+    {
+        gmicCommand = var.value<Command *>();
+    }
 
+    gmicCommand->reset();
+    KisGmicSettingsWidget * currentSettingsWidget = qobject_cast<KisGmicSettingsWidget *>(m_filterOptions);
+    if (currentSettingsWidget)
+    {
+        currentSettingsWidget->reload();
+    }
+}
+
+void KisGmicWidget::maximizeSlot()
+{
+    QPushButton * maximizeButton = qobject_cast<QPushButton *>(sender());
+    if (!maximizeButton)
+    {
+        return;
+    }
+    if (isMaximized())
+    {
+        // restore clicked
+        showNormal();
+        maximizeButton->setText(maximizeStr);
+    }
+    else
+    {
+        showMaximized();
+        maximizeButton->setText(i18n("Restore"));
+    }
 }

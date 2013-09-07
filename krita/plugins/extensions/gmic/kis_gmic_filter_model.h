@@ -30,7 +30,7 @@ static const int GmicRolespace = 100;
 
 enum
 {
-    WidgetRole = Qt::UserRole + GmicRolespace + 1,
+    CommandRole = Qt::UserRole + GmicRolespace + 1,
     FilterSettingsRole = Qt::UserRole + GmicRolespace + 2
 };
 
@@ -45,7 +45,7 @@ public:
     ~KisGmicFilterModel();
 
     QVariant data(const QModelIndex &index, int role) const;
-//    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    // virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

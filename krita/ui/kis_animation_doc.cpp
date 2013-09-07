@@ -55,6 +55,7 @@ public:
     bool saved;
     KisAnimationStore* store;
     KisAnimationPlayer* player;
+    KisImageWSP image;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -90,21 +91,21 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
     if(hasFile) {
 
-        KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-        connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-        image->setResolution(animation->resolution(), animation->resolution());
+        d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+        connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+        d->image->setResolution(animation->resolution(), animation->resolution());
 
         d->currentFramePosition = frame;
-        d->currentFrame = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+        d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
         d->currentFrame->setName("testFrame");
         d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
-        image->addNode(d->currentFrame.data(), image->rootLayer().data());
+        d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
         //Load all the layers here
 
         d->kranimLoader->loadFrame(d->currentFrame, d->store, d->currentFramePosition);
 
-        setCurrentImage(image);
+        setCurrentImage(d->image);
     }
 }
 
@@ -115,24 +116,36 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
-    KisImageWSP image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    image->setResolution(animation->resolution(), animation->resolution());
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
 
     d->currentFramePosition = frame;
-    d->currentFrame = new KisPaintLayer(image.data(), image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("testFrame");
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
-    image->addNode(d->currentFrame.data(), image->rootLayer().data());
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     //Load all the layers here
 
-    setCurrentImage(image);
+    setCurrentImage(d->image);
 }
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
 {
 
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
+
+    d->currentFramePosition = frame;
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    setCurrentImage(d->image);
 }
 
 bool KisAnimationDoc::completeSaving(KoStore *store)

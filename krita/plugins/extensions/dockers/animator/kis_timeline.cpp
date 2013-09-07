@@ -251,4 +251,5 @@ void KisTimeline::addframePressed()
 void KisTimeline::documentModified()
 {
     emit canvasModified();
+    kWarning() << "Make it a keyframe...";
 }

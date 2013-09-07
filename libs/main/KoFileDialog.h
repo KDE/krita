@@ -50,13 +50,13 @@ public:
                             const QString &caption = QString(),
                             const QString &dir = QString(),
                             const QStringList &mimeList = QStringList(),
-                            const QString &selectedMime = 0);
+                            const QString &defaultMime = QString());
 
     QStringList getOpenFileNames(QWidget *parent = 0,
                                  const QString &caption = QString(),
                                  const QString &dir = QString(),
                                  const QStringList &mimeList = QStringList(),
-                                 const QString &selectedMime = 0);
+                                 const QString &defaultMime = QString());
 
     QString getOpenDirectory(QWidget *parent = 0,
                              const QString &caption = QString(),
@@ -75,20 +75,20 @@ public:
                               const QString &caption = QString(),
                               const QString &dir = QString(),
                               const QStringList &mimeList = QStringList(),
-                              const QString &selectedMime = 0);
+                              const QString &defaultMime = QString());
 
     QStringList getImportFileNames(QWidget *parent = 0,
                                const QString &caption = QString(),
                                const QString &dir = QString(),
                                const QStringList &mimeList = QStringList(),
-                               const QString &selectedMime = 0);
+                               const QString &defaultMime = QString());
 
     QString getImportDirectory(QWidget *parent = 0,
                                const QString &caption = QString(),
                                const QString &dir = QString());
 
     /**
-     * @brief getSaveFileName - used for save current document
+     * @brief getSaveFileName - used for save/save as current document
      * This will be a sheet dialog under OSX
      * @param parent The parent of the file dialog
      * @param caption Caption of the file dialog
@@ -101,10 +101,10 @@ public:
                             const QString &caption = QString(),
                             const QString &dir = QString(),
                             const QStringList &mimeList = QStringList(),
-                            const QString &selectedMime = 0);
+                            const QString &defaultMime = QString());
 
     /**
-     * @brief getSaveFileName - used for save as or export
+     * @brief getSaveFileName - used for export
      * @param parent The parent of the file dialog
      * @param caption Caption of the file dialog
      * @param dir Directory when file dialog appear
@@ -116,7 +116,7 @@ public:
                               const QString &caption = QString(),
                               const QString &dir = QString(),
                               const QStringList &mimeList = QStringList(),
-                              const QString &selectedMime = 0);
+                              const QString &defaultMime = QString());
 
 private slots:
     void getFileName(QString filename);
@@ -124,17 +124,18 @@ private slots:
 
 private:
     const QString getFilterString(const QStringList &mimeList);
-    const QString getFilterString(const QString &selectedMime);
+    const QString getFilterString(const QString &defaultMime);
     QFileDialog *initDialog(QWidget *parent,
                             const QString &caption,
                             const QString &dir,
                             const QStringList &mimeList,
-                            const QString &selectedMime,
+                            const QString &defaultMime,
                             QFileDialog::AcceptMode aMode,
                             QFileDialog::FileMode fMode);
 
     QString m_fileName;
     QStringList m_fileNames;
+    QString m_selectedFilter;
 };
 
 #endif /* KOFILEDIALOG_H */

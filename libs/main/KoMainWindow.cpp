@@ -913,11 +913,13 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         KoFileDialog saveDialog;
         KUrl newURL;
         if(!isExporting()) {
-            newURL = KUrl(saveDialog.getSaveFileName(
-                              this,
-                              suggestedURL.url(),
-                              i18n("untitled"),
-                              mimeFilter));
+            QString str = saveDialog.getSaveFileName(
+                        this,
+                        suggestedURL.url(),
+                        i18n("untitled"),
+                        mimeFilter);
+            newURL = KUrl(str);
+            qDebug() << newURL << str;
         } else {
             newURL = KUrl(saveDialog.getExportFileName(
                               this,
@@ -932,7 +934,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         QByteArray outputFormat = _native_format;
         outputFormat = outputFormatString.toLatin1();
 
-        kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
+        kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat << newURL;
 
         int specialOutputFlag = 0;
         if (!isExporting())

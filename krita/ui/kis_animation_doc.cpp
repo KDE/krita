@@ -28,6 +28,7 @@
 #include <KoFilterManager.h>
 #include <kranimstore/kis_animation_store.h>
 #include <kis_animation_player.h>
+#include <QList>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 static const char CURRENT_DTD_VERSION[] = "1.0";
@@ -56,6 +57,7 @@ public:
     KisAnimationStore* store;
     KisAnimationPlayer* player;
     KisImageWSP image;
+    QDomElement frameElement;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -109,12 +111,27 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     }
 }
 
+void KisAnimationDoc::updateXML()
+{
+    QDomElement frameElement = d->doc.createElement("frame");
+    frameElement.setAttribute("number", d->currentFramePosition.x());
+    frameElement.setAttribute("layer", d->currentFramePosition.y());
+    d->frameElement.appendChild(frameElement);
+
+    d->store->openStore();
+    d->store->openFileWriting("maindoc.xml");
+    d->store->writeDataToFile(d->doc.toByteArray());
+    d->store->closeFileWriting();
+    d->store->closeStore();
+}
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+
+    this->updateXML();
 
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -141,6 +158,8 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+
+    this->updateXML();
 
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -195,6 +214,10 @@ void KisAnimationDoc::preSaveAnimation()
     d->doc = this->createDomDocument("krita-animation", "1.0");
 
     d->kranimSaver->saveMetaData(d->doc);
+
+
+    d->frameElement = d->doc.createElement("frames");
+    d->doc.appendChild(d->frameElement);
 
     d->store->openStore();
     d->store->openFileWriting("maindoc.xml");

@@ -51,6 +51,7 @@ public slots:
 
 private:
     void preSaveAnimation();
+    void updateXML();
 
 private:
     class KisAnimationDocPrivate;

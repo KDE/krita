@@ -592,7 +592,7 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    if (m_d->currentCanvasIsOpenGL) {
+    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
         m_d->canvasWidget->widget()->update();
     }
     else {

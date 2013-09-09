@@ -31,7 +31,8 @@ FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                int feather,
                                int sizemod,
                                int fillThreshold,
-                               bool unmerged)
+                               bool unmerged,
+                               bool useBgColor)
     : m_startPoint(startPoint),
       m_selection(selection),
       m_selectionOnly(selectionOnly),
@@ -40,7 +41,8 @@ FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
       m_feather(feather),
       m_sizemod(sizemod),
       m_fillThreshold(fillThreshold),
-      m_unmerged(unmerged)
+      m_unmerged(unmerged),
+      m_useBgColor(useBgColor)
 {
 }
 
@@ -65,6 +67,10 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
 
         if (m_usePattern) {
             fillPainter.fillRect(fillRect, m_resources->currentPattern());
+        } else if (m_useBgColor) {
+            fillPainter.fillRect(fillRect,
+                                 m_resources->currentBgColor(),
+                                 m_resources->opacity());
         } else {
             fillPainter.fillRect(fillRect,
                                  m_resources->currentFgColor(),

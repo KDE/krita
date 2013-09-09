@@ -37,7 +37,8 @@ public:
                    int feather,
                    int sizemod,
                    int fillThreshold,
-                   bool unmerged);
+                   bool unmerged,
+                   bool m_useBgColor);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
@@ -54,6 +55,7 @@ private:
     int m_sizemod;
     int m_fillThreshold;
     bool m_unmerged;
+    bool m_useBgColor;
 };
 
 #endif /* __FILL_PROCESSING_VISITOR_H */

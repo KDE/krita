@@ -23,7 +23,7 @@ set(komain_LIB_SRCS
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
-    KoFileDialog.cpp
+    KoFileDialogHelper.cpp
     KoGlobal.cpp
     KoGridData.cpp
     KoMainWindow.cpp
@@ -164,7 +164,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
-    KoFileDialog.h
+    KoFileDialogHelper.h
     MacSupport.h
     KoModeBoxFactory.h
     KoServiceProvider.h

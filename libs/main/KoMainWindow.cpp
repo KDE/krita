@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFileDialog.h"
+#include "KoFileDialogHelper.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
@@ -910,23 +910,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog saveDialog;
-        KUrl newURL;
-        if(!isExporting()) {
-            newURL = KUrl(saveDialog.getSaveFileName(
-                              this,
-                              suggestedURL.url(),
-                              i18n("untitled"),
-                              mimeFilter));
-            qDebug() << newURL << str;
-        } else {
-            newURL = KUrl(saveDialog.getExportFileName(
-                              this,
-                              !d->lastExportUrl.isEmpty() ?
-                                  d->lastExportUrl.url() : suggestedURL.url(),
-                              i18n("untitled"),
-                              mimeFilter));
-        }
+        KUrl newURL(KoFileDialogHelper::getSaveFileName(
+                        this,
+                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
+                            d->lastExportUrl.url() : suggestedURL.url(),
+                        i18n("untitled"),
+                        mimeFilter));
 
         KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
         QString outputFormatString = mime->name();
@@ -1246,14 +1235,13 @@ void KoMainWindow::slotFileOpen()
                                                                KoFilterManager::Import,
                                                                KoServiceProvider::readExtraNativeMimeTypes());
     QString url;
-    KoFileDialog openDialog;
     if (!isImporting()) {
-        url = openDialog.getOpenFileName(this,
+        url = KoFileDialogHelper::getOpenFileName(this,
                                          i18n("Open Document"),
                                          "",
                                          mimeFilter);
     } else {
-        url = openDialog.getImportFileName(this,
+        url = KoFileDialogHelper::getImportFileName(this,
                                            i18n("Import Document"),
                                            "",
                                            mimeFilter);

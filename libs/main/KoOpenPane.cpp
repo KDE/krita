@@ -37,7 +37,7 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 
-#include <KoFileDialog.h>
+#include <KoFileDialogHelper.h>
 #include <KoIcon.h>
 #include "KoTemplateTree.h"
 #include "KoTemplateGroup.h"
@@ -193,8 +193,7 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
-    KoFileDialog openDialog;
-    QString url = openDialog.getOpenFileName(this,
+    QString url = KoFileDialogHelper::getOpenFileName(this,
                                                i18n("Open Existing Document"),
                                                "",
                                                m_mimeFiletr);

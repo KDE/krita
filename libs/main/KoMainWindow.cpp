@@ -913,12 +913,11 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         KoFileDialog saveDialog;
         KUrl newURL;
         if(!isExporting()) {
-            QString str = saveDialog.getSaveFileName(
-                        this,
-                        suggestedURL.url(),
-                        i18n("untitled"),
-                        mimeFilter);
-            newURL = KUrl(str);
+            newURL = KUrl(saveDialog.getSaveFileName(
+                              this,
+                              suggestedURL.url(),
+                              i18n("untitled"),
+                              mimeFilter));
             qDebug() << newURL << str;
         } else {
             newURL = KUrl(saveDialog.getExportFileName(

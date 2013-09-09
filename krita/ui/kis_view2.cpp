@@ -413,6 +413,13 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         existingShortcuts.insert(action->shortcut());
     }
 #endif
+
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    if (preset) {
+        paintOpBox()->resourceSelected(preset);
+    }
+
 }
 
 

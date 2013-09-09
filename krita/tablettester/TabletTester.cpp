@@ -191,6 +191,26 @@ protected:
         m_polyLine[0] = m_polyLine[1] = m_polyLine[2] = QPoint();
     }
 
+    void mouseMoveEvent(QMouseEvent *event) {
+        m_eventLogger->appendPlainText("received mouse move event");
+        event->ignore();
+    }
+
+    void mousePressEvent(QMouseEvent *event) {
+        m_eventLogger->appendPlainText("received mouse press event");
+        event->ignore();
+    }
+
+    void mouseReleaseEvent(QMouseEvent *event) {
+        m_eventLogger->appendPlainText("received mouse release event");
+        event->ignore();
+    }
+
+    void mouseDoubleClickEvent(QMouseEvent *event) {
+        m_eventLogger->appendPlainText("received mouse double click event");
+        event->ignore();
+    }
+
 private:
 
     void initPixmap() {

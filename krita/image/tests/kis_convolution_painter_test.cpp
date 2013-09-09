@@ -305,6 +305,16 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     }
 }
 
+inline qreal sigmaFromRadius(qreal radius)
+{
+    return 0.3 * radius + 0.8;
+}
+
+inline uint kernelSizeFromRadius(qreal radius)
+{
+    return 6 * ceil(sigmaFromRadius(radius)) + 1;
+}
+
 void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix)
 {
    QBitArray channelFlags =
@@ -313,7 +323,7 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
    KisPainter gc(dev);
 
 
-   uint horizontalRadius = 1, verticalRadius = 1;
+   qreal horizontalRadius = 25, verticalRadius = 25;
    
    for(int i = 0; i < 20 ; i++, horizontalRadius++, verticalRadius++)
    {
@@ -321,31 +331,32 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
        timer.start();
 
        gc.beginTransaction("");
-       uint horizKernelSize = horizontalRadius * 2 + 1;
+       uint horizKernelSize = kernelSizeFromRadius(horizontalRadius);
        Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
-    
-       qreal horizSigma = horizontalRadius;
-       const qreal horizMultiplicand = 1 / (2 * M_PI * horizSigma * horizSigma);
+
+       const qreal horizSigma = sigmaFromRadius(horizontalRadius);
+       const qreal horizMultiplicand = 1 / (sqrt(2 * M_PI * horizSigma * horizSigma));
        const qreal horizExponentMultiplicand = 1 / (2 * horizSigma * horizSigma);
-    
-       for (uint x = 0; x < horizKernelSize; x++)
-       {
-           uint xDistance = qAbs((int)horizontalRadius - (int)x);
-           horizGaussian(0, x) = horizMultiplicand * exp( -(qreal)((xDistance * xDistance) + (horizontalRadius * horizontalRadius)) * horizExponentMultiplicand );
-       }
-       uint verticalKernelSize = verticalRadius * 2 + 1;
+       const qreal horizCenter = 0.5 * horizKernelSize;
+
+       for (uint x = 0; x < horizKernelSize; x++) {
+               qreal xDistance = horizCenter - x;
+               horizGaussian(0, x) = horizMultiplicand * exp( -xDistance * xDistance * horizExponentMultiplicand );
+           }
+
+       uint verticalKernelSize = kernelSizeFromRadius(verticalRadius);
        Matrix<qreal, Dynamic, Dynamic> verticalGaussian(verticalKernelSize, 1);
-    
-       qreal verticalSigma = verticalRadius;
-       const qreal verticalMultiplicand = 1 / (2 * M_PI * verticalSigma * verticalSigma);
+
+       const qreal verticalSigma = sigmaFromRadius(verticalRadius);
+       const qreal verticalMultiplicand = 1 / (sqrt(2 * M_PI * verticalSigma * verticalSigma));
        const qreal verticalExponentMultiplicand = 1 / (2 * verticalSigma * verticalSigma);
-    
+       const qreal verticalCenter = 0.5 * verticalKernelSize;
+
        for (uint y = 0; y < verticalKernelSize; y++)
        {
-           uint yDistance = ((int)verticalRadius - (int)y);
-           verticalGaussian(y, 0) = verticalMultiplicand * exp( -(qreal)((yDistance * yDistance) + (verticalRadius * verticalRadius)) * verticalExponentMultiplicand );
+           qreal yDistance = verticalCenter - y;
+           verticalGaussian(y, 0) = verticalMultiplicand * exp( -yDistance * yDistance * verticalExponentMultiplicand );
        }
-    
        if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
     

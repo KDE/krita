@@ -84,6 +84,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         this->preSaveAnimation();
         return;
     }
+    this->getFrameFile(frame.x(), frame.y());
 
     QString location = "frame" + QString::number(frame.x()) +"layer" + QString::number(frame.y());
 
@@ -109,6 +110,41 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
         setCurrentImage(d->image);
     }
+}
+
+QString KisAnimationDoc::getFrameFile(int frame, int layer)
+{
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    QString location;
+
+    for(int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+
+        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
+            frameNumbers.append(node.attributes().namedItem("number").nodeValue().toInt());
+        }
+    }
+
+    qSort(frameNumbers);
+
+    if(frameNumbers.contains(frame)) {
+        location = "frame" + QString::number(frame) + "layer" + QString::number(layer);
+        return location;
+    }
+
+    int frameN;
+    for(int i = 0 ; i < frameNumbers.length() ; i++) {
+        if(frameNumbers.at(i) < frame) {
+            frameN = frameNumbers.at(i);
+        }
+    }
+
+    location = "frame" + QString::number(frameN) + "layer" + QString::number(layer);
+
+    return location;
 }
 
 void KisAnimationDoc::updateXML()

@@ -52,6 +52,7 @@ public slots:
 private:
     void preSaveAnimation();
     void updateXML();
+    QString getFrameFile(int frame, int layer);
 
 private:
     class KisAnimationDocPrivate;

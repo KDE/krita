@@ -50,12 +50,14 @@ signals:
 
 private slots:
     void createAnimation();
+    void openAnimation();
     void resolutionChanged(double value);
     void widthUnitChanged(int index);
     void heightUnitChanged(int index);
     void widthChanged(double value);
     void heightChanged(double value);
     void changeLocation();
+    void selectFile();
 
 private:
     quint8 backgroundOpacity();

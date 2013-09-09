@@ -113,6 +113,8 @@ KisAnimationSelector::KisAnimationSelector(QWidget *parent, KisAnimationDoc *doc
     connect(inputWidth, SIGNAL(valueChanged(double)), this, SLOT(widthChanged(double)));
     connect(bnCreateAnimation, SIGNAL(clicked()), this, SLOT(createAnimation()));
     connect(locationButton, SIGNAL(clicked()), this, SLOT(changeLocation()));
+    connect(btnSelectFile, SIGNAL(clicked()), this, SLOT(selectFile()));
+    connect(btnOpen, SIGNAL(clicked()), this, SLOT(openAnimation()));
 }
 
 KisAnimationSelector::~KisAnimationSelector()
@@ -131,6 +133,18 @@ void KisAnimationSelector::changeLocation()
     QString location = folderSelector.getExistingDirectory();
 
     txtLocation->setText(location);
+}
+
+void KisAnimationSelector::selectFile()
+{
+    QFileDialog fileSelector;
+    QString location = fileSelector.getOpenFileName();
+    txtOpenFile->setText(location);
+}
+
+void KisAnimationSelector::openAnimation()
+{
+
 }
 
 void KisAnimationSelector::createAnimation()

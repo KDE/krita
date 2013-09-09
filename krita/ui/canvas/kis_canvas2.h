@@ -80,6 +80,8 @@ public:
 
     virtual void disconnectCanvasObserver(QObject *object);
 
+    void toggleTabletLogger();
+
 public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL();

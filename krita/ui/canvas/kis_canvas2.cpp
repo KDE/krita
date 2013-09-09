@@ -612,6 +612,11 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
     m_d->view->disconnect(object);
 }
 
+void KisCanvas2::toggleTabletLogger()
+{
+    m_d->inputManager->toggleTabletLogger();
+}
+
 void KisCanvas2::notifyZoomChanged()
 {
     if (!m_d->currentCanvasIsOpenGL) {

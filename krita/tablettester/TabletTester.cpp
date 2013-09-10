@@ -179,6 +179,7 @@ protected:
                 break;
         }
         update();
+        event->ignore();
     }
 
     void paintEvent(QPaintEvent *) {

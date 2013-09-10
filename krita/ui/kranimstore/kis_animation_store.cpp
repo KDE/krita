@@ -22,14 +22,6 @@ KisAnimationStore::KisAnimationStore(QString filename)
 {
     m_zip = new KZip(filename);
     m_currentDir = 0;
-
-    m_zip->open(QIODevice::ReadWrite);
-
-    QByteArray mimetype("x-krita-animation");
-
-    m_zip->writeFile("mimetype", "user", "group", mimetype.data(), mimetype.size());
-
-    m_zip->close();
 }
 
 KisAnimationStore::~KisAnimationStore()
@@ -111,4 +103,15 @@ void KisAnimationStore::readFromFile(QString filename, char *buffer, qint64 leng
     file->read(buffer, length);
     file->close();
     delete file;
+}
+
+void KisAnimationStore::setMimetype()
+{
+    m_zip->open(QIODevice::ReadWrite);
+
+    QByteArray mimetype("x-krita-animation");
+
+    m_zip->writeFile("mimetype", "user", "group", mimetype.data(), mimetype.size());
+
+    m_zip->close();
 }

@@ -25,6 +25,7 @@
 
 class KisAnimationDoc;
 class QDomElement;
+class QDomNode;
 class QDomDocument;
 class KoStore;
 class QString;
@@ -38,7 +39,7 @@ public:
 
     QDomElement saveXML(QDomDocument& doc);
 
-    QDomElement saveMetaData(QDomDocument& doc);
+    QDomElement saveMetaData(QDomDocument &doc, QDomNode root);
 
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 

@@ -144,7 +144,32 @@ void KisAnimationSelector::selectFile()
 
 void KisAnimationSelector::openAnimation()
 {
+    KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
+    store->openStore(QIODevice::ReadOnly);
+    QByteArray xmlData = store->getDevice("maindoc.xml")->readAll();
+    store->closeStore();
+
+    QDomDocument doc;
+    doc.setContent(xmlData);
+
+    QDomNode metaData = doc.elementsByTagName("metadata").at(0);
+    QDomNamedNodeMap attributes = metaData.attributes();
+
+    KisAnimation* animation = new KisAnimation();
+    animation->setName(attributes.namedItem("name").nodeValue());
+    animation->setAuthor(attributes.namedItem("author").nodeValue());
+    animation->setDescription(attributes.namedItem("des").nodeValue());
+    animation->setFps(attributes.namedItem("fps").nodeValue().toInt());
+    animation->setColorSpace(colorSpaceSelector->currentColorSpace());
+    animation->setWidth(attributes.namedItem("width").nodeValue().toInt());
+    animation->setHeight(attributes.namedItem("height").nodeValue().toInt());
+    animation->setResolution(attributes.namedItem("res").nodeValue().toDouble());
+    animation->setLocation(txtOpenFile->text());
+    animation->setBgColor(KoColor(inputBackground->color(), colorSpaceSelector->currentColorSpace()));
+
+    static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
+    //emit documentSelected();
 }
 
 void KisAnimationSelector::createAnimation()

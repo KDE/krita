@@ -41,6 +41,8 @@ public:
     void openStore(QIODevice::OpenMode mode = QIODevice::ReadWrite);
     void closeStore();
 
+    void setMimetype();
+
     bool hasFile(QString location) const;
     QIODevice* getDevice(QString location);
 

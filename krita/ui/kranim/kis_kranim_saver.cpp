@@ -54,7 +54,7 @@ QDomElement KisKranimSaver::saveXML(QDomDocument &doc)
     return layersElement;
 }
 
-QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc)
+QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc, QDomNode root)
 {
     QDomElement metaDataElement = doc.createElement("metadata");
     metaDataElement.setAttribute(MIME, NATIVE_MIMETYPE);
@@ -66,7 +66,7 @@ QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc)
     metaDataElement.setAttribute(WIDTH, m_d->animation->width());
     metaDataElement.setAttribute(RESOLUTION, m_d->animation->resolution());
     metaDataElement.setAttribute(DESCRIPTION, m_d->animation->description());
-    doc.appendChild(metaDataElement);
+    root.appendChild(metaDataElement);
     return metaDataElement;
 }
 

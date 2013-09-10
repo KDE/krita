@@ -246,14 +246,20 @@ void KisAnimationDoc::preSaveAnimation()
     }
 
     d->store = new KisAnimationStore(filename);
+    d->store->setMimetype();
 
-    d->doc = this->createDomDocument("krita-animation", "1.0");
+    QDomDocument doc;
+    d->doc = doc;
 
-    d->kranimSaver->saveMetaData(d->doc);
+    d->root = d->doc.createElement("kritaanimation");
+    d->root.setAttribute("version", 1.0);
+    d->doc.appendChild(d->root);
+
+    d->kranimSaver->saveMetaData(d->doc, d->root);
 
 
     d->frameElement = d->doc.createElement("frames");
-    d->doc.appendChild(d->frameElement);
+    d->root.appendChild(d->frameElement);
 
     d->store->openStore();
     d->store->openFileWriting("maindoc.xml");

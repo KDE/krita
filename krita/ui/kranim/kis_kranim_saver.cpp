@@ -88,23 +88,26 @@ bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QSt
 void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect framePosition)
 {
     if(frame) {
-
-        KisPaintDeviceSP device = frame->paintDevice();
-        QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
-
-        store->openStore();
-        store->setCompressionEnabled(true);
-
-        store->openFileWriting(location);
-        m_writer = new KisAnimationStoreWriter(store);
-        device->write(*m_writer);
-        store->closeFileWriting();
-
-        store->openFileWriting(location + ".defaultpixel");
-        store->writeDataToFile((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
-        store->closeFileWriting();
-
-        store->setCompressionEnabled(false);
-        store->closeStore();
+        this->saveFrame(store, frame->paintDevice(), framePosition);
     }
+}
+
+void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device, QRect framePosition)
+{
+    QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
+
+    store->openStore();
+    store->setCompressionEnabled(true);
+
+    store->openFileWriting(location);
+    m_writer = new KisAnimationStoreWriter(store);
+    device->write(*m_writer);
+    store->closeFileWriting();
+
+    store->openFileWriting(location + ".defaultpixel");
+    store->writeDataToFile((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
+    store->closeFileWriting();
+
+    store->setCompressionEnabled(false);
+    store->closeStore();
 }

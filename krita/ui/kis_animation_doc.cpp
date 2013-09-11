@@ -78,6 +78,7 @@ KisAnimationDoc::~KisAnimationDoc()
 void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store)
 {
     kWarning() << "Laoding animation file";
+    d->store = store;
 }
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
@@ -170,9 +171,11 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+    if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
+        d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
+    }
 
-    this->updateXML();
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -185,6 +188,8 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
+    this->updateXML();
+
     setCurrentImage(d->image);
 }
 
@@ -198,9 +203,11 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
 
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
+    if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
+        d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
+    }
 
-    this->updateXML();
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, d->currentFramePosition);
 
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -208,6 +215,8 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
 
     d->currentFramePosition = frame;
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    this->updateXML();
 
     setCurrentImage(d->image);
 }
@@ -274,8 +283,12 @@ void KisAnimationDoc::preSaveAnimation()
     d->store->closeFileWriting();
     d->store->closeStore();
 
-    d->saved = true;
+    QRect initialFramePosition(0, 0, 10, 20);
+    d->currentFramePosition = initialFramePosition;
 
+    this->updateXML();
+
+    d->saved = true;
 }
 
 KisAnimationStore* KisAnimationDoc::getStore()

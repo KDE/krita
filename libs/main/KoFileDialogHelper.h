@@ -84,7 +84,8 @@ public:
                                    const QString &defaultMime = QString());
 
 private:
-    static const QString getFilterString(const QStringList &mimeList);
+    static const QString getFilterString(const QStringList &mimeList,
+                                         bool withAllSupported = true);
     static const QString getFilterString(const QString &defaultMime);
     static QStringList getFileNames(QWidget *parent,
                                     const QString &caption,

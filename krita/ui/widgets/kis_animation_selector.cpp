@@ -169,7 +169,30 @@ void KisAnimationSelector::openAnimation()
     animation->setBgColor(KoColor(inputBackground->color(), colorSpaceSelector->currentColorSpace()));
 
     static_cast<KisAnimationPart*>(m_document->documentPart())->setAnimation(animation);
-    //emit documentSelected();
+
+    //Load a temporary image before opening the animation file
+    m_document->newImage(animation->name(), animation->width(), animation->height(), animation->colorSpace(),
+                         animation->bgColor(), animation->description(), animation->resolution());
+
+    KisImageWSP image = m_document->image();
+
+    if(image && image->root() && image->root()->firstChild()) {
+        KisLayer* layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+
+        if(layer) {
+            layer->setOpacity(OPACITY_OPAQUE_U8);
+        }
+
+        if(layer && backgroundOpacity() < OPACITY_OPAQUE_U8) {
+            KisFillPainter painter;
+            painter.begin(layer->paintDevice());
+            painter.fillRect(0, 0, animation->width(), animation->height(), animation->bgColor(), backgroundOpacity());
+        }
+        layer->setDirty(QRect(0, 0, animation->width(), animation->height()));
+    }
+    emit documentSelected();
+
+    dynamic_cast<KisAnimationDoc*>(m_document)->loadAnimationFile(animation, store);
 }
 
 void KisAnimationSelector::createAnimation()

@@ -43,6 +43,8 @@ public:
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
+    void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store);
+
 public slots:
     void play();
     void pause();

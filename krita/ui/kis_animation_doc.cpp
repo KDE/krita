@@ -75,6 +75,11 @@ KisAnimationDoc::~KisAnimationDoc()
     delete d;
 }
 
+void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store)
+{
+    kWarning() << "Laoding animation file";
+}
+
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();

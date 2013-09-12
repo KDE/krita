@@ -51,11 +51,9 @@ KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
     return image;
 }
 
-void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QRect framePosition)
+void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QString location)
 {
-    kWarning() << "Loading frame" << framePosition.x() << framePosition.y();
     KisPaintDeviceSP dev = layer->paintDevice();
-    QString location = "frame" + QString::number(framePosition.x()) + "layer" + QString::number(framePosition.y());
 
     store->openStore(QIODevice::ReadOnly);
 

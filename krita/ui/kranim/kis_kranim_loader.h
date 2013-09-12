@@ -38,7 +38,7 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString &uri, bool external);
 
-    void loadFrame(KisLayerSP layer,KisAnimationStore* store, QRect framePosition);
+    void loadFrame(KisLayerSP layer,KisAnimationStore* store, QString location);
 
 private:
     struct Private;

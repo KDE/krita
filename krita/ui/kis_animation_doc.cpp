@@ -92,7 +92,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     }
     this->getFrameFile(frame.x(), frame.y());
 
-    QString location = "frame" + QString::number(frame.x()) +"layer" + QString::number(frame.y());
+    QString location = this->getFrameFile(frame.x(), frame.y());
 
     d->store->openStore();
     bool hasFile = d->store->hasFile(location);
@@ -112,7 +112,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
         //Load all the layers here
 
-        d->kranimLoader->loadFrame(d->currentFrame, d->store, d->currentFramePosition);
+        d->kranimLoader->loadFrame(d->currentFrame, d->store, location);
 
         setCurrentImage(d->image);
     }

@@ -2,15 +2,8 @@ include_directories( ../.. )
 
 set(kopabackgroundtool_PART_SRCS
     Plugin.cpp
-    KoPABackgroundTool.cpp
     KoPABackgroundToolFactory.cpp
-    KoPABackgroundToolWidget.cpp
     KoPAMasterPageDocker.cpp
-)
-
-
-kde4_add_ui_files(kopabackgroundtool_PART_SRCS
-    BackgroundToolWidget.ui
 )
 
 
@@ -29,5 +22,11 @@ install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kopabackgroundtool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+
+install(FILES
+    KoPABackgroundTool.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )

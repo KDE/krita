@@ -196,8 +196,8 @@ public:
         hoveredPoint(0),
         angleSnapStrategy(0),
         angleSnappingDelta(15),
-        angleSnapStatus(false)
-
+        angleSnapStatus(false),
+        strokeWidget(0)
     {}
 
     KoPathShape *shape;
@@ -213,6 +213,7 @@ public:
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
+    KoStrokeConfigWidget *strokeWidget;
 
     void repaintActivePoint() const
     {
@@ -383,6 +384,8 @@ public:
 
     void addPathShape()
     {
+        if (!shape) return;
+
         if (shape->pointCount() < 2) {
             cleanUp();
             return;

@@ -225,8 +225,6 @@ ImageDockerDock::ImageDockerDock():
     connect(m_popupUi->zoomSlider    , SIGNAL(valueChanged(int))                      , SLOT(slotZoomChanged(int)));
     connect(m_zoomButtons            , SIGNAL(buttonClicked(int))                     , SLOT(slotZoomChanged(int)));
     connect(m_zoomButtons            , SIGNAL(buttonClicked(int))                     , SLOT(slotCloseZoomPopup()));
-    connect(this                     , SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
-    connect(this                     , SIGNAL(topLevelChanged(bool))                  , SLOT(slotTopLevelChanged(bool)));
 
     setWidget(m_ui);
 }
@@ -458,24 +456,6 @@ void ImageDockerDock::slotColorSelected(const QColor& color)
     m_canvas->resourceManager()->setForegroundColor(
         KoColor(color, KoColorSpaceRegistry::instance()->rgb8())
     );
-}
-
-void ImageDockerDock::slotDockLocationChanged(Qt::DockWidgetArea area)
-{
-    if(area == Qt::AllDockWidgetAreas)
-        m_ui->tabWidget->setTabPosition(QTabWidget::North);
-    else if(area & Qt::LeftDockWidgetArea)
-        m_ui->tabWidget->setTabPosition(QTabWidget::East);
-    else if(area & Qt::RightDockWidgetArea)
-        m_ui->tabWidget->setTabPosition(QTabWidget::West);
-    else
-        m_ui->tabWidget->setTabPosition(QTabWidget::North);
-}
-
-void ImageDockerDock::slotTopLevelChanged(bool topLevel)
-{
-    if(topLevel)
-        m_ui->tabWidget->setTabPosition(QTabWidget::North);
 }
 
 void ImageDockerDock::slotViewModeChanged(int viewMode, qreal scale)

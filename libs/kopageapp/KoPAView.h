@@ -70,12 +70,18 @@ public:
         AllActions       = 0xFF
     };
 
+    enum KoPAFlags
+    {
+        NormalMode =1,
+        ModeBox = 2
+    };
+
     /**
      * Constructor
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView(KoPart *part, KoPADocument *document, QWidget *parent);
+    explicit KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent);
 
     virtual ~KoPAView();
 
@@ -193,7 +199,7 @@ signals:
 protected:
 
     /// creates the widgets (called from the constructor)
-    void initGUI();
+    void initGUI(KoPAFlags flags);
     /// creates the actions (called from the constructor)
     void initActions();
 

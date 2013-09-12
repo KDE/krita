@@ -23,46 +23,51 @@
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_paintop_registry.h"
 #include "kis_selection_options.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
-#include "kis_shape_tool_helper.h"
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-    : KisToolSelectBase(canvas,
-                        KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
-                        i18n("Path Selection")),
-      m_localTool(new LocalTool(canvas, this))
+    : DelegatedSelectPathTool(canvas,
+                              KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
+                              new __KisToolSelectPathLocalTool(canvas, this))
 {
 }
 
-KisToolSelectPath::~KisToolSelectPath()
+void KisToolSelectPath::requestStrokeEnd()
 {
-    delete m_localTool;
+    localTool()->endPathWithoutLastPoint();
+}
+
+void KisToolSelectPath::requestStrokeCancellation()
+{
+    localTool()->cancelPath();
+}
+
+void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
+{
+    if (!selectionEditable()) return;
+    DelegatedSelectPathTool::mousePressEvent(event);
 }
 
 QList<QWidget *> KisToolSelectPath::createOptionWidgets()
 {
-    QList<QWidget*> widgetsList = m_localTool->createOptionWidgets();
-
-    KisToolSelectBase::createOptionWidget();
+    QList<QWidget*> widgetsList =
+        DelegatedSelectPathTool::createOptionWidgets();
     selectionOptionWidget()->disableAntiAliasSelectionOption();
-    widgetsList.append(selectionOptionWidget());
-
     return widgetsList;
 }
 
 
-KisToolSelectPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
-        : KoCreatePathTool(canvas), m_selectionTool(selectingTool)
+ __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
+     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
 }
 
-void KisToolSelectPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
+void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -75,7 +80,7 @@ void KisToolSelectPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &p
     m_selectionTool->paintToolOutline(&painter, m_selectionTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
+void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
     KisNodeSP currentNode =
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
@@ -116,16 +121,5 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         helper.addSelectionShape(pathShape);
     }
 }
-
-void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
-{
-    if (!selectionEditable()) {
-        return;
-    }
-
-    m_localTool->mousePressEvent(event);
-    KisTool::mousePressEvent(event);
-}
-
 
 #include "kis_tool_select_path.moc"

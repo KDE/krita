@@ -1141,11 +1141,6 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);
 
-    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
-    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
-    opacityWidget->setCanvas(canvas());
-    widgets.append(opacityWidget);
-
     return widgets;
 }
 

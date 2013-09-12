@@ -30,10 +30,11 @@ KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)
     : m_modeBox(modeBox)
 {
     setWidget(modeBox);
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWindowTitle("");
     setObjectName("ModeBox");
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
 
 void KoModeBoxDocker::setCanvas(KoCanvasBase *canvas)
@@ -44,4 +45,9 @@ void KoModeBoxDocker::setCanvas(KoCanvasBase *canvas)
 void KoModeBoxDocker::unsetCanvas()
 {
     m_modeBox->unsetCanvas();
+}
+
+void KoModeBoxDocker::locationChanged(Qt::DockWidgetArea area)
+{
+    m_modeBox->locationChanged(area);
 }

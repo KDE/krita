@@ -79,6 +79,20 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 {
     kWarning() << "Laoding animation file";
     d->store = store;
+
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
+
+    d->currentFramePosition = QRect(0, 0, 10, 20);
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame->setName("testFrame");
+    d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    d->kranimLoader->loadFrame(d->currentFrame, d->store, "frame0layer0");
+
+    setCurrentImage(d->image);
 }
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)

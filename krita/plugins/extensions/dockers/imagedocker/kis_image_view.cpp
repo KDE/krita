@@ -16,6 +16,7 @@
  */
 
 #include "kis_image_view.h"
+#include <kis_cursor.h>
 
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -32,6 +33,7 @@ KisImageViewport::KisImageViewport():
     m_rubberBand(QRubberBand::Rectangle, this)
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setCursor(KisCursor::pickerCursor());
 }
 
 void KisImageViewport::paintEvent(QPaintEvent* event)
@@ -91,6 +93,7 @@ void KisImageViewport::mousePressEvent(QMouseEvent* event)
 void KisImageViewport::mouseMoveEvent(QMouseEvent* event)
 {
     if(m_mousePressed) {
+        setCursor(KisCursor::arrowCursor());
         QPoint size = event->pos() - m_selection.topLeft();
         m_selection.setSize(QSize(size.x(), size.y()));
         m_rubberBand.setGeometry(m_selection.normalized());
@@ -100,6 +103,7 @@ void KisImageViewport::mouseMoveEvent(QMouseEvent* event)
 void KisImageViewport::mouseReleaseEvent(QMouseEvent* event)
 {
     m_selection = m_selection.normalized();
+    setCursor(KisCursor::pickerCursor());
     
     if(m_selection.width() > 5 && m_selection.height() > 5) {
         QRect imgRect = imageRect();

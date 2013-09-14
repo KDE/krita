@@ -69,11 +69,12 @@ private slots:
     void slotImageChoosenFromComboBox(int index);
     void slotZoomChanged(int zoom);
     void slotColorSelected(const QColor& color);
-    void slotDockLocationChanged(Qt::DockWidgetArea area);
-    void slotTopLevelChanged(bool topLevel);
     void slotViewModeChanged(int viewMode, qreal scale);
     void slotCloseZoomPopup();
     void slotChangeRoot(const QString& path);
+    
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
     
 private:
     void addCurrentPathToHistory();

@@ -128,5 +128,40 @@ void KisMaskTest::testSelectionParent()
     }
 }
 
+void KisMaskTest::testDeferredOffsetInitialization()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+
+    KisMaskSP mask = new TestMask;
+
+    QCOMPARE(mask->x(), 0);
+    QCOMPARE(mask->y(), 0);
+
+    mask->setX(10);
+    QCOMPARE(mask->x(), 10);
+    QCOMPARE(mask->y(), 0);
+
+    mask->setY(11);
+    QCOMPARE(mask->x(), 10);
+    QCOMPARE(mask->y(), 11);
+
+    mask->initSelection(image->rootLayer());
+
+    // IMPORTANT: a bit weird behavior, but it is needed for
+    // KisKraLoadVisitor to work properly
+    QCOMPARE(mask->x(), 10);
+    QCOMPARE(mask->y(), 11);
+
+    // Now there is no deferred initialization, so the offest
+    // should simply be reset
+    mask->initSelection(image->rootLayer());
+    QCOMPARE(mask->x(), 0);
+    QCOMPARE(mask->y(), 0);
+
+    KisSelectionSP selection = mask->selection();
+    QCOMPARE(selection->parentNode(), KisNodeSP(mask));
+}
+
 QTEST_KDEMAIN(KisMaskTest, GUI)
 #include "kis_mask_test.moc"

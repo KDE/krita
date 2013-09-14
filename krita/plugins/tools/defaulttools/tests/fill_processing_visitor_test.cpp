@@ -29,7 +29,8 @@
 #include "stroke_testing_utils.h"
 #include "kis_pattern.h"
 #include "kis_canvas_resource_provider.h"
-#include "processings/fill_processing_visitor.h"
+
+#include <processing/fill_processing_visitor.h>
 
 class FillProcessingVisitorTester : public TestUtil::QImageBasedTest
 {
@@ -74,7 +75,7 @@ public:
                                       resources,
                                       usePattern,
                                       selectionOnly,
-                                      10, 10, 10, true);
+                                      10, 10, 10, true, false);
 
 
         KisProcessingApplicator applicator(image, fillNode,

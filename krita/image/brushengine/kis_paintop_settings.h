@@ -100,6 +100,13 @@ public:
     }
 
     /**
+     * @return the composite op it to which the indirect painting device
+     * should be initialized to. This is used by duplicate op to reset
+     * the composite op to COMPOSITE_COPY
+     */
+    virtual QString indirectPaintingCompositeOp() const;
+
+    /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */

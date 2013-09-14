@@ -25,7 +25,9 @@
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
+#include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPainter>
 #include <QAbstractItemDelegate>
@@ -92,14 +94,14 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
 
-    m_lbScale = new QLabel(i18n("Scale:"), this);
-    m_slScale = new KisMultipliersDoubleSliderSpinBox(this);
-    m_slScale->setRange(0.0, 2.0, 2);
-    m_slScale->setValue(1.0);
-    m_slScale->addMultiplier(0.1);
-    m_slScale->addMultiplier(2);
-    m_slScale->addMultiplier(10);
-    QObject::connect(m_slScale, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemScale(qreal)));
+    m_lbSize = new QLabel(i18n("Size:"), this);
+    m_slSize = new KisMultipliersDoubleSliderSpinBox(this);
+    m_slSize->setRange(0.0, 10.0, 2);
+    m_slSize->setValue(5.0);
+    m_slSize->addMultiplier(10);
+    m_slSize->addMultiplier(100);
+    QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
+
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
@@ -144,17 +146,26 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     mainLayout->addLayout(spacingLayout, 1);
 
-    spacingLayout->addWidget(m_lbScale, 0, 0);
-    spacingLayout->addWidget(m_slScale, 0, 1);
-    spacingLayout->addWidget(m_lbRotation, 1, 0);
-    spacingLayout->addWidget(m_slRotation, 1, 1);
-    spacingLayout->addWidget(m_lbSpacing, 2, 0);
-    spacingLayout->addWidget(m_slSpacing, 2, 1);
+    spacingLayout->addWidget(m_lbSize, 1, 0);
+    spacingLayout->addWidget(m_slSize, 1, 1);
+    spacingLayout->addWidget(m_lbRotation, 2, 0);
+    spacingLayout->addWidget(m_slRotation, 2, 1);
+    spacingLayout->addWidget(m_lbSpacing, 3, 0);
+    spacingLayout->addWidget(m_slSpacing, 3, 1);
     spacingLayout->setColumnStretch(1, 3);
 
-    spacingLayout->addWidget(m_chkColorMask, 3, 0, 1, 2);
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Brush"), this);
+    resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
+    connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
+
+    QHBoxLayout *resetHLayout = new QHBoxLayout();
+    resetHLayout->addWidget(m_chkColorMask, 0);
+    resetHLayout->addWidget(resetBrushButton, 0, Qt::AlignRight);
+
+    spacingLayout->addLayout(resetHLayout, 4, 0, 1, 2);
 
     slotActivatedBrush(m_itemChooser->currentResource());
+    update(m_itemChooser->currentResource());
 }
 
 KisBrushChooser::~KisBrushChooser()
@@ -167,16 +178,32 @@ void KisBrushChooser::setBrush(KisBrushSP _brush)
     update(_brush.data());
 }
 
-void KisBrushChooser::slotSetItemScale(qreal scaleValue)
+void KisBrushChooser::slotResetBrush()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
-        brush->setScale(scaleValue);
+        brush->load();
+        brush->setScale(1.0);
+        brush->setAngle(0.0);
         slotActivatedBrush(brush);
-
+        update(brush);
         emit sigBrushChanged();
     }
 }
+
+void KisBrushChooser::slotSetItemSize(qreal sizeValue)
+{
+    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+
+    if (brush) {
+        int brushWidth = brush->width();
+
+        brush->setScale(sizeValue / qreal(brushWidth));
+        slotActivatedBrush(brush);
+        emit sigBrushChanged();
+    }
+}
+
 void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
@@ -223,7 +250,7 @@ void KisBrushChooser::update(KoResource * resource)
         m_lbName->setText(text);
         m_slSpacing->setValue(brush->spacing());
         m_slRotation->setValue(brush->angle() * 180 / M_PI);
-        m_slScale->setValue(brush->scale());
+        m_slSize->setValue(brush->width() * brush->scale());
 
 
         // useColorAsMask support is only in gimp brush so far
@@ -250,32 +277,12 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     Q_UNUSED(yPixels);
     qreal oldWidth = m_brush->width() * m_brush->scale();
     qreal newWidth = oldWidth + xPixels;
+
     if (newWidth <= 0.1) {
         newWidth = 0.1;
     }
 
-    qreal newScale = floor((newWidth / m_brush->width()) * 100) / 100;
-
-    // If the size is increased, use at least the minimum that the slider doesn't interpret as zero
-    if (xPixels > 0 && newScale < 0.05) {
-        newScale  = 0.05;
-    }
-
-    // check whether we are trying to increase the size, but fail because we only handle two decimals
-    // for the scale
-    if (xPixels > 0 && qFuzzyCompare(newScale, m_brush->scale())) {
-        newScale += 0.02;
-    }
-
-    // signal valueChanged will care about call to slotSetItemScale
-    m_slScale->setValue(newScale);
-}
-
-QSizeF KisBrushChooser::brushSize() const
-{
-    qreal width = m_brush->width() * m_brush->scale();
-    qreal height = m_brush->height() * m_brush->scale();
-    return QSizeF(width, height);
+    m_slSize->setValue(newWidth);
 }
 
 

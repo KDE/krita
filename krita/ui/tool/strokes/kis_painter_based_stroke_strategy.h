@@ -68,7 +68,8 @@ private:
     void init();
     void initPainters(KisPaintDeviceSP targetDevice,
                       KisSelectionSP selection,
-                      bool hasIndirectPainting);
+                      bool hasIndirectPainting,
+                      const QString &indirectPaintingCompositeOp);
     void deletePainters();
 
 private:

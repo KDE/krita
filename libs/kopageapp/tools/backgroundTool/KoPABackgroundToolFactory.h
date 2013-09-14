@@ -21,7 +21,7 @@
 #define KOPABACKGROUNDTOOLFACTORY_H
 
 #include <KoToolFactoryBase.h>
-#include "KoPABackgroundTool.h"
+#include "tools/backgroundTool/KoPABackgroundTool.h"
 
 class KoPABackgroundToolFactory : public KoToolFactoryBase
 {

@@ -1,4 +1,4 @@
-include_directories( 
+include_directories(
     ${KOPAGEAPP_INCLUDES}
 )
 
@@ -50,6 +50,13 @@ set( kopageapp_LIB_SRCS
      dialogs/KoPAConfigureDialog.cpp
      widgets/KoPageNavigator.cpp
      widgets/KoPageNavigatorButton.cpp
+     widgets/KoPABackgroundFillWidget.cpp
+     tools/backgroundTool/KoPABackgroundTool.cpp
+     tools/backgroundTool/KoPABackgroundToolWidget.cpp
+)
+
+kde4_add_ui_files(kopageapp_LIB_SRCS
+    tools/backgroundTool/BackgroundToolWidget.ui
 )
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
@@ -80,6 +87,7 @@ install(FILES
     KoPAViewBase.h
     KoPAViewMode.h
     KoPAViewModeNormal.h
+    tools/backgroundTool/KoPABackgroundTool.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

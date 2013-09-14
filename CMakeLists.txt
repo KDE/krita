@@ -222,7 +222,7 @@ calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter"  NEEDS K
 calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter"  NEEDS KARBON_APP)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  NEEDS KARBON_APP)
-calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS FILTER_EPS_TO_SVG_AI FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
+calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS FILTER_EPS_TO_SVG_AI FILTER_XFIG_TO_ODG FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
 calligra_define_product(FILTER_KARBON_EXPORT "All Karbon export filter"  WANTS FILTER_KARBON_TO_IMAGE FILTER_KARBON_TO_SVG FILTER_KARBON_TO_WMF)
 calligra_define_product(FILTER_KARBON "All Karbon filter"  WANTS FILTER_KARBON_IMPORT FILTER_KARBON_EXPORT)
 # meta apps
@@ -809,6 +809,11 @@ set(WRITERPERFECT_INCLUDES
 # libodf2
 set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
+)
+
+# libodfreader
+set(KOODFREADER_INCLUDES
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
 )
 
  #########################################

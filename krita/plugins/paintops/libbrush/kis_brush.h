@@ -163,12 +163,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
+    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
+    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
 
     /**
      * @return the angle of the mask adding the given angle
@@ -314,6 +314,9 @@ protected:
     QImage m_image;
 
     void resetBoundary();
+
+protected:
+    void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:
     friend class KisImagePipeBrushTest;

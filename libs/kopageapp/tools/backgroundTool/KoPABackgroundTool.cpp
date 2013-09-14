@@ -104,15 +104,21 @@ QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
     QList<QWidget *> widgets;
     const QString title =
-        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Slide Background");
+        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Background");
     widget->setWindowTitle(title);
-    widgets.append(widget );
+    widgets.append(widget);
+    widgets.append(m_addOnWidgets);
 #if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
     masterPageDocker->setView( static_cast<KoPACanvas *>(m_canvas)->koPAView() );
     widgets.insert( i18n("Master Page"), masterPageDocker );
 #endif
     return widgets;
+}
+
+void KoPABackgroundTool::addOptionWidget(QWidget *widget)
+{
+    m_addOnWidgets.append(widget);
 }
 
 #include <KoPABackgroundTool.moc>

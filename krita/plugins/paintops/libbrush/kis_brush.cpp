@@ -208,8 +208,8 @@ QPointF KisBrush::hotSpot(double scaleX, double scaleY, double rotation, const K
 {
     Q_UNUSED(scaleY);
 
-    double w = maskWidth(scaleX, rotation, info);
-    double h = maskHeight(scaleX, rotation, info);
+    double w = maskWidth(scaleX, rotation, 0.0, 0.0, info);
+    double h = maskHeight(scaleX, rotation, 0.0, 0.0, info);
 
     // The smallest brush we can produce is a single pixel.
     if (w < 1) {
@@ -266,6 +266,15 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
+void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
+{
+    e.setAttribute("type", type);
+    e.setAttribute("filename", shortFilename());
+    e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("angle", QString::number(angle()));
+    e.setAttribute("scale", QString::number(scale()));
+}
+
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 {
     element.setAttribute("BrushVersion", "2");
@@ -281,7 +290,7 @@ KisBrushSP KisBrush::fromXML(const QDomElement& element)
     return brush;
 }
 
-qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
 {
     Q_UNUSED(info);
 
@@ -293,10 +302,11 @@ qint32 KisBrush::maskWidth(double scale, double angle, const KisPaintInformation
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle, 0.5, 0.5).width();
+                                       scale, angle,
+                                       subPixelX, subPixelY).width();
 }
 
-qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformation& info) const
+qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const
 {
     Q_UNUSED(info);
 
@@ -308,7 +318,8 @@ qint32 KisBrush::maskHeight(double scale, double angle, const KisPaintInformatio
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
-                                       scale, angle, 0.5, 0.5).height();
+                                       scale, angle,
+                                       subPixelX, subPixelY).height();
 }
 
 double KisBrush::maskAngle(double angle) const
@@ -368,7 +379,7 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, double scal
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, info));
+    PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle, subPixelX, subPixelY, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
 

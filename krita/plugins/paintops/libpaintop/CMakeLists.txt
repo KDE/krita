@@ -24,9 +24,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_multi_sensors_model_p.cpp
     kis_multi_sensors_selector.cpp
     kis_paint_action_type_option.cpp
-    kis_paintop_option.cpp
-    kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
     kis_precision_option.cpp
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp

@@ -126,15 +126,14 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
         m_d->resources->setCurrentNode(overrideNode);
     }
 
-    bool indirectPainting = m_d->resources->needsIndirectPainting();
-
     if(m_d->recordingAdapter) {
         m_d->recordingAdapter->startStroke(image, m_d->resources);
     }
 
     KisStrokeStrategy *stroke =
-            new FreehandStrokeStrategy(indirectPainting,
-                                       m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
+        new FreehandStrokeStrategy(m_d->resources->needsIndirectPainting(),
+                                   m_d->resources->indirectPaintingCompositeOp(),
+                                   m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 

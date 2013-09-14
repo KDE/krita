@@ -46,11 +46,11 @@ public:
 
     void setBrush(KisBrushSP _brush);
     void setBrushSize(qreal xPixels,qreal yPixels);
-    QSizeF brushSize() const;
 
 private slots:
 
-    void slotSetItemScale(qreal);
+    void slotResetBrush();
+    void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
     void slotSetItemSpacing(qreal);
     void slotSetItemUseColorAsMask(bool);
@@ -64,10 +64,10 @@ signals:
 private:
     QLabel* m_lbName;
     QLabel* m_lbRotation;
-    QLabel* m_lbScale;
+    QLabel* m_lbSize;
     QLabel* m_lbSpacing;
     KisDoubleSliderSpinBox* m_slRotation;
-    KisMultipliersDoubleSliderSpinBox* m_slScale;
+    KisMultipliersDoubleSliderSpinBox* m_slSize;
     KisDoubleSliderSpinBox* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;

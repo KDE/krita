@@ -91,21 +91,35 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         }
 
         // skip typedef
+        const QChar underscore('_');
         int helperIndex = index;
-        while (line.at(helperIndex).isLetter() && helperIndex < line.size()){
-            helperIndex++;
+        while (helperIndex < line.size())
+        {
+            const QChar c = line.at(helperIndex);
+            if (c.isLetter() || c == underscore)
+            {
+                helperIndex++;
+            }
+            else
+            {
+                break;
+            }
+
         }
 
+        QString typeName = line.mid(index, helperIndex - index);
+        if (typeName.startsWith(underscore))
+        {
+            typeName = typeName.mid(1);
+        }
 
         const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
-        QString typeName = line.mid(index, helperIndex - index);
-        if (typeDefs.contains(typeName)){
-            // point to next character
-            index = helperIndex;
-        }else {
-            dbgPlugins << "Unknown type" << typeName;
+        if (!typeDefs.contains(typeName))
+        {
+            dbgPlugins << "Unknown type" << typeName << line;
         }
 
+        index = helperIndex;
 
         // Type separators '()' can be replaced by '[]' or '{}' if necessary ...
         QChar delimiter = line.at(index);

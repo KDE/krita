@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<blacklist>
+
+    <category name="About">
+        <filter name="Gmicky / Roddy" />
+    </category>
+
+    <category name="Arrays &amp; tiles">
+        <filter name="Tileable rotation" />
+    </category>
+
+    <category name="Artistic">
+        <filter name="Warhol" />
+    </category>
+
+    <category name="Black &amp; white">
+        <filter name="Hard sketch" />
+        <filter name="Hough sketch" />
+        <filter name="Sketch" />
+    </category>
+
+   <category name="Colors">
+       <filter name="Decompose channels" />
+       <filter name="Equalize HSV" />
+       <filter name="User-defined" />
+   </category>
+
+    <category name="Contours">
+        <filter name="Difference of gaussians" />
+        <filter name="Edges" />
+        <filter name="Gradient norm" />
+        <filter name="Gradient RGB" />
+        <filter name="Thin edges" />
+
+    </category>
+
+    <category name="Deformations">
+        <!--
+        <filter name="" />
+        -->
+        <filter name="Cartesian transform" />
+        <filter name="Kaleidoscope [blended]" />
+        <filter name="Polar transform" />
+        <filter name="Ripple" />
+    </category>
+
+
+</blacklist>

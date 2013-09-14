@@ -54,8 +54,6 @@ public:
     ~KisGmicParser();
     Component * createFilterTree();
 
-    enum ParsingStatus {PARSE_START, PARSE_FOLDER, PARSE_PARAM, PARSE_COMMAND};
-
 private:
     bool isCategory(const QString &line);
     /* Parses gmic command names for preview and for the filter itself */
@@ -67,12 +65,7 @@ private:
     QString fetchLine(QTextStream &input, int &lineCounter);
 
 private:
-    QVector<int> cosik;
     QString m_fileName;
-    ParsingStatus m_status;
 };
-
-
-
 
 #endif

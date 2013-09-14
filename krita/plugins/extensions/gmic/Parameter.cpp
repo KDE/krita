@@ -414,21 +414,35 @@ LinkParameter::LinkParameter(const QString& name, bool updatePreview): Parameter
 void LinkParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-    QString link = "<a href=%1>%2</a>";
 
+
+    QString linkAddress;
+    QString linkText;
     if (values.size() == 1)
     {
-        m_link = link.arg(values.at(0)).arg(values.at(0));
+        linkAddress = values.at(0);
+        linkText = stripQuotes(values.at(0));
+
     }
     else if (values.size() == 2)
     {
-        m_link = link.arg(values.at(1)).arg(values.at(0));
+        linkAddress = values.at(1);
+        linkText = stripQuotes(values.at(0));
     }
     else if (values.size() == 3)
     {
         //TODO: ignored aligment at values.at(0) , mostly 0
-        m_link = link.arg(values.at(2)).arg(values.at(1));
+        linkAddress = values.at(2);
+        linkText = stripQuotes(values.at(1));
     }
+    else
+    {
+        dbgPlugins << "Wrong format of link parameter";
+        return;
+    }
+
+    QString link = "<a href=%1>%2</a>";
+    m_link = link.arg(linkAddress).arg(linkText);
 }
 
 QString LinkParameter::toString()

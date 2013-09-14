@@ -406,7 +406,7 @@ QString Command::mergeBlockToLine(const QStringList& block)
     {
         QString nextLine = block.at(i);
         nextLine = nextLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
-        result = result + "<br />" + nextLine;
+        result = result + nextLine;
     }
     return result;
 }

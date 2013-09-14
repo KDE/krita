@@ -135,6 +135,7 @@ Component* KisGmicParser::createFilterTree()
                     QStringList block;
                     block.append(line);
                     bool parameterIsComplete = false;
+                    int lines = 1;
                     while (!parameterIsComplete)
                     {
                         //dbgPlugins << "Line number" << lineNum;
@@ -146,12 +147,17 @@ Component* KisGmicParser::createFilterTree()
                             if (!anotherLine.isNull())
                             {
                                 block.append(anotherLine);
+                                lines++;
                             }
                             else
                             {
                                 warnPlugins << "We are and the end of the file unexpectedly"; // we are at the end of the file
                                 break;
                             }
+                        }
+                        else if (lines > 1)
+                        {
+                            dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
                         }
                     }
                 }

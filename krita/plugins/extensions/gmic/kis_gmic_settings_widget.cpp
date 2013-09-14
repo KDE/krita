@@ -180,7 +180,8 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 {
                     NoteParameter * noteParam = static_cast<NoteParameter *>(p);
                     QLabel * label = new QLabel;
-                    label->setText(noteParam->m_label);
+                    QString labelTxt = noteParam->m_label.replace(QString("\\n"), QString("<br />"));
+                    label->setText(labelTxt);
                     label->setWordWrap(true);
 
                     mapParameterWidget(noteParam, label);

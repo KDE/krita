@@ -40,15 +40,22 @@ void Parameter::parseValues(const QString& typeDefinition)
     Q_UNUSED(typeDefinition);
 }
 
-QStringList Parameter::getValues(const QString& typeDefinition)
+QString Parameter::extractValues(const QString& typeDefinition)
 {
     QString currentType = PARAMETER_NAMES[m_type];
     Q_ASSERT(typeDefinition.startsWith(currentType));
 
     QString onlyValues = typeDefinition;
     onlyValues = onlyValues.remove(0, currentType.size()).trimmed();
+
     // drop first and last character : '(1)' or '{1}' or '[1]'
     onlyValues = onlyValues.mid(1, onlyValues.size() - 2);
+    return onlyValues;
+}
+
+QStringList Parameter::getValues(const QString& typeDefinition)
+{
+    QString onlyValues= extractValues(typeDefinition);
     QStringList result = onlyValues.split(",");
     return result;
 }
@@ -62,7 +69,7 @@ bool Parameter::isPresentationalOnly() const
     return false;
 }
 
-QString Parameter::stripQuotes(const QString& str)
+ QString Parameter::stripQuotes(const QString& str)
 {
     if (str.startsWith("\"") && str.endsWith("\""))
     {
@@ -266,8 +273,8 @@ NoteParameter::NoteParameter(const QString& name, bool updatePreview): Parameter
 
 void NoteParameter::parseValues(const QString& typeDefinition)
 {
-    QStringList values = getValues(typeDefinition);
-    m_label = stripQuotes(values.at(0));
+    QString values = extractValues(typeDefinition);
+    m_label = stripQuotes(values);
 }
 
 QString NoteParameter::toString()

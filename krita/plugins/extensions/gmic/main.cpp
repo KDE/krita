@@ -11,9 +11,9 @@ int main(int argc, char *argv[])
     KisGmicParser parser("gmic_def.gmic");
     Component * root = parser.createFilterTree();
 
-    KisGmicFilterModel model(root);
+    KisGmicFilterModel * model = new KisGmicFilterModel(root);
 
-    KisGmicWidget gmicWidget(&model);
+    KisGmicWidget gmicWidget(model);
     gmicWidget.show();
 
     return app.exec();

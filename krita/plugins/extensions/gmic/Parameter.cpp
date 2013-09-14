@@ -45,12 +45,11 @@ QStringList Parameter::getValues(const QString& typeDefinition)
     QString currentType = PARAMETER_NAMES[m_type];
     Q_ASSERT(typeDefinition.startsWith(currentType));
 
-    // get rid of '(', '{' and '['
     QString onlyValues = typeDefinition;
-    onlyValues = onlyValues.remove(0, currentType.size() + 1);
-    onlyValues.chop(1);
+    onlyValues = onlyValues.remove(0, currentType.size()).trimmed();
+    // drop first and last character : '(1)' or '{1}' or '[1]'
+    onlyValues = onlyValues.mid(1, onlyValues.size() - 2);
     QStringList result = onlyValues.split(",");
-
     return result;
 }
 
@@ -89,7 +88,14 @@ void FloatParameter::parseValues(const QString& typeDefinition)
     bool isOk = true;
 
     m_value = m_defaultValue = values.at(0).toFloat(&isOk);
+
+    if (!isOk)
+    {
+        dbgPlugins << "Incorect type definition: " << typeDefinition;
+    }
     Q_ASSERT(isOk);
+
+
     m_minValue = values.at(1).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_maxValue = values.at(2).toFloat(&isOk);
@@ -473,9 +479,6 @@ void TextParameter::parseValues(const QString& typeDefinition)
             }
         }
     }
-
-    dbgPlugins << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<HEY!!!!";
-    dbgPlugins << values.size() << " " << values << "m_value" << m_value;
 
     // remove first and last "
     m_value = stripQuotes(m_value);

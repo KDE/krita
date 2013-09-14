@@ -137,6 +137,7 @@ Component* KisGmicParser::createFilterTree()
                     bool parameterIsComplete = false;
                     while (!parameterIsComplete)
                     {
+                        //dbgPlugins << "Line number" << lineNum;
                         parameterIsComplete = command->processParameter(block);
                         if (!parameterIsComplete)
                         {

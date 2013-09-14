@@ -68,6 +68,7 @@ void KisGmicWidget::createMainLayout()
 
     m_filterOptions = new QWidget();
     m_filterConfigLayout->addWidget(m_filterOptions,row, column);
+    m_filterConfigLayout->setColumnStretch(column, 1);
     m_filterOptionsRow = row;
     m_filterOptionsColumn = column;
 

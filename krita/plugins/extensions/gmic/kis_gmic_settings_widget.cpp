@@ -25,6 +25,7 @@
 #include <kcolorbutton.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
+#include <kseparator.h>
 
 KisGmicSettingsWidget::KisGmicSettingsWidget(Command * command):
     m_commandDefinition(command)
@@ -156,7 +157,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     connect(combo, SIGNAL(currentIndexChanged(int)), this, SLOT(setChoiceIndex(int)));
 
                     gridLayout->addWidget(new QLabel(choiceParam->name()), row, 0);
-                    gridLayout->addWidget(combo, row, 1, 1, 2);
+                    gridLayout->addWidget(combo, row, 1, 1, 3);
                     row++;
                 }
                 else if (role == LoadRole)
@@ -180,7 +181,8 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 {
                     NoteParameter * noteParam = static_cast<NoteParameter *>(p);
                     QLabel * label = new QLabel;
-                    label->setText(noteParam->m_label);
+                    QString labelTxt = noteParam->m_label.replace(QString("\\n"), QString("<br />"));
+                    label->setText(labelTxt);
                     label->setWordWrap(true);
 
                     mapParameterWidget(noteParam, label);
@@ -203,6 +205,18 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     mapParameterWidget(linkParam, label);
 
                     gridLayout->addWidget(label, row, 0, 1, 3);
+                    row++;
+                }
+                break;
+            }
+            case Parameter::SEPARATOR_P:
+            {
+                if (role == CreateRole)
+                {
+                    SeparatorParameter * linkParam = static_cast<SeparatorParameter *>(p);
+                    KSeparator * kseparator = new KSeparator(Qt::Horizontal);
+                    mapParameterWidget(linkParam, kseparator);
+                    gridLayout->addWidget(kseparator, row, 0, 1, 4);
                     row++;
                 }
                 break;
@@ -256,7 +270,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                     connect(colorButton, SIGNAL(changed(QColor)), this, SLOT(setColorValue(QColor)));
 
                     gridLayout->addWidget(new QLabel(colorParam->name()), row, 0);
-                    gridLayout->addWidget(colorButton, row, 1, 1, 2);
+                    gridLayout->addWidget(colorButton, row, 1, 1, 3);
                     row++;
                 }
                 else if (role == LoadRole)

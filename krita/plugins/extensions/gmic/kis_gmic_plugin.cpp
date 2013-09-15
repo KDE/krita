@@ -55,6 +55,7 @@
 #include "kis_export_gmic_processing_visitor.h"
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
+#include "kis_gmic_blacklister.h"
 
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
@@ -97,6 +98,10 @@ void KisGmicPlugin::slotGmic()
     KisGmicParser parser(m_gmicDefinitionFilePath);
     Component * root = parser.createFilterTree();
     KisGmicFilterModel * model = new KisGmicFilterModel(root); // filter mode takes owner ship
+
+    KisGmicBlacklister * blacklister = new KisGmicBlacklister(m_gmicDefinitionFilePath + ".blacklist");
+    model->setBlacklister(blacklister);
+
     m_gmicWidget = new KisGmicWidget(model);
 
     // apply
@@ -115,6 +120,12 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 {
     QString actionName;
     KisNodeSP node;
+
+    if (setting->isBlacklisted())
+    {
+        KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this filter is crashing Krita and is turned off."), i18n("Krita"));
+        return;
+    }
 
     if (setting->inputLayerMode() == ACTIVE_LAYER)
     {

@@ -63,9 +63,10 @@ public:
     virtual void reset() { };
 
 protected:
+    // strips parameter type (int, note, etc.) and enclosing brackets
+    QString extractValues(const QString& typeDefinition);
     QStringList getValues(const QString& typeDefinition);
-    QString stripQuotes(const QString &str);
-
+    QString stripQuotes(const QString& str);
 };
 
 static QMap<Parameter::ParameterType, QString> initMap()

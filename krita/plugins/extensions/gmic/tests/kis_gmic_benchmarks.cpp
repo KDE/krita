@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -16,25 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef FILTERS_H
-#define FILTERS_H
+#include "kis_gmic_benchmarks.h"
 
-#include <QList>
+#include <qtest_kde.h>
 
-class Component;
-class Category;
+int count = 1000;
 
-class Filters
+void KisGmicBenchmarks::testA()
 {
-public:
-    Filters();
-    ~Filters();
+    QBENCHMARK
+    {
+        for (int i = 0; i < count; i++)
+        {
+            float f = i * 1/255.0;
+            f += 1.0;
+        }
+    }
+}
 
-    QList<Component*> m_category;
-    void addCategory(Category * category);
+void KisGmicBenchmarks::testB()
+{
+    QBENCHMARK
+    {
+        for (int i = 0; i < count; i++)
+        {
+            double f = i * 1/255.0;
+            f += 1.0;
+        }
+    }
+}
 
-    void print();
+QTEST_KDEMAIN(KisGmicBenchmarks, GUI)
 
-};
-
-#endif
+#include "kis_gmic_benchmarks.moc"

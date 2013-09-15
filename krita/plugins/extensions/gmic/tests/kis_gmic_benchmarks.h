@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
+ *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -16,33 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <Filters.h>
+#ifndef _KIS_GMIC_BENCHMARKS_H_
+#define _KIS_GMIC_BENCHMARKS_H_
 
-#include <QList>
+#include <QtTest>
 
-#include <Category.h>
-
-Filters::Filters()
+class KisGmicBenchmarks : public QObject
 {
+    Q_OBJECT
 
-}
+private slots:
+    void testA();
+    void testB();
+};
 
-Filters::~Filters()
-{
-    qDeleteAll(m_category);
-    m_category.clear();
-}
-
-void Filters::addCategory(Category* category)
-{
-    m_category.append(category);
-}
-
-void Filters::print()
-{
-    {
-        for (int i = 0; i < m_category.size();i++){
-            m_category.at(i)->print(0);
-        }
-    }
-}
+#endif

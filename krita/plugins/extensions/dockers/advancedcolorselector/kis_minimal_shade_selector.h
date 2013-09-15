@@ -28,6 +28,7 @@ class KisMinimalShadeSelector : public KisColorSelectorBase
 Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
+    void unsetCanvas();
     void setCanvas(KisCanvas2* canvas);
 
 public slots:

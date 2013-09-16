@@ -171,6 +171,11 @@ QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
     return m_d->decorations;
 }
 
+void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
+{
+    qWarning() << "Wrap Around mode is not available for this type of canvas!";
+}
+
 QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg;

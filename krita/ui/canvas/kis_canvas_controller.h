@@ -46,6 +46,7 @@ public slots:
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     void resetCanvasTransformations();
+    void slotToggleWrapAroundMode(bool value);
 
 signals:
     void documentSizeChanged();

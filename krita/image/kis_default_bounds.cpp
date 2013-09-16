@@ -57,7 +57,7 @@ QRect KisDefaultBounds::bounds() const
 
 bool KisDefaultBounds::wrapAroundMode() const
 {
-    return false;
+    return m_d->image ? m_d->image->wrapAroundMode() : false;
 }
 
 /******************************************************************/

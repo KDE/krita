@@ -84,6 +84,7 @@ public:
         , displayFilter(0)
         , checkerVertexBuffer(0)
         , tileVertexBuffer(0)
+        , wrapAroundMode(false)
     {
     }
 
@@ -103,6 +104,8 @@ public:
 
     QGLBuffer *checkerVertexBuffer;
     QGLBuffer *tileVertexBuffer;
+
+    bool wrapAroundMode;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -164,6 +167,12 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     d->displayFilter = displayFilter;
     initializeDisplayShader();
+}
+
+void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
+{
+    d->wrapAroundMode = value;
+    update();
 }
 
 void KisOpenGLCanvas2::initializeGL()
@@ -286,6 +295,8 @@ void KisOpenGLCanvas2::drawCheckers() const
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->checkerShader->release();
+
+    // TODO: wrap around mode for checkers!
 }
 
 void KisOpenGLCanvas2::drawImage() const
@@ -320,8 +331,7 @@ void KisOpenGLCanvas2::drawImage() const
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
 
-    const bool wrapAroundMode = false;
-    if (!wrapAroundMode) {
+    if (!d->wrapAroundMode) {
         // if we don't want to paint wrapping images, just limit the
         // processing area, and the code will handle all the rest
         wr &= ir;

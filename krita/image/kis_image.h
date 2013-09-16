@@ -490,6 +490,19 @@ public:
      */
     void removeComposition(KisLayerComposition* composition);
 
+    /**
+     * Enables/Disables the wrap-around mode on all the paint
+     * devices of the image
+     */
+    void setWrapAroundMode(bool value);
+
+    /**
+     * \return whether the wrap-around mode is active
+     *
+     * \see setWrapAroundMode
+     */
+    bool wrapAroundMode() const;
+
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
@@ -736,6 +749,10 @@ private:
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
+
+    void requestProjectionUpdateImpl(KisNode *node,
+                                     const QRect& rect,
+                                     const QRect &cropRect);
 
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);

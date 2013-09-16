@@ -208,6 +208,9 @@ private slots:
 
 public:
 
+    // interafce for KisCanvasController only
+    void setWrapAroundViewingMode(bool value);
+
     // interface for KisView2 only
     void connectCurrentImage();
     void disconnectCurrentImage();

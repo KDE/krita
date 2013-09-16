@@ -66,6 +66,8 @@ public: // KisAbstractCanvasWidget
     virtual void setDecorations(const QList<KisCanvasDecoration*> &);
     virtual QList<KisCanvasDecoration*> decorations() const;
 
+    virtual void setWrapAroundViewingMode(bool value);
+
     /**
      * Returns the color of the border, i.e. the part of the canvas
      * outside the image contents.

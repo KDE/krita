@@ -76,6 +76,7 @@
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
+#include "kis_wrapped_rect.h"
 
 
 // #define SANITY_CHECKS
@@ -110,6 +111,7 @@ public:
     QList<KisLayer*> dirtyLayers; // for thumbnails
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
+    bool wrapAroundMode;
 
     KisNameServer *nserver;
 
@@ -1518,14 +1520,30 @@ void KisImage::notifySelectionChanged()
     }
 }
 
+void KisImage::requestProjectionUpdateImpl(KisNode *node,
+                                           const QRect &rect,
+                                           const QRect &cropRect)
+{
+    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjection(node, rect, cropRect);
+    }
+}
+
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->disableDirtyRequests) return;
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+    if (m_d->wrapAroundMode) {
+        QRect boundRect = bounds();
+        KisWrappedRect splitRect(rect, boundRect);
 
-    if (m_d->scheduler) {
-        m_d->scheduler->updateProjection(node, rect, bounds());
+        foreach (const QRect &rc, splitRect) {
+            requestProjectionUpdateImpl(node, rc, boundRect);
+        }
+    } else {
+        requestProjectionUpdateImpl(node, rect, bounds());
     }
 }
 
@@ -1543,6 +1561,16 @@ void KisImage::removeComposition(KisLayerComposition* composition)
 {
     m_d->compositions.removeAll(composition);
     delete composition;
+}
+
+void KisImage::setWrapAroundMode(bool value)
+{
+    m_d->wrapAroundMode = value;
+}
+
+bool KisImage::wrapAroundMode() const
+{
+    return m_d->wrapAroundMode;
 }
 
 #include "kis_image.moc"

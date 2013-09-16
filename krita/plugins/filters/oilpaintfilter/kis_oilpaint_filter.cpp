@@ -161,7 +161,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     int height = (2 * Radius) + 1;
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
-    KisRectIteratorSP it = src->createRectIteratorNG(startx, starty, width, height);
+    KisRectIteratorSP it = src->createRectIteratorNG(QRect(startx, starty, width, height));
     do {
 
         cs->normalisedChannelsValue(it->rawData(), channel);

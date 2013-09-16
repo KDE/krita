@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ITERATOR_BENCHMARK_H
-#define KIS_ITERATOR_BENCHMARK_H
+#ifndef __KIS_WRAPPED_RANDOM_ACCESSOR_H
+#define __KIS_WRAPPED_RANDOM_ACCESSOR_H
 
-#include <QtTest>
+#include "tiles3/kis_random_accessor.h"
 
-class KoColorSpace;
 
-class KisIteratorBenchmark : public QObject
+class KisWrappedRandomAccessor : public KisRandomAccessor2
 {
-    Q_OBJECT
+public:
+    KisWrappedRandomAccessor(KisTiledDataManager *ktm,
+                             qint32 x, qint32 y,
+                             qint32 offsetX, qint32 offsetY,
+                             bool writable,
+                             const QRect &wrapRect);
+
+    void moveTo(qint32 x, qint32 y);
+    qint32 numContiguousColumns(qint32 x) const;
+    qint32 numContiguousRows(qint32 y) const;
+    qint32 rowStride(qint32 x, qint32 y) const;
 
 private:
-    void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs));
-
-    void vLineIterNG(const KoColorSpace * cs);
-    void rectIter(const KoColorSpace * cs);
-    void hLineIterNG(const KoColorSpace * cs);
-    void randomAccessor(const KoColorSpace * cs);
-
-
-private slots:
-
-    void runBenchmark();
+    QRect m_wrapRect;
 };
 
-#endif
-
+#endif /* __KIS_WRAPPED_RANDOM_ACCESSOR_H */

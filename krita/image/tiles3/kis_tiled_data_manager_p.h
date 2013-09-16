@@ -22,7 +22,8 @@
 /* FIXME: Think over SSE here */
 void KisTiledDataManager::writeBytesBody(const quint8 *data,
                                          qint32 x, qint32 y,
-                                         qint32 width, qint32 height)
+                                         qint32 width, qint32 height,
+                                         qint32 dataRowStride)
 {
     if (!data) return;
 
@@ -33,6 +34,10 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
     qint32 imageY = y;
     qint32 rowsRemaining = height;
     const qint32 pixelSize = this->pixelSize();
+
+    if (dataRowStride <= 0) {
+        dataRowStride = pixelSize * width;
+    }
 
     while (rowsRemaining > 0) {
 
@@ -60,9 +65,7 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
             const qint32 tileRowStride = rowStride(imageX, imageY);
 
             const quint8 *dataIt = data +
-                    ((dataX + (dataY * width)) * pixelSize);
-
-            const qint32 dataRowStride = width * pixelSize;
+                    dataX * pixelSize + dataY * dataRowStride;
 
             const qint32 lineSize = columnsToWork * pixelSize;
 
@@ -86,7 +89,8 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
 
 void KisTiledDataManager::readBytesBody(quint8 *data,
                                         qint32 x, qint32 y,
-                                        qint32 width, qint32 height) const
+                                        qint32 width, qint32 height,
+                                        qint32 dataRowStride) const
 {
     if (!data) return;
 
@@ -97,6 +101,10 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
     qint32 imageY = y;
     qint32 rowsRemaining = height;
     const qint32 pixelSize = this->pixelSize();
+
+    if (dataRowStride <= 0) {
+        dataRowStride = pixelSize * width;
+    }
 
     while (rowsRemaining > 0) {
 
@@ -124,9 +132,7 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
             const qint32 tileRowStride = rowStride(imageX, imageY);
 
             quint8 *dataIt = data +
-                    ((dataX + (dataY * width)) * pixelSize);
-
-            const qint32 dataRowStride = width * pixelSize;
+                    dataX * pixelSize + dataY * dataRowStride;
 
             const qint32 lineSize = columnsToWork * pixelSize;
 

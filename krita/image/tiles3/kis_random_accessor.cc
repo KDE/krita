@@ -49,10 +49,12 @@ KisRandomAccessor2::~KisRandomAccessor2()
 
 void KisRandomAccessor2::moveTo(qint32 x, qint32 y)
 {
-    x -= m_offsetX;
-    y -= m_offsetY;
     m_lastX = x;
     m_lastY = y;
+
+    x -= m_offsetX;
+    y -= m_offsetY;
+
     // Look in the cache if the tile if the data is available
     for (uint i = 0; i < m_tilesCacheSize; i++) {
         if (x >= m_tilesCache[i]->area_x1 && x <= m_tilesCache[i]->area_x2 &&

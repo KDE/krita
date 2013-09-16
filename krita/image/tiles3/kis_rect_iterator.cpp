@@ -26,7 +26,7 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
         qint32 left, qint32 top,
         qint32 width, qint32 height, qint32 offsetX, qint32 offsetY,
         bool writable)
-        : KisRectIteratorNG(), KisBaseIterator(dataManager, writable, offsetX, offsetY),
+        : KisRectIteratorNG(), KisBaseIterator(dataManager, writable),
         m_width(width),
         m_height(height)
 {

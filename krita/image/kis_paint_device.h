@@ -356,7 +356,7 @@ public:
      * @param data The address of the memory to receive the bytes read
      * @param rect The rectangle in the paint device to read from
      */
-    void readBytes(quint8 * data, const QRect &rect);
+    void readBytes(quint8 * data, const QRect &rect) const;
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If the
@@ -658,21 +658,15 @@ public:
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
-
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
 
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
-
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
-    KisRectIteratorSP createRectIteratorNG(const QRect& r);
-
-    KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
-    KisRectConstIteratorSP createRectConstIteratorNG(const QRect& r) const;
+    KisRectIteratorSP createRectIteratorNG(const QRect &rc);
+    KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const;
 
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
 
     /**
@@ -741,7 +735,6 @@ protected:
 private:
     struct Private;
     Private * const m_d;
-
 };
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_

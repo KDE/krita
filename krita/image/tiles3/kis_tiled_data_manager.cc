@@ -689,20 +689,22 @@ void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 
 void KisTiledDataManager::writeBytes(const quint8 *data,
                                      qint32 x, qint32 y,
-                                     qint32 width, qint32 height)
+                                     qint32 width, qint32 height,
+                                     qint32 dataRowStride)
 {
     QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header
-    writeBytesBody(data, x, y, width, height);
+    writeBytesBody(data, x, y, width, height, dataRowStride);
 }
 
 void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 x, qint32 y,
-                                    qint32 width, qint32 height) const
+                                    qint32 width, qint32 height,
+                                    qint32 dataRowStride) const
 {
     QReadLocker locker(&m_lock);
     // Actual bytes reading/writing is done in private header
-    readBytesBody(data, x, y, width, height);
+    readBytesBody(data, x, y, width, height, dataRowStride);
 }
 
 QVector<quint8*>

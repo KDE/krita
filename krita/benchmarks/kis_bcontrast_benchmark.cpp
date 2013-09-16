@@ -48,7 +48,7 @@ void KisBContrastBenchmark::initTestCase()
     
     int r,g,b;
     
-    KisRectIteratorSP it = m_device->createRectIteratorNG(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT);
+    KisRectIteratorSP it = m_device->createRectIteratorNG(QRect(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT));
     do {
         r = rand() % 255;
         g = rand() % 255;

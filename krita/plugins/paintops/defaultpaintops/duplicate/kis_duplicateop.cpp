@@ -192,7 +192,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(0, 0, sw, sh);
+        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {

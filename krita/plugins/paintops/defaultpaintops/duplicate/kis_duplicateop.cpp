@@ -158,11 +158,13 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qint32 sw = brush->maskWidth(scale, 0.0, xFraction, yFraction, info);
     qint32 sh = brush->maskHeight(scale, 0.0, xFraction, yFraction, info);
 
-    if (srcPoint.x() < 0)
-        srcPoint.setX(0);
+    if (!realSourceDevice->defaultBounds()->wrapAroundMode()) {
+        if (srcPoint.x() < 0)
+            srcPoint.setX(0);
 
-    if (srcPoint.y() < 0)
-        srcPoint.setY(0);
+        if (srcPoint.y() < 0)
+            srcPoint.setY(0);
+    }
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;

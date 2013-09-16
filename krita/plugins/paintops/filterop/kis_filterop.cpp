@@ -117,11 +117,10 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect rect = QRect(0, 0, maskWidth, maskHeight);
     QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
 
-    if (!m_smudgeMode) {
-        m_tmpDevice->clear();
-    }
-
     KisPainter p(m_tmpDevice);
+    if (!m_smudgeMode) {
+        p.setCompositeOp(COMPOSITE_COPY);
+    }
     p.bitBltOldData(QPoint(neededRect.x()-x, neededRect.y()-y), source(), neededRect);
     m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
 

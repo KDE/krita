@@ -111,6 +111,15 @@ struct KisPainter::Private {
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
+
+    bool tryReduceSourceRect(const KisPaintDevice *srcDev,
+                             QRect *srcRect,
+                             qint32 *srcX,
+                             qint32 *srcY,
+                             qint32 *srcWidth,
+                             qint32 *srcHeight,
+                             qint32 *dstX,
+                             qint32 *dstY);
 };
 
 KisPainter::KisPainter()
@@ -303,12 +312,50 @@ void KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
+inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDev,
+                                                     QRect *srcRect,
+                                                     qint32 *srcX,
+                                                     qint32 *srcY,
+                                                     qint32 *srcWidth,
+                                                     qint32 *srcHeight,
+                                                     qint32 *dstX,
+                                                     qint32 *dstY)
+{
+    /**
+     * In case of COMPOSITE_COPY and Wrap Around Mode even the pixels
+     * outside the device extent matter, because they will be either
+     * directly copied (former case) or cloned from another area of
+     * the image.
+     */
+    if (compositeOp->id() != COMPOSITE_COPY &&
+        !srcDev->defaultBounds()->wrapAroundMode()) {
+
+        /**
+         * If srcDev->extent() (the area of the tiles containing
+         * srcDev) is smaller than srcRect, then shrink srcRect to
+         * that size. This is done as a speed optimization, useful for
+         * stack recomposition in KisImage. srcRect won't grow if
+         * srcDev->extent() is larger.
+         */
+        *srcRect &= srcDev->extent();
+
+        if (srcRect->isEmpty()) return true;
+
+        // Readjust the function paramenters to the new dimensions.
+        *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
+        *dstY += srcRect->y() - *srcY;    // Idem
+        srcRect->getRect(srcX, srcY, srcWidth, srcHeight);
+    }
+
+    return false;
+}
+
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           const KisPaintDeviceSP srcDev,
                                           const KisFixedPaintDeviceSP selection,
                                           qint32 selX, qint32 selY,
                                           qint32 srcX, qint32 srcY,
-                                          quint32 srcWidth, quint32 srcHeight)
+                                          qint32 srcWidth, qint32 srcHeight)
 {
     // TODO: get selX and selY working as intended
 
@@ -329,33 +376,14 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     Q_ASSERT(selection->bounds().contains(selRect));
     Q_UNUSED(selRect); // only used by the above Q_ASSERT
 
-    /* KisPaintDevice is a tricky beast, and it can easily have unpredictable exactBounds() or extent()
-    in limit cases (for example, when brushes become too small in a brush engine). That's why there's no
-    Q_ASSERT to check correlation between srcRect and those bounds.
-    Below lies a speed optimization that shrinks srcRect only when srcDev is smaller than it. This is no
-    problem and without it there would be no illegal read from memory since reading out the bounds of a
-    KisPaintDevice gives the default pixel.*/
-
-    /* In case of COMPOSITE_COPY restricting bitBlt to extent can
-    have unexpected behavior since it would reduce the area that
-    is copied (Read below). */
-    if (d->compositeOp->id() != COMPOSITE_COPY) {
-        /* If srcDev->extent() (the area of the tiles containing srcDev)
-        is smaller than srcRect, then shrink srcRect to that size. This
-        is done as a speed optimization, useful for stack recomposition
-        in KisImage. srcRect won't grow if srcDev->extent() is larger. */
-        srcRect &= srcDev->extent();
-
-        if (srcRect.isEmpty()) return;
-
-        // Readjust the function paramenters to the new dimensions.
-        dstX += srcRect.x() - srcX;    // This will only add, not subtract
-        dstY += srcRect.y() - srcY;    // Idem
-        srcX = srcRect.x();
-        srcY = srcRect.y();
-        srcWidth = srcRect.width();
-        srcHeight = srcRect.height();
-    }
+    /**
+     * An optimization, which crops the source rect by the bounds of
+     * the source device when it is possible
+     */
+    if (d->tryReduceSourceRect(srcDev, &srcRect,
+                               &srcX, &srcY,
+                               &srcWidth, &srcHeight,
+                               &dstX, &dstY)) return;
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (d->device) */
@@ -427,7 +455,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           const KisPaintDeviceSP srcDev,
                                           const KisFixedPaintDeviceSP selection,
-                                          quint32 srcWidth, quint32 srcHeight)
+                                          qint32 srcWidth, qint32 srcHeight)
 {
     bitBltWithFixedSelection(dstX, dstY, srcDev, selection, 0, 0, 0, 0, srcWidth, srcHeight);
 }
@@ -460,26 +488,14 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
         }
     }
     else {
-        /* In case of COMPOSITE_COPY restricting bitBlt to extent can
-        have unexpected behavior since it would reduce the area that
-        is copied (Read below). */
-        if (d->compositeOp->id() != COMPOSITE_COPY) {
-            /* If srcDev->extent() (the area of the tiles containing srcDev)
-            is smaller than srcRect, then shrink srcRect to that size. This
-            is done as a speed optimization, useful for stack recomposition
-            in KisImage. srcRect won't grow if srcDev->extent() is larger. */
-            srcRect &= srcDev->extent();
-
-            if (srcRect.isEmpty()) return;
-
-            // Readjust the function paramenters to the new dimensions.
-            dstX += srcRect.x() - srcX;    // This will only add, not subtract
-            dstY += srcRect.y() - srcY;    // Idem
-            srcX = srcRect.x();
-            srcY = srcRect.y();
-            srcWidth = srcRect.width();
-            srcHeight = srcRect.height();
-        }
+        /**
+         * An optimization, which crops the source rect by the bounds of
+         * the source device when it is possible
+         */
+        if (d->tryReduceSourceRect(srcDev, &srcRect,
+                                   &srcX, &srcY,
+                                   &srcWidth, &srcHeight,
+                                   &dstX, &dstY)) return;
     }
 
     qint32 dstY_ = dstY;

@@ -42,13 +42,17 @@ void KisWrappedRandomAccessor::moveTo(qint32 x, qint32 y)
 qint32 KisWrappedRandomAccessor::numContiguousColumns(qint32 x) const
 {
     x = KisWrappedRect::xToWrappedX(x, m_wrapRect);
-    return KisRandomAccessor2::numContiguousColumns(x);
+    qint32 distanceToBorder = m_wrapRect.x() + m_wrapRect.width() - x;
+
+    return qMin(distanceToBorder, KisRandomAccessor2::numContiguousColumns(x));
 }
 
 qint32 KisWrappedRandomAccessor::numContiguousRows(qint32 y) const
 {
     y = KisWrappedRect::yToWrappedY(y, m_wrapRect);
-    return KisRandomAccessor2::numContiguousRows(y);
+    qint32 distanceToBorder = m_wrapRect.y() + m_wrapRect.height() - y;
+
+    return qMin(distanceToBorder, KisRandomAccessor2::numContiguousRows(y));
 }
 
 qint32 KisWrappedRandomAccessor::rowStride(qint32 x, qint32 y) const

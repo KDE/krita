@@ -27,12 +27,15 @@ KisWrappedRandomAccessor::KisWrappedRandomAccessor(KisTiledDataManager *ktm,
                                                    bool writable,
                                                    const QRect &wrapRect)
     : KisRandomAccessor2(ktm, x, y, offsetX, offsetY, writable),
-      m_wrapRect(wrapRect)
+      m_wrapRect(wrapRect),
+      m_currentPos(x, y)
 {
 }
 
 void KisWrappedRandomAccessor::moveTo(qint32 x, qint32 y)
 {
+    m_currentPos = QPoint(x, y);
+
     x = KisWrappedRect::xToWrappedX(x, m_wrapRect);
     y = KisWrappedRect::yToWrappedY(y, m_wrapRect);
 
@@ -60,4 +63,14 @@ qint32 KisWrappedRandomAccessor::rowStride(qint32 x, qint32 y) const
     x = KisWrappedRect::xToWrappedX(x, m_wrapRect);
     y = KisWrappedRect::yToWrappedY(y, m_wrapRect);
     return KisRandomAccessor2::rowStride(x, y);
+}
+
+qint32 KisWrappedRandomAccessor::x() const
+{
+    return m_currentPos.x();
+}
+
+qint32 KisWrappedRandomAccessor::y() const
+{
+    return m_currentPos.y();
 }

@@ -94,11 +94,11 @@ public:
     }
 
     qint32 x() const {
-        return m_currentIterator->x();
+        return m_splitRect.wrappedXToX(m_currentIterator->x());
     }
 
     qint32 y() const {
-        return m_currentIterator->y();
+        return m_splitRect.wrappedYToY(m_currentIterator->y());
     }
 
 private:

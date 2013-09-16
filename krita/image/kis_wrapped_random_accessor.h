@@ -36,8 +36,12 @@ public:
     qint32 numContiguousRows(qint32 y) const;
     qint32 rowStride(qint32 x, qint32 y) const;
 
+    qint32 x() const;
+    qint32 y() const;
+
 private:
     QRect m_wrapRect;
+    QPoint m_currentPos;
 };
 
 #endif /* __KIS_WRAPPED_RANDOM_ACCESSOR_H */

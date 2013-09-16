@@ -80,7 +80,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
     {
         KisFillPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
-        fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
         fillPainter.setPaintColor( fg );
         fillPainter.setBackgroundColor( bg );
 

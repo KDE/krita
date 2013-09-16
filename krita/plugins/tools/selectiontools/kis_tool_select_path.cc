@@ -96,7 +96,6 @@ void KisToolSelectPath::LocalTool::addPathShape(KoPathShape* pathShape)
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
         KisPainter painter(tmpSel);
-        painter.setBounds(m_selectionTool->currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);

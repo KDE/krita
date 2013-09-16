@@ -83,7 +83,6 @@ struct KisPainter::Private {
 
     QVector<QRect>              dirtyRects;
     KisPaintOp*                 paintOp;
-    QRect                       bounds;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
     const KisFilterConfiguration* generator;
@@ -155,7 +154,6 @@ void KisPainter::init()
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
     d->antiAliasPolygonFill = true;
-    d->bounds = QRect();
     d->progressUpdater = 0;
     d->gradient = 0;
     d->maskPainter = 0;
@@ -1176,11 +1174,6 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
         fillRect &= requestedRect;
     }
 
-    // Clip to the image bounds.
-    if (d->bounds.isValid()) {
-        fillRect &= d->bounds;
-    }
-
     switch (fillStyle) {
     default:
         // Fall through
@@ -1277,12 +1270,6 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
-
-
-    // Clip to the image bounds.
-    if (d->bounds.isValid()) {
-        fillRect &= d->bounds;
-    }
 
     d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
 
@@ -2375,16 +2362,6 @@ void KisPainter::setOpacity(quint8 opacity)
 quint8 KisPainter::opacity() const
 {
     return quint8(d->paramInfo.opacity * 255.0f);
-}
-
-void KisPainter::setBounds(const QRect & bounds)
-{
-    d->bounds = bounds;
-}
-
-QRect KisPainter::bounds()
-{
-    return d->bounds;
 }
 
 void KisPainter::setCompositeOp(const KoCompositeOp * op)

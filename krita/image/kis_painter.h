@@ -683,12 +683,6 @@ public:
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
 
-    /// Sets the bounds of the painter area; if not set, the painter
-    /// will happily paint where you ask it, making the paint device
-    /// larger as it goes
-    void setBounds(const QRect & bounds);
-    QRect bounds();
-
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op);
     const KoCompositeOp * compositeOp();

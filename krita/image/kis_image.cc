@@ -111,7 +111,7 @@ public:
     QList<KisLayer*> dirtyLayers; // for thumbnails
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
-    bool wrapAroundMode;
+    bool wrapAroundModePermitted;
 
     KisNameServer *nserver;
 
@@ -1535,7 +1535,13 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->disableDirtyRequests) return;
 
-    if (m_d->wrapAroundMode) {
+    /**
+     * Here we use 'permitted' instead of 'active' intentively,
+     * because the updates may come after the actual stroke has been
+     * finished. And having some more updates for the stroke not
+     * supporting the wrap-around mode will not make much harm.
+     */
+    if (m_d->wrapAroundModePermitted) {
         QRect boundRect = bounds();
         KisWrappedRect splitRect(rect, boundRect);
 
@@ -1563,14 +1569,20 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
-void KisImage::setWrapAroundMode(bool value)
+void KisImage::setWrapAroundModePermitted(bool value)
 {
-    m_d->wrapAroundMode = value;
+    m_d->wrapAroundModePermitted = value;
 }
 
-bool KisImage::wrapAroundMode() const
+bool KisImage::wrapAroundModePermitted() const
 {
-    return m_d->wrapAroundMode;
+    return m_d->wrapAroundModePermitted;
+}
+
+bool KisImage::wrapAroundModeActive() const
+{
+    return m_d->wrapAroundModePermitted && m_d->scheduler &&
+        m_d->scheduler->wrapAroundModeSupported();
 }
 
 #include "kis_image.moc"

@@ -151,5 +151,5 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
     Q_ASSERT(kritaCanvas);
 
     kritaCanvas->setWrapAroundViewingMode(value);
-    kritaCanvas->image()->setWrapAroundMode(value);
+    kritaCanvas->image()->setWrapAroundModePermitted(value);
 }

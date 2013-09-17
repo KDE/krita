@@ -491,17 +491,32 @@ public:
     void removeComposition(KisLayerComposition* composition);
 
     /**
-     * Enables/Disables the wrap-around mode on all the paint
-     * devices of the image
+     * Permit or deny the wrap-around mode for all the paint devices
+     * of the image. Note that permitting the wraparound mode will not
+     * necessarily activate it right now. To be activated the wrap
+     * around mode should be 1) permitted; 2) supported by the
+     * currently running stroke.
      */
-    void setWrapAroundMode(bool value);
+    void setWrapAroundModePermitted(bool value);
 
     /**
-     * \return whether the wrap-around mode is active
+     * \return whether the wrap-around mode is permitted for this
+     *         image. If the wrap around mode is permitted and the
+     *         currently running stroke supports it, the mode will be
+     *         activated for all paint devices of the image.
      *
      * \see setWrapAroundMode
      */
-    bool wrapAroundMode() const;
+    bool wrapAroundModePermitted() const;
+
+
+    /**
+     * \return whether the wraparound mode is activated for all the
+     *         devices of the image. The mode is activated when both
+     *         factors are true: the user permitted it and the stroke
+     *         supports it
+     */
+    bool wrapAroundModeActive() const;
 
 public:
     void startIsolatedMode(KisNodeSP node);

@@ -199,6 +199,11 @@ bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
     return result;
 }
 
+bool KisUpdateScheduler::wrapAroundModeSupported() const
+{
+    return m_d->strokesQueue->wrapAroundModeSupported();
+}
+
 void KisUpdateScheduler::updateSettings()
 {
     if(m_d->updatesQueue) {

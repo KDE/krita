@@ -213,8 +213,47 @@ public:
     }
 
     void move(const QPoint& pt) {
-        qWarning() << "Wrapped-around move() is not implemented yet";
+        QPoint offset (pt.x() - m_device->x(), pt.y() - m_device->y());
+
+        QRect exactBoundsBeforeMove = m_device->exactBounds();
         KisPaintDeviceStrategy::move(pt);
+
+        QRegion borderRegion(exactBoundsBeforeMove.translated(offset.x(), offset.y()));
+        borderRegion -= m_wrapRect;
+
+        const int pixelSize = m_device->pixelSize();
+
+        foreach (const QRect &rc, borderRegion.rects()) {
+            KisRandomConstAccessorSP srcIt = KisPaintDeviceStrategy::createRandomConstAccessorNG(rc.x(), rc.y());
+            KisRandomAccessorSP dstIt = createRandomAccessorNG(rc.x(), rc.y());
+
+            int rows = 1;
+            int columns = 1;
+
+            for (int y = rc.y(); y <= rc.bottom(); y += rows) {
+                int rows = qMin(srcIt->numContiguousRows(y), dstIt->numContiguousRows(y));
+                rows = qMin(rows, rc.bottom() - y + 1);
+
+                for (int x = rc.x(); x <= rc.right(); x += columns) {
+                    int columns = qMin(srcIt->numContiguousColumns(x), dstIt->numContiguousColumns(x));
+                    columns = qMin(columns, rc.right() - x + 1);
+
+                    srcIt->moveTo(x, y);
+                    dstIt->moveTo(x, y);
+
+                    int srcRowStride = srcIt->rowStride(x, y);
+                    int dstRowStride = dstIt->rowStride(x, y);
+                    const quint8 *srcPtr = srcIt->rawDataConst();
+                    quint8 *dstPtr = dstIt->rawData();
+
+                    for (int i = 0; i < rows; i++) {
+                        memcpy(dstPtr, srcPtr, pixelSize * columns);
+                        srcPtr += srcRowStride;
+                        dstPtr += dstRowStride;
+                    }
+                }
+            }
+        }
     }
 
     QRect extent() const {

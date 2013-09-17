@@ -1105,9 +1105,11 @@ void KisPaintDeviceTest::testMoveWrapAround()
 
     QRect rc = dev->defaultBounds()->bounds();
 
-    dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move0.png");
+    //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move0.png");
+    QCOMPARE(dev->exactBounds(), QRect(3,3,16,16));
     dev->move(QPoint(10,10));
-    dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move1.png");
+    QCOMPARE(dev->exactBounds(), QRect(8,8,6,6));
+    //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move1.png");
 
 }
 

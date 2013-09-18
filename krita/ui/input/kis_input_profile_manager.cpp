@@ -39,6 +39,8 @@
 #include "kis_tool_invocation_action.h"
 #include "kis_zoom_action.h"
 #include "kis_shortcut_configuration.h"
+#include "kis_select_layer_action.h"
+
 
 class KisInputProfileManager::Private
 {
@@ -282,6 +284,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisRotateCanvasAction());
     actions.append(new KisZoomAction());
     actions.append(new KisShowPaletteAction());
+    actions.append(new KisSelectLayerAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

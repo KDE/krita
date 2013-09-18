@@ -15,21 +15,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_COLOR_PICKER_UTILS_H
-#define KIS_COLOR_PICKER_UTILS_H
+#ifndef KIS_TOOL_UTILS_H
+#define KIS_TOOL_UTILS_H
 
 #include <QPoint>
 
 #include <KoColor.h>
+#include <kis_types.h>
+#include <krita_export.h>
 
-#include <kis_paint_device.h>
 
 namespace KisToolUtils {
 /**
  * return the color at the given position on the given paint device.
  */
-KoColor pick(KisPaintDeviceSP dev, const QPoint& pos);
+KoColor KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos);
+
+/**
+ * Recursively search a node with a non-transparent pixel
+ */
+KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly = true);
 
 }
 
-#endif // KIS_COLOR_PICKER_UTILS_H
+#endif // KIS_TOOL_UTILS_H

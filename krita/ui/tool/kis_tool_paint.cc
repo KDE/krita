@@ -67,7 +67,7 @@
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
 #include <recorder/kis_recorded_paint_action.h>
-#include "kis_color_picker_utils.h"
+#include "kis_tool_utils.h"
 #include <kis_paintop.h>
 
 const int STEP = 25;

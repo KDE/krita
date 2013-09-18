@@ -159,7 +159,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
-    tool/kis_color_picker_utils.cpp
+    tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
@@ -218,6 +218,7 @@ set(kritaui_LIB_SRCS
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
+    input/kis_select_layer_action.cpp
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
     operations/kis_operation_registry.cpp

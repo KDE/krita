@@ -65,8 +65,10 @@ KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
 }
 
 void KisImageCommand::UpdateTarget::update() {
+    if (!m_node) return;
+
     if (m_needsFullRefresh) {
-        m_image->refreshGraph(m_node);
+        m_image->refreshGraphAsync(m_node);
         m_node->setDirty(m_updateRect);
     }
     else {

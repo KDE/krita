@@ -36,8 +36,8 @@ public:
      * @param image The image the command will be working on.
      * @param layer the layer to add
      */
-    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis);
-    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index);
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates = true, bool doUndoUpdates = true);
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index, bool doRedoUpdates = true, bool doUndoUpdates = true);
 
     virtual void redo();
     virtual void undo();
@@ -47,5 +47,7 @@ private:
     KisNodeSP m_parent;
     KisNodeSP m_aboveThis;
     quint32 m_index;
+    bool m_doRedoUpdates;
+    bool m_doUndoUpdates;
 };
 #endif

@@ -23,16 +23,32 @@
 #include <klocale.h>
 
 
-KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis)
-        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(-1)
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
+                                                 KisNodeSP layer,
+                                                 KisNodeSP parent,
+                                                 KisNodeSP aboveThis,
+                                                 bool doRedoUpdates,
+                                                 bool doUndoUpdates)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image),
+          m_index(-1),
+          m_doRedoUpdates(doRedoUpdates),
+          m_doUndoUpdates(doUndoUpdates)
 {
     m_layer = layer;
     m_parent = parent;
     m_aboveThis = aboveThis;
 }
 
-KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index)
-        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(index)
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
+                                                 KisNodeSP layer,
+                                                 KisNodeSP parent,
+                                                 quint32 index,
+                                                 bool doRedoUpdates,
+                                                 bool doUndoUpdates)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image),
+          m_index(index),
+          m_doRedoUpdates(doRedoUpdates),
+          m_doUndoUpdates(doUndoUpdates)
 {
     m_layer = layer;
     m_parent = parent;
@@ -47,12 +63,18 @@ void KisImageLayerAddCommand::redo()
         m_image->addNode(m_layer, m_parent, m_index);
     }
 
-    m_layer->setDirty(m_image->bounds());
+    if (m_doRedoUpdates) {
+        m_layer->setDirty(m_image->bounds());
+    }
 }
 
 void KisImageLayerAddCommand::undo()
 {
-    UpdateTarget target(m_image, m_layer, m_image->bounds());
-    m_image->removeNode(m_layer);
-    target.update();
+    if (m_doUndoUpdates) {
+        UpdateTarget target(m_image, m_layer, m_image->bounds());
+        m_image->removeNode(m_layer);
+        target.update();
+    } else {
+        m_image->removeNode(m_layer);
+    }
 }

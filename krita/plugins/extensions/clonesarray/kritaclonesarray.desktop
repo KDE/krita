@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Clones Array Plugin
+Name[ru]=Дополнение Массив Клонов
+Name[x-test]=xxClones Array Pluginxx
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritaclonesarray
+X-Krita-Version=28

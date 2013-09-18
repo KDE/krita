@@ -151,6 +151,12 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
     KisLayer::setDirty(localRect);
 }
 
+void KisCloneLayer::notifyParentVisibilityChanged(bool value)
+{
+    KisLayer::setDirty(image()->bounds());
+    KisLayer::notifyParentVisibilityChanged(value);
+}
+
 qint32 KisCloneLayer::x() const
 {
     return m_d->x;

@@ -35,7 +35,7 @@ K_EXPORT_PLUGIN(ClonesArrayFactory("krita"))
 ClonesArray::ClonesArray(QObject *parent, const QVariantList &)
         : KisViewPlugin(parent, "kritaplugins/clonesarray.rc")
 {
-    KisAction *action = new KisAction(i18n("C&lones Array..."), this);
+    KisAction *action = new KisAction(i18n("Clones &Array..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     addAction("clones_array", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateClonesArray()));

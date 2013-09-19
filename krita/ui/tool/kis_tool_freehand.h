@@ -104,14 +104,9 @@ private:
 
     void showOutlineTemporary();
 
-    QPainterPath getOutlinePath(const QPointF &documentPos,
-                                KisPaintOpSettings::OutlineMode outlineMode);
-
 
 
 private slots:
-    void increaseBrushSize();
-    void decreaseBrushSize();
     void hideOutline();
 
 protected:
@@ -132,10 +127,7 @@ private:
     QString m_brushModelName;
 #endif
 
-    QPointF m_outlineDocPoint;
     QTimer m_outlineTimer;
-    QRectF m_oldOutlineRect;
-    QPainterPath m_currentOutline;
     bool m_explicitShowOutline;
 
     KisPaintingInformationBuilder *m_infoBuilder;

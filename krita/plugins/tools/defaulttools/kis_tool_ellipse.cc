@@ -41,6 +41,7 @@ KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
         : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
 {
     setObjectName("tool_ellipse");
+    setSupportOutline(true);
 }
 
 KisToolEllipse::~KisToolEllipse()

@@ -41,6 +41,7 @@ KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
         : KisToolPolylineBase(canvas, KisToolPolylineBase::PAINT, KisCursor::load("tool_polyline_cursor.png", 6, 6))
 {
     setObjectName("tool_polyline");
+    setSupportOutline(true);
 }
 
 KisToolPolyline::~KisToolPolyline()

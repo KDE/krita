@@ -83,23 +83,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_prevyTilt = 0.0;
 #endif
 
-    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-    if (!collection->action("increase_brush_size")) {
-        KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
-        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
-        collection->addAction("increase_brush_size", increaseBrushSize);
-    }
-
-    if (!collection->action("decrease_brush_size")) {
-        KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
-        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
-        collection->addAction("decrease_brush_size", decreaseBrushSize);
-    }
-
-    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
-    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
-
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
 
@@ -139,8 +122,6 @@ int KisToolFreehand::flags() const
 void KisToolFreehand::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(activation, shapes);
-    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
-    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
 }
 
 void KisToolFreehand::deactivate()
@@ -149,8 +130,6 @@ void KisToolFreehand::deactivate()
         endStroke();
         setMode(KisTool::HOVER_MODE);
     }
-    disconnect(actions().value("increase_brush_size"), 0, this, 0);
-    disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisToolPaint::deactivate();
 }
 
@@ -240,7 +219,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
     else {
         KisToolPaint::mousePressEvent(e);
-        requestUpdateOutline(e->point);
+        //requestUpdateOutline(e->point);
     }
 }
 
@@ -266,7 +245,14 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 
     if (mode() != KisTool::PAINT_MODE) {
-        KisToolPaint::mouseMoveEvent(e);
+        if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+            KisToolPaint::pickColor(e->point, e->modifiers() & Qt::AltModifier,
+                      m_toForegroundColor);
+            e->accept();
+        }
+        else {
+            KisTool::mouseMoveEvent(e);
+        }
         return;
     }
 
@@ -442,55 +428,6 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
         }
     }
     return perspective;
-}
-
-QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
-                                             KisPaintOpSettings::OutlineMode outlineMode)
-{
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    const KisPaintOp *paintOp = m_helper->currentPaintOp();
-    if (paintOp){
-        scale = paintOp->currentScale();
-        rotation = paintOp->currentRotation();
-    }
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
-    QPointF imagePos = currentImage()->documentToPixel(documentPos);
-    QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
-
-    return path;
-}
-
-void KisToolFreehand::increaseBrushSize()
-{
-    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
-    int increment = 1;
-    if (paintopSize > 100) {
-        increment = 30;
-    } else if (paintopSize > 10){
-        increment = 10;
-    }
-    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
-    showOutlineTemporary();
-}
-
-void KisToolFreehand::decreaseBrushSize()
-{
-    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
-    int decrement = -1;
-    if (paintopSize > 100) {
-        decrement = -30;
-    } else if (paintopSize > 20){
-        decrement = -10;
-    }
-    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
-    showOutlineTemporary();
 }
 
 void KisToolFreehand::requestUpdateOutline(const QPointF &outlineDocPoint)

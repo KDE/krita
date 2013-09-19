@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,18 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <kis_color_picker_utils.h>
 
-namespace KisToolUtils {
-/**
- * return the color at the given position on the given paint device.
- */
-KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
+#ifndef CLONESARRAY_H
+#define CLONESARRAY_H
+
+#include <kis_view_plugin.h>
+#include <kis_types.h>
+
+class ClonesArray : public KisViewPlugin
 {
+    Q_OBJECT
+public:
+    ClonesArray(QObject *parent, const QVariantList &);
+    virtual ~ClonesArray();
 
-    KoColor pickedColor;
-    dev->pixel(pos.x(), pos.y(), &pickedColor);
-    return pickedColor;
-}
+private slots:
+    void slotCreateClonesArray();
+};
 
-}
+#endif // CLONESARRAY<_H

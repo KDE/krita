@@ -392,6 +392,9 @@ protected:
         return 0;
     }
 
+    virtual void notifyParentVisibilityChanged(bool value) {
+    }
+
     /**
      * This callback is called when some meta state of the base node
      * that can be interesting to the UI has changed. E.g. visibility,

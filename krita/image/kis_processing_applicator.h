@@ -55,6 +55,7 @@ public:
                       KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
     void end();
+    void cancel();
 
 private:
     void visitRecursively(KisNodeSP node,

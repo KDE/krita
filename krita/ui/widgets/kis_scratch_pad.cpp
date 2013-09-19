@@ -30,7 +30,7 @@
 #include <KoAbstractGradient.h>
 
 #include <kis_cursor.h>
-#include <kis_color_picker_utils.h>
+#include <kis_tool_utils.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_gradient_painter.h>

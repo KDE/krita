@@ -117,6 +117,9 @@ public:
      */
     void setDirtyOriginal(const QRect &rect);
 
+protected:
+    void notifyParentVisibilityChanged(bool value);
+
 private:
 
     struct Private;

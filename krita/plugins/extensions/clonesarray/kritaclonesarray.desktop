@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Clones Array Plugin
+Name[nl]=Plug-in voor array klonen
+Name[sk]=Plugin poľa klonov
+Name[sv]=Insticksprogram för klonfält
+Name[uk]=Додаток масивів клонів
+Name[x-test]=xxClones Array Pluginxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaclonesarray

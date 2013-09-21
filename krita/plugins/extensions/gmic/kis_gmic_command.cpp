@@ -48,7 +48,7 @@ void KisGmicCommand::redo()
         gmic_list<char> images_names;
         try
         {
-            QString gmicCmd = "-+ -n 0,255 ";
+            QString gmicCmd = "-* 255 ";
             gmicCmd.append(m_gmicCommandString);
             dbgPlugins << m_gmicCommandString;
             gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names);

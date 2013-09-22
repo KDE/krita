@@ -133,4 +133,4 @@ QDataStream &operator>>(QDataStream &stream, SvmHeader &header)
 }
 
 
-};
+}

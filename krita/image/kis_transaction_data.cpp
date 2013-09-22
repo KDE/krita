@@ -23,8 +23,6 @@
 #include "kis_datamanager.h"
 
 #include <config-tiles.h> // For the next define
-#include KIS_MEMENTO_HEADER
-
 
 //#define DEBUG_TRANSACTIONS
 

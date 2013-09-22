@@ -393,6 +393,7 @@ protected:
     }
 
     virtual void notifyParentVisibilityChanged(bool value) {
+        Q_UNUSED(value);
     }
 
     /**

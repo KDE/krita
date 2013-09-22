@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
+    <width>583</width>
     <height>174</height>
    </rect>
   </property>
@@ -344,17 +344,18 @@
  </widget>
  <tabstops>
   <tabstop>numNegativeColumns</tabstop>
-  <tabstop>numPositiveColumns</tabstop>
-  <tabstop>columnXOffset</tabstop>
-  <tabstop>columnYOffset</tabstop>
-  <tabstop>columnDistance</tabstop>
-  <tabstop>columnAngle</tabstop>
   <tabstop>numNegativeRows</tabstop>
+  <tabstop>numPositiveColumns</tabstop>
   <tabstop>numPositiveRows</tabstop>
+  <tabstop>columnXOffset</tabstop>
   <tabstop>rowXOffset</tabstop>
+  <tabstop>columnYOffset</tabstop>
   <tabstop>rowYOffset</tabstop>
+  <tabstop>columnDistance</tabstop>
   <tabstop>rowDistance</tabstop>
+  <tabstop>columnAngle</tabstop>
   <tabstop>rowAngle</tabstop>
+  <tabstop>columnPreference</tabstop>
  </tabstops>
  <resources/>
  <connections/>

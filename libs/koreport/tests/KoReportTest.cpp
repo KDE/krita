@@ -183,6 +183,6 @@ void KoReportTest::rectItem()
     QCOMPARE(size.toPoint(), QSizeF(KoUnit::parseValue("4.5cm"), KoUnit::parseValue("0.75cm")));
 }
 
-QTEST_KDEMAIN(KoReportTest, GUI);
+QTEST_KDEMAIN(KoReportTest, GUI)
 
 #include "moc_KoReportTest.cpp"

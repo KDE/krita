@@ -24,6 +24,7 @@
 
 #include "kis_tile.h"
 #include "kis_tiled_data_manager.h"
+#include "kis_tile_data_wrapper.h"
 #include "kis_tiled_data_manager_p.h"
 #include "kis_memento_manager.h"
 #include "swap/kis_legacy_tile_compressor.h"
@@ -32,7 +33,6 @@
 #include "kis_paint_device_writer.h"
 
 #include "kis_global.h"
-//#include "kis_debug.h"
 
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
@@ -44,8 +44,7 @@
  */
 
 KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
-        const quint8 *defaultPixel)
-        : m_lock(QReadWriteLock::NonRecursive)
+                                         const quint8 *defaultPixel)
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager();
@@ -62,8 +61,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
-        : KisShared(),
-        m_lock(QReadWriteLock::NonRecursive)
+    : KisShared()
 {
     /* See comment in destructor for details */
 

@@ -24,6 +24,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
+
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
 

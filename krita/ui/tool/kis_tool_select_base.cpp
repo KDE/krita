@@ -28,8 +28,10 @@ KisToolSelectBase::KisToolSelectBase(KoCanvasBase *canvas,
                                      const QCursor& cursor,
                                      const QString &windowTitle)
     : KisTool(canvas, cursor),
-      m_widgetHelper(windowTitle)
+      m_widgetHelper(windowTitle),
+      m_selectionAction(SELECTION_REPLACE)
 {
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
 }
 
 SelectionMode KisToolSelectBase::selectionMode() const
@@ -39,7 +41,20 @@ SelectionMode KisToolSelectBase::selectionMode() const
 
 SelectionAction KisToolSelectBase::selectionAction() const
 {
-    return m_widgetHelper.selectionAction();
+    return m_selectionAction;
+}
+
+void KisToolSelectBase::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
+    }
 }
 
 QWidget* KisToolSelectBase::createOptionWidget()

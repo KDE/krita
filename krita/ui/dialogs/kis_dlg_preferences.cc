@@ -94,9 +94,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     KisConfig cfg;
 
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-#if defined(HAVE_OPENGL)
-    m_cmbCursorShape->addItem("3D Brush Model");
-#endif
 
 #ifdef NEPOMUK
     grpResourceTagging->show();
@@ -398,42 +395,21 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-    labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        cbUseOpenGLShaders->setEnabled(false);
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-        cbUseOpenGLTrilinearFiltering->setEnabled(false);
+        chkUseTextureBuffer->setEnabled(false);
+        cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
-        cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
-#ifdef HAVE_GLEW
-        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
-        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
-        } else {
-            cbUseOpenGLShaders->setEnabled(false);
-        }
-#else
-        cbUseOpenGLShaders->setChecked(false);
-        cbUseOpenGLShaders->setEnabled(false);
-#endif
+        chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
+        chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        cmbFilterMode->setEnabled(cfg.useOpenGL());
+        cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
 #else
     grpOpenGL->setEnabled(false);
-    cbUseOpenGLShaders->setEnabled(false);
 #endif
-
-    QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if(versionNumber>=40603)
-        cbUseOpenGLToolOutlineWorkaround->hide();
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -446,13 +422,11 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
 void DisplaySettingsTab::setDefault()
 {
-    cbUseOpenGL->setChecked(false);
-    cbUseOpenGLShaders->setChecked(false);
-    cbUseOpenGLShaders->setEnabled(false);
-    cbUseOpenGLToolOutlineWorkaround->setChecked(false);
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setChecked(true);
+    cbUseOpenGL->setChecked(true);
+    chkUseTextureBuffer->setChecked(false);
+    chkUseTextureBuffer->setEnabled(true);
+    cmbFilterMode->setEnabled(true);
+    cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
@@ -462,13 +436,8 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
-#ifdef HAVE_GLEW
-    if (KisOpenGL::hasShadingLanguage()) {
-        cbUseOpenGLShaders->setEnabled(isChecked);
-    }
-#endif
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
-    cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
+    chkUseTextureBuffer->setEnabled(isChecked);
+    cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -787,11 +756,10 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
-        cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
-        cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
+        cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
+        cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
 #else
-        cfg.setUseOpenGLToolOutlineWorkaround(false);
+        cfg.chkUseTextureBuffer(false);
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

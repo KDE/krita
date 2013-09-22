@@ -32,6 +32,13 @@
 
 #define M_SQRT_2 1.41421356237309504880
 
+#ifdef Q_OS_WIN
+// on windows we get our erf() from boost
+#include <boost/math/special_functions/erf.hpp>
+#define erf(x) boost::math::erf(x)
+#endif
+
+
 struct KisGaussCircleMaskGenerator::Private {
     qreal ycoef;
     qreal center, distfactor, alphafactor;

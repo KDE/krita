@@ -341,7 +341,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
+#ifndef Q_OS_WIN
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
@@ -377,6 +377,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         y = cfg.readEntry("ko_y", y);
         setGeometry(x, y, w, h);
     }
+#endif
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
     // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
@@ -942,7 +943,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 outputFormat = outputFormatString.toLatin1();
 
                 specialOutputFlag = dialog->specialEntrySelected();
-                kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
 
                 if (!isExporting())
                     justChangingFilterOptions = (newURL == d->rootPart->url()) &&
@@ -1673,7 +1673,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-
     KXMLGUIFactory *factory = guiFactory();
 
 // ###  setUpdatesEnabled( false );
@@ -1704,8 +1703,10 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
         factory->addClient(d->activeView);
 
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
+        // Position and show toolbars according to user's preference. 
+		QRect rc = geometry();
+		setAutoSaveSettings(newPart->componentData().componentName(), true);
+		setGeometry(rc);
 
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {

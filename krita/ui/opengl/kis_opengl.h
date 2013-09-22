@@ -26,7 +26,6 @@
 
 #include <config-glew.h>
 
-
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #endif
@@ -34,6 +33,7 @@
 #ifdef HAVE_GLEW
 #include <GL/glew.h>
 #endif
+
 
 #include <QtGlobal>
 #ifdef Q_WS_MAC
@@ -45,6 +45,7 @@
 #include "krita_export.h"
 
 class QGLWidget;
+class QGLContext;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -59,19 +60,12 @@ public:
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
-
     /**
      * Make the shared OpenGL context the current context. You should
      * make the context current before creating textures, display lists,
      * shader objects, etc, that are to be shared by multiple QGLWidgets.
      */
     static void makeContextCurrent();
-
-    /**
-     * Returns true if the OpenGL shading language is available
-     * (using the core API, i.e. OpenGL version is 2.0 or greater).
-     */
-    static bool hasShadingLanguage();
 
     /**
      * Print any error messages waiting to be read from glGetError(). Use
@@ -90,7 +84,6 @@ private:
     KisOpenGL();
 
     static void createContext();
-    static void initGlew();
 };
 
 /**

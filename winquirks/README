@@ -1,0 +1,6 @@
+Without introducing some artificial compatibility layers,
+a native windows development environment (e.g. Visual Studio 2010)
+does not know about some includes known in the UNIX world.
+
+For this reason the winquirks/ directory shall provide a minimal
+approach to such an compatibility layer.

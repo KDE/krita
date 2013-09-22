@@ -567,7 +567,7 @@ protected:
      *    the source pixels are first converted to *this color space
      *    and then composition is performed.
      *
-     *2)  preferCompositionInSourceColorSpace() == true,
+     * 2)  preferCompositionInSourceColorSpace() == true,
      *
      *    the destination pixels are first converted into *srcCS color
      *    space, then the composition is done, and the result is finally
@@ -577,7 +577,6 @@ protected:
      *    weaker representation of the color, so the composition
      *    should be done in CS with richer functionality.
      */
-
     virtual bool preferCompositionInSourceColorSpace() const;
 
 

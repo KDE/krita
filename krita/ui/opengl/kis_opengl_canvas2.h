@@ -68,6 +68,8 @@ public: // QWidget
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
+    virtual void paintEvent(QPaintEvent* event);
+
 private slots:
     void slotConfigChanged();
 

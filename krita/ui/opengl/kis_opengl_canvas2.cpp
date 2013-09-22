@@ -444,5 +444,17 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
+void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
+{
+    // Workaround for bug 322808, paint events with only a partial rect cause flickering
+    // Drop those event and trigger a new full update
+    if (event->rect().width() == width() && event->rect().height() == height()) {
+        QGLWidget::paintEvent(event);
+    } else {
+        update();
+    }
+}
+
+
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

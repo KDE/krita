@@ -715,13 +715,27 @@ KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
 
 
 void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
-        QVector<qint32> channelSizes,
-        qint32 x, qint32 y,
-        qint32 width, qint32 height)
+                                           QVector<qint32> channelSizes,
+                                           qint32 x, qint32 y,
+                                           qint32 width, qint32 height)
 {
     QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header
-    writePlanarBytesBody(planes, channelSizes, x, y, width, height);
+
+    bool allChannelsPresent = true;
+
+    foreach (const quint8* plane, planes) {
+        if (!plane) {
+            allChannelsPresent = false;
+            break;
+        }
+    }
+
+    if (allChannelsPresent) {
+        writePlanarBytesBody<true>(planes, channelSizes, x, y, width, height);
+    } else {
+        writePlanarBytesBody<false>(planes, channelSizes, x, y, width, height);
+    }
 }
 
 qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const

@@ -24,10 +24,8 @@ class QRect;
 class KisPaintDeviceWriter;
 class QIODevice;
 
-// Change the following line to switch (at compiletime) to different datamanager
+// Change cmake to switch (at compiletime) to different datamanager
 #include <config-tiles.h> // For the next define
-#include KIS_TILED_DATA_MANAGER_HEADER
-#include KIS_MEMENTO_HEADER
 
 #define ACTUAL_DATAMGR KisTiledDataManager
 

@@ -345,6 +345,8 @@ private:
                        qint32 x, qint32 y,
                        qint32 width, qint32 height,
                        qint32 dataRowStride = -1) const;
+
+    template <bool allChannelsPresent>
     void writePlanarBytesBody(QVector<quint8*> planes,
                               QVector<qint32> channelsizes,
                               qint32 x, qint32 y, qint32 w, qint32 h);

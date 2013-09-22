@@ -159,6 +159,7 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
     _idx<numChannels && (_channelSize=channelSizes[_idx], 1);   \
     _idx++)
 
+template <bool allChannelsPresent>
 void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > planes,
                                                QVector<qint32> channelSizes,
                                                qint32 x, qint32 y,
@@ -205,20 +206,23 @@ void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > plan
 
 
             forEachChannel(i, channelSize) {
-                const quint8* planeIt = planes[i] + dataIdx * channelSize;
-                qint32 dataStride = (width - columnsToWork) * channelSize;
-                quint8* tileIt = tileItStart;
+                if (allChannelsPresent || planes[i]) {
+                    const quint8* planeIt = planes[i] + dataIdx * channelSize;
+                    qint32 dataStride = (width - columnsToWork) * channelSize;
+                    quint8* tileIt = tileItStart;
 
-                for (qint32 row = 0; row < rowsToWork; row++) {
-                    for (int col = 0; col < columnsToWork; col++) {
-                        memcpy(tileIt, planeIt, channelSize);
-                        tileIt += pixelSize;
-                        planeIt += channelSize;
+                    for (qint32 row = 0; row < rowsToWork; row++) {
+                        for (int col = 0; col < columnsToWork; col++) {
+                            memcpy(tileIt, planeIt, channelSize);
+                            tileIt += pixelSize;
+                            planeIt += channelSize;
+                        }
+
+                        tileIt += tileRowStride;
+                        planeIt += dataStride;
                     }
-
-                    tileIt += tileRowStride;
-                    planeIt += dataStride;
                 }
+
                 tileItStart += channelSize;
             }
 

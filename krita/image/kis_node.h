@@ -272,6 +272,7 @@ private:
 
 protected:
     KisBaseNodeSP parentCallback() const;
+    void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
 
     /**

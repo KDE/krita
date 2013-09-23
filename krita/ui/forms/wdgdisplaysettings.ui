@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>435</height>
+    <height>468</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -177,75 +177,52 @@
       <string>OpenGL</string>
      </property>
      <layout class="QGridLayout">
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-        <item>
-         <widget class="QLabel" name="labelWarning">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="toolTip">
-           <string>&lt;html&gt;
-&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; this is the same thing as the &quot;incremental&quot; option in the Krita 1.6 freehand tool options.&lt;/p&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="text">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Bitstream Vera Sans'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-weight:600;&quot;&gt;Warning&lt;/span&gt;&lt;span style=&quot; font-family:'Ubuntu';&quot;&gt;: Enabling OpenGL with some graphics drivers can cause crashes and performance problems. OpenGL enables 16 bit/channel mode for some cards and displays.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::RichText</enum>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chkUseTextureBuffer">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Use Texture Buffer</string>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="0">
+      <item row="0" column="0">
        <widget class="QCheckBox" name="cbUseOpenGL">
         <property name="text">
          <string>Enable OpenGL</string>
         </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="cbUseOpenGLShaders">
-        <property name="text">
-         <string>Enable OpenGL shaders</string>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QCheckBox" name="cbUseOpenGLToolOutlineWorkaround">
-        <property name="toolTip">
-         <string>This enables a workaround for a bug in Qt. 
-If you experience problems while creating a selection, 
-a shape or with the brush outline, 
-then you can try to enable this.</string>
+       <widget class="QComboBox" name="cmbFilterMode">
+        <property name="currentIndex">
+         <number>0</number>
         </property>
-        <property name="text">
-         <string>Use workaround for tool outlines</string>
-        </property>
+        <item>
+         <property name="text">
+          <string>Nearest Neighbour</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bilinear Filtering</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Trilinear Filtering</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QCheckBox" name="cbUseOpenGLTrilinearFiltering">
-        <property name="toolTip">
-         <string>Use trilinear filtering when zooming. Disabling this may improve painting performance.</string>
-        </property>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Use trilinear texture filtering</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
+         <string>Scaling Mode:</string>
         </property>
        </widget>
       </item>

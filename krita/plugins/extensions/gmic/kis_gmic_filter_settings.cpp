@@ -20,7 +20,7 @@
 #include <kis_gmic_filter_settings.h>
 
 
-KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE)
+KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE),m_isBlacklisted(false)
 {
 
 }

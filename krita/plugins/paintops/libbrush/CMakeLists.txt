@@ -22,7 +22,12 @@ set(kritalibbrush_LIB_SRCS
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
-target_link_libraries(kritalibbrush kritaui)
+if (WIN32)
+    target_link_libraries(kritalibbrush kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
+    target_link_libraries(kritalibbrush kritaui)
+endif (WIN32)
+
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})

@@ -4,11 +4,11 @@ include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
-	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/ora
-	${CMAKE_SOURCE_DIR}/krita/image/metadata
-	${EXIV2_INCLUDE_DIR} )
+    ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/ora
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${EXIV2_INCLUDE_DIR} )
 
 add_subdirectory( tests )
 
@@ -159,7 +159,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
-    tool/kis_color_picker_utils.cpp
+    tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
@@ -218,6 +218,7 @@ set(kritaui_LIB_SRCS
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
+    input/kis_select_layer_action.cpp
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
     operations/kis_operation_registry.cpp
@@ -245,25 +246,7 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
 )
 
-if(HAVE_OPENGL)
-    if(HAVE_GLEW)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            opengl/kis_opengl_shader.cpp
-            opengl/kis_opengl_fragment_shader.cpp
-            opengl/kis_opengl_vertex_shader.cpp
-            opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_gradient_program.cpp
-            )
-    endif(HAVE_GLEW)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        kis_3d_object_model.cpp
-        )
-endif(HAVE_OPENGL)
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui
@@ -327,7 +310,6 @@ if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
 
     # activate workaround for the VSync disable
-    # TODO: port this to Glew when Glew 1.7 will become a mandatory dep
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
     endif(NOT WIN32)
@@ -336,6 +318,7 @@ if(HAVE_OPENGL)
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
+
 endif(HAVE_OPENGL)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )

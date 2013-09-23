@@ -45,12 +45,6 @@ public:
     bool isAirbrushing() const;
     int rate() const;
 
-#if defined(HAVE_OPENGL)
-    inline QString modelName() const {
-        return "3d-deform-brush";
-    }
-#endif
-
 private:
     KisDeformPaintOpSettingsWidget* m_options;
 };

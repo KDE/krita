@@ -26,7 +26,6 @@
 
 #include <Parameter.h>
 #include <Command.h>
-#include <Filters.h>
 #include <Category.h>
 #include "kis_gmic_widget.h"
 
@@ -81,8 +80,6 @@ Component* KisGmicParser::createFilterTree()
 
     QTextStream in(&file);
 
-    int folders = 0;
-    m_status = PARSE_START;
     Category * rootCategory = new Category();
     rootCategory->setName("Filters");
 

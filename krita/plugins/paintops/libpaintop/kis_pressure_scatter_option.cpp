@@ -28,6 +28,15 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
+#include <QtGlobal>
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
+#endif
+
+
 KisPressureScatterOption::KisPressureScatterOption()
         : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::brushCategory(), false, 1.0, 0.0, 5.0)
 {

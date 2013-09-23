@@ -57,10 +57,3 @@ QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos, KisPaintO
     return path;
 }
 
-#if defined(HAVE_OPENGL)
-QString KisChalkPaintOpSettings::modelName() const
-{
-    return "3d-pencil";
-}
-#endif
-

@@ -62,6 +62,8 @@ public:
      */
     ~KisInputManager();
 
+    void toggleTabletLogger();
+
     /**
      * Event filter method. Overridden from QObject.
      */

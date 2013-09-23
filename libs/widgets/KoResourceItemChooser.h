@@ -37,6 +37,7 @@
 class QAbstractProxyModel;
 class QButtonGroup;
 class QAbstractItemDelegate;
+class QToolButton;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
 class KoResource;
@@ -106,6 +107,9 @@ public:
     QSize viewSize() const;
 
     KoResourceItemView *itemView() const;
+
+    void setViewModeButtonVisible(bool visible);
+    QToolButton *viewModeButton() const;
 
 signals:
     /// Emitted when a resource was selected

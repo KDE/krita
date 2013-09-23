@@ -20,13 +20,14 @@
 #define __KIS_IMAGE_INTERFACES_H
 
 #include "kis_types.h"
+#include <krita_export.h>
 
 class QRect;
 class KisStrokeStrategy;
 class KisStrokeJobData;
 
 
-class KisStrokesFacade
+class KRITAIMAGE_EXPORT KisStrokesFacade
 {
 public:
     virtual ~KisStrokesFacade();
@@ -36,7 +37,7 @@ public:
     virtual bool cancelStroke(KisStrokeId id) = 0;
 };
 
-class KisUpdatesFacade
+class KRITAIMAGE_EXPORT KisUpdatesFacade
 {
 public:
     virtual ~KisUpdatesFacade();
@@ -55,7 +56,7 @@ public:
     virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) = 0;
 };
 
-class KisProjectionUpdateListener
+class KRITAIMAGE_EXPORT KisProjectionUpdateListener
 {
 public:
     virtual ~KisProjectionUpdateListener();

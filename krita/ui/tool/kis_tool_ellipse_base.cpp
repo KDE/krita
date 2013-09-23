@@ -44,6 +44,7 @@ void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
     Q_ASSERT(currentImage());
     if (mode() == KisTool::PAINT_MODE)
         paintEllipse(gc, QRect());
+    KisToolPaint::paint(gc,converter);
 }
 
 void KisToolEllipseBase::deactivate()
@@ -113,6 +114,7 @@ void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
+        KisToolPaint::requestUpdateOutline(event->point);
     }
     else {
         KisToolShape::mouseMoveEvent(event);

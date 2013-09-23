@@ -521,10 +521,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     dev->writePlanarBytes(swappedPlanes, 0, 0, 100, 100);
 
-    dev->convertToQImage(0, 0, 0, 5000, 5000).save("planar.png");
-
-    qDeleteAll(planes);
-    swappedPlanes.clear();
+    dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar.png");
 
     dev->pixel(5, 5, &c1);
 
@@ -539,6 +536,24 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QVERIFY(c1.green() == 255);
     QVERIFY(c1.blue() == 100);
     QVERIFY(c1.alpha() == 155);
+
+    // check if one of the planes is Null.
+    Q_ASSERT(planes.size() == 4);
+    delete planes[2];
+    planes[2] = 0;
+    dev->writePlanarBytes(planes, 0, 0, 100, 100);
+    dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar_noR.png");
+
+    dev->pixel(75, 50, &c1);
+
+    QCOMPARE(c1.red(), 200);
+    QCOMPARE(c1.green(), 200);
+    QCOMPARE(c1.blue(), 155);
+    QCOMPARE(c1.alpha(), 100);
+
+
+    qDeleteAll(planes);
+    swappedPlanes.clear();
 }
 
 void KisPaintDeviceTest::testBltPerformance()

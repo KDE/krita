@@ -19,10 +19,6 @@
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
 #include <opengl/kis_opengl.h>
-#include "canvas/kis_update_info.h"
-#include "opengl/kis_texture_tile_update_info.h"
-#include "opengl/kis_texture_tile.h"
-
 
 #ifdef HAVE_OPENGL
 
@@ -34,17 +30,15 @@
 
 #include "kis_shared.h"
 
-
-#ifdef HAVE_GLEW
-class KisOpenGLHDRExposureProgram;
-#endif
+#include "canvas/kis_update_info.h"
+#include "opengl/kis_texture_tile_update_info.h"
+#include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorSpace;
 class KoColorProfile;
-class KisDisplayFilter;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -82,34 +76,16 @@ public:
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
-     * set the (ocio) display filter.
+     * The background checkers texture.
      */
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
-
+    static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
+    static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
     /**
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
      */
-    void generateBackgroundTexture(const QImage & checkImage);
-
-    /**
-     * The background texture.
-     */
-    GLuint backgroundTexture() const;
-
-    static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
-    static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
-
-    /**
-     * Activate the high dynamic range image program. Call this before rendering
-     * the image textures if the image has high dynamic range.
-     */
-    void activateHDRExposureProgram();
-
-    /**
-     * Detivate the high dynamic range image program.
-     */
-    void deactivateHDRExposureProgram();
+    void generateCheckerTexture(const QImage & checkImage);
+    GLuint checkerTexture() const;
 
 public:
     inline QRect storedImageBounds() {
@@ -133,24 +109,31 @@ public:
     }
 
 public slots:
+
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+
     void recalculateCache(KisUpdateInfoSP info);
 
     void slotImageSizeChanged(qint32 w, qint32 h);
 
 protected:
+
     KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     void createImageTextureTiles();
+
     void destroyImageTextureTiles();
 
     static bool imageCanShareTextures();
 
 private:
+
     QRect calculateTileRect(int col, int row) const;
+
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
+
     void updateTextureFormat();
 
 private:
@@ -159,13 +142,11 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-    GLuint m_backgroundTexture;
+    GLuint m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
-
-    KisDisplayFilter *m_displayFilter;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

@@ -20,7 +20,10 @@
 
 #include "kis_paintop_presets_chooser_popup.h"
 
+#include <QToolButton>
+
 #include <KoResource.h>
+#include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
@@ -56,11 +59,12 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
 
-    m_d->uiWdgPaintOpPresets.viewModeButton->setIcon(koIcon("view-choose"));
-    m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
-    m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true,true);
+
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
+    QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
+    viewModeButton->setMenu(menu);
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));

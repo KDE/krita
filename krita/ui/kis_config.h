@@ -123,14 +123,11 @@ public:
     bool useOpenGL() const;
     void setUseOpenGL(bool useOpenGL);
 
-    bool useOpenGLShaders() const;
-    void setUseOpenGLShaders(bool useOpenGLShaders);
+    int openGLFilteringMode() const;
+    void setOpenGLFilteringMode(int filteringMode);
 
-    bool useOpenGLToolOutlineWorkaround() const;
-    void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
-
-    bool useOpenGLTrilinearFiltering() const;
-    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
+    bool useOpenGLTextureBuffer() const;
+    void setUseOpenGLTextureBuffer(bool useBuffer);
 
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);

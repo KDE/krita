@@ -365,34 +365,24 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
     m_cfg.writeEntry("useOpenGL", useOpenGL);
 }
 
-bool KisConfig::useOpenGLShaders() const
+int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("useOpenGLShaders", false);
+    return m_cfg.readEntry("OpenGLFilterMode", 1);
 }
 
-void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
+void KisConfig::setOpenGLFilteringMode(int filteringMode)
 {
-    m_cfg.writeEntry("useOpenGLShaders", useOpenGLShaders);
+    m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
-bool KisConfig::useOpenGLToolOutlineWorkaround() const
+bool KisConfig::useOpenGLTextureBuffer() const
 {
-    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);
+    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
 }
 
-void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
+void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 {
-    m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
-}
-
-bool KisConfig::useOpenGLTrilinearFiltering() const
-{
-    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
-}
-
-void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
-{
-    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
+    m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
 qint32 KisConfig::maxNumberOfThreads()

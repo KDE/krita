@@ -29,6 +29,7 @@ class KisSelectionOptions;
 class KRITAUI_EXPORT KisToolSelectBase : public KisTool
 {
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectBase(KoCanvasBase *canvas,
                       const QCursor& cursor,
@@ -40,11 +41,18 @@ public:
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
 
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
+
 protected:
     virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
 
 #endif // KISTOOLSELECTBASE_H

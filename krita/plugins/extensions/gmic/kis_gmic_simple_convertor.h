@@ -32,18 +32,17 @@ public:
     ~KisGmicSimpleConvertor();
 
 public:
+    static QImage convertToQImage(gmic_image<float>& gmicImage);
+    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
+
     // convert functions
     void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
-
     KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage, bool &preserveAlpha);
     // re-align functions
     void grayscale2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
     void grayscaleAlpha2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
     void rgb2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
     void rgba2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
-    QImage convertToQImage(gmic_image<float>& gmicImage);
-    void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
-
 
     void releaseAlphaChannel()
     {

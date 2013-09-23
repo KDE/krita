@@ -31,6 +31,7 @@
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
+#include <QDesktopServices>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
@@ -193,10 +194,15 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    QString defaultDir = group.readEntry("OpenDialog");
+    if (defaultDir.isEmpty())
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url = KoFileDialogHelper::getOpenFileName(this,
                                                i18n("Open Existing Document"),
-                                               "",
+                                               defaultDir,
                                                m_mimeFiletr);
+    group.writeEntry("OpenDialog", url);
     emit openExistingFile(KUrl(url));
 }
 

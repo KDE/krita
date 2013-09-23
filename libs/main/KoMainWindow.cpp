@@ -1236,10 +1236,9 @@ void KoMainWindow::slotFileOpen()
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                                                KoFilterManager::Import,
                                                                KoServiceProvider::readExtraNativeMimeTypes());
-    KConfigGroup group = KGlobal::config()->group("Recent Dirs");
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
     QString defaultDir = group.readEntry("OpenDialog");
-    QDir dir(defaultDir);
-    if (!dir.exists())
+    if (defaultDir.isEmpty())
         defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url;
     if (!isImporting()) {

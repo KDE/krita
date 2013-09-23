@@ -141,7 +141,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initRecentDocs();
-    //initExistingFilesPane(mimeFilter);
+#ifndef Q_OS_WIN
+    initExistingFilesPane(mimeFilter);
+#endif
     initTemplates(templateType);
 
     d->m_freeCustomWidgetIndex = 4;

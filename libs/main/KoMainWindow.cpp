@@ -90,6 +90,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QPrintPreviewDialog>
 
 #include "thememanager.h"
@@ -912,9 +913,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
         KUrl newURL(KoFileDialogHelper::getSaveFileName(
                         this,
-                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
-                            d->lastExportUrl.url() : suggestedURL.url(),
                         i18n("untitled"),
+                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
+                        d->lastExportUrl.url() : suggestedURL.url(),
                         mimeFilter));
 
         KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
@@ -1234,21 +1235,27 @@ void KoMainWindow::slotFileOpen()
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
                                                                KoFilterManager::Import,
                                                                KoServiceProvider::readExtraNativeMimeTypes());
+    KConfigGroup group = KGlobal::config()->group("Recent Dirs");
+    QString defaultDir = group.readEntry("OpenDialog");
+    QDir dir(defaultDir);
+    if (!dir.exists())
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url;
     if (!isImporting()) {
         url = KoFileDialogHelper::getOpenFileName(this,
                                          i18n("Open Document"),
-                                         "",
+                                         defaultDir,
                                          mimeFilter);
     } else {
         url = KoFileDialogHelper::getImportFileName(this,
                                            i18n("Import Document"),
-                                           "",
+                                           defaultDir,
                                            mimeFilter);
     }
 
     if (url.isEmpty())
         return;
+    group.writeEntry("OpenDialog", url);
 
     (void) openDocument(KUrl(url));
 }

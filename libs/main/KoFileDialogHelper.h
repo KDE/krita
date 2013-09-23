@@ -28,13 +28,11 @@
 
 /**
  * Wrapper around QFileDialog providing native file dialogs
- * on KDE/Gnome/Qt/Windows/OSX
+ * on KDE/Gnome/Windows/OSX/etc.
  */
 class KOMAIN_EXPORT KoFileDialogHelper
 {
 public:
-    KoFileDialogHelper() {}
-    ~KoFileDialogHelper() {}
 
     /**
      * @brief getOpenFileName - used for open an existing document

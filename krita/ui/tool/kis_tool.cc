@@ -742,7 +742,7 @@ void KisTool::resetCursorStyle()
         break;
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-
+        ;
     }
 }
 

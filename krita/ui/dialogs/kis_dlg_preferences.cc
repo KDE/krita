@@ -100,6 +100,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
     m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
 
 #ifdef NEPOMUK
     grpResourceTagging->show();

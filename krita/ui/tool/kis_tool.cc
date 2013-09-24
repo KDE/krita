@@ -726,6 +726,7 @@ void KisTool::resetCursorStyle()
         useCursor(d->cursor);
         break;
     case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
         useCursor(KisCursor::crossCursor());
         break;
     case CURSOR_STYLE_POINTER:

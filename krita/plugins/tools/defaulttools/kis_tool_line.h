@@ -52,7 +52,8 @@ public:
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-
+    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void keyReleaseEvent(QKeyEvent* event);
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const;

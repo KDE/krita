@@ -39,6 +39,10 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
+private slots:
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
+
 private:
     KoModeBox *m_modeBox;
 };

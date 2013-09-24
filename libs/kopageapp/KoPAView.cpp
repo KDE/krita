@@ -47,6 +47,7 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoStandardAction.h>
+#include <KoModeBoxFactory.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -160,11 +161,11 @@ public:
 
 
 
-KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent)
 : KoView(part, document, parent)
 , d( new Private(document))
 {
-    initGUI();
+    initGUI(withModeBox);
     initActions();
 
     if ( d->doc->pageCount() > 0 )
@@ -228,7 +229,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 }
 
 
-void KoPAView::initGUI()
+void KoPAView::initGUI(KoPAFlags flags)
 {
     d->tabBarLayout = new QGridLayout(this);
     d->tabBarLayout->setMargin(0);
@@ -315,12 +316,21 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController);
-    if (shell())
-    {
-        shell()->createDockWidget( &toolBoxFactory );
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+    KoMainWindow *mainWindow = shell();
+    if (flags & KoPAView::ModeBox) {
+        if (mainWindow) {
+            KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+            QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
+            mainWindow->dockerManager()->removeToolOptionsDocker();
+            dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
+        }
+    } else {
+        if (mainWindow) {
+            KoToolBoxFactory toolBoxFactory(d->canvasController);
+            mainWindow->createDockWidget( &toolBoxFactory );
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+            mainWindow->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+        }
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -332,7 +342,7 @@ void KoPAView::initGUI()
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
-    if (shell()) {
+    if (mainWindow) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
 }

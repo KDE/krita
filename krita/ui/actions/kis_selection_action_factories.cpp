@@ -48,6 +48,8 @@
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
 
+#include <processing/fill_processing_visitor.h>
+
 namespace ActionHelper {
 
     void copyFromDevice(KisView2 *view, KisPaintDeviceSP device) {
@@ -151,57 +153,42 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-
-    QString actionName;
-
+    
+    bool usePattern = false;
+    bool useBgColor = false;
+    
     if (fillSource == "pattern") {
-        KisFillPainter painter(filled);
-        painter.fillRect(selectedRect.x(), selectedRect.y(),
-                         selectedRect.width(), selectedRect.height(),
-                         view->resourceProvider()->currentPattern());
-        painter.end();
-        actionName = i18n("Fill with Pattern");
-    } else if (fillSource == "bg") {
-        KoColor color(filled->colorSpace());
-        color.fromKoColor(view->resourceProvider()->bgColor());
-        filled->setDefaultPixel(color.data());
-        actionName = i18n("Fill with Background Color");
-    } else if (fillSource == "fg") {
-        KoColor color(filled->colorSpace());
-        color.fromKoColor(view->resourceProvider()->fgColor());
-        filled->setDefaultPixel(color.data());
-        actionName = i18n("Fill with Foreground Color");
+        usePattern = true;
     }
+    else if (fillSource == "bg") {
+        useBgColor = true;
+    }
+        
+    KisProcessingApplicator applicator(view->image(), node,
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       i18n("Flood Fill"));
 
-    struct BitBlt : public KisTransactionBasedCommand {
-        BitBlt(KisPaintDeviceSP src, KisPaintDeviceSP dst,
-               KisSelectionSP sel, const QRect &rc)
-            : m_src(src), m_dst(dst), m_sel(sel), m_rc(rc){}
-        KisPaintDeviceSP m_src;
-        KisPaintDeviceSP m_dst;
-        KisSelectionSP m_sel;
-        QRect m_rc;
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(view->image(), 0, view->resourceProvider()->resourceManager());
 
-        KUndo2Command* paint() {
-            KisPainter gc(m_dst, m_sel);
-            gc.beginTransaction("");
-            gc.bitBlt(m_rc.x(), m_rc.y(),
-                      m_src,
-                      m_rc.x(), m_rc.y(),
-                      m_rc.width(), m_rc.height());
-            m_dst->setDirty(m_rc);
-            return gc.endAndTakeTransaction();
-        }
-    };
+    KisProcessingVisitorSP visitor =
+        new FillProcessingVisitor(QPoint(0, 0), // start position
+                                  selection,
+                                  resources,
+                                  usePattern,
+                                  true, // fill only selection,
+                                  0, // feathering radius
+                                  0, // sizemod
+                                  80, // threshold,
+                                  false, // unmerged
+                                  useBgColor);
+                        
+    applicator.applyVisitor(visitor,
+                            KisStrokeJobData::SEQUENTIAL,
+                            KisStrokeJobData::EXCLUSIVE);
 
-    KisProcessingApplicator *ap = beginAction(view, actionName);
-    ap->applyCommand(new BitBlt(filled, view->activeDevice()/*node->paintDevice()*/, selection, selectedRect),
-                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-
-    KisOperationConfiguration config(id());
-    config.setProperty("fill-source", fillSource);
-
-    endAction(ap, config.toXML());
+    applicator.end();
 }
 
 void KisClearActionFactory::run(KisView2 *view)

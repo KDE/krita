@@ -31,6 +31,7 @@
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoStrokeConfigWidget.h"
+#include "KoShapeStroke.h"
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -56,6 +57,10 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
 {
     Q_D(KoCreatePathTool);
     if (d->shape) {
+        KoShapeStroke *stroke(createStroke());
+        if (stroke) {
+            d->shape->setStroke(stroke);
+        }
         painter.save();
         paintPath(*(d->shape), painter, converter);
         painter.restore();
@@ -127,14 +132,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
     Q_D(KoCreatePathTool);
 
     if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && event->modifiers() & Qt::ShiftModifier)) {
-        if (d->shape) {
-            // repaint the shape before removing the last point
-            canvas()->updateCanvas(d->shape->boundingRect());
-            delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-
-            d->addPathShape();
-        }
-        // Return as otherwise a point would be added
+        endPathWithoutLastPoint();
         return;
     }
 
@@ -146,7 +144,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
             // we are closing the path, so reset the existing start path point
             d->existingStartPoint = 0;
             // finish path
-            d->addPathShape();
+            endPath();
         } else {
             canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 
@@ -158,7 +156,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
                 point = d->existingEndPoint.path->shapeToDocument(d->existingEndPoint.point->point());
                 d->activePoint->setPoint(point);
                 // finish path
-                d->addPathShape();
+                endPath();
             } else {
                 d->activePoint->setPoint(point);
                 canvas()->updateCanvas(d->shape->boundingRect());
@@ -204,12 +202,7 @@ void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     //remove handle
     canvas()->updateCanvas(handlePaintRect(event->point));
 
-    if (d->shape) {
-        // the first click of the double click created a new point which has the be removed again
-        d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-
-        d->addPathShape();
-    }
+    endPathWithoutLastPoint();
 }
 
 void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
@@ -293,6 +286,39 @@ void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
         event->ignore();
 }
 
+void KoCreatePathTool::endPath()
+{
+    Q_D(KoCreatePathTool);
+
+    d->addPathShape();
+}
+
+void KoCreatePathTool::endPathWithoutLastPoint()
+{
+    Q_D(KoCreatePathTool);
+
+    if (d->shape) {
+        QRectF dirtyRect = d->shape->boundingRect();
+        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+        canvas()->updateCanvas(dirtyRect);
+
+        d->addPathShape();
+    }
+}
+
+void KoCreatePathTool::cancelPath()
+{
+    Q_D(KoCreatePathTool);
+
+    if (d->shape) {
+        canvas()->updateCanvas(handlePaintRect(d->firstPoint->point()));
+        canvas()->updateCanvas(d->shape->boundingRect());
+        d->firstPoint = 0;
+        d->activePoint = 0;
+    }
+    d->cleanUp();
+}
+
 void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     Q_D(KoCreatePathTool);
@@ -308,15 +334,7 @@ void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
 
 void KoCreatePathTool::deactivate()
 {
-    Q_D(KoCreatePathTool);
-
-    if (d->shape) {
-        canvas()->updateCanvas(handlePaintRect(d->firstPoint->point()));
-        canvas()->updateCanvas(d->shape->boundingRect());
-        d->firstPoint = 0;
-        d->activePoint = 0;
-    }
-    d->cleanUp();
+    cancelPath();
 }
 
 void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
@@ -345,6 +363,7 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     d->existingStartPoint.validate(canvas());
     d->existingEndPoint.validate(canvas());
 
+    pathShape->setStroke(createStroke());
     if (d->connectPaths(pathShape, d->existingStartPoint, d->existingEndPoint)) {
         if (d->existingStartPoint.isValid())
             startShape = d->existingStartPoint.path;
@@ -393,16 +412,34 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Line"));
-    strokeWidget->setCanvas(canvas());
-    list.append(strokeWidget);
+    d->strokeWidget = new KoStrokeConfigWidget(0);
+    d->strokeWidget->setWindowTitle(i18n("Line"));
+    d->strokeWidget->setCanvas(canvas());
+    d->strokeWidget->setActive(false);
+    list.append(d->strokeWidget);
 
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
 
     return list;
+}
+
+KoShapeStroke *KoCreatePathTool::createStroke()
+{
+    Q_D(KoCreatePathTool);
+
+    KoShapeStroke *stroke = 0;
+    if (d->strokeWidget) {
+        stroke = new KoShapeStroke();
+        stroke->setColor(d->strokeWidget->color());
+        stroke->setLineWidth(d->strokeWidget->lineWidth());
+        stroke->setCapStyle(d->strokeWidget->capStyle());
+        stroke->setJoinStyle(d->strokeWidget->joinStyle());
+        stroke->setMiterLimit(d->strokeWidget->miterLimit());
+        stroke->setLineStyle(d->strokeWidget->lineStyle(), d->strokeWidget->lineDashes());
+    }
+    return stroke;
 }
 
 #include <KoCreatePathTool.moc>

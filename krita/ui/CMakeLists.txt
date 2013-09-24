@@ -243,6 +243,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.cpp
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
+    processing/fill_processing_visitor.cpp
 )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
@@ -369,4 +370,5 @@ install( FILES
     kis_paintop_option.h
     kis_paintop_options_model.h
     kis_paintop_options_widget.h
+    processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

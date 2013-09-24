@@ -80,7 +80,7 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
-void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
+void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);

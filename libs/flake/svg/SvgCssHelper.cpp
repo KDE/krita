@@ -299,7 +299,7 @@ private:
             InId,
             InAttribute,
             InClassAttribute,
-            InPseudoClass,
+            InPseudoClass
         } state;
 
         // add terminator to string

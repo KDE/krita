@@ -398,13 +398,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
         chkUseTextureBuffer->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
@@ -413,13 +410,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #else
     grpOpenGL->setEnabled(false);
 #endif
-
-    QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if(versionNumber>=40603)
-        cbUseOpenGLToolOutlineWorkaround->hide();
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -433,8 +423,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     cbUseOpenGL->setChecked(true);
-    cbUseOpenGLToolOutlineWorkaround->setChecked(false);
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
     cmbFilterMode->setEnabled(true);
@@ -448,7 +436,6 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
     chkUseTextureBuffer->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
@@ -769,11 +756,9 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
 #else
-        cfg.setUseOpenGLToolOutlineWorkaround(false);
         cfg.chkUseTextureBuffer(false);
 #endif
 

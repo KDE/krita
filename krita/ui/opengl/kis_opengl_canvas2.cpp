@@ -436,13 +436,30 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     delete d->displayShader;
     d->displayShader = new QGLShaderProgram();
 
-    d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    if (d->displayFilter) {
-        d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
+    bool res;
+
+    res = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+    if (!res) {
+        //qDebug() << "Failed to add gl2.vert source to shader:" << d->displayShader->log();
+        // This might be a timing issue, when setting a display filter on the canvas before the opengl stuff is really initialized, it'll
+        // be correct later on, so just return;
+        return;
+    }
+    if (d->displayFilter && !d->displayFilter->program().isEmpty()) {
+        qDebug() << "display filter" << d->displayFilter->program().toLatin1();
+        res = d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
+        if (!res) {
+            qDebug() << "Failed to add ocio frag source to shader:" << d->displayShader->log();
+        }
     }
     else {
-        d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
+        qDebug() << "no display filter" << KGlobal::dirs()->findResource("data", "krita/shaders/display.frag");
+        res = d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
+        if (!res) {
+            qDebug() << "Failed to add display.frag source to shader:" << d->displayShader->log();
+        }
     }
+
     d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
@@ -490,6 +507,18 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
 }
+
+void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
+{
+    // Workaround for bug 322808, paint events with only a partial rect cause flickering
+    // Drop those event and trigger a new full update
+    if (event->rect().width() == width() && event->rect().height() == height()) {
+        QGLWidget::paintEvent(event);
+    } else {
+        update();
+    }
+}
+
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

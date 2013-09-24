@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Gmic
+Name[kk]=Gmic
+Name[nl]=Gmic
+Name[pt]=Gmic
+Name[pt_BR]=Gmic
+Name[sk]=Gmic
+Name[sv]=G'Mic
+Name[uk]=Gmic
+Name[x-test]=xxGmicxx
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritagmic
+X-Krita-Version=28

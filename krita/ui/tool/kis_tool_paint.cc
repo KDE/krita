@@ -68,6 +68,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include "kis_tool_utils.h"
 #include <kis_paintop.h>
+#include <kis_paintop_preset.h>
 
 const int STEP = 25;
 
@@ -115,6 +116,20 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("decrease_opacity", dynamic_cast<KAction*>(collection->action("decrease_opacity")));
     addAction("increase_opacity", dynamic_cast<KAction*>(collection->action("increase_opacity")));
 
+    if (!collection->action("increase_brush_size")) {
+        KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
+        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
+        collection->addAction("increase_brush_size", increaseBrushSize);
+    }
+
+    if (!collection->action("decrease_brush_size")) {
+        KAction *decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), collection);
+        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
+        collection->addAction("decrease_brush_size", decreaseBrushSize);
+    }
+
+    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
@@ -156,6 +171,8 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()), Qt::UniqueConnection);
     connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()), Qt::UniqueConnection);
     connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()), Qt::UniqueConnection);
+    connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
+    connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
 }
 
 void KisToolPaint::deactivate()
@@ -164,12 +181,16 @@ void KisToolPaint::deactivate()
     disconnect(actions().value("make_brush_color_darker"), 0, this, 0);
     disconnect(actions().value("increase_opacity"), 0, this, 0);
     disconnect(actions().value("decrease_opacity"), 0, this, 0);
+    disconnect(actions().value("increase_brush_size"), 0, this, 0);
+    disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisTool::deactivate();
 }
 
 
-void KisToolPaint::paint(QPainter&, const KoViewConverter &)
+void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
+    paintToolOutline(&gc,pixelToView(m_currentOutline));
 }
 
 void KisToolPaint::setMode(ToolMode mode)
@@ -200,6 +221,7 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
     }
     else {
         KisTool::mousePressEvent(event);
+        requestUpdateOutline(event->point);
     }
 }
 
@@ -212,6 +234,7 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     }
     else {
         KisTool::mouseMoveEvent(event);
+        requestUpdateOutline(event->point);
     }
 }
 
@@ -223,6 +246,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
         event->accept();
     } else {
         KisTool::mouseReleaseEvent(event);
+        requestUpdateOutline(event->point);
     }
 }
 
@@ -468,5 +492,88 @@ void KisToolPaint::decreaseOpacity()
     stepAlpha(-0.1f);
 }
 
+void KisToolPaint::increaseBrushSize()
+{
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int increment = 1;
+    if (paintopSize > 100) {
+        increment = 30;
+    } else if (paintopSize > 10){
+        increment = 10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
+    requestUpdateOutline(m_outlineDocPoint);
+}
+
+void KisToolPaint::decreaseBrushSize()
+{
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int decrement = -1;
+    if (paintopSize > 100) {
+        decrement = -30;
+    } else if (paintopSize > 20){
+        decrement = -10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
+    requestUpdateOutline(m_outlineDocPoint);
+}
+
+void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
+{
+    KisConfig cfg;
+    KisPaintOpSettings::OutlineMode outlineMode;
+    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
+
+    if (mode() == KisTool::GESTURE_MODE ||
+        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+         ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
+          (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+
+        outlineMode = KisPaintOpSettings::CursorIsOutline;
+    }
+
+    m_outlineDocPoint = outlineDocPoint;
+    m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
+
+    QRectF outlinePixelRect = m_currentOutline.boundingRect();
+    QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
+
+    // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // See BUG 275829
+    qreal zoomX;
+    qreal zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    qreal xoffset = 2.0/zoomX;
+    qreal yoffset = 2.0/zoomY;
+    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+
+    if (!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect);
+    }
+
+    if (!newOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(newOutlineRect);
+    }
+
+    m_oldOutlineRect = newOutlineRect;
+}
+
+QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
+                                             KisPaintOpSettings::OutlineMode outlineMode)
+{
+    qreal scale = 1.0;
+    qreal rotation = 0;
+
+    if (mode() == KisTool::HOVER_MODE) {
+        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
+    }
+
+    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    QPainterPath path = currentPaintOpPreset()->settings()->
+            brushOutline(imagePos, outlineMode, scale, rotation);
+
+    return path;
+}
 
 #include "kis_tool_paint.moc"

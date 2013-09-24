@@ -14,6 +14,7 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
+add_subdirectory( gmic )
 
 find_package(OpenShiva)
 find_package(QtShiva )

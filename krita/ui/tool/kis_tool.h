@@ -29,26 +29,26 @@
 #include <kis_types.h>
 
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
-    (mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+    (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
 
 #define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
-    (mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+    (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
-    (mode() == (_mode) && (_event)->button() == (_button) &&            \
+    (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
      ((_event)->modifiers() & (_modifier) ||                            \
       (_event)->modifiers() == Qt::NoModifier) &&                       \
-     !specialModifierActive())
+     !this->specialModifierActive())
 
 #define RELEASE_CONDITION(_event, _mode, _button)               \
-    (mode() == (_mode) && (_event)->button() == (_button))
+    (this->mode() == (_mode) && (_event)->button() == (_button))
 
 #define RELEASE_CONDITION_WB(_event, _mode, _button)               \
-    (mode() == (_mode) && (_event)->button() & (_button))
+    (this->mode() == (_mode) && (_event)->button() & (_button))
 
-#define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
+#define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
 
 class KActionCollection;
 class KoCanvasBase;

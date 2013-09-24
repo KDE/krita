@@ -27,7 +27,7 @@
 #include <QSharedPointer>
 
 class KoCanvasBase;
-class KoColor;
+class QColor;
 class KoResource;
 class KoShapeBackground;
 class KoShape;
@@ -46,7 +46,16 @@ public:
     explicit KoFillConfigWidget(QWidget *parent);
     ~KoFillConfigWidget();
 
-    void setCanvas( KoCanvasBase *canvas );
+    void setCanvas(KoCanvasBase *canvas);
+
+    KoCanvasBase *canvas();
+
+    /// Returns the list of the selected shape
+    /// If you need to use only one shape, call currentShape()
+    virtual QList<KoShape*> currentShapes();
+
+    /// Returns the first selected shape of the ressource
+    virtual KoShape *currentShape();
 
 private slots:
     void styleButtonPressed(int buttonId);
@@ -62,15 +71,10 @@ private slots:
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
-    void shapeChanged();
-
+    virtual void shapeChanged();
 private:
-    /// update the widget
+    /// update the widget with the KoShape background
     void updateWidget(KoShape *shape);
-
-    static QSharedPointer<KoShapeBackground> applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
-
-    void blockChildSignals(bool block);
 
     class Private;
     Private * const d;

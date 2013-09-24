@@ -93,7 +93,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    m_cmbCursorShape->addItem(i18n("Tool Icon"));
+    m_cmbCursorShape->addItem(i18n("Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Arrow"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline"));
+    m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
 
 #ifdef NEPOMUK
     grpResourceTagging->show();

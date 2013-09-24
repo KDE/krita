@@ -74,11 +74,13 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
+
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
-    void requestUpdateOutline(const QPointF &outlineDocPoint);
 
 protected slots:
 
@@ -100,8 +102,6 @@ private:
     qreal calculatePerspective(const QPointF &documentPoint);
 
     void showOutlineTemporary();
-
-
 
 private slots:
     void hideOutline();

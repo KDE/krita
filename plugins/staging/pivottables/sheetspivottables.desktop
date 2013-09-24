@@ -15,5 +15,5 @@ Name[uk]=Додаток зведених таблиць для Sheets
 Name[x-test]=xxSheets Pivot Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
-X-KDE-Library=sheetssolver
+X-KDE-Library=sheetspivottables
 X-Sheets-Version=28

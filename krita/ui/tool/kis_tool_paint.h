@@ -92,7 +92,8 @@ protected:
     void setSupportOutline(bool supportOutline) {
         m_supportOutline = supportOutline;
     }
-    QPainterPath getOutlinePath(const QPointF &documentPos,
+
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:

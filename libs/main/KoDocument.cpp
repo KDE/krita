@@ -1471,7 +1471,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
                 continue;
             pos++;
         } while (pos < 5);
-         isRawXML = (qstrnicmp(buf, "<?xml", 5) == 0);
+        isRawXML = (qstrnicmp(buf, "<?xml", 5) == 0);
         if (! isRawXML)
             // also check for broken MathML files, which seem to be rather common
             isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?

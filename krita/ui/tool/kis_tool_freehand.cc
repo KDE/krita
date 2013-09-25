@@ -208,7 +208,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     }
     else {
         KisToolPaint::mousePressEvent(e);
-        //requestUpdateOutline(e->point);
     }
 }
 
@@ -223,14 +222,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     }
 
     if (mode() != KisTool::PAINT_MODE) {
-        if(mode() == KisTool::SECONDARY_PAINT_MODE) {
-            KisToolPaint::pickColor(e->point, e->modifiers() & Qt::AltModifier,
-                      m_toForegroundColor);
-            e->accept();
-        }
-        else {
-            KisTool::mouseMoveEvent(e);
-        }
+        KisToolPaint::mouseMoveEvent(e);
         return;
     }
 
@@ -334,48 +326,6 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
     return perspective;
 }
 
-void KisToolFreehand::requestUpdateOutline(const QPointF &outlineDocPoint)
-{
-    KisConfig cfg;
-    KisPaintOpSettings::OutlineMode outlineMode;
-    outlineMode = KisPaintOpSettings::CursorIsNotOutline;
-
-    if (m_explicitShowOutline ||
-        mode() == KisTool::GESTURE_MODE ||
-        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
-         ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
-          (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
-
-        outlineMode = KisPaintOpSettings::CursorIsOutline;
-    }
-
-    m_outlineDocPoint = outlineDocPoint;
-    m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
-
-    QRectF outlinePixelRect = m_currentOutline.boundingRect();
-    QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
-
-    // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
-    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
-    // See BUG 275829
-    qreal zoomX;
-    qreal zoomY;
-    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    qreal xoffset = 2.0/zoomX;
-    qreal yoffset = 2.0/zoomY;
-    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
-
-    if (!m_oldOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(m_oldOutlineRect);
-    }
-
-    if (!newOutlineRect.isEmpty()) {
-        canvas()->updateCanvas(newOutlineRect);
-    }
-
-    m_oldOutlineRect = newOutlineRect;
-}
-
 void KisToolFreehand::showOutlineTemporary()
 {
     m_explicitShowOutline = true;
@@ -387,6 +337,29 @@ void KisToolFreehand::hideOutline()
 {
     m_explicitShowOutline = false;
     requestUpdateOutline(m_outlineDocPoint);
+}
+
+QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
+                                          KisPaintOpSettings::OutlineMode outlineMode)
+{
+    qreal scale = 1.0;
+    qreal rotation = 0;
+
+    if (mode() == KisTool::HOVER_MODE) {
+        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
+    }
+
+    const KisPaintOp *paintOp = m_helper->currentPaintOp();
+    if (paintOp){
+        scale = paintOp->currentScale();
+        rotation = paintOp->currentRotation();
+    }
+
+    QPointF imagePos = currentImage()->documentToPixel(documentPos);
+    QPainterPath path = currentPaintOpPreset()->settings()->
+            brushOutline(imagePos, outlineMode, scale, rotation);
+
+    return path;
 }
 
 #include "kis_tool_freehand.moc"

@@ -726,6 +726,7 @@ void KisTool::resetCursorStyle()
         useCursor(d->cursor);
         break;
     case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
         useCursor(KisCursor::crossCursor());
         break;
     case CURSOR_STYLE_POINTER:
@@ -742,7 +743,7 @@ void KisTool::resetCursorStyle()
         break;
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-
+        ;
     }
 }
 

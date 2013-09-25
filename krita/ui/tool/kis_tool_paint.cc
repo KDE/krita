@@ -522,7 +522,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
     if (mode() == KisTool::GESTURE_MODE ||
-        ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT )&&
+        ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
          ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
 

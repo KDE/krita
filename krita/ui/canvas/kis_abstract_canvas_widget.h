@@ -56,6 +56,8 @@ public:
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
+
+    virtual void setWrapAroundViewingMode(bool value) = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

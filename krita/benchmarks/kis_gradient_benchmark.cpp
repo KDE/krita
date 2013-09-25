@@ -64,7 +64,6 @@ void KisGradientBenchmark::benchmarkGradient()
         Q_ASSERT(kograd);
         KisGradientPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
-        fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
         fillPainter.setGradient(kograd);
 
         fillPainter.beginTransaction(i18n("Gradient Fill"));

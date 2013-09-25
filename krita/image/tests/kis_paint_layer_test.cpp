@@ -81,7 +81,7 @@ void KisPaintLayerTest::testProjection()
     layer->updateProjection(qimage.rect());
 
     // We've inverted the mask, so now nothing is seen
-    KisRectConstIteratorSP it = layer->projection()->createRectConstIteratorNG(0, 0, qimage.width(), qimage.height());
+    KisRectConstIteratorSP it = layer->projection()->createRectConstIteratorNG(qimage.rect());
     do {
         QVERIFY(cs->opacityU8(it->oldRawData()) == OPACITY_TRANSPARENT_U8);
     } while (it->nextPixel());

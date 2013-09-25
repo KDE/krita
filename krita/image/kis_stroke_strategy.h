@@ -42,6 +42,7 @@ public:
     virtual KisStrokeJobData* createCancelData();
 
     bool isExclusive() const;
+    bool supportsWrapAroundMode() const;
     bool needsIndirectPainting() const;
     QString indirectPaintingCompositeOp() const;
 
@@ -68,11 +69,13 @@ protected:
     // after the KisStroke object has been created
 
     void setExclusive(bool value);
+    void setSupportsWrapAroundMode(bool value);
     void setNeedsIndirectPainting(bool value);
     void setIndirectPaintingCompositeOp(const QString &id);
 
 private:
     bool m_exclusive;
+    bool m_supportsWrapAroundMode;
     bool m_needsIndirectPainting;
     QString m_indirectPaintingCompositeOp;
 

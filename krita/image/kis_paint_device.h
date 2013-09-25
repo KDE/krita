@@ -356,7 +356,7 @@ public:
      * @param data The address of the memory to receive the bytes read
      * @param rect The rectangle in the paint device to read from
      */
-    void readBytes(quint8 * data, const QRect &rect);
+    void readBytes(quint8 * data, const QRect &rect) const;
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If the
@@ -386,7 +386,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -658,21 +658,15 @@ public:
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
-
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
 
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
-
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
-    KisRectIteratorSP createRectIteratorNG(const QRect& r);
-
-    KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
-    KisRectConstIteratorSP createRectConstIteratorNG(const QRect& r) const;
+    KisRectIteratorSP createRectIteratorNG(const QRect &rc);
+    KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const;
 
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
 
     /**
@@ -729,39 +723,18 @@ private:
     friend class KisPainter;
 
     /**
-     * Get the number of contiguous columns starting at x, valid for all values
-     * of y between minY and maxY.
-     */
-    qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const;
-
-    /**
-     * Get the number of contiguous rows starting at y, valid for all values
-     * of x between minX and maxX.
-     */
-    qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const;
-
-    /**
-     * Get the row stride at pixel (x, y). This is the number of bytes to add to a
-     * pointer to pixel (x, y) to access (x, y + 1).
-     */
-    qint32 rowStride(qint32 x, qint32 y) const;
-
-    /**
      * Return a vector with in order the size in bytes of the channels
      * in the colorspace of this paint device.
      */
-    QVector<qint32> channelSizes();
+    QVector<qint32> channelSizes() const;
 
 protected:
     friend class KisSelectionTest;
     KisNodeWSP parentNode() const;
 
 private:
-    KisDataManagerSP m_datamanager;
-
     struct Private;
     Private * const m_d;
-
 };
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_

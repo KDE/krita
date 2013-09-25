@@ -770,5 +770,9 @@ void KisCanvas2::slotSelectionChanged()
     }
 }
 
+void KisCanvas2::setWrapAroundViewingMode(bool value)
+{
+    m_d->canvasWidget->setWrapAroundViewingMode(value);
+}
 
 #include "kis_canvas2.moc"

@@ -870,7 +870,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
 
-        KisRectConstIteratorSP it = device->createRectConstIteratorNG(0, 0, image->width(), image->height());
+        KisRectConstIteratorSP it = device->createRectConstIteratorNG(image->bounds());
 
         bool toomuchcolor = false;
         do {

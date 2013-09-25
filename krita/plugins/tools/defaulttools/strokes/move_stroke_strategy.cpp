@@ -34,6 +34,7 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
       m_updatesFacade(updatesFacade),
       m_legacyUndoAdapter(legacyUndoAdapter)
 {
+    setSupportsWrapAroundMode(true);
 }
 
 void MoveStrokeStrategy::setNode(KisNodeSP node)

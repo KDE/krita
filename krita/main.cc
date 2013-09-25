@@ -64,7 +64,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
-#ifdef Q_WS_X11
+#if defined Q_WS_X11 && QT_VERSION >= 0x040800
     app.setAttribute(Qt::AA_X11InitThreads, true);
 #endif
 

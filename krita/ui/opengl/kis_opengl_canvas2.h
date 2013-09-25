@@ -56,6 +56,7 @@ public:
     virtual ~KisOpenGLCanvas2();
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
 

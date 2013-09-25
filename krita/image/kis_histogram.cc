@@ -82,7 +82,7 @@ void KisHistogram::updateHistogram()
         return;
     }
 
-    KisRectConstIteratorSP srcIt = m_paintDevice->createRectConstIteratorNG(m_bounds.left(), m_bounds.top(), m_bounds.width(), m_bounds.height());
+    KisRectConstIteratorSP srcIt = m_paintDevice->createRectConstIteratorNG(m_bounds);
     const KoColorSpace* cs = m_paintDevice->colorSpace();
 
     // Let the producer do it's work

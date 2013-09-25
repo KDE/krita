@@ -239,7 +239,7 @@ public:
                                   const KisFixedPaintDeviceSP selection,
                                   qint32 selX, qint32 selY,
                                   qint32 srcX, qint32 srcY,
-                                  quint32 srcWidth, quint32 srcHeight);
+                                  qint32 srcWidth, qint32 srcHeight);
 
     /**
      * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
@@ -256,7 +256,7 @@ public:
     void bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                   const KisPaintDeviceSP srcDev,
                                   const KisFixedPaintDeviceSP selection,
-                                  quint32 srcWidth, quint32 srcHeight);
+                                  qint32 srcWidth, qint32 srcHeight);
 
     /**
      * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param srcDev onto the current
@@ -682,12 +682,6 @@ public:
 
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
-
-    /// Sets the bounds of the painter area; if not set, the painter
-    /// will happily paint where you ask it, making the paint device
-    /// larger as it goes
-    void setBounds(const QRect & bounds);
-    QRect bounds();
 
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op);

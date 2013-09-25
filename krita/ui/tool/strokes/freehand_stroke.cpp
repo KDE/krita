@@ -52,6 +52,7 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 {
     setNeedsIndirectPainting(needsIndirectPainting);
     setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
+    setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 

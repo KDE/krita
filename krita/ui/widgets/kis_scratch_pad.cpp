@@ -30,7 +30,7 @@
 #include <KoAbstractGradient.h>
 
 #include <kis_cursor.h>
-#include <kis_color_picker_utils.h>
+#include <kis_tool_utils.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_gradient_painter.h>
@@ -103,7 +103,8 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    QImage checkImage = KisCanvasWidgetBase::checkImage();
+    KisConfig cfg;
+    QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
 

@@ -45,7 +45,8 @@ enum enumCursorStyle {
     CURSOR_STYLE_OUTLINE = 3,
     CURSOR_STYLE_NO_CURSOR = 4,
     CURSOR_STYLE_SMALL_ROUND = 5,
-    CURSOR_STYLE_3D_MODEL = 6
+    CURSOR_STYLE_OUTLINE_CENTER_DOT = 6,
+    CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7
 };
 
 /*
@@ -107,6 +108,16 @@ inline T pow2(T x) {
 template<>
 inline QPointF qAbs(const QPointF &pt) {
     return QPointF(qAbs(pt.x()), qAbs(pt.y()));
+}
+
+template<typename T>
+inline T kisDegreesToRadians(T degrees) {
+    return degrees * M_PI / 180.0;
+}
+
+template<typename T>
+inline T kisRadiansToDegrees(T radians) {
+    return radians * 180.0 / M_PI;
 }
 
 #endif // KISGLOBAL_H_

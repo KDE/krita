@@ -25,6 +25,11 @@
 #include "kis_rect_mask_generator.h"
 #include "kis_base_mask_generator.h"
 
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
+
 struct KisRectangleMaskGenerator::Private {
     double m_c;
     double m_halfWidth, m_halfHeight;

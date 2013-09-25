@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@
 class QWidget;
 class QPaintEvent;
 class KisCanvas2;
-
+class KisDisplayFilter;
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -55,44 +55,21 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
-    /**
-     * Prepare the canvas for rendering using native OpenGL
-     * commands. This sets the projection and model view matrices so
-     * that primitives can be rendered using coordinates returned
-     * from pixelToView().
-     */
-    void beginOpenGL();
-
-    /**
-     * Notify the canvas that rendering using native OpenGL commands
-     * has finished. This restores the state so that the canvas can
-     * be painted on using a QPainter.
-     */
-    void endOpenGL();
-
-    /**
-     * Set the projection and model view matrices so that primitives can be
-     * rendered using image pixel coordinates. This handles zooming and
-     * scrolling of the canvas.
-     */
-    void setupImageToWidgetTransformation();
-
-    /**
-     * The same as \ref setupImageToWidgetTransformation(), but input
-     * coordinate system is flake
-     */
-    void setupFlakeToWidgetTransformation();
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
-
-    /// reimplemented method from superclass
-    void paintEvent(QPaintEvent * ev);
 
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
+
+    void renderCanvasGL() const;
+    void renderDecorations(QPainter *painter);
+
+    virtual void paintEvent(QPaintEvent* event);
 
 private slots:
     void slotConfigChanged();
@@ -101,10 +78,11 @@ protected:
 
     void resizeGL(int width, int height);
     void initializeGL();
+    void paintGL();
 
 public: // KisAbstractCanvasWidget
 
-    QWidget * widget() {
+    QWidget *widget() {
         return this;
     }
 
@@ -113,12 +91,13 @@ protected: // KisCanvasWidgetBase
 
 private:
     struct Private;
-    Private * const m_d;
+    Private * const d;
 
-    void loadQTransform(QTransform transform);
+    void drawImage() const;
+    void drawCheckers() const;
 
-    void saveGLState();
-    void restoreGLState();
+    void initializeCheckerShader();
+    void initializeDisplayShader();
 };
 
 #endif // HAVE_OPENGL

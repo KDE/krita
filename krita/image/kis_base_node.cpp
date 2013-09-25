@@ -203,6 +203,8 @@ bool KisBaseNode::visible(bool recursive) const
 void KisBaseNode::setVisible(bool visible, bool loading)
 {
     m_d->properties.setProperty("visible", visible);
+    notifyParentVisibilityChanged(visible);
+
     if (!loading) {
         emit visibilityChanged(visible);
         baseNodeChangedCallback();

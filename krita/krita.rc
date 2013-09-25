@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="47">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="48">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -37,6 +37,7 @@
   <Action name="view_show_just_the_canvas"/>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
+  <Action name="wrap_around_mode"/>
   <Separator/>
   <Action name="view_newview"/>    
   <Separator/>      

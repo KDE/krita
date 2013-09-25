@@ -20,14 +20,15 @@
 
 #ifdef HAVE_OPENGL
 
+#include <QGLContext>
 #include <QGLWidget>
 
 #include <kis_debug.h>
+#include <kis_config.h>
 
 namespace
 {
     QGLWidget *SharedContextWidget = 0;
-    bool ContextHasShadingLanguage = false;
 }
 
 void KisOpenGL::createContext()
@@ -36,19 +37,78 @@ void KisOpenGL::createContext()
 
     dbgUI << "OpenGL: Creating shared context widget";
 
-    SharedContextWidget = new QGLWidget();
-    SharedContextWidget->makeCurrent();
-    initGlew();
-
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) {
-        dbgUI << "Have OpenGL >= 2.0";
-        ContextHasShadingLanguage = true;
-    } else {
-        dbgUI << "Have OpengGL < 2.0";
-        // We could check for the ARB extensions but it's unlikely now to find a 
-        // card that has them but is less than version 2.0
-        ContextHasShadingLanguage = false;
+    if (!QGLFormat::hasOpenGL()) {
+        qWarning() << "OpenGL is not available at all, falling back to CPU Canvas";
+        return;
     }
+
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_None)
+        qDebug() << "no OpenGL is present or if no OpenGL context is current.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_1)
+        qDebug() << "OpenGL version 1.1 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_2)
+        qDebug() << "OpenGL version 1.2 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_3)
+        qDebug() << "OpenGL version 1.3 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_4)
+        qDebug() << "OpenGL version 1.4 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_5)
+        qDebug() << "OpenGL version 1.5 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)
+        qDebug() << "OpenGL version 2.0 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_1)
+        qDebug() << "OpenGL version 2.1 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0)
+        qDebug() << "OpenGL version 3.0 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_1)
+        qDebug() << "OpenGL version 3.1 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2)
+        qDebug() << "OpenGL version 3.2 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_3)
+        qDebug() << "OpenGL version 3.3 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_4_0)
+        qDebug() << "OpenGL version 4.0 or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_0)
+        qDebug() << "OpenGL ES version 1.0 Common Lite or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_0)
+        qDebug() << "OpenGL ES version 1.0 Common or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_1)
+        qDebug() << "OpenGL ES version 1.1 Common Lite or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_1)
+        qDebug() << "OpenGL ES version 1.1 Common or higher is present.";
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
+        qDebug() << "OpenGL ES version 2.0 or higher is present.";
+
+    if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
+          (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
+        qWarning() << "Cannot use OpenGL: we need at least OpenGL 2.0 or ES 2.0.";
+        return;
+    }
+
+    QGLFormat format(QGL::SampleBuffers);
+    format.setVersion(3, 0);
+    format.setProfile(QGLFormat::CoreProfile);
+    if (format.profile() == 0)
+        qDebug() << "Using No Profile";
+    if (format.profile() == 1)
+        qDebug() << "Using the core profile";
+    if (format.profile() == 2)
+        qDebug() << "Using the compatibility profile";
+
+    format.setDoubleBuffer(false);
+
+    SharedContextWidget = new QGLWidget(format);
+    SharedContextWidget->setObjectName("Krita OpenGL Shared Context Widget");
+    SharedContextWidget->makeCurrent();
+
+#ifdef HAVE_GLEW
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        dbgUI << "glewInit error:" << (const char *)glewGetErrorString(err);
+    } else {
+        dbgUI << "Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
+    }
+#endif
 }
 
 void KisOpenGL::makeContextCurrent()
@@ -62,27 +122,6 @@ QGLWidget *KisOpenGL::sharedContextWidget()
         createContext();
     }
     return SharedContextWidget;
-}
-
-void KisOpenGL::initGlew()
-{
-#ifdef HAVE_GLEW
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        dbgUI << "glewInit error:" << (const char *)glewGetErrorString(err);
-    } else {
-        dbgUI << "Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
-    }
-#endif
-}
-
-bool KisOpenGL::hasShadingLanguage()
-{
-    if (SharedContextWidget == 0) {
-        createContext();
-    }
-
-    return ContextHasShadingLanguage;
 }
 
 void KisOpenGL::printError(const char *file, int line)

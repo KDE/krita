@@ -67,13 +67,12 @@ void Command::processCommandName(const QString& line)
 QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclosed)
 {
     QStringList result;
-
-    lastTokenEnclosed = true;
+    lastTokenEnclosed = false;
     int index = 0;
     int lastIndex = 0;
     while (index < line.size())
     {
-        // find index of =
+        // skip parameter name, find index of =
         index = line.indexOf("=", index);
 
         if (index == -1)
@@ -85,28 +84,43 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         index++;
 
         // eat all spaces
-        while (line.at(index).isSpace() && index < line.size())
-        {
-            index++;
-        }
+        index = skipWhitespace(line, index);
 
-        // skip typedef
+        // skip type-definition name e.g. "int", "_note", etc.
+        const QChar underscore('_');
         int helperIndex = index;
-        while (line.at(helperIndex).isLetter() && helperIndex < line.size()){
-            helperIndex++;
+        while (helperIndex < line.size())
+        {
+            const QChar c = line.at(helperIndex);
+            if (c.isLetter() || c == underscore)
+            {
+                helperIndex++;
+            }
+            else
+            {
+                break;
+            }
+
         }
 
+        QString typeName = line.mid(index, helperIndex - index);
+        if (typeName.startsWith(underscore))
+        {
+            typeName = typeName.mid(1);
+        }
 
         const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
-        QString typeName = line.mid(index, helperIndex - index);
-        if (typeDefs.contains(typeName)){
-            // point to next character
-            index = helperIndex;
-        }else {
-            dbgPlugins << "Unknown type" << typeName;
+        if (!typeDefs.contains(typeName))
+        {
+            dbgPlugins << "Unknown type" << typeName << line;
         }
 
+        index = helperIndex;
 
+        // skip all whitespaces, e.g. note = note ("Example")
+        index = skipWhitespace(line, index);
+
+        // determine separator
         // Type separators '()' can be replaced by '[]' or '{}' if necessary ...
         QChar delimiter = line.at(index);
         QChar closingdelimiter;
@@ -129,33 +143,52 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
             }
             default:
             {
-                //Q_ASSERT_X(false,"Unhandled separator", delimiter);
+                dbgPlugins << "Delimiter: " << delimiter << line;
+                Q_ASSERT(false);
                 break;
             }
         }
 
-        while (line.at(index) != closingdelimiter && index < line.size())
+        // search for enclosing separator
+        while (index < line.size() - 1)
         {
-            index++;
+            if (line.at(index) != closingdelimiter)
+            {
+                index++;
+            }
+            else
+            {
+                // we found enclosing separator
+                break;
+            }
         }
 
         if (line.at(index) != closingdelimiter)
         {
             lastTokenEnclosed = false;
+            dbgPlugins << "Enclosing delimiter not found, trying again" << line.at(index);
+            break;
         }
-
-        // clean ","
-        if (lastIndex != 0 )
+        else
         {
-            if (line.at(lastIndex) == ',')
+            lastTokenEnclosed = true;
+            // "," removal only if there are n tokens in one line
+            if (lastIndex != 0 )
             {
-                lastIndex++;
+                // if there are more tokens on one line, they are separated by ",", so remove it here
+                if (line.at(lastIndex) == ',')
+                {
+                    lastIndex++;
+                }
             }
+
+            QString token = line.mid(lastIndex, index + 1 - lastIndex).trimmed();
+            result.append(token);
+            lastIndex = index + 1;
+
+
         }
-        QString token = line.mid(lastIndex, index + 1 - lastIndex).trimmed();
-        result.append(token);
-        lastIndex = index + 1;
-    }
+    } // while
 
     return result;
 }
@@ -166,12 +199,22 @@ bool Command::processParameter(const QStringList& block)
     QString parameterLine = mergeBlockToLine(block);
     // remove gimp prefix and " :"
     parameterLine = parameterLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
+
+    /* State: one parameter one line
+     * one parameter n lines
+     * n parameters one line
+    */
+
     // break into parameter tokens
     bool lastTokenEnclosed = true;
     QStringList tokens = breakIntoTokens(parameterLine, lastTokenEnclosed);
+
+
+
     if (!lastTokenEnclosed)
     {
         // we need more lines of command parameters
+        dbgPlugins << "ParameterLine not enclosed";
         return false;
     }
 
@@ -180,13 +223,12 @@ bool Command::processParameter(const QStringList& block)
     Parameter * parameter = 0;
     foreach (QString token, tokens)
     {
-        token = token.trimmed();
-        QStringList tokenSplit = token.split("=");
-        Q_ASSERT(tokenSplit.size() == 2);
 
+        QString paramName;
+        QString typeDefinition;
 
-        QString paramName = tokenSplit.at(0).trimmed();
-        QString typeDefinition = tokenSplit.at(1).trimmed();
+        // determine parameter name and parameter definition
+        processToken(token, paramName, typeDefinition);
 
         bool showPreviewOnChange = true;
         if (typeDefinition.startsWith("_"))
@@ -364,7 +406,7 @@ QString Command::mergeBlockToLine(const QStringList& block)
     {
         QString nextLine = block.at(i);
         nextLine = nextLine.remove(0, GIMP_COMMENT.size()+2).trimmed();
-        result = result + "<br />" + nextLine;
+        result = result + nextLine;
     }
     return result;
 }
@@ -376,4 +418,38 @@ void Command::reset()
         p->reset();
     }
 
+}
+
+
+bool Command::processToken(const QString& token, QString& parameterName, QString& parameterDefinition)
+{
+        // determine parameter name and parameter definition
+        // dbgPlugins << "Processing token " << token;
+
+        QString trimedToken = token.trimmed();
+        // '=' separates parameter name and parameter definition
+        // parameter definition can contain '=' so avoid split(") here
+        int firstSeparatorIndex = trimedToken.indexOf("=");
+        Q_ASSERT(firstSeparatorIndex != -1);
+        parameterName = trimedToken.left(firstSeparatorIndex).trimmed();
+        parameterDefinition = trimedToken.mid(firstSeparatorIndex + 1).trimmed();
+        //dbgPlugins << ppVar(parameterName);
+        //dbgPlugins << ppVar(parameterDefinition);
+        return true;
+}
+
+int Command::skipWhitespace(const QString& line, int index)
+{
+    while (index < line.size())
+    {
+        if (line.at(index).isSpace())
+        {
+            index++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return index;
 }

@@ -57,8 +57,8 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpa
     KoColor myColor(color);
     quint8 opacity = respectOpacity? myColor.opacityU8() : OPACITY_OPAQUE_U8;
 
-    int ipx = int (pos.x());
-    int ipy = int (pos.y());
+    int ipx = floor(pos.x());
+    int ipy = floor(pos.y());
     qreal fx = pos.x() - ipx;
     qreal fy = pos.y() - ipy;
 

@@ -318,3 +318,4 @@ void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float 
     }
 
 }
+

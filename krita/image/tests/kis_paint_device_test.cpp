@@ -268,8 +268,8 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     dev->move(10, 10);   // Unalign with tile boundaries
     KUndo2Command* cmd = dev->convertTo(dstCs);
 
-    QVERIFY(dev->exactBounds() == QRect(10, 10, image.width(), image.height()));
-    QVERIFY(dev->pixelSize() == dstCs->pixelSize());
+    QCOMPARE(dev->exactBounds(), QRect(10, 10, image.width(), image.height()));
+    QCOMPARE(dev->pixelSize(), dstCs->pixelSize());
     QVERIFY(*dev->colorSpace() == *dstCs);
 
     delete cmd;
@@ -521,10 +521,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
 
     dev->writePlanarBytes(swappedPlanes, 0, 0, 100, 100);
 
-    dev->convertToQImage(0, 0, 0, 5000, 5000).save("planar.png");
-
-    qDeleteAll(planes);
-    swappedPlanes.clear();
+    dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar.png");
 
     dev->pixel(5, 5, &c1);
 
@@ -539,6 +536,24 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QVERIFY(c1.green() == 255);
     QVERIFY(c1.blue() == 100);
     QVERIFY(c1.alpha() == 155);
+
+    // check if one of the planes is Null.
+    Q_ASSERT(planes.size() == 4);
+    delete planes[2];
+    planes[2] = 0;
+    dev->writePlanarBytes(planes, 0, 0, 100, 100);
+    dev->convertToQImage(0, 0, 0, 1000, 1000).save("planar_noR.png");
+
+    dev->pixel(75, 50, &c1);
+
+    QCOMPARE(c1.red(), 200);
+    QCOMPARE(c1.green(), 200);
+    QCOMPARE(c1.blue(), 155);
+    QCOMPARE(c1.alpha(), 100);
+
+
+    qDeleteAll(planes);
+    swappedPlanes.clear();
 }
 
 void KisPaintDeviceTest::testBltPerformance()
@@ -729,6 +744,389 @@ void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
     QCOMPARE(measuredRect, fillRect);
 }
 
+KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
+{
+    struct TestingDefaultBounds : public KisDefaultBoundsBase {
+        QRect bounds() const {
+            return QRect(0,0,20,20);
+        }
+        bool wrapAroundMode() const {
+            return true;
+        }
+    };
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    KisDefaultBoundsBaseSP bounds = new TestingDefaultBounds();
+    dev->setDefaultBounds(bounds);
+
+    return dev;
+}
+
+void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
+                             const QRect &rc)
+{
+    KisPaintDeviceSP deviceCopy = new KisPaintDevice(*dev.data());
+
+    QRect readRect(10, 10, 20, 20);
+    int bufSize = rc.width() * rc.height() * dev->pixelSize();
+
+    QScopedPointer<quint8> buf1(new quint8[bufSize]);
+
+    deviceCopy->readBytes(buf1.data(), rc);
+
+    deviceCopy->clear();
+    QVERIFY(deviceCopy->extent().isEmpty());
+
+
+    QScopedPointer<quint8> buf2(new quint8[bufSize]);
+    deviceCopy->writeBytes(buf1.data(), rc);
+    deviceCopy->readBytes(buf2.data(), rc);
+
+    QVERIFY(!memcmp(buf1.data(), buf2.data(), bufSize));
+}
+
+
+void KisPaintDeviceTest::testReadBytesWrapAround()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+
+    KoColor c1(Qt::red, cs);
+    KoColor c2(Qt::green, cs);
+
+    dev->setPixel(3, 3, c1);
+    dev->setPixel(18, 18, c2);
+
+    const int pixelSize = dev->pixelSize();
+
+    {
+        QRect readRect(10, 10, 20, 20);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final1.png");
+
+        QVERIFY(memcmp(buf.data() + (7 + readRect.width() * 7) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (8 + readRect.width() * 8) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (12 + readRect.width() * 12) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (13 + readRect.width() * 13) * pixelSize, c1.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+
+    {
+        // check weird case when the read rect is larger than wrap rect
+        QRect readRect(10, 10, 30, 30);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final2.png");
+
+        QVERIFY(memcmp(buf.data() + (7 + readRect.width() * 7) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (8 + readRect.width() * 8) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (12 + readRect.width() * 12) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (13 + readRect.width() * 13) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (27 + readRect.width() * 7) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (28 + readRect.width() * 8) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (7 + readRect.width() * 27) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (8 + readRect.width() * 28) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (27 + readRect.width() * 27) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (28 + readRect.width() * 28) * pixelSize, c2.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+
+    {
+        // even more large
+        QRect readRect(10, 10, 40, 40);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final3.png");
+
+        QVERIFY(memcmp(buf.data() + (7 + readRect.width() * 7) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (8 + readRect.width() * 8) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (12 + readRect.width() * 12) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (13 + readRect.width() * 13) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (27 + readRect.width() * 7) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (28 + readRect.width() * 8) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (7 + readRect.width() * 27) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (8 + readRect.width() * 28) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (27 + readRect.width() * 27) * pixelSize, c2.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (28 + readRect.width() * 28) * pixelSize, c2.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (32 + readRect.width() * 12) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (33 + readRect.width() * 13) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (12 + readRect.width() * 32) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (13 + readRect.width() * 33) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (32 + readRect.width() * 32) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (33 + readRect.width() * 33) * pixelSize, c1.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+
+    {
+        // check if the wrap rect contains the read rect entirely
+        QRect readRect(1, 1, 10, 10);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final4.png");
+
+        QVERIFY(memcmp(buf.data() + (1 + readRect.width() * 1) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (2 + readRect.width() * 2) * pixelSize, c1.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+
+    {
+        // check if the wrap happens only on vertical side of the rect
+        QRect readRect(1, 1, 29, 10);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final5.png");
+
+        QVERIFY(memcmp(buf.data() + (1 + readRect.width() * 1) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (2 + readRect.width() * 2) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (21 + readRect.width() * 1) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (22 + readRect.width() * 2) * pixelSize, c1.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+
+    {
+        // check if the wrap happens only on horizontal side of the rect
+        QRect readRect(1, 1, 10, 29);
+        QScopedPointer<quint8> buf(new quint8[readRect.width() *
+                                              readRect.height() *
+                                              pixelSize]);
+        dev->readBytes(buf.data(), readRect);
+        //dev->convertToQImage(0, readRect.x(), readRect.y(), readRect.width(), readRect.height()).save("final6.png");
+
+        QVERIFY(memcmp(buf.data() + (1 + readRect.width() * 1) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (2 + readRect.width() * 2) * pixelSize, c1.data(), pixelSize));
+
+        QVERIFY(memcmp(buf.data() + (1 + readRect.width() * 21) * pixelSize, c1.data(), pixelSize));
+        QVERIFY(!memcmp(buf.data() + (2 + readRect.width() * 22) * pixelSize, c1.data(), pixelSize));
+
+        checkReadWriteRoundTrip(dev, readRect);
+    }
+}
+
+#include "kis_random_accessor_ng.h"
+
+void KisPaintDeviceTest::testWrappedRandomAccessor()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+
+    KoColor c1(Qt::red, cs);
+    KoColor c2(Qt::green, cs);
+
+    dev->setPixel(3, 3, c1);
+    dev->setPixel(18, 18, c2);
+
+    const int pixelSize = dev->pixelSize();
+
+    int x;
+    int y;
+
+    x = 3;
+    y = 3;
+    KisRandomAccessorSP dstIt = dev->createRandomAccessorNG(x, y);
+
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = 23;
+    y = 23;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = 3;
+    y = 23;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = 23;
+    y = 3;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = -17;
+    y = 3;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = 3;
+    y = -17;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+
+    x = -17;
+    y = -17;
+    dstIt->moveTo(x, y);
+    QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
+    QCOMPARE(dstIt->numContiguousColumns(x), 61);
+    QCOMPARE(dstIt->numContiguousRows(y), 61);
+}
+
+#include "kis_iterator_ng.h"
+
+static bool nextRowGeneral(KisHLineIteratorSP it, int y, const QRect &rc) {
+    it->nextRow();
+    return y < rc.height();
+}
+
+static bool nextRowGeneral(KisVLineIteratorSP it, int y, const QRect &rc) {
+    it->nextColumn();
+    return y < rc.width();
+}
+
+static bool nextRowGeneral(KisRectIteratorSP it, int y, const QRect &rc) {
+    Q_UNUSED(it);
+    Q_UNUSED(y);
+    Q_UNUSED(rc);
+    return false;
+}
+
+template <class IteratorSP>
+IteratorSP createIterator(KisPaintDeviceSP dev, const QRect &rc) {
+    Q_UNUSED(dev);
+    Q_UNUSED(rc);
+    return 0;
+}
+
+template <>
+KisHLineIteratorSP createIterator(KisPaintDeviceSP dev,
+                                  const QRect &rc) {
+    return dev->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+}
+
+template <>
+KisVLineIteratorSP createIterator(KisPaintDeviceSP dev,
+                                  const QRect &rc) {
+    return dev->createVLineIteratorNG(rc.x(), rc.y(), rc.height());
+}
+
+template <>
+KisRectIteratorSP createIterator(KisPaintDeviceSP dev,
+                                 const QRect &rc) {
+    return dev->createRectIteratorNG(rc);
+}
+
+template <class IteratorSP>
+void testWrappedLineIterator(QString testName, const QRect &rect)
+{
+    testName = QString("%1_%2_%3_%4_%5")
+        .arg(testName)
+        .arg(rect.x())
+        .arg(rect.y())
+        .arg(rect.width())
+        .arg(rect.height());
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+
+    // test rect fits the wrap rect in both dimensions
+    IteratorSP it = createIterator<IteratorSP>(dev, rect);
+
+    int y = 0;
+    do {
+        int x = 0;
+        do {
+            quint8 *data = it->rawData();
+
+            data[0] = 10 * x;
+            data[1] = 10 * y;
+            data[2] = 0;
+            data[3] = 255;
+
+            x++;
+        } while (it->nextPixel());
+    } while (nextRowGeneral(it, ++y, rect));
+
+    QRect rc = dev->defaultBounds()->bounds() | dev->exactBounds();
+    QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators", testName));
+}
+
+template <class IteratorSP>
+void testWrappedLineIterator(const QString &testName)
+{
+    testWrappedLineIterator<IteratorSP>(testName, QRect(10,10,20,20));
+    testWrappedLineIterator<IteratorSP>(testName, QRect(10,10,10,20));
+    testWrappedLineIterator<IteratorSP>(testName, QRect(10,10,20,10));
+    testWrappedLineIterator<IteratorSP>(testName, QRect(10,10,10,10));
+    testWrappedLineIterator<IteratorSP>(testName, QRect(0,0,20,20));
+}
+
+void KisPaintDeviceTest::testWrappedHLineIterator()
+{
+    testWrappedLineIterator<KisHLineIteratorSP>("hline_iterator");
+}
+
+void KisPaintDeviceTest::testWrappedVLineIterator()
+{
+    testWrappedLineIterator<KisVLineIteratorSP>("vline_iterator");
+}
+
+void KisPaintDeviceTest::testWrappedRectIterator()
+{
+    testWrappedLineIterator<KisRectIteratorSP>("rect_iterator");
+}
+
+void KisPaintDeviceTest::testMoveWrapAround()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+
+    KoColor c1(Qt::red, cs);
+    KoColor c2(Qt::green, cs);
+
+    dev->setPixel(3, 3, c1);
+    dev->setPixel(18, 18, c2);
+
+    QRect rc = dev->defaultBounds()->bounds();
+
+    //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move0.png");
+    QCOMPARE(dev->exactBounds(), QRect(3,3,16,16));
+    dev->move(QPoint(10,10));
+    QCOMPARE(dev->exactBounds(), QRect(8,8,6,6));
+    //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move1.png");
+
+}
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"

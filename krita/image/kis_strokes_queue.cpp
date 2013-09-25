@@ -25,10 +25,13 @@
 #include "kis_updater_context.h"
 
 struct KisStrokesQueue::Private {
-    Private() : needsExclusiveAccess(false) {}
+    Private()
+        : needsExclusiveAccess(false),
+          wrapAroundModeSupported(false) {}
 
     QQueue<KisStrokeSP> strokesQueue;
     bool needsExclusiveAccess;
+    bool wrapAroundModeSupported;
     QMutex mutex;
 };
 
@@ -105,6 +108,11 @@ bool KisStrokesQueue::needsExclusiveAccess() const
     return m_d->needsExclusiveAccess;
 }
 
+bool KisStrokesQueue::wrapAroundModeSupported() const
+{
+    return m_d->wrapAroundModeSupported;
+}
+
 bool KisStrokesQueue::isEmpty() const
 {
     QMutexLocker locker(&m_d->mutex);
@@ -169,6 +177,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
 
     if(!stroke->isInitialized() && stroke->hasJobs()) {
         m_d->needsExclusiveAccess = stroke->isExclusive();
+        m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
         result = true;
     }
     else if(stroke->hasJobs()){
@@ -177,6 +186,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
     else if(stroke->isEnded() && !hasStrokeJobsRunning) {
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
+        m_d->wrapAroundModeSupported = false;
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false);

@@ -58,10 +58,10 @@
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 
+#include <QtGlobal>
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
@@ -1471,10 +1471,10 @@ bool KoDocument::loadNativeFormat(const QString & file_)
                 continue;
             pos++;
         } while (pos < 5);
-        isRawXML = (strncasecmp(buf, "<?xml", 5) == 0);
+        isRawXML = (qstrnicmp(buf, "<?xml", 5) == 0);
         if (! isRawXML)
             // also check for broken MathML files, which seem to be rather common
-            isRawXML = (strncasecmp(buf, "<math", 5) == 0);   // file begins with <math ?
+            isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?
         //kDebug(30003) <<"PATTERN=" << buf;
     }
     // Is it plain XML?
@@ -2044,7 +2044,6 @@ bool KoDocument::hasExternURL() const
             && d->parentPart->url().protocol() != STORE_PROTOCOL
             && d->parentPart->url().protocol() != INTERNAL_PROTOCOL;
 }
-
 
 static const struct {
     const char *localName;

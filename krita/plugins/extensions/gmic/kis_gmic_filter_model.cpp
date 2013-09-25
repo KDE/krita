@@ -18,24 +18,26 @@
 
 #include <kis_gmic_filter_model.h>
 #include "Component.h"
-#include <Filters.h>
 #include "Command.h"
 
 #include "kis_gmic_filter_settings.h"
 #include "kis_gmic_settings_widget.h"
+#include "kis_gmic_blacklister.h"
 
 // debug
 
 KisGmicFilterModel::KisGmicFilterModel(Component * rootComponent, QObject* parent):
     QAbstractItemModel(parent),
-    m_rootComponent(rootComponent)
+    m_rootComponent(rootComponent),
+    m_blacklister(0)
 {
-    //m_rootComponent->print();
+
 }
 
 KisGmicFilterModel::~KisGmicFilterModel()
 {
     delete m_rootComponent;
+    delete m_blacklister;
 }
 
 
@@ -145,6 +147,15 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
         {
             KisGmicFilterSetting * settings = new KisGmicFilterSetting;
             commandItem->writeConfiguration(settings);
+
+            if (m_blacklister)
+            {
+                if (m_blacklister->isBlacklisted(commandItem->name(), commandItem->parent()->name()))
+                {
+                    settings->setBlacklisted(true);
+                }
+            }
+
             return QVariant::fromValue<KisGmicFilterSetting *>(settings);
         }
 
@@ -178,4 +189,13 @@ QVariant KisGmicFilterModel::headerData(int section, Qt::Orientation orientation
     Q_UNUSED(orientation);
     Q_UNUSED(role);
     return m_rootComponent->name();
+}
+
+void KisGmicFilterModel::setBlacklister(KisGmicBlacklister* blacklister)
+{
+    if (m_blacklister)
+    {
+        delete m_blacklister;
+    }
+    m_blacklister = blacklister;
 }

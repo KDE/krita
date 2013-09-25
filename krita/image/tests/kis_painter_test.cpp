@@ -265,7 +265,7 @@ void KisPainterTest::testSelectionBltSelection()
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
 
-    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(10, 10, 10, 10);
+    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(QRect(10, 10, 10, 10));
     do {
         // These are selections, so only one channel and it should
         // be totally selected
@@ -398,7 +398,7 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     //dst->convertToQImage(0).save("result.png");
 
     QRect erasedRect(50, 50, 50, 50);
-    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(0, 0, 150, 150);
+    KisRectConstIteratorSP it = dst->createRectConstIteratorNG(QRect(0, 0, 150, 150));
     do {
         if(!erasedRect.contains(it->x(), it->y())) {
              QVERIFY(memcmp(it->oldRawData(), c.data(), cs->pixelSize()) == 0);

@@ -74,7 +74,7 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
     delete m_d;
 }
 
-void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect)
+void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const
 {
     gc.save();
 
@@ -151,7 +151,7 @@ void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
     m_d->decorations.push_back(deco);
 }
 
-KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id)
+KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
 {
     foreach(KisCanvasDecoration* deco, m_d->decorations) {
         if (deco->id() == id) {
@@ -166,12 +166,17 @@ void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration*> &deco
     m_d->decorations=decorations;
 }
 
-QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations()
+QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }
 
-QImage KisCanvasWidgetBase::checkImage(qint32 checkSize)
+void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
+{
+    qWarning() << "Wrap Around mode is not available for this type of canvas!";
+}
+
+QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg;
 
@@ -206,14 +211,18 @@ KisCanvas2 *KisCanvasWidgetBase::canvas() const
     return m_d->canvas;
 }
 
-KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter()
+KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
 }
 
-KoToolProxy *KisCanvasWidgetBase::toolProxy()
+KoToolProxy *KisCanvasWidgetBase::toolProxy() const
 {
     return m_d->toolProxy;
+}
+
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
+{
 }
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const

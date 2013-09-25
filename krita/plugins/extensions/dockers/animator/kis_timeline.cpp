@@ -134,8 +134,33 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     connect(addKeyFrameButton, SIGNAL(pressed()), this, SLOT(keyFramePressed()));
     connect(addBlankFrameButton, SIGNAL(pressed()), this, SLOT(blankFramePressed()));
 
+    QToolBar* playerButtons = new QToolBar(this);
+
+    QToolButton* playButton = new QToolButton(this);
+    playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    playButton->setToolTip("Play Animation");
+    playButton->setFixedSize(15, 15);
+    playerButtons->addWidget(playButton);
+
+    QToolButton* pauseButton = new QToolButton(this);
+    pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    pauseButton->setToolTip("Pause Animation");
+    pauseButton->setFixedSize(15, 15);
+    playerButtons->addWidget(pauseButton);
+
+    QToolButton* stopButton = new QToolButton(this);
+    stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+    stopButton->setToolTip("Stop Animation");
+    stopButton->setFixedSize(15, 15);
+    playerButtons->addWidget(stopButton);
+
+    connect(playButton, SIGNAL(clicked()), this, SLOT(playAnimation()));
+    connect(pauseButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
+    connect(stopButton, SIGNAL(clicked()), this, SLOT(stopAnimation()));
+
     QHBoxLayout* rightToolBarLayout = new QHBoxLayout();
     rightToolBarLayout->addWidget(frameButtons);
+    rightToolBarLayout->addWidget(playerButtons);
     rightToolBar->setLayout(rightToolBarLayout);
 
     QScrollArea* rightScrollArea = new QScrollArea(this);
@@ -255,4 +280,19 @@ void KisTimeline::documentModified()
 
     //Convert to keyframe here
     this->m_cells->getSelectedFrame()->setType(KisAnimationFrame::KEYFRAME);
+}
+
+void KisTimeline::playAnimation()
+{
+    dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->play();
+}
+
+void KisTimeline::pauseAnimation()
+{
+    dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->pause();
+}
+
+void KisTimeline::stopAnimation()
+{
+    dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->stop();
 }

@@ -65,6 +65,9 @@ private slots:
     void keyFramePressed();
     void addframePressed();
     void frameSelectionChanged(QRect frame);
+    void playAnimation();
+    void pauseAnimation();
+    void stopAnimation();
 
 signals:
     void canvasModified();

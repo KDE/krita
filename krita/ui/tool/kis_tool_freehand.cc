@@ -216,20 +216,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Update outline
      */
-    if (mode() == KisTool::HOVER_MODE ||
-            mode() == KisTool::PAINT_MODE) {
+    if (mode() == KisTool::PAINT_MODE) {
         requestUpdateOutline(e->point);
-    }
 
-    if (mode() != KisTool::PAINT_MODE) {
+        /**
+         * Actual painting
+         */
+        doStroke(e);
+    } else {
         KisToolPaint::mouseMoveEvent(e);
-        return;
     }
-
-    /**
-     * Actual painting
-     */
-    doStroke(e);
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)

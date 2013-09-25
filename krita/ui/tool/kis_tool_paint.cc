@@ -221,7 +221,9 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
     }
     else {
         KisTool::mousePressEvent(event);
-        requestUpdateOutline(event->point);
+        if (mode() == KisTool::HOVER_MODE) {
+            requestUpdateOutline(event->point);
+        }
     }
 }
 
@@ -234,7 +236,9 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
     }
     else {
         KisTool::mouseMoveEvent(event);
-        requestUpdateOutline(event->point);
+        if (mode() == KisTool::HOVER_MODE) {
+            requestUpdateOutline(event->point);
+        }
     }
 }
 
@@ -246,7 +250,9 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
         event->accept();
     } else {
         KisTool::mouseReleaseEvent(event);
-        requestUpdateOutline(event->point);
+        if (mode() == KisTool::HOVER_MODE) {
+            requestUpdateOutline(event->point);
+        }
     }
 }
 
@@ -517,6 +523,8 @@ void KisToolPaint::decreaseBrushSize()
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 {
+    qDebug() << "requestUpdateOutline" << outlineDocPoint;
+
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;

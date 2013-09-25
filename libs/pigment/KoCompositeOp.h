@@ -56,12 +56,9 @@ public:
 
     struct PIGMENTCMS_EXPORT ParameterInfo
     {
-        ParameterInfo()
-            : opacity(1.0f),
-              flow(1.0f),
-              lastOpacity(&opacity)
-        {
-        }
+        ParameterInfo();
+        ParameterInfo(const ParameterInfo &rhs);
+        ParameterInfo& operator=(const ParameterInfo &rhs);
 
         quint8*       dstRowStart;
         qint32        dstRowStride;
@@ -78,6 +75,8 @@ public:
         QBitArray     channelFlags;
 
         void updateOpacityAndAverage(float value);
+    private:
+        inline void copy(const ParameterInfo &rhs);
     };
 
 public:

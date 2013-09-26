@@ -644,6 +644,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     Q_ASSERT(canvasData);
     if (!canvasData) return;
     if (inputDevice == device) return;
+    if (inputDevice.isMouse() && device.isMouse()) return;
     if (device.isMouse() && !inputDevice.isMouse()) {
         // we never switch back to mouse from a tablet input device, so the user can use the
         // mouse to edit the settings for a tool activated by a tablet. See bugs

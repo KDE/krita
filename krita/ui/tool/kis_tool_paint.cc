@@ -523,7 +523,7 @@ void KisToolPaint::decreaseBrushSize()
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 {
-    qDebug() << "requestUpdateOutline" << outlineDocPoint;
+    if (!m_supportOutline) return;
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;

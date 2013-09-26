@@ -932,3 +932,23 @@ void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
 {
     m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }
+
+bool KisConfig::presetStripVisible() const
+{
+    return m_cfg.readEntry("presetStripVisible", true);
+}
+
+void KisConfig::setPresetStripVisible(bool visible)
+{
+    m_cfg.writeEntry("presetStripVisible", visible);
+}
+
+bool KisConfig::scratchpadVisible() const
+{
+    return m_cfg.readEntry("scratchpadVisible", true);
+}
+
+void KisConfig::setScratchpadVisible(bool visible)
+{
+    m_cfg.writeEntry("scratchpadVisible", visible);
+}

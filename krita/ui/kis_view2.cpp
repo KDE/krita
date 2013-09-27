@@ -125,6 +125,7 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
+#include "kis_canvas_controls_manager.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -186,6 +187,7 @@ public:
         delete viewConverter;
         delete statusBar;
         delete actionManager;
+        delete canvasControlsManager;
     }
 
 public:
@@ -208,6 +210,7 @@ public:
     KisZoomManager *zoomManager;
     KisImageManager *imageManager;
     KisGridManager *gridManager;
+    KisCanvasControlsManager *canvasControlsManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
@@ -808,6 +811,9 @@ void KisView2::createManagers()
     m_d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
     m_d->paintingAssistantManager->setup(actionCollection());
     m_d->canvas->addDecoration(m_d->paintingAssistantManager);
+
+    m_d->canvasControlsManager = new KisCanvasControlsManager(this);
+    m_d->canvasControlsManager->setup(actionCollection());
 }
 
 void KisView2::updateGUI()

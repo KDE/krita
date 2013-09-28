@@ -33,56 +33,15 @@ public:
 
 public:
     static QImage convertToQImage(gmic_image<float>& gmicImage);
-    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
+    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage, qreal multiplied = 255.0);
 
-    // convert functions
+    // dev will be converted to float32 colorspace in-place to save some memory!!!
     void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc = QRect());
-    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage, bool &preserveAlpha);
-    // re-align functions
-    void grayscale2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
-    void grayscaleAlpha2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
-    void rgb2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
-    void rgba2rgba(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);
+    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage);
 
-    void releaseAlphaChannel()
-    {
-        // alphaPos == 3
-        delete m_planarBytes[3];
-        m_planarBytes[3] = 0;
-    }
-
-    void deletePlanes()
-    {
-        qDeleteAll(m_planarBytes);
-        m_planarBytes.clear();
-    }
-
-    void accumulate(unsigned int channelSize, bool alphaChannelEnabled = true)
-    {
-        setChannelSize(channelSize);
-        m_planarBytes.resize(4);
-
-        int channelCount = 4;
-        if (!alphaChannelEnabled)
-        {
-            m_planarBytes[3] = 0;
-            channelCount = 3;
-        }
-
-        for (int i=0;i<channelCount;i++)
-        {
-            m_planarBytes[i] = new quint8[channelSize * sizeof(float)];
-        }
-    }
-
-    void setChannelSize(unsigned int channelSize) { m_channelSize = channelSize; }
-    // count of float pixels per channel
-    unsigned int channelSize() {return m_channelSize;}
-
+    void setMultiplier(qreal multiplier) { m_multiplier = multiplier; }
 private:
-    unsigned int m_channelSize;
-    QVector<quint8 *> m_planarBytes;
-
+    qreal m_multiplier;
 };
 
 #endif

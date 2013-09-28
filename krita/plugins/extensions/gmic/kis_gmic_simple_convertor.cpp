@@ -19,6 +19,7 @@
 #include <QRect>
 
 #include <kis_debug.h>
+#include <kis_random_accessor_ng.h>
 
 #include <kis_gmic_simple_convertor.h>
 
@@ -29,8 +30,8 @@
 
 using namespace cimg_library;
 
-
-KisGmicSimpleConvertor::KisGmicSimpleConvertor():m_channelSize(0)
+// gmic assumes float rgba in 0.0 - 255.0, thus default value
+KisGmicSimpleConvertor::KisGmicSimpleConvertor() : m_multiplier(255.0)
 {
 
 }
@@ -38,12 +39,15 @@ KisGmicSimpleConvertor::KisGmicSimpleConvertor():m_channelSize(0)
 
 KisGmicSimpleConvertor::~KisGmicSimpleConvertor()
 {
-    deletePlanes();
 }
 
-
-void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image< float >& gmicImage, QRect rect)
+void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, CImg< float >& gmicImage, QRect rc)
 {
+    if (rc.isEmpty())
+    {
+        rc = dev->exactBounds();
+    }
+
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
@@ -51,228 +55,149 @@ void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
     dev->convertTo(rgbaFloat32bitcolorSpace);
 
-    QRect rc;
-    if (rect.isEmpty())
-    {
-        rc = dev->exactBounds();
-    }
-    else
-    {
-        rc = rect;
-    }
-    m_planarBytes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
-    setChannelSize(rc.width() * rc.height());
+    Q_ASSERT(gmicImage._spectrum == 4); // rgba
 
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
-    quint8 * redChannelBytes   = m_planarBytes.at(KoRgbF32Traits::red_pos);
-    quint8 * greenChannelBytes = m_planarBytes.at(KoRgbF32Traits::green_pos);
-    quint8 * blueChannelBytes  = m_planarBytes.at(KoRgbF32Traits::blue_pos);
-    quint8 * alphaChannelBytes = m_planarBytes.at(KoRgbF32Traits::alpha_pos);
 
-    unsigned int channelSize = sizeof(float);
 
-    memcpy(gmicImage._data                  ,redChannelBytes    ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + greenOffset    ,greenChannelBytes  ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + blueOffset     ,blueChannelBytes   ,gmicImage._width * gmicImage._height * channelSize);
-    memcpy(gmicImage._data + alphaOffset    ,alphaChannelBytes  ,gmicImage._width * gmicImage._height * channelSize);
+    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
+    int pos;
+    for (int y = 0; y < rc.height(); y++)
+    {
+        for (int x = 0; x < rc.width(); x++)
+        {
+            pos = y * gmicImage._width + x;
+            it->moveTo(x, y);
+            const quint8 * floatRGBApixel = it->rawDataConst(); // we are interpreting pixels here
+
+            memcpy(gmicImage._data + pos                  ,floatRGBApixel    , 4);
+            memcpy(gmicImage._data + pos + greenOffset    ,floatRGBApixel + 4, 4);
+            memcpy(gmicImage._data + pos + blueOffset     ,floatRGBApixel + 8, 4);
+            memcpy(gmicImage._data + pos + alphaOffset    ,floatRGBApixel + 12, 4);
+        }
+    }
 }
 
 
-KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmicImage, bool &preserveAlpha)
+KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmicImage)
 {
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
 
     KisPaintDeviceSP dev = new KisPaintDevice(rgbaFloat32bitcolorSpace);
+    int greenOffset = gmicImage._width * gmicImage._height;
+    int blueOffset = greenOffset * 2;
+    int alphaOffset = greenOffset * 3;
+    QRect rc(0,0,gmicImage._width, gmicImage._height);
 
-
-    unsigned int channelBytes = gmicImage._width * gmicImage._height * sizeof(float);
-    if (channelBytes == channelSize() * sizeof(float))
-    {
-        // ok, we can reuse read plannar bytes here
-        dbgPlugins << "[krita] Re-using read plannar bytes";
-        /*if ((gmicImage._spectrum == 1) || (gmicImage._spectrum == 3))
-        {
-            dbgPlugins << "[krita] Releasing alpha channel";
-            // we can delete alpha channel
-            releaseAlphaChannel();
-        }*/
-
-    }
-    else
-    {
-        // re-accumullate buffers, output image has different dimension..not sure if this ever happens
-        deletePlanes();
-        bool alphaChannelEnabled = true;//((gmicImage._spectrum == 2) || (gmicImage._spectrum == 4));
-        dbgPlugins << "Accumulating...!";
-        accumulate(gmicImage._width * gmicImage._height, alphaChannelEnabled);
-    }
+    KisRandomAccessorSP it = dev->createRandomAccessorNG(0,0);
+    int pos;
+    float r,g,b,a;
 
     switch (gmicImage._spectrum)
     {
         case 1:
         {
-            grayscale2rgb(gmicImage, m_planarBytes);
-            preserveAlpha = true;
+            // convert grayscale to rgba
+            for (int y = 0; y < rc.height(); y++)
+            {
+                for (int x = 0; x < rc.width(); x++)
+                {
+                    pos = y * gmicImage._width + x;
+                    it->moveTo(x, y);
+                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+
+                    r = g = b = gmicImage._data[pos] / m_multiplier;
+                    a = 1.0;
+
+                    memcpy(floatRGBApixel,      &r,4);
+                    memcpy(floatRGBApixel + 4,  &g,4);
+                    memcpy(floatRGBApixel + 8,  &b,4);
+                    memcpy(floatRGBApixel + 12, &a,4);
+                }
+            }
             break;
         }
         case 2:
         {
-            grayscaleAlpha2rgba(gmicImage, m_planarBytes);
+            // convert grayscale alpha to rgba
+            for (int y = 0; y < rc.height(); y++)
+            {
+                for (int x = 0; x < rc.width(); x++)
+                {
+                    pos = y * gmicImage._width + x;
+                    it->moveTo(x, y);
+                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+
+                    r = g = b = gmicImage._data[pos] / m_multiplier;
+                    a = gmicImage._data[pos + greenOffset] / m_multiplier;
+
+                    memcpy(floatRGBApixel,      &r,4);
+                    memcpy(floatRGBApixel + 4,  &g,4);
+                    memcpy(floatRGBApixel + 8,  &b,4);
+                    memcpy(floatRGBApixel + 12, &a,4);
+                }
+            }
             break;
         }
         case 3:
         {
-            rgb2rgb(gmicImage, m_planarBytes);
-            preserveAlpha = true;
+            // convert rgb -> rgba
+            for (int y = 0; y < rc.height(); y++)
+            {
+                for (int x = 0; x < rc.width(); x++)
+                {
+                    pos = y * gmicImage._width + x;
+                    it->moveTo(x, y);
+                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+
+                    r = gmicImage._data[pos] / m_multiplier;
+                    g = gmicImage._data[pos + greenOffset] / m_multiplier;
+                    b = gmicImage._data[pos + blueOffset] / m_multiplier;
+                    a = 1.0;
+
+                    memcpy(floatRGBApixel,      &r,4);
+                    memcpy(floatRGBApixel + 4,  &g,4);
+                    memcpy(floatRGBApixel + 8,  &b,4);
+                    memcpy(floatRGBApixel + 12, &a,4);
+                }
+            }
             break;
         }
         case 4:
-            rgba2rgba(gmicImage, m_planarBytes);
+        {
+            for (int y = 0; y < rc.height(); y++)
+            {
+                for (int x = 0; x < rc.width(); x++)
+                {
+                    pos = y * gmicImage._width + x;
+                    it->moveTo(x, y);
+                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+
+                    r = gmicImage._data[pos] / m_multiplier;
+                    g = gmicImage._data[pos + greenOffset] / m_multiplier;
+                    b = gmicImage._data[pos + blueOffset] / m_multiplier;
+                    a = gmicImage._data[pos + alphaOffset] / m_multiplier;
+
+                    memcpy(floatRGBApixel,      &r,4);
+                    memcpy(floatRGBApixel + 4,  &g,4);
+                    memcpy(floatRGBApixel + 8,  &b,4);
+                    memcpy(floatRGBApixel + 12, &a,4);
+                }
+            }
             break;
+        }
+
         default:
         {
             dbgPlugins << "Unsupported gmic output format : " <<  gmicImage._width << gmicImage._height << gmicImage._depth << gmicImage._spectrum;
         }
     }
 
-    dev->writePlanarBytes(m_planarBytes, 0, 0, gmicImage._width, gmicImage._height);
-
-    // release planes
-    deletePlanes();
     return dev;
-}
-
-void KisGmicSimpleConvertor::grayscale2rgb(CImg< float >& gmicImage, QVector< quint8 * > &planes)
-{
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    // alphaChannel will be preserved
-
-    int pos = 0;
-    float r,g,b;
-
-    // iterate over gmic image and fill plane buffers
-    for (unsigned int y = 0; y < gmicImage._height; y++)
-    {
-        for (unsigned int x = 0; x < gmicImage._width; x++)
-        {
-            pos = y * gmicImage._width + x;
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = g = b = gmicImage._data[pos]                / 255.0;
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-        }
-    }
-    // TODO: check performance if memcpy whole channel is faster
-}
-
-
-void KisGmicSimpleConvertor::grayscaleAlpha2rgba(CImg< float >& gmicImage, QVector< quint8 * > &planes)
-{
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    quint8 * alphaChannelBytes = planes[3];
-
-    int pos = 0;
-    int alphaOffset = gmicImage._width * gmicImage._height;
-    float r,g,b,a;
-
-    // iterate over gmic image and fill plane buffers
-    for (unsigned int y = 0; y < gmicImage._height; y++)
-    {
-        for (unsigned int x = 0; x < gmicImage._width; x++){
-            pos = y * gmicImage._width + x;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = g = b = gmicImage._data[pos]                / 255.0;
-            a = gmicImage._data[pos + alphaOffset]   / 255.0;
-
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
-        }
-    }
-}
-
-
-void KisGmicSimpleConvertor::rgb2rgb(CImg< float >& gmicImage, QVector< quint8 * > &planes)
-{
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    quint8 * alphaChannelBytes = planes[3];
-
-    // alphaChannel will be preserved
-
-    int pos = 0;
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-
-    float r,g,b,a = 1.0;
-
-    // iterate over gmic image and fill plane buffers
-    for (unsigned int y = 0; y < gmicImage._height; y++)
-    {
-        for (unsigned int x = 0; x < gmicImage._width; x++)
-        {
-            pos = y * gmicImage._width + x;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = gmicImage._data[pos]                / 255.0;
-            g = gmicImage._data[pos + greenOffset]  / 255.0;
-            b = gmicImage._data[pos + blueOffset]   / 255.0;
-
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-            memcpy(alphaChannelBytes,    &a, 4); alphaChannelBytes   += 4;
-        }
-    }
-}
-
-void KisGmicSimpleConvertor::rgba2rgba(CImg< float >& gmicImage, QVector< quint8 * > &planes)
-{
-    dbgPlugins <<"planes-size"<< planes.size();
-
-    quint8 * redChannelBytes = planes[0];
-    quint8 * greenChannelBytes = planes[1];
-    quint8 * blueChannelBytes = planes[2];
-    quint8 * alphaChannelBytes = planes[3];
-
-    int pos = 0;
-    int greenOffset = gmicImage._width * gmicImage._height;
-    int blueOffset = greenOffset * 2;
-    int alphaOffset = greenOffset * 3;
-
-    float r,g,b,a;
-
-    // iterate over gmic image and fill plane buffers
-    for (unsigned int y = 0; y < gmicImage._height; y++)
-    {
-        for (unsigned int x = 0; x < gmicImage._width; x++)
-        {
-            pos = y * gmicImage._width + x;
-
-            // gmic assumes 0.0 - 255.0, Krita stores 0.0 - 1.0
-            r = gmicImage._data[pos]                / 255.0;
-            g = gmicImage._data[pos + greenOffset]  / 255.0;
-            b = gmicImage._data[pos + blueOffset]   / 255.0;
-            a = gmicImage._data[pos + alphaOffset]  / 255.0;
-
-            memcpy(redChannelBytes,     &r, 4); redChannelBytes     += 4;
-            memcpy(greenChannelBytes,   &g, 4); greenChannelBytes   += 4;
-            memcpy(blueChannelBytes,    &b, 4); blueChannelBytes    += 4;
-            memcpy(alphaChannelBytes,   &a, 4); alphaChannelBytes   += 4;
-        }
-    }
 }
 
 
@@ -303,7 +228,7 @@ QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage)
 }
 
 
-void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float >& gmicImage)
+void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float >& gmicImage, qreal multiplied)
 {
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
@@ -321,10 +246,10 @@ void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float 
         for (int x = 0; x < image.width(); x++)
         {
             pos = y * gmicImage._width + x;
-            gmicImage._data[pos]                = qRed(pixel[x]) / 255.0;
-            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]) / 255.0;
-            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]) / 255.0;
-            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]) / 255.0;
+            gmicImage._data[pos]                = qRed(pixel[x]) / multiplied;
+            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]) / multiplied;
+            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]) / multiplied;
+            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]) / multiplied;
         }
     }
 

@@ -48,10 +48,8 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         KisPaintDeviceSP src = node->paintDevice();
         KisTransaction transaction("", src);
 
-        bool preserveAlpha = false;
-
         KisGmicSimpleConvertor convertor;
-        KisPaintDeviceSP dstDev = convertor.convertFromGmicImage(m_images->_data[index], preserveAlpha);
+        KisPaintDeviceSP dstDev = convertor.convertFromGmicImage(m_images->_data[index]);
 
         // to actual layer colorspace
         dstDev->convertTo(src->colorSpace());
@@ -62,10 +60,6 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
 
         // preserve alpha if grayscale or RGB output
         QRect rc(0,0,m_images->_data[index]._width, m_images->_data[index]._height);
-        if (preserveAlpha)
-        {
-            gc.setLockAlpha(true);
-        }
         gc.bitBlt(rc.topLeft(), dstDev, rc);
         gc.end();
 

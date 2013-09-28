@@ -19,15 +19,31 @@
 #ifndef _KIS_GMIC_BENCHMARKS_H_
 #define _KIS_GMIC_BENCHMARKS_H_
 
+#include <gmic.h>
+#include <kis_types.h>
+
 #include <QtTest>
+#include <QImage>
+#include <QColor>
 
 class KisGmicBenchmarks : public QObject
 {
     Q_OBJECT
 
+private:
+    gmic_image<float> m_gmicImage;
+    QImage m_qImage;
+    QColor m_darkOrange;
+    KisPaintDeviceSP m_device;
+
 private slots:
-    void testA();
-    void testB();
+    void initTestCase();
+    void cleanupTestCase();
+
+    void testQImageConversion();
+    void testKisPaintDeviceConversion();
+    void testConversion();
+
 };
 
 #endif

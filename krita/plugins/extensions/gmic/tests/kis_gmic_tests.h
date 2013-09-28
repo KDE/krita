@@ -23,7 +23,7 @@
 #include <QImage>
 #include <gmic.h>
 
-//#define RUN_FILTERS
+// #define RUN_FILTERS
 
 class KisGmicBlacklister;
 

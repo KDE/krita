@@ -55,7 +55,7 @@
 
 using namespace cimg_library;
 
-const static QString EXTENSION = ".bmp";
+const static QString EXTENSION = ".png";
 
 void KisGmicTests::initTestCase()
 {
@@ -197,6 +197,9 @@ void KisGmicTests::testAllFilters()
 
     int failed = 0;
     int success = 0;
+
+    QVector<QString> failedFilters;
+
     while (!q.isEmpty())
     {
         Component * c = q.dequeue();
@@ -222,6 +225,7 @@ void KisGmicTests::testAllFilters()
                 {
                     qDebug() << "Blacklisted filter, increase fails" << filterName;
                     failed++;
+                    failedFilters.append(categoryName+":"+filterName);
                 }
                 else
                 {
@@ -236,6 +240,10 @@ void KisGmicTests::testAllFilters()
                     bool result = filterWithGmic(&filterSettings, filterName, m_images);
                     result ? success++ : failed++;
                     qDebug() << "Progress status:" << "Failed:" << failed << " Success: " << success;
+                    if (result == false)
+                    {
+                        failedFilters.append(categoryName+":"+filterName);
+                    }
                 }
 #endif
             }
@@ -251,10 +259,19 @@ void KisGmicTests::testAllFilters()
 
 #ifdef RUN_FILTERS
     qDebug() << "Finish status:" << "Failed:" << failed << " Success: " << success;
+    qDebug() << "== Failed filters ==";
+    foreach (const QString &item, failedFilters)
+    {
+        qDebug() << item;
+    }
+
+
 #else
     Q_UNUSED(success);
     Q_UNUSED(failed);
 #endif
+
+
 
     QCOMPARE(filters,260);
 }
@@ -295,11 +312,10 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
     }
 
     // Forth step : convert to QImage and save
-    bool preserveAlpha(true);
     for (unsigned int i = 0; i < images._width; ++i)
     {
         KisGmicSimpleConvertor convertor;
-        KisPaintDeviceSP device = convertor.convertFromGmicImage(images._data[i], preserveAlpha);
+        KisPaintDeviceSP device = convertor.convertFromGmicImage(images._data[i]);
         QImage result = device->convertToQImage(0, 0,0,images._data[i]._width, images._data[i]._height);
         QString indexString("_%1");
         if (images._width > 1)
@@ -310,10 +326,17 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
             indexString = QString();
         }
         QString fullFileName(QString(FILES_OUTPUT_DIR) + QDir::separator() + fileName + indexString + ".png");
+        QFileInfo info(fullFileName);
+        if (info.exists())
+        {
+            continue;
+        }
+
         bool isSaved = result.save(fullFileName);
         if (!isSaved)
         {
             qDebug() << "Saving " << fileName  << "failed";
+            return false;
         }else
         {
             qDebug() << "Saved " << fullFileName << " -- OK";
@@ -352,9 +375,6 @@ bool KisGmicTests::isAlreadyThere(QString fileName)
     QFileInfo info(path);
     return info.exists();
 }
-
-
-
 
 
 QTEST_KDEMAIN(KisGmicTests, NoGUI)

@@ -301,7 +301,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     //TODO connect to slot
 
     d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
-    actionCollection()->addAction("file_uncompress_doc", d->encryptDocument);
+    actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
     //TODO connect to slot
 
     /* The following entry opens the document information dialog.  Since the action is named so it
@@ -325,7 +325,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
-    d->encryptDocument->setEnabled(true);
+    d->encryptDocument->setEnabled(false);
     d->uncompressToDir->setEnabled(false);
 
     // populate theme menu
@@ -516,6 +516,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     d->saveActionAs->setEnabled(enable);
     d->importFile->setEnabled(enable);
     d->exportFile->setEnabled(enable);
+    d->encryptDocument->setEnabled(enable);
+    d->uncompressToDir->setEnabled(enable);
     d->printAction->setEnabled(enable);
     d->printActionPreview->setEnabled(enable);
     d->sendFileAction->setEnabled(enable);

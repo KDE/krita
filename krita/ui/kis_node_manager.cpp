@@ -627,26 +627,6 @@ bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
     return lastLayer;
 }
 
-void KisNodeManager::removeNode()
-{
-    //do not delete root layer
-
-    KisNodeSP node = activeNode();
-
-    if(node->parent()==0)
-        return;
-
-    if (scanForLastLayer(m_d->view->image(), node)) {
-        m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
-        m_d->commandsAdapter->removeNode(node);
-        createNode("KisPaintLayer");
-        m_d->commandsAdapter->endMacro();
-    } else {
-        m_d->commandsAdapter->removeNode(node);
-    }
-
-}
-
 void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();

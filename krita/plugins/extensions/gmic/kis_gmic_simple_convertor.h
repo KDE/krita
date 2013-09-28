@@ -36,7 +36,7 @@ public:
     static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage);
 
     // convert functions
-    void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage);
+    void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc = QRect());
     KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage, bool &preserveAlpha);
     // re-align functions
     void grayscale2rgb(cimg_library::CImg< float >& gmicImage, QVector< quint8 * > &planes);

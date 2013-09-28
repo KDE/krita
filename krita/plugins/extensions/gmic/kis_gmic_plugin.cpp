@@ -38,6 +38,7 @@
 #include <kis_layer.h>
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
+#include <kis_paint_layer.h>
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
@@ -56,6 +57,9 @@
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_gmic_blacklister.h"
+#include "kis_input_output_mapper.h"
+#include "kis_gmic_simple_convertor.h"
+#include "kis_gmic_synchronize_layers_command.h"
 
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
@@ -108,9 +112,6 @@ void KisGmicPlugin::slotGmic()
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
     // cancel
     connect(m_gmicWidget, SIGNAL(sigClose()),this, SLOT(slotClose()));
-    // ok
-
-    // reset
 
     m_gmicWidget->show();
 }
@@ -127,16 +128,18 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         return;
     }
 
-    if (setting->inputLayerMode() == ACTIVE_LAYER)
-    {
-        //TODO: Undo string for gimp plug-in is G'MIC, I would like to use G'MIC+filtername
-        actionName = i18n("Gmic: Active Layer");
-        node = m_view->activeNode();
-    }
-    else
+    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisNodeListSP kritaNodes = mapper.inputNodes(setting->inputLayerMode());
+
+    if (kritaNodes->isEmpty())
     {
         KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
         return;
+    }
+    else
+    {
+        actionName = i18n("Gmic filter");
+        node = m_view->image()->root();
     }
 
     if (setting->outputMode() != IN_PLACE)
@@ -153,31 +156,28 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
                                    KisProcessingApplicator::RECURSIVE,
                                    emitSignals, actionName);
 
-    QList<KisNodeSP> kritaNodes;
-    kritaNodes.append(m_view->activeNode());
 
     QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-    gmicLayers->assign(kritaNodes.size());
+    gmicLayers->assign(kritaNodes->size());
 
-
+    QRect layerSize(0,0,m_view->image()->width(), m_view->image()->height());
     KisProcessingVisitorSP visitor;
-    visitor = new KisExportGmicProcessingVisitor(kritaNodes, gmicLayers);
+
+    // convert krita layers to gmic layers
+    visitor = new KisExportGmicProcessingVisitor(kritaNodes, gmicLayers, layerSize);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
+    // apply gmic filters to provided layers
     applicator.applyCommand(new KisGmicCommand(setting->gmicCommand(), gmicLayers));
+
+    // synchronize layer count
+    applicator.applyCommand(new KisGmicSynchronizeLayersCommand(kritaNodes, gmicLayers, m_view->image()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+
+    // would sleep(3) help here?
 
     visitor = new KisImportGmicProcessingVisitor(kritaNodes, gmicLayers);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
     applicator.end();
-
-    // TODO: applicator.applyCommand(new CleanTheData(images));
-
-    /*CleanTheData::redo() {
-        m_images->clear();
-    }/*/
-
-
-
 }
 
 void KisGmicPlugin::slotClose()

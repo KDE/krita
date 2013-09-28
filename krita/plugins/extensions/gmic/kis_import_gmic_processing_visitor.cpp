@@ -27,9 +27,11 @@
 #include "kis_gmic_simple_convertor.h"
 #include <kis_node.h>
 #include <kis_painter.h>
+#include <commands/kis_image_layer_add_command.h>
+#include <kis_paint_layer.h>
 #include <KoCompositeOpRegistry.h>
 
-KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const QList<KisNodeSP> &nodes,QSharedPointer<gmic_list<float> > images)
+KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<gmic_list<float> > images)
     : m_nodes(nodes),
       m_images(images)
 {
@@ -37,13 +39,11 @@ KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const QList<KisNo
 
 void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
-    int index = m_nodes.indexOf(node);
+    int index = m_nodes->indexOf(node);
     if (index >= 0)
     {
         gmic_image<float> &gimg = m_images->_data[index];
-
-        dbgPlugins << "Importing: " << gimg._width << gimg._height << gimg._spectrum;
-
+        dbgPlugins << "Importing layer index" << index << "Size: "<< gimg._width << "x" << gimg._height << "colorchannels: " << gimg._spectrum;
 
         KisPaintDeviceSP src = node->paintDevice();
         KisTransaction transaction("", src);
@@ -52,7 +52,6 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
 
         KisGmicSimpleConvertor convertor;
         KisPaintDeviceSP dstDev = convertor.convertFromGmicImage(m_images->_data[index], preserveAlpha);
-
 
         // to actual layer colorspace
         dstDev->convertTo(src->colorSpace());

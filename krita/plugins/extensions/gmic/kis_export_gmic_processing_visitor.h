@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -37,7 +37,7 @@ class KisUndoAdapter;
 class KisExportGmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    KisExportGmicProcessingVisitor(const QList<KisNodeSP> &nodes, QSharedPointer< gmic_list<float> > images);
+    KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer< gmic_list<float> > images, QRect rc = QRect());
 
 protected:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
@@ -48,8 +48,9 @@ private:
     void init();
 private:
 
-    QList<KisNodeSP> m_nodes;
+    KisNodeListSP m_nodes;
     QSharedPointer<gmic_list<float> > m_images;
+    QRect m_rc; // size of the layer has to be same for some filters, e.g. colorize, use image size
 };
 
 #endif /* __KIS_EXPORT_GMIC_PROCESSING_VISITOR_H */

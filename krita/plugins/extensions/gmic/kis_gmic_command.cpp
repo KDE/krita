@@ -45,6 +45,18 @@ void KisGmicCommand::redo()
         //------------------------------------------------------
         std::fprintf(stderr,"\n- 2st step : Call G'MIC interpreter.\n");
 
+        for (unsigned int i = 0; i<m_images->_width; ++i)
+        {
+            std::fprintf(stderr,"   Input image %u = %ux%ux%ux%u, buffer : %p\n",i,
+                        m_images->_data[i]._width,
+                        m_images->_data[i]._height,
+                        m_images->_data[i]._depth,
+                        m_images->_data[i]._spectrum,
+                        m_images->_data[i]._data);
+        }
+
+
+
         gmic_list<char> images_names;
         try
         {

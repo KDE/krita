@@ -33,7 +33,7 @@ class KisUndoAdapter;
 class KisImportGmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    KisImportGmicProcessingVisitor(const QList<KisNodeSP> &nodes,
+    KisImportGmicProcessingVisitor(const KisNodeListSP nodes,
                                    QSharedPointer<gmic_list<float> > images);
 
 protected:
@@ -41,7 +41,7 @@ protected:
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
 
 private:
-    QList<KisNodeSP> m_nodes;
+    const KisNodeListSP m_nodes;
     QSharedPointer<gmic_list<float> > m_images;
 };
 

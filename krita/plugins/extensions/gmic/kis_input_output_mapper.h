@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,35 +13,31 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
-#ifndef _KIS_GMIC_PLUGIN_H_
-#define _KIS_GMIC_PLUGIN_H_
+#ifndef _KIS_INPUT_OUTPUT_MAPPER
+#define _KIS_INPUT_OUTPUT_MAPPER
 
-#include <QVariant>
-
-#include <kis_view_plugin.h>
-#include <kis_gmic_filter_settings.h>
-#include "kis_gmic_parser.h"
 #include <kis_types.h>
+#include "kis_gmic_filter_settings.h"
 
-class KisGmicWidget;
 
-class KisGmicPlugin : public KisViewPlugin
+
+class KisInputOutputMapper
 {
-    Q_OBJECT
 public:
-    KisGmicPlugin(QObject *parent, const QVariantList &);
-    virtual ~KisGmicPlugin();
+    KisInputOutputMapper(KisImageWSP image, KisNodeSP activeNode);
+    KisNodeListSP inputNodes(InputLayerMode inputMode);
 
 private:
-    KisGmicWidget * m_gmicWidget;
-    QString m_gmicDefinitionFilePath;
+    void allLayers(KisNodeListSP result);
+    void allInversedOrderedLayers(KisNodeListSP result);
 
-private slots:
-    void slotGmic();
-    void slotApplyGmicCommand(KisGmicFilterSetting* setting);
-    void slotClose();
+private:
+    KisImageWSP m_image;
+    KisNodeSP m_activeNode;
+
 };
 
 #endif

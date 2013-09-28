@@ -206,6 +206,8 @@ template<class T> class QWeakPointer;
 class KUndo2Command;
 typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
 
+typedef QSharedPointer<QList <KisNodeSP> > KisNodeListSP;
+
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;
 typedef QWeakPointer<KisStroke> KisStrokeWSP;

@@ -267,6 +267,7 @@ void KisMaskManager::maskProperties()
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
+            mask->setName(dlg.layerName());
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd

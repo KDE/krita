@@ -150,6 +150,7 @@ public slots:
     void nodeOpacityChanged(qreal opacity, bool finalChange);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
+    void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
     void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);

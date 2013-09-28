@@ -421,7 +421,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
     colorChecks1->setColor(cfg.checkersColor1());
-    colorChecks2->setColor(cfg.checkersColor1());
+    colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
 

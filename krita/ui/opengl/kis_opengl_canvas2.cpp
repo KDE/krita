@@ -473,6 +473,9 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {
+    KisConfig cfg;
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+
     notifyConfigChanged();
 }
 

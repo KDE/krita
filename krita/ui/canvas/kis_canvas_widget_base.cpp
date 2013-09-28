@@ -183,13 +183,14 @@ QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
     if(checkSize < 0)
         checkSize = cfg.checkSize();
 
-    QColor checkColor = cfg.checkersColor();
+    QColor checkColor1 = cfg.checkersColor1();
+    QColor checkColor2 = cfg.checkersColor2();
 
     QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
     QPainter pt(&tile);
-    pt.fillRect(tile.rect(), Qt::white);
-    pt.fillRect(0, 0, checkSize, checkSize, checkColor);
-    pt.fillRect(checkSize, checkSize, checkSize, checkSize, checkColor);
+    pt.fillRect(tile.rect(), checkColor2);
+    pt.fillRect(0, 0, checkSize, checkSize, checkColor1);
+    pt.fillRect(checkSize, checkSize, checkSize, checkSize, checkColor1);
     pt.end();
 
     return tile;

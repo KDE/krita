@@ -561,15 +561,25 @@ void KisConfig::setCanvasBorderColor(const QColor& color)
 }
 
 
-QColor KisConfig::checkersColor()
+QColor KisConfig::checkersColor1()
 {
     QColor col(220, 220, 220);
     return m_cfg.readEntry("checkerscolor", col);
 }
 
-void KisConfig::setCheckersColor(const QColor & v)
+void KisConfig::setCheckersColor1(const QColor & v)
 {
     m_cfg.writeEntry("checkerscolor", v);
+}
+
+QColor KisConfig::checkersColor2()
+{
+    return m_cfg.readEntry("checkerscolor2", QColor(Qt::white));
+}
+
+void KisConfig::setCheckersColor2(const QColor & v)
+{
+    m_cfg.writeEntry("checkerscolor2", v);
 }
 
 bool KisConfig::antialiasCurves()

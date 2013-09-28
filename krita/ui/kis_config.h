@@ -175,8 +175,12 @@ public:
     bool scrollCheckers() const;
     void setScrollingCheckers(bool scollCheckers);
 
-    QColor checkersColor();
-    void setCheckersColor(const QColor & v);
+    QColor checkersColor1();
+    void setCheckersColor1(const QColor & v);
+
+    QColor checkersColor2();
+    void setCheckersColor2(const QColor & v);
+
 
     QColor canvasBorderColor();
     void setCanvasBorderColor(const QColor &color);

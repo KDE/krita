@@ -80,6 +80,7 @@ public:
      */
     static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
     static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
+
     /**
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.

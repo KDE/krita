@@ -40,7 +40,7 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
-#include <KoPageLayoutWidget.h>
+#include <KoPageLayoutDialog.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
 
@@ -70,7 +70,6 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
 #include <kmenubar.h>
@@ -125,6 +124,8 @@ public:
         showFileVersions = 0;
         importFile = 0;
         exportFile = 0;
+        encryptDocument = 0;
+        uncompressToDir = 0;
         isImporting = false;
         isExporting = false;
         windowSizeDirty = false;
@@ -199,6 +200,8 @@ public:
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
+    KAction *encryptDocument;
+    KAction *uncompressToDir;
     KToggleAction *toggleDockers;
     KRecentFilesAction *recent;
 
@@ -293,6 +296,14 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
+    d->encryptDocument = new KAction(i18n("En&crypt Document"), this);
+    actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
+    //TODO connect to slot
+
+    d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
+    actionCollection()->addAction("file_uncompress_doc", d->encryptDocument);
+    //TODO connect to slot
+
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
@@ -314,6 +325,8 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
+    d->encryptDocument->setEnabled(true);
+    d->uncompressToDir->setEnabled(false);
 
     // populate theme menu
     d->themeManager = new Digikam::ThemeManager(this);
@@ -1358,56 +1371,6 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-class ExportPdfDialog : public KPageDialog
-{
-public:
-    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KPageDialog() {
-        setFaceType(KPageDialog::List);
-        setCaption(i18n("Export to PDF"));
-
-        m_fileWidget = new KFileWidget(startUrl, this);
-        m_fileWidget->setOperationMode(KFileWidget::Saving);
-        m_fileWidget->setMode(KFile::File);
-        m_fileWidget->setMimeFilter(QStringList() << "application/pdf");
-        connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-
-        KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
-        fileItem->setIcon(koIcon("document-open"));
-        addPage(fileItem);
-
-        m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
-        m_pageLayoutWidget->showUnitchooser(false);
-        KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
-        optionsItem->setIcon(koIcon("configure"));
-        addPage(optionsItem);
-
-        resize(QSize(800, 600).expandedTo(minimumSizeHint()));
-    }
-    KUrl selectedUrl() const {
-        // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
-        //return m_fileWidget->selectedUrl();
-
-        KUrl url = m_fileWidget->dirOperator()->url();
-        url.adjustPath(KUrl::AddTrailingSlash);
-        url.setFileName(m_fileWidget->locationEdit()->currentText());
-        return url;
-    }
-    KoPageLayout pageLayout() const {
-        return m_pageLayoutWidget->pageLayout();
-    }
-protected:
-    virtual void slotButtonClicked(int button) {
-        if (button == KDialog::Ok) {
-            m_fileWidget->slotOk();
-        } else {
-            KPageDialog::slotButtonClicked(button);
-        }
-    }
-private:
-    KFileWidget *m_fileWidget;
-    KoPageLayoutWidget *m_pageLayoutWidget;
-};
-
 KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
     if (!rootView())
@@ -1422,7 +1385,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     if (!rootView())
         return 0;
     if (pdfFileName.isEmpty()) {
-        KUrl startUrl = KUrl("kfiledialog:///SavePdfDialog");
+        KConfigGroup group = KGlobal::config()->group("File Dialogs");
+        QString defaultDir = group.readEntry("SavePdfDialog");
+        if (defaultDir.isEmpty())
+            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+        KUrl startUrl = KUrl(defaultDir);
         KoDocument* pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
@@ -1432,15 +1399,20 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
             startUrl.setFileName( fileName );
         }
 
-        QPointer<ExportPdfDialog> dialog(new ExportPdfDialog(startUrl, pageLayout));
-        if (dialog->exec() != QDialog::Accepted || !dialog) {
-            delete dialog;
+        QPointer<KoPageLayoutDialog> layoutDlg(new KoPageLayoutDialog(this, pageLayout));
+        layoutDlg->setWindowModality(Qt::WindowModal);
+        if (layoutDlg->exec() != QDialog::Accepted || !layoutDlg) {
+            delete layoutDlg;
             return 0;
         }
+        pageLayout = layoutDlg->pageLayout();
+        delete layoutDlg;
 
-        KUrl url = dialog->selectedUrl();
-        pageLayout = dialog->pageLayout();
-        delete dialog;
+        KUrl url(KoFileDialogHelper::getSaveFileName(
+                        this,
+                        i18n("Export as PDF"),
+                        startUrl.toLocalFile(),
+                        QStringList() << "application/pdf"));
 
         if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
             bool overwrite = KMessageBox::questionYesNo(this,

@@ -21,11 +21,12 @@
 #define KIS_CANVAS_CONTROLS_MANAGER_H
 
 #include <QObject>
+#include <krita_export.h>
 
 class KisView2;
 class KActionCollection;
 
-class KisCanvasControlsManager: public QObject
+class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
 {
     Q_OBJECT
 

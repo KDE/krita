@@ -115,7 +115,7 @@ private:
         return button == leftButtonValue ? Qt::LeftButton :
             button == rightButtonValue ? Qt::RightButton :
             button == middleButtonValue ? Qt::MiddleButton :
-            button ? Qt::LeftButton /* Fallback item */ :
+            button ? Qt::LeftButton /* fallback item */ :
             Qt::NoButton;
     }
 };
@@ -268,12 +268,15 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         btnNew = localPacketBuf[i].pkButtons;
         btnChange = btnOld ^ btnNew;
 
-        qDebug() << "Old Buttons:" <<btnOld << "NewButtons:" << btnNew;
+        bool buttonPressed = btnChange && btnNew > btnOld;
+        bool buttonReleased = btnChange && btnNew < btnOld;
+        bool anyButtonsStillPressed = btnNew;
 
-        if (btnNew & btnChange) {
-            button_pressed = true;
-            t = KisTabletEvent::TabletPressEx;
+        if (btnOld != btnNew) {
+            qDebug() << "Old Buttons:" <<btnOld << "NewButtons:" << btnNew << "pressed" << buttonPressed << "released" << buttonReleased;
         }
+
+
         ptNew.x = UINT(localPacketBuf[i].pkX);
         ptNew.y = UINT(localPacketBuf[i].pkY);
         z = UINT(localPacketBuf[i].pkZ);
@@ -284,18 +287,24 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
-        if (btnNew) {
+        if (buttonPressed) {
+            button_pressed = true;
+            t = KisTabletEvent::TabletPressEx;
+        } else if (buttonReleased /* button_pressed */) {
+            // One button press, should only give one button release
+            t = KisTabletEvent::TabletReleaseEx;
+            button_pressed = false;
+        }
+
+        if (anyButtonsStillPressed) {
             if (currentTabletPointer.currentPointerType == QTabletEvent::Pen || currentTabletPointer.currentPointerType == QTabletEvent::Eraser)
                 prsNew = localPacketBuf[i].pkNormalPressure
                             / qreal(currentTabletPointer.maxPressure
                                     - currentTabletPointer.minPressure);
             else
                 prsNew = 0;
-        } else if (button_pressed) {
-            // One button press, should only give one button release
-            t = KisTabletEvent::TabletReleaseEx;
-            button_pressed = false;
         }
+
         QPoint globalPos(qRound(hiResGlobal.x()), qRound(hiResGlobal.y()));
 
         if (t == KisTabletEvent::TabletPressEx && !kis_tablet_pressed) {
@@ -314,7 +323,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             w = QWidget::find(msg.hwnd);
         }
 
-        if (t == KisTabletEvent::TabletReleaseEx) {
+        if (!anyButtonsStillPressed) {
             kis_tablet_pressed = 0;
         }
 

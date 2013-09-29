@@ -667,10 +667,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case KisTabletEvent::TabletMoveEx:
     case KisTabletEvent::TabletReleaseEx: {
 
-        qDebug() << "Got TabletEx event" <<
-            (event->type() == KisTabletEvent::TabletPressEx ? "Press" :
-             event->type() == KisTabletEvent::TabletReleaseEx ? "Release" :
-             event->type() == KisTabletEvent::TabletMoveEx ? "Move" : "Shit");
+//        qDebug() << "Got TabletEx event" <<
+//            (event->type() == KisTabletEvent::TabletPressEx ? "Press" :
+//             event->type() == KisTabletEvent::TabletReleaseEx ? "Release" :
+//             event->type() == KisTabletEvent::TabletMoveEx ? "Move" : "Shit");
 
         save_ignore_cursor_events();
 

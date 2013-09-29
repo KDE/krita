@@ -26,7 +26,7 @@
 
 #include <QDebug>
 #define DEBUG_ACTION(action) qDebug() << __FUNCTION__ << ":" << action;
-#define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button;
+#define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons;
 
 
 class KisShortcutMatcher::Private

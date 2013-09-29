@@ -853,7 +853,7 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
     return (ret == KMessageBox::Continue);
 }
 
-bool KoMainWindow::saveDocument(bool saveas, bool silent)
+bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 {
     if (!d->rootDocument || !d->rootPart) {
         return true;
@@ -883,8 +883,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
     KUrl suggestedURL = d->rootPart->url();
 
-    QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format,
-                                                         KoFilterManager::Export, d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
+    QStringList mimeFilter;
+    if (!specialOutputFlag) {
+        mimeFilter = KoFilterManager::mimeFilter(_native_format,
+                                                 KoFilterManager::Export,
+                                                 d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
+    }
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
@@ -934,14 +938,13 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                         d->lastExportUrl.url() : suggestedURL.url(),
                         mimeFilter));
 
-        KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-        QString outputFormatString = mime->name();
         QByteArray outputFormat = _native_format;
-        outputFormat = outputFormatString.toLatin1();
+        if (!specialOutputFlag) {
+            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = mime->name();
+            outputFormat = outputFormatString.toLatin1();
+        }
 
-        //specialOutputFlag = dialog->specialEntrySelected();
-
-        int specialOutputFlag = 0;
         if (!isExporting())
             justChangingFilterOptions = (newURL == d->rootPart->url()) &&
                     (outputFormat == d->rootDocument->mimeType()) &&
@@ -1296,12 +1299,14 @@ void KoMainWindow::slotFileSaveAs()
 
 void KoMainWindow::slotEncryptDocument()
 {
-    emit documentSaved();
+    if (saveDocument(false, false, KoDocument::SaveEncrypted))
+        emit documentSaved();
 }
 
 void KoMainWindow::slotUncompressToDir()
 {
-    emit documentSaved();
+    if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore))
+        emit documentSaved();
 }
 
 void KoMainWindow::slotDocumentInfo()

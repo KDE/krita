@@ -64,6 +64,30 @@ public:
     inline Qt::MouseButton button() const { return mouseButton; }
     inline Qt::MouseButtons buttons() const { return mouseButtons; }
 
+    inline QMouseEvent toQMouseEvent() const {
+        QEvent::Type t =
+            type() == TabletMoveEx ? MouseMove :
+            type() == TabletPressEx ? MouseButtonPress :
+            type() == TabletReleaseEx ? MouseButtonRelease :
+            QEvent::None;
+
+        return QMouseEvent(t, pos(), globalPos(),
+                           button(), buttons(), modifiers());
+    }
+
+    inline QTabletEvent toQTabletEvent() const {
+        QEvent::Type t =
+            type() == TabletMoveEx ? TabletMove :
+            type() == TabletPressEx ? TabletPress :
+            type() == TabletReleaseEx ? TabletRelease :
+            QEvent::None;
+
+        return QTabletEvent(t, pos(), globalPos(), hiResGlobalPos(),
+                            device(), pointerType(),
+                            pressure(), xTilt(), yTilt(), tangentialPressure(),
+                            rotation(), z(), modifiers(), uniqueId());
+    }
+
 protected:
     QPoint mPos, mGPos;
     QPointF mHiResGlobalPos;

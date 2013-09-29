@@ -52,6 +52,8 @@
 #include "kis_input_profile_manager.h"
 #include "kis_shortcut_configuration.h"
 
+#include <input/kis_tablet_event.h>
+
 
 QString eventToString(QTabletEvent *event) {
 
@@ -159,12 +161,15 @@ public:
         , toolProxy(0)
         , setMirrorMode(false)
         , forwardAllEventsToTool(false)
+        , ignoreQtCursorEvents(false)
     #ifdef Q_WS_X11
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
     #endif
         , lastTabletEvent(0)
         , logTabletEvents(false)
-    { }
+        , proximityNotifier(0)
+    {
+    }
 
     bool tryHidePopupPalette();
     bool trySetMirrorMode(const QPointF &mousePosition);
@@ -185,6 +190,7 @@ public:
 
     bool setMirrorMode;
     bool forwardAllEventsToTool;
+    bool ignoreQtCursorEvents;
 
     KisShortcutMatcher matcher;
 #ifdef Q_WS_X11
@@ -195,7 +201,14 @@ public:
     KisAbstractInputAction *defaultInputAction;
 
     bool logTabletEvents;
+
+    class ProximityNotifier;
+    QObject *proximityNotifier;
 };
+
+#define save_ignore_cursor_events() bool __old_iqce = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
+#define restore_ignore_cursor_events() d->ignoreQtCursorEvents = __old_iqce
+#define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
 
 static inline QList<Qt::Key> KEYS() {
     return QList<Qt::Key>();
@@ -216,6 +229,25 @@ static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button1, Qt::MouseB
     return QList<Qt::MouseButton>() << button1 << button2;
 }
 
+class KisInputManager::Private::ProximityNotifier : public QObject {
+public:
+    ProximityNotifier(Private *_d) : d(_d) {}
+
+    bool eventFilter(QObject* object, QEvent* event ) {
+        switch (event->type()) {
+        case QEvent::TabletEnterProximity:
+            d->ignoreQtCursorEvents = true;
+            break;
+        case QEvent::TabletLeaveProximity:
+            d->ignoreQtCursorEvents = false;
+            break;
+        }
+        return QObject::eventFilter(object, event);
+    }
+
+private:
+    KisInputManager::Private *d;
+};
 
 void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action, int index,
                                                  const QList<Qt::Key> &modifiers,
@@ -474,6 +506,15 @@ void KisInputManager::toggleTabletLogger()
     }
 }
 
+QObject* KisInputManager::proximityEventFilterObject() const
+{
+    if (!d->proximityNotifier) {
+        d->proximityNotifier = new Private::ProximityNotifier(d);
+    }
+
+    return d->proximityNotifier;
+}
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object);
@@ -487,8 +528,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:
+        break_if_should_ignore_cursor_events();
         if (d->logTabletEvents) qDebug() << "MouseButtonPress";
     case QEvent::MouseButtonDblClick: {
+        break_if_should_ignore_cursor_events();
         if (d->logTabletEvents) qDebug() << "MouseButtonDblClick";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
@@ -501,6 +544,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseButtonRelease: {
+        break_if_should_ignore_cursor_events();
         if (d->logTabletEvents) qDebug() << "MouseButtonRelease";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
@@ -539,6 +583,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseMove: {
+        break_if_should_ignore_cursor_events();
+
         if (d->logTabletEvents) qDebug() << "MouseMove";
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
@@ -587,6 +633,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::TabletPress:
     case QEvent::TabletMove:
     case QEvent::TabletRelease: {
+        break_if_should_ignore_cursor_events();
         //We want both the tablet information and the mouse button state.
         //Since QTabletEvent only provides the tablet information, we
         //save that and then ignore the event so it will generate a mouse
@@ -612,6 +659,34 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->ignore();
 #endif
 
+
+        break;
+    }
+
+    case KisTabletEvent::TabletPressEx:
+    case KisTabletEvent::TabletMoveEx:
+    case KisTabletEvent::TabletReleaseEx: {
+
+        qDebug() << "Got TabletEx event" <<
+            (event->type() == KisTabletEvent::TabletPressEx ? "Press" :
+             event->type() == KisTabletEvent::TabletReleaseEx ? "Release" :
+             event->type() == KisTabletEvent::TabletMoveEx ? "Move" : "Shit");
+
+        save_ignore_cursor_events();
+
+        KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
+
+        QTabletEvent qte = tevent->toQTabletEvent();
+        retval = eventFilter(object, &qte);
+        tevent->setAccepted(qte.isAccepted());
+
+        if (!retval && !qte.isAccepted()) {
+            QMouseEvent qme = tevent->toQMouseEvent();
+            retval = eventFilter(object, &qme);
+            tevent->setAccepted(qme.isAccepted());
+        }
+
+        restore_ignore_cursor_events();
 
         break;
     }

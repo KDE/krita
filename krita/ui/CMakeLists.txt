@@ -247,6 +247,14 @@ set(kritaui_LIB_SRCS
     processing/fill_processing_visitor.cpp
 )
 
+if(WIN32)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support_win.cpp
+        )
+endif(WIN32)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 kde4_add_ui_files(kritaui_LIB_SRCS

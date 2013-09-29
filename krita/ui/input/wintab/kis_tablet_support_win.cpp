@@ -18,9 +18,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <input/kis_tablet_event.h>
 #include "kis_tablet_support_win.h"
 #include "kis_tablet_support_win_p.h"
-#include "kis_tablet_event.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -40,11 +40,11 @@
                      | PK_ORIENTATION | PK_CURSOR | PK_Z)
 #define PACKETMODE  0
 
-#include <wintab.h>
+#include "wintab.h"
 #ifndef CSR_TYPE
 #define CSR_TYPE 20 // Some old Wacom wintab.h may not provide this constant.
 #endif
-#include <pktdef.h>
+#include "pktdef.h"
 
 
 /**
@@ -67,7 +67,7 @@ static PACKET globalPacketBuf[QT_TABLET_NPACKETQSIZE];  // our own tablet packet
 /**
  * Global variables to handle the Tablet Context
  */
-HCTX qt_tablet_context;
+HCTX qt_tablet_context = 0;
 bool qt_tablet_tilt_support;
 
 /**
@@ -92,7 +92,7 @@ struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter
                  Qt::MouseButton *button,
                  Qt::MouseButtons *buttons) {
 
-        int pressedButtonValue = btnNew & (btnNew ^ btnOld);
+        int pressedButtonValue = btnNew ^ btnOld;
 
         *button = buttonValueToEnum(pressedButtonValue);
 
@@ -115,6 +115,7 @@ private:
         return button == leftButtonValue ? Qt::LeftButton :
             button == rightButtonValue ? Qt::RightButton :
             button == middleButtonValue ? Qt::MiddleButton :
+            button ? Qt::LeftButton /* Fallback item */ :
             Qt::NoButton;
     }
 };
@@ -266,7 +267,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         btnOld = btnNew;
         btnNew = localPacketBuf[i].pkButtons;
         btnChange = btnOld ^ btnNew;
-        qDebug() << "Buttons:" << btnNew << btnChange;
+
+        qDebug() << "Old Buttons:" <<btnOld << "NewButtons:" << btnNew;
+
         if (btnNew & btnChange) {
             button_pressed = true;
             t = KisTabletEvent::TabletPressEx;

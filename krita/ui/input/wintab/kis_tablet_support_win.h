@@ -22,16 +22,17 @@
 #define KIS_TABLET_SUPPORT_WIN_H
 
 #include <Qt>
+#include <krita_export.h>
 
 #ifndef _WINDEF_
 typedef unsigned long DWORD;
 #endif
 
 
-class KisTabletSupportWin
+class KRITAUI_EXPORT KisTabletSupportWin
 {
 public:
-    struct ButtonsConverter {
+    struct KRITAUI_EXPORT ButtonsConverter {
         virtual ~ButtonsConverter() {}
         virtual void convert(DWORD btnOld, DWORD btnNew,
                              Qt::MouseButton *button,

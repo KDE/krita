@@ -35,6 +35,7 @@ private:
     QImage m_qImage;
     QColor m_darkOrange;
     KisPaintDeviceSP m_device;
+    QRect m_rect;
 
 private slots:
     void initTestCase();
@@ -43,6 +44,9 @@ private slots:
     void testQImageConversion();
     void testKisPaintDeviceConversion();
     void testConversion();
+
+    void testConvertToGmic();
+    void testConvertFromGmic();
 
 };
 

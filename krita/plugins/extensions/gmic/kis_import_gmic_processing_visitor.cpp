@@ -49,19 +49,7 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         KisTransaction transaction("", src);
 
         KisGmicSimpleConvertor convertor;
-        KisPaintDeviceSP dstDev = convertor.convertFromGmicImage(m_images->_data[index]);
-
-        // to actual layer colorspace
-        dstDev->convertTo(src->colorSpace());
-        // bitBlt back -- we don't write the pixel data back directly, but bitBlt so the
-        // unselected pixels are not overwritten.
-        KisPainter gc(src);
-        gc.setCompositeOp(COMPOSITE_COPY);
-
-        // preserve alpha if grayscale or RGB output
-        QRect rc(0,0,m_images->_data[index]._width, m_images->_data[index]._height);
-        gc.bitBlt(rc.topLeft(), dstDev, rc);
-        gc.end();
+        convertor.convertFromGmicImage(m_images->_data[index], src, 255.0f);
 
         transaction.commit(undoAdapter);
     }

@@ -16,12 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QRect>
+#include <kis_gmic_simple_convertor.h>
 
 #include <kis_debug.h>
 #include <kis_random_accessor_ng.h>
-
-#include <kis_gmic_simple_convertor.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -31,63 +29,75 @@
 using namespace cimg_library;
 
 // gmic assumes float rgba in 0.0 - 255.0, thus default value
-KisGmicSimpleConvertor::KisGmicSimpleConvertor() : m_multiplier(255.0)
+void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc)
 {
+    Q_ASSERT(!dev.isNull());
+    Q_ASSERT(gmicImage._spectrum == 4); // rgba
 
-}
-
-
-KisGmicSimpleConvertor::~KisGmicSimpleConvertor()
-{
-}
-
-void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, CImg< float >& gmicImage, QRect rc)
-{
     if (rc.isEmpty())
     {
-        rc = dev->exactBounds();
+        rc = QRect(0,0,gmicImage._width, gmicImage._height);
     }
 
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
-
     Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
-    dev->convertTo(rgbaFloat32bitcolorSpace);
-
-    Q_ASSERT(gmicImage._spectrum == 4); // rgba
 
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
 
+    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
+    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
 
+    const KoColorSpace * colorSpace = dev->colorSpace();
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
-    int pos;
+
+    int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
+    quint8 * floatRGBApixel = rgbaFloat32bitcolorSpace->allocPixelBuffer(optimalBufferSize);
+    quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
+    int pos = 0;
     for (int y = 0; y < rc.height(); y++)
     {
-        for (int x = 0; x < rc.width(); x++)
+        int x = 0;
+        while (x < rc.width())
         {
-            pos = y * gmicImage._width + x;
             it->moveTo(x, y);
-            const quint8 * floatRGBApixel = it->rawDataConst(); // we are interpreting pixels here
+            qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+            numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
-            memcpy(gmicImage._data + pos                  ,floatRGBApixel    , 4);
-            memcpy(gmicImage._data + pos + greenOffset    ,floatRGBApixel + 4, 4);
-            memcpy(gmicImage._data + pos + blueOffset     ,floatRGBApixel + 8, 4);
-            memcpy(gmicImage._data + pos + alphaOffset    ,floatRGBApixel + 12, 4);
+            colorSpace->convertPixelsTo(it->rawDataConst(), floatRGBApixel, rgbaFloat32bitcolorSpace, numContiguousColumns, renderingIntent, conversionFlags);
+
+            pos = y * gmicImage._width + x;
+            for (qint32 bx = 0; bx < numContiguousColumns; bx++)
+            {
+                memcpy(gmicImage._data + pos                  ,floatRGBApixel + bx * pixelSize   , 4);
+                memcpy(gmicImage._data + pos + greenOffset    ,floatRGBApixel + bx * pixelSize + 4, 4);
+                memcpy(gmicImage._data + pos + blueOffset     ,floatRGBApixel + bx * pixelSize + 8, 4);
+                memcpy(gmicImage._data + pos + alphaOffset    ,floatRGBApixel + bx * pixelSize + 12, 4);
+                pos++;
+            }
+
+            x += numContiguousColumns;
         }
     }
+    delete [] floatRGBApixel;
 }
 
-
-KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmicImage)
+void KisGmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)
 {
+    Q_ASSERT(!dst.isNull());
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
+    const KoColorSpace *dstColorSpace = dst->colorSpace();
+    if (dstColorSpace == 0)
+    {
+        dstColorSpace = rgbaFloat32bitcolorSpace;
+    }
 
-    KisPaintDeviceSP dev = new KisPaintDevice(rgbaFloat32bitcolorSpace);
+    KisPaintDeviceSP dev = dst;
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
@@ -97,6 +107,16 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
     int pos;
     float r,g,b,a;
 
+    int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
+    quint8 * floatRGBApixel = rgbaFloat32bitcolorSpace->allocPixelBuffer(optimalBufferSize);
+    quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
+
+    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
+    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
+
+    // Krita needs rgba in 0.0...1.0
+    float multiplied = 1.0 / gmicMaxChannelValue;
+
     switch (gmicImage._spectrum)
     {
         case 1:
@@ -104,19 +124,27 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
             // convert grayscale to rgba
             for (int y = 0; y < rc.height(); y++)
             {
-                for (int x = 0; x < rc.width(); x++)
+                int x = 0;
+                while (x < rc.width())
                 {
-                    pos = y * gmicImage._width + x;
                     it->moveTo(x, y);
-                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+                    qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+                    numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
-                    r = g = b = gmicImage._data[pos] / m_multiplier;
-                    a = 1.0;
+                    pos = y * gmicImage._width + x;
+                    for (qint32 bx = 0; bx < numContiguousColumns; bx++)
+                    {
+                            r = g = b = gmicImage._data[pos] * multiplied;
+                            a = gmicMaxChannelValue * multiplied;
 
-                    memcpy(floatRGBApixel,      &r,4);
-                    memcpy(floatRGBApixel + 4,  &g,4);
-                    memcpy(floatRGBApixel + 8,  &b,4);
-                    memcpy(floatRGBApixel + 12, &a,4);
+                            memcpy(floatRGBApixel + bx * pixelSize,      &r,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 4,  &g,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 8,  &b,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 12, &a,4);
+                            pos++;
+                    }
+                    rgbaFloat32bitcolorSpace->convertPixelsTo(floatRGBApixel, it->rawData(), dstColorSpace, numContiguousColumns,renderingIntent, conversionFlags);
+                    x += numContiguousColumns;
                 }
             }
             break;
@@ -126,19 +154,27 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
             // convert grayscale alpha to rgba
             for (int y = 0; y < rc.height(); y++)
             {
-                for (int x = 0; x < rc.width(); x++)
+                int x = 0;
+                while (x < rc.width())
                 {
-                    pos = y * gmicImage._width + x;
                     it->moveTo(x, y);
-                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+                    qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+                    numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
-                    r = g = b = gmicImage._data[pos] / m_multiplier;
-                    a = gmicImage._data[pos + greenOffset] / m_multiplier;
+                    pos = y * gmicImage._width + x;
+                    for (qint32 bx = 0; bx < numContiguousColumns; bx++)
+                    {
+                            r = g = b = gmicImage._data[pos] * multiplied;
+                            a = gmicImage._data[pos + greenOffset] * multiplied;
 
-                    memcpy(floatRGBApixel,      &r,4);
-                    memcpy(floatRGBApixel + 4,  &g,4);
-                    memcpy(floatRGBApixel + 8,  &b,4);
-                    memcpy(floatRGBApixel + 12, &a,4);
+                            memcpy(floatRGBApixel + bx * pixelSize,      &r,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 4,  &g,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 8,  &b,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 12, &a,4);
+                            pos++;
+                    }
+                    rgbaFloat32bitcolorSpace->convertPixelsTo(floatRGBApixel, it->rawData(), dstColorSpace, numContiguousColumns,renderingIntent, conversionFlags);
+                    x += numContiguousColumns;
                 }
             }
             break;
@@ -148,21 +184,29 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
             // convert rgb -> rgba
             for (int y = 0; y < rc.height(); y++)
             {
-                for (int x = 0; x < rc.width(); x++)
+                int x = 0;
+                while (x < rc.width())
                 {
-                    pos = y * gmicImage._width + x;
                     it->moveTo(x, y);
-                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+                    qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+                    numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
-                    r = gmicImage._data[pos] / m_multiplier;
-                    g = gmicImage._data[pos + greenOffset] / m_multiplier;
-                    b = gmicImage._data[pos + blueOffset] / m_multiplier;
-                    a = 1.0;
+                    pos = y * gmicImage._width + x;
+                    for (qint32 bx = 0; bx < numContiguousColumns; bx++)
+                    {
+                            r = gmicImage._data[pos] * multiplied;
+                            g = gmicImage._data[pos + greenOffset] * multiplied;
+                            b = gmicImage._data[pos + blueOffset ] * multiplied;
+                            a = gmicMaxChannelValue * multiplied;
 
-                    memcpy(floatRGBApixel,      &r,4);
-                    memcpy(floatRGBApixel + 4,  &g,4);
-                    memcpy(floatRGBApixel + 8,  &b,4);
-                    memcpy(floatRGBApixel + 12, &a,4);
+                            memcpy(floatRGBApixel + bx * pixelSize,      &r,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 4,  &g,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 8,  &b,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 12, &a,4);
+                            pos++;
+                    }
+                    rgbaFloat32bitcolorSpace->convertPixelsTo(floatRGBApixel, it->rawData(), dstColorSpace, numContiguousColumns,renderingIntent, conversionFlags);
+                    x += numContiguousColumns;
                 }
             }
             break;
@@ -171,21 +215,29 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
         {
             for (int y = 0; y < rc.height(); y++)
             {
-                for (int x = 0; x < rc.width(); x++)
+                int x = 0;
+                while (x < rc.width())
                 {
-                    pos = y * gmicImage._width + x;
                     it->moveTo(x, y);
-                    quint8 * floatRGBApixel = it->rawData(); // we are interpreting pixels here
+                    qint32 numContiguousColumns = qMin(it->numContiguousColumns(x), optimalBufferSize);
+                    numContiguousColumns = qMin(numContiguousColumns, rc.width() - x);
 
-                    r = gmicImage._data[pos] / m_multiplier;
-                    g = gmicImage._data[pos + greenOffset] / m_multiplier;
-                    b = gmicImage._data[pos + blueOffset] / m_multiplier;
-                    a = gmicImage._data[pos + alphaOffset] / m_multiplier;
+                    pos = y * gmicImage._width + x;
+                    for (qint32 bx = 0; bx < numContiguousColumns; bx++)
+                    {
+                            r = gmicImage._data[pos] * multiplied;
+                            g = gmicImage._data[pos + greenOffset] * multiplied;
+                            b = gmicImage._data[pos + blueOffset ] * multiplied;
+                            a = gmicImage._data[pos + alphaOffset] * multiplied;
 
-                    memcpy(floatRGBApixel,      &r,4);
-                    memcpy(floatRGBApixel + 4,  &g,4);
-                    memcpy(floatRGBApixel + 8,  &b,4);
-                    memcpy(floatRGBApixel + 12, &a,4);
+                            memcpy(floatRGBApixel + bx * pixelSize,      &r,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 4,  &g,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 8,  &b,4);
+                            memcpy(floatRGBApixel + bx * pixelSize + 12, &a,4);
+                            pos++;
+                    }
+                    rgbaFloat32bitcolorSpace->convertPixelsTo(floatRGBApixel, it->rawData(), dstColorSpace, numContiguousColumns,renderingIntent, conversionFlags);
+                    x += numContiguousColumns;
                 }
             }
             break;
@@ -196,12 +248,10 @@ KisPaintDeviceSP KisGmicSimpleConvertor::convertFromGmicImage(CImg< float >& gmi
             dbgPlugins << "Unsupported gmic output format : " <<  gmicImage._width << gmicImage._height << gmicImage._depth << gmicImage._spectrum;
         }
     }
-
-    return dev;
 }
 
 
-QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage)
+QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage, float gmicActualMaxChannelValue)
 {
 
     QImage image = QImage(gmicImage._width, gmicImage._height, QImage::Format_ARGB32);
@@ -212,15 +262,18 @@ QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage)
     int blueOffset = greenOffset * 2;
     int pos = 0;
 
+    // always put 255 to qimage
+    float multiplied = 255.0f / gmicActualMaxChannelValue;
+
     for (unsigned int y = 0; y < gmicImage._height; y++)
     {
         QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
         for (unsigned int x = 0; x < gmicImage._width; x++)
         {
             pos = y * gmicImage._width + x;
-            float r = gmicImage._data[pos];
-            float g = gmicImage._data[pos + greenOffset];
-            float b = gmicImage._data[pos + blueOffset];
+            float r = gmicImage._data[pos] * multiplied;
+            float g = gmicImage._data[pos + greenOffset]  * multiplied;
+            float b = gmicImage._data[pos + blueOffset]  * multiplied;
             pixel[x] = qRgb(int(r),int(g), int(b));
         }
     }
@@ -228,12 +281,16 @@ QImage KisGmicSimpleConvertor::convertToQImage(gmic_image<float>& gmicImage)
 }
 
 
-void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float >& gmicImage, qreal multiplied)
+void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float >& gmicImage, float gmicMaxChannelValue)
 {
     int greenOffset = gmicImage._width * gmicImage._height;
     int blueOffset = greenOffset * 2;
     int alphaOffset = greenOffset * 3;
     int pos = 0;
+
+    // QImage has 0..255
+    float multiplied = gmicMaxChannelValue / 255.0;
+
 
     Q_ASSERT(image.width() == int(gmicImage._width));
     Q_ASSERT(image.height() == int(gmicImage._height));
@@ -246,10 +303,10 @@ void KisGmicSimpleConvertor::convertFromQImage(const QImage& image, CImg< float 
         for (int x = 0; x < image.width(); x++)
         {
             pos = y * gmicImage._width + x;
-            gmicImage._data[pos]                = qRed(pixel[x]) / multiplied;
-            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]) / multiplied;
-            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]) / multiplied;
-            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]) / multiplied;
+            gmicImage._data[pos]                = qRed(pixel[x]) * multiplied;
+            gmicImage._data[pos + greenOffset]  = qGreen(pixel[x]) * multiplied;
+            gmicImage._data[pos + blueOffset]   = qBlue(pixel[x]) * multiplied;
+            gmicImage._data[pos + alphaOffset]   = qAlpha(pixel[x]) * multiplied;
         }
     }
 

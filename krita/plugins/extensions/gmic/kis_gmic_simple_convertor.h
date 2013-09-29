@@ -16,32 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QVector>
-
 #ifndef __KIS_GMIC_SIMPLE_CONVERTOR_H
 #define __KIS_GMIC_SIMPLE_CONVERTOR_H
 
-#include <gmic.h>
+#include <QRect>
 #include <kis_paint_device.h>
+#include <gmic.h>
 
+class QImage;
+class KoColorSpace;
 
 class KisGmicSimpleConvertor
 {
 public:
-    KisGmicSimpleConvertor();
-    ~KisGmicSimpleConvertor();
+    static QImage convertToQImage(gmic_image<float>& gmicImage, float gmicMaxChannelValue = 255.0);
+    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage, float gmicMaxChannelValue = 1.0);
 
-public:
-    static QImage convertToQImage(gmic_image<float>& gmicImage);
-    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage, qreal multiplied = 255.0);
-
-    // dev will be converted to float32 colorspace in-place to save some memory!!!
-    void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc = QRect());
-    KisPaintDeviceSP convertFromGmicImage(gmic_image<float>& gmicImage);
-
-    void setMultiplier(qreal multiplier) { m_multiplier = multiplier; }
-private:
-    qreal m_multiplier;
+    // output gmic image will have max channel 1.0 as in Krita's float rgba color-space
+    static void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc = QRect());
+    // gmicMaxChannelValue indicates if the gmic image pixels rgb has range 0..255 or 0..1.0
+    static void convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue);
 };
 
 #endif

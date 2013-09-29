@@ -30,6 +30,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kactioncollection.h>
+#include <QTime>
 
 #include <kis_view2.h>
 #include <kis_action.h>
@@ -151,7 +152,8 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-
+    //QTime myTimer;
+    //myTimer.start();
     KisProcessingApplicator applicator(m_view->image(), node,
                                    KisProcessingApplicator::RECURSIVE,
                                    emitSignals, actionName);
@@ -178,6 +180,9 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
     visitor = new KisImportGmicProcessingVisitor(kritaNodes, gmicLayers);
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
     applicator.end();
+
+    //m_view->image()->waitForDone();
+    //qDebug() << myTimer.elapsed();
 }
 
 void KisGmicPlugin::slotClose()

@@ -315,7 +315,8 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
     for (unsigned int i = 0; i < images._width; ++i)
     {
         KisGmicSimpleConvertor convertor;
-        KisPaintDeviceSP device = convertor.convertFromGmicImage(images._data[i]);
+        KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        convertor.convertFromGmicImage(images._data[i], device, 255.0f);
         QImage result = device->convertToQImage(0, 0,0,images._data[i]._width, images._data[i]._height);
         QString indexString("_%1");
         if (images._width > 1)

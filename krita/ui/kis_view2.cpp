@@ -174,6 +174,7 @@ public:
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
 
+        delete resourceProvider;
         delete canvasController;
         delete canvas;
         delete filterManager;
@@ -247,7 +248,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-
 
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {

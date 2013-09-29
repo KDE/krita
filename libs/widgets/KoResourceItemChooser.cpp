@@ -177,6 +177,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
+    disconnect();
     delete d;
 }
 

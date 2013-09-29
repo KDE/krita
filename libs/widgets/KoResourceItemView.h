@@ -40,7 +40,7 @@ public:
     };
 
     explicit KoResourceItemView(QWidget *parent = 0);
-    virtual ~KoResourceItemView() {}
+    virtual ~KoResourceItemView() {disconnect();}
 
     /** reimplemented
     * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMS

@@ -286,6 +286,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
 {
     m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
 }
 
 QString KisPaintOpPresetsPopup::currentPaintOp()

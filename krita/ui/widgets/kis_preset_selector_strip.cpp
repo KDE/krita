@@ -47,6 +47,11 @@ KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
 }
 
+void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
+{
+    smallPresetChooser->setPresetFilter(paintOpId);
+}
+
 void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision

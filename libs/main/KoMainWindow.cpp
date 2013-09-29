@@ -298,11 +298,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     d->encryptDocument = new KAction(i18n("En&crypt Document"), this);
     actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
-    //TODO connect to slot
+    connect(d->encryptDocument, SIGNAL(triggered(bool)), this, SLOT(slotEncryptDocument()));
 
     d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
     actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
-    //TODO connect to slot
+    connect(d->uncompressToDir, SIGNAL(triggered(bool)), this, SLOT(slotUncompressToDir()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
@@ -1292,6 +1292,16 @@ void KoMainWindow::slotFileSaveAs()
 {
     if (saveDocument(true))
         emit documentSaved();
+}
+
+void KoMainWindow::slotEncryptDocument()
+{
+    emit documentSaved();
+}
+
+void KoMainWindow::slotUncompressToDir()
+{
+    emit documentSaved();
 }
 
 void KoMainWindow::slotDocumentInfo()

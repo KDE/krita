@@ -307,6 +307,9 @@ public slots:
      */
     void slotExportFile();
 
+    void slotEncryptDocument();
+    void slotUncompressToDir();
+
     void slotProgress(int value);
 
     /**

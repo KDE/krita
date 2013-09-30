@@ -22,7 +22,7 @@
 #include "kis_tablet_support_win.h"
 #include "kis_tablet_support_win_p.h"
 
-#include <QDebug>
+#include <kis_debug.h>
 #include <QApplication>
 #include <QDesktopWidget>
 
@@ -144,6 +144,25 @@ static void initWinTabFunctions()
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
 }
 
+void printContext(const LOGCONTEXT &lc)
+{
+    qDebug() << "Context data:";
+    qDebug() << ppVar(lc.lcName);
+    qDebug() << ppVar(lc.lcDevice);
+    qDebug() << ppVar(lc.lcInOrgX);
+    qDebug() << ppVar(lc.lcInOrgY);
+    qDebug() << ppVar(lc.lcInExtX);
+    qDebug() << ppVar(lc.lcInExtY);
+    qDebug() << ppVar(lc.lcOutOrgX);
+    qDebug() << ppVar(lc.lcOutOrgY);
+    qDebug() << ppVar(lc.lcOutExtX);
+    qDebug() << ppVar(lc.lcOutExtY);
+    qDebug() << ppVar(lc.lcSysOrgX);
+    qDebug() << ppVar(lc.lcSysOrgY);
+    qDebug() << ppVar(lc.lcSysExtX);
+    qDebug() << ppVar(lc.lcSysExtY);
+}
+
 /**
  * Initializes the QTabletDeviceData structure for \p uniqueId cursor
  * and stores it in the global cache
@@ -161,6 +180,9 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     /* get the current context for its device variable. */
     ptrWTGet(hTab, &lc);
+
+    qDebug() << "Getting current context:";
+    printContext(lc);
 
     /* get the size of the pressure axis. */
     QTabletDeviceData tdd;
@@ -186,6 +208,9 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
 
     /* get default region */
     ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+
+    qDebug() << "Getting default context:";
+    printContext(lcMine);
 
     tdd.minX = 0;
     tdd.maxX = int(lcMine.lcInExtX) - int(lcMine.lcInOrgX);
@@ -287,6 +312,11 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y, desktopArea.left(),
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
+
+        qDebug() << "WinTab:"
+                 << "Dsk:" << desktopArea
+                 << "Raw:" << ptNew.x << ptNew.y
+                 << "Scaled:" << hiResGlobal;
 
         t = KisTabletEvent::TabletMoveEx;
         if (buttonPressed) {

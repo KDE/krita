@@ -125,6 +125,7 @@ KoGradientBackground &KoGradientBackground::operator = (const KoGradientBackgrou
 void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoGradientBackground);
+    if (!d->gradient) return;
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
 
@@ -135,6 +136,7 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
 void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_D(KoGradientBackground);
+    if (!d->gradient) return;
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);

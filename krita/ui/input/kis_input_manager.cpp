@@ -55,104 +55,6 @@
 #include <input/kis_tablet_event.h>
 
 
-QString eventToString(QTabletEvent *event) {
-
-    QString type;
-    switch(event->type()) {
-    case QEvent::TabletMove:
-        type = "TabletMove";
-        break;
-    case QEvent::TabletPress:
-        type = "TabletPress";
-        break;
-    case QEvent::TabletRelease:
-        type = "TabletRelease";
-        break;
-    case QEvent::TabletEnterProximity:
-        type = "TabletEnterProximity";
-        break;
-    case QEvent::TabletLeaveProximity:
-        type = "TabletLeaveProximity";
-        break;
-    default:
-        type = QString("Event Type: %1").arg(event->type());
-
-    }
-
-    QString pointerType;
-    switch(event->pointerType()) {
-    case QTabletEvent::UnknownPointer:
-        pointerType = "Unknown Pointer";
-        break;
-    case QTabletEvent::Pen:
-        pointerType = "Pen";
-        break;
-    case QTabletEvent::Cursor:
-        pointerType = "Cursor";
-        break;
-    case QTabletEvent::Eraser:
-        pointerType = "Eraser";
-        break;
-    default:
-        pointerType = QString("Unknown Pointer Type: %1").arg(event->pointerType());
-    }
-
-    QString tabletDevice;
-    switch(event->device()) {
-    case QTabletEvent::NoDevice:
-        tabletDevice = "NoDevice";
-        break;
-    case QTabletEvent::Puck:
-        tabletDevice = "Puck";
-        break;
-    case QTabletEvent::Stylus:
-        tabletDevice = "Stylus";
-        break;
-    case QTabletEvent::Airbrush:
-        tabletDevice = "Airbrush";
-        break;
-    case QTabletEvent::FourDMouse:
-        tabletDevice = "FourDMouse";
-        break;
-    case QTabletEvent::RotationStylus:
-        tabletDevice = "RotationStylus";
-        break;
-    default:
-        tabletDevice = QString("Unknown Tablet Device: %1").arg(event->device());
-    }
-
-    return QString("Tablet event. Type: %1."
-                   " Pointer Type: %2."
-                   " Device: %3."
-                   " Global Pos: (%4, %5)."
-                   " Hires Global Pos: (%6, %7)."
-                   " Pressure: %8"
-                   " Rotation: %9"
-                   " Tangential pressure: %10"
-                   " Unique id: %11"
-                   " x: %12"
-                   " y: %13"
-                   " xTilt: %14"
-                   " yTilt: %15"
-                   )
-            .arg(type)
-            .arg(pointerType)
-            .arg(tabletDevice)
-            .arg(event->globalX())
-            .arg(event->globalY())
-            .arg(event->hiResGlobalX())
-            .arg(event->hiResGlobalY())
-            .arg(event->pressure())
-            .arg(event->rotation())
-            .arg(event->tangentialPressure())
-            .arg(event->uniqueId())
-            .arg(event->x())
-            .arg(event->y())
-            .arg(event->xTilt())
-            .arg(event->yTilt())
-            ;
-}
-
 class KisInputManager::Private
 {
 public:
@@ -547,8 +449,10 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
 
+#ifdef Q_OS_WIN
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
+#endif
 }
 
 KisInputManager::~KisInputManager()

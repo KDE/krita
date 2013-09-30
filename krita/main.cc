@@ -38,13 +38,12 @@
 
 #include <krita_export.h>
 
-#include <ui/input/wintab/kis_tablet_support_win.h>
-
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
+#include <ui/input/wintab/kis_tablet_support_win.h>
 #endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
@@ -66,8 +65,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
+#ifdef Q_OS_WIN
     KisTabletSupportWin::init();
     app.setEventFilter(&KisTabletSupportWin::eventFilter);
+#endif
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     app.setAttribute(Qt::AA_X11InitThreads, true);

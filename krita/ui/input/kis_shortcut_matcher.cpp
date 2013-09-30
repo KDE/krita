@@ -24,10 +24,14 @@
 #include "kis_abstract_input_action.h"
 #include "kis_stroke_shortcut.h"
 
+#ifdef DEBUG_MATCHER
 #include <QDebug>
 #define DEBUG_ACTION(action) qDebug() << __FUNCTION__ << ":" << action;
-#define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons;
-
+#define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#else
+#define DEBUG_ACTION(action)
+#define DEBUG_BUTTON_ACTION(action, button)
+#endif
 
 class KisShortcutMatcher::Private
 {
@@ -126,13 +130,11 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 
 bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *event)
 {
-    bool retval = false;
-
     DEBUG_BUTTON_ACTION("entered", button);
 
-    if (m_d->buttons.contains(button)) {
-        reset();
-    }
+    bool retval = false;
+
+    if (m_d->buttons.contains(button)) reset();
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
@@ -151,20 +153,17 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *even
 
 bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QMouseEvent *event)
 {
-    bool retval = false;
-
     DEBUG_BUTTON_ACTION("entered", button);
+
+    bool retval = false;
 
     if (m_d->runningShortcut) {
         retval = tryEndRunningShortcut(button, event);
         DEBUG_BUTTON_ACTION("ended", button);
     }
 
-    if (!m_d->buttons.contains(button)) {
-        reset();
-    } else {
-        m_d->buttons.removeOne(button);
-    }
+    if (!m_d->buttons.contains(button)) reset();
+    else m_d->buttons.removeOne(button);
 
     if (!m_d->runningShortcut) {
         prepareReadyShortcuts();

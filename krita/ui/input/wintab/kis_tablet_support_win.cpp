@@ -251,7 +251,6 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
     static DWORD btnNew, btnOld, btnChange;
     qreal prsNew;
     ORIENTATION ort;
-    static bool button_pressed = false;
     int i,
         tiltX,
         tiltY;
@@ -261,8 +260,15 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
     qreal rotation = 0.0;
     qreal tangentialPressure;
 
-    // the most common event that we get...
-    t = KisTabletEvent::TabletMoveEx;
+    /**
+     * There is a bug in Qt (tested on 4.8.5) and if you press
+     * Win+UpKey hotkey right after the start of the application, the
+     * next call to QApplication::keyboardModifiers() will return Alt
+     * key pressed, although it isn't.  That is why we do not rely on
+     * keyboardModifiers(), but just query the keys state directly.
+     */
+    Qt::KeyboardModifiers modifiers = QApplication::queryKeyboardModifiers();
+
     for (i = 0; i < numPackets; i++) {
         btnOld = btnNew;
         btnNew = localPacketBuf[i].pkButtons;
@@ -271,11 +277,6 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         bool buttonPressed = btnChange && btnNew > btnOld;
         bool buttonReleased = btnChange && btnNew < btnOld;
         bool anyButtonsStillPressed = btnNew;
-
-        if (btnOld != btnNew) {
-            qDebug() << "Old Buttons:" <<btnOld << "NewButtons:" << btnNew << "pressed" << buttonPressed << "released" << buttonReleased;
-        }
-
 
         ptNew.x = UINT(localPacketBuf[i].pkX);
         ptNew.y = UINT(localPacketBuf[i].pkY);
@@ -287,13 +288,11 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
+        t = KisTabletEvent::TabletMoveEx;
         if (buttonPressed) {
-            button_pressed = true;
             t = KisTabletEvent::TabletPressEx;
-        } else if (buttonReleased /* button_pressed */) {
-            // One button press, should only give one button release
+        } else if (buttonReleased) {
             t = KisTabletEvent::TabletReleaseEx;
-            button_pressed = false;
         }
 
         if (anyButtonsStillPressed) {
@@ -367,7 +366,7 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
 
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,
                          currentTabletPointer.currentPointerType, prsNew, tiltX, tiltY,
-                         tangentialPressure, rotation, z, QApplication::keyboardModifiers(), currentTabletPointer.llId,
+                         tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
         sendEvent = qApp->sendEvent(w, &e);
     }

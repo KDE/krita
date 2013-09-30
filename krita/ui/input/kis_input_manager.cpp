@@ -167,7 +167,6 @@ public:
     #endif
         , lastTabletEvent(0)
         , logTabletEvents(false)
-        , proximityNotifier(0)
     {
     }
 
@@ -203,7 +202,6 @@ public:
     bool logTabletEvents;
 
     class ProximityNotifier;
-    QObject *proximityNotifier;
 };
 
 #define save_ignore_cursor_events() bool __old_iqce = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
@@ -231,7 +229,7 @@ static inline QList<Qt::MouseButton> BUTTONS(Qt::MouseButton button1, Qt::MouseB
 
 class KisInputManager::Private::ProximityNotifier : public QObject {
 public:
-    ProximityNotifier(Private *_d) : d(_d) {}
+    ProximityNotifier(Private *_d, QObject *p) : QObject(p), d(_d) {}
 
     bool eventFilter(QObject* object, QEvent* event ) {
         switch (event->type()) {
@@ -485,6 +483,9 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
+
+    QApplication::instance()->
+        installEventFilter(new Private::ProximityNotifier(d, this));
 }
 
 KisInputManager::~KisInputManager()
@@ -504,15 +505,6 @@ void KisInputManager::toggleTabletLogger()
     else {
         qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^ START TABLET EVENT LOG ^^^^^^^^^^^^^^^^^^^^^^^";
     }
-}
-
-QObject* KisInputManager::proximityEventFilterObject() const
-{
-    if (!d->proximityNotifier) {
-        d->proximityNotifier = new Private::ProximityNotifier(d);
-    }
-
-    return d->proximityNotifier;
 }
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
@@ -666,11 +658,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case KisTabletEvent::TabletPressEx:
     case KisTabletEvent::TabletMoveEx:
     case KisTabletEvent::TabletReleaseEx: {
-
-//        qDebug() << "Got TabletEx event" <<
-//            (event->type() == KisTabletEvent::TabletPressEx ? "Press" :
-//             event->type() == KisTabletEvent::TabletReleaseEx ? "Release" :
-//             event->type() == KisTabletEvent::TabletMoveEx ? "Move" : "Shit");
 
         save_ignore_cursor_events();
 

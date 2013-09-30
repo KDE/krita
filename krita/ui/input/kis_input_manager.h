@@ -64,8 +64,6 @@ public:
 
     void toggleTabletLogger();
 
-    QObject* proximityEventFilterObject() const;
-
     /**
      * Event filter method. Overridden from QObject.
      */

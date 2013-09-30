@@ -222,6 +222,11 @@ void KisCanvas2::setSmoothingEnabled(bool smooth)
     }
 }
 
+void KisCanvas2::channelSelectionChanged()
+{
+    qDebug() << "redo the projection, with just the right channels";
+}
+
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
     m_d->view->koDocument()->addCommand(command);

@@ -398,7 +398,14 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                          currentTabletPointer.currentPointerType, prsNew, tiltX, tiltY,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
+
+        e.ignore();
         sendEvent = qApp->sendEvent(w, &e);
+
+        if (!e.isAccepted()) {
+            QTabletEvent t = e.toQTabletEvent();
+            qApp->sendEvent(w,  &t);
+        }
     }
     return sendEvent;
 }

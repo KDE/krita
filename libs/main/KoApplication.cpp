@@ -106,6 +106,8 @@ KoApplication::KoApplication()
     QString styleSheet = QLatin1String(file.readAll());
     file.close();
     setStyleSheet(styleSheet);
+
+    setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {

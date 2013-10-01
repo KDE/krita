@@ -252,8 +252,9 @@ public:
      */
     inline void readBytes(quint8 * data,
                           qint32 x, qint32 y,
-                          qint32 w, qint32 h) const {
-        ACTUAL_DATAMGR::readBytes(data, x, y, w, h);
+                          qint32 w, qint32 h,
+                          qint32 dataRowStride = -1) const {
+        ACTUAL_DATAMGR::readBytes(data, x, y, w, h, dataRowStride);
     }
 
     /**
@@ -262,8 +263,9 @@ public:
      */
     inline void writeBytes(const quint8 * data,
                            qint32 x, qint32 y,
-                           qint32 w, qint32 h) {
-        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h);
+                           qint32 w, qint32 h,
+                           qint32 dataRowStride = -1) {
+        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h, dataRowStride);
     }
 
 
@@ -275,7 +277,7 @@ public:
      *
      * @param channelsize a vector with for every channel its size in bytes
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) {
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const {
         return ACTUAL_DATAMGR::readPlanarBytes(channelsizes, x, y, w, h);
     }
 

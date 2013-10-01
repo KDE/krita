@@ -51,10 +51,9 @@ public:
 
     virtual QString toString();
     // if the parameter is only GUI option, return null string
-    virtual QString value() const
-    {
-        return QString();
-    }
+    virtual QString value() const;
+    virtual void setValue(const QString &value);
+
     virtual void parseValues(const QString& typeDefinition);
 
     QString name() const { return m_name; }
@@ -101,6 +100,8 @@ public:
     float m_maxValue;
 
     virtual QString value() const;
+    virtual void setValue(const QString& value);
+
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual void reset();
@@ -118,6 +119,8 @@ public:
     int m_maxValue;
 
     virtual QString value() const;
+    virtual void setValue(const QString& value);
+
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual void reset();
@@ -137,15 +140,17 @@ public:
     ChoiceParameter(const QString& name, bool updatePreview = true);
     virtual void parseValues(const QString& typeDefinition);
 
-
     // default index
     int m_defaultValue;
     // current index
     int m_value;
-
     QStringList m_choices;
 
     virtual QString value() const;
+    // you can use int or name, if it is int, it will be set as index,
+    // if you use name of choice, index will be determined
+    virtual void setValue(const QString& value);
+    void setIndex(int i);
     virtual QString toString();
     virtual void reset();
 };

@@ -1,108 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <blacklist>
-
     <category name="About">
         <filter name="Gmicky / Roddy" />
     </category>
 
-    <category name="Arrays &amp; tiles">
-        <filter name="Tileable rotation" />
-    </category>
-
-    <category name="Artistic">
-        <filter name="Warhol" />
-    </category>
-
-    <category name="Black &amp; white">
-        <filter name="Hard sketch" />
-        <filter name="Hough sketch" />
-        <filter name="Sketch" />
-    </category>
-
-   <category name="Colors">
-       <filter name="Decompose channels" />
-       <filter name="Equalize HSV" />
+    <category name="Colors">
        <filter name="User-defined" />
-   </category>
-
-    <category name="Contours">
-        <filter name="Difference of gaussians" />
-        <filter name="Edges" />
-        <filter name="Gradient norm" />
-        <filter name="Gradient RGB" />
-        <filter name="Thin edges" />
-
     </category>
 
     <category name="Deformations">
         <filter name="Cartesian transform" />
-        <filter name="Kaleidoscope [blended]" />
         <filter name="Polar transform" />
-        <filter name="Ripple" />
     </category>
 
     <category name="Degradations">
-        <filter name="Lomo" />
-        <filter name="Oldschool 8bits" />
         <filter name="Visible watermark" />
-    </category>
-
-    <category name="Frames">"
-        <filter name="Old photograph" />
     </category>
 
     <category name="Layers">
         <filter name="Blend [fade]" />
-        <filter name="Align layers" />
-        <filter name="Fade layers" />
-        <filter name="Morph layers" />
-        <filter name="Split tones" />
-    </category>
-
-    <category name="Lights &amp; Shadows">
-        <filter name="Light rays" />
-    </category>
-
-    <category name="Patterns">
-        <filter name="Bayer filter" />
-        <filter name="Dots" />
-        <filter name="Lava" />
-        <filter name="Mineral mosaic" />
-    </category>
-
-    <category name="Repair">
-        <filter name="Bayer reconstruction" />
-        <filter name="Inpaint [solidify]" />
-        <filter name="Red-Eye attenuation" />
-        <filter name="Upscale [diffusion]" />
     </category>
 
     <category name="Rendering">
-        <filter name="3d colored object" />
-        <filter name="3d random objects" />
-        <filter name="Equation plot" />
-        <filter name="Mandelbrot / Julia sets" />
-        <filter name="Maze" />
-        <filter name="Plasma" />
         <filter name="Quick copyright" />
-        <filter name="Rorschach" />
-        <filter name="Seamless turbulence" />
-        <filter name="Shade bobs" />
-        <filter name="Truchet" />
-        <filter name="Edges on fire" />
     </category>
 
     <category name="Sequences">
         <filter name="B&amp;W pencil" />
         <filter name="B&amp;W stencil" />
-        <filter name="Edges" />
-        <filter name="Edges on fire" />
-        <filter name="Lava lamp" />
         <filter name="Soft glow" />
     </category>
 
     <category name="Spectral filters">
-        <filter name="Fourier analysis" />
         <filter name="Fourier watermark" />
     </category>
 
@@ -112,25 +41,4 @@
         <filter name="GREYC Poker Tour" />
         <filter name="Import data" />
     </category>
-
-    <category name="Curves [RGB]">
-        <filter name="Red" />
-        <filter name="Green" />
-        <filter name="Blue" />
-    </category>
-
-
-    <category name="Curves [YCbCr]">
-        <filter name="Luminance" />
-        <filter name="Blue chrominance" />
-        <filter name="Red Chrominance" />
-    </category>
-
-    <category name="Curves [Lab]">
-        <filter name="Lightness" />
-        <filter name="A-color" />
-        <filter name="B-color" />
-    </category>
-
-
 </blacklist>

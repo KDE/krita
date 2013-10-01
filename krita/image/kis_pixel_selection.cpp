@@ -237,7 +237,7 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-        KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+        KisRectIteratorSP it = createRectIteratorNG(rc);
         do {
             *(it->rawData()) = MAX_SELECTED - *(it->rawData());
         } while (it->nextPixel());

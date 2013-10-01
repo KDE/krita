@@ -46,6 +46,8 @@ public:
     qint32 sizeMetric() const;
     QString currentStrokeName() const;
 
+    bool wrapAroundModeSupported() const;
+
 private:
     bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool checkStrokeState(bool hasStrokeJobsRunning);

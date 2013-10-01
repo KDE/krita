@@ -81,9 +81,7 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     width_ = width;
     
     m_painter.setMaskImageSize(width_, height_);
-    QRect limits(QPoint(0,0), QPoint(width_, height_));
-    m_painter.setBounds(limits);
-    
+
     /*  dx and dy are the separation between lines in the x and y axis
     dx = separation / sin(angle*M_PI/180);     csc = 1/sin(angle)  */
     dy = fabs(separation / cos(angle*M_PI/180));    // sec = 1/cos(angle)

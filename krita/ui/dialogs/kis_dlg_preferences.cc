@@ -420,7 +420,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
-    colorChecks->setColor(cfg.checkersColor());
+    colorChecks1->setColor(cfg.checkersColor1());
+    colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
 
@@ -436,7 +437,8 @@ void DisplaySettingsTab::setDefault()
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
-    colorChecks->setColor(QColor(220, 220, 220));
+    colorChecks1->setColor(QColor(220, 220, 220));
+    colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
 }
 
@@ -771,7 +773,8 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
-        cfg.setCheckersColor(dialog->m_displaySettings->colorChecks->color());
+        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
+        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         // Grid settings

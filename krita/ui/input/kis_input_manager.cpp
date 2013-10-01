@@ -241,13 +241,17 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
         buttonList << Qt::XButton2;
     }
 
-    strokeShortcut->setButtons(modifiers, buttonList);
-    matcher.addShortcut(strokeShortcut);
+    if (buttonList.size() > 0) {
+        strokeShortcut->setButtons(modifiers, buttonList);
+        matcher.addShortcut(strokeShortcut);
+    }
 }
 
 void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, int index,
                                               const QList<Qt::Key> &keys)
 {
+    if (keys.size() == 0) return;
+
     KisSingleActionShortcut *keyShortcut =
             new KisSingleActionShortcut(action, index);
 

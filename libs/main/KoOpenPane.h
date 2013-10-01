@@ -62,6 +62,7 @@ public:
      */
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
+
 protected slots:
     void updateSelectedWidget();
     void itemClicked(QTreeWidgetItem* item);
@@ -90,6 +91,10 @@ protected:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     void initTemplates(const QString& templateType);
+
+    // QWidget overrides
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
 
 private:
     QStringList m_mimeFiletr;

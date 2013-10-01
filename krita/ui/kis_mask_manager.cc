@@ -255,7 +255,7 @@ void KisMaskManager::maskProperties()
             return;
         }
 
-        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
@@ -267,6 +267,7 @@ void KisMaskManager::maskProperties()
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
+            mask->setName(dlg.layerName());
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd

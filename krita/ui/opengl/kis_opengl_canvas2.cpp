@@ -84,6 +84,7 @@ public:
         , displayFilter(0)
         , checkerVertexBuffer(0)
         , tileVertexBuffer(0)
+        , wrapAroundMode(false)
     {
     }
 
@@ -103,6 +104,30 @@ public:
 
     QGLBuffer *checkerVertexBuffer;
     QGLBuffer *tileVertexBuffer;
+
+    bool wrapAroundMode;
+
+    int xToColWithWrapCompensation(int x, const QRect &imageRect) {
+        int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
+        int lastImageColumn = openGLImageTextures->xToCol(imageRect.right());
+
+        int colsPerImage = lastImageColumn - firstImageColumn + 1;
+        int numWraps = floor(qreal(x) / imageRect.width());
+        int remainder = x - imageRect.width() * numWraps;
+
+        return colsPerImage * numWraps + openGLImageTextures->xToCol(remainder);
+    }
+
+    int yToRowWithWrapCompensation(int y, const QRect &imageRect) {
+        int firstImageRow = openGLImageTextures->yToRow(imageRect.top());
+        int lastImageRow = openGLImageTextures->yToRow(imageRect.bottom());
+
+        int rowsPerImage = lastImageRow - firstImageRow + 1;
+        int numWraps = floor(qreal(y) / imageRect.height());
+        int remainder = y - imageRect.height() * numWraps;
+
+        return rowsPerImage * numWraps + openGLImageTextures->yToRow(remainder);
+    }
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
@@ -142,6 +167,12 @@ void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     d->displayFilter = displayFilter;
     initializeDisplayShader();
+}
+
+void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
+{
+    d->wrapAroundMode = value;
+    update();
 }
 
 void KisOpenGLCanvas2::initializeGL()
@@ -189,6 +220,32 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 }
 
+inline QVector<QVector3D> rectToVertices(const QRectF &rc)
+{
+    QVector<QVector3D> vertices;
+    vertices << QVector3D(rc.left(),  rc.bottom(), 0.f)
+             << QVector3D(rc.left(),  rc.top(),    0.f)
+             << QVector3D(rc.right(), rc.bottom(), 0.f)
+             << QVector3D(rc.left(),  rc.top(), 0.f)
+             << QVector3D(rc.right(), rc.top(), 0.f)
+             << QVector3D(rc.right(), rc.bottom(),    0.f);
+
+    return vertices;
+}
+
+inline QVector<QVector2D> rectToTexCoords(const QRectF &rc)
+{
+    QVector<QVector2D> texCoords;
+    texCoords << QVector2D(rc.left(), rc.bottom())
+              << QVector2D(rc.left(), rc.top())
+              << QVector2D(rc.right(), rc.bottom())
+              << QVector2D(rc.left(), rc.top())
+              << QVector2D(rc.right(), rc.top())
+              << QVector2D(rc.right(), rc.bottom());
+
+    return texCoords;
+}
+
 void KisOpenGLCanvas2::drawCheckers() const
 {
     KisCoordinatesConverter *converter = coordinatesConverter();
@@ -222,25 +279,11 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->setUniformValue("textureMatrix", textureMatrix);
 
     //Setup the geometry for rendering
-    QVector<QVector3D> vertices;
-    vertices << QVector3D(modelRect.left(),  modelRect.bottom(), 0.f)
-             << QVector3D(modelRect.left(),  modelRect.top(),    0.f)
-             << QVector3D(modelRect.right(), modelRect.bottom(), 0.f)
-             << QVector3D(modelRect.left(),  modelRect.top(), 0.f)
-             << QVector3D(modelRect.right(), modelRect.top(), 0.f)
-             << QVector3D(modelRect.right(), modelRect.bottom(),    0.f);
-
+    QVector<QVector3D> vertices = rectToVertices(modelRect);
     d->checkerShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
     d->checkerShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
 
-    QVector<QVector2D> texCoords;
-    texCoords << QVector2D(textureRect.left(), textureRect.bottom())
-              << QVector2D(textureRect.left(), textureRect.top())
-              << QVector2D(textureRect.right(), textureRect.bottom())
-              << QVector2D(textureRect.left(), textureRect.top())
-              << QVector2D(textureRect.right(), textureRect.top())
-              << QVector2D(textureRect.right(), textureRect.bottom());
-
+    QVector<QVector2D> texCoords = rectToTexCoords(textureRect);
     d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
     d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
@@ -252,6 +295,8 @@ void KisOpenGLCanvas2::drawCheckers() const
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->checkerShader->release();
+
+    // TODO: wrap around mode for checkers!
 }
 
 void KisOpenGLCanvas2::drawImage() const
@@ -283,46 +328,65 @@ void KisOpenGLCanvas2::drawImage() const
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
 
-    QRect wr = widgetRectInImagePixels.toAlignedRect() & d->openGLImageTextures->storedImageBounds();
+    QRect ir = d->openGLImageTextures->storedImageBounds();
+    QRect wr = widgetRectInImagePixels.toAlignedRect();
 
-    int firstColumn = d->openGLImageTextures->xToCol(wr.left());
-    int lastColumn = d->openGLImageTextures->xToCol(wr.right());
-    int firstRow = d->openGLImageTextures->yToRow(wr.top());
-    int lastRow = d->openGLImageTextures->yToRow(wr.bottom());
+    if (!d->wrapAroundMode) {
+        // if we don't want to paint wrapping images, just limit the
+        // processing area, and the code will handle all the rest
+        wr &= ir;
+    }
+
+    int firstColumn = d->xToColWithWrapCompensation(wr.left(), ir);
+    int lastColumn = d->xToColWithWrapCompensation(wr.right(), ir);
+    int firstRow = d->yToRowWithWrapCompensation(wr.top(), ir);
+    int lastRow = d->yToRowWithWrapCompensation(wr.bottom(), ir);
+
+    int minColumn = d->openGLImageTextures->xToCol(ir.left());
+    int maxColumn = d->openGLImageTextures->xToCol(ir.right());
+    int minRow = d->openGLImageTextures->yToRow(ir.top());
+    int maxRow = d->openGLImageTextures->yToRow(ir.bottom());
+
+    int imageColumns = maxColumn - minColumn + 1;
+    int imageRows = maxRow - minRow + 1;
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
+            int effectiveCol = col;
+            int effectiveRow = row;
+            QPointF tileWrappingTranslation;
+
+            if (effectiveCol > maxColumn || effectiveCol < minColumn) {
+                int translationStep = floor(qreal(col) / imageColumns);
+                int originCol = translationStep * imageColumns;
+                effectiveCol = col - originCol;
+                tileWrappingTranslation.rx() = translationStep * ir.width();
+            }
+
+            if (effectiveRow > maxRow || effectiveRow < minRow) {
+                int translationStep = floor(qreal(row) / imageRows);
+                int originRow = translationStep * imageRows;
+                effectiveRow = row - originRow;
+                tileWrappingTranslation.ry() = translationStep * ir.height();
+            }
+
             KisTextureTile *tile =
-                    d->openGLImageTextures->getTextureTileCR(col, row);
+                    d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
             /*
              * We create a float rect here to workaround Qt's
              * "history reasons" in calculation of right()
              * and bottom() coordinates of integer rects.
              */
             QRectF textureRect(tile->tileRectInTexturePixels());
-            QRectF modelRect(tile->tileRectInImagePixels());
+            QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
 
             //Setup the geometry for rendering
-            QVector<QVector3D> vertices;
-            vertices << QVector3D(modelRect.left(),  modelRect.bottom(), 0.f)
-                     << QVector3D(modelRect.left(),  modelRect.top(),    0.f)
-                     << QVector3D(modelRect.right(), modelRect.bottom(), 0.f)
-                     << QVector3D(modelRect.left(),  modelRect.top(), 0.f)
-                     << QVector3D(modelRect.right(), modelRect.top(), 0.f)
-                     << QVector3D(modelRect.right(), modelRect.bottom(),    0.f);
-
+            QVector<QVector3D> vertices = rectToVertices(modelRect);
             d->displayShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
             d->displayShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
 
-            QVector<QVector2D> texCoords;
-            texCoords << QVector2D(textureRect.left(), textureRect.bottom())
-                      << QVector2D(textureRect.left(), textureRect.top())
-                      << QVector2D(textureRect.right(), textureRect.bottom())
-                      << QVector2D(textureRect.left(), textureRect.top())
-                      << QVector2D(textureRect.right(), textureRect.top())
-                      << QVector2D(textureRect.right(), textureRect.bottom());
-
+            QVector<QVector2D> texCoords  = rectToTexCoords(textureRect);
             d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
             d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
@@ -409,6 +473,9 @@ void KisOpenGLCanvas2::initializeDisplayShader()
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {
+    KisConfig cfg;
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+
     notifyConfigChanged();
 }
 

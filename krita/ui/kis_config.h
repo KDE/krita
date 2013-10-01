@@ -175,8 +175,12 @@ public:
     bool scrollCheckers() const;
     void setScrollingCheckers(bool scollCheckers);
 
-    QColor checkersColor();
-    void setCheckersColor(const QColor & v);
+    QColor checkersColor1();
+    void setCheckersColor1(const QColor & v);
+
+    QColor checkersColor2();
+    void setCheckersColor2(const QColor & v);
+
 
     QColor canvasBorderColor();
     void setCanvasBorderColor(const QColor &color);
@@ -284,6 +288,12 @@ public:
     QString currentInputProfile() const;
     void setCurrentInputProfile(const QString& name);
 
+    bool presetStripVisible() const;
+    void setPresetStripVisible(bool visible);
+
+    bool scratchpadVisible() const;
+    void setScratchpadVisible(bool visible);
+    
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

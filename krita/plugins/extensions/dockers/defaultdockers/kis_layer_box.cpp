@@ -366,30 +366,35 @@ void KisLayerBox::updateUI()
 {
     if(!m_canvas) return;
 
-    KisNodeSP active = m_nodeManager->activeNode();
+    KisNodeSP activeNode = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnRaise->setEnabled(active && active->isEditable() && (active->nextSibling()
-                                       || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(active && active->isEditable() && (active->prevSibling()
-                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable() && (activeNode->nextSibling()
+                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
+    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable() && (activeNode->prevSibling()
+                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(active && active->isEditable());
+    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
-    m_wdgLayerBox->cmbComposite->setEnabled(active && active->isEditable());
+    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
 
-    if (active) {
+    if (activeNode) {
         if (m_nodeManager->activePaintDevice()) {
             slotFillCompositeOps(m_nodeManager->activeColorSpace());
         } else {
             slotFillCompositeOps(m_image->colorSpace());
         }
 
-        if (active->inherits("KisMask")) {
-            active = active->parent(); // We need a layer to set opacity and composite op, which masks don't have
+        if (activeNode->inherits("KisMask")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(false);
+            m_wdgLayerBox->doubleOpacity->setEnabled(false);
         }
-        if (active->inherits("KisLayer")) {
-            KisLayerSP l = qobject_cast<KisLayer*>(active.data());
+
+        if (activeNode->inherits("KisLayer")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(true);
+            m_wdgLayerBox->doubleOpacity->setEnabled(true);
+
+            KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
             slotSetOpacity(l->opacity() * 100.0 / 255);
 
             const KoCompositeOp* compositeOp = l->compositeOp();

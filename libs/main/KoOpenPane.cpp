@@ -32,6 +32,8 @@
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
 #include <QDesktopServices>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
@@ -173,6 +175,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
 
     connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
             this, SLOT(saveSplitterSizes(KoDetailsPane*, const QList<int>&)));
+
+    setAcceptDrops(true);
 }
 
 KoOpenPane::~KoOpenPane()
@@ -276,6 +280,24 @@ void KoOpenPane::initTemplates(const QString& templateType)
         d->m_sectionList->setCurrentItem(selectItem, 0, QItemSelectionModel::ClearAndSelect);
     } else if (d->m_sectionList->selectedItems().isEmpty() && firstItem) {
         d->m_sectionList->setCurrentItem(firstItem, 0, QItemSelectionModel::ClearAndSelect);
+    }
+}
+
+void KoOpenPane::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->accept();
+    }
+}
+
+void KoOpenPane::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        // XXX: when the MVC refactoring is done, this can open a bunch of
+        //      urls, but since the part/document combination is still 1:1
+        //      that won't work for now.
+        emit openExistingFile(event->mimeData()->urls().first());
+
     }
 }
 

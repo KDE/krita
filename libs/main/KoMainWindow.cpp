@@ -858,6 +858,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     if (!d->rootDocument || !d->rootPart) {
         return true;
     }
+    if (!d->rootDocument->isModified()) {
+        return true;
+    }
 
     bool reset_url;
 

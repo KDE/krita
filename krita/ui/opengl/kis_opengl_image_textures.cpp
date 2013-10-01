@@ -283,11 +283,12 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    Q_ASSERT(checkImage.width() == BACKGROUND_TEXTURE_SIZE);
-    Q_ASSERT(checkImage.height() == BACKGROUND_TEXTURE_SIZE);
-
+    QImage img = checkImage;
+    if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
+        img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                 0, GL_BGRA, GL_UNSIGNED_BYTE, checkImage.bits());
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
 
 }
 

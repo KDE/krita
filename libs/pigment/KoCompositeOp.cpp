@@ -42,6 +42,44 @@ QString KoCompositeOp::categoryHSV()        { return i18n("HSV");        }
 QString KoCompositeOp::categoryMix()        { return i18n("Mix");        }
 QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
 
+KoCompositeOp::ParameterInfo::ParameterInfo()
+    : opacity(1.0f),
+      flow(1.0f),
+      lastOpacity(&opacity)
+{
+}
+
+KoCompositeOp::ParameterInfo::ParameterInfo(const ParameterInfo &rhs)
+{
+    copy(rhs);
+}
+
+KoCompositeOp::ParameterInfo& KoCompositeOp::ParameterInfo::operator=(const ParameterInfo &rhs)
+{
+    copy(rhs);
+    return *this;
+}
+
+void KoCompositeOp::ParameterInfo::copy(const ParameterInfo &rhs)
+{
+    memcpy(this, &rhs, sizeof(ParameterInfo));
+    lastOpacity = rhs.lastOpacity == &rhs.opacity ?
+        &opacity : &_lastOpacityData;
+}
+
+void KoCompositeOp::ParameterInfo::updateOpacityAndAverage(float value) {
+    const float exponent = 0.1;
+
+    opacity = value;
+
+    if (*lastOpacity < opacity) {
+        lastOpacity = &opacity;
+    } else {
+        _lastOpacityData = exponent * opacity + (1.0 - exponent) * (*lastOpacity);
+        lastOpacity = &_lastOpacityData;
+    }
+}
+
 struct KoCompositeOp::Private {
     const KoColorSpace * colorSpace;
     QString id;

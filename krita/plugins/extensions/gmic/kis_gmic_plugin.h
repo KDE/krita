@@ -23,6 +23,7 @@
 #include <kis_view_plugin.h>
 #include <kis_gmic_filter_settings.h>
 #include "kis_gmic_parser.h"
+#include <kis_types.h>
 
 class KisGmicWidget;
 

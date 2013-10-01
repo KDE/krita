@@ -33,6 +33,7 @@ public:
     virtual ~KisDefaultBoundsBase();
 
     virtual QRect bounds() const = 0;
+    virtual bool wrapAroundMode() const = 0;
 };
 
 

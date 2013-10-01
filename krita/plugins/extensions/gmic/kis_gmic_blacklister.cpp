@@ -22,10 +22,12 @@
 #include "kis_debug.h"
 
 #include <QFile>
+#include <QQueue>
 #include <QDomDocument>
 #include <qdom.h>
 #include <QTextDocument>
 
+#include <Component.h>
 
 KisGmicBlacklister::KisGmicBlacklister(const QString& filePath):m_fileName(filePath)
 {
@@ -44,14 +46,13 @@ bool KisGmicBlacklister::parseBlacklist()
     QFile file(m_fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
-        qDebug() << "Cannot open file";
         return false;
     }
 
     if (!doc.setContent(&file))
     {
         file.close();
-        qDebug() << "Cannot set content";
+        warnPlugins << m_fileName << " has wrong format? Correct XML expected!";
         return false;
     }
 
@@ -87,14 +88,13 @@ void KisGmicBlacklister::dump()
 {
 
     QList<QString> keysList = m_categoryNameBlacklist.keys();
-    qDebug() << "Dumping ..." << keysList.count();
     foreach (const QString& item, keysList)
     {
         QSet<QString> filters = m_categoryNameBlacklist[item];
-        qDebug() << item;
+        dbgPlugins << item;
         foreach (const QString filterItem, filters)
         {
-            qDebug() << "\t" << filterItem;
+            dbgPlugins << "\t" << filterItem;
         }
     }
 }
@@ -105,7 +105,6 @@ bool KisGmicBlacklister::isBlacklisted(const QString& filterName, const QString&
     QString filterNamePlain = toPlainText(filterName);
     QString filterCategoryPlain = toPlainText(filterCategory);
 
-    bool result = false;
     if (!m_categoryNameBlacklist.contains(filterCategoryPlain))
     {
         return false;
@@ -120,4 +119,40 @@ QString KisGmicBlacklister::toPlainText(const QString& htmlText)
     QTextDocument doc;
     doc.setHtml(htmlText);
     return doc.toPlainText();
+}
+
+Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName)
+{
+    Component * result = 0;
+
+    QQueue<const Component *> q;
+    q.enqueue(rootNode);
+    while (!q.isEmpty())
+    {
+        Component * c = const_cast<Component *>( q.dequeue() );
+        if (c->childCount() == 0)
+        {
+            // check filtername
+            if (toPlainText(c->name()) == filterName)
+            {
+                // check category
+                if (toPlainText(c->parent()->name()) == filterCategory)
+                {
+                    result = c;
+                }
+            }
+            else
+            {
+                // dbgPlugins << cmd->name() << "is different from " << filterName;
+            }
+        }
+        else
+        {
+            for (int i=0; i < c->childCount(); i++)
+            {
+                q.enqueue(c->child(i));
+            }
+        }
+    }
+    return result;
 }

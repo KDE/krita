@@ -47,6 +47,7 @@ public:
     bool isEnded() const;
 
     bool isExclusive() const;
+    bool supportsWrapAroundMode() const;
 
     bool prevJobSequential() const;
     bool nextJobSequential() const;

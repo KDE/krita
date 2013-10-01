@@ -55,6 +55,10 @@ QRect KisDefaultBounds::bounds() const
     return m_d->image ? m_d->image->bounds() : infiniteRect;
 }
 
+bool KisDefaultBounds::wrapAroundMode() const
+{
+    return m_d->image ? m_d->image->wrapAroundModeActive() : false;
+}
 
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */

@@ -80,13 +80,13 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
 
     QLabel * lblName = new QLabel(i18n("Layer name:"), page);
     lblName->setObjectName("lblName");
-    hl->addWidget(lblName, 0, 0);
+    hl->addWidget(lblName, 0);
 
     m_layerName = new KLineEdit(page);
     m_layerName->setObjectName("m_layerName");
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    hl->addWidget(m_layerName, 0, Qt::AlignLeft);
+    hl->addWidget(m_layerName, 10);
     connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     if (m_currentFilter) {

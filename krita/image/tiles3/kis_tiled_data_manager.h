@@ -232,19 +232,29 @@ public:
     /**
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void readBytes(quint8 * bytes,
                    qint32 x, qint32 y,
-                   qint32 w, qint32 h) const;
+                   qint32 w, qint32 h,
+                   qint32 dataRowStride = -1) const;
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void writeBytes(const quint8 * bytes,
                     qint32 x, qint32 y,
-                    qint32 w, qint32 h);
+                    qint32 w, qint32 h,
+                    qint32 dataRowStride = -1);
 
     /**
      * Copy the bytes in the paint device into a vector of arrays of bytes,
@@ -252,7 +262,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channels. If there
@@ -328,9 +338,13 @@ private:
         void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
 
     void writeBytesBody(const quint8 *data,
-                        qint32 x, qint32 y, qint32 width, qint32 height);
+                        qint32 x, qint32 y,
+                        qint32 width, qint32 height,
+                        qint32 dataRowStride = -1);
     void readBytesBody(quint8 *data,
-                       qint32 x, qint32 y, qint32 width, qint32 height) const;
+                       qint32 x, qint32 y,
+                       qint32 width, qint32 height,
+                       qint32 dataRowStride = -1) const;
 
     template <bool allChannelsPresent>
     void writePlanarBytesBody(QVector<quint8*> planes,
@@ -338,7 +352,7 @@ private:
                               qint32 x, qint32 y, qint32 w, qint32 h);
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
                                          qint32 x, qint32 y,
-                                         qint32 w, qint32 h);
+                                         qint32 w, qint32 h) const;
 public:
     void debugPrintInfo() {
         m_mementoManager->debugPrintInfo();

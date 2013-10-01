@@ -143,12 +143,6 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacity);
 
-    void makeColorLighter();
-    void makeColorDarker();
-
-    void increaseOpacity();
-    void decreaseOpacity();
-
     void increaseBrushSize();
     void decreaseBrushSize();
 
@@ -165,11 +159,6 @@ protected:
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
     bool m_toForegroundColor;
-
-private:
-
-    void transformColor(int step);
-    void stepAlpha(float step);
 
 private:
 

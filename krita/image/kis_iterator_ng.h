@@ -36,6 +36,10 @@ public:
      * Move to the next pixels
      */
     virtual bool nextPixels(qint32 n) = 0;
+    /**
+     * @return return number of consequential numbers of pixels, useful for optimization
+     */
+    virtual qint32 nConseqPixels() const = 0;
 };
 
 class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor

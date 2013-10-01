@@ -20,7 +20,7 @@
 
 
 KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable)
-    : KisBaseIterator(dataManager, writable, offsetX, offsetY)
+    : KisBaseIterator(dataManager, writable)
 {
     x -= offsetX;
     y -= offsetY;

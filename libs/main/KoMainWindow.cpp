@@ -125,7 +125,9 @@ public:
         importFile = 0;
         exportFile = 0;
         encryptDocument = 0;
+#ifndef NDEBUG
         uncompressToDir = 0;
+#endif
         isImporting = false;
         isExporting = false;
         windowSizeDirty = false;
@@ -201,7 +203,9 @@ public:
     KAction *importFile;
     KAction *exportFile;
     KAction *encryptDocument;
+#ifndef NDEBUG
     KAction *uncompressToDir;
+#endif
     KToggleAction *toggleDockers;
     KRecentFilesAction *recent;
 
@@ -300,9 +304,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
     connect(d->encryptDocument, SIGNAL(triggered(bool)), this, SLOT(slotEncryptDocument()));
 
+#ifndef NDEBUG
     d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
     actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
     connect(d->uncompressToDir, SIGNAL(triggered(bool)), this, SLOT(slotUncompressToDir()));
+#endif
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
@@ -326,7 +332,9 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
     d->encryptDocument->setEnabled(false);
+#ifndef NDEBUG
     d->uncompressToDir->setEnabled(false);
+#endif
 
     // populate theme menu
     d->themeManager = new Digikam::ThemeManager(this);
@@ -517,7 +525,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     d->importFile->setEnabled(enable);
     d->exportFile->setEnabled(enable);
     d->encryptDocument->setEnabled(enable);
+#ifndef NDEBUG
     d->uncompressToDir->setEnabled(enable);
+#endif
     d->printAction->setEnabled(enable);
     d->printActionPreview->setEnabled(enable);
     d->sendFileAction->setEnabled(enable);
@@ -887,11 +897,15 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     KUrl suggestedURL = d->rootPart->url();
 
     QStringList mimeFilter;
-    if (!specialOutputFlag) {
+    KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
+    if (! mime)
+        mime = KMimeType::defaultMimeTypePtr();
+    if (specialOutputFlag)
+        mimeFilter = mime->patterns();
+    else
         mimeFilter = KoFilterManager::mimeFilter(_native_format,
                                                  KoFilterManager::Export,
                                                  d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
-    }
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
@@ -904,9 +918,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-            if (! mime)
-                mime = KMimeType::defaultMimeTypePtr();
             QString ext = mime->property("X-KDE-NativeExtension").toString();
             if (!ext.isEmpty()) {
                 if (c < 0)
@@ -964,10 +975,22 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         }
 
         // adjust URL before doing checks on whether the file exists.
-        if (specialOutputFlag == KoDocument::SaveAsDirectoryStore) {
+        if (specialOutputFlag) {
             QString fileName = newURL.fileName();
-            if (fileName != "content.xml") {
-                newURL.addPath("content.xml");
+            if ( specialOutputFlag== KoDocument::SaveAsDirectoryStore) {
+                qDebug() << "save to directory: " << newURL.url();
+            }
+            else if (specialOutputFlag == KoDocument::SaveEncrypted) {
+                int dot = fileName.lastIndexOf('.');
+                qDebug() << dot;
+                QString ext = mime->mainExtension();
+                if (!ext.isEmpty()) {
+                    if (dot < 0) fileName += ext;
+                    else fileName = fileName.left(dot) + ext;
+                } else { // current filename extension wrong anyway
+                    if (dot > 0) fileName = fileName.left(dot);
+                }
+                newURL.setFileName(fileName);
             }
         }
 

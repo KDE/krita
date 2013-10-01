@@ -95,6 +95,7 @@ public slots:
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
+    void slotCanvasResourceChanged(int key, const QVariant& v);
     void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();

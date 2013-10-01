@@ -527,6 +527,24 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
     }
 }
 
+void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
+{
+    if(m_view)
+    {
+        sender()->blockSignals(true);
+        KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if(preset && m_activePreset->name() != preset->name())
+        {
+            QString compositeOp = preset->settings()->getString("CompositeOp");
+            updateCompositeOp(compositeOp);
+            resourceSelected(preset.data());
+        }
+        if(m_resourceProvider->currentCompositeOp() != m_currCompositeOpID)
+            updateCompositeOp(m_resourceProvider->currentCompositeOp());
+        sender()->blockSignals(false);
+    }
+}
+
 void KisPaintopBox::slotSaveActivePreset()
 {
     KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();

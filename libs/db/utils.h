@@ -550,9 +550,6 @@ private:
  and contains only letters, numbers and '_' character. */
 CALLIGRADB_EXPORT bool isIdentifier(const QString& s);
 
-//! \return Valid filename based on \a s
-CALLIGRADB_EXPORT QString string2FileName(const QString &s);
-
 //! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
 {

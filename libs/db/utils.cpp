@@ -1607,15 +1607,6 @@ bool KexiDB::isIdentifier(const QString& s)
     return i > 0 && i == sLength;
 }
 
-QString KexiDB::string2FileName(const QString &s)
-{
-    QString fn = s.simplified();
-    fn.replace(' ',  '_').replace('$', '_').
-       replace('\\', '-').replace('/', '-').
-       replace(':',  '-').replace('*', '-');
-    return fn;
-}
-
 QString KexiDB::temporaryTableName(Connection *conn, const QString &baseName)
 {
     while (true) {

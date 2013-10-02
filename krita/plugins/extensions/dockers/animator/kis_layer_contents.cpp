@@ -70,7 +70,7 @@ void KisLayerContents::paintEvent(QPaintEvent *event)
     }
 }
 
-void KisLayerContents::mousePressEvent(QMouseEvent *event)
+void KisLayerContents::mouseReleaseEvent(QMouseEvent *event)
 {
     int x = event->x();
     x = x - (x % 10);

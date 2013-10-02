@@ -356,6 +356,12 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
         e = e.nextSiblingElement();
     }
 
+    curve.fromString("0,0;1,1");
+    if(numTransfers == 3) {
+        numTransfers++;
+        curves.insert(index + 1, curve);
+    }
+
     if (!numTransfers)
         return;
 

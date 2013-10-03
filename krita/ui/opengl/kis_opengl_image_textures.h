@@ -152,6 +152,9 @@ private:
     QVector<KisTextureTile*> m_textureTiles;
 
     QBitArray m_channelFlags;
+    bool m_allChannelsSelected;
+    bool m_onlyOneChannelSelected;
+    int m_selectedChannelIndex;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

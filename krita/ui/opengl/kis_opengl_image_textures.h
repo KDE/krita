@@ -75,6 +75,8 @@ public:
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    void setChannelFlags(const QBitArray &channelFlags);
+
     /**
      * The background checkers texture.
      */
@@ -148,6 +150,8 @@ private:
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
+
+    QBitArray m_channelFlags;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

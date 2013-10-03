@@ -113,6 +113,8 @@ public:
     bool vastScrolling;
 
     KisInputManager* inputManager;
+
+    QBitArray channelFlags;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -224,7 +226,27 @@ void KisCanvas2::setSmoothingEnabled(bool smooth)
 
 void KisCanvas2::channelSelectionChanged()
 {
-    qDebug() << "redo the projection, with just the right channels";
+    KisImageWSP image = this->image();
+    m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    image->barrierLock();
+
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
+#else
+        Q_ASSERT_X(0, "KisCanvas2::setChannelFlags", "Bad use of setChannelFlags(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setChannelFlags(m_d->channelFlags);
+    }
+
+    startUpdateInPatches(image->bounds());
+
+    image->unlock();
+
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)

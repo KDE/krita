@@ -315,6 +315,11 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     }
 }
 
+void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_channelFlags = channelFlags;
+}
+
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable

@@ -88,6 +88,7 @@ struct KisPrescaledProjection::Private {
     KisImageWSP image;
     KisCoordinatesConverter *coordinatesConverter;
     KisProjectionBackend* projectionBackend;
+    QBitArray channelFlags;
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
@@ -275,6 +276,11 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
 void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+}
+
+void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_d->channelFlags = channelFlags;
 }
 
 void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)

@@ -962,3 +962,14 @@ void KisConfig::setScratchpadVisible(bool visible)
 {
     m_cfg.writeEntry("scratchpadVisible", visible);
 }
+
+
+bool KisConfig::showSingleChannelAsColor() const
+{
+    return m_cfg.readEntry("showSingleChannelAsColor", false);
+}
+
+void KisConfig::setShowSingleChannelAsColor(bool asColor)
+{
+    m_cfg.writeEntry("showSingleChannelAsColor", asColor);
+}

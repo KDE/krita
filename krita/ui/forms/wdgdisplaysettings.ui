@@ -152,6 +152,16 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
+       <widget class="QCheckBox" name="chkChannelsAsColor">
+        <property name="text">
+         <string>Color Channels in Color</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkCurveAntialiasing">
         <property name="text">
          <string>Enable curve anti-aliasing</string>

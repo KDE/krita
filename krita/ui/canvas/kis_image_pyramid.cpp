@@ -232,7 +232,9 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
 
-            if (m_onlyOneChannelSelected) {
+            KisConfig cfg;
+
+            if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
                 int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
                 for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
                     for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {

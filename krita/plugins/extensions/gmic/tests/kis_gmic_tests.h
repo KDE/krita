@@ -60,6 +60,12 @@ private slots:
     void testBlacklister();
     void testGatherLayers();
 
+    void testConvertGrayScaleGmic();
+    void testConvertGrayScaleAlphaGmic();
+    void testConvertRGBgmic();
+    void testConvertRGBAgmic();
+
+
 };
 
 #endif

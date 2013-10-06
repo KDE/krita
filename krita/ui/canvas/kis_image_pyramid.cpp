@@ -17,6 +17,8 @@
  */
 #include "kis_image_pyramid.h"
 
+#include <QBitArray>
+
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
@@ -127,6 +129,22 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
     rebuildPyramid();
 }
 
+void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_channelFlags = channelFlags;
+    int selectedChannels = 0;
+    const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
+    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    for (int i = 0; i < m_channelFlags.size(); ++i) {
+        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+            selectedChannels++;
+            m_selectedChannelIndex = i;
+        }
+    }
+    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
+    m_onlyOneChannelSelected = (selectedChannels == 1);
+}
+
 void KisImagePyramid::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     m_displayFilter = displayFilter;
@@ -205,6 +223,53 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         m_displayFilter->filter(originalBytes, originalBytes, numPixels);
 #endif
 #endif
+    }
+    else {
+        if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
+
+            quint8 *dst = projectionCs->allocPixelBuffer(numPixels);
+            QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+            int channelSize = channelInfo[m_selectedChannelIndex]->size();
+            int pixelSize = projectionCs->pixelSize();
+
+            KisConfig cfg;
+
+            if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
+                int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
+
+                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   originalBytes + (pixelIndex * pixelSize) + selectedChannelPos,
+                                   channelSize);
+                        }
+                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
+                                memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                       originalBytes  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                       channelSize);
+                        }
+                    }
+                }
+            }
+            else {
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
+                        if (m_channelFlags.testBit(channelIndex)) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   originalBytes  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                        else {
+                            memset(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                        }
+                    }
+                }
+
+            }
+            delete[] originalBytes;
+            originalBytes = dst;
+        }
     }
 
     quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);

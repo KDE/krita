@@ -48,8 +48,7 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         KisPaintDeviceSP src = node->paintDevice();
         KisTransaction transaction("", src);
 
-        KisGmicSimpleConvertor convertor;
-        convertor.convertFromGmicImage(m_images->_data[index], src, 255.0f);
+        KisGmicSimpleConvertor::convertFromGmicFast(m_images->_data[index], src, 255.0f);
 
         transaction.commit(undoAdapter);
     }

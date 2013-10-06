@@ -480,6 +480,7 @@ bool KoBorder::hasBorder(KoBorder::BorderSide side) const
 void KoBorder::paint(QPainter &painter, const QRectF &borderRect,
                      BorderPaintArea whereToPaint) const
 {
+    Q_UNUSED(whereToPaint);
     // In tables it is apparently best practice to paint the
     // horizontal lines over the vertical ones.  So let's use the same
     // strategy here.

@@ -48,6 +48,9 @@ private slots:
     void testConvertToGmic();
     void testConvertFromGmic();
 
+    void testConvertToGmicFast();
+    void testConvertFromGmicFast();
+
 };
 
 #endif

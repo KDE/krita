@@ -28,6 +28,10 @@
 #include <kis_canvas2.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>
+#include <kis_image.h>
+#include <kis_group_layer.h>
+#include <kis_layer.h>
+
 
 ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
 {
@@ -41,15 +45,19 @@ ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canva
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    if (m_canvas && m_canvas->view()) {
-        m_canvas->view()->nodeManager()->disconnect(m_model);
+    if (m_canvas) {
+        m_canvas->disconnect();
+    }
+    if (!canvas) {
+        m_canvas = 0;
+        return;
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         KisView2* view = m_canvas->view();
-        m_model->slotLayerActivated(view->activeLayer());
-        connect(view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), m_model, SLOT(slotLayerActivated(KisLayerSP)));
+        m_model->slotLayerActivated(view->image()->rootLayer());
     }
+    connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
 }
 
 

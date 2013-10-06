@@ -41,19 +41,15 @@ void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     if (index >= 0)
     {
         /* fill the image with data here */
-        KisGmicSimpleConvertor convertor;
-
         KisPaintDeviceSP device = node->paintDevice();
         gmic_image<float> &gimg = m_images->_data[index];
-
 
         quint32 x = m_rc.width();
         quint32 y = m_rc.height();
         quint32 z = 1;
         quint32 colorChannelCount = 4; // RGBA
         gimg.assign(x,y,z,colorChannelCount);
-
-        convertor.convertToGmicImage(device, gimg, m_rc);
+        KisGmicSimpleConvertor::convertToGmicImageFast(device, gimg, m_rc);
     }
 }
 

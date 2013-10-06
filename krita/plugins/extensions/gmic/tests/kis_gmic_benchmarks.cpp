@@ -25,7 +25,7 @@
 #include <KoColor.h>
 
 #include <qtest_kde.h>
-// #include "testutil.h"
+
 #include <QImage>
 #include <QColor>
 
@@ -119,7 +119,6 @@ void KisGmicBenchmarks::testConvertToGmic()
     #endif
 }
 
-
 void KisGmicBenchmarks::testConvertFromGmic()
 {
     gmic_image<float> gmicImage;
@@ -140,6 +139,47 @@ void KisGmicBenchmarks::testConvertFromGmic()
         qResult.save("002_testConvertFromGmic.bmp");
     #endif
 }
+
+
+void KisGmicBenchmarks::testConvertToGmicFast()
+{
+    gmic_image<float> gmicImage;
+    gmicImage.assign(m_qImage.width(),m_qImage.height(), 1,4);
+    memset(gmicImage._data, 0, m_qImage.width() * m_qImage.height() * sizeof(float));
+
+    QBENCHMARK
+    {
+        KisGmicSimpleConvertor::convertToGmicImageFast(m_device, gmicImage, m_rect);
+    }
+
+    #ifdef SAVE_OUTPUT
+        QImage qResult = KisGmicSimpleConvertor::convertToQImage(gmicImage, 1.0);
+        qResult.save("003_testConvertToGmic_fast.bmp");
+    #endif
+}
+
+
+void KisGmicBenchmarks::testConvertFromGmicFast()
+{
+    gmic_image<float> gmicImage;
+    gmicImage.assign(m_qImage.width(),m_qImage.height(), 1,4);
+
+    KisGmicSimpleConvertor::convertFromQImage(m_qImage, gmicImage, 1.0);
+
+    KisPaintDeviceSP result = new KisPaintDevice(m_device->colorSpace());
+    result->fill(QRect(0,0,m_qImage.width(),m_qImage.height()), KoColor(m_darkOrange, m_device->colorSpace()));
+
+    QBENCHMARK
+    {
+        KisGmicSimpleConvertor::convertFromGmicFast(gmicImage, result, 1.0);
+    }
+
+    #ifdef SAVE_OUTPUT
+        QImage qResult = result->convertToQImage(0, 0,0, m_qImage.width(),m_qImage.height());
+        qResult.save("002_testConvertFromGmic_fast.bmp");
+    #endif
+}
+
 
 
 

@@ -173,6 +173,8 @@ public slots:
     qreal rotationAngle() const;
     void setSmoothingEnabled(bool smooth);
 
+    void channelSelectionChanged();
+
 private slots:
 
     /// The image projection has changed, now start an update

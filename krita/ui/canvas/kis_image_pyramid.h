@@ -41,7 +41,7 @@ public:
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
     void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
-
+    void setChannelFlags(const QBitArray &channelFlags);
     /// we don't own the display filter, it's the docker that owns it!
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     void updateCache(const QRect &dirtyImageRect);
@@ -136,6 +136,11 @@ private:
 
     bool m_useOcio;
 
+    QBitArray m_channelFlags;
+    bool m_allChannelsSelected;
+    bool m_onlyOneChannelSelected;
+    int m_selectedChannelIndex;
+    
 };
 
 #endif /* __KIS_IMAGE_PYRAMID */

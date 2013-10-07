@@ -212,14 +212,14 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     qDebug() << "Getting default context:";
     printContext(lcMine);
 
-    tdd.minX = 0;
-    tdd.maxX = int(lcMine.lcInExtX) - int(lcMine.lcInOrgX);
+    tdd.minX = int(lcMine.lcOutOrgX);
+    tdd.maxX = int(lcMine.lcOutExtX) + int(lcMine.lcOutOrgX);
 
-    tdd.minY = 0;
-    tdd.maxY = int(lcMine.lcInExtY) - int(lcMine.lcInOrgY);
+    tdd.minY = int(lcMine.lcOutOrgY);
+    tdd.maxY = int(lcMine.lcOutExtY) + int(lcMine.lcOutOrgY);
 
-    tdd.minZ = 0;
-    tdd.maxZ = int(lcMine.lcInExtZ) - int(lcMine.lcInOrgZ);
+    tdd.minZ = int(lcMine.lcOutOrgZ);
+    tdd.maxZ = int(lcMine.lcOutExtZ) + int(lcMine.lcOutOrgZ);
 
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {

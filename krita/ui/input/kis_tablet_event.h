@@ -66,9 +66,9 @@ public:
 
     inline QMouseEvent toQMouseEvent() const {
         QEvent::Type t =
-            type() == TabletMoveEx ? MouseMove :
-            type() == TabletPressEx ? MouseButtonPress :
-            type() == TabletReleaseEx ? MouseButtonRelease :
+            (ExtraEventType) type() == TabletMoveEx ? MouseMove :
+            (ExtraEventType) type() == TabletPressEx ? MouseButtonPress :
+            (ExtraEventType) type() == TabletReleaseEx ? MouseButtonRelease :
             QEvent::None;
 
         return QMouseEvent(t, pos(), globalPos(),
@@ -77,9 +77,9 @@ public:
 
     inline QTabletEvent toQTabletEvent() const {
         QEvent::Type t =
-            type() == TabletMoveEx ? TabletMove :
-            type() == TabletPressEx ? TabletPress :
-            type() == TabletReleaseEx ? TabletRelease :
+            (ExtraEventType) type() == TabletMoveEx ? TabletMove :
+            (ExtraEventType) type() == TabletPressEx ? TabletPress :
+            (ExtraEventType) type() == TabletReleaseEx ? TabletRelease :
             QEvent::None;
 
         return QTabletEvent(t, pos(), globalPos(), hiResGlobalPos(),

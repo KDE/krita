@@ -255,6 +255,15 @@ if(WIN32)
         )
 endif(WIN32)
 
+if(UNIX AND NOT APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support.cpp
+        input/wintab/kis_tablet_support_x11.cpp
+        )
+endif(UNIX AND NOT APPLE)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 kde4_add_ui_files(kritaui_LIB_SRCS

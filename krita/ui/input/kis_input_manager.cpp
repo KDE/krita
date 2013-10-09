@@ -205,6 +205,8 @@ public:
         case QEvent::TabletLeaveProximity:
             d->ignoreQtCursorEvents = false;
             break;
+        default:
+            break;
         }
         return QObject::eventFilter(object, event);
     }
@@ -449,10 +451,8 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
 
-#ifdef Q_OS_WIN
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
-#endif
 }
 
 KisInputManager::~KisInputManager()

@@ -21,6 +21,7 @@
 
 #include <QtGlobal>
 #include <QLibrary>
+#include <QPointer>
 #include <QPointF>
 #include <QList>
 #include <QTabletEvent>
@@ -97,6 +98,11 @@ inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
     return ret;
 }
 #endif
+
+typedef QList<QTabletDeviceData> QTabletDeviceDataList;
+QTabletDeviceDataList *qt_tablet_devices();
+
+
 
 
 #endif // KIS_TABLET_HANDLER_P_H

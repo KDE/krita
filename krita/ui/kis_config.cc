@@ -375,16 +375,6 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
     m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
-bool KisConfig::useOpenGLTextureBuffer() const
-{
-    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
-}
-
-void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
-{
-    m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
-}
-
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());

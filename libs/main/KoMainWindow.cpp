@@ -841,9 +841,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
     if (!d->rootDocument || !d->rootPart) {
         return true;
     }
-    if (!d->rootDocument->isModified()) {
-        return true;
-    }
 
     bool reset_url;
 
@@ -1057,13 +1054,16 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         else
             ret = false;
     } else { // saving
+
         bool needConfirm = d->rootDocument->confirmNonNativeSave(false) &&
                            !d->rootDocument->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
            ) {
             // be sure d->rootDocument has the correct outputMimeType!
-            ret = d->rootPart->save();
+            if (isExporting() || d->rootDocument->isModified()) {
+                ret = d->rootPart->save();
+            }
 
             if (!ret) {
                 kDebug(30003) << "Failed Save!";

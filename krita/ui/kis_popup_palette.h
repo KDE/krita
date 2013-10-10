@@ -64,7 +64,6 @@ protected:
     void mouseReleaseEvent (QMouseEvent*);
     void mouseMoveEvent (QMouseEvent*);
     void mousePressEvent (QMouseEvent*);
-    void tabletEvent (QTabletEvent*);
     
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors

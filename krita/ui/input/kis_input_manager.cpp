@@ -627,11 +627,13 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
 
         QTabletEvent qte = tevent->toQTabletEvent();
+        qte.ignore();
         retval = eventFilter(object, &qte);
         tevent->setAccepted(qte.isAccepted());
 
         if (!retval && !qte.isAccepted()) {
             QMouseEvent qme = tevent->toQMouseEvent();
+            qme.ignore();
             retval = eventFilter(object, &qme);
             tevent->setAccepted(qme.isAccepted());
         }

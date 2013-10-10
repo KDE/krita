@@ -26,7 +26,6 @@ class KRITAUI_EXPORT KisTabletSupportX11
 {
 public:
     static void init();
-//static void setButtonsConverter(ButtonsConverter *buttonsConverter);
     static bool eventFilter(void *message, long *result);
 };
 

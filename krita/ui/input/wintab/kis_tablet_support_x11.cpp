@@ -445,11 +445,6 @@ void KisTabletSupportX11::init()
     kis_x11_init_tablet();
 }
 
-/*void KisTabletSupportX11::setButtonsConverter(ButtonsConverter *buttonsConverter)
-{
-
-}*/
-
 bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
 {
     XEvent *event = static_cast<XEvent*>(ev);

@@ -170,9 +170,10 @@ void KisInputManager::Private::debugTabletEvent(QEvent *event)
     qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6;
 }
 
-#define save_ignore_cursor_events() bool __old_iqce = d->ignoreQtCursorEvents; d->ignoreQtCursorEvents = false
-#define restore_ignore_cursor_events() d->ignoreQtCursorEvents = __old_iqce
+#define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
+#define stop_ignore_cursor_events() d->ignoreQtCursorEvents = false
 #define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
+
 
 static inline QList<Qt::Key> KEYS() {
     return QList<Qt::Key>();
@@ -200,10 +201,10 @@ public:
     bool eventFilter(QObject* object, QEvent* event ) {
         switch (event->type()) {
         case QEvent::TabletEnterProximity:
-            d->ignoreQtCursorEvents = true;
+            start_ignore_cursor_events();
             break;
         case QEvent::TabletLeaveProximity:
-            d->ignoreQtCursorEvents = false;
+            stop_ignore_cursor_events();
             break;
         default:
             break;
@@ -584,6 +585,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Ensure we have focus so we get key events.
         d->canvas->canvasWidget()->setFocus();
         break;
+    case QEvent::Leave:
+        /**
+         * We won't get a TabletProximityLeave event when the tablet
+         * is hovering above some other widget, so restore cursor
+         * events processing right now.
+         */
+        stop_ignore_cursor_events();
+        break;
     case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reset();
@@ -622,7 +631,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case KisTabletEvent::TabletMoveEx:
     case KisTabletEvent::TabletReleaseEx: {
 
-        save_ignore_cursor_events();
+        stop_ignore_cursor_events();
 
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
 
@@ -638,7 +647,14 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             tevent->setAccepted(qme.isAccepted());
         }
 
-        restore_ignore_cursor_events();
+        /**
+         * The flow of tablet events means the tablet is in the
+         * proximity area, so activate it even when the
+         * TabletEnterProximity event was missed (may happen when
+         * changing focus of the window with tablet in the proximity
+         * area)
+         */
+        start_ignore_cursor_events();
 
         break;
     }

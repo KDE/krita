@@ -296,6 +296,8 @@ static Qt::MouseButton translateMouseButton(int b)
 
 bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *defaultWidget)
 {
+    Q_ASSERT(defaultWidget);
+
 #if defined (Q_OS_IRIX)
 #endif
 
@@ -459,8 +461,13 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
             || event->type == tab.xinput_button_release
             || event->type == tab.xinput_button_press) {
 
-            QWidget *widget = QWidget::find((WId)event->xany.window);
-            return translateXinputEvent(event, &tab, widget);
+            QWidget *widget = QApplication::activeModalWidget();
+
+            if (!widget) {
+                widget = QWidget::find((WId)event->xany.window);
+            }
+
+            return widget ? translateXinputEvent(event, &tab, widget) : false;
         }
     }
 

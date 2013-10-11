@@ -204,22 +204,26 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qt_tablet_tilt_support = tpOri[0].axResolution && tpOri[1].axResolution;
     }
 
-    LOGCONTEXT lcMine;
+    tdd.minX = int(lc.lcOutOrgX);
+    tdd.maxX = int(lc.lcOutExtX) + int(lc.lcOutOrgX);
 
-    /* get default region */
-    ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+    tdd.minY = int(lc.lcOutOrgY);
+    tdd.maxY = int(lc.lcOutExtY) + int(lc.lcOutOrgY);
 
-    qDebug() << "Getting default context:";
-    printContext(lcMine);
+    tdd.minZ = int(lc.lcOutOrgZ);
+    tdd.maxZ = int(lc.lcOutExtZ) + int(lc.lcOutOrgZ);
 
-    tdd.minX = int(lcMine.lcOutOrgX);
-    tdd.maxX = int(lcMine.lcOutExtX) + int(lcMine.lcOutOrgX);
+    {
+        // Only for debugging purposes
 
-    tdd.minY = int(lcMine.lcOutOrgY);
-    tdd.maxY = int(lcMine.lcOutExtY) + int(lcMine.lcOutOrgY);
+        LOGCONTEXT lcMine;
 
-    tdd.minZ = int(lcMine.lcOutOrgZ);
-    tdd.maxZ = int(lcMine.lcOutExtZ) + int(lcMine.lcOutOrgZ);
+        /* get default region */
+        ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+
+        qDebug() << "Getting default context:";
+        printContext(lcMine);
+    }
 
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {

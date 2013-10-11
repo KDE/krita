@@ -78,7 +78,7 @@ bool qt_tablet_tilt_support;
  * press event allows to ensure that exactly the same widget would get
  * the release.
  */
-QWidget *kis_tablet_pressed = 0;
+QPointer<QWidget> kis_tablet_pressed = 0;
 
 
 /**
@@ -347,14 +347,16 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         // make sure the tablet event get's sent to the proper widget...
         QWidget *w = 0;
 
-        if (kis_tablet_pressed)
+        if (kis_tablet_pressed) {
             w = kis_tablet_pressed; // Pass it to the thing that's grabbed it.
-        else
-            w = qApp->widgetAt(globalPos);
-
-        if (!w) {
-            w = QWidget::find(msg.hwnd);
         }
+
+        /**
+         * Find the appropriate window in an order of preference
+         */
+        if (!w) w = qApp->activeModalWidget();
+        if (!w) w = qApp->widgetAt(globalPos);
+        if (!w) w = QWidget::find(msg.hwnd);
 
         if (!anyButtonsStillPressed) {
             kis_tablet_pressed = 0;

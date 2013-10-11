@@ -205,13 +205,13 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     }
 
     tdd.minX = int(lc.lcOutOrgX);
-    tdd.maxX = int(lc.lcOutExtX) + int(lc.lcOutOrgX);
+    tdd.maxX = int(qAbs(lc.lcOutExtX)) + int(lc.lcOutOrgX);
 
     tdd.minY = int(lc.lcOutOrgY);
-    tdd.maxY = int(lc.lcOutExtY) + int(lc.lcOutOrgY);
+    tdd.maxY = int(qAbs(lc.lcOutExtY)) + int(lc.lcOutOrgY);
 
     tdd.minZ = int(lc.lcOutOrgZ);
-    tdd.maxZ = int(lc.lcOutExtZ) + int(lc.lcOutOrgZ);
+    tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
     {
         // Only for debugging purposes

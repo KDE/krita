@@ -596,6 +596,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reset();
+        stop_ignore_cursor_events();
         break;
     case QEvent::TabletPress:
     case QEvent::TabletMove:

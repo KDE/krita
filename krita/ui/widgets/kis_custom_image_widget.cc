@@ -74,7 +74,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     m_doc = doc;
 
     txtName->setText(imageName);
-
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
@@ -109,9 +108,12 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     createButton->setDefault(true);
 
     bnPortrait->setIcon(koIcon("portrait"));
-    connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
+    connect(bnPortrait, SIGNAL(clicked()), SLOT(switchWidthHeight()));
+    connect(bnLandscape, SIGNAL(clicked()), SLOT(switchWidthHeight()));
     bnLandscape->setIcon(koIcon("landscape"));
 
+    connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
+    connect(doubleHeight, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
@@ -126,7 +128,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
-    fillPredefined();   
+    fillPredefined();
+    switchPortraitLandscape();
 }
 
 void KisCustomImageWidget::showEvent(QShowEvent *){
@@ -368,6 +371,14 @@ void KisCustomImageWidget::switchWidthHeight()
     double width = doubleWidth->value();
     doubleWidth->setValue(doubleHeight->value());
     doubleHeight->setValue(width);
+}
+
+void KisCustomImageWidget::switchPortraitLandscape()
+{
+    if(doubleWidth->value() > doubleHeight->value())
+        bnLandscape->setChecked(true);
+    else
+        bnPortrait->setChecked(true);
 }
 
 #include "kis_custom_image_widget.moc"

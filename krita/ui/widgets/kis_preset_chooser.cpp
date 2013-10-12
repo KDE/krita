@@ -125,10 +125,13 @@ public:
 
     virtual QList< KoResource* > resources() {
 
+        if (m_paintopID.isEmpty()) {
+            return KoResourceServerAdapter<KisPaintOpPreset>::resources();
+        }
         QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
         QList<KoResource*> resources;
         foreach( KisPaintOpPreset* preset, serverResources ) {
-            if( m_paintopID.isEmpty() || preset->paintOp().id() == m_paintopID) {
+            if( preset->paintOp().id() == m_paintopID) {
                 resources.append( preset );
             }
         }

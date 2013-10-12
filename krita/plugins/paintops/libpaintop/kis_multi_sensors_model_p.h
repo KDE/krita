@@ -49,7 +49,6 @@ signals:
 private:
     KisDynamicSensor* getOrCreateSensorFromCache(const QString& id);
     KisDynamicSensor* takeOrCreateSensorFromCache(const QString& id);
-    void pushSensorToCache(KisDynamicSensor*);
 private:
     KisDynamicSensor* m_currentSensor;
     KisDynamicSensorList* m_listSensor;

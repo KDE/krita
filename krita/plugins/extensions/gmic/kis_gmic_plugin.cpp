@@ -30,14 +30,13 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kactioncollection.h>
+#include <QTime>
 
 #include <kis_view2.h>
 #include <kis_action.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
-#include <kis_image_signal_router.h>
-#include <kis_processing_applicator.h>
 #include <kis_paint_layer.h>
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
@@ -53,13 +52,10 @@
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
 
-#include "kis_export_gmic_processing_visitor.h"
-#include "kis_gmic_command.h"
-#include "kis_import_gmic_processing_visitor.h"
 #include "kis_gmic_blacklister.h"
 #include "kis_input_output_mapper.h"
 #include "kis_gmic_simple_convertor.h"
-#include "kis_gmic_synchronize_layers_command.h"
+#include "kis_gmic_applicator.h"
 
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
@@ -107,6 +103,7 @@ void KisGmicPlugin::slotGmic()
     model->setBlacklister(blacklister);
 
     m_gmicWidget = new KisGmicWidget(model);
+    m_gmicApplicator = new KisGmicApplicator();
 
     // apply
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
@@ -148,36 +145,14 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         return;
     }
 
-    KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
+    QTime myTimer;
+    myTimer.start();
+    m_gmicApplicator->apply(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand());
+    m_view->image()->waitForDone();
 
-
-    KisProcessingApplicator applicator(m_view->image(), node,
-                                   KisProcessingApplicator::RECURSIVE,
-                                   emitSignals, actionName);
-
-
-    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-    gmicLayers->assign(kritaNodes->size());
-
-    QRect layerSize(0,0,m_view->image()->width(), m_view->image()->height());
-    KisProcessingVisitorSP visitor;
-
-    // convert krita layers to gmic layers
-    visitor = new KisExportGmicProcessingVisitor(kritaNodes, gmicLayers, layerSize);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
-
-    // apply gmic filters to provided layers
-    applicator.applyCommand(new KisGmicCommand(setting->gmicCommand(), gmicLayers));
-
-    // synchronize layer count
-    applicator.applyCommand(new KisGmicSynchronizeLayersCommand(kritaNodes, gmicLayers, m_view->image()), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
-
-    // would sleep(3) help here?
-
-    visitor = new KisImportGmicProcessingVisitor(kritaNodes, gmicLayers);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
-    applicator.end();
+    double seconds = myTimer.elapsed() * 0.001;
+    // temporary feedback
+    m_gmicWidget->setWindowTitle(QString("Filtering took ") + QString::number(seconds) + QString(" seconds"));
 }
 
 void KisGmicPlugin::slotClose()
@@ -191,6 +166,8 @@ void KisGmicPlugin::slotClose()
     {
         // close event deletes widget
         m_gmicWidget = 0;
+        delete m_gmicApplicator;
+        m_gmicApplicator = 0;
     }
 }
 

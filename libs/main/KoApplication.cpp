@@ -95,6 +95,7 @@ KoApplication::KoApplication()
 
     m_starting = true;
 #ifdef Q_OS_MAC
+#if 0
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
     if (styleSheetPath.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
@@ -106,6 +107,9 @@ KoApplication::KoApplication()
     QString styleSheet = QLatin1String(file.readAll());
     file.close();
     setStyleSheet(styleSheet);
+#endif
+
+    setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {

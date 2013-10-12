@@ -23,6 +23,7 @@
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_filter_settings.h"
 
+class QCloseEvent;
 class KisGmicInputOutputWidget;
 class QPushButton;
 
@@ -36,6 +37,7 @@ public:
     ~KisGmicWidget();
 
     void createMainLayout();
+    virtual void closeEvent(QCloseEvent* );
 
 signals:
     void sigApplyCommand(KisGmicFilterSetting * setting);

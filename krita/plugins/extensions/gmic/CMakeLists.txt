@@ -12,6 +12,9 @@ gmic_def.h
 gmic.h
 )
 
+if(APPLE)
+    add_definitions(-D_APPLE)
+endif()
 add_definitions(-Dgmic_build )
 add_definitions(-Dgmic_float_only )
 
@@ -62,6 +65,7 @@ set(kritagmic_shared_PART_SRCS
 set(kritagmic_PART_SRCS
     kis_gmic_simple_convertor.cpp
     kis_export_gmic_processing_visitor.cpp
+    kis_gmic_applicator.cpp
     kis_gmic_command.cpp
     kis_gmic_synchronize_layers_command.cpp
     kis_import_gmic_processing_visitor.cpp

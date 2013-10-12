@@ -204,6 +204,13 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     int lastRow = yToRow(artificialRect.bottom());
 
 
+    KisConfig cfg;
+    QBitArray channelFlags; // empty by default
+
+    if (!cfg.useOcio() && !m_allChannelsSelected) {
+        channelFlags = m_channelFlags;
+    }
+
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
@@ -219,7 +226,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                                               m_image->bounds());
             // Don't update empty tiles
             if (tileInfo.valid()) {
-                tileInfo.retrieveData(m_image);
+                tileInfo.retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
                 info->tileList.append(tileInfo);
             }
             else {
@@ -313,6 +320,22 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
         m_renderingIntent = renderingIntent;
         m_conversionFlags = conversionFlags;
     }
+}
+
+void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_channelFlags = channelFlags;
+    int selectedChannels = 0;
+    const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
+    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    for (int i = 0; i < m_channelFlags.size(); ++i) {
+        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+            selectedChannels++;
+            m_selectedChannelIndex = i;
+        }
+    }
+    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
+    m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)

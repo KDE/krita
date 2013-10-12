@@ -108,7 +108,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
                 paintLayer->setChannelLockFlags(flags);
             }
             
-            m_currentLayer->setDirty();
+            emit channelFlagsChanged();
             return true;
         }
     }

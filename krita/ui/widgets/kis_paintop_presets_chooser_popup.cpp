@@ -24,10 +24,13 @@
 
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
+#include <KoResourceServer.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
 #include <kis_config.h>
+#include <kis_resource_server_provider.h>
+#include <kis_paintop_preset.h>
 #include <KoIcon.h>
 #include <QCompleter>
 
@@ -103,4 +106,15 @@ void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
 void KisPaintOpPresetsChooserPopup::showButtons(bool show)
 {
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
+}
+
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource)
+{
+    if(resource)
+    {
+        blockSignals(true);
+        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(rserver->resourceByName(resource->name()));
+        blockSignals(false);
+    }
 }

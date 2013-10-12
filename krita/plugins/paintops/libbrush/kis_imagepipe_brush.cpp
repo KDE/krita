@@ -221,6 +221,7 @@ bool KisImagePipeBrush::load()
 
 bool KisImagePipeBrush::initFromData(const QByteArray &data)
 {
+    if (data.size() == 0) return false;
     // XXX: this doesn't correctly load the image pipe brushes yet.
 
     // XXX: This stuff is in utf-8, too.

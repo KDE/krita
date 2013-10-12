@@ -373,6 +373,9 @@ bool MyPaintBrushResource::load()
     int version = -1;
 
     QFile f(filename());
+
+    if (f.size() == 0) return false;
+
     if (f.open( QIODevice::ReadOnly)) {
         QTextStream stream(&f);
         QString line;

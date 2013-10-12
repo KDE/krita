@@ -33,6 +33,9 @@ KisPngBrush::KisPngBrush(const QString& filename)
 
 bool KisPngBrush::load()
 {
+    QFileInfo fi(filename());
+    if (fi.size() == 0) return false;
+
     QImageReader reader(filename(), "PNG");
     if(reader.textKeys().contains("brush_spacing"))
     {

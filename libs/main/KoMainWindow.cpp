@@ -868,9 +868,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     if (!d->rootDocument || !d->rootPart) {
         return true;
     }
-    if (!saveas && !isExporting() && !specialOutputFlag && !d->rootDocument->isModified()) {
-        return true;
-    }
 
     bool reset_url;
 
@@ -1075,13 +1072,16 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         else
             ret = false;
     } else { // saving
+
         bool needConfirm = d->rootDocument->confirmNonNativeSave(false) &&
                 !d->rootDocument->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
                 ) {
             // be sure d->rootDocument has the correct outputMimeType!
-            ret = d->rootPart->save();
+            if (isExporting() || d->rootDocument->isModified()) {
+                ret = d->rootPart->save();
+            }
 
             if (!ret) {
                 kDebug(30003) << "Failed Save!";
@@ -1092,22 +1092,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             ret = false;
     }
 
-    // Now that there's a File/Export option, this is no longer necessary.
-    // If you continue to use File/Save to export to a foreign format,
-    // this signals your intention to continue working in a foreign format.
-    // You have already been warned by the DoNotAskAgain exportConfirmation
-    // about losing formatting when you first saved so don't set modified
-    // here or else it will be reported as a bug by some MSOffice user.
-    // You have been warned!  Do not click DoNotAskAgain!!!
-#if 0
-    if (ret && !isExporting()) {
-        // When exporting to a non-native format, we don't reset modified.
-        // This way the user will be reminded to save it again in the native format,
-        // if he/she doesn't want to lose formatting.
-        if (wasModified && d->rootDocument->outputMimeType() != _native_format)
-            d->rootDocument->setModified(true);
-    }
-#endif
 
     if (!ret && reset_url)
         d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected

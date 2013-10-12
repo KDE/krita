@@ -12,6 +12,9 @@ gmic_def.h
 gmic.h
 )
 
+if(APPLE)
+    add_definitions(-D_APPLE)
+endif()
 add_definitions(-Dgmic_build )
 add_definitions(-Dgmic_float_only )
 

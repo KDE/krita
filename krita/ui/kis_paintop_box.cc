@@ -534,9 +534,9 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
     {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if(preset && m_activePreset->name() != preset->name())
-        {
-            QString compositeOp = preset->settings()->getString("CompositeOp");
+        m_presetsChooserPopup->canvasResourceChanged(preset.data());
+        if(m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
+            QString compositeOp = m_resourceProvider->currentCompositeOp();
             m_cmbCompositeOp->blockSignals(true);
             m_cmbCompositeOp->selectCompositeOp(KoID(compositeOp));
             m_cmbCompositeOp->blockSignals(false);
@@ -547,14 +547,6 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
             m_eraseModeButton->defaultAction()->setChecked(compositeOp == COMPOSITE_ERASE);
             m_eraseModeButton->blockSignals(false);
             m_eraseModeButton->defaultAction()->blockSignals(false);
-
-            resourceSelected(preset.data());
-        }
-        m_presetsChooserPopup->canvasResourceChanged(preset.data());
-        if(m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
-            if(!(m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE && m_eraseModeButton->isChecked() == true) &&
-               !(m_resourceProvider->currentCompositeOp() != COMPOSITE_ERASE && m_eraseModeButton->isChecked() == false))
-                updateCompositeOp(m_resourceProvider->currentCompositeOp(), true);
         }
         sender()->blockSignals(false);
     }

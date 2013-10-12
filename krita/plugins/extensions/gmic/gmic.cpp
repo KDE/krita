@@ -740,7 +740,9 @@ CImg<T>& color_CImg3d(const float R, const float G, const float B, const float o
           h = (unsigned int)*(ptrd++),
           s = (unsigned int)*(ptrd++);
         ptrd+=w*h*s;
-      } else *(ptrd++) = (T)opacity;
+      } else {
+        *(ptrd++) = (T)opacity;
+      }
   return *this;
 }
 
@@ -1579,7 +1581,7 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
 //-------------------------------
 gmic& gmic::assign(const char *const custom_commands, const bool include_default_commands,
                    float *const p_progress, int *const p_cancel) {
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32) || defined(_WIN64) || defined(_APPLE)
   setlocale(LC_NUMERIC,"C");
 #else
   std::setlocale(LC_NUMERIC,"C");

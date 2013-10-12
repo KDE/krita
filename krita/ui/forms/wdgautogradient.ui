@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>KisWdgAutogradient</class>
- <widget class="QWidget" name="KisWdgAutogradient" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KisWdgAutogradient">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,51 +10,78 @@
     <height>208</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox1" >
-     <property name="title" >
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox1">
+     <property name="title">
       <string>Custom Gradient</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <widget class="KisGradientSliderWidget" native="1" name="gradientSlider" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <widget class="KisGradientSliderWidget" name="gradientSlider" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>32767</width>
           <height>30</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::ClickFocus</enum>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
+       <layout class="QHBoxLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="margin" >
+         <layout class="QVBoxLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="textLabel1" >
-            <property name="font" >
+           <widget class="QLabel" name="textLabel1">
+            <property name="font">
              <font>
               <family>Sans Serif</family>
               <pointsize>9</pointsize>
@@ -64,19 +92,28 @@
               <strikeout>false</strikeout>
              </font>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Segment Color</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
+           <layout class="QHBoxLayout">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
-             <widget class="QLabel" name="labelLeftColor" >
-              <property name="font" >
+             <widget class="QLabel" name="labelLeftColor">
+              <property name="font">
                <font>
                 <family>Sans Serif</family>
                 <pointsize>9</pointsize>
@@ -87,26 +124,29 @@
                 <strikeout>false</strikeout>
                </font>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Left:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="KColorButton" name="leftColorButton" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <widget class="KColorButton" name="leftColorButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximumSize" >
+              <property name="maximumSize">
                <size>
                 <width>30</width>
                 <height>30</height>
                </size>
               </property>
-              <property name="font" >
+              <property name="font">
                <font>
                 <family>Sans Serif</family>
                 <pointsize>9</pointsize>
@@ -117,7 +157,7 @@
                 <strikeout>false</strikeout>
                </font>
               </property>
-              <property name="focusPolicy" >
+              <property name="focusPolicy">
                <enum>Qt::ClickFocus</enum>
               </property>
              </widget>
@@ -125,13 +165,22 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
+           <layout class="QHBoxLayout">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
-             <widget class="QLabel" name="labelRightColor" >
-              <property name="font" >
+             <widget class="QLabel" name="labelRightColor">
+              <property name="font">
                <font>
                 <family>Sans Serif</family>
                 <pointsize>9</pointsize>
@@ -142,26 +191,29 @@
                 <strikeout>false</strikeout>
                </font>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Right:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="KColorButton" name="rightColorButton" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <widget class="KColorButton" name="rightColorButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximumSize" >
+              <property name="maximumSize">
                <size>
                 <width>30</width>
                 <height>30</height>
                </size>
               </property>
-              <property name="font" >
+              <property name="font">
                <font>
                 <family>Sans Serif</family>
                 <pointsize>9</pointsize>
@@ -172,17 +224,17 @@
                 <strikeout>false</strikeout>
                </font>
               </property>
-              <property name="focusPolicy" >
+              <property name="focusPolicy">
                <enum>Qt::ClickFocus</enum>
               </property>
-              <property name="color" >
+              <property name="color" stdset="0">
                <color>
                 <red>255</red>
                 <green>255</green>
                 <blue>255</blue>
                </color>
               </property>
-              <property name="defaultColor" >
+              <property name="defaultColor" stdset="0">
                <color>
                 <red>255</red>
                 <green>255</green>
@@ -196,13 +248,22 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="margin" >
+         <layout class="QVBoxLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="textLabel2" >
-            <property name="font" >
+           <widget class="QLabel" name="textLabel2">
+            <property name="font">
              <font>
               <family>Sans Serif</family>
               <pointsize>9</pointsize>
@@ -213,20 +274,20 @@
               <strikeout>false</strikeout>
              </font>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Opacity:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KIntSpinBox" name="intNumInputLeftOpacity" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Ignored" hsizetype="Ignored" >
+           <widget class="KIntSpinBox" name="intNumInputLeftOpacity">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="font" >
+            <property name="font">
              <font>
               <family>Sans Serif</family>
               <pointsize>9</pointsize>
@@ -237,26 +298,26 @@
               <strikeout>false</strikeout>
              </font>
             </property>
-            <property name="focusPolicy" >
+            <property name="focusPolicy">
              <enum>Qt::ClickFocus</enum>
             </property>
-            <property name="maximum" >
+            <property name="maximum">
              <number>100</number>
             </property>
-            <property name="value" >
+            <property name="value">
              <number>100</number>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KIntSpinBox" name="intNumInputRightOpacity" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Ignored" hsizetype="Ignored" >
+           <widget class="KIntSpinBox" name="intNumInputRightOpacity">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="font" >
+            <property name="font">
              <font>
               <family>Sans Serif</family>
               <pointsize>9</pointsize>
@@ -267,13 +328,13 @@
               <strikeout>false</strikeout>
              </font>
             </property>
-            <property name="focusPolicy" >
+            <property name="focusPolicy">
              <enum>Qt::ClickFocus</enum>
             </property>
-            <property name="maximum" >
+            <property name="maximum">
              <number>100</number>
             </property>
-            <property name="value" >
+            <property name="value">
              <number>100</number>
             </property>
            </widget>
@@ -283,13 +344,22 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
+       <layout class="QHBoxLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QComboBox" name="comboBoxInterpolationType" >
-          <property name="font" >
+         <widget class="QComboBox" name="comboBoxInterpolationType">
+          <property name="font">
            <font>
             <family>Sans Serif</family>
             <pointsize>9</pointsize>
@@ -300,39 +370,39 @@
             <strikeout>false</strikeout>
            </font>
           </property>
-          <property name="focusPolicy" >
+          <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
           </property>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Linear</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Curved</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Sine</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Sphere Inc.</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>Sphere Dec.</string>
            </property>
           </item>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBoxColorInterpolationType" >
-          <property name="font" >
+         <widget class="QComboBox" name="comboBoxColorInterpolationType">
+          <property name="font">
            <font>
             <family>Sans Serif</family>
             <pointsize>9</pointsize>
@@ -343,21 +413,21 @@
             <strikeout>false</strikeout>
            </font>
           </property>
-          <property name="focusPolicy" >
+          <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
           </property>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>RGB</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>HSV CW</string>
            </property>
           </item>
           <item>
-           <property name="text" >
+           <property name="text">
             <string>HSV CCW</string>
            </property>
           </item>

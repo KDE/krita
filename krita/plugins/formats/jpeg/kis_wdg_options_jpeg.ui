@@ -49,7 +49,7 @@
             <string>File size:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignTop</set>
+            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -131,7 +131,7 @@
             <string>Quality:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignTop</set>
+            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -197,6 +197,9 @@
            <property name="text">
             <string>Transparent pixel fill color:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
@@ -245,6 +248,9 @@
            <property name="text">
             <string comment="the result will be artificially smoothed to hide jpeg artefacts">Smooth:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
@@ -281,6 +287,9 @@
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Subsampling:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>

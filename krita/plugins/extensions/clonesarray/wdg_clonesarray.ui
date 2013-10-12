@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
+    <width>644</width>
     <height>174</height>
    </rect>
   </property>
@@ -117,6 +117,9 @@
        <property name="text">
         <string>Columns:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="1" rowspan="2">
@@ -210,6 +213,9 @@
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Rows:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

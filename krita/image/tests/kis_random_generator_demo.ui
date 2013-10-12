@@ -47,6 +47,9 @@
         <property name="text">
          <string>Min</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -61,6 +64,9 @@
         <property name="text">
          <string>Max</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -74,6 +80,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Mean</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -104,6 +113,9 @@
         <property name="text">
          <string>Shift</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -111,30 +123,33 @@
         <property name="text">
          <string>Cutoff</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="shift">
-        <property name="minimum">
+       <widget class="KIntNumInput" name="shift" native="true">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>56</number>
         </property>
-        <property name="relativeValue">
+        <property name="relativeValue" stdset="0">
          <double>0.000000000000000</double>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KIntNumInput" name="cutoff">
-        <property name="value">
+       <widget class="KIntNumInput" name="cutoff" native="true">
+        <property name="value" stdset="0">
          <number>255</number>
         </property>
-        <property name="minimum">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>255</number>
         </property>
        </widget>
@@ -192,41 +207,41 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="KIntNumInput" name="seed1">
-        <property name="minimum">
+       <widget class="KIntNumInput" name="seed1" native="true">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>65535</number>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KIntNumInput" name="seed2">
-        <property name="minimum">
+       <widget class="KIntNumInput" name="seed2" native="true">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>65535</number>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="KIntNumInput" name="seed3">
-        <property name="minimum">
+       <widget class="KIntNumInput" name="seed3" native="true">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>65535</number>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KIntNumInput" name="seed4">
-        <property name="minimum">
+       <widget class="KIntNumInput" name="seed4" native="true">
+        <property name="minimum" stdset="0">
          <number>0</number>
         </property>
-        <property name="maximum">
+        <property name="maximum" stdset="0">
          <number>65535</number>
         </property>
        </widget>
@@ -257,10 +272,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>groupBox</zorder>
-  <zorder>groupBox_2</zorder>
-  <zorder>groupBox_3</zorder>
-  <zorder>view</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -22,7 +22,7 @@
     <height>285</height>
    </size>
   </property>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -36,6 +36,9 @@
      <widget class="QLabel" name="radiusLabel">
       <property name="text">
        <string>radius</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
@@ -51,6 +54,9 @@
       <property name="text">
        <string>sigma</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
@@ -62,7 +68,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>

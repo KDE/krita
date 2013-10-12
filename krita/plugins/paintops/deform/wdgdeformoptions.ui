@@ -130,6 +130,9 @@
          <property name="text">
           <string>Deform amount:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -197,21 +200,6 @@
     </spacer>
    </item>
   </layout>
-  <zorder>deformLabel</zorder>
-  <zorder>growBtn</zorder>
-  <zorder>shrinkBtn</zorder>
-  <zorder>swirlCCWBtn</zorder>
-  <zorder>swirlCWBtn</zorder>
-  <zorder>moveBtn</zorder>
-  <zorder>colorBtn</zorder>
-  <zorder>lensOutBtn</zorder>
-  <zorder>lensBtn</zorder>
-  <zorder>deformAmountLbl</zorder>
-  <zorder>interpolationChBox</zorder>
-  <zorder>useCounter</zorder>
-  <zorder>useOldData</zorder>
-  <zorder>deformAmount</zorder>
-  <zorder>interpolationChBox</zorder>
  </widget>
  <customwidgets>
   <customwidget>

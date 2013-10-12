@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgResolution</class>
- <widget class="QWidget" name="WdgResolution" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgResolution">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,85 +10,113 @@
     <height>182</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Image Resolution</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QLabel" name="lblWidth" >
-     <property name="text" >
+    <widget class="QLabel" name="lblWidth">
+     <property name="text">
       <string>Width:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="lblHeight" >
-     <property name="text" >
+    <widget class="QLabel" name="lblHeight">
+     <property name="text">
       <string>Height:</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
+    <layout class="QHBoxLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="lblImageXRes" >
-       <property name="text" >
+      <widget class="QLabel" name="lblImageXRes">
+       <property name="text">
         <string>X resolution:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleResolution" />
+      <widget class="QDoubleSpinBox" name="doubleResolution"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
+    <layout class="QHBoxLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="lblYResolution" >
-       <property name="text" >
+      <widget class="QLabel" name="lblYResolution">
+       <property name="text">
         <string>Y resolution:</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleResolution_2" />
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="lblYResolution_3" >
-       <property name="text" >
-        <string>Resolution:</string>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleResolution_5" />
+      <widget class="QDoubleSpinBox" name="doubleResolution_2"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="lblYResolution_3">
+       <property name="text">
+        <string>Resolution:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleResolution_5"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QDoubleSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

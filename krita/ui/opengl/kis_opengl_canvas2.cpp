@@ -178,7 +178,7 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 void KisOpenGLCanvas2::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
-#ifndef Q_WS_WIN
+
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
         qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";
@@ -190,16 +190,14 @@ void KisOpenGLCanvas2::initializeGL()
         qWarning() << "WARNING: You may see some flickering when painting with some tools. It doesn't";
         qWarning() << "WARNING: affect the quality of the final image, though.";
         qWarning();
-#endif
+
         if (doubleBuffer()) {
             qCritical() << "CRITICAL: Failed to disable Double Buffering. Lines may look \"bended\" on your image.";
             qCritical() << "CRITICAL: Your graphics card or driver does not fully support Krita's OpenGL canvas.";
             qCritical() << "CRITICAL: For an optimal experience, please disable OpenGL";
             qCritical();
         }
-#ifndef Q_WS_WIN
     }
-#endif
 
     initializeCheckerShader();
     initializeDisplayShader();

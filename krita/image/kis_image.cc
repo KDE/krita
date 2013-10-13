@@ -307,7 +307,8 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->lockCount = 0;
     m_d->perspectiveGrid = 0;
-	m_d->scheduler = 0;
+    m_d->scheduler = 0;
+    m_d->wrapAroundModePermitted = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
 

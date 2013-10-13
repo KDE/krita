@@ -29,6 +29,7 @@
 #include <math.h>
 #define Q_PI M_PI
 
+//#define DEBUG_WINTAB_TABLET
 
 /**
  * A set of definitions to form a structure of a WinTab packet.  This
@@ -144,6 +145,7 @@ static void initWinTabFunctions()
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
 }
 
+#ifdef DEBUG_WINTAB_TABLET
 void printContext(const LOGCONTEXT &lc)
 {
     qDebug() << "Context data:";
@@ -162,6 +164,7 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
 }
+#endif /* DEBUG_WINTAB_TABLET */
 
 /**
  * Initializes the QTabletDeviceData structure for \p uniqueId cursor
@@ -181,8 +184,10 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     /* get the current context for its device variable. */
     ptrWTGet(hTab, &lc);
 
+#ifdef DEBUG_WINTAB_TABLET
     qDebug() << "Getting current context:";
     printContext(lc);
+#endif /* DEBUG_WINTAB_TABLET */
 
     /* get the size of the pressure axis. */
     QTabletDeviceData tdd;
@@ -213,17 +218,15 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-    {
-        // Only for debugging purposes
+#ifdef DEBUG_WINTAB_TABLET
+    LOGCONTEXT lcMine;
 
-        LOGCONTEXT lcMine;
+    /* get default region */
+    ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
 
-        /* get default region */
-        ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
-
-        qDebug() << "Getting default context:";
-        printContext(lcMine);
-    }
+    qDebug() << "Getting default context:";
+    printContext(lcMine);
+#endif /* DEBUG_WINTAB_TABLET */
 
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
@@ -317,10 +320,12 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
+#ifdef DEBUG_WINTAB_TABLET
         qDebug() << "WinTab:"
                  << "Dsk:" << desktopArea
                  << "Raw:" << ptNew.x << ptNew.y
                  << "Scaled:" << hiResGlobal;
+#endif
 
         t = KisTabletEvent::TabletMoveEx;
         if (buttonPressed) {

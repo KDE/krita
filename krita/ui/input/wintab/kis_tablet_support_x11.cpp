@@ -30,7 +30,11 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/XInput.h>
 
-#include "qt_x11_p.h"
+#if QT_VERSION >= 0x040800
+#include "qt_x11_p_qt48.h"
+#else
+#include "qt_x11_p_qt47.h"
+#endif
 
 /**
  * WARNING:
@@ -319,6 +323,13 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     XDeviceButtonEvent *button = 0;
     KisTabletEvent::ExtraEventType t;
     Qt::KeyboardModifiers modifiers = 0;
+
+#if QT_VERSION >= 0x040800
+    modifiers = QApplication::queryKeyboardModifiers();
+#else
+    modifiers = QApplication::keyboardModifiers();
+#endif
+
 #if !defined (Q_OS_IRIX)
     XID device_id;
 #endif
@@ -380,7 +391,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         yTilt = (short) motion->axis_data[4];
         rotation = ((short) motion->axis_data[5]) / 64.0;
         pressure = (short) motion->axis_data[2];
-        modifiers = QApplication::queryKeyboardModifiers();
         hiRes = tablet->scaleCoord(motion->axis_data[0], motion->axis_data[1],
                                     screenArea.x(), screenArea.width(),
                                     screenArea.y(), screenArea.height());
@@ -389,7 +399,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         yTilt = (short) button->axis_data[4];
         rotation = ((short) button->axis_data[5]) / 64.0;
         pressure = (short) button->axis_data[2];
-        modifiers = QApplication::queryKeyboardModifiers();
         hiRes = tablet->scaleCoord(button->axis_data[0], button->axis_data[1],
                                     screenArea.x(), screenArea.width(),
                                     screenArea.y(), screenArea.height());

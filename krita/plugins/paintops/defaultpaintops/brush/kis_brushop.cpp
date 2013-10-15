@@ -152,6 +152,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                                      scale, scale,
                                                      rotation,
                                                      info,
+                                                     QPoint(x, y),
                                                      xFraction, yFraction,
                                                      m_softnessOption.apply(info));
 

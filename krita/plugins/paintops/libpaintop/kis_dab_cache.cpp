@@ -160,11 +160,13 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                                             double scaleX, double scaleY,
                                             double angle,
                                             const KisPaintInformation& info,
+                                            const QPoint &dabTopLeft,
                                             double subPixelX, double subPixelY,
                                             qreal softnessFactor)
 {
     return fetchDabCommon(cs, 0, color, scaleX, scaleY, angle,
-                          info, subPixelX, subPixelY, softnessFactor);
+                          info,
+                          dabTopLeft, subPixelX, subPixelY, softnessFactor);
 }
 
 KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
@@ -172,11 +174,13 @@ KisFixedPaintDeviceSP KisDabCache::fetchDab(const KoColorSpace *cs,
                                             double scaleX, double scaleY,
                                             double angle,
                                             const KisPaintInformation& info,
+                                            const QPoint &dabTopLeft,
                                             double subPixelX, double subPixelY,
                                             qreal softnessFactor)
 {
     return fetchDabCommon(cs, colorSource, KoColor(), scaleX, scaleY, angle,
-                          info, subPixelX, subPixelY, softnessFactor);
+                          info,
+                          dabTopLeft, subPixelX, subPixelY, softnessFactor);
 }
 
 bool KisDabCache::needSeparateOriginal()
@@ -191,6 +195,7 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const KisColorSource *color
                                                      double scaleX, double scaleY,
                                                      double angle,
                                                      const KisPaintInformation& info,
+                                                     const QPoint &dabTopLeft,
                                                      double subPixelX, double subPixelY,
                                                      qreal softnessFactor,
                                                      MirrorProperties mirrorProperties)
@@ -216,7 +221,7 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const KisColorSource *color
 
     if (needSeparateOriginal()) {
         *m_d->dab = *m_d->dabOriginal;
-        postProcessDab(m_d->dab, info);
+        postProcessDab(m_d->dab, dabTopLeft, info);
     }
 
     m_d->brush->notifyCachedDabPainted();
@@ -230,6 +235,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
                                                   double scaleX, double scaleY,
                                                   double angle,
                                                   const KisPaintInformation& info,
+                                                  const QPoint &dabTopLeft,
                                                   double subPixelX, double subPixelY,
                                                   qreal softnessFactor)
 {
@@ -257,8 +263,8 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
     } else {
         KisFixedPaintDeviceSP cachedDab =
             tryFetchFromCache(colorSource, color, scaleX, scaleY, angle,
-                              info, subPixelX, subPixelY, softnessFactor,
-                              mirrorProperties);
+                              info, dabTopLeft, subPixelX, subPixelY,
+                              softnessFactor, mirrorProperties);
         if (cachedDab) return cachedDab;
     }
 
@@ -323,12 +329,13 @@ KisFixedPaintDeviceSP KisDabCache::fetchDabCommon(const KoColorSpace *cs,
         *m_d->dabOriginal = *m_d->dab;
     }
 
-    postProcessDab(m_d->dab, info);
+    postProcessDab(m_d->dab, dabTopLeft, info);
 
     return m_d->dab;
 }
 
 void KisDabCache::postProcessDab(KisFixedPaintDeviceSP dab,
+                                 const QPoint &dabTopLeft,
                                  const KisPaintInformation& info)
 {
     if (m_d->sharpnessOption) {
@@ -336,6 +343,6 @@ void KisDabCache::postProcessDab(KisFixedPaintDeviceSP dab,
     }
 
     if (m_d->textureOption) {
-        m_d->textureOption->apply(dab, info.pos().toPoint(), info);
+        m_d->textureOption->apply(dab, dabTopLeft, info);
     }
 }

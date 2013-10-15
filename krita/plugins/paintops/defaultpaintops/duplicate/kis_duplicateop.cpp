@@ -284,7 +284,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     KisFixedPaintDeviceSP dab =
         m_dabCache->fetchDab(cs, color, scale, scale,
-                             0.0, info);
+                             0.0, info, QPoint(x, y));
 
     QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
     if (dstRect.isEmpty()) return 1.0;

@@ -128,19 +128,20 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
 
-    KisFixedPaintDeviceSP fixedDab = m_dabCache->fetchDab(cs,
-                                                          color,
-                                                          scale, scale,
-                                                          rotation,
-                                                          info,
-                                                          xFraction,
-                                                          yFraction);
-
     // Blit the paint device onto the layer
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
+
+    KisFixedPaintDeviceSP fixedDab = m_dabCache->fetchDab(cs,
+                                                          color,
+                                                          scale, scale,
+                                                          rotation,
+                                                          info,
+                                                          dstRect.topLeft(),
+                                                          xFraction,
+                                                          yFraction);
 
     painter()->
         bitBltWithFixedSelection(dstRect.x(), dstRect.y(),

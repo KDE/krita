@@ -50,7 +50,7 @@ public:
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
-    void updateMask(const KisPaintInformation& info, double scale, double rotation);
+    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPoint &dstTopLeft);
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:

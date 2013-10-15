@@ -85,7 +85,7 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
     delete m_smudgePainter;
 }
 
-void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation)
+void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation, const QPoint &dstTopLeft)
 {
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
@@ -94,7 +94,8 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
                                      color,
                                      scale, scale,
                                      rotation,
-                                     info);
+                                     info,
+                                     dstTopLeft);
 
     m_maskBounds = m_maskDab->bounds();
 }
@@ -157,7 +158,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     // update the brush mask if needed. the mask is then stored in m_maskDab
     // and the extends of the mask is stored in m_maskBounds
-    updateMask(info, scale, rotation);
+    updateMask(info, scale, rotation, QPoint(dstX, dstY));
 
     if(m_image && m_overlayModeOption.isChecked()) {
         m_image->blockUpdates();

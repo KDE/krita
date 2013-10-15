@@ -121,7 +121,8 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
 
     KisFixedPaintDeviceSP maskDab =
         m_dabCache->fetchDab(cs, color, scale, scale,
-                             0.0, info, xFraction, yFraction);
+                             0.0, info,
+                             QPoint(x, y), xFraction, yFraction);
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/

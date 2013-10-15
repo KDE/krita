@@ -48,6 +48,7 @@ public:
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
+                                   const QPoint &dabTopLeft,
                                    double subPixelX = 0.0, double subPixelY = 0.0,
                                    qreal softnessFactor = 1.0);
 
@@ -56,6 +57,7 @@ public:
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
+                                   const QPoint &dabTopLeft,
                                    double subPixelX = 0.0, double subPixelY = 0.0,
                                    qreal softnessFactor = 1.0);
 
@@ -76,6 +78,7 @@ private:
                                                    double scaleX, double scaleY,
                                                    double angle,
                                                    const KisPaintInformation& info,
+                                                   const QPoint &dabTopLeft,
                                                    double subPixelX, double subPixelY,
                                                    qreal softnessFactor,
                                                    MirrorProperties mirrorProperties);
@@ -86,10 +89,13 @@ private:
                                                 double scaleX, double scaleY,
                                                 double angle,
                                                 const KisPaintInformation& info,
+                                                const QPoint &dabTopLeft,
                                                 double subPixelX, double subPixelY,
                                                 qreal softnessFactor);
 
-    void postProcessDab(KisFixedPaintDeviceSP dab, const KisPaintInformation& info);
+    void postProcessDab(KisFixedPaintDeviceSP dab,
+                        const QPoint &dabTopLeft,
+                        const KisPaintInformation& info);
 
 private:
 

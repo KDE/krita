@@ -43,6 +43,14 @@
  */
 extern QX11Data *qt_x11Data;
 
+/**
+ * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
+ * intended to block Mouse events after any accepted Tablet event. In
+ * Qt it is available on X11 only, so we won't extend this behavior on
+ * Windows.
+ */
+bool kis_tabletChokeMouse = false;
+
 
 // from include/Xwacom.h
 #  define XWACOM_PARAM_TOOLID 322
@@ -458,6 +466,19 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
 {
     XEvent *event = static_cast<XEvent*>(ev);
 
+    // Eat the choked mouse event...
+    if (kis_tabletChokeMouse &&
+        (event->type == ButtonRelease ||
+         event->type == ButtonPress ||
+         event->type == MotionNotify)) {
+
+        kis_tabletChokeMouse = false;
+
+        // Mhom-mhom...
+        return true;
+    }
+
+
     QTabletDeviceDataList *tablets = qt_tablet_devices();
     for (int i = 0; i < tablets->size(); ++i) {
         QTabletDeviceData &tab = tablets->operator [](i);
@@ -471,7 +492,18 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
                 widget = QWidget::find((WId)event->xany.window);
             }
 
-            return widget ? translateXinputEvent(event, &tab, widget) : false;
+            bool retval = widget ? translateXinputEvent(event, &tab, widget) : false;
+
+            if (retval) {
+                /**
+                 * If the tablet event is accepted, no mouse event
+                 * should arrive. Otherwise, the popup widgets (at
+                 * least) will not work correctly
+                 */
+                kis_tabletChokeMouse = true;
+            }
+
+            return retval;
         }
     }
 

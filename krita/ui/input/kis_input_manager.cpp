@@ -503,6 +503,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             retval = d->matcher.buttonPressed(mouseEvent->button(), mouseEvent);
         }
         d->resetSavedTabletEvent(event->type());
+        event->setAccepted(retval);
         break;
     }
     case QEvent::MouseButtonRelease: {
@@ -512,6 +513,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
         d->resetSavedTabletEvent(event->type());
+        event->setAccepted(retval);
         break;
     }
     case QEvent::KeyPress: {
@@ -555,6 +557,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             d->toolProxy->mouseMoveEvent(mouseEvent, widgetToPixel(mouseEvent->posF()));
         }
         retval = true;
+        event->setAccepted(retval);
         d->resetSavedTabletEvent(event->type());
         break;
     }
@@ -617,12 +620,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 #ifdef Q_OS_WIN
         if (event->type() == QEvent::TabletMove) {
             retval = d->matcher.tabletMoved(static_cast<QTabletEvent*>(event));
-        }
-
-        if (retval) {
-            event->accept();
-        } else {
-            event->ignore();
+            event->setAccepted(retval);
         }
 #else
         event->ignore();

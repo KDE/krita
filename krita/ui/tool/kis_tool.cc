@@ -23,7 +23,6 @@
 #include <QPolygonF>
 #include <QTransform>
 #include <QGLShaderProgram>
-#include <QGLBuffer>
 #include <QGLFramebufferObject>
 #include <QGLContext>
 

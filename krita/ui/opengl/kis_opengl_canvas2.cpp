@@ -33,7 +33,6 @@
 #include <QThread>
 
 #include <QGLShaderProgram>
-#include <QGLBuffer>
 #include <QGLFramebufferObject>
 #include <QGLContext>
 #include <QTransform>
@@ -82,8 +81,6 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , displayFilter(0)
-        , checkerVertexBuffer(0)
-        , tileVertexBuffer(0)
         , wrapAroundMode(false)
     {
     }
@@ -91,8 +88,6 @@ public:
     ~Private() {
         delete displayShader;
         delete checkerShader;
-        delete checkerVertexBuffer;
-        delete tileVertexBuffer;
     }
 
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -101,9 +96,6 @@ public:
     QGLShaderProgram *checkerShader;
 
     KisDisplayFilter *displayFilter;
-
-    QGLBuffer *checkerVertexBuffer;
-    QGLBuffer *tileVertexBuffer;
 
     bool wrapAroundMode;
 

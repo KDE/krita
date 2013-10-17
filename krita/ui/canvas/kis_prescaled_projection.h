@@ -115,6 +115,8 @@ public slots:
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    void setChannelFlags(const QBitArray &channelFlags);
+
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**

@@ -28,13 +28,19 @@
 
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor32 {
+    struct OptionalParams {
+        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+            : channelFlags(params.channelFlags)
+        {
+        }
+        const QBitArray &channelFlags;
+    };
+
     // \see docs in AlphaDarkenCompositor32
-
-
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, float flow)
+    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
-        Q_UNUSED(flow);
+        Q_UNUSED(oparams);
 
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
@@ -118,10 +124,8 @@ struct OverCompositor32 {
     }
 
     template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, float flow, const QBitArray &channelFlags)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
     {
-        Q_UNUSED(flow);
-
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
@@ -172,6 +176,8 @@ struct OverCompositor32 {
                     dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcBlendNorm);
                 }
             } else {
+                const QBitArray &channelFlags = oparams.channelFlags;
+
                 if (srcBlendNorm == 1.0) {
                     if(channelFlags.at(0)) dst[0] = src[0];
                     if(channelFlags.at(1)) dst[1] = src[1];

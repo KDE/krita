@@ -22,7 +22,6 @@
 #include <kis_action.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -51,6 +50,7 @@
 #include <KoResourceServerProvider.h>
 #include <recorder/kis_macro_player.h>
 #include <QApplication>
+#include <QFileDialog>
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
@@ -187,7 +187,10 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
     Q_UNUSED(url);
 
-    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    //QString filename = QFileDialog::getOpenFileName(m_view, i18n("Open Macro"), "*.krarec|Recorded actions (*.krarec)");
+    QString filename;
+    QFileDialog* dia = new QFileDialog();
+    dia->open();
     RecordedActionLoadContext loadContext;
     if (!filename.isNull()) {
         QDomDocument doc;
@@ -221,7 +224,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    QString filename = KFileDialog::getSaveFileName(url, "*.krarec|Recorded actions (*.krarec)", m_view);
+    QString filename = QFileDialog::getSaveFileName(m_view, i18n("Save Macro"), url.url(), "*.krarec|Recorded actions (*.krarec)");
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

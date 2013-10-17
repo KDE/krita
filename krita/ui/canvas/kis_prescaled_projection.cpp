@@ -277,6 +277,11 @@ void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProf
     m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
 }
 
+void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_d->projectionBackend->setChannelFlags(channelFlags);
+}
+
 void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     m_d->projectionBackend->setDisplayFilter(displayFilter);

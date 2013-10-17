@@ -54,7 +54,7 @@ void KisToolText::finishRect(const QRectF &rect)
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
-        shape->setPosition(rect.topLeft());
+        shape->setPosition(r.topLeft());
         // If the shape is an artistic shape we keep the aspect ratio so the text isn't stretched
         if (shapeString == "ArtisticText") {
             qreal ratio = rect.height()/shape->size().height();

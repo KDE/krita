@@ -19,8 +19,6 @@
 #ifndef KIS_PAINTOP_SETTINGS_H_
 #define KIS_PAINTOP_SETTINGS_H_
 
-#include "opengl/kis_opengl.h"
-
 #include "kis_types.h"
 #include "krita_export.h"
 

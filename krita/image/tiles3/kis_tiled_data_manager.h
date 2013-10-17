@@ -43,70 +43,6 @@ class KisPaintDeviceWriter;
 class QIODevice;
 
 /**
- * KisTileDataWrapper is a special object, that fetches the tile from
- * the data manager according to the position, locks it and returns
- * a pointer to the needed piece of data
- */
-class KisTileDataWrapper
-{
-public:
-    enum accessType {
-        READ,
-        WRITE
-    };
-
-    /**
-     * Fetches the tile which contains point (\p x, \p y) from
-     * the data manager \p dm with access \p type
-     */
-    inline KisTileDataWrapper(KisTiledDataManager *dm,
-                              qint32 x, qint32 y,
-                              enum KisTileDataWrapper::accessType type);
-
-    virtual ~KisTileDataWrapper()
-    {
-        m_tile->unlock();
-    }
-
-    /**
-     * Returns the offset of the data in the tile's chunk of memory
-     *
-     * \see data()
-     */
-    inline qint32 offset() const
-    {
-        return m_offset;
-    }
-
-    /**
-     * Returns the fetched tile
-     */
-    inline KisTileSP& tile()
-    {
-        return m_tile;
-    }
-
-    /**
-     * Returns the pointer to the pixel, that was passed to
-     * the constructor. This points to the raw data of the tile,
-     * so you should think about the borders of the tile yourself.
-     * When (x,y) is the top-left corner of the tile, the pointer
-     * will lead to the beginning of the tile's chunk of memory.
-     */
-    inline quint8* data() const
-    {
-        return m_tile->data() + m_offset;
-    }
-
-private:
-    Q_DISABLE_COPY(KisTileDataWrapper)
-
-    KisTileSP m_tile;
-    qint32 m_offset;
-};
-
-
-/**
  * KisTiledDataManager implements the interface that KisDataManager defines
  *
  * The interface definition is enforced by KisDataManager calling all the methods
@@ -296,19 +232,29 @@ public:
     /**
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void readBytes(quint8 * bytes,
                    qint32 x, qint32 y,
-                   qint32 w, qint32 h) const;
+                   qint32 w, qint32 h,
+                   qint32 dataRowStride = -1) const;
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void writeBytes(const quint8 * bytes,
                     qint32 x, qint32 y,
-                    qint32 w, qint32 h);
+                    qint32 w, qint32 h,
+                    qint32 dataRowStride = -1);
 
     /**
      * Copy the bytes in the paint device into a vector of arrays of bytes,
@@ -316,7 +262,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channels. If there
@@ -392,15 +338,21 @@ private:
         void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
 
     void writeBytesBody(const quint8 *data,
-                        qint32 x, qint32 y, qint32 width, qint32 height);
+                        qint32 x, qint32 y,
+                        qint32 width, qint32 height,
+                        qint32 dataRowStride = -1);
     void readBytesBody(quint8 *data,
-                       qint32 x, qint32 y, qint32 width, qint32 height) const;
+                       qint32 x, qint32 y,
+                       qint32 width, qint32 height,
+                       qint32 dataRowStride = -1) const;
+
+    template <bool allChannelsPresent>
     void writePlanarBytesBody(QVector<quint8*> planes,
                               QVector<qint32> channelsizes,
                               qint32 x, qint32 y, qint32 w, qint32 h);
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
                                          qint32 x, qint32 y,
-                                         qint32 w, qint32 h);
+                                         qint32 w, qint32 h) const;
 public:
     void debugPrintInfo() {
         m_mementoManager->debugPrintInfo();
@@ -420,7 +372,6 @@ inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) con
            -(((-x - 1) / y) + 1);
 }
 
-
 inline qint32 KisTiledDataManager::xToCol(qint32 x) const
 {
     return divideRoundDown(x, KisTileData::WIDTH);
@@ -429,32 +380,6 @@ inline qint32 KisTiledDataManager::xToCol(qint32 x) const
 inline qint32 KisTiledDataManager::yToRow(qint32 y) const
 {
     return divideRoundDown(y, KisTileData::HEIGHT);
-}
-
-inline KisTileDataWrapper::KisTileDataWrapper(KisTiledDataManager *dm,
-                                              qint32 x, qint32 y,
-                                              enum KisTileDataWrapper::accessType type)
-{
-    const qint32 col = dm->xToCol(x);
-    const qint32 row = dm->yToRow(y);
-
-    /* FIXME: Always positive? */
-    const qint32 xInTile = x - col * KisTileData::WIDTH;
-    const qint32 yInTile = y - row * KisTileData::HEIGHT;
-
-    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
-
-    KisTileSP tile = dm->getTile(col, row, type == WRITE);
-
-    m_tile = tile;
-    m_offset = pixelIndex * dm->pixelSize();
-
-    if (type == READ) {
-        m_tile->lockForRead();
-    }
-    else {
-        m_tile->lockForWrite();
-    }
 }
 
 // during development the following line helps to check the interface is correct

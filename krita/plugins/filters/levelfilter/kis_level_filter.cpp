@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 
+#include <QtGlobal>
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -182,14 +183,14 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     if (histogram->getHistogramType() == LINEAR) {
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1));
+            int binNo = qRound((double)i / wWidth * (bins - 1));
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
         }
     } else {
         double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
+            int binNo = qRound((double)i / wWidth * (bins - 1)) ;
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
         }

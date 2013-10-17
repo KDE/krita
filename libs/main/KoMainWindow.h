@@ -307,6 +307,9 @@ public slots:
      */
     void slotExportFile();
 
+    void slotEncryptDocument();
+    void slotUncompressToDir();
+
     void slotProgress(int value);
 
     /**
@@ -340,11 +343,13 @@ private:
      *
      * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
      *
+     * @param specialOutputFlag set to enums defined in KoDocument if save to special output format
+     *
      * @return TRUE on success, false on error or cancel
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(bool saveas = false, bool silent = false);
+    bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);

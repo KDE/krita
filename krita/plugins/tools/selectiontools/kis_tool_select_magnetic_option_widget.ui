@@ -7,11 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>259</width>
-    <height>114</height>
+    <height>115</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
@@ -43,12 +52,18 @@
        <property name="text">
         <string>Start Search From</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Limit to Color</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -87,6 +102,9 @@
        <property name="text">
         <string>Radius</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="2" column="1">
@@ -119,6 +137,9 @@
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Threshold:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

@@ -138,9 +138,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 
     m_d->history.clear();
-    m_d->history.append(m_d->previousPaintInformation);
     m_d->velocityHistory.clear();
-    m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN());
 
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
@@ -251,8 +249,25 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && m_d->smoothingOptions.smoothnessDistance > 0.0) {
 
+        { // initialize current velocity
+            QPointF prevPos;
+            int prevTime;
+
+            if (!m_d->history.isEmpty()) {
+                const KisPaintInformation &prevPi = m_d->history.last();
+                prevPos = prevPi.pos();
+                prevTime = prevPi.currentTime();
+            } else {
+                prevPos = m_d->previousPaintInformation.pos();
+                prevTime = m_d->previousPaintInformation.currentTime();
+            }
+
+            int deltaTime = qMax(1, info.currentTime() - prevTime); // make sure deltaTime > 1
+            qreal currentVelocity = QVector2D(info.pos() - prevPos).length() / deltaTime;
+            m_d->velocityHistory.append(currentVelocity);
+        }
+
         m_d->history.append(info);
-        m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN()); // Fake velocity!
 
         qreal x = 0.0;
         qreal y = 0.0;
@@ -275,25 +290,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 
                 const KisPaintInformation nextInfo = m_d->history.at(i);
                 double velocity = m_d->velocityHistory.at(i);
-
-                if (qIsNaN(velocity)) {
-
-                    QPointF prevPos = nextInfo.pos();
-                    int prevTime = nextInfo.currentTime();
-
-                    if (i > 0) {
-                        const KisPaintInformation &prevPi = m_d->history.at(i - 1);
-                        prevPos = prevPi.pos();
-                        prevTime = prevPi.currentTime();
-                    } else {
-                        prevPos = m_d->previousPaintInformation.pos();
-                        prevTime = m_d->previousPaintInformation.currentTime();
-                    }
-
-                    int deltaTime = qMax(1, nextInfo.currentTime() - prevTime); // make sure deltaTime > 1
-                    velocity = QVector2D(nextInfo.pos() - prevPos).length() / deltaTime;
-                    m_d->velocityHistory[i] = velocity;
-                }
+                Q_ASSERT(velocity >= 0.0);
 
                 qreal pressureGrad = 0.0;
                 if (i < m_d->history.size() - 1) {

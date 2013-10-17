@@ -27,15 +27,13 @@
 #include <cstdlib>
 
 // Qt includes.
-
+#include <QtGlobal>
 #include <QPainter>
 #include <QPoint>
 #include <QPen>
 #include <QMouseEvent>
 #include <QBrush>
 #include <QLinearGradient>
-
-
 
 KisGradientSlider::KisGradientSlider(QWidget *parent)
         : QWidget(parent)
@@ -78,7 +76,7 @@ void KisGradientSlider::paintEvent(QPaintEvent *)
     int wWidth = width();
     int wHeight = height();
 
-    const int gradientHeight = (int)round((double)wHeight / 7.0 * 2);
+    const int gradientHeight = qRound((double)wHeight / 7.0 * 2);
 
     QPainter p1(this);
 
@@ -230,12 +228,12 @@ void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 
     switch (m_grabCursor) {
     case BlackCursor:
-        m_black = (int)round(m_blackCursor / m_scalingFactor);
+        m_black = qRound(m_blackCursor / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedBlack(m_black);
         break;
     case WhiteCursor:
-        m_white = (int)round(m_whiteCursor / m_scalingFactor);
+        m_white = qRound(m_whiteCursor / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedWhite(m_white);
         break;
@@ -297,8 +295,8 @@ void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
 
 void KisGradientSlider::calculateCursorPositions()
 {
-    m_blackCursor = (int)round(m_black * m_scalingFactor);
-    m_whiteCursor = (int)round(m_white * m_scalingFactor);
+    m_blackCursor = qRound(m_black * m_scalingFactor);
+    m_whiteCursor = qRound(m_white * m_scalingFactor);
     m_gammaCursor = calculateGammaCursor();
 }
 
@@ -326,7 +324,7 @@ void KisGradientSlider::slotModifyBlack(int v)
 {
     if (v >= 0 && v <= (int)m_white && !m_feedback) {
         m_black = v;
-        m_blackCursor = (int)round(m_black * m_scalingFactor);
+        m_blackCursor = qRound(m_black * m_scalingFactor);
         m_gammaCursor = calculateGammaCursor();
         update();
     }
@@ -335,7 +333,7 @@ void KisGradientSlider::slotModifyWhite(int v)
 {
     if (v >= (int)m_black && v <= width() && !m_feedback) {
         m_white = v;
-        m_whiteCursor = (int)round(m_white * m_scalingFactor);
+        m_whiteCursor = qRound(m_white * m_scalingFactor);
         m_gammaCursor = calculateGammaCursor();
         update();
     }

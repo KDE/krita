@@ -14,7 +14,16 @@
    <string>Text Options</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -51,12 +60,18 @@
        <property name="text">
         <string>Mode:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="labelStyle">
        <property name="text">
         <string>Style:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

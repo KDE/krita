@@ -3,6 +3,7 @@ Type=Service
 Name=OpenRaster Archiving Images
 Name[bs]=OpenRaster Arhivne slike
 Name[ca]=Imatges d'arxivat OpenRaster
+Name[ca@valencia]=Imatges d'arxivat OpenRaster
 Name[da]=Arkivering af billeder med OpenRaster
 Name[el]=Εικόνες αρχειοθέτησης OpenRaster
 Name[es]=Imágenes de archivo OpenRaster

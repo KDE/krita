@@ -140,9 +140,21 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisCloneLayer::setDirtyOriginal(const QRect &rect)
 {
+    /**
+     * The original will be updated when the clone becomes visible
+     * again.
+     */
+    if (!visible(true)) return;
+
     QRect localRect = rect;
     localRect.translate(m_d->x, m_d->y);
     KisLayer::setDirty(localRect);
+}
+
+void KisCloneLayer::notifyParentVisibilityChanged(bool value)
+{
+    KisLayer::setDirty(image()->bounds());
+    KisLayer::notifyParentVisibilityChanged(value);
 }
 
 qint32 KisCloneLayer::x() const

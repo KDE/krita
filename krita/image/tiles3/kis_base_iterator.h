@@ -27,14 +27,11 @@
 
 class KisBaseIterator {
 protected:
-    KisBaseIterator(KisTiledDataManager * _dataManager, bool _writable, qint32 _offsetX, qint32 _offsetY) {
+    KisBaseIterator(KisTiledDataManager * _dataManager, bool _writable) {
         m_dataManager = _dataManager;
         m_pixelSize = m_dataManager->pixelSize();
         m_writable = _writable;
-        m_offsetX = _offsetX;
-        m_offsetY = _offsetY;
     }
-    qint32 m_offsetX, m_offsetY;
     qint32 m_pixelSize;        // bytes per pixel
     KisTiledDataManager *m_dataManager;
     bool m_writable;

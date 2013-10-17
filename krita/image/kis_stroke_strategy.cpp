@@ -22,6 +22,7 @@
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, QString name)
     : m_exclusive(false),
+      m_supportsWrapAroundMode(false),
       m_needsIndirectPainting(false),
       m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_id(id),
@@ -74,6 +75,11 @@ bool KisStrokeStrategy::isExclusive() const
     return m_exclusive;
 }
 
+bool KisStrokeStrategy::supportsWrapAroundMode() const
+{
+    return m_supportsWrapAroundMode;
+}
+
 bool KisStrokeStrategy::needsIndirectPainting() const
 {
     return m_needsIndirectPainting;
@@ -97,6 +103,11 @@ QString KisStrokeStrategy::name() const
 void KisStrokeStrategy::setExclusive(bool value)
 {
     m_exclusive = value;
+}
+
+void KisStrokeStrategy::setSupportsWrapAroundMode(bool value)
+{
+    m_supportsWrapAroundMode = value;
 }
 
 void KisStrokeStrategy::setNeedsIndirectPainting(bool value)

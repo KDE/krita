@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>239</width>
-    <height>118</height>
+    <height>119</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,6 +20,9 @@
       <widget class="QLabel" name="textLabelOutline">
        <property name="text">
         <string>Outline:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -41,6 +44,9 @@
       <widget class="QLabel" name="textLabelFill">
        <property name="text">
         <string>Fill:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

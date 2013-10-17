@@ -46,7 +46,9 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <kio/job.h>
+#ifndef Q_OS_WIN
 #include <kio/jobuidelegate.h>
+#endif
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 
@@ -411,9 +413,11 @@ void KoPart::setTitleModified(const QString &caption, bool mod)
 
 void KoPart::slotStarted(KIO::Job *job)
 {
+#ifndef Q_OS_WIN
     if (job && job->ui()) {
         job->ui()->setWindow(currentShell());
     }
+#endif
 }
 
 

@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFileDialog.h"
+#include "KoFileDialogHelper.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
@@ -40,7 +40,7 @@
 #include "KoDockerManager.h"
 #include "KoServiceProvider.h"
 #include "KoPart.h"
-#include <KoPageLayoutWidget.h>
+#include <KoPageLayoutDialog.h>
 #include <KoIcon.h>
 #include <KoConfig.h>
 
@@ -70,10 +70,10 @@
 #include <kdebug.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kfilewidget.h>
 #include <kurlcombobox.h>
 #include <kdiroperator.h>
 #include <kmenubar.h>
+#include <kmimetype.h>
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -89,6 +89,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDesktopWidget>
+#include <QDesktopServices>
 #include <QPrintPreviewDialog>
 
 #include "thememanager.h"
@@ -123,6 +124,10 @@ public:
         showFileVersions = 0;
         importFile = 0;
         exportFile = 0;
+        encryptDocument = 0;
+#ifndef NDEBUG
+        uncompressToDir = 0;
+#endif
         isImporting = false;
         isExporting = false;
         windowSizeDirty = false;
@@ -157,7 +162,7 @@ public:
         if (title.isEmpty()) {
             // #139905
             const QString programName = parent->componentData().aboutData() ?
-                                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
+                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
             title = i18n("%1 unsaved document (%2)", programName,
                          KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
         }
@@ -197,6 +202,10 @@ public:
     KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
+    KAction *encryptDocument;
+#ifndef NDEBUG
+    KAction *uncompressToDir;
+#endif
     KToggleAction *toggleDockers;
     KRecentFilesAction *recent;
 
@@ -225,8 +234,8 @@ public:
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
-        : KParts::MainWindow()
-        , d(new KoMainWindowPrivate(this))
+    : KParts::MainWindow()
+    , d(new KoMainWindowPrivate(this))
 {
 #ifdef __APPLE__
     //setUnifiedTitleAndToolBarOnMac(true);
@@ -291,6 +300,16 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     actionCollection()->addAction("file_export_file", d->exportFile);
     connect(d->exportFile, SIGNAL(triggered(bool)), this, SLOT(slotExportFile()));
 
+    d->encryptDocument = new KAction(i18n("En&crypt Document"), this);
+    actionCollection()->addAction("file_encrypt_doc", d->encryptDocument);
+    connect(d->encryptDocument, SIGNAL(triggered(bool)), this, SLOT(slotEncryptDocument()));
+
+#ifndef NDEBUG
+    d->uncompressToDir = new KAction(i18n("&Uncompress to Directory"), this);
+    actionCollection()->addAction("file_uncompress_doc", d->uncompressToDir);
+    connect(d->uncompressToDir, SIGNAL(triggered(bool)), this, SLOT(slotUncompressToDir()));
+#endif
+
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = new KAction(koIcon("document-properties"), i18n("Document Information"), this);
@@ -312,6 +331,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
+    d->encryptDocument->setEnabled(false);
+#ifndef NDEBUG
+    d->uncompressToDir->setEnabled(false);
+#endif
 
     // populate theme menu
     d->themeManager = new Digikam::ThemeManager(this);
@@ -341,7 +364,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
+#ifndef Q_OS_WIN
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
@@ -377,6 +400,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         y = cfg.readEntry("ko_y", y);
         setGeometry(x, y, w, h);
     }
+#endif
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
     // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
@@ -500,6 +524,10 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *rootPart)
     d->saveActionAs->setEnabled(enable);
     d->importFile->setEnabled(enable);
     d->exportFile->setEnabled(enable);
+    d->encryptDocument->setEnabled(enable);
+#ifndef NDEBUG
+    d->uncompressToDir->setEnabled(enable);
+#endif
     d->printAction->setEnabled(enable);
     d->printActionPreview->setEnabled(enable);
     d->sendFileAction->setEnabled(enable);
@@ -808,34 +836,34 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
     int ret;
     if (!isExporting()) { // File --> Save
         ret = KMessageBox::warningContinueCancel
-              (
-                  this,
-                  i18n("<qt>Saving as a %1 may result in some loss of formatting."
-                       "<p>Do you still want to save in this format?</qt>",
-                       QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                  i18n("Confirm Save"),
-                  KStandardGuiItem::save(),
-                  KStandardGuiItem::cancel(),
-                  "NonNativeSaveConfirmation"
-              );
+                (
+                    this,
+                    i18n("<qt>Saving as a %1 may result in some loss of formatting."
+                         "<p>Do you still want to save in this format?</qt>",
+                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
+                    i18n("Confirm Save"),
+                    KStandardGuiItem::save(),
+                    KStandardGuiItem::cancel(),
+                    "NonNativeSaveConfirmation"
+                    );
     } else { // File --> Export
         ret = KMessageBox::warningContinueCancel
-              (
-                  this,
-                  i18n("<qt>Exporting as a %1 may result in some loss of formatting."
-                       "<p>Do you still want to export to this format?</qt>",
-                       QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                  i18n("Confirm Export"),
-                  KGuiItem(i18n("Export")),
-                  KStandardGuiItem::cancel(),
-                  "NonNativeExportConfirmation" // different to the one used for Save (above)
-              );
+                (
+                    this,
+                    i18n("<qt>Exporting as a %1 may result in some loss of formatting."
+                         "<p>Do you still want to export to this format?</qt>",
+                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
+                    i18n("Confirm Export"),
+                    KGuiItem(i18n("Export")),
+                    KStandardGuiItem::cancel(),
+                    "NonNativeExportConfirmation" // different to the one used for Save (above)
+                    );
     }
 
     return (ret == KMessageBox::Continue);
 }
 
-bool KoMainWindow::saveDocument(bool saveas, bool silent)
+bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 {
     if (!d->rootDocument || !d->rootPart) {
         return true;
@@ -865,8 +893,16 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
     KUrl suggestedURL = d->rootPart->url();
 
-    QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format,
-            KoFilterManager::Export, d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
+    QStringList mimeFilter;
+    KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
+    if (! mime)
+        mime = KMimeType::defaultMimeTypePtr();
+    if (specialOutputFlag)
+        mimeFilter = mime->patterns();
+    else
+        mimeFilter = KoFilterManager::mimeFilter(_native_format,
+                                                 KoFilterManager::Export,
+                                                 d->rootDocument->extraNativeMimeTypes(KoDocument::ForExport));
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
@@ -879,9 +915,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-            if (! mime)
-                mime = KMimeType::defaultMimeTypePtr();
             QString ext = mime->property("X-KDE-NativeExtension").toString();
             if (!ext.isEmpty()) {
                 if (c < 0)
@@ -909,78 +942,63 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog(
-            (isExporting() && !d->lastExportUrl.isEmpty()) ?
-            d->lastExportUrl.url() : suggestedURL.url(), this);
+        KUrl newURL(KoFileDialogHelper::getSaveFileName(
+                        this,
+                        i18n("untitled"),
+                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
+                        d->lastExportUrl.url() : suggestedURL.url(),
+                        mimeFilter));
+
+        QByteArray outputFormat = _native_format;
+        if (!specialOutputFlag) {
+            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = mime->name();
+            outputFormat = outputFormatString.toLatin1();
+        }
 
         if (!isExporting())
-            dialog->setCaption(i18n("Save Document As"));
+            justChangingFilterOptions = (newURL == d->rootPart->url()) &&
+                    (outputFormat == d->rootDocument->mimeType()) &&
+                    (specialOutputFlag == oldSpecialOutputFlag);
         else
-            dialog->setCaption(i18n("Export Document As"));
+            justChangingFilterOptions = (newURL == d->lastExportUrl) &&
+                    (outputFormat == d->lastExportedFormat) &&
+                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
 
-        dialog->setOperationMode(KFileDialog::Saving);
-        dialog->setMode(KFile::File);
-        dialog->setSpecialMimeFilter(mimeFilter,
-                                     isExporting() ? d->lastExportedFormat : d->rootDocument->mimeType(),
-                                     isExporting() ? d->lastExportSpecialOutputFlag : oldSpecialOutputFlag,
-                                     _native_format,
-                                     d->rootDocument->supportedSpecialFormats());
 
-        KUrl newURL;
-        QByteArray outputFormat = _native_format;
-        int specialOutputFlag = 0;
-        bool bOk;
-        do {
-            bOk = true;
-            if (dialog->exec() == QDialog::Accepted) {
-                newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter();
-                if (outputFormatString.isNull()) {
-                    KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-                    outputFormatString = mime->name();
+        bool bOk = true;
+        if (newURL.isEmpty()) {
+            bOk = false;
+        }
+
+        // adjust URL before doing checks on whether the file exists.
+        if (specialOutputFlag) {
+            QString fileName = newURL.fileName();
+            if ( specialOutputFlag== KoDocument::SaveAsDirectoryStore) {
+                qDebug() << "save to directory: " << newURL.url();
+            }
+            else if (specialOutputFlag == KoDocument::SaveEncrypted) {
+                int dot = fileName.lastIndexOf('.');
+                qDebug() << dot;
+                QString ext = mime->mainExtension();
+                if (!ext.isEmpty()) {
+                    if (dot < 0) fileName += ext;
+                    else fileName = fileName.left(dot) + ext;
+                } else { // current filename extension wrong anyway
+                    if (dot > 0) fileName = fileName.left(dot);
                 }
-                outputFormat = outputFormatString.toLatin1();
-
-                specialOutputFlag = dialog->specialEntrySelected();
-                kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
-
-                if (!isExporting())
-                    justChangingFilterOptions = (newURL == d->rootPart->url()) &&
-                                                (outputFormat == d->rootDocument->mimeType()) &&
-                                                (specialOutputFlag == oldSpecialOutputFlag);
-                else
-                    justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                                                (outputFormat == d->lastExportedFormat) &&
-                                                (specialOutputFlag == d->lastExportSpecialOutputFlag);
-            } else {
-                bOk = false;
-                break;
+                newURL.setFileName(fileName);
             }
+        }
 
-            if (newURL.isEmpty()) {
-                bOk = false;
-                break;
-            }
-
-            // adjust URL before doing checks on whether the file exists.
-            if (specialOutputFlag == KoDocument::SaveAsDirectoryStore) {
-                QString fileName = newURL.fileName();
-                if (fileName != "content.xml") {
-                    newURL.addPath("content.xml");
-                }
-            }
-
-            // this file exists and we are not just clicking "Save As" to change filter options
-            // => ask for confirmation
-            if (KIO::NetAccess::exists(newURL,  KIO::NetAccess::DestinationSide, this) && !justChangingFilterOptions) {
-                bOk = KMessageBox::questionYesNo(this,
-                                                 i18n("A document with this name already exists.\n"\
-                                                      "Do you want to overwrite it?"),
-                                                 i18n("Warning")) == KMessageBox::Yes;
-            }
-        } while (!bOk);
-
-        delete dialog;
+        // this file exists and we are not just clicking "Save As" to change filter options
+        // => ask for confirmation
+        if (KIO::NetAccess::exists(newURL,  KIO::NetAccess::DestinationSide, this) && !justChangingFilterOptions) {
+            bOk = KMessageBox::questionYesNo(this,
+                                             i18n("A document with this name already exists.\n"\
+                                                  "Do you want to overwrite it?"),
+                                             i18n("Warning")) == KMessageBox::Yes;
+        }
 
         if (bOk) {
             bool wantToSave = true;
@@ -1054,13 +1072,16 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
         else
             ret = false;
     } else { // saving
+
         bool needConfirm = d->rootDocument->confirmNonNativeSave(false) &&
-                           !d->rootDocument->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
+                !d->rootDocument->isNativeFormat(oldOutputFormat, KoDocument::ForExport);
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
-           ) {
+                ) {
             // be sure d->rootDocument has the correct outputMimeType!
-            ret = d->rootPart->save();
+            if (isExporting() || d->rootDocument->isModified()) {
+                ret = d->rootPart->save();
+            }
 
             if (!ret) {
                 kDebug(30003) << "Failed Save!";
@@ -1071,22 +1092,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             ret = false;
     }
 
-// Now that there's a File/Export option, this is no longer necessary.
-// If you continue to use File/Save to export to a foreign format,
-// this signals your intention to continue working in a foreign format.
-// You have already been warned by the DoNotAskAgain exportConfirmation
-// about losing formatting when you first saved so don't set modified
-// here or else it will be reported as a bug by some MSOffice user.
-// You have been warned!  Do not click DoNotAskAgain!!!
-#if 0
-    if (ret && !isExporting()) {
-        // When exporting to a non-native format, we don't reset modified.
-        // This way the user will be reminded to save it again in the native format,
-        // if he/she doesn't want to lose formatting.
-        if (wasModified && d->rootDocument->outputMimeType() != _native_format)
-            d->rootDocument->setModified(true);
-    }
-#endif
 
     if (!ret && reset_url)
         d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected
@@ -1148,7 +1153,7 @@ void KoMainWindow::saveWindowSettings()
 
         // Save collapsable state of dock widgets
         for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
-                i != d->dockWidgetsMap.constEnd(); ++i) {
+             i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
@@ -1192,10 +1197,10 @@ bool KoMainWindow::queryClose()
             name = i18n("Untitled");
 
         int res = KMessageBox::warningYesNoCancel(this,
-                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                  QString(),
-                  KStandardGuiItem::save(),
-                  KStandardGuiItem::discard());
+                                                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                                  QString(),
+                                                  KStandardGuiItem::save(),
+                                                  KStandardGuiItem::discard());
 
         switch (res) {
         case KMessageBox::Yes : {
@@ -1255,35 +1260,32 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-#ifdef Q_WS_WIN
-    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
-	// TODO provide support for "last visited" directory
-    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
-#else
-    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
-#endif
-    dialog->setObjectName("file dialog");
-    dialog->setMode(KFile::File);
-    if (!isImporting())
-        dialog->setCaption(i18n("Open Document"));
-    else
-        dialog->setCaption(i18n("Import Document"));
 
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
-    dialog->setMimeFilter(mimeFilter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
+                                                               KoFilterManager::Import,
+                                                               KoServiceProvider::readExtraNativeMimeTypes());
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    QString defaultDir = group.readEntry("OpenDialog");
+    if (defaultDir.isEmpty())
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    QString url;
+    if (!isImporting()) {
+        url = KoFileDialogHelper::getOpenFileName(this,
+                                         i18n("Open Document"),
+                                         defaultDir,
+                                         mimeFilter);
+    } else {
+        url = KoFileDialogHelper::getImportFileName(this,
+                                           i18n("Import Document"),
+                                           defaultDir,
+                                           mimeFilter);
     }
-    KUrl url(dialog->selectedUrl());
-    delete dialog;
 
     if (url.isEmpty())
         return;
+    group.writeEntry("OpenDialog", url);
 
-    (void) openDocument(url);
+    (void) openDocument(KUrl(url));
 }
 
 void KoMainWindow::slotFileOpenRecent(const KUrl & url)
@@ -1302,6 +1304,18 @@ void KoMainWindow::slotFileSave()
 void KoMainWindow::slotFileSaveAs()
 {
     if (saveDocument(true))
+        emit documentSaved();
+}
+
+void KoMainWindow::slotEncryptDocument()
+{
+    if (saveDocument(false, false, KoDocument::SaveEncrypted))
+        emit documentSaved();
+}
+
+void KoMainWindow::slotUncompressToDir()
+{
+    if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore))
         emit documentSaved();
 }
 
@@ -1371,7 +1385,7 @@ void KoMainWindow::slotFilePrintPreview()
     if (printJob == 0)
         return;
 
-  /* Sets the startPrinting() slot to be blocking.
+    /* Sets the startPrinting() slot to be blocking.
      The Qt print-preview dialog requires the printing to be completely blocking
      and only return when the full document has been printed.
      By default the KoPrintingDialog is non-blocking and
@@ -1383,56 +1397,6 @@ void KoMainWindow::slotFilePrintPreview()
     preview->exec();
     delete preview;
 }
-
-class ExportPdfDialog : public KPageDialog
-{
-public:
-    ExportPdfDialog(const KUrl &startUrl, const KoPageLayout &pageLayout) : KPageDialog() {
-        setFaceType(KPageDialog::List);
-        setCaption(i18n("Export to PDF"));
-
-        m_fileWidget = new KFileWidget(startUrl, this);
-        m_fileWidget->setOperationMode(KFileWidget::Saving);
-        m_fileWidget->setMode(KFile::File);
-        m_fileWidget->setMimeFilter(QStringList() << "application/pdf");
-        connect(m_fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
-
-        KPageWidgetItem *fileItem = new KPageWidgetItem(m_fileWidget, i18n( "File" ));
-        fileItem->setIcon(koIcon("document-open"));
-        addPage(fileItem);
-
-        m_pageLayoutWidget = new KoPageLayoutWidget(this, pageLayout);
-        m_pageLayoutWidget->showUnitchooser(false);
-        KPageWidgetItem *optionsItem = new KPageWidgetItem(m_pageLayoutWidget, i18n("Configure"));
-        optionsItem->setIcon(koIcon("configure"));
-        addPage(optionsItem);
-
-        resize(QSize(800, 600).expandedTo(minimumSizeHint()));
-    }
-    KUrl selectedUrl() const {
-        // selectedUrl()( does not return the expected result. So, build up the KUrl the more complicated way
-        //return m_fileWidget->selectedUrl();
-
-        KUrl url = m_fileWidget->dirOperator()->url();
-        url.adjustPath(KUrl::AddTrailingSlash);
-        url.setFileName(m_fileWidget->locationEdit()->currentText());
-        return url;
-    }
-    KoPageLayout pageLayout() const {
-        return m_pageLayoutWidget->pageLayout();
-    }
-protected:
-    virtual void slotButtonClicked(int button) {
-        if (button == KDialog::Ok) {
-            m_fileWidget->slotOk();
-        } else {
-            KPageDialog::slotButtonClicked(button);
-        }
-    }
-private:
-    KFileWidget *m_fileWidget;
-    KoPageLayoutWidget *m_pageLayoutWidget;
-};
 
 KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
@@ -1448,7 +1412,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     if (!rootView())
         return 0;
     if (pdfFileName.isEmpty()) {
-        KUrl startUrl = KUrl("kfiledialog:///SavePdfDialog");
+        KConfigGroup group = KGlobal::config()->group("File Dialogs");
+        QString defaultDir = group.readEntry("SavePdfDialog");
+        if (defaultDir.isEmpty())
+            defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+        KUrl startUrl = KUrl(defaultDir);
         KoDocument* pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
@@ -1458,21 +1426,26 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
             startUrl.setFileName( fileName );
         }
 
-        QPointer<ExportPdfDialog> dialog(new ExportPdfDialog(startUrl, pageLayout));
-        if (dialog->exec() != QDialog::Accepted || !dialog) {
-            delete dialog;
+        QPointer<KoPageLayoutDialog> layoutDlg(new KoPageLayoutDialog(this, pageLayout));
+        layoutDlg->setWindowModality(Qt::WindowModal);
+        if (layoutDlg->exec() != QDialog::Accepted || !layoutDlg) {
+            delete layoutDlg;
             return 0;
         }
+        pageLayout = layoutDlg->pageLayout();
+        delete layoutDlg;
 
-        KUrl url = dialog->selectedUrl();
-        pageLayout = dialog->pageLayout();
-        delete dialog;
+        KUrl url(KoFileDialogHelper::getSaveFileName(
+                        this,
+                        i18n("Export as PDF"),
+                        startUrl.toLocalFile(),
+                        QStringList() << "application/pdf"));
 
         if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
             bool overwrite = KMessageBox::questionYesNo(this,
-                                            i18n("A document with this name already exists.\n"\
-                                                "Do you want to overwrite it?"),
-                                            i18n("Warning")) == KMessageBox::Yes;
+                                                        i18n("A document with this name already exists.\n"\
+                                                             "Do you want to overwrite it?"),
+                                                        i18n("Warning")) == KMessageBox::Yes;
             if (!overwrite) {
                 return 0;
             }
@@ -1501,8 +1474,8 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
     }
 
     switch (pageLayout.orientation) {
-        case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
-        case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
+    case KoPageFormat::Portrait: printJob->printer().setOrientation(QPrinter::Portrait); break;
+    case KoPageFormat::Landscape: printJob->printer().setOrientation(QPrinter::Landscape); break;
     }
 
     printJob->printer().setPageMargins(pageLayout.leftMargin, pageLayout.topMargin, pageLayout.rightMargin, pageLayout.bottomMargin, QPrinter::Millimeter);
@@ -1673,10 +1646,9 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-
     KXMLGUIFactory *factory = guiFactory();
 
-// ###  setUpdatesEnabled( false );
+    // ###  setUpdatesEnabled( false );
 
     if (d->activeView) {
         KParts::GUIActivateEvent ev(false);
@@ -1704,8 +1676,10 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
         factory->addClient(d->activeView);
 
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
+        // Position and show toolbars according to user's preference. 
+		QRect rc = geometry();
+		setAutoSaveSettings(newPart->componentData().componentName(), true);
+		setGeometry(rc);
 
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -1738,7 +1712,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
-// ###  setUpdatesEnabled( true );
+    // ###  setUpdatesEnabled( true );
 }
 
 QLabel * KoMainWindow::statusBarLabel()

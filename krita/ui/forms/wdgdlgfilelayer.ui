@@ -25,6 +25,9 @@
      <property name="text">
       <string>&amp;Layer Name:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy">
       <cstring>txtLayerName</cstring>
      </property>
@@ -37,6 +40,9 @@
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>File:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
       <cstring>txtLayerName</cstring>

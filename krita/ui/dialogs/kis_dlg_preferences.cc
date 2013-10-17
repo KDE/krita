@@ -93,10 +93,14 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    m_cmbCursorShape->addItem(i18n("Tool Icon"));
+    m_cmbCursorShape->addItem(i18n("Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Arrow"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline"));
+    m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-#if defined(HAVE_OPENGL)
-    m_cmbCursorShape->addItem("3D Brush Model");
-#endif
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
 
 #ifdef NEPOMUK
     grpResourceTagging->show();
@@ -398,77 +402,48 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-    labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        cbUseOpenGLShaders->setEnabled(false);
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-        cbUseOpenGLTrilinearFiltering->setEnabled(false);
+        cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
-        cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
-#ifdef HAVE_GLEW
-        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
-        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
-        } else {
-            cbUseOpenGLShaders->setEnabled(false);
-        }
-#else
-        cbUseOpenGLShaders->setChecked(false);
-        cbUseOpenGLShaders->setEnabled(false);
-#endif
+        cmbFilterMode->setEnabled(cfg.useOpenGL());
+        cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
 #else
     grpOpenGL->setEnabled(false);
-    cbUseOpenGLShaders->setEnabled(false);
 #endif
-
-    QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if(versionNumber>=40603)
-        cbUseOpenGLToolOutlineWorkaround->hide();
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
-    colorChecks->setColor(cfg.checkersColor());
+    colorChecks1->setColor(cfg.checkersColor1());
+    colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
+    chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
 void DisplaySettingsTab::setDefault()
 {
-    cbUseOpenGL->setChecked(false);
-    cbUseOpenGLShaders->setChecked(false);
-    cbUseOpenGLShaders->setEnabled(false);
-    cbUseOpenGLToolOutlineWorkaround->setChecked(false);
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setChecked(true);
+    cbUseOpenGL->setChecked(true);
+    cmbFilterMode->setEnabled(true);
+    cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
-    colorChecks->setColor(QColor(220, 220, 220));
+    colorChecks1->setColor(QColor(220, 220, 220));
+    colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
+    chkCurveAntialiasing->setChecked(true);
+    chkChannelsAsColor->setChecked(false);
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
-#ifdef HAVE_GLEW
-    if (KisOpenGL::hasShadingLanguage()) {
-        cbUseOpenGLShaders->setEnabled(isChecked);
-    }
-#endif
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
-    cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
+    cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -787,18 +762,16 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
-        cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
-        cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
-#else
-        cfg.setUseOpenGLToolOutlineWorkaround(false);
+        cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
-        cfg.setCheckersColor(dialog->m_displaySettings->colorChecks->color());
+        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
+        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
+        cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());
         cfg.setGridSubdivisionStyle(dialog->m_gridSettings->selectSubdivisionStyle->currentIndex());

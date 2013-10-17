@@ -22,6 +22,9 @@
      <property name="text">
       <string>Merge strategy:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="0" column="1">
@@ -46,7 +49,7 @@
       <string>Description:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
      </property>
     </widget>
    </item>

@@ -27,6 +27,9 @@
           <property name="text">
            <string>Name:</string>
           </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
          </widget>
         </item>
         <item>

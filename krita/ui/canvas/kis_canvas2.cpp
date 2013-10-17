@@ -22,6 +22,7 @@
 #include "kis_canvas2.h"
 
 #include <QWidget>
+#include <QVBoxLayout>
 #include <QTime>
 #include <QLabel>
 #include <QMouseEvent>
@@ -101,7 +102,7 @@ public:
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
 #ifdef HAVE_OPENGL
-    bool useTrilinearFiltering;
+    int openGLFilterMode;
 #endif
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
@@ -112,6 +113,8 @@ public:
     bool vastScrolling;
 
     KisInputManager* inputManager;
+
+    QBitArray channelFlags;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -131,7 +134,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(this, SIGNAL(canvasDestroyed(QWidget*)), this, SLOT(slotCanvasDestroyed(QWidget*)));
 
     /**
      * We switch the shape manager every time vector layer or
@@ -164,7 +166,9 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
-    emit canvasDestroyed(widget);
+    if (m_d->favoriteResourceManager != 0) {
+        m_d->favoriteResourceManager->resetPopupPaletteParent(widget);
+    }
 
     if(m_d->canvasWidget!=0)
         tmp->setDecorations(m_d->canvasWidget->decorations());
@@ -218,6 +222,31 @@ void KisCanvas2::setSmoothingEnabled(bool smooth)
     if (canvas) {
         canvas->setSmoothingEnabled(smooth);
     }
+}
+
+void KisCanvas2::channelSelectionChanged()
+{
+    KisImageWSP image = this->image();
+    m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    image->barrierLock();
+
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
+#else
+        Q_ASSERT_X(0, "KisCanvas2::setChannelFlags", "Bad use of setChannelFlags(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setChannelFlags(m_d->channelFlags);
+    }
+
+    startUpdateInPatches(image->bounds());
+
+    image->unlock();
+
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)
@@ -315,13 +344,13 @@ void KisCanvas2::createOpenGLCanvas()
 {
 #ifdef HAVE_OPENGL
     KisConfig cfg;
-    m_d->useTrilinearFiltering = cfg.useOpenGLTrilinearFiltering();
+    m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
-    // XXX: The image isn't done loading here!
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
+
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
 #endif
@@ -342,14 +371,14 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL()) {
+        if (QGLFormat::hasOpenGL() && KisOpenGL::sharedContextWidget()) {
             createOpenGLCanvas();
         } else {
             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
             createQPainterCanvas();
         }
 #else
-        warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
+        warnKrita << "OpenGL requested while it's not available, starting qpainter canvas";
         createQPainterCanvas();
 #endif
     } else {
@@ -375,6 +404,7 @@ void KisCanvas2::connectCurrentImage()
     connect(image, SIGNAL(sigImageUpdated(QRect)),
             SLOT(startUpdateCanvasProjection(QRect)),
             Qt::DirectConnection);
+
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
             this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
 
@@ -420,7 +450,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     KisConfig cfg;
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
-         m_d->useTrilinearFiltering != cfg.useOpenGLTrilinearFiltering());
+         m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
         disconnectCurrentImage();
@@ -470,7 +500,6 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
-
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
 #endif
@@ -491,8 +520,7 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setDisplayFilter(displayFilter);
+        m_d->canvasWidget->setDisplayFilter(displayFilter);
 #endif
     }
     else {
@@ -524,7 +552,6 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->slotImageSizeChanged(w, h);
-
 #else
         Q_ASSERT_X(0, "finishResizingImage()", "Bad use of finishResizingImage(). It shouldn't have happened =(");
 #endif
@@ -592,12 +619,17 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    // updateCanvas is called from tools, never from the projection
-    // updates, so no need to prescale!
-    QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
-    widgetRect.adjust(-2, -2, 2, 2);
-    if (!widgetRect.isEmpty()) {
-        m_d->canvasWidget->widget()->update(widgetRect);
+    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
+        m_d->canvasWidget->widget()->update();
+    }
+    else {
+        // updateCanvas is called from tools, never from the projection
+        // updates, so no need to prescale!
+        QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
+        widgetRect.adjust(-2, -2, 2, 2);
+        if (!widgetRect.isEmpty()) {
+            m_d->canvasWidget->widget()->update(widgetRect);
+        }
     }
 }
 
@@ -605,6 +637,11 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
 {
     KoCanvasBase::disconnectCanvasObserver(object);
     m_d->view->disconnect(object);
+}
+
+void KisCanvas2::toggleTabletLogger()
+{
+    m_d->inputManager->toggleTabletLogger();
 }
 
 void KisCanvas2::notifyZoomChanged()
@@ -727,19 +764,10 @@ void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
     connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
 }
 
-void KisCanvas2::slotCanvasDestroyed(QWidget* w)
-{
-    if (m_d->favoriteResourceManager != 0)
-    {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(w);
-    }
-}
-
 KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
 {
     return m_d->favoriteResourceManager;
 }
-
 
 bool KisCanvas2::handlePopupPaletteIsVisible()
 {
@@ -769,5 +797,9 @@ void KisCanvas2::slotSelectionChanged()
     }
 }
 
+void KisCanvas2::setWrapAroundViewingMode(bool value)
+{
+    m_d->canvasWidget->setWrapAroundViewingMode(value);
+}
 
 #include "kis_canvas2.moc"

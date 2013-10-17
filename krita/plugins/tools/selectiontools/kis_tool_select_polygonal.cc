@@ -73,7 +73,6 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
-        painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
         painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());

@@ -24,6 +24,9 @@
        <property name="text">
         <string>&amp;Name:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>editName</cstring>
        </property>
@@ -36,6 +39,9 @@
       <widget class="QLabel" name="textLabel3">
        <property name="text">
         <string>&amp;Opacity:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>intOpacity</cstring>
@@ -50,12 +56,18 @@
        <property name="text">
         <string>Composite mode:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="lblColorSpaces">
        <property name="text">
         <string>Color space:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -72,7 +84,7 @@
         <string>Profile:</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
        </property>
       </widget>
      </item>

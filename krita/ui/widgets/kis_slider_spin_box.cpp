@@ -248,6 +248,7 @@ void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     } else {
         setInternalValue(d->value - d->singleStep);
     }
+    update();
     e->accept();
 }
 

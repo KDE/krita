@@ -26,7 +26,16 @@
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -132,7 +141,7 @@
       </widget>
      </item>
      <item row="1" column="4" rowspan="2">
-      <widget class="KoAspectButton" name="aspectButton" native="true">
+      <widget class="KoAspectButton" name="aspectButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -151,7 +160,7 @@
          <height>32767</height>
         </size>
        </property>
-       <property name="text" stdset="0">
+       <property name="text">
         <string/>
        </property>
       </widget>
@@ -220,6 +229,9 @@
        <property name="text">
         <string>Texture:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
@@ -244,14 +256,15 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QLabel</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -436,7 +436,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
     return m_paintOpPresetMap[paintOp];
 }
 
-void KisPaintopBox::updateCompositeOp(QString compositeOpID)
+void KisPaintopBox::updateCompositeOp(QString compositeOpID, bool localUpdate)
 {
     KisNodeSP node = m_resourceProvider->currentNode();
     
@@ -458,7 +458,8 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if(compositeOpID != m_currCompositeOpID) {
             m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
             m_optionWidget->setConfiguration(m_activePreset->settings().data());
-            m_resourceProvider->setCurrentCompositeOp(compositeOpID);
+            if(!localUpdate)
+                m_resourceProvider->setCurrentCompositeOp(compositeOpID);
             m_prevCompositeOpID = m_currCompositeOpID;
             m_currCompositeOpID = compositeOpID;
         }
@@ -524,6 +525,30 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
     for(TabletToolMap::iterator itr=m_tabletToolMap.begin(); itr!=m_tabletToolMap.end(); ++itr) {
         if(itr->preset && itr->preset->settings())
             itr->preset->settings()->setNode(node);
+    }
+}
+
+void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
+{
+    if(m_view)
+    {
+        sender()->blockSignals(true);
+        KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        m_presetsChooserPopup->canvasResourceChanged(preset.data());
+        if(m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
+            QString compositeOp = m_resourceProvider->currentCompositeOp();
+            m_cmbCompositeOp->blockSignals(true);
+            m_cmbCompositeOp->selectCompositeOp(KoID(compositeOp));
+            m_cmbCompositeOp->blockSignals(false);
+
+            m_eraseModeButton->defaultAction()->blockSignals(true);
+            m_eraseModeButton->blockSignals(true);
+            m_eraseModeButton->setChecked(compositeOp == COMPOSITE_ERASE);
+            m_eraseModeButton->defaultAction()->setChecked(compositeOp == COMPOSITE_ERASE);
+            m_eraseModeButton->blockSignals(false);
+            m_eraseModeButton->defaultAction()->blockSignals(false);
+        }
+        sender()->blockSignals(false);
     }
 }
 

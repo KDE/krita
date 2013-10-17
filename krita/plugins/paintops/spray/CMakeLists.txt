@@ -26,7 +26,3 @@ install( FILES  kritaspraypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES
     krita-spray.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
-install( FILES
-    airbrush.obj  
-    airbrush.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
-

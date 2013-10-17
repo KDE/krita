@@ -31,6 +31,8 @@
 #include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <ksplashscreen.h>
+#include <ksycoca.h>
+#include <kstandarddirs.h>
 
 #include <KoApplication.h>
 
@@ -56,17 +58,21 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
+    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
     KoApplication app;
+
+#if defined Q_WS_X11 && QT_VERSION >= 0x040800
+    app.setAttribute(Qt::AA_X11InitThreads, true);
+#endif
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
-
 
     if (!app.start()) {
         return 1;

@@ -26,16 +26,21 @@
 #include <QPen>
 #include <QPixmap>
 #include <QSize>
+#include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QStyledItemDelegate>
 #include <QLinearGradient>
+#include <QDesktopServices>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
 
+#include <KoFileDialogHelper.h>
 #include <KoIcon.h>
 #include "KoTemplateTree.h"
 #include "KoTemplateGroup.h"
@@ -44,7 +49,6 @@
 #include "KoTemplatesPane.h"
 #include "KoRecentDocumentsPane.h"
 #include "ui_KoOpenPaneBase.h"
-#include "KoExistingDocumentPane.h"
 
 #include <limits.h>
 #include <kconfiggroup.h>
@@ -130,6 +134,12 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
     d->m_componentData = componentData;
     d->setupUi(this);
 
+    m_mimeFiletr = mimeFilter;
+    d->m_openExistingButton->setText(i18n("Open Existing Document"));
+
+    connect(d->m_openExistingButton, SIGNAL(clicked()),
+            this, SLOT(openFileDialog()));
+
     KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);
     d->m_sectionList->setItemDelegate(delegate);
 
@@ -141,7 +151,6 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initRecentDocs();
-    initExistingFilesPane(mimeFilter);
     initTemplates(templateType);
 
     d->m_freeCustomWidgetIndex = 4;
@@ -166,6 +175,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
 
     connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
             this, SLOT(saveSplitterSizes(KoDetailsPane*, const QList<int>&)));
+
+    setAcceptDrops(true);
 }
 
 KoOpenPane::~KoOpenPane()
@@ -183,6 +194,20 @@ KoOpenPane::~KoOpenPane()
     }
 
     delete d;
+}
+
+void KoOpenPane::openFileDialog()
+{
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    QString defaultDir = group.readEntry("OpenDialog");
+    if (defaultDir.isEmpty())
+        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+    QString url = KoFileDialogHelper::getOpenFileName(this,
+                                               i18n("Open Existing Document"),
+                                               defaultDir,
+                                               m_mimeFiletr);
+    group.writeEntry("OpenDialog", url);
+    emit openExistingFile(KUrl(url));
 }
 
 void KoOpenPane::initRecentDocs()
@@ -255,6 +280,24 @@ void KoOpenPane::initTemplates(const QString& templateType)
         d->m_sectionList->setCurrentItem(selectItem, 0, QItemSelectionModel::ClearAndSelect);
     } else if (d->m_sectionList->selectedItems().isEmpty() && firstItem) {
         d->m_sectionList->setCurrentItem(firstItem, 0, QItemSelectionModel::ClearAndSelect);
+    }
+}
+
+void KoOpenPane::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls()) {
+        event->accept();
+    }
+}
+
+void KoOpenPane::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        // XXX: when the MVC refactoring is done, this can open a bunch of
+        //      urls, but since the part/document combination is still 1:1
+        //      that won't work for now.
+        emit openExistingFile(event->mimeData()->urls().first());
+
     }
 }
 
@@ -346,22 +389,6 @@ void KoOpenPane::itemClicked(QTreeWidgetItem* item)
     KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
 
     if (selectedItem && selectedItem->widgetIndex() >= 0) {
-        d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
-    }
-}
-
-void KoOpenPane::initExistingFilesPane( const QStringList& mimeFilter )
-{
-    KoExistingDocumentPane* widget = new KoExistingDocumentPane(this, mimeFilter);
-    connect(widget, SIGNAL(openExistingUrl(const KUrl&)),
-            this, SIGNAL(openExistingFile(const KUrl&)));
-    QTreeWidgetItem* item = addPane(i18n("Open Document"), "document-open", widget, 2);
-
-    KConfigGroup cfgGrp(d->m_componentData.config(), "TemplateChooserDialog");
-
-    if (cfgGrp.readEntry("LastReturnType") == i18n("Open Document")) {
-        d->m_sectionList->setCurrentItem(item, 0, QItemSelectionModel::ClearAndSelect);
-        KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
         d->m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
     }
 }

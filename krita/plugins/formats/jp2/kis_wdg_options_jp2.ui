@@ -19,7 +19,7 @@
         <string>File size:</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignTop</set>
+        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
@@ -101,7 +101,7 @@
         <string>Quality:</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignTop</set>
+        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
        </property>
        <property name="wordWrap">
         <bool>false</bool>
@@ -157,6 +157,9 @@
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Number of resolutions:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

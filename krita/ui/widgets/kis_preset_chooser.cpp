@@ -113,6 +113,48 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
+class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
+{
+
+public:
+    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
+        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer)
+    {
+    }
+    virtual ~KisPresetProxyAdapter() {}
+
+    virtual QList< KoResource* > resources() {
+
+        if (m_paintopID.isEmpty()) {
+            return KoResourceServerAdapter<KisPaintOpPreset>::resources();
+        }
+        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
+        QList<KoResource*> resources;
+        foreach( KisPaintOpPreset* preset, serverResources ) {
+            if( preset->paintOp().id() == m_paintopID) {
+                resources.append( preset );
+            }
+        }
+        return resources;
+    }
+
+    ///Set id for paintop to be accept by the proxy model, if not filter is set all
+    ///presets will be shown.
+    void setPresetFilter(const QString& paintOpId)
+    {
+        m_paintopID = paintOpId;
+        invalidate();
+    }
+
+    ///Resets the model connected to the adapter
+    void invalidate() {
+        emitRemovingResource(0);
+    }
+
+private:
+    QString m_paintopID;
+};
+
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -121,7 +163,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     layout->setMargin(0);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
-    m_adapter = new KoResourceServerAdapter<KisPaintOpPreset>(rserver);
+    m_adapter = new KisPresetProxyAdapter(rserver);
 
     m_chooser = new KoResourceItemChooser(m_adapter, this);
     QString knsrcFile = "kritapresets.knsrc";
@@ -213,6 +255,12 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 {
     return m_chooser;
 }
+
+void KisPresetChooser::setPresetFilter(const QString& paintOpId)
+{
+    static_cast<KisPresetProxyAdapter*>(m_adapter)->setPresetFilter(paintOpId);
+}
+
 
 #include "kis_preset_chooser.moc"
 

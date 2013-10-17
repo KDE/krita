@@ -11,7 +11,16 @@
    </rect>
   </property>
   <layout class="QVBoxLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -20,6 +29,9 @@
       <widget class="QLabel" name="brushNameLbl">
        <property name="text">
         <string>Name:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -30,13 +42,25 @@
    </item>
    <item>
     <layout class="QGridLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="textLabel2">
        <property name="text">
         <string>Style:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -80,6 +104,9 @@
        <property name="text">
         <string>Selection mode:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -107,7 +134,16 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -170,6 +206,9 @@
        <property name="text">
         <string>Spacing:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
@@ -179,7 +218,16 @@
    </item>
    <item>
     <layout class="QVBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>

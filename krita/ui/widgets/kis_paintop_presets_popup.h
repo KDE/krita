@@ -97,7 +97,8 @@ signals:
 
 private slots:
     void slotCheckPresetValidity();
-
+    void slotSwitchPresetStrip(bool visible);
+    void slotSwitchScratchpad(bool visible);
 
 private:
 

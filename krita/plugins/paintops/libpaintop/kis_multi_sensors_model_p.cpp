@@ -70,7 +70,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
                 return true;
             } else {
                 KisDynamicSensor* sensor = m_listSensor->takeSensor(KisDynamicSensor::sensorsIds()[index.row()].id());
-                pushSensorToCache(sensor);;
+                m_sensorCache[sensor->id()] = sensor;
                 
                 // If there is only one sensor left, remove it from the list sensor, and delete the list sensor
                 QList<QString> ids = m_listSensor->sensorIds();
@@ -148,11 +148,6 @@ KisDynamicSensor* KisMultiSensorsModel::takeOrCreateSensorFromCache(const QStrin
     return sensor;
 }
 
-void KisMultiSensorsModel::pushSensorToCache(KisDynamicSensor* sensor)
-{
-    Q_ASSERT(!m_sensorCache.contains(sensor->id()));
-    m_sensorCache[sensor->id()] = sensor;
-}
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
 {

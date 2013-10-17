@@ -174,8 +174,19 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
             this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
     }
+    if (m_popup) {
+        m_popup->setCanvas(canvas);
+    }
 
     update();
+}
+
+void KisColorSelectorBase::unsetCanvas()
+{
+    if (m_popup) {
+        m_popup->unsetCanvas();
+    }
+    m_canvas = 0;
 }
 
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)

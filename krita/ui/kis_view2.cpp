@@ -125,6 +125,7 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
+#include "kis_canvas_controls_manager.h"
 
 
 class BlockingUserInputEventFilter : public QObject
@@ -173,6 +174,7 @@ public:
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
 
+        delete resourceProvider;
         delete canvasController;
         delete canvas;
         delete filterManager;
@@ -186,6 +188,7 @@ public:
         delete viewConverter;
         delete statusBar;
         delete actionManager;
+        delete canvasControlsManager;
     }
 
 public:
@@ -208,6 +211,7 @@ public:
     KisZoomManager *zoomManager;
     KisImageManager *imageManager;
     KisGridManager *gridManager;
+    KisCanvasControlsManager *canvasControlsManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
@@ -244,7 +248,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-
 
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
@@ -293,6 +296,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
+
+    KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
+    actionCollection()->addAction("tablet_debugger", tabletDebugger );
+    tabletDebugger->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    connect(tabletDebugger, SIGNAL(triggered()), this, SLOT(toggleTabletLogger()));
+
     m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
@@ -317,6 +326,11 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasTransformations()));
+
+    KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
+    actionCollection()->addAction("wrap_around_mode", wrapAroundAction);
+    wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
+    connect(wrapAroundAction, SIGNAL(toggled(bool)), m_d->canvasController, SLOT(slotToggleWrapAroundMode(bool)));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -368,6 +382,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+    connect(m_d->resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            m_d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->doc->image(), SLOT(requestStrokeEnd()));
@@ -380,9 +396,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
-    show();
-
-
+  
     loadPlugins();
 
     // Wait for the async image to have loaded
@@ -403,7 +417,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     KisInputProfileManager::instance()->loadProfiles();
 
-
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
@@ -416,6 +429,13 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         existingShortcuts.insert(action->shortcut());
     }
 #endif
+
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    if (preset) {
+        paintOpBox()->resourceSelected(preset);
+    }
+
 }
 
 
@@ -793,6 +813,9 @@ void KisView2::createManagers()
     m_d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
     m_d->paintingAssistantManager->setup(actionCollection());
     m_d->canvas->addDecoration(m_d->paintingAssistantManager);
+
+    m_d->canvasControlsManager = new KisCanvasControlsManager(this);
+    m_d->canvasControlsManager->setup(actionCollection());
 }
 
 void KisView2::updateGUI()
@@ -1312,6 +1335,11 @@ void KisView2::showJustTheCanvas(bool toggled)
                                                                           actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
         floatingMessage->showMessage();
     }
+}
+
+void KisView2::toggleTabletLogger()
+{
+    m_d->canvas->toggleTabletLogger();
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

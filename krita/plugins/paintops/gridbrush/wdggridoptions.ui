@@ -37,6 +37,9 @@
       <property name="text">
        <string>Grid width:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="0" column="1" colspan="2">
@@ -57,6 +60,9 @@
       <property name="text">
        <string>Grid height:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
@@ -76,6 +82,9 @@
      <widget class="QLabel" name="label_3">
       <property name="text">
        <string>Division level:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
@@ -104,6 +113,9 @@
       <property name="text">
        <string>Scale:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="4" column="1" colspan="2">
@@ -127,6 +139,9 @@
       <property name="text">
        <string>Vertical border:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="5" column="2">
@@ -140,6 +155,9 @@
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Horizontal border:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>

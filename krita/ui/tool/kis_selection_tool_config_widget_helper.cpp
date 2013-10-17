@@ -36,6 +36,7 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
     Q_CHECK_PTR(m_optionWidget);
     m_optionWidget->setObjectName(toolId + "option widget");
     m_optionWidget->setWindowTitle(m_windowTitle);
+    m_optionWidget->setAction(m_selectionAction);
 
     connect(m_optionWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optionWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
@@ -61,9 +62,10 @@ SelectionAction KisSelectionToolConfigWidgetHelper::selectionAction() const
 
 void KisSelectionToolConfigWidgetHelper::slotSetAction(int action)
 {
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT) {
+    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT && m_selectionAction != action) {
         m_selectionAction = (SelectionAction)action;
         m_optionWidget->setAction(action);
+        emit selectionActionChanged(action);
     }
 }
 

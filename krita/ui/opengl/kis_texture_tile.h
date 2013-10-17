@@ -29,12 +29,16 @@
 
 
 struct KisGLTexturesInfo {
+
+    // real width and height
     int width;
     int height;
 
+    // width and height minus border padding?
     int effectiveWidth;
     int effectiveHeight;
 
+    // size of the border padding
     int border;
 
     GLint internalFormat;
@@ -51,13 +55,16 @@ class KisTextureTile
 {
 public:
     enum FilterMode {
-        NearestFilterMode,
-        BilinearFilterMode,
-        TrilinearFilterMode
+        NearestFilterMode,  // nearest
+        BilinearFilterMode, // linear, no mipmap
+        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
+        nearest_mipmap_nearest,
+        nearest_mipmap_linear,
+        linear_mipmap_nearest
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData, FilterMode mode);
+                   const QByteArray &fillData, FilterMode mode);
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
@@ -73,21 +80,19 @@ public:
     inline QRect textureRectInImagePixels() {
         return m_textureRectInImagePixels;
     }
-    
+
     inline QRectF tileRectInTexturePixels() {
         return m_tileRectInTexturePixels;
     }
-    
-private:
-    void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
 
 private:
+
     GLuint m_textureId;
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
-
+    FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
 
     Q_DISABLE_COPY(KisTextureTile)

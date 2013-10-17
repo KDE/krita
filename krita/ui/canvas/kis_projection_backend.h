@@ -46,6 +46,7 @@ public:
     virtual void setImage(KisImageWSP image) = 0;
     virtual void setImageSize(qint32 w, qint32 h) = 0;
     virtual void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) = 0;
+    virtual void setChannelFlags(const QBitArray &channelFlags) = 0;
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
 
     /**

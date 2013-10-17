@@ -16,17 +16,12 @@
 
 
 #if USE_TILESYSTEM == 1
-  #define TILES_DIR(file) <tiles/file>
-  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tileddatamanager.h)
-
+#error "The tiles1 backend is not available anymore"
 #elif USE_TILESYSTEM == 2
-  #define TILES_DIR(file) <tiles_new/file>
-  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tileddatamanager.h)
+#error "The tiles_new backend is not available anymore"
 #elif USE_TILESYSTEM == 3
-  #define TILES_DIR(file) <tiles3/file>
-  #define KIS_TILED_DATA_MANAGER_HEADER TILES_DIR(kis_tiled_data_manager.h)
+  #include <tiles3/kis_tiled_data_manager.h>
+  #include <tiles3/kis_memento.h>
 #endif
-
-#define KIS_MEMENTO_HEADER TILES_DIR(kis_memento.h)      
 
 #endif /* CONFIG_TILES_H_ */

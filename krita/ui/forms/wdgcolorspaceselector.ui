@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>99</height>
+    <width>438</width>
+    <height>101</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -22,13 +22,16 @@
      <property name="text">
       <string>Model:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy">
       <cstring>cmbColorModels</cstring>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KisCmbIDList" name="cmbColorModels" native="true">
+    <widget class="KisCmbIDList" name="cmbColorModels">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -48,13 +51,16 @@
      <property name="text">
       <string>Depth:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="buddy">
       <cstring>cmbColorModels</cstring>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KisCmbIDList" name="cmbColorDepth" native="true">
+    <widget class="KisCmbIDList" name="cmbColorDepth">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -76,13 +82,16 @@
        <property name="text">
         <string>Profile:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>cmbProfile</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="SqueezedComboBox" name="cmbProfile" native="true">
+      <widget class="SqueezedComboBox" name="cmbProfile">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -143,13 +152,13 @@
  <customwidgets>
   <customwidget>
    <class>KisCmbIDList</class>
-   <extends>QWidget</extends>
+   <extends>QComboBox</extends>
    <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>
    <class>SqueezedComboBox</class>
-   <extends>QWidget</extends>
-   <header>widgets/squeezedcombobox.h</header>
+   <extends>QComboBox</extends>
+   <header>squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

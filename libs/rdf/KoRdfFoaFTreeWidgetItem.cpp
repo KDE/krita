@@ -24,15 +24,6 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// contacts
-#ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#include <kabc/addressbook.h>
-#include <kabc/phonenumber.h>
-#include <kabc/vcardconverter.h>
-#endif
-
 
 KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf)
         : KoRdfSemanticTreeWidgetItem(parent, Type)

@@ -51,6 +51,8 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
     setObjectName("tool_line");
     m_painter = 0;
     currentImage() = 0;
+
+    setSupportOutline(true);
 }
 
 KisToolLine::~KisToolLine()
@@ -89,11 +91,30 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (mode() == KisTool::PAINT_MODE) {
-        paintLine(gc, QRect());
+    if(mode() == KisTool::PAINT_MODE) {
+        paintLine(gc,QRect());
     }
+    KisToolPaint::paint(gc,converter);
 }
 
+void KisToolLine::keyPressEvent(QKeyEvent *event)
+{
+    if (mode() != KisTool::PAINT_MODE) {
+        KisToolPaint::keyPressEvent(event);
+        return;
+    }
+
+    event->accept();
+}
+
+void KisToolLine::keyReleaseEvent(QKeyEvent *event)
+{
+    if (mode() != KisToolPaint::PAINT_MODE) {
+        KisToolPaint::keyReleaseEvent(event);
+        return;
+    }
+    event->accept();
+}
 
 void KisToolLine::mousePressEvent(KoPointerEvent *event)
 {
@@ -149,6 +170,7 @@ void KisToolLine::mouseMoveEvent(KoPointerEvent *event)
 
         m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
         updatePreview();
+        KisToolPaint::requestUpdateOutline(event->point);
     }
     else {
         KisToolPaint::mouseMoveEvent(event);

@@ -47,7 +47,7 @@ int KisStrokeShortcut::priority() const
 void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
                                    const QList<Qt::MouseButton> &buttons)
 {
-    Q_ASSERT(buttons.size() > 0);
+    if (buttons.size() == 0) return;
 
     m_d->modifiers = modifiers;
     m_d->buttons = buttons;

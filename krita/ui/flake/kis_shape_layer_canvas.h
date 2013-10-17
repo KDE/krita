@@ -74,7 +74,6 @@ private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 
-    bool m_antialias;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
 };

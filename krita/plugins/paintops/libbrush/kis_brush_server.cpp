@@ -88,6 +88,8 @@ public:
         if( fi.exists() == false )
             return;
 
+        if (fi.size() == 0) return;
+
         if( fi.suffix().toLower() == "abr") {
             if(fileCreation) {
                 QFile::copy(filename, saveLocation() + fi.fileName());

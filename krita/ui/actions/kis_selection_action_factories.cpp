@@ -237,7 +237,11 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         if (!node) return;
 
         image->barrierLock();
-        ActionHelper::copyFromDevice(view, node->paintDevice());
+        KisPaintDeviceSP dev = node->paintDevice();
+        if (!dev) {
+            dev = node->projection();
+        }
+        ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
         KUndo2Command *command = 0;

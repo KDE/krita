@@ -44,7 +44,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter 
         , m_shapeManager(new KoShapeManager(this))
         , m_projection(0)
         , m_parentLayer(parent)
-        , m_antialias(false)
 {
     m_shapeManager->selection()->setActiveLayer(parent);
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
@@ -98,7 +97,6 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
         m_dirtyRegion += r;
         qreal x, y;
         m_viewConverter->zoom(&x, &y);
-        m_antialias = x < 3 || y < 3;
     }
 
     emit forwardRepaint();
@@ -107,11 +105,9 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 void KisShapeLayerCanvas::repaint()
 {
     QRect r;
-    bool antialias;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        antialias = m_antialias;
         r = m_dirtyRegion.boundingRect();
         m_dirtyRegion = QRegion();
     }
@@ -123,8 +119,8 @@ void KisShapeLayerCanvas::repaint()
     image.fill(0);
     QPainter p(&image);
 
-    p.setRenderHint(QPainter::Antialiasing, antialias);
-    p.setRenderHint(QPainter::TextAntialiasing, antialias);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::TextAntialiasing);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT

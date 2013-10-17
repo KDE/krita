@@ -67,6 +67,8 @@ set(kotext_LIB_SRCS
     KoTextMeta.cpp
     KoTextTableTemplate.cpp
 
+    OdfTextTrackStyles.cpp
+
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
@@ -78,7 +80,6 @@ set(kotext_LIB_SRCS
     styles/KoStyleManager.cpp
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
-    styles/ChangeFollower.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp

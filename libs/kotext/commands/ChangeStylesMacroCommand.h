@@ -25,7 +25,7 @@
 #include <QList>
 #include <QSet>
 
-class ChangeFollower;
+class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoStyleManager;
@@ -33,8 +33,7 @@ class KoStyleManager;
 class ChangeStylesMacroCommand : public KUndo2Command
 {
 public:
-    ChangeStylesMacroCommand(const QList<ChangeFollower *> &changeFollowers,
-                             KoStyleManager *styleManager);
+    ChangeStylesMacroCommand(const QList<QTextDocument *> &documents, KoStyleManager *styleManager);
 
     virtual ~ChangeStylesMacroCommand();
 
@@ -45,13 +44,13 @@ public:
     void undo();
 
     void changedStyle(KoCharacterStyle *s) {m_changedCharacterStyles.append(s);}
-    void origStyle(KoCharacterStyle *s) {m_changedCharacterStyles.append(s);}
+    void origStyle(KoCharacterStyle *s) {m_origCharacterStyles.append(s);}
     void changedStyle(KoParagraphStyle *s) {m_changedParagraphStyles.append(s);}
-    void origStyle(KoParagraphStyle *s) {m_changedParagraphStyles.append(s);}
+    void origStyle(KoParagraphStyle *s) {m_origParagraphStyles.append(s);}
     void changedStyle(int id) {m_changedStyles.insert(id);}
 
 private:
-    QList<ChangeFollower *> m_changeFollowers;
+    QList<QTextDocument *> m_documents;
     QList<KoCharacterStyle *> m_origCharacterStyles;
     QList<KoCharacterStyle *> m_changedCharacterStyles;
     QList<KoParagraphStyle *> m_origParagraphStyles;

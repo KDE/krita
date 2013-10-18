@@ -27,6 +27,11 @@
 #include <QRect>
 #include <QRectF>
 
+#if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
+#define USE_PIXEL_BUFFERS
+#include <QGLBuffer>
+#endif
+
 
 struct KisGLTexturesInfo {
 
@@ -88,6 +93,11 @@ public:
 private:
 
     GLuint m_textureId;
+
+#ifdef USE_PIXEL_BUFFERS
+    void createTextureBuffer(const QByteArray &fillData);
+    QGLBuffer *m_glBuffer;
+#endif
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;

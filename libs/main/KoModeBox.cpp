@@ -306,6 +306,7 @@ QIcon KoModeBox::createTextIcon(const KoToolButton button)
     }
 
     p.setFont(smallFont);
+    p.setPen(palette().text().color());
     textLayout.draw(&p, QPoint(0, 22));
     p.end();
 

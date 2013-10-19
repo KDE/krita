@@ -19,6 +19,7 @@
 #include "kis_recorded_node_action.h"
 
 #include <QDomDocument>
+#include <KLocalizedString>
 #include <KoUpdater.h>
 
 #include "kis_node_query_path.h"
@@ -50,7 +51,7 @@ void KisRecordedNodeAction::play(const KisPlayInfo& _info, KoUpdater* _updater) 
 {
     QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(_info.image(), _info.currentNode());
     KoProgressUpdater updater(_updater);
-    updater.start(nodes.size());
+    updater.start(nodes.size(), i18n("Applying action to all selected nodes"));
     foreach(KisNodeSP node, nodes)
     {
         play(node, _info, updater.startSubtask());

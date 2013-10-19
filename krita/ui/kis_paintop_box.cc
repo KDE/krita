@@ -534,8 +534,13 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
     {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (preset && m_activePreset->name() != preset->name()) {
+            QString compositeOp = preset->settings()->getString("CompositeOp");
+            updateCompositeOp(compositeOp);
+            resourceSelected(preset.data());
+        }
         m_presetsChooserPopup->canvasResourceChanged(preset.data());
-        if(m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
+        if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
             QString compositeOp = m_resourceProvider->currentCompositeOp();
             m_cmbCompositeOp->blockSignals(true);
             m_cmbCompositeOp->selectCompositeOp(KoID(compositeOp));

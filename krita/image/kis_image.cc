@@ -240,9 +240,14 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
             selectionMask = new KisSelectionMask(this);
             selectionMask->initSelection(m_d->rootLayer);
             addNode(selectionMask);
+            // If we do not set the selection now, the setActive call coming next
+            // can be very, very expensive, depending on the size of the image.
+            selectionMask->setSelection(globalSelection);
             selectionMask->setActive(true);
         }
-        selectionMask->setSelection(globalSelection);
+        else {
+            selectionMask->setSelection(globalSelection);
+        }
 
         Q_ASSERT(m_d->rootLayer->childCount() > 0);
         Q_ASSERT(m_d->rootLayer->selectionMask());
@@ -820,7 +825,7 @@ KisGroupLayerSP KisImage::rootLayer() const
     return m_d->rootLayer;
 }
 
-KisPaintDeviceSP KisImage::projection()
+KisPaintDeviceSP KisImage::projection() const
 {
     if (m_d->isolatedRootNode) {
         return m_d->isolatedRootNode->projection();

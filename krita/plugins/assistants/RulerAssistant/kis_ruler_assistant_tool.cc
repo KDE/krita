@@ -28,7 +28,10 @@
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-//#include <kio/jobuidelegate.h>
+
+#ifndef QT_NO_DBUS
+#include <kio/jobuidelegate.h>
+#endif
 
 #include <KoIcon.h>
 
@@ -226,6 +229,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             return;
         }
+
         m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
             QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
@@ -410,8 +414,11 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
         QPainterPath path;
         path.addEllipse(ellipse);
-        KisPaintingAssistant::drawPath(_gc, path);        
+        KisPaintingAssistant::drawPath(_gc, path);
     }
+    
+    QPixmap iconDelete = koIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         if(assistant->id()=="perspective") {
             assistant->findHandleLocation();
@@ -429,8 +436,6 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
     }
 
-    QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
 
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
@@ -449,15 +454,18 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
+#ifndef QT_NO_DBUS
     KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
     connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
     job->start();
+#endif
 }
 
 void KisRulerAssistantTool::saveAssistants()
 {
+#ifndef QT_NO_DBUS
     QByteArray data;
     QXmlStreamWriter xml(&data);
     xml.writeStartDocument();
@@ -496,13 +504,15 @@ void KisRulerAssistantTool::saveAssistants()
     KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
     connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
     job->start();
+#endif
 }
 
 void KisRulerAssistantTool::openFinish(KJob* job)
 {
+#ifndef QT_NO_DBUS
     job->deleteLater();
     if (job->error()) {
-//        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
         return;
     }
     QByteArray data = dynamic_cast<KIO::StoredTransferJob*>(job)->data();
@@ -584,15 +594,19 @@ void KisRulerAssistantTool::openFinish(KJob* job)
     }
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();
+#endif
 }
 
 void KisRulerAssistantTool::saveFinish(KJob* job)
 {
+#ifndef QT_NO_DBUS
     if (job->error()) {
-//        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
     }
     job->deleteLater();
+#endif
 }
+
 
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
@@ -606,8 +620,13 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
+#ifndef QT_NO_DBUS
         connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
+#else
+        m_options.saveButton->hide();
+        m_options.loadButton->hide();
+#endif
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;

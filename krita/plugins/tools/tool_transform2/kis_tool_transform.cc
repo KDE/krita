@@ -76,14 +76,16 @@
 
 #include "widgets/kis_progress_widget.h"
 
+#include <Eigen/Geometry>
+using namespace Eigen;
+
 #include "strokes/transform_stroke_strategy.h"
 
-
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::rotateCursor())
-        , m_workRecursively(true)
-        , m_isActive(false)
-        , m_changesTracker(&m_transaction)
+    : KisTool(canvas, KisCursor::rotateCursor())
+    , m_workRecursively(true)
+    , m_isActive(false)
+    , m_changesTracker(&m_transaction)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
@@ -441,6 +443,8 @@ void KisToolTransform::outlineChanged()
         m_canvas->updateCanvas();
         return;
     }
+
+    emit freeTransformChanged();
 
     KisImageSP kisimage = image();
     double maxRadiusX = m_canvas->viewConverter()->viewToDocumentX(m_maxRadius);
@@ -917,6 +921,72 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
     storeArgs(m_clickArgs);
 }
 
+void KisToolTransform::touchEvent( QTouchEvent* event )
+{
+    //Count all moving touch points
+    int touchCount = 0;
+    foreach( QTouchEvent::TouchPoint tp, event->touchPoints() ) {
+        if( tp.state() == Qt::TouchPointMoved ) {
+            touchCount++;
+        }
+    }
+
+    //Use the touch point count to determine the gesture
+    switch( touchCount ) {
+    case 1: { //Panning
+        QTouchEvent::TouchPoint tp = event->touchPoints().at( 0 );
+        QPointF diff = tp.screenPos() - tp.lastScreenPos();
+
+        m_currentArgs.setTransformedCenter( m_currentArgs.transformedCenter() + diff );
+        outlineChanged();
+        break;
+    }
+    case 2: { //Scaling
+        QTouchEvent::TouchPoint tp1 = event->touchPoints().at( 0 );
+        QTouchEvent::TouchPoint tp2 = event->touchPoints().at( 1 );
+
+        float lastZoom = (tp1.lastScreenPos() - tp2.lastScreenPos()).manhattanLength();
+        float newZoom = (tp1.screenPos() - tp2.screenPos()).manhattanLength();
+
+        float diff = (newZoom - lastZoom) / 100;
+
+        m_currentArgs.setScaleX( m_currentArgs.scaleX() + diff );
+        m_currentArgs.setScaleY( m_currentArgs.scaleY() + diff );
+
+        outlineChanged();
+        break;
+    }
+    case 3: { //Rotation
+
+/* TODO: implement touch-based rotation.
+
+            Vector2f center;
+            foreach( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
+                if( tp.state() == Qt::TouchPointMoved ) {
+                    center += Vector2f( tp.screenPos().x(), tp.screenPos().y() );
+                }
+            }
+            center /= touchCount;
+
+            QTouchEvent::TouchPoint tp = event->touchPoints().at(0);
+
+            Vector2f oldPosition = (Vector2f( tp.lastScreenPos().x(), tp.lastScreenPos().y() ) - center).normalized();
+            Vector2f newPosition = (Vector2f( tp.screenPos().x(), tp.screenPos().y() ) - center).normalized();
+
+            float oldAngle = qAcos( oldPosition.dot( Vector2f( 0.0f, 0.0f ) ) );
+            float newAngle = qAcos( newPosition.dot( Vector2f( 0.0f, 0.0f ) ) );
+
+            float diff = newAngle - oldAngle;
+
+            m_currentArgs.setAZ( m_currentArgs.aZ() + diff );
+
+            outlineChanged();
+*/
+        break;
+    }
+    }
+}
+
 void KisToolTransform::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Meta) {
@@ -944,6 +1014,140 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 
     updateApplyResetAvailability();
     KisTool::keyReleaseEvent(event);
+}
+
+void KisToolTransform::applyTransform()
+{
+    slotApplyTransform();
+}
+
+KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
+{
+    return m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM ? FreeTransformMode : WarpTransformMode;
+}
+
+double KisToolTransform::translateX() const
+{
+    return m_currentArgs.transformedCenter().x();
+}
+
+double KisToolTransform::translateY() const
+{
+    return m_currentArgs.transformedCenter().y();
+}
+
+double KisToolTransform::rotateX() const
+{
+    return m_currentArgs.aX();
+}
+
+double KisToolTransform::rotateY() const
+{
+    return m_currentArgs.aY();
+}
+
+double KisToolTransform::rotateZ() const
+{
+    return m_currentArgs.aZ();
+}
+
+double KisToolTransform::scaleX() const
+{
+    return m_currentArgs.scaleX();
+}
+
+double KisToolTransform::scaleY() const
+{
+    return m_currentArgs.scaleY();
+}
+
+double KisToolTransform::shearX() const
+{
+    return m_currentArgs.shearX();
+}
+
+double KisToolTransform::shearY() const
+{
+    return m_currentArgs.shearY();
+}
+
+KisToolTransform::WarpType KisToolTransform::warpType() const
+{
+    switch(m_currentArgs.warpType()) {
+    case KisWarpTransformWorker::AFFINE_TRANSFORM:
+        return AffineWarpType;
+    case KisWarpTransformWorker::RIGID_TRANSFORM:
+        return RigidWarpType;
+    case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
+        return SimilitudeWarpType;
+    default:
+        return RigidWarpType;
+    }
+}
+
+double KisToolTransform::warpFlexibility() const
+{
+    return m_currentArgs.alpha();
+}
+
+int KisToolTransform::warpPointDensity() const
+{
+    return m_currentArgs.pointsPerLine();
+}
+
+void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newMode)
+{
+    ToolTransformArgs::TransformMode mode = newMode == FreeTransformMode ? ToolTransformArgs::FREE_TRANSFORM : ToolTransformArgs::WARP;
+    if( mode != m_currentArgs.mode() ) {
+        if( newMode == FreeTransformMode ) {
+            m_optWidget->slotSetFreeTransformModeButtonClicked( true );
+        } else {
+            m_optWidget->slotSetWrapModeButtonClicked( true );
+        }
+        emit transformModeChanged();
+    }
+}
+
+void KisToolTransform::setRotateX( double rotation )
+{
+    m_currentArgs.setAX( rotation );
+}
+
+void KisToolTransform::setRotateY( double rotation )
+{
+    m_currentArgs.setAY( rotation );
+}
+
+void KisToolTransform::setRotateZ( double rotation )
+{
+    m_currentArgs.setAZ( rotation );
+}
+
+void KisToolTransform::setWarpType( KisToolTransform::WarpType type )
+{
+    switch( type ) {
+    case RigidWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
+        break;
+    case AffineWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::AFFINE_TRANSFORM);
+        break;
+    case SimilitudeWarpType:
+        m_currentArgs.setWarpType(KisWarpTransformWorker::SIMILITUDE_TRANSFORM);
+        break;
+    default:
+        break;
+    }
+}
+
+void KisToolTransform::setWarpFlexibility( double flexibility )
+{
+    m_currentArgs.setAlpha( flexibility );
+}
+
+void KisToolTransform::setWarpPointDensity( int density )
+{
+    m_optWidget->slotSetWarpDensity(density);
 }
 
 /* A sort of gradient descent method is used to find the correct scale
@@ -1001,59 +1205,59 @@ double KisToolTransform::gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D
    1 is returned if correct scale factors have been found, or else 0 (in that case x_min, y_min are unchanged
 */
 int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desired, double x0, double y0, double epsilon, double gradStep, int nbIt1, int nbIt2, double epsilon_deriv, double *x_min, double *y_min) {
-   double val = gradientDescent_f(v1, v2, desired, x0, y0);
-   double derivX, derivY;
-   double x1, y1;
-   int exit;
-   double step;
-   for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
-      step = gradStep;
-      derivX = gradientDescent_partialDeriv1_f(v1, v2, desired, x0, y0, epsilon_deriv);
-      derivY = gradientDescent_partialDeriv2_f(v1, v2, desired, x0, y0, epsilon_deriv);
-      if (derivX == 0 && derivY == 0) {
-          // might happen if f is not computable around x0, y0
-          x0 /= 2;
-          y0 /= 2;
-          continue;
-      }
+    double val = gradientDescent_f(v1, v2, desired, x0, y0);
+    double derivX, derivY;
+    double x1, y1;
+    int exit;
+    double step;
+    for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
+        step = gradStep;
+        derivX = gradientDescent_partialDeriv1_f(v1, v2, desired, x0, y0, epsilon_deriv);
+        derivY = gradientDescent_partialDeriv2_f(v1, v2, desired, x0, y0, epsilon_deriv);
+        if (derivX == 0 && derivY == 0) {
+            // might happen if f is not computable around x0, y0
+            x0 /= 2;
+            y0 /= 2;
+            continue;
+        }
 
-      int j = 0;
-      exit = 0;
-      do {
-         if (j > nbIt2) {
-            exit = 1;
+        int j = 0;
+        exit = 0;
+        do {
+            if (j > nbIt2) {
+                exit = 1;
+                break;
+            }
+            x1 = x0 - step * derivX;
+            y1 = y0 - step * derivY;
+
+            if (gradientDescent_f(v1, v2, desired, x1, y1) >= val) {
+                step /= 2;
+            }
+            else {
+                break;
+            }
+            ++j;
+        } while(1);
+        if (exit) {
             break;
-         }
-         x1 = x0 - step * derivX;
-         y1 = y0 - step * derivY;
+        }
+        else {
+            x0 = x1;
+            y0 = y1;
+            val = gradientDescent_f(v1, v2, desired, x0, y0);
+        }
+    }
 
-         if (gradientDescent_f(v1, v2, desired, x1, y1) >= val) {
-            step /= 2;
-         }
-         else {
-            break;
-         }
-         ++j;
-      } while(1);
-      if (exit) {
-         break;
-      }
-      else {
-         x0 = x1;
-         y0 = y1;
-         val = gradientDescent_f(v1, v2, desired, x0, y0);
-      }
-   }
+    if (val <= epsilon) {
+        *x_min = x0;
+        *y_min = y0;
 
-   if (val <= epsilon) {
-      *x_min = x0;
-      *y_min = y0;
-
-      return 1;
-   }
-   else {
-      return 0;
-   }
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 // the interval for the dichotomy is [0, b]
@@ -1494,7 +1698,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             updateOptionWidget();
         }
-        break;
+            break;
         case PERSPECTIVE:
         {
             t = QVector3D(mousePos.x() - m_clickPoint.x(), mousePos.y() - m_clickPoint.y(), 0);
@@ -1531,7 +1735,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             updateOptionWidget();
         }
-        break;
+            break;
         case TOPSCALE:
         case BOTTOMSCALE:
             if (m_function == TOPSCALE) {
@@ -2231,6 +2435,36 @@ void KisToolTransform::slotEditingFinished()
 
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
+}
+
+void KisToolTransform::setShearY(double shear)
+{
+    m_optWidget->slotSetShearY(shear);
+}
+
+void KisToolTransform::setShearX(double shear)
+{
+    m_optWidget->slotSetShearX(shear);
+}
+
+void KisToolTransform::setScaleY(double scale)
+{
+    m_optWidget->slotSetScaleY(scale);
+}
+
+void KisToolTransform::setScaleX(double scale)
+{
+    m_optWidget->slotSetScaleX(scale);
+}
+
+void KisToolTransform::setTranslateY(double translation)
+{
+    m_optWidget->slotSetTranslateY(translation);
+}
+
+void KisToolTransform::setTranslateX(double translation)
+{
+    m_optWidget->slotSetTranslateX(translation);
 }
 
 #include "kis_tool_transform.moc"

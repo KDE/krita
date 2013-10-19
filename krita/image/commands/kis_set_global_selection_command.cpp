@@ -44,6 +44,6 @@ void KisSetGlobalSelectionCommand::undo()
 }
 
 KisSetEmptyGlobalSelectionCommand::KisSetEmptyGlobalSelectionCommand(KisImageWSP image)
-    : KisSetGlobalSelectionCommand(image, new KisSelection(new KisDefaultBounds(image)))
+    : KisSetGlobalSelectionCommand(image, new KisSelection(new KisSelectionEmptyBounds()))
 {
 }

@@ -381,6 +381,17 @@ void KisToolColorPicker::updateOptionWidget()
     m_optionsWidget->radius->setValue(m_config.radius);
 }
 
+void KisToolColorPicker::setToForeground(bool newValue)
+{
+    m_config.toForegroundColor = newValue;
+    emit toForegroundChanged();
+}
+
+bool KisToolColorPicker::toForeground() const
+{
+    return m_config.toForegroundColor;
+}
+
 void KisToolColorPicker::slotSetUpdateColor(bool state)
 {
     m_config.updateColor = state;

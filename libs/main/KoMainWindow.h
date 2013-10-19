@@ -69,11 +69,15 @@ public:
      */
     virtual ~KoMainWindow();
 
+    // If noCleanup is set, KoMainWindow will not delete the root document
+    // or part manager on destruction.
+    void setNoCleanup(bool noCleanup);
+
     /**
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0);
+    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0, bool deletePrevious = true);
 
     /**
      * This is used to handle the document used at start up before it actually
@@ -317,6 +321,21 @@ public slots:
      */
     void toggleDockersVisibility(bool visible);
 
+    /**
+     * Saves the document, asking for a filename if necessary.
+     *
+     * @param saveas if set to TRUE the user is always prompted for a filename
+     *
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
+     * @param specialOutputFlag set to enums defined in KoDocument if save to special output format
+     *
+     * @return TRUE on success, false on error or cancel
+     *         (don't display anything in this case, the error dialog box is also implemented here
+     *         but restore the original URL in slotFileSaveAs)
+     */
+    bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
+
 private:
 
     /**
@@ -335,21 +354,6 @@ private:
      * Create a new empty document.
      */
     KoPart* createPart() const;
-
-    /**
-     * Saves the document, asking for a filename if necessary.
-     *
-     * @param saveas if set to TRUE the user is always prompted for a filename
-     *
-     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @param specialOutputFlag set to enums defined in KoDocument if save to special output format
-     *
-     * @return TRUE on success, false on error or cancel
-     *         (don't display anything in this case, the error dialog box is also implemented here
-     *         but restore the original URL in slotFileSaveAs)
-     */
-    bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);

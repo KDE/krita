@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2012 <hanna.et.scott@gmail.com> 
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

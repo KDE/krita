@@ -132,6 +132,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_AcceptTouchEvents);
     setAutoFillBackground(false);
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -240,6 +241,9 @@ inline QVector<QVector2D> rectToTexCoords(const QRectF &rc)
 
 void KisOpenGLCanvas2::drawCheckers() const
 {
+    if(!d->checkerShader)
+        return;
+
     KisCoordinatesConverter *converter = coordinatesConverter();
     QTransform textureTransform;
     QTransform modelTransform;
@@ -293,6 +297,9 @@ void KisOpenGLCanvas2::drawCheckers() const
 
 void KisOpenGLCanvas2::drawImage() const
 {
+    if(!d->displayShader)
+        return;
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

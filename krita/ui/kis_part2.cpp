@@ -115,7 +115,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
         item.icon = "application-x-krita";
@@ -130,7 +130,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
         item.title = i18n("Create from Clipboard");

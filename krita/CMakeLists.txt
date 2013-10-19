@@ -90,6 +90,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
     ${EIGEN2_INCLUDE_DIR}
+    ${Vc_INCLUDE_DIR}
 
     # 'Export' this for use by filters
     CACHE INTERNAL ""
@@ -130,7 +131,7 @@ if (Q_WS_MAC)
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui)
-target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
+target_link_libraries(krita kdeinit_krita)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     find_package(OpenCTL)
@@ -159,6 +160,5 @@ install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 add_subdirectory(tablettester)
-
-
-
+add_subdirectory(sketch)
+add_subdirectory(gemini)

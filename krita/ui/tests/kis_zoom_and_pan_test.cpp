@@ -218,7 +218,7 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
     qreal oldPreferredCenterFractionY = 1.0 * oldPreferredCenter.y() / oldDocumentSize.height();
 
     qreal roundingTolerance =
-        qMax(1.0, qMax(oldPreferredCenterFractionX, oldPreferredCenterFractionY) / k);
+        qMax(qreal(1.0), qMax(oldPreferredCenterFractionX, oldPreferredCenterFractionY) / k);
 
     /**
      * In the computation of the offset two roundings happen:

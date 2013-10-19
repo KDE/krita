@@ -389,6 +389,12 @@ void KisSelectionManager::deselect()
     factory.run(m_view);
 }
 
+void KisSelectionManager::invert()
+{
+    if(m_invert)
+        m_invert->trigger();
+}
+
 void KisSelectionManager::reselect()
 {
     KisReselectActionFactory factory;
@@ -440,7 +446,13 @@ void KisSelectionManager::cutToNewLayer()
 void KisSelectionManager::toggleDisplaySelection()
 {
     KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
-    if (decoration) decoration->toggleVisibility();
+    if (decoration) {
+        decoration->toggleVisibility();
+        m_toggleDisplaySelection->blockSignals(true);
+        m_toggleDisplaySelection->setChecked(decoration->visible());
+        m_toggleDisplaySelection->blockSignals(false);
+    }
+    emit displaySelectionChanged();
 }
 
 bool KisSelectionManager::displaySelection()

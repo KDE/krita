@@ -615,12 +615,14 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 void KisCanvas2::updateCanvas()
 {
     m_d->canvasWidget->widget()->update();
+    emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
 }
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
     if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
         m_d->canvasWidget->widget()->update();
+        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
     }
     else {
         // updateCanvas is called from tools, never from the projection
@@ -628,6 +630,7 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
         QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
         widgetRect.adjust(-2, -2, 2, 2);
         if (!widgetRect.isEmpty()) {
+            emit updateCanvasRequested(widgetRect);
             m_d->canvasWidget->widget()->update(widgetRect);
         }
     }
@@ -681,6 +684,11 @@ KisImageWSP KisCanvas2::image()
 KisImageWSP KisCanvas2::currentImage()
 {
     return m_d->view->image();
+}
+
+KisInputManager *KisCanvas2::inputManager() const
+{
+    return m_d->inputManager;
 }
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)

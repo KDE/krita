@@ -86,3 +86,21 @@ QRect KisSelectionDefaultBounds::bounds() const
     QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
 }
+
+
+/******************************************************************/
+/*                   KisSelectionEmptyBounds                      */
+/******************************************************************/
+
+KisSelectionEmptyBounds::KisSelectionEmptyBounds()
+{
+}
+
+KisSelectionEmptyBounds::~KisSelectionEmptyBounds()
+{
+}
+
+QRect KisSelectionEmptyBounds::bounds() const
+{
+    return QRect(0, 0, 0, 0);
+}

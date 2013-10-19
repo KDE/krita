@@ -63,6 +63,8 @@ if (qgetenv("KDE_FULL_SESSION").size() > 0) {
     options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
+    QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
+
     // first create the application so we can create a  pixmap
     KoApplication app;
 

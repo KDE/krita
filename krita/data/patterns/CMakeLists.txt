@@ -1,17 +1,18 @@
 ########### install files ###############
 
 install(FILES
+
 01_canvas.png
-02_rough-canvas.png
 02b_WoofTissue.png
+02_rough-canvas.png
 03_default-paper.png
 04_paper-C-grain.png
 05_paper-torchon.png
 06_hard-grain.png
 07_big-grain.png
 08_bump-relief.png
-09_drawed_crosshatched.png
 09b_drawed-CrossedLines.png
+09_drawed_crosshatched.png
 10_drawed_dotted.png
 11_drawed_furry.png
 12_drawed_vertical.png
@@ -20,8 +21,8 @@ install(FILES
 15_texture-rockB.png
 16_texture-woody.png
 17_texture-melt.png
-18_texture-bark.png
 18b_WaveFlex.png
+18_texture-bark.png
 19_texture-crackle.png
 20_texture-vegetal.png
 21_texture-chainmail.png
@@ -29,8 +30,11 @@ install(FILES
 23-dynamic-screentone-A.png
 24-dynamic-screentone-B.png
 25-dynamic-screentone-C.png
-Canvas_Hard.pat
+3-flat-hack.png
+3-mini-rock-soft.png
+3-rock-smooth.png
 Canvas_covered.pat
+Canvas_Hard.pat
 Canvas_small_01.pat
 Canvas_small_02.pat
 Cross01.pat
@@ -41,11 +45,16 @@ Cross05.pat
 Cross06.pat
 Cross07.pat
 Crumpled_Paper.pat
+fractal_pattern.pat
+generic_paper1.pat
+generic_paper2.pat
+granite.pat
 Grid01.pat
 Grid02.pat
 Grid03.pat
 Grid04.pat
 Grid05.pat
+hexacolBW__2.pat
 HR_PastelPaper_02.pat
 HR_Wall_Paper.pat
 Pattern01.pat
@@ -76,10 +85,5 @@ Zigzag01.pat
 Zigzag02.pat
 Zigzag03.pat
 Zigzag04.pat
-fractal_pattern.pat
-generic_paper1.pat
-generic_paper2.pat
-granite.pat
-hexacolBW__2.pat
     DESTINATION ${DATA_INSTALL_DIR}/krita/patterns)
 

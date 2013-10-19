@@ -40,6 +40,7 @@
 #include <KoOdfDocument.h>
 #include <kundo2stack.h>
 
+class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
@@ -652,6 +653,7 @@ signals:
 protected:
 
     friend class KoPart;
+    friend class KisSketchPart;
 
     /**
      * Generate a name for the document.

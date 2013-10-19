@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Krita Gemini
+Exec=kritagemini
+Icon=kritagemini
+MimeType=application/x-krita;
+Categories=Qt;KDE;Graphics;

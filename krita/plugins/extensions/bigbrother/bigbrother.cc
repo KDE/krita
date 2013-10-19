@@ -126,7 +126,7 @@ void BigBrotherPlugin::slotOpenPlay()
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(1);
+    updater->start(1, i18n("Playing back macro"));
     KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater->startSubtask());
     player.start();
     while(player.isRunning())

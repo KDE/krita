@@ -31,7 +31,7 @@
 #undef _T
 
 /**
- * This is an empty shell that needs to be "specialized" for each possible
+ * This is an empty mainWindow that needs to be "specialized" for each possible
  * numerical type (quint8, quint16...).
  *
  * It needs to defines some static constant fields :

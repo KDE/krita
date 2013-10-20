@@ -27,7 +27,7 @@
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
+#include <KoDocumentEntry.h>
 
 #include <kactioncollection.h>
 
@@ -38,6 +38,8 @@
 #include <KLocalizedString>
 #include <krecentfilesaction.h>
 #include <boost/config/posix_features.hpp>
+
+#include <kis_doc2.h>
 
 class DesktopViewProxy::Private
 {
@@ -113,9 +115,12 @@ void DesktopViewProxy::fileOpen()
     dialog->setMode(KFile::File);
     dialog->setCaption(i18n("Open Document"));
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
+    KService::Ptr service = entry.service();
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KIS_MIME_TYPE,
+                                                               KoFilterManager::Import,
+                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+
     dialog->setMimeFilter(mimeFilter);
     if (dialog->exec() != QDialog::Accepted) {
         delete dialog;

@@ -137,7 +137,7 @@ void DocumentManager::closeDocument()
 {
     if (d->document) {
         emit aboutToDeleteDocument();
-        part()->closeUrl(false);
+        d->document->closeUrl(false);
         //d->document->deleteLater();
         d->document = 0;
     }
@@ -145,7 +145,7 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if (part()->save())
+    if (d->document->save())
     {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
         emit documentSaved();
@@ -167,14 +167,14 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 
 void DocumentManager::delayedSaveAs()
 {
-    part()->saveAs(d->saveAsFilename);
+    d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     emit documentSaved();
 }
 
 void DocumentManager::reload()
 {
-    KUrl url = part()->url();
+    KUrl url = d->document->url();
     closeDocument();
     d->openDocumentFilename = url.toLocalFile();
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));

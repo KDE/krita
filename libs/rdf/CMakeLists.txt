@@ -70,7 +70,7 @@ target_link_libraries(kordf ${MARBLE_LIBRARIES})
 target_link_libraries(kordf LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif( MARBLE_FOUND )
 
-target_link_libraries(kordf LINK_INTERFACE_LIBRARIES komain ${KDE4_KPARTS_LIBS})
+target_link_libraries(kordf LINK_INTERFACE_LIBRARIES komain )
 
 set_target_properties(kordf PROPERTIES
 VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

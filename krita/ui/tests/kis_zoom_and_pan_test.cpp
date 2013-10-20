@@ -57,19 +57,19 @@ public:
 
         m_doc->setCurrentImage(m_image);
 
-        m_shell = new KoMainWindow(m_part->componentData());
-        m_view = new KisView2(m_part, m_doc, m_shell);
+        m_mainWindow = m_doc->documentPart()->createMainWindow();
+        m_view = new KisView2(m_part, m_doc, m_mainWindow);
 
         m_image->refreshGraph();
 
-        m_shell->show();
+        m_mainWindow->show();
     }
 
     ~ZoomAndPanTester() {
         m_image->waitForDone();
         QApplication::processEvents();
 
-        delete m_shell;
+        delete m_mainWindow;
         delete m_doc;
 
         /**
@@ -85,8 +85,8 @@ public:
         return m_view;
     }
 
-    KoMainWindow* shell() {
-        return m_shell;
+    KoMainWindow* mainWindow() {
+        return m_mainWindow;
     }
 
     KisImageWSP image() {
@@ -119,7 +119,7 @@ private:
     KoPart *m_part;
     KisDoc2 *m_doc;
     KisView2 *m_view;
-    KoMainWindow *m_shell;
+    KoMainWindow *m_mainWindow;
 };
 
 template<class P, class T>

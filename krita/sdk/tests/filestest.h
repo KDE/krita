@@ -93,7 +93,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.documentPart()->saveAs(KUrl("file://" + tmpFile.fileName()));
+            doc.saveAs(KUrl("file://" + tmpFile.fileName()));
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);

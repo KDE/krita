@@ -930,21 +930,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 
     tmpURL.clear();
 
-    // see KoDocument::insertChild for an explanation what's going on
-    // now :-)
-    /*if (parentDocument()) {
-        KoDocument *parent = parentDocument();
-
-        KParts::PartManager* manager = parent->manager();
-        if (manager && !manager->parts().isEmpty())
-        {
-            if (!manager->parts().contains(d->document)
-                && !parent->isSingleViewMode())
-                manager->addPart(d->document, false);
-        }
-    }*/
-
-    //QApplication::restoreOverrideCursor();
+   //QApplication::restoreOverrideCursor();
 
     return res;
 }

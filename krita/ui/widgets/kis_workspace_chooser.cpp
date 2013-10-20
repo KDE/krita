@@ -106,7 +106,7 @@ KisWorkspaceChooser::~KisWorkspaceChooser()
 
 void KisWorkspaceChooser::slotSave()
 {
-    if(!m_view->qtMainWindow()) {
+    if (!m_view->qtMainWindow()) {
         return;
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
@@ -140,7 +140,7 @@ void KisWorkspaceChooser::slotSave()
 
 void KisWorkspaceChooser::resourceSelected(KoResource* resource)
 {
-    if(!m_view->qtMainWindow()) {
+    if (!m_view->qtMainWindow()) {
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);

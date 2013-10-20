@@ -40,6 +40,7 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_doc2.h"
 
 #ifdef Q_OS_WIN
 #include "stdlib.h"
@@ -66,7 +67,7 @@ if (qgetenv("KDE_FULL_SESSION").size() > 0) {
     QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
 
     // first create the application so we can create a  pixmap
-    KoApplication app;
+    KoApplication app(KIS_MIME_TYPE);
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     app.setAttribute(Qt::AA_X11InitThreads, true);

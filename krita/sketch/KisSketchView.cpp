@@ -318,7 +318,7 @@ void KisSketchView::documentChanged()
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-    d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(QApplication::activeWindow()));
+    d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(d->doc, QApplication::activeWindow()));
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     emit viewChanged();
 

@@ -51,7 +51,7 @@ KisPart2::KisPart2(QObject *parent)
     , m_dieOnError(false)
     , m_document(0)
 {
-    setComponentData(KisFactory2::componentData(), false);
+    setComponentData(KisFactory2::componentData());
     setTemplateType("krita_template");
 }
 
@@ -66,29 +66,34 @@ void KisPart2::setDocument(KisDoc2 *document)
     m_document = document;
 }
 
-KoView *KisPart2::createViewInstance(QWidget *parent)
+KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 *v = new KisView2(this, m_document, parent);
+    KisView2 *v = new KisView2(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
-    dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
+    dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     // XXX: this prevents a crash when opening a new document after opening a
     // a document that has not been touched! I have no clue why, though.
     // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    setModified(true);
-    setModified(false);
+    document->setModified(true);
+    document->setModified(false);
     qApp->restoreOverrideCursor();
 
     return v;
 }
 
-QGraphicsItem *KisPart2::createCanvasItem()
+QGraphicsItem *KisPart2::createCanvasItem(KoDocument *document)
 {
-    // XXX: It's time we implement this!
+    Q_UNUSED(document);
     return 0;
+}
+
+KoMainWindow *KisPart2::createMainWindow()
+{
+    return new KoMainWindow(KIS_MIME_TYPE, componentData());
 }
 
 void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
@@ -159,7 +164,7 @@ void KisPart2::setFlipbook(KisFlipbook *flipbook)
 
 void KisPart2::showErrorAndDie()
 {
-    KMessageBox::error(widget(),
+    KMessageBox::error(0,
                        m_errorMessage,
                        i18n("Installation error"));
     if (m_dieOnError) {

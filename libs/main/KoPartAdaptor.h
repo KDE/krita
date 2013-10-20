@@ -79,11 +79,6 @@ public slots: // METHODS
     Q_SCRIPTABLE QString view(int idx);
 
     /**
-     * @return list of actions
-     */
-    Q_SCRIPTABLE QStringList actions();
-
-    /**
      * Saves the document under its existing filename
      */
     Q_SCRIPTABLE void save();

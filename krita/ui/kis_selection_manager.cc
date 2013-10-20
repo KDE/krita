@@ -32,7 +32,6 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
-#include <KoServiceProvider.h>
 #include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"

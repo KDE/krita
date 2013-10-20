@@ -22,7 +22,7 @@
 #define __koView_h__
 
 #include <QWidget>
-#include <kparts/part.h>
+#include <kxmlguiclient.h>
 #include "komain_export.h"
 
 class KoPart;
@@ -49,7 +49,7 @@ class QPrintDialog;
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMAIN_EXPORT KoView : public QWidget, public KParts::PartBase
+class KOMAIN_EXPORT KoView : public QWidget, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -59,7 +59,7 @@ public:
      * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
-     * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
+     * The standard way to retrieve a KoView is to call @ref KoPart::createView.
      *
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
@@ -106,15 +106,7 @@ public:
      * Tells this view that its document has got deleted (called internally)
      */
     void setDocumentDeleted();
-    /**
-     * @return true if the document has already got deleted.
-     * This can be useful for the view destructor to know if it can
-     * access the document or not.
-     */
-    bool documentDeleted() const;
 
-    virtual void setPartManager(KParts::PartManager *manager);
-    virtual KParts::PartManager *partManager() const;
 
     /**
      * Returns the action described action object. In fact only the "name" attribute
@@ -141,17 +133,6 @@ public:
      */
     virtual QAction *action(const char* name) const;
 
-    /**
-     *  Retrieves the document that is hit. This can be an embedded document.
-     *
-     *  The default implementation asks @ref KoDocument::hitTest. This
-     *  will iterate over all child documents to detect a hit.
-     *
-     *  If your calligra component has multiple pages, like for example KSpread, then the hittest
-     *  may not succeed for a child that is not on the visible page. In those
-     *  cases you need to reimplement this method.
-     */
-    virtual KoDocument *hitTest(const QPoint &pos);
 
     /**
      * Retrieves the left border width that is displayed around the content if
@@ -242,21 +223,11 @@ public:
 
     /**
      * @return the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
-    KoMainWindow * shell() const;
+    KoMainWindow * mainWindow() const;
 
-    /**
-     * @return the KXmlGuiWindow in which this view is currently.
-     * This one should never return 0, in a KDE app.
-     */
-    KXmlGuiWindow* mainWindow() const;
-
-    /**
+   /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
     KStatusBar * statusBar() const;
 
@@ -279,11 +250,6 @@ public:
     void removeStatusBarItem(QWidget * widget);
 
     /**
-     * Show or hide all statusbar items. Used by KoMainWindow during saving.
-     */
-    void showAllStatusBarItems(bool show);
-
-    /**
      * You have to implement this method and disable/enable certain functionality (actions for example) in
      * your view to allow/disallow editing of the document.
      */
@@ -302,11 +268,12 @@ public:
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 
-public slots:
     /**
-     * Slot to create a new view around the contained @ref #koDocument.
+     * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.
      */
-    virtual void newView();
+    virtual void guiActivateEvent(bool activated);
+
+public slots:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -326,36 +293,13 @@ public slots:
     void slotUpdateAuthorProfileActions();
 
 protected:
-    /**
-     * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent
-     * and KParts::GUIActivateEvent.
-     * The respective handlers are called if such an event is found.
-     */
-    virtual void customEvent(QEvent *ev);
 
     /**
-     * Handles the event KParts::PartActivateEvent.
+     * Generate a name for this view.
      */
-    virtual void partActivateEvent(KParts::PartActivateEvent *event);
-    /**
-     * Handles the event KParts::PartSelectEvent.
-     */
-    virtual void partSelectEvent(KParts::PartSelectEvent *event);
-    /**
-     * Handles the event KParts::GUIActivateEvent.
-     */
-    virtual void guiActivateEvent(KParts::GUIActivateEvent *);
-
-
-    /**
-       Generate a name for this view.
-    */
     QString newObjectName();
 
 signals:
-    void activated(bool active);
-    void selected(bool select);
-
     void autoScroll(const QPoint &scrollDistance);
 
     void regionInvalidated(const QRegion &region, bool erase);

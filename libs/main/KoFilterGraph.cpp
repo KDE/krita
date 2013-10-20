@@ -116,7 +116,7 @@ void Graph::dump() const
 void Graph::buildGraph()
 {
     // Make sure that all available parts are added to the graph
-    const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
+    const QList<KoDocumentEntry> parts(KoDocumentEntry::query());
 
     foreach(const KoDocumentEntry& part, parts) {
 
@@ -199,7 +199,7 @@ void Graph::shortestPaths()
 QByteArray Graph::findCalligraPart() const
 {
     // Here we simply try to find the closest Calligra mimetype
-    const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
+    const QList<KoDocumentEntry> parts(KoDocumentEntry::query());
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 

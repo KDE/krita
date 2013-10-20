@@ -23,8 +23,6 @@
 #include <QTimer>
 #include <QMenu>
 
-#include <kxmlguifactory.h>
-
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 #include <KoToolProxy.h>

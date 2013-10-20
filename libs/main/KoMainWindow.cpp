@@ -1986,8 +1986,8 @@ void KoMainWindow::newView()
 
 void KoMainWindow::createMainwindowGUI()
 {
-    //    if ( isHelpMenuEnabled() && !d->m_helpMenu )
-    //        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
+    if ( isHelpMenuEnabled() && !d->m_helpMenu )
+        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );

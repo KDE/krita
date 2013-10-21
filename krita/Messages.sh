@@ -2,7 +2,9 @@
 $EXTRACTRC `find . -name \*.ui | grep -v '/tests/'` >> rc.cpp
 RCFILES=`find . -name \*.rc                                                   \
 	| grep -v plugins/extensions/metadataeditor/editors/dublincore.rc     \
-	| grep -v plugins/extensions/metadataeditor/editors/exif.rc
+	| grep -v plugins/extensions/metadataeditor/editors/exif.rc           \
+	| grep -v sketch/KritaSketch.rc                                       \
+	| grep -v gemini/KritaGemini.rc
          `
 $EXTRACTRC $RCFILES >> rc.cpp
 perl extracti18n.pl > i18ndata

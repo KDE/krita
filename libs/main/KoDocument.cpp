@@ -61,7 +61,6 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <kdirnotify.h>
@@ -75,6 +74,7 @@
 #include <QPainter>
 #include <QTimer>
 #ifndef QT_NO_DBUS
+#include <kio/jobuidelegate.h>
 #include <QDBusConnection>
 #endif
 #include <QApplication>
@@ -323,10 +323,12 @@ public:
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
+#ifndef QT_NO_DBUS
         m_job->ui()->setWindow(0);
         if (m_job->ui()) {
             m_job->ui()->setWindow(parentPart->currentMainwindow());
         }
+#endif
         QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
         QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)), document, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
     }
@@ -2104,7 +2106,7 @@ QString KoDocument::prettyPathOrUrl() const
 {
     QString _url( url().pathOrUrl() );
 #ifdef Q_WS_WIN
-    if (_url().isLocalFile()) {
+    if (url().isLocalFile()) {
         _url = QDir::convertSeparators(_url);
     }
 #endif
@@ -2615,6 +2617,7 @@ bool KoDocument::saveToUrl()
         d->m_originalFilePath.clear();
         return true; // Nothing to do
     }
+#ifndef Q_OS_WIN
     else {
         if (d->m_uploadJob) {
             QFile::remove(d->m_uploadJob->srcUrl().toLocalFile());
@@ -2633,10 +2636,15 @@ bool KoDocument::saveToUrl()
             return false;
         }
         d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
+#ifndef QT_NO_DBUS
         d->m_uploadJob->ui()->setWindow( 0 );
+#endif
         connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
         return true;
     }
+#else
+    return false;
+#endif
 }
 
 

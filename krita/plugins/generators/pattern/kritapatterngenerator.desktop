@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Solid Pattern Layer
+Name[ca]=Capa de patrons sòlids
 Name[es]=Capa de patrón sólido
 Name[hu]=Egyszínű minta réteg
 Name[it]=Livello con modello solido
@@ -13,6 +14,7 @@ Name[sv]=Helmönstergenerator
 Name[uk]=Шар суцільного візерунка
 Name[x-test]=xxSolid Pattern Layerxx
 Comment=generates a pattern layer
+Comment[ca]=Genera una capa de patrons
 Comment[es]=genera una capa de patrón
 Comment[hu]=egy minta réteget állít elő
 Comment[it]=genera un livello con modello

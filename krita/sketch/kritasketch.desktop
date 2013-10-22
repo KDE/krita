@@ -2,6 +2,13 @@
 Version=1.0
 Type=Application
 Name=Krita Sketch
+Name[nl]=Krita Sketch
+Name[pt]=Krita Sketch
+Name[pt_BR]=Krita Sketch
+Name[sk]=Krita Sketch
+Name[sv]=Krita Sketch
+Name[uk]=Krita Sketch
+Name[x-test]=xxKrita Sketchxx
 Exec=kritasketch
 Icon=krita
 MimeType=application/x-krita;

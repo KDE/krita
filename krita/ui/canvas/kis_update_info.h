@@ -88,11 +88,6 @@ public:
     TransferType transfer;
 
     /**
-     * Render hints for painting the direct painting/patch painting
-     */
-    QPainter::RenderHints renderHints;
-
-    /**
      * The number of additional pixels those should be added
      * to the patch
      */

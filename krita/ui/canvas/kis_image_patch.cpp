@@ -20,7 +20,7 @@
 
 #include <QPainter>
 #include "kis_debug.h"
-
+#include "scalefilter.h"
 #include <math.h>
 
 /****** Some helper functions *******/
@@ -50,6 +50,7 @@ inline void scaleRect(QRect &rc, qreal scaleX, qreal scaleY)
 
     rc.setRect(x, y, w, h);
 }
+
 
 /*********** KisImagePatch ************/
 
@@ -102,8 +103,8 @@ void KisImagePatch::preScale(const QRectF &dstRect)
     m_scaleY *= scaleY;
 
     scaleRect(m_interestRect, scaleX, scaleY);
-
     m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    //m_image = Blitz::smoothScaleFilter(m_image, newImageSize, 1.0, Blitz::LanczosFilter);
 
     m_isScaled = true;
 
@@ -120,12 +121,10 @@ bool KisImagePatch::isValid()
 }
 
 void KisImagePatch::drawMe(QPainter &gc,
-                           const QRectF &dstRect,
-                           QPainter::RenderHints renderHints)
+                           const QRectF &dstRect)
 {
     gc.save();
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-    gc.setRenderHints(renderHints, true);
     gc.drawImage(dstRect, m_image, m_interestRect);
     gc.restore();
 

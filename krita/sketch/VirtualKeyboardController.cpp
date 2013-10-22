@@ -41,6 +41,7 @@ VirtualKeyboardController* VirtualKeyboardController::instance()
 }
 
 VirtualKeyboardController::VirtualKeyboardController(QObject* parent)
+ : QObject(parent)
 {
 
 }

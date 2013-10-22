@@ -34,7 +34,6 @@
 #include <GL/glew.h>
 #endif
 
-
 #include <QtGlobal>
 #ifdef Q_WS_MAC
 #include <OpenGL/glu.h>

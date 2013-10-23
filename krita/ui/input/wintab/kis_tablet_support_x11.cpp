@@ -24,7 +24,7 @@
 
 #include "kis_debug.h"
 #include <input/kis_tablet_event.h>
-#include "kis_tablet_support_win_p.h"
+#include "kis_tablet_support.h"
 #include "wacomcfg.h"
 
 #include <X11/Xlib.h>

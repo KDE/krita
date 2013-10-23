@@ -197,8 +197,6 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_D(KoCreatePathTool);
-
     //remove handle
     canvas()->updateCanvas(handlePaintRect(event->point));
 

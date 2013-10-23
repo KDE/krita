@@ -23,6 +23,7 @@
 
 class QPointF;
 class QTabletEvent;
+class QTouchEvent;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
@@ -73,6 +74,7 @@ public:
      * Return the canvas this input manager is associated with.
      */
     KisCanvas2 *canvas() const;
+
     /**
      * The tool proxy of the current application.
      */
@@ -85,12 +87,21 @@ public:
     QTabletEvent *lastTabletEvent() const;
 
     /**
+     * Touch events are special, too.
+     *
+     * \return a touch event if there was one, otherwise 0
+     */
+    QTouchEvent *lastTouchEvent() const;
+
+    /**
      * Convert a widget position to a pixel position.
      */
     QPointF widgetToPixel(const QPointF &position);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void setMirrorAxis();
+
+private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
 

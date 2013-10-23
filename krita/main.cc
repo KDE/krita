@@ -40,6 +40,7 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_doc2.h"
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -53,7 +54,9 @@
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 #ifdef Q_WS_X11
+if (qgetenv("KDE_FULL_SESSION").size() > 0) {
     setenv("QT_NO_GLIB", "1", true);
+}
 #endif
 
     int state;
@@ -67,7 +70,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KoApplication app;
+    KoApplication app(KIS_MIME_TYPE);
 
 #if defined Q_OS_WIN
     KisTabletSupportWin::init();

@@ -32,16 +32,24 @@
 class KisToolSelectPolygonal : public KisToolPolylineBase
 {
     Q_OBJECT
-
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectPolygonal(KoCanvasBase *canvas);
     QWidget* createOptionWidget();
+    SelectionAction selectionAction() const;
+
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
 
 private:
     void keyPressEvent(QKeyEvent *event);
     void finishPolyline(const QVector<QPointF> &points);
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
 
 

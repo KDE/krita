@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgNoiseOptions</class>
- <widget class="QWidget" name="WdgNoiseOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgNoiseOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,45 +10,60 @@
     <height>63</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="textLabel2" >
-     <property name="text" >
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="1" column="0">
+    <widget class="QLabel" name="textLabel2">
+     <property name="text">
       <string>Opacity:</string>
      </property>
-     <property name="wordWrap" >
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="textLabel1" >
-     <property name="text" >
+   <item row="0" column="0">
+    <widget class="QLabel" name="textLabel1">
+     <property name="text">
       <string>Level:</string>
      </property>
-     <property name="wordWrap" >
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QSpinBox" native="1" name="intOpacity" />
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="intOpacity"/>
    </item>
-   <item row="0" column="1" >
-    <widget class="QSpinBox" native="1" name="intLevel" />
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="intLevel"/>
    </item>
-   <item row="1" column="2" >
+   <item row="1" column="2">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>21</width>
        <height>20</height>
@@ -55,15 +71,15 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="1" >
+   <item row="2" column="1">
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType" >
+     <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>21</height>
@@ -73,8 +89,6 @@
    </item>
   </layout>
  </widget>
-  <customwidgets>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

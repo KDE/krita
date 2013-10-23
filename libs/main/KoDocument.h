@@ -27,8 +27,6 @@
 #include <QTransform>
 #include <QList>
 
-#include <kparts/part.h>
-#include <kservice.h>
 #include <kcomponentdata.h>
 
 #include <KoUnit.h>
@@ -40,6 +38,10 @@
 #include <KoOdfDocument.h>
 #include <kundo2stack.h>
 
+#include <klocale.h>
+#include <kglobal.h>
+
+class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
@@ -49,8 +51,8 @@ class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;
 class KoProgressUpdater;
-class KoPageWidgetItem;
 class KoProgressProxy;
+class KoDocumentInfoDlg;
 
 class KoVersionInfo
 {
@@ -101,7 +103,7 @@ public:
     KoPart *documentPart() const;
 
     /**
-     * Reimplemented from KParts::ReadWritePart for internal reasons
+     * Reimplemented from KoParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
     virtual bool openUrl(const KUrl & url);
@@ -121,7 +123,7 @@ public:
     /**
      * Saves the document as @p url without changing the state of the
      * KoDocument (URL, modified flag etc.). Call this instead of
-     * KParts::ReadWritePart::saveAs() to implement KoMainWindow's
+     * KoParts::ReadWritePart::saveAs() to implement KoMainWindow's
      * File --> Export feature.
      *
      * @note This will call KoDocument::saveAs(). To differentiate this
@@ -145,7 +147,7 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    QByteArray nativeFormatMimeType() const;
+    virtual QByteArray nativeFormatMimeType() const = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -154,19 +156,14 @@ public:
      *
      * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
      */
-    QByteArray nativeOasisMimeType() const;
-
-    enum ImportExportType {
-        ForExport,
-        ForImport
-    };
+    virtual QByteArray nativeOasisMimeType() const = 0;
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat(const QByteArray& mimetype, ImportExportType importExportType) const;
+    bool isNativeFormat(const QByteArray& mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
+    virtual QStringList extraNativeMimeTypes() const = 0;
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
@@ -248,6 +245,16 @@ public:
      * showing it; this method is mostly provided for non-interactive use.
      */
     QString errorMessage() const;
+
+
+    /**
+     * Show the last error message in a message box.
+     * The dialog box will mention a loading problem.
+     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
+     * so this is often called after loadNativeFormat returned false.
+     */
+    void showLoadingErrorDialog();
+
 
     /**
      * @brief Generates a preview picture of the document
@@ -652,6 +659,7 @@ signals:
 protected:
 
     friend class KoPart;
+    friend class KisSketchPart;
 
     /**
      * Generate a name for the document.
@@ -730,10 +738,28 @@ protected:
 public:
 
     QString localFilePath() const;
+    void setLocalFilePath( const QString &localFilePath );
 
-    virtual KUrl url() const;
+    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
-    virtual void setUrl(const KUrl& url);
+    bool isReadWrite() const;
+
+    KUrl url() const;
+    void setUrl(const KUrl &url);
+
+    virtual bool closeUrl(bool promptToSave = true);
+
+    virtual bool saveAs( const KUrl &url );
+
+public slots:
+
+    virtual bool save();
+    bool waitSaveComplete();
+
+signals:
+
+    void completed();
+    void canceled(const QString &);
 
 private slots:
 
@@ -748,7 +774,6 @@ private:
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
-    KService::Ptr nativeService();
     bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
@@ -758,8 +783,21 @@ private:
 
     QString prettyPathOrUrl() const;
 
+    bool queryClose();
+    bool saveToUrl();
+    bool openUrlInternal(const KUrl &url);
+
+    void abortLoad();
+
     class Private;
     Private *const d;
+
+    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
+    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
 };
+
+Q_DECLARE_METATYPE(KoDocument*)
 
 #endif

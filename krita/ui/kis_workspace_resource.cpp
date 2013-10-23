@@ -68,6 +68,7 @@ bool KisWorkspaceResource::load()
          return false;
  
     QFile file(filename());
+    if (file.size() == 0) return false;
 
     QDomDocument doc;
     if (!file.open(QIODevice::ReadOnly))

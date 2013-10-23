@@ -110,8 +110,7 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
 
 void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource)
 {
-    if(resource)
-    {
+    if (resource) {
         blockSignals(true);
         KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(rserver->resourceByName(resource->name()));

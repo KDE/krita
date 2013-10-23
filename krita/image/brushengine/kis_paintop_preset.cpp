@@ -123,6 +123,9 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
+    QFile file(filename());
+    if (file.size() == 0) return false;
+
     QImageReader reader(filename(), "PNG");
 
     QString version = reader.text("version");

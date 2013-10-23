@@ -35,6 +35,9 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 
 bool KisSvgBrush::load()
 {
+    QFileInfo fi(filename());
+    if (fi.size() == 0) return false;
+
     QSvgRenderer renderer(filename());
     
     QRect box = renderer.viewBox();

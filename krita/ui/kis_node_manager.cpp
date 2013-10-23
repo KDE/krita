@@ -389,7 +389,7 @@ void KisNodeManager::slotTryFinishIsolatedMode()
     }
 }
 
-void KisNodeManager::createNode(const QString & nodeType)
+void KisNodeManager::createNode(const QString & nodeType, bool quiet)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
@@ -414,7 +414,7 @@ void KisNodeManager::createNode(const QString & nodeType)
     } else if (nodeType == "KisTransparencyMask") {
         m_d->maskManager->createTransparencyMask(activeNode, 0);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager->createFilterMask(activeNode, 0);
+        m_d->maskManager->createFilterMask(activeNode, 0, quiet);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(activeNode, 0);
     } else if (nodeType == "KisFileLayer") {

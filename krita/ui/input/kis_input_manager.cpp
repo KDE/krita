@@ -47,6 +47,7 @@
 #include "kis_shortcut_matcher.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_single_action_shortcut.h"
+#include "kis_touch_shortcut.h"
 
 #include "kis_input_profile.h"
 #include "kis_input_profile_manager.h"
@@ -68,6 +69,7 @@ public:
         , hiResEventsWorkaroundCoeff(1.0, 1.0)
     #endif
         , lastTabletEvent(0)
+        , lastTouchEvent(0)
         , logTabletEvents(false)
     {
     }
@@ -77,12 +79,13 @@ public:
     void saveTabletEvent(const QTabletEvent *event);
     void resetSavedTabletEvent(QEvent::Type type);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
-    void addKeyShortcut(KisAbstractInputAction* action, int index,
-                        const QList<Qt::Key> &modifiers);
+    void addKeyShortcut(KisAbstractInputAction* action, int index,const QList<Qt::Key> &keys);
+    void addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture );
     void addWheelShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, KisShortcutConfiguration::MouseWheelMovement wheelAction);
     bool processUnhandledEvent(QEvent *event);
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
+    void saveTouchEvent( QTouchEvent* event );
 
     KisInputManager *q;
 
@@ -98,6 +101,7 @@ public:
     QPointF hiResEventsWorkaroundCoeff;
 #endif
     QTabletEvent *lastTabletEvent;
+    QTouchEvent *lastTouchEvent;
 
     KisAbstractInputAction *defaultInputAction;
 
@@ -288,6 +292,24 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut);
 }
 
+void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
+{
+    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
+    switch(gesture) {
+        case KisShortcutConfiguration::PinchGesture:
+            shortcut->setMinimumTouchPoints(2);
+            shortcut->setMaximumTouchPoints(2);
+            break;
+        case KisShortcutConfiguration::PanGesture:
+            shortcut->setMinimumTouchPoints(3);
+            shortcut->setMaximumTouchPoints(10);
+            break;
+        default:
+            break;
+    }
+    matcher.addShortcut(shortcut);
+}
+
 void KisInputManager::Private::setupActions()
 {
     QList<KisAbstractInputAction*> actions = KisInputProfileManager::instance()->actions();
@@ -372,7 +394,6 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
      * Happily, the error is linear (without the offset) so we can simply
      * scale it a bit.
      */
-
     if (event->type() == QEvent::TabletPress) {
         if ((event->globalPos() - event->hiResGlobalPos()).manhattanLength() > 4) {
             hiResEventsWorkaroundCoeff = dividePoints(event->globalPos(), event->hiResGlobalPos());
@@ -403,6 +424,12 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
                              event->uniqueId());
 }
 
+void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
+{
+    delete lastTouchEvent;
+    lastTouchEvent = new QTouchEvent(event->type(), event->deviceType(), event->modifiers(), event->touchPointStates(), event->touchPoints());
+}
+
 void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
 {
     bool needResetSavedEvent = true;
@@ -426,11 +453,6 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
         delete lastTabletEvent;
         lastTabletEvent = 0;
     }
-}
-
-QTabletEvent* KisInputManager::lastTabletEvent() const
-{
-    return d->lastTabletEvent;
 }
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -480,7 +502,8 @@ void KisInputManager::toggleTabletLogger()
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    Q_UNUSED(object);
+    Q_UNUSED(object)
+
     bool retval = false;
 
     // KoToolProxy needs to pre-process some events to ensure the
@@ -500,6 +523,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToPixel(mouseEvent->posF()))) {
             retval = true;
         } else {
+            //Make sure the input actions know we are active.
+            KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(mouseEvent->button(), mouseEvent);
         }
         d->resetSavedTabletEvent(event->type());
@@ -583,6 +608,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
         }
 
+        //Make sure the input actions know we are active.
+        KisAbstractInputAction::setInputManager(this);
         retval = d->matcher.wheelEvent(action, wheelEvent);
         break;
     }
@@ -629,7 +656,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         break;
     }
-
     case KisTabletEvent::TabletPressEx:
     case KisTabletEvent::TabletMoveEx:
     case KisTabletEvent::TabletReleaseEx: {
@@ -661,6 +687,29 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         break;
     }
+
+    case QEvent::TouchBegin:
+        KisAbstractInputAction::setInputManager(this);
+
+        retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent(event->type());
+        break;
+    case QEvent::TouchUpdate:
+        KisAbstractInputAction::setInputManager(this);
+
+        retval = d->matcher.touchUpdateEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent(event->type());
+        break;
+    case QEvent::TouchEnd:
+        d->saveTouchEvent(static_cast<QTouchEvent*>(event));
+        retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent(event->type());
+        delete d->lastTouchEvent;
+        d->lastTouchEvent = 0;
+        break;
     default:
         break;
     }
@@ -678,6 +727,16 @@ KoToolProxy* KisInputManager::toolProxy() const
     return d->toolProxy;
 }
 
+QTabletEvent* KisInputManager::lastTabletEvent() const
+{
+    return d->lastTabletEvent;
+}
+
+QTouchEvent *KisInputManager::lastTouchEvent() const
+{
+    return d->lastTouchEvent;
+}
+
 void KisInputManager::setMirrorAxis()
 {
     d->setMirrorMode = true;
@@ -687,7 +746,7 @@ void KisInputManager::setMirrorAxis()
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID" || toolId == "KisToolTransform") {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {
@@ -720,6 +779,9 @@ void KisInputManager::profileChanged()
                 break;
             case KisShortcutConfiguration::MouseWheelType:
                 d->addWheelShortcut(shortcut->action(), shortcut->mode(), shortcut->keys(), shortcut->wheel());
+                break;
+            case KisShortcutConfiguration::GestureType:
+                d->addTouchShortcut(shortcut->action(), shortcut->mode(), shortcut->gesture());
                 break;
             default:
                 break;

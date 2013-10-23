@@ -84,7 +84,7 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 #include <QSignalMapper>
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QLinearGradient>
 #include <QBitmap>
 #include <QDrag>

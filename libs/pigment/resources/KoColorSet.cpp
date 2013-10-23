@@ -63,6 +63,7 @@ KoColorSet::~KoColorSet()
 bool KoColorSet::load()
 {
     QFile file(filename());
+    if (file.size() == 0) return false;
     file.open(QIODevice::ReadOnly);
     m_data = file.readAll();
     file.close();

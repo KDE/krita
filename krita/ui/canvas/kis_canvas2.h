@@ -42,6 +42,7 @@ class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
 class KisDisplayFilter;
+class KisInputManager;
 
 enum KisCanvasType {
     QPAINTER,
@@ -140,6 +141,9 @@ public: // KoCanvasBase implementation
     // current shape selection.
     KisImageWSP currentImage();
 
+
+    KisInputManager *inputManager() const;
+
 public: // KisCanvas2 methods
 
     KisImageWSP image();
@@ -158,6 +162,9 @@ signals:
     void sigContinueResizeImage(qint32 w, qint32 h);
 
     void documentOffsetUpdateFinished();
+
+    // emitted whenever the canvas widget thinks sketch should update
+    void updateCanvasRequested(const QRect &rc);
 
 public slots:
 

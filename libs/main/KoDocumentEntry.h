@@ -49,56 +49,33 @@ public:
     explicit KoDocumentEntry(const KService::Ptr& service);
     ~KoDocumentEntry();
 
-    KService::Ptr service() const {
-        return m_service;
-    }
+    KService::Ptr service() const;
 
     /**
      * @return TRUE if the service pointer is null
      */
-    bool isEmpty() const {
-        return m_service.isNull();
-    }
+    bool isEmpty() const;
 
     /**
      * @return name of the associated service
      */
-    QString name() const {
-        return m_service->name();
-    }
+    QString name() const;
 
     /**
      *  Mimetypes (and other service types) which this document can handle.
      */
-    QStringList mimeTypes() const {
-        return m_service->serviceTypes();
-    }
+    QStringList mimeTypes() const;
 
     /**
      *  @return TRUE if the document can handle the requested mimetype.
      */
-    bool supportsMimeType(const QString & _mimetype) const {
-        return mimeTypes().contains(_mimetype);
-    }
+    bool supportsMimeType(const QString & _mimetype) const;
 
     /**
      *  Uses the factory of the component to create
      *  a part. If that is not possible, 0 is returned.
      */
     KoPart *createKoPart(QString* errorMsg = 0) const;
-
-    enum QueryFlag {
-        AllEntries = 0,
-        /**
-         * OnlyEmbeddableDocuments specifies if only Calligra Parts should be
-         * listed which are embeddable into other koDocuments, or all (if false)
-         * (eg.: it makes no sense to embed Kexi into Words,
-         *  but it makes sense to embed it into KoShell)
-         */
-        OnlyEmbeddableDocuments = 1
-        // bitfield
-    };
-    Q_DECLARE_FLAGS(QueryFlags, QueryFlag)
 
     /**
      *  This function will query ksycoca to find all available components.
@@ -108,7 +85,7 @@ public:
      *                 You can use it to set additional restrictions on the available
      *                 components.
      */
-    static QList<KoDocumentEntry> query(QueryFlags flags, const QString &  _constr = QString());
+    static QList<KoDocumentEntry> query(const QString &  _constr = QString());
 
     /**
      *  This is a convenience function.
@@ -121,7 +98,5 @@ public:
 private:
     KService::Ptr m_service;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoDocumentEntry::QueryFlags)
 
 #endif

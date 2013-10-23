@@ -3,7 +3,8 @@
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   
+   Copyright (C) 2012 Boudewijn Rempt <boud@kogmbh.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -25,6 +26,8 @@
 
 #include <QInputEvent>
 
+#include <QTouchEvent>
+
 class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
@@ -34,9 +37,18 @@ class QGraphicsSceneWheelEvent;
 
 #include "flake_export.h"
 
+struct KoTouchPoint
+{
+    QTouchEvent::TouchPoint touchPoint;
+    // the point in document coordinates
+    QPointF lastPoint;
+    QPointF point;
+
+};
+
 /**
- * KoPointerEvent is a synthetic event that can be built from a mouse
- * or a tablet event. In addition to always providing tools with tablet
+ * KoPointerEvent is a synthetic event that can be built from a mouse,
+ * touch or tablet event. In addition to always providing tools with tablet
  * pressure characteristics, KoPointerEvent has both the original
  * (canvas based) position as well as the normalized position, that is,
  * the position of the event _in_ the document coordinates.
@@ -75,6 +87,15 @@ public:
      * @param point the zoomed point in the normal coordinate system.
      */
     KoPointerEvent(QTabletEvent *event, const QPointF &point);
+
+    /**
+     * Constructor.
+     *
+     * @param event the touch event that is the base of this event.
+     * @param point the zoomed point of the primary touch event in the normal coordinate system.
+     * @param touchpoints the zoomed points of the touch event in the normal coordinate system.
+     */
+    KoPointerEvent(QTouchEvent *event, const QPointF &point, QList<KoTouchPoint> _touchPoints);
 
     /**
      * Constructor.
@@ -223,6 +244,7 @@ public:
     /// The point in document coordinates.
     const QPointF point;
 
+    const QList<KoTouchPoint> touchPoints;
     /**
      * Returns if the event comes from a tablet
      */

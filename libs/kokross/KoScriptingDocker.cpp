@@ -170,7 +170,7 @@ void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
     if (visible) {
         if (m_module && m_action->isFinalized()) {
             //KoView *view = m_module->view();
-            //KoMainWindow *mainwindow = view ? view->shell() : 0;
+            //KoMainWindow *mainwindow = view ? view->mainWindow() : 0;
             m_action->trigger();
         }
     } else {

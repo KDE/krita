@@ -145,7 +145,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
         d->zoomer.setZoom( 1.0 );
         d->zoomer.setDpi( d->printer->resolution(), d->printer->resolution() );
 
-        d->progress->start();
+        d->progress->start(100, i18n("Printing"));
 
         if (d->printer->numCopies() > 1) {
             QList<int> oldPages = d->pages;

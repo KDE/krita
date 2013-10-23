@@ -33,6 +33,7 @@
 #include "krita_export.h"
 
 class QWidget;
+class QGLFramebufferObject;
 class QPaintEvent;
 class KisCanvas2;
 class KisDisplayFilter;
@@ -66,6 +67,8 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
+    void initializeCheckerShader();
+    void initializeDisplayShader();
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
@@ -74,13 +77,14 @@ public: // QWidget
 private slots:
     void slotConfigChanged();
 
-protected:
+
+public:
 
     void resizeGL(int width, int height);
     void initializeGL();
     void paintGL();
 
-public: // KisAbstractCanvasWidget
+public:
 
     QWidget *widget() {
         return this;
@@ -90,14 +94,15 @@ protected: // KisCanvasWidgetBase
     virtual bool callFocusNextPrevChild(bool next);
 
 private:
+
+
+
     struct Private;
     Private * const d;
 
     void drawImage() const;
     void drawCheckers() const;
 
-    void initializeCheckerShader();
-    void initializeDisplayShader();
 };
 
 #endif // HAVE_OPENGL

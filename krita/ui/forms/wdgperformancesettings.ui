@@ -13,7 +13,16 @@
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -25,10 +34,13 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
        <property name="text">
         <string>Maximum number of tiles kept in memory:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="KIntNumInput" name="m_maxTiles">
+      <widget class="KIntNumInput" name="m_maxTiles" native="true">
        <property name="whatsThis">
         <string>The maximum number of &quot;tiles&quot; that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
 Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>

@@ -36,6 +36,17 @@ public:
     {}
     const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }
     virtual KoOdf::DocumentType documentType() const { return KoOdf::Presentation; }
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return "";}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList();
+    }
+
 };
 
 

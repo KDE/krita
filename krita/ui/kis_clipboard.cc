@@ -296,18 +296,20 @@ void KisClipboard::clipboardDataChanged()
         if (!qimage.isNull())
             m_hasClip = true;
     }
-
+    if (m_hasClip) {
+        emit clipCreated();
+    }
     m_pushedClipboard = false;
     emit clipChanged();
 }
 
 
-bool KisClipboard::hasClip()
+bool KisClipboard::hasClip() const
 {
     return m_hasClip;
 }
 
-QSize KisClipboard::clipSize()
+QSize KisClipboard::clipSize() const
 {
 
     QClipboard *cb = QApplication::clipboard();

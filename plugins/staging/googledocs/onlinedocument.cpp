@@ -39,7 +39,7 @@ K_PLUGIN_FACTORY(OnlineDocumentFactory, registerPlugin<OnlineDocument>();)
 K_EXPORT_PLUGIN(OnlineDocumentFactory("googledocs_plugin"))
 
 OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
-    : KParts::Plugin(parent)
+    : KoParts::Plugin(parent)
     , m_login(0)
 {
     setComponentData(OnlineDocumentFactory::componentData());

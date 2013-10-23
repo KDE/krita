@@ -51,7 +51,7 @@
 #include <QKeyEvent>
 #include <QGridLayout>
 #include <QDockWidget>
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QStringList>
 #include <QAbstractButton>
 #include <QApplication>

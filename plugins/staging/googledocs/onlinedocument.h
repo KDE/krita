@@ -19,12 +19,12 @@
 #ifndef ONLINEDOCUMENT_H
 #define ONLINEDOCUMENT_H
 
-#include <kparts/plugin.h>
+#include <plugin.h>
 
 class GoogleDocumentService;
 class LoginWindow;
 
-class OnlineDocument : public KParts::Plugin
+class OnlineDocument : public KoParts::Plugin
 {
     Q_OBJECT
 public:

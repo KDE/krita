@@ -103,14 +103,6 @@
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 
-/**
- * Mime type for this app - not same as file type, but file types
- * can be associated with a mime type and are opened with applications
- * associated with the same mime type
- */
-#define APP_MIMETYPE "application/x-krita"
-
-
 class KisDoc2::KisDocPrivate
 {
 
@@ -159,6 +151,23 @@ KisDoc2::KisDoc2()
 
 }
 
+KisDoc2::KisDoc2(KisPart2 *part)
+    : KoDocument(part, new UndoStack(this))
+    , m_d(new KisDocPrivate())
+{
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
+    init();
+    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+    setBackupFile(KisConfig().backupFile());
+
+}
+
+
+
 KisDoc2::~KisDoc2()
 {
     // Despite being QObject they needs to be deleted before the image
@@ -175,7 +184,7 @@ KisDoc2::~KisDoc2()
 
 QByteArray KisDoc2::mimeType() const
 {
-    return APP_MIMETYPE;
+    return KIS_MIME_TYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {
@@ -411,7 +420,7 @@ bool KisDoc2::newImage(const QString& name,
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
-    cfg.defColorDepth(image->colorSpace()->colorDepthId().id());
+    cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
     qApp->restoreOverrideCursor();

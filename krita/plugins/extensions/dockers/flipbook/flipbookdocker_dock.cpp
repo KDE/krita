@@ -33,10 +33,10 @@
 #include <KoZoomController.h>
 #include <KoZoomMode.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
 #include <KoMainWindow.h>
 #include <KoView.h>
 #include <KoToolManager.h>
+#include <KoApplication.h>
 
 #include <kis_image.h>
 #include <kis_view2.h>
@@ -111,8 +111,8 @@ FlipbookDockerDock::~FlipbookDockerDock()
 void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->view()) {
-         m_canvas->view()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
+        m_canvas->view()->actionCollection()->disconnect(this);
+        foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
@@ -163,7 +163,7 @@ void FlipbookDockerDock::saveFlipbook()
         m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);
     }
-    m_canvas->view()->document()->documentPart()->addRecentURLToAllShells(filename);
+    m_canvas->view()->document()->documentPart()->addRecentURLToAllMainWindows(filename);
 }
 
 
@@ -176,14 +176,12 @@ void FlipbookDockerDock::newFlipbook()
 
     KisImageSP oldImage = m_canvas->view()->image();
     if (m_canvas->view()->document()->isModified()) {
-        m_canvas->view()->document()->documentPart()->save();
+        m_canvas->view()->document()->save();
         m_canvas->view()->document()->setModified(false);
     }
 
 
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
@@ -246,9 +244,7 @@ void FlipbookDockerDock::openFlipbook()
 
 void FlipbookDockerDock::addImage()
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
@@ -332,16 +328,16 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {
-            m_canvas->view()->document()->documentPart()->save();
+            m_canvas->view()->document()->save();
             m_canvas->view()->document()->setModified(false);
         }
         m_canvas->view()->document()->setUrl(item->filename());
-        m_canvas->view()->shell()->updateCaption();
+        m_canvas->view()->mainWindow()->updateCaption();
         m_canvas->view()->document()->setCurrentImage(item->document()->image());
         m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
         // Update all dockers, except us
-        QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->shell()->canvasObservers();
+        QList<KoCanvasObserverBase*> canvasObservers = m_canvas->view()->mainWindow()->canvasObservers();
         foreach (KoCanvasObserverBase *canvasObserver, canvasObservers) {
             if (canvasObserver != this) {
                 canvasObserver->unsetObservedCanvas();
@@ -355,32 +351,32 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
 void FlipbookDockerDock::toggleAnimation()
 {
-//    if (!m_animationWidget) {
-//        m_animationWidget = new SequenceViewer(m_canvas->view()->shell());
-//        m_animationWidget->hide();
-//    }
+    //    if (!m_animationWidget) {
+    //        m_animationWidget = new SequenceViewer(m_canvas->view()->mainWindow());
+    //        m_animationWidget->hide();
+    //    }
 
-//    if (!m_canvasWidget) {
-//        m_canvasWidget = m_canvas->view()->findChild<KisCanvasController*>();
-//    }
+    //    if (!m_canvasWidget) {
+    //        m_canvasWidget = m_canvas->view()->findChild<KisCanvasController*>();
+    //    }
 
-//    if (!m_animating) {
-//        qDebug() << "start animation";
-//        m_animating = true;
-//        bnAnimate->setIcon(koIcon("media-playback-stop"));
-//        m_canvas->view()->
-//        m_mainWindow->setCentralWidget(m_animationWidget);
-//        m_animationWidget->show();
-//        m_canvasWidget->hide();
-//    }
-//    else {
-//        qDebug() << "stopt animation";
-//        m_animating = false;
-//        bnAnimate->setIcon(koIcon("media-playback-start"));
-//        m_mainWindow->setCentralWidget(m_canvasWidget);
-//        m_animationWidget->hide();
-//        m_canvasWidget->show();
-//    }
+    //    if (!m_animating) {
+    //        qDebug() << "start animation";
+    //        m_animating = true;
+    //        bnAnimate->setIcon(koIcon("media-playback-stop"));
+    //        m_canvas->view()->
+    //        m_mainWindow->setCentralWidget(m_animationWidget);
+    //        m_animationWidget->show();
+    //        m_canvasWidget->hide();
+    //    }
+    //    else {
+    //        qDebug() << "stopt animation";
+    //        m_animating = false;
+    //        bnAnimate->setIcon(koIcon("media-playback-start"));
+    //        m_mainWindow->setCentralWidget(m_canvasWidget);
+    //        m_animationWidget->hide();
+    //        m_canvasWidget->show();
+    //    }
 }
 
 

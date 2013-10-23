@@ -41,6 +41,7 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QScrollBar>
+#include <QMainWindow>
 
 #include <kio/netaccess.h>
 #include <kmenubar.h>
@@ -127,6 +128,7 @@
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
 
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -166,6 +168,7 @@ public:
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
         , actionManager(0)
+        , mainWindow(0)
     {
     }
 
@@ -217,6 +220,7 @@ public:
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
+    QMainWindow* mainWindow;
 };
 
 
@@ -284,7 +288,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
-    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+
 
     if (m_d->doc->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
@@ -356,21 +361,22 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
-    if (shell()) {
-        //Workaround, by default has the same shortcut as hide/show dockers
-        action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+    //Workaround, by default has the same shortcut as hide/show dockers
+    if (mainWindow()) {
+        connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+        action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
         if (action) {
             action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
-        shell()->dockerManager()->setIcons(false);
+        mainWindow()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -396,7 +402,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
-  
+
     loadPlugins();
 
     // Wait for the async image to have loaded
@@ -551,29 +557,109 @@ void KisView2::dropEvent(QDropEvent *event)
                     }
                     else if (action == replaceCurrentDocument) {
                         if (m_d->doc->isModified()) {
-                            m_d->doc->documentPart()->save();
+                            m_d->doc->save();
                         }
-
-                        if (shell() != 0) {
+                        if (mainWindow() != 0) {
                             /**
                              * NOTE: this is effectively deferred self-destruction
                              */
-                            connect(shell(), SIGNAL(loadCompleted()),
-                                    shell(), SLOT(close()));
+                            connect(mainWindow(), SIGNAL(loadCompleted()),
+                                    mainWindow(), SLOT(close()));
 
-                            shell()->openDocument(url);
+                            mainWindow()->openDocument(url);
+                            mainWindow()->close();
                         }
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
-
-                        if (shell() != 0) {
-                            shell()->openDocument(url);
+                        if (mainWindow()) {
+                            mainWindow()->openDocument(url);
                         }
                     }
                 }
             }
         }
     }
+}
+
+bool KisView2::event( QEvent* event )
+{
+    switch(static_cast<int>(event->type()))
+    {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            KisCanvasResourceProvider* provider = resourceProvider();
+            syncObject->backgroundColor = provider->bgColor();
+            syncObject->foregroundColor = provider->fgColor();
+            syncObject->exposure = provider->HDRExposure();
+            syncObject->gamma = provider->HDRGamma();
+            syncObject->compositeOp = provider->currentCompositeOp();
+            syncObject->pattern = provider->currentPattern();
+            syncObject->gradient = provider->currentGradient();
+            syncObject->node = provider->currentNode();
+            syncObject->paintOp = provider->currentPreset();
+            syncObject->opacity = provider->opacity();
+            syncObject->globalAlphaLock = provider->globalAlphaLock();
+
+            syncObject->documentOffset = canvasControllerWidget()->scrollBarValue() - pos();
+            syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+            syncObject->rotationAngle = canvasBase()->rotationAngle();
+
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
+            syncObject->initialized = true;
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
+            if(syncObject->initialized) {
+                KisCanvasResourceProvider* provider = resourceProvider();
+
+                provider->setPaintOpPreset(syncObject->paintOp);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                KisPaintOpPresetSP preset = canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
+                if(preset->settings()->hasProperty("OpacityValue"))
+                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
+                provider->setPaintOpPreset(preset);
+
+                provider->setBGColor(syncObject->backgroundColor);
+                provider->setFGColor(syncObject->foregroundColor);
+                provider->setHDRExposure(syncObject->exposure);
+                provider->setHDRGamma(syncObject->gamma);
+                provider->slotPatternActivated(syncObject->pattern);
+                provider->slotGradientActivated(syncObject->gradient);
+                provider->slotNodeActivated(syncObject->node);
+                provider->setOpacity(syncObject->opacity);
+                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                actionCollection()->action("zoom_in")->trigger();
+                qApp->processEvents();
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+                canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
+
+                QPoint newOffset = syncObject->documentOffset + pos();
+                qApp->processEvents();
+                canvasControllerWidget()->setScrollBarValue(newOffset);
+            }
+
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return QWidget::event( event );
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -616,7 +702,7 @@ KisPaintopBox* KisView2::paintOpBox() const
 
 KoProgressUpdater* KisView2::createProgressUpdater(KoProgressUpdater::Mode mode)
 {
-    return m_d->statusBar->progress()->createUpdater(mode);
+    return new KisProgressUpdater(m_d->statusBar->progress(), document()->progressProxy(), mode);
 }
 
 KisSelectionManager * KisView2::selectionManager()
@@ -625,6 +711,11 @@ KisSelectionManager * KisView2::selectionManager()
 }
 
 KoCanvasController * KisView2::canvasController()
+{
+    return m_d->canvasController;
+}
+
+KisCanvasController *KisView2::canvasControllerWidget()
 {
     return m_d->canvasController;
 }
@@ -750,7 +841,7 @@ void KisView2::slotLoadingFinished()
     /**
      * Dirty hack alert
      */
-    if (m_d->zoomManager && m_d->zoomManager->zoomController())
+    if (mainWindow() && m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
     if (m_d->viewConverter)
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
@@ -1034,6 +1125,18 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
     return m_d->paintingAssistantManager;
 }
 
+QMainWindow* KisView2::qtMainWindow()
+{
+    if(m_d->mainWindow)
+        return m_d->mainWindow;
+    return mainWindow();
+}
+
+void KisView2::setQtMainWindow(QMainWindow* newMainWindow)
+{
+    m_d->mainWindow = newMainWindow;
+}
+
 void KisView2::slotTotalRefresh()
 {
     KisConfig cfg;
@@ -1138,10 +1241,13 @@ void KisView2::slotSaveIncremental()
         return;
     }
     m_d->doc->setSaveInBatchMode(true);
-    m_d->doc->documentPart()->saveAs(fileName);
+    m_d->doc->saveAs(fileName);
     m_d->doc->setSaveInBatchMode(false);
 
-    shell()->updateCaption();
+
+    if (mainWindow()) {
+        mainWindow()->updateCaption();
+    }
 }
 
 void KisView2::slotSaveIncrementalBackup()
@@ -1206,9 +1312,9 @@ void KisView2::slotSaveIncrementalBackup()
             return;
         }
         QFile::copy(fileName, backupFileName);
-        m_d->doc->documentPart()->saveAs(fileName);
+        m_d->doc->saveAs(fileName);
 
-        shell()->updateCaption();
+        if (mainWindow()) mainWindow()->updateCaption();
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1244,10 +1350,10 @@ void KisView2::slotSaveIncrementalBackup()
         // Save both as backup and on current file for interapplication workflow
         m_d->doc->setSaveInBatchMode(true);
         QFile::copy(fileName, backupFileName);
-        m_d->doc->documentPart()->saveAs(fileName);
+        m_d->doc->saveAs(fileName);
         m_d->doc->setSaveInBatchMode(false);
 
-        shell()->updateCaption();
+        if (mainWindow()) mainWindow()->updateCaption();
     }
 }
 
@@ -1290,28 +1396,28 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideDockersFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
+    if (cfg.hideDockersFullscreen() && mainWindow()) {
+        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }
     }
 
-    if (cfg.hideTitlebarFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
+    if (cfg.hideTitlebarFullscreen() && mainWindow()) {
+        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
         if (action && action->isChecked() != toggled) {
             action->setChecked(toggled);
         }
     }
 
-    if (cfg.hideMenuFullscreen()) {
-        if (shell()->menuBar()->isVisible() == toggled) {
-            shell()->menuBar()->setVisible(!toggled);
+    if (cfg.hideMenuFullscreen() && mainWindow()) {
+        if (mainWindow()->menuBar()->isVisible() == toggled) {
+            mainWindow()->menuBar()->setVisible(!toggled);
         }
     }
 
-    if (cfg.hideToolbarFullscreen()) {
-        foreach(KToolBar* toolbar, shell()->toolBars()) {
+    if (cfg.hideToolbarFullscreen() && mainWindow()) {
+        foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
             if (toolbar->isVisible() == toggled) {
                 toolbar->setVisible(!toggled);
             }
@@ -1344,10 +1450,14 @@ void KisView2::toggleTabletLogger()
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 {
-    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
-    floatingMessage->setShowOverParent(true);
-    floatingMessage->setIcon(icon);
-    floatingMessage->showMessage();
+    // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
+    if (mainWindow()) {
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+        floatingMessage->setShowOverParent(true);
+        floatingMessage->setIcon(icon);
+        floatingMessage->showMessage();
+    }
+    emit floatingMessageRequested(message, icon.name());
 }
 
 #include "kis_view2.moc"

@@ -10,7 +10,7 @@
     <height>335</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
    <item row="0" column="0" rowspan="3">
     <widget class="KisPaintOpListWidget" name="paintopList" native="true">
      <property name="sizePolicy">
@@ -92,6 +92,9 @@
          <property name="text">
           <string>Name:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -138,9 +141,18 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
       <property name="spacing">
-       <number>-1</number>
+       <number>6</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>

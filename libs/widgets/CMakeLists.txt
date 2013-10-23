@@ -134,6 +134,10 @@ install( FILES
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
+    KoResourceServer.h
+    KoResourceServerAdapter.h
+    KoResourceServerObserver.h
+    KoResourceServerProvider.h
     KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h

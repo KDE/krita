@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <QTimer>
 #include <QApplication>
+#include <QTouchEvent>
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -132,6 +133,7 @@ void KoToolProxy::repaintDecorations()
     if (d->activeTool) d->activeTool->repaintDecorations();
 }
 
+
 QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
     QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
@@ -146,7 +148,65 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
-#include <kdebug.h>
+#include <KDebug>
+
+void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter, const QPointF &documentOffset)
+{
+    QPointF point;
+    QList<KoTouchPoint> touchPoints;
+
+    foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
+        QPointF docPoint = viewConverter->viewToDocument(p.screenPos() + documentOffset);
+        if (p.isPrimary()) {
+            point = docPoint;
+        }
+        KoTouchPoint touchPoint;
+        touchPoint.touchPoint = p;
+        touchPoint.point = point;
+        touchPoint.lastPoint = viewConverter->viewToDocument(p.lastNormalizedPos()) + documentOffset;
+        touchPoints << touchPoint;
+    }
+
+    KoPointerEvent ev(event, point, touchPoints);
+
+    KoInputDevice id;
+    KoToolManager::instance()->priv()->switchInputDevice(id);
+
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            if( d->activeTool->wantsTouch() )
+                d->activeTool->touchEvent(event);
+            else
+                d->activeTool->mousePressEvent(&ev);
+        }
+        break;
+    case QEvent::TouchUpdate:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            if( d->activeTool->wantsTouch() )
+                d->activeTool->touchEvent(event);
+            else
+                d->activeTool->mouseMoveEvent(&ev);
+        }
+        break;
+    case QEvent::TouchEnd:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            if( d->activeTool->wantsTouch() )
+                d->activeTool->touchEvent(event);
+            else
+                d->activeTool->mouseReleaseEvent(&ev);
+        }
+        break;
+    default:
+        ; // ingore the rest
+    }
+    d->mouseLeaveWorkaround = true;
+
+}
+
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // don't process tablet events for stylus middle and right mouse button

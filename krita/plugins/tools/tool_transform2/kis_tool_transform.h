@@ -49,8 +49,12 @@
 #include "transform_transaction_properties.h"
 
 class KoID;
+
 class KisFilterStrategy;
 class KisCanvas2;
+
+class QTouchEvent;
+
 
 /**
  * Transform tool
@@ -66,13 +70,46 @@ class KisCanvas2;
  * the user clicks the Apply button : the semi-transparent image displayed
  * until the user click that button is only a preview.
  */
-
 class KisToolTransform : public KisTool
 {
 
     Q_OBJECT
 
+    Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
+
+    Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double translateY READ translateY WRITE setTranslateY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double rotateX READ rotateX WRITE setRotateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateY READ rotateY WRITE setRotateY NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateZ READ rotateZ WRITE setRotateZ NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double scaleX READ scaleX WRITE setScaleX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double scaleY READ scaleY WRITE setScaleY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double shearX READ shearX WRITE setShearX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double shearY READ shearY WRITE setShearY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(WarpType warpType READ warpType WRITE setWarpType NOTIFY warpTransformChanged)
+    Q_PROPERTY(double warpFlexibility READ warpFlexibility WRITE setWarpFlexibility NOTIFY warpTransformChanged)
+    Q_PROPERTY(int warpPointDensity READ warpPointDensity WRITE setWarpPointDensity NOTIFY warpTransformChanged)
+
+
+
 public:
+    enum TransformToolMode {
+        FreeTransformMode,
+        WarpTransformMode
+    };
+    Q_ENUMS(TransformToolMode)
+
+    enum WarpType {
+        RigidWarpType,
+        AffineWarpType,
+        SimilitudeWarpType
+    };
+    Q_ENUMS(WarpType)
+
     KisToolTransform(KoCanvasBase * canvas);
     virtual ~KisToolTransform();
 
@@ -83,13 +120,60 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+    virtual void touchEvent(QTouchEvent *event);
 
-public:
     void paint(QPainter& gc, const KoViewConverter &converter);
+
+    TransformToolMode transformMode() const;
+
+    double translateX() const;
+    double translateY() const;
+
+    double rotateX() const;
+    double rotateY() const;
+    double rotateZ() const;
+
+    double scaleX() const;
+    double scaleY() const;
+
+    double shearX() const;
+    double shearY() const;
+
+    WarpType warpType() const;
+    double warpFlexibility() const;
+    int warpPointDensity() const;
+
+    bool wantsTouch() const { return true; }
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+    // Applies the current transformation to the original paint device and commits it to the undo stack
+    void applyTransform();
+
+    void setTransformMode( KisToolTransform::TransformToolMode newMode );
+
+    void setTranslateX(double translateX);
+    void setTranslateY(double translateY);
+
+    void setRotateX(double rotation);
+    void setRotateY(double rotation);
+    void setRotateZ(double rotation);
+
+    void setScaleX(double scaleX);
+    void setScaleY(double scaleY);
+
+    void setShearX(double shearX);
+    void setShearY(double shearY);
+
+    void setWarpType(WarpType type);
+    void setWarpFlexibility(double flexibility);
+    void setWarpPointDensity(int density);
+
+Q_SIGNALS:
+    void transformModeChanged();
+    void freeTransformChanged();
+    void warpTransformChanged();
 
 protected:
     void requestUndoDuringStroke();
@@ -386,6 +470,7 @@ private:
 
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;
+
 
 private:
     QPointF imageToFlake(const QPointF &pt);

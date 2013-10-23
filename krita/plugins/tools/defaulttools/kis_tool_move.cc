@@ -33,20 +33,15 @@
 #include "kis_tool_utils.h"
 #include "kis_paint_layer.h"
 #include "strokes/move_stroke_strategy.h"
+#include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
-
-void MoveToolOptionsWidget::connectSignals()
-{
-    connect(radioSelectedLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-    connect(radioFirstLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-    connect(radioGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-}
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
     m_optionsWidget = 0;
+    m_moveToolMode = MoveSelectedLayer;
 }
 
 KisToolMove::~KisToolMove()
@@ -93,11 +88,11 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
         KisSelectionSP selection = currentSelection();
 
-        if(!m_optionsWidget->radioSelectedLayer->isChecked() &&
+        if(!m_moveToolMode == MoveSelectedLayer &&
            event->modifiers() != Qt::ControlModifier) {
 
             bool wholeGroup = !selection &&
-                (m_optionsWidget->radioGroup->isChecked() ||
+                (m_moveToolMode == MoveGroup ||
                  event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier));
 
             node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
@@ -210,9 +205,38 @@ QWidget* KisToolMove::createOptionWidget()
     m_optionsWidget = new MoveToolOptionsWidget(0);
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
-    connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
+    connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
+    connect(m_optionsWidget->radioFirstLayer, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
+    connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
+
+    //connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
 
     return m_optionsWidget;
+}
+
+void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
+{
+    m_moveToolMode = newMode;
+}
+
+KisToolMove::MoveToolMode KisToolMove::moveToolMode() const
+{
+    return m_moveToolMode;
+}
+
+void KisToolMove::slotWidgetRadioToggled(bool checked)
+{
+    Q_UNUSED(checked);
+    QObject* from = sender();
+    if(from == m_optionsWidget->radioSelectedLayer)
+        setMoveToolMode(MoveSelectedLayer);
+    else if(from == m_optionsWidget->radioFirstLayer)
+        setMoveToolMode(MoveFirstLayer);
+    else if(from == m_optionsWidget->radioGroup)
+        setMoveToolMode(MoveGroup);
 }
 
 QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)

@@ -1415,7 +1415,7 @@ inline unsigned int gmic_hashcode(const char *const str, const bool is_variable)
   return hash&255;
 }
 
-// Tells if the the implementation of a G'MIC command contains arguments.
+// Tells if the implementation of a G'MIC command contains arguments.
 //------------------------------------------------------------------------
 inline bool gmic_command_has_arguments(const char *const command) {
   if (!command || !*command) return false;

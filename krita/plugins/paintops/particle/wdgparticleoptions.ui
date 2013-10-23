@@ -22,7 +22,7 @@
     <height>300</height>
    </size>
   </property>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>1</x>
@@ -49,35 +49,38 @@
       <property name="text">
        <string>Particles:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="KDoubleNumInput" name="particleSpinBox">
+     <widget class="KDoubleNumInput" name="particleSpinBox" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="value">
+      <property name="value" stdset="0">
        <double>50.000000000000000</double>
       </property>
-      <property name="minimum">
+      <property name="minimum" stdset="0">
        <double>1.000000000000000</double>
       </property>
-      <property name="maximum">
+      <property name="maximum" stdset="0">
        <double>500.000000000000000</double>
       </property>
-      <property name="singleStep">
+      <property name="singleStep" stdset="0">
        <double>1.000000000000000</double>
       </property>
-      <property name="decimals">
+      <property name="decimals" stdset="0">
        <number>0</number>
       </property>
-      <property name="sliderEnabled">
+      <property name="sliderEnabled" stdset="0">
        <bool>true</bool>
       </property>
-      <property name="exponentRatio">
+      <property name="exponentRatio" stdset="0">
        <double>1.500000000000000</double>
       </property>
      </widget>
@@ -99,42 +102,45 @@
       <property name="text">
        <string>Opacity weight:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="KDoubleNumInput" name="weightSPBox">
+     <widget class="KDoubleNumInput" name="weightSPBox" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="value">
+      <property name="value" stdset="0">
        <double>0.200000000000000</double>
       </property>
-      <property name="minimum">
+      <property name="minimum" stdset="0">
        <double>0.010000000000000</double>
       </property>
-      <property name="maximum">
+      <property name="maximum" stdset="0">
        <double>1.000000000000000</double>
       </property>
-      <property name="singleStep">
+      <property name="singleStep" stdset="0">
        <double>0.100000000000000</double>
       </property>
-      <property name="sliderEnabled">
+      <property name="sliderEnabled" stdset="0">
        <bool>true</bool>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>90</y>
      <width>171</width>
-     <height>114</height>
+     <height>116</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
@@ -142,6 +148,9 @@
      <widget class="QLabel" name="radiusLabel_3">
       <property name="text">
        <string>dx scale:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
@@ -169,6 +178,9 @@
       <property name="text">
        <string>dy scale:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="1" column="1">
@@ -195,6 +207,9 @@
       <property name="text">
        <string>Iterations:</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
      </widget>
     </item>
     <item row="2" column="1">
@@ -211,6 +226,9 @@
      <widget class="QLabel" name="radiusLabel_2">
       <property name="text">
        <string>Gravity:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>

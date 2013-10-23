@@ -2,6 +2,8 @@
 Version=1.0
 Type=Application
 Name=Krita Gemini
+Name[de]=Krita Gemini
+Name[kk]=Krita Gemini
 Name[nl]=Krita Gemini
 Name[pt]=Krita Gemini
 Name[pt_BR]=Krita Gemini

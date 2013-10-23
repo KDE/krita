@@ -2,6 +2,8 @@
 Version=1.0
 Type=Application
 Name=Krita Sketch
+Name[de]=Krita Sketch
+Name[kk]=Krita Sketch
 Name[nl]=Krita Sketch
 Name[pt]=Krita Sketch
 Name[pt_BR]=Krita Sketch

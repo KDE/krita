@@ -486,7 +486,11 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
             || event->type == tab.xinput_button_release
             || event->type == tab.xinput_button_press) {
 
-            QWidget *widget = QApplication::activeModalWidget();
+            QWidget *widget = QApplication::activePopupWidget();
+
+            if (!widget) {
+                widget = QApplication::activeModalWidget();
+            }
 
             if (!widget) {
                 widget = QWidget::find((WId)event->xany.window);

@@ -295,6 +295,9 @@ public:
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
 
+    int qPainterCanvasScalingMethod() const;
+    void setQPainterCanvasScalingMethod(int method);
+
     
     template<class T>
     void writeEntry(const QString& name, const T& value) {

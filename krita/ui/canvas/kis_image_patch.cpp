@@ -21,6 +21,7 @@
 #include <QPainter>
 #include "kis_debug.h"
 #include "scalefilter.h"
+#include "kis_config.h"
 #include <math.h>
 
 /****** Some helper functions *******/
@@ -103,8 +104,13 @@ void KisImagePatch::preScale(const QRectF &dstRect)
     m_scaleY *= scaleY;
 
     scaleRect(m_interestRect, scaleX, scaleY);
-    m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    //m_image = Blitz::smoothScaleFilter(m_image, newImageSize, 1.0, Blitz::LanczosFilter);
+    KisConfig cfg;
+    if (cfg.qPainterCanvasScalingMethod() == Blitz::UndefinedFilter) {
+        m_image = m_image.scaled(newImageSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+    else {
+        m_image = Blitz::smoothScaleFilter(m_image, newImageSize, 1.0, Blitz::ScaleFilterType(cfg.qPainterCanvasScalingMethod()));
+    }
 
     m_isScaled = true;
 

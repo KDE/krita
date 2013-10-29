@@ -21,6 +21,7 @@
 
 #include <cmath>
 
+#include <QtGlobal>
 #include <QRect>
 
 #include <kis_global.h>
@@ -40,6 +41,13 @@
 
 #ifdef BENCHMARK
     #include <QTime>
+#endif
+
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
 KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)

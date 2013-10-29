@@ -72,8 +72,7 @@ public:
      * @renderHints are directly tranmitted to QPainter
      */
     void drawMe(QPainter &gc,
-                const QRectF &dstRect,
-                QPainter::RenderHints renderHints);
+                const QRectF &dstRect);
 
     /**
      * Checks whether the patch can be used for drawing the image

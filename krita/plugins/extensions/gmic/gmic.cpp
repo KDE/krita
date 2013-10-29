@@ -740,7 +740,9 @@ CImg<T>& color_CImg3d(const float R, const float G, const float B, const float o
           h = (unsigned int)*(ptrd++),
           s = (unsigned int)*(ptrd++);
         ptrd+=w*h*s;
-      } else *(ptrd++) = (T)opacity;
+      } else {
+        *(ptrd++) = (T)opacity;
+      }
   return *this;
 }
 
@@ -1413,7 +1415,7 @@ inline unsigned int gmic_hashcode(const char *const str, const bool is_variable)
   return hash&255;
 }
 
-// Tells if the the implementation of a G'MIC command contains arguments.
+// Tells if the implementation of a G'MIC command contains arguments.
 //------------------------------------------------------------------------
 inline bool gmic_command_has_arguments(const char *const command) {
   if (!command || !*command) return false;
@@ -1579,7 +1581,11 @@ CImgList<char> gmic::commands_line_to_CImgList(const char *const commands_line) 
 //-------------------------------
 gmic& gmic::assign(const char *const custom_commands, const bool include_default_commands,
                    float *const p_progress, int *const p_cancel) {
+#if defined(_WIN32) || defined(_WIN64) || defined(_APPLE)
+  setlocale(LC_NUMERIC,"C");
+#else
   std::setlocale(LC_NUMERIC,"C");
+#endif
   cimg::srand();
   verbosity = 0;
   nb_carriages = 0;
@@ -11164,8 +11170,13 @@ gmic& gmic::parse(const CImgList<char>& commands_line, unsigned int& position,
                   _filename0,stype,
                   gmic_selection);
 
+#if defined(_WIN32) || defined(_WIN64)
+#define what_strcasecmp _stricmp
+#else
+#define what_strcasecmp strcasecmp
+#endif
 #define gmic_load_raw(value_type,svalue_type) \
-            if (!strcasecmp(stype,svalue_type)) \
+            if (!what_strcasecmp(stype,svalue_type)) \
               CImg<value_type>::get_load_raw(filename,(unsigned int)dx,(unsigned int)dy,\
                                              (unsigned int)dz,(unsigned int)dc).\
                 move_to(input_images);

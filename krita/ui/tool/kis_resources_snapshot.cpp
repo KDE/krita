@@ -119,7 +119,6 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setBounds(m_d->bounds->bounds());
     painter->setPaintColor(m_d->currentFgColor);
     painter->setBackgroundColor(m_d->currentBgColor);
     painter->setGenerator(m_d->currentGenerator);

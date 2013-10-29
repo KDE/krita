@@ -199,7 +199,6 @@ void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
-        painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
         painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());

@@ -10,9 +10,6 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -87,6 +84,9 @@
        <property name="text">
         <string>Spacing:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
@@ -101,11 +101,13 @@
        <property name="text">
         <string>Save brush:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="nameEdit">
-      </widget>
+      <widget class="QLineEdit" name="nameEdit"/>
      </item>
      <item>
       <widget class="QPushButton" name="saveBrush">

@@ -118,7 +118,6 @@ void KisPatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setWidth(size.width());
     gc.setHeight(size.height());
     gc.setFillStyle(KisFillPainter::FillStylePattern);
-    gc.setBounds(QRect(dstInfo.topLeft(), size));
     gc.fillRect(QRect(dstInfo.topLeft(), size), pattern);
     gc.end();
 

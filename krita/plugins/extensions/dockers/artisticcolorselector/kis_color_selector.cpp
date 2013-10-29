@@ -583,7 +583,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
     if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), false);
+        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
         m_mouseMoved   = true;
     }
     else if (m_clickedRing >= 0) {
@@ -596,7 +596,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
             m_selectedColor.setS(getSaturation(m_clickedRing));
             m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-            setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), false);
+            setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
             m_selectedRing = m_clickedRing;
             m_mouseMoved   = true;
             update();
@@ -612,7 +612,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, false);
+        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
     }
     
     if (m_clickedRing < 0)
@@ -640,7 +640,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
                 color.setX(getLight(m_light, color.getH(), m_relativeLight));
                 
                 m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
-                setSelectedColor(color, m_selectedColorIsFgColor, false);
+                setSelectedColor(color, m_selectedColorIsFgColor, true);
             }
             
             m_mouseMoved = true;
@@ -650,7 +650,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
         Radian angle = std::atan2(dragPos.x(), dragPos.y()) - RAD_90;
         m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
         m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, false);
+        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
     }
     
     update();

@@ -130,6 +130,8 @@ public:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    bool wrapAroundModeSupported() const;
+
 protected:
     // Trivial constructor for testing support
     KisUpdateScheduler();

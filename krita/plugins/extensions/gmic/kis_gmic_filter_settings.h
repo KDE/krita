@@ -72,10 +72,13 @@ public:
     OutputMode outputMode();
     void setOutputMode(OutputMode mode);
 
+    void setBlacklisted(bool blacklist){ m_isBlacklisted = blacklist; }
+    bool isBlacklisted() const { return m_isBlacklisted; };
 private:
     QString m_gmicCommand;
     InputLayerMode m_inputLayerMode;
     OutputMode m_outputMode;
+    bool m_isBlacklisted;
 };
 
 Q_DECLARE_METATYPE(KisGmicFilterSetting *)

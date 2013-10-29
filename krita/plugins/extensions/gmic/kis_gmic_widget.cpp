@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <qdialogbuttonbox.h>
 #include <QLabel>
+#include <QCloseEvent>
 #include <kis_debug.h>
 
 #include <QMetaType>
@@ -68,6 +69,7 @@ void KisGmicWidget::createMainLayout()
 
     m_filterOptions = new QWidget();
     m_filterConfigLayout->addWidget(m_filterOptions,row, column);
+    m_filterConfigLayout->setColumnStretch(column, 1);
     m_filterOptionsRow = row;
     m_filterOptionsColumn = column;
 
@@ -183,6 +185,12 @@ void KisGmicWidget::okFilterSlot()
     applyFilterSlot();
     emit sigClose();
 }
+
+ void KisGmicWidget::closeEvent(QCloseEvent *event)
+ {
+     emit sigClose();
+     event->accept();
+ }
 
 void KisGmicWidget::resetFilterSlot()
 {

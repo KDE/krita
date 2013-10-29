@@ -267,3 +267,7 @@ void KisProcessingApplicator::end()
     m_image->endStroke(m_strokeId);
 }
 
+void KisProcessingApplicator::cancel()
+{
+    m_image->cancelStroke(m_strokeId);
+}

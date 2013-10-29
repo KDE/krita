@@ -53,9 +53,6 @@ public slots:
     virtual QObject *application();
 
     /** Return the \a KoMainWindow object. */
-    virtual QObject *shell();
-
-    /** Return the \a KXmlGuiWindow object. */
     virtual QWidget *mainWindow();
 
     /** Return the \a KoPartAdaptor object. */

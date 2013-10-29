@@ -101,7 +101,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
 
-    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(0, 0, importedImage->width(), importedImage->height());
+    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(importedImage->bounds());
     do {
         const quint16* data = reinterpret_cast<const quint16*>(refIt->oldRawData());
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>189</height>
+    <height>210</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,16 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QGridLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <property name="spacing">
@@ -61,7 +70,7 @@
         <string>Compress:</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignTop</set>
+        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
        </property>
       </widget>
      </item>
@@ -167,6 +176,9 @@ You can uncheck the box if you are not using transparency and you want to make t
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Transparent pixel fill color:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

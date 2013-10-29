@@ -29,7 +29,9 @@
 #include <cfloat>
 #include <cmath>
 #include <climits>
+#ifndef Q_OS_WIN
 #include <strings.h>
+#endif
 
 #include <QImage>
 #include <QRect>
@@ -68,6 +70,10 @@
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
+#define trunc(x) ((int)(x))
+#ifndef Q_OS_WIN
+
+#endif
 
 struct KisPainter::Private {
     KisPaintDeviceSP            device;
@@ -77,7 +83,6 @@ struct KisPainter::Private {
 
     QVector<QRect>              dirtyRects;
     KisPaintOp*                 paintOp;
-    QRect                       bounds;
     KoColor                     paintColor;
     KoColor                     backgroundColor;
     const KisFilterConfiguration* generator;
@@ -105,6 +110,15 @@ struct KisPainter::Private {
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
+
+    bool tryReduceSourceRect(const KisPaintDevice *srcDev,
+                             QRect *srcRect,
+                             qint32 *srcX,
+                             qint32 *srcY,
+                             qint32 *srcWidth,
+                             qint32 *srcHeight,
+                             qint32 *dstX,
+                             qint32 *dstY);
 };
 
 KisPainter::KisPainter()
@@ -140,7 +154,6 @@ void KisPainter::init()
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
     d->antiAliasPolygonFill = true;
-    d->bounds = QRect();
     d->progressUpdater = 0;
     d->gradient = 0;
     d->maskPainter = 0;
@@ -149,8 +162,7 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
-    d->paramInfo.opacity = 1.0f;
-    d->paramInfo.flow = 1.0f;
+    d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;
     d->conversionFlags = KoColorConversionTransformation::InternalConversionFlags;
 }
@@ -297,12 +309,50 @@ void KisPainter::addDirtyRect(const QRect & rc)
     }
 }
 
+inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDev,
+                                                     QRect *srcRect,
+                                                     qint32 *srcX,
+                                                     qint32 *srcY,
+                                                     qint32 *srcWidth,
+                                                     qint32 *srcHeight,
+                                                     qint32 *dstX,
+                                                     qint32 *dstY)
+{
+    /**
+     * In case of COMPOSITE_COPY and Wrap Around Mode even the pixels
+     * outside the device extent matter, because they will be either
+     * directly copied (former case) or cloned from another area of
+     * the image.
+     */
+    if (compositeOp->id() != COMPOSITE_COPY &&
+        !srcDev->defaultBounds()->wrapAroundMode()) {
+
+        /**
+         * If srcDev->extent() (the area of the tiles containing
+         * srcDev) is smaller than srcRect, then shrink srcRect to
+         * that size. This is done as a speed optimization, useful for
+         * stack recomposition in KisImage. srcRect won't grow if
+         * srcDev->extent() is larger.
+         */
+        *srcRect &= srcDev->extent();
+
+        if (srcRect->isEmpty()) return true;
+
+        // Readjust the function paramenters to the new dimensions.
+        *dstX += srcRect->x() - *srcX;    // This will only add, not subtract
+        *dstY += srcRect->y() - *srcY;    // Idem
+        srcRect->getRect(srcX, srcY, srcWidth, srcHeight);
+    }
+
+    return false;
+}
+
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           const KisPaintDeviceSP srcDev,
                                           const KisFixedPaintDeviceSP selection,
                                           qint32 selX, qint32 selY,
                                           qint32 srcX, qint32 srcY,
-                                          quint32 srcWidth, quint32 srcHeight)
+                                          qint32 srcWidth, qint32 srcHeight)
 {
     // TODO: get selX and selY working as intended
 
@@ -323,33 +373,14 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     Q_ASSERT(selection->bounds().contains(selRect));
     Q_UNUSED(selRect); // only used by the above Q_ASSERT
 
-    /* KisPaintDevice is a tricky beast, and it can easily have unpredictable exactBounds() or extent()
-    in limit cases (for example, when brushes become too small in a brush engine). That's why there's no
-    Q_ASSERT to check correlation between srcRect and those bounds.
-    Below lies a speed optimization that shrinks srcRect only when srcDev is smaller than it. This is no
-    problem and without it there would be no illegal read from memory since reading out the bounds of a
-    KisPaintDevice gives the default pixel.*/
-
-    /* In case of COMPOSITE_COPY restricting bitBlt to extent can
-    have unexpected behavior since it would reduce the area that
-    is copied (Read below). */
-    if (d->compositeOp->id() != COMPOSITE_COPY) {
-        /* If srcDev->extent() (the area of the tiles containing srcDev)
-        is smaller than srcRect, then shrink srcRect to that size. This
-        is done as a speed optimization, useful for stack recomposition
-        in KisImage. srcRect won't grow if srcDev->extent() is larger. */
-        srcRect &= srcDev->extent();
-
-        if (srcRect.isEmpty()) return;
-
-        // Readjust the function paramenters to the new dimensions.
-        dstX += srcRect.x() - srcX;    // This will only add, not subtract
-        dstY += srcRect.y() - srcY;    // Idem
-        srcX = srcRect.x();
-        srcY = srcRect.y();
-        srcWidth = srcRect.width();
-        srcHeight = srcRect.height();
-    }
+    /**
+     * An optimization, which crops the source rect by the bounds of
+     * the source device when it is possible
+     */
+    if (d->tryReduceSourceRect(srcDev, &srcRect,
+                               &srcX, &srcY,
+                               &srcWidth, &srcHeight,
+                               &dstX, &dstY)) return;
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (d->device) */
@@ -421,7 +452,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                           const KisPaintDeviceSP srcDev,
                                           const KisFixedPaintDeviceSP selection,
-                                          quint32 srcWidth, quint32 srcHeight)
+                                          qint32 srcWidth, qint32 srcHeight)
 {
     bitBltWithFixedSelection(dstX, dstY, srcDev, selection, 0, 0, 0, 0, srcWidth, srcHeight);
 }
@@ -454,26 +485,14 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
         }
     }
     else {
-        /* In case of COMPOSITE_COPY restricting bitBlt to extent can
-        have unexpected behavior since it would reduce the area that
-        is copied (Read below). */
-        if (d->compositeOp->id() != COMPOSITE_COPY) {
-            /* If srcDev->extent() (the area of the tiles containing srcDev)
-            is smaller than srcRect, then shrink srcRect to that size. This
-            is done as a speed optimization, useful for stack recomposition
-            in KisImage. srcRect won't grow if srcDev->extent() is larger. */
-            srcRect &= srcDev->extent();
-
-            if (srcRect.isEmpty()) return;
-
-            // Readjust the function paramenters to the new dimensions.
-            dstX += srcRect.x() - srcX;    // This will only add, not subtract
-            dstY += srcRect.y() - srcY;    // Idem
-            srcX = srcRect.x();
-            srcY = srcRect.y();
-            srcWidth = srcRect.width();
-            srcHeight = srcRect.height();
-        }
+        /**
+         * An optimization, which crops the source rect by the bounds of
+         * the source device when it is possible
+         */
+        if (d->tryReduceSourceRect(srcDev, &srcRect,
+                                   &srcX, &srcY,
+                                   &srcWidth, &srcHeight,
+                                   &dstX, &dstY)) return;
     }
 
     qint32 dstY_ = dstY;
@@ -496,9 +515,9 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 dstX_ = dstX;
             qint32 srcX_ = srcX;
             qint32 columnsRemaining = srcWidth;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
-            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
-            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
+            qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(srcY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -506,21 +525,21 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
-                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
-                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(srcX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                qint32 srcRowStride = srcIt->rowStride(srcX_, srcY_);
                 srcIt->moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                qint32 dstRowStride = dstIt->rowStride(dstX_, dstY_);
                 dstIt->moveTo(dstX_, dstY_);
 
-                qint32 maskRowStride = selectionProjection->rowStride(dstX_, dstY_);
+                qint32 maskRowStride = maskIt->rowStride(dstX_, dstY_);
                 maskIt->moveTo(dstX_, dstY_);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
@@ -551,24 +570,24 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 dstX_ = dstX;
             qint32 srcX_ = srcX;
             qint32 columnsRemaining = srcWidth;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
-            qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
+            qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, rowsRemaining);
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
-                qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 srcRowStride = srcDev->rowStride(srcX_, srcY_);
+                qint32 srcRowStride = srcIt->rowStride(srcX_, srcY_);
                 srcIt->moveTo(srcX_, srcY_);
 
-                qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
+                qint32 dstRowStride = dstIt->rowStride(dstX_, dstY_);
                 dstIt->moveTo(dstX_, dstY_);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
@@ -647,22 +666,22 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
 
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
-            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(dstY);
             qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
             rows = qMin(rows, rowsRemaining);
 
             while (columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
-                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(dstX);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
 
-                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
+                qint32 dstRowStride = dstIt->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
-                qint32 maskRowStride = selectionProjection->rowStride(dstX, dstY);
+                qint32 maskRowStride = maskIt->rowStride(dstX, dstY);
 
                 maskIt->moveTo(dstX, dstY);
 
@@ -690,14 +709,14 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
 
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
-            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY);
             qint32 rows                 = qMin(numContiguousDstRows, rowsRemaining);
 
             while(columnsRemaining > 0) {
 
-                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX);
                 qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
-                qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
+                qint32 dstRowStride            = dstIt->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
 
                 d->paramInfo.dstRowStart   = dstIt->rawData();
@@ -1154,11 +1173,6 @@ void KisPainter::fillPainterPath(const QPainterPath& path, const QRect &requeste
         fillRect &= requestedRect;
     }
 
-    // Clip to the image bounds.
-    if (d->bounds.isValid()) {
-        fillRect &= d->bounds;
-    }
-
     switch (fillStyle) {
     default:
         // Fall through
@@ -1255,12 +1269,6 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
 
     // Expand the rectangle to allow for anti-aliasing.
     fillRect.adjust(-1, -1, 1, 1);
-
-
-    // Clip to the image bounds.
-    if (d->bounds.isValid()) {
-        fillRect &= d->bounds;
-    }
 
     d->fillPainter->fillRect(fillRect, paintColor(), OPACITY_OPAQUE_U8);
 
@@ -2345,6 +2353,11 @@ quint8 KisPainter::flow() const
     return quint8(d->paramInfo.flow * 255.0f);
 }
 
+void KisPainter::setOpacityUpdateAverage(quint8 opacity)
+{
+    d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
+}
+
 void KisPainter::setOpacity(quint8 opacity)
 {
     d->paramInfo.opacity = float(opacity) / 255.0f;
@@ -2353,16 +2366,6 @@ void KisPainter::setOpacity(quint8 opacity)
 quint8 KisPainter::opacity() const
 {
     return quint8(d->paramInfo.opacity * 255.0f);
-}
-
-void KisPainter::setBounds(const QRect & bounds)
-{
-    d->bounds = bounds;
-}
-
-QRect KisPainter::bounds()
-{
-    return d->bounds;
 }
 
 void KisPainter::setCompositeOp(const KoCompositeOp * op)

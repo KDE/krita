@@ -142,14 +142,14 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     {
         // Const does not extend the extent
 
-        KisRectConstIteratorSP cit = dev.createRectConstIteratorNG(0, 0, 128, 128);
+        KisRectConstIteratorSP cit = dev.createRectConstIteratorNG(QRect(0, 0, 128, 128));
         do {} while (cit->nextPixel());
         QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
         QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
         // Non-const does
 
-        KisRectIteratorSP it = dev.createRectIteratorNG(0, 0, 128, 128);
+        KisRectIteratorSP it = dev.createRectIteratorNG(QRect(0, 0, 128, 128));
         do {
             memcpy(it->rawData(), bytes, colorSpace->pixelSize());
         } while (it->nextPixel());
@@ -161,7 +161,7 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     dev.clear();
 
     {
-        KisRectIteratorSP it = dev.createRectIteratorNG(10, 10, 128, 128);
+        KisRectIteratorSP it = dev.createRectIteratorNG(QRect(10, 10, 128, 128));
         do {
             memcpy(it->rawData(), bytes, colorSpace->pixelSize());
         } while (it->nextPixel());
@@ -175,7 +175,7 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     dev.setY(-15);
 
     {
-        KisRectIteratorSP it = dev.createRectIteratorNG(10, 10, 128, 128);
+        KisRectIteratorSP it = dev.createRectIteratorNG(QRect(10, 10, 128, 128));
         do {
             memcpy(it->rawData(), bytes, colorSpace->pixelSize());
         } while (it->nextPixel());
@@ -444,14 +444,14 @@ public:
                 qint32 columnsRemaining = m_rect.width();
                 qint32 x = m_rect.x();
 
-                qint32 numContiguousRows = m_device->numContiguousRows(y, x, x + m_rect.width() - 1);
+                qint32 numContiguousRows = iter->numContiguousRows(y);
                 qint32 rows = qMin(numContiguousRows, rowsRemaining);
 
                 while (columnsRemaining > 0) {
-                    qint32 numContiguousColumns = m_device->numContiguousColumns(x, y, y + rows - 1);
+                    qint32 numContiguousColumns = iter->numContiguousColumns(x);
                     qint32 columns = qMin(numContiguousColumns, columnsRemaining);
 
-                    qint32 rowStride = m_device->rowStride(x, y);
+                    qint32 rowStride = iter->rowStride(x, y);
                     iter->moveTo(x, y);
 
                     // qDebug() << "BitBlt:" << ppVar(x) << ppVar(y)

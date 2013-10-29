@@ -101,6 +101,7 @@ public:
     KisNodeSP currentNode() const;
 
     KisPaintOpPresetSP currentPreset() const;
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
@@ -124,7 +125,6 @@ public:
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
-    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
     ///Notify that the workspace is saved and settings should be saved to it
     void notifySavingWorkspace(KisWorkspaceResource* workspace);

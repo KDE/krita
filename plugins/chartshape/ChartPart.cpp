@@ -18,7 +18,7 @@
 */
 
 #include "ChartPart.h"
-
+#include "ChartDocument.h"
 
 ChartPart::ChartPart(QObject *parent)
     : KoPart(parent)
@@ -30,9 +30,15 @@ ChartPart::~ChartPart()
 {
 }
 
-KoView * ChartPart::createViewInstance(QWidget *parent)
+KoView * ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
+    Q_UNUSED(document);
     Q_UNUSED(parent);
 
     return 0;
+}
+
+KoMainWindow *ChartPart::createMainWindow()
+{
+    return new KoMainWindow(CHART_MIME_TYPE, componentData());
 }

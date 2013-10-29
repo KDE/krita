@@ -59,7 +59,8 @@ bool PSDResourceSection::read(QIODevice* io)
         PSDResourceBlock* block = new PSDResourceBlock();
         if (!block->read(&buf)) {
             error = "Error reading block: " + block->error;
-            return false;
+            dbgFile << error << ",skipping.";
+            continue;
         }
         dbgFile << "resource block created. Type:" << block->identifier << "size"
                 << block->dataSize

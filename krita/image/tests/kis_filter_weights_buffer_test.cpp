@@ -38,7 +38,7 @@ void checkWeightsBuffer(KisFilterStrategy *filter, qreal scale)
     KisFixedPoint fp2;
 
     const int startIndex = 1;
-    const int endIndex = 255 * qMin(scale, 1.0);
+    const int endIndex = 255 * qMin(scale, qreal(1.0));
 
     fp1.from256Frac(startIndex);
     fp2.from256Frac(endIndex);

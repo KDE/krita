@@ -22,9 +22,9 @@
 #include <kis_flipbook_item.h>
 #include <kis_image.h>
 
+#include <KoApplication.h>
 #include <KoIcon.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -46,9 +46,7 @@ KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
 
 void KisFlipbookSelector::createImage()
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),

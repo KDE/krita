@@ -25,36 +25,41 @@
 
 #include <QList>
 
-#include <kparts/part.h>
 #include <kservice.h>
 #include <kcomponentdata.h>
+#include <kurl.h>
+#include <kxmlguiclient.h>
 
 #include "komain_export.h"
 
-class KoMainWindow;
+#include <KoMainWindow.h>
+
+class KJob;
+namespace KIO {
+  class Job;
+}
+
 class KoDocument;
 class KoView;
-class KoMainWindow;
 class KoView;
 class KoOpenPane;
-class KoDocumentInfoDlg;
-class KoDocumentInfo;
 class QGraphicsItem;
 
 /**
  * Override this class in your application. It's the main entry point that
- * should provide the document to the calligra system.
+ * should provide the document, the view and the component data to the calligra
+ * system.
+ *
+ * There is/will be a single KoPart instance for an application that will manage
+ * the list of documents, views and mainwindows.
+ *
+ * It hasn't got much to do with kparts anymore.
  */
-class KOMAIN_EXPORT KoPart : public KParts::ReadWritePart
+class KOMAIN_EXPORT KoPart : public QObject
 {
     Q_OBJECT
 
 public:
-
-    using ReadWritePart::setUrl;
-    using ReadWritePart::localFilePath;
-    using ReadWritePart::setLocalFilePath;
-
     /**
      * Constructor.
      *
@@ -72,6 +77,12 @@ public:
     virtual ~KoPart();
 
     /**
+     * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
+     * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
+     */
+    KComponentData componentData() const;
+
+    /**
      * @param document the document this part manages
      */
     void setDocument(KoDocument *document);
@@ -81,60 +92,40 @@ public:
      */
     KoDocument *document() const;
 
+    // ----------------- mainwindow management -----------------
+
     /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a saving problem.
-     * Note that save/saveFile takes care of doing it.
+     * Create a new main window, but does not add it to the current set of managed main windows.
      */
-    void showSavingErrorDialog();
+    virtual KoMainWindow *createMainWindow() = 0;
 
     /**
-     * Show the last error message in a message box.
-     * The dialog box will mention a loading problem.
-     * openUrl/openFile takes care of doing it, but not loadNativeFormat itself,
-     * so this is often called after loadNativeFormat returned false.
-     */
-    void showLoadingErrorDialog();
-
-
-    // ---------- KParts::ReadWritePart overloads -----------
-
-    void setReadWrite(bool readwrite);
-
-    virtual bool openFile(); ///reimplemented
-    virtual bool saveFile(); ///reimplemented
-
-    // ----------------- shell management -----------------
-    /**
-     * Appends the shell to the list of shells which show this
+     * Appends the mainwindow to the list of mainwindows which show this
      * document as their root document.
      *
      * This method is automatically called from KoMainWindow::setRootDocument,
      * so you do not need to call it.
      */
-    virtual void addShell(KoMainWindow *shell);
+    virtual void addMainWindow(KoMainWindow *mainWindow);
 
     /**
-     * Removes the shell from the list. That happens automatically if the shell changes its
-     * root document. Usually you do not need to call this method.
+     * Removes the mainwindow from the list.
      */
-    virtual void removeShell(KoMainWindow *shell);
+    virtual void removeMainWindow(KoMainWindow *mainWindow);
 
     /**
-     * @return the list of shells for the main window
+     * @return the list of main windows.
      */
-    const QList<KoMainWindow*>& shells() const;
+    const QList<KoMainWindow*>& mainWindows() const;
 
     /**
      * @return the number of shells for the main window
      */
-    int shellCount() const;
+    int mainwindowCount() const;
 
-    void addRecentURLToAllShells(KUrl url);
+    void addRecentURLToAllMainWindows(KUrl url);
 
-    KoMainWindow *currentShell() const;
-
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    KoMainWindow *currentMainwindow() const;
 
 protected slots:
 
@@ -156,8 +147,6 @@ signals:
 
 private slots:
 
-    void setTitleModified(const QString &caption, bool mod);
-    void slotStarted(KIO::Job*);
     void startCustomDocument();
 
 
@@ -168,15 +157,16 @@ public:
     /**
      *  Create a new view for the document.
      */
-    KoView *createView(QWidget *parent = 0);
+    KoView *createView(KoDocument *document, QWidget *parent = 0);
 
     /**
-     * Adds a view to the document.
+     * Adds a view to the document. If the part doesn't know yet about
+     * the document, it is registered.
      *
      * This calls KoView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
      */
-    virtual void addView(KoView *view);
+    virtual void addView(KoView *view, KoDocument *document);
 
     /**
      * Removes a view of the document.
@@ -200,15 +190,9 @@ public:
      *
      * @param create if true, a new canvas item is created if there wasn't one.
      */
-    QGraphicsItem *canvasItem(bool create = true);
+    QGraphicsItem *canvasItem(KoDocument *document, bool create = true);
 
     // ------- startup/openpane etc ---------------
-
-    /**
-     * Set the template type used. This is used by the start up widget to show
-     * the correct templates.
-     */
-    void setTemplateType(const QString& _templateType);
 
     /**
      * Template type used. This is used by the start up widget to show
@@ -230,6 +214,12 @@ public:
     void deleteOpenPane(bool closing = false);
 
 protected:
+
+    /**
+     * Set the template type used. This is used by the start up widget to show
+     * the correct templates.
+     */
+    void setTemplateType(const QString& _templateType);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -265,22 +255,26 @@ protected:
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
                                const QString& templateType = QString());
 
-
-
-
-    virtual KoView *createViewInstance(QWidget *parent) = 0;
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 
     /**
      * Override this to create a QGraphicsItem that does not rely
      * on proxying a KoCanvasController.
      */
-    virtual QGraphicsItem *createCanvasItem();
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document);
 
+protected:
+
+    /// Call in the constructor of the subclass: setComponentData(AppFactory::componentData());
+    virtual void setComponentData(const KComponentData &componentData);
 
 private:
 
+    Q_DISABLE_COPY(KoPart)
+
     class Private;
     Private *const d;
+
 };
 
 class MockPart : public KoPart
@@ -289,9 +283,10 @@ public:
     MockPart()
     : KoPart( 0 )
     {}
-    KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
+    KoView *createViewInstance(KoDocument */*document*/, QWidget * /* parent */ ) { return 0; }
+    virtual KoMainWindow *createMainWindow() { return 0; }
 protected:
-    virtual QGraphicsItem *createCanvasItem() { return 0; }
+    virtual QGraphicsItem *createCanvasItem(KoDocument */*document*/) { return 0; }
 };
 
 #endif

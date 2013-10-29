@@ -69,6 +69,7 @@ private slots:
     void saveAsPredefined();
     void switchWidthHeight();
     void createImage();
+    void switchPortraitLandscape();
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();

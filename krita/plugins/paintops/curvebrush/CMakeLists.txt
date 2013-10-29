@@ -22,8 +22,3 @@ install(TARGETS kritacurvepaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kritacurvepaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita-curve.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
-install( FILES  stylus.obj DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
-install( FILES  stylus.mtl DESTINATION ${DATA_INSTALL_DIR}/krita/brushmodels )
-
-
-

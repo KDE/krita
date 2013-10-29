@@ -157,6 +157,11 @@ bool KisStroke::isExclusive() const
     return m_strokeStrategy->isExclusive();
 }
 
+bool KisStroke::supportsWrapAroundMode() const
+{
+    return m_strokeStrategy->supportsWrapAroundMode();
+}
+
 bool KisStroke::prevJobSequential() const
 {
     return m_prevJobSequential;

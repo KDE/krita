@@ -67,35 +67,55 @@ public:
 
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
+
     /// Forwarded to the current KoToolBase
     void repaintDecorations();
+
+    /**
+     * Forward the given touch event to the current KoToolBase.
+     * The viewconverter and document offset are necessary to convert all
+     * the QTouchPoints to KoTouchPoints that work in document coordinates.
+     */
+    void touchEvent(QTouchEvent *event, KoViewConverter *viewConverter, const QPointF &documentOffset);
+
     /// Forwarded to the current KoToolBase
     void tabletEvent(QTabletEvent *event, const QPointF &point);
+
     /// Forwarded to the current KoToolBase
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mousePressEvent(KoPointerEvent *event);
+
     /// Forwarded to the current KoToolBase
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(KoPointerEvent *event);
+
     /// Forwarded to the current KoToolBase
     void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
     void mouseMoveEvent(KoPointerEvent *event);
+
     /// Forwarded to the current KoToolBase
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
     void mouseReleaseEvent(KoPointerEvent *event);
+
     /// Forwarded to the current KoToolBase
     void keyPressEvent(QKeyEvent *event);
+
     /// Forwarded to the current KoToolBase
     void keyReleaseEvent(QKeyEvent *event);
+
     /// Forwarded to the current KoToolBase
     void wheelEvent(QWheelEvent * event, const QPointF &point);
     void wheelEvent(KoPointerEvent *event);
+
     /// Forwarded to the current KoToolBase
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+
     /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);
+
     /// Forwarded to the current KoToolBase
     QList<QAction*> popupActionList() const;
+
     /// Forwarded to the current KoToolBase
     void deleteSelection();
 
@@ -111,18 +131,25 @@ public:
 
     /// returns true if the current tool holds a selection
     bool hasSelection() const;
+
     /// Forwarded to the current KoToolBase
     void cut();
+
     /// Forwarded to the current KoToolBase
     void copy() const;
+
     /// Forwarded to the current KoToolBase
     bool paste();
+
     /// Forwarded to the current KoToolBase
     QStringList supportedPasteMimeTypes() const;
+
     /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+
     /// Forwarded to the current KoToolBase
     void dragLeaveEvent(QDragLeaveEvent *event);
+
     /// Forwarded to the current KoToolBase
     void dropEvent(QDropEvent *event, const QPointF &point);
  

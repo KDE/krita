@@ -40,17 +40,23 @@ void Parameter::parseValues(const QString& typeDefinition)
     Q_UNUSED(typeDefinition);
 }
 
-QStringList Parameter::getValues(const QString& typeDefinition)
+QString Parameter::extractValues(const QString& typeDefinition)
 {
     QString currentType = PARAMETER_NAMES[m_type];
     Q_ASSERT(typeDefinition.startsWith(currentType));
 
-    // get rid of '(', '{' and '['
     QString onlyValues = typeDefinition;
-    onlyValues = onlyValues.remove(0, currentType.size() + 1);
-    onlyValues.chop(1);
-    QStringList result = onlyValues.split(",");
+    onlyValues = onlyValues.remove(0, currentType.size()).trimmed();
 
+    // drop first and last character : '(1)' or '{1}' or '[1]'
+    onlyValues = onlyValues.mid(1, onlyValues.size() - 2);
+    return onlyValues;
+}
+
+QStringList Parameter::getValues(const QString& typeDefinition)
+{
+    QString onlyValues= extractValues(typeDefinition);
+    QStringList result = onlyValues.split(",");
     return result;
 }
 
@@ -63,7 +69,7 @@ bool Parameter::isPresentationalOnly() const
     return false;
 }
 
-QString Parameter::stripQuotes(const QString& str)
+ QString Parameter::stripQuotes(const QString& str)
 {
     if (str.startsWith("\"") && str.endsWith("\""))
     {
@@ -71,6 +77,20 @@ QString Parameter::stripQuotes(const QString& str)
     }
     return str;
 }
+
+
+QString Parameter::value() const
+{
+    return QString();
+}
+
+
+void Parameter::setValue(const QString& value)
+{
+    Q_UNUSED(value);
+    dbgPlugins << "Not implemented for type : " << PARAMETER_NAMES[m_type];
+}
+
 
 
 /**************************
@@ -89,7 +109,14 @@ void FloatParameter::parseValues(const QString& typeDefinition)
     bool isOk = true;
 
     m_value = m_defaultValue = values.at(0).toFloat(&isOk);
+
+    if (!isOk)
+    {
+        dbgPlugins << "Incorect type definition: " << typeDefinition;
+    }
     Q_ASSERT(isOk);
+
+
     m_minValue = values.at(1).toFloat(&isOk);
     Q_ASSERT(isOk);
     m_maxValue = values.at(2).toFloat(&isOk);
@@ -101,6 +128,18 @@ QString FloatParameter::value() const
 {
     return QString::number(m_value);
 }
+
+
+void FloatParameter::setValue(const QString& value)
+{
+    bool isOk = true;
+    float floatValue = value.toFloat(&isOk);
+    if (isOk)
+    {
+        m_value = floatValue;
+    }
+}
+
 
 QString FloatParameter::toString()
 {
@@ -146,6 +185,17 @@ void IntParameter::parseValues(const QString& typeDefinition)
 QString IntParameter::value() const
 {
     return QString::number(m_value);
+}
+
+
+void IntParameter::setValue(const QString& value)
+{
+    bool isOk = true;
+    int intValue = value.toInt(&isOk);
+    if (isOk)
+    {
+        m_value = intValue;
+    }
 }
 
 
@@ -231,6 +281,27 @@ QString ChoiceParameter::value() const
     return QString::number(m_value);
 }
 
+void ChoiceParameter::setValue(const QString& value)
+{
+    bool isInt = true;
+    int choiceIndex = value.toInt(&isInt);
+    if (isInt)
+    {
+        setIndex(choiceIndex);
+    }else
+    {
+        setIndex(m_choices.indexOf(value));
+    }
+}
+
+void ChoiceParameter::setIndex(int i)
+{
+    if (i >= 0 && i < m_choices.size())
+    {
+        m_value = i;
+    }
+}
+
 
 QString ChoiceParameter::toString()
 {
@@ -260,8 +331,8 @@ NoteParameter::NoteParameter(const QString& name, bool updatePreview): Parameter
 
 void NoteParameter::parseValues(const QString& typeDefinition)
 {
-    QStringList values = getValues(typeDefinition);
-    m_label = stripQuotes(values.at(0));
+    QString values = extractValues(typeDefinition);
+    m_label = stripQuotes(values);
 }
 
 QString NoteParameter::toString()
@@ -401,21 +472,35 @@ LinkParameter::LinkParameter(const QString& name, bool updatePreview): Parameter
 void LinkParameter::parseValues(const QString& typeDefinition)
 {
     QStringList values = getValues(typeDefinition);
-    QString link = "<a href=%1>%2</a>";
 
+
+    QString linkAddress;
+    QString linkText;
     if (values.size() == 1)
     {
-        m_link = link.arg(values.at(0)).arg(values.at(0));
+        linkAddress = values.at(0);
+        linkText = stripQuotes(values.at(0));
+
     }
     else if (values.size() == 2)
     {
-        m_link = link.arg(values.at(1)).arg(values.at(0));
+        linkAddress = values.at(1);
+        linkText = stripQuotes(values.at(0));
     }
     else if (values.size() == 3)
     {
         //TODO: ignored aligment at values.at(0) , mostly 0
-        m_link = link.arg(values.at(2)).arg(values.at(1));
+        linkAddress = values.at(2);
+        linkText = stripQuotes(values.at(1));
     }
+    else
+    {
+        dbgPlugins << "Wrong format of link parameter";
+        return;
+    }
+
+    QString link = "<a href=%1>%2</a>";
+    m_link = link.arg(linkAddress).arg(linkText);
 }
 
 QString LinkParameter::toString()
@@ -473,9 +558,6 @@ void TextParameter::parseValues(const QString& typeDefinition)
             }
         }
     }
-
-    dbgPlugins << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<HEY!!!!";
-    dbgPlugins << values.size() << " " << values << "m_value" << m_value;
 
     // remove first and last "
     m_value = stripQuotes(m_value);

@@ -31,6 +31,8 @@ class KoTemplatesPane;
 class KoDetailsPane;
 class KUrl;
 class QTreeWidgetItem;
+class QString;
+class QStringList;
 
 /// \internal
 class KoOpenPane : public QWidget
@@ -60,12 +62,17 @@ public:
      */
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
+
 protected slots:
     void updateSelectedWidget();
     void itemClicked(QTreeWidgetItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
+
+private slots:
+    /// when clicked "Open Existing Document" button
+    void openFileDialog();
 
 signals:
     void openExistingFile(const KUrl&);
@@ -85,8 +92,12 @@ protected:
      */
     void initTemplates(const QString& templateType);
 
+    // QWidget overrides
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
 private:
-    void initExistingFilesPane(const QStringList& mimeFilter);
+    QStringList m_mimeFiletr;
 
     KoOpenPanePrivate * const d;
 };

@@ -25,9 +25,10 @@
 #include <kis_node.h>
 #include <kis_debug.h>
 
-KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const QList<KisNodeSP> &nodes, QSharedPointer<gmic_list<float> > images)
+KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer<gmic_list<float> > images, QRect rc)
     : m_nodes(nodes),
-      m_images(images)
+      m_images(images),
+      m_rc(rc)
 {
 }
 
@@ -36,26 +37,19 @@ void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
 {
     Q_UNUSED(undoAdapter);
 
-    int index = m_nodes.indexOf(node);
+    int index = m_nodes->indexOf(node);
     if (index >= 0)
     {
-        dbgPlugins << "Found the LAYEEEEEEEEEEEEEEEEER!";
-
         /* fill the image with data here */
-        KisGmicSimpleConvertor convertor;
-
         KisPaintDeviceSP device = node->paintDevice();
         gmic_image<float> &gimg = m_images->_data[index];
 
-
-        QRect rc = device->exactBounds();
-        quint32 x = rc.width();
-        quint32 y = rc.height();
+        quint32 x = m_rc.width();
+        quint32 y = m_rc.height();
         quint32 z = 1;
         quint32 colorChannelCount = 4; // RGBA
         gimg.assign(x,y,z,colorChannelCount);
-
-        convertor.convertToGmicImage(device, gimg);
+        KisGmicSimpleConvertor::convertToGmicImageFast(device, gimg, m_rc);
     }
 }
 

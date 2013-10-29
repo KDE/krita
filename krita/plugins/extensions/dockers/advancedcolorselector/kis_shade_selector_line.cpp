@@ -168,29 +168,10 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
         e->setAccepted(false);
         return;
     }
-
-    QColor color(m_pixelCache.pixel(e->pos()));
-    if(color==m_backgroundColor)
-        return;
-
     KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
     Q_ASSERT(parent);
 
-    KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
-    if(e->button()==Qt::RightButton)
-        role = KisColorSelectorBase::Background;
-
-    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), role);
     parent->KisColorSelectorBase::mousePressEvent(e);
-
-    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-
-    bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
-    bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
-
-    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick)) {
-        parent->setColor(parent->findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())));
-    }
 
     e->accept();
 }
@@ -204,5 +185,33 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
         parent->updateColorPreview(color);
 }
 
-void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent *)
-{}
+void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
+{
+    if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
+        e->setAccepted(false);
+        return;
+    }
+    
+    QColor color(m_pixelCache.pixel(e->pos()));
+    if(color==m_backgroundColor)
+        return;
+
+    KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
+    Q_ASSERT(parent);
+
+    KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
+    if(e->button()==Qt::RightButton)
+        role = KisColorSelectorBase::Background;
+
+    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), role);
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
+    bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
+    bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
+
+    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick)) {
+        parent->setColor(parent->findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())));
+    }
+    e->accept();
+}

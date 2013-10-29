@@ -23,6 +23,7 @@
 #include <QModelIndex>
 #include <QVariant>
 
+class KisGmicBlacklister;
 class Component;
 
 // introduce "rolespace", let's not collide with some other Qt::UserRole + 1 roles e.g. in ui/kis_categorized_list_model.h
@@ -57,8 +58,12 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    // takes ownership
+    void setBlacklister(KisGmicBlacklister * blacklister);
+
 private:
     Component * m_rootComponent;
+    KisGmicBlacklister * m_blacklister;
 
 };
 

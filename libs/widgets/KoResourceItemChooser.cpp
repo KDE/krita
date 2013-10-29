@@ -34,6 +34,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QSplitter>
+#include <QToolButton>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -67,6 +68,7 @@ public:
     KoResourceTaggingInterface* tagChooser;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    QToolButton  *viewModeButton;
 
     QString knsrcFile;
     QScrollArea *previewScroller;
@@ -112,7 +114,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->buttonGroup = new QButtonGroup(this);
     d->buttonGroup->setExclusive(false);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
 
     QGridLayout* buttonLayout = new QGridLayout;
 
@@ -154,12 +156,18 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setSpacing(0);
     buttonLayout->setMargin(0);
 
+    d->viewModeButton = new QToolButton(this);
+    d->viewModeButton->setIcon(koIcon("view-choose"));
+    d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
+    d->viewModeButton->setVisible(false);
+
     d->tagChooser = new KoResourceTaggingInterface(d->model, this);
 
-    layout->addWidget(d->tagChooser->tagChooserWidget());
-    layout->addWidget(d->splitter);
-    layout->addWidget(d->tagChooser->tagFilterWidget());
-    layout->addLayout(buttonLayout);
+    layout->addWidget(d->tagChooser->tagChooserWidget(), 0, 0);
+    layout->addWidget(d->viewModeButton, 0, 1);
+    layout->addWidget(d->splitter, 1, 0, 1, 2);
+    layout->addWidget(d->tagChooser->tagFilterWidget(), 2, 0, 1, 2);
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
@@ -169,6 +177,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
+    disconnect();
     delete d;
 }
 
@@ -475,6 +484,16 @@ KoResourceItemView *KoResourceItemChooser::itemView() const
 void KoResourceItemChooser::contextMenuRequested(const QPoint& pos)
 {
     d->tagChooser->contextMenuRequested(currentResource(), pos);
+}
+
+void KoResourceItemChooser::setViewModeButtonVisible(bool visible)
+{
+    d->viewModeButton->setVisible(visible);
+}
+
+QToolButton* KoResourceItemChooser::viewModeButton() const
+{
+    return d->viewModeButton;
 }
 
 #include <KoResourceItemChooser.moc>

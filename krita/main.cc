@@ -31,6 +31,8 @@
 #include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <ksplashscreen.h>
+#include <ksycoca.h>
+#include <kstandarddirs.h>
 
 #include <KoApplication.h>
 
@@ -38,15 +40,23 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_doc2.h"
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN
 #include "stdlib.h"
+#include <ui/input/wintab/kis_tablet_support_win.h>
+
+#elif defined Q_WS_X11
+#include <ui/input/wintab/kis_tablet_support_x11.h>
+
 #endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 #ifdef Q_WS_X11
+if (qgetenv("KDE_FULL_SESSION").size() > 0) {
     setenv("QT_NO_GLIB", "1", true);
+}
 #endif
 
     int state;
@@ -56,17 +66,29 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
+    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KoApplication app;
+    KoApplication app(KIS_MIME_TYPE);
+
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    app.setEventFilter(&KisTabletSupportWin::eventFilter);
+#elif defined Q_WS_X11
+    KisTabletSupportX11::init();
+    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+#endif
+
+#if defined Q_WS_X11 && QT_VERSION >= 0x040800
+    app.setAttribute(Qt::AA_X11InitThreads, true);
+#endif
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
-
 
     if (!app.start()) {
         return 1;

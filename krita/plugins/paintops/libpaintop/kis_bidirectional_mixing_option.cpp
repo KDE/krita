@@ -55,8 +55,9 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
     p.bitBlt(sx, sy, device, dstRect.x(), dstRect.y(), sw, sh);
 
     int count = cs->channelCount();
-    KisRectIteratorSP cit = canvas->createRectIteratorNG(sx, sy, sw, sh);
-    KisRectIteratorSP dit = dab->createRectIteratorNG(sx, sy, sw, sh);
+    QRect srcRect(sx, sy, sw, sh);
+    KisRectIteratorSP cit = canvas->createRectIteratorNG(srcRect);
+    KisRectIteratorSP dit = dab->createRectIteratorNG(srcRect);
     QVector<float> cc(count), dc(count);
     do {
         if (cs->opacityU8(dit->rawData()) > 10 && cs->opacityU8(cit->rawData()) > 10) {

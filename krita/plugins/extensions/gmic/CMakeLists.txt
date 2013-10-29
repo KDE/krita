@@ -12,6 +12,9 @@ gmic_def.h
 gmic.h
 )
 
+if(APPLE)
+    add_definitions(-D_APPLE)
+endif()
 add_definitions(-Dgmic_build )
 add_definitions(-Dgmic_float_only )
 
@@ -35,30 +38,36 @@ if(FFTW3_FOUND)
 endif(FFTW3_FOUND)
 
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
-install(FILES gmic_def.gmic DESTINATION ${GMIC_INSTALL_DIR} )
+install(FILES
+    gmic_def.gmic
+    gmic_def.gmic.blacklist
+DESTINATION ${GMIC_INSTALL_DIR} )
 
 ##
 # compile Krita plug-in and link static library in
 ##
 
-set(kritagmic_shared_PART_SRCS kis_gmic_parser.cpp
-kis_gmic_filter_model.cpp
-kis_html_delegate.cpp
-kis_gmic_filter_settings.cpp
-kis_gmic_settings_widget.cpp
-kis_gmic_input_output_widget.cpp
-kis_gmic_widget.cpp
-Component.h
-Category.cpp
-Command.cpp
-Filters.cpp
-Parameter.cpp
+set(kritagmic_shared_PART_SRCS
+    kis_gmic_parser.cpp
+    kis_gmic_blacklister.cpp
+    kis_gmic_filter_model.cpp
+    kis_gmic_filter_settings.cpp
+    Category.cpp
+    Command.cpp
+    Parameter.cpp
+    kis_input_output_mapper.cpp
+    kis_html_delegate.cpp
+    kis_gmic_settings_widget.cpp
+    kis_gmic_input_output_widget.cpp
+    kis_gmic_widget.cpp
 )
 
 set(kritagmic_PART_SRCS
     kis_gmic_simple_convertor.cpp
     kis_export_gmic_processing_visitor.cpp
+    kis_gmic_applicator.cpp
     kis_gmic_command.cpp
+    kis_gmic_synchronize_layers_command.cpp
     kis_import_gmic_processing_visitor.cpp
     kis_gmic_plugin.cpp ${kritagmic_shared_PART_SRCS}
 )
@@ -69,7 +78,7 @@ set(gmicparser_PART_SRCS main.cpp ${kritagmic_shared_PART_SRCS})
 kde4_add_ui_files(kritagmic_PART_SRCS wdg_gmic.ui )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
 
-target_link_libraries(kritagmic kritaui gmic)
+target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY})
 
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
 target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic)
@@ -83,4 +92,4 @@ install( FILES  gmic.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 install( FILES  kritagmic.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 # tests
-# add_subdirectory(tests)
+add_subdirectory(tests)

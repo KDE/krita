@@ -27,9 +27,11 @@
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
+class QTouchEvent;
 class QTabletEvent;
 
 class KisStrokeShortcut;
+class KisTouchShortcut;
 class KisAbstractInputAction;
 
 /**
@@ -86,6 +88,7 @@ public:
 
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
+    void addShortcut(KisTouchShortcut *shortcut);
     void addAction(KisAbstractInputAction *action);
 
     /**
@@ -155,6 +158,10 @@ public:
      */
     bool mouseMoved(QMouseEvent *event);
 
+    bool touchBeginEvent(QTouchEvent *event);
+    bool touchUpdateEvent(QTouchEvent *event);
+    bool touchEndEvent(QTouchEvent *event);
+
     /**
      * Handles the High Resolution tablet events
      * (used on Windows only)
@@ -197,9 +204,12 @@ private:
 
     void prepareReadyShortcuts();
 
-    bool tryRunReadyShortcut(Qt::MouseButton button, QMouseEvent *event);
+    bool tryRunReadyShortcut( Qt::MouseButton button, QMouseEvent* event );
     void tryActivateReadyShortcut();
-    bool tryEndRunningShortcut(Qt::MouseButton button, QMouseEvent *event);
+    bool tryEndRunningShortcut( Qt::MouseButton button, QMouseEvent* event );
+
+    bool tryRunTouchShortcut(QTouchEvent *event);
+    bool tryEndTouchShortcut(QTouchEvent *event);
 
 private:
     class Private;

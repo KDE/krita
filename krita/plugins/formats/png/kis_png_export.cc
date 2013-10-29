@@ -112,7 +112,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     }
 
 
-    KisRectConstIteratorSP it = l->paintDevice()->createRectConstIteratorNG(0, 0, image->width(), image->height());
+    KisRectConstIteratorSP it = l->paintDevice()->createRectConstIteratorNG(image->bounds());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     KisPNGOptions options;

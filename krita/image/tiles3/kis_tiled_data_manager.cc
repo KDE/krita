@@ -24,6 +24,7 @@
 
 #include "kis_tile.h"
 #include "kis_tiled_data_manager.h"
+#include "kis_tile_data_wrapper.h"
 #include "kis_tiled_data_manager_p.h"
 #include "kis_memento_manager.h"
 #include "swap/kis_legacy_tile_compressor.h"
@@ -32,7 +33,6 @@
 #include "kis_paint_device_writer.h"
 
 #include "kis_global.h"
-//#include "kis_debug.h"
 
 
 /* The data area is divided into tiles each say 64x64 pixels (defined at compiletime)
@@ -44,8 +44,7 @@
  */
 
 KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
-        const quint8 *defaultPixel)
-        : m_lock(QReadWriteLock::NonRecursive)
+                                         const quint8 *defaultPixel)
 {
     /* See comment in destructor for details */
     m_mementoManager = new KisMementoManager();
@@ -62,8 +61,7 @@ KisTiledDataManager::KisTiledDataManager(quint32 pixelSize,
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm)
-        : KisShared(),
-        m_lock(QReadWriteLock::NonRecursive)
+    : KisShared()
 {
     /* See comment in destructor for details */
 
@@ -689,26 +687,28 @@ void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
 
 void KisTiledDataManager::writeBytes(const quint8 *data,
                                      qint32 x, qint32 y,
-                                     qint32 width, qint32 height)
+                                     qint32 width, qint32 height,
+                                     qint32 dataRowStride)
 {
     QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header
-    writeBytesBody(data, x, y, width, height);
+    writeBytesBody(data, x, y, width, height, dataRowStride);
 }
 
 void KisTiledDataManager::readBytes(quint8 *data,
                                     qint32 x, qint32 y,
-                                    qint32 width, qint32 height) const
+                                    qint32 width, qint32 height,
+                                    qint32 dataRowStride) const
 {
     QReadLocker locker(&m_lock);
     // Actual bytes reading/writing is done in private header
-    readBytesBody(data, x, y, width, height);
+    readBytesBody(data, x, y, width, height, dataRowStride);
 }
 
 QVector<quint8*>
 KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
                                      qint32 x, qint32 y,
-                                     qint32 width, qint32 height)
+                                     qint32 width, qint32 height) const
 {
     QReadLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header
@@ -717,13 +717,27 @@ KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
 
 
 void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
-        QVector<qint32> channelSizes,
-        qint32 x, qint32 y,
-        qint32 width, qint32 height)
+                                           QVector<qint32> channelSizes,
+                                           qint32 x, qint32 y,
+                                           qint32 width, qint32 height)
 {
     QWriteLocker locker(&m_lock);
     // Actial bytes reading/writing is done in private header
-    writePlanarBytesBody(planes, channelSizes, x, y, width, height);
+
+    bool allChannelsPresent = true;
+
+    foreach (const quint8* plane, planes) {
+        if (!plane) {
+            allChannelsPresent = false;
+            break;
+        }
+    }
+
+    if (allChannelsPresent) {
+        writePlanarBytesBody<true>(planes, channelSizes, x, y, width, height);
+    } else {
+        writePlanarBytesBody<false>(planes, channelSizes, x, y, width, height);
+    }
 }
 
 qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const

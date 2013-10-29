@@ -77,9 +77,9 @@ public:
 
     virtual void syncTaggedResourceView(){}
 
-    virtual void syncTagAddition(const QString& tag){}
+    virtual void syncTagAddition(const QString& tag) { Q_UNUSED(tag); }
 
-    virtual void syncTagRemoval(const QString& tag){}
+    virtual void syncTagRemoval(const QString& tag) { Q_UNUSED(tag); }
 
     ///Reimplemented
     virtual void importResourceFile(const QString& filename, bool fileCreation = true)
@@ -87,6 +87,8 @@ public:
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
+
+        if (fi.size() == 0) return;
 
         if( fi.suffix().toLower() == "abr") {
             if(fileCreation) {

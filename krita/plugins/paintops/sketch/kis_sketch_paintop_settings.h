@@ -56,10 +56,6 @@ public:
     bool isAirbrushing() const;
     int rate() const;
     
-#if defined(HAVE_OPENGL)
-    QString modelName() const;
-#endif
-
 };
 
 #endif

@@ -19,7 +19,7 @@
  */
 
 #include "kis_random_sub_accessor.h"
-
+#include <QtGlobal>
 
 #include <KoColorSpace.h>
 #include <math.h>
@@ -49,16 +49,16 @@ void KisRandomSubAccessor::sampledOldRawData(quint8* dst)
     if (hsub < 0.0) hsub = 1.0 + hsub;
     double vsub = m_currentPoint.y() - y;
     if (vsub < 0.0) vsub = 1.0 + vsub;
-    weights[0] = (int)round((1.0 - hsub) * (1.0 - vsub) * 255);
+    weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->oldRawData();
-    weights[1] = (int)round((1.0 - vsub) * hsub * 255);
+    weights[1] = qRound((1.0 - vsub) * hsub * 255);
     m_randomAccessor->moveTo(x + 1, y);
     pixels[1] = m_randomAccessor->oldRawData();
-    weights[2] = (int)round(vsub * (1.0 - hsub) * 255);
+    weights[2] = qRound(vsub * (1.0 - hsub) * 255);
     m_randomAccessor->moveTo(x, y + 1);
     pixels[2] = m_randomAccessor->oldRawData();
-    weights[3] = (int)round(hsub * vsub * 255);
+    weights[3] = qRound(hsub * vsub * 255);
     m_randomAccessor->moveTo(x + 1, y + 1);
     pixels[3] = m_randomAccessor->oldRawData();
     m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
@@ -75,16 +75,16 @@ void KisRandomSubAccessor::sampledRawData(quint8* dst)
     if (hsub < 0.0) hsub = 1.0 + hsub;
     double vsub = m_currentPoint.y() - y;
     if (vsub < 0.0) vsub = 1.0 + vsub;
-    weights[0] = (int)round((1.0 - hsub) * (1.0 - vsub) * 255);
+    weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->rawData();
-    weights[1] = (int)round((1.0 - vsub) * hsub * 255);
+    weights[1] = qRound((1.0 - vsub) * hsub * 255);
     m_randomAccessor->moveTo(x + 1, y);
     pixels[1] = m_randomAccessor->rawData();
-    weights[2] = (int)round(vsub * (1.0 - hsub) * 255);
+    weights[2] = qRound(vsub * (1.0 - hsub) * 255);
     m_randomAccessor->moveTo(x, y + 1);
     pixels[2] = m_randomAccessor->rawData();
-    weights[3] = (int)round(hsub * vsub * 255);
+    weights[3] = qRound(hsub * vsub * 255);
     m_randomAccessor->moveTo(x + 1, y + 1);
     pixels[3] = m_randomAccessor->rawData();
     m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);

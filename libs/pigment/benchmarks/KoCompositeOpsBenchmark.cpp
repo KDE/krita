@@ -21,8 +21,10 @@
 #include "KoCompositeOpsBenchmark.h"
 #include "../compositeops/KoCompositeOpAlphaDarken.h"
 #include "../compositeops/KoCompositeOpOver.h"
+#include <KoOptimizedCompositeOpFactory.h>
 
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpaceRegistry.h>
 
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
@@ -39,7 +41,7 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 #define COMPOSITE_BENCHMARK \
         for (int y = 0; y < TILES_IN_HEIGHT; y++){                                              \
             for (int x = 0; x < TILES_IN_WIDTH; x++){                                           \
-                compositeOp.composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
+                compositeOp->composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
                                       m_srcBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
                                       0, 0,                                                            \
                                       TILE_WIDTH, TILE_HEIGHT,                                         \
@@ -69,7 +71,7 @@ void KoCompositeOpsBenchmark::cleanupTestCase()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeOver()
 {
-    KoCompositeOpOver<KoBgrU16Traits> compositeOp(0);
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createOverOp32(KoColorSpaceRegistry::instance()->rgb16());
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
@@ -77,7 +79,8 @@ void KoCompositeOpsBenchmark::benchmarkCompositeOver()
 
 void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
 {
-    KoCompositeOpAlphaDarken<KoBgrU16Traits> compositeOp(0);
+    //KoCompositeOpAlphaDarken<KoBgrU16Traits> compositeOp(0);
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(KoColorSpaceRegistry::instance()->rgb16());
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }

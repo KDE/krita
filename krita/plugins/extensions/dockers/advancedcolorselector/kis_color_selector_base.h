@@ -40,7 +40,7 @@ public:
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
     virtual void setCanvas(KisCanvas2* canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas();
     const KoColorSpace* colorSpace() const;
     enum ColorRole {Foreground, Background};
 

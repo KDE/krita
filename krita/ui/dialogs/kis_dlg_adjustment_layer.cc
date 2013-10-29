@@ -48,7 +48,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)
-    , m_freezeName(false)
+    , m_customName(false)
+    , m_layerName(layerName)
 {
     setCaption(caption);
     setButtons(Ok | Cancel);
@@ -57,14 +58,17 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
+
     wdgFilterNodeCreation.filterSelector->setView(view);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
-    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
-
     wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
     wdgFilterNodeCreation.layerName->setText(layerName);
-    enableButtonOk(0);
+
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
+    connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
+
+    enableButtonOk(false);
 }
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
@@ -72,13 +76,11 @@ KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
     KisConfig().setShowFilterGalleryLayerMaskDialog(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
 }
 
-void KisDlgAdjustmentLayer::slotNameChanged(const QString & text)
+void KisDlgAdjustmentLayer::slotNameChanged(const QString &text)
 {
     Q_UNUSED(text);
-    if (m_freezeName)
-        return;
-
-    enableButtonOk(true);
+    m_customName = !text.isEmpty();
+    enableButtonOk(m_currentFilter);
 }
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
@@ -94,11 +96,18 @@ QString KisDlgAdjustmentLayer::layerName() const
 
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
-    enableButtonOk(true);
-    KisFilterConfiguration * config = filterConfiguration();
-    if (config) {
-        m_nodeFilterInterface->setFilter(config);
+    m_currentFilter = filterConfiguration();
+    enableButtonOk(m_currentFilter);
+
+    if (m_currentFilter) {
+        m_nodeFilterInterface->setFilter(m_currentFilter);
+        if (!m_customName) {
+            wdgFilterNodeCreation.layerName->blockSignals(true);
+            wdgFilterNodeCreation.layerName->setText(m_layerName + " (" + wdgFilterNodeCreation.filterSelector->currentFilterName() + ")");
+            wdgFilterNodeCreation.layerName->blockSignals(false);
+        }
     }
+
     m_node->setDirty();
 }
 

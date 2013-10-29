@@ -305,6 +305,19 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+# overcome some platform incompatibilities
+if(WIN32)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+    add_definitions(-D_USE_MATH_DEFINES)
+    add_definitions(-DNOMINMAX)
+    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
+endif(WIN32)
+
+add_definitions(
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
+)
+
 # would need more code changes before 4.8.0, e.g. with qPrintable()
 if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
     # enable QStringBuilder enhancement
@@ -375,23 +388,19 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-if (WIN32)
-    message(STATUS "OpenGL is not supported on Windows.")
-else (WIN32)
-    macro_optional_find_package(OpenGL)
+macro_optional_find_package(OpenGL)
 
-    if(OPENGL_FOUND)
-        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-        if(QT_QTOPENGL_FOUND)
-            message(STATUS "Found Qt OpenGL support")
-            set(HAVE_OPENGL 1)
-        else(QT_QTOPENGL_FOUND)
-            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-        endif(QT_QTOPENGL_FOUND)
-    else(OPENGL_FOUND)
-        message(STATUS "Did NOT find OpenGL libraries")
-    endif(OPENGL_FOUND)
-endif (WIN32)
+if(OPENGL_FOUND)
+    message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+    if(QT_QTOPENGL_FOUND)
+        message(STATUS "Found Qt OpenGL support")
+        set(HAVE_OPENGL 1)
+    else(QT_QTOPENGL_FOUND)
+        message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+    endif(QT_QTOPENGL_FOUND)
+else(OPENGL_FOUND)
+    message(STATUS "Did NOT find OpenGL libraries")
+endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
@@ -400,7 +409,6 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 ##
 macro_optional_find_package(KdepimLibs)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
-
 
 ##
 ## Test for eigen2
@@ -492,21 +500,49 @@ if(HAVE_VC)
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
     include (VcMacros)
 
-    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-      if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
-      else(PACKAGERS_BUILD)
-        set(${_objs} ${_src})
-      endif(PACKAGERS_BUILD)
-    endmacro()
+    #Handle Vc master
+    if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
+        message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
 
-    macro(ko_compile_for_all_implementations _objs _src)
-      if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
-      else(PACKAGERS_BUILD)
-        set(${_objs} ${_src})
-      endif(PACKAGERS_BUILD)
-    endmacro()
+        if(Vc_COMPILER_IS_GCC)
+            AddCompilerFlag("-std=c++11" _ok)
+            if(NOT _ok)
+                AddCompilerFlag("-std=c++0x" _ok)
+            endif()
+        endif(Vc_COMPILER_IS_GCC)
+
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+    else()
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+    endif()
 
     if (NOT PACKAGERS_BUILD)
       # Optimize the whole Calligra for current architecture
@@ -686,13 +722,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CM
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
-                   ${CMAKE_SOURCE_DIR}/libs/odf/styles
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KDE4_INCLUDES})
 
-set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}

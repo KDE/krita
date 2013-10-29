@@ -51,10 +51,9 @@ public:
 
     virtual QString toString();
     // if the parameter is only GUI option, return null string
-    virtual QString value() const
-    {
-        return QString();
-    }
+    virtual QString value() const;
+    virtual void setValue(const QString &value);
+
     virtual void parseValues(const QString& typeDefinition);
 
     QString name() const { return m_name; }
@@ -63,9 +62,10 @@ public:
     virtual void reset() { };
 
 protected:
+    // strips parameter type (int, note, etc.) and enclosing brackets
+    QString extractValues(const QString& typeDefinition);
     QStringList getValues(const QString& typeDefinition);
-    QString stripQuotes(const QString &str);
-
+    QString stripQuotes(const QString& str);
 };
 
 static QMap<Parameter::ParameterType, QString> initMap()
@@ -100,6 +100,8 @@ public:
     float m_maxValue;
 
     virtual QString value() const;
+    virtual void setValue(const QString& value);
+
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual void reset();
@@ -117,6 +119,8 @@ public:
     int m_maxValue;
 
     virtual QString value() const;
+    virtual void setValue(const QString& value);
+
     virtual void parseValues(const QString& typeDefinition);
     virtual QString toString();
     virtual void reset();
@@ -136,15 +140,17 @@ public:
     ChoiceParameter(const QString& name, bool updatePreview = true);
     virtual void parseValues(const QString& typeDefinition);
 
-
     // default index
     int m_defaultValue;
     // current index
     int m_value;
-
     QStringList m_choices;
 
     virtual QString value() const;
+    // you can use int or name, if it is int, it will be set as index,
+    // if you use name of choice, index will be determined
+    virtual void setValue(const QString& value);
+    void setIndex(int i);
     virtual QString toString();
     virtual void reset();
 };

@@ -23,7 +23,6 @@
 
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
-#include <KoServiceProvider.h>
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
@@ -237,7 +236,11 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         if (!node) return;
 
         image->barrierLock();
-        ActionHelper::copyFromDevice(view, node->paintDevice());
+        KisPaintDeviceSP dev = node->paintDevice();
+        if (!dev) {
+            dev = node->projection();
+        }
+        ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
         KUndo2Command *command = 0;
@@ -341,7 +344,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow *win = doc->documentPart()->createMainWindow();
     win->show();
     win->setRootDocument(doc);
 }

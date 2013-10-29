@@ -131,38 +131,40 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     qreal scale = m_sizeOption.apply(info);
     if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
-    QPointF pt = info.pos() - hotSpot;
-
     setCurrentScale(scale);
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x, y;
-    qreal xFraction, yFraction; // will not be used
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
+
+    QRect dstRect;
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, info.pos(),
+                             scale, scale, 0.0,
+                             info, 1.0,
+                             &dstRect);
+
+    if (dstRect.isEmpty()) return 1.0;
+
 
     QPoint srcPoint;
 
-    if(m_moveSourcePoint)
-    {
-        srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
-                          y - static_cast<qint32>(settings->offset().y()));
+    if(m_moveSourcePoint) {
+        srcPoint = (dstRect.topLeft() - settings->offset()).toPoint();
     } else {
-        srcPoint = QPoint(static_cast<qint32>(settings->position().x() - hotSpot.x()),
-                          static_cast<qint32>(settings->position().y() - hotSpot.y()));
+        QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
+        srcPoint = (settings->position() - hotSpot).toPoint();
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0, xFraction, yFraction, info);
-    qint32 sh = brush->maskHeight(scale, 0.0, xFraction, yFraction, info);
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
-    if (srcPoint.x() < 0)
-        srcPoint.setX(0);
+    if (!realSourceDevice->defaultBounds()->wrapAroundMode()) {
+        if (srcPoint.x() < 0)
+            srcPoint.setX(0);
 
-    if (srcPoint.y() < 0)
-        srcPoint.setY(0);
+        if (srcPoint.y() < 0)
+            srcPoint.setY(0);
+    }
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
@@ -192,11 +194,11 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(0, 0, sw, sh);
+        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {
-            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + x, dstIt->y() + y)) + translat);
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + dstRect.x(), dstIt->y() + dstRect.y())) + translat);
             srcAcc->moveTo(p);
             srcAcc->sampledOldRawData(dstIt->rawData());
         } while (dstIt->nextPixel());
@@ -218,7 +220,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         // First divide
         const KoColorSpace* srcCs = realSourceDevice->colorSpace();
         const KoColorSpace* tmpCs = m_srcdev->colorSpace();
-        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(x, y, sw);
+        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(dstRect.x(), dstRect.y() , sw);
         KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
@@ -255,7 +257,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
 
         // Finaly multiply
-        KisHLineIteratorSP srcIt2 = realSourceDevice->createHLineIteratorNG(x, y, sw);
+        KisHLineIteratorSP srcIt2 = realSourceDevice->createHLineIteratorNG(dstRect.x(), dstRect.y(), sw);
         KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
@@ -276,16 +278,6 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
         delete [] matrix;
     }
-
-    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
-    static KoColor color(Qt::black, cs);
-
-    KisFixedPaintDeviceSP dab =
-        m_dabCache->fetchDab(cs, color, scale, scale,
-                             0.0, info);
-
-    QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
-    if (dstRect.isEmpty()) return 1.0;
 
     painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
                                         m_srcdev, dab,

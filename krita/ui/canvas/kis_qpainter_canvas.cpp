@@ -116,7 +116,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
         m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
 
-
     QPainter gc(&m_buffer);
 
     // we double buffer, so we paint on an image first, then from the image onto the canvas,
@@ -196,7 +195,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    m_d->checkBrush = QBrush(checkImage());
+    m_d->checkBrush = QBrush(createCheckersImage());
     notifyConfigChanged();
 }
 

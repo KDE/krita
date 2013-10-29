@@ -76,10 +76,10 @@ void clamp<float>(float* r, float* g, float* b)
 }
 
 
-template<typename _channel_type_>
+template<typename _channel_type_,typename traits>
 class KisHSVAdjustment : public KoColorTransformation
 {
-    typedef KoBgrTraits<_channel_type_> RGBTrait;
+    typedef traits RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
@@ -250,17 +250,17 @@ KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoCol
         return 0;
     }
     if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        adj = new KisHSVAdjustment< quint8 >();
+        adj = new KisHSVAdjustment< quint8, KoBgrTraits < quint8 > >();
     } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisHSVAdjustment< quint16 >();
+        adj = new KisHSVAdjustment< quint16, KoBgrTraits < quint16 > >();
     }
 #ifdef HAVE_OPENEXR
     else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
-        adj = new KisHSVAdjustment< half >();
+        adj = new KisHSVAdjustment< half, KoRgbTraits < half > >();
     }
 #endif
     else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        adj = new KisHSVAdjustment< float >();
+        adj = new KisHSVAdjustment< float, KoRgbTraits < float > >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;

@@ -95,60 +95,42 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
 
     qreal rotation = m_rotationOption.apply(info);
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
-    QPointF pt = info.pos() - hotSpot;
 
-
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
-
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-
-    qint32 maskWidth = brush->maskWidth(scale, rotation, xFraction, yFraction, info);
-    qint32 maskHeight = brush->maskHeight(scale, rotation, xFraction, yFraction, info);
-
-    // Filter the paint device
-    QRect rect = QRect(0, 0, maskWidth, maskHeight);
-    QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
-
-    if (!m_smudgeMode) {
-        m_tmpDevice->clear();
-    }
-
-    KisPainter p(m_tmpDevice);
-    p.bitBltOldData(QPoint(neededRect.x()-x, neededRect.y()-y), source(), neededRect);
-    m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
-
-    // Fetch the mask
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
 
-    KisFixedPaintDeviceSP fixedDab = m_dabCache->fetchDab(cs,
-                                                          color,
-                                                          scale, scale,
-                                                          rotation,
-                                                          info,
-                                                          xFraction,
-                                                          yFraction);
+    QRect dstRect;
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, info.pos(),
+                             scale, scale, rotation,
+                             info, 1.0,
+                             &dstRect);
 
-    // Blit the paint device onto the layer
-    QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    if (dstRect.isEmpty()) return 1.0;
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
+    QRect dabRect = dab->bounds();
+
+    // sanity check
+    Q_ASSERT(dstRect.size() == dabRect.size());
+
+
+    // Filter the paint device
+    QRect neededRect = m_filter->neededRect(dstRect, m_filterConfiguration);
+
+    KisPainter p(m_tmpDevice);
+    if (!m_smudgeMode) {
+        p.setCompositeOp(COMPOSITE_COPY);
+    }
+    p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
+    m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
+
 
     painter()->
         bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
-                                 m_tmpDevice, fixedDab,
+                                 m_tmpDevice, dab,
                                  0,0,
-                                 0,0,
-                                 maskWidth, maskHeight);
+                                 dabRect.x(), dabRect.y(),
+                                 dabRect.width(), dabRect.height());
 
-    return effectiveSpacing(maskWidth, maskHeight);
+    return effectiveSpacing(dabRect.width(), dabRect.height());
 }

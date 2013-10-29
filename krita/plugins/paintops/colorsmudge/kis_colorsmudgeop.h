@@ -50,7 +50,7 @@ public:
     KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
-    void updateMask(const KisPaintInformation& info, double scale, double rotation);
+    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:
@@ -70,7 +70,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
     KisPressureGradientOption m_gradientOption;
-    QRect                     m_maskBounds;
+    QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
     KisCrossDeviceColorPickerInt m_colorPicker;
     QPointF                   m_lastPaintPos;

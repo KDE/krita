@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>123</height>
+    <width>358</width>
+    <height>139</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -77,6 +77,9 @@
        <property name="text">
         <string>Hue Pieces:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
@@ -94,6 +97,9 @@
        <property name="text">
         <string>Saturation Rings:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="2" column="1">
@@ -110,6 +116,9 @@
       <widget class="QLabel" name="lightPiecesLabel">
        <property name="text">
         <string>Light Pieces</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

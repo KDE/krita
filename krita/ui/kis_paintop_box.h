@@ -95,6 +95,7 @@ public slots:
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
+    void slotCanvasResourceChanged(int key, const QVariant& v);
     void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();
@@ -104,7 +105,7 @@ private:
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
-    void updateCompositeOp(QString compositeOpID);
+    void updateCompositeOp(QString compositeOpID, bool localUpdate = false);
     void updatePaintops(const KoColorSpace* colorSpace);
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);

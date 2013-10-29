@@ -22,33 +22,7 @@
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QComboBox" name="m_cmbCursorShape">
-     <item>
-      <property name="text">
-       <string>Tool Icon</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Crosshair</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Arrow</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Brush Outline</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>No Cursor</string>
-      </property>
-     </item>
-    </widget>
+    <widget class="QComboBox" name="m_cmbCursorShape"/>
    </item>
    <item row="0" column="3">
     <spacer name="spacer1">

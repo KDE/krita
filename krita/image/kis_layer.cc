@@ -267,12 +267,12 @@ KisSelectionMaskSP KisLayer::selectionMask() const
     KoProperties properties;
     properties.setProperty("active", true);
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
-    Q_ASSERT(masks.size() <= 1); // only one active mask at a time
 
-    //finds the active selection mask
-    if (masks.size() == 1) {
-        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selectionMask;
+    // return the first visible mask
+    foreach (KisNodeSP mask, masks) {
+        if (mask->visible()) {
+            return dynamic_cast<KisSelectionMask*>(mask.data());
+        }
     }
     return 0;
 }

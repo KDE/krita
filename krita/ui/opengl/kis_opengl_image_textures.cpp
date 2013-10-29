@@ -19,15 +19,13 @@
 #include "opengl/kis_opengl_image_textures.h"
 
 #ifdef HAVE_OPENGL
-
-#include <QApplication>
+#include <QGLWidget>
 
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
 #include "kis_image.h"
 #include "kis_config.h"
-#include "kis_display_filter.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -45,10 +43,10 @@
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
 KisOpenGLImageTextures::KisOpenGLImageTextures()
-    : m_displayFilter(0)
+    : m_image(0)
+    , m_monitorProfile(0)
+    , m_checkerTexture(0)
 {
-    m_image = 0;
-    m_monitorProfile = 0;
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
@@ -61,19 +59,19 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
                                                KoColorProfile *monitorProfile,
                                                KoColorConversionTransformation::Intent renderingIntent,
                                                KoColorConversionTransformation::ConversionFlags conversionFlags)
-    : m_displayFilter(0)
+    : m_image(image)
+    , m_monitorProfile(monitorProfile)
+    , m_renderingIntent(renderingIntent)
+    , m_conversionFlags(conversionFlags)
+    , m_checkerTexture(0)
 {
-    m_image = image;
-    m_monitorProfile = monitorProfile;
-    m_renderingIntent = renderingIntent;
     Q_ASSERT(renderingIntent < 4);
-    m_conversionFlags = conversionFlags;
 
     KisOpenGL::makeContextCurrent();
 
     getTextureSize(&m_texturesInfo);
 
-    glGenTextures(1, &m_backgroundTexture);
+    glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
@@ -92,7 +90,7 @@ KisOpenGLImageTextures::~KisOpenGLImageTextures()
     }
 
     destroyImageTextureTiles();
-    glDeleteTextures(1, &m_backgroundTexture);
+    glDeleteTextures(1, &m_checkerTexture);
 }
 
 bool KisOpenGLImageTextures::imageCanShareTextures()
@@ -131,10 +129,10 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 {
     return m_image->bounds() &
-        QRect(col * m_texturesInfo.effectiveWidth,
-              row * m_texturesInfo.effectiveHeight,
-              m_texturesInfo.effectiveWidth,
-              m_texturesInfo.effectiveHeight);
+            QRect(col * m_texturesInfo.effectiveWidth,
+                  row * m_texturesInfo.effectiveHeight,
+                  m_texturesInfo.effectiveWidth,
+                  m_texturesInfo.effectiveHeight);
 }
 
 void KisOpenGLImageTextures::createImageTextureTiles()
@@ -154,7 +152,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config;
-    KisTextureTile::FilterMode mode = config.useOpenGLTrilinearFiltering() ? KisTextureTile::TrilinearFilterMode : KisTextureTile::BilinearFilterMode;
+    KisTextureTile::FilterMode mode = (KisTextureTile::FilterMode)config.openGLFilteringMode();
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
@@ -162,7 +160,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
                                                       &m_texturesInfo,
-                                                      emptyTileData.constData(),
+                                                      emptyTileData,
                                                       mode);
             m_textureTiles.append(tile);
         }
@@ -181,8 +179,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
     m_storedImageBounds = QRect();
 }
 
-KisOpenGLUpdateInfoSP
-KisOpenGLImageTextures::updateCache(const QRect& rect)
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 {
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 
@@ -207,6 +204,13 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
     int lastRow = yToRow(artificialRect.bottom());
 
 
+    KisConfig cfg;
+    QBitArray channelFlags; // empty by default
+
+    if (!cfg.useOcio() && !m_allChannelsSelected) {
+        channelFlags = m_channelFlags;
+    }
+
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
@@ -222,7 +226,7 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
                                               m_image->bounds());
             // Don't update empty tiles
             if (tileInfo.valid()) {
-                tileInfo.retrieveData(m_image);
+                tileInfo.retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
                 info->tileList.append(tileInfo);
             }
             else {
@@ -241,7 +245,6 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
 
-
     KisTextureTileUpdateInfo tileInfo;
     foreach(tileInfo, glInfo->tileList) {
         const KoColorSpace *dstCS = 0;
@@ -250,17 +253,17 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         case GL_UNSIGNED_BYTE:
             dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
             break;
-#if defined(HAVE_GLEW) && defined(HAVE_OPENEXR)
         case GL_UNSIGNED_SHORT:
             dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
             break;
+#if defined(HAVE_OPENEXR)
         case GL_HALF_FLOAT_ARB:
             dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
             break;
+#endif
         case GL_FLOAT:
             dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
             break;
-#endif
         default:
             qFatal("Unknown m_imageTextureType");
         }
@@ -274,11 +277,11 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     }
 }
 
-void KisOpenGLImageTextures::generateBackgroundTexture(const QImage & checkImage)
+void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
     KisOpenGL::makeContextCurrent();
 
-    glBindTexture(GL_TEXTURE_2D, m_backgroundTexture);
+    glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -287,16 +290,18 @@ void KisOpenGLImageTextures::generateBackgroundTexture(const QImage & checkImage
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    Q_ASSERT(checkImage.width() == BACKGROUND_TEXTURE_SIZE);
-    Q_ASSERT(checkImage.height() == BACKGROUND_TEXTURE_SIZE);
-
+    QImage img = checkImage;
+    if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
+        img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                 0, GL_BGRA, GL_UNSIGNED_BYTE, checkImage.bits());
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
+
 }
 
-GLuint KisOpenGLImageTextures::backgroundTexture() const
+GLuint KisOpenGLImageTextures::checkerTexture() const
 {
-    return m_backgroundTexture;
+    return m_checkerTexture;
 }
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
@@ -308,8 +313,8 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
 {
     Q_ASSERT(renderingIntent < 4);
     if (monitorProfile != m_monitorProfile ||
-        renderingIntent != m_renderingIntent ||
-        conversionFlags != m_conversionFlags) {
+            renderingIntent != m_renderingIntent ||
+            conversionFlags != m_conversionFlags) {
 
         m_monitorProfile = monitorProfile;
         m_renderingIntent = renderingIntent;
@@ -317,38 +322,26 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     }
 }
 
-void KisOpenGLImageTextures::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 {
-    m_displayFilter = displayFilter;
-}
-
-void KisOpenGLImageTextures::activateHDRExposureProgram()
-{
-#ifdef HAVE_GLEW
-    if (m_displayFilter && m_displayFilter->program()) {
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_3D, m_displayFilter->lut3dTexID());
-
-        glUseProgram(m_displayFilter->program());
-
-        glUniform1i(glGetUniformLocation(m_displayFilter->program(), "tex1"), 0);
-        glUniform1i(glGetUniformLocation(m_displayFilter->program(), "tex2"), 1);
+    m_channelFlags = channelFlags;
+    int selectedChannels = 0;
+    const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
+    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    for (int i = 0; i < m_channelFlags.size(); ++i) {
+        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+            selectedChannels++;
+            m_selectedChannelIndex = i;
+        }
     }
-#endif
-}
-
-void KisOpenGLImageTextures::deactivateHDRExposureProgram()
-{
-#ifdef HAVE_GLEW
-    glUseProgram(0);
-#endif
+    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
+    m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
     // TODO: make configurable
-    const GLint preferredTextureSize = 256;
+    const GLint preferredTextureSize = 1024;
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -367,7 +360,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
     m_texturesInfo.format = GL_BGRA;
-
 #ifdef HAVE_GLEW
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
@@ -426,7 +418,6 @@ void KisOpenGLImageTextures::updateTextureFormat()
     }
 #endif
 }
-
 
 #include "kis_opengl_image_textures.moc"
 

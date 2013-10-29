@@ -50,7 +50,7 @@
     <attribute name="title">
      <string>Dynamics settings</string>
     </attribute>
-    <widget class="QWidget">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -64,6 +64,9 @@
        <widget class="QLabel" name="initWidthLbl">
         <property name="text">
          <string>Initial width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -85,6 +88,9 @@
         <property name="text">
          <string>Mass:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -104,6 +110,9 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Drag:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -138,6 +147,9 @@
         <property name="text">
          <string>Width range:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
        </widget>
       </item>
      </layout>
@@ -147,7 +159,7 @@
     <attribute name="title">
      <string>Shape</string>
     </attribute>
-    <widget class="QWidget">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -235,13 +247,13 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>1</x>
        <y>2</y>
        <width>301</width>
-       <height>63</height>
+       <height>65</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">

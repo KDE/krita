@@ -50,7 +50,8 @@ signals:
     void sigRestartTransform();
     void sigEditingFinished();
 
-private slots:
+public slots:
+
     void slotFilterChanged(const KoID &filter);
     void slotWarpTypeChanged(int index);
     void slotRotationCenterChanged(int index);

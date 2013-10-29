@@ -26,7 +26,13 @@
 class KoPart;
 
 class KoApplicationPrivate;
+
 class QSplashScreen;
+class QStringList;
+
+#include <KoFilterManager.h>
+
+#define koApp KoApplication::koApplication()
 
 /**
  *  @brief Base class for all %Calligra apps
@@ -48,8 +54,10 @@ public:
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
+     *
+     * @param nativeMimeType: the nativeMimeType of the calligra application
      */
-    KoApplication();
+    KoApplication(const QByteArray &nativeMimeType);
 
     /**
      *  Destructor.
@@ -60,7 +68,7 @@ public:
     /**
      * Call this to start the application.
      *
-     * Parses command line arguments and creates the initial shells and docs
+     * Parses command line arguments and creates the initial main windowss and docs
      * from them (or an empty doc if no cmd-line argument is specified ).
      *
      * You must call this method directly before calling QApplication::exec.
@@ -85,16 +93,30 @@ public:
 
     QList<KoPart*> partList() const;
 
-    void addPart(KoPart* part);
-
     /**
      *  Get the number of currently open documents.
      */
     int documents();
 
+    /**
+     * return a list of mimetypes this application supports.
+     */
+    QStringList mimeFilter(KoFilterManager::Direction direction) const;
 
     // Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
+
+    /**
+     * Returns the current application object.
+     *
+     * This is similar to the global QApplication pointer qApp. It
+     * allows access to the single global KoApplication object, since
+     * more than one cannot be created in the same application. It
+     * saves you the trouble of having to pass the pointer explicitly
+     * to every function that may require it.
+     * @return the current application object
+     */
+    static KoApplication* koApplication();
 
 signals:
 
@@ -110,6 +132,11 @@ signals:
      * emitted when an old document is closed.
      */
     void documentClosed(const QString &ref);
+
+protected:
+
+    // Current application object.
+    static KoApplication *KoApp;
 
 private:
     bool initHack();

@@ -22,9 +22,9 @@
 
 #include "RdfForward.h"
 #include <QWidget>
-#include <KoDocumentInfoDlg.h>
 #include <klocale.h>
 #include <kordf_export.h>
+#include <KoPageWidgetItem.h>
 
 class KoDocumentRdf;
 class KoSemanticStylesheet;

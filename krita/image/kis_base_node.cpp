@@ -31,7 +31,6 @@ public:
 
     QString compositeOp;
     KoProperties properties;
-    KisBaseNodeSP linkedTo;
     bool systemLocked;
     KoDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
@@ -55,9 +54,8 @@ KisBaseNode::KisBaseNode()
     setCollapsed(false);
 
     setSystemLocked(false);
-    m_d->linkedTo = 0;
     m_d->compositeOp = COMPOSITE_OVER;
-    
+
     setUuid(QUuid::createUuid());
 }
 
@@ -72,9 +70,11 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
         iter.next();
         m_d->properties.setProperty(iter.key(), iter.value());
     }
-    m_d->linkedTo = rhs.m_d->linkedTo;
+    setCollapsed(rhs.collapsed());
+
+    setSystemLocked(false);
     m_d->compositeOp = rhs.m_d->compositeOp;
-    
+
     setUuid(QUuid::createUuid());
 }
 
@@ -203,6 +203,8 @@ bool KisBaseNode::visible(bool recursive) const
 void KisBaseNode::setVisible(bool visible, bool loading)
 {
     m_d->properties.setProperty("visible", visible);
+    notifyParentVisibilityChanged(visible);
+
     if (!loading) {
         emit visibilityChanged(visible);
         baseNodeChangedCallback();

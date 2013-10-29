@@ -33,7 +33,6 @@
 
 #include <klocale.h>
 
-#include "KoUnit.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorConversionTransformation.h"
@@ -77,6 +76,7 @@
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
+#include "kis_wrapped_rect.h"
 
 
 // #define SANITY_CHECKS
@@ -104,8 +104,6 @@ public:
     double xres;
     double yres;
 
-    KoUnit unit;
-
     const KoColorSpace * colorSpace;
 
     KisSelectionSP deselectedGlobalSelection;
@@ -113,6 +111,7 @@ public:
     QList<KisLayer*> dirtyLayers; // for thumbnails
     QList<KisLayerComposition*> compositions;
     KisNodeSP isolatedRootNode;
+    bool wrapAroundModePermitted;
 
     KisNameServer *nserver;
 
@@ -241,9 +240,14 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
             selectionMask = new KisSelectionMask(this);
             selectionMask->initSelection(m_d->rootLayer);
             addNode(selectionMask);
+            // If we do not set the selection now, the setActive call coming next
+            // can be very, very expensive, depending on the size of the image.
+            selectionMask->setSelection(globalSelection);
             selectionMask->setActive(true);
         }
-        selectionMask->setSelection(globalSelection);
+        else {
+            selectionMask->setSelection(globalSelection);
+        }
 
         Q_ASSERT(m_d->rootLayer->childCount() > 0);
         Q_ASSERT(m_d->rootLayer->selectionMask());
@@ -308,6 +312,8 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->lockCount = 0;
     m_d->perspectiveGrid = 0;
+    m_d->scheduler = 0;
+    m_d->wrapAroundModePermitted = false;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
 
@@ -327,7 +333,6 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->xres = 1.0;
     m_d->yres = 1.0;
-    m_d->unit = KoUnit::Point;
     m_d->width = width;
     m_d->height = height;
 
@@ -335,7 +340,6 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->compositeProgressProxy = new KisCompositeProgressProxy();
 
-    m_d->scheduler = 0;
     if (m_d->startProjection) {
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
@@ -822,7 +826,7 @@ KisGroupLayerSP KisImage::rootLayer() const
     return m_d->rootLayer;
 }
 
-KisPaintDeviceSP KisImage::projection()
+KisPaintDeviceSP KisImage::projection() const
 {
     if (m_d->isolatedRootNode) {
         return m_d->isolatedRootNode->projection();
@@ -1522,14 +1526,36 @@ void KisImage::notifySelectionChanged()
     }
 }
 
+void KisImage::requestProjectionUpdateImpl(KisNode *node,
+                                           const QRect &rect,
+                                           const QRect &cropRect)
+{
+    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+
+    if (m_d->scheduler) {
+        m_d->scheduler->updateProjection(node, rect, cropRect);
+    }
+}
+
 void KisImage::requestProjectionUpdate(KisNode *node, const QRect& rect)
 {
     if (m_d->disableDirtyRequests) return;
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rect);
+    /**
+     * Here we use 'permitted' instead of 'active' intentively,
+     * because the updates may come after the actual stroke has been
+     * finished. And having some more updates for the stroke not
+     * supporting the wrap-around mode will not make much harm.
+     */
+    if (m_d->wrapAroundModePermitted) {
+        QRect boundRect = bounds();
+        KisWrappedRect splitRect(rect, boundRect);
 
-    if (m_d->scheduler) {
-        m_d->scheduler->updateProjection(node, rect, bounds());
+        foreach (const QRect &rc, splitRect) {
+            requestProjectionUpdateImpl(node, rc, boundRect);
+        }
+    } else {
+        requestProjectionUpdateImpl(node, rect, bounds());
     }
 }
 
@@ -1547,6 +1573,22 @@ void KisImage::removeComposition(KisLayerComposition* composition)
 {
     m_d->compositions.removeAll(composition);
     delete composition;
+}
+
+void KisImage::setWrapAroundModePermitted(bool value)
+{
+    m_d->wrapAroundModePermitted = value;
+}
+
+bool KisImage::wrapAroundModePermitted() const
+{
+    return m_d->wrapAroundModePermitted;
+}
+
+bool KisImage::wrapAroundModeActive() const
+{
+    return m_d->wrapAroundModePermitted && m_d->scheduler &&
+        m_d->scheduler->wrapAroundModeSupported();
 }
 
 #include "kis_image.moc"

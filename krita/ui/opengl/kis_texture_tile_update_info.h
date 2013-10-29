@@ -18,11 +18,15 @@
 #ifndef KIS_TEXTURE_TILE_UPDATE_INFO_H_
 #define KIS_TEXTURE_TILE_UPDATE_INFO_H_
 
+#include "opengl/kis_opengl.h"
+
+#ifdef HAVE_OPENGL
+
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
-
+#include "kis_config.h"
 #include <KoColorConversionTransformation.h>
 
 
@@ -32,17 +36,19 @@ typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
 class KisTextureTileUpdateInfo
 {
 public:
-    KisTextureTileUpdateInfo() {
-        m_patchPixels = 0;
+    KisTextureTileUpdateInfo()
+        : m_patchPixels(0)
+    {
     }
 
-    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect) {
+    KisTextureTileUpdateInfo(qint32 col, qint32 row, QRect tileRect, QRect updateRect, QRect currentImageRect)
+        : m_patchPixels(0)
+    {
         m_tileCol = col;
         m_tileRow = row;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_currentImageRect = currentImageRect;
-        m_patchPixels = 0;
         m_numPixels = m_patchRect.width() * m_patchRect.height();
     }
 
@@ -54,12 +60,67 @@ public:
         m_patchPixels = 0;
     }
 
-    void retrieveData(KisImageWSP image) {
+    void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
+    {
         m_patchColorSpace = image->projection()->colorSpace();
         m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
+
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
                                        m_patchRect.width(), m_patchRect.height());
+
+        // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
+        //      the display shader
+        if (!m_channelFlags.isEmpty()) {
+
+            quint32 numPixels = m_patchRect.width() * m_patchRect.height();
+
+            quint8 *dst = m_patchColorSpace->allocPixelBuffer(numPixels);
+
+            QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
+            int channelSize = channelInfo[selectedChannelIndex]->size();
+            int pixelSize = m_patchColorSpace->pixelSize();
+
+            KisConfig cfg;
+
+            if (onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
+                int selectedChannelPos = channelInfo[selectedChannelIndex]->pos();
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
+
+                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels + (pixelIndex * pixelSize) + selectedChannelPos,
+                                   channelSize);
+                        }
+                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                    }
+                }
+            }
+            else {
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
+                        if (m_channelFlags.testBit(channelIndex)) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                        else {
+                            memset(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                        }
+                    }
+                }
+
+            }
+            delete[] m_patchPixels;
+            m_patchPixels = dst;
+
+        }
+
     }
 
     void convertTo(const KoColorSpace* dstCS,
@@ -68,18 +129,18 @@ public:
     {
 
         if (m_numPixels > 0) {
-            /**
-             * FIXME: is it possible to do an in-place conversion?
-             */
-            quint8* dstBuffer = dstCS->allocPixelBuffer(m_numPixels);
+            const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
+            quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
 
             // FIXME: rendering intent
-            Q_ASSERT(dstBuffer);
-            Q_ASSERT(m_patchPixels);
-            m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, m_numPixels, renderingIntent, conversionFlags);
+            Q_ASSERT(dstBuffer && m_patchPixels);
+            m_patchColorSpace->convertPixelsTo(m_patchPixels, dstBuffer, dstCS, numPixels, renderingIntent, conversionFlags);
+
             delete[] m_patchPixels;
+
             m_patchColorSpace = dstCS;
             m_patchPixels = dstBuffer;
+            m_patchPixelsLength = numPixels * dstCS->pixelSize();
         }
     }
 
@@ -120,12 +181,15 @@ public:
         return m_patchColorSpace->pixelSize();
     }
 
-    bool valid() {
+    inline quint32 patchPixelsLength() const {
+        return m_patchPixelsLength;
+    }
+
+    inline bool valid() const {
         return m_numPixels > 0;
     }
 
 private:
-    qint32 m_numPixels;
     qint32 m_tileCol;
     qint32 m_tileRow;
     QRect m_currentImageRect;
@@ -133,9 +197,12 @@ private:
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;
     quint8 *m_patchPixels;
+    quint32 m_patchPixelsLength;
+    quint32 m_numPixels;
 };
 
 
+#endif /* HAVE_OPENGL */
 
 #endif /* KIS_TEXTURE_TILE_UPDATE_INFO_H_ */
 

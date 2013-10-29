@@ -66,10 +66,13 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QTouchEvent *touchEvent = inputManager()->lastTouchEvent();
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if (touchEvent) {
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
             inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
         }
@@ -102,12 +105,22 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if(touchEvent) {
+            if(touchEvent->type() != QEvent::TouchEnd) {
+                //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
+                touchEvent = new QTouchEvent(QEvent::TouchEnd, touchEvent->deviceType(), touchEvent->modifiers(), touchEvent->touchPointStates(), touchEvent->touchPoints());
+            }
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
             inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+        } else {
+            QMouseEvent fakeRelease(QEvent::MouseButtonRelease, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, 0);
+            inputManager()->toolProxy()->mouseReleaseEvent(&fakeRelease, QPoint(0,0));
         }
 
         d->active = false;
@@ -118,7 +131,7 @@ void KisToolInvocationAction::end(QEvent *event)
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseButtonPress) {
+     if(event->type() == QEvent::MouseButtonPress) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
     } else if(event->type() == QEvent::MouseButtonRelease) {
@@ -138,6 +151,9 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
     } else if(event->type() == QEvent::KeyRelease) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         inputManager()->toolProxy()->keyReleaseEvent(kevent);
+    }   else if (event->type() == QEvent::TouchUpdate) {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }
 }
 

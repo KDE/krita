@@ -64,10 +64,3 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const QPointF& pos, KisPaint
 }
 
 
-#if defined(HAVE_OPENGL)
-QString KisSketchPaintOpSettings::modelName() const
-{
-    return "3d-pencil";
-}
-#endif
-

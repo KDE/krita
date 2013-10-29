@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Clones Array Plugin
+Name[ca]=Connector de llista de clons
+Name[es]=Complemento de array de clones
+Name[hu]=Klóntömbök bővítmény
+Name[it]=Estensione Elenco di cloni
+Name[kk]=Клондар жиым плагині
+Name[nl]=Plug-in voor array klonen
+Name[pt]='Plugin' de Lista de Clones
+Name[pt_BR]=Plugin de lista de clones
+Name[sk]=Plugin poľa klonov
+Name[sv]=Insticksprogram för klonfält
+Name[uk]=Додаток масивів клонів
+Name[x-test]=xxClones Array Pluginxx
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritaclonesarray
+X-Krita-Version=28

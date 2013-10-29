@@ -50,6 +50,8 @@ public:
     virtual int columnCount() const;
     virtual QVariant data(int column);
 
+    void setParameter(const QString &name, const QString &value);
+
     // reset to default values
     void reset();
     void print(int level);
@@ -70,8 +72,18 @@ private:
         param [in] line
         param [out] lastTokenEnclosed if the last token-parameter is not enclosed
                     and continue on the next line, this flag is false, true otherwise
+        @return set of tokens, e.g. note = [ 'note("example")', 'sep = separator()' ]
      */
     QStringList breakIntoTokens(const QString &line, bool &lastTokenEnclosed);
+    /**
+     *  param [in] token - string describing one parameter. e.g. Height = _int(128,8,256) or note = note{"Example"}
+     *  param [out] parameterName "Height" or "note" etc.
+     *  param [out] parameterDefinition "_int(128,8,256)" or "note{"Example"}"
+     * */
+    bool processToken(const QString &token, QString &parameterName, QString &parameterDefinition);
+
+    // return new index pointing to non-whitespace, index can be line.size()
+    int skipWhitespace(const QString &line, int index);
 
 };
 

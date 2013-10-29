@@ -287,6 +287,8 @@ public:
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
+        if ( fi.size() == 0)
+            return;
 
         T* resource = createResource( filename );
         resource->load();

@@ -23,14 +23,13 @@
 #include "pivotoptions.h"
 #include "pivotfilters.h"
 #include "ui_pivotmain.h"
+//#include "ui_pivotoptions.h"
 
 #include<QTimer>
 #include<QObject>
 #include<QColor>
 #include<QPen>
 #include<QMessageBox>
-#include<QListWidgetItem>
-#include<QListWidget>
 
 #include <sheets/Value.h>
 #include <sheets/ValueCalc.h>
@@ -41,7 +40,6 @@
 #include <sheets/Style.h>
 #include <sheets/Sheet.h>
 #include <sheets/ui/Selection.h>
-#include <sheets/CellStorage.h>
 
 
 using namespace Calligra::Sheets;
@@ -69,130 +67,59 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     setCaption(i18n("Pivot Table Configuration Window"));
     
     //Adding Buttons
-    setButtons(Ok|Cancel|User2);
+    setButtons(Ok|Cancel|User2|User3);
+  //  setButtonGuiItem(User1, KGuiItem(i18n("Options")));
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
-
+    setButtonGuiItem(User3, KGuiItem(i18nc("DnD = Drag and Drop","Reset DnD")));
+    enableButton(User1,true);
     enableButton(User2,true);
     enableButton(Ok,true);
+    enableButton(User3,true);
     d->mainWidget.TotalRows->setChecked(true);
     d->mainWidget.TotalColumns->setChecked(true);
 
 
     d->mainWidget.Labels->setSelectionMode(QAbstractItemView::ExtendedSelection);
     d->mainWidget.Labels->setDragEnabled(true);
-    d->mainWidget.Labels->setDragDropMode(QAbstractItemView::DragDrop);
+    d->mainWidget.Labels->setDragDropMode(QAbstractItemView::InternalMove);
     d->mainWidget.Labels->viewport()->setAcceptDrops(true);
     d->mainWidget.Labels->setDropIndicatorShown(true);
 
     d->mainWidget.Rows->setSelectionMode(QAbstractItemView::SingleSelection);
     d->mainWidget.Rows->setDragEnabled(true);
-    d->mainWidget.Rows->setDragDropMode(QAbstractItemView::DragDrop);
+    d->mainWidget.Rows->setDragDropMode(QAbstractItemView::DropOnly);
     d->mainWidget.Rows->viewport()->setAcceptDrops(true);
     d->mainWidget.Rows->setDropIndicatorShown(true);
 
     d->mainWidget.Columns->setSelectionMode(QAbstractItemView::SingleSelection);
     d->mainWidget.Columns->setDragEnabled(true);
-    d->mainWidget.Columns->setDragDropMode(QAbstractItemView::DragDrop);
+    d->mainWidget.Columns->setDragDropMode(QAbstractItemView::DropOnly);
     d->mainWidget.Columns->viewport()->setAcceptDrops(true);
     d->mainWidget.Columns->setDropIndicatorShown(true);
 
     d->mainWidget.Values->setSelectionMode(QAbstractItemView::SingleSelection);
     d->mainWidget.Values->setDragEnabled(true);
-    d->mainWidget.Values->setDragDropMode(QAbstractItemView::DragDrop);
+    d->mainWidget.Values->setDragDropMode(QAbstractItemView::DropOnly);
     d->mainWidget.Values->viewport()->setAcceptDrops(true);
     d->mainWidget.Values->setDropIndicatorShown(true);
 
+    //The functionality for Page Fields is not added yet.Only added in GUI
+/*    d->mainWidget.PageFields->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->mainWidget.PageFields->setDragEnabled(true);
+    d->mainWidget.PageFields->setDragDropMode(QAbstractItemView::DropOnly);
+    d->mainWidget.PageFields->viewport()->setAcceptDrops(true);
+    d->mainWidget.PageFields->setDropIndicatorShown(true);
+*/
     d->mainWidget.selectOption->addItem("prod");
     d->mainWidget.selectOption->addItem("devsq");
 
-    extractColumnNames();
     connect(this,SIGNAL(user2Clicked()),this,SLOT(on_AddFilter_clicked()));
+//  connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
+    extractColumnNames();
     connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));
-    connect(d->mainWidget.Rows,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(rows_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Labels,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(labels_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Columns,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(columns_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Values,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(values_itemChanged(QListWidgetItem*)));
+    connect(this, SIGNAL(user3Clicked()), this, SLOT(Reset()));
   
 }
-
-void PivotMain::rows_itemChanged(QListWidgetItem *item)
-{
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
-            d->mainWidget.Labels->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
-            d->mainWidget.Columns->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
-            d->mainWidget.Values->takeItem(i);
-        }
-      }
-}
-
-void PivotMain::labels_itemChanged(QListWidgetItem *item)
-{
-   for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
-            d->mainWidget.Rows->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
-            d->mainWidget.Columns->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
-            d->mainWidget.Values->takeItem(i);
-        }
-      }
-}
-
-void PivotMain::columns_itemChanged(QListWidgetItem *item)
-{
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
-            d->mainWidget.Labels->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
-            d->mainWidget.Rows->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Values->count();i++){
-        if(d->mainWidget.Values->item(i)->text()==item->text()){
-            d->mainWidget.Values->takeItem(i);
-        }
-      }
-}
-
-void PivotMain::values_itemChanged(QListWidgetItem *item)
-{
-   for(int i=0;i<d->mainWidget.Labels->count();i++){
-        if(d->mainWidget.Labels->item(i)->text()==item->text()){
-            d->mainWidget.Labels->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Columns->count();i++){
-        if(d->mainWidget.Columns->item(i)->text()==item->text()){
-            d->mainWidget.Columns->takeItem(i);
-        }
-      }
-    for(int i=0;i<d->mainWidget.Rows->count();i++){
-        if(d->mainWidget.Rows->item(i)->text()==item->text()){
-            d->mainWidget.Rows->takeItem(i);
-        }
-      }
-}
-
-
-
 
 PivotMain::~PivotMain()
 {
@@ -469,7 +396,10 @@ void PivotMain::Summarize()
   
   //Summarization using vectors
   int rowpos=-1,colpos=-1,valpos=-1;
-  QVector<Value> rowVector,rowVectorArr[rowList.size()],columnVectorArr[columnList.size()],columnVector,valueVector;
+  QVector<Value> rowVector;
+  QVector<QVector<Value> > rowVectorArr(rowList.size());
+  QVector<QVector<Value> > columnVectorArr(columnList.size());
+  QVector<Value> columnVector,valueVector;
   QVector<int> rowposVect,colposVect,valposVect;
   
   for(int i=0;i<rowList.size();i++)
@@ -503,8 +433,8 @@ void PivotMain::Summarize()
       colposVect.append(colpos);
   }
   
- int count=1,count2=0,prevcount=1;
-  QVector<Value> rowVect[rowposVect.count()];
+  int count=1,count2=0,prevcount=1;
+  QVector<QVector<Value> > rowVect(rowposVect.count());
   for(int i=0;i<rowposVect.count();i++)
   {
     for(int j=i+1;j<rowposVect.count();j++)
@@ -513,11 +443,9 @@ void PivotMain::Summarize()
     }
     for(int k=0;k<(rowVectorArr[i].count())*prevcount;k++)
     {
-     for(int m=0;m<count;m++)
-     Cell(mySheet,((k)*count)+1+colposVect.count()+m,i+1).setValue(rowVectorArr[i].at(k%rowVectorArr[i].count()));
+      Cell(mySheet,((k)*count)+1+colposVect.count(),i+1).setValue(rowVectorArr[i].at(k%rowVectorArr[i].count()));
      
-     
-     for(int l=0;l<count;l++)
+      for(int l=0;l<count;l++)
 	rowVect[i].append(rowVectorArr[i].at(k%rowVectorArr[i].count()));
       
       count2++;
@@ -528,7 +456,7 @@ void PivotMain::Summarize()
   }
 
   count=1,count2=0,prevcount=1;
-  QVector<Value> colVect[colposVect.count()];
+  QVector<QVector<Value> > colVect(colposVect.count());
   for(int i=0;i<colposVect.count();i++)
   {
     for(int j=i+1;j<colposVect.count();j++)
@@ -537,9 +465,9 @@ void PivotMain::Summarize()
     }
     for(int k=0;k<(columnVectorArr[i].count())*prevcount;k++)
     {
-      for(int m=0;m<count;m++) 
-      Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()+m).setValue(columnVectorArr[i].at(k%columnVectorArr[i].count()));
-   
+       
+      Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()).setValue(columnVectorArr[i].at(k%columnVectorArr[i].count()));
+//     Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()).setStyle(st2);
       for(int l=0;l<count;l++)
 	colVect[i].append(columnVectorArr[i].at(k%columnVectorArr[i].count()));
       
@@ -550,8 +478,45 @@ void PivotMain::Summarize()
     prevcount=count2;
     count=1;
     count2=0;
-  }
- 
+  } 
+  
+  // Styling
+  
+  for(int m=0;m<colVect[0].count();m++)
+    {
+      Cell(mySheet,1,m+1+rowList.count()).setStyle(stl);
+      Cell(mySheet,columnList.count(),m+1+rowList.count()).setStyle(str);
+      Cell(mySheet,columnList.count()+rowVect[0].count(),m+1+rowList.count()).setStyle(str);
+      
+    }
+  
+  
+  for(int m=0;m<rowVect[0].count();m++)
+    {
+      Cell(mySheet,m+1+columnList.count(),1).setStyle(stt);
+      Cell(mySheet,m+1+columnList.count(),rowList.count()).setStyle(stb);
+      Cell(mySheet,m+1+columnList.count(),rowList.count()+colVect[0].count()).setStyle(stb);
+      
+    }
+    
+   for(int m=0;m<rowList.count();m++)
+    {
+      Cell(mySheet,columnList.count()+1,m+1).setStyle(stl);
+      Cell(mySheet,columnList.count()+rowVect[0].count(),m+1).setStyle(str);
+    }
+  
+  
+  for(int m=0;m<columnList.count();m++)
+    {
+      Cell(mySheet,m+1,rowList.count()+1).setStyle(stt);
+      Cell(mySheet,m+1,rowList.count()+colVect[0].count()).setStyle(stb);
+    } 
+      
+    
+    
+    
+   //Styling Done
+  
   for(int i=0;i<valueList.size();i++)
   {
      valpos=vect.indexOf(Value(valueList.at(i)->text()));
@@ -596,7 +561,7 @@ void PivotMain::Summarize()
 		}
 		Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setValue(res);
 		if(m%2==0)
-		  //Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setStyle(st3);
+		  Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setStyle(st3);
 		
 		aggregate.clear();
 		res=Value(0);
@@ -688,8 +653,6 @@ void PivotMain::Summarize()
   valposVect.clear();
   
   //Adding built sheet to myMap for viewing
-  clean(mySheet);
-  styling(mySheet);
   myMap->addSheet(mySheet);
   
 }//Summarize
@@ -725,88 +688,6 @@ QVector<QString> PivotMain::ValueData(QString str)
       }
       return d->retVect;
 }//ValueData
-
-void PivotMain::clean(Sheet* sheet)
-{
-  ValueConverter *conv;
-  int lastRow=sheet->cellStorage()->rows();
-  int lastColumn=sheet->cellStorage()->columns();
-  for(int i=d->mainWidget.Rows->count()+1;i<=lastRow+1;i++){
-    int temp=0;
-    for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	qDebug()<<"i:"<<i<<" j:"<<j<<" value:"<<conv->toInteger(Cell(sheet,j,i).value());
-	if(!conv->toInteger(Cell(sheet,j,i).value())==0){
-	  temp=1;
-	  break;
-	}
-      }
-	if(temp==0){
-	  sheet->cellStorage()->removeRows(i);
-	  i--;
-	  lastRow--;
-      }
-    }
-    
-    
-    
-  lastRow=sheet->cellStorage()->rows();
-  lastColumn=sheet->cellStorage()->columns();
-  for(int i=d->mainWidget.Columns->count()+1;i<=lastColumn;i++){
-    int temp=0;
-    for(int j=d->mainWidget.Rows->count()+1;j<=lastRow;j++){
-	if(!conv->toInteger(Cell(sheet,i,j).value())==0){
-	  temp=1;
-	  break;
-	}
-      }
-	if(temp==0){
-	  sheet->cellStorage()->removeColumns(i);
-	  i--;
-	  lastColumn--;
-	}
-    } 
-    
-}
-
-void PivotMain::styling(Sheet* mySheet)
-{
-    int lastRow=mySheet->cellStorage()->rows();
-    int lastColumn=mySheet->cellStorage()->columns();
-    QColor color,color2("lightGray");
-    color.setBlue(50);
-    QPen pen(color);
-    
-    Style st,st2,st3,str,stl,stb,stt;
-    st.setFontUnderline(true);
-    st3.setBackgroundColor("lightGray");
-    st.setRightBorderPen(pen);
-    st.setLeftBorderPen(pen);
-    st.setTopBorderPen(pen);
-    st.setBottomBorderPen(pen);
-    str.setRightBorderPen(pen);
-    stl.setLeftBorderPen(pen);
-    stt.setTopBorderPen(pen);
-    stb.setBottomBorderPen(pen);
-    
-    
-    for( int i=1;i<=lastRow;i++){
-      Cell(mySheet,d->mainWidget.Columns->count(),i).setStyle(str);
-      Cell(mySheet,lastColumn,i).setStyle(str);
-    }
-    for( int i=d->mainWidget.Rows->count()+1;i<=lastRow;i++){
-      for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	if(i%2==0)
-	  Cell(mySheet,j,i).setStyle(st3);
-      }
-    }
-    for( int i=1;i<=lastColumn;i++){
-      Cell(mySheet,i,d->mainWidget.Rows->count()).setStyle(stb);
-      Cell(mySheet,i,lastRow).setStyle(stb);
-    }
-   
-       
-}
-
 
 void PivotMain::Reset()
 {

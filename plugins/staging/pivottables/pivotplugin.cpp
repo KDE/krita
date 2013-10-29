@@ -57,6 +57,7 @@ PivotPlugin::~PivotPlugin()
 
 void PivotPlugin::pivot()
 {
+  qDebug()<<"Running";
     View *view = dynamic_cast<View *>(parent());
     if (!view) {
         return;

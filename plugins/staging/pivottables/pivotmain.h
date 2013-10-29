@@ -22,8 +22,7 @@
 #ifndef PIVOTMAIN_H
 #define PIVOTMAIN_H
 
-#include <KDialog>
-#include<QListWidgetItem>
+#include <kdialog.h>
 
 #include <sheets/Sheet.h>
 namespace Calligra{
@@ -44,17 +43,11 @@ class PivotMain : public KDialog
     private slots:
 	  
       //void on_Options_clicked();
-      void styling(Sheet* mySheet);
-      void labels_itemChanged(QListWidgetItem *item);
-      void values_itemChanged(QListWidgetItem *item);
-      void columns_itemChanged(QListWidgetItem *item);
-      void rows_itemChanged(QListWidgetItem *item);
 
       void on_AddFilter_clicked();
       void on_Ok_clicked();
       void Summarize();
       void Reset();
-      void clean(Sheet* sheet);
 
     private:
       void extractColumnNames();

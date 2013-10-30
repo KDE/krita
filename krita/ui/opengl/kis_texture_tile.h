@@ -63,9 +63,7 @@ public:
         NearestFilterMode,  // nearest
         BilinearFilterMode, // linear, no mipmap
         TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
-        nearest_mipmap_nearest,
-        nearest_mipmap_linear,
-        linear_mipmap_nearest
+        HighQualityFiltering // Mipmaps + custom shader
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,

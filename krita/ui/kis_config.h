@@ -128,6 +128,10 @@ public:
     bool useOpenGLTextureBuffer() const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    int numMipmapLevels() const;
+    int openGLTextureSize() const;
+    int textureOverlapBorder() const;
+
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 

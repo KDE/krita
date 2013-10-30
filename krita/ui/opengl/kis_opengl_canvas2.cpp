@@ -96,6 +96,7 @@ public:
     QGLShaderProgram *checkerShader;
 
     KisDisplayFilter *displayFilter;
+    KisTextureTile::FilterMode filterMode;
 
     bool wrapAroundMode;
 
@@ -120,6 +121,8 @@ public:
 
         return rowsPerImage * numWraps + openGLImageTextures->yToRow(remainder);
     }
+
+    void activateFilteringMode(qreal scaleX, qreal scaleY);
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures)
@@ -324,6 +327,8 @@ void KisOpenGLCanvas2::drawImage() const
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
+    d->displayShader->setUniformValue("viewportScale", (GLfloat) scaleX);
+    d->displayShader->setUniformValue("texelSize", (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -397,14 +402,8 @@ void KisOpenGLCanvas2::drawImage() const
                 d->displayShader->setUniformValue("texture1", 1);
             }
 
-            if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            } else {
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            }
-
+            d->activateFilteringMode(scaleX, scaleY);
             glDrawArrays(GL_TRIANGLES, 0, 6);
-
         }
     }
 
@@ -412,12 +411,53 @@ void KisOpenGLCanvas2::drawImage() const
     d->displayShader->release();
 }
 
+void KisOpenGLCanvas2::Private::activateFilteringMode(qreal scaleX, qreal scaleY)
+{
+    if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        switch(filterMode) {
+        case KisTextureTile::NearestFilterMode:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            break;
+        case KisTextureTile::BilinearFilterMode:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            break;
+        case KisTextureTile::TrilinearFilterMode:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            break;
+        case KisTextureTile::HighQualityFiltering:
+            if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+            } else {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            }
+            break;
+        }
+    }
+}
+
 void KisOpenGLCanvas2::initializeCheckerShader()
 {
     delete d->checkerShader;
     d->checkerShader = new QGLShaderProgram();
-    d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/checker.frag"));
+
+    QString vertexShaderName;
+    QString fragmentShaderName;
+
+    if (KisOpenGL::supportsGLSL13()) {
+        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert");
+        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture.frag");
+    } else {
+        vertexShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert");
+        fragmentShaderName = KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture_legacy.frag");
+    }
+
+    d->checkerShader->addShaderFromSourceFile(QGLShader::Vertex, vertexShaderName);
+    d->checkerShader->addShaderFromSourceFile(QGLShader::Fragment, fragmentShaderName);
+
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
@@ -433,28 +473,19 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     delete d->displayShader;
     d->displayShader = new QGLShaderProgram();
 
-    bool res;
-
-    res = d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    if (!res) {
-        //qDebug() << "Failed to add gl2.vert source to shader:" << d->displayShader->log();
-        // This might be a timing issue, when setting a display filter on the canvas before the opengl stuff is really initialized, it'll
-        // be correct later on, so just return;
-        return;
-    }
     if (d->displayFilter && !d->displayFilter->program().isEmpty()) {
-        qDebug() << "display filter" << d->displayFilter->program().toLatin1();
-        res = d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
-        if (!res) {
-            qDebug() << "Failed to add ocio frag source to shader:" << d->displayShader->log();
+        d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
+    } else if (KisOpenGL::supportsGLSL13()) {
+        d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform.vert"));
+        if (d->filterMode == KisTextureTile::HighQualityFiltering) {
+            d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/highq_downscale.frag"));
+        } else {
+            d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture.frag"));
         }
-    }
-    else {
-        qDebug() << "no display filter" << KGlobal::dirs()->findResource("data", "krita/shaders/display.frag");
-        res = d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
-        if (!res) {
-            qDebug() << "Failed to add display.frag source to shader:" << d->displayShader->log();
-        }
+    } else {
+        d->displayShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/matrix_transform_legacy.vert"));
+        d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/simple_texture_legacy.frag"));
     }
 
     d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
@@ -472,6 +503,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
 
     notifyConfigChanged();
 }

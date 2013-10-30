@@ -42,3 +42,8 @@ void KisSignalCompressor::stop()
 {
     m_timer->stop();
 }
+
+bool KisSignalCompressor::isActive() const
+{
+    return m_timer->isActive();
+}

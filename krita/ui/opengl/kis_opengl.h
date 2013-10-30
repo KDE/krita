@@ -79,6 +79,8 @@ public:
      */
     static void clearError();
 
+    static bool supportsGLSL13();
+
 private:
     KisOpenGL();
 

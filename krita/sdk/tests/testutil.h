@@ -35,6 +35,14 @@
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
 
+#ifndef FILES_DATA_DIR
+#define FILES_DATA_DIR "."
+#endif
+
+#ifndef FILES_DEFAULT_DATA_DIR
+#define FILES_DEFAULT_DATA_DIR "."
+#endif
+
 
 /**
  * Routines that are useful for writing efficient tests

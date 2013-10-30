@@ -34,6 +34,7 @@ public:
 public slots:
     void start();
     void stop();
+    bool isActive() const;
 
 signals:
     void timeout();

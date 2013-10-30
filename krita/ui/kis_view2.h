@@ -96,7 +96,7 @@ public:
 public:  // Krita specific interfaces
 
     /// Return the image this view is displaying
-    KisImageWSP image();
+    KisImageWSP image() const;
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.

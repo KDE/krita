@@ -667,7 +667,7 @@ KoZoomController *KisView2::zoomController() const
     return m_d->zoomManager->zoomController();
 }
 
-KisImageWSP KisView2::image()
+KisImageWSP KisView2::image() const
 {
     if (m_d && m_d->doc) {
         return m_d->doc->image();

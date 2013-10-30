@@ -185,8 +185,8 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-            qDebug() << "WARINING: there is no intersection point "
-                     << "in the basic smoothing algoriths";
+//            qDebug() << "WARINING: there is no intersection point "
+//                     << "in the basic smoothing algoriths";
         }
 
         controlTarget1 = intersection;

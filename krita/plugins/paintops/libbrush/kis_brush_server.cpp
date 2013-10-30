@@ -47,13 +47,6 @@ public:
         addObserver(this, true);
     }
 
-    ~BrushResourceServer() {
-        foreach(KisBrush* brush, m_brushes)
-        {
-            removeResourceFromServer(brush);
-        }
-    }
-
     virtual void resourceAdded(KisBrush* brush)
     {
         // Hack: This prevents the deletion of brushes in the resource server

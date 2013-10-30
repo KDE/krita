@@ -47,6 +47,8 @@ int KisAlternateInvocationAction::priority() const
 
 void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 {
+    if (!event) return;
+
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
@@ -68,6 +70,8 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
 void KisAlternateInvocationAction::end(QEvent *event)
 {
+    if (!event) return;
+
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     QMouseEvent targetEvent(*mouseEvent);

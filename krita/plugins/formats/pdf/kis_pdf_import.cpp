@@ -89,6 +89,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     }
 
     Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
+
+    if (!pdoc) {
+        return KisPDFImport::InvalidFormat;
+    }
+
     pdoc->setRenderHint(Poppler::Document::Antialiasing, true);
     pdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
 

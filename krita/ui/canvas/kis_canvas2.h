@@ -217,6 +217,8 @@ private slots:
 
     void slotSelectionChanged();
 
+    void updateCanvasWidget();
+
 public:
 
     // interafce for KisCanvasController only

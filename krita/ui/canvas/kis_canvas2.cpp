@@ -27,6 +27,7 @@
 #include <QTime>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QTimer>
 
 #include <kis_debug.h>
 
@@ -85,7 +86,9 @@ public:
         , currentCanvasIsOpenGL(false)
         , toolProxy(new KisToolProxy(parent))
         , favoriteResourceManager(0)
-        , vastScrolling(true) {
+        , vastScrolling(true)
+        , isDirty(false)
+    {
     }
 
     ~KisCanvas2Private() {
@@ -116,6 +119,9 @@ public:
     KisInputManager* inputManager;
 
     QBitArray channelFlags;
+
+    QTimer displayUpdateTimer;
+    bool isDirty;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -156,6 +162,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+
+    connect(&m_d->displayUpdateTimer, SIGNAL(timeout()), SLOT(updateCanvasWidget()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -351,6 +359,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
+    m_d->displayUpdateTimer.start(1000 / 60);
 
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
@@ -613,30 +622,6 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     }
 }
 
-void KisCanvas2::updateCanvas()
-{
-    m_d->canvasWidget->widget()->update();
-    emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
-}
-
-void KisCanvas2::updateCanvas(const QRectF& documentRect)
-{
-    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
-        m_d->canvasWidget->widget()->update();
-        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
-    }
-    else {
-        // updateCanvas is called from tools, never from the projection
-        // updates, so no need to prescale!
-        QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
-        widgetRect.adjust(-2, -2, 2, 2);
-        if (!widgetRect.isEmpty()) {
-            emit updateCanvasRequested(widgetRect);
-            m_d->canvasWidget->widget()->update(widgetRect);
-        }
-    }
-}
-
 void KisCanvas2::disconnectCanvasObserver(QObject *object)
 {
     KoCanvasBase::disconnectCanvasObserver(object);
@@ -806,9 +791,50 @@ void KisCanvas2::slotSelectionChanged()
     }
 }
 
+void KisCanvas2::updateCanvasWidget()
+{
+    if (m_d->isDirty) {
+        m_d->isDirty = false;
+        // The opengl canvas always gets updated completely, because otherwise the
+        // canvas decorations are broken.
+        m_d->canvasWidget->widget()->update();
+    }
+
+}
+
+void KisCanvas2::updateCanvas()
+{
+    if (m_d->currentCanvasIsOpenGL) {
+        m_d->isDirty = true;
+    }
+    else {
+        m_d->canvasWidget->widget()->update();
+    }
+
+}
+
+void KisCanvas2::updateCanvas(const QRectF& documentRect)
+{
+    if (m_d->currentCanvasIsOpenGL) {
+        m_d->isDirty = true;
+    }
+    else {
+        // updateCanvas is called from tools, never from the projection
+        // updates, so no need to prescale!
+        QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
+        widgetRect.adjust(-2, -2, 2, 2);
+        if (!widgetRect.isEmpty()) {
+            m_d->canvasWidget->widget()->update(widgetRect);
+        }
+    }
+}
+
+
+
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 
 #include "kis_canvas2.moc"
+

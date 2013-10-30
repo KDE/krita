@@ -259,19 +259,28 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
+    //qDebug() << "loadBinaryData. Location:" << location;
     if (store->hasFile(location)) {
-        store->open(location);
-        QByteArray data; data.resize(store->size());
-        store->read(data.data(), store->size());
-        store->close();
-        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
-        if (profile && profile->valid()) {
-            image->assignImageProfile(profile);
-        }
-        else {
-            profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
-            Q_ASSERT(profile && profile->valid());
-            image->assignImageProfile(profile);
+        if (store->open(location)) {
+            //qDebug() << "icc file opened";
+            QByteArray data; data.resize(store->size());
+            bool res = (store->read(data.data(), store->size()) > -1);
+            //qDebug() << "managed to read data:" << res;
+            store->close();
+            if (res) {
+                //qDebug() << "Success, trying to read the profile for:" << image->colorSpace()->colorModelId().id() <<  image->colorSpace()->colorDepthId().id();
+                const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
+                if (profile && profile->valid()) {
+                    //qDebug() << "profile is valid" << profile->name();
+                    image->assignImageProfile(profile);
+                }
+                else {
+                    //qDebug() << "profile not valid, getting profile for name" << KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile();
+                    profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+                    Q_ASSERT(profile && profile->valid());
+                    image->assignImageProfile(profile);
+                }
+            }
         }
     }
 

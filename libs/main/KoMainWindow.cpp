@@ -1028,15 +1028,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             }
         }
 
-        // this file exists and we are not just clicking "Save As" to change filter options
-        // => ask for confirmation
-        if (KIO::NetAccess::exists(newURL,  KIO::NetAccess::DestinationSide, this) && !justChangingFilterOptions) {
-            bOk = KMessageBox::questionYesNo(this,
-                                             i18n("A document with this name already exists.\n"\
-                                                  "Do you want to overwrite it?"),
-                                             i18n("Warning")) == KMessageBox::Yes;
-        }
-
         if (bOk) {
             bool wantToSave = true;
 
@@ -1482,15 +1473,6 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
                      startUrl.toLocalFile(),
                      QStringList() << "application/pdf"));
 
-        if (KIO::NetAccess::exists(url,  KIO::NetAccess::DestinationSide, this)) {
-            bool overwrite = KMessageBox::questionYesNo(this,
-                                                        i18n("A document with this name already exists.\n"\
-                                                             "Do you want to overwrite it?"),
-                                                        i18n("Warning")) == KMessageBox::Yes;
-            if (!overwrite) {
-                return 0;
-            }
-        }
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())
             return 0;

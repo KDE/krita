@@ -53,12 +53,11 @@ public:
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     // reimplemented from KoShapeBackground
     virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
-
 protected:
     KoColorBackground(KoShapeBackgroundPrivate &dd);
-
 private:
     Q_DECLARE_PRIVATE(KoColorBackground)
+    Q_DISABLE_COPY(KoColorBackground)
 };
 
 #endif // KOCOLORBACKGROUND_H

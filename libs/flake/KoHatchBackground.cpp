@@ -52,7 +52,7 @@ public:
 };
 
 KoHatchBackground::KoHatchBackground()
-: KoColorBackground(*(new KoHatchBackgroundPrivate()))
+    : KoColorBackground(*(new KoHatchBackgroundPrivate()))
 {
 }
 

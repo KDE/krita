@@ -443,14 +443,12 @@ void KisOpenGLCanvas2::initializeDisplayShader()
         return;
     }
     if (d->displayFilter && !d->displayFilter->program().isEmpty()) {
-        qDebug() << "display filter" << d->displayFilter->program().toLatin1();
         res = d->displayShader->addShaderFromSourceCode(QGLShader::Fragment, d->displayFilter->program().toLatin1());
         if (!res) {
             qDebug() << "Failed to add ocio frag source to shader:" << d->displayShader->log();
         }
     }
     else {
-        qDebug() << "no display filter" << KGlobal::dirs()->findResource("data", "krita/shaders/display.frag");
         res = d->displayShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/display.frag"));
         if (!res) {
             qDebug() << "Failed to add display.frag source to shader:" << d->displayShader->log();

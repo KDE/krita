@@ -1643,6 +1643,13 @@ void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
 
 KoProgressProxy* KoDocument::progressProxy() const
 {
+    if (!d->progressProxy) {
+        KoMainWindow *mainWindow = 0;
+        if (d->parentPart->mainwindowCount() > 0) {
+            mainWindow = d->parentPart->mainWindows()[0];
+        }
+        d->progressProxy = new DocumentProgressProxy(mainWindow);
+    }
     return d->progressProxy;
 }
 

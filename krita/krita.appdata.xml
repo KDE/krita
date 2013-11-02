@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">krita.desktop</id>
+  <licence>CC0</licence>
+  <description>
+    <p>Krita is the full-featured digital art studio.</p>
+
+    <p> It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
+
+    <p>Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings.</p>
+
+    <p>Have fun painting!</p>
+  </description>
+  <url type="homepage">http://www.krita.org/</url>
+  <screenshots>
+    <screenshot type="default"></screenshot>
+    <screenshot></screenshot>
+  </screenshots>
+  <updatecontact>foundation@krita.org</updatecontact>
+  <project_group>KDE</project_group>
+</application>

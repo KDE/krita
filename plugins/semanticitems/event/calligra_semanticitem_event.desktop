@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=RDF Calendar Event Plugin
+Comment=A plugin to map calendar event items between document and RDF database
+
+Type=Service
+X-KDE-ServiceTypes=Calligra/SemanticItem
+X-KDE-Library=calligra_semanticitem_event
+X-KDE-PluginInfo-Name=calligra_semanticitem_event
+X-Calligra-MinVersion=28
+X-Calligra-PluginVersion=28

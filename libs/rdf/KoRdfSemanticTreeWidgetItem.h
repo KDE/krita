@@ -51,14 +51,11 @@ protected:
 
 public:
     enum {
-        Type = QTreeWidgetItem::UserType + 1
-    };
-    enum {
         ColName = 0,
         ColSize
     };
 
-    KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent, int type);
+    explicit KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent);
     virtual ~KoRdfSemanticTreeWidgetItem();
 
     /**

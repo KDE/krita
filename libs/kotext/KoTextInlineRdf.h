@@ -149,7 +149,6 @@ public:
 private:
 
     friend class KoRdfSemanticItem;
-    friend class KoRdfFoaF;
     friend class KoDocumentRdf;
 
     class Private;

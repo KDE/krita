@@ -26,9 +26,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-class KoRdfFoaF;
-class KoRdfCalendarEvent;
-class KoRdfLocation;
 class KoDocumentRdf;
 class KoRdfSemanticTreePrivate;
 

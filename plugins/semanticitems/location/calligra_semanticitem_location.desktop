@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=RDF Location Plugin
+Comment=A plugin to map location items between document and RDF database
+
+Type=Service
+X-KDE-ServiceTypes=Calligra/SemanticItem
+X-KDE-Library=calligra_semanticitem_location
+X-KDE-PluginInfo-Name=calligra_semanticitem_location
+X-Calligra-MinVersion=28
+X-Calligra-PluginVersion=28

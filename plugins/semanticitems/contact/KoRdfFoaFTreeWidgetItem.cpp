@@ -26,7 +26,7 @@
 
 
 KoRdfFoaFTreeWidgetItem::KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf)
-        : KoRdfSemanticTreeWidgetItem(parent, Type)
+        : KoRdfSemanticTreeWidgetItem(parent)
         , m_foaf(foaf)
 {
     setText(ColName, m_foaf->name());

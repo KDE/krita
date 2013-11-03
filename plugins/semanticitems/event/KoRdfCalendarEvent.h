@@ -54,7 +54,7 @@ public:
     // inherited and reimplemented...
 
     virtual void exportToFile(const QString& fileName = QString()) const;
-    virtual void importFromData(const QByteArray& ba, KoDocumentRdf *m_rdf = 0, KoCanvasBase *host = 0);
+    virtual void importFromData(const QByteArray& ba, const KoDocumentRdf *m_rdf = 0, KoCanvasBase *host = 0);
     virtual QWidget* createEditor(QWidget *parent);
     virtual void updateFromEditorData();
     virtual KoRdfSemanticTreeWidgetItem* createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
@@ -96,4 +96,7 @@ private:
     Ui::KoRdfCalendarEventEditWidget editWidget;
 
 };
+
+typedef QExplicitlySharedDataPointer<KoRdfCalendarEvent> hKoRdfCalendarEvent;
+
 #endif

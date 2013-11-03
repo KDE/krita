@@ -1,10 +1,12 @@
-/* This file is part of the KDE project
+/* This file is part of the Calligra project, made with-in the KDE community
+
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+   Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,25 +16,20 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef __rdf_RdfSemanticTreeWidgetSelectAction_h__
-#define __rdf_RdfSemanticTreeWidgetSelectAction_h__
+#ifndef KOCONTACTSEMANTICITEMPLUGIN_H
+#define KOCONTACTSEMANTICITEMPLUGIN_H
 
-#include "kordf_export.h"
-#include "RdfSemanticTreeWidgetAction.h"
-#include "KoRdfSemanticItem.h"
+#include <QObject>
+#include <QVariantList>
 
-
-class KORDF_EXPORT RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
+class KoContactSemanticItemPlugin : public QObject
 {
-    hKoRdfSemanticItem si;
+    Q_OBJECT
 public:
-    RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas,
-            hKoRdfSemanticItem si, const QString &name = QString("Select"));
-
-    virtual ~RdfSemanticTreeWidgetSelectAction();
-    virtual void activated();
+    explicit KoContactSemanticItemPlugin(QObject *parent, const QVariantList &args = QVariantList());
 };
-#endif
+
+#endif // KOCONTACTSEMANTICITEMPLUGIN_H

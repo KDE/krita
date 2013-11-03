@@ -54,10 +54,7 @@ class KoTextEditor;
 #include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticTree.h"
 
-class KoRdfCalendarEvent;
-class KoRdfLocation;
 class KoDocumentRdfPrivate;
-class KoRdfFoaF;
 
 
 /**
@@ -95,7 +92,7 @@ class KoRdfFoaF;
  * For example, to find the foaf entries related to the current KoTextEditor
  *
  * Soprano::Model* model = rdf->findStatements( editor );
- * KoRdfFoaFList foaflist = rdf->foaf( model );
+ * QList<hKoRdfSemanticItem> foaflist = rdf->semanticItems( "Contact", model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.
@@ -277,23 +274,17 @@ public:
     KoTextInlineRdf* findInlineRdfByID(const QString &xmlid) const;
 
     /**
-     * Obtain a list of Contact/FOAF semantic objects, if any, for the Rdf
+     * Obtain a list of semantic objects of the given class, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<hKoRdfFoaF> foaf(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
-
-
-    /**
-     * Obtain a list of calendar/vevent semantic objects, if any, for the Rdf
-     * in the default model() or the one you optionally pass in.
-     */
-    QList<hKoRdfCalendarEvent> calendarEvents(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
+    QList<hKoRdfSemanticItem> semanticItems(const QString &className, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
-     * Obtain a list of location semantic objects, if any, for the Rdf
-     * in the default model() or the one you optionally pass in.
+     * Create a SemanticItem subclass using its name from
+     * classNames(). Useful for menus and other places that want to
+     * allow the user to create new SemanticItem Objects.
      */
-    QList<hKoRdfLocation> locations(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
+     hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -497,17 +488,6 @@ private:
      * content.xml file is generated.
      */
     bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const Soprano::Node &context) const;
-
-
-    /**
-     * Because there are at least two different ways of associating digital longitude
-     * and latitude with triples in Rdf, the locations() method farms off discovering
-     * these values to this method using specific SPARQL query text.
-     *
-     * @see locations()
-     */
-    void addLocations(QSharedPointer<Soprano::Model> m, QList<hKoRdfLocation> &ret,
-                      bool isGeo84, const QString &sparql);
 
 
     /**

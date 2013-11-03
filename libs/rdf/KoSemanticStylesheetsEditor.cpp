@@ -18,8 +18,11 @@
 */
 
 #include "KoSemanticStylesheetsEditor.h"
+
 #include "ui_KoSemanticStylesheetsEditor.h"
+
 #include "KoRdfSemanticItem.h"
+#include "KoRdfSemanticItemRegistry.h"
 #include "KoDocumentRdf.h"
 
 #include <kdebug.h>
@@ -118,12 +121,11 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     d->m_systemSheetsParentItem->setText(ColSemobj, "");
     d->m_ui->stylesheets->expandItem(d->m_systemSheetsParentItem);
 
-    QStringList classNames;
     QTreeWidgetItem *treewidget = 0;
     treewidget = d->m_systemSheetsParentItem;
-    classNames = KoRdfSemanticItem::classNames();
+    const QStringList classNames = KoRdfSemanticItemRegistry::instance()->classNames();
     foreach (const QString &semanticClass, classNames) {
-        hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(this, rdf, semanticClass);
+        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass, this);
         KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_systemSheetsItems[semanticClass] = item;
@@ -135,9 +137,8 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     d->m_ui->stylesheets->expandItem(d->m_userSheetsParentItem);
 
     treewidget = d->m_userSheetsParentItem;
-    classNames = KoRdfSemanticItem::classNames();
     foreach (const QString &semanticClass, classNames) {
-        hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(this, rdf, semanticClass);
+        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass, this);
         KoSemanticStylesheetWidgetItem* item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);
         item->setText(ColName, semanticClass);
         d->m_userSheetsItems[semanticClass] = item;
@@ -145,10 +146,9 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
     }
 
     // initialize stylesheets tree
-    classNames = KoRdfSemanticItem::classNames();
     foreach (const QString &semanticClass, classNames) {
         kDebug(30015) << "semanticClass:" << semanticClass;
-        hKoRdfSemanticItem p = KoRdfSemanticItem::createSemanticItem(this, rdf, semanticClass);
+        hKoRdfSemanticItem p = rdf->createSemanticItem(semanticClass, this);
         setupStylesheetsItems(semanticClass, p, p->stylesheets(), d->m_systemSheetsItems);
         setupStylesheetsItems(semanticClass, p, p->userStylesheets(), d->m_userSheetsItems, true);
     }

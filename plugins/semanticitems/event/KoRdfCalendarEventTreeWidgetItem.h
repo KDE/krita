@@ -20,10 +20,8 @@
 #ifndef __rdf_KoRdfCalendarEventTreeWidgetItem_h__
 #define __rdf_KoRdfCalendarEventTreeWidgetItem_h__
 
-#include "RdfForward.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
-#include "KoRdfFoaFTreeWidgetItem.h"
 
 class KoCanvasBase;
 
@@ -37,9 +35,6 @@ class KoRdfCalendarEventTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
     Q_OBJECT
 
 public:
-    enum {
-        Type = KoRdfFoaFTreeWidgetItem::Type + 1
-    };
     KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfCalendarEvent ev);
 
     // inherited and reimplemented...

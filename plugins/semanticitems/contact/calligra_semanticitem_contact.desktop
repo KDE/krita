@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=RDF Contact Plugin
+Comment=A plugin to map contact items between document and RDF database
+
+Type=Service
+X-KDE-ServiceTypes=Calligra/SemanticItem
+X-KDE-Library=calligra_semanticitem_contact
+X-KDE-PluginInfo-Name=calligra_semanticitem_contact
+X-Calligra-MinVersion=28
+X-Calligra-PluginVersion=28

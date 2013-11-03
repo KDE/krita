@@ -17,37 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __rdf_KoRdfFoaFTreeWidgetItem_h__
-#define __rdf_KoRdfFoaFTreeWidgetItem_h__
+#ifndef __rdf_KoRdfLocationTreeWidgetItem_h__
+#define __rdf_KoRdfLocationTreeWidgetItem_h__
 
-#include "RdfForward.h"
-#include "KoRdfFoaF.h"
+#include "KoRdfLocation.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 
 class KoCanvasBase;
 
 /**
- * @short Display Contact/FOAF semantic data with a context menu tailored
+ * @short Display location (lat/long) semantic data with a context menu tailored
  *        to such infomartion.
  * @author Ben Martin <ben.martin@kogmbh.com>
  */
-class KoRdfFoaFTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
+class KoRdfLocationTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
 {
     Q_OBJECT
 public:
-    enum {
-        Type = KoRdfSemanticTreeWidgetItem::Type + 1
-    };
-    KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf);
+    KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfLocation semObj);
+    virtual ~KoRdfLocationTreeWidgetItem();
 
-    // inherited and reimplemented...
+    /****************************************/
+    /****************************************/
+    /**** inherited and reimplemented... **/
 
-    hKoRdfFoaF foaf() const;
+    hKoRdfLocation semanticObject() const;
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);
 
 public slots:
-    void importSelectedSemanticViewContact();
+    void showInViewer();
     void exportToFile();
 
 protected:
@@ -55,7 +54,6 @@ protected:
     virtual QString uIObjectName() const;
 
 private:
-    hKoRdfFoaF m_foaf;
+    hKoRdfLocation m_semanticObject;
 };
-
 #endif

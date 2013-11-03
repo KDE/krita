@@ -30,8 +30,6 @@
 #include <ui_KoRdfLocationViewWidget.h>
 /* #endif */
 
-#include "kordf_export.h"
-
 /**
  * @short A Location class which handles ICBM (lat/long) data of various kinds.
  * @author Ben Martin <ben.martin@kogmbh.com>
@@ -45,7 +43,7 @@
  * http://www.w3.org/TR/rdfcal/     Relates an Rdf "geo" to a list of 2 doubles.
  *
  */
-class KORDF_EXPORT KoRdfLocation : public KoRdfSemanticItem
+class KoRdfLocation : public KoRdfSemanticItem
 {
     Q_OBJECT
 
@@ -57,7 +55,7 @@ public:
     // inherited and reimplemented...
 
     virtual void exportToFile(const QString &fileName = QString()) const;
-    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
+    virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
     virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
     virtual KoRdfSemanticTreeWidgetItem *createQTreeWidgetItem(QTreeWidgetItem *parent = 0);
@@ -101,7 +99,8 @@ private:
     Soprano::Node m_joiner;
     Ui::KoRdfLocationEditWidget editWidget;
     Ui::KoRdfLocationViewWidget viewWidget;
-
-
 };
+
+typedef QExplicitlySharedDataPointer<KoRdfLocation> hKoRdfLocation;
+
 #endif

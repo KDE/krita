@@ -19,10 +19,6 @@
 
 #include "KoRdfSemanticItem.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
-#include "KoDocumentRdf.h"
 
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
@@ -302,28 +298,6 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 
 }
 
-QStringList KoRdfSemanticItem::classNames()
-{
-    QStringList ret;
-    ret << "Contact";
-    ret << "Event";
-    ret << "Location";
-    return ret;
-}
-
-hKoRdfSemanticItem KoRdfSemanticItem::createSemanticItem(QObject *parent, const KoDocumentRdf *m_rdf, const QString &semanticClass)
-{
-    if (semanticClass == "Contact") {
-        return hKoRdfSemanticItem(new KoRdfFoaF(parent, m_rdf));
-    }
-    if (semanticClass == "Event") {
-        return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, m_rdf));
-    }
-    if (semanticClass == "Location") {
-        return hKoRdfSemanticItem(new KoRdfLocation(parent, m_rdf));
-    }
-    return hKoRdfSemanticItem(0);
-}
 
 QList<hKoSemanticStylesheet> KoRdfSemanticItem::userStylesheets() const
 {

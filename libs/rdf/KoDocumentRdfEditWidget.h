@@ -109,16 +109,14 @@ public slots:
      */
     void sparqlExecute();
 
+private slots:
+
     /**
      * This methods set the default stylesheet to the
      * user selection for each type of KoRdfSemanticItem.
      */
-    void defaultContactsSheetButton();
-    void defaultEventsSheetButton();
-    void defaultLocationsSheetButton();
-    void defaultAllSheetButton();
-
-private slots:
+    void onDefaultSheetButtonClicked();
+    void onDefaultAllSheetButtonClicked();
 
     /**
      * Show a context menu for the semantic treeview
@@ -133,7 +131,9 @@ private slots:
 private:
 
     hKoSemanticStylesheet stylesheetFromComboBox(QComboBox *w) const;
+    void applyStylesheetFromComboBox(QComboBox *comboBox) const;
 
+private:
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;
 

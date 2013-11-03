@@ -19,8 +19,12 @@
 */
 
 #include "KoDocumentRdf.h"
+
 #include "KoRdfPrefixMapping.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
+#include "InsertSemanticObjectActionBase.h"
+#include "InsertSemanticObjectCreateAction.h"
+#include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticItemRegistry.h"
 
 #include "../KoView.h"

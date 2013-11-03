@@ -22,6 +22,7 @@
 #define __rdf_KoRdfSemanticTree_h__
 
 #include "kordf_export.h"
+// Qt
 #include <QSharedPointer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

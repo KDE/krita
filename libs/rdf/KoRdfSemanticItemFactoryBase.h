@@ -23,13 +23,11 @@
 #define KORDFSEMANTICITEMFACTORYBASE_H
 
 #include "kordf_export.h"
-
-// lib
 #include "KoRdfSemanticItem.h"
+// Qt
+#include <QString>
 
 class QMimeData;
-
-#include <QString>
 
 
 /**

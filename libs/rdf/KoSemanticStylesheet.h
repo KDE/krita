@@ -22,11 +22,12 @@
 
 #include "kordf_export.h"
 
+#include "RdfForward.h"
+// Qt
 #include <QObject>
 #include <QSharedData>
 #include <QList>
 #include <QString>
-#include "RdfForward.h"
 
 class KoSemanticStylesheetPrivate;
 

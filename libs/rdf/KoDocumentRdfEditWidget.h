@@ -20,11 +20,12 @@
 #ifndef __koDocumentRdfEditWidget_h__
 #define __koDocumentRdfEditWidget_h__
 
+#include "kordf_export.h"
 #include "RdfForward.h"
-#include <QWidget>
-#include <klocale.h>
-#include <kordf_export.h>
+// Calligra
 #include <KoPageWidgetItem.h>
+// Qt
+#include <QWidget>
 
 class KoDocumentRdf;
 class KoSemanticStylesheet;
@@ -138,7 +139,5 @@ private:
     KoDocumentRdfEditWidgetPrivate *const d;
 
 };
-
-
 
 #endif

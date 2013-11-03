@@ -21,38 +21,37 @@
 #define KO_DOCUMENT_Rdf_H
 
 #include "kordf_export.h"
-#include "KoDocumentRdfBase.h"
-
-#include "KoXmlReaderForward.h"
-#include <KoDataCenterBase.h>
-#include <kconfig.h>
-
-#include <QObject>
-#include <QMap>
-#include <QString>
-#include <QStringList>
-#include <Soprano/Soprano>
-#include <QTextBlockUserData>
-#include <QTreeWidgetItem>
-#include <kaction.h>
-#include <kdatetime.h>
-
-class QDomDocument;
-class KoStore;
-class KoXmlWriter;
-class KoDocument;
-class KoCanvasBase;
-class KoTextEditor;
-
 #include "RdfForward.h"
 #include "KoSemanticStylesheet.h"
 #include "KoRdfSemanticItem.h"
 #include "KoRdfSemanticItemViewSite.h"
 #include "RdfSemanticTreeWidgetAction.h"
-#include "InsertSemanticObjectActionBase.h"
-#include "InsertSemanticObjectCreateAction.h"
-#include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticTree.h"
+// Calligra
+#include <KoDocumentRdfBase.h>
+#include <KoXmlReaderForward.h>
+#include <KoDataCenterBase.h>
+// KDE
+#include <kconfig.h>
+#include <kaction.h>
+#include <kdatetime.h>
+// Soprano
+#include <Soprano/Soprano>
+// Qt
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
+#include <QTextBlockUserData>
+#include <QTreeWidgetItem>
+
+class QDomDocument;
+
+class KoStore;
+class KoXmlWriter;
+class KoDocument;
+class KoCanvasBase;
+class KoTextEditor;
 
 class KoDocumentRdfPrivate;
 

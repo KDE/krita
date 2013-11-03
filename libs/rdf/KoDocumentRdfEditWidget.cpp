@@ -33,6 +33,7 @@
 #include <QSortFilterProxyModel>
 #include <kmenu.h>
 #include <kmessagebox.h>
+#include <klocale.h>
 
 
 static const char SemanticItemClassId[] = "Ko_semanticItemClass";

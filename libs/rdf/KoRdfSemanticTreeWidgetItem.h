@@ -22,9 +22,10 @@
 
 #include "kordf_export.h"
 #include "RdfForward.h"
-
+// Qt
 #include <QObject>
 #include <QTreeWidgetItem>
+
 class KAction;
 class KoCanvasBase;
 

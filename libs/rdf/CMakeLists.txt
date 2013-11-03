@@ -50,22 +50,18 @@ install( FILES calligra_semanticitem.desktop  DESTINATION ${SERVICETYPES_INSTALL
 
 install( FILES
     kordf_export.h
-    KoChangeTrackerDisabledRAII.h
     RdfForward.h
     KoDocumentRdf.h
-    KoSopranoTableModelDelegate.h
-    KoSopranoTableModel.h
-    KoSemanticStylesheet.h
+    KoDocumentRdfEditWidget.h
+    KoRdfPrefixMapping.h
     KoRdfSemanticItem.h
     KoRdfSemanticItemFactoryBase.h
     KoRdfSemanticItemRegistry.h
     KoRdfSemanticItemViewSite.h
     KoRdfSemanticTree.h
     KoRdfSemanticTreeWidgetItem.h
+    KoSemanticStylesheet.h
+    KoSemanticStylesheetsEditor.h
     RdfSemanticTreeWidgetAction.h
     RdfSemanticTreeWidgetSelectAction.h
-    InsertSemanticObjectActionBase.h
-    InsertSemanticObjectCreateAction.h
-    InsertSemanticObjectReferenceAction.h
-    KoSemanticStylesheetsEditor.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

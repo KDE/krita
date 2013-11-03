@@ -22,14 +22,16 @@
 
 #include "kordf_export.h"
 
-#include <QObject>
+#include "RdfForward.h"
+#include "KoSemanticStylesheet.h"
+// KDE
+#include <kdatetime.h>
+// Soprano
+#include <Soprano/Soprano>
+// Qt
 #include <QSharedData>
 #include <QExplicitlySharedDataPointer>
 #include <QMimeData>
-#include <kdatetime.h>
-#include <Soprano/Soprano>
-#include "RdfForward.h"
-#include "KoSemanticStylesheet.h"
 
 class KoCanvasBase;
 class QTreeWidgetItem;

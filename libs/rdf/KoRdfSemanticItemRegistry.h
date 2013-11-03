@@ -23,9 +23,9 @@
 #define KORDFSEMANTICITEMREGISTRY_H
 
 #include "kordf_export.h"
-
 #include "KoRdfSemanticItem.h"
 #include "KoRdfSemanticItemFactoryBase.h"
+// Calligra
 #include <KoGenericRegistry.h>
 
 class KoCanvasBase;

@@ -413,7 +413,7 @@ void KisOpenGLCanvas2::drawImage() const
             d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, tile->textureId());
+            tile->bindToActiveTexture();
             d->displayShader->setUniformValue("texture0", 0);
 
             if (d->displayFilter) {

@@ -88,7 +88,10 @@ public:
         return m_tileRectInTexturePixels;
     }
 
+    void bindToActiveTexture();
+
 private:
+    void setNeedsMipmapRegeneration();
 
     GLuint m_textureId;
 
@@ -102,6 +105,7 @@ private:
     QRect m_textureRectInImagePixels;
     FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
+    bool m_needsMipmapRegeneration;
 
     Q_DISABLE_COPY(KisTextureTile)
 };

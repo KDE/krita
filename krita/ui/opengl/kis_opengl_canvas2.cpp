@@ -178,8 +178,6 @@ void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 
 void KisOpenGLCanvas2::initializeGL()
 {
-    glEnable(GL_MULTISAMPLE);
-
     if (!VSyncWorkaround::tryDisableVSync(this)) {
         qWarning();
         qWarning() << "WARNING: We didn't manage to switch off VSync on your graphics adapter.";

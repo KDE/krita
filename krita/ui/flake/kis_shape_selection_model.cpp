@@ -33,7 +33,7 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
     : m_image(image)
     , m_parentSelection(selection)
     , m_shapeSelection(shapeSelection)
-    , m_updateSignalCompressor(new KisSignalCompressor(300, false, this))
+    , m_updateSignalCompressor(new KisSignalCompressor(300, KisSignalCompressor::POSTPONE, this))
     , m_updatesEnabled(true)
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));

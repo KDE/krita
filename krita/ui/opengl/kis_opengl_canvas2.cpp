@@ -16,6 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#define GL_GLEXT_PROTOTYPES
+
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl.h"
 
@@ -81,6 +83,7 @@ public:
         : displayShader(0)
         , checkerShader(0)
         , displayFilter(0)
+        , glSyncObject(0)
         , wrapAroundMode(false)
     {
     }
@@ -97,6 +100,8 @@ public:
 
     KisDisplayFilter *displayFilter;
     KisTextureTile::FilterMode filterMode;
+
+    GLsync glSyncObject;
 
     bool wrapAroundMode;
 
@@ -209,9 +214,26 @@ void KisOpenGLCanvas2::paintGL()
 {
     makeCurrent();
     renderCanvasGL();
+
     QPainter gc(this);
     renderDecorations(&gc);
     gc.end();
+
+    if (d->glSyncObject) {
+        glDeleteSync(d->glSyncObject);
+    }
+
+    d->glSyncObject = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+}
+
+bool KisOpenGLCanvas2::isBusy() const
+{
+    if (!d->glSyncObject) return false;
+
+    GLint status = -1;
+    glGetSynciv(d->glSyncObject, GL_SYNC_STATUS, 1, 0, &status);
+
+    return status == GL_UNSIGNALED;
 }
 
 inline QVector<QVector3D> rectToVertices(const QRectF &rc)

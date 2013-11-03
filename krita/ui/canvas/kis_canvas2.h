@@ -217,6 +217,8 @@ private slots:
 
     void slotSelectionChanged();
 
+    void slotDoCanvasUpdate();
+
 public:
 
     // interafce for KisCanvasController only
@@ -238,6 +240,7 @@ private:
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
+    void updateCanvasWidgetImpl(const QRect &rc = QRect());
 
 private:
 

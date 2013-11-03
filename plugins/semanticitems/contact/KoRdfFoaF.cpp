@@ -28,9 +28,11 @@
 #include <kfiledialog.h>
 
 #ifdef KDEPIMLIBS_FOUND
+#include <akonadi/collectiondialog.h>
+#include <akonadi/itemcreatejob.h>
+#include <akonadi/collection.h>
+#include <akonadi/item.h>
 #include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#include <kabc/addressbook.h>
 #include <kabc/phonenumber.h>
 #include <kabc/vcardconverter.h>
 #endif
@@ -185,18 +187,38 @@ void KoRdfFoaF::saveToKABC()
 {
     kDebug(30015) << "saving name:" << m_name;
 #ifdef KDEPIMLIBS_FOUND
-    KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
-                               (KABC::StdAddressBook::self());
-    if (!ab) {
+    Akonadi::CollectionDialog collectionDialog;
+    collectionDialog.setMimeTypeFilter(QStringList() << KABC::Addressee::mimeType());
+    collectionDialog.setAccessRightsFilter(Akonadi::Collection::CanCreateItem);
+    collectionDialog.setDescription(i18n("Select an address book for saving:"));
+    if (! collectionDialog.exec()) {
         return;
     }
-    KABC::Ticket *ticket = ab->requestSaveTicket();
-    KABC::Addressee addr = toKABC();
-    ab->insertAddressee(addr);
-    KABC::AddressBook* pab = ab;
-    pab->save(ticket);
+
+    Akonadi::Collection collection = collectionDialog.selectedCollection();
+
+    KABC::Addressee addressee = toKABC();
+
+    Akonadi::Item item;
+    item.setPayload<KABC::Addressee>(addressee);
+    item.setMimeType(KABC::Addressee::mimeType());
+
+    Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
+    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
+
+#ifdef KDEPIMLIBS_FOUND
+void KoRdfFoaF::onCreateJobFinished( KJob *job )
+{
+    if (job->error()) {
+        kDebug(30015) << "Could not add entry:" << name();
+    } else {
+        kDebug(30015) << "Added contact entry:" << name();
+    }
+}
+#endif
+
 
 void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
 {

@@ -24,10 +24,8 @@
 
 // calendars
 #ifdef KDEPIMLIBS_FOUND
-namespace KCal
-{
-    class Event;
-}
+#include <kcalcore/event.h>
+class KJob;
 #endif
 
 #include <ui_KoRdfCalendarEventEditWidget.h>
@@ -78,11 +76,14 @@ public:
     KDateTime start() const;
     KDateTime end() const;
 
-private:
 #ifdef KDEPIMLIBS_FOUND
-    KCal::Event *toKEvent() const;
-    void fromKEvent(KCal::Event *e);
+private:
+    KCalCore::Event::Ptr toKEvent() const;
+    void fromKEvent(KCalCore::Event::Ptr e);
+private Q_SLOTS:
+    void onCreateJobFinished(KJob *job);
 #endif
+
 private:
     Soprano::Node m_linkSubject;
     QString m_location;

@@ -408,7 +408,7 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 ##
 ## Test for kdepimlibs
 ##
-macro_optional_find_package(KdepimLibs)
+macro_optional_find_package(KdepimLibs 4.6.0)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
 
 ##

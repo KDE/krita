@@ -27,6 +27,7 @@
 namespace KABC {
     class Addressee;
 }
+class KJob;
 #endif
 
 #include "ui_KoRdfFoaFEditWidget.h"
@@ -89,6 +90,8 @@ private:
 #ifdef KDEPIMLIBS_FOUND
     KABC::Addressee toKABC() const;
     void fromKABC(KABC::Addressee addr);
+private Q_SLOTS:
+    void onCreateJobFinished(KJob *job);
 #endif
 
 };

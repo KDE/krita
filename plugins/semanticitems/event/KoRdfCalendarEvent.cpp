@@ -30,9 +30,13 @@
 #include "ksystemtimezone.h"
 
 #ifdef KDEPIMLIBS_FOUND
-#include <kcal/calendarresources.h>
-#include <kcal/calendarlocal.h>
-#include <kcal/vcalformat.h>
+#include <akonadi/collectiondialog.h>
+#include <akonadi/itemcreatejob.h>
+#include <akonadi/collection.h>
+#include <akonadi/item.h>
+#include <kcalcore/memorycalendar.h>
+#include <kcalcore/icalformat.h>
+#include <kcalcore/vcalformat.h>
 #endif
 
 using namespace Soprano;
@@ -343,24 +347,9 @@ KDateTime KoRdfCalendarEvent::end() const
 }
 
 #ifdef KDEPIMLIBS_FOUND
-static KCal::CalendarResources *StdCalendar()
+KCalCore::Event::Ptr KoRdfCalendarEvent::toKEvent() const
 {
-    static KCal::CalendarResources *ret = 0;
-    if (!ret) {
-        ret = new KCal::CalendarResources(KSystemTimeZones::local());
-        ret->readConfig();
-        KCal::CalendarResourceManager* manager = ret->resourceManager();
-        KCal::CalendarResourceManager::Iterator it;
-        for (it = manager->begin(); it != manager->end(); ++it) {
-            (*it)->load();
-        }
-    }
-    return ret;
-}
-
-KCal::Event *KoRdfCalendarEvent::toKEvent() const
-{
-    KCal::Event *event = new KCal::Event();
+    KCalCore::Event::Ptr event = KCalCore::Event::Ptr(new KCalCore::Event());
     event->setDtStart(start());
     event->setDtEnd(end());
     event->setSummary(summary());
@@ -369,7 +358,7 @@ KCal::Event *KoRdfCalendarEvent::toKEvent() const
     return event;
 }
 
-void KoRdfCalendarEvent::fromKEvent(KCal::Event *event)
+void KoRdfCalendarEvent::fromKEvent(KCalCore::Event::Ptr event)
 {
     m_dtstart = event->dtStart();
     m_dtend   = event->dtEnd();
@@ -397,17 +386,37 @@ void KoRdfCalendarEvent::fromKEvent(KCal::Event *event)
 void KoRdfCalendarEvent::saveToKCal()
 {
 #ifdef KDEPIMLIBS_FOUND
-    KCal::CalendarResources *calendarResource = StdCalendar();
-    calendarResource->load();
-    KCal::Event *event = toKEvent();
-    if (calendarResource->addEvent(event)) {
-        kDebug(30015) << "Added calendar entry:" << name();
-        calendarResource->save();
-    } else {
-        KMessageBox::error(0, i18n("Could not add entry\n%1", name()));
+    KCalCore::Event::Ptr event = toKEvent();
+
+    Akonadi::CollectionDialog collectionDialog;
+    collectionDialog.setMimeTypeFilter(QStringList() << event->mimeType());
+    collectionDialog.setAccessRightsFilter(Akonadi::Collection::CanCreateItem);
+    collectionDialog.setDescription(i18n("Select a calendar for saving:"));
+    if (! collectionDialog.exec()) {
+        return;
     }
+
+    Akonadi::Collection collection = collectionDialog.selectedCollection();
+
+    Akonadi::Item item;
+    item.setPayload<KCalCore::Event::Ptr>(event);
+    item.setMimeType(event->mimeType());
+
+    Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
+    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
+
+#ifdef KDEPIMLIBS_FOUND
+void KoRdfCalendarEvent::onCreateJobFinished( KJob *job )
+{
+    if (job->error()) {
+        KMessageBox::error(0, i18n("Could not add entry\n%1", name()));
+    } else {
+        kDebug(30015) << "Added calendar entry:" << name();
+    }
+}
+#endif
 
 void KoRdfCalendarEvent::exportToFile(const QString &fileNameConst) const
 {
@@ -425,9 +434,10 @@ void KoRdfCalendarEvent::exportToFile(const QString &fileNameConst) const
             return;
         }
     }
-    KCal::CalendarLocal cal(KSystemTimeZones::local());
-    cal.addEvent(toKEvent());
-    if (!cal.save(fileName)) {
+    KCalCore::Calendar::Ptr cal(new KCalCore::MemoryCalendar(KSystemTimeZones::local()));
+    cal->addEvent(toKEvent());
+    KCalCore::ICalFormat format;
+    if (! format.save(cal, fileName)) {
         KMessageBox::error(0, i18n("Could not save iCal file\n%1", fileName));
     }
     kDebug(30015) << "wrote to export file:" << fileName;
@@ -442,17 +452,16 @@ void KoRdfCalendarEvent::importFromData(const QByteArray &ba, const KoDocumentRd
     if (_rdf) {
         m_rdf = _rdf;
     }
-    KCal::VCalFormat v;
-    KCal::Calendar *cal = new KCal::CalendarLocal(KSystemTimeZones::local());
+    KCalCore::VCalFormat v;
+    KCalCore::Calendar::Ptr cal(new KCalCore::MemoryCalendar(KSystemTimeZones::local()));
     bool rc = v.fromRawString(cal, ba);
     kDebug(30015) << "parse rc:" << rc;
-    KCal::Event::List events = cal->rawEvents();
+    KCalCore::Event::List events = cal->rawEvents();
     kDebug(30015) << "found event count:" << events.size();
     if (events.size() >= 1) {
-        KCal::Event* e = events[0];
+        KCalCore::Event::Ptr e = events[0];
         fromKEvent(e);
     }
-    delete cal;
     importFromDataComplete(ba, documentRdf(), host);
 #else
     Q_UNUSED(ba);

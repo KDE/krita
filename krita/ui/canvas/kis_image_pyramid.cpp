@@ -30,7 +30,6 @@
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
 #include "kis_config.h"
-#include "scalefilter.h"
 
 //#define DEBUG_PYRAMID
 
@@ -170,28 +169,6 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
 {
     if (newImage) {
         m_originalImage = newImage;
-
-//        KisPaintDeviceSP dev = newImage->projection();
-//        QImage img = dev->convertToQImage(0);
-
-//        QSize sz = img.size() / 4;
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::BesselFilter).save("bessel.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::BlackmanFilter).save("blackman.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::BoxFilter).save("box.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::CatromFilter).save("catrom.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::CubicFilter).save("cubic.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::GaussianFilter).save("gaussian.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::HammingFilter).save("hamming.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::HanningFilter).save("hanning.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::HermiteFilter).save("hermite.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::LanczosFilter).save("lanczos.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::MitchellFilter).save("mitchell.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::PointFilter).save("point.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::QuadraticFilter).save("quadratic.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::SincFilter).save("sinc.png");
-//        Blitz::smoothScaleFilter(img, sz, 1.0, Blitz::TriangleFilter).save("triangle.png");
-//        img.scaled(sz, Qt::IgnoreAspectRatio, Qt::FastTransformation).save("fast.png");
-//        img.scaled(sz, Qt::IgnoreAspectRatio, Qt::SmoothTransformation).save("smooth.png");
 
         clearPyramid();
         setImageSize(m_originalImage->width(), m_originalImage->height());
@@ -485,7 +462,7 @@ KisImagePatch KisImagePyramid::getNearestPatch(KisPPUpdateInfoSP info)
 void KisImagePyramid::drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info)
 {
     KisImagePatch patch = getNearestPatch(info);
-    patch.drawMe(gc, info->viewportRect);
+    patch.drawMe(gc, info->viewportRect, info->renderHints);
 }
 
 QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,

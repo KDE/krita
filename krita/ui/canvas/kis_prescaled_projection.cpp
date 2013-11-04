@@ -370,17 +370,19 @@ void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
     if (SCALE_MORE_OR_EQUAL_TO(info->scaleX, info->scaleY, 1.0)) {
         if (SCALE_LESS_THAN(info->scaleX, info->scaleY, 2.0)) {
             dbgRender << "smoothBetween100And200Percent" << endl;
+            info->renderHints = QPainter::SmoothPixmapTransform;
             info->borderWidth = borderSize;
         }
         info->transfer = KisPPUpdateInfo::DIRECT;
     } else { // <100%
+        info->renderHints = QPainter::SmoothPixmapTransform;
         info->borderWidth = borderSize;
         info->transfer = KisPPUpdateInfo::PATCH;
     }
 
     dbgRender << "#####################################";
     dbgRender << ppVar(info->scaleX) << ppVar(info->scaleY);
-    dbgRender << ppVar(info->borderWidth);
+    dbgRender << ppVar(info->borderWidth) << ppVar(info->renderHints);
     dbgRender << ppVar(info->transfer);
     dbgRender << ppVar(info->dirtyImageRect);
     dbgRender << "Not aligned rect of the canvas (raw):\t" << croppedViewRect;
@@ -407,7 +409,7 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
         // prescale the patch because otherwise we'd scale using QPainter, which gives
         // a crap result compared to QImage's smoothscale
         patch.preScale(info->viewportRect);
-        patch.drawMe(gc, info->viewportRect);
+        patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
 }
 

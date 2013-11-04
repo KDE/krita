@@ -65,7 +65,8 @@ public:
         MirrorAxisCenter,
         Opacity,
         HdrGamma,
-        GlobalAlphaLock
+        GlobalAlphaLock,
+        PreviousPaintOpPreset
     };
 
 
@@ -102,6 +103,9 @@ public:
 
     KisPaintOpPresetSP currentPreset() const;
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
+    KisPaintOpPresetSP previousPreset() const;
+    void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 

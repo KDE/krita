@@ -169,6 +169,41 @@ KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
     return preset;
 }
 
+void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
+{
+    Q_ASSERT(preset->valid());
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
+    Q_ASSERT(preset->settings());
+    if (!preset) return;
+
+    dbgUI << "setPaintOpPreset" << preset->paintOp();
+
+    QVariant v;
+    v.setValue(preset);
+    m_resourceManager->setResource(CurrentPaintOpPreset, v);
+}
+
+KisPaintOpPresetSP KisCanvasResourceProvider::previousPreset() const
+{
+    KisPaintOpPresetSP preset = m_resourceManager->resource(PreviousPaintOpPreset).value<KisPaintOpPresetSP>();
+    return preset;
+}
+
+void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetSP preset)
+{
+    Q_ASSERT(preset->valid());
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
+    Q_ASSERT(preset->settings());
+    if (!preset) return;
+
+    dbgUI << "setPreviousPaintOpPreset" << preset->paintOp();
+
+    QVariant v;
+    v.setValue(preset);
+    m_resourceManager->setResource(PreviousPaintOpPreset, v);
+}
+
+
 
 void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 {
@@ -194,19 +229,6 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
     emit sigGradientChanged(gradient);
 }
 
-void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
-{
-    Q_ASSERT(preset->valid());
-    Q_ASSERT(!preset->paintOp().id().isEmpty());
-    Q_ASSERT(preset->settings());
-    if (!preset) return;
-
-    dbgUI << "setPaintOpPreset" << preset->paintOp();
-
-    QVariant v;
-    v.setValue(preset);
-    m_resourceManager->setResource(CurrentPaintOpPreset, v);
-}
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 {

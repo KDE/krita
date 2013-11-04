@@ -100,7 +100,6 @@ public slots:
 
 private:
 
-    KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
     KoID currentPaintop();
     void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
     QPixmap paintopPixmap(const KoID& paintop);
@@ -155,8 +154,8 @@ private:
     KisWidgetChooser*                    m_sliderChooser[2];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
 
-    KisPaintOpPresetSP  m_activePreset;
-    KisPaintOpPresetSP  m_previousPreset;
+//    KisPaintOpPresetSP  m_activePreset;
+//    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;

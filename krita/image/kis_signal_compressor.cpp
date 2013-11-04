@@ -20,25 +20,59 @@
 
 #include <QTimer>
 
-KisSignalCompressor::KisSignalCompressor(int delay, bool deadline, QObject *parent)
+
+KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     : QObject(parent),
       m_timer(new QTimer(this)),
-      m_deadline(deadline)
+      m_mode(mode),
+      m_gotSignals(false)
 {
     m_timer->setSingleShot(true);
     m_timer->setInterval(delay);
 
-    connect(m_timer, SIGNAL(timeout()), SIGNAL(timeout()));
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimerExpired()));
 }
 
 void KisSignalCompressor::start()
 {
-    if (!m_deadline || !m_timer->isActive()) {
+    switch (m_mode) {
+    case POSTPONE:
         m_timer->start();
+        break;
+    case FIRST_ACTIVE:
+        if (!m_timer->isActive()) {
+            m_gotSignals = false;
+            m_timer->start();
+            emit timeout();
+        } else {
+            m_gotSignals = true;
+        }
+        break;
+    case FIRST_INACTIVE:
+        if (!m_timer->isActive()) {
+            m_timer->start();
+        }
+    };
+
+    if (m_mode == POSTPONE || !m_timer->isActive()) {
+        m_timer->start();
+    }
+}
+
+void KisSignalCompressor::slotTimerExpired()
+{
+    if (m_mode != FIRST_ACTIVE || m_gotSignals) {
+        m_gotSignals = false;
+        emit timeout();
     }
 }
 
 void KisSignalCompressor::stop()
 {
     m_timer->stop();
+}
+
+bool KisSignalCompressor::isActive() const
+{
+    return m_timer->isActive() && (m_mode != FIRST_ACTIVE || m_gotSignals);
 }

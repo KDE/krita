@@ -391,6 +391,21 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
     m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
+int KisConfig::openGLTextureSize() const
+{
+    return m_cfg.readEntry("textureSize", 256);
+}
+
+int KisConfig::numMipmapLevels() const
+{
+    return m_cfg.readEntry("numMipmapLevels", 4);
+}
+
+int KisConfig::textureOverlapBorder() const
+{
+    return 1 << qMax(0, numMipmapLevels() - 1);
+}
+
 qint32 KisConfig::maxNumberOfThreads()
 {
     return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());

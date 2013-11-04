@@ -77,6 +77,10 @@ public: // KisAbstractCanvasWidget
         return this;
     }
 
+    bool isBusy() const {
+        return false;
+    }
+
 protected: // KisCanvasWidgetBase
 
     virtual bool callFocusNextPrevChild(bool next);

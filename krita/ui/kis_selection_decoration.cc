@@ -37,7 +37,7 @@
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view),
-      m_signalCompressor(500 /*ms*/),
+      m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
       m_mode(Ants)
 {
     m_offset = 0;

@@ -111,6 +111,11 @@ public:
         return getTextureTileCR(xToCol(x), yToRow(y));;
     }
 
+    inline qreal texelSize() const {
+        Q_ASSERT(m_texturesInfo.width == m_texturesInfo.height);
+        return 1.0 / m_texturesInfo.width;
+    }
+
 public slots:
 
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect);

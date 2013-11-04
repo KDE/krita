@@ -61,18 +61,19 @@ public:
 
 public: // QWidget
 
-    /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-
-    /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
+    virtual void paintEvent(QPaintEvent* event);
 
+public:
+
+    bool isBusy() const;
     void initializeCheckerShader();
     void initializeDisplayShader();
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
-    virtual void paintEvent(QPaintEvent* event);
+
 
 private slots:
     void slotConfigChanged();

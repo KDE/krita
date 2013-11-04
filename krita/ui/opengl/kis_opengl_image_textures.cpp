@@ -340,8 +340,9 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
-    // TODO: make configurable
-    const GLint preferredTextureSize = 1024;
+    KisConfig cfg;
+
+    const GLint preferredTextureSize = cfg.openGLTextureSize();
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -349,7 +350,7 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);
 
-    texturesInfo->border = 1;
+    texturesInfo->border = cfg.textureOverlapBorder();
 
     texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;

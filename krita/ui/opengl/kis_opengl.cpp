@@ -153,5 +153,10 @@ void KisOpenGL::clearError()
     }
 }
 
+bool KisOpenGL::supportsGLSL13()
+{
+    return QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0;
+}
+
 #endif // HAVE_OPENGL
 

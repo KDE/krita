@@ -29,18 +29,30 @@ class KRITAIMAGE_EXPORT KisSignalCompressor : public QObject
     Q_OBJECT
 
 public:
-    KisSignalCompressor(int delay, bool deadline = true, QObject *parent = 0);
+    enum Mode {
+        POSTPONE, /* every start() porspones event by \p delay ms */
+        FIRST_ACTIVE, /* fist call to start() emits a signal, the latter will happen not earlier after \p delay ms */
+        FIRST_INACTIVE /* the first signal will be emitted not earlier that after \p delay ms after the first call to start() */
+    };
+
+public:
+    KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
+    bool isActive() const;
 
 public slots:
     void start();
     void stop();
+
+private slots:
+    void slotTimerExpired();
 
 signals:
     void timeout();
 
 private:
     QTimer *m_timer;
-    bool m_deadline;
+    Mode m_mode;
+    bool m_gotSignals;
 };
 
 #endif /* __KIS_SIGNAL_COMPRESSOR_H */

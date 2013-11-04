@@ -22,13 +22,11 @@
 #define __rdf_KoRdfSemanticTree_h__
 
 #include "kordf_export.h"
+// Qt
 #include <QSharedPointer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-class KoRdfFoaF;
-class KoRdfCalendarEvent;
-class KoRdfLocation;
 class KoDocumentRdf;
 class KoRdfSemanticTreePrivate;
 

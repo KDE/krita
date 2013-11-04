@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfLocationEditWidget_h__
 #define __rdf_KoRdfLocationEditWidget_h__
 
-#include "RdfForward.h"
 #include <QObject>
 #include <QWidget>
 
@@ -31,6 +30,10 @@ namespace Marble
     class MarbleWidget;
     class LatLonEdit;
 }
+namespace Ui
+{
+    class KoRdfLocationEditWidget;
+}
 
 /**
  * This class allows the map to adjust the LatLonEdit widgets as the
@@ -40,7 +43,7 @@ class KoRdfLocationEditWidget : public QWidget
 {
     Q_OBJECT
     KoRdfLocationEditWidgetPrivate* const d;
-    
+
 public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
     ~KoRdfLocationEditWidget();
@@ -48,7 +51,7 @@ public:
 //#ifdef CAN_USE_MARBLE
 //    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
 //#endif
-    
+
 public slots:
     void mouseMoveGeoPosition(const QString&);
 

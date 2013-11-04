@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoRdfLocationTreeWidgetItem.h"
+#include "KoRdfCalendarEventTreeWidgetItem.h"
 
 #include "KoDocumentRdf.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
@@ -25,56 +25,35 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-// Don't use this until we become a plugin.
-#ifdef CAN_USE_MARBLE
-#undef CAN_USE_MARBLE
-#endif
-
-KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,
-                                                         hKoRdfLocation semObj)
-        : KoRdfSemanticTreeWidgetItem(parent, Type)
-        , m_semanticObject(semObj)
+KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent,
+                                                                   hKoRdfCalendarEvent ev)
+        : KoRdfSemanticTreeWidgetItem(parent)
+        , m_semanticObject(ev)
 {
     setText(ColName, m_semanticObject->name());
 }
 
-KoRdfLocationTreeWidgetItem::~KoRdfLocationTreeWidgetItem()
-{
-    kDebug(30015) << "DTOR()";
-    if( m_semanticObject )
-        kDebug(30015) << "semobj:" << m_semanticObject->name();
-    else
-        kDebug(30015) << "NO SEMOBJ";
-    kDebug(30015) << "DTOR(END)";
-}
-
-
-hKoRdfSemanticItem KoRdfLocationTreeWidgetItem::semanticItem() const
+hKoRdfSemanticItem KoRdfCalendarEventTreeWidgetItem::semanticItem() const
 {
     return m_semanticObject;
 }
 
-QString KoRdfLocationTreeWidgetItem::uIObjectName() const
+QString KoRdfCalendarEventTreeWidgetItem::uIObjectName() const
 {
-    return i18n("Location Information");
+    return i18n("Calendar Event");
 }
 
-QList<KAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
+QList<KAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
 {
     QList<KAction *> m_actions;
-    KAction *action = 0;
-    
-#ifdef CAN_USE_MARBLE
-    // These were coded to need marble
-    action = createAction(parent, host, "Edit...");
+    KAction* action = 0;
+    action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     m_actions.append(action);
-    action = createAction(parent, host, "Show location on a map");
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(showInViewer()));
+    action = createAction(parent, host, i18n("Import event to Calendar"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(saveToKCal()));
     m_actions.append(action);
-#endif
-    
-    action = createAction(parent, host, "Export location to KML file...");
+    action = createAction(parent, host, i18n("Export event to iCal file..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(exportToFile()));
     m_actions.append(action);
     addApplyStylesheetActions(parent, m_actions, host);
@@ -85,23 +64,26 @@ QList<KAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasB
     return m_actions;
 }
 
-hKoRdfLocation KoRdfLocationTreeWidgetItem::semanticObject() const
+hKoRdfCalendarEvent KoRdfCalendarEventTreeWidgetItem::semanticObject() const
 {
     return m_semanticObject;
 }
 
-void KoRdfLocationTreeWidgetItem::insert(KoCanvasBase *host)
+void KoRdfCalendarEventTreeWidgetItem::insert(KoCanvasBase *host)
 {
     semanticObject()->insert(host);
 }
 
-void KoRdfLocationTreeWidgetItem::showInViewer()
+void KoRdfCalendarEventTreeWidgetItem::saveToKCal()
 {
-    semanticObject()->showInViewer();
+    kDebug(30015) << "import a calendar event from the document... "
+        << " name:" << m_semanticObject->name();
+    semanticObject()->saveToKCal();
 }
 
-void KoRdfLocationTreeWidgetItem::exportToFile()
+void KoRdfCalendarEventTreeWidgetItem::exportToFile()
 {
+    kDebug(30015) << "exporting to an iCal file..."
+        << " name:" << m_semanticObject->name();
     semanticObject()->exportToFile();
 }
-

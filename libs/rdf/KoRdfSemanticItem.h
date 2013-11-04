@@ -22,14 +22,16 @@
 
 #include "kordf_export.h"
 
-#include <QObject>
+#include "RdfForward.h"
+#include "KoSemanticStylesheet.h"
+// KDE
+#include <kdatetime.h>
+// Soprano
+#include <Soprano/Soprano>
+// Qt
 #include <QSharedData>
 #include <QExplicitlySharedDataPointer>
 #include <QMimeData>
-#include <kdatetime.h>
-#include <Soprano/Soprano>
-#include "RdfForward.h"
-#include "KoSemanticStylesheet.h"
 
 class KoCanvasBase;
 class QTreeWidgetItem;
@@ -229,7 +231,7 @@ public:
      * This method calls also insert() which links the semanticItem with the
      * KoDocumentRdf object m_rdf.
      */
-    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0) = 0;
+    virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0) = 0;
 
     /**
      * A simple description of the semantic item that can be shown to the user
@@ -240,22 +242,6 @@ public:
      * Name of the subclass as would be contained in classNames()
      */
     virtual QString className() const = 0;
-
-    /**
-     * Gets a list of SemanticItem subclasses that can be created.
-     * Any of the strings in the return value can be created using
-     * createSemanticItem().
-     *
-     * @see createSemanticItem()
-     */
-    static QStringList classNames();
-
-    /**
-     * Create a SemanticItem subclass using its name from
-     * classNames(). Useful for menus and other places that want to
-     * allow the user to create new SemanticItem Objects.
-     */
-    static QExplicitlySharedDataPointer<KoRdfSemanticItem> createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
 
     /**
      * Get the system semantic stylesheets that are supported for this

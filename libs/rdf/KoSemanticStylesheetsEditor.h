@@ -21,9 +21,10 @@
 #define __rdf_KoSemanticStylesheetsEditor_h__
 
 #include "kordf_export.h"
-
 #include "RdfForward.h"
+// KDE
 #include <kdialog.h>
+// Qt
 #include <QSharedPointer>
 
 class QTreeWidgetItem;

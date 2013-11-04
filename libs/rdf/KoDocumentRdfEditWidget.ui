@@ -220,60 +220,8 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>Stylesheets</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Contacts</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="m_defaultContactsSheet"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Events</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="m_defaultEventsSheet"/>
-       </item>
-       <item row="4" column="1">
-        <widget class="QComboBox" name="m_defaultLocationsSheet"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Locations</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0" colspan="3">
+      <layout class="QVBoxLayout" stretch="0,0,1">
+       <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Set the default stylesheet for Semantic objects in this document. New RDF objects will use this stylesheet automatically. The buttons allow you to set the stylesheet for all existing semantic objects to the new default stylesheet as well.</string>
@@ -283,33 +231,16 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="m_defaultContactsSheetButton">
-         <property name="text">
-          <string>Set For All Existing</string>
-         </property>
-        </widget>
+       <item>
+        <layout class="QGridLayout" name="m_styleSheetsGridLayout">
+        </layout>
        </item>
-       <item row="3" column="2">
-        <widget class="QPushButton" name="m_defaultEventsSheetButton">
-         <property name="text">
-          <string>Set For All Existing</string>
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="m_defaultLocationsSheetButton">
-         <property name="text">
-          <string>Set For All Existing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QPushButton" name="m_setAllStylesheetsButton">
-         <property name="text">
-          <string>Set For All Existing</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>

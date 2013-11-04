@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Semantic item definition
+Comment=Definition of a semantic item object
+
+Type=ServiceType
+X-KDE-ServiceType=Calligra/SemanticItem
+
+[PropertyDef::X-Calligra-MinVersion]
+Type=int
+[PropertyDef::X-Calligra-PluginVersion]
+Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

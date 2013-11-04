@@ -84,24 +84,26 @@ class KisPaintopBox : public QWidget
     };
 
 public:
+
     KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
-    KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
-    KoID currentPaintop();
-    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
-    QPixmap paintopPixmap(const KoID& paintop);
     ~KisPaintopBox();
 
+private:
+
 public slots:
+
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotCanvasResourceChanged(int key, const QVariant& v);
-    void slotSaveActivePreset();
-    void slotUpdatePreset();
-    void slotSetupDefaultPreset();
     void resourceSelected(KoResource* resource);
 
 private:
+
+    KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
+    KoID currentPaintop();
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
+    QPixmap paintopPixmap(const KoID& paintop);
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
     KisPaintOpPresetSP activePreset(const KoID& paintOp);
@@ -112,6 +114,10 @@ private:
     void sliderChanged(int n);
     
 private slots:
+
+    void slotSaveActivePreset();
+    void slotUpdatePreset();
+    void slotSetupDefaultPreset();
     void slotNodeChanged(const KisNodeSP node);
     void slotToggleEraseMode(bool checked);
     void slotSetCompositeMode(int index);

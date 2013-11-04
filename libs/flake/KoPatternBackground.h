@@ -72,7 +72,7 @@ public:
     /// Returns the pattern
     QImage pattern();
 
-    /// Sets the pattern repeat
+    /// Sets the pattern repeatgfl
     void setRepeat(PatternRepeat repeat);
 
     /// Returns the pattern repeat
@@ -105,9 +105,6 @@ public:
     /// Returns the original image size
     QSizeF patternOriginalSize() const;
 
-    /// Assignment operator
-    KoPatternBackground& operator=(const KoPatternBackground &other);
-
     /// reimplemented from KoShapeBackground
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
@@ -119,6 +116,7 @@ public:
     QRectF patternRectFromFillSize(const QSizeF &size);
 private:
     Q_DECLARE_PRIVATE(KoPatternBackground)
+    Q_DISABLE_COPY(KoPatternBackground)
 };
 
 #endif // KOPATTERNBACKGROUND_H

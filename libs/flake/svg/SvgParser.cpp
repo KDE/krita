@@ -548,7 +548,6 @@ void SvgParser::applyFillStyle(KoShape *shape)
             } else {
                 QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
                 bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(convertedGradient));
-                delete convertedGradient;
                 QTransform invShapematrix = shape->transformation().inverted();
                 bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
             }

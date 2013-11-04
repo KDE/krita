@@ -30,11 +30,7 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/XInput.h>
 
-#if QT_VERSION >= 0x040800
-#include "qt_x11_p_qt48.h"
-#else
-#include "qt_x11_p_qt47.h"
-#endif
+#include <input/wintab/config-qt_x11_p.h>
 
 /**
  * WARNING:

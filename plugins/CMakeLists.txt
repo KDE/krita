@@ -85,6 +85,10 @@ if(SHOULD_BUILD_PLUGIN_REPORTING)
     add_subdirectory( reporting )
 endif(SHOULD_BUILD_PLUGIN_REPORTING)
 
+if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
+    add_subdirectory( semanticitems )
+endif(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
+
 #add_subdirectory( videoshape )
 #add_subdirectory( commentshape )
 

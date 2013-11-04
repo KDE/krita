@@ -277,14 +277,15 @@ void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
     d->profileMap.remove(profile->name());
 }
 
-bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profileName) const
+bool KoColorSpaceRegistry::isCached(const QString & csID, const QString & profileName) const
 {
-    return !(d->csMap.find(idsToCacheName(csId, profileName)) == d->csMap.end());
+    QReadLocker l(&d->registrylock);
+    return !(d->csMap.find(idsToCacheName(csID, profileName)) == d->csMap.end());
 }
 
-QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString & profileName) const
+QString KoColorSpaceRegistry::idsToCacheName(const QString & csID, const QString & profileName) const
 {
-    return csId + "<comb>" + profileName;
+    return csID + "<comb>" + profileName;
 }
 
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const
@@ -308,8 +309,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         profileName = csf->defaultProfile();
     }
-
-    QString name = idsToCacheName(csID, profileName);
 
     if (!isCached(csID, profileName)) {
         d->registrylock.lockForRead();
@@ -345,16 +344,29 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         QWriteLocker l(&d->registrylock);
-        d->csMap[name] = cs;
+        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count()
+                             << ", adding name: " << idsToCacheName(cs->id(), cs->profile()->name())
+                             << "\n\tcsID" << csID
+                             << "\n\tprofileName" << profileName
+                             << "\n\tcs->id()" << cs->id()
+                             << "\n\tcs->profile()->name()" << cs->profile()->name()
+                             << "\n\tpName" << pName;
+        Q_ASSERT(cs->id() == csID);
+        Q_ASSERT(cs->profile()->name() == profileName);
+        d->csMap[idsToCacheName(cs->id(), cs->profile()->name())] = cs;
         cs->d->deletability = OwnedByRegistryDoNotDelete;
-        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
+
     }
     QReadLocker l(&d->registrylock);
 
-    if (d->csMap.contains(name))
-        return d->csMap[name];
-    else
+    if (d->csMap.contains(idsToCacheName(csID, profileName))) {
+        const KoColorSpace *cs = d->csMap[idsToCacheName(csID, profileName)];
+        Q_ASSERT(cs->profile()->name() == profileName);
+        return cs;
+    }
+    else {
         return 0;
+    }
 }
 
 
@@ -415,7 +427,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
     if (profileName.isEmpty()) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), "");
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
@@ -427,7 +439,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
     if (profile == 0) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), "");
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;

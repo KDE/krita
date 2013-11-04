@@ -20,8 +20,6 @@
 #ifndef __KoChangeTrackerDisabledRAII_h__
 #define __KoChangeTrackerDisabledRAII_h__
 
-#include "kordf_export.h"
-
 class KoChangeTracker;
 
 /**
@@ -38,7 +36,7 @@ class KoChangeTracker;
  * @see KoChangeTracker
  *
  */
-class KORDF_EXPORT KoChangeTrackerDisabledRAII
+class KoChangeTrackerDisabledRAII
 {
 public:
     explicit KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);

@@ -263,7 +263,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     slotNodeChanged(view->activeNode());
     updatePaintops(view->image()->colorSpace());
-    setCurrentPaintop(defaultPaintOp());
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
     connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
@@ -325,6 +324,7 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
+    m_resourceProvider->resourceManager()->blockSignals(true);
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     if (preset) {
         if(!preset->settings()->isLoadable())
@@ -334,6 +334,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
+    m_resourceProvider->resourceManager()->blockSignals(false);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
@@ -389,10 +390,11 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     Q_ASSERT(m_optionWidget && m_presetWidget);
     connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
 
-    KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
-    QString            pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+    KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
+    QString pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
     m_settingsWidget->setIcon(QIcon(pixFilename));
+
     m_resourceProvider->setPaintOpPreset(preset);
     m_presetsPopup->setCurrentPaintOp(paintop.id());
 
@@ -516,7 +518,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         setCurrentPaintop(currentPaintop());
     else
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
-    
+
     m_currTabletToolID = TabletToolID(inputDevice);
 }
 
@@ -530,8 +532,7 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 
 void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
-    if(m_view)
-    {
+    if (m_view) {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && m_activePreset->name() != preset->name()) {
@@ -540,8 +541,10 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
             resourceSelected(preset.data());
         }
         m_presetsChooserPopup->canvasResourceChanged(preset.data());
+
         if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
             QString compositeOp = m_resourceProvider->currentCompositeOp();
+
             m_cmbCompositeOp->blockSignals(true);
             m_cmbCompositeOp->selectCompositeOp(KoID(compositeOp));
             m_cmbCompositeOp->blockSignals(false);

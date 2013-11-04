@@ -58,6 +58,7 @@ private:
 
 private:
     Q_DECLARE_PRIVATE(KoOdfGradientBackground)
+    Q_DISABLE_COPY(KoOdfGradientBackground)
 };
 
 #endif

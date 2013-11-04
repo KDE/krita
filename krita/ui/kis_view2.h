@@ -96,7 +96,7 @@ public:
 public:  // Krita specific interfaces
 
     /// Return the image this view is displaying
-    KisImageWSP image();
+    KisImageWSP image() const;
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
@@ -170,13 +170,7 @@ public:  // Krita specific interfaces
 
     KisDoc2* document() const;
 
-    /// Connects the signals from the current image to the various
-    /// slots of the various managers
-    void connectCurrentImage();
-
-    /// Disconnect the current image (for instance, before connecting
-    /// another image) from the slots in the various managers
-    void disconnectCurrentImage();
+public:
 
     virtual KoPrintJob * createPrintJob();
 

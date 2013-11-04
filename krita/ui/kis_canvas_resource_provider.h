@@ -169,12 +169,9 @@ signals:
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
-    void sigPaintOpPresetChanged(KisPaintOpPresetSP preset);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-    void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
-    void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);

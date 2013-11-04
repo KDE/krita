@@ -132,7 +132,7 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
 
         editWidget.setupUi(ret);
         editWidget.name->setText(m_name);
-        
+
         return ret;
     }
 #else
@@ -165,7 +165,7 @@ void KoRdfLocation::updateFromEditorData()
 
     QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     QString predBase = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    
+
     if (!m_linkSubject.isValid()) {
         m_linkSubject = createNewUUIDNode();
     }
@@ -277,7 +277,7 @@ QString KoRdfLocation::className() const
     return "Location";
 }
 
-void KoRdfLocation::importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf, KoCanvasBase* host)
+void KoRdfLocation::importFromData(const QByteArray& ba, const KoDocumentRdf* m_rdf, KoCanvasBase* host)
 {
     Q_UNUSED(ba);
     Q_UNUSED(m_rdf);

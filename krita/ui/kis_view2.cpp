@@ -228,6 +228,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
+    Q_ASSERT(doc);
+    Q_ASSERT(doc->image());
+
     setXMLFile("krita.rc");
 
     setFocusPolicy(Qt::NoFocus);
@@ -667,7 +670,7 @@ KoZoomController *KisView2::zoomController() const
     return m_d->zoomManager->zoomController();
 }
 
-KisImageWSP KisView2::image()
+KisImageWSP KisView2::image() const
 {
     if (m_d && m_d->doc) {
         return m_d->doc->image();
@@ -807,7 +810,38 @@ void KisView2::slotLoadingFinished()
         m_d->nodeManager->nodesUpdated();
     }
 
-    connectCurrentImage();
+
+    if (m_d->statusBar) {
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+        connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
+        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->statusBar, SLOT(imageSizeChanged()));
+
+    }
+    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+
+    connect(image(), SIGNAL(sigResolutionChanged(double,double)),
+            m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+    connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+
+    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
+    connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
+    connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
+    connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
+
+    /*
+     * WARNING: Currently we access the global progress bar in two ways:
+     * connecting to composite progress proxy (strokes) and creating
+     * progress updaters. The latter way should be deprecated in favour
+     * of displaying the status of the global strokes queue
+     */
+    //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+
+    m_d->canvas->connectCurrentImage();
+
+    if (m_d->controlFrame) {
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+    }
 
     if (image()->locked()) {
         // If this is the first view on the image, the image will have been locked
@@ -920,58 +954,6 @@ void KisView2::updateGUI()
     m_d->actionManager->updateGUI();
 }
 
-
-void KisView2::connectCurrentImage()
-{
-    if (image()) {
-        if (m_d->statusBar) {
-            connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), m_d->statusBar, SLOT(updateStatusBarProfileLabel()));
-            connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->statusBar, SLOT(imageSizeChanged()));
-
-        }
-        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
-
-        connect(image(), SIGNAL(sigResolutionChanged(double,double)),
-                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
-        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
-
-        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
-        connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
-        connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
-        connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
-
-        /**
-         * WARNING: Currently we access the global progress bar in two ways:
-         * connecting to composite progress proxy (strokes) and creating
-         * progress updaters. The latter way should be depracated in favour
-         * of displaying the status of the global strokes queue
-         */
-        //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
-    }
-
-    m_d->canvas->connectCurrentImage();
-
-    if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
-    }
-
-}
-
-void KisView2::disconnectCurrentImage()
-{
-    if (image()) {
-
-        image()->disconnect(this);
-        image()->disconnect(m_d->nodeManager);
-        image()->disconnect(m_d->selectionManager);
-        if (m_d->statusBar)
-            image()->disconnect(m_d->statusBar);
-
-        m_d->canvas->disconnectCurrentImage();
-    }
-}
 
 void KisView2::slotPreferences()
 {

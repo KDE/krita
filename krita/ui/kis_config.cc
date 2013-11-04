@@ -977,13 +977,3 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
 {
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
-
-int KisConfig::qPainterCanvasScalingMethod() const
-{
-    return m_cfg.readEntry("QPainterCanvasScalingMethod", 0);
-}
-
-void KisConfig::setQPainterCanvasScalingMethod(int method)
-{
-    m_cfg.writeEntry("QPainterCanvasScalingMethod", method);
-}

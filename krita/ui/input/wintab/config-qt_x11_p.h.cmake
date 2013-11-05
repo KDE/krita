@@ -15,7 +15,13 @@
 #if QT_VERSION >= 0x040800
 #include <input/wintab/qt_x11_p_qt48.h>
 #else
-#include <input/wintab/qt_x11_p_qt47.h>
+    #if QT_VERSION >= 0x040700
+        #include <input/wintab/qt_x11_p_qt47.h>
+    #else
+        #if QT_VERSION >= 0x040600
+            #include <input/wintab/qt_x11_p_qt46.h>
+        #endif
+    #endif
 #endif
 
 #endif

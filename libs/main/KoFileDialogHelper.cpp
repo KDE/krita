@@ -113,14 +113,19 @@ QString KoFileDialogHelper::getOpenFileName(QWidget *parent,
                                             const QStringList &mimeList,
                                             const QString &defaultMime)
 {
-    qApp->clipboard()->blockSignals(true);
     QString str = getFilterString(defaultMime);
+    QFileDialog::Options options = 0;
+#ifdef Q_WS_X11
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        options = QFileDialog::DontUseNativeDialog;
+    }
+#endif
     QString res = QFileDialog::getOpenFileName(parent,
-                                        caption,
-                                        dir,
-                                        getFilterString(mimeList),
-                                        &str);
-    qApp->clipboard()->blockSignals(false);
+                                               caption,
+                                               dir,
+                                               getFilterString(mimeList),
+                                               &str,
+                                               options);
     return res;
 }
 
@@ -130,14 +135,19 @@ QStringList KoFileDialogHelper::getOpenFileNames(QWidget *parent,
                                                  const QStringList &mimeList,
                                                  const QString &defaultMime)
 {
-    qApp->clipboard()->blockSignals(true);
     QString str = getFilterString(defaultMime);
+    QFileDialog::Options options = 0;
+#ifdef Q_WS_X11
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        options = QFileDialog::DontUseNativeDialog;
+    }
+#endif
     QStringList res = QFileDialog::getOpenFileNames(parent,
-                                         caption,
-                                         dir,
-                                         getFilterString(mimeList),
-                                         &str);
-    qApp->clipboard()->blockSignals(false);
+                                                    caption,
+                                                    dir,
+                                                    getFilterString(mimeList),
+                                                    &str,
+                                                    options);
     return res;
 }
 
@@ -145,9 +155,7 @@ QString KoFileDialogHelper::getOpenDirectory(QWidget *parent,
                                              const QString &caption,
                                              const QString &dir)
 {
-    qApp->clipboard()->blockSignals(true);
     QString res = QFileDialog::getExistingDirectory(parent, caption, dir);
-    qApp->clipboard()->blockSignals(false);
     return res;
 }
 
@@ -157,7 +165,6 @@ QString KoFileDialogHelper::getImportFileName(QWidget *parent,
                                               const QStringList &mimeList,
                                               const QString &defaultMime)
 {
-    qApp->clipboard()->blockSignals(true);
     QString res;
 #ifdef Q_OS_MAC
     QStringList result =  getFileNames(parent,
@@ -173,13 +180,19 @@ QString KoFileDialogHelper::getImportFileName(QWidget *parent,
         res = result.first();
 #else
     QString str = getFilterString(defaultMime);
-    res = QFileDialog::getOpenFileName(parent,
-                                        caption,
-                                        dir,
-                                        getFilterString(mimeList),
-                                        &str);
+    QFileDialog::Options options = 0;
+#ifdef Q_WS_X11
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        options = QFileDialog::DontUseNativeDialog;
+    }
 #endif
-    qApp->clipboard()->blockSignals(false);
+    res = QFileDialog::getOpenFileName(parent,
+                                       caption,
+                                       dir,
+                                       getFilterString(mimeList),
+                                       &str,
+                                       options);
+#endif
     return res;
 }
 
@@ -189,24 +202,29 @@ QStringList KoFileDialogHelper::getImportFileNames(QWidget *parent,
                                                    const QStringList &mimeList,
                                                    const QString &defaultMime)
 {
-    qApp->clipboard()->blockSignals(true);
 #ifdef Q_OS_MAC
     QStringList res = getFileNames(parent,
-                        caption,
-                        dir,
-                        mimeList,
-                        defaultMime,
-                        QFileDialog::AcceptOpen,
-                        QFileDialog::ExistingFiles);
+                                   caption,
+                                   dir,
+                                   mimeList,
+                                   defaultMime,
+                                   QFileDialog::AcceptOpen,
+                                   QFileDialog::ExistingFiles);
 #else
     QString str = getFilterString(defaultMime);
-    QStringList res =QFileDialog::getOpenFileNames(parent,
-                                         caption,
-                                         dir,
-                                         getFilterString(mimeList),
-                                         &str);
+    QFileDialog::Options options = 0;
+#ifdef Q_WS_X11
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        options = QFileDialog::DontUseNativeDialog;
+    }
 #endif
-    qApp->clipboard()->blockSignals(false);
+    QStringList res =QFileDialog::getOpenFileNames(parent,
+                                                   caption,
+                                                   dir,
+                                                   getFilterString(mimeList),
+                                                   &str,
+                                                   options);
+#endif
     return res;
 }
 
@@ -214,7 +232,6 @@ QString KoFileDialogHelper::getImportDirectory(QWidget *parent,
                                                const QString &caption,
                                                const QString &dir)
 {
-    qApp->clipboard()->blockSignals(true);
     QString res;
 #ifdef Q_OS_MAC
     QStringList result = getFileNames(parent,
@@ -231,7 +248,6 @@ QString KoFileDialogHelper::getImportDirectory(QWidget *parent,
 #else
     res = QFileDialog::getExistingDirectory(parent, caption, dir);
 #endif // Q_OS_MAC
-    qApp->clipboard()->blockSignals(false);
     return res;
 }
 
@@ -241,7 +257,6 @@ QString KoFileDialogHelper::getSaveFileName(QWidget *parent,
                                             const QStringList &mimeList,
                                             const QString &defaultMime)
 {
-    qApp->clipboard()->blockSignals(true);
     QString res;
 #ifdef Q_OS_MAC
     QStringList result = getFileNames(parent,
@@ -257,12 +272,18 @@ QString KoFileDialogHelper::getSaveFileName(QWidget *parent,
         res = result.first();
 #else
     QString str = getFilterString(defaultMime);
+    QFileDialog::Options options = 0;
+#ifdef Q_WS_X11
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        options = QFileDialog::DontUseNativeDialog;
+    }
+#endif
     res = QFileDialog::getSaveFileName(parent,
-                                        caption,
-                                        dir,
-                                        getFilterString(mimeList),
-                                        &str);
+                                       caption,
+                                       dir,
+                                       getFilterString(mimeList),
+                                       &str,
+                                       options);
 #endif // Q_OS_MAC
-    qApp->clipboard()->blockSignals(false);
     return res;
 }

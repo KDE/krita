@@ -98,15 +98,27 @@ void kis_x11_init_tablet()
 
 #if defined(Q_OS_IRIX)
 #else
-            if (devs->type == ATOM(XWacomStylus) || devs->type == ATOM(XTabletStylus)) {
-                deviceType = QTabletEvent::Stylus;
-                if (wacomDeviceName()->isEmpty())
-                    wacomDeviceName()->append(devs->name);
-                gotStylus = true;
-            } else if (devs->type == ATOM(XWacomEraser) || devs->type == ATOM(XTabletEraser)) {
-                deviceType = QTabletEvent::XFreeEraser;
-                gotEraser = true;
-            }
+
+
+    #if QT_VERSION >= 0x040700
+                if (devs->type == ATOM(XWacomStylus) || devs->type == ATOM(XTabletStylus)) {
+    #else
+                if (devs->type == ATOM(XWacomStylus)) {
+    #endif
+                    deviceType = QTabletEvent::Stylus;
+                    if (wacomDeviceName()->isEmpty())
+                        wacomDeviceName()->append(devs->name);
+                    gotStylus = true;
+    #if QT_VERSION >= 0x040700
+                } else if (devs->type == ATOM(XWacomEraser) || devs->type == ATOM(XTabletEraser)) {
+    #else
+                } else if (devs->type == ATOM(XWacomEraser)) {
+    #endif
+                    deviceType = QTabletEvent::XFreeEraser;
+                    gotEraser = true;
+                }
+
+
 #endif
             if (deviceType == QTabletEvent::NoDevice)
                 continue;

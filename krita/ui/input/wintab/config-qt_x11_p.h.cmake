@@ -19,7 +19,9 @@
         #include <input/wintab/qt_x11_p_qt47.h>
     #else
         #if QT_VERSION >= 0x040600
-            #include <input/wintab/qt_x11_p_qt46.h>
+            #define QT_NO_XIM
+                #include <input/wintab/qt_x11_p_qt46.h>
+            #undef QT_NO_XIM
         #endif
     #endif
 #endif

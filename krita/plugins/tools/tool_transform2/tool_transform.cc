@@ -20,8 +20,6 @@
 
 #include "tool_transform.h"
 
-#include <QtDeclarative/QtDeclarative>
-
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>

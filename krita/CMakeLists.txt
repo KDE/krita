@@ -160,6 +160,7 @@ install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
+if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
 add_subdirectory(sketch)
 add_subdirectory(gemini)
-
+endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

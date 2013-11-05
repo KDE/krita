@@ -26,7 +26,11 @@
 
 #include "flake_export.h"
 
+#if QT_VERSION >= 0x040700
 #include <QDeclarativeView>
+#else
+#include <QAbstractScrollArea>
+#endif
 #include <QMap>
 #include <QString>
 
@@ -41,7 +45,11 @@ class ZoomAndPanTester;
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
+#if QT_VERSION >= 0x040700
 class FLAKE_EXPORT KoCanvasControllerWidget : public QDeclarativeView, public KoCanvasController
+#else
+class FLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
+#endif
 {
     Q_OBJECT
 public:

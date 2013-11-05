@@ -23,9 +23,10 @@
 #include "KoRdfSemanticItemRegistry.h"
 #include "KoDocumentRdf.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
+// KDE
 #include <kdebug.h>
 #include <klocale.h>
-
+// Qt
 #include <QSet>
 
 class KoRdfSemanticTreePrivate : public QSharedData

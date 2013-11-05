@@ -18,12 +18,15 @@
 */
 
 #include "KoSopranoTableModelDelegate.h"
+
+// lib
 #include "KoSopranoTableModel.h"
-
 #include "KoDocumentRdf.h"
-#include "../KoDocument.h"
-
+// main
+#include <KoDocument.h>
+// KDE
 #include <klocale.h>
+// Qt
 #include <QComboBox>
 
 KoSopranoTableModelDelegate::KoSopranoTableModelDelegate(QObject *parent)

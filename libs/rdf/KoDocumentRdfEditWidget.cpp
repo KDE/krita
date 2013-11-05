@@ -18,22 +18,26 @@
 */
 
 #include "KoDocumentRdfEditWidget.h"
+
 #include <ui_KoDocumentRdfEditWidget.h>
+
 #include "KoDocumentRdf.h"
 #include "KoRdfSemanticItemRegistry.h"
 #include "KoRdfPrefixMapping.h"
-#include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
 #include "KoSopranoTableModel.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
-#include "../KoGlobal.h"
-
+// main
+#include <KoDocument.h>
+#include <KoGlobal.h>
+// KDE
 #include <kdebug.h>
-#include <QComboBox>
-#include <QSortFilterProxyModel>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+// Qt
+#include <QComboBox>
+#include <QSortFilterProxyModel>
 
 
 static const char SemanticItemClassId[] = "Ko_semanticItemClass";
@@ -185,23 +189,22 @@ public:
         m_ui->m_tripleView->selectRow(row);
     }
 
-    void selectTriples(QModelIndex mi,
+    void selectTriples(const QModelIndex &mi,
                        QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select) {
         m_ui->m_tripleView->selectionModel()->select(mi, command | QItemSelectionModel::Rows);
     }
 
-    void selectTriples(QModelIndexList ml,
+    void selectTriples(const QModelIndexList &ml,
                        QItemSelectionModel::SelectionFlags command = QItemSelectionModel::Select) {
         Q_UNUSED(command);
-        QModelIndex mi;
-        foreach (mi, ml) {
+        foreach (const QModelIndex &mi, ml) {
             selectTriples(mi);
         }
     }
 
     QModelIndexList mapFromSource(QModelIndexList mil) const {
         QModelIndexList ret;
-        foreach (QModelIndex idx, mil) {
+        foreach (const QModelIndex &idx, mil) {
             QModelIndex pidx = m_tripleProxyModel->mapFromSource(idx);
             ret << pidx;
         }
@@ -220,7 +223,7 @@ public:
 
     QModelIndexList mapToSource(const QModelIndexList proxyList) const {
         QModelIndexList ret;
-        foreach (QModelIndex idx, proxyList) {
+        foreach (const QModelIndex &idx, proxyList) {
             QModelIndex sidx = m_tripleProxyModel->mapToSource(idx);
             ret << sidx;
         }

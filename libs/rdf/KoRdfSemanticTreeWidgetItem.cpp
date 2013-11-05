@@ -20,18 +20,18 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 
 #include "KoDocumentRdf.h"
-
+// main
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
-
+// KDE
 #include <kactionmenu.h>
-#include <QVBoxLayout>
 #include <kpagedialog.h>
-
 #include <kdebug.h>
 #include <klocale.h>
+// Qt
+#include <QVBoxLayout>
 
 using namespace Soprano;
 

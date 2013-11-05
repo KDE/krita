@@ -27,8 +27,8 @@
 #include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticItemRegistry.h"
 
-#include "../KoView.h"
-#include "../KoDocument.h"
+#include <KoView.h>
+#include <KoDocument.h>
 #include <KoToolManager.h>
 #include <KoTextDocument.h>
 #include <KoTextRdfCore.h>
@@ -160,7 +160,7 @@ void KoDocumentRdf::freshenBNodes(QSharedPointer<Soprano::Model> m)
     StatementIterator it = m->listStatements();
     QList<Statement> allStatements = it.allElements();
     RDEBUG << "freshening model.sz:" << allStatements.size();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         Soprano::Node subj = s.subject();
         Soprano::Node obj = s.object();
         Soprano::Statement news;
@@ -221,7 +221,7 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
                                     Soprano::SerializationRdfXml);
     QList<Statement> allStatements = it.allElements();
     RDEBUG << "Found " << allStatements.size() << " triples..." << endl;
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         Soprano::Node subj = s.subject();
         Soprano::Node pred = s.predicate();
         Soprano::Node obj  = s.object();
@@ -365,7 +365,7 @@ bool KoDocumentRdf::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
     bool ok = true;
     NodeIterator contextIter = model()->listContexts();
     QList<Node> contexts = contextIter.allElements();
-    foreach (Soprano::Node node, contexts) {
+    foreach (const Soprano::Node &node, contexts) {
         if (!saveRdf(store, manifestWriter, node)) {
             ok = false;
         }
@@ -391,12 +391,12 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
     QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;
 
     QList<Statement> allStatements = it.allElements();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         RDEBUG << "seeking obj:" << s.object();
         QMap<QString, QString>::const_iterator mi = m.find(s.object().toString());
         if (mi != m.end()) {
-            QString oldID = mi.key();
-            QString newID = mi.value();
+            const QString &oldID = mi.key();
+            const QString &newID = mi.value();
             removeList << s;
             Statement n(s.subject(),
                         s.predicate(),
@@ -452,7 +452,7 @@ void KoDocumentRdf::dumpModel(const QString &msg, QSharedPointer<Soprano::Model>
 
     QList<Soprano::Statement> allStatements = m->listStatements().allElements();
     RDEBUG << "----- " << msg << " ----- model size:" << allStatements.size();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         RDEBUG << s;
     }
 }
@@ -530,9 +530,9 @@ void KoDocumentRdf::expandStatementsReferencingSubject(QSharedPointer<Soprano::M
     QList<Statement> addList;
     QList<Statement> allStatements = _model->listStatements().allElements();
 
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(Node(), Node(), s.subject()).allElements();
-        foreach (Soprano::Statement e, all) {
+        foreach (const Soprano::Statement &e, all) {
             addList << e;
         }
     }
@@ -546,9 +546,9 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Mode
     QList<Statement> addList;
     QList<Statement> allStatements = _model->listStatements().allElements();
 
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(s.object(), Node(), Node()).allElements();
-        foreach (Soprano::Statement e, all) {
+        foreach (const Soprano::Statement &e, all) {
             RDEBUG << "ADD obj:" << s.object() << " adding:" << e;
             addList << e;
         }
@@ -563,7 +563,7 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Mode
     QList<Statement> addList;
     QList<Statement> all = model()->listStatements(n, Node(), Node()).allElements();
 
-    foreach (Soprano::Statement e, all) {
+    foreach (const Soprano::Statement &e, all) {
         RDEBUG << "n:" << n << " adding:" << e;
         addList << e;
     }
@@ -583,7 +583,7 @@ void KoDocumentRdf::expandStatementsToIncludeRdfListsRecurse(QSharedPointer<Sopr
     addList << all;
     all = model()->listStatements(n, rdfRest, Node()).allElements();
     addList << all;
-    foreach (Soprano::Statement s, all) {
+    foreach (const Soprano::Statement &s, all) {
         expandStatementsToIncludeRdfListsRecurse(_model, addList, s.object());
     }
 }
@@ -596,7 +596,7 @@ void KoDocumentRdf::expandStatementsToIncludeRdfLists(QSharedPointer<Soprano::Mo
     QList<Statement> addList;
     QList<Statement> allStatements = model->listStatements().allElements();
 
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         expandStatementsToIncludeRdfListsRecurse(model, addList, s.subject());
     }
     RDEBUG << "model.sz:" << model->statementCount();
@@ -611,9 +611,9 @@ void KoDocumentRdf::expandStatementsToIncludeOtherPredicates(QSharedPointer<Sopr
     QList<Statement> addList;
     QList<Statement> allStatements = _model->listStatements().allElements();
 
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(s.subject(), Node(), Node()).allElements();
-        foreach (Soprano::Statement e, all) {
+        foreach (const Soprano::Statement &e, all) {
             addList << e;
         }
     }
@@ -1088,7 +1088,7 @@ QStringList KoDocumentRdf::idrefList() const
     }
 
     QList<Statement> allStatements = it.allElements();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         idrefs << s.object().toString();
     }
     return idrefs;

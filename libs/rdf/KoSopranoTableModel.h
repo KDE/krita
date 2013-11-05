@@ -49,7 +49,7 @@ class KoSopranoTableModel : public QAbstractTableModel
     /**
      * True if the statement is stored in content.xml
      */
-    bool isInlineRdf(Soprano::Statement st) const;
+    bool isInlineRdf(const Soprano::Statement &st) const;
 
 public:
 
@@ -94,13 +94,13 @@ public:
      * The internal m_statementIndex int->statement is updated
      * as well as the dataChanged signal emitted
      */
-    bool setDataUpdateTriple(const QModelIndex &index, Soprano::Statement &old, Soprano::Statement &n);
+    bool setDataUpdateTriple(const QModelIndex &index, const Soprano::Statement &old, const Soprano::Statement &n);
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     /**
      * Add the statement 'st' to the model as the new last row.
      */
-    int insertStatement(Soprano::Statement st);
+    int insertStatement(const Soprano::Statement &st);
 
     /**
      * Copy all the triples in srclist to be new rows in the model.

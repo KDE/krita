@@ -18,8 +18,10 @@
 */
 
 #include "KoSopranoTableModel.h"
+
 #include "KoDocumentRdf.h"
 #include "KoRdfPrefixMapping.h"
+// KDE
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -143,7 +145,7 @@ QVariant KoSopranoTableModel::headerData(int section, Qt::Orientation orientatio
     return QVariant();
 }
 
-bool KoSopranoTableModel::isInlineRdf(Soprano::Statement st) const
+bool KoSopranoTableModel::isInlineRdf(const Soprano::Statement &st) const
 {
     return (st.context().toString() == m_rdf->inlineRdfContext().toString());
 }
@@ -174,7 +176,7 @@ Qt::ItemFlags KoSopranoTableModel::flags(const QModelIndex &index) const
  * The internal m_statementIndex int->statement is updated
  * as well as the dataChanged signal emitted
  */
-bool KoSopranoTableModel::setDataUpdateTriple(const QModelIndex &index, Soprano::Statement &old, Soprano::Statement &n)
+bool KoSopranoTableModel::setDataUpdateTriple(const QModelIndex &index, const Soprano::Statement &old, const Soprano::Statement &n)
 {
     model()->addStatement(n);
     model()->removeStatement(old);
@@ -242,7 +244,7 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
 /**
  * Add the statement 'st' to the model as the new last row.
  */
-int KoSopranoTableModel::insertStatement(Soprano::Statement st)
+int KoSopranoTableModel::insertStatement(const Soprano::Statement &st)
 {
     QModelIndex parent;
     int newRowNumber = rowCount();
@@ -340,7 +342,7 @@ QModelIndexList KoSopranoTableModel::invalidStatementList() const
 {
     QModelIndexList ret;
     for (int r = 0; r < m_statementIndex.size(); ++r)  {
-        Soprano::Statement s = m_statementIndex[ r ];
+        const Soprano::Statement &s = m_statementIndex.at(r);
         if (!s.isValid()) {
             int col = ColSubj;
             if (!s.subject().isValid()) {

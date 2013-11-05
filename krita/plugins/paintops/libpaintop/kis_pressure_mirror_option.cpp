@@ -78,6 +78,7 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
 {
     int mirrorXIncrement = m_canvasAxisXMirrored;
     int mirrorYIncrement = m_canvasAxisYMirrored;
+    bool coordinateSystemFlipped = false;
 
     if (isChecked() && (m_enableHorizontalMirror || m_enableVerticalMirror)){
         qreal sensorResult = computeValue(info);
@@ -85,12 +86,15 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
 
         mirrorXIncrement += result && m_enableHorizontalMirror;
         mirrorYIncrement += result && m_enableVerticalMirror;
+        coordinateSystemFlipped = result &&
+            (m_enableHorizontalMirror != m_enableVerticalMirror);
     }
 
     MirrorProperties mirrors;
 
     mirrors.verticalMirror = mirrorYIncrement % 2;
     mirrors.horizontalMirror = mirrorXIncrement % 2;
+    mirrors.coordinateSystemFlipped = coordinateSystemFlipped;
 
     return mirrors;
 }

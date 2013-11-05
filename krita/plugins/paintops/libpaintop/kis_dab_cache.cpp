@@ -256,9 +256,7 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
     int x, y;
     qreal subPixelX, subPixelY;
 
-    if (mirrorProperties.horizontalMirror !=
-        mirrorProperties.verticalMirror) {
-
+    if (mirrorProperties.coordinateSystemFlipped) {
         angle = 2 * M_PI - angle;
     }
 

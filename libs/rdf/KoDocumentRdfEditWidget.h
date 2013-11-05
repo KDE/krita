@@ -69,8 +69,8 @@ public:
     /** OK button in dialog, if this returns false then do not close the dialog */
     void apply();
 
-    const QString name() const;
-    const QLatin1String icon() const;
+    QString name() const;
+    QString iconName() const;
 
 public slots:
 

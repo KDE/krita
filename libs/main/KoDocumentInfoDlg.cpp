@@ -439,7 +439,7 @@ void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 {
     KPageWidgetItem * page = new KPageWidgetItem(item->widget(), item->name());
     page->setHeader(item->name());
-    page->setIcon(koIcon(item->icon()));
+    page->setIcon(KIcon(item->iconName()));
 
     addPage(page);
     d->pages.append(page);

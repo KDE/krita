@@ -30,6 +30,7 @@
 // main
 #include <KoDocument.h>
 #include <KoGlobal.h>
+#include <KoIcon.h>
 // KDE
 #include <kdebug.h>
 #include <kmenu.h>
@@ -342,14 +343,14 @@ void KoDocumentRdfEditWidget::apply()
     }
 }
 
-const QString KoDocumentRdfEditWidget::name() const
+QString KoDocumentRdfEditWidget::name() const
 {
     return i18n("Rdf");
 }
 
-const QLatin1String KoDocumentRdfEditWidget::icon() const
+QString KoDocumentRdfEditWidget::iconName() const
 {
-    return QLatin1String("text-rdf");
+    return koIconName("text-rdf");
 }
 
 void KoDocumentRdfEditWidget::semanticObjectUpdated(hKoRdfSemanticItem item)

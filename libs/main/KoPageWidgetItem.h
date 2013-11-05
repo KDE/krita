@@ -13,8 +13,8 @@ public:
 
     virtual ~KoPageWidgetItem() {}
     virtual QWidget *widget() = 0;
-    virtual const QString name() const = 0;
-    virtual const QLatin1String icon() const = 0;
+    virtual QString name() const = 0;
+    virtual QString iconName() const = 0;
     virtual bool shouldDialogCloseBeVetoed() = 0;
     virtual void apply() = 0;
 };

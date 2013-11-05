@@ -1439,7 +1439,9 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
         floatingMessage->setIcon(icon);
         floatingMessage->showMessage();
     }
+#if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
+#endif
 }
 
 #include "kis_view2.moc"

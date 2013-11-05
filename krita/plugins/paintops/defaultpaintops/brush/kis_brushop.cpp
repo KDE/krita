@@ -145,7 +145,9 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                                      &dabRect);
 
     // sanity check for the size calculation code
-    Q_ASSERT(dab->bounds().size() == dabRect.size());
+    if (dab->bounds().size() == dabRect.size()) {
+        warnKrita << "KisBrushOp: dab bounds is not dab rect. See bug 327156" << dab->bounds().size() << dabRect.size();
+    }
 
     painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
 

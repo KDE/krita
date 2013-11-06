@@ -2,6 +2,7 @@
 Name=Semantic item definition
 Name[nl]=Definitie van semantisch item
 Name[pt]=Definição do item semântico
+Name[pt_BR]=Definição do item semântico
 Name[sk]=Definícia sémantickej položky
 Name[sv]=Definition av semantiskt objekt
 Name[uk]=Визначення семантичного запису
@@ -9,6 +10,7 @@ Name[x-test]=xxSemantic item definitionxx
 Comment=Definition of a semantic item object
 Comment[nl]=Definitie van een semantisch itemobject
 Comment[pt]=Definição de um objecto de item semântico
+Comment[pt_BR]=Definição de um objeto de item semântico
 Comment[sk]=Definícia objektu sémantickej položky
 Comment[sv]=Definition av ett semantiskt objekt
 Comment[uk]=Визначення об’єкта семантичного запису

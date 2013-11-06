@@ -45,7 +45,7 @@ class CALLIGRADB_EXPORT Validator : public QValidator
 public:
     enum Result { Error = 0, Ok = 1, Warning = 2 };
 
-    Validator(QObject * parent = 0);
+    explicit Validator(QObject * parent = 0);
 
     virtual ~Validator();
 

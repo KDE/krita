@@ -53,7 +53,7 @@ void PSDColorModeBlockTest::testLoadingRGB()
 
     PSDColorModeBlock colorModeBlock(header.colormode);
     bool retval = colorModeBlock.read(&f);
-    Q_ASSERT(retval);
+    Q_ASSERT(retval); Q_UNUSED(retval);
     Q_ASSERT(colorModeBlock.valid());
 
 }
@@ -70,7 +70,7 @@ void PSDColorModeBlockTest::testLoadingIndexed()
 
     PSDColorModeBlock colorModeBlock(header.colormode);
     bool retval = colorModeBlock.read(&f);
-    Q_ASSERT(retval);
+    Q_ASSERT(retval); Q_UNUSED(retval);
     Q_ASSERT(colorModeBlock.valid());
 
 }

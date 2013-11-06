@@ -67,7 +67,7 @@ void PSDHeaderTest::testRoundTripping()
     header.colormode = RGB;
     Q_ASSERT(header.valid());
     bool retval = header.write(&f);
-    Q_ASSERT(retval);
+    Q_ASSERT(retval); Q_UNUSED(retval);
 
     f.close();
     f.open(QIODevice::ReadOnly);

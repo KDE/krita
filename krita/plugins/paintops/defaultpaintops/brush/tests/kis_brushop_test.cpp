@@ -31,10 +31,30 @@
 class TestBrushOp : public TestUtil::QImageBasedTest
 {
 public:
-    TestBrushOp()
+    TestBrushOp(const QString &presetFileName)
         : QImageBasedTest("brushop")
     {
-        m_presetFileName = "LR_simple.kpp";
+        m_presetFileName = presetFileName;
+    }
+
+    virtual ~TestBrushOp() {}
+
+    void test() {
+        test(false, false,  0.0);
+        test(false, false, 10.0);
+        test(false, false, 20.0);
+
+        test(true, false,  0.0);
+        test(true, false, 10.0);
+        test(true, false, 20.0);
+
+        test(false, true,  0.0);
+        test(false, true, 10.0);
+        test(false, true, 20.0);
+
+        test(true, true,  0.0);
+        test(true, true, 10.0);
+        test(true, true, 20.0);
     }
 
     void test(bool mirrorX, bool mirrorY, qreal rotation) {
@@ -122,37 +142,56 @@ public:
 
         resources->setupPainter(&gc);
 
+        doPaint(gc);
+
+        checkOneLayer(image, paint1, testName);
+    }
+
+    virtual void doPaint(KisPainter &gc) {
         KisPaintInformation pi(QPointF(100,100), 1.0);
 
         KisDistanceInformation dist;
         gc.paintAt(pi, &dist);
-
-        checkOneLayer(image, paint1, testName);
     }
 
     QString m_presetFileName;
 };
 
+class TestBrushOpLines : public TestBrushOp
+{
+public:
+    TestBrushOpLines(const QString &presetFileName)
+        : TestBrushOp(presetFileName)
+    {
+    }
+
+    void doPaint(KisPainter &gc) {
+
+        QVector<KisPaintInformation> vector;
+
+        vector << KisPaintInformation(QPointF(100,100));
+        vector << KisPaintInformation(QPointF(200,150));
+        vector << KisPaintInformation(QPointF(100,350));
+
+        KisDistanceInformation dist;
+
+        for (int i = 1; i < vector.size(); i++) {
+            gc.paintLine(vector[i-1], vector[i], &dist);
+        }
+    }
+};
+
 
 void KisBrushOpTest::testRotationMirroring()
 {
-    TestBrushOp t;
+    TestBrushOp t("LR_simple.kpp");
+    t.test();
+}
 
-    t.test(false, false,  0.0);
-    t.test(false, false, 10.0);
-    t.test(false, false, 20.0);
-
-    t.test(true, false,  0.0);
-    t.test(true, false, 10.0);
-    t.test(true, false, 20.0);
-
-    t.test(false, true,  0.0);
-    t.test(false, true, 10.0);
-    t.test(false, true, 20.0);
-
-    t.test(true, true,  0.0);
-    t.test(true, true, 10.0);
-    t.test(true, true, 20.0);
+void KisBrushOpTest::testRotationMirroringDrawingAngle()
+{
+    TestBrushOpLines t("LR_drawing_angle.kpp");
+    t.test();
 }
 
 QTEST_KDEMAIN(KisBrushOpTest, GUI)

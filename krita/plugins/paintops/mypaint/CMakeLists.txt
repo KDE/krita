@@ -25,7 +25,7 @@ kde4_add_ui_files(kritamypaintpaintop_PART_SRCS wdgmypaintoptions.ui )
 
 kde4_add_plugin(kritamypaintpaintop ${kritamypaintpaintop_PART_SRCS})
 
-target_link_libraries(kritamypaintpaintop kritaui ${GLIB2_LIBRARIES})
+target_link_libraries(kritamypaintpaintop kritaui kritalibpaintop ${GLIB2_LIBRARIES})
 
 #install( TARGETS kritamypaintpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 #install( FILES  kritamypaintpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

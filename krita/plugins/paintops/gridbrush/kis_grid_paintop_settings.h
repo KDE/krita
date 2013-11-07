@@ -22,6 +22,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include <kis_outline_generation_policy.h>
 #include "kis_grid_paintop_settings_widget.h"
 
 class QWidget;
@@ -29,11 +30,12 @@ class QDomElement;
 class QDomDocument;
 
 
-class KisGridPaintOpSettings : public KisPaintOpSettings
+class KisGridPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;    
+    KisGridPaintOpSettings();
 
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
     bool paintIncremental();
 
 private:

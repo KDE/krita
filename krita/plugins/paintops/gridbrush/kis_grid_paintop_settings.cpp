@@ -25,26 +25,27 @@
 #include "kis_grid_shape_option.h"
 #include <kis_color_option.h>
 
+KisGridPaintOpSettings::KisGridPaintOpSettings()
+    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::NO_OPTION)
+{
+}
 
 bool KisGridPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisGridPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline) {
-        qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE) * scale;
-        qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE) * scale;
+        qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
+        qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
-        QTransform m;
-        m.reset();
-        m.rotate(rotation);
-        path = m.map(path);
         path.addRect(rc);
-        path.translate(pos);
+
+        path = outlineFetcher()->fetchOutline(info, this, path);
     }
     return path;
 }

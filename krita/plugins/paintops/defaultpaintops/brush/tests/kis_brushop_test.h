@@ -26,6 +26,7 @@ class KisBrushOpTest : public QObject
     Q_OBJECT
 private slots:
     void testRotationMirroring();
+    void testRotationMirroringDrawingAngle();
 };
 
 #endif /* __KIS_BRUSHOP_TEST_H */

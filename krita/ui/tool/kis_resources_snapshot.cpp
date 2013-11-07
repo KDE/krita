@@ -245,6 +245,12 @@ KoColor KisResourcesSnapshot::currentBgColor() const
     return m_d->currentBgColor;
 }
 
+KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
+{
+    return m_d->currentPaintOpPreset;
+}
+
+
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {
     QBitArray channelFlags;

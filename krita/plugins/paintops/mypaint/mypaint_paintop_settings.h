@@ -23,6 +23,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include <kis_outline_generation_policy.h>
 #include "mypaint_paintop_settings_widget.h"
 
 class QWidget;
@@ -31,7 +32,7 @@ class QDomDocument;
 
 class MyPaintBrushResource;
 
-class MyPaintSettings : public QObject, public KisPaintOpSettings
+class MyPaintSettings : public QObject, public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
     Q_OBJECT
 
@@ -45,8 +46,8 @@ public:
     bool paintIncremental() {
         return false;
     }
-    
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
+
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
 private:
     MyPaintSettingsWidget* m_options;

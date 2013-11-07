@@ -51,7 +51,6 @@ KisPaintOpSettings::KisPaintOpSettings()
 
 KisPaintOpSettings::~KisPaintOpSettings()
 {
-    delete d;
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
@@ -145,22 +144,15 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
     return COMPOSITE_ALPHA_DARKEN;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
+    Q_UNUSED(info);
+
     QPainterPath path;
     if (mode == CursorIsOutline){
-        QRectF rc(-5,-5, 10, 10);
-        path.moveTo(rc.topLeft());
-        path.lineTo(rc.bottomRight());
-        path.moveTo(rc.topRight());
-        path.lineTo(rc.bottomLeft());
-        QTransform m;
-        m.reset();
-        m.scale(scale, scale);
-        m.rotateRadians(rotation);
-        path = m.map(path);
-        path.translate(pos);
+        path = ellipseOutline(10,10,0,0);
     }
+
     return path;
 }
 
@@ -191,4 +183,14 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
     setProperty("runtimeCanvasMirroredY", yAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredY");
+}
+
+void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
+{
+    KisPropertiesConfiguration::setProperty(name, value);
+    onPropertyChanged();
+}
+
+void KisPaintOpSettings::onPropertyChanged()
+{
 }

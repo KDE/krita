@@ -136,24 +136,24 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(), mode, scale, rotation);
+    path = KisBrushBasedPaintOpSettings::brushOutline(info, mode);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
     if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
-        copy.translate(m_position - pos);
+        copy.translate(m_position - info.pos());
     } else {
         copy.translate(-m_offset);
     }
 
     path.addPath(copy);
 
-    QTransform m;
-    m.scale(0.5,0.5);
-    rect2 = m.mapRect(rect2);
+    qreal dx = rect2.width() / 4.0;
+    qreal dy = rect2.height() / 4.0;
+    rect2.adjust(dx, dy, -dx, -dy);
 
     path.moveTo(rect2.topLeft());
     path.lineTo(rect2.bottomRight());
@@ -161,5 +161,5 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOp
     path.moveTo(rect2.topRight());
     path.lineTo(rect2.bottomLeft());
 
-    return path.translated(pos);
+    return path;
 }

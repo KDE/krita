@@ -24,6 +24,14 @@
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
 
+
+KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
+    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                 KisCurrentOutlineFetcher::ROTATION_OPTION |
+                                 KisCurrentOutlineFetcher::MIRROR_OPTION)
+{
+}
+
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
     if(hasProperty("PaintOpAction")) {
@@ -43,31 +51,19 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    QPainterPath path;
-    if (mode == CursorIsOutline) {
-    
-        KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-        if(!options) {
-            return KisPaintOpSettings::brushOutline(pos,mode);
-        }
-        
-        KisBrushSP brush = options->brush();
-        QPointF hotSpot = brush->hotSpot(1.0/brush->scale(),1.0/brush->scale(), -brush->angle(), KisPaintInformation());
+    if (mode != CursorIsOutline) return QPainterPath();
 
-        QTransform m;
-        m.reset();
-        m.rotateRadians(-rotation - brush->angle()); 
-        m.scale(brush->scale() * scale, brush->scale() * scale);
-        m.translate(-hotSpot.x(), -hotSpot.y());
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
 
-        path = brush->outline();
-        path = m.map(path);
-        
-        path.translate(pos);
+    if(!widget) {
+        return KisPaintOpSettings::brushOutline(info, mode);
     }
-    return path;
+
+    KisBrushSP brush = widget->brush();
+
+    return outlineFetcher()->fetchOutline(info, this, brush->outline(), brush->scale(), brush->angle());
 }
 
 bool KisBrushBasedPaintOpSettings::isValid()

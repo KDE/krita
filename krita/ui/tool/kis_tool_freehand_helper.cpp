@@ -31,9 +31,10 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_smoothing_options.h"
+#include "kis_paintop_preset.h"
+
 
 #include <math.h>
-#include <qnumeric.h> // for qIsNaN
 
 //#define DEBUG_BEZIER_CURVES
 
@@ -65,6 +66,8 @@ struct KisToolFreehandHelper::Private
 
     QList<KisPaintInformation> history;
     QList<qreal> distanceHistory;
+
+    QPointF lastOutlinePos;
 };
 
 
@@ -89,6 +92,27 @@ KisToolFreehandHelper::~KisToolFreehandHelper()
 void KisToolFreehandHelper::setSmoothness(const KisSmoothingOptions &smoothingOptions)
 {
     m_d->smoothingOptions = smoothingOptions;
+}
+
+QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
+                                                   const KisPaintOpSettings *globalSettings,
+                                                   KisPaintOpSettings::OutlineMode mode) const
+{
+    const KisPaintOpSettings *settings = globalSettings;
+    KisPaintInformation info(savedCursorPos);
+    KisDistanceInformation distanceInfo(m_d->lastOutlinePos, 0);
+    m_d->lastOutlinePos = savedCursorPos;
+
+    if (!m_d->painterInfos.isEmpty()) {
+        settings = m_d->resources->currentPaintOpPreset()->settings();
+        info = m_d->previousPaintInformation;
+        distanceInfo = *m_d->painterInfos.first()->dragDistance;
+    }
+
+    KisPaintInformation::DistanceInformaionRegistrar registrar =
+        info.registerDistanceInformation(&distanceInfo);
+
+    return settings->brushOutline(info, mode);
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
@@ -418,7 +442,6 @@ const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
 {
     return !m_d->painterInfos.isEmpty() ? m_d->painterInfos.first()->painter->paintOp() : 0;
 }
-
 
 void KisToolFreehandHelper::finishStroke()
 {

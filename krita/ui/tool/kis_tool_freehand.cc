@@ -338,24 +338,11 @@ void KisToolFreehand::hideOutline()
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
-    const KisPaintOp *paintOp = m_helper->currentPaintOp();
-    if (paintOp){
-        scale = paintOp->currentScale();
-        rotation = paintOp->currentRotation();
-    }
-
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
-    QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
 
-    return path;
+    return m_helper->paintOpOutline(imagePos,
+                                    currentPaintOpPreset()->settings(),
+                                    outlineMode);
 }
 
 #include "kis_tool_freehand.moc"

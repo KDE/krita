@@ -482,16 +482,9 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
+        brushOutline(KisPaintInformation(imagePos), outlineMode);
 
     return path;
 }

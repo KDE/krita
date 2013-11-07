@@ -44,6 +44,25 @@
 #include <QPixmap>
 #include <QDateTime>
 
+class KoPageWidgetItemAdapter : public KPageWidgetItem
+{
+public:
+    KoPageWidgetItemAdapter(KoPageWidgetItem *item)
+      : KPageWidgetItem(item->widget(), item->name())
+      , m_item(item)
+    {
+        setHeader(item->name());
+        setIcon(KIcon(item->iconName()));
+    }
+    ~KoPageWidgetItemAdapter() { delete m_item; }
+
+    bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
+    void apply() { m_item->apply(); }
+
+private:
+    KoPageWidgetItem * const m_item;
+};
+
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -141,7 +160,7 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
     switch (button) {
     case Ok:
         foreach(KPageWidgetItem* item, d->pages) {
-            KoPageWidgetItem *page = dynamic_cast<KoPageWidgetItem*>(item);
+            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
             if (page) {
                 if (page->shouldDialogCloseBeVetoed()) {
                     return;
@@ -252,7 +271,7 @@ void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
     foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItem *page = dynamic_cast<KoPageWidgetItem*>(item);
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
         if (page) {
             page->apply();
         }
@@ -437,9 +456,7 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 
 void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 {
-    KPageWidgetItem * page = new KPageWidgetItem(item->widget(), item->name());
-    page->setHeader(item->name());
-    page->setIcon(KIcon(item->iconName()));
+    KPageWidgetItem * page = new KoPageWidgetItemAdapter(item);
 
     addPage(page);
     d->pages.append(page);

@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Semantic item definition
+Name[de]=Definition eines semantischen Elements
+Name[kk]=Семантикалық аталым анықтамасы
 Name[nl]=Definitie van semantisch item
 Name[pt]=Definição do item semântico
 Name[pt_BR]=Definição do item semântico
@@ -8,6 +10,8 @@ Name[sv]=Definition av semantiskt objekt
 Name[uk]=Визначення семантичного запису
 Name[x-test]=xxSemantic item definitionxx
 Comment=Definition of a semantic item object
+Comment[de]=Definition eines Objekts für ein semantisches Element
+Comment[kk]=Семантикалық аталым нысанының анықтамасы
 Comment[nl]=Definitie van een semantisch itemobject
 Comment[pt]=Definição de um objecto de item semântico
 Comment[pt_BR]=Definição de um objeto de item semântico

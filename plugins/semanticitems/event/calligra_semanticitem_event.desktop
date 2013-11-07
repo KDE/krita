@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=RDF Calendar Event Plugin
+Name[de]=RDF-Kalender-Ereignismodul
+Name[kk]=RDF күнтізбе оқиға плагині
 Name[nl]=Plug-in voor gebeurtenis in RDF-agenda
 Name[pt]='Plugin' de Eventos do Calendário RDF
 Name[pt_BR]=Plugin de eventos do calendário RDF
@@ -8,6 +10,7 @@ Name[sv]=Insticksprogram för RDF-kalenderhändelser
 Name[uk]=Додаток подій календаря RDF
 Name[x-test]=xxRDF Calendar Event Pluginxx
 Comment=A plugin to map calendar event items between document and RDF database
+Comment[kk]=Құжаттағы және RDF деректер қорындағы күнтізбе оқиғаларды сәйкестіретін плагині
 Comment[nl]=Een plug-in om verbinding te maken tussen gebeurtenis-items in een document en een RDF-database
 Comment[pt]=Um 'plugin' para associar os itens do evento entre o documento e a base de dados RDF
 Comment[pt_BR]=Um plugin para associar os eventos de calendário entre o documento e o banco de dados RDF

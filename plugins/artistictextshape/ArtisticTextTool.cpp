@@ -38,6 +38,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
+#include <KoShapeBackground.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <KoInteractionStrategy.h>

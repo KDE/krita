@@ -145,6 +145,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
+
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
@@ -186,7 +187,6 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     QRect updateRect = rect & m_image->bounds();
     if (updateRect.isEmpty()) return info;
 
-
     /**
      * Why the rect is artificial? That's easy!
      * It does not represent any real piece of the image. It is
@@ -197,6 +197,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
      */
 
     QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
+    artificialRect &= m_image->bounds();
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
@@ -270,7 +271,10 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
         tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
-        tile->update(tileInfo);
+        Q_ASSERT(tile);
+        if (tile) {
+            tile->update(tileInfo);
+        }
         tileInfo.destroy();
 
         KIS_OPENGL_PRINT_ERROR();

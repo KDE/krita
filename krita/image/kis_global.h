@@ -25,6 +25,8 @@
 #include <calligraversion.h>
 
 #include <KoConfig.h>
+#include "kis_assert.h"
+
 
 #define KRITA_VERSION CALLIGRA_VERSION
 

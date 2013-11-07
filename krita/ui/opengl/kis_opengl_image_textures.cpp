@@ -271,10 +271,9 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
         tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
-        Q_ASSERT(tile);
-        if (tile) {
-            tile->update(tileInfo);
-        }
+        KIS_ASSERT_RECOVER_RETURN(tile);
+
+        tile->update(tileInfo);
         tileInfo.destroy();
 
         KIS_OPENGL_PRINT_ERROR();

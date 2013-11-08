@@ -155,7 +155,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     slotConfigChanged();
 
     KisConfig cfg;
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    //d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
 
@@ -198,7 +198,7 @@ void KisOpenGLCanvas2::initializeGL()
         }
     }
 
-    initializeCheckerShader();
+    //initializeCheckerShader();
     initializeDisplayShader();
 }
 
@@ -548,7 +548,7 @@ void KisOpenGLCanvas2::renderCanvasGL() const
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    drawCheckers();
+    //drawCheckers();
     drawImage();
 }
 

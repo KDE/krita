@@ -109,7 +109,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
         distanceInfo = *m_d->painterInfos.first()->dragDistance;
     }
 
-    KisPaintInformation::DistanceInformaionRegistrar registrar =
+    KisPaintInformation::DistanceInformationRegistrar registrar =
         info.registerDistanceInformation(&distanceInfo);
 
     return settings->brushOutline(info, mode);

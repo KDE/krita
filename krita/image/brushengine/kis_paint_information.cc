@@ -78,15 +78,15 @@ struct KisPaintInformation::Private {
     }
 };
 
-KisPaintInformation::DistanceInformaionRegistrar::
-DistanceInformaionRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo)
+KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo)
     : p(_p)
 {
     p->d->registerDistanceInfo(distanceInfo);
 }
 
-KisPaintInformation::DistanceInformaionRegistrar::
-~DistanceInformaionRegistrar()
+KisPaintInformation::DistanceInformationRegistrar::
+~DistanceInformationRegistrar()
 {
     p->d->unregisterDistanceInfo();
 }
@@ -206,10 +206,10 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
     return atan2(diff.y(), diff.x());
 }
 
-KisPaintInformation::DistanceInformaionRegistrar
+KisPaintInformation::DistanceInformationRegistrar
 KisPaintInformation::registerDistanceInformation(KisDistanceInformation *distance)
 {
-    return DistanceInformaionRegistrar(this, distance);
+    return DistanceInformationRegistrar(this, distance);
 }
 
 qreal KisPaintInformation::drawingAngle() const

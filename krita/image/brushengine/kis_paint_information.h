@@ -62,10 +62,10 @@ public:
      * of the return value. So if it doesn't work for some reason,
      * please implement a proper copy c-tor
      */
-    class DistanceInformaionRegistrar {
+    class KRITAIMAGE_EXPORT DistanceInformationRegistrar {
     public:
-        DistanceInformaionRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo);
-        ~DistanceInformaionRegistrar();
+        DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo);
+        ~DistanceInformationRegistrar();
     private:
         KisPaintInformation *p;
     };
@@ -112,7 +112,7 @@ public:
 
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
 
-    DistanceInformaionRegistrar registerDistanceInformation(KisDistanceInformation *distance);
+    DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**
      * Current brush direction computed from the cursor movement

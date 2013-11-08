@@ -155,7 +155,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     slotConfigChanged();
 
     KisConfig cfg;
-    //d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
 

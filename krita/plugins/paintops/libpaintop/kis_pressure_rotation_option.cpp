@@ -56,9 +56,8 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
     m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     KisCurveOption::readOptionSetting(setting);
 
-    // inversion of the axis names is done intentively due to weird naming
-    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredY", false);
-    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 }
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)

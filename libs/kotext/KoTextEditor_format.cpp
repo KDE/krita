@@ -417,7 +417,7 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
-    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (beginning of a block). We need to force it.
          //applying a style is absolute, so first initialise the caret with the frame's style, then apply the paragraph's. Finally apply the character style
         QTextCharFormat charFormat = KoTextDocument(d->document).frameCharFormat();
         KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
@@ -478,7 +478,7 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
-    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (beginning of a block). We need to force it.
         //applying a style is absolute, so first initialise the caret with the frame's style, then apply the paragraph style
         QTextCharFormat charFormat = KoTextDocument(d->document).frameCharFormat();
         d->caret.setCharFormat(charFormat);
@@ -540,7 +540,7 @@ void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
-    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (beginning of a block). We need to force it.
         d->caret.mergeCharFormat(deltaCharFormat);
     }
     else {

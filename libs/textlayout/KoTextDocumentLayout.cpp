@@ -574,7 +574,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             d->foundAnchors.append(anchor);
 
             // At the beginAnchorCollecting the strategy is cleared, so this if will be entered
-            // everytime we layout a page (though not everytime for the inner repeats due to anchors)
+            // every time we layout a page (though not every time for the inner repeats due to anchors)
             if (!anchor->placementStrategy()) {
                 int index = d->textAnchors.count();
                 anchor->setPlacementStrategy(new FloatingAnchorStrategy(anchorRange, d->anchoringRootArea));

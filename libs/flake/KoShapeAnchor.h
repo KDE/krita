@@ -177,7 +177,7 @@ public:
      * - frame
      *   The parent text box that the current drawing shape element is
      *   contained in.
-     *  FIXME we dont support type frame
+     *  FIXME we don't support type frame
      * - page
      *   The page that has the same physical page number as the value of the
      *   text:anchor-page-number attribute that is attached to the drawing

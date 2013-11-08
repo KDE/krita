@@ -198,7 +198,7 @@ void KisOpenGLCanvas2::initializeGL()
         }
     }
 
-    //initializeCheckerShader();
+    initializeCheckerShader();
     initializeDisplayShader();
 }
 
@@ -548,7 +548,7 @@ void KisOpenGLCanvas2::renderCanvasGL() const
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    //drawCheckers();
+    drawCheckers();
     drawImage();
 }
 

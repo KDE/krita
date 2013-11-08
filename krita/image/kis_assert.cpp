@@ -21,6 +21,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <klocale.h>
+#include <kis_assert_exception.h>
 
 /**
  * TODO: Add automatic saving of the documents
@@ -35,7 +36,7 @@
  *    lead to an infinite loop.
  */
 
-void kis_assert(const char *assertion, const char *file, int line)
+void kis_assert_common(const char *assertion, const char *file, int line, bool throwException)
 {
     QString shortMessage =
         QString("ASSERT (krita): \"%1\" in file %2, line %3")
@@ -60,5 +61,32 @@ void kis_assert(const char *assertion, const char *file, int line)
 
     if (button == QMessageBox::Abort) {
         qFatal("%s", shortMessage.toLatin1().data());
+    } else if (throwException) {
+        throw KisAssertException(shortMessage.toLatin1().data());
     }
+}
+
+
+void kis_assert_recoverable(const char *assertion, const char *file, int line)
+{
+    kis_assert_common(assertion, file, line, false);
+}
+
+void kis_assert_exception(const char *assertion, const char *file, int line)
+{
+    kis_assert_common(assertion, file, line, true);
+}
+
+void kis_assert_x_exception(const char *assertion,
+                            const char *where,
+                            const char *what,
+                            const char *file, int line)
+{
+    QString res =
+        QString("ASSERT failure in %1: \"%2\" (%3)")
+        .arg(where)
+        .arg(what)
+        .arg(assertion);
+
+    kis_assert_common(res.toLatin1().data(), file, line, true);
 }

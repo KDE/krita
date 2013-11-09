@@ -240,10 +240,6 @@ protected:
      */
     QString newObjectName();
 
-signals:
-
-    void invalidated();
-
 protected slots:
 
     virtual void changeAuthorProfile(const QString &profileName);

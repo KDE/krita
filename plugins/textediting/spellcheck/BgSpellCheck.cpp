@@ -47,6 +47,7 @@ BgSpellCheck::BgSpellCheck(QObject *parent)
 
 void BgSpellCheck::setDefaultLanguage(const QString &language)
 {
+    m_defaultCountry = "";
     m_defaultLanguage = language;
     int index = m_defaultLanguage.indexOf('_');
     if (index > 0) {
@@ -99,8 +100,10 @@ QString BgSpellCheck::fetchMoreText()
 
         iter = block.begin();
         while (!iter.atEnd() && iter.fragment().position() + iter.fragment().length() <=
-                m_currentPosition)
+                m_currentPosition) {
             ++iter;
+        }
+
         break;
     }
 

@@ -242,8 +242,6 @@ protected:
 
 signals:
 
-    void regionInvalidated(const QRegion &region, bool erase);
-
     void invalidated();
 
 protected slots:

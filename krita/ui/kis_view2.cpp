@@ -570,7 +570,6 @@ void KisView2::dropEvent(QDropEvent *event)
                                     mainWindow(), SLOT(close()));
 
                             mainWindow()->openDocument(url);
-                            mainWindow()->close();
                         }
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openManyDocuments);

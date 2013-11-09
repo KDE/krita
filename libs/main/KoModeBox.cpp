@@ -235,9 +235,8 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
         // Clear the minimumSize instigated by the previous tool
-        // Yhe new minimumSize will be set in updateShownTools()
-        QWidget *w = d->addedWidgets[d->activeId];
-        if (w) {
+        // The new minimumSize will be set in updateShownTools()
+        if (d->addedWidgets.contains(d->activeId)) {
             ScrollArea *sa = qobject_cast<ScrollArea *>(d->addedWidgets[d->activeId]->parentWidget()->parentWidget());
             sa->setMinimumWidth(0);
             sa->setMinimumHeight(0);
@@ -422,7 +421,6 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
             && !button.section.contains("main")) {
             continue;
         }
-
         if (code.startsWith(QLatin1String("flake/"))) {
             addItem(button);
             continue;

@@ -867,6 +867,10 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
+    repaintSelection(); //needed to delete any possible text selection i other text docs
+
+    m_textEditor.data()->setPosition(m_textEditor.data()->position());
+
     updateSelectedShape(event->point);
 
     KoSelection *selection = canvas()->shapeManager()->selection();
@@ -1919,6 +1923,12 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
+    if ((!m_oldTextEditor.isNull()) && m_oldTextEditor.data()->document() != static_cast<KoTextShapeData*>(m_textShape->userData())->document()) {
+        m_oldTextEditor.data()->setPosition(m_oldTextEditor.data()->position());
+        //we need to redraw like this so we update the old textshape whereever it may be
+        if (canvas()->canvasWidget())
+            canvas()->canvasWidget()->update();
+    }
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
@@ -1941,6 +1951,7 @@ void TextTool::deactivate()
     // No shape means no active range
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
 
+    m_oldTextEditor = m_textEditor;
     setShapeData(0);
 
     updateSelectionHandler();
@@ -1998,7 +2009,7 @@ void TextTool::repaintSelection()
     QTextCursor cursor = *textEditor->cursor();
 
     QList<TextShape *> shapes;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textEditor->document()->documentLayout());
     Q_ASSERT(lay);
     foreach (KoShape* shape, lay->shapes()) {
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
@@ -2046,7 +2057,8 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 {
     if (!m_textShapeData)
         return QRectF();
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextEditor *textEditor = m_textEditor.data();
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textEditor->document()->documentLayout());
     return lay->selectionBoundingBox(cursor);
 }
 

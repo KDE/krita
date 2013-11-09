@@ -336,16 +336,6 @@ QWidget *KoView::canvas() const
     return const_cast<KoView *>(this);
 }
 
-int KoView::canvasXOffset() const
-{
-    return 0;
-}
-
-int KoView::canvasYOffset() const
-{
-    return 0;
-}
-
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);

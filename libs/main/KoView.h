@@ -168,24 +168,6 @@ public:
     virtual QWidget *canvas() const;
 
     /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasXOffset() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasYOffset() const;
-
-    /**
      * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
      */
     void enableAutoScroll();

@@ -303,26 +303,6 @@ QAction *KoView::action(const char* name) const
     return act;
 }
 
-int KoView::leftBorder() const
-{
-    return 0;
-}
-
-int KoView::rightBorder() const
-{
-    return 0;
-}
-
-int KoView::topBorder() const
-{
-    return 0;
-}
-
-int KoView::bottomBorder() const
-{
-    return 0;
-}
-
 QWidget *KoView::canvas() const
 {
     //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas

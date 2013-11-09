@@ -133,32 +133,6 @@ public:
      */
     virtual QAction *action(const char* name) const;
 
-
-    /**
-     * Retrieves the left border width that is displayed around the content if
-     * the view is active.
-     *
-     * In a spread sheet this border is for example used to display the
-     * rows, while a top border is used to display the names of the cells
-     * and a right and bottom border is used to display scrollbars. If the view
-     * becomes inactive, then this stuff is not displayed anymore.
-     *
-     * The default border is 0.
-     */
-    virtual int leftBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int rightBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int topBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int bottomBorder() const;
-
     /**
      * Overload this function if the content will be displayed
      * on some child widget instead of the view directly.

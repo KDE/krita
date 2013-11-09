@@ -168,16 +168,6 @@ public:
     virtual QWidget *canvas() const;
 
     /**
-     * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
-     */
-    void enableAutoScroll();
-
-    /**
-     * Stops the emitting of autoScroll signals
-     */
-    void disableAutoScroll();
-
-    /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
@@ -277,21 +267,18 @@ protected:
     QString newObjectName();
 
 signals:
-    void autoScroll(const QPoint &scrollDistance);
 
     void regionInvalidated(const QRegion &region, bool erase);
 
     void invalidated();
 
 protected slots:
-    virtual void slotAutoScroll();
+
     virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);
     KoViewPrivate * const d;
-    int autoScrollAcceleration(int offset) const;
-
 };
 
 #endif

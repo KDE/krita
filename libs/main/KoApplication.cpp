@@ -63,8 +63,6 @@
 
 KoApplication* KoApplication::KoApp = 0;
 
-bool KoApplication::m_starting = true;
-
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -98,7 +96,6 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif
 
-    m_starting = true;
 #ifdef Q_OS_MAC
 #if 0
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
@@ -142,7 +139,6 @@ bool KoApplication::initHack()
     return true;
 }
 
-// Small helper for start() so that we don't forget to reset m_starting before a return
 class KoApplication::ResetStarting
 {
 public:
@@ -152,7 +148,6 @@ public:
     }
 
     ~ResetStarting()  {
-        KoApplication::m_starting = false;
         if (m_splash) {
             m_splash->hide();
         }
@@ -194,7 +189,7 @@ bool KoApplication::start()
         d->splashScreen->showMessage(".");
     }
 
-    ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done
+    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
@@ -526,11 +521,6 @@ bool KoApplication::start()
 KoApplication::~KoApplication()
 {
     delete d;
-}
-
-bool KoApplication::isStarting()
-{
-    return KoApplication::m_starting;
 }
 
 void KoApplication::setSplashScreen(QSplashScreen *splashScreen)

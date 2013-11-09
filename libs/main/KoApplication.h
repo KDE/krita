@@ -89,11 +89,6 @@ public:
     QList<KoPart*> partList() const;
 
     /**
-     *  Get the number of currently open documents.
-     */
-    int documents();
-
-    /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KoFilterManager::Direction direction) const;

@@ -533,16 +533,6 @@ QList<KoPart*> KoApplication::partList() const
     return d->partList;
 }
 
-int KoApplication::documents()
-{
-    QSet<QString> nameList;
-    QList<KoPart*> parts = d->partList;
-    foreach(KoPart* part, parts) {
-        nameList.insert(part->document()->objectName());
-    }
-    return nameList.size();
-}
-
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);

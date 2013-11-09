@@ -31,7 +31,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QVBoxLayout">
        <item>
         <widget class="QLabel" name="label_2">
@@ -55,7 +55,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QGridLayout">
        <property name="leftMargin">
         <number>0</number>

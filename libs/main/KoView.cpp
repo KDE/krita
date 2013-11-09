@@ -81,7 +81,6 @@ public:
     KoViewPrivate() {
         tempActiveWidget = 0;
         documentDeleted = false;
-        viewBar = 0;
         actionAuthor = 0;
     }
     ~KoViewPrivate() {
@@ -157,7 +156,6 @@ public:
 
     QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
-    QToolBar* viewBar;
     KSelectAction *actionAuthor; // Select action for author profile.
 };
 
@@ -527,16 +525,6 @@ void KoView::slotUpdateAuthorProfileActions()
     } else {
         d->actionAuthor->setCurrentItem(0);
     }
-}
-
-QToolBar* KoView::viewBar()
-{
-    if (!d->viewBar) {
-        d->viewBar = new QToolBar(statusBar());
-        addStatusBarItem(d->viewBar, 0 , true);
-    }
-
-    return d->viewBar;
 }
 
 QList<QAction*> KoView::createChangeUnitActions()

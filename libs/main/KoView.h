@@ -260,11 +260,6 @@ public:
      */
     virtual KoZoomController *zoomController() const = 0;
 
-    /**
-     * @return the view bar. The bar is created only if this function is called.
-     */
-    QToolBar* viewBar();
-
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 

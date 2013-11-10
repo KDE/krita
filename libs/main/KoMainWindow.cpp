@@ -367,7 +367,11 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
 
-    actionCollection()->addAction(KStandardAction::FullScreen, "view_fullscreen", this, SLOT(viewFullscreen(bool)));
+    // set up the action "list" for "Close all Views" (hacky :) (Werner)
+    KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
+    actionCollection()->addAction("view_fullscreen", fullscreenAction);
+    fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    connect(fullscreenAction, SIGNAL(toggled(bool)), this, SLOT(viewFullscreen(bool)));
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
     d->toggleDockers->setChecked(true);

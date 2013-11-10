@@ -23,7 +23,6 @@
 #include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>

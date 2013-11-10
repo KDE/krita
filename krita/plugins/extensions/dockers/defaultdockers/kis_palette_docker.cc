@@ -27,7 +27,6 @@
 #include <KoColorSet.h>
 #include <KoColorSetWidget.h>
 #include <KoCanvasResourceManager.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <kis_config.h>
 #include <kis_workspace_resource.h>

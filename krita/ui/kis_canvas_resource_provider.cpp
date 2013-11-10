@@ -22,7 +22,6 @@
 
 #include <KoCanvasBase.h>
 #include <KoID.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>

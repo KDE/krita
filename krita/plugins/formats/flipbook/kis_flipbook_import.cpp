@@ -31,7 +31,6 @@
 
 #include <KoColorSpace.h>
 #include <KoFilterChain.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>

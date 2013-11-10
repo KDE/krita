@@ -40,7 +40,6 @@
 #include <KoCanvasController.h>
 #include <KoFilterManager.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoUnit.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>

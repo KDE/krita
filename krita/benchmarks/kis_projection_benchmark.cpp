@@ -21,7 +21,6 @@
 #include "kis_benchmark_values.h"
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
 #include <kis_group_layer.h>

@@ -31,7 +31,6 @@
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>

@@ -47,7 +47,6 @@
 #include <kmenubar.h>
 
 #include <KoCanvasBase.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoMainWindow.h>
 #include <KoGlobal.h>

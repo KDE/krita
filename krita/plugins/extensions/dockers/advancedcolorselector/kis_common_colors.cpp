@@ -31,7 +31,6 @@
 
 #include <KoIcon.h>
 #include "KoColor.h"
-#include "KoColorSpaceRegistry.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"

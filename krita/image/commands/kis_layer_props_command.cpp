@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"

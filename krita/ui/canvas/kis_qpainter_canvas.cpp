@@ -37,7 +37,6 @@
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
 #include "kis_coordinates_converter.h"
 #include <KoZoomHandler.h>

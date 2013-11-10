@@ -18,7 +18,6 @@
 #include "mypaint_paintop_settings.h"
 
 #include <math.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>

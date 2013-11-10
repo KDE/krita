@@ -30,7 +30,6 @@
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
 #include "kis_cursor.h"

@@ -68,7 +68,6 @@
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
-#include "KoColorSpaceRegistry.h"
 #include <KoDockerManager.h>
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>

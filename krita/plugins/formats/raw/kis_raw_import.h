@@ -26,7 +26,6 @@
 
 class KDialog;
 class WdgRawImport;
-class KoColorProfile;
 class QProgressDialog;
 
 namespace KDcrawIface

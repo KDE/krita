@@ -30,7 +30,6 @@
 #include "kis_paint_device.h"
 
 class KoCompositeOp;
-class KoColorProfile;
 
 /// The command for layer property changes
 class KRITAIMAGE_EXPORT KisLayerPropsCommand : public KisLayerCommand

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
- * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
+   Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,30 +15,27 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include "KoTextInlineRdf.h"
+// lib
 #include "opendocument/KoTextSharedSavingData.h"
-#include <KoShapeSavingContext.h>
-
-#include <KoXmlReader.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoElementReference.h>
-
+#include "styles/KoCharacterStyle.h"
 #include "KoBookmark.h"
 #include "KoAnnotation.h"
 #include "KoTextMeta.h"
 #include "KoTextEditor.h"
 #include "KoTextDocument.h"
-#include "KoTextBlockData.h"
-#include "styles/KoCharacterStyle.h"
-#include "KoTextEditor.h"
-
+// komain
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoElementReference.h>
+// KDE
 #include <kdebug.h>
+// Qt
 #include <QTextCursor>
-#include <QUuid>
 #include <QTextDocument>
 
 
@@ -178,7 +175,7 @@ bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
     return true;
 }
 
-bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id)
+bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id) const
 {
     kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id << "passed id" << id.toString();
     QString oldID = d->id;
@@ -216,17 +213,17 @@ QString KoTextInlineRdf::createXmlId()
     return ref.toString();
 }
 
-QString KoTextInlineRdf::subject()
+QString KoTextInlineRdf::subject() const
 {
     return d->subject;
 }
 
-QString KoTextInlineRdf::predicate()
+QString KoTextInlineRdf::predicate() const
 {
     return d->predicate;
 }
 
-QPair<int, int>  KoTextInlineRdf::findExtent()
+QPair<int, int>  KoTextInlineRdf::findExtent() const
 {
     if (d->bookmark && d->document) {
         return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
@@ -252,7 +249,7 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
     return QPair<int, int>(0, 0);
 }
 
-QString KoTextInlineRdf::object()
+QString KoTextInlineRdf::object() const
 {
     if (d->isObjectAttributeUsed) {
         return d->object;
@@ -288,12 +285,12 @@ QString KoTextInlineRdf::object()
     return d->block.text();
 }
 
-int KoTextInlineRdf::sopranoObjectType()
+int KoTextInlineRdf::sopranoObjectType() const
 {
     return d->sopranoObjectType;
 }
 
-QString KoTextInlineRdf::xmlId()
+QString KoTextInlineRdf::xmlId() const
 {
     return d->id;
 }

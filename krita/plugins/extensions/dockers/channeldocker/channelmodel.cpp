@@ -18,6 +18,7 @@
 #include "channelmodel.h"
 
 #include <KoColorSpace.h>
+#include <KoChannelInfo.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 

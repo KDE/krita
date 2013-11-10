@@ -27,6 +27,7 @@
 #include "kis_paint_device.h"
 #include "kis_config.h"
 #include <KoColorConversionTransformation.h>
+#include <KoChannelInfo.h>
 
 
 class KisTextureTileUpdateInfo;

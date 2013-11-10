@@ -25,6 +25,7 @@
 #include "KoUpdater.h"
 #include "kis_math_toolbox.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoChannelInfo.h>
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
 #include "kundo2command.h"

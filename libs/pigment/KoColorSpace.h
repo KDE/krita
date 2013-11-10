@@ -31,13 +31,13 @@
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
 #include "KoCompositeOp.h"
-#include <KoChannelInfo.h>
 #include <KoID.h>
 #include "pigment_export.h"
 
 class QDomDocument;
 class QDomElement;
 class KoCompositeOp;
+class KoChannelInfo;
 class KoColorProfile;
 class KoColorTransformation;
 class KoColorConversionTransformationFactory;

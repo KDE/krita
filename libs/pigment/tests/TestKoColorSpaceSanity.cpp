@@ -21,6 +21,7 @@
 
 #include <qtest_kde.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoChannelInfo.h>
 
 
 void TestKoColorSpaceSanity::testChannelsInfo()

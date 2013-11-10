@@ -25,6 +25,7 @@
 #include <QTime>
 #include <QtXml>
 
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>

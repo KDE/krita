@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 
+#include <KoChannelInfo.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>

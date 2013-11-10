@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QBitArray>
 
+#include <KoChannelInfo.h>
 #include <KoCompositeOp.h>
 #include <KoUpdater.h>
 

@@ -22,7 +22,6 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
-#include <KoChannelInfo.h>
 #include <KoID.h>
 #include "pigment_export.h"
 

@@ -47,6 +47,7 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "KoColorSpace.h"
+#include <KoChannelInfo.h>
 #include "kis_types.h"
 
 #include "kis_selection.h"

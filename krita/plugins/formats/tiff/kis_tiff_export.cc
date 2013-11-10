@@ -27,6 +27,7 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
+#include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
 #include <KoFilterManager.h>
 

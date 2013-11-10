@@ -146,9 +146,9 @@ void TestDocumentLayout::testRootAreaZeroWidth()
     QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(0.,0.));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
     //QCOMPARE(provider->m_area->boundingRect().height(), qreal(14.4));
-    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(0.,0.));
+    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(10.,10.));
     //QCOMPARE(provider->m_area->referenceRect().bottomLeft(), QPointF(0.,14.4));
 }
 
@@ -167,8 +167,8 @@ void TestDocumentLayout::testRootAreaZeroHeight()
     QVERIFY(!provider->m_area->virginPage()); // should not be virigin any longer cause we added text
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea())); // start- and end-iterator should not be equal cause we added text
-    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,200.,0.));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,200.,0.));
+    QCOMPARE(provider->m_area->boundingRect(), QRectF(10.,10.,200.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,200.,0.));
 }
 
 void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
@@ -186,10 +186,10 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(0.,0.));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
     QCOMPARE(provider->m_area->boundingRect().height(), qreal(0.));
     //QCOMPARE(provider->m_area->boundingRect().width(), qreal(6.67188));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,0.,0.));
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

@@ -26,7 +26,6 @@
 
 #include "filestest.h"
 
-#include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
 #include "kisexiv2/kis_exiv2.h"

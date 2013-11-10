@@ -29,7 +29,6 @@
 #include <QPainter>
 
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_config.h"

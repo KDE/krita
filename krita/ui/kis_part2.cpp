@@ -29,7 +29,6 @@
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
 
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>

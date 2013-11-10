@@ -40,7 +40,6 @@
 #include "kis_view2.h"
 #include "kis_canvas2.h"
 #include <kis_bookmarked_configuration_manager.h>
-#include <KoColorSpaceRegistry.h>
 
 #include "dialogs/kis_dlg_filter.h"
 #include "strokes/kis_filter_stroke_strategy.h"

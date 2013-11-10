@@ -35,7 +35,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-#include <KoColorSpaceRegistry.h>
 
 #include <KoIcon.h>
 #include <kis_paintop_preset.h>

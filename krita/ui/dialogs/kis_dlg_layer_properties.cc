@@ -34,7 +34,6 @@
 #include <kpushbutton.h>
 #include <knuminput.h>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>

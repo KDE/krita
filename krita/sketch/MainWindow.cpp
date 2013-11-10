@@ -38,7 +38,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_config.h"

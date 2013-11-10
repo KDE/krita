@@ -28,7 +28,6 @@
 #include <QScopedPointer>
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
 #include "kis_paint_device.h"

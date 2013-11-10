@@ -24,7 +24,6 @@
 #include <QAbstractListModel>
 
 #include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>

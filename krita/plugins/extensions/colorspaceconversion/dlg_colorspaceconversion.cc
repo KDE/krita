@@ -30,7 +30,6 @@
 #include <knuminput.h>
 #include <kis_debug.h>
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"

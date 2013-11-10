@@ -27,7 +27,6 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoInputDevice.h>
 
 #include "kis_types.h"

@@ -33,7 +33,6 @@
 #include <KoUnit.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
 #include <KoSelection.h>

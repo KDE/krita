@@ -34,7 +34,6 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 

@@ -45,7 +45,6 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoPointerEvent.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

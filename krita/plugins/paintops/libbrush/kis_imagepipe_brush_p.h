@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <krandom.h>
 
-#include "KoColorSpaceRegistry.h"
 
 #include "kis_global.h"
 #include "kis_paint_device.h"

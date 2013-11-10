@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "KoColorSpaceRegistry.h"
 
 #include <KoColorModelStandardIds.h>
 

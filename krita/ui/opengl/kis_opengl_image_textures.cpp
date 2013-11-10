@@ -21,6 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 

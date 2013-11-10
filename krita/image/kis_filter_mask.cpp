@@ -19,7 +19,6 @@
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
 #include "kis_layer.h"

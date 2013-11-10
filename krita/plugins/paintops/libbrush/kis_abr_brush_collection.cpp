@@ -36,7 +36,6 @@
 #include <klocale.h>
 
 #include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 
 struct AbrInfo{

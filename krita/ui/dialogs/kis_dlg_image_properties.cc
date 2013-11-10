@@ -32,7 +32,6 @@
 
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>
-#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoID.h"
 #include "kis_types.h"

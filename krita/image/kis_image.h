@@ -40,7 +40,6 @@
 
 class KoDocument;
 class KoColorSpace;
-class KoCompositeOp;
 class KoColor;
 
 class KisCompositeProgressProxy;

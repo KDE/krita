@@ -40,7 +40,6 @@ class QHBoxLayout;
 class KoColorSpace;
 class KoResourceSelector;
 class KoResource;
-class KoCompositeOp;
 class KoCanvasController;
 
 class KisView2;

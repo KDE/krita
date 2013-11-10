@@ -42,7 +42,6 @@
 #include <kis_pattern.h>
 
 #include "kis_tool.h"
-#include "KoCompositeOp.h"
 #include <QCheckBox>
 
 class QEvent;
@@ -51,6 +50,7 @@ class QPaintEvent;
 class QGridLayout;
 class QLabel;
 class QPoint;
+class KoCompositeOp;
 
 
 class KoCanvasBase;

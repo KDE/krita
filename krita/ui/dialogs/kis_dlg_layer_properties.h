@@ -28,7 +28,6 @@
 #include "ui_wdglayerproperties.h"
 
 class QWidget;
-class KoCompositeOp;
 class QBitArray;
 class KisChannelFlagsWidget;
 class KisView2;

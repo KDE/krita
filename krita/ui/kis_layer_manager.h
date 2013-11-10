@@ -28,7 +28,6 @@ class QAction;
 class KToggleAction;
 class KActionCollection;
 
-class KoCompositeOp;
 
 class KisDoc2;
 class KisFilterStrategy;

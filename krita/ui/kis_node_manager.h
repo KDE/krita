@@ -31,7 +31,6 @@ class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
-class KoCompositeOp;
 
 class KisDoc2;
 class KisFilterStrategy;

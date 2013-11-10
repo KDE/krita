@@ -26,7 +26,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-class KoCompositeOp;
 /**
   * The command for image locking inside macro commands.
   *

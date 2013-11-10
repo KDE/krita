@@ -30,7 +30,6 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoIntegerMaths.h>
-#include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
 #include "KoFallBackColorTransformation.h"
 #include "KoLabDarkenColorTransformation.h"

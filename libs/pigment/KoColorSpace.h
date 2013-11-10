@@ -36,7 +36,6 @@
 
 class QDomDocument;
 class QDomElement;
-class KoCompositeOp;
 class KoChannelInfo;
 class KoColorProfile;
 class KoColorTransformation;

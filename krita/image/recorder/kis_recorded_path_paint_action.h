@@ -25,7 +25,6 @@
 
 class KisPaintInformation;
 class KisPainter;
-class KoCompositeOp;
 
 #include <krita_export.h>
 

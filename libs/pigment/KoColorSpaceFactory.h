@@ -25,7 +25,6 @@
 #include <KoID.h>
 #include "pigment_export.h"
 
-class KoCompositeOp;
 class KoColorProfile;
 class KoColorConversionTransformationFactory;
 class QBitArray;

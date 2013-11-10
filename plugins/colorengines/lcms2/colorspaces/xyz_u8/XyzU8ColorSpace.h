@@ -93,7 +93,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return "XYZ built-in - (lcms internal)";
+        return "XYZ identity built-in";
     }
 };
 

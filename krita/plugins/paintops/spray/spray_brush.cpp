@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
 #include <KoCompositeOp.h>
+#include <KoMixColorsOp.h>
 
 #include "kis_paintop.h"
 

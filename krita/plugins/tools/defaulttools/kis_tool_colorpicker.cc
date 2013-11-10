@@ -49,6 +49,7 @@
 #include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
 #include <KoChannelInfo.h>
+#include <KoMixColorsOp.h>
 
 namespace
 {

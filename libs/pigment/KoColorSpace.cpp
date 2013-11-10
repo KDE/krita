@@ -33,6 +33,7 @@
 #include "KoCopyColorConversionTransformation.h"
 #include "KoFallBackColorTransformation.h"
 #include "KoUniqueNumberForIdServer.h"
+#include "KoMixColorsOp.h"
 
 #include <QThreadStorage>
 #include <QByteArray>

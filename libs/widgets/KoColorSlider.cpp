@@ -21,6 +21,7 @@
 #include "KoColorSpace.h"
 
 #include <KoColor.h>
+#include <KoMixColorsOp.h>
 
 #include <QPainter>
 #include <QTimer>

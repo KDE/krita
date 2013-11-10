@@ -34,6 +34,7 @@
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
+#include <KoMixColorsOp.h>
 
 #include <kis_gridop_option.h>
 #include <kis_grid_shape_option.h>

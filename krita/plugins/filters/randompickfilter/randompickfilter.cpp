@@ -36,6 +36,7 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
+#include <KoMixColorsOp.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_image.h>

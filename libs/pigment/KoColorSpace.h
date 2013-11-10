@@ -26,7 +26,6 @@
 #include <QHash>
 #include <QVector>
 #include <QList>
-#include <QBitArray>
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
@@ -55,8 +54,7 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 
-
-#include "KoMixColorsOp.h"
+class KoMixColorsOp;
 #include "KoConvolutionOp.h"
 
 /**

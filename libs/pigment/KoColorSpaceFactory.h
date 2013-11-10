@@ -28,7 +28,6 @@
 
 class KoCompositeOp;
 class KoColorProfile;
-class KoColorTransformation;
 class KoColorConversionTransformationFactory;
 class QBitArray;
 

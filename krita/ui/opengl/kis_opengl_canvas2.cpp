@@ -226,13 +226,11 @@ void KisOpenGLCanvas2::paintGL()
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    return false;
     if (!d->glSyncObject) return false;
 
     GLint status = -1;
     glGetSynciv(d->glSyncObject, GL_SYNC_STATUS, 1, 0, &status);
 
-    kDebug() << rand() << "status " << (status == GL_UNSIGNALED);
     return status == GL_UNSIGNALED;
 }
 

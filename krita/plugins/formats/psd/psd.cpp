@@ -18,7 +18,7 @@
 #include "psd.h"
 
 #include <KoColorModelStandardIds.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 
 QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)

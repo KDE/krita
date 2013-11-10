@@ -29,7 +29,7 @@
 
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 
 #include "kis_paint_device.h"

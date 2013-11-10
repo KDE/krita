@@ -23,6 +23,7 @@
 
 #include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
+#include <KoCompositeOpRegistry.h>
 
 /**
  * A template version of the alphadarken composite operation to use in colorspaces

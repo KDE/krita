@@ -26,6 +26,7 @@
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"

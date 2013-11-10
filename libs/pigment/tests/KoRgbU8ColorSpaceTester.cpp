@@ -28,6 +28,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
+#include <KoCompositeOpRegistry.h>
 
 
 #include "KoRgbU8ColorSpaceTester.h"

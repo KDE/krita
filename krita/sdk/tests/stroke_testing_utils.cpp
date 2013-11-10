@@ -24,6 +24,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
 #include "kis_pattern.h"

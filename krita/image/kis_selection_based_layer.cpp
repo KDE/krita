@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include "kis_debug.h"
 
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"

@@ -21,7 +21,7 @@
 #include "kis_group_layer.h"
 
 #include <KoIcon.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_types.h"

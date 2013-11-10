@@ -39,7 +39,7 @@
 #include <KoColorTransformation.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoInputDevice.h>
 #include <KoColorSpaceRegistry.h>
 

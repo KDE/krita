@@ -21,7 +21,7 @@
 #include <KoIcon.h>
 
 #include <kis_cmb_composite.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_types.h>
 #include <KoID.h>
 #include <ui_wdgCompositeOpOption.h>

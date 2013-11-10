@@ -23,7 +23,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_paintop_registry.h>
 #include "kis_simple_paintop_factory.h"

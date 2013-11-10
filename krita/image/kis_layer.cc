@@ -29,7 +29,7 @@
 #include <QMutexLocker>
 
 #include <KoProperties.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_debug.h"

@@ -31,7 +31,7 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>

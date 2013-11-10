@@ -25,7 +25,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoStopGradient.h>
 

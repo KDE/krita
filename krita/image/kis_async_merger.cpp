@@ -23,7 +23,7 @@
 #include <QBitArray>
 
 #include <KoChannelInfo.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoUpdater.h>
 
 #include "kis_paint_device.h"

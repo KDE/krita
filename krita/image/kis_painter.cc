@@ -45,7 +45,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
 #include "filter/kis_filter.h"

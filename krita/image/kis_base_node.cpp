@@ -22,7 +22,7 @@
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 
 struct KisBaseNode::Private

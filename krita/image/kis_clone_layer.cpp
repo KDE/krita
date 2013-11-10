@@ -24,7 +24,7 @@
 #include <KoIcon.h>
 
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_paint_device.h"
 #include "kis_image.h"

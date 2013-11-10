@@ -20,6 +20,7 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_pattern.h"

@@ -37,6 +37,7 @@
 #include "KoColor.h"
 #include "KoColorConversionTransformation.h"
 #include "KoColorProfile.h"
+#include <KoCompositeOpRegistry.h>
 
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"

@@ -23,6 +23,7 @@
 #include "kis_debug.h"
 
 #include <KoIcon.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
 #include "kis_selection.h"

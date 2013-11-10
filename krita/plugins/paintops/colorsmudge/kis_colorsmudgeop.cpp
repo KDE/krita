@@ -24,7 +24,7 @@
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_brush.h>
 #include <kis_global.h>

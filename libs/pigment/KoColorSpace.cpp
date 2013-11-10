@@ -35,6 +35,7 @@
 #include "KoUniqueNumberForIdServer.h"
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
+#include "KoCompositeOpRegistry.h"
 
 #include <QThreadStorage>
 #include <QByteArray>

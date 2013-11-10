@@ -39,7 +39,7 @@
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>

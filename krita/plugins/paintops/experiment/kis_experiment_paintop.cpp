@@ -22,7 +22,7 @@
 
 #include <cmath>
 
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_debug.h>
 

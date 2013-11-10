@@ -28,7 +28,7 @@
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_datamanager.h"
 #include "kis_types.h"

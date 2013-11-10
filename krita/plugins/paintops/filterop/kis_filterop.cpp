@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoInputDevice.h>
 
 #include <kis_processing_information.h>

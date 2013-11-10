@@ -49,7 +49,6 @@
 #include <KoTextInlineRdf.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
-#include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoShapeController.h>
 

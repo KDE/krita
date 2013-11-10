@@ -40,7 +40,6 @@ class QTextTable;
 class QRect;
 
 class KoSection;
-class KoBookmarkManager;
 class KoShapeLoadingContext;
 class KoShape;
 

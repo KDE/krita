@@ -30,7 +30,6 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
-#include "KoBookmark.h"
 #include <KoAnchorInlineObject.h>
 #include <KoAnchorTextRange.h>
 #include <KoCanvasBase.h>

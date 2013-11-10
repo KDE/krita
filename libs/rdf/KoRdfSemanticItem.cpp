@@ -26,7 +26,6 @@
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoTextDocument.h>
 

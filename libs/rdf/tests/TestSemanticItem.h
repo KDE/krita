@@ -31,7 +31,6 @@
 #include <KoDocumentRdf.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include <KoBookmark.h>
 #include <KoTextInlineRdf.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>

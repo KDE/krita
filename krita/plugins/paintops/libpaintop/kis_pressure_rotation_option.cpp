@@ -24,7 +24,6 @@
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
         : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::brushCategory(), false),

@@ -29,7 +29,6 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
-#include <KoColorSpace.h>
 #include <KoFilterChain.h>
 
 #include <kis_transaction.h>

@@ -23,7 +23,6 @@
 
 #include <QPoint>
 
-#include "KoColorSpace.h"
 
 #include "kis_cursor.h"
 #include "kis_selection.h"

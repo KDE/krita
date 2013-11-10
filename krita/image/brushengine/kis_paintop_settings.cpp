@@ -24,7 +24,6 @@
 
 #include <KoPointerEvent.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 

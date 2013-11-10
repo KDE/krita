@@ -20,7 +20,6 @@
 #include "hatching_brush.h"
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 #include <KoColorTransformation.h>
 
 #include <QVariant>

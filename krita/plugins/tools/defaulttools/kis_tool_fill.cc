@@ -35,7 +35,6 @@
 #include <knuminput.h>
 
 #include <KoUpdater.h>
-#include <KoColorSpace.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoProgressUpdater.h>

@@ -26,8 +26,8 @@
 #include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 #include "kis_curve_paintop_settings_widget.h"
-#include <KoColorSpace.h>
 
+class KoColorSpace;
 class CurveProperties;
 class Pen {
 public:

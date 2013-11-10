@@ -20,7 +20,6 @@
 #define _KIS_COLORSMUDGEOP_H_
 
 #include <QRect>
-#include <KoColorSpace.h>
 
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>

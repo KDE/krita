@@ -37,7 +37,6 @@
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
-class KoColorSpace;
 class KoColorProfile;
 
 /**

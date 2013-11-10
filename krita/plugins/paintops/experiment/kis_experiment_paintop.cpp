@@ -23,7 +23,6 @@
 #include <cmath>
 
 #include <KoCompositeOp.h>
-#include <KoColorSpace.h>
 
 #include <kis_debug.h>
 

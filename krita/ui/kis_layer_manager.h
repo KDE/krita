@@ -29,7 +29,6 @@ class KToggleAction;
 class KActionCollection;
 
 class KoCompositeOp;
-class KoColorSpace;
 
 class KisDoc2;
 class KisFilterStrategy;

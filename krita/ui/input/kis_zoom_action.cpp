@@ -29,6 +29,8 @@
 #include <kis_view2.h>
 #include "kis_input_manager.h"
 
+#include <klocale.h>
+
 class KisZoomAction::Private
 {
 public:

@@ -25,7 +25,7 @@
 #include <QSize>
 #include <QString>
 
-#include <KoColorSpace.h>
+#include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
 #include <krita_export.h>
 #include <kis_types.h>

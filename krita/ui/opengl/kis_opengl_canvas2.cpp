@@ -43,7 +43,6 @@
 
 #include "KoToolProxy.h"
 #include "KoToolManager.h"
-#include "KoColorSpace.h"
 #include "KoShapeManager.h"
 
 #include "kis_types.h"

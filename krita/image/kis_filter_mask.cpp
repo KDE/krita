@@ -18,7 +18,6 @@
  */
 
 #include <KoIcon.h>
-#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
 #include "kis_layer.h"

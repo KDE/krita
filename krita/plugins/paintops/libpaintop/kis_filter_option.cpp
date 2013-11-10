@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 
-#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 #include <KoID.h>

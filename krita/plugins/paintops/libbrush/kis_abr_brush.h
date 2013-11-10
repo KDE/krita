@@ -38,7 +38,6 @@ class QPoint;
 class QIODevice;
 
 class KoColor;
-class KoColorSpace;
 
 class BRUSH_EXPORT KisAbrBrush : public KisBrush
 {

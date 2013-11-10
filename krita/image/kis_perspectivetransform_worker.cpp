@@ -36,7 +36,6 @@
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <KoColorSpace.h>
 #include <KoColor.h>
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)

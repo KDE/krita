@@ -47,7 +47,6 @@
 #include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoColor.h>
 #include <KoUnit.h>

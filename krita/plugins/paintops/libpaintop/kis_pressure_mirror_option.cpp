@@ -25,7 +25,6 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureMirrorOption::KisPressureMirrorOption()
         : KisCurveOption(i18n("Mirror"), "Mirror", KisPaintOpOption::brushCategory(), false)

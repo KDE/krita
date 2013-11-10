@@ -25,7 +25,6 @@
 
 #include "KoColor.h"
 #include "KoColorProfile.h"
-#include "KoColorSpace.h"
 
 
 #include "kis_image.h"

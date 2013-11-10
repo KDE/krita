@@ -27,7 +27,6 @@
 
 #include "KoColor.h"
 #include "KoChannelInfo.h"
-#include "KoColorSpace.h"
 #include "DebugPigment.h"
 
 void TestKoChannelInfo::testDisplayPositionToChannelIndex()

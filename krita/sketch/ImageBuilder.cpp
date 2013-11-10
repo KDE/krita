@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_part2.h>
 #include <kis_doc2.h>

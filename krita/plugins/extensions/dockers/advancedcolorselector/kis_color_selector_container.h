@@ -23,7 +23,6 @@
 class KisColorSelector;
 class KisMyPaintShadeSelector;
 class KisMinimalShadeSelector;
-class KoColorSpace;
 class QBoxLayout;
 class KisCanvas2;
 class KAction;

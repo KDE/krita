@@ -30,7 +30,6 @@
 #include "kis_paint_device.h"
 
 class KoCompositeOp;
-class KoColorSpace;
 class KoColorProfile;
 
 /// The command for layer property changes

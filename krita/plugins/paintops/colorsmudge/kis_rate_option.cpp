@@ -26,7 +26,6 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 #include <iostream>
 

@@ -92,7 +92,7 @@ QString BgSpellCheck::fetchMoreText()
             m_nextPosition = m_endPosition; // ends run
             return QString();
         }
-        if (block.length() == 1) { // only linefeed
+        if (block.length() <= 1) { // only linefeed or empty block
             block = block.next();
             m_currentPosition++;
             continue;

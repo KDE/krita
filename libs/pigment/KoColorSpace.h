@@ -55,7 +55,7 @@ enum ColorSpaceIndependence {
 };
 
 class KoMixColorsOp;
-#include "KoConvolutionOp.h"
+class KoConvolutionOp;
 
 /**
  * A KoColorSpace is the definition of a certain color space.

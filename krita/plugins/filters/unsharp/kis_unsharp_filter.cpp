@@ -33,6 +33,7 @@
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoConvolutionOp.h>
 #include <kis_paint_device.h>
 
 #include "kis_wdg_unsharp.h"

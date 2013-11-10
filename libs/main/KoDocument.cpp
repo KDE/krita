@@ -1053,6 +1053,7 @@ bool KoDocument::saveToStore(KoStore *_store, const QString & _path)
 {
     kDebug(30003) << "Saving document to store" << _path;
 
+    _store->pushDirectory();
     // Use the path as the internal url
     if (_path.startsWith(STORE_PROTOCOL))
         setUrl(KUrl(_path));

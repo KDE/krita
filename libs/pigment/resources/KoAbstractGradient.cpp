@@ -20,6 +20,7 @@
 
 #include "KoAbstractGradient.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoColor.h>
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64

@@ -37,7 +37,6 @@ class QString;
 class QPoint;
 class QIODevice;
 
-class KoColor;
 
 class BRUSH_EXPORT KisAbrBrush : public KisBrush
 {

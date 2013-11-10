@@ -25,7 +25,6 @@
 #include <QWidget>
 
 class KoUnit;
-class KoColor;
 class KoCanvasBase;
 
 /// A widget for configuring the shadow of a shape

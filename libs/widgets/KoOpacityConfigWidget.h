@@ -26,7 +26,6 @@
 #include <QWidget>
 
 class KoCanvasBase;
-class KoColor;
 class KoResource;
 class KoShapeBackground;
 class KoShape;

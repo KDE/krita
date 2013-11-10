@@ -19,7 +19,6 @@
 #define _PRESETDOCKER_DOCK_H_
 
 #include <QDockWidget>
-#include <KoColor.h>
 #include <KoCanvasObserverBase.h>
 
 class KisPaintOpPresetsChooserPopup;

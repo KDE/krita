@@ -23,7 +23,7 @@
 
 #include <cfloat>
 
-#include <QColor>
+#include <KoColor.h>
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -174,7 +174,7 @@ private:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
+    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName = QString());
 public:
     /**
      * Return a colorspace that works with the parameter profile.

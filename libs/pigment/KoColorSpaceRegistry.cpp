@@ -410,14 +410,14 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         return cs;
     } else {
-        return colorSpace(csID, "");
+        return colorSpace(csID);
     }
 }
 
 const KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
     if (!d->alphaCs) {
-        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId(), 0);
+        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId());
     }
     Q_ASSERT(d->alphaCs);
     return d->alphaCs;
@@ -427,7 +427,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
     if (profileName.isEmpty()) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), "");
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId());
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
@@ -439,7 +439,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
     if (profile == 0) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), "");
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId());
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
@@ -606,7 +606,7 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     foreach(KoColorSpaceFactory* factory, factories) {
         if (visibility == AllColorSpaces || factory->userVisible()) {
             if (pSelection == OnlyDefaultProfile) {
-                const KoColorSpace *cs = colorSpace(factory->id(), 0);
+                const KoColorSpace *cs = colorSpace(factory->id());
                 if (cs) {
                     colorSpaces.append(cs);
                 }

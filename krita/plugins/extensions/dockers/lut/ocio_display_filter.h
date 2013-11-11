@@ -21,7 +21,7 @@
 #include <kis_display_filter.h>
 #include <OpenColorIO/OpenColorIO.h>
 #include <OpenColorIO/OpenColorTransforms.h>
-
+#include <QVector>
 #include <opengl/kis_opengl.h>
 
 namespace OCIO = OCIO_NAMESPACE;

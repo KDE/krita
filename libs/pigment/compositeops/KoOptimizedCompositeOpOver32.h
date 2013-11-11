@@ -22,7 +22,7 @@
 #define KOOPTIMIZEDCOMPOSITEOPOVER32_H_
 
 #include "KoCompositeOpBase.h"
-
+#include "KoCompositeOpRegistry.h"
 #include "KoStreamedMath.h"
 
 

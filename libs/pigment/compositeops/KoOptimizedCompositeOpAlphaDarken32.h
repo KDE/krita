@@ -22,7 +22,8 @@
 #define KOOPTIMIZEDCOMPOSITEOPALPHADARKEN32_H_
 
 #include "KoCompositeOpBase.h"
-
+#include "KoCompositeOpRegistry.h"
+#include <klocale.h>
 #include "KoStreamedMath.h"
 
 template<typename channels_type, typename pixel_type>

@@ -23,6 +23,8 @@
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver32.h"
 
+#include <KoCompositeOpRegistry.h>
+
 template<>
 template<>
 KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType

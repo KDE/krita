@@ -190,9 +190,6 @@ click &quot;Bookmarks&quot; in the Links and Bookmarks section</string>
         <string/>
        </property>
       </widget>
-      <zorder>layoutWidget</zorder>
-      <zorder>buttonBox</zorder>
-      <zorder>bookmarkLinkStatusLabel</zorder>
      </widget>
     </widget>
    </item>

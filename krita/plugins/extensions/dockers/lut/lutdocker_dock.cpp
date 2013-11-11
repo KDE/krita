@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
 #include <KoColorProfile.h>

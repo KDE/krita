@@ -784,6 +784,7 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTran
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createHLineIteratorNG(x, y, w);
 }
 
@@ -794,6 +795,7 @@ KisHLineConstIteratorSP KisPaintDevice::createHLineConstIteratorNG(qint32 x, qin
 
 KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createVLineIteratorNG(x, y, w);
 }
 
@@ -804,6 +806,7 @@ KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qin
 
 KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect &rc)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createRectIteratorNG(rc);
 }
 
@@ -826,6 +829,7 @@ KisRepeatVLineConstIteratorSP KisPaintDevice::createRepeatVLineConstIterator(qin
 
 KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG(qint32 x, qint32 y)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createRandomAccessorNG(x, y);
 }
 

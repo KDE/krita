@@ -47,9 +47,11 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
-#include "kis_mirror_visitor.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_processing_applicator.h"
+#include "processing/kis_mirror_processing_visitor.h"
+
 
 struct KisNodeManager::Private {
 
@@ -727,22 +729,22 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
     m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
 }
 
-void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::Orientation orientation)
+void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)
 {
-    m_d->view->image()->undoAdapter()->beginMacro(commandName);
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
 
-    KisMirrorVisitor visitor(m_d->view->image(), orientation);
-    node->accept(visitor);
+    KisProcessingApplicator applicator(m_d->view->image(), node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
 
-    m_d->view->image()->undoAdapter()->endMacro();
-    m_d->doc->setModified(true);
+    KisProcessingVisitorSP visitor =
+        new KisMirrorProcessingVisitor(m_d->view->image()->bounds(), orientation);
 
-    if (node->inherits("KisLayer")) {
-        m_d->layerManager->layersUpdated();
-    } else if (node->inherits("KisMask")) {
-        m_d->maskManager->masksUpdated();
-    }
-    m_d->view->canvas()->update();
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
+
+    nodesUpdated();
 }
 
 void KisNodeManager::saveNodeAsImage()

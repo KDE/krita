@@ -115,7 +115,6 @@ set(kritaui_LIB_SRCS
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
-    kis_mirror_visitor.cpp
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp

@@ -50,50 +50,83 @@ void KisTransformWorkerTest::testCreation()
                           0, 0, updater, filter);
 }
 
-void KisTransformWorkerTest::testMirrorX()
+void testMirror(const QRect &imageRect, const QRect &mirrorRect, Qt::Orientation orientation)
 {
-
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
-    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, 0);
-    KisTransformWorker::mirrorX(dev2);
-    KisTransformWorker::mirrorX(dev2);
-    KisTransformWorker::mirrorX(dev2);
-    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
-    image = image.mirrored(true, false);
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        // They are the same, but should be mirrored
-        image.save("mirror_test_1_source.png");
-        result.save("mirror_test_1_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    qreal axis = QRectF(mirrorRect).center().x();
+
+    KisRandomAccessorSP it = dev->createRandomAccessorNG(imageRect.x(), imageRect.y());
+
+    int i = 0;
+    for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++) {
+        for (int x = imageRect.x(); x < imageRect.x() + imageRect.width(); x++) {
+            it->moveTo(x, y);
+
+            *reinterpret_cast<quint32*>(it->rawData()) = 0xFFFFFFFF - i++;
+        }
     }
 
+    QCOMPARE(dev->exactBounds(), imageRect);
+
+
+    QImage srcImage = dev->convertToQImage(0, mirrorRect.x(), mirrorRect.y(), mirrorRect.width(), mirrorRect.height());
+    QImage mirroredImage = srcImage.mirrored(orientation == Qt::Horizontal, orientation == Qt::Vertical);
+    QImage result;
+
+    //srcImage.save("input.png");
+    //mirroredImage.save("mirror_expected.png");
+
+    QBENCHMARK_ONCE {
+        KisTransformWorker::mirror(dev, axis, orientation);
+    }
+    result = dev->convertToQImage(0, mirrorRect.x(), mirrorRect.y(), mirrorRect.width(), mirrorRect.height());
+    QCOMPARE(result, mirroredImage);
+
+    //result.save("mirror1.png");
+
+    KisTransformWorker::mirror(dev, axis, orientation);
+    result = dev->convertToQImage(0, mirrorRect.x(), mirrorRect.y(), mirrorRect.width(), mirrorRect.height());
+    QCOMPARE(result, srcImage);
+
+    //result.save("mirror2.png");
+
+    KisTransformWorker::mirror(dev, axis, orientation);
+    result = dev->convertToQImage(0, mirrorRect.x(), mirrorRect.y(), mirrorRect.width(), mirrorRect.height());
+    QCOMPARE(result, mirroredImage);
+
+    //result.save("mirror3.png");
 }
 
-void KisTransformWorkerTest::testMirrorY()
+void KisTransformWorkerTest::testMirrorX_Even()
 {
+    testMirror(QRect(10,10,30,30), QRect(1,1,70,70), Qt::Horizontal);
+}
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "mirror_source.png");
-    KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
-    dev2->convertFromQImage(image, 0);
-    KisTransformWorker::mirrorY(dev2);
-    KisTransformWorker::mirrorY(dev2);
-    KisTransformWorker::mirrorY(dev2);
-    QImage result = dev2->convertToQImage(0, 0, 0, image.width(), image.height());
-    image = image.mirrored(false, true  );
+void KisTransformWorkerTest::testMirrorX_Odd()
+{
+    testMirror(QRect(10,10,30,30), QRect(1,1,71,71), Qt::Horizontal);
+}
 
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        // They are the same, but should be mirrored
-        image.save("mirror_test_2_source.png");
-        result.save("mirror_test_2_result.png");
-        QFAIL(QString("Failed to mirror the image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-    }
+void KisTransformWorkerTest::testMirrorY_Even()
+{
+    testMirror(QRect(10,10,30,30), QRect(1,1,70,70), Qt::Vertical);
+}
 
+void KisTransformWorkerTest::testMirrorY_Odd()
+{
+    testMirror(QRect(10,10,30,30), QRect(1,1,71,71), Qt::Vertical);
+}
+
+void KisTransformWorkerTest::benchmarkMirrorX()
+{
+    testMirror(QRect(10,10,4000,4000), QRect(1,1,7000,7000), Qt::Horizontal);
+}
+
+void KisTransformWorkerTest::benchmarkMirrorY()
+{
+    testMirror(QRect(10,10,4000,4000), QRect(1,1,7000,7000), Qt::Vertical);
 }
 
 void KisTransformWorkerTest::testOffset()

@@ -57,21 +57,24 @@ public:
                        KisFilterStrategy *filter);
     ~KisTransformWorker();
 
-    /**
-     * Mirror the specified device along the X axis
-     * @param dev device to be mirrored
-     * @param axis the axis around which the device will be mirrored, only used if greater zero
-     * @param selection optional selection that will be used for the mirror
-     */
-    static QRect mirrorX(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
 
     /**
-     * Mirror the specified device along the Y axis
-     * @param dev device to be mirrored
-     * @param axis the axis around which the device will be mirrored, only used if greater zero
-     * @param selection optional selection that will be used for the mirror
+     * Mirror the specified device along the X or Y axis at the
+     * coordinate \p axis.
      */
-    static QRect mirrorY(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
+    static void mirror(KisPaintDeviceSP dev, qreal axis, Qt::Orientation orientation);
+
+    /**
+     * Convenience methods for mirror(dev, axis, orientation)
+     */
+    static void mirrorX(KisPaintDeviceSP dev, qreal axis);
+    static void mirrorY(KisPaintDeviceSP dev, qreal axis);
+
+    /**
+     * Mirror the device relative to the center of its exactBounds()
+     */
+    static void mirrorX(KisPaintDeviceSP dev);
+    static void mirrorY(KisPaintDeviceSP dev);
 
     /**
      * Offset the specified device with wraping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*

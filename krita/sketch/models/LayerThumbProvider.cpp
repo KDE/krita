@@ -69,5 +69,3 @@ int LayerThumbProvider::layerID() const
 {
     return d->id;
 }
-
-#include "LayerThumbProvider.moc"

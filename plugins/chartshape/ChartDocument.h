@@ -35,7 +35,7 @@ class KoShapeLoadingContext;
 
 namespace KChart {
 
-#define CHART_MIME_TYPE "vnd.oasis.opendocument.chart"
+#define CHART_MIME_TYPE "application/vnd.oasis.opendocument.chart"
 
 class ChartShape;
 

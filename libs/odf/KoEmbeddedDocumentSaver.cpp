@@ -105,12 +105,12 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument *
     }
 
     //<draw:object draw:style-name="standard" xml:id="1" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    kDebug(30003) << "KoEmbeddedDocumentSaver::addEmbeddedDocument saving reference to embedded document as" << ref;
+    writer.addAttribute("xlink:href", /*"#" + */ref);
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
 
-    kDebug(30003) << "KoEmbeddedDocumentSaver::addEmbeddedDocument saving reference to embedded document as" << ref;
-    writer.addAttribute("xlink:href", /*"#" + */ref);
 }
 
 // Examples:

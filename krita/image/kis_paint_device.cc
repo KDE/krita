@@ -55,18 +55,43 @@
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
+#include "kis_lock_free_cache.h"
+
 
 class CacheData : public KisDataManager::AbstractCache
 {
 public:
+    CacheData(KisPaintDevice *paintDevice)
+        : m_exactBoundsCache(paintDevice),
+          m_regionCache(paintDevice)
+    {
+    }
+
     bool m_thumbnailsValid;
     QMap<int, QMap<int, QImage> > m_thumbnails;
 
-    bool m_exactBoundsValid;
-    QRect m_exactBounds;
+    struct ExactBoundsCache : KisLockFreeCache<QRect> {
+        ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
 
-    bool m_regionValid;
-    QRegion m_region;
+        QRect calculateNewValue() const {
+            return m_paintDevice->calculateExactBounds();
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    struct RegionCache : KisLockFreeCache<QRegion> {
+        RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
+
+        QRegion calculateNewValue() const {
+            return m_paintDevice->dataManager()->region();
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    ExactBoundsCache m_exactBoundsCache;
+    RegionCache m_regionCache;
 };
 
 class PaintDeviceCache
@@ -81,7 +106,7 @@ public:
         CacheData *data = static_cast<CacheData *>(m_paintDevice->dataManager()->cache());
 
         if(!data) {
-            data = new CacheData();
+            data = new CacheData(m_paintDevice);
             m_paintDevice->dataManager()->setCache(data);
         }
 
@@ -91,27 +116,16 @@ public:
 
     void invalidate() {
         m_data->m_thumbnailsValid = false;
-        m_data->m_exactBoundsValid = false;
-        m_data->m_regionValid = false;
+        m_data->m_exactBoundsCache.invalidate();
+        m_data->m_regionCache.invalidate();
     }
 
     QRect exactBounds() {
-        if (m_data->m_exactBoundsValid) {
-            return m_data->m_exactBounds;
-        }
-        m_data->m_exactBounds = m_paintDevice->calculateExactBounds();
-        m_data->m_exactBoundsValid = true;
-        return m_data->m_exactBounds;
+        return m_data->m_exactBoundsCache.getValue();
     }
 
     QRegion region() {
-        if (m_data->m_regionValid) {
-            return m_data->m_region;
-        }
-        m_data->m_region = m_paintDevice->dataManager()->region();
-        m_data->m_regionValid = true;
-        return m_data->m_region;
-
+        return m_data->m_regionCache.getValue();
     }
 
     QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {

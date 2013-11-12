@@ -219,7 +219,6 @@ private slots:
     void toggleTabletLogger();
 
 private:
-    void createGUI();
     void createActions();
     void createManagers();
     void loadPlugins();

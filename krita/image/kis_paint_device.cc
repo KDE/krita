@@ -58,17 +58,69 @@
 #include "kis_lock_free_cache.h"
 
 
-class CacheData : public KisDataManager::AbstractCache
+class PaintDeviceCache
 {
 public:
-    CacheData(KisPaintDevice *paintDevice)
-        : m_exactBoundsCache(paintDevice),
+    PaintDeviceCache(KisPaintDevice *paintDevice)
+        : m_paintDevice(paintDevice),
+          m_exactBoundsCache(paintDevice),
           m_regionCache(paintDevice)
     {
     }
 
-    bool m_thumbnailsValid;
-    QMap<int, QMap<int, QImage> > m_thumbnails;
+    void setupCache() {
+        invalidate();
+    }
+
+    void invalidate() {
+        m_thumbnailsValid = false;
+        m_exactBoundsCache.invalidate();
+        m_regionCache.invalidate();
+    }
+
+    QRect exactBounds() {
+        return m_exactBoundsCache.getValue();
+    }
+
+    QRegion region() {
+        return m_regionCache.getValue();
+    }
+
+    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
+        QImage thumbnail;
+
+        if(m_thumbnailsValid) {
+            thumbnail = findThumbnail(w, h);
+        }
+        else {
+            m_thumbnails.clear();
+            m_thumbnailsValid = true;
+        }
+
+        if(thumbnail.isNull()) {
+            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent, conversionFlags);
+            cacheThumbnail(w, h, thumbnail);
+        }
+
+        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
+        return thumbnail;
+    }
+
+private:
+    inline QImage findThumbnail(qint32 w, qint32 h) {
+        QImage resultImage;
+        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h)) {
+            resultImage = m_thumbnails[w][h];
+        }
+        return resultImage;
+    }
+
+    inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
+        m_thumbnails[w][h] = image;
+    }
+
+private:
+    KisPaintDevice *m_paintDevice;
 
     struct ExactBoundsCache : KisLockFreeCache<QRect> {
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
@@ -92,78 +144,9 @@ public:
 
     ExactBoundsCache m_exactBoundsCache;
     RegionCache m_regionCache;
-};
 
-class PaintDeviceCache
-{
-public:
-    PaintDeviceCache(KisPaintDevice *paintDevice) {
-        m_paintDevice = paintDevice;
-    }
-
-
-    void setupCache() {
-        CacheData *data = static_cast<CacheData *>(m_paintDevice->dataManager()->cache());
-
-        if(!data) {
-            data = new CacheData(m_paintDevice);
-            m_paintDevice->dataManager()->setCache(data);
-        }
-
-        m_data = data;
-        invalidate();
-    }
-
-    void invalidate() {
-        m_data->m_thumbnailsValid = false;
-        m_data->m_exactBoundsCache.invalidate();
-        m_data->m_regionCache.invalidate();
-    }
-
-    QRect exactBounds() {
-        return m_data->m_exactBoundsCache.getValue();
-    }
-
-    QRegion region() {
-        return m_data->m_regionCache.getValue();
-    }
-
-    QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
-        QImage thumbnail;
-
-        if(m_data->m_thumbnailsValid) {
-            thumbnail = findThumbnail(w, h);
-        }
-        else {
-            m_data->m_thumbnails.clear();
-            m_data->m_thumbnailsValid = true;
-        }
-
-        if(thumbnail.isNull()) {
-            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), renderingIntent, conversionFlags);
-            cacheThumbnail(w, h, thumbnail);
-        }
-
-        Q_ASSERT(!thumbnail.isNull() || m_paintDevice->extent().isEmpty());
-        return thumbnail;
-    }
-
-private:
-    inline QImage findThumbnail(qint32 w, qint32 h) {
-        QImage resultImage;
-        if (m_data->m_thumbnails.contains(w) && m_data->m_thumbnails[w].contains(h)) {
-            resultImage = m_data->m_thumbnails[w][h];
-        }
-        return resultImage;
-    }
-
-    inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
-        m_data->m_thumbnails[w][h] = image;
-    }
-
-private:
-    KisPaintDevice *m_paintDevice;
-    CacheData *m_data;
+    bool m_thumbnailsValid;
+    QMap<int, QMap<int, QImage> > m_thumbnails;
 };
 
 

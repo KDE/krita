@@ -37,10 +37,12 @@ Q_SIGNALS:
     void cropWidthChanged(int newWidth);
     void forceWidthChanged(bool newForce);
     void cropHeightChanged(int newHeight);
-    void forceHeightCHanged(bool newForce);
+    void forceHeightChanged(bool newForce);
     void ratioChanged(double newRatio);
     void forceRatioChanged(bool newForce);
     void decorationChanged(int newDecoration);
+    void allowGrowChanged(bool newForce);
+    void growCenterChanged(bool newForce);
     
 public Q_SLOTS:
     void cropTypeChanged();
@@ -50,10 +52,13 @@ public Q_SLOTS:
     void cropWidthChanged();
     void forceWidthChanged();
     void cropHeightChanged();
-    void forceHeightCHanged();
+    void forceHeightChanged();
     void ratioChanged();
     void forceRatioChanged();
     void decorationChanged();
+    void cropChanged(bool updateRatio);
+    void allowGrowChanged();
+    void growCenterChanged();
 
 private:
     KisToolCrop* m_cropTool;

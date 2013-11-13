@@ -90,6 +90,26 @@
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="boolCenter">
+         <property name="toolTip">
+          <string>resize keeping center fixed</string>
+         </property>
+         <property name="text">
+          <string>center</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="boolGrow">
+         <property name="toolTip">
+          <string>allow growing the image by dragging outside bounds of the image</string>
+         </property>
+         <property name="text">
+          <string>grow</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -261,6 +281,11 @@
        <item>
         <property name="text">
          <string>Passport photo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Crosshair</string>
         </property>
        </item>
       </widget>

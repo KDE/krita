@@ -43,7 +43,7 @@ public:
         int newValue = -1;
         do {
             oldValue = m_value;
-            newValue = (oldValue + SeqNoIncrement) & ~IsValidMask;
+            newValue = incrementSeqNo(oldValue) & ~IsValidMask;
         } while(!m_value.testAndSetOrdered(oldValue, newValue));
     }
 
@@ -74,7 +74,7 @@ public:
 
                 return false;
             }
-            newValue = oldValue + SeqNoIncrement + WritersCountIncrement;
+            newValue = incrementSeqNo(oldValue) + WritersCountIncrement;
         } while(!m_value.testAndSetOrdered(oldValue, newValue));
 
         *seq = newValue;
@@ -88,11 +88,22 @@ public:
             oldValue = m_value;
 
             if (oldValue == seq) {
-                newValue = (oldValue + SeqNoIncrement - WritersCountIncrement) | IsValidMask;
+                newValue = (incrementSeqNo(oldValue) - WritersCountIncrement) | IsValidMask;
             } else {
-                newValue = (oldValue + SeqNoIncrement - WritersCountIncrement) & ~IsValidMask;
+                newValue = (incrementSeqNo(oldValue) - WritersCountIncrement) & ~IsValidMask;
             }
         } while(!m_value.testAndSetOrdered(oldValue, newValue));
+    }
+
+private:
+    int incrementSeqNo(int value) {
+        // handle overflow properly
+        if ((value & SeqNoMask) == SeqNoMask) {
+            value = value & ~SeqNoMask;
+        } else {
+            value += SeqNoIncrement;
+        }
+        return value;
     }
 
 private:

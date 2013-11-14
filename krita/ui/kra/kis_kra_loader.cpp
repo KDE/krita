@@ -349,8 +349,6 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
     KoXmlNode node = element.firstChild();
     KoXmlNode child;
 
-    QDomDocument doc;
-
     if (!node.isNull()) {
 
         if (node.isElement()) {
@@ -358,17 +356,12 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisNodeSP node = loadNode(child.toElement(), image, parent);
-                    if (!node) {
-#ifdef __GNUC__
-#warning "KisKraLoader::loadNodes: report node load failures back to the user!"
-#endif
-                    } else {
+                    if (node) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && child.childNodesCount() > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
-
                     }
                 }
             }

@@ -148,7 +148,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, O
 
     QPainterPath path;
     if (mode == CursorIsOutline){
-        path = ellipseOutline(10,10,0,0);
+        path = ellipseOutline(10,10,1.0,0).translated(info.pos());
     }
 
     return path;

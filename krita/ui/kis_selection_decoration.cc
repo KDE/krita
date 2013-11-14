@@ -123,11 +123,8 @@ void KisSelectionDecoration::antsAttackEvent()
     if (!selection) return;
 
     if (selectionIsActive()) {
-        KisPaintDeviceSP dev = view()->activeDevice();
-        if (dev) {
-            m_offset = (m_offset + 1) % 8;
-            view()->canvasBase()->updateCanvas();
-        }
+        m_offset = (m_offset + 1) % 8;
+        view()->canvasBase()->updateCanvas();
     }
 }
 

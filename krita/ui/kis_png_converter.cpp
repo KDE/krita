@@ -836,11 +836,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     // Initialize the writing
 //     png_init_io(png_ptr, fp);
     // Setup the progress function
-#ifdef __GNUC__
-#warning "KisPngCoverter::buildFile: Implement progress updating -- png_set_write_status_fn(png_ptr, progress);"
-#endif
+    // XXX: Implement progress updating -- png_set_write_status_fn(png_ptr, progress);"
 //     setProgressTotalSteps(100/*height*/);
-
 
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, options.compression);
@@ -943,9 +940,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
         if ((*it) -> type().startsWith(QString("krita_attribute:"))) { //
             // Attribute
-#ifdef __GNUC__
-#warning "it should be possible to save krita_attributes in the \"CHUNKs\""
-#endif
+            // XXX: it should be possible to save krita_attributes in the \"CHUNKs\""
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset" ) {
             dbgFile << "Saving preset information " << (*it)->description();

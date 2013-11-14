@@ -44,7 +44,7 @@
 
 inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 {
-    qreal scale = 0.5;
+    qreal scale = 0.5; Q_UNUSED(scale);
     KisGbrBrush *firstBrush = brush->testingGetBrushes().first();
 
     /**

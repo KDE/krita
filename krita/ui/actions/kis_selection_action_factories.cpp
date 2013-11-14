@@ -152,8 +152,9 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
+    Q_UNUSED(selectedRect);
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-    
+    Q_UNUSED(filled);
     bool usePattern = false;
     bool useBgColor = false;
     
@@ -193,9 +194,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 
 void KisClearActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Clear action"
-#endif
+    // XXX: "Add saving of XML data for Clear action"
 
     KisNodeSP node = view->activeNode();
     if (!node || !node->hasEditablePaintDevice()) return;
@@ -205,9 +204,7 @@ void KisClearActionFactory::run(KisView2 *view)
 
 void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Image Resize To Selection action"
-#endif
+    // XXX: "Add saving of XML data for Image Resize To Selection action"
 
     KisSelectionSP selection = view->selection();
     if (!selection) return;
@@ -221,9 +218,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
     bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
     if (haveShapesSelected) {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Cut/Copy of shapes"
-#endif
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         image->barrierLock();
         if (willCut) {
@@ -307,10 +302,7 @@ void KisPasteActionFactory::run(KisView2 *view)
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
         endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Paste of shapes"
-#endif
-
+        // XXX: "Add saving of XML data for Paste of shapes"
         view->canvasBase()->toolProxy()->paste();
     }
 }

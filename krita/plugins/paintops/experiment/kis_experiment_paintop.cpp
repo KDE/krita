@@ -304,6 +304,8 @@ QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qre
 
             i += 2;
         }
+        default:
+            ;
         }
         startPoint = endPoint;
     }

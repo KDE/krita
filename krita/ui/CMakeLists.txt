@@ -2,8 +2,11 @@
 # kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
 # warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
 # warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
-
-add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
+else (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}

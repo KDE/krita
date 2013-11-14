@@ -93,4 +93,16 @@ KRITAIMAGE_EXPORT void kis_assert_x_exception(const char *assertion, const char 
  */
 #define KIS_ASSERT_RECOVER_RETURN_VALUE(cond, val) KIS_ASSERT_RECOVER(cond) { return (val); }
 
+/**
+ * Does nothing in case of a failure. Just continues execution.
+ *
+ * Equivalent of the following:
+ *
+ * KIS_ASSERT_RECOVER(cond) {
+ *     qt_noop();
+ * }
+ *
+ */
+#define KIS_ASSERT_RECOVER_NOOP(cond) KIS_ASSERT_RECOVER(cond) { qt_noop(); }
+
 #endif /* __KIS_ASSERT_H */

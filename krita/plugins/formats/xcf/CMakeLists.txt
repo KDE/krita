@@ -2,6 +2,10 @@ add_subdirectory(tests)
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
+add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
+
+
+
 set(kritaxcfimport_PART_SRCS
     kis_xcf_import.cpp
     xcf-general.c

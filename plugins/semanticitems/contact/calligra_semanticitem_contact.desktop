@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=RDF Contact Plugin
 Name[de]=RDF-Kontaktmodul
+Name[it]=Estensione RDF dei contatti
 Name[kk]=RDF контакт плагині
 Name[nl]=Plug-in voor RDF-contactpersoon
 Name[pt]='Plugin' de Contactos em RDF
@@ -10,6 +11,7 @@ Name[sv]=Insticksprogram för RDF-kontakt
 Name[uk]=Додаток контактів RDF
 Name[x-test]=xxRDF Contact Pluginxx
 Comment=A plugin to map contact items between document and RDF database
+Comment[it]=Una estensione per associare i contatti tra documento e database RDF
 Comment[kk]=Құжаттағы және RDF деректер қорындағы контактарды сәйкестіретін плагині
 Comment[nl]=Een plug-in om verbinding te maken tussen contact-items in een document en een RDF-database
 Comment[pt]=Um 'plugin' para associar os itens do contacto entre o documento e a base de dados RDF

@@ -28,7 +28,7 @@ void TestKoColorSpaceSanity::testChannelsInfo()
 {
     foreach(const KoColorSpace* colorSpace, KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile))
     {
-        qDebug() << colorSpace->id();
+
         QCOMPARE(colorSpace->channelCount(), quint32(colorSpace->channels().size()));
         QList<int> displayPositions;
         quint32 colorChannels = 0;

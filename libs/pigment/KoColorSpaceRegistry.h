@@ -311,8 +311,17 @@ public:
      */
     QList<KoID> listKeys() const;
 
+private:
+
+    friend class KisCsConversionTest;
+    friend class KisIteratorTest;
+    friend class KisPainterTest;
+    friend class KisCrashFilterTest;
+    friend class KoColorSpacesBenchmark;
+    friend class TestKoColorSpaceSanity;
+    friend class KisActionRecorderTest;
     /**
-     * @return a list with an instance of all color space with their default profile
+     * @return a list with an instance of all color space with their default profile.
      */
     QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility, ColorSpaceListProfilesSelection pSelection);
 

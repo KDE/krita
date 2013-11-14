@@ -335,16 +335,15 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                     // And if that doesn't work get the first one
                     p = profiles[0];
                     Q_ASSERT(p);
-                    profileName = p->name();
                 }
             }
-
         }
         // We did our best, but still have no profile: and since csf->grabColorSpace
         // needs the profile to find the colorspace, we have to give up.
         if (!p) {
             return 0;
         }
+        profileName = p->name();
         const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";
@@ -612,6 +611,8 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     d->registrylock.unlock();
 
     foreach(KoColorSpaceFactory* factory, factories) {
+        // Don't test with ycbcr for now, since we don't have a default profile for it.
+        if (factory->colorModelId().id().startsWith("Y")) continue;
         if (visibility == AllColorSpaces || factory->userVisible()) {
             if (pSelection == OnlyDefaultProfile) {
                 const KoColorSpace *cs = colorSpace(factory->id());

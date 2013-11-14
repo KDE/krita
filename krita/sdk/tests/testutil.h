@@ -267,12 +267,6 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
     return true;
 }
 
-
-inline QList<const KoColorSpace*> allColorSpaces()
-{
-    return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
-}
-
 class TestNode : public KisNode
 {
     Q_OBJECT

@@ -133,7 +133,7 @@ void KisFilterManager::updateGUI()
     bool enable = false;
 
     KisNodeSP activeNode = d->view->activeNode();
-    enable = activeNode && activeNode->paintDevice() && activeNode->isEditable();
+    enable = activeNode && activeNode->hasEditablePaintDevice();
 
     d->reapplyAction->setEnabled(enable);
 

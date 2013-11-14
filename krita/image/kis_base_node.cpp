@@ -250,6 +250,11 @@ bool KisBaseNode::isEditable() const
     return editable;
 }
 
+bool KisBaseNode::hasEditablePaintDevice() const
+{
+    return paintDevice() && isEditable();
+}
+
 void KisBaseNode::setCollapsed(bool collapsed)
 {
     m_d->collapsed = collapsed;

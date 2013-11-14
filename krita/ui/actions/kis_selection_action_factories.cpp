@@ -147,7 +147,7 @@ void KisReselectActionFactory::run(KisView2 *view)
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 {
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
@@ -198,7 +198,7 @@ void KisClearActionFactory::run(KisView2 *view)
 #endif
 
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     view->canvasBase()->toolProxy()->deleteSelection();
 }
@@ -246,7 +246,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
 
         KUndo2Command *command = 0;
 
-        if (willCut && node->isEditable()) {
+        if (willCut && node->hasEditablePaintDevice()) {
             struct ClearSelection : public KisTransactionBasedCommand {
                 ClearSelection(KisNodeSP node, KisSelectionSP sel)
                     : m_node(node), m_sel(sel) {}

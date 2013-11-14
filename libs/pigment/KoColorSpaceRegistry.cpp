@@ -328,9 +328,17 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 dbgPigmentCSRegistry << "No profile at all available for " << csf << " " << csf->id();
                 p = 0;
             } else {
-                p = profiles[0];
-                Q_ASSERT(p);
+                // Get the default profile if the asked-for profile isn't available
+                profileName = csf->defaultProfile();
+                const KoColorProfile *p = profileByName(profileName);
+                if (!p) {
+                    // And if that doesn't work get the first one
+                    p = profiles[0];
+                    Q_ASSERT(p);
+                    profileName = p->name();
+                }
             }
+
         }
         // We did our best, but still have no profile: and since csf->grabColorSpace
         // needs the profile to find the colorspace, we have to give up.

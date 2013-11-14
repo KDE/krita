@@ -1168,6 +1168,7 @@ public:
             {
                 int newValue = m_cache.getValue();
                 Q_ASSERT(newValue >= m_oldValue);
+                Q_UNUSED(newValue);
             }
                 break;
             case 3:

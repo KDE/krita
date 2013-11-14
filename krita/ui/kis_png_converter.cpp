@@ -668,9 +668,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     }
                 } while (it->nextPixel());
             }
-#ifdef __GNUC__
-#warning "KisPngCoverter::buildImage(QIODevice* iod): FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
-#endif
+            // FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:

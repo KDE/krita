@@ -1,4 +1,9 @@
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+# Disable -Wswitch because of the extra definitions we here:
+# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
+# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+
+add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
 
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}

@@ -349,6 +349,7 @@ int Command::row() const
 
 QVariant Command::data(int column)
 {
+    Q_UNUSED(column);
     Q_ASSERT(column == 0);
     return name();
 }

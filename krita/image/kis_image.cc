@@ -1294,28 +1294,6 @@ void KisImage::removeAnnotation(const QString& type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    const KoColorProfile * profile = colorSpace()->profile();
-    KisAnnotationSP annotation;
-
-    if (profile) {
-#ifdef __GNUC__
-#warning "KisImage::beginAnnotations: make it possible to save any profile, not just icc profiles."
-#endif
-#if 0
-        // XXX we hardcode icc, this is correct for icc?
-        // XXX productName(), or just "ICC Profile"?
-        if (profile->valid() && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
-            }
-        }
-#endif
-    }
-
-    if (annotation)
-        addAnnotation(annotation);
-    else
-        removeAnnotation("icc");
-
     return m_d->annotations.begin();
 }
 

@@ -40,8 +40,9 @@ public:
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
-    void KDE_DEPRECATED setupPaintAction(KisRecordedPaintAction *action);
-
+    // XXX: This was marked as KDE_DEPRECATED, but no althernative was
+    //      given in the apidox.
+    void setupPaintAction(KisRecordedPaintAction *action);
 
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);

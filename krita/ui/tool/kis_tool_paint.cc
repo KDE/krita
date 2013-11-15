@@ -396,19 +396,6 @@ void KisToolPaint::slotPopupQuickHelp()
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
 
-
-void KisToolPaint::resetCursorStyle()
-{
-    KisTool::resetCursorStyle();
-    KisConfig cfg;
-    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        if (m_supportOutline) {
-            // do not show cursor, tool will paint outline
-                useCursor(KisCursor::blankCursor());
-        }
-    }
-}
-
 void KisToolPaint::updateTabletPressureSamples()
 {
     KisConfig cfg;

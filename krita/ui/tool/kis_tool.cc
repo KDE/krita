@@ -711,31 +711,6 @@ void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
     useCursor(d->cursor);
-
-    switch (cfg.cursorStyle()) {
-    case CURSOR_STYLE_TOOLICON:
-        useCursor(d->cursor);
-        break;
-    case CURSOR_STYLE_CROSSHAIR:
-    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
-        useCursor(KisCursor::crossCursor());
-        break;
-    case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::arrowCursor());
-        break;
-    case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor());
-        break;
-    case CURSOR_STYLE_SMALL_ROUND:
-    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
-        useCursor(KisCursor::roundCursor());
-        break;
-    case CURSOR_STYLE_OUTLINE:
-        break;
-    default:
-        // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        ;
-    }
 }
 
 

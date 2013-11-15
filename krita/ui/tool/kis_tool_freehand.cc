@@ -87,6 +87,34 @@ KisToolFreehand::~KisToolFreehand()
     delete m_infoBuilder;
 }
 
+void KisToolFreehand::resetCursorStyle()
+{
+    KisConfig cfg;
+
+    switch (cfg.cursorStyle()) {
+    case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+        useCursor(KisCursor::crossCursor());
+        break;
+    case CURSOR_STYLE_POINTER:
+        useCursor(KisCursor::arrowCursor());
+        break;
+    case CURSOR_STYLE_NO_CURSOR:
+        useCursor(KisCursor::blankCursor());
+        break;
+    case CURSOR_STYLE_SMALL_ROUND:
+    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        useCursor(KisCursor::roundCursor());
+        break;
+    case CURSOR_STYLE_OUTLINE:
+        useCursor(KisCursor::blankCursor());
+        break;
+    case CURSOR_STYLE_TOOLICON:
+    default:
+        KisToolPaint::resetCursorStyle();
+    }
+}
+
 KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
 {
     return m_infoBuilder;

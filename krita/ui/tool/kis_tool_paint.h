@@ -147,7 +147,6 @@ private slots:
     void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 

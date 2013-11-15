@@ -296,11 +296,6 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
-void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &/*converter*/)
-{
-    paintToolOutline(&gc,pixelToView(m_currentOutline));
-}
-
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {

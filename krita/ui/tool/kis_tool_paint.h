@@ -161,6 +161,9 @@ protected:
     bool m_toForegroundColor;
 
 private:
+    QPainterPath tryFixTooBigBrush(const QPainterPath &originalOutline);
+
+private:
 
     bool m_specialHoverModifier;
     QGridLayout *m_optionWidgetLayout;

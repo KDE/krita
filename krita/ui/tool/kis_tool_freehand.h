@@ -72,8 +72,6 @@ protected:
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
                                         KisPaintOpSettings::OutlineMode outlineMode);
 

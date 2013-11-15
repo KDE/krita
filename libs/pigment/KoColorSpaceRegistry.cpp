@@ -185,6 +185,7 @@ void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& t
 
 QString KoColorSpaceRegistry::profileAlias(const QString& _name) const
 {
+    QReadLocker l(&d->registrylock);
     return d->profileAlias.value(_name, _name);
 }
 
@@ -308,9 +309,15 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         profileName = csf->defaultProfile();
+        // There's nothing we can do now
+    }
+
+    if (profileName.isEmpty()) {
+        return 0;
     }
 
     if (!isCached(csID, profileName)) {
+
         d->registrylock.lockForRead();
         KoColorSpaceFactory *csf = d->colorSpaceFactoryRegistry.value(csID);
         d->registrylock.unlock();
@@ -331,11 +338,12 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 // Get the default profile if the asked-for profile isn't available
                 profileName = csf->defaultProfile();
                 const KoColorProfile *p = profileByName(profileName);
-                if (!p) {
+                if (!p && profiles.size() > 0) {
                     // And if that doesn't work get the first one
                     p = profiles[0];
                     Q_ASSERT(p);
                 }
+
             }
         }
         // We did our best, but still have no profile: and since csf->grabColorSpace
@@ -344,6 +352,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
             return 0;
         }
         profileName = p->name();
+
         const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";

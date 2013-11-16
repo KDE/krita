@@ -100,11 +100,6 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
-    void showOutlineTemporary();
-
-private slots:
-    void hideOutline();
-
 protected:
 
     KisSmoothingOptions m_smoothingOptions;
@@ -112,10 +107,6 @@ protected:
     double m_magnetism;
 
 private:
-
-    QTimer m_outlineTimer;
-    bool m_explicitShowOutline;
-
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;

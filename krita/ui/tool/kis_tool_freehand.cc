@@ -60,20 +60,13 @@
 #include "strokes/freehand_stroke.h"
 
 
-static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
-
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
     : KisToolPaint(canvas, cursor)
 {
-    m_explicitShowOutline = false;
-
     m_assistant = false;
     m_magnetism = 1.0;
 
     setSupportOutline(true);
-
-    m_outlineTimer.setSingleShot(true);
-    connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
@@ -241,9 +234,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-    /**
-     * Update outline
-     */
     if (mode() == KisTool::PAINT_MODE) {
         requestUpdateOutline(e->point);
 
@@ -343,19 +333,6 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
         }
     }
     return perspective;
-}
-
-void KisToolFreehand::showOutlineTemporary()
-{
-    m_explicitShowOutline = true;
-    m_outlineTimer.start(HIDE_OUTLINE_TIMEOUT);
-    requestUpdateOutline(m_outlineDocPoint);
-}
-
-void KisToolFreehand::hideOutline()
-{
-    m_explicitShowOutline = false;
-    requestUpdateOutline(m_outlineDocPoint);
 }
 
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,

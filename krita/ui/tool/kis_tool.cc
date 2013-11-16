@@ -450,11 +450,6 @@ KisTool::ToolMode KisTool::mode() const {
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(false);
-    }
-
     KisConfig cfg;
 
     if (isGestureSupported() &&
@@ -482,11 +477,6 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(true);
-    }
     KisConfig cfg;
 
     if (mode() == GESTURE_MODE) {

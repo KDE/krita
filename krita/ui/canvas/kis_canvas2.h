@@ -178,7 +178,6 @@ public slots:
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;
-    void setSmoothingEnabled(bool smooth);
 
     void channelSelectionChanged();
 

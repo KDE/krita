@@ -55,8 +55,6 @@ public:
 
     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
-    void setSmoothingEnabled(bool smooth);
-
 public: // QWidget
 
     /// reimplemented method from superclass

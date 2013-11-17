@@ -94,9 +94,9 @@ public:
     QTouchEvent *lastTouchEvent() const;
 
     /**
-     * Convert a widget position to a pixel position.
+     * Convert a widget position to a document position.
      */
-    QPointF widgetToPixel(const QPointF &position);
+    QPointF widgetToDocument(const QPointF &position);
 
 public Q_SLOTS:
     void setMirrorAxis();

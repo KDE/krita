@@ -520,7 +520,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToPixel(mouseEvent->posF()))) {
+        if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToDocument(mouseEvent->posF()))) {
             retval = true;
         } else {
             //Make sure the input actions know we are active.
@@ -579,7 +579,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
             //Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->mouseMoveEvent(mouseEvent, widgetToPixel(mouseEvent->posF()));
+            d->toolProxy->mouseMoveEvent(mouseEvent, widgetToDocument(mouseEvent->posF()));
         }
         retval = true;
         event->setAccepted(retval);
@@ -755,7 +755,7 @@ void KisInputManager::slotToolChanged()
     }
 }
 
-QPointF KisInputManager::widgetToPixel(const QPointF& position)
+QPointF KisInputManager::widgetToDocument(const QPointF& position)
 {
     QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
     return d->canvas->coordinatesConverter()->widgetToDocument(pixel);

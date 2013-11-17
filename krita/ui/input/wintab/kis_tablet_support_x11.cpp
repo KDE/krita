@@ -21,23 +21,12 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QWidget>
+#include <QX11Info>
 
 #include "kis_debug.h"
 #include <input/kis_tablet_event.h>
 #include "kis_tablet_support.h"
 #include "wacomcfg.h"
-
-#include <X11/Xlib.h>
-#include <X11/extensions/XInput.h>
-
-#include <input/wintab/config-qt_x11_p.h>
-
-/**
- * WARNING:
- * We are linking to an undocumented exported symbol of QtGui.
- * Yes, we know what we are doing.
- */
-extern QX11Data *qt_x11Data;
 
 /**
  * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
@@ -65,10 +54,117 @@ static PtrWacomConfigCloseDevice ptrWacomConfigCloseDevice = 0;
 static PtrWacomConfigTerm ptrWacomConfigTerm = 0;
 Q_GLOBAL_STATIC(QByteArray, wacomDeviceName)
 
+// link Xinput statically
+#define XINPUT_LOAD(symbol) symbol
+
+typedef int (*PtrXCloseDevice)(Display *, XDevice *);
+typedef XDeviceInfo* (*PtrXListInputDevices)(Display *, int *);
+typedef XDevice* (*PtrXOpenDevice)(Display *, XID);
+typedef void (*PtrXFreeDeviceList)(XDeviceInfo *);
+typedef int (*PtrXSelectExtensionEvent)(Display *, Window, XEventClass *, int);
+
+struct KisX11Data
+{
+    Display *display;
+
+    bool use_xinput;
+    int xinput_major;
+    int xinput_eventbase;
+    int xinput_errorbase;
+
+    PtrXCloseDevice ptrXCloseDevice;
+    PtrXListInputDevices ptrXListInputDevices;
+    PtrXOpenDevice ptrXOpenDevice;
+    PtrXFreeDeviceList ptrXFreeDeviceList;
+    PtrXSelectExtensionEvent ptrXSelectExtensionEvent;
+
+    /* Warning: if you modify this list, modify the names of atoms in kis_x11_atomnames as well! */
+    enum X11Atom {
+        XWacomStylus,
+        XWacomCursor,
+        XWacomEraser,
+
+        XTabletStylus,
+        XTabletEraser,
+
+        NPredefinedAtoms,
+        NAtoms = NPredefinedAtoms
+    };
+    Atom atoms[NAtoms];
+};
+
+/* Warning: if you modify this string, modify the list of atoms in KisX11Data as well! */
+static const char * kis_x11_atomnames = {
+    // Wacom old. (before version 0.10)
+    "Wacom Stylus\0"
+    "Wacom Cursor\0"
+    "Wacom Eraser\0"
+
+    // Tablet
+    "STYLUS\0"
+    "ERASER\0"
+};
+
+KisX11Data *kis_x11Data = 0;
+
+#define KIS_ATOM(x) kis_x11Data->atoms[KisX11Data::x]
+#define KIS_X11 kis_x11Data
+
+static void kis_x11_create_intern_atoms()
+{
+    const char *names[KisX11Data::NAtoms];
+    const char *ptr = kis_x11_atomnames;
+
+    int i = 0;
+    while (*ptr) {
+        names[i++] = ptr;
+        while (*ptr)
+            ++ptr;
+        ++ptr;
+    }
+
+    Q_ASSERT(i == KisX11Data::NPredefinedAtoms);
+    Q_ASSERT(i == KisX11Data::NAtoms);
+
+#if defined(XlibSpecificationRelease) && (XlibSpecificationRelease >= 6)
+    XInternAtoms(KIS_X11->display, (char **)names, i, False, KIS_X11->atoms);
+#else
+    for (i = 0; i < KisX11Data::NAtoms; ++i)
+        KIS_X11->atoms[i] = XInternAtom(KIS_X11->display, (char *)names[i], False);
+#endif
+}
 
 void kis_x11_init_tablet()
 {
-    if (X11->use_xinput) {
+    // TODO: free this structure on exit
+    KIS_X11 = new KisX11Data;
+    KIS_X11->display = QX11Info::display();
+
+    kis_x11_create_intern_atoms();
+
+    // XInputExtension
+    KIS_X11->use_xinput = false;
+    KIS_X11->xinput_major = 0;
+    KIS_X11->xinput_eventbase = 0;
+    KIS_X11->xinput_errorbase = 0;
+
+    // See if Xinput is supported on the connected display
+    KIS_X11->ptrXCloseDevice = 0;
+    KIS_X11->ptrXListInputDevices = 0;
+    KIS_X11->ptrXOpenDevice = 0;
+    KIS_X11->ptrXFreeDeviceList = 0;
+    KIS_X11->ptrXSelectExtensionEvent = 0;
+    KIS_X11->use_xinput = XQueryExtension(KIS_X11->display, "XInputExtension", &KIS_X11->xinput_major,
+                                          &KIS_X11->xinput_eventbase, &KIS_X11->xinput_errorbase);
+    if (KIS_X11->use_xinput) {
+        KIS_X11->ptrXCloseDevice = XINPUT_LOAD(XCloseDevice);
+        KIS_X11->ptrXListInputDevices = XINPUT_LOAD(XListInputDevices);
+        KIS_X11->ptrXOpenDevice = XINPUT_LOAD(XOpenDevice);
+        KIS_X11->ptrXFreeDeviceList = XINPUT_LOAD(XFreeDeviceList);
+        KIS_X11->ptrXSelectExtensionEvent = XINPUT_LOAD(XSelectExtensionEvent);
+    }
+
+    if (KIS_X11->use_xinput) {
         int ndev,
             i,
             j;
@@ -81,8 +177,8 @@ void kis_x11_init_tablet()
         XAxisInfoPtr a;
         XDevice *dev = 0;
 
-        if (X11->ptrXListInputDevices) {
-            devices = X11->ptrXListInputDevices(X11->display, &ndev);
+        if (KIS_X11->ptrXListInputDevices) {
+            devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
             if (!devices)
                 qWarning("QApplication: Failed to get list of tablet devices");
         }
@@ -100,20 +196,12 @@ void kis_x11_init_tablet()
 #else
 
 
-    #if QT_VERSION >= 0x040700
-                if (devs->type == ATOM(XWacomStylus) || devs->type == ATOM(XTabletStylus)) {
-    #else
-                if (devs->type == ATOM(XWacomStylus)) {
-    #endif
+                if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus)) {
                     deviceType = QTabletEvent::Stylus;
                     if (wacomDeviceName()->isEmpty())
                         wacomDeviceName()->append(devs->name);
                     gotStylus = true;
-    #if QT_VERSION >= 0x040700
-                } else if (devs->type == ATOM(XWacomEraser) || devs->type == ATOM(XTabletEraser)) {
-    #else
-                } else if (devs->type == ATOM(XWacomEraser)) {
-    #endif
+                } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
                     deviceType = QTabletEvent::XFreeEraser;
                     gotEraser = true;
                 }
@@ -124,8 +212,8 @@ void kis_x11_init_tablet()
                 continue;
 
             if (gotStylus || gotEraser) {
-                if (X11->ptrXOpenDevice)
-                    dev = X11->ptrXOpenDevice(X11->display, devs->id);
+                if (KIS_X11->ptrXOpenDevice)
+                    dev = KIS_X11->ptrXOpenDevice(KIS_X11->display, devs->id);
 
                 if (!dev)
                     continue;
@@ -216,8 +304,8 @@ void kis_x11_init_tablet()
                 qt_tablet_devices()->append(device_data);
             } // if (gotStylus || gotEraser)
         }
-        if (X11->ptrXFreeDeviceList)
-            X11->ptrXFreeDeviceList(devices);
+        if (KIS_X11->ptrXFreeDeviceList)
+            KIS_X11->ptrXFreeDeviceList(devices);
     }
 }
 
@@ -225,7 +313,7 @@ void fetchWacomToolId(int &deviceType, qint64 &serialId)
 {
     if (ptrWacomConfigInit == 0) // we actually have the lib
         return;
-    WACOMCONFIG *config = ptrWacomConfigInit(X11->display, 0);
+    WACOMCONFIG *config = ptrWacomConfigInit(KIS_X11->display, 0);
     if (config == 0)
         return;
     WACOMDEVICE *device = ptrWacomConfigOpenDevice (config, wacomDeviceName()->constData());
@@ -284,15 +372,6 @@ void fetchWacomToolId(int &deviceType, qint64 &serialId)
     ptrWacomConfigCloseDevice (device);
     ptrWacomConfigTerm(config);
 }
-
-struct qt_tablet_motion_data
-{
-    bool filterByWidget;
-    const QWidget *widget;
-    const QWidget *etWidget;
-    int tabletMotionType;
-    bool error; // found a reason to stop searching
-};
 
 static Qt::MouseButtons translateMouseButtons(int s)
 {

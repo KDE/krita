@@ -26,9 +26,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
 /**
   * The command for image locking inside macro commands.
   *

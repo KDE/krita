@@ -23,10 +23,10 @@
 
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
-#include <KoServiceProvider.h>
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -147,13 +147,14 @@ void KisReselectActionFactory::run(KisView2 *view)
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 {
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
+    Q_UNUSED(selectedRect);
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-    
+    Q_UNUSED(filled);
     bool usePattern = false;
     bool useBgColor = false;
     
@@ -193,21 +194,17 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 
 void KisClearActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Clear action"
-#endif
+    // XXX: "Add saving of XML data for Clear action"
 
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 
 void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Image Resize To Selection action"
-#endif
+    // XXX: "Add saving of XML data for Image Resize To Selection action"
 
     KisSelectionSP selection = view->selection();
     if (!selection) return;
@@ -221,9 +218,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
     bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
     if (haveShapesSelected) {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Cut/Copy of shapes"
-#endif
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         image->barrierLock();
         if (willCut) {
@@ -237,12 +232,16 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         if (!node) return;
 
         image->barrierLock();
-        ActionHelper::copyFromDevice(view, node->paintDevice());
+        KisPaintDeviceSP dev = node->paintDevice();
+        if (!dev) {
+            dev = node->projection();
+        }
+        ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
         KUndo2Command *command = 0;
 
-        if (willCut && node->isEditable()) {
+        if (willCut && node->hasEditablePaintDevice()) {
             struct ClearSelection : public KisTransactionBasedCommand {
                 ClearSelection(KisNodeSP node, KisSelectionSP sel)
                     : m_node(node), m_sel(sel) {}
@@ -303,10 +302,7 @@ void KisPasteActionFactory::run(KisView2 *view)
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
         endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Paste of shapes"
-#endif
-
+        // XXX: "Add saving of XML data for Paste of shapes"
         view->canvasBase()->toolProxy()->paste();
     }
 }
@@ -341,7 +337,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow *win = doc->documentPart()->createMainWindow();
     win->show();
     win->setRootDocument(doc);
 }

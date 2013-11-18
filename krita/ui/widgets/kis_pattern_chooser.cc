@@ -31,7 +31,6 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
-#include "KoColorSpace.h"
 
 #include "kis_global.h"
 #include "kis_pattern.h"

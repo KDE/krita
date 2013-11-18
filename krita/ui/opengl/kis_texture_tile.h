@@ -63,9 +63,7 @@ public:
         NearestFilterMode,  // nearest
         BilinearFilterMode, // linear, no mipmap
         TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
-        nearest_mipmap_nearest,
-        nearest_mipmap_linear,
-        linear_mipmap_nearest
+        HighQualityFiltering // Mipmaps + custom shader
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
@@ -90,7 +88,10 @@ public:
         return m_tileRectInTexturePixels;
     }
 
+    void bindToActiveTexture();
+
 private:
+    void setNeedsMipmapRegeneration();
 
     GLuint m_textureId;
 
@@ -104,6 +105,7 @@ private:
     QRect m_textureRectInImagePixels;
     FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
+    bool m_needsMipmapRegeneration;
 
     Q_DISABLE_COPY(KisTextureTile)
 };

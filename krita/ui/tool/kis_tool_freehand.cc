@@ -60,20 +60,13 @@
 #include "strokes/freehand_stroke.h"
 
 
-static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
-
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
     : KisToolPaint(canvas, cursor)
 {
-    m_explicitShowOutline = false;
-
     m_assistant = false;
     m_magnetism = 1.0;
 
     setSupportOutline(true);
-
-    m_outlineTimer.setSingleShot(true);
-    connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
 
     m_infoBuilder = new KisToolPaintingInformationBuilder(this);
     m_recordingAdapter = new KisRecordingAdapter();
@@ -85,6 +78,34 @@ KisToolFreehand::~KisToolFreehand()
     delete m_helper;
     delete m_recordingAdapter;
     delete m_infoBuilder;
+}
+
+void KisToolFreehand::resetCursorStyle()
+{
+    KisConfig cfg;
+
+    switch (cfg.cursorStyle()) {
+    case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
+        useCursor(KisCursor::crossCursor());
+        break;
+    case CURSOR_STYLE_POINTER:
+        useCursor(KisCursor::arrowCursor());
+        break;
+    case CURSOR_STYLE_NO_CURSOR:
+        useCursor(KisCursor::blankCursor());
+        break;
+    case CURSOR_STYLE_SMALL_ROUND:
+    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        useCursor(KisCursor::roundCursor());
+        break;
+    case CURSOR_STYLE_OUTLINE:
+        useCursor(KisCursor::blankCursor());
+        break;
+    case CURSOR_STYLE_TOOLICON:
+    default:
+        KisToolPaint::resetCursorStyle();
+    }
 }
 
 KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
@@ -213,9 +234,6 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-    /**
-     * Update outline
-     */
     if (mode() == KisTool::PAINT_MODE) {
         requestUpdateOutline(e->point);
 
@@ -296,11 +314,6 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
-void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &/*converter*/)
-{
-    paintToolOutline(&gc,pixelToView(m_currentOutline));
-}
-
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {
@@ -322,40 +335,14 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
     return perspective;
 }
 
-void KisToolFreehand::showOutlineTemporary()
-{
-    m_explicitShowOutline = true;
-    m_outlineTimer.start(HIDE_OUTLINE_TIMEOUT);
-    requestUpdateOutline(m_outlineDocPoint);
-}
-
-void KisToolFreehand::hideOutline()
-{
-    m_explicitShowOutline = false;
-    requestUpdateOutline(m_outlineDocPoint);
-}
-
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
-    const KisPaintOp *paintOp = m_helper->currentPaintOp();
-    if (paintOp){
-        scale = paintOp->currentScale();
-        rotation = paintOp->currentRotation();
-    }
-
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
-    QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
 
-    return path;
+    return m_helper->paintOpOutline(imagePos,
+                                    currentPaintOpPreset()->settings(),
+                                    outlineMode);
 }
 
 #include "kis_tool_freehand.moc"

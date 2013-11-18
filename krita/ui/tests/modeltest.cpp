@@ -476,6 +476,10 @@ void ModelTest::rowsAboutToBeInserted(const QModelIndex &parent, int start, int 
  */
 void ModelTest::rowsInserted(const QModelIndex & parent, int start, int end)
 {
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+
     Changing c = insert.pop();
     Q_ASSERT(c.parent == parent);
     Q_ASSERT(c.oldSize + (end - start + 1) == model->rowCount(parent));
@@ -528,6 +532,10 @@ void ModelTest::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
  */
 void ModelTest::rowsRemoved(const QModelIndex & parent, int start, int end)
 {
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+
     Changing c = remove.pop();
     Q_ASSERT(c.parent == parent);
     Q_ASSERT(c.oldSize - (end - start + 1) == model->rowCount(parent));

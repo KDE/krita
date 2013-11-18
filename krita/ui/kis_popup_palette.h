@@ -28,13 +28,13 @@
 #include <kis_types.h>
 #include <QWidget>
 #include <QQueue>
-#include <KoColor.h>
 #include <KoTriangleColorSelector.h>
 
 class KisFavoriteBrushData;
 class KoFavoriteResourceManager;
 class QWidget;
 class KisTriangleColorSelector;
+class KoColor;
 
 class KisPopupPalette : public QWidget
 {
@@ -64,7 +64,6 @@ protected:
     void mouseReleaseEvent (QMouseEvent*);
     void mouseMoveEvent (QMouseEvent*);
     void mousePressEvent (QMouseEvent*);
-    void tabletEvent (QTabletEvent*);
     
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors

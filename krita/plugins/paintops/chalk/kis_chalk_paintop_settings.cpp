@@ -42,18 +42,13 @@ int KisChalkPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisChalkPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisChalkPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    Q_UNUSED(scale);
-    Q_UNUSED(rotation);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal size = getInt(CHALK_RADIUS) * 2 + 1;
-        QRectF rc(0, 0, size, size);
-        rc.translate(-rc.center());
-        path.addEllipse(rc);
-        path.translate(pos);
+        path = ellipseOutline(size, size, 1.0, 0.0);
+        path.translate(info.pos());
     }
     return path;
 }
-

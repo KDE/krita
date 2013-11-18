@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
-    <height>445</height>
+    <width>616</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,6 +20,9 @@
       <widget class="QLabel" name="lblName">
        <property name="text">
         <string>&amp;Name:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>txtName</cstring>
@@ -50,6 +53,9 @@
             <property name="text">
              <string>&amp;Predefined:</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
             <property name="buddy">
              <cstring>cmbPredefined</cstring>
             </property>
@@ -71,7 +77,16 @@
          <layout class="QHBoxLayout">
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -104,7 +119,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -146,7 +170,16 @@
           </item>
           <item>
            <layout class="QVBoxLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -370,13 +403,25 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QHBoxLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="textLabel1">
            <property name="text">
             <string>Transparent</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -433,14 +478,14 @@
       </item>
       <item row="0" column="1">
        <widget class="KColorButton" name="cmbColor">
-        <property name="color">
+        <property name="color" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
           <blue>255</blue>
          </color>
         </property>
-        <property name="defaultColor">
+        <property name="defaultColor" stdset="0">
          <color>
           <red>255</red>
           <green>255</green>
@@ -454,7 +499,16 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -495,6 +549,7 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>

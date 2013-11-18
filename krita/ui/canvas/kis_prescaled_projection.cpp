@@ -29,7 +29,6 @@
 #include <QPainter>
 
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_config.h"
@@ -275,6 +274,11 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
 void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+}
+
+void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_d->projectionBackend->setChannelFlags(channelFlags);
 }
 
 void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)

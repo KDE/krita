@@ -108,8 +108,7 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:plugin");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QUrl storeUrl;//= context.odfSavingContext().store()->urlOfStore();
-    QString name = videoData->tagForSaving(storeUrl, m_videoCollection->saveCounter);
+    QString name = videoData->tagForSaving(m_videoCollection->saveCounter);
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");

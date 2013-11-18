@@ -20,11 +20,12 @@
 #ifndef __koDocumentRdfEditWidget_h__
 #define __koDocumentRdfEditWidget_h__
 
+#include "kordf_export.h"
 #include "RdfForward.h"
+// Calligra
+#include <KoPageWidgetItem.h>
+// Qt
 #include <QWidget>
-#include <KoDocumentInfoDlg.h>
-#include <klocale.h>
-#include <kordf_export.h>
 
 class KoDocumentRdf;
 class KoSemanticStylesheet;
@@ -68,8 +69,8 @@ public:
     /** OK button in dialog, if this returns false then do not close the dialog */
     void apply();
 
-    const QString name() const;
-    const QLatin1String icon() const;
+    QString name() const;
+    QString iconName() const;
 
 public slots:
 
@@ -109,16 +110,14 @@ public slots:
      */
     void sparqlExecute();
 
+private slots:
+
     /**
      * This methods set the default stylesheet to the
      * user selection for each type of KoRdfSemanticItem.
      */
-    void defaultContactsSheetButton();
-    void defaultEventsSheetButton();
-    void defaultLocationsSheetButton();
-    void defaultAllSheetButton();
-
-private slots:
+    void onDefaultSheetButtonClicked();
+    void onDefaultAllSheetButtonClicked();
 
     /**
      * Show a context menu for the semantic treeview
@@ -133,12 +132,12 @@ private slots:
 private:
 
     hKoSemanticStylesheet stylesheetFromComboBox(QComboBox *w) const;
+    void applyStylesheetFromComboBox(QComboBox *comboBox) const;
 
+private:
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;
 
 };
-
-
 
 #endif

@@ -22,7 +22,6 @@
 
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
-#include "KoServiceProvider.h"
 #include "KoPart.h"
 
 #include <QFile>
@@ -200,8 +199,12 @@ void KoVersionDialog::slotOpen()
     tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if (!m_doc->documentPart()->shells().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+    if (!m_doc->documentPart()->mainWindows().isEmpty()) { //open the version in a new window if possible
+        KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(m_doc->nativeOasisMimeType());
+        if (entry.isEmpty()) {
+            entry = KoDocumentEntry::queryByMimeType(m_doc->nativeFormatMimeType());
+        }
+        Q_ASSERT(!entry.isEmpty());
         QString errorMsg;
         KoPart *part= entry.createKoPart(&errorMsg);
         if (!part) {
@@ -209,9 +212,9 @@ void KoVersionDialog::slotOpen()
                 KMessageBox::error(0, errorMsg);
             return;
         }
-        KoMainWindow *shell = new KoMainWindow(part->componentData());
-        shell->openDocument(tmp.fileName());
-        shell->show();
+        KoMainWindow *mainWindow = part->createMainWindow();
+        mainWindow ->openDocument(tmp.fileName());
+        mainWindow ->show();
     } else {
         m_doc->openUrl(tmp.fileName());
     }

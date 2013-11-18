@@ -44,6 +44,26 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
+int KisToolBrush::smoothingType() const
+{
+    return m_smoothingOptions.smoothingType;
+}
+
+bool KisToolBrush::smoothPressure() const
+{
+    return m_smoothingOptions.smoothPressure;
+}
+
+int KisToolBrush::smoothnessQuality() const
+{
+    return m_smoothingOptions.smoothnessDistance;
+}
+
+qreal KisToolBrush::smoothnessFactor() const
+{
+    return m_smoothingOptions.tailAggressiveness;
+}
+
 void KisToolBrush::slotSetSmoothingType(int index)
 {
     switch (index) {
@@ -66,16 +86,19 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_sliderTailAggressiveness->setEnabled(true);
         m_chkSmoothPressure->setEnabled(true);
     }
+    emit smoothingTypeChanged();
 }
 
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
     m_smoothingOptions.smoothnessDistance = distance;
+    emit smoothnessQualityChanged();
 }
 
 void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
     m_smoothingOptions.tailAggressiveness = argh_rhhrr;
+    emit smoothnessFactorChanged();
 }
 
 void KisToolBrush::setSmoothPressure(bool value)

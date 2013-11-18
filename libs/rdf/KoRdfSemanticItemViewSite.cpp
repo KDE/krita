@@ -19,11 +19,13 @@
 
 #include "KoRdfSemanticItemViewSite.h"
 #include "KoDocumentRdf.h"
-#include "KoCanvasBase.h"
-#include "KoCanvasResourceManager.h"
-#include "KoToolProxy.h"
-#include "KoText.h"
-#include "KoTextEditor.h"
+// main
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceManager.h>
+#include <KoToolProxy.h>
+#include <KoText.h>
+#include <KoTextEditor.h>
+// KDE
 #include <kdebug.h>
 
 using namespace Soprano;

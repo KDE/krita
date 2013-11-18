@@ -28,7 +28,7 @@
 #include <KoColorSpaceRegistry.h>
 
 
-bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
+bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 {
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
@@ -60,7 +60,7 @@ bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 
 }
 
-bool testFilter(KisFilterSP f)
+bool KisCrashFilterTest::testFilter(KisFilterSP f)
 {
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     bool ok = false;

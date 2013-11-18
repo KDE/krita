@@ -42,7 +42,7 @@ KoScriptingModule::KoScriptingModule(QObject *parent, const QString &name)
 {
     setObjectName(name);
     d->view = dynamic_cast<KoView*>(parent);
-    //if (d->view) KoMainWindow *mainwindow = d->view->shell();
+    //if (d->view) KoMainWindow *mainwindow = d->view->mainWindow();
 }
 
 KoScriptingModule::~KoScriptingModule()
@@ -65,11 +65,6 @@ void KoScriptingModule::setView(KoView *view)
 QObject *KoScriptingModule::application()
 {
     return qApp->findChild<KoApplicationAdaptor*>();
-}
-
-QObject *KoScriptingModule::shell()
-{
-    return d->view ? d->view->shell() : 0;
 }
 
 QWidget *KoScriptingModule::mainWindow()

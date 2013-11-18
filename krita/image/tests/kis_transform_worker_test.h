@@ -27,8 +27,15 @@ class KisTransformWorkerTest : public QObject
 private slots:
 
     void testCreation();
-    void testMirrorX();
-    void testMirrorY();
+
+    void testMirrorX_Even();
+    void testMirrorX_Odd();
+    void testMirrorY_Even();
+    void testMirrorY_Odd();
+
+    void benchmarkMirrorX();
+    void benchmarkMirrorY();
+
     void testOffset();
     void testMirrorTransactionX();
     void testMirrorTransactionY();

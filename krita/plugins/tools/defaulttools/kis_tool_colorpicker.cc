@@ -48,6 +48,8 @@
 #include "KoColor.h"
 #include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
+#include <KoChannelInfo.h>
+#include <KoMixColorsOp.h>
 
 namespace
 {
@@ -379,6 +381,17 @@ void KisToolColorPicker::updateOptionWidget()
     m_optionsWidget->cmbSources->setCurrentIndex(SAMPLE_MERGED + !m_config.sampleMerged);
     m_optionsWidget->cbPalette->setChecked(m_config.addPalette);
     m_optionsWidget->radius->setValue(m_config.radius);
+}
+
+void KisToolColorPicker::setToForeground(bool newValue)
+{
+    m_config.toForegroundColor = newValue;
+    emit toForegroundChanged();
+}
+
+bool KisToolColorPicker::toForeground() const
+{
+    return m_config.toForegroundColor;
 }
 
 void KisToolColorPicker::slotSetUpdateColor(bool state)

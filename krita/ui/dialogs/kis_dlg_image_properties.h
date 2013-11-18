@@ -25,7 +25,6 @@
 
 class KoID;
 class KoColorSpace;
-class KoColorProfile;
 
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {

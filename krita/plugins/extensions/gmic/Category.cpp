@@ -29,7 +29,7 @@ void Category::add(Component* c)
 
 void Category::processCategoryName(const QString& line)
 {
-
+    Q_UNUSED(line);
 }
 
 Category::Category(Component * parent):m_parent(parent)
@@ -97,6 +97,7 @@ int Category::columnCount() const
 
 QVariant Category::data(int column)
 {
+    Q_UNUSED(column);
     return name();
 }
 

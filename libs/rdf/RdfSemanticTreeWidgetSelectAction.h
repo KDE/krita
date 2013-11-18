@@ -20,15 +20,18 @@
 #ifndef __rdf_RdfSemanticTreeWidgetSelectAction_h__
 #define __rdf_RdfSemanticTreeWidgetSelectAction_h__
 
-#include "RdfForward.h"
+#include "kordf_export.h"
 #include "RdfSemanticTreeWidgetAction.h"
+#include "KoRdfSemanticItem.h"
 
-class RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
+
+class KORDF_EXPORT RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
 {
     hKoRdfSemanticItem si;
 public:
     RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas,
-            hKoRdfSemanticItem si, QString name = QString("Select"));
+            hKoRdfSemanticItem si, const QString &name = QString("Select"));
+
     virtual ~RdfSemanticTreeWidgetSelectAction();
     virtual void activated();
 };

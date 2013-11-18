@@ -23,12 +23,11 @@
 
 #include <cfloat>
 
-#include <QColor>
+#include <KoColor.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "KoColorSpaceRegistry.h"
 
 #include <KoColorModelStandardIds.h>
 

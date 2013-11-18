@@ -41,6 +41,7 @@ using namespace Calligra::Sheets;
  K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables_plugin"))
 
 PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
+ : QObject(parent)
 {
     setComponentData(PivotPluginFactory::componentData());
   //  setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/pivottables.rc"), true);

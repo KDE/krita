@@ -88,12 +88,6 @@ KoProgressProxy* KisProgressWidget::progressProxy()
     return m_progressBar;
 }
 
-KoProgressUpdater* KisProgressWidget::createUpdater(KoProgressUpdater::Mode mode)
-{
-    KoProgressUpdater* updater = new KisProgressUpdater(this, m_progressBar, mode);
-    return updater;
-}
-
 void KisProgressWidget::cancel()
 {
     foreach(KoProgressUpdater* updater, m_activeUpdaters) {

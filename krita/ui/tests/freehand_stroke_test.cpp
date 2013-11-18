@@ -88,5 +88,17 @@ void FreehandStrokeTest::testColorSmudgeStroke()
     tester.test();
 }
 
+void FreehandStrokeTest::testAutoTextured17()
+{
+    FreehandStrokeTester tester("auto_textured_17.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testAutoTextured38()
+{
+    FreehandStrokeTester tester("auto_textured_38.kpp");
+    tester.test();
+}
+
 QTEST_KDEMAIN(FreehandStrokeTest, GUI)
 #include "freehand_stroke_test.moc"

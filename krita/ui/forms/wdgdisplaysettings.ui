@@ -25,7 +25,7 @@
      <property name="title">
       <string>Canvas border</string>
      </property>
-     <layout class="QGridLayout" name="_3">
+     <layout class="QGridLayout">
       <item row="1" column="0">
        <widget class="QLabel" name="lblCanvasBorderColor">
         <property name="text">
@@ -61,7 +61,7 @@
       <string>Transparency Checkboxes</string>
      </property>
      <layout class="QGridLayout">
-      <item row="1" column="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="lblCheckSize">
         <property name="text">
          <string>Size:</string>
@@ -74,7 +74,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <widget class="QSpinBox" name="intCheckSize">
         <property name="maximum">
          <number>256</number>
@@ -84,7 +84,36 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="5" rowspan="2">
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="lblColor">
+        <property name="text">
+         <string>Color:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="KColorButton" name="colorChecks1"/>
+      </item>
+      <item row="0" column="5">
+       <widget class="KColorButton" name="colorChecks2"/>
+      </item>
+      <item row="0" column="6">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -97,7 +126,7 @@
         </property>
        </spacer>
       </item>
-      <item row="3" column="0" colspan="6">
+      <item row="1" column="0" colspan="3">
        <widget class="QCheckBox" name="chkMoving">
         <property name="toolTip">
          <string>If checked, the checkers will move when scrolling the canvas.</string>
@@ -113,32 +142,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="lblColor">
-        <property name="text">
-         <string>Color:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="KColorButton" name="colorChecks"/>
-      </item>
-      <item row="1" column="2">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
@@ -148,6 +151,16 @@
       <string>Miscellaneous</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="chkChannelsAsColor">
+        <property name="text">
+         <string>Color Channels in Color</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QCheckBox" name="chkCurveAntialiasing">
         <property name="text">
@@ -215,6 +228,11 @@
         <item>
          <property name="text">
           <string>Trilinear Filtering</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>High Quality Filtering</string>
          </property>
         </item>
        </widget>

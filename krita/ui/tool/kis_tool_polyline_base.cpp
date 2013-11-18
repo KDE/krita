@@ -27,6 +27,10 @@
 #include <KoViewConverter.h>
 
 #include "kis_tool_polyline_base.h"
+#include "kis_canvas2.h"
+#include <kis_view2.h>
+#include <kis_action.h>
+#include <kactioncollection.h>
 
 #define SNAPPING_THRESHOLD 10
 #define SNAPPING_HANDLE_RADIUS 8
@@ -38,6 +42,12 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
+
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(this->canvas());
+    KAction *undo_polygon_selection = new KAction("Undo Polygon Selection Points",this);
+    undo_polygon_selection->setShortcut(QKeySequence(Qt::ShiftModifier + Qt::Key_Z));
+    kiscanvas->view()->actionCollection()->addAction("undo_polygon_selection", undo_polygon_selection);
+    connect(undo_polygon_selection, SIGNAL(triggered()), SLOT(undoSelection()));
 }
 
 void KisToolPolylineBase::deactivate()
@@ -134,6 +144,24 @@ void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *event)
     }
     else {
         KisToolShape::mousePressEvent(event);
+    }
+}
+
+void KisToolPolylineBase::undoSelection()
+{
+    if(m_dragging) {
+        //Update canvas for drag before undo
+        QRectF updateRect = dragBoundingRect();
+        updateRect |= dragBoundingRect();
+        updateCanvasViewRect(updateRect);
+
+        //Update canvas for last segment
+        QRectF rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
+        rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
+        rect |= rect;
+        updateCanvasViewRect(rect);
+        m_points.pop_back();
+        m_dragStart = m_points.last();
     }
 }
 

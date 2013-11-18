@@ -23,24 +23,16 @@ class KisDeformPaintOpSettingsWidget;
 
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
+#include <kis_outline_generation_policy.h>
 
-#include <opengl/kis_opengl.h>
-
-#if defined(_WIN32) || defined(_WIN64)
-#ifndef __MINGW32__
-# include <windows.h>
-#endif
-#endif
-
-class KisDeformPaintOpSettings : public KisPaintOpSettings
+class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 
 public:
-    KisDeformPaintOpSettings(){}
-    virtual ~KisDeformPaintOpSettings() {}
+    KisDeformPaintOpSettings();
 
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
-    
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;

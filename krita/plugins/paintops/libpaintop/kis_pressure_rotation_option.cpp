@@ -24,11 +24,12 @@
 #include <kis_painter.h>
 #include <kis_paintop.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
         : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::brushCategory(), false),
-          m_defaultAngle(0.0)
+          m_defaultAngle(0.0),
+          m_canvasAxisXMirrored(false),
+          m_canvasAxisYMirrored(false)
 {
     setMinimumLabel(i18n("0°"));
     setMaximumLabel(i18n("360°"));
@@ -38,16 +39,25 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
 {
     if (!isChecked()) return m_defaultAngle;
 
-    qreal baseAngle = sensor()->dependsOnCanvasRotation() ?
-        m_defaultAngle : 0;
+    bool dependsOnViewportTransformations = sensor()->dependsOnCanvasRotation();
 
-    return fmod( (1.0 - computeValue(info)) * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
+    qreal baseAngle = dependsOnViewportTransformations ? m_defaultAngle : 0;
+    qreal rotationCoeff =
+        dependsOnViewportTransformations ||
+        m_canvasAxisXMirrored == m_canvasAxisYMirrored ?
+        1.0 - computeValue(info) :
+        0.5 + computeValue(info);
+
+    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
 }
 
 void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     KisCurveOption::readOptionSetting(setting);
+
+    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 }
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)

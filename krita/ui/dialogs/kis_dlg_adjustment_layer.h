@@ -73,8 +73,9 @@ private:
     KisNodeSP m_node;
     KisNodeFilterInterface *m_nodeFilterInterface;
     Ui::WdgFilterNodeCreation wdgFilterNodeCreation;
-    KisFilterConfiguration* m_currentFilter;
-    bool m_freezeName;
+    KisFilterConfiguration *m_currentFilter;
+    bool m_customName;
+    QString m_layerName;
 
 };
 

@@ -20,7 +20,6 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <klocale.h>
 #include <QString>
 #include <QList>
 #include <QMultiMap>
@@ -32,8 +31,6 @@ class KoColorSpace;
 
 class KoID;
 class KoColorSpace;
-
-#include "KoCompositeOpRegistry.h"
 
 /**
  * Base for colorspace-specific blending modes.
@@ -54,8 +51,12 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
 
-    struct ParameterInfo
+    struct PIGMENTCMS_EXPORT ParameterInfo
     {
+        ParameterInfo();
+        ParameterInfo(const ParameterInfo &rhs);
+        ParameterInfo& operator=(const ParameterInfo &rhs);
+
         quint8*       dstRowStart;
         qint32        dstRowStride;
         const quint8* srcRowStart;
@@ -66,7 +67,13 @@ public:
         qint32        cols;
         float         opacity;
         float         flow;
+        float         _lastOpacityData;
+        float*        lastOpacity;
         QBitArray     channelFlags;
+
+        void updateOpacityAndAverage(float value);
+    private:
+        inline void copy(const ParameterInfo &rhs);
     };
 
 public:

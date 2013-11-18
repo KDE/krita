@@ -18,6 +18,9 @@
        <property name="text">
         <string>&amp;Pattern:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="buddy">
         <cstring>patternChooser</cstring>
        </property>
@@ -30,6 +33,9 @@
       <widget class="QLabel" name="lblColor">
        <property name="text">
         <string>&amp;Color:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>bnColor</cstring>

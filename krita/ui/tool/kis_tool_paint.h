@@ -42,7 +42,6 @@
 #include <kis_pattern.h>
 
 #include "kis_tool.h"
-#include "KoCompositeOp.h"
 #include <QCheckBox>
 
 class QEvent;
@@ -51,6 +50,7 @@ class QPaintEvent;
 class QGridLayout;
 class QLabel;
 class QPoint;
+class KoCompositeOp;
 
 
 class KoCanvasBase;
@@ -143,17 +143,10 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacity);
 
-    void makeColorLighter();
-    void makeColorDarker();
-
-    void increaseOpacity();
-    void decreaseOpacity();
-
     void increaseBrushSize();
     void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 
@@ -167,9 +160,7 @@ protected:
     bool m_toForegroundColor;
 
 private:
-
-    void transformColor(int step);
-    void stepAlpha(float step);
+    QPainterPath tryFixTooBigBrush(const QPainterPath &originalOutline);
 
 private:
 

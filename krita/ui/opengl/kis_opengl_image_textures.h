@@ -37,7 +37,6 @@
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
-class KoColorSpace;
 class KoColorProfile;
 
 /**
@@ -75,11 +74,14 @@ public:
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    void setChannelFlags(const QBitArray &channelFlags);
+
     /**
      * The background checkers texture.
      */
     static const int BACKGROUND_TEXTURE_CHECK_SIZE = 32;
     static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
+
     /**
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
@@ -101,11 +103,19 @@ public:
     }
 
     inline KisTextureTile* getTextureTileCR(int col, int row) {
-        return m_textureTiles[row * m_numCols + col];
+        int tile = row * m_numCols + col;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
+
+        return m_textureTiles[tile];
     }
 
     inline KisTextureTile* getTextureTile(int x, int y) {
         return getTextureTileCR(xToCol(x), yToRow(y));;
+    }
+
+    inline qreal texelSize() const {
+        Q_ASSERT(m_texturesInfo.width == m_texturesInfo.height);
+        return 1.0 / m_texturesInfo.width;
     }
 
 public slots:
@@ -147,6 +157,11 @@ private:
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
     QVector<KisTextureTile*> m_textureTiles;
+
+    QBitArray m_channelFlags;
+    bool m_allChannelsSelected;
+    bool m_onlyOneChannelSelected;
+    int m_selectedChannelIndex;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

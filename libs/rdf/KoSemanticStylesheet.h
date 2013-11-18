@@ -22,11 +22,12 @@
 
 #include "kordf_export.h"
 
+#include "RdfForward.h"
+// Qt
 #include <QObject>
 #include <QSharedData>
 #include <QList>
 #include <QString>
-#include "RdfForward.h"
 
 class KoSemanticStylesheetPrivate;
 
@@ -81,7 +82,7 @@ public:
     void templateString(const QString &v);
 
 signals:
-    void nameChanging(hKoSemanticStylesheet, QString oldName, QString newName);
+    void nameChanging(hKoSemanticStylesheet, const QString &oldName, const QString &newName);
 };
 
 #include <QMetaType>

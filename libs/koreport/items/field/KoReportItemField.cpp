@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemField.h"
-#include <KoGlobal.h>
+
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>

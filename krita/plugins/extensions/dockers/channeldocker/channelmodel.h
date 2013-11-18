@@ -38,7 +38,8 @@ public:
 
 public slots:
     void slotLayerActivated(KisLayerSP layer);
-    
+signals:
+    void channelFlagsChanged();
 private:
     KisLayerWSP m_currentLayer;
 };

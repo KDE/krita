@@ -48,7 +48,6 @@
 #include "KoSection.h"
 
 #include "KoTextMeta.h"
-#include "KoBookmark.h"
 
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>

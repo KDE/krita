@@ -31,7 +31,6 @@
 #include <kstandarddirs.h>
 
 #include <KoProgressUpdater.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>

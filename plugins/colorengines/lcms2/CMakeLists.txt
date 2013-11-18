@@ -91,7 +91,7 @@ endif (HAVE_LCMS24 AND OPENEXR_FOUND)
 
 kde4_add_plugin(kolcmsengine ${lcmsengine_SRCS})
 
-target_link_libraries(kolcmsengine pigmentcms ${LCMS2_LIBRARIES} ${KDE4_KPARTS_LIBS} ${LINK_OPENEXR_LIB})
+target_link_libraries(kolcmsengine pigmentcms ${LCMS2_LIBRARIES}  ${LINK_OPENEXR_LIB})
 install(TARGETS kolcmsengine DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

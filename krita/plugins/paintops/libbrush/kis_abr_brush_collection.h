@@ -35,9 +35,6 @@ class QString;
 class QPoint;
 class QIODevice;
 
-class KoColor;
-class KoColorSpace;
-
 class KisAbrBrush;
 struct AbrInfo;
 

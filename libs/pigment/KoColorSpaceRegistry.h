@@ -174,7 +174,7 @@ private:
      * @param profileName the name of the KoColorProfile to be combined with the colorspace
      * @return the wanted colorspace, or 0 when the cs and profile can not be combined.
      */
-    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName);
+    const KoColorSpace * colorSpace(const QString &colorSpaceId, const QString &profileName = QString());
 public:
     /**
      * Return a colorspace that works with the parameter profile.
@@ -311,8 +311,17 @@ public:
      */
     QList<KoID> listKeys() const;
 
+private:
+
+    friend class KisCsConversionTest;
+    friend class KisIteratorTest;
+    friend class KisPainterTest;
+    friend class KisCrashFilterTest;
+    friend class KoColorSpacesBenchmark;
+    friend class TestKoColorSpaceSanity;
+    friend class KisActionRecorderTest;
     /**
-     * @return a list with an instance of all color space with their default profile
+     * @return a list with an instance of all color space with their default profile.
      */
     QList<const KoColorSpace*> allColorSpaces(ColorSpaceListVisibility visibility, ColorSpaceListProfilesSelection pSelection);
 

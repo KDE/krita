@@ -21,6 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
@@ -46,6 +47,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_checkerTexture(0)
+    , m_allChannelsSelected(true)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
@@ -145,6 +147,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
+
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
@@ -186,7 +189,6 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     QRect updateRect = rect & m_image->bounds();
     if (updateRect.isEmpty()) return info;
 
-
     /**
      * Why the rect is artificial? That's easy!
      * It does not represent any real piece of the image. It is
@@ -197,12 +199,20 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
      */
 
     QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
+    artificialRect &= m_image->bounds();
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
     int firstRow = yToRow(artificialRect.top());
     int lastRow = yToRow(artificialRect.bottom());
 
+
+    KisConfig cfg;
+    QBitArray channelFlags; // empty by default
+
+    if (!cfg.useOcio() && !m_allChannelsSelected) {
+        channelFlags = m_channelFlags;
+    }
 
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
@@ -219,7 +229,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                                               m_image->bounds());
             // Don't update empty tiles
             if (tileInfo.valid()) {
-                tileInfo.retrieveData(m_image);
+                tileInfo.retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
                 info->tileList.append(tileInfo);
             }
             else {
@@ -263,6 +273,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
         tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        KIS_ASSERT_RECOVER_RETURN(tile);
+
         tile->update(tileInfo);
         tileInfo.destroy();
 
@@ -283,11 +295,12 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    Q_ASSERT(checkImage.width() == BACKGROUND_TEXTURE_SIZE);
-    Q_ASSERT(checkImage.height() == BACKGROUND_TEXTURE_SIZE);
-
+    QImage img = checkImage;
+    if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
+        img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
-                 0, GL_BGRA, GL_UNSIGNED_BYTE, checkImage.bits());
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
 
 }
 
@@ -314,10 +327,27 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     }
 }
 
+void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_channelFlags = channelFlags;
+    int selectedChannels = 0;
+    const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
+    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    for (int i = 0; i < m_channelFlags.size(); ++i) {
+        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+            selectedChannels++;
+            m_selectedChannelIndex = i;
+        }
+    }
+    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
+    m_onlyOneChannelSelected = (selectedChannels == 1);
+}
+
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
-    // TODO: make configurable
-    const GLint preferredTextureSize = 1024;
+    KisConfig cfg;
+
+    const GLint preferredTextureSize = cfg.openGLTextureSize();
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -325,7 +355,7 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);
 
-    texturesInfo->border = 1;
+    texturesInfo->border = cfg.textureOverlapBorder();
 
     texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;

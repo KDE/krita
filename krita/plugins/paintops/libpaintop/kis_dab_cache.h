@@ -44,24 +44,27 @@ public:
     bool needSeparateOriginal();
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
-                                   const KoColor& color,
+                                   const KisColorSource *colorSource,
+                                   const QPointF &cursorPoint,
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
-                                   double subPixelX = 0.0, double subPixelY = 0.0,
-                                   qreal softnessFactor = 1.0);
+                                   qreal softnessFactor,
+                                   QRect *dstDabRect);
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
-                                   const KisColorSource *colorSource,
+                                   const KoColor& color,
+                                   const QPointF &cursorPoint,
                                    double scaleX, double scaleY,
                                    double angle,
                                    const KisPaintInformation& info,
-                                   double subPixelX = 0.0, double subPixelY = 0.0,
-                                   qreal softnessFactor = 1.0);
+                                   qreal softnessFactor,
+                                   QRect *dstDabRect);
+
 
 private:
     struct SavedDabParameters;
-
+    struct DabPosition;
 private:
     inline SavedDabParameters getDabParameters(const KoColor& color,
                                                double scaleX, double scaleY,
@@ -70,26 +73,34 @@ private:
                                                double subPixelX, double subPixelY,
                                                qreal softnessFactor,
                                                MirrorProperties mirrorProperties);
+    inline KisDabCache::DabPosition
+        calculateDabRect(const QPointF &cursorPoint,
+                         double scaleX, double scaleY,
+                         double angle,
+                         const KisPaintInformation& info,
+                         const MirrorProperties &mirrorProperties);
 
-    inline KisFixedPaintDeviceSP tryFetchFromCache(const KisColorSource *colorSource,
-                                                   const KoColor& color,
-                                                   double scaleX, double scaleY,
-                                                   double angle,
+    inline
+        QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
+                                                 const QSize &realDabSize);
+
+    inline KisFixedPaintDeviceSP tryFetchFromCache(const SavedDabParameters &params,
                                                    const KisPaintInformation& info,
-                                                   double subPixelX, double subPixelY,
-                                                   qreal softnessFactor,
-                                                   MirrorProperties mirrorProperties);
+                                                   QRect *dstDabRect);
 
     inline KisFixedPaintDeviceSP fetchDabCommon(const KoColorSpace *cs,
                                                 const KisColorSource *colorSource,
                                                 const KoColor& color,
+                                                const QPointF &cursorPoint,
                                                 double scaleX, double scaleY,
                                                 double angle,
                                                 const KisPaintInformation& info,
-                                                double subPixelX, double subPixelY,
-                                                qreal softnessFactor);
+                                                qreal softnessFactor,
+                                                QRect *dstDabRect);
 
-    void postProcessDab(KisFixedPaintDeviceSP dab, const KisPaintInformation& info);
+    void postProcessDab(KisFixedPaintDeviceSP dab,
+                        const QPoint &dabTopLeft,
+                        const KisPaintInformation& info);
 
 private:
 

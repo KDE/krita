@@ -349,6 +349,7 @@ int Command::row() const
 
 QVariant Command::data(int column)
 {
+    Q_UNUSED(column);
     Q_ASSERT(column == 0);
     return name();
 }
@@ -452,4 +453,16 @@ int Command::skipWhitespace(const QString& line, int index)
         }
     }
     return index;
+}
+
+void Command::setParameter(const QString& name, const QString& value)
+{
+    for (int i = 0; i < m_parameters.size(); i++)
+    {
+        if (m_parameters.at(i)->name() == name)
+        {
+            m_parameters[i]->setValue(value);
+        }
+    }
+
 }

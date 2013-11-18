@@ -26,6 +26,12 @@
 #include "kis_spray_shape_option.h"
 #include <kis_airbrush_option.h>
 
+KisSprayPaintOpSettings::KisSprayPaintOpSettings()
+    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                 KisCurrentOutlineFetcher::ROTATION_OPTION)
+{
+}
+
 bool KisSprayPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
@@ -42,15 +48,14 @@ int KisSprayPaintOpSettings::rate() const
 }
 
 
-QPainterPath KisSprayPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    Q_UNUSED(pos);
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
-        path = ellipseOutline(width, height, getDouble(SPRAY_SCALE) * scale , getDouble(SPRAY_ROTATION) - rotation*180.0/M_PI);
-        path.translate(pos);
+        path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
+        path = outlineFetcher()->fetchOutline(info, this, path);
     }
     return path;
 }

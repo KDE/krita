@@ -84,3 +84,4 @@
 #    define Q_ASSERT(cond) if(!(cond)) { kError() << kBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
 #  endif
 
+#include "kis_assert.h"

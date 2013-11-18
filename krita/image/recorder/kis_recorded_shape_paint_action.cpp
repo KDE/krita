@@ -24,7 +24,6 @@
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOp.h>
-#include <KoColorSpace.h>
 #include "kis_node.h"
 #include "kis_mask_generator.h"
 #include "kis_painter.h"

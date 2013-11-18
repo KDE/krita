@@ -20,7 +20,6 @@
 
 #include <QObject>
 
-#include <KoColorSpace.h>
 #include <opengl/kis_opengl.h>
 #include <krita_export.h>
 

@@ -22,7 +22,8 @@
 #include <QDebug>
 #include <QBitArray>
 
-#include <KoCompositeOp.h>
+#include <KoChannelInfo.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoUpdater.h>
 
 #include "kis_paint_device.h"

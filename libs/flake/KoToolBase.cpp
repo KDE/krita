@@ -110,6 +110,11 @@ void KoToolBase::wheelEvent(KoPointerEvent * e)
     e->ignore();
 }
 
+void KoToolBase::touchEvent(QTouchEvent *event)
+{
+    event->ignore();
+}
+
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);
@@ -148,6 +153,11 @@ void KoToolBase::customReleaseEvent(KoPointerEvent * event)
 void KoToolBase::customMoveEvent(KoPointerEvent * event)
 {
     event->ignore();
+}
+
+bool KoToolBase::wantsTouch() const
+{
+    return false;
 }
 
 void KoToolBase::useCursor(const QCursor &cursor)

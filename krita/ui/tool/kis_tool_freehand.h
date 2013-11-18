@@ -67,12 +67,11 @@ protected:
     virtual bool wantsAutoScroll() const;
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
+    void resetCursorStyle();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
                                         KisPaintOpSettings::OutlineMode outlineMode);
@@ -101,11 +100,6 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
-    void showOutlineTemporary();
-
-private slots:
-    void hideOutline();
-
 protected:
 
     KisSmoothingOptions m_smoothingOptions;
@@ -113,10 +107,6 @@ protected:
     double m_magnetism;
 
 private:
-
-    QTimer m_outlineTimer;
-    bool m_explicitShowOutline;
-
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;

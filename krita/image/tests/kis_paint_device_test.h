@@ -57,6 +57,8 @@ private slots:
     void testWrappedVLineIterator();
     void testWrappedRectIterator();
     void testMoveWrapAround();
+
+    void testCacheState();
 };
 
 #endif

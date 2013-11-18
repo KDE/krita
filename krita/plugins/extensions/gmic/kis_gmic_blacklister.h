@@ -20,6 +20,7 @@
 #include <QHash>
 #include <QSet>
 
+class Component;
 class KisGmicBlacklister
 {
 public:
@@ -30,7 +31,8 @@ public:
     bool isBlacklisted(const QString &filterName, const QString &filterCategory);
 
     void dump();
-    QString toPlainText(const QString& htmlText);
+    static QString toPlainText(const QString& htmlText);
+    static Component* findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName);
 private:
     QString m_fileName;
     QHash<QString, QSet<QString> > m_categoryNameBlacklist;

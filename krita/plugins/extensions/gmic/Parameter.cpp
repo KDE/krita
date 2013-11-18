@@ -79,6 +79,20 @@ bool Parameter::isPresentationalOnly() const
 }
 
 
+QString Parameter::value() const
+{
+    return QString();
+}
+
+
+void Parameter::setValue(const QString& value)
+{
+    Q_UNUSED(value);
+    dbgPlugins << "Not implemented for type : " << PARAMETER_NAMES[m_type];
+}
+
+
+
 /**************************
     == FloatParameter ==
  ***************************/
@@ -114,6 +128,18 @@ QString FloatParameter::value() const
 {
     return QString::number(m_value);
 }
+
+
+void FloatParameter::setValue(const QString& value)
+{
+    bool isOk = true;
+    float floatValue = value.toFloat(&isOk);
+    if (isOk)
+    {
+        m_value = floatValue;
+    }
+}
+
 
 QString FloatParameter::toString()
 {
@@ -159,6 +185,17 @@ void IntParameter::parseValues(const QString& typeDefinition)
 QString IntParameter::value() const
 {
     return QString::number(m_value);
+}
+
+
+void IntParameter::setValue(const QString& value)
+{
+    bool isOk = true;
+    int intValue = value.toInt(&isOk);
+    if (isOk)
+    {
+        m_value = intValue;
+    }
 }
 
 
@@ -242,6 +279,27 @@ void ChoiceParameter::parseValues(const QString& typeDefinition)
 QString ChoiceParameter::value() const
 {
     return QString::number(m_value);
+}
+
+void ChoiceParameter::setValue(const QString& value)
+{
+    bool isInt = true;
+    int choiceIndex = value.toInt(&isInt);
+    if (isInt)
+    {
+        setIndex(choiceIndex);
+    }else
+    {
+        setIndex(m_choices.indexOf(value));
+    }
+}
+
+void ChoiceParameter::setIndex(int i)
+{
+    if (i >= 0 && i < m_choices.size())
+    {
+        m_value = i;
+    }
 }
 
 

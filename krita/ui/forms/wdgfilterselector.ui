@@ -57,16 +57,28 @@
      </widget>
      <widget class="QWidget">
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <property name="spacing">
-        <number>-1</number>
+        <number>6</number>
        </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Presets:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>

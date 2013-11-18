@@ -45,7 +45,6 @@
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
 #include <KoEditColorSetDialog.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 

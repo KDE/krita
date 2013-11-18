@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include <KoColorSpace.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"

@@ -22,6 +22,7 @@
 #include <KoProgressUpdater.h>
 #include "kis_node_progress_proxy.h"
 #include "kis_node.h"
+#include <KLocalizedString>
 
 KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 {
@@ -29,7 +30,7 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 
     if(progressProxy) {
         m_progressUpdater = new KoProgressUpdater(progressProxy);
-        m_progressUpdater->start();
+        m_progressUpdater->start(100, i18n("Processing"));
         m_progressUpdater->moveToThread(node->thread());
     }
     else {

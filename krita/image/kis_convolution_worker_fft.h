@@ -161,14 +161,14 @@ public:
                         // Pentalis comment: Pass to the next loop if you hit the alpha channel,
                         // make sure to increment *m_channelPtr[k]  (this was a bug that took hours to find)
                         if (k == (quint32)alphaChannelIndex) {
-                            *m_channelPtr[k]++;   // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
+                            (void)*m_channelPtr[k]++;  // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
                             continue;
                         }
                         
                         // Pentalis comments: PREMULTIPLY BY ALPHA
                         // This code works because m_channelPtr has already been filled entirely
                         *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex];
-                        *m_channelPtr[k]++;   // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
+                        (void)*m_channelPtr[k]++;   // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
                     }
                 }
 

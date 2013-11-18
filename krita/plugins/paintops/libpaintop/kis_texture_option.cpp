@@ -294,9 +294,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     int x = offset.x() % m_maskBounds.width() - offsetX;
     int y = offset.y() % m_maskBounds.height() - offsetY;
 
-    fillDevice->setX(x);
-    fillDevice->setY(y);
-
     KisFillPainter fillPainter(fillDevice);
     fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);
     fillPainter.end();

@@ -40,7 +40,6 @@ namespace OCIO = OCIO_NAMESPACE;
 class KisCanvas2;
 class KisDoubleWidget;
 class KoZoomAdapter;
-class KoColorSpace;
 class SqueezedComboBox;
 class QCheckBox;
 class KComboBox;

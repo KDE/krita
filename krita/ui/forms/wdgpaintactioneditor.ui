@@ -94,20 +94,20 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KIntNumInput" name="opacity">
+        <widget class="KIntNumInput" name="opacity" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimum">
+         <property name="minimum" stdset="0">
           <number>0</number>
          </property>
-         <property name="maximum">
+         <property name="maximum" stdset="0">
           <number>100</number>
          </property>
-         <property name="sliderEnabled">
+         <property name="sliderEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -123,6 +123,9 @@
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Paint op:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -180,6 +183,7 @@
    <class>KIntNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisPresetChooser</class>

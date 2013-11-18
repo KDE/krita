@@ -34,17 +34,21 @@ KisHairyPaintOpSettings::KisHairyPaintOpSettings()
     setProperty(HAIRY_VERSION, "2");
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
-        path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),mode, scale, rotation);
-        double scaleFactor = getDouble(HAIRY_BRISTLE_SCALE);
-        QTransform m;
-        m.reset();
-        m.scale(scaleFactor * scale, scaleFactor * scale);
-        path = m.map(path);
-        path.translate(pos);
+        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+
+        if(!widget) {
+            return KisPaintOpSettings::brushOutline(info, mode);
+        }
+
+        KisBrushSP brush = widget->brush();
+
+        qreal additionalScale = brush->scale() * getDouble(HAIRY_BRISTLE_SCALE);
+
+        return outlineFetcher()->fetchOutline(info, this, brush->outline(), additionalScale, brush->angle());
     }
     return path;
 }

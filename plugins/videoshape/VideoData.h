@@ -22,11 +22,10 @@
 #ifndef VIDEODATA_H
 #define VIDEODATA_H
 
-#include <QUrl>
-
 #include <KoShapeUserData.h>
 
 class QIODevice;
+class QUrl;
 class VideoCollection;
 class VideoDataPrivate;
 class KoStore;
@@ -73,7 +72,7 @@ public:
      */
     bool saveData(QIODevice &device);
 
-    QString tagForSaving(QUrl storeUrl, int &counter);
+    QString tagForSaving(int &counter);
 
     VideoData &operator=(const VideoData &other);
 

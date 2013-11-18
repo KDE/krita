@@ -73,7 +73,7 @@ void KisDropshadowPlugin::slotDropshadow()
         KisDropshadow dropshadow(m_view);
 
         KoProgressUpdater* updater = m_view->createProgressUpdater();
-        updater->start();
+        updater->start(100, i18n("Drop Shadow"));
         QPointer<KoUpdater> u = updater->startSubtask();
         dropshadow.dropshadow(u,
                               dlgDropshadow->getXOffset(),

@@ -225,8 +225,8 @@ QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mi
 {
     bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
     bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
-    qreal      scaleX       = doYMirroring ? -1.0 : 1.0;
-    qreal      scaleY       = doXMirroring ? -1.0 : 1.0;
+    qreal      scaleX       = doXMirroring ? -1.0 : 1.0;
+    qreal      scaleY       = doYMirroring ? -1.0 : 1.0;
     QTransform mirror       = QTransform::fromScale(scaleX, scaleY);
     
     QTransform rot;
@@ -347,7 +347,6 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 {
     KisConfig cfg;
     QRectF viewportRect = imageRectInViewportPixels();
-
     if(cfg.scrollCheckers()) {
         *textureTransform = QTransform();
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());

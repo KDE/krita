@@ -12,6 +12,7 @@ set(kritagmic_parser_PART_SRCS
 ../kis_gmic_filter_model.cpp
 ../kis_gmic_filter_settings.cpp
 ../kis_gmic_simple_convertor.cpp
+../kis_input_output_mapper.cpp
 )
 
 

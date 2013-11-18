@@ -125,7 +125,7 @@ void TestBlockLayout::testBasicLineSpacing()
         // considerations, and offers general performance benefits across all
         // platforms.
         //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
-        QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
+        QVERIFY(qAbs(line.y() - (i * lineSpacing12  + 100.0)) < ROUNDING);
     }
 
     // make first word smaller, should have zero effect on lineSpacing.
@@ -138,7 +138,7 @@ void TestBlockLayout::testBasicLineSpacing()
         line = blockLayout->lineAt(i);
         QVERIFY(line.isValid());
         //qDebug() << i << qAbs(line.y() - i * lineSpacing12);
-        QVERIFY(qAbs(line.y() - i * lineSpacing12) < ROUNDING);
+        QVERIFY(qAbs(line.y() - (i * lineSpacing12 + 100.0)) < ROUNDING);
     }
 
     // make first word on second line word bigger, should move that line down a little.
@@ -149,14 +149,14 @@ void TestBlockLayout::testBasicLineSpacing()
     cursor.mergeCharFormat(charFormat);
     m_layout->layout();
     line = blockLayout->lineAt(0);
-    QCOMPARE(line.y(), 0.0);
+    QCOMPARE(line.y(), 0.0 + 100.0);
     line = blockLayout->lineAt(1);
-    QVERIFY(qAbs(line.y() - lineSpacing12) < ROUNDING);
+    QVERIFY(qAbs(line.y() - (lineSpacing12 + 100.0)) < ROUNDING);
 
     for (int i = 2; i < 15; i++) {
         line = blockLayout->lineAt(i);
 //qDebug() << "i: " << i << " gives: " << line.y() << (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12);
-        QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12)) < ROUNDING);
+        QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12 + 100.0)) < ROUNDING);
     }
 }
 
@@ -177,7 +177,7 @@ void TestBlockLayout::testBasicLineSpacing2()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - 28.8) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (28.8 + 100.0)) < ROUNDING);
 }
 
 void TestBlockLayout::testFixedLineSpacing()
@@ -198,9 +198,9 @@ void TestBlockLayout::testFixedLineSpacing()
 
     // lines with fontsize less than the fixed height are bottom aligned, resulting in
     // positive y for first line
-    QCOMPARE(blockLayout->lineAt(0).y(), 28.0-12.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0-12.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 56.0 + 28.0-12.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 28.0-12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0-12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 56.0 + 28.0-12.0 + 100.0);
 
     style.setLineHeightAbsolute(8.0);
     style.applyStyle(block);
@@ -212,9 +212,9 @@ void TestBlockLayout::testFixedLineSpacing()
 
     // lines with fontsize more than the fixed height are bottom aligned, resulting in
     //negative y for first line
-    QCOMPARE(blockLayout->lineAt(0).y(), 8.0-12.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 8.0-12.0 + 8.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 8.0-12.0 + 8.0 + 8.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 8.0-12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 8.0-12.0 + 8.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 8.0-12.0 + 8.0 + 8.0 + 100.0);
 }
 
 void TestBlockLayout::testPercentageLineSpacing()
@@ -233,9 +233,9 @@ void TestBlockLayout::testPercentageLineSpacing()
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
 
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 18.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 18.0 + 18.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 18.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 18.0 + 18.0 + 100.0);
 
     style.setLineHeightPercent(50);
     style.applyStyle(block);
@@ -245,9 +245,9 @@ void TestBlockLayout::testPercentageLineSpacing()
     m_layout->layout();
     blockLayout = block.layout();
 
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 6.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 6.0 + 6.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 0.0 + 6.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 0.0 + 6.0 + 6.0 + 100.0);
 }
 
 void TestBlockLayout::testAdvancedLineSpacing()
@@ -299,46 +299,46 @@ void TestBlockLayout::testAdvancedLineSpacing()
     block = m_block; // line1
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.0  + 100.0)) < ROUNDING);
 
     block = block.next(); // line2 with fixed we are bottom aligned so offset by 28.0-12.0
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0-12.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0-12.0 + 100.0)) < ROUNDING);
 
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 100.0)) < ROUNDING);
 
     block = block.next(); // line4
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
     // percentage overrides minimum so percentage value is the right to test against
-    //QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 40.0)) < ROUNDING);
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12)) < ROUNDING);
+    //QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 40.0 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 100.0)) < ROUNDING);
 
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
     // minimum of 5 is irelevant and percentage of 1.2 was still there
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 100.0)) < ROUNDING);
 
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 100.0)) < ROUNDING);
 
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 1.2*12)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 1.2*12 + 100.0)) < ROUNDING);
 }
 
 void TestBlockLayout::testEmptyLineHeights()
@@ -374,13 +374,13 @@ void TestBlockLayout::testEmptyLineHeights()
 
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 20.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 20.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0 + 100.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 12.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 12.0 + 100.0);
 
     // Now do the test again but with last line having bigger font
     block = m_doc->begin();
@@ -392,13 +392,13 @@ void TestBlockLayout::testEmptyLineHeights()
 
     m_layout->layout();
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 20.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 20.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0 + 100.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 20.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 20.0 + 100.0);
 
     // Now do the test again but with last line having a small font
     block = m_doc->begin();
@@ -409,13 +409,13 @@ void TestBlockLayout::testEmptyLineHeights()
 
     m_layout->layout();
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 20.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 20.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 20.0 + 8.0 + 100.0);
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 6.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 6.0 + 100.0);
 }
 
 
@@ -482,7 +482,7 @@ void TestBlockLayout::testBlockSpacing()
                             if (paraTableSpacingAtStart) {
                                 QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
                             } else {
-                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - 0.0) < ROUNDING);
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - (0.0 + 100.0)) < ROUNDING);
                             }
 
                             // Between 1st and 2nd block is max of spaces
@@ -524,9 +524,9 @@ void TestBlockLayout::testBlockSpacing()
                             // Now lets do the actual testing
                             //Above first block is just plain
                             if (paraTableSpacingAtStart) {
-                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - (spaces[t1] + 100.0)) < ROUNDING);
                             } else {
-                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - 0.0) < ROUNDING);
+                                QVERIFY(qAbs(block1Layout->lineAt(0).y() - (0.0 + 100.0)) < ROUNDING);
                             }
 
                             // Between 1st and 2nd block is max of spaces
@@ -555,19 +555,19 @@ void TestBlockLayout::testLeftRightMargins()
     cursor.setBlockFormat(bf);
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 10.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 10.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 190.0);
 
     bf.setRightMargin(15.0);
     cursor.setBlockFormat(bf);
     m_layout->layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 10.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 10.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 175.0);
 
     bf.setLeftMargin(0.0);
     cursor.setBlockFormat(bf);
     m_layout->layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 185.0); // still uses the right margin of 15
 
     // create second parag
@@ -577,13 +577,13 @@ void TestBlockLayout::testLeftRightMargins()
     cursor.setBlockFormat(bf);
     cursor.insertText(m_loremIpsum);
     m_layout->layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0); // parag 1
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0 + 100.0); // parag 1
     QCOMPARE(blockLayout->lineAt(0).width(), 185.0);
 
     // and test parag 2
     QTextBlock block2 = m_doc->begin().next();
     QTextLayout *block2Layout = block2.layout();
-    QCOMPARE(block2Layout->lineAt(0).x(), 0.0);
+    QCOMPARE(block2Layout->lineAt(0).x(), 0.0 + 100.0);
     QCOMPARE(block2Layout->lineAt(0).width(), 185.0);
 }
 
@@ -598,18 +598,18 @@ void TestBlockLayout::testTextIndent()
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
 
-    QCOMPARE(blockLayout->lineAt(0).x(), 20.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 20.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 180.0);
-    QCOMPARE(blockLayout->lineAt(1).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(1).x(), 0.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(1).width(), 200.0);
 
     // Add som left margin to check for no correlation
     bf.setLeftMargin(15.0);
     cursor.setBlockFormat(bf);
     m_layout->layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 35.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 35.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 165.0);
-    QCOMPARE(blockLayout->lineAt(1).x(), 15.0);
+    QCOMPARE(blockLayout->lineAt(1).x(), 15.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(1).width(), 185.0);
 
     // create second parag and see it works too
@@ -621,9 +621,9 @@ void TestBlockLayout::testTextIndent()
     m_layout->layout();
     QTextBlock block2 = m_doc->begin().next();
     QTextLayout *block2Layout = block2.layout();
-    QCOMPARE(block2Layout->lineAt(0).x(), 35.0);
+    QCOMPARE(block2Layout->lineAt(0).x(), 35.0 + 100.0);
     QCOMPARE(block2Layout->lineAt(0).width(), 165.0);
-    QCOMPARE(block2Layout->lineAt(1).x(), 15.0);
+    QCOMPARE(block2Layout->lineAt(1).x(), 15.0 + 100.0);
     QCOMPARE(block2Layout->lineAt(1).width(), 185.0);
 }
 
@@ -759,7 +759,7 @@ void TestBlockLayout::testBasicTextAlignments()
 
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 100.0);
 
     QTextBlock block = m_doc->begin().next();
     QVERIFY(block.isValid());
@@ -773,7 +773,7 @@ void TestBlockLayout::testBasicTextAlignments()
     blockLayout = block.layout();
     rect = blockLayout->lineAt(0).naturalTextRect();
     QVERIFY(rect.x() > 150);
-    QVERIFY(rect.right() >= 200.0);
+    QVERIFY(rect.right() >= 200.0 + 100.0);
 }
 
 void TestBlockLayout::testTextAlignments()
@@ -812,29 +812,29 @@ void TestBlockLayout::testTextAlignments()
 
     // line 'Left'
     QRectF rect = blockLayout->lineAt(0).naturalTextRect();
-    QCOMPARE(rect.x(), 0.);
+    QCOMPARE(rect.x(), 100.0);
 
     // line 'Right'
     block = m_doc->begin().next();
     rect = block.layout()->lineAt(0).naturalTextRect();
-    QVERIFY(rect.right() - 200 <= 1);
-    QVERIFY(rect.left() > 0.);
+    QVERIFY(rect.right() - 200 <= (1 + 100.0));
+    QVERIFY(rect.left() > 100.0);
 
     // line with align Leading and RTL progression
     block = block.next();
     rect = block.layout()->lineAt(0).naturalTextRect();
-    QVERIFY(rect.right() - 200 <= 1);
-    QVERIFY(rect.left() > 0.); // expect right alignment
+    QVERIFY(rect.right() - 200 <= (1 + 100.0));
+    QVERIFY(rect.left() > 100.0); // expect right alignment
 
     // line with align tailing and RTL progression
     block = block.next();
     rect = block.layout()->lineAt(0).naturalTextRect();
-    QCOMPARE(rect.x(), 0.); // expect left alignment
+    QCOMPARE(rect.x(), 100.0); // expect left alignment
 
     // non RTL _text_ but RTL progression as well as align trailing
     block = block.next();
     rect = block.layout()->lineAt(0).naturalTextRect();
-    QCOMPARE(rect.x(), 0.); // expect left alignment
+    QCOMPARE(rect.x(), 100.0); // expect left alignment
     // TODO can we check if the dot is the left most painted char?
 }
 
@@ -856,13 +856,13 @@ void TestBlockLayout::testParagraphBorders()
     m_layout->layout();
     QTextBlock block = m_doc->begin();
     QTextLayout *blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 8.0);
-    QCOMPARE(blockLayout->lineAt(0).y(), 9.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 8.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 9.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0);
     block = block.next();
     blockLayout = block.layout();
     //kDebug() << "blockLayout->lineAt(0).y() "<<blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10)) < ROUNDING);  // 14.4 is 12 pt font + 20% linespacing
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10.0 + 100.0)) < ROUNDING);  // 14.4 is 12 pt font + 20% linespacing
 
     // borders + padding create the total inset.
     bf.setProperty(KoParagraphStyle::LeftPadding, 5.0);
@@ -874,13 +874,13 @@ void TestBlockLayout::testParagraphBorders()
     m_layout->layout();
     block = m_doc->begin();
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 13.0);
-    QCOMPARE(blockLayout->lineAt(0).y(), 14.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 13.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 14.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - 5.0 * 2);
     block = block.next();
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y() << (9.0 + 14.4 + 10 + 5.0 * 2);
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + 5.0 * 2)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + 5.0 * 2 + 100.0)) < ROUNDING);
 
     // borders are positioned outside the padding, lets check that to be the case.
     block = m_doc->begin();
@@ -909,13 +909,13 @@ void TestBlockLayout::testParagraphBorders()
     m_layout->layout();
     block = m_doc->begin();
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
-    QCOMPARE(blockLayout->lineAt(0).y(), 16.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 15.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 16.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0) * 2);
     block = block.next();
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0) * 2)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0) * 2 + 100.0)) < ROUNDING);
 
     // and last, make the 2 qreal border have a blank space in the middle.
     bf.setProperty(KoParagraphStyle::LeftBorderSpacing, 3.0);
@@ -927,13 +927,13 @@ void TestBlockLayout::testParagraphBorders()
     m_layout->layout();
     block = m_doc->begin();
     blockLayout = block.layout();
-    QCOMPARE(blockLayout->lineAt(0).x(), 18.0);
-    QCOMPARE(blockLayout->lineAt(0).y(), 19.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 18.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 19.0 + 100.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0 + 3.0) * 2);
     block = block.next();
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2 + 100.0)) < ROUNDING);
 }
 
 void TestBlockLayout::testBorderData()
@@ -962,11 +962,11 @@ void TestBlockLayout::testBorderData()
     KoTextBlockData data(block);
     KoTextBlockBorderData *border = data.border();
     QVERIFY(border);
-    QCOMPARE(data.counterPosition(), QPointF(3, 24.4));
+    QCOMPARE(data.counterPosition(), QPointF(3 + 100.0, 24.4 + 100.0));
 
     block = block.next();
     KoTextBlockData data2(block);
-    QCOMPARE(data2.counterPosition(), QPointF(3, 48.8));
+    QCOMPARE(data2.counterPosition(), QPointF(3 + 100.0, 48.8 + 100.0));
 
 
     style.setBottomMargin(QTextLength(QTextLength::FixedLength, 5)); //bottom spacing
@@ -982,11 +982,11 @@ void TestBlockLayout::testBorderData()
     QVERIFY(border);
 
     KoTextBlockData data3(block);
-    QCOMPARE(data3.counterPosition(), QPointF(3, 24.4));
+    QCOMPARE(data3.counterPosition(), QPointF(3 + 100.0, 24.4 + 100.0));
 
     block = block.next();
     KoTextBlockData data4(block);
-    QCOMPARE(data4.counterPosition(), QPointF(3, 48.8)); // same y as before as we take max spacing
+    QCOMPARE(data4.counterPosition(), QPointF(3 + 100.0, 48.8 + 100.0)); // same y as before as we take max spacing
 }
 
 void TestBlockLayout::testEmptyParag()
@@ -1004,7 +1004,7 @@ void TestBlockLayout::testEmptyParag()
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
     QVERIFY(lay->lineAt(0).position().y() > y);
-    QVERIFY(qAbs(lay->lineAt(0).position().y() - 14.4) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).position().y() - (14.4 + 100.0)) < ROUNDING);
 }
 
 void TestBlockLayout::testDropCaps()
@@ -1038,17 +1038,17 @@ void TestBlockLayout::testDropCaps()
     line = blockLayout->lineAt(0);
     QCOMPARE(line.textLength(), 1);
 
-    QCOMPARE(line.position().x(), 0.0);
-    QVERIFY(line.position().y() <= 0.0); // can't get a tight-boundingrect here.
+    QCOMPARE(line.position().x(), 100.0);
+    QVERIFY(line.position().y() <= 100.0); // can't get a tight-boundingrect here.
 
     line = blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);
     qreal heightNormalLine = line.height();
     qreal linexpos = line.position().x();
-    QCOMPARE(line.position().y(), 0.0); // aligned top
+    QCOMPARE(line.position().y(), 100.0); // aligned top
     //qDebug()<<line.position().x();
-    QVERIFY(line.position().x() > 49.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 54.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() > 149.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 154.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since
     // it should still be influenced by the dropcap
@@ -1057,8 +1057,8 @@ void TestBlockLayout::testDropCaps()
     line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
     QCOMPARE(line.position().x(), linexpos);
-    QVERIFY(line.position().x() > 49.0); // can't get a tight-boundingrect here.
-    QVERIFY(line.position().x() < 54.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() > 149.0); // can't get a tight-boundingrect here.
+    QVERIFY(line.position().x() < 154.0); // can't get a tight-boundingrect here.
 
     style.setDropCaps(false); // remove it
     style.applyStyle(block);

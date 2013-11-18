@@ -23,6 +23,9 @@
          <property name="text">
           <string>Horizontal Lines</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -32,6 +35,9 @@
         <widget class="QLabel" name="lblVerticalSplitLines">
          <property name="text">
           <string>Vertical Lines</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -59,6 +65,9 @@
          <property name="text">
           <string>Prefix</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -75,6 +84,9 @@
         <widget class="QLabel" name="lblFileType">
          <property name="text">
           <string>File Type</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>

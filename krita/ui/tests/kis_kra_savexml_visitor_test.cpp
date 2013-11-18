@@ -25,9 +25,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
-#include <KoColorSpace.h>
 #include <KoPathShape.h>
 
 #include "kis_count_visitor.h"

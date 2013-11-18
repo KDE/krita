@@ -259,19 +259,28 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
+    //qDebug() << "loadBinaryData. Location:" << location;
     if (store->hasFile(location)) {
-        store->open(location);
-        QByteArray data; data.resize(store->size());
-        store->read(data.data(), store->size());
-        store->close();
-        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
-        if (profile && profile->valid()) {
-            image->assignImageProfile(profile);
-        }
-        else {
-            profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
-            Q_ASSERT(profile && profile->valid());
-            image->assignImageProfile(profile);
+        if (store->open(location)) {
+            //qDebug() << "icc file opened";
+            QByteArray data; data.resize(store->size());
+            bool res = (store->read(data.data(), store->size()) > -1);
+            //qDebug() << "managed to read data:" << res;
+            store->close();
+            if (res) {
+                //qDebug() << "Success, trying to read the profile for:" << image->colorSpace()->colorModelId().id() <<  image->colorSpace()->colorDepthId().id();
+                const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
+                if (profile && profile->valid()) {
+                    //qDebug() << "profile is valid" << profile->name();
+                    image->assignImageProfile(profile);
+                }
+                else {
+                    //qDebug() << "profile not valid, getting profile for name" << KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile();
+                    profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+                    Q_ASSERT(profile && profile->valid());
+                    image->assignImageProfile(profile);
+                }
+            }
         }
     }
 
@@ -340,8 +349,6 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
     KoXmlNode node = element.firstChild();
     KoXmlNode child;
 
-    QDomDocument doc;
-
     if (!node.isNull()) {
 
         if (node.isElement()) {
@@ -349,17 +356,12 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageWSP image
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
                     KisNodeSP node = loadNode(child.toElement(), image, parent);
-                    if (!node) {
-#ifdef __GNUC__
-#warning "KisKraLoader::loadNodes: report node load failures back to the user!"
-#endif
-                    } else {
+                    if (node) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
                         if (node->inherits("KisLayer") && child.childNodesCount() > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
-
                     }
                 }
             }

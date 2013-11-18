@@ -1,4 +1,12 @@
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+# Disable -Wswitch because of the extra definitions we here:
+# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
+# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
+else (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
@@ -34,6 +42,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_update_info.cpp
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
+    canvas/kis_qpainter_canvas_widget_factory.cpp
     canvas/kis_infinity_manager.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -114,10 +123,10 @@ set(kritaui_LIB_SRCS
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
-    kis_mirror_visitor.cpp
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
+    kis_canvas_controls_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -226,6 +235,7 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
+    input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
     input/kis_input_profile_manager.cpp
@@ -245,6 +255,23 @@ set(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
 )
+
+if(WIN32)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support_win.cpp
+        )
+endif(WIN32)
+
+if(UNIX AND NOT APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support.cpp
+        input/wintab/kis_tablet_support_x11.cpp
+        )
+endif(UNIX AND NOT APPLE)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
@@ -296,7 +323,9 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${X11_X11_LIB})
+target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
+                              ${X11_X11_LIB}
+                              ${X11_Xinput_LIB})
 
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
@@ -336,6 +365,7 @@ install( FILES
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h
     tool/kis_tool.h
+    kis_canvas_resource_provider.h
     kis_cursor.h
     kis_view2.h
     kis_ui_types.h

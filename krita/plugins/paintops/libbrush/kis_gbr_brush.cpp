@@ -155,6 +155,7 @@ bool KisGbrBrush::load()
 {
     if (d->ownData) {
         QFile file(filename());
+        if (file.size() == 0) return false;
         file.open(QIODevice::ReadOnly);
         d->data = file.readAll();
         file.close();

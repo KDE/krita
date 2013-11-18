@@ -96,7 +96,9 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 {
     KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
-    return m_d->indexConverter->indexFromDummy(dummy);
+    if(dummy)
+        return m_d->indexConverter->indexFromDummy(dummy);
+    return QModelIndex();
 }
 
 bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const

@@ -22,8 +22,7 @@
 
 #include <cmath>
 
-#include <KoCompositeOp.h>
-#include <KoColorSpace.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_debug.h>
 
@@ -305,6 +304,8 @@ QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qre
 
             i += 2;
         }
+        default:
+            ;
         }
         startPoint = endPoint;
     }

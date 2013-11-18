@@ -21,6 +21,7 @@
 
 #include "kis_canvas2.h"
 
+#include <QApplication>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QTime>
@@ -32,7 +33,6 @@
 #include <KoUnit.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
 #include <KoSelection.h>
@@ -57,6 +57,7 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
+#include "kis_signal_compressor.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -113,6 +114,11 @@ public:
     bool vastScrolling;
 
     KisInputManager* inputManager;
+
+    KisSignalCompressor *updateSignalCompressor;
+    QRect savedUpdateRect;
+
+    QBitArray channelFlags;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
@@ -153,6 +159,9 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+
+    m_d->updateSignalCompressor = new KisSignalCompressor(10 /*ms*/, KisSignalCompressor::FIRST_ACTIVE, this);
+    connect(m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -214,12 +223,29 @@ qreal KisCanvas2::rotationAngle() const
     return m_d->coordinatesConverter->rotationAngle();
 }
 
-void KisCanvas2::setSmoothingEnabled(bool smooth)
+void KisCanvas2::channelSelectionChanged()
 {
-    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
-    if (canvas) {
-        canvas->setSmoothingEnabled(smooth);
+    KisImageWSP image = this->image();
+    m_d->channelFlags = image->rootLayer()->channelFlags();
+
+    image->barrierLock();
+
+    if (m_d->currentCanvasIsOpenGL) {
+#ifdef HAVE_OPENGL
+        Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
+#else
+        Q_ASSERT_X(0, "KisCanvas2::setChannelFlags", "Bad use of setChannelFlags(). It shouldn't have happened =(");
+#endif
+    } else {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setChannelFlags(m_d->channelFlags);
     }
+
+    startUpdateInPatches(image->bounds());
+
+    image->unlock();
+
 }
 
 void KisCanvas2::addCommand(KUndo2Command *command)
@@ -434,7 +460,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 #endif
 
-    m_d->canvasWidget->widget()->update();
+    updateCanvasWidgetImpl();
 }
 
 void KisCanvas2::startUpdateInPatches(QRect imageRect)
@@ -564,7 +590,7 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
          * FIXME: Please not update entire canvas
          * Implement info->dirtyViewportRect()
          */
-        m_d->canvasWidget->widget()->update();
+        updateCanvasWidgetImpl();
 #else
         Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
 #endif
@@ -580,20 +606,48 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
                 viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
 
         if (!vRect.isEmpty()) {
-            m_d->canvasWidget->widget()->update(vRect);
+            updateCanvasWidgetImpl(vRect);
         }
     }
 }
 
+void KisCanvas2::slotDoCanvasUpdate()
+{
+    if (m_d->canvasWidget->isBusy()) {
+        // just restarting the timer
+        updateCanvasWidgetImpl(m_d->savedUpdateRect);
+        return;
+    }
+
+    if (m_d->savedUpdateRect.isEmpty()) {
+        m_d->canvasWidget->widget()->update();
+        emit updateCanvasRequested(m_d->canvasWidget->widget()->rect());
+    } else {
+        emit updateCanvasRequested(m_d->savedUpdateRect);
+        m_d->canvasWidget->widget()->update(m_d->savedUpdateRect);
+    }
+
+    m_d->savedUpdateRect = QRect();
+}
+
+void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
+{
+    if (!m_d->updateSignalCompressor->isActive() ||
+        !m_d->savedUpdateRect.isEmpty()) {
+        m_d->savedUpdateRect |= rc;
+    }
+    m_d->updateSignalCompressor->start();
+}
+
 void KisCanvas2::updateCanvas()
 {
-    m_d->canvasWidget->widget()->update();
+    updateCanvasWidgetImpl();
 }
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
     if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
-        m_d->canvasWidget->widget()->update();
+        updateCanvasWidgetImpl();
     }
     else {
         // updateCanvas is called from tools, never from the projection
@@ -601,7 +655,7 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
         QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
         widgetRect.adjust(-2, -2, 2, 2);
         if (!widgetRect.isEmpty()) {
-            m_d->canvasWidget->widget()->update(widgetRect);
+            updateCanvasWidgetImpl(widgetRect);
         }
     }
 }
@@ -654,6 +708,11 @@ KisImageWSP KisCanvas2::image()
 KisImageWSP KisCanvas2::currentImage()
 {
     return m_d->view->image();
+}
+
+KisInputManager *KisCanvas2::inputManager() const
+{
+    return m_d->inputManager;
 }
 
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)

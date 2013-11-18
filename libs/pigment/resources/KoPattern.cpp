@@ -63,8 +63,11 @@ bool KoPattern::load()
         fileExtension = filename().mid(index).toLower();
 
     bool result;
+
+    QFile file(filename());
+    if (file.size() == 0) return false;
+
     if (fileExtension == ".pat") {
-        QFile file(filename());
         file.open(QIODevice::ReadOnly);
         QByteArray data = file.readAll();
         file.close();

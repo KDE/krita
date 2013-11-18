@@ -28,13 +28,13 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 {
     Q_ASSERT(!baseImage.isNull());
 
-    m_baseSize = baseImage.size();
+    m_originalSize = baseImage.size();
 
 
     qreal scale = MAX_MIPMAP_SCALE;
 
     while (scale > 1.0) {
-        QSize scaledSize = m_baseSize * scale;
+        QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() <= MIPMAP_SIZE_THRESHOLD ||
             scaledSize.height() <= MIPMAP_SIZE_THRESHOLD) {
@@ -56,7 +56,7 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 
     scale = 0.5;
     while (true) {
-        QSize scaledSize = m_baseSize * scale;
+        QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() == 0 ||
             scaledSize.height() == 0) break;
@@ -111,40 +111,85 @@ inline QRect roundRect(const QRectF &rc) {
     return QRect(left, top, right - left, bottom - top);
 }
 
-void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
-                                       qreal subPixelX, qreal subPixelY,
-                                       qreal baseScale, const QSize &baseSize,
-                                       QTransform *outputTransform, QSize *outputSize)
+QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
+                              qreal rotation,
+                              qreal subPixelX, qreal subPixelY,
+                              const QRectF &baseBounds)
 {
     QTransform transform;
-    QRectF baseBounds = QRectF(QPointF(), baseSize);
-
-    qreal scaleX = scale / baseScale;
-    qreal scaleY = scale / baseScale;
-
     if (!qFuzzyCompare(rotation, 0)) {
         QTransform rotationTransform;
         rotationTransform.rotateRadians(rotation);
 
         QRectF rotatedBounds = rotationTransform.mapRect(baseBounds);
-        transform = QTransform().rotateRadians(rotation) *
+        transform = rotationTransform *
             QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
-    } else {
-        QRectF scaledRect = QTransform::fromScale(scaleX, scaleY).mapRect(baseBounds).toAlignedRect();
-        scaleX = scaledRect.width() / baseBounds.width();
-        scaleY = scaledRect.height() / baseBounds.height();
     }
 
-
-    transform *= QTransform::fromScale(scaleX, scaleY) *
+    return transform *
+        QTransform::fromScale(scaleX, scaleY) *
         QTransform::fromTranslate(subPixelX, subPixelY);
+}
 
-    QRect dstRect = roundRect(transform.mapRect(baseBounds));
-    Q_ASSERT(dstRect.x() >= 0);
-    Q_ASSERT(dstRect.y() >= 0);
+void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
+                                       qreal subPixelX, qreal subPixelY,
+                                       const QSize &originalSize,
+                                       QTransform *outputTransform, QSize *outputSize)
+{
+    calculateParams(scale, rotation,
+                    subPixelX, subPixelY,
+                    originalSize, 1.0, originalSize,
+                    outputTransform, outputSize);
+}
 
-    int width = dstRect.x() + dstRect.width();
-    int height = dstRect.y() + dstRect.height();
+void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
+                                       qreal subPixelX, qreal subPixelY,
+                                       const QSize &originalSize,
+                                       qreal baseScale, const QSize &baseSize,
+                                       QTransform *outputTransform, QSize *outputSize)
+{
+    QRectF originalBounds = QRectF(QPointF(), originalSize);
+    QTransform originalTransform =
+        baseBrushTransform(scale, scale,
+                           rotation,
+                           subPixelX, subPixelY,
+                           originalBounds);
+
+    qreal scaleX = scale / baseScale;
+    qreal scaleY = scale / baseScale;
+
+    QRectF baseBounds = QRectF(QPointF(), baseSize);
+    QTransform transform =
+        baseBrushTransform(scaleX, scaleY,
+                           rotation,
+                           subPixelX, subPixelY,
+                           baseBounds);
+
+    QRect expectedDstRect = roundRect(originalTransform.mapRect(originalBounds));
+    QRectF realRect = transform.mapRect(baseBounds);
+
+    scaleX *= qreal(expectedDstRect.width()) / realRect.width();
+    scaleY *= qreal(expectedDstRect.height()) / realRect.height();
+
+    transform = baseBrushTransform(scaleX, scaleY,
+                                   rotation,
+                                   subPixelX, subPixelY,
+                                   baseBounds);
+
+    {
+        QRect testingRect = roundRect(transform.mapRect(baseBounds));
+        if (testingRect.size() != expectedDstRect.size()) {
+            qWarning() << "WARNING: expected and real dab rects do not coincide!";
+            qWarning() << "         expected rect:" << expectedDstRect.size();
+            qWarning() << "         real rect:    " << testingRect.size();
+        }
+    }
+
+    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.x() >= 0);
+    KIS_ASSERT_RECOVER_NOOP(expectedDstRect.y() >= 0);
+
+    int width = expectedDstRect.x() + expectedDstRect.width();
+    int height = expectedDstRect.y() + expectedDstRect.height();
 
     // we should not return invalid image, so adjust the image to be
     // at least 1 px in size.
@@ -155,7 +200,7 @@ void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
     *outputSize = QSize(width, height);
 }
 
-QSize KisQImagePyramid::imageSize(const QSize &baseSize,
+QSize KisQImagePyramid::imageSize(const QSize &originalSize,
                                   qreal scale, qreal rotation,
                                   qreal subPixelX, qreal subPixelY)
 {
@@ -163,7 +208,7 @@ QSize KisQImagePyramid::imageSize(const QSize &baseSize,
     QSize dstSize;
 
     calculateParams(scale, rotation, subPixelX, subPixelY,
-                    1.0, baseSize,
+                    originalSize,
                     &transform, &dstSize);
 
     return dstSize;
@@ -181,7 +226,7 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
     QSize dstSize;
 
     calculateParams(scale, rotation, subPixelX, subPixelY,
-                    baseScale, srcImage.size(),
+                    m_originalSize, baseScale, srcImage.size(),
                     &transform, &dstSize);
 
     if (transform.isIdentity() &&

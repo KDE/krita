@@ -58,6 +58,14 @@ public:
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
+
+    /**
+     * Returns true if the asynchromous engine of the canvas
+     * (e.g. openGL pipeline) is busy with processing of the previous
+     * update events. This will make KisCanvas2 to postpone and
+     * compress update events.
+     */
+    virtual bool isBusy() const = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

@@ -65,7 +65,8 @@ public:
         MirrorAxisCenter,
         Opacity,
         HdrGamma,
-        GlobalAlphaLock
+        GlobalAlphaLock,
+        PreviousPaintOpPreset
     };
 
 
@@ -101,6 +102,10 @@ public:
     KisNodeSP currentNode() const;
 
     KisPaintOpPresetSP currentPreset() const;
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
+    KisPaintOpPresetSP previousPreset() const;
+    void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
@@ -124,7 +129,6 @@ public:
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
-    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
     ///Notify that the workspace is saved and settings should be saved to it
     void notifySavingWorkspace(KisWorkspaceResource* workspace);
@@ -169,12 +173,9 @@ signals:
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
-    void sigPaintOpPresetChanged(KisPaintOpPresetSP preset);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-    void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
-    void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);

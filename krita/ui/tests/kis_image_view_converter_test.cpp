@@ -97,7 +97,7 @@ void KisImageViewConverterTest::testZoom()
 
     image->setResolution(1.38888888, 5.38888888);
 
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
 
     viewConverter.zoom(&zoomX, &zoomY);
     QVERIFY(zoomX < 1.388889 && zoomX > 1.3888887);

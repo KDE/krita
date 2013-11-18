@@ -116,7 +116,7 @@ void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCe
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
+    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
 }

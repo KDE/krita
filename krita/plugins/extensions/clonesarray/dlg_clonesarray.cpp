@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 
-#include <KoColorSpace.h>
+#include <KoColorSpaceConstants.h>
 
 #include <kis_debug.h>
 #include <kis_view2.h>

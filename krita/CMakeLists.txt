@@ -90,6 +90,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
     ${EIGEN2_INCLUDE_DIR}
+    ${Vc_INCLUDE_DIR}
 
     # 'Export' this for use by filters
     CACHE INTERNAL ""
@@ -130,7 +131,7 @@ if (Q_WS_MAC)
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui)
-target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
+target_link_libraries(krita kdeinit_krita)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     find_package(OpenCTL)
@@ -154,11 +155,12 @@ endif()
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-add_subdirectory(tablettester)
-
-
-
+if (${QTVERSION} VERSION_GREATER 4.7.0)
+add_subdirectory(sketch)
+add_subdirectory(gemini)
+endif (${QTVERSION} VERSION_GREATER 4.7.0)

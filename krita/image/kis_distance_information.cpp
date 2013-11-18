@@ -185,7 +185,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             t = k;
             m_d->distance = QPointF();
         } else {
-            m_d->distance += qAbs(end - start);
+            QPointF diff = end - start;
+            m_d->distance += QPointF(qAbs(diff.x()), qAbs(diff.y()));
         }
     } else {
         qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";

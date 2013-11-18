@@ -14,17 +14,17 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KO_TEXT_INLINE_RDF_H
 #define KO_TEXT_INLINE_RDF_H
 
 #include "kotext_export.h"
+// komain
 #include <KoXmlReaderForward.h>
 #include <KoElementReference.h>
-
-#include <QTextBlockUserData>
+// Qt
 #include <QTextTableCell>
 
 class KoXmlWriter;
@@ -32,9 +32,6 @@ class KoShapeSavingContext;
 class KoBookmark;
 class KoAnnotation;
 class KoTextMeta;
-class KoTextInlineRdf;
-class RdfSemanticItem;
-class RdfFoaF;
 class KoTextEditor;
 
 /**
@@ -73,7 +70,6 @@ class KoTextEditor;
  */
 class KOTEXT_EXPORT KoTextInlineRdf : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -103,37 +99,37 @@ public:
     static void attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor);
 
     bool loadOdf(const KoXmlElement &element);
-    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id = KoElementReference());
+    bool saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id = KoElementReference()) const;
 
     /**
      * Get the RDF subject for this inline RDF
      */
-    QString subject();
+    QString subject() const;
     /**
      * Get the RDF predicate for this inline RDF
      */
-    QString predicate();
+    QString predicate() const;
     /**
      * Get the RDF object for this inline RDF
      */
-    QString object();
+    QString object() const;
     /**
      * Get the type of RDF node (bnode, literal, uri etc) for this inline RDF
      */
-    int sopranoObjectType();
+    int sopranoObjectType() const;
 
     /**
      * Because RDF is linked to the xml id attribute of elements in
      * content.xml the xml:id attribute that was read from the
      * content.xml file is available here
      */
-    QString xmlId();
+    QString xmlId() const;
 
     /**
      * Find the start and end position of this inline RDF object in the
      * document.
      */
-    QPair<int, int> findExtent();
+    QPair<int, int> findExtent() const;
 
 
     /**
@@ -144,12 +140,11 @@ public:
     /**
      * Create a new and unique xml:id
      */
-    QString createXmlId();
+    static QString createXmlId();
 
 private:
 
     friend class KoRdfSemanticItem;
-    friend class KoRdfFoaF;
     friend class KoDocumentRdf;
 
     class Private;

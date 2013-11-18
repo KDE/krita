@@ -18,6 +18,7 @@
 #include "channelmodel.h"
 
 #include <KoColorSpace.h>
+#include <KoChannelInfo.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
@@ -108,7 +109,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
                 paintLayer->setChannelLockFlags(flags);
             }
             
-            m_currentLayer->setDirty();
+            emit channelFlagsChanged();
             return true;
         }
     }

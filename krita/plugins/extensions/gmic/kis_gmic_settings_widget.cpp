@@ -21,7 +21,7 @@
 
 //
 #include <kurlrequester.h>
-
+#include <kdeversion.h>
 #include <kcolorbutton.h>
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
@@ -261,8 +261,9 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
                 if (role == CreateRole)
                 {
                     colorButton = new KColorButton;
+#if KDE_IS_VERSION(4,5,0)
                     colorButton->setAlphaChannelEnabled(colorParam->m_hasAlpha);
-
+#endif
                     m_widgetToParameterIndexMapper[colorParam] = i;
                     mapParameterWidget(colorParam, colorButton);
 

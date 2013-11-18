@@ -70,8 +70,6 @@
 #include <kis_paintop.h>
 #include <kis_paintop_preset.h>
 
-const int STEP = 25;
-
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor)
 {
@@ -85,36 +83,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_supportOutline = false;
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-    if (!collection->action("make_brush_color_lighter")) {
-        KAction *lighterColor = new KAction(i18n("Make brush color lighter"), collection);
-        lighterColor->setShortcut(Qt::Key_L);
-        collection->addAction("make_brush_color_lighter", lighterColor);
-    }
-
-    if (!collection->action("make_brush_color_darker")) {
-        KAction *darkerColor = new KAction(i18n("Make brush color darker"), collection);
-        darkerColor->setShortcut(Qt::Key_K);
-        collection->addAction("make_brush_color_darker", darkerColor);
-    }
-
-    addAction("make_brush_color_lighter", dynamic_cast<KAction*>(collection->action("make_brush_color_lighter")));
-    addAction("make_brush_color_darker", dynamic_cast<KAction*>(collection->action("make_brush_color_darker")));
-
-    if (!collection->action("increase_opacity")) {
-        KAction *increaseOpacity = new KAction(i18n("Increase opacity"), collection);
-        increaseOpacity->setShortcut(Qt::Key_O);
-        collection->addAction("increase_opacity", increaseOpacity);
-    }
-
-    if (!collection->action("decrease_opacity")) {
-        KAction *increaseOpacity = new KAction(i18n("Decrease opacity"), collection);
-        increaseOpacity->setShortcut(Qt::Key_I);
-        collection->addAction("decrease_opacity", increaseOpacity);
-    }
-
-    addAction("decrease_opacity", dynamic_cast<KAction*>(collection->action("decrease_opacity")));
-    addAction("increase_opacity", dynamic_cast<KAction*>(collection->action("increase_opacity")));
 
     if (!collection->action("increase_brush_size")) {
         KAction *increaseBrushSize = new KAction(i18n("Increase Brush Size"), collection);
@@ -167,10 +135,6 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    connect(actions().value("make_brush_color_lighter"), SIGNAL(triggered()), SLOT(makeColorLighter()), Qt::UniqueConnection);
-    connect(actions().value("make_brush_color_darker"), SIGNAL(triggered()), SLOT(makeColorDarker()), Qt::UniqueConnection);
-    connect(actions().value("increase_opacity"), SIGNAL(triggered()), SLOT(increaseOpacity()), Qt::UniqueConnection);
-    connect(actions().value("decrease_opacity"), SIGNAL(triggered()), SLOT(decreaseOpacity()), Qt::UniqueConnection);
     connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
     connect(actions().value("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
 }
@@ -186,11 +150,43 @@ void KisToolPaint::deactivate()
     KisTool::deactivate();
 }
 
+QPainterPath KisToolPaint::tryFixTooBigBrush(const QPainterPath &originalOutline)
+{
+    KisConfig cfg;
+    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+
+    /**
+     * If the brush outline is bigger than the canvas itself (which
+     * would make it invisible for a user in most of the cases) just
+     * add a cross in the center of it
+     */
+
+    QSize widgetSize = canvas()->canvasWidget()->size();
+    const int maxThresholdSum = widgetSize.width() + widgetSize.height();
+
+    QPainterPath outline = originalOutline;
+    QRectF boundingRect = outline.boundingRect();
+
+    if (boundingRect.width() + boundingRect.height() > maxThresholdSum) {
+        const int hairOffset = 7;
+        QPointF center = boundingRect.center();
+
+        outline.moveTo(center.x(), center.y() - hairOffset);
+        outline.lineTo(center.x(), center.y() + hairOffset);
+
+        outline.moveTo(center.x() - hairOffset, center.y());
+        outline.lineTo(center.x() + hairOffset, center.y());
+    }
+
+    return outline;
+}
 
 void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    paintToolOutline(&gc,pixelToView(m_currentOutline));
+
+    QPainterPath path = tryFixTooBigBrush(pixelToView(m_currentOutline));
+    paintToolOutline(&gc, path);
 }
 
 void KisToolPaint::setMode(ToolMode mode)
@@ -400,19 +396,6 @@ void KisToolPaint::slotPopupQuickHelp()
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
 
-
-void KisToolPaint::resetCursorStyle()
-{
-    KisTool::resetCursorStyle();
-    KisConfig cfg;
-    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        if (m_supportOutline) {
-            // do not show cursor, tool will paint outline
-                useCursor(KisCursor::blankCursor());
-        }
-    }
-}
-
 void KisToolPaint::updateTabletPressureSamples()
 {
     KisConfig cfg;
@@ -446,55 +429,6 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
     return NONE;
 }
 
-void KisToolPaint::transformColor(int step)
-{
-    KoColor color = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-    QColor rgb = color.toQColor();
-    int h = 0, s = 0, v = 0;
-    rgb.getHsv(&h,&s,&v);
-    if ((v < 255) || ((s == 0) || (s == 255))) {
-        v += step;
-        v = qBound(0,v,255);
-    } else {
-        s += -step;
-        s = qBound(0,s,255);
-    }
-    rgb.setHsv(h,s,v);
-    color.fromQColor(rgb);
-    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
-}
-
-
-void KisToolPaint::makeColorDarker()
-{
-    transformColor(-STEP);
-}
-
-void KisToolPaint::makeColorLighter()
-{
-    transformColor(STEP);
-}
-
-
-void KisToolPaint::stepAlpha(float step)
-{
-    qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
-    alpha += step;
-    alpha = qBound<qreal>(0.0, alpha, 1.0);
-    canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
-}
-
-
-void KisToolPaint::increaseOpacity()
-{
-    stepAlpha(0.1f);
-}
-
-void KisToolPaint::decreaseOpacity()
-{
-    stepAlpha(-0.1f);
-}
-
 void KisToolPaint::increaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
@@ -523,7 +457,7 @@ void KisToolPaint::decreaseBrushSize()
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 {
-    qDebug() << "requestUpdateOutline" << outlineDocPoint;
+    if (!m_supportOutline) return;
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
@@ -567,16 +501,9 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
+        brushOutline(KisPaintInformation(imagePos), outlineMode);
 
     return path;
 }

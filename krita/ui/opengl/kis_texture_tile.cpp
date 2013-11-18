@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
+#define GL_GLEXT_PROTOTYPES
 #include "kis_texture_tile.h"
 
 #ifdef HAVE_OPENGL
@@ -39,42 +39,18 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
     return QRectF(x, y, w, h);
 }
 
-void setTextureParameters(KisTextureTile::FilterMode filter)
+void setTextureParameters()
 {
+    const int numMipmapLevels = KisConfig().numMipmapLevels();
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 1000);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, numMipmapLevels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 3);
-
-    switch(filter) {
-    case KisTextureTile::NearestFilterMode:
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        break;
-    case KisTextureTile::BilinearFilterMode:
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        break;
-    case KisTextureTile::TrilinearFilterMode:
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        break;
-    case KisTextureTile::nearest_mipmap_linear:
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-        break;
-    case KisTextureTile::nearest_mipmap_nearest:
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        break;
-    case KisTextureTile::linear_mipmap_nearest:
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-        break;
-    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numMipmapLevels);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
 }
 
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
@@ -87,6 +63,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     , m_tileRectInImagePixels(imageRect)
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
+    , m_needsMipmapRegeneration(false)
 {
     const GLvoid *fd = fillData.constData();
 
@@ -100,7 +77,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 
-    setTextureParameters(m_filter);
+    setTextureParameters();
 
 #ifdef USE_PIXEL_BUFFERS
     createTextureBuffer(fillData);
@@ -122,9 +99,7 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     }
 #endif
 
-#ifdef Q_OS_WIN
-    glGenerateMipmap(GL_TEXTURE_2D);
-#endif
+    setNeedsMipmapRegeneration();
 }
 
 KisTextureTile::~KisTextureTile()
@@ -138,11 +113,30 @@ KisTextureTile::~KisTextureTile()
     glDeleteTextures(1, &m_textureId);
 }
 
+void KisTextureTile::bindToActiveTexture()
+{
+    glBindTexture(GL_TEXTURE_2D, textureId());
+
+    if (m_needsMipmapRegeneration) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+        m_needsMipmapRegeneration = false;
+    }
+}
+
+void KisTextureTile::setNeedsMipmapRegeneration()
+{
+    if (m_filter == TrilinearFilterMode ||
+        m_filter == HighQualityFiltering) {
+
+        m_needsMipmapRegeneration = true;
+    }
+}
+
 void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 {
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 
-    setTextureParameters(m_filter);
+    setTextureParameters();
 
     const GLvoid *fd = updateInfo.data();
 #ifdef USE_PIXEL_BUFFERS
@@ -304,9 +298,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                         columnBuffer.constData());
     }
 
-#ifdef Q_OS_WIN
-        glGenerateMipmap(GL_TEXTURE_2D);
-#endif
+    setNeedsMipmapRegeneration();
 }
 
 #ifdef USE_PIXEL_BUFFERS

@@ -31,7 +31,7 @@ class KoPAViewBase;
 class KOPAGEAPP_EXPORT KoPABackgroundFillWidget : public KoFillConfigWidget
 {
 public:
-    KoPABackgroundFillWidget(QWidget *parent);
+    explicit KoPABackgroundFillWidget(QWidget *parent);
 
     void setView(KoPAViewBase *view);
 

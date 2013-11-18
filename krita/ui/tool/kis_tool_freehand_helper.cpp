@@ -31,9 +31,10 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_smoothing_options.h"
+#include "kis_paintop_preset.h"
+
 
 #include <math.h>
-#include <qnumeric.h> // for qIsNaN
 
 //#define DEBUG_BEZIER_CURVES
 
@@ -64,7 +65,9 @@ struct KisToolFreehandHelper::Private
     QTimer airbrushingTimer;
 
     QList<KisPaintInformation> history;
-    QList<qreal> velocityHistory;
+    QList<qreal> distanceHistory;
+
+    QPointF lastOutlinePos;
 };
 
 
@@ -89,6 +92,27 @@ KisToolFreehandHelper::~KisToolFreehandHelper()
 void KisToolFreehandHelper::setSmoothness(const KisSmoothingOptions &smoothingOptions)
 {
     m_d->smoothingOptions = smoothingOptions;
+}
+
+QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
+                                                   const KisPaintOpSettings *globalSettings,
+                                                   KisPaintOpSettings::OutlineMode mode) const
+{
+    const KisPaintOpSettings *settings = globalSettings;
+    KisPaintInformation info(savedCursorPos);
+    KisDistanceInformation distanceInfo(m_d->lastOutlinePos, 0);
+    m_d->lastOutlinePos = savedCursorPos;
+
+    if (!m_d->painterInfos.isEmpty()) {
+        settings = m_d->resources->currentPaintOpPreset()->settings();
+        info = m_d->previousPaintInformation;
+        distanceInfo = *m_d->painterInfos.first()->dragDistance;
+    }
+
+    KisPaintInformation::DistanceInformationRegistrar registrar =
+        info.registerDistanceInformation(&distanceInfo);
+
+    return settings->brushOutline(info, mode);
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
@@ -138,7 +162,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 
     m_d->history.clear();
-    m_d->velocityHistory.clear();
+    m_d->distanceHistory.clear();
 
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
@@ -185,8 +209,8 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-            qDebug() << "WARINING: there is no intersection point "
-                     << "in the basic smoothing algoriths";
+//            qDebug() << "WARINING: there is no intersection point "
+//                     << "in the basic smoothing algoriths";
         }
 
         controlTarget1 = intersection;
@@ -243,28 +267,40 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             m_d->infoBuilder->continueStroke(event,
                                              m_d->strokeTime.elapsed());
 
-    // Smooth the coordinates out using the history and the velocity. See
-    // https://bugs.kde.org/show_bug.cgi?id=281267 and http://www24.atwiki.jp/sigetch_2007/pages/17.html.
-    // This is also implemented in gimp, which is where I cribbed the code from.
+    /**
+     * Smooth the coordinates out using the history and the
+     * distance. This is a heavily modified version of an algo used in
+     * Gimp and described in https://bugs.kde.org/show_bug.cgi?id=281267 and
+     * http://www24.atwiki.jp/sigetch_2007/pages/17.html.  The main
+     * differences are:
+     *
+     * 1) It uses 'distance' instead of 'velocity', since time
+     *    measurements are too unstable in realworld environment
+     *
+     * 2) There is no 'Quality' parameter, since the number of samples
+     *    is calculated automatically
+     *
+     * 3) 'Tail Aggressiveness' is used for controling the end of the
+     *    stroke
+     *
+     * 4) The formila is a little bit different: 'Distance' parameter
+     *    stands for $3 \Sigma$
+     */
     if (m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && m_d->smoothingOptions.smoothnessDistance > 0.0) {
 
-        { // initialize current velocity
+        { // initialize current distance
             QPointF prevPos;
-            int prevTime;
 
             if (!m_d->history.isEmpty()) {
                 const KisPaintInformation &prevPi = m_d->history.last();
                 prevPos = prevPi.pos();
-                prevTime = prevPi.currentTime();
             } else {
                 prevPos = m_d->previousPaintInformation.pos();
-                prevTime = m_d->previousPaintInformation.currentTime();
             }
 
-            int deltaTime = qMax(1, info.currentTime() - prevTime); // make sure deltaTime > 1
-            qreal currentVelocity = QVector2D(info.pos() - prevPos).length() / deltaTime;
-            m_d->velocityHistory.append(currentVelocity);
+            qreal currentDistance = QVector2D(info.pos() - prevPos).length();
+            m_d->distanceHistory.append(currentDistance);
         }
 
         m_d->history.append(info);
@@ -273,24 +309,23 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
-            const qreal avg_events_rate = 8; // ms
-            const qreal sigma = m_d->smoothingOptions.smoothnessDistance / (3.0 * avg_events_rate); // '3.0' for (3 * sigma) range
+            const qreal sigma = m_d->smoothingOptions.smoothnessDistance / 3.0; // '3.0' for (3 * sigma) range
 
             qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
             qreal gaussianWeight2 = sigma * sigma;
-            qreal velocitySum = 0.0;
+            qreal distanceSum = 0.0;
             qreal scaleSum = 0.0;
             qreal pressure = 0.0;
             qreal baseRate = 0.0;
 
-            Q_ASSERT(m_d->history.size() == m_d->velocityHistory.size());
+            Q_ASSERT(m_d->history.size() == m_d->distanceHistory.size());
 
             for (int i = m_d->history.size() - 1; i >= 0; i--) {
                 qreal rate = 0.0;
 
                 const KisPaintInformation nextInfo = m_d->history.at(i);
-                double velocity = m_d->velocityHistory.at(i);
-                Q_ASSERT(velocity >= 0.0);
+                double distance = m_d->distanceHistory.at(i);
+                Q_ASSERT(distance >= 0.0);
 
                 qreal pressureGrad = 0.0;
                 if (i < m_d->history.size() - 1) {
@@ -300,13 +335,13 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
 
                     if (pressureGrad > 0.0 ) {
                         pressureGrad *= tailAgressiveness * (1.0 - nextInfo.pressure());
-                        velocity += pressureGrad * 3.0 * sigma; // (3 * sigma) --- holds > 90% of the region
+                        distance += pressureGrad * 3.0 * sigma; // (3 * sigma) --- holds > 90% of the region
                     }
                 }
 
                 if (gaussianWeight2 != 0.0) {
-                    velocitySum += velocity;
-                    rate = gaussianWeight * exp(-velocitySum * velocitySum / (2 * gaussianWeight2));
+                    distanceSum += distance;
+                    rate = gaussianWeight * exp(-distanceSum * distanceSum / (2 * gaussianWeight2));
                 }
 
                 if (m_d->history.size() - i == 1) {
@@ -350,11 +385,11 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         if (!m_d->haveTangent) {
             m_d->haveTangent = true;
             m_d->previousTangent =
-                    (info.pos() - m_d->previousPaintInformation.pos()) /
-                    (info.currentTime() - m_d->previousPaintInformation.currentTime());
+                (info.pos() - m_d->previousPaintInformation.pos()) /
+                qMax(1, info.currentTime() - m_d->previousPaintInformation.currentTime());
         } else {
             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-                    (info.currentTime() - m_d->olderPaintInformation.currentTime());
+                qMax(1, info.currentTime() - m_d->olderPaintInformation.currentTime());
 
             paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
                                m_d->previousTangent, newTangent);
@@ -407,7 +442,6 @@ const KisPaintOp* KisToolFreehandHelper::currentPaintOp() const
 {
     return !m_d->painterInfos.isEmpty() ? m_d->painterInfos.first()->painter->paintOp() : 0;
 }
-
 
 void KisToolFreehandHelper::finishStroke()
 {

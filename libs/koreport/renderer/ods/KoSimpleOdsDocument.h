@@ -21,12 +21,12 @@
 #ifndef KOSIMPLEODSDOCUMENT_H
 #define KOSIMPLEODSDOCUMENT_H
 
-#include <KoDocument.h>
-#include <KoStore.h>
-
 #include "KoSimpleOdsSheet.h"
 
+#include <QFile>
+
 class KoOdfWriteStore;
+class KoStore;
 
 class KoSimpleOdsDocument
 {
@@ -43,7 +43,7 @@ class KoSimpleOdsDocument
 
     private:
         bool createContent(KoOdfWriteStore* store);
-        
+
         KoStore *m_store;
         QList<KoSimpleOdsSheet*> m_worksheets;
 };

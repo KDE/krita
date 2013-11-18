@@ -50,6 +50,7 @@ public:
     void deactivate();
 
     void begin(int shortcut, QEvent *event = 0);
+    void inputEvent(QEvent* event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
 private:

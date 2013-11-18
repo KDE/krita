@@ -78,7 +78,7 @@ void KisMacroPlayer::run()
     KoProgressUpdater* progressUpdater = 0;
     if(d->updater) {
         progressUpdater = new KoProgressUpdater(d->updater);
-        progressUpdater->start(actions.size());
+        progressUpdater->start(actions.size(), i18n("Playing back macro"));
     }
 
     for (QList<KisRecordedAction*>::iterator it = actions.begin(); it != actions.end(); ++it) {

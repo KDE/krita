@@ -22,6 +22,7 @@
 #include <QtGlobal>
 
 #include <KoColorSpace.h>
+#include <KoMixColorsOp.h>
 #include <math.h>
 
 #include "kis_paint_device.h"

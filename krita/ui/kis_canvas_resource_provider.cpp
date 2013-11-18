@@ -22,11 +22,10 @@
 
 #include <KoCanvasBase.h>
 #include <KoID.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoStopGradient.h>
 
@@ -169,6 +168,41 @@ KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
     return preset;
 }
 
+void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
+{
+    Q_ASSERT(preset->valid());
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
+    Q_ASSERT(preset->settings());
+    if (!preset) return;
+
+    dbgUI << "setPaintOpPreset" << preset->paintOp();
+
+    QVariant v;
+    v.setValue(preset);
+    m_resourceManager->setResource(CurrentPaintOpPreset, v);
+}
+
+KisPaintOpPresetSP KisCanvasResourceProvider::previousPreset() const
+{
+    KisPaintOpPresetSP preset = m_resourceManager->resource(PreviousPaintOpPreset).value<KisPaintOpPresetSP>();
+    return preset;
+}
+
+void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetSP preset)
+{
+    Q_ASSERT(preset->valid());
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
+    Q_ASSERT(preset->settings());
+    if (!preset) return;
+
+    dbgUI << "setPreviousPaintOpPreset" << preset->paintOp();
+
+    QVariant v;
+    v.setValue(preset);
+    m_resourceManager->setResource(PreviousPaintOpPreset, v);
+}
+
+
 
 void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 {
@@ -183,7 +217,6 @@ void KisCanvasResourceProvider::slotGeneratorConfigurationActivated(KisFilterCon
     KisFilterConfiguration * generatorConfiguration = dynamic_cast<KisFilterConfiguration*>(res);
     QVariant v = qVariantFromValue((void *) generatorConfiguration);
     m_resourceManager->setResource(CurrentGeneratorConfiguration, v);
-    emit sigGeneratorConfigurationChanged(generatorConfiguration);
 }
 
 void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
@@ -195,20 +228,6 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
     emit sigGradientChanged(gradient);
 }
 
-void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset)
-{
-    Q_ASSERT(preset->valid());
-    Q_ASSERT(!preset->paintOp().id().isEmpty());
-    Q_ASSERT(preset->settings());
-    if (!preset) return;
-
-    dbgUI << "setPaintOpPreset" << preset->paintOp();
-
-    QVariant v;
-    v.setValue(preset);
-    m_resourceManager->setResource(CurrentPaintOpPreset, v);
-    emit sigPaintOpPresetChanged(preset);
-}
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 {
@@ -312,19 +331,11 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
     case(CurrentPattern):
         emit sigPatternChanged(static_cast<KisPattern *>(res.value<void *>()));
         break;
-    case(CurrentGeneratorConfiguration):
-        emit sigGeneratorConfigurationChanged(static_cast<KisFilterConfiguration*>(res.value<void*>()));
     case(CurrentGradient):
         emit sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));
         break;
-    case(CurrentPaintOpPreset):
-        emit sigPaintOpPresetChanged(currentPreset());
-        break;
     case(CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
-        break;
-    case(CurrentCompositeOp) :
-        emit sigCompositeOpChanged(currentCompositeOp());
         break;
     case (Opacity):
     {
@@ -341,7 +352,6 @@ void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp
     QVariant v;
     v.setValue(compositeOp);
     m_resourceManager->setResource(CurrentCompositeOp, v);
-    emit sigCompositeOpChanged(compositeOp);
 }
 
 QString KisCanvasResourceProvider::currentCompositeOp() const

@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include "KoColorSpaceRegistry.h"
+#include "KoMixColorsOp.h"
 
 #include <math.h>
 #include <KoColorModelStandardIds.h>

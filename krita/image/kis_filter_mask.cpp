@@ -18,9 +18,7 @@
  */
 
 #include <KoIcon.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
 #include "kis_filter_mask.h"

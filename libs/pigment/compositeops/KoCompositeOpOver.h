@@ -21,6 +21,7 @@
 #define _KOCOMPOSITEOPOVER_H_
 
 #include "KoCompositeOpAlphaBase.h"
+#include <KoCompositeOpRegistry.h>
 #include <klocale.h>
 
 template<class _CSTraits, int channel>

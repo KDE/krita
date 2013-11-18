@@ -26,6 +26,7 @@
 #include "kis_paint_information.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_default_bounds.h"
+#include "kis_paintop_settings.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -64,6 +65,7 @@ public:
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
+    QPainterPath paintOpOutline(const QPointF &savedCursorPos, const KisPaintOpSettings *globalSettings, KisPaintOpSettings::OutlineMode mode) const;
 
 protected:
 

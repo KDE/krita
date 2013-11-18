@@ -20,6 +20,7 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_pattern.h"
@@ -244,6 +245,12 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 {
     return m_d->currentBgColor;
 }
+
+KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
+{
+    return m_d->currentPaintOpPreset;
+}
+
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

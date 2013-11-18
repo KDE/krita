@@ -1934,7 +1934,7 @@ void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
     int keepProperties[] = { QTextFormat::FontStyleHint, QTextFormat::FontFixedPitch, KoCharacterStyle::FontCharset };
 
     QMap<int, QVariant> keep;
-    for (unsigned int i = 0; i < sizeof(keepProperties); ++i) {
+    for (unsigned int i = 0; i < sizeof(keepProperties)/sizeof(*keepProperties); ++i) {
         if (hasProperty(keepProperties[i])) {
             keep.insert(keepProperties[i], value(keepProperties[i]));
         }

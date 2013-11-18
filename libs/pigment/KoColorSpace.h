@@ -26,18 +26,16 @@
 #include <QHash>
 #include <QVector>
 #include <QList>
-#include <QBitArray>
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
 #include "KoCompositeOp.h"
-#include <KoChannelInfo.h>
 #include <KoID.h>
 #include "pigment_export.h"
 
 class QDomDocument;
 class QDomElement;
-class KoCompositeOp;
+class KoChannelInfo;
 class KoColorProfile;
 class KoColorTransformation;
 class KoColorConversionTransformationFactory;
@@ -56,9 +54,8 @@ enum ColorSpaceIndependence {
     TO_RGBA16
 };
 
-
-#include "KoMixColorsOp.h"
-#include "KoConvolutionOp.h"
+class KoMixColorsOp;
+class KoConvolutionOp;
 
 /**
  * A KoColorSpace is the definition of a certain color space.

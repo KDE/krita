@@ -15,14 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "KoReportKSpreadRenderer.h"
+
 #include <ods/KoSimpleOdsDocument.h>
 #include <ods/KoSimpleOdsCell.h>
 #include <ods/KoSimpleOdsSheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoDocument.h>
 #include "renderobjects.h"
 #include <kdebug.h>
 

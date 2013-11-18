@@ -31,7 +31,6 @@ class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
-class KoCompositeOp;
 
 class KisDoc2;
 class KisFilterStrategy;
@@ -143,7 +142,7 @@ public slots:
     void slotTryFinishIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString &node);
+    void createNode(const QString& nodeType, bool quiet = false);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);

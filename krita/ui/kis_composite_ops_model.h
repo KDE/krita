@@ -23,7 +23,6 @@
 #include <KoID.h>
 #include "kis_categorized_list_model.h"
 
-class KoCompositeOp;
 class KoColorSpace;
 
 struct KoIDToQStringConverter {

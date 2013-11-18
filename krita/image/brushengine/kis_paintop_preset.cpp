@@ -27,7 +27,6 @@
 #include <QDomDocument>
 #include <QBuffer>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoInputDevice.h>
 
 #include "kis_types.h"
@@ -122,6 +121,9 @@ bool KisPaintOpPreset::load()
     if (filename().isEmpty()) {
         return false;
     }
+
+    QFile file(filename());
+    if (file.size() == 0) return false;
 
     QImageReader reader(filename(), "PNG");
 

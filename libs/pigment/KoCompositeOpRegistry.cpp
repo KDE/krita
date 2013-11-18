@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KoCompositeOpRegistry.h"
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <KoID.h>

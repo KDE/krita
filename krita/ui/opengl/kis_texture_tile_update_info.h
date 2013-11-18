@@ -23,11 +23,11 @@
 #ifdef HAVE_OPENGL
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
-
+#include "kis_config.h"
 #include <KoColorConversionTransformation.h>
+#include <KoChannelInfo.h>
 
 
 class KisTextureTileUpdateInfo;
@@ -60,13 +60,67 @@ public:
         m_patchPixels = 0;
     }
 
-    void retrieveData(KisImageWSP image)
+    void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
         m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
+
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
                                        m_patchRect.width(), m_patchRect.height());
+
+        // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
+        //      the display shader
+        if (!m_channelFlags.isEmpty()) {
+
+            quint32 numPixels = m_patchRect.width() * m_patchRect.height();
+
+            quint8 *dst = m_patchColorSpace->allocPixelBuffer(numPixels);
+
+            QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
+            int channelSize = channelInfo[selectedChannelIndex]->size();
+            int pixelSize = m_patchColorSpace->pixelSize();
+
+            KisConfig cfg;
+
+            if (onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
+                int selectedChannelPos = channelInfo[selectedChannelIndex]->pos();
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
+
+                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels + (pixelIndex * pixelSize) + selectedChannelPos,
+                                   channelSize);
+                        }
+                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                    }
+                }
+            }
+            else {
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < m_patchColorSpace->channelCount(); ++channelIndex) {
+                        if (m_channelFlags.testBit(channelIndex)) {
+                            memcpy(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   m_patchPixels  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                        else {
+                            memset(dst + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                        }
+                    }
+                }
+
+            }
+            delete[] m_patchPixels;
+            m_patchPixels = dst;
+
+        }
+
     }
 
     void convertTo(const KoColorSpace* dstCS,

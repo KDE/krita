@@ -32,9 +32,9 @@
 void KisActionManagerTest::testUpdateGUI()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
-    doc->documentPart()->addView(view);
+    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -59,9 +59,9 @@ void KisActionManagerTest::testUpdateGUI()
 void KisActionManagerTest::testCondition()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
-    doc->documentPart()->addView(view);
+    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
@@ -96,9 +96,9 @@ void KisActionManagerTest::testCondition()
 void KisActionManagerTest::testTakeAction()
 {
     KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* shell = new KoMainWindow(doc->documentPart()->componentData());
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), shell);
-    doc->documentPart()->addView(view);
+    KoMainWindow* mainWindow =  doc->documentPart()->createMainWindow();
+    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
     view->actionManager()->addAction("dummy", action, view->actionCollection());

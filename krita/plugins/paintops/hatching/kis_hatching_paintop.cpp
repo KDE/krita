@@ -99,34 +99,23 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
-    //-----------POSITIONING code----------
-    QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
-    QPointF pt = info.pos() - hotSpot;
-
-    qint32 x, y;
-    qreal xFraction, yFraction;
-
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-
-    if (!m_settings->subpixelprecision) {
-        xFraction = 0;
-        yFraction = 0;
-    }
-    //--------END POSITIONING CODE-----------
-
-    //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
+    /*----Fetch the Dab----*/
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
     static KoColor color(Qt::black, cs);
 
+    QRect dstRect;
     KisFixedPaintDeviceSP maskDab =
-        m_dabCache->fetchDab(cs, color, scale, scale,
-                             0.0, info, xFraction, yFraction);
+        m_dabCache->fetchDab(cs, color, info.pos(),
+                             scale, scale, 0.0,
+                             info, 1.0, &dstRect);
+
+    // sanity check
+    Q_ASSERT(dstRect.size() == maskDab->bounds().size());
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/
-    qint32 sw = maskDab->bounds().width();
-    qint32 sh = maskDab->bounds().height();
+    qint32 x, y, sw, sh;
+    dstRect.getRect(&x, &y, &sw, &sh);
 
     //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
     if (m_settings->opaquebackground) {

@@ -29,10 +29,13 @@
 struct MirrorProperties{
     MirrorProperties()
         : horizontalMirror(false),
-          verticalMirror(false) {}
+        verticalMirror(false),
+        coordinateSystemFlipped(false) {}
 
     bool horizontalMirror;
     bool verticalMirror;
+
+    bool coordinateSystemFlipped;
 
     bool isEmpty() const {
         return !horizontalMirror && !verticalMirror;

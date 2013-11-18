@@ -249,7 +249,36 @@ namespace VSyncWorkaround {
     }
 }
 
-#else  // defined Q_OS_LINUX
+#elif defined Q_WS_WIN
+
+#include <GL/wglew.h>
+
+namespace VSyncWorkaround {
+    bool tryDisableVSync(QWidget *) {
+        bool retval = false;
+
+#ifdef WGL_EXT_swap_control
+        if (WGLEW_EXT_swap_control) {
+            wglSwapIntervalEXT(0);
+            int interval = wglGetSwapIntervalEXT();
+
+            if (interval) {
+                qWarning() << "Failed to disable VSync with WGLEW_EXT_swap_control";
+            }
+
+            retval = !interval;
+        } else {
+            qWarning() << "WGL_EXT_swap_control extension is not available";
+        }
+#else
+        qWarning() << "GLEW WGL_EXT_swap_control extension is not compiled in";
+#endif
+
+        return retval;
+    }
+}
+
+#else  // !defined Q_OS_LINUX && !defined Q_WS_WIN
 
 namespace VSyncWorkaround {
     bool tryDisableVSync(QWidget *) {

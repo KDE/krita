@@ -16,9 +16,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemText.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>

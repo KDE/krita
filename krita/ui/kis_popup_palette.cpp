@@ -444,33 +444,6 @@ void KisPopupPalette::mouseReleaseEvent ( QMouseEvent * event )
     }
 }
 
-void KisPopupPalette::tabletEvent(QTabletEvent* event)
-{
-    event->accept();
-    QMouseEvent* mouseEvent = 0;
-    switch(event->type())
-    {
-    case QEvent::TabletPress:
-
-        mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                     Qt::LeftButton, Qt::LeftButton, event->modifiers());
-        mousePressEvent(mouseEvent);
-        break;
-    case QEvent::TabletMove:
-        mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                     Qt::NoButton, Qt::NoButton, event->modifiers());
-        mouseMoveEvent(mouseEvent);
-        break;
-    case QEvent::TabletRelease:
-        mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                     Qt::LeftButton, Qt::LeftButton, event->modifiers());
-        mouseReleaseEvent(mouseEvent);
-        break;
-    default: break;
-    }
-    delete mouseEvent;
-}
-
 int KisPopupPalette::calculateIndex(QPointF point, int n)
 {
     calculatePresetIndex(point, n);

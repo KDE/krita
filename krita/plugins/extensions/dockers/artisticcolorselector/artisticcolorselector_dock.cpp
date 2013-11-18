@@ -45,7 +45,7 @@ struct ColorPreferencesPopupUI: public QWidget, public Ui_wdgColorPreferencesPop
 };
 
 ArtisticColorSelectorDock::ArtisticColorSelectorDock():
-    QDockWidget(i18n("Art. Color Selector")),
+    QDockWidget(i18n("Artistic Color Selector")),
     m_canvas(0)
 {
     m_hsxButtons    = new QButtonGroup();

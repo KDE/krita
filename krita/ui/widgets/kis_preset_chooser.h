@@ -63,6 +63,8 @@ public:
 
     KoResourceItemChooser *itemChooser();
 
+    void setPresetFilter(const QString& paintOpId);
+
 signals:
     void resourceSelected(KoResource * resource);
 

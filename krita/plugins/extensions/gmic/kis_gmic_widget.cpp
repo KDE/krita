@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <qdialogbuttonbox.h>
 #include <QLabel>
+#include <QCloseEvent>
 #include <kis_debug.h>
 
 #include <QMetaType>
@@ -184,6 +185,12 @@ void KisGmicWidget::okFilterSlot()
     applyFilterSlot();
     emit sigClose();
 }
+
+ void KisGmicWidget::closeEvent(QCloseEvent *event)
+ {
+     emit sigClose();
+     event->accept();
+ }
 
 void KisGmicWidget::resetFilterSlot()
 {

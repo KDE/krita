@@ -23,7 +23,6 @@
 #include <QPolygonF>
 #include <QTransform>
 #include <QGLShaderProgram>
-#include <QGLBuffer>
 #include <QGLFramebufferObject>
 #include <QGLContext>
 
@@ -74,7 +73,6 @@ struct KisTool::Private {
     Private()
         : currentPattern(0),
           currentGradient(0),
-          currentPaintOpPreset(0),
           currentGenerator(0),
           optionWidget(0),
           spacePressed(0),
@@ -90,7 +88,6 @@ struct KisTool::Private {
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     float currentExposure;
     KisFilterConfiguration * currentGenerator;
@@ -173,12 +170,7 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
 
-    d->currentPaintOpPreset =
-            canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-
-    if (d->currentPaintOpPreset && d->currentPaintOpPreset->settings()) {
-        d->currentPaintOpPreset->settings()->activate();
-    }
+    canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
 
     d->currentNode = canvas()->resourceManager()->
             resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
@@ -234,10 +226,6 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentGradient):
         d->currentGradient = static_cast<KoAbstractGradient *>(v.value<void *>());
-        break;
-    case(KisCanvasResourceProvider::CurrentPaintOpPreset):
-        d->currentPaintOpPreset =
-                canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
@@ -415,7 +403,7 @@ KoAbstractGradient * KisTool::currentGradient()
 
 KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 {
-    return d->currentPaintOpPreset;
+    return canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 }
 
 KisNodeSP KisTool::currentNode()
@@ -462,11 +450,6 @@ KisTool::ToolMode KisTool::mode() const {
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(false);
-    }
-
     KisConfig cfg;
 
     if (isGestureSupported() &&
@@ -494,11 +477,6 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(true);
-    }
     KisConfig cfg;
 
     if (mode() == GESTURE_MODE) {
@@ -723,31 +701,6 @@ void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
     useCursor(d->cursor);
-
-    switch (cfg.cursorStyle()) {
-    case CURSOR_STYLE_TOOLICON:
-        useCursor(d->cursor);
-        break;
-    case CURSOR_STYLE_CROSSHAIR:
-    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
-        useCursor(KisCursor::crossCursor());
-        break;
-    case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::arrowCursor());
-        break;
-    case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor());
-        break;
-    case CURSOR_STYLE_SMALL_ROUND:
-    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
-        useCursor(KisCursor::roundCursor());
-        break;
-    case CURSOR_STYLE_OUTLINE:
-        break;
-    default:
-        // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        ;
-    }
 }
 
 

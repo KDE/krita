@@ -20,11 +20,10 @@
 #ifndef KOUNICOLORDIALOG_H
 #define KOUNICOLORDIALOG_H
 
-#include "KoColor.h"
-
 #include <kpagedialog.h>
 #include "kowidgets_export.h"
 
+class KoColor;
 class KoUniColorDialogPrivate;
 
 /**

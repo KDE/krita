@@ -222,7 +222,7 @@ void KisCoordinatesConverterTest::testMirroring()
     QTransform flakeToWidget;
     QTransform viewportToWidget;
 
-    converter.mirror(converter.imageCenterInWidgetPixel(), false, true);
+    converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
     converter.setZoom(1.);
 
     // image pixels == flake pixels
@@ -256,7 +256,7 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
     QTransform flakeToWidget;
     QTransform viewportToWidget;
 
-    converter.mirror(converter.imageCenterInWidgetPixel(), false, true);
+    converter.mirror(converter.imageCenterInWidgetPixel(), true, false);
     converter.setZoom(1.);
 
     // image pixels == flake pixels

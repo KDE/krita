@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 
+#include <KoChannelInfo.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -54,74 +55,46 @@
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
+#include "kis_lock_free_cache.h"
 
-class CacheData : public KisDataManager::AbstractCache
-{
-public:
-    bool m_thumbnailsValid;
-    QMap<int, QMap<int, QImage> > m_thumbnails;
-
-    bool m_exactBoundsValid;
-    QRect m_exactBounds;
-
-    bool m_regionValid;
-    QRegion m_region;
-};
 
 class PaintDeviceCache
 {
 public:
-    PaintDeviceCache(KisPaintDevice *paintDevice) {
-        m_paintDevice = paintDevice;
+    PaintDeviceCache(KisPaintDevice *paintDevice)
+        : m_paintDevice(paintDevice),
+          m_exactBoundsCache(paintDevice),
+          m_regionCache(paintDevice)
+    {
     }
 
-
     void setupCache() {
-        CacheData *data = static_cast<CacheData *>(m_paintDevice->dataManager()->cache());
-
-        if(!data) {
-            data = new CacheData();
-            m_paintDevice->dataManager()->setCache(data);
-        }
-
-        m_data = data;
         invalidate();
     }
 
     void invalidate() {
-        m_data->m_thumbnailsValid = false;
-        m_data->m_exactBoundsValid = false;
-        m_data->m_regionValid = false;
+        m_thumbnailsValid = false;
+        m_exactBoundsCache.invalidate();
+        m_regionCache.invalidate();
     }
 
     QRect exactBounds() {
-        if (m_data->m_exactBoundsValid) {
-            return m_data->m_exactBounds;
-        }
-        m_data->m_exactBounds = m_paintDevice->calculateExactBounds();
-        m_data->m_exactBoundsValid = true;
-        return m_data->m_exactBounds;
+        return m_exactBoundsCache.getValue();
     }
 
     QRegion region() {
-        if (m_data->m_regionValid) {
-            return m_data->m_region;
-        }
-        m_data->m_region = m_paintDevice->dataManager()->region();
-        m_data->m_regionValid = true;
-        return m_data->m_region;
-
+        return m_regionCache.getValue();
     }
 
     QImage createThumbnail(qint32 w, qint32 h, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) {
         QImage thumbnail;
 
-        if(m_data->m_thumbnailsValid) {
+        if(m_thumbnailsValid) {
             thumbnail = findThumbnail(w, h);
         }
         else {
-            m_data->m_thumbnails.clear();
-            m_data->m_thumbnailsValid = true;
+            m_thumbnails.clear();
+            m_thumbnailsValid = true;
         }
 
         if(thumbnail.isNull()) {
@@ -136,19 +109,44 @@ public:
 private:
     inline QImage findThumbnail(qint32 w, qint32 h) {
         QImage resultImage;
-        if (m_data->m_thumbnails.contains(w) && m_data->m_thumbnails[w].contains(h)) {
-            resultImage = m_data->m_thumbnails[w][h];
+        if (m_thumbnails.contains(w) && m_thumbnails[w].contains(h)) {
+            resultImage = m_thumbnails[w][h];
         }
         return resultImage;
     }
 
     inline void cacheThumbnail(qint32 w, qint32 h, QImage image) {
-        m_data->m_thumbnails[w][h] = image;
+        m_thumbnails[w][h] = image;
     }
 
 private:
     KisPaintDevice *m_paintDevice;
-    CacheData *m_data;
+
+    struct ExactBoundsCache : KisLockFreeCache<QRect> {
+        ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
+
+        QRect calculateNewValue() const {
+            return m_paintDevice->calculateExactBounds();
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    struct RegionCache : KisLockFreeCache<QRegion> {
+        RegionCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
+
+        QRegion calculateNewValue() const {
+            return m_paintDevice->dataManager()->region();
+        }
+    private:
+        KisPaintDevice *m_paintDevice;
+    };
+
+    ExactBoundsCache m_exactBoundsCache;
+    RegionCache m_regionCache;
+
+    bool m_thumbnailsValid;
+    QMap<int, QMap<int, QImage> > m_thumbnails;
 };
 
 
@@ -783,6 +781,7 @@ QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h, KoColorConversionTran
 
 KisHLineIteratorSP KisPaintDevice::createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createHLineIteratorNG(x, y, w);
 }
 
@@ -793,6 +792,7 @@ KisHLineConstIteratorSP KisPaintDevice::createHLineConstIteratorNG(qint32 x, qin
 
 KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qint32 w)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createVLineIteratorNG(x, y, w);
 }
 
@@ -803,6 +803,7 @@ KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qin
 
 KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect &rc)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createRectIteratorNG(rc);
 }
 
@@ -825,6 +826,7 @@ KisRepeatVLineConstIteratorSP KisPaintDevice::createRepeatVLineConstIterator(qin
 
 KisRandomAccessorSP KisPaintDevice::createRandomAccessorNG(qint32 x, qint32 y)
 {
+    m_d->cache.invalidate();
     return m_d->currentStrategy()->createRandomAccessorNG(x, y);
 }
 

@@ -139,7 +139,7 @@ void KoRdfPrefixMapping::load(QSharedPointer<Soprano::Model> model)
     Soprano::Node ListHeadSubject = Node::createResourceNode(QUrl(nodePrefix + "list"));
     QList<Statement> listNodes = KoTextRdfCore::loadList(model, ListHeadSubject);
     //kDebug(30015) << "found count:" << listNodes.size();
-    foreach (Soprano::Statement s, listNodes) {
+    foreach (const Soprano::Statement &s, listNodes) {
         Soprano::Node dataBNode = s.object();
         QString prefix = KoTextRdfCore::getObject(model, dataBNode,
                          Node::createResourceNode(QUrl(nodePrefix + "prefix"))).toString();

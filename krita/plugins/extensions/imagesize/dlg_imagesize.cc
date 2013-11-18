@@ -138,10 +138,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     slotProtectChanged();
 
-#ifdef __GNUC__
-#warning "DlgImageSize: should take current units from a setting"
-#endif
-
+     // XXX: Should take current units from a setting"
     const int unitIndex = KoUnit(KoUnit::Centimeter).indexInListForUi(KoUnit::HidePixel);
     m_page->cmbWidthUnit->setCurrentIndex(unitIndex);
     m_page->cmbHeightUnit->setCurrentIndex(unitIndex);

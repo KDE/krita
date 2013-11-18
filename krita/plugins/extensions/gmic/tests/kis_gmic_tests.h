@@ -23,6 +23,8 @@
 #include <QImage>
 #include <gmic.h>
 
+// #define RUN_FILTERS
+
 class KisGmicBlacklister;
 
 class KisGmicFilterSetting;
@@ -33,7 +35,8 @@ class KisGmicTests : public QObject
     Q_OBJECT
 
 private:
-    bool filterWithGmic(KisGmicFilterSetting * gmicFilterSetting, const QString &fileName);
+    bool filterWithGmic(KisGmicFilterSetting * gmicFilterSetting, const QString &fileName, gmic_list<float> &images);
+
     QString filePathify(const QString &filterName);
     bool isAlreadyThere(QString fileName);
     QString toPlainText(const QString &htmlText);
@@ -50,9 +53,17 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-
+#ifdef RUN_FILTERS
+    void testColorizeFilter();
+#endif
     void testAllFilters();
     void testBlacklister();
+    void testGatherLayers();
+
+    void testConvertGrayScaleGmic();
+    void testConvertGrayScaleAlphaGmic();
+    void testConvertRGBgmic();
+    void testConvertRGBAgmic();
 
 
 };

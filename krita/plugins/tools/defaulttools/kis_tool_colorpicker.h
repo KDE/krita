@@ -46,6 +46,7 @@ class KisToolColorPicker : public KisTool
 {
 
     Q_OBJECT
+    Q_PROPERTY(bool toForeground READ toForeground WRITE setToForeground NOTIFY toForegroundChanged)
 
 public:
     KisToolColorPicker(KoCanvasBase* canvas);
@@ -75,11 +76,17 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    bool toForeground() const;
+
+Q_SIGNALS:
+    void toForegroundChanged();
+
 protected:
     void activate(ToolActivation activation, const QSet<KoShape*> &);
     void deactivate();
 
 public slots:
+    void setToForeground(bool newValue);
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);

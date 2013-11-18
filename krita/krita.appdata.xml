@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">krita.desktop</id>
+  <licence>CC0</licence>
+  <summary>Digital Painting, Creative Freedom</summary>
+  <description>
+    <p>Krita is the full-featured digital art studio.</p>
+
+    <p> It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters..</p>
+
+    <p>Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
+
+    <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
+  </description>
+  <url type="homepage">http://www.krita.org/</url>
+  <screenshots>
+    <screenshot type="default">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
+    <screenshot >http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
+    <screenshot></screenshot>
+  </screenshots>
+  <updatecontact>foundation@krita.org</updatecontact>
+  <project_group>KDE</project_group>
+</application>

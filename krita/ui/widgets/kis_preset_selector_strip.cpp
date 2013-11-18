@@ -47,6 +47,12 @@ KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
 }
 
+void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
+{
+    smallPresetChooser->setPresetFilter(paintOpId);
+    m_resourceItemView->scrollTo(m_resourceItemView->model()->index(0, 0));
+}
+
 void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision

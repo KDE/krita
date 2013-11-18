@@ -26,8 +26,6 @@
 #include <kis_types.h>
 #include <kis_color_option.h>
 
-#include <KoColor.h>
-
 #include "kis_grid_paintop_settings.h"
 
 

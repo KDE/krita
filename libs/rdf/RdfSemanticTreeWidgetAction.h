@@ -20,13 +20,14 @@
 #ifndef __rdf_RdfSemanticTreeWidgetAction_h__
 #define __rdf_RdfSemanticTreeWidgetAction_h__
 
-#include <QObject>
+#include "kordf_export.h"
+// KDE
 #include <kaction.h>
 
 class KoCanvasBase;
-class KoTextEditor;
 
-class RdfSemanticTreeWidgetAction : public KAction
+
+class KORDF_EXPORT RdfSemanticTreeWidgetAction : public KAction
 {
     Q_OBJECT
 

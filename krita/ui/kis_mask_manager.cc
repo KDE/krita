@@ -184,7 +184,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDevice
     createMaskCommon(mask, activeNode, copyFrom, i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"));
 }
 
-void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom)
+void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet)
 {
     KisFilterMaskSP mask = new KisFilterMask();
     createMaskCommon(mask, activeNode, copyFrom, i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"));
@@ -200,6 +200,16 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
     KisDlgAdjustmentLayer dialog(mask, mask.data(), originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
                                  m_view);
+
+    // If we are supposed to not disturb the user, don't start asking them about things.
+    if(quiet) {
+        KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
+        if (filter) {
+            mask->setFilter(filter);
+            mask->setName(mask->name());
+        }
+        return;
+    }
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfiguration *filter = dialog.filterConfiguration();
@@ -255,7 +265,7 @@ void KisMaskManager::maskProperties()
             return;
         }
 
-        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
+        KisDlgAdjLayerProps dlg(layer, mask, dev, m_view, mask->filter().data(), mask->name(), i18n("Filter Mask Properties"), m_view, "dlgeffectmaskprops");
 
         KisSafeFilterConfigurationSP configBefore(mask->filter());
         Q_ASSERT(configBefore);
@@ -267,6 +277,7 @@ void KisMaskManager::maskProperties()
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
+            mask->setName(dlg.layerName());
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd

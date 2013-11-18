@@ -21,8 +21,6 @@
 
 #include <QtTest>
 
-class KoColorSpace;
-
 class KisSelectionTest : public QObject
 {
     Q_OBJECT

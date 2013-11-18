@@ -106,6 +106,22 @@ protected:
         return image;
     }
 
+    /**
+     * Creates a simple image with one empty layer and connects it to
+     * a surrogate undo store
+     */
+    KisImageSP createTrivialImage(KisSurrogateUndoStore *undoStore) {
+        QRect imageRect = QRect(0, 0, 640, 441);
+
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "merge test");
+
+        KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+        image->addNode(paintLayer1);
+
+        return image;
+    }
+
     void addGlobalSelection(KisImageSP image) {
         QRect selectionRect(40,40,300,300);
 
@@ -220,6 +236,12 @@ private:
         if (fullPath.isEmpty()) {
             // Try without the testname subdirectory
             fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+                                         realName);
+        }
+
+        if (fullPath.isEmpty()) {
+            // Try without the prefix subdirectory
+            fullPath = fetchDataFileLazy(m_directoryName + QDir::separator() +
                                          realName);
         }
 

@@ -59,6 +59,15 @@ KisNodeShape::KisNodeShape(KisNodeSP node)
 
 KisNodeShape::~KisNodeShape()
 {
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    // If we're the active layer, we should tell the active selection we're dead meat.
+    if (canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
+        KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
+        KoShapeLayer *activeLayer = activeSelection->activeLayer();
+        if (activeLayer == this){
+            activeSelection->setActiveLayer(0);
+        }
+    }
     delete m_d;
 }
 
@@ -100,7 +109,7 @@ void KisNodeShape::editabilityChanged()
 
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
 
-    if(canvasController) {
+    if(canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
         KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
         KoShapeLayer *activeLayer = activeSelection->activeLayer();
 
@@ -108,6 +117,7 @@ void KisNodeShape::editabilityChanged()
             activeSelection->setActiveLayer(activeLayer);
         }
     }
+
 }
 
 QSizeF KisNodeShape::size() const

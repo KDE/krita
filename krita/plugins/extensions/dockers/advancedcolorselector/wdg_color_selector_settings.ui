@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
-    <height>333</height>
+    <width>582</width>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -98,6 +98,9 @@
                <widget class="QLabel" name="label_11">
                 <property name="text">
                  <string>zoom to size</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -197,6 +200,9 @@
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Type and Shape</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="buddy">
           <cstring>colorSelectorConfiguration</cstring>
@@ -309,6 +315,9 @@
                 <property name="text">
                  <string>Line Count</string>
                 </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
                </widget>
               </item>
               <item row="0" column="1">
@@ -328,6 +337,9 @@
                <widget class="QLabel" name="label_6">
                 <property name="text">
                  <string>line height</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -371,6 +383,9 @@
                 <property name="text">
                  <string>patches per line</string>
                 </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
                </widget>
               </item>
               <item row="0" column="1">
@@ -403,8 +418,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>78</width>
-               <height>24</height>
+               <width>321</width>
+               <height>151</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
@@ -460,6 +475,9 @@
                  <property name="text">
                   <string>Size:</string>
                  </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -494,6 +512,9 @@
                  <property name="text">
                   <string>Patch count:</string>
                  </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -527,6 +548,9 @@
                 <widget class="QLabel" name="label_8">
                  <property name="text">
                   <string>Direction:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
                   <cstring>lastUsedColorsAlignVertical</cstring>
@@ -570,6 +594,9 @@
                   <property name="text">
                    <string>Number of columns</string>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
                   <property name="buddy">
                    <cstring>lastUsedColorsNumCols</cstring>
                   </property>
@@ -592,6 +619,9 @@
                  <widget class="QLabel" name="lbl_lastUsedNumRows">
                   <property name="text">
                    <string>Number of rows</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                   <property name="buddy">
                    <cstring>lastUsedColorsNumRows</cstring>
@@ -662,6 +692,9 @@
                  <property name="text">
                   <string>Size:</string>
                  </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -696,6 +729,9 @@
                  <property name="text">
                   <string>Patch count:</string>
                  </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -729,6 +765,9 @@
                 <widget class="QLabel" name="label_13">
                  <property name="text">
                   <string>Direction:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                  <property name="buddy">
                   <cstring>commonColorsAlignHorizontal</cstring>
@@ -772,6 +811,9 @@
                   <property name="text">
                    <string>Number of columns</string>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
                   <property name="buddy">
                    <cstring>commonColorsNumCols</cstring>
                   </property>
@@ -794,6 +836,9 @@
                  <widget class="QLabel" name="lbl_commonColorsNumRows">
                   <property name="text">
                    <string>Number of rows</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                   <property name="buddy">
                    <cstring>commonColorsNumRows</cstring>

@@ -19,7 +19,6 @@
 
 #include "kis_autogradient_resource.h"
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
 
 // XXX: use the same #define as in kis_gradient.cc, probably best customizable?

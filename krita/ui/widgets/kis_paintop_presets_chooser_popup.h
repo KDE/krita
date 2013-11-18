@@ -35,6 +35,8 @@ public:
     virtual ~KisPaintOpPresetsChooserPopup();
     
     void showButtons(bool show);
+public slots:
+    void canvasResourceChanged( KoResource * resource );
 signals:
     void resourceSelected( KoResource * resource );
     

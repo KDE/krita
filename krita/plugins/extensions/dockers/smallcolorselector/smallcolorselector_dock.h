@@ -22,7 +22,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KisSmallColorWidget;
-class KoColor;
 
 class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
 {

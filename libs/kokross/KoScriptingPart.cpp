@@ -106,7 +106,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     }
 
     KoView *view = d->module->view();
-    KoMainWindow *mainwindow = view ? view->shell() : 0;
+    KoMainWindow *mainwindow = view ? view->mainWindow() : 0;
     if (mainwindow) {
         KoScriptingDockerFactory factory(mainwindow);
         mainwindow->createDockWidget(&factory);
@@ -207,7 +207,7 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
     kDebug(32010) << "action=" << action->objectName();
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(qApp->activeWindow());
     KoView *view = d->module ? d->module->view() : 0;
-    if (view && mainwin && view->shell() == mainwin && view == mainwin->rootView()) {
+    if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->rootView()) {
         action->addObject(d->module);
         d->actions.append(action);
         connect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
@@ -224,7 +224,7 @@ void KoScriptingPart::slotFinished(Kross::Action *action)
         //d->view->document()->setModified(true);
         //QApplication::restoreOverrideCursor();
         KoView *view = d->module ? d->module->view() : 0;
-        if (view && view->shell() /* && view == view->shell()->rootView() */) {
+        if (view && view->mainWindow() /* && view == view->mainWindow()->rootView() */) {
             if (action->hadError()) {
                 if (action->errorTrace().isNull())
                     KMessageBox::error(view, action->errorMessage());

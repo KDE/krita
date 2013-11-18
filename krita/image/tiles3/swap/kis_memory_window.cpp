@@ -90,11 +90,7 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
             m_file.resize(newSize);
         }
 
-#ifdef __GNUC__
-#warning "A workaround for http://bugreports.qt.nokia.com/browse/QTBUG-6330"
-#else
-#pragma WARNING( "A workaround for http://bugreports.qt.nokia.com/browse/QTBUG-6330" )
-#endif
+        // A workaround for https://bugreports.qt-project.org/browse/QTBUG-6330
         m_file.exists();
 
         *window = m_file.map(windowChunk->m_begin, windowChunk->size());

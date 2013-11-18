@@ -32,9 +32,9 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 

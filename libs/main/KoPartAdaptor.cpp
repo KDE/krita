@@ -27,8 +27,6 @@
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoView.h"
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 
@@ -45,7 +43,7 @@ KoPartAdaptor::~KoPartAdaptor()
 
 void KoPartAdaptor::openUrl(const QString & url)
 {
-    m_pDoc->openUrl(KUrl(url));
+    m_pDoc->document()->openUrl(KUrl(url));
 }
 
 bool KoPartAdaptor::isLoading()
@@ -55,12 +53,12 @@ bool KoPartAdaptor::isLoading()
 
 QString KoPartAdaptor::url()
 {
-    return m_pDoc->url().url();
+    return m_pDoc->document()->url().url();
 }
 
 bool KoPartAdaptor::isModified()
 {
-    return m_pDoc->isModified();
+    return m_pDoc->document()->isModified();
 }
 
 int KoPartAdaptor::viewCount()
@@ -78,26 +76,15 @@ QString KoPartAdaptor::view(int idx)
     return v->objectName();
 }
 
-QStringList KoPartAdaptor::actions()
-{
-    QStringList tmp_actions;
-    QList<QAction*> lst = m_pDoc->actionCollection()->actions();
-    foreach(QAction* it, lst) {
-        if (it->isEnabled())
-            tmp_actions.append(it->objectName());
-    }
-    return tmp_actions;
-}
-
 void KoPartAdaptor::save()
 {
-    m_pDoc->save();
+    m_pDoc->document()->save();
 }
 
 void KoPartAdaptor::saveAs(const QString & url)
 {
-    m_pDoc->saveAs(KUrl(url));
-    m_pDoc->waitSaveComplete(); // see ReadWritePart
+    m_pDoc->document()->saveAs(KUrl(url));
+    m_pDoc->document()->waitSaveComplete(); // see ReadWritePart
 }
 
 void KoPartAdaptor::setOutputMimeType(const QByteArray& mimetype)

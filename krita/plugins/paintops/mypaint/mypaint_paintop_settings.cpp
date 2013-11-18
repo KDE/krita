@@ -18,7 +18,6 @@
 #include "mypaint_paintop_settings.h"
 
 #include <math.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -33,7 +32,9 @@
 #include "mypaint_paintop_settings_widget.h"
 
 MyPaintSettings::MyPaintSettings()
-        : m_options(0)
+    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                 KisCurrentOutlineFetcher::ROTATION_OPTION),
+      m_options(0)
 {
 }
 
@@ -42,16 +43,13 @@ MyPaintBrushResource* MyPaintSettings::brush() const
     return m_options->brush();
 }
 
-QPainterPath MyPaintSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath MyPaintSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline){
         qreal radius = expf(getFloat("radius_logarithmic"));
         path = ellipseOutline(2*radius, 2*radius, 1.0, 0.0 );
-        QTransform m; m.reset(); m.scale(scale,scale); m.rotateRadians(rotation);
-        path = m.map(path);
-        path.translate(pos);
+        path = outlineFetcher()->fetchOutline(info, this, path);
     }
     return path;
 }
-

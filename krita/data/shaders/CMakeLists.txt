@@ -1,10 +1,12 @@
 install( FILES  
     bilinear_gradient.frag
-    checker.frag
     conical_gradient.frag
     conical_symetric_gradient.frag
-    display.frag
-    gl2.vert
+    highq_downscale.frag
+    matrix_transform.vert
+    matrix_transform_legacy.vert
+    simple_texture.frag
+    simple_texture_legacy.frag
     cursor.vert
     cursor.frag
     linear_gradient.frag

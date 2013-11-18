@@ -27,6 +27,7 @@
 #include "kis_paint_device.h"
 
 #include <KoColorSpace.h>
+#include <KoMixColorsOp.h>
 
 
 namespace tmp {

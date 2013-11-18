@@ -33,6 +33,7 @@
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoConvolutionOp.h>
 #include <kis_paint_device.h>
 
 #include "kis_wdg_unsharp.h"
@@ -74,7 +75,7 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
 
     if (progressUpdater) {
         updater = new KoProgressUpdater(progressUpdater);
-        updater->start();
+        updater->start(100, i18n("Unsharp Mask"));
         // Two sub-sub tasks that each go from 0 to 100.
         convolutionUpdater = updater->startSubtask();
         filterUpdater = updater->startSubtask();

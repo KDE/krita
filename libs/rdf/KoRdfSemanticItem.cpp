@@ -19,10 +19,6 @@
 
 #include "KoRdfSemanticItem.h"
 #include "KoDocumentRdf.h"
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
-#include "KoDocumentRdf.h"
 
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
@@ -30,7 +26,6 @@
 #include <KoCanvasBase.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
-#include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoTextDocument.h>
 
@@ -83,7 +78,7 @@ QStringList KoRdfSemanticItem::xmlIdList() const
                                Node(),
                                documentRdf()->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         QString xmlid = s.object().toString();
         ret << xmlid;
     }
@@ -117,7 +112,7 @@ void KoRdfSemanticItem::updateTriple_remove(const Soprano::LiteralValue &toModif
     StatementIterator it = m->listStatements(explicitLinkingSubject, pred, Node());
     QList<Statement> removeList;
     QList<Statement> allStatements = it.allElements();
-    foreach (Soprano::Statement s, allStatements) {
+    foreach (const Soprano::Statement &s, allStatements) {
         kDebug(30015) << "typeless remove,  s:" << s.object().toString();
         kDebug(30015) << "typeless remove, tm:" << Node::createLiteralNode(toModify).toString();
 
@@ -302,28 +297,6 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 
 }
 
-QStringList KoRdfSemanticItem::classNames()
-{
-    QStringList ret;
-    ret << "Contact";
-    ret << "Event";
-    ret << "Location";
-    return ret;
-}
-
-hKoRdfSemanticItem KoRdfSemanticItem::createSemanticItem(QObject *parent, const KoDocumentRdf *m_rdf, const QString &semanticClass)
-{
-    if (semanticClass == "Contact") {
-        return hKoRdfSemanticItem(new KoRdfFoaF(parent, m_rdf));
-    }
-    if (semanticClass == "Event") {
-        return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, m_rdf));
-    }
-    if (semanticClass == "Location") {
-        return hKoRdfSemanticItem(new KoRdfLocation(parent, m_rdf));
-    }
-    return hKoRdfSemanticItem(0);
-}
 
 QList<hKoSemanticStylesheet> KoRdfSemanticItem::userStylesheets() const
 {
@@ -483,7 +456,7 @@ void KoRdfSemanticItem::loadUserStylesheets(QSharedPointer<Soprano::Model> model
     Soprano::Node ListHeadSubject = Node::createResourceNode(QUrl(nodePrefix + "list"));
     QList<Statement> listNodes = KoTextRdfCore::loadList(model, ListHeadSubject);
     kDebug(30015) << "semanticClass:" << semanticClass << " listNodes.sz:" << listNodes.size();
-    foreach (Soprano::Statement s, listNodes) {
+    foreach (const Soprano::Statement &s, listNodes) {
         Soprano::Node dataBNode = s.object();
 
         QString uuid = KoTextRdfCore::getObject(model, dataBNode,

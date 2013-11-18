@@ -30,18 +30,17 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kactioncollection.h>
+#include <QTime>
 
 #include <kis_view2.h>
 #include <kis_action.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
-#include <kis_image_signal_router.h>
-#include <kis_processing_applicator.h>
+#include <kis_paint_layer.h>
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
-#include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -52,10 +51,10 @@
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_widget.h"
 
-#include "kis_export_gmic_processing_visitor.h"
-#include "kis_gmic_command.h"
-#include "kis_import_gmic_processing_visitor.h"
 #include "kis_gmic_blacklister.h"
+#include "kis_input_output_mapper.h"
+#include "kis_gmic_simple_convertor.h"
+#include "kis_gmic_applicator.h"
 
 
 K_PLUGIN_FACTORY(KisGmicPluginFactory, registerPlugin<KisGmicPlugin>();)
@@ -103,14 +102,12 @@ void KisGmicPlugin::slotGmic()
     model->setBlacklister(blacklister);
 
     m_gmicWidget = new KisGmicWidget(model);
+    m_gmicApplicator = new KisGmicApplicator();
 
     // apply
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
     // cancel
     connect(m_gmicWidget, SIGNAL(sigClose()),this, SLOT(slotClose()));
-    // ok
-
-    // reset
 
     m_gmicWidget->show();
 }
@@ -127,16 +124,18 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         return;
     }
 
-    if (setting->inputLayerMode() == ACTIVE_LAYER)
-    {
-        //TODO: Undo string for gimp plug-in is G'MIC, I would like to use G'MIC+filtername
-        actionName = i18n("Gmic: Active Layer");
-        node = m_view->activeNode();
-    }
-    else
+    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisNodeListSP kritaNodes = mapper.inputNodes(setting->inputLayerMode());
+
+    if (kritaNodes->isEmpty())
     {
         KMessageBox::sorry(m_gmicWidget, i18n("Sorry, this input mode is not implemented"), i18n("Krita"));
         return;
+    }
+    else
+    {
+        actionName = i18n("Gmic filter");
+        node = m_view->image()->root();
     }
 
     if (setting->outputMode() != IN_PLACE)
@@ -145,39 +144,14 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
         return;
     }
 
-    KisImageSignalVector emitSignals;
-    emitSignals << ModifiedSignal;
+    QTime myTimer;
+    myTimer.start();
+    m_gmicApplicator->apply(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand());
+    m_view->image()->waitForDone();
 
-
-    KisProcessingApplicator applicator(m_view->image(), node,
-                                   KisProcessingApplicator::RECURSIVE,
-                                   emitSignals, actionName);
-
-    QList<KisNodeSP> kritaNodes;
-    kritaNodes.append(m_view->activeNode());
-
-    QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);
-    gmicLayers->assign(kritaNodes.size());
-
-
-    KisProcessingVisitorSP visitor;
-    visitor = new KisExportGmicProcessingVisitor(kritaNodes, gmicLayers);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
-
-    applicator.applyCommand(new KisGmicCommand(setting->gmicCommand(), gmicLayers));
-
-    visitor = new KisImportGmicProcessingVisitor(kritaNodes, gmicLayers);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
-    applicator.end();
-
-    // TODO: applicator.applyCommand(new CleanTheData(images));
-
-    /*CleanTheData::redo() {
-        m_images->clear();
-    }/*/
-
-
-
+    double seconds = myTimer.elapsed() * 0.001;
+    // temporary feedback
+    m_gmicWidget->setWindowTitle(QString("Filtering took ") + QString::number(seconds) + QString(" seconds"));
 }
 
 void KisGmicPlugin::slotClose()
@@ -191,6 +165,8 @@ void KisGmicPlugin::slotClose()
     {
         // close event deletes widget
         m_gmicWidget = 0;
+        delete m_gmicApplicator;
+        m_gmicApplicator = 0;
     }
 }
 

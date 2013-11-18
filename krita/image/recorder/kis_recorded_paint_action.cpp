@@ -23,7 +23,7 @@
 
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_node.h"

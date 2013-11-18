@@ -297,7 +297,7 @@ struct gmic {
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
     const unsigned int variables_sizes[256] = { 0 };
     unsigned int position = 0;
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32) || defined(_WIN64) || defined(_APPLE)
     setlocale(LC_NUMERIC,"C");
 #else
     std::setlocale(LC_NUMERIC,"C");

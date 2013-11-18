@@ -66,12 +66,15 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QTouchEvent *touchEvent = inputManager()->lastTouchEvent();
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if (touchEvent) {
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
-            inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+            inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
         }
 
         d->active = true;
@@ -102,12 +105,22 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if(touchEvent) {
+            if(touchEvent->type() != QEvent::TouchEnd) {
+                //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
+                touchEvent = new QTouchEvent(QEvent::TouchEnd, touchEvent->deviceType(), touchEvent->modifiers(), touchEvent->touchPointStates(), touchEvent->touchPoints());
+            }
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
-            inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+            inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
+        } else {
+            QMouseEvent fakeRelease(QEvent::MouseButtonRelease, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, 0);
+            inputManager()->toolProxy()->mouseReleaseEvent(&fakeRelease, QPoint(0,0));
         }
 
         d->active = false;
@@ -118,19 +131,19 @@ void KisToolInvocationAction::end(QEvent *event)
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseButtonPress) {
+     if(event->type() == QEvent::MouseButtonPress) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+        inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->widgetToDocument(mevent->posF()));
     } else if(event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+        inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->widgetToDocument(mevent->posF()));
     } else if(event->type() == QEvent::MouseMove) {
         QTabletEvent* tevent = inputManager()->lastTabletEvent();
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         if (tevent && tevent->type() == QEvent::TabletMove) {
             inputManager()->toolProxy()->tabletEvent(tevent, d->tabletToPixel(tevent->hiResGlobalPos()));
         } else {
-            inputManager()->toolProxy()->mouseMoveEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
+            inputManager()->toolProxy()->mouseMoveEvent(mevent, inputManager()->widgetToDocument(mevent->posF()));
         }
     } else if(event->type() == QEvent::KeyPress) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
@@ -138,6 +151,9 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
     } else if(event->type() == QEvent::KeyRelease) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         inputManager()->toolProxy()->keyReleaseEvent(kevent);
+    }   else if (event->type() == QEvent::TouchUpdate) {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }
 }
 
@@ -149,6 +165,6 @@ bool KisToolInvocationAction::supportsHiResInputEvents() const
 QPointF KisToolInvocationAction::Private::tabletToPixel(const QPointF &globalPos)
 {
     const QPointF pos = globalPos - q->inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
-    return q->inputManager()->widgetToPixel(pos);
+    return q->inputManager()->widgetToDocument(pos);
 }
 

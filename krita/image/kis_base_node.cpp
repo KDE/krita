@@ -22,7 +22,7 @@
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 
 struct KisBaseNode::Private
@@ -31,7 +31,6 @@ public:
 
     QString compositeOp;
     KoProperties properties;
-    KisBaseNodeSP linkedTo;
     bool systemLocked;
     KoDocumentSectionModel::Property hack_visible; //HACK
     QUuid id;
@@ -55,9 +54,8 @@ KisBaseNode::KisBaseNode()
     setCollapsed(false);
 
     setSystemLocked(false);
-    m_d->linkedTo = 0;
     m_d->compositeOp = COMPOSITE_OVER;
-    
+
     setUuid(QUuid::createUuid());
 }
 
@@ -72,9 +70,11 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
         iter.next();
         m_d->properties.setProperty(iter.key(), iter.value());
     }
-    m_d->linkedTo = rhs.m_d->linkedTo;
+    setCollapsed(rhs.collapsed());
+
+    setSystemLocked(false);
     m_d->compositeOp = rhs.m_d->compositeOp;
-    
+
     setUuid(QUuid::createUuid());
 }
 
@@ -248,6 +248,11 @@ bool KisBaseNode::isEditable() const
         }
     }
     return editable;
+}
+
+bool KisBaseNode::hasEditablePaintDevice() const
+{
+    return paintDevice() && isEditable();
 }
 
 void KisBaseNode::setCollapsed(bool collapsed)

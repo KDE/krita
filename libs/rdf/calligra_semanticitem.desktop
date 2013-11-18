@@ -1,0 +1,33 @@
+[Desktop Entry]
+Name=Semantic item definition
+Name[de]=Definition eines semantischen Elements
+Name[it]=Definizione dell'elemento semantico
+Name[kk]=Семантикалық аталым анықтамасы
+Name[nl]=Definitie van semantisch item
+Name[pt]=Definição do item semântico
+Name[pt_BR]=Definição do item semântico
+Name[sk]=Definícia sémantickej položky
+Name[sv]=Definition av semantiskt objekt
+Name[uk]=Визначення семантичного запису
+Name[x-test]=xxSemantic item definitionxx
+Comment=Definition of a semantic item object
+Comment[de]=Definition eines Objekts für ein semantisches Element
+Comment[it]=Definizione di un oggetto di un elemento semantico
+Comment[kk]=Семантикалық аталым нысанының анықтамасы
+Comment[nl]=Definitie van een semantisch itemobject
+Comment[pt]=Definição de um objecto de item semântico
+Comment[pt_BR]=Definição de um objeto de item semântico
+Comment[sk]=Definícia objektu sémantickej položky
+Comment[sv]=Definition av ett semantiskt objekt
+Comment[uk]=Визначення об’єкта семантичного запису
+Comment[x-test]=xxDefinition of a semantic item objectxx
+
+Type=ServiceType
+X-KDE-ServiceType=Calligra/SemanticItem
+
+[PropertyDef::X-Calligra-MinVersion]
+Type=int
+[PropertyDef::X-Calligra-PluginVersion]
+Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

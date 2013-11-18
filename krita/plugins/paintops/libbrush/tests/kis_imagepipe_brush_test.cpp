@@ -24,6 +24,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_paint_information.h>
 
@@ -43,7 +44,7 @@
 
 inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 {
-    qreal scale = 0.5;
+    qreal scale = 0.5; Q_UNUSED(scale);
     KisGbrBrush *firstBrush = brush->testingGetBrushes().first();
 
     /**

@@ -20,7 +20,6 @@
 #include "hatching_brush.h"
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 #include <KoColorTransformation.h>
 
 #include <QVariant>
@@ -199,7 +198,7 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
             if (m_settings->antialias)
                 m_painter.drawThickLine(A, B, thickness, thickness);
             else        
-                m_painter.drawDDALine(A, B);    //testing no subpixel;
+                m_painter.drawLine(A, B, thickness, false);    //testing no subpixel;
             
             if (oneline)
                 break;
@@ -260,7 +259,7 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
         if (m_settings->antialias)
             m_painter.drawThickLine(A, B, thickness, thickness);
         else        
-            m_painter.drawDDALine(A, B);    //testing no subpixel;
+            m_painter.drawLine(A, B, thickness, false);    //testing no subpixel;
             
         if (oneline)
             break;

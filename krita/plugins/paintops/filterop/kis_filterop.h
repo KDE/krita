@@ -24,7 +24,6 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <KoColorSpace.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rotation_option.h>
 

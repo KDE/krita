@@ -699,7 +699,7 @@ signals:
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
 
-private:
+public:
     friend class PaintDeviceCache;
 
     /**

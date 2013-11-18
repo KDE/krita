@@ -285,6 +285,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     registry->addProfileAlias("sRGB built-in - (lcms internal)", "sRGB built-in");
     registry->addProfileAlias("gray built-in - (lcms internal)", "gray built-in");
     registry->addProfileAlias("Lab identity built-in - (lcms internal)", "Lab identity built-in");
+    registry->addProfileAlias("XYZ built-in - (lcms internal)", "XYZ identity built-in");
 }
 
 #include <LcmsEnginePlugin.moc>

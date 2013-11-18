@@ -309,7 +309,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         profileName = csf->defaultProfile();
-        // There's nothing we can do now
     }
 
     if (profileName.isEmpty()) {

@@ -67,7 +67,7 @@ public:
 
 
 KoSimpleColorSpaceEngine::KoSimpleColorSpaceEngine()
-        : KoColorSpaceEngine("simple", i18n("Simple Color Conversion Engine"))
+    : KoColorSpaceEngine("simple", i18n("Simple Color Conversion Engine"))
 {
 }
 

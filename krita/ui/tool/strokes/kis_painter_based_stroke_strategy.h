@@ -24,7 +24,7 @@
 #include "kis_selection.h"
 
 class KisPainter;
-struct KisDistanceInformation;
+class KisDistanceInformation;
 class KisTransaction;
 
 

@@ -553,6 +553,15 @@ endif(HAVE_VC)
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 ##
+## Test for Xinput
+##
+if(NOT WIN32)
+  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
+else(NOT WIN32)
+  set(REQUIRED_Xinput_FOUND TRUE)
+endif(NOT WIN32)
+
+##
 ## Test for Nepomuk
 ##
 if(NEPOMUK)
@@ -878,8 +887,8 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms|Xinput devel not found ")
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

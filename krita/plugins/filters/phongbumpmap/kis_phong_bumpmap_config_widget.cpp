@@ -18,6 +18,7 @@
 
 #include "kis_phong_bumpmap_config_widget.h"
 #include <filter/kis_filter_configuration.h>
+#include <KoSizeGroup.h>
 #include "phong_bumpmap_constants.h"
 #include "KoChannelInfo.h"
 #include "KoColorSpace.h"
@@ -29,6 +30,12 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     Q_ASSERT(m_device);
     m_page = new KisPhongBumpmapWidget(this);
 
+    KoSizeGroup *matPropLabelsGroup = new KoSizeGroup(this);
+    matPropLabelsGroup->addWidget(m_page->lblAmbientReflectivity);
+    matPropLabelsGroup->addWidget(m_page->lblDiffuseReflectivity);
+    matPropLabelsGroup->addWidget(m_page->lblSpecularReflectivity);
+    matPropLabelsGroup->addWidget(m_page->lblSpecularShinyExp);
+
     // Connect widgets to each other
     connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox1, SLOT(setValue(int)));
     connect(m_page->azimuthDial2, SIGNAL(valueChanged(int)), m_page->azimuthSpinBox2, SLOT(setValue(int)));
@@ -38,15 +45,6 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->azimuthSpinBox2, SIGNAL(valueChanged(int)), m_page->azimuthDial2, SLOT(setValue(int)));
     connect(m_page->azimuthSpinBox3, SIGNAL(valueChanged(int)), m_page->azimuthDial3, SLOT(setValue(int)));
     connect(m_page->azimuthSpinBox4, SIGNAL(valueChanged(int)), m_page->azimuthDial4, SLOT(setValue(int)));
-
-    connect(m_page->diffuseReflectivityCheckBox, SIGNAL(toggled(bool)),
-            m_page->diffuseReflectivityKisDoubleSliderSpinBox, SLOT(setEnabled(bool)));
-    connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
-            m_page->specularReflectivityKisDoubleSliderSpinBox, SLOT(setEnabled(bool)));
-    connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
-            m_page->shinynessExponentKisSliderSpinBox, SLOT(setEnabled(bool)));
-    connect(m_page->specularReflectivityCheckBox, SIGNAL(toggled(bool)),
-            m_page->shinynessExponentLabel, SLOT(setEnabled(bool)));
 
     //Let widgets warn the preview of when they are updated
     connect(m_page->azimuthDial1, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -64,8 +62,8 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->inclinationSpinBox3, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->inclinationSpinBox4, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     
-    connect(m_page->diffuseReflectivityCheckBox, SIGNAL(stateChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->specularReflectivityCheckBox, SIGNAL(stateChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->diffuseReflectivityGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->specularReflectivityGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     
     connect(m_page->ambientReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->diffuseReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
@@ -102,8 +100,8 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
     m_page->specularReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_SPECULAR_REFLECTIVITY) );
     m_page->shinynessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
-    m_page->diffuseReflectivityCheckBox->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) );
-    m_page->specularReflectivityCheckBox->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
+    m_page->diffuseReflectivityGroup->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) );
+    m_page->specularReflectivityGroup->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
     // NOTE: Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
     m_page->lightSourceGroupBox1->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[0]) );
     m_page->lightSourceGroupBox2->setChecked( config->getBool(PHONG_ILLUMINANT_IS_ENABLED[1]) );
@@ -135,8 +133,8 @@ KisPropertiesConfiguration *KisPhongBumpmapConfigWidget::configuration() const
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, m_page->diffuseReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, m_page->specularReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_SHINYNESS_EXPONENT, m_page->shinynessExponentKisSliderSpinBox->value());
-    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, m_page->diffuseReflectivityCheckBox->isChecked());
-    config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, m_page->diffuseReflectivityGroup->isChecked());
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, m_page->specularReflectivityGroup->isChecked());
     //config->setProperty(PHONG_SHINYNESS_EXPONENT_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());
     // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
     config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[0], m_page->lightSourceGroupBox1->isChecked());

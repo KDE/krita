@@ -99,8 +99,12 @@ bool KCanvasPreview::isInRegion(QPoint point)
 
 double KCanvasPreview::scalingFactor()
 {
-    double xScale = (double)(height() - 1) / m_height;
-    double yScale = (double)(width() - 1) / m_width;
+    // take into account offset frame size to show him when the canvas are shrinked
+    const int maxHeight = (m_height > m_imageHeight) ? m_height : m_imageHeight;
+    const int maxWidth = (m_width > m_imageWidth) ? m_width : m_imageWidth;
+
+    const double xScale = (double)(height() - 1) / maxHeight;
+    const double yScale = (double)(width() - 1) / maxWidth;
 
     return (xScale < yScale) ? xScale : yScale;
 }

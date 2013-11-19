@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,42 +45,34 @@ class DlgLayerSize: public KDialog
 
 public:
 
-    DlgLayerSize(QWidget * parent = 0,
-                 const char* name = 0);
+    DlgLayerSize(QWidget * parent, const char* name,
+                 int width, int height, double resolution);
     ~DlgLayerSize();
 
-    void setWidth(quint32 w);
-    void setWidthPercent(quint32 w);
-    void setMaximumWidth(quint32 w);
     qint32 width();
-
-    void setHeight(quint32 h);
-    void setHeightPercent(quint32 h);
-    void setMaximumHeight(quint32 h);
     qint32 height();
+
     KisFilterStrategy *filterType();
 
 private slots:
-
-    void okClicked();
-    void slotWidthPixelsChanged(int w);
-    void slotHeightPixelsChanged(int h);
-    void slotWidthPercentChanged(int w);
-    void slotHeightPercentChanged(int h);
+    void slotWidthChanged(int w);
+    void slotHeightChanged(int h);
+    void slotWidthChanged(double w);
+    void slotHeightChanged(double h);
+    void slotWidthUnitChanged(int index);
+    void slotHeightUnitChanged(int index);
+    void slotAspectChanged(bool keep);
 
 private:
-
-    void blockAll();
-    void unblockAll();
+    void updateWidthUIValue(double value);
+    void updateHeightUIValue(double value);
 
     WdgLayerSize * m_page;
-    double m_oldW, m_oldH;
-    double m_oldWPercent, m_oldHPercent;
-    double m_origW, m_origH;
-    double m_maxW, m_maxH;
-
-    bool m_lock;
-
+    const double m_aspectRatio;
+    const int m_originalWidth, m_originalHeight;
+    int m_width, m_height;
+    const double m_resolution;
+    bool m_keepAspect;
 };
 
 #endif // DLG_IMAGESIZE

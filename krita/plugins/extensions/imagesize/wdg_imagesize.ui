@@ -6,293 +6,390 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>382</height>
+    <width>379</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Image Size</string>
+   <string>Scale To New Size</string>
   </property>
-  <layout class="QGridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QGroupBox" name="grpResizeScale">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupImageSize">
      <property name="title">
-      <string/>
+      <string>Pixel Dimensions</string>
      </property>
-     <layout class="QGridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="pixmapLabel1_2">
-        <property name="pixmap">
-         <pixmap>image0</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <spacer name="spacer2_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>65</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <spacer name="spacer1_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>65</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="pixmapLabel2_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="pixmap">
-         <pixmap>image1</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radioResize">
-        <property name="text">
-         <string>&amp;Resize</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="chkCrop">
-        <property name="text">
-         <string>&amp;Crop layers on image resize</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" colspan="2">
-       <spacer name="spacer3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>121</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="3">
-       <widget class="QRadioButton" name="radioScale">
-        <property name="text">
-         <string>&amp;Scale</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QGroupBox" name="grpPixelDimensions">
-     <property name="title">
-      <string>&amp;Pixel Dimensions</string>
+     <property name="flat">
+      <bool>true</bool>
      </property>
-     <layout class="QGridLayout">
-      <item row="0" column="1">
-       <widget class="QLabel" name="lblWidth">
-        <property name="text">
-         <string>&amp;Width:</string>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="2">
+       <widget class="QDoubleSpinBox" name="pixelHeightDouble">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="buddy">
-         <cstring>intWidth</cstring>
+        <property name="minimum">
+         <double>1.000000000000000</double>
         </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="KIntNumInput" name="intHeight" native="true">
-        <property name="minimum" stdset="0">
-         <number>1</number>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="textLabel2">
-        <property name="text">
-         <string>&amp;Height:</string>
-        </property>
-        <property name="buddy">
-         <cstring>intHeight</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="lblWidthOriginal">
-        <property name="frameShape">
-         <enum>QFrame::WinPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
-       <widget class="QLabel" name="lblHeightOriginal">
-        <property name="frameShape">
-         <enum>QFrame::WinPanel</enum>
+       <widget class="QSpinBox" name="pixelHeight">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
+        <property name="minimum">
+         <number>1</number>
         </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblOrignal">
-        <property name="text">
-         <string>Original:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <property name="maximum">
+         <number>1000000</number>
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lblNew">
+      <item row="0" column="3">
+       <widget class="QComboBox" name="pixelWidthUnit"/>
+      </item>
+      <item row="0" column="0">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>25</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="lblPixelWidth">
         <property name="text">
-         <string>&amp;New:</string>
+         <string>Width:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>intWidth</cstring>
+         <cstring>pixelWidth</cstring>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KIntNumInput" name="intWidth" native="true">
-        <property name="minimum" stdset="0">
-         <number>1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="KIntNumInput" name="intWidthPercent" native="true">
-        <property name="value" stdset="0">
-         <number>100</number>
-        </property>
-        <property name="minimum" stdset="0">
-         <number>0</number>
-        </property>
-        <property name="referencePoint" stdset="0">
-         <number>100</number>
-        </property>
-        <property name="suffix" stdset="0">
-         <string>%</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="KIntNumInput" name="intHeightPercent" native="true">
-        <property name="value" stdset="0">
-         <number>100</number>
-        </property>
-        <property name="minimum" stdset="0">
-         <number>0</number>
-        </property>
-        <property name="suffix" stdset="0">
-         <string>%</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lblPercent">
+       <widget class="QLabel" name="lblPixelFilter">
         <property name="text">
-         <string>&amp;Percent:</string>
+         <string>Filter:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>intWidthPercent</cstring>
+         <cstring>printWidth</cstring>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="3">
-       <widget class="QCheckBox" name="chkConstrain">
-        <property name="text">
-         <string>&amp;Constrain proportions</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
+      <item row="0" column="4" rowspan="2">
+       <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
+        <property name="text" stdset="0">
+         <string/>
         </property>
        </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="pixelHeightUnit"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="lblPixelHeight">
+        <property name="text">
+         <string>Height:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>pixelHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QDoubleSpinBox" name="pixelWidthDouble">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QSpinBox" name="pixelWidth">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="2" colspan="2">
+       <widget class="KisCmbIDList" name="pixelFilterCmb" native="true"/>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lblFilterType">
+   <item>
+    <widget class="QGroupBox" name="groupPrintSize">
+     <property name="title">
+      <string>Print Size</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="1">
+       <widget class="QLabel" name="lblPrintHeight">
+        <property name="text">
+         <string>Height:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>printHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="printHeightUnit"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QDoubleSpinBox" name="printWidth">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="lblPrintWidth">
+        <property name="text">
+         <string>Width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>printWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QDoubleSpinBox" name="printHeight">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4" rowspan="2">
+       <widget class="KoAspectButton" name="printAspectRatioBtn" native="true">
+        <property name="text" stdset="0">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="printWidthUnit"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="lblResolution">
+        <property name="text">
+         <string>Resolution:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QDoubleSpinBox" name="printResolution">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QComboBox" name="printResolutionUnit"/>
+      </item>
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>25</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="5">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="aspectRatioCkb">
+     <property name="toolTip">
+      <string>Constrain aspect ratio</string>
+     </property>
      <property name="text">
-      <string>Filter:</string>
+      <string>Constrain proportions</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>cmbFilterType</cstring>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="KisCmbIDList" name="cmbFilterType" native="true">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Box:&lt;/span&gt; simple scaling, use when scaling at exact divisions.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bilinear:&lt;/span&gt; use when upscaling or downscaling, with a scale from half to 2 times the original size &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bicubic:&lt;/span&gt; sometimes better than bilinear, but could be a little blurry.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   <item>
+    <widget class="QCheckBox" name="adjustPrintSizeSeparatelyCkb">
+     <property name="text">
+      <string>Adjust print size separately</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>30</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -303,19 +400,28 @@
    <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>
-   <class>KIntNumInput</class>
+   <class>KoAspectButton</class>
    <extends>QWidget</extends>
-   <header>knuminput.h</header>
+   <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>intWidth</tabstop>
-  <tabstop>intHeight</tabstop>
-  <tabstop>intWidthPercent</tabstop>
-  <tabstop>intHeightPercent</tabstop>
-  <tabstop>chkConstrain</tabstop>
-  <tabstop>radioScale</tabstop>
+  <tabstop>pixelWidth</tabstop>
+  <tabstop>pixelWidthDouble</tabstop>
+  <tabstop>pixelWidthUnit</tabstop>
+  <tabstop>pixelHeight</tabstop>
+  <tabstop>pixelHeightDouble</tabstop>
+  <tabstop>pixelHeightUnit</tabstop>
+  <tabstop>pixelFilterCmb</tabstop>
+  <tabstop>printWidth</tabstop>
+  <tabstop>printWidthUnit</tabstop>
+  <tabstop>printHeight</tabstop>
+  <tabstop>printHeightUnit</tabstop>
+  <tabstop>printResolution</tabstop>
+  <tabstop>printResolutionUnit</tabstop>
+  <tabstop>aspectRatioCkb</tabstop>
+  <tabstop>adjustPrintSizeSeparatelyCkb</tabstop>
  </tabstops>
  <resources/>
  <connections/>

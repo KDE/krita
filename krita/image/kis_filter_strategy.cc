@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -212,4 +213,25 @@ QList<KoID> KisFilterStrategyRegistry::listKeys() const
     }
 
     return answer;
+}
+
+QString KisFilterStrategyRegistry::formatedDescriptions() const
+{
+    QString formatedDescription("<html><head/><body>");
+
+    foreach (const QString key, keys()) {
+        KisFilterStrategy *strategy = get(key);
+        QString description = strategy->description();
+
+        if (!description.isEmpty()) {
+            formatedDescription.append("<p><span style=\"font-weight:600;\">");
+            formatedDescription.append(strategy->name());
+            formatedDescription.append("</span>: ");
+            formatedDescription.append(description);
+            formatedDescription.append("</p>");
+        }
+    }
+    formatedDescription.append("</body></html>");
+
+    return formatedDescription;
 }

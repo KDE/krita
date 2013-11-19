@@ -1,6 +1,7 @@
 /*
  *
  *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,8 +20,6 @@
 
 #ifndef DLG_CANVASSIZE
 #define DLG_CANVASSIZE
-
-#include <math.h>
 
 #include <kdialog.h>
 #include <kicon.h>
@@ -49,7 +48,7 @@ class DlgCanvasSize: public KDialog
 public:
     enum anchor { NORTH_WEST = 0, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE};
 
-    DlgCanvasSize(QWidget * parent, int width, int height);
+    DlgCanvasSize(QWidget * parent, int width, int height, double resolution);
     ~DlgCanvasSize();
 
     qint32 width();
@@ -57,32 +56,50 @@ public:
     qint32 xOffset();
     qint32 yOffset();
 
-protected slots:
-    void slotAnchorButtonClicked(int id);
-    void slotUpdateSizeTextBoxes();
-
+private slots:
     void slotAspectChanged(bool keep);
+    void slotAnchorButtonClicked(int id);
+
     void slotWidthChanged(int v);
     void slotHeightChanged(int v);
+    void slotWidthChanged(double v);
+    void slotHeightChanged(double v);
+
+    void slotWidthUnitChanged(int index);
+    void slotHeightUnitChanged(int index);
+
     void slotXOffsetChanged(int v);
     void slotYOffsetChanged(int v);
+    void slotXOffsetChanged(double v);
+    void slotYOffsetChanged(double v);
 
-protected:
-    void loadAnchorIcons();
-    void updateAnchorIcons(int id);
-    void updateOffset(int id);
-    void expectedOffset(int id, int &xOffset, int &yOffset);
-    void updateButtons(int forceId);
+    void slotXOffsetUnitChanged(int index);
+    void slotYOffsetUnitChanged(int index);
+
+    void slotCanvasPreviewXOffsetChanged(int v);
+    void slotCanvasPreviewYOffsetChanged(int v);
 
 private:
-    const int m_originalWidth, m_originalHeight;
-    const double m_aspectRatio;
+    void updateWidthUIValue(double value);
+    void updateHeightUIValue(double value);
+    void updateXOffsetUIValue(double value);
+    void updateYOffsetUIValue(double value);
+
+    void loadAnchorIcons();
+    void updateAnchorIcons(int id);
+    void updateButtons(int forceId);
+    void updateOffset(int id);
+    void expectedOffset(int id, double &xOffset, double &yOffset);
+
     bool m_keepAspect;
+    const double m_aspectRatio;
+    const double m_resolution;
+    const int m_originalWidth, m_originalHeight;
     int m_newWidth, m_newHeight;
     int m_xOffset, m_yOffset;
-    KIcon m_anchorIcons[9];
-    WdgCanvasSize * m_page;
 
+    WdgCanvasSize * m_page;
+    KIcon m_anchorIcons[9];
     QButtonGroup *m_group;
 };
 

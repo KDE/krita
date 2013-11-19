@@ -41,7 +41,7 @@ static const char* const unitNameList[KoUnit::TypeCount] =
     "px"
 };
 
-QString unitDescription(KoUnit::Type type)
+QString KoUnit::unitDescription(KoUnit::Type type)
 {
     switch (type) {
     case KoUnit::Millimeter:
@@ -61,7 +61,7 @@ QString unitDescription(KoUnit::Type type)
     case KoUnit::Pixel:
         return i18n("Pixels (px)");
     default:
-        return i18n("Error!");
+        return i18n("Unsupported unit");
     }
 }
 

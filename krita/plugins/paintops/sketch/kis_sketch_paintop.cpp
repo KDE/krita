@@ -205,14 +205,17 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
                 makeConnection = true;
             }
         // mask test
-        }else{
-
+        }
+        else {
             if ( m_brushBoundingBox.contains( m_points.at(i) ) ){
                 positionInMask = (diff + m_hotSpot).toPoint();
-                pixel = m_maskDab->data() + ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
-                opacityU8 = m_maskDab->colorSpace()->opacityU8( pixel );
-                if (opacityU8 != 0){
-                    makeConnection = true;
+                uint pos = ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
+                if (pos < m_maskDab->allocatedPixels() * m_maskDab->pixelSize()) {
+                    pixel = m_maskDab->data() + pos;
+                    opacityU8 = m_maskDab->colorSpace()->opacityU8( pixel );
+                    if (opacityU8 != 0){
+                        makeConnection = true;
+                    }
                 }
             }
 

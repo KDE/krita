@@ -70,6 +70,17 @@ public:
     };
 
     bool enabled;
+
+    /**
+     * @brief apply combine the texture map with the dab
+     * @param dab the colored, final representation of the dab, after mirroring and everything.
+     * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
+     */
+    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
+    void fillProperties(const KisPropertiesConfiguration *setting);
+
+private:
+
     qreal scale;
     int offsetX;
     int offsetY;
@@ -79,13 +90,6 @@ public:
     int cutoffLeft;
     int cutoffRight;
     int cutoffPolicy;
-    /**
-     * @brief apply combine the texture map with the dab
-     * @param dab the colored, final representation of the dab, after mirroring and everything.
-     * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
-     */
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
-    void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

@@ -196,9 +196,9 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
 
 void KisTextureOption::resetGUI(KoResource* res)
 {
-    KisPattern *pattern = static_cast<KisPattern *>(res);
-    m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
-    m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
+    KisPattern *pat = static_cast<KisPattern *>(res);
+    m_optionWidget->offsetSliderX->setRange(0, pat->image().width() / 2);
+    m_optionWidget->offsetSliderY->setRange(0, pat->image().height() / 2);
 }
 
 void KisTextureProperties::recalculateMask()

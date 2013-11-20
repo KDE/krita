@@ -407,6 +407,13 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
 
+    if (image.format()!= QImage::Format_RGB32 ||
+            image.format() != QImage::Format_ARGB32 ||
+            image.format() != QImage::Format_ARGB32_Premultiplied) {
+
+        image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+    }
+
     if (d->tiledPreview) {
         int width = d->previewScroller->width() * 4;
         int height = d->previewScroller->height() * 4;
@@ -419,11 +426,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         image = img;
     }
 
-    // Only convert to grayscale if it is RGB
-    if (d->grayscalePreview &&
-            ( image.format() == QImage::Format_RGB32 ||
-              image.format() == QImage::Format_ARGB32 ||
-              image.format() == QImage::Format_ARGB32_Premultiplied)) {
+    // Only convert to grayscale if it is rgb. Otherwise, it's gray already.
+    if (d->grayscalePreview && !image.isGrayscale()) {
 
         QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
         for (int row = 0; row < image.height(); ++row ) {

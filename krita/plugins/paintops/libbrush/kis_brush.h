@@ -282,6 +282,10 @@ public:
     qreal scale() const;
     virtual void setAngle(qreal _angle);
     qreal angle() const;
+
+    void prepareBrushPyramid() const;
+    void clearBrushPyramid();
+
 protected:
 
     KisBrush(const KisBrush& rhs);
@@ -304,8 +308,6 @@ protected:
     virtual void setBrushType(enumBrushType type);
 
     friend class KisBrushTest;
-    void prepareBrushPyramid() const;
-    void clearBrushPyramid();
 
     virtual void setHasColor(bool hasColor);
 

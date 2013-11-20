@@ -86,7 +86,7 @@ public:
     virtual ~KisBicubicFilterStrategy() {}
 
     virtual QString description() {
-        return i18n("Adds pixels using the color of sorrounding pixels. Produces smoother tonal gradiatons than Bilinear.");
+        return i18n("Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.");
     }
 
     virtual qint32 intValueAt(qint32 t) const;

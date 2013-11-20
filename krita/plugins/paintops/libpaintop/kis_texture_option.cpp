@@ -209,9 +209,10 @@ void KisTextureProperties::recalculateMask()
 
     QImage mask = pattern->image();
 
-    if (mask.format()!= QImage::Format_RGB32 ||
-            mask.format() != QImage::Format_ARGB32) {
-        mask = mask.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+    if (mask.format() != QImage::Format_RGB32 ||
+        mask.format() != QImage::Format_ARGB32) {
+
+        mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
 
     if (!qFuzzyCompare(scale, 0.0)) {

@@ -38,7 +38,7 @@ public:
 
 private:
     void keyPressEvent(QKeyEvent *event);
-    void finishEllipse(const QRectF &rect);
+    void finishRect(const QRectF &rect);
 
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;

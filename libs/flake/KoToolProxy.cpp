@@ -150,20 +150,20 @@ KoCanvasBase* KoToolProxy::canvas() const
 
 #include <KDebug>
 
-void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter, const QPointF &documentOffset)
+void KoToolProxy::touchEvent(QTouchEvent *event)
 {
     QPointF point;
     QList<KoTouchPoint> touchPoints;
 
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
-        QPointF docPoint = viewConverter->viewToDocument(p.screenPos() + documentOffset);
+        QPointF docPoint = widgetToDocument(p.screenPos());
         if (p.isPrimary()) {
             point = docPoint;
         }
         KoTouchPoint touchPoint;
         touchPoint.touchPoint = p;
         touchPoint.point = point;
-        touchPoint.lastPoint = viewConverter->viewToDocument(p.lastNormalizedPos()) + documentOffset;
+        touchPoint.lastPoint = widgetToDocument(p.lastNormalizedPos());
         touchPoints << touchPoint;
     }
 

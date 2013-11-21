@@ -28,19 +28,19 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
+     (_event)->modifiers() == (_modifier))
 
 #define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
     (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
+     (_event)->modifiers() == (_modifier))
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
      ((_event)->modifiers() & (_modifier) ||                            \
-      (_event)->modifiers() == Qt::NoModifier) &&                       \
-     !this->specialModifierActive())
+      (_event)->modifiers() == Qt::NoModifier))
 
 #define RELEASE_CONDITION(_event, _mode, _button)               \
     (this->mode() == (_mode) && (_event)->button() == (_button))
@@ -93,22 +93,56 @@ public:
     void deleteSelection();
 // KoToolBase Implementation.
 
+public:
+    virtual void beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+    virtual void endPrimaryAction(KoPointerEvent *event);
+    virtual void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+
+    enum ToolAction {
+        Primary,
+        AlternateChangeSize,
+        AlternatePickFgNode,
+        AlternatePickBgNode,
+        AlternatePickFgImage,
+        AlternatePickBgImage,
+        AlternateSecondary,
+        AlternateThird,
+        AlternateFourth,
+        AlternateFifth
+    };
+
+    enum AlternateAction {
+        ChangeSize = AlternateChangeSize,
+        PickFgNode = AlternatePickFgNode,
+        PickBgNode = AlternatePickBgNode,
+        PickFgImage = AlternatePickFgImage,
+        PickBgImage = AlternatePickBgImage,
+        Secondary = AlternateSecondary,
+        Third = AlternateThird,
+        Fourth = AlternateFourth,
+        Fifth = AlternateFifth
+    };
+
+    static AlternateAction actionToAlternateAction(ToolAction action);
+
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
+
+
+    void mousePressEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
 
 protected:
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
-
-    /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *) {}  // when a krita tool is enabled, don't push double click on
-
     QPointF widgetCenterInWidgetPixels();
     QPointF convertDocumentToWidget(const QPointF& pt);
 
@@ -155,11 +189,6 @@ protected:
     }
 
 protected:
-    bool specialModifierActive();
-    virtual bool isGestureSupported() const;
-    virtual void gesture(const QPointF &offsetInDocPixels,
-                         const QPointF &initialDocPoint);
-
     KisImageWSP image() const;
     QCursor cursor() const;
 
@@ -242,21 +271,10 @@ protected slots:
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();
-    void slotDelayedGesture();
-
-private:
-    void initPan(const QPointF &docPoint);
-    void pan(const QPointF &docPoint);
-    void endPan();
-
-    void initGesture(const QPointF &docPoint);
-    void processGesture(const QPointF &docPoint);
-    void endGesture();
 
 private:
     PaintMode m_outlinePaintMode;
     ToolMode m_mode;
-    QPointF m_lastPosition;
 
     struct Private;
     Private* const d;

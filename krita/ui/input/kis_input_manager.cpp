@@ -27,7 +27,7 @@
 #include <kactioncollection.h>
 #include <QApplication>
 
-#include <KoToolProxy.h>
+#include "kis_tool_proxy.h"
 
 #include <kis_canvas2.h>
 #include <kis_view2.h>
@@ -90,7 +90,7 @@ public:
     KisInputManager *q;
 
     KisCanvas2 *canvas;
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
 
     bool setMirrorMode;
     bool forwardAllEventsToTool;
@@ -455,7 +455,7 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
     }
 }
 
-KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
+KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     : QObject(canvas), d(new Private(this))
 {
     d->canvas = canvas;
@@ -722,7 +722,7 @@ KisCanvas2* KisInputManager::canvas() const
     return d->canvas;
 }
 
-KoToolProxy* KisInputManager::toolProxy() const
+KisToolProxy* KisInputManager::toolProxy() const
 {
     return d->toolProxy;
 }

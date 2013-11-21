@@ -26,130 +26,14 @@
 
 #include "kis_canvas2.h"
 
-KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor) :
-        KisToolShape(canvas, cursor),
-        m_dragStart(0,0),
-        m_dragEnd(0,0),
-        m_type(type)
+KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor)
+    : KisToolRectangleBase(canvas, type, cursor)
 {
 }
 
-KisToolEllipseBase::~KisToolEllipseBase()
+void KisToolEllipseBase::paintRectangle(QPainter &gc, const QRect &viewRect)
 {
+    QPainterPath path;
+    path.addEllipse(viewRect);
+    paintToolOutline(&gc, path);
 }
-
-void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
-{
-    Q_UNUSED(converter);
-    Q_ASSERT(currentImage());
-    if (mode() == KisTool::PAINT_MODE)
-        paintEllipse(gc, QRect());
-    KisToolPaint::paint(gc,converter);
-}
-
-void KisToolEllipseBase::deactivate()
-{
-    updateArea();
-    KisToolShape::deactivate();
-}
-
-
-void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
-{
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton,
-                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
-
-        if (m_type == PAINT) {
-            if (!nodeEditable() || nodePaintAbility() == NONE) {
-                return;
-            }
-        } else {
-            if (!selectionEditable()) {
-                return;
-            }
-        }
-        setMode(KisTool::PAINT_MODE);
-
-        QPointF pos = convertToPixelCoord(event);
-        m_dragStart = m_dragCenter = m_dragEnd = pos;
-        event->accept();
-    }
-    else {
-        KisToolShape::mousePressEvent(event);
-    }
-}
-
-void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
-{
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        updateArea();
-
-        QPointF pos = convertToPixelCoord(event);
-
-        if (event->modifiers() & Qt::AltModifier) {
-            QPointF trans = pos - m_dragEnd;
-            m_dragStart += trans;
-            m_dragEnd += trans;
-        } else {
-            QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-                                  ? m_dragCenter : m_dragStart);
-            // circle?
-            if (event->modifiers() & Qt::ShiftModifier) {
-                double size = qMax(fabs(diag.x()), fabs(diag.y()));
-                double w = diag.x() < 0 ? -size : size;
-                double h = diag.y() < 0 ? -size : size;
-                diag = QPointF(w, h);
-            }
-
-            // resize around center point?
-            if (event->modifiers() & Qt::ControlModifier) {
-                m_dragStart = m_dragCenter - diag;
-                m_dragEnd = m_dragCenter + diag;
-            } else {
-                m_dragEnd = m_dragStart + diag;
-            }
-        }
-        updateArea();
-
-        m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
-                               (m_dragStart.y() + m_dragEnd.y()) / 2);
-        KisToolPaint::requestUpdateOutline(event->point);
-    }
-    else {
-        KisToolShape::mouseMoveEvent(event);
-    }
-}
-
-void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-
-        updateArea();
-
-        finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
-        event->accept();
-    }
-    else {
-        KisToolShape::mouseReleaseEvent(event);
-    }
-}
-
-
-void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
-{
-    if (canvas()) {
-        QPainterPath path;
-        path.addEllipse(QRectF(pixelToView(m_dragStart), pixelToView(m_dragEnd)));
-        paintToolOutline(&gc, path);
-    }
-}
-
-void KisToolEllipseBase::updateArea()
-{
-    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-10, -10, 10, 10)));
-}
-
-#include "kis_tool_ellipse_base.moc"
-

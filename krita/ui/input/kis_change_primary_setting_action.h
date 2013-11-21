@@ -35,9 +35,12 @@ public:
 
     virtual int priority() const;
 
+    void activate();
+    void deactivate();
+
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void inputEvent(QEvent* event);
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

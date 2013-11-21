@@ -20,6 +20,7 @@
 #define KIS_ALTERNATE_INVOCATION_ACTION_H
 
 #include "kis_abstract_input_action.h"
+#include <QScopedPointer>
 
 /**
  * \brief Alternate Invocation implementation of KisAbstractInputAction.
@@ -37,6 +38,10 @@ public:
     enum Shortcut {
         PrimaryAlternateToggleShortcut, ///< Toggle Primary mode.
         SecondaryAlternateToggleShortcut, ///< Toggle Secondary mode.
+        PickColorFgNodeToggleShortcut,
+        PickColorBgNodeToggleShortcut,
+        PickColorFgImageToggleShortcut,
+        PickColorBgImageToggleShortcut,
     };
 
     explicit KisAlternateInvocationAction();
@@ -44,12 +49,16 @@ public:
 
     virtual int priority() const;
 
+    void activate();
+    void deactivate();
+
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void inputEvent(QEvent* event);
 
 private:
-    Shortcut m_savedShortcut;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KIS_ALTERNATE_INVOCATION_ACTION_H

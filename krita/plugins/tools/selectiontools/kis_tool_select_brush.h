@@ -41,9 +41,11 @@ public:
 
 public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void mouseMoveEvent(KoPointerEvent *event);
 
 public slots:
     virtual void deactivate();

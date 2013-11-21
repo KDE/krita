@@ -38,10 +38,12 @@ public:
     KisToolMultihand(KoCanvasBase *canvas);
     ~KisToolMultihand();
 
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+
 protected:
-    void mousePressEvent(KoPointerEvent *e);
-    void mouseMoveEvent(KoPointerEvent *e);
-    void mouseReleaseEvent(KoPointerEvent* e);
     void paint(QPainter& gc, const KoViewConverter &converter);
 
     QWidget* createOptionWidget();

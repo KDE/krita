@@ -66,7 +66,6 @@ struct KisEmbeddedPatternManager::Private {
     }
 };
 
-
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KisPattern *pattern)
 {
     QByteArray patternMD5 = pattern->md5();

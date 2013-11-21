@@ -66,7 +66,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
+#include <kis_resource_server_provider.h>
 #endif
 
 #include "widgets/squeezedcombobox.h"
@@ -177,7 +177,7 @@ bool GeneralTab::showOutlineWhilePainting()
 void GeneralTab::tagBackendChange(bool on)
 {
 #ifdef NEPOMUK
-    KoResourceServer<KoPattern>* tagServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern>* tagServer = KisResourceServerProvider::instance()->patternServer();
 
     if(radioNepomuk->isChecked()) {
         tagServer->updateNepomukXML(on);

@@ -65,7 +65,7 @@ KisPattern::KisPattern(const QString& file)
 }
 
 KisPattern::KisPattern(const QImage &image, const QString &name, const QString &folderName)
-        : KoPattern(0)
+    : KoPattern(0)
 {
     setImage(image);
     setName(name);
@@ -104,7 +104,7 @@ KisPattern* KisPattern::clone() const
 
 QByteArray KisPattern::md5() const
 {
-    if (m_md5.isEmpty()) {
+    if (m_md5.isEmpty() && !image().isNull()) {
         m_md5 = generateMD5(image());
     }
     return m_md5;

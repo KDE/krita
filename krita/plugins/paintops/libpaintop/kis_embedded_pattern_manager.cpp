@@ -32,8 +32,8 @@ struct KisEmbeddedPatternManager::Private {
 
         if (!md5.isEmpty()) {
             foreach(KoResource *res, KisResourceServerProvider::instance()->patternServer()->resources()) {
-                KisPattern *pat = static_cast<KisPattern *>(res);
-                if (pat->md5() == md5) {
+                KisPattern *pat = dynamic_cast<KisPattern *>(res);
+                if (pat && pat->valid() && pat->md5() == md5) {
                     pattern = pat;
                     break;
                 }

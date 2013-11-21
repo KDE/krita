@@ -265,7 +265,7 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
     setMode(GESTURE_MODE);
     m_initialGestureDocPoint = event->point;
     m_initialGestureGlobalPoint = QCursor::pos();
-    //useCursor(KisCursor::blankCursor());
+    useCursor(KisCursor::blankCursor());
 
     m_lastDocumentPoint = event->point;
 }
@@ -309,7 +309,7 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
     requestUpdateOutline(m_initialGestureDocPoint);
 
     setMode(HOVER_MODE);
-    //resetCursorStyle();
+    resetCursorStyle();
 }
 
 bool KisToolFreehand::wantsAutoScroll() const

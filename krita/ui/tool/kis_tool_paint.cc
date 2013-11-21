@@ -207,6 +207,7 @@ void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction a
     if (pickColor(event->point, action)) {
         setMode(SECONDARY_PAINT_MODE);
         requestUpdateOutline(event->point);
+        useCursor(KisCursor::pickerCursor());
     } else {
         KisTool::beginAlternateAction(event, action);
     }
@@ -224,6 +225,8 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
 {
     if (pickColor(event->point, action)) {
         setMode(KisTool::HOVER_MODE);
+        resetCursorStyle();
+        requestUpdateOutline(event->point);
     } else {
         KisTool::endAlternateAction(event, action);
     }

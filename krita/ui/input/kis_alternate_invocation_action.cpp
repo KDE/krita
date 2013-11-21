@@ -55,16 +55,6 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
 }
 
-void KisAlternateInvocationAction::activate()
-{
-    QApplication::setOverrideCursor(KisCursor::pickerCursor());
-}
-
-void KisAlternateInvocationAction::deactivate()
-{
-    QApplication::restoreOverrideCursor();
-}
-
 int KisAlternateInvocationAction::priority() const
 {
     return 9;

@@ -44,17 +44,6 @@ int KisChangePrimarySettingAction::priority() const
     return 8;
 }
 
-void KisChangePrimarySettingAction::activate()
-{
-    QApplication::setOverrideCursor(KisCursor::blankCursor());
-}
-
-void KisChangePrimarySettingAction::deactivate()
-{
-    QApplication::restoreOverrideCursor();
-}
-
-
 void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);

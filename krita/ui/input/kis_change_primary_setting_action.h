@@ -35,9 +35,6 @@ public:
 
     virtual int priority() const;
 
-    void activate();
-    void deactivate();
-
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
     void inputEvent(QEvent* event);

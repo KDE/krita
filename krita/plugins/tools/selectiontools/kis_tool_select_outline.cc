@@ -88,6 +88,7 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     setMode(KisTool::HOVER_MODE);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

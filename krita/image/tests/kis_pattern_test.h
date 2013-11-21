@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class KisPatternTest : public QObject
+class KoPatternTest : public QObject
 {
     Q_OBJECT
 private slots:

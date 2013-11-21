@@ -47,7 +47,7 @@
 #include "kis_recorded_action_load_context.h"
 #include "kis_recorded_action_save_context.h"
 #include <KoAbstractGradient.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
@@ -61,7 +61,7 @@ struct KisRecordedPaintAction::Private {
     QString compositeOp;
     KisPainter::StrokeStyle strokeStyle;
     KisPainter::FillStyle fillStyle;
-    const KisPattern* pattern;
+    const KoPattern* pattern;
     const KoAbstractGradient* gradient;
     const KisFilterConfiguration* generator;
 };
@@ -246,7 +246,7 @@ KisPainter::FillStyle KisRecordedPaintAction::fillStyle() const
     return d->fillStyle;
 }
 
-void KisRecordedPaintAction::setPattern(const KisPattern* pattern)
+void KisRecordedPaintAction::setPattern(const KoPattern* pattern)
 {
   d->pattern = pattern;
 }
@@ -371,7 +371,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
         action->setFillStyle(KisPainter::FillStyleBackgroundColor);
     } else if(fillAttr == "Pattern")
     {
-        const KisPattern* pattern = context->pattern(elt.attribute("pattern"));
+        const KoPattern* pattern = context->pattern(elt.attribute("pattern"));
         if (pattern)
         {
             action->setFillStyle(KisPainter::FillStylePattern);

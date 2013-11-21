@@ -54,7 +54,7 @@
 #include <KoZoomController.h>
 
 #include <kis_paintop_preset.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>
 #include <kis_doc2.h>

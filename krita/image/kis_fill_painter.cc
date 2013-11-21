@@ -49,7 +49,7 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "KoColorSpace.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
@@ -110,7 +110,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPattern * pattern)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;
@@ -118,7 +118,9 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     if (w < 1) return;
     if (h < 1) return;
 
-    KisPaintDeviceSP patternLayer = pattern->paintDevice(device()->compositionSourceColorSpace());
+    KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
+    patternLayer->convertFromQImage(pattern->image(), 0);
+
     fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
 }
 

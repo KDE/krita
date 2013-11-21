@@ -27,7 +27,7 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 #include "stroke_testing_utils.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <processing/fill_processing_visitor.h>
@@ -56,7 +56,7 @@ public:
 
         KoCanvasResourceManager *manager = utils::createResourceManager(image, fillNode);
 
-        KisPattern *newPattern = new KisPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat"));
+        KoPattern *newPattern = new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
 

@@ -23,9 +23,19 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include <limits.h>
+#include <stdlib.h>
+
+#include <QFileInfo>
+#include <QDir>
+#include <QCryptographicHash>
+#include <QPoint>
+#include <QSize>
 #include <QImage>
 #include <QMap>
 #include <QFile>
+#include <QBuffer>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,10 +55,42 @@ struct GimpPatternHeader {
 quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
+QByteArray generateMD5(const QImage &pattern)
+{
+#if QT_VERSION >= 0x040700
+    QByteArray ba = QByteArray::fromRawData((const char*)pattern.constBits(), pattern.byteCount());
+#else
+    QByteArray ba = QByteArray::fromRawData((const char*)pattern.bits(), pattern.byteCount());
+#endif
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    return md5.result();
+}
+
+
 KoPattern::KoPattern(const QString& file)
     : KoResource(file)
 {
 }
+
+KoPattern::KoPattern(const QImage &image, const QString &name, const QString &folderName)
+    : KoResource(QString())
+{
+    setImage(image);
+    setName(name);
+
+    QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
+
+    int i = 1;
+    while (fileInfo.exists()) {
+        fileInfo.setFile(folderName + QDir::separator() +
+                         name + QString("%1").arg(i) + defaultFileExtension());
+        i++;
+    }
+
+    setFilename(fileInfo.filePath());
+}
+
 
 KoPattern::~KoPattern()
 {
@@ -309,3 +351,20 @@ QString KoPattern::defaultFileExtension() const
 {
     return QString(".pat");
 }
+
+KoPattern* KoPattern::clone() const
+{
+    KoPattern* pattern = new KoPattern(filename());
+    pattern->setImage(image());
+    pattern->setName(name());
+    return pattern;
+}
+
+QByteArray KoPattern::md5() const
+{
+    if (m_md5.isEmpty() && !image().isNull()) {
+        m_md5 = generateMD5(image());
+    }
+    return m_md5;
+}
+

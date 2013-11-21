@@ -22,7 +22,7 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 
-#include "kis_pattern.h"
+#include <KoPattern.h>
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"
@@ -59,7 +59,7 @@ public:
         mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
         view = new KisView2(doc->documentPart(), doc, mainWindow);
 
-        KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
+        KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);

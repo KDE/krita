@@ -35,7 +35,7 @@ class KoResource;
 
 class KoCanvasBase;
 class KisView2;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisAbstractPerspectiveGrid;
 
@@ -90,7 +90,7 @@ public:
     float HDRGamma() const;
     void setHDRGamma(float gamma);
 
-    KisPattern *currentPattern() const;
+    KoPattern *currentPattern() const;
 
     KoAbstractGradient *currentGradient() const;
 
@@ -172,7 +172,7 @@ signals:
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
-    void sigPatternChanged(KisPattern *);
+    void sigPatternChanged(KoPattern *);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigFGColorUsed(const KoColor&);

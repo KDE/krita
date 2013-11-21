@@ -21,15 +21,15 @@
 
 #include <krita_export.h>
 
-class KisPattern;
+class KoPattern;
 class KisPropertiesConfiguration;
 
 
 class PAINTOP_EXPORT KisEmbeddedPatternManager
 {
 public:
-    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KisPattern *pattern);
-    static KisPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
+    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
+    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
 
 private:
     struct Private;

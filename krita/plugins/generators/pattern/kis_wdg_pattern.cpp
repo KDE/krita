@@ -26,11 +26,11 @@
 
 #include <KoColor.h>
 #include <KoResourceServer.h>
+#include <KoPattern.h>
+#include <KoResourceServerProvider.h>
 
 #include <filter/kis_filter_configuration.h>
-#include <kis_pattern.h>
 #include <kis_pattern_chooser.h>
-#include "kis_resource_server_provider.h"
 #include "ui_wdgpatternoptions.h"
 
 KisWdgPattern::KisWdgPattern(QWidget* parent)
@@ -50,8 +50,8 @@ KisWdgPattern::~KisWdgPattern()
 
 void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
 {
-    KoResourceServer<KisPattern> *rserver = KisResourceServerProvider::instance()->patternServer();
-    KisPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
+    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
+    KoPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
     if (pattern) {
        widget()->patternChooser->setCurrentPattern(pattern);
     }

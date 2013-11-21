@@ -52,7 +52,7 @@
 
 class KActionCollection;
 class KoCanvasBase;
-class KisPattern;
+class KoPattern;
 class KoAbstractGradient;
 class KisFilterConfiguration;
 class KisPainter;
@@ -170,7 +170,7 @@ protected:
     void notifyModified() const;
 
     KisImageWSP currentImage();
-    KisPattern* currentPattern();
+    KoPattern* currentPattern();
     KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();

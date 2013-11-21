@@ -26,7 +26,7 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomMode.h>
 #include <kis_node.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_paintop_preset.h>
 
 class KisView2;
@@ -44,7 +44,7 @@ struct ViewModeSynchronisationObject {
     float exposure;
     float gamma;
     QString compositeOp;
-    KisPattern* pattern;
+    KoPattern* pattern;
     KoAbstractGradient* gradient;
     KisNodeSP node;
     KisPaintOpPresetSP paintOp;

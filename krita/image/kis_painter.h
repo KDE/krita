@@ -50,7 +50,7 @@ class KoCompositeOp;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisTransaction;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisPaintInformation;
 class KisPaintOp;
@@ -609,10 +609,10 @@ public:
     bool hasMirroring() const;
 
     /// Set the current pattern
-    void setPattern(const KisPattern * pattern);
+    void setPattern(const KoPattern * pattern);
 
     /// Returns the currently set pattern
-    const KisPattern * pattern() const;
+    const KoPattern * pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it

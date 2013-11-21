@@ -22,6 +22,7 @@
 
 #include "KoResourceServerProvider.h"
 
+#include <QApplication>
 #include <QFileInfo>
 #include <QStringList>
 #include <QDir>
@@ -172,6 +173,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->m_patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternThread = new KoResourceLoaderThread(d->m_patternServer);
     d->patternThread->start();
+    if (qApp->applicationName().toLower().contains("test")) {
+        d->patternThread->wait();
+    }
 
     d->m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);

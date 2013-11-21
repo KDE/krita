@@ -22,14 +22,14 @@
 #include "krita_export.h"
 
 class KoAbstractGradient;
-class KisPattern;
+class KoPattern;
 class QString;
 
 class KRITAIMAGE_EXPORT KisRecordedActionLoadContext {
     public:
         virtual ~KisRecordedActionLoadContext();
         virtual KoAbstractGradient* gradient(const QString& name) const = 0;
-        virtual KisPattern* pattern(const QString& name) const = 0;
+        virtual KoPattern* pattern(const QString& name) const = 0;
 };
 
 #endif

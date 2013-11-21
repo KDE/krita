@@ -30,7 +30,7 @@
 #include <QRect>
 
 class KisTextureOptionWidget;
-class KisPattern;
+class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
 
@@ -86,7 +86,7 @@ private:
     int offsetY;
     TexturingMode texturingMode;
     bool invert;
-    KisPattern *pattern;
+    KoPattern *pattern;
     int cutoffLeft;
     int cutoffRight;
     int cutoffPolicy;

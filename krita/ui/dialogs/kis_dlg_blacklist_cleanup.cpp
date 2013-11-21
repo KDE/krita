@@ -60,7 +60,7 @@ void KisDlgBlacklistCleanup::accept()
         KoResourceServerProvider::instance()->gradientServer()->removeBlackListedFiles();
     }
     if (cbRemovePattern->isChecked()) {
-        KisResourceServerProvider::instance()->patternServer()->removeBlackListedFiles();
+        KoResourceServerProvider::instance()->patternServer()->removeBlackListedFiles();
     }
 }
 

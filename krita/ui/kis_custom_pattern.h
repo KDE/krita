@@ -26,7 +26,7 @@
 
 #include "ui_wdgcustompattern.h"
 
-class KisPattern;
+class KoPattern;
 class KoResource;
 class KisView2;
 
@@ -49,7 +49,7 @@ public:
 
 signals:
     void activatedResource(KoResource *);
-    void addPattern(KisPattern*);
+    void addPattern(KoPattern*);
 
 private slots:
     void slotAddPredefined();
@@ -59,8 +59,8 @@ private slots:
 private:
     void createPattern();
     KisView2* m_view;
-    KisPattern* m_pattern;
-    KoResourceServerAdapter<KisPattern>* m_rServerAdapter;
+    KoPattern* m_pattern;
+    KoResourceServerAdapter<KoPattern>* m_rServerAdapter;
 };
 
 

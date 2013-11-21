@@ -27,7 +27,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"

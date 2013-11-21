@@ -29,7 +29,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoStopGradient.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_image.h>
@@ -122,9 +122,9 @@ void KisCanvasResourceProvider::setHDRGamma(float gamma)
 }
 
 
-KisPattern * KisCanvasResourceProvider::currentPattern() const
+KoPattern * KisCanvasResourceProvider::currentPattern() const
 {
-    return static_cast<KisPattern*>(m_resourceManager->resource(CurrentPattern).value<void *>());
+    return static_cast<KoPattern*>(m_resourceManager->resource(CurrentPattern).value<void *>());
 }
 
 KisFilterConfiguration * KisCanvasResourceProvider::currentGeneratorConfiguration() const
@@ -206,7 +206,7 @@ void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetS
 
 void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 {
-    KisPattern * pattern = dynamic_cast<KisPattern*>(res);
+    KoPattern * pattern = dynamic_cast<KoPattern*>(res);
     QVariant v = qVariantFromValue((void *) pattern);
     m_resourceManager->setResource(CurrentPattern, v);
     emit sigPatternChanged(pattern);
@@ -329,7 +329,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         emit sigBGColorChanged(res.value<KoColor>());
         break;
     case(CurrentPattern):
-        emit sigPatternChanged(static_cast<KisPattern *>(res.value<void *>()));
+        emit sigPatternChanged(static_cast<KoPattern *>(res.value<void *>()));
         break;
     case(CurrentGradient):
         emit sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));

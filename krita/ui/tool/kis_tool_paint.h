@@ -39,7 +39,7 @@
 #include <kis_image.h>
 #include <kis_paintop_settings.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 #include "kis_tool.h"
 #include <QCheckBox>

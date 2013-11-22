@@ -31,6 +31,8 @@
 #include <QList>
 
 #define APP_MIMETYPE "application/x-krita-animation"
+#define KIS_MIME_TYPE "application/x-krita-animation"
+
 static const char CURRENT_DTD_VERSION[] = "1.0";
 
 
@@ -258,8 +260,6 @@ bool KisAnimationDoc::completeLoading(KoStore *store)
 void KisAnimationDoc::preSaveAnimation()
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
-
-    KUrl url = this->documentPart()->url();
 
     QString filename = animation->location() + "/" + animation->name() + ".kranim";
 

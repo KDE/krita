@@ -141,23 +141,7 @@ KisDoc2::KisDoc2()
     : KoDocument(new KisPart2, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    setMimeType(APP_MIMETYPE);
-    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
-    // preload the krita resources
-    KisResourceServerProvider::instance();
-
-    init();
-    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
-    setBackupFile(KisConfig().backupFile());
-
-}
-
-KisDoc2::KisDoc2(KisPart2* part)
-    : KoDocument(part, new UndoStack(this))
-    , m_d(new KisDocPrivate())
-{
-    setMimeType(APP_MIMETYPE);
+    //setMimeType(APP_MIMETYPE);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -198,11 +182,6 @@ KisDoc2::~KisDoc2()
     m_d->image.clear();
 
     delete m_d;
-}
-
-QByteArray KisDoc2::mimeType() const
-{
-    return KIS_MIME_TYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {
@@ -544,7 +523,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
     QList<KoCanvasObserverBase*> canvasObservers;
     KoCanvasBase* tmpCanvas;
 
-    if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
+    /*if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
             //qDebug() << "Unsetting canvas" << this->documentPart()->shells().at(0)->canvasObservers();
             canvasObservers = this->documentPart()->shells().at(0)->canvasObservers();
             tmpCanvas = canvasObservers.at(0)->observedCanvas();
@@ -552,7 +531,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
                 canvasObserver->unsetObservedCanvas();
             }
 
-    }
+    }*/
 
     if (m_d->image) {
         // Disconnect existing sig/slot connections
@@ -567,14 +546,14 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 
     connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
-    if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
+    /*if(this->documentPart()->shells().at(0)->canvasObservers().count() > 0){
             //qDebug() << "Setting back" << this->documentPart()->shells().at(0)->canvasObservers();
             canvasObservers = this->documentPart()->shells().at(0)->canvasObservers();
             foreach(KoCanvasObserverBase* canvasObserver, canvasObservers){
                 canvasObserver->setObservedCanvas(tmpCanvas);
             }
 
-    }
+    }*/
     emit sigLoadingFinished();
 }
 

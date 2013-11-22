@@ -2187,7 +2187,6 @@ QDomDocument KoDocument::saveXML()
 
 bool KoDocument::isNativeFormat(const QByteArray& mimetype) const
 {
-    qDebug() << mimeType() << importExportType << nativeFormatMimeType();
     if (mimetype == nativeFormatMimeType())
         return true;
     return extraNativeMimeTypes().contains(mimetype);

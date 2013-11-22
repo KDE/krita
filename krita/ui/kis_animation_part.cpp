@@ -26,8 +26,7 @@
 KisAnimationPart::KisAnimationPart(QObject* parent)
     : KisPart2(parent), m_animation(0)
 {
-    setComponentData(KisAnimationFactory::componentData(), false);
-
+    //setComponentData(KisAnimationFactory::componentData(), false);
 }
 
 KisAnimationPart::~KisAnimationPart()
@@ -44,7 +43,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisAnimationPart::createCustomDocumentWi
     QList<KoPart::CustomDocumentWidgetItem> widgetlist;
 
     KoPart::CustomDocumentWidgetItem item;
-    item.widget = new KisAnimationSelector(parent, qobject_cast<KisAnimationDoc*>(document()), w, h, cfg.defImageResolution(),cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+    item.widget = new KisAnimationSelector(parent, qobject_cast<KisAnimationDoc*>(document()), w, h, cfg.defImageResolution(),cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                            i18n("untitled-animation"));
 
     item.title = i18n("Animation");

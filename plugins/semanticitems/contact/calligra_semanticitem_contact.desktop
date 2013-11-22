@@ -1,0 +1,29 @@
+[Desktop Entry]
+Name=RDF Contact Plugin
+Name[de]=RDF-Kontaktmodul
+Name[it]=Estensione RDF dei contatti
+Name[kk]=RDF контакт плагині
+Name[nl]=Plug-in voor RDF-contactpersoon
+Name[pt]='Plugin' de Contactos em RDF
+Name[pt_BR]=Plugin de contatos em RDF
+Name[sk]=Plugin kontaktu RDF
+Name[sv]=Insticksprogram för RDF-kontakt
+Name[uk]=Додаток контактів RDF
+Name[x-test]=xxRDF Contact Pluginxx
+Comment=A plugin to map contact items between document and RDF database
+Comment[it]=Una estensione per associare i contatti tra documento e database RDF
+Comment[kk]=Құжаттағы және RDF деректер қорындағы контактарды сәйкестіретін плагині
+Comment[nl]=Een plug-in om verbinding te maken tussen contact-items in een document en een RDF-database
+Comment[pt]=Um 'plugin' para associar os itens do contacto entre o documento e a base de dados RDF
+Comment[pt_BR]=Um plugin para associar os itens do contato entre o documento e o banco de dados RDF
+Comment[sk]=Plugin na mapovanie položiek kontaktov medzi dokumentom a RDF databázou
+Comment[sv]=Ett insticksprogram för att avbilda kontaktobjekt mellan dokument och en RDF-databas
+Comment[uk]=Додаток для створення зв’язку між записами контактів у документі та у базі даних RDF
+Comment[x-test]=xxA plugin to map contact items between document and RDF databasexx
+
+Type=Service
+X-KDE-ServiceTypes=Calligra/SemanticItem
+X-KDE-Library=calligra_semanticitem_contact
+X-KDE-PluginInfo-Name=calligra_semanticitem_contact
+X-Calligra-MinVersion=28
+X-Calligra-PluginVersion=28

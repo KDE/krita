@@ -18,15 +18,17 @@
 */
 #include "KoSemanticStylesheet.h"
 
-#include <QCoreApplication>
-#include <kdebug.h>
-
 #include "KoDocumentRdf.h"
-#include "../KoDocument.h"
+#include "KoChangeTrackerDisabledRAII.h"
+// main
+#include <KoDocument.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
+// KDE
+#include <kdebug.h>
+// Qt
+#include <QCoreApplication>
 
-#include "KoChangeTrackerDisabledRAII.h"
 
 class KoSemanticStylesheetPrivate
 {
@@ -38,7 +40,7 @@ public:
     bool m_isMutable;
 
     KoSemanticStylesheetPrivate(const QString &uuid, const QString &name, const QString &templateString,
-                                const QString &type = "System", bool isMutable = false)
+                                const QString &type = QLatin1String("System"), bool isMutable = false)
         :
         m_uuid(uuid),
         m_name(name),
@@ -164,11 +166,11 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
 
 QString KoSemanticStylesheet::stylesheetTypeSystem()
 {
-    return "System";
+    return QLatin1String("System");
 }
 
 QString KoSemanticStylesheet::stylesheetTypeUser()
 {
-    return "User";
+    return QLatin1String("User");
 }
 

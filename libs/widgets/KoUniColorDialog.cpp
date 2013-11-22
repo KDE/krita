@@ -20,6 +20,8 @@
 #include "KoUniColorDialog.h"
 
 #include "KoUniColorChooser.h"
+#include <KoColor.h>
+
 #include <klocale.h>
 
 class KoUniColorDialogPrivate

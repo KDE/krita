@@ -26,7 +26,6 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisSmudgeOption::KisSmudgeOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisRateOption(name, label, checked, category),

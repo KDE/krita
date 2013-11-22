@@ -47,6 +47,8 @@ int KisAlternateInvocationAction::priority() const
 
 void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 {
+    if (!event) return;
+
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
@@ -63,11 +65,13 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
         break;
     }
 
-    inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
 }
 
 void KisAlternateInvocationAction::end(QEvent *event)
 {
+    if (!event) return;
+
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     QMouseEvent targetEvent(*mouseEvent);
@@ -81,7 +85,7 @@ void KisAlternateInvocationAction::end(QEvent *event)
         break;
     }
 
-    inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
 
     KisAbstractInputAction::end(event);
 }
@@ -101,5 +105,5 @@ void KisAlternateInvocationAction::mouseMoved(const QPointF &lastPos, const QPoi
         break;
     }
 
-    inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToPixel(pos));
+    inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToDocument(pos));
 }

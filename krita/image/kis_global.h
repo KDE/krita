@@ -25,6 +25,8 @@
 #include <calligraversion.h>
 
 #include <KoConfig.h>
+#include "kis_assert.h"
+
 
 #define KRITA_VERSION CALLIGRA_VERSION
 
@@ -103,11 +105,6 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 template<typename T>
 inline T pow2(T x) {
     return x * x;
-}
-
-template<>
-inline QPointF qAbs(const QPointF &pt) {
-    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
 }
 
 template<typename T>

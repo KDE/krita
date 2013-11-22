@@ -19,19 +19,19 @@
 #include "kis_pattern_test.h"
 
 #include <qtest_kde.h>
-#include "kis_pattern.h"
+#include "KoPattern.h"
 
-void KisPatternTest::testCreation()
+void KoPatternTest::testCreation()
 {
-    KisPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
+    KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
 }
 
-void KisPatternTest::testRoundTripMd5()
+void KoPatternTest::testRoundTripMd5()
 {
     QString filename(QString(FILES_DATA_DIR) + QDir::separator() + "test_pattern.png");
     QString patFilename("test_pattern.pat");
 
-    KisPattern pngPattern(filename);
+    KoPattern pngPattern(filename);
     QVERIFY(pngPattern.load());
 
     qDebug() << "PNG Name:" << pngPattern.name();
@@ -40,7 +40,7 @@ void KisPatternTest::testRoundTripMd5()
     pngPattern.setFilename(patFilename);
     pngPattern.save();
 
-    KisPattern patPattern(patFilename);
+    KoPattern patPattern(patFilename);
     QVERIFY(patPattern.load());
 
     qDebug() << "PAT Name:" << patPattern.name();
@@ -51,5 +51,5 @@ void KisPatternTest::testRoundTripMd5()
 }
 
 
-QTEST_KDEMAIN(KisPatternTest, GUI)
+QTEST_KDEMAIN(KoPatternTest, GUI)
 #include "kis_pattern_test.moc"

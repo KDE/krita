@@ -20,18 +20,18 @@
 #include "KoRdfSemanticTreeWidgetItem.h"
 
 #include "KoDocumentRdf.h"
-
+// main
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoDocumentResourceManager.h>
 #include <KoTextEditor.h>
-
+// KDE
 #include <kactionmenu.h>
-#include <QVBoxLayout>
 #include <kpagedialog.h>
-
 #include <kdebug.h>
 #include <klocale.h>
+// Qt
+#include <QVBoxLayout>
 
 using namespace Soprano;
 
@@ -80,8 +80,8 @@ void RdfSemanticTreeWidgetApplyStylesheet::activated()
 }
 
 
-KoRdfSemanticTreeWidgetItem::KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent, int Type)
-    : QTreeWidgetItem(parent, Type)
+KoRdfSemanticTreeWidgetItem::KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent)
+    : QTreeWidgetItem(parent)
 {
 }
 
@@ -172,7 +172,7 @@ void KoRdfSemanticTreeWidgetItem::edit()
     dialog.setCaption(caption);
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
-        kDebug(30015) << "KoRdfCalendarEventTreeWidgetItem::edit() accepted...";
+        kDebug(30015) << "KoRdfSemanticTreeWidgetItem::edit() accepted...";
         semanticItem()->updateFromEditorData();
     }
 }

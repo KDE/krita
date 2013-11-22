@@ -1118,7 +1118,7 @@ void KisPaintDeviceTest::testMoveWrapAround()
     dev->setPixel(3, 3, c1);
     dev->setPixel(18, 18, c2);
 
-    QRect rc = dev->defaultBounds()->bounds();
+    // QRect rc = dev->defaultBounds()->bounds();
 
     //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move0.png");
     QCOMPARE(dev->exactBounds(), QRect(3,3,16,16));
@@ -1126,6 +1126,85 @@ void KisPaintDeviceTest::testMoveWrapAround()
     QCOMPARE(dev->exactBounds(), QRect(8,8,6,6));
     //dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height()).save("move1.png");
 
+}
+
+#include "kis_lock_free_cache.h"
+
+#define NUM_TYPES 3
+
+// high-concurrency
+#define NUM_CYCLES 500000
+#define NUM_THREADS 4
+
+
+struct TestingCache : KisLockFreeCache<int> {
+    int calculateNewValue() const {
+        return m_realValue;
+    }
+
+    QAtomicInt m_realValue;
+};
+
+class CacheStressJob : public QRunnable
+{
+public:
+    CacheStressJob(TestingCache &cache)
+        : m_cache(cache),
+          m_oldValue(0)
+    {
+    }
+
+    void run() {
+        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+            qint32 type = i % NUM_TYPES;
+
+            switch(type) {
+            case 0:
+                m_cache.m_realValue.ref();
+                m_oldValue = m_cache.m_realValue;
+                m_cache.invalidate();
+                break;
+            case 1:
+            {
+                int newValue = m_cache.getValue();
+                Q_ASSERT(newValue >= m_oldValue);
+                Q_UNUSED(newValue);
+            }
+                break;
+            case 3:
+                QTest::qSleep(3);
+                break;
+            }
+        }
+    }
+
+private:
+    TestingCache &m_cache;
+    int m_oldValue;
+};
+
+void KisPaintDeviceTest::testCacheState()
+{
+    TestingCache cache;
+
+    QList<CacheStressJob*> jobsList;
+    CacheStressJob *job;
+
+    for(qint32 i = 0; i < NUM_THREADS; i++) {
+        //job = new CacheStressJob(value, cacheValue, cacheState);
+        job = new CacheStressJob(cache);
+        job->setAutoDelete(true);
+        jobsList.append(job);
+    }
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(NUM_THREADS);
+
+    foreach(job, jobsList) {
+        pool.start(job);
+    }
+
+    pool.waitForDone();
 }
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)

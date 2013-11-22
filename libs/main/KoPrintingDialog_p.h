@@ -44,7 +44,7 @@
 
 class KoPrintingDialogPrivate {
 public:
-    KoPrintingDialogPrivate(KoPrintingDialog *dia)
+    explicit KoPrintingDialogPrivate(KoPrintingDialog *dia)
         : parent(dia),
           stop(true),
           shapeManager(0),

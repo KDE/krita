@@ -30,7 +30,6 @@
 #include <kio/job.h>
 
 #include <KoFilterManager.h>
-#include <KoColorSpaceRegistry.h>
 
 #include "kis_node_manager.h"
 #include "kis_types.h"

@@ -39,10 +39,9 @@
 #include <kis_image.h>
 #include <kis_paintop_settings.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 #include "kis_tool.h"
-#include "KoCompositeOp.h"
 #include <QCheckBox>
 
 class QEvent;
@@ -51,6 +50,7 @@ class QPaintEvent;
 class QGridLayout;
 class QLabel;
 class QPoint;
+class KoCompositeOp;
 
 
 class KoCanvasBase;
@@ -147,7 +147,6 @@ private slots:
     void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 
@@ -159,6 +158,9 @@ protected:
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
     bool m_toForegroundColor;
+
+private:
+    QPainterPath tryFixTooBigBrush(const QPainterPath &originalOutline);
 
 private:
 

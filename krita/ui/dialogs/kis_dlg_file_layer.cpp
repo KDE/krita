@@ -30,8 +30,8 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 
+#include <KoApplication.h>
 #include <KoFilterManager.h>
-#include <KoServiceProvider.h>
 
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
@@ -82,9 +82,7 @@ QString KisDlgFileLayer::fileName() const
 
 void KisDlgFileLayer::slotSelectFile()
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     KUrl startUrl("kfiledialog:///OpenDialog");
     if (!m_basePath.isEmpty()) {

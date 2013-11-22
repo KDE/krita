@@ -29,6 +29,7 @@
 #include <QMap>
 #include <QHash>
 #include <QDockWidget>
+#include <QScrollArea>
 
 #include <KoToolManager.h>
 
@@ -37,6 +38,13 @@ class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;
+
+class ScrollArea : public QScrollArea
+{
+    Q_OBJECT
+protected:
+    void showEvent(QShowEvent *);
+};
 
 /**
  * KoModeBox is housed in a dock widget that presents tools as headings in a QToolBox

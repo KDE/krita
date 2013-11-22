@@ -117,7 +117,7 @@ calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  NEEDS LIB_KOODF2 CALLIGRA_
 calligra_define_product(SCRIPTING "Scripting feature") # TODO
 calligra_define_product(RDF "RDF feature")
 # plugins
-calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  NEEDS CALLIGRA_LIBS)
 # apps
 calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEXTSHAPE)
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
@@ -141,27 +141,28 @@ calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
 # more plugins
-calligra_define_product(PLUGIN_COLORENGINES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_MUSICSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_SPACENAVIGATOR ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_DOCKERS ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_TEXTEDITING ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION ""  NEEDS KEXI_APP SHEETS_PART)
-calligra_define_product(PLUGIN_DEFAULTTOOLS ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_PATHSHAPES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_VARIABLES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_CHARTSHAPE "" NEEDS CALLIGRA_LIBS LIB_KDCHART)
-calligra_define_product(PLUGIN_PICTURESHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_PLUGINSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_FORMULASHAPE ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi"  NEEDS KEXI_APP SHEETS_PART)
+calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" NEEDS CALLIGRA_LIBS LIB_KDCHART)
+calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
+calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  NEEDS LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  NEEDS RDF CALLIGRA_LIBS)
 # staging plugins
-calligra_define_product(PLUGIN_GOOGLEDOCS "" STAGING  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_THREEDSHAPE ""  STAGING  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  STAGING  NEEDS SHEETS_PART)
+calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING  NEEDS SHEETS_PART)
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter" NEEDS LIB_KOMSOOXML SHEETS_PART)
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter" NEEDS LIB_MSO LIB_KOMSOOXML SHEETS_PART)
@@ -226,10 +227,10 @@ calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS F
 calligra_define_product(FILTER_KARBON_EXPORT "All Karbon export filter"  WANTS FILTER_KARBON_TO_IMAGE FILTER_KARBON_TO_SVG FILTER_KARBON_TO_WMF)
 calligra_define_product(FILTER_KARBON "All Karbon filter"  WANTS FILTER_KARBON_IMPORT FILTER_KARBON_EXPORT)
 # meta apps
-calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP  WANTS FILTER_WORDS)
+calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP  WANTS FILTER_WORDS PLUGIN_SEMANTICITEMS)
 calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP  WANTS FILTER_STAGE)
 calligra_define_product(SHEETS "Full Sheets (for Desktop)"  NEEDS SHEETS_APP  WANTS FILTER_SHEETS PLUGIN_SHEETS_PIVOTTABLES)
-calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS)
+calligra_define_product(AUTHOR "Full Author (for Desktop)"  NEEDS AUTHOR_APP  WANTS FILTER_WORDS PLUGIN_SEMANTICITEMS)
 calligra_define_product(KARBON "Full Karbon (for Desktop)"  NEEDS KARBON_APP  WANTS FILTER_KARBON)
 calligra_define_product(KRITA "Full Krita (for Desktop)"  NEEDS KRITA_APP)
 calligra_define_product(KEXI "Full Kexi (for Desktop)"  NEEDS KEXI_APP  WANTS PLUGIN_KEXI_SPREADSHEETMIGRATION PLUGIN_REPORTING)
@@ -237,10 +238,10 @@ calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FI
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
 calligra_define_product(ACTIVE "Calligra Active"  NEEDS SHEETS_PART STAGE_PART WORDS_PART)
-calligra_define_product(CALLIGRA ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLIGRA_LIBS)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
-calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
+calligra_define_product(CSTESTER "cstester " NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 
 # For new products see cmake/productsets/README, "How to add another product?"
 
@@ -360,7 +361,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.7.15)
+set(SQLITE_RECOMMENDED_VERSION 3.8.1)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite 3.6.16)
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -407,9 +408,8 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 ##
 ## Test for kdepimlibs
 ##
-macro_optional_find_package(KdepimLibs)
+macro_optional_find_package(KdepimLibs 4.6.0)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
-
 
 ##
 ## Test for eigen2
@@ -501,21 +501,49 @@ if(HAVE_VC)
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
     include (VcMacros)
 
-    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-      if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
-      else(PACKAGERS_BUILD)
-        set(${_objs} ${_src})
-      endif(PACKAGERS_BUILD)
-    endmacro()
+    #Handle Vc master
+    if(Vc_VERSION_MAJOR GREATER 0 OR Vc_VERSION_MINOR GREATER 7)
+        message(STATUS "Vc version is greater than 0.7, enabling AVX2 support")
 
-    macro(ko_compile_for_all_implementations _objs _src)
-      if(PACKAGERS_BUILD)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
-      else(PACKAGERS_BUILD)
-        set(${_objs} ${_src})
-      endif(PACKAGERS_BUILD)
-    endmacro()
+        if(Vc_COMPILER_IS_GCC)
+            AddCompilerFlag("-std=c++11" _ok)
+            if(NOT _ok)
+                AddCompilerFlag("-std=c++0x" _ok)
+            endif()
+        endif(Vc_COMPILER_IS_GCC)
+
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX AVX2)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+    else()
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY SSE2 SSSE3 SSE4_1 AVX)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+        if(PACKAGERS_BUILD)
+            vc_compile_for_all_implementations(${_objs} ${_src} FLAGS -fPIC ONLY Scalar SSE2 SSSE3 SSE4_1 AVX)
+        else(PACKAGERS_BUILD)
+            set(${_objs} ${_src})
+        endif(PACKAGERS_BUILD)
+        endmacro()
+    endif()
 
     if (NOT PACKAGERS_BUILD)
       # Optimize the whole Calligra for current architecture
@@ -523,6 +551,15 @@ if(HAVE_VC)
     endif (NOT PACKAGERS_BUILD)
 endif(HAVE_VC)
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+
+##
+## Test for Xinput
+##
+if(NOT WIN32)
+  set(REQUIRED_Xinput_FOUND ${X11_Xinput_FOUND})
+else(NOT WIN32)
+  set(REQUIRED_Xinput_FOUND TRUE)
+endif(NOT WIN32)
 
 ##
 ## Test for Nepomuk
@@ -695,12 +732,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CM
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
 
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+
 # koodf is at the bottom of the stack
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KDE4_INCLUDES})
 
-set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
 
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
@@ -760,6 +798,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/rdf
 )
+set(KORDF_LIBS kordf)
 
 if(SHOULD_BUILD_SCRIPTING)
   set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
@@ -848,9 +887,9 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms|Xinput devel not found ")
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     calligra_disable_product(ACTIVE "Qt version <= 4.7.0")

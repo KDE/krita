@@ -1,5 +1,5 @@
 if(SHOULD_BUILD_PLUGIN_GOOGLEDOCS)
-    add_subdirectory(googledocs)
+#    add_subdirectory(googledocs)
 endif(SHOULD_BUILD_PLUGIN_GOOGLEDOCS)
 
 if (SHOULD_BUILD_PLUGIN_THREEDSHAPE)

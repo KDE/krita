@@ -30,7 +30,7 @@
 #include <kis_layer.h>
 #include <kis_painter.h>
 #include <flake/kis_shape_layer.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoSelection.h>
 
 #include <kis_debug.h>

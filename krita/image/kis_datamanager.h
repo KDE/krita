@@ -54,11 +54,10 @@ public:
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
      * defPixel array.
      */
-KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel), m_abstractCache(0) {}
-KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm), m_abstractCache(0) { }
+KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
+    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
     ~KisDataManager() {
-        delete m_abstractCache;
     }
 
 public:
@@ -329,27 +328,10 @@ public:
         return ACTUAL_DATAMGR::rowStride(x, y);
     }
 
-public:
-    class AbstractCache {
-    public:
-        virtual ~AbstractCache() {}
-    };
-
-    inline void setCache(AbstractCache* cache) {
-        delete m_abstractCache;
-        m_abstractCache = cache;
-    }
-
-    inline AbstractCache* cache() const {
-        return m_abstractCache;
-    }
-
 protected:
     friend class KisRectIterator;
     friend class KisHLineIterator;
     friend class KisVLineIterator;
-private:
-    mutable AbstractCache* m_abstractCache;
 };
 
 

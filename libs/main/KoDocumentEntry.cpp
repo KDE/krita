@@ -24,8 +24,6 @@
 #include "KoDocument.h"
 #include "KoFilter.h"
 
-#include <kparts/factory.h>
-
 #include <kservicetype.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
@@ -47,6 +45,39 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
+
+KService::Ptr KoDocumentEntry::service() const {
+    return m_service;
+}
+
+/**
+ * @return TRUE if the service pointer is null
+ */
+bool KoDocumentEntry::isEmpty() const {
+    return m_service.isNull();
+}
+
+/**
+ * @return name of the associated service
+ */
+QString KoDocumentEntry::name() const {
+    return m_service->name();
+}
+
+/**
+ *  Mimetypes (and other service types) which this document can handle.
+ */
+QStringList KoDocumentEntry::mimeTypes() const {
+    return m_service->serviceTypes();
+}
+
+/**
+ *  @return TRUE if the document can handle the requested mimetype.
+ */
+bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+    return mimeTypes().contains(_mimetype);
+}
+
 KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 {
     QString error;
@@ -66,12 +97,12 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
 {
     QString constr = QString::fromLatin1("[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]").arg(mimetype).arg(mimetype);
 
-    QList<KoDocumentEntry> vec = query(AllEntries, constr);
+    QList<KoDocumentEntry> vec = query(constr);
     if (vec.isEmpty()) {
         kWarning(30003) << "Got no results with " << constr;
         // Fallback to the old way (which was probably wrong, but better be safe)
         QString constr = QString::fromLatin1("'%1' in ServiceTypes").arg(mimetype);
-        vec = query(AllEntries, constr);
+        vec = query(constr);
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
@@ -89,7 +120,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & _constr)
+QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
 {
 
     QList<KoDocumentEntry> lst;
@@ -98,8 +129,6 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
         constr = '(' + _constr + ") and ";
     }
     constr += " exist Library";
-
-    const bool onlyDocEmb = flags & OnlyEmbeddableDocuments;
 
     // Query the trader
     const KService::List offers = KServiceTypeTrader::self()->query("Calligra/Part", constr);
@@ -112,13 +141,10 @@ QList<KoDocumentEntry> KoDocumentEntry::query(QueryFlags flags, const QString & 
 
         if ((*it)->noDisplay())
             continue;
-        // Maybe this could be done as a trader constraint too.
-        if ((!onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString() != "1")) {
-            KoDocumentEntry d(*it);
-            // Append converted offer
-            lst.append(d);
-            // Next service
-        }
+        KoDocumentEntry d(*it);
+        // Append converted offer
+        lst.append(d);
+        // Next service
     }
 
     if (lst.count() > 1 && !_constr.isEmpty())

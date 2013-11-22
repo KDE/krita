@@ -405,9 +405,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
+        chkUseTextureBuffer->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
+        chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
+        chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
@@ -429,6 +432,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     cbUseOpenGL->setChecked(true);
+    chkUseTextureBuffer->setChecked(false);
+    chkUseTextureBuffer->setEnabled(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
@@ -443,6 +448,7 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
+    chkUseTextureBuffer->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
@@ -762,7 +768,10 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
+        cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
+#else
+        cfg.chkUseTextureBuffer(false);
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

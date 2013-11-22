@@ -134,7 +134,7 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
-    Q_ASSERT(obj2 == 0);
+    Q_ASSERT(obj2 == 0); Q_UNUSED(obj2);
 
     // this should not crash, even though we were a listener
     manager.setProperty(KoInlineObject::UserGet, "bla");

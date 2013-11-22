@@ -185,6 +185,7 @@ void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& t
 
 QString KoColorSpaceRegistry::profileAlias(const QString& _name) const
 {
+    QReadLocker l(&d->registrylock);
     return d->profileAlias.value(_name, _name);
 }
 
@@ -277,14 +278,15 @@ void KoColorSpaceRegistry::removeProfile(KoColorProfile* profile)
     d->profileMap.remove(profile->name());
 }
 
-bool KoColorSpaceRegistry::isCached(const QString & csId, const QString & profileName) const
+bool KoColorSpaceRegistry::isCached(const QString & csID, const QString & profileName) const
 {
-    return !(d->csMap.find(idsToCacheName(csId, profileName)) == d->csMap.end());
+    QReadLocker l(&d->registrylock);
+    return !(d->csMap.find(idsToCacheName(csID, profileName)) == d->csMap.end());
 }
 
-QString KoColorSpaceRegistry::idsToCacheName(const QString & csId, const QString & profileName) const
+QString KoColorSpaceRegistry::idsToCacheName(const QString & csID, const QString & profileName) const
 {
-    return csId + "<comb>" + profileName;
+    return csID + "<comb>" + profileName;
 }
 
 const KoColorSpaceFactory* KoColorSpaceRegistry::colorSpaceFactory(const QString &colorSpaceId) const
@@ -309,9 +311,12 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         profileName = csf->defaultProfile();
     }
 
-    QString name = idsToCacheName(csID, profileName);
+    if (profileName.isEmpty()) {
+        return 0;
+    }
 
     if (!isCached(csID, profileName)) {
+
         d->registrylock.lockForRead();
         KoColorSpaceFactory *csf = d->colorSpaceFactoryRegistry.value(csID);
         d->registrylock.unlock();
@@ -329,8 +334,15 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
                 dbgPigmentCSRegistry << "No profile at all available for " << csf << " " << csf->id();
                 p = 0;
             } else {
-                p = profiles[0];
-                Q_ASSERT(p);
+                // Get the default profile if the asked-for profile isn't available
+                profileName = csf->defaultProfile();
+                const KoColorProfile *p = profileByName(profileName);
+                if (!p && profiles.size() > 0) {
+                    // And if that doesn't work get the first one
+                    p = profiles[0];
+                    Q_ASSERT(p);
+                }
+
             }
         }
         // We did our best, but still have no profile: and since csf->grabColorSpace
@@ -338,6 +350,8 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         if (!p) {
             return 0;
         }
+        profileName = p->name();
+
         const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";
@@ -345,16 +359,29 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
 
         QWriteLocker l(&d->registrylock);
-        d->csMap[name] = cs;
+        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count()
+                             << ", adding name: " << idsToCacheName(cs->id(), cs->profile()->name())
+                             << "\n\tcsID" << csID
+                             << "\n\tprofileName" << profileName
+                             << "\n\tcs->id()" << cs->id()
+                             << "\n\tcs->profile()->name()" << cs->profile()->name()
+                             << "\n\tpName" << pName;
+        Q_ASSERT(cs->id() == csID);
+        Q_ASSERT(cs->profile()->name() == profileName);
+        d->csMap[idsToCacheName(cs->id(), cs->profile()->name())] = cs;
         cs->d->deletability = OwnedByRegistryDoNotDelete;
-        dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;
+
     }
     QReadLocker l(&d->registrylock);
 
-    if (d->csMap.contains(name))
-        return d->csMap[name];
-    else
+    if (d->csMap.contains(idsToCacheName(csID, profileName))) {
+        const KoColorSpace *cs = d->csMap[idsToCacheName(csID, profileName)];
+        Q_ASSERT(cs->profile()->name() == profileName);
+        return cs;
+    }
+    else {
         return 0;
+    }
 }
 
 
@@ -398,14 +425,14 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
         return cs;
     } else {
-        return colorSpace(csID, "");
+        return colorSpace(csID);
     }
 }
 
 const KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
     if (!d->alphaCs) {
-        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId(), 0);
+        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId());
     }
     Q_ASSERT(d->alphaCs);
     return d->alphaCs;
@@ -415,7 +442,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const QString &profileName)
 {
     if (profileName.isEmpty()) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profileName);
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId());
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
@@ -427,7 +454,7 @@ const KoColorSpace * KoColorSpaceRegistry::rgb8(const KoColorProfile * profile)
 {
     if (profile == 0) {
         if (!d->rgbU8sRGB) {
-            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId(), profile);
+            d->rgbU8sRGB = colorSpace(KoRgbU8ColorSpace::colorSpaceId());
         }
         Q_ASSERT(d->rgbU8sRGB);
         return d->rgbU8sRGB;
@@ -592,9 +619,11 @@ QList<const KoColorSpace*> KoColorSpaceRegistry::allColorSpaces(ColorSpaceListVi
     d->registrylock.unlock();
 
     foreach(KoColorSpaceFactory* factory, factories) {
+        // Don't test with ycbcr for now, since we don't have a default profile for it.
+        if (factory->colorModelId().id().startsWith("Y")) continue;
         if (visibility == AllColorSpaces || factory->userVisible()) {
             if (pSelection == OnlyDefaultProfile) {
-                const KoColorSpace *cs = colorSpace(factory->id(), 0);
+                const KoColorSpace *cs = colorSpace(factory->id());
                 if (cs) {
                     colorSpaces.append(cs);
                 }

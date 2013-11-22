@@ -28,7 +28,6 @@
 #include <kpluginfactory.h>
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_undo_adapter.h>
 #include <kis_transaction.h>

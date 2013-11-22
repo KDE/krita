@@ -50,7 +50,7 @@ ClonesArray::~ClonesArray()
 void ClonesArray::slotCreateClonesArray()
 {
     KisImageWSP image = m_view->image();
-    Q_ASSERT(image);
+    Q_ASSERT(image); Q_UNUSED(image);
 
     DlgClonesArray *dialog = new DlgClonesArray(m_view, m_view);
     Q_CHECK_PTR(dialog);

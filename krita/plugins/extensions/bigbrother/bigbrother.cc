@@ -35,7 +35,7 @@
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <recorder/kis_play_info.h>
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_recorded_action_factory_registry.h>
@@ -58,7 +58,7 @@ K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {
     public:
         virtual void saveGradient(const KoAbstractGradient* ) {}
-        virtual void savePattern(const KisPattern* ) {}
+        virtual void savePattern(const KoPattern* ) {}
 };
 
 class RecordedActionLoadContext : public KisRecordedActionLoadContext {
@@ -67,9 +67,9 @@ class RecordedActionLoadContext : public KisRecordedActionLoadContext {
         {
             return KoResourceServerProvider::instance()->gradientServer()->resourceByName(name);
         }
-        virtual KisPattern* pattern(const QString& name) const
+        virtual KoPattern* pattern(const QString& name) const
         {
-            return KisResourceServerProvider::instance()->patternServer()->resourceByName(name);
+            return KoResourceServerProvider::instance()->patternServer()->resourceByName(name);
         }
 };
 
@@ -126,7 +126,7 @@ void BigBrotherPlugin::slotOpenPlay()
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(1);
+    updater->start(1, i18n("Playing back macro"));
     KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater->startSubtask());
     player.start();
     while(player.isRunning())

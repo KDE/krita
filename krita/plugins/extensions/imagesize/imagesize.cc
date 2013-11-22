@@ -86,8 +86,8 @@ void ImageSize::slotImageSize()
     if (!image) return;
 
     DlgImageSize * dlgImageSize = new DlgImageSize(m_view, image->width(), image->height(), image->yRes());
-    dlgImageSize->setObjectName("ImageSize");
     Q_CHECK_PTR(dlgImageSize);
+    dlgImageSize->setObjectName("ImageSize");
 
     if (dlgImageSize->exec() == QDialog::Accepted) {
         qint32 w = dlgImageSize->width();
@@ -106,7 +106,7 @@ void ImageSize::slotCanvasSize()
 
     if (!image) return;
 
-    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view, image->width(), image->height());
+    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view, image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgCanvasSize);
 
     if (dlgCanvasSize->exec() == QDialog::Accepted) {
@@ -126,17 +126,13 @@ void ImageSize::slotLayerSize()
 
     if (!image) return;
 
-    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize");
-    Q_CHECK_PTR(dlgLayerSize);
-
-    dlgLayerSize->setCaption(i18n("Layer Size"));
-
     KisPaintDeviceSP dev = m_view->activeLayer()->projection();
     Q_ASSERT(dev);
     QRect rc = dev->exactBounds();
 
-    dlgLayerSize->setWidth(rc.width());
-    dlgLayerSize->setHeight(rc.height());
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(m_view, "LayerSize", rc.width(), rc.height(), image->yRes());
+    Q_CHECK_PTR(dlgLayerSize);
+    dlgLayerSize->setCaption(i18n("Layer Size"));
 
     if (dlgLayerSize->exec() == QDialog::Accepted) {
         qint32 w = dlgLayerSize->width();
@@ -162,17 +158,11 @@ void ImageSize::slotSelectionScale()
     KisSelectionSP selection = m_view->selection();
     if (!selection) return;
 
-
-    DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale");
-    Q_CHECK_PTR(dlgSize);
-
-    dlgSize->setCaption(i18n("Scale Selection"));
-
     QRect rc = selection->selectedRect();
 
-    dlgSize->setWidth(rc.width());
-    dlgSize->setHeight(rc.height());
-
+    DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale", rc.width(), rc.height(), image->yRes());
+    Q_CHECK_PTR(dlgSize);
+    dlgSize->setCaption(i18n("Scale Selection"));
 
     KoProgressUpdater* pu = m_view->createProgressUpdater();
     QPointer<KoUpdater> u = pu->startSubtask();

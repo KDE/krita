@@ -407,19 +407,11 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
 
-    /**
-     * Most of our resources code expects the image() of the resource
-     * to be in ARGB32 (or alike) format. If some resource returns the
-     * image in another format, then it is actually a bug (and it may
-     * result in a SIGSEGV somewhere). But here we will not assert
-     * with it, just warn the user that something is wrong.
-     */
-    if (image.format() != QImage::Format_RGB32 &&
-        image.format() != QImage::Format_ARGB32 &&
-        image.format() != QImage::Format_ARGB32_Premultiplied) {
+    if (image.format()!= QImage::Format_RGB32 ||
+            image.format() != QImage::Format_ARGB32 ||
+            image.format() != QImage::Format_ARGB32_Premultiplied) {
 
         image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-        qWarning() << "WARNING (KoResourceItemChooser::updatePreview): the resource" << resource->name() << "has created a non-rgb32 image thumbnail. It may not work properly.";
     }
 
     if (d->tiledPreview) {
@@ -434,7 +426,9 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         image = img;
     }
 
-    if (d->grayscalePreview) {
+    // Only convert to grayscale if it is rgb. Otherwise, it's gray already.
+    if (d->grayscalePreview && !image.isGrayscale()) {
+
         QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
         for (int row = 0; row < image.height(); ++row ) {
             for (int col = 0; col < image.width(); ++col ){

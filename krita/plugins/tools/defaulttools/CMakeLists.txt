@@ -14,6 +14,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_measure.cc
     kis_tool_path.cc
     kis_tool_move.cc
+    kis_tool_movetooloptionswidget.cpp
     strokes/move_stroke_strategy.cpp
     strokes/move_selection_stroke_strategy.cpp
     kis_tool_multihand.cpp

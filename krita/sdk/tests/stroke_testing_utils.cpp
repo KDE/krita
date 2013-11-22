@@ -24,9 +24,10 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -95,7 +96,7 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
         preset = new KisPaintOpPreset(fullFileName);
         bool presetValid = preset->load();
-        Q_ASSERT(presetValid);
+        Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
         manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);

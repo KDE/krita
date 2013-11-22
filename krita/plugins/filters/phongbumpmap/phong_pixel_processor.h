@@ -28,7 +28,6 @@
 
 #include "phong_bumpmap_constants.h"
 #include "kis_properties_configuration.h"
-#include <KoChannelInfo.h>
 
 struct Illuminant
 {

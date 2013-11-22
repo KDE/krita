@@ -249,38 +249,6 @@ QSizeF KoPatternBackground::patternOriginalSize() const
     return d->imageData->imageSize();
 }
 
-KoPatternBackground &KoPatternBackground::operator = (const KoPatternBackground &rhs)
-{
-    Q_D(KoPatternBackground);
-    if (this == &rhs)
-        return *this;
-
-    const KoPatternBackgroundPrivate *otherD = static_cast<const KoPatternBackgroundPrivate*>(rhs.d_func());
-
-    d->matrix = otherD->matrix;
-    d->repeat = otherD->repeat;
-    d->refPoint = otherD->refPoint;
-    d->targetImageSize = otherD->targetImageSize;
-    d->targetImageSizePercent = otherD->targetImageSizePercent;
-    d->refPointOffsetPercent = otherD->refPointOffsetPercent;
-    d->tileRepeatOffsetPercent = otherD->tileRepeatOffsetPercent;
-    d->imageCollection = otherD->imageCollection;
-
-    if (otherD->imageData) {
-        if (d->imageData) {
-            *(d->imageData) = *(otherD->imageData);
-        }
-        else {
-            d->imageData = new KoImageData(*otherD->imageData);
-        }
-    } else {
-        delete d->imageData;
-        d->imageData = 0;
-    }
-
-    return *this;
-}
-
 void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoPatternBackground);

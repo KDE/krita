@@ -35,14 +35,13 @@
 #include <knuminput.h>
 
 #include <KoUpdater.h>
-#include <KoColorSpace.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoProgressUpdater.h>
 
 #include <kis_layer.h>
 #include <kis_painter.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
 #include <kis_system_locker.h>

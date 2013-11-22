@@ -23,8 +23,6 @@
 #include <QByteArray>
 #include <QBitArray>
 
-#include <KoColorSpace.h>
-
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <kis_node.h>

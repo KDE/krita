@@ -25,7 +25,7 @@
      <property name="title">
       <string>Canvas border</string>
      </property>
-     <layout class="QGridLayout" name="_3">
+     <layout class="QGridLayout">
       <item row="1" column="0">
        <widget class="QLabel" name="lblCanvasBorderColor">
         <property name="text">
@@ -60,7 +60,7 @@
      <property name="title">
       <string>Transparency Checkboxes</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="lblCheckSize">
         <property name="text">
@@ -190,6 +190,16 @@
       <string>OpenGL</string>
      </property>
      <layout class="QGridLayout">
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chkUseTextureBuffer">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use Texture Buffering. This can be faster on some GPU/Driver combinations (like Intel) or broken on some others (like AMD/Radeon).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Use Texture Buffer</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QCheckBox" name="cbUseOpenGL">
         <property name="text">
@@ -200,7 +210,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QComboBox" name="cmbFilterMode">
         <property name="currentIndex">
          <number>0</number>
@@ -220,9 +230,14 @@
           <string>Trilinear Filtering</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>High Quality Filtering</string>
+         </property>
+        </item>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Scaling Mode:</string>

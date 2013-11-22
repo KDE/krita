@@ -27,23 +27,10 @@ class KoDocumentRdfEditWidget;
 class KoTextInlineRdf;
 class KoRdfPrefixMapping;
 class KoRdfSemanticTreeWidgetItem;
-class KoRdfFoaFTreeWidgetItem;
 class KoTextEditor;
 class KoRdfSemanticItem;
-class KoRdfFoaF;
-class KoRdfCalendarEvent;
-class KoRdfLocation;
 class KoSemanticStylesheet;
 
-namespace Ui
-{
-    class KoRdfLocationEditWidget;
-}
-// namespace Marble
-// {
-//     class MarbleWidget;
-//     class LatLonEdit;
-// }
 namespace Soprano
 {
     class Model;
@@ -51,9 +38,6 @@ namespace Soprano
     class Node;
 }
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
-typedef QExplicitlySharedDataPointer<KoRdfFoaF> hKoRdfFoaF;
-typedef QExplicitlySharedDataPointer<KoRdfCalendarEvent> hKoRdfCalendarEvent;
-typedef QExplicitlySharedDataPointer<KoRdfLocation> hKoRdfLocation;
 typedef QExplicitlySharedDataPointer<KoSemanticStylesheet> hKoSemanticStylesheet;
 
 #endif

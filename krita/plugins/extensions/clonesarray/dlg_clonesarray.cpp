@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 
-#include <KoColorSpace.h>
+#include <KoColorSpaceConstants.h>
 
 #include <kis_debug.h>
 #include <kis_view2.h>
@@ -121,12 +121,12 @@ void DlgClonesArray::syncOrthogonalToAngular()
 
     x = m_page->columnXOffset->value();
     y = m_page->columnYOffset->value();
-    m_page->columnDistance->setValue(sqrt(pow2(x) + pow2(y)));
+    m_page->columnDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
     m_page->columnAngle->setValue(kisRadiansToDegrees(atan2(y, x)));
 
     x = m_page->rowXOffset->value();
     y = m_page->rowYOffset->value();
-    m_page->rowDistance->setValue(sqrt(pow2(x) + pow2(y)));
+    m_page->rowDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
     m_page->rowAngle->setValue(kisRadiansToDegrees(atan2(y, x)));
 
     setAngularSignalsEnabled(true);

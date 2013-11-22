@@ -43,9 +43,8 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoPointerEvent.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>

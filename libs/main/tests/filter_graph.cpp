@@ -39,7 +39,7 @@ int main(int /*argc*/, char ** /*argv*/)
     QList<QString> vertices; // to keep track of already inserted values, not performance critical
 
     // Make sure that all available parts are added to the graph
-    const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
+    const QList<KoDocumentEntry> parts(KoDocumentEntry::query());
     QList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
 

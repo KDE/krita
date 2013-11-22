@@ -39,22 +39,22 @@ public:
     ~KisConfig();
 
     bool useProjections() const;
-    void setUseProjections(bool useProj);
+    void setUseProjections(bool useProj) const;
 
     bool undoEnabled() const;
-    void setUndoEnabled(bool undo);
+    void setUndoEnabled(bool undo) const;
 
     int undoStackLimit() const;
-    void setUndoStackLimit(int limit);
+    void setUndoStackLimit(int limit) const;
 
     qint32 defImageWidth() const;
-    void defImageWidth(qint32 width);
+    void defImageWidth(qint32 width) const;
 
     qint32 defImageHeight() const;
-    void defImageHeight(qint32 height);
+    void defImageHeight(qint32 height) const;
 
     double defImageResolution() const;
-    void defImageResolution(double res);
+    void defImageResolution(double res) const;
 
     /**
      * @return the id of the default color model used for creating new images.
@@ -63,16 +63,16 @@ public:
     /**
      * set the id of the default color model used for creating new images.
      */
-    void defColorModel(const QString & model);
+    void defColorModel(const QString & model) const;
 
     /**
      * @return the id of the default color depth used for creating new images.
      */
-    QString defColorDepth() const;
+    QString defaultColorDepth() const;
     /**
      * set the id of the default color depth used for creating new images.
      */
-    void defColorDepth(const QString & depth);
+    void setDefaultColorDepth(const QString & depth) const;
 
     /**
      * @return the id of the default color profile used for creating new images.
@@ -81,140 +81,145 @@ public:
     /**
      * set the id of the default color profile used for creating new images.
      */
-    void defColorProfile(const QString & depth);
+    void defColorProfile(const QString & depth) const;
 
     enumCursorStyle cursorStyle() const;
     enumCursorStyle getDefaultCursorStyle() const;
-    void setCursorStyle(enumCursorStyle style);
+    void setCursorStyle(enumCursorStyle style) const;
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override = false);
+    void setMonitorProfile(const QString & monitorProfile, bool override = false) const;
     static const KoColorProfile* getScreenProfile(int screen = -1);
-    const KoColorProfile *displayProfile(int screen = -1);
+    const KoColorProfile *displayProfile(int screen = -1) const;
 
     QString workingColorSpace() const;
-    void setWorkingColorSpace(const QString & workingColorSpace);
+    void setWorkingColorSpace(const QString & workingColorSpace) const;
 
     QString importProfile() const;
-    void setImportProfile(const QString & importProfile);
+    void setImportProfile(const QString & importProfile) const;
 
     QString printerColorSpace() const;
-    void setPrinterColorSpace(const QString & printerColorSpace);
+    void setPrinterColorSpace(const QString & printerColorSpace) const;
 
     QString printerProfile() const;
-    void setPrinterProfile(const QString & printerProfile);
+    void setPrinterProfile(const QString & printerProfile) const;
 
     bool useBlackPointCompensation() const;
-    void setUseBlackPointCompensation(bool useBlackPointCompensation);
+    void setUseBlackPointCompensation(bool useBlackPointCompensation) const;
 
     bool allowLCMSOptimization() const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
-
     bool showRulers() const;
-    void setShowRulers(bool rulers);
+    void setShowRulers(bool rulers) const;
 
     qint32 pasteBehaviour() const;
-    void setPasteBehaviour(qint32 behaviour);
+    void setPasteBehaviour(qint32 behaviour) const;
 
     qint32 renderIntent() const;
-    void setRenderIntent(qint32 renderIntent);
+    void setRenderIntent(qint32 renderIntent) const;
 
     bool useOpenGL() const;
-    void setUseOpenGL(bool useOpenGL);
+    void setUseOpenGL(bool useOpenGL) const;
 
     int openGLFilteringMode() const;
     void setOpenGLFilteringMode(int filteringMode);
+
+    bool useOpenGLTextureBuffer() const;
+    void setUseOpenGLTextureBuffer(bool useBuffer);
+
+    int numMipmapLevels() const;
+    int openGLTextureSize() const;
+    int textureOverlapBorder() const;
 
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     /// Maximum tiles in memory (this is a guideline, not absolute)
     qint32 maxTilesInMem() const;
-    void setMaxTilesInMem(qint32 tiles);
+    void setMaxTilesInMem(qint32 tiles) const;
 
-    quint32 getGridMainStyle();
-    void setGridMainStyle(quint32 v);
+    quint32 getGridMainStyle() const;
+    void setGridMainStyle(quint32 v) const;
 
-    quint32 getGridSubdivisionStyle();
-    void setGridSubdivisionStyle(quint32 v);
+    quint32 getGridSubdivisionStyle() const;
+    void setGridSubdivisionStyle(quint32 v) const;
 
-    QColor getGridMainColor();
-    void setGridMainColor(const QColor & v);
+    QColor getGridMainColor() const;
+    void setGridMainColor(const QColor & v) const;
 
-    QColor getGridSubdivisionColor();
-    void setGridSubdivisionColor(const QColor & v);
+    QColor getGridSubdivisionColor() const;
+    void setGridSubdivisionColor(const QColor & v) const;
 
-    quint32 getGridHSpacing();
-    void setGridHSpacing(quint32 v);
+    quint32 getGridHSpacing() const;
+    void setGridHSpacing(quint32 v) const;
 
-    quint32 getGridVSpacing();
-    void setGridVSpacing(quint32 v);
+    quint32 getGridVSpacing() const;
+    void setGridVSpacing(quint32 v) const;
 
-    bool getGridSpacingAspect();
-    void setGridSpacingAspect(bool v);
+    bool getGridSpacingAspect() const;
+    void setGridSpacingAspect(bool v) const;
 
-    quint32 getGridSubdivisions();
-    void setGridSubdivisions(quint32 v);
+    quint32 getGridSubdivisions() const;
+    void setGridSubdivisions(quint32 v) const;
 
-    quint32 getGridOffsetX();
-    void setGridOffsetX(quint32 v);
+    quint32 getGridOffsetX() const;
+    void setGridOffsetX(quint32 v) const;
 
-    quint32 getGridOffsetY();
-    void setGridOffsetY(quint32 v);
+    quint32 getGridOffsetY() const;
+    void setGridOffsetY(quint32 v) const;
 
-    bool getGridOffsetAspect();
-    void setGridOffsetAspect(bool v);
+    bool getGridOffsetAspect() const;
+    void setGridOffsetAspect(bool v) const;
 
-    qint32 checkSize();
-    void setCheckSize(qint32 checkSize);
+    qint32 checkSize() const;
+    void setCheckSize(qint32 checkSize) const;
 
     bool scrollCheckers() const;
-    void setScrollingCheckers(bool scollCheckers);
+    void setScrollingCheckers(bool scollCheckers) const;
 
-    QColor checkersColor1();
-    void setCheckersColor1(const QColor & v);
+    QColor checkersColor1() const;
+    void setCheckersColor1(const QColor & v) const;
 
-    QColor checkersColor2();
-    void setCheckersColor2(const QColor & v);
+    QColor checkersColor2() const;
+    void setCheckersColor2(const QColor & v) const;
 
+    QColor canvasBorderColor() const;
+    void setCanvasBorderColor(const QColor &color) const;
 
-    QColor canvasBorderColor();
-    void setCanvasBorderColor(const QColor &color);
+    bool antialiasCurves() const;
+    void setAntialiasCurves(bool v) const;
 
-    bool antialiasCurves();
-    void setAntialiasCurves(bool v);
+    bool showRootLayer() const;
+    void setShowRootLayer(bool showRootLayer) const;
 
-    bool showRootLayer();
-    void setShowRootLayer(bool showRootLayer);
+    bool showOutlineWhilePainting() const;
+    void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
-    bool showOutlineWhilePainting();
-    void setShowOutlineWhilePainting(bool showOutlineWhilePainting);
+    int autoSaveInterval() const;
+    void setAutoSaveInterval(int seconds) const;
 
-    int autoSaveInterval();
-    void setAutoSaveInterval(int seconds);
+    bool backupFile() const;
+    void setBackupFile(bool backupFile) const;
 
-    bool backupFile();
-    void setBackupFile(bool backupFile);
+    bool showFilterGallery() const;
+    void setShowFilterGallery(bool showFilterGallery) const;
 
-    bool showFilterGallery();
-    void setShowFilterGallery(bool showFilterGallery);
+    bool showFilterGalleryLayerMaskDialog() const;
+    void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) const;
 
-    bool showFilterGalleryLayerMaskDialog();
-    void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery);
+    QString defaultPainterlyColorModelId() const;
+    void setDefaultPainterlyColorModelId(const QString& def) const;
 
-    QString defaultPainterlyColorModelId();
-    void setDefaultPainterlyColorModelId(const QString& def);
-
-    QString defaultPainterlyColorDepthId();
-    void setDefaultPainterlyColorDepthId(const QString& def);
+    QString defaultPainterlyColorDepthId() const;
+    void setDefaultPainterlyColorDepthId(const QString& def) const;
 
     // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
     QString canvasState() const;
-    void setCanvasState(const QString& state);
+    void setCanvasState(const QString& state) const;
 
     bool paintopPopupDetached() const;
-    void setPaintopPopupDetached(bool detached);
+    void setPaintopPopupDetached(bool detached) const;
 
     QString pressureTabletCurve() const;
     void setPressureTabletCurve(const QString& curveString) const;
@@ -223,7 +228,7 @@ public:
     void setVastScrolling(const qreal factor) const;
 
     int presetChooserViewMode() const;
-    void setPresetChooserViewMode(const int mode);
+    void setPresetChooserViewMode(const int mode) const;
 
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
@@ -237,47 +242,47 @@ public:
     int verticalSplitLines() const;
     void setVerticalSplitLines(const int numberLines) const;
 
-    int hideDockersFullscreen();
+    int hideDockersFullscreen() const;
     void setHideDockersFullscreen(const int value) const;
 
-    int hideMenuFullscreen();
+    int hideMenuFullscreen() const;
     void setHideMenuFullscreen(const int value) const;
 
-    int hideScrollbarsFullscreen();
+    int hideScrollbarsFullscreen() const;
     void setHideScrollbarsFullscreen(const int value) const;
 
-    int hideStatusbarFullscreen();
+    int hideStatusbarFullscreen() const;
     void setHideStatusbarFullscreen(const int value) const;
 
-    int hideTitlebarFullscreen();
+    int hideTitlebarFullscreen() const;
     void setHideTitlebarFullscreen(const int value) const;
 
-    int hideToolbarFullscreen();
+    int hideToolbarFullscreen() const;
     void setHideToolbarFullscreen(const int value) const;
 
     QStringList favoriteCompositeOps() const;
-    void setFavoriteCompositeOps(const QStringList& compositeOps);
+    void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
     QString exportConfiguration(const QString &filterId) const;
-    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const;
 
-    bool useOcio();
-    void setUseOcio(bool useOCIO);
+    bool useOcio() const;
+    void setUseOcio(bool useOCIO) const;
 
-    bool useOcioEnvironmentVariable();
-    void setUseOcioEnvironmentVariable(bool useOCIO);
+    bool useOcioEnvironmentVariable() const;
+    void setUseOcioEnvironmentVariable(bool useOCIO) const;
 
-    QString ocioConfigurationPath();
-    void setOcioConfigurationPath(const QString &path);
+    QString ocioConfigurationPath() const;
+    void setOcioConfigurationPath(const QString &path) const;
 
-    QString ocioLutPath();
-    void setOcioLutPath(const QString &path);
+    QString ocioLutPath() const;
+    void setOcioLutPath(const QString &path) const;
 
     bool useSystemMonitorProfile() const;
-    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
 
-    QString defaultPalette();
-    void setDefaultPalette(const QString& name);
+    QString defaultPalette() const;
+    void setDefaultPalette(const QString& name) const;
 
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
@@ -317,7 +322,7 @@ public:
 
 private:
     KisConfig(const KisConfig&);
-    KisConfig& operator=(const KisConfig&);
+    KisConfig& operator=(const KisConfig&) const;
 
 private:
     mutable KConfigGroup m_cfg;

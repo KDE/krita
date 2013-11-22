@@ -16,7 +16,6 @@ set (QT_USE_QTWEBKIT TRUE)
 
 target_link_libraries(koreport_webplugin
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
     ${KOREPORT_LIBS}
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}

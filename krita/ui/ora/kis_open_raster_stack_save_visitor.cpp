@@ -22,7 +22,7 @@
 #include <QImage>
 
 #include <KoStore.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_adjustment_layer.h"
 #include "filter/kis_filter.h"

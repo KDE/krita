@@ -27,6 +27,11 @@
 #include <QRect>
 #include <QRectF>
 
+#if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
+#define USE_PIXEL_BUFFERS
+#include <QGLBuffer>
+#endif
+
 
 struct KisGLTexturesInfo {
 
@@ -58,9 +63,7 @@ public:
         NearestFilterMode,  // nearest
         BilinearFilterMode, // linear, no mipmap
         TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
-        nearest_mipmap_nearest,
-        nearest_mipmap_linear,
-        linear_mipmap_nearest
+        HighQualityFiltering // Mipmaps + custom shader
     };
 
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
@@ -85,15 +88,24 @@ public:
         return m_tileRectInTexturePixels;
     }
 
+    void bindToActiveTexture();
+
 private:
+    void setNeedsMipmapRegeneration();
 
     GLuint m_textureId;
+
+#ifdef USE_PIXEL_BUFFERS
+    void createTextureBuffer(const QByteArray &fillData);
+    QGLBuffer *m_glBuffer;
+#endif
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
     FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
+    bool m_needsMipmapRegeneration;
 
     Q_DISABLE_COPY(KisTextureTile)
 };

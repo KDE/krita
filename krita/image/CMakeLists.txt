@@ -60,6 +60,7 @@ endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
@@ -98,6 +99,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
+   processing/kis_mirror_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_registry.cc
@@ -175,7 +177,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp

@@ -6,11 +6,10 @@ set(kritaimagesize_PART_SRCS
     dlg_canvassize.cc
     dlg_layersize.cc
     kcanvaspreview.cc
-    multilock_button.cc
     )
 
 kde4_add_ui_files(kritaimagesize_PART_SRCS
-    wdg_imagescale.ui
+    wdg_imagesize.ui
     wdg_canvassize.ui
     wdg_layersize.ui
     )

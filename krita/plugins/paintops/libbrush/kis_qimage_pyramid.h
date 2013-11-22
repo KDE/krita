@@ -30,7 +30,7 @@ public:
     KisQImagePyramid(const QImage &baseImage);
     ~KisQImagePyramid();
 
-    static QSize imageSize(const QSize &baseSize,
+    static QSize imageSize(const QSize &originalSize,
                            qreal scale, qreal rotation,
                            qreal subPixelX, qreal subPixelY);
 
@@ -40,13 +40,20 @@ public:
 private:
     friend class KisBrushTest;
     int findNearestLevel(qreal scale, qreal *baseScale);
+
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,
+                                const QSize &originalSize,
+                                QTransform *outputTransform, QSize *outputSize);
+
+    static void calculateParams(qreal scale, qreal rotation,
+                                qreal subPixelX, qreal subPixelY,
+                                const QSize &originalSize,
                                 qreal baseScale, const QSize &baseSize,
                                 QTransform *outputTransform, QSize *outputSize);
 
 private:
-    QSize m_baseSize;
+    QSize m_originalSize;
     qreal m_baseScale;
     QVector<QImage> m_levels;
 };

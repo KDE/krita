@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
  *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,6 +55,10 @@ public:
     virtual bool boxSpecial() {
         return false;
     }
+    virtual QString description() {
+        return QString("");
+    }
+
 protected:
     qreal supportVal;
     qint32 intSupportVal;
@@ -80,6 +85,10 @@ public:
     }
     virtual ~KisBicubicFilterStrategy() {}
 
+    virtual QString description() {
+        return i18n("Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.");
+    }
+
     virtual qint32 intValueAt(qint32 t) const;
 };
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
@@ -89,6 +98,10 @@ public:
         supportVal = 0.5; intSupportVal = 128;
     }
     virtual ~KisBoxFilterStrategy() {}
+
+    virtual QString description() {
+        return i18n("Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.");
+    }
 
     virtual qint32 intValueAt(qint32 t) const;
     virtual qreal valueAt(qreal t) const;
@@ -104,6 +117,10 @@ public:
         supportVal = 1.0; intSupportVal = 256;
     }
     virtual ~KisBilinearFilterStrategy() {}
+
+    virtual QString description() {
+        return i18n("Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.");
+    }
 
     virtual qint32 intValueAt(qint32 t) const;
     virtual qreal valueAt(qreal t) const;
@@ -139,6 +156,10 @@ public:
     }
     virtual ~KisLanczos3FilterStrategy() {}
 
+    virtual QString description() {
+        return i18n("Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.");
+    }
+
     virtual qreal valueAt(qreal t) const;
 private:
     qreal sinc(qreal x) const;
@@ -167,6 +188,12 @@ public:
      * on the objects stored in the registry.
      */
     QList<KoID> listKeys() const;
+
+    /**
+     * This function return a string formated in HTML that contains the descriptions of all objects
+     * (with a non empty description) stored in the registry.
+     */
+    QString formatedDescriptions() const;
 
 private:
 

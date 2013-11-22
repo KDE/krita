@@ -58,7 +58,8 @@ public:
     virtual bool save() = 0;
 
     /**
-     * Returns a QImage representing this resource.  This image could be null.
+     * Returns a QImage representing this resource.  This image could be null. The image can
+     * be in any valid QImage::Format.
      */
     virtual QImage image() const {
         return QImage();

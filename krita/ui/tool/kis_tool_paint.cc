@@ -150,11 +150,43 @@ void KisToolPaint::deactivate()
     KisTool::deactivate();
 }
 
+QPainterPath KisToolPaint::tryFixTooBigBrush(const QPainterPath &originalOutline)
+{
+    KisConfig cfg;
+    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+
+    /**
+     * If the brush outline is bigger than the canvas itself (which
+     * would make it invisible for a user in most of the cases) just
+     * add a cross in the center of it
+     */
+
+    QSize widgetSize = canvas()->canvasWidget()->size();
+    const int maxThresholdSum = widgetSize.width() + widgetSize.height();
+
+    QPainterPath outline = originalOutline;
+    QRectF boundingRect = outline.boundingRect();
+
+    if (boundingRect.width() + boundingRect.height() > maxThresholdSum) {
+        const int hairOffset = 7;
+        QPointF center = boundingRect.center();
+
+        outline.moveTo(center.x(), center.y() - hairOffset);
+        outline.lineTo(center.x(), center.y() + hairOffset);
+
+        outline.moveTo(center.x() - hairOffset, center.y());
+        outline.lineTo(center.x() + hairOffset, center.y());
+    }
+
+    return outline;
+}
 
 void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    paintToolOutline(&gc,pixelToView(m_currentOutline));
+
+    QPainterPath path = tryFixTooBigBrush(pixelToView(m_currentOutline));
+    paintToolOutline(&gc, path);
 }
 
 void KisToolPaint::setMode(ToolMode mode)
@@ -364,19 +396,6 @@ void KisToolPaint::slotPopupQuickHelp()
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
 
-
-void KisToolPaint::resetCursorStyle()
-{
-    KisTool::resetCursorStyle();
-    KisConfig cfg;
-    if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
-        if (m_supportOutline) {
-            // do not show cursor, tool will paint outline
-                useCursor(KisCursor::blankCursor());
-        }
-    }
-}
-
 void KisToolPaint::updateTabletPressureSamples()
 {
     KisConfig cfg;
@@ -482,16 +501,9 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
-    qreal scale = 1.0;
-    qreal rotation = 0;
-
-    if (mode() == KisTool::HOVER_MODE) {
-        rotation += static_cast<KisCanvas2*>(canvas())->rotationAngle() * M_PI / 180.0;
-    }
-
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-            brushOutline(imagePos, outlineMode, scale, rotation);
+        brushOutline(KisPaintInformation(imagePos), outlineMode);
 
     return path;
 }

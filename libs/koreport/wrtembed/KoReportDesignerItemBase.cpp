@@ -36,7 +36,6 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <koproperty/EditorView.h>
-#include <KoGlobal.h>
 #include "KoReportItemBase.h"
 #include <krutils.h>
 #include <klocalizedstring.h>

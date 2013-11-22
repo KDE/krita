@@ -56,6 +56,19 @@ class KisDistanceInformation;
  **/
 class KRITAIMAGE_EXPORT KisPaintInformation
 {
+public:
+    /**
+     * Note, that this class is relied on the compiler optimization
+     * of the return value. So if it doesn't work for some reason,
+     * please implement a proper copy c-tor
+     */
+    class KRITAIMAGE_EXPORT DistanceInformationRegistrar {
+    public:
+        DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo);
+        ~DistanceInformationRegistrar();
+    private:
+        KisPaintInformation *p;
+    };
 
 public:
 
@@ -98,6 +111,8 @@ public:
     void overrideDrawingAngle(qreal angle);
 
     qreal drawingAngleSafe(const KisDistanceInformation &distance) const;
+
+    DistanceInformationRegistrar registerDistanceInformation(KisDistanceInformation *distance);
 
     /**
      * Current brush direction computed from the cursor movement

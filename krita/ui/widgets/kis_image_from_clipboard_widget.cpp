@@ -44,11 +44,9 @@
 #include <kis_debug.h>
 
 #include <KoIcon.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoColor.h>
 #include <KoUnit.h>

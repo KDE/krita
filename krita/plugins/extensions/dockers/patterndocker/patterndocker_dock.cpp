@@ -30,14 +30,14 @@
 #include <kis_paintop_box.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 
 PatternDockerDock::PatternDockerDock( )
     : QDockWidget(i18n("Patterns"))
     , m_canvas(0)
 {
-    m_patternChooser = new KisPatternChooser(this);
+    m_patternChooser = new KoPatternChooser(this);
     m_patternChooser->setPreviewOrientation(Qt::Vertical);
     m_patternChooser->setCurrentItem(0,0);
     m_patternChooser->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -56,15 +56,15 @@ void PatternDockerDock::setCanvas(KoCanvasBase * canvas)
     Q_ASSERT(m_canvas);
     if (!m_canvas) return;
 
-    connect(m_canvas->view()->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern*)),
-            this, SLOT(patternChanged(KisPattern*)));
+    connect(m_canvas->view()->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
+            this, SLOT(patternChanged(KoPattern*)));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
             m_canvas->view()->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
 }
 
-void PatternDockerDock::patternChanged(KisPattern *pattern)
+void PatternDockerDock::patternChanged(KoPattern *pattern)
 {
     m_patternChooser->setCurrentPattern(pattern);
 }

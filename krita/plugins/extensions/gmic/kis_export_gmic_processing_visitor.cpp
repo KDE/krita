@@ -18,8 +18,6 @@
  */
 
 #include "kis_export_gmic_processing_visitor.h"
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpace.h>
 
 #include <kis_gmic_simple_convertor.h>
 #include <kis_node.h>

@@ -35,6 +35,14 @@
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
 
+#ifndef FILES_DATA_DIR
+#define FILES_DATA_DIR "."
+#endif
+
+#ifndef FILES_DEFAULT_DATA_DIR
+#define FILES_DEFAULT_DATA_DIR "."
+#endif
+
 
 /**
  * Routines that are useful for writing efficient tests
@@ -257,12 +265,6 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
         it->nextRow();
     }
     return true;
-}
-
-
-inline QList<const KoColorSpace*> allColorSpaces()
-{
-    return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
 
 class TestNode : public KisNode

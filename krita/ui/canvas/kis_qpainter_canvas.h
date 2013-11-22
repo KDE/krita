@@ -55,8 +55,6 @@ public:
 
     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
-    void setSmoothingEnabled(bool smooth);
-
 public: // QWidget
 
     /// reimplemented method from superclass
@@ -75,6 +73,10 @@ public: // KisAbstractCanvasWidget
 
     QWidget * widget() {
         return this;
+    }
+
+    bool isBusy() const {
+        return false;
     }
 
 protected: // KisCanvasWidgetBase

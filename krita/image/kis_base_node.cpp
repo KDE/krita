@@ -22,7 +22,7 @@
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 
 struct KisBaseNode::Private
@@ -248,6 +248,11 @@ bool KisBaseNode::isEditable() const
         }
     }
     return editable;
+}
+
+bool KisBaseNode::hasEditablePaintDevice() const
+{
+    return paintDevice() && isEditable();
 }
 
 void KisBaseNode::setCollapsed(bool collapsed)

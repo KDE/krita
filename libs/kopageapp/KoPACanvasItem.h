@@ -41,8 +41,8 @@ public:
     QWidget* canvasWidget() { return 0; }
     const QWidget* canvasWidget() const { return 0; }
 
-    QGraphicsWidget *canvasItem() { return this; }
-    const QGraphicsWidget *canvasItem() const{ return this; }
+    QGraphicsObject *canvasItem() { return this; }
+    const QGraphicsObject *canvasItem() const{ return this; }
 
     /// reimplemented method
     virtual void updateCanvas( const QRectF& rc );

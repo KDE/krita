@@ -31,7 +31,7 @@ class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
 class KisRecordedPaintAction;
-class KisPattern;
+class KoPattern;
 
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
@@ -40,8 +40,9 @@ public:
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
-    void KDE_DEPRECATED setupPaintAction(KisRecordedPaintAction *action);
-
+    // XXX: This was marked as KDE_DEPRECATED, but no althernative was
+    //      given in the apidox.
+    void setupPaintAction(KisRecordedPaintAction *action);
 
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);
@@ -59,9 +60,10 @@ public:
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
 
-    KisPattern* currentPattern() const;
+    KoPattern* currentPattern() const;
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
+    KisPaintOpPresetSP currentPaintOpPreset() const;
 
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;

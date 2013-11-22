@@ -20,6 +20,7 @@
 #include "kis_composite_ops_model.h"
 
 #include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoIcon.h>
 
 #include "kis_debug.h"

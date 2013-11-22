@@ -119,7 +119,7 @@ private:
     void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const QString &macroName, const QString &nodeType, const QString &nodeName);
 
     void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
-    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
+    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet = false);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
 
     KisView2 * m_view;

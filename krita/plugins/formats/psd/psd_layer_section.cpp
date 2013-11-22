@@ -19,6 +19,8 @@
 
 #include <QIODevice>
 
+#include <KoColorSpace.h>
+
 #include <kis_debug.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>

@@ -24,7 +24,6 @@
 #include <gmic.h>
 
 class QImage;
-class KoColorSpace;
 
 
 class KisGmicSimpleConvertor

@@ -21,7 +21,6 @@
 
 #include "kis_layer.h"
 #include "kis_types.h"
-#include <KoColorConversionTransformation.h>
 
 class KoColorSpace;
 

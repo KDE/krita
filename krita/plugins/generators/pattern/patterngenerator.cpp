@@ -22,7 +22,6 @@
 
 #include <QPoint>
 
-#include <kis_debug.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -32,7 +31,11 @@
 
 #include <KoColor.h>
 #include <KoProgressUpdater.h>
+#include <KoResourceServer.h>
+#include <KoPattern.h>
+#include <KoResourceServerProvider.h>
 
+#include <kis_debug.h>
 #include <kis_fill_painter.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
@@ -44,9 +47,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_pattern_chooser.h>
-#include <KoResourceServer.h>
-#include <kis_pattern.h>
-#include "kis_resource_server_provider.h"
+
 
 #include "kis_wdg_pattern.h"
 #include "ui_wdgpatternoptions.h"
@@ -57,21 +58,21 @@ K_EXPORT_PLUGIN(KritaPatternGeneratorFactory("krita"))
 KritaPatternGenerator::KritaPatternGenerator(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    KisGeneratorRegistry::instance()->add(new KisPatternGenerator());
+    KisGeneratorRegistry::instance()->add(new KoPatternGenerator());
 }
 
 KritaPatternGenerator::~KritaPatternGenerator()
 {
 }
 
-KisPatternGenerator::KisPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
+KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Pattern..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
 }
 
-KisFilterConfiguration* KisPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration* KoPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("pattern", 1);
 
@@ -85,13 +86,13 @@ KisFilterConfiguration* KisPatternGenerator::factoryConfiguration(const KisPaint
     return config;
 }
 
-KisConfigWidget * KisPatternGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KoPatternGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisWdgPattern(parent);
 }
 
-void KisPatternGenerator::generate(KisProcessingInformation dstInfo,
+void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
                                  const QSize& size,
                                  const KisFilterConfiguration* config,
                                  KoUpdater* progressUpdater) const
@@ -103,8 +104,8 @@ void KisPatternGenerator::generate(KisProcessingInformation dstInfo,
 
     if (!config) return;
     QString patternName = config->getString("pattern", "Grid01.pat");
-    KoResourceServer<KisPattern> *rserver = KisResourceServerProvider::instance()->patternServer();
-    KisPattern *pattern = rserver->resourceByName(patternName);
+    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
+    KoPattern *pattern = rserver->resourceByName(patternName);
 
 //    KoColor c = config->getColor("color");
 

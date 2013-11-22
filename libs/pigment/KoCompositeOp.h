@@ -20,7 +20,6 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <klocale.h>
 #include <QString>
 #include <QList>
 #include <QMultiMap>
@@ -32,8 +31,6 @@ class KoColorSpace;
 
 class KoID;
 class KoColorSpace;
-
-#include "KoCompositeOpRegistry.h"
 
 /**
  * Base for colorspace-specific blending modes.

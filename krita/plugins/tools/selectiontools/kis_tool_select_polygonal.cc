@@ -42,6 +42,25 @@ KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
       m_widgetHelper(i18n("Polygonal Selection"))
 {
     setObjectName("tool_select_polygonal");
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+}
+
+SelectionAction KisToolSelectPolygonal::selectionAction() const
+{
+    return m_selectionAction;
+}
+
+void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
+    }
 }
 
 QWidget* KisToolSelectPolygonal::createOptionWidget()

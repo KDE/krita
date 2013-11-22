@@ -21,6 +21,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_transaction.h>
+#include <KoCompositeOpRegistry.h>
 
 
 struct KisFilterStrokeStrategy::Private {

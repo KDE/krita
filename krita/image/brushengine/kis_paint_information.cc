@@ -78,6 +78,19 @@ struct KisPaintInformation::Private {
     }
 };
 
+KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo)
+    : p(_p)
+{
+    p->d->registerDistanceInfo(distanceInfo);
+}
+
+KisPaintInformation::DistanceInformationRegistrar::
+~DistanceInformationRegistrar()
+{
+    p->d->unregisterDistanceInfo();
+}
+
 KisPaintInformation::KisPaintInformation(const QPointF & pos_,
                                          qreal pressure_,
                                          qreal xTilt_, qreal yTilt_,
@@ -191,6 +204,12 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
 
     QVector2D diff(pos() - distance.lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+KisPaintInformation::DistanceInformationRegistrar
+KisPaintInformation::registerDistanceInformation(KisDistanceInformation *distance)
+{
+    return DistanceInformationRegistrar(this, distance);
 }
 
 qreal KisPaintInformation::drawingAngle() const

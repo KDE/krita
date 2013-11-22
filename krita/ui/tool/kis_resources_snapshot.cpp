@@ -20,9 +20,10 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_image.h"
@@ -45,7 +46,7 @@ struct KisResourcesSnapshot::Private {
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisPattern *currentPattern;
+    KoPattern *currentPattern;
     KoAbstractGradient *currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
@@ -78,7 +79,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
 
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = static_cast<KisPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
+    m_d->currentPattern = static_cast<KoPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
     m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
@@ -230,7 +231,7 @@ const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
     return m_d->compositeOp;
 }
 
-KisPattern* KisResourcesSnapshot::currentPattern() const
+KoPattern* KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }
@@ -244,6 +245,12 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 {
     return m_d->currentBgColor;
 }
+
+KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
+{
+    return m_d->currentPaintOpPreset;
+}
+
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

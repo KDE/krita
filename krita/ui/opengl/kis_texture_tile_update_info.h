@@ -23,11 +23,11 @@
 #ifdef HAVE_OPENGL
 
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_config.h"
 #include <KoColorConversionTransformation.h>
+#include <KoChannelInfo.h>
 
 
 class KisTextureTileUpdateInfo;

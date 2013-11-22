@@ -30,6 +30,7 @@
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
+#include "KoChannelInfo.h"
 
 
 class KoColor::Private

@@ -28,18 +28,18 @@
 
 #include <kdebug.h>
 
+#include <QSharedPointer>
 #include <QBrush>
 #include <QPainter>
 
 class KoGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
-    KoGradientBackgroundPrivate() : gradient(0) {};
-    ~KoGradientBackgroundPrivate() {
-        delete gradient;
-    }
+    KoGradientBackgroundPrivate()
+        : gradient(0)
+    {}
 
-    QGradient * gradient;
+    QGradient *gradient;
     QTransform matrix;
 };
 
@@ -79,16 +79,6 @@ QTransform KoGradientBackground::transform() const
     return d->matrix;
 }
 
-void KoGradientBackground::setGradient(QGradient * gradient)
-{
-    Q_D(KoGradientBackground);
-    delete d->gradient;
-
-    d->gradient = gradient;
-    Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
-}
-
 void KoGradientBackground::setGradient(const QGradient &gradient)
 {
     Q_D(KoGradientBackground);
@@ -103,23 +93,6 @@ const QGradient * KoGradientBackground::gradient() const
 {
     Q_D(const KoGradientBackground);
     return d->gradient;
-}
-
-KoGradientBackground &KoGradientBackground::operator = (const KoGradientBackground &rhs)
-{
-    Q_D(KoGradientBackground);
-    if (this == &rhs)
-        return *this;
-
-    KoGradientBackgroundPrivate *other = static_cast<KoGradientBackgroundPrivate*>(rhs.d_ptr);
-
-    d->matrix = other->matrix;
-    delete d->gradient;
-    d->gradient = KoFlake::cloneGradient(other->gradient);
-    Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
-
-    return *this;
 }
 
 void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const

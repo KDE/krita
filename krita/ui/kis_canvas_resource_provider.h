@@ -35,7 +35,7 @@ class KoResource;
 
 class KoCanvasBase;
 class KisView2;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisAbstractPerspectiveGrid;
 
@@ -65,7 +65,8 @@ public:
         MirrorAxisCenter,
         Opacity,
         HdrGamma,
-        GlobalAlphaLock
+        GlobalAlphaLock,
+        PreviousPaintOpPreset
     };
 
 
@@ -89,7 +90,7 @@ public:
     float HDRGamma() const;
     void setHDRGamma(float gamma);
 
-    KisPattern *currentPattern() const;
+    KoPattern *currentPattern() const;
 
     KoAbstractGradient *currentGradient() const;
 
@@ -101,6 +102,10 @@ public:
     KisNodeSP currentNode() const;
 
     KisPaintOpPresetSP currentPreset() const;
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
+    KisPaintOpPresetSP previousPreset() const;
+    void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
 
@@ -124,7 +129,6 @@ public:
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
-    void setPaintOpPreset(const KisPaintOpPresetSP preset);
 
     ///Notify that the workspace is saved and settings should be saved to it
     void notifySavingWorkspace(KisWorkspaceResource* workspace);
@@ -168,13 +172,10 @@ signals:
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
-    void sigPatternChanged(KisPattern *);
-    void sigPaintOpPresetChanged(KisPaintOpPresetSP preset);
+    void sigPatternChanged(KoPattern *);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-    void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
-    void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);

@@ -23,7 +23,6 @@
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 
 #include "kis_painter.h"
 #include "kis_types.h"

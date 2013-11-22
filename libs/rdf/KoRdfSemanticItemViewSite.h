@@ -22,6 +22,7 @@
 
 #include "kordf_export.h"
 #include "RdfForward.h"
+// Soprano
 #include <Soprano/Soprano>
 
 class KoCanvasBase;

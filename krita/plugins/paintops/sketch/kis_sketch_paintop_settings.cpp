@@ -22,6 +22,8 @@
 
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
+#include "kis_current_outline_fetcher.h"
+
 
 KisSketchPaintOpSettings::KisSketchPaintOpSettings()
 {
@@ -42,25 +44,24 @@ int KisSketchPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    bool simpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
-    if (simpleMode){
-        KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-        if(!options) {
-            return QPainterPath();
-        }
-    
-        if (mode != CursorIsOutline) {
-            return QPainterPath();
-        }
-        
-        KisBrushSP brush = options->brush();
+    bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
+
+    if (!isSimpleMode) {
+        return KisBrushBasedPaintOpSettings::brushOutline(info, mode);
+    }
+
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    QPainterPath path;
+
+    if (widget && mode == CursorIsOutline){
+        KisBrushSP brush = widget->brush();
         // just circle supported
         qreal diameter = qMax(brush->width(), brush->height());
-        return ellipseOutline(diameter, diameter, 1.0 , 0.0).translated(pos);
+        path = ellipseOutline(diameter, diameter, 1.0, 0.0/*brush->scale(), brush->angle()*/);
+        path = outlineFetcher()->fetchOutline(info, this, path);
     }
-    return KisBrushBasedPaintOpSettings::brushOutline(pos, mode, scale, rotation);
+    return path;
 }
-
 

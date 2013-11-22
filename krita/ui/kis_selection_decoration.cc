@@ -37,7 +37,7 @@
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view),
-      m_signalCompressor(500 /*ms*/),
+      m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
       m_mode(Ants)
 {
     m_offset = 0;
@@ -78,7 +78,7 @@ void KisSelectionDecoration::setMode(Mode mode)
 bool KisSelectionDecoration::selectionIsActive()
 {
     KisImageWSP image = view()->image();
-    Q_ASSERT(image);
+    Q_ASSERT(image); Q_UNUSED(image);
 
     KisSelectionSP selection = view()->selection();
     return visible() && selection &&
@@ -123,11 +123,8 @@ void KisSelectionDecoration::antsAttackEvent()
     if (!selection) return;
 
     if (selectionIsActive()) {
-        KisPaintDeviceSP dev = view()->activeDevice();
-        if (dev) {
-            m_offset = (m_offset + 1) % 8;
-            view()->canvasBase()->updateCanvas();
-        }
+        m_offset = (m_offset + 1) % 8;
+        view()->canvasBase()->updateCanvas();
     }
 }
 

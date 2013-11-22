@@ -22,28 +22,22 @@
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
 
+#include <kis_outline_generation_policy.h>
 #include "kis_spray_paintop_settings_widget.h"
 
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 
-
-class KisSprayPaintOpSettings : public KisPaintOpSettings
+class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
-
 public:
+    KisSprayPaintOpSettings();
 
-    KisSprayPaintOpSettings(){}
-    virtual ~KisSprayPaintOpSettings() {}
 
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
-    
-    
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
+
     QString modelName() const{
         return "airbrush";
     }
-    
+
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;

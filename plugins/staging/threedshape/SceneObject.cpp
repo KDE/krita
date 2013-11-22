@@ -235,6 +235,3 @@ void SceneObject::waitUntilReady(const KoViewConverter &converter, bool asynchro
     Q_UNUSED(converter);
     Q_UNUSED(asynchronous);
 }
-
-
-#include <SceneObject.moc>

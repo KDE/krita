@@ -25,6 +25,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"

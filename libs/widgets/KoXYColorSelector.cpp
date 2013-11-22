@@ -18,6 +18,7 @@
 */
 #include "KoXYColorSelector.h"
 #include "KoColorSpace.h"
+#include <KoMixColorsOp.h>
 
 #include <QColor>
 #include <QPainter>

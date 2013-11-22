@@ -22,7 +22,7 @@
 
 #include "kordf_export.h"
 #include "RdfForward.h"
-
+// Qt
 #include <QSharedPointer>
 #include <QObject>
 #include <QMap>

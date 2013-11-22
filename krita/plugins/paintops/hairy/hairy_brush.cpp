@@ -30,6 +30,7 @@ inline double drand48() {
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <QVariant>
 #include <QHash>

@@ -23,7 +23,6 @@
 #define KOSIMPLECOLORSPACEFACTORY_H_
 
 #include <KoColorSpaceAbstract.h>
-#include <KoColorSpaceRegistry.h>
 #include "KoColorConversionTransformationFactory.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
@@ -89,7 +88,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return QString();
+        return QString("default");
     }
 protected:
     virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {

@@ -27,7 +27,6 @@
 #include "kis_clone_info.h"
 
 class KisNodeVisitor;
-class KoCompositeOp;
 
 enum CopyLayerType {
     COPY_PROJECTION,

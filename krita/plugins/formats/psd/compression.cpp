@@ -250,6 +250,7 @@ QByteArray Compression::compress(QByteArray bytes, Compression::CompressionType 
         QByteArray dst;
         int packed_len = pack_pb_line(bytes, dst);
         Q_ASSERT(packed_len == dst.size());
+        Q_UNUSED(packed_len);
         return dst;
     }
     case ZIP:

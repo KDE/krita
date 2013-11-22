@@ -155,6 +155,12 @@ QRectF SimpleRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         rootArea->setNoWrap(1E6);
     }
+
+    // Make sure the size is not negative due to padding and border with
+    // This can happen on vertical lines containing text on shape.
+    if (rect.width() < 0) {
+        rect.setWidth(0);
+    }
     return rect;
 }
 

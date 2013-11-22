@@ -91,11 +91,11 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoTextRangeManager *tex
 static QString removeWhitespacePrefix(const QString& text)
 {
     int firstNonWhitespaceCharIndex = 0;
-    int lenght = text.length();
-    while (firstNonWhitespaceCharIndex < lenght && text.at(firstNonWhitespaceCharIndex).isSpace()) {
+    const int length = text.length();
+    while (firstNonWhitespaceCharIndex < length && text.at(firstNonWhitespaceCharIndex).isSpace()) {
         firstNonWhitespaceCharIndex++;
     }
-    return text.right(lenght - firstNonWhitespaceCharIndex);
+    return text.right(length - firstNonWhitespaceCharIndex);
 }
 
 

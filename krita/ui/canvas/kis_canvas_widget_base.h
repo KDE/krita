@@ -39,8 +39,11 @@ class QVariant;
 class KoViewConverter;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
+class KisInputManager;
 
-class KisCanvasWidgetBase : public KisAbstractCanvasWidget
+#include "krita_export.h"
+
+class KRITAUI_EXPORT KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
 public:
     KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
@@ -80,10 +83,11 @@ public: // KisAbstractCanvasWidget
      */
     static QImage createCheckersImage(qint32 checkSize = -1);
 
-protected:
-    KisCanvas2 *canvas() const;
 
     KisCoordinatesConverter* coordinatesConverter() const;
+
+protected:
+    KisCanvas2 *canvas() const;
 
     /**
      * Event handlers to be called by derived canvas event handlers.

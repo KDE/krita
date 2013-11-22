@@ -24,9 +24,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
-#include <KoColorSpace.h>
 #include <KoPathShape.h>
 
 #include "filter/kis_filter_registry.h"

@@ -23,7 +23,7 @@
 #include <kselector.h>
 #include "kowidgets_export.h"
 
-#include <KoColor.h>
+class KoColor;
 
 class KOWIDGETS_EXPORT KoColorSlider : public KSelector
 {

@@ -45,8 +45,6 @@
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kparts/partmanager.h>
-#include <kparts/event.h>
 #include <kstatusbar.h>
 #include <kdebug.h>
 #include <kurl.h>
@@ -57,7 +55,6 @@
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
 
-#include <QTimer>
 #include <QDockWidget>
 #include <QToolBar>
 #include <QApplication>
@@ -76,15 +73,13 @@ QString KoView::newObjectName()
     return name;
 }
 
+
 class KoViewPrivate
 {
 public:
     KoViewPrivate() {
-        manager = 0;
         tempActiveWidget = 0;
-        registered = false;
         documentDeleted = false;
-        viewBar = 0;
         actionAuthor = 0;
     }
     ~KoViewPrivate() {
@@ -92,13 +87,10 @@ public:
 
     QPointer<KoDocument> document; // our KoDocument
     QPointer<KoPart> part; // our part
-    QPointer<KParts::PartManager> manager;
     QWidget *tempActiveWidget;
-    bool registered;  // are we registered at the part manager?
     bool documentDeleted; // true when document gets deleted [can't use document==0
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
-    QTimer *scrollTimer;
 
 
     // Hmm sorry for polluting the private class with such a big inner class.
@@ -162,7 +154,6 @@ public:
 
     QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
-    QToolBar* viewBar;
     KSelectAction *actionAuthor; // Select action for author profile.
 };
 
@@ -180,11 +171,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
 
-    //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;
     d->part = part;
-
-    KParts::PartBase::setPartObject(this);
 
     setFocusPolicy(Qt::StrongFocus);
 
@@ -198,14 +186,11 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
     }
 
-    d->scrollTimer = new QTimer(this);
-    connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
-
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-        if (shell())
-            shell()->createDockWidget(factory);
+        if (mainWindow())
+            mainWindow()->createDockWidget(factory);
     }
 
     actionCollection()->addAssociatedWidget(this);
@@ -215,12 +200,8 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
-    kDebug(30003) << "KoView::~KoView" << this;
-    delete d->scrollTimer;
     if (!d->documentDeleted) {
         if (d->document) {
-            if (d->manager && d->registered)   // if we aren't registered we mustn't unregister :)
-                d->manager->removePart(d->part);
             d->part->removeView(this);
         }
     }
@@ -296,25 +277,6 @@ void KoView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-bool KoView::documentDeleted() const
-{
-    return d->documentDeleted;
-}
-
-void KoView::setPartManager(KParts::PartManager *manager)
-{
-    d->manager = manager;
-    if (!manager->parts().contains(d->part)) {  // is there another view registered?
-        d->registered = true; // no, so we have to register now and ungregister again in the DTOR
-        manager->addPart(d->part, false);
-    } else
-        d->registered = false;  // There is already another view registered for that part...
-}
-
-KParts::PartManager *KoView::partManager() const
-{
-    return d->manager;
-}
 
 QAction *KoView::action(const QDomElement &element) const
 {
@@ -323,12 +285,9 @@ QAction *KoView::action(const QDomElement &element) const
 
     QAction *act = KXMLGUIClient::action(name.toUtf8());
 
-    if (!act)
-        act = d->part->KXMLGUIClient::action(name.toUtf8());
-
     // last resort, try to get action from the main window if there is one
-    if (!act && shell())
-        act = shell()->actionCollection()->action(name);
+    if (!act && mainWindow())
+        act = mainWindow()->actionCollection()->action(name);
 
     return act;
 }
@@ -337,40 +296,11 @@ QAction *KoView::action(const char* name) const
 {
     QAction *act = KXMLGUIClient::action(name);
 
-    if (!act)
-        act = d->part->KXMLGUIClient::action(name);
-
     // last resort, try to get action from the main window if there is one
-    if (!act && shell())
-        act = shell()->actionCollection()->action(name);
+    if (!act && mainWindow())
+        act = mainWindow()->actionCollection()->action(name);
 
     return act;
-}
-
-KoDocument *KoView::hitTest(const QPoint &viewPos)
-{
-    Q_UNUSED(viewPos);
-    return d->document; // we no longer have child documents
-}
-
-int KoView::leftBorder() const
-{
-    return 0;
-}
-
-int KoView::rightBorder() const
-{
-    return 0;
-}
-
-int KoView::topBorder() const
-{
-    return 0;
-}
-
-int KoView::bottomBorder() const
-{
-    return 0;
 }
 
 QWidget *KoView::canvas() const
@@ -378,57 +308,6 @@ QWidget *KoView::canvas() const
     //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
     // but not the view", it's just coincidence that the view is the canvas by default ;)
     return const_cast<KoView *>(this);
-}
-
-int KoView::canvasXOffset() const
-{
-    return 0;
-}
-
-int KoView::canvasYOffset() const
-{
-    return 0;
-}
-
-void KoView::customEvent(QEvent *ev)
-{
-    if (KParts::PartActivateEvent::test(ev))
-        partActivateEvent((KParts::PartActivateEvent *)ev);
-    else if (KParts::PartSelectEvent::test(ev))
-        partSelectEvent((KParts::PartSelectEvent *)ev);
-    else if (KParts::GUIActivateEvent::test(ev))
-        guiActivateEvent((KParts::GUIActivateEvent*)ev);
-}
-
-void KoView::partActivateEvent(KParts::PartActivateEvent *event)
-{
-    emit activated(event->activated());
-}
-
-void KoView::partSelectEvent(KParts::PartSelectEvent *event)
-{
-    emit selected(event->selected());
-}
-
-void KoView::guiActivateEvent(KParts::GUIActivateEvent * ev)
-{
-    showAllStatusBarItems(ev->activated());
-}
-
-void KoView::showAllStatusBarItems(bool show)
-{
-    KStatusBar * sb = statusBar();
-    if (!sb)
-        return;
-    int itemCount = d->statusBarItems.count();
-    for (int i = 0; i < itemCount; ++i) {
-        KoViewPrivate::StatusBarItem &sbItem = d->statusBarItems[i];
-        if (show) {
-            sbItem.ensureItemShown(sb);
-        } else {
-            sbItem.ensureItemHidden(sb);
-        }
-    }
 }
 
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
@@ -455,57 +334,6 @@ void KoView::removeStatusBarItem(QWidget *widget)
             d->statusBarItems.removeOne(sbItem);
             break;
         }
-    }
-}
-
-void KoView::enableAutoScroll()
-{
-    d->scrollTimer->start(50);
-}
-
-void KoView::disableAutoScroll()
-{
-    d->scrollTimer->stop();
-}
-
-int KoView::autoScrollAcceleration(int offset) const
-{
-    if (offset < 40)
-        return offset;
-    else
-        return offset*offset / 40;
-}
-
-void KoView::slotAutoScroll()
-{
-    QPoint scrollDistance;
-    bool actuallyDoScroll = false;
-    QPoint pos(mapFromGlobal(QCursor::pos()));
-
-    //Provide progressive scrolling depending on the mouse position
-    if (pos.y() < topBorder()) {
-        scrollDistance.setY((int) - autoScrollAcceleration(- pos.y() + topBorder()));
-        actuallyDoScroll = true;
-    } else if (pos.y() > height() - bottomBorder()) {
-        scrollDistance.setY((int) autoScrollAcceleration(pos.y() - height() + bottomBorder()));
-        actuallyDoScroll = true;
-    }
-
-    if (pos.x() < leftBorder()) {
-        scrollDistance.setX((int) - autoScrollAcceleration(- pos.x() + leftBorder()));
-        actuallyDoScroll = true;
-    } else if (pos.x() > width() - rightBorder()) {
-        scrollDistance.setX((int) autoScrollAcceleration(pos.x() - width() + rightBorder()));
-        actuallyDoScroll = true;
-    }
-
-    if (actuallyDoScroll) {
-        pos = canvas()->mapFrom(this, pos);
-        QMouseEvent* event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
-                                             QApplication::keyboardModifiers());
-
-        QApplication::postEvent(canvas(), event);
-        emit autoScroll(scrollDistance);
     }
 }
 
@@ -536,10 +364,6 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
-    actionCollection()->addAction("view_newview", actionNewView);
-    connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
-
     actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
     actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
@@ -548,16 +372,6 @@ void KoView::setupGlobalActions()
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
     slotUpdateAuthorProfileActions();
-}
-
-void KoView::newView()
-{
-    Q_ASSERT((d != 0 && d->document && d->part));
-
-    KoDocument *thisDocument = d->document;
-    KoMainWindow *shell = new KoMainWindow(d->part->componentData());
-    shell->setRootDocument(thisDocument, d->part);
-    shell->show();
 }
 
 void KoView::changeAuthorProfile(const QString &profileName)
@@ -574,19 +388,14 @@ void KoView::changeAuthorProfile(const QString &profileName)
     d->document->documentInfo()->updateParameters();
 }
 
-KoMainWindow * KoView::shell() const
+KoMainWindow * KoView::mainWindow() const
 {
     return dynamic_cast<KoMainWindow *>(window());
 }
 
-KXmlGuiWindow * KoView::mainWindow() const
-{
-    return dynamic_cast<KXmlGuiWindow *>(window());
-}
-
 KStatusBar * KoView::statusBar() const
 {
-    KoMainWindow *mw = shell();
+    KoMainWindow *mw = mainWindow();
     return mw ? mw->statusBar() : 0;
 }
 
@@ -631,21 +440,17 @@ void KoView::slotUpdateAuthorProfileActions()
     }
 }
 
-QToolBar* KoView::viewBar()
-{
-    if (!d->viewBar) {
-        d->viewBar = new QToolBar(statusBar());
-        addStatusBarItem(d->viewBar, 0 , true);
-    }
-
-    return d->viewBar;
-}
-
 QList<QAction*> KoView::createChangeUnitActions()
 {
     UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
     return unitActions->actions();
 }
+
+void KoView::guiActivateEvent(bool activated)
+{
+    Q_UNUSED(activated);
+}
+
 
 #include <KoView_p.moc>
 #include <KoView.moc>

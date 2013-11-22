@@ -23,6 +23,7 @@
 #include <QVector>
 #include <QFile>
 #include <QTextStream>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -181,8 +182,21 @@ bool KoColorSet::init()
 
         setValid(true);
         return true;
-    } else if (s.length() == 768) {
-        kWarning(30009) << "Photoshop format palette file. Not implemented yet";
+    } else if (m_data.length() == 768) {
+        // Photoshop .act files
+        QFileInfo info(filename());
+        setName(info.baseName());
+        KoColorSetEntry e;
+        for (int i = 0; i < m_data.size(); i += 3) {
+            quint8 r = m_data[i];
+            quint8 g = m_data[i+1];
+            quint8 b = m_data[i+2];
+            e.color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
+            e.color.fromQColor(QColor(r, g, b));
+            add(e);
+        }
+        setValid(true);
+        return true;
     }
     return false;
 }

@@ -2,6 +2,7 @@
  *  dlg_imagesize.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,11 +25,10 @@
 
 class KisFilterStrategy;
 class WdgImageSize;
-class QButtonGroup;
 
-#include "ui_wdg_imagescale.h"
+#include "ui_wdg_imagesize.h"
 
-class WdgImageSize : public QWidget, public Ui::WdgImageScale
+class WdgImageSize : public QWidget, public Ui::WdgImageSize
 {
     Q_OBJECT
 
@@ -38,17 +38,12 @@ public:
     }
 };
 
-/**
- * This dialog allows the user to create a selection mask based
- * on a (range of) colors.
- */
 class DlgImageSize: public KDialog
 {
 
     Q_OBJECT
 
 public:
-
     DlgImageSize(QWidget * parent, int width, int height, double resolution);
     ~DlgImageSize();
 
@@ -59,32 +54,36 @@ public:
     KisFilterStrategy *filterType();
 
 private slots:
-
-    void okClicked();
-    void slotWidthPixelsChanged(int w);
-    void slotHeightPixelsChanged(int h);
-    void slotWidthPercentageChanged(double w);
-    void slotHeightPercentageChanged(double h);
-    void slotWidthPixelUnitChanged(int index);
-    void slotHeightPixelUnitChanged(int index);
-    void slotWidthPhysicalChanged(double w);
-    void slotHeightPhysicalChanged(double h);
-    void slotWidthUnitChanged(int index);
-    void slotHeightUnitChanged(int index);
-    void slotProtectChanged();
+    void slotPixelWidthChanged(int w);
+    void slotPixelHeightChanged(int h);
+    void slotPixelWidthChanged(double w);
+    void slotPixelHeightChanged(double h);
+    void slotPixelWidthUnitChanged();
+    void slotPixelHeightUnitChanged();
+    void slotPrintWidthChanged(double w);
+    void slotPrintHeightChanged(double h);
+    void slotPrintWidthUnitChanged();
+    void slotPrintHeightUnitChanged();
     void slotAspectChanged(bool keep);
-    void slotResolutionChanged(double r);
-    void slotUpdateInterpolationGuidance(const KoID &id);
+    void slotPrintResolutionChanged(double r);
+    void slotPrintResolutionEditFinished();
+    void slotPrintResolutionUnitChanged();
+
 private:
+    void updatePixelWidthUIValue(double value);
+    void updatePixelHeightUIValue(double value);
+    void updatePrintWidthUIValue(double value);
+    void updatePrintHeightUIValue(double value);
+    void updatePrintResolutionUIValue(double value);
 
-    void blockAll();
-    void unblockAll();
-
-    WdgImageSize * m_page;
-    double m_origW, m_origH;
-    double m_width, m_height;  // in points
-    QButtonGroup *m_buttonGroup;
-    double m_aspectRatio;
+    WdgImageSize *m_page;
+    const double m_aspectRatio;
+    const int m_originalWidth, m_originalHeight;
+    int m_width, m_height;
+    double m_printWidth, m_printHeight; // in points
+    const double m_originalResolution;
+    double m_resolution;
+    bool m_keepAspect;
 };
 
 #endif // DLG_IMAGESIZE

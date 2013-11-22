@@ -19,8 +19,8 @@
 #include "phong_pixel_processor.h"
 #include <cmath>
 #include "kis_math_toolbox.h"
-#include <KoColorSpaceRegistry.h>
 #include <iostream>
+#include <KoChannelInfo.h>
 
 PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config)
 {

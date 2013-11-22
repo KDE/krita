@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,41 +22,73 @@
 
 #include "dlg_layersize.h"
 
-#include <math.h>
+#include <KoUnit.h>
 
-#include <klocale.h>
-#include <kis_debug.h>
+#include <klocalizedstring.h>
 
-#include <widgets/kis_cmb_idlist.h>
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
-DlgLayerSize::DlgLayerSize(QWidget *  parent,
-                           const char * name)
+
+static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
+static const QString percentStr(i18n("Percent (%)"));
+
+DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
+                           int width, int height, double resolution)
         : KDialog(parent)
+        , m_aspectRatio(((double) width) / height)
+        , m_originalWidth(width)
+        , m_originalHeight(height)
+        , m_width(width)
+        , m_height(height)
+        , m_resolution(resolution)
+        , m_keepAspect(true)
 {
-    setCaption(i18n("Image Size"));
+    setCaption(i18n("Layer Size"));
+    setObjectName(name);
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setObjectName(name);
-
-    m_lock = false;
 
     m_page = new WdgLayerSize(this);
     Q_CHECK_PTR(m_page);
-    m_page->setObjectName("layer_size");
+    m_page->layout()->setMargin(0);
+    m_page->setObjectName(name);
 
-    m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->cmbFilterType->setCurrent("Bicubic");
+    m_page->newWidth->setValue(width);
+    m_page->newWidth->setFocus();
+    m_page->newHeight->setValue(height);
+
+    m_page->newWidthDouble->setVisible(false);
+    m_page->newHeightDouble->setVisible(false);
+
+    m_page->filterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    m_page->filterCmb->setToolTip(KisFilterStrategyRegistry::instance()->formatedDescriptions());
+    m_page->filterCmb->setCurrent("Bicubic");
+
+    m_page->newWidthUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->newWidthUnit->addItem(percentStr);
+
+    m_page->newHeightUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->newHeightUnit->addItem(percentStr);
+
+    const int pixelUnitIndex = KoUnit(KoUnit::Pixel).indexInListForUi();
+    m_page->newWidthUnit->setCurrentIndex(pixelUnitIndex);
+    m_page->newHeightUnit->setCurrentIndex(pixelUnitIndex);
+
+    m_page->aspectRatioBtn->setKeepAspectRatio(true);
+    m_page->aspectRatioCkb->setChecked(true);
 
     setMainWidget(m_page);
-    resize(m_page->sizeHint());
+    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
 
-    unblockAll();
+    connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->aspectRatioCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
 
-
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(okClicked()));
-
+    connect(m_page->newWidth, SIGNAL(valueChanged(int)), this, SLOT(slotWidthChanged(int)));
+    connect(m_page->newHeight, SIGNAL(valueChanged(int)), this, SLOT(slotHeightChanged(int)));
+    connect(m_page->newWidthDouble, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
+    connect(m_page->newHeightDouble, SIGNAL(valueChanged(double)), this, SLOT(slotHeightChanged(double)));
+    connect(m_page->newWidthUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWidthUnitChanged(int)));
+    connect(m_page->newHeightUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotHeightUnitChanged(int)));
 }
 
 DlgLayerSize::~DlgLayerSize()
@@ -63,188 +96,168 @@ DlgLayerSize::~DlgLayerSize()
     delete m_page;
 }
 
-void DlgLayerSize::setWidth(quint32 w)
-{
-    blockAll();
-
-    m_page->lblWidthOriginal->setNum((int)w);
-    m_page->intWidth->setValue(w);
-    m_oldW = w;
-    m_origW = w;
-
-    unblockAll();
-}
-
-void DlgLayerSize::setWidthPercent(quint32 w)
-{
-    blockAll();
-
-    m_page->intWidthPercent->setValue(w);
-    m_oldWPercent = w;
-
-    unblockAll();
-}
-
-
-void DlgLayerSize::setMaximumWidth(quint32 w)
-{
-    m_page->intWidth->setMaximum(w);
-    m_maxW = w;
-}
-
 qint32 DlgLayerSize::width()
 {
-    //return (qint32)qRound(m_oldW);
-    return (qint32)qRound(m_page->intWidth->value());
-}
-
-void DlgLayerSize::setHeight(quint32 h)
-{
-    blockAll();
-
-    m_page->lblHeightOriginal->setNum((int)h);
-    m_page->intHeight->setValue(h);
-    m_oldH = h;
-    m_origH = h;
-
-    unblockAll();
-}
-
-
-void DlgLayerSize::setHeightPercent(quint32 h)
-{
-    blockAll();
-
-    m_page->intHeightPercent->setValue(h);
-    m_oldHPercent = h;
-
-    unblockAll();
-}
-
-void DlgLayerSize::setMaximumHeight(quint32 h)
-{
-    m_page->intHeight->setMaximum(h);
-    m_maxH = h;
+    return (qint32)m_width;
 }
 
 qint32 DlgLayerSize::height()
 {
-    //return (qint32)qRound(m_oldH);
-    return (qint32)qRound(m_page->intHeight->value());
+    return (qint32)m_height;
 }
 
 KisFilterStrategy *DlgLayerSize::filterType()
 {
-    KoID filterID = m_page->cmbFilterType->currentItem();
+    KoID filterID = m_page->filterCmb->currentItem();
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
     return filter;
 }
 
-
 // SLOTS
 
-void DlgLayerSize::okClicked()
+void DlgLayerSize::slotWidthChanged(int w)
 {
-    accept();
+    slotWidthChanged((double) w);
 }
 
-void DlgLayerSize::slotWidthPixelsChanged(int w)
+void DlgLayerSize::slotHeightChanged(int h)
 {
-    blockAll();
-
-    double wPercent = double(w) * 100 / double(m_origW);
-
-    m_page->intWidthPercent->setValue(qRound(wPercent));
-
-    // Set height in pixels and percent of necessary
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intHeightPercent->setValue(qRound(wPercent));
-
-        m_oldH = qRound(m_origH * wPercent / 100);
-        m_page->intHeight->setValue(qRound(m_oldH));
-
-    }
-    m_oldW = w;
-
-    unblockAll();
+    slotHeightChanged((double) h);
 }
 
-void DlgLayerSize::slotHeightPixelsChanged(int h)
+void DlgLayerSize::slotWidthChanged(double w)
 {
-    blockAll();
-
-    double hPercent = double(h) * 100 / double(m_origH);
-
-    m_page->intHeightPercent->setValue(qRound(hPercent));
-
-    // Set width in pixels and percent of necessary
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intWidthPercent->setValue(qRound(hPercent));
-
-        m_oldW = qRound(m_origW * hPercent / 100);
-        m_page->intWidth->setValue(qRound(m_oldW));
-
-    }
-    m_oldH = h;
-
-    unblockAll();
-}
-
-void DlgLayerSize::slotWidthPercentChanged(int w)
-{
-    blockAll();
-
-    m_page->intWidth->setValue(qRound(w * m_origW / 100));
-
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intHeightPercent->setValue(w);
-        m_page->intHeight->setValue(qRound(w * m_origH / 100));
+    if (m_page->newWidthUnit->currentText() == percentStr) {
+        m_width = qRound((w * m_originalWidth) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newWidthUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? w : (w * m_resolution);
+        m_width = qRound(selectedUnit.fromUserValue(resValue));
     }
 
-    unblockAll();
+    if (m_keepAspect) {
+        m_height = qRound(m_width / m_aspectRatio);
+        updateHeightUIValue(m_height);
+    }
 }
 
-void DlgLayerSize::slotHeightPercentChanged(int h)
+void DlgLayerSize::slotHeightChanged(double h)
 {
-    blockAll();
-
-    m_page->intHeight->setValue(qRound(h * m_origH / 100));
-    if (m_page->chkConstrain->isChecked()) {
-        m_page->intWidthPercent->setValue(h);
-        m_page->intWidth->setValue(qRound(h * m_origW / 100));
+    if (m_page->newHeightUnit->currentText() == percentStr) {
+        m_height = qRound((h * m_originalHeight) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newHeightUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? h : (h * m_resolution);
+        m_height = qRound(selectedUnit.fromUserValue(resValue));
     }
 
-    unblockAll();
-
+    if (m_keepAspect) {
+        m_width = qRound(m_height * m_aspectRatio);
+        updateWidthUIValue(m_width);
+    }
 }
 
-
-void DlgLayerSize::blockAll()
+void DlgLayerSize::slotWidthUnitChanged(int index)
 {
-    // XXX: more efficient to use blockSignals?
-    m_page->intWidth->disconnect();
-    m_page->intHeight->disconnect();
-    m_page->intWidthPercent->disconnect();
-    m_page->intHeightPercent->disconnect();
+    updateWidthUIValue(m_width);
 
+    if (m_page->newWidthUnit->currentText() == percentStr) {
+        m_page->newWidth->setVisible(false);
+        m_page->newWidthDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+            m_page->newWidth->setVisible(false);
+            m_page->newWidthDouble->setVisible(true);
+        } else {
+            m_page->newWidth->setVisible(true);
+            m_page->newWidthDouble->setVisible(false);
+        }
+    }
 }
 
-void DlgLayerSize::unblockAll()
+void DlgLayerSize::slotHeightUnitChanged(int index)
 {
-    // XXX: more efficient to use blockSignals?
-    connect(m_page->intWidth, SIGNAL(valueChanged(int)),
-            this, SLOT(slotWidthPixelsChanged(int)));
+    updateHeightUIValue(m_height);
 
-    connect(m_page->intHeight, SIGNAL(valueChanged(int)),
-            this, SLOT(slotHeightPixelsChanged(int)));
+    if (m_page->newHeightUnit->currentText() == percentStr) {
+        m_page->newHeight->setVisible(false);
+        m_page->newHeightDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+            m_page->newHeight->setVisible(false);
+            m_page->newHeightDouble->setVisible(true);
+        } else {
+            m_page->newHeight->setVisible(true);
+            m_page->newHeightDouble->setVisible(false);
+        }
+    }
+}
 
-    connect(m_page->intWidthPercent, SIGNAL(valueChanged(int)),
-            this, SLOT(slotWidthPercentChanged(int)));
+void DlgLayerSize::slotAspectChanged(bool keep)
+{
+    m_page->aspectRatioBtn->blockSignals(true);
+    m_page->aspectRatioCkb->blockSignals(true);
 
-    connect(m_page->intHeightPercent, SIGNAL(valueChanged(int)),
-            this, SLOT(slotHeightPercentChanged(int)));
+    m_page->aspectRatioBtn->setKeepAspectRatio(keep);
+    m_page->aspectRatioCkb->setChecked(keep);
 
+    m_page->aspectRatioBtn->blockSignals(false);
+    m_page->aspectRatioCkb->blockSignals(false);
 
+    m_keepAspect = keep;
+
+    if (keep) {
+        // values may be out of sync, so we need to reset it to defaults
+        m_width = m_originalWidth;
+        m_height = m_originalHeight;
+
+        updateWidthUIValue(m_width);
+        updateHeightUIValue(m_height);
+    }
+}
+
+void DlgLayerSize::updateWidthUIValue(double value)
+{
+    if (m_page->newWidthUnit->currentText() == percentStr) {
+        m_page->newWidthDouble->blockSignals(true);
+        m_page->newWidthDouble->setValue((value * 100.0) / m_originalWidth);
+        m_page->newWidthDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newWidthUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+            m_page->newWidthDouble->blockSignals(true);
+            m_page->newWidthDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->newWidthDouble->blockSignals(false);
+        } else {
+            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+            m_page->newWidth->blockSignals(true);
+            m_page->newWidth->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newWidth->blockSignals(false);
+        }
+    }
+}
+
+void DlgLayerSize::updateHeightUIValue(double value)
+{
+    if (m_page->newHeightUnit->currentText() == percentStr) {
+        m_page->newHeightDouble->blockSignals(true);
+        m_page->newHeightDouble->setValue((value * 100.0) / m_originalHeight);
+        m_page->newHeightDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newHeightUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+            m_page->newHeightDouble->blockSignals(true);
+            m_page->newHeightDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->newHeightDouble->blockSignals(false);
+        } else {
+            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+            m_page->newHeight->blockSignals(true);
+            m_page->newHeight->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newHeight->blockSignals(false);
+        }
+    }
 }
 
 #include "dlg_layersize.moc"

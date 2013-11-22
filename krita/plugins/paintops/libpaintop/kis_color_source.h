@@ -129,11 +129,11 @@ private:
     const KoColorSpace* m_colorSpace;
 };
 
-class PAINTOP_EXPORT KisPatternColorSource : public KisColorSource
+class PAINTOP_EXPORT KoPatternColorSource : public KisColorSource
 {
 public:
-    KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked);
-    virtual ~KisPatternColorSource();
+    KoPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked);
+    virtual ~KoPatternColorSource();
 public:
     virtual void selectColor(double mix);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);

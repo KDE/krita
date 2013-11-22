@@ -34,7 +34,6 @@
 
 class KoCompositeOp;
 
-class KoColorSpace;
 
 class KisHairyProperties{
 public:

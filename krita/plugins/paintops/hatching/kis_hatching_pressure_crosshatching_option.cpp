@@ -22,7 +22,6 @@
 #include <klocale.h>
 #include <kis_painter.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 
 KisHatchingPressureCrosshatchingOption::KisHatchingPressureCrosshatchingOption()

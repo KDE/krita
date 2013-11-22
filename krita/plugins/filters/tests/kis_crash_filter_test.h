@@ -21,6 +21,9 @@
 
 #include <QtTest>
 
+class KoColorSpace;
+#include <kis_types.h>
+
 /**
  * The crash filter test just loops through all filters
  * and tests every filter with all colorspaces we have.
@@ -30,6 +33,10 @@
 class KisCrashFilterTest : public QObject
 {
     Q_OBJECT
+private:
+
+    bool applyFilter(const KoColorSpace * cs,  KisFilterSP f);
+    bool testFilter(KisFilterSP f);
 
 private slots:
 

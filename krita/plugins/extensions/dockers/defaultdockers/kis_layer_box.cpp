@@ -54,7 +54,7 @@
 #include <KoIcon.h>
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_types.h>
 #include <kis_image.h>

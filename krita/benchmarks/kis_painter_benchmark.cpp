@@ -41,7 +41,7 @@ inline double drand48()
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 
 #include <kis_image.h>

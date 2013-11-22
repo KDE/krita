@@ -64,12 +64,7 @@ KisPaintInformation KisPaintingInformationBuilder::continueStroke(KoPointerEvent
     return createPaintingInformation(event, timeElapsed);
 }
 
-QPointF KisPaintingInformationBuilder::startPoint() const
-{
-    return m_startPoint;
-}
-
-QPointF KisPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point)
+QPointF KisPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &/*startPoint*/)
 {
     return point;
 }
@@ -90,7 +85,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                                                              int timeElapsed)
 {
 
-    QPointF adjusted = adjustDocumentPoint(event->point);
+    QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
 
@@ -120,9 +115,9 @@ KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisToolFree
 {
 }
 
-QPointF KisToolPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point)
+QPointF KisToolPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)
 {
-    return m_tool->adjustPosition(point, startPoint());
+    return m_tool->adjustPosition(point, startPoint);
 }
 
 QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)

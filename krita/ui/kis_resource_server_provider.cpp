@@ -35,30 +35,17 @@
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
-    KGlobal::mainComponent().dirs()->addResourceType("kis_patterns", "data", "krita/patterns/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
-
     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
     
-    m_patternServer = new KoResourceServer<KisPattern>("kis_patterns", "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
-    patternThread = new KoResourceLoaderThread(m_patternServer);
-    patternThread->start();
-
-    if (qApp->applicationName().toLower().contains("test")) {
-        patternThread->wait();
-    }
-
-
     m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
@@ -77,13 +64,9 @@ KisResourceServerProvider::KisResourceServerProvider()
 
 KisResourceServerProvider::~KisResourceServerProvider()
 {
-    dbgRegistry << "deleting KisResourceServerProvider";
-
-    delete patternThread;
     delete paintOpPresetThread;
     delete workspaceThread;
 
-    delete m_patternServer;
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
 }
@@ -94,12 +77,6 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
     return s_instance;
 }
 
-
-KoResourceServer<KisPattern>* KisResourceServerProvider::patternServer()
-{
-    patternThread->barrier();
-    return m_patternServer;
-}
 
 KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServer()
 {

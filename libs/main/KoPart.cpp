@@ -30,7 +30,6 @@
 #include "KoOpenPane.h"
 #include "KoProgressProxy.h"
 #include "KoFilterManager.h"
-#include "KoServiceProvider.h"
 #include <KoDocumentInfoDlg.h>
 
 #include <KoCanvasController.h>
@@ -45,12 +44,6 @@
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
-#include <kio/job.h>
-#ifndef Q_OS_WIN
-#include <kio/jobuidelegate.h>
-#endif
-#include <kfileitem.h>
-#include <kio/netaccess.h>
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
@@ -60,49 +53,15 @@
 #include "KoPartAdaptor.h"
 #endif
 
-namespace {
-
-class DocumentProgressProxy : public KoProgressProxy {
-public:
-    KoMainWindow *m_shell;
-    DocumentProgressProxy(KoMainWindow *shell)
-        : m_shell(shell)
-    {
-    }
-
-    ~DocumentProgressProxy() {
-        // signal that the job is done
-        setValue(-1);
-    }
-
-    int maximum() const {
-        return 100;
-    }
-
-    void setValue(int value) {
-        if (m_shell) {
-            m_shell->slotProgress(value);
-        }
-    }
-
-    void setRange(int /*minimum*/, int /*maximum*/) {
-
-    }
-
-    void setFormat(const QString &/*format*/) {
-
-    }
-};
-}
-
-
 class KoPart::Private
 {
 public:
-    Private()
-        : document(0)
+    Private(KoPart *_parent)
+        : parent(_parent)
+        , document(0)
         , canvasItem(0)
         , startUpWidget(0)
+        , m_componentData(KGlobal::mainComponent())
     {
     }
 
@@ -111,57 +70,59 @@ public:
         delete canvasItem;
     }
 
+    KoPart *parent;
+
     QList<KoView*> views;
-    QList<KoMainWindow*> shells;
+    QList<KoMainWindow*> mainWindows;
     KoDocument *document;
+    QList<KoDocument*> documents;
     QGraphicsItem *canvasItem;
     QPointer<KoOpenPane> startUpWidget;
     QString templateType;
+
+    KComponentData m_componentData;
 
 };
 
 
 KoPart::KoPart(QObject *parent)
-        : KParts::ReadWritePart(parent)
-        , d(new Private)
+        : QObject(parent)
+        , d(new Private(this))
 {
-    // we're not a part in a part, so we cannot be selected, we're always top-level
-    setSelectable(false);
-
 #ifndef QT_NO_DBUS
     new KoPartAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
-
-    connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
 
 KoPart::~KoPart()
 {
-
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView *view, views()) {
         view->setDocumentDeleted();
     }
 
-    while (!d->shells.isEmpty()) {
-        delete d->shells.takeFirst();
+    while (!d->mainWindows.isEmpty()) {
+        delete d->mainWindows.takeFirst();
     }
-
 
     delete d->startUpWidget;
     d->startUpWidget = 0;
 
-
     delete d;
+}
+
+KComponentData KoPart::componentData() const
+{
+    return d->m_componentData;
 }
 
 void KoPart::setDocument(KoDocument *document)
 {
     Q_ASSERT(document);
     d->document = document;
-    connect(d->document, SIGNAL(titleModified(QString,bool)), SLOT(setTitleModified(QString,bool)));
+
 }
 
 KoDocument *KoPart::document() const
@@ -170,81 +131,29 @@ KoDocument *KoPart::document() const
     return d->document;
 }
 
-void KoPart::setReadWrite(bool readwrite)
+KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
-    KParts::ReadWritePart::setReadWrite(readwrite);
-
-    foreach(KoView *view, d->views) {
-        view->updateReadWrite(readwrite);
+    KoView *view = createViewInstance(document, parent);
+    addView(view, document);
+    if (!d->documents.contains(document)) {
+        d->documents.append(document);
     }
-
-    foreach(KoMainWindow *mainWindow, d->shells) {
-        mainWindow->setReadWrite(readwrite);
-    }
-}
-
-bool KoPart::openFile()
-{
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KoMainWindow *shell = 0;
-        if (shellCount() > 0) {
-            shell = shells()[0];
-        }
-        progressProxy = new DocumentProgressProxy(shell);
-        d->document->setProgressProxy(progressProxy);
-    }
-    d->document->setUrl(url());
-
-    // THIS IS WRONG! KoDocument::openFile should move here, and whoever subclassed KoDocument to
-    // reimplement openFile shold now subclass KoPart.
-    bool ok = d->document->openFile();
-
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
-    return ok;
-}
-
-bool KoPart::saveFile()
-{
-    DocumentProgressProxy *progressProxy = 0;
-    if (!d->document->progressProxy()) {
-        KoMainWindow *shell = 0;
-        if (shellCount() > 0) {
-            shell = shells()[0];
-        }
-        progressProxy = new DocumentProgressProxy(shell);
-        d->document->setProgressProxy(progressProxy);
-    }
-    d->document->setUrl(url());
-
-    // THIS IS WRONG! KoDocument::saveFile should move here, and whoever subclassed KoDocument to
-    // reimplement saveFile shold now subclass KoPart.
-    bool ok = d->document->saveFile();
-
-    if (progressProxy) {
-        d->document->setProgressProxy(0);
-        delete progressProxy;
-    }
-    return ok;
-}
-
-KoView *KoPart::createView(QWidget *parent)
-{
-    KoView *view = createViewInstance(parent);
-    addView(view);
     return view;
 }
 
-void KoPart::addView(KoView *view)
+void KoPart::addView(KoView *view, KoDocument *document)
 {
     if (!view)
         return;
 
-    d->views.append(view);
-    view->updateReadWrite(isReadWrite());
+    if (!d->views.contains(view)) {
+        d->views.append(view);
+    }
+    if (!d->documents.contains(document)) {
+        d->documents.append(document);
+    }
+
+    view->updateReadWrite(document->isReadWrite());
 
     if (d->views.size() == 1) {
         KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
@@ -276,97 +185,71 @@ int KoPart::viewCount() const
     return d->views.count();
 }
 
-QGraphicsItem *KoPart::canvasItem(bool create)
+QGraphicsItem *KoPart::canvasItem(KoDocument *document, bool create)
 {
     if (create && !d->canvasItem) {
-        d->canvasItem = createCanvasItem();
+        d->canvasItem = createCanvasItem(document);
     }
     return d->canvasItem;
 }
 
-QGraphicsItem *KoPart::createCanvasItem()
+QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 {
-    KoView *view = createView();
+    KoView *view = createView(document);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);
     return proxy;
 }
 
-void KoPart::addShell(KoMainWindow *shell)
+void KoPart::addMainWindow(KoMainWindow *mainWindow)
 {
-    if (d->shells.indexOf(shell) == -1) {
-        //kDebug(30003) <<"shell" << (void*)shell <<"added to doc" << this;
-        d->shells.append(shell);
-        // XXX!!!
-        //connect(shell, SIGNAL(documentSaved()), d->undoStack, SLOT(setClean()));
+    if (d->mainWindows.indexOf(mainWindow) == -1) {
+        kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+        d->mainWindows.append(mainWindow);
     }
 }
 
-void KoPart::removeShell(KoMainWindow *shell)
+void KoPart::removeMainWindow(KoMainWindow *mainWindow)
 {
-    //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
-    if (shell) {
-        disconnect(shell, SIGNAL(documentSaved()), d->document->undoStack(), SLOT(setClean()));
-        d->shells.removeAll(shell);
+    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
+    if (mainWindow) {
+        d->mainWindows.removeAll(mainWindow);
     }
 }
 
-const QList<KoMainWindow*>& KoPart::shells() const
+const QList<KoMainWindow*>& KoPart::mainWindows() const
 {
-    return d->shells;
+    return d->mainWindows;
 }
 
-int KoPart::shellCount() const
+int KoPart::mainwindowCount() const
 {
-    return d->shells.count();
+    return d->mainWindows.count();
 }
 
 
-KoMainWindow *KoPart::currentShell() const
+KoMainWindow *KoPart::currentMainwindow() const
 {
     QWidget *widget = qApp->activeWindow();
-    KoMainWindow *shell = qobject_cast<KoMainWindow*>(widget);
-    while (!shell && widget) {
+    KoMainWindow *mainWindow = qobject_cast<KoMainWindow*>(widget);
+    while (!mainWindow && widget) {
         widget = widget->parentWidget();
-        shell = qobject_cast<KoMainWindow*>(widget);
+        mainWindow = qobject_cast<KoMainWindow*>(widget);
     }
 
-    if (!shell && d->document && shells().size() > 0) {
-        shell = shells().first();
+    if (!mainWindow && mainWindows().size() > 0) {
+        mainWindow = mainWindows().first();
     }
-    return shell;
+    return mainWindow;
 
-}
-
-KoDocumentInfoDlg *KoPart::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
-{
-    return new KoDocumentInfoDlg(parent, docInfo);
-}
-
-void KoPart::showSavingErrorDialog()
-{
-    if (d->document->errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not save\n%1", localFilePath()));
-    } else if (d->document->errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not save %1\nReason: %2", localFilePath(), d->document->errorMessage()));
-    }
-}
-
-void KoPart::showLoadingErrorDialog()
-{
-    if (d->document->errorMessage().isEmpty()) {
-        KMessageBox::error(0, i18n("Could not open\n%1", localFilePath()));
-    } else if (d->document->errorMessage() != "USER_CANCELED") {
-        KMessageBox::error(0, i18n("Could not open %1\nReason: %2", localFilePath(), d->document->errorMessage()));
-    }
 }
 
 void KoPart::openExistingFile(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     d->document->openUrl(url);
-    setModified(false);
+    d->document->setModified(false);
     qApp->restoreOverrideCursor();
 }
 
@@ -386,40 +269,20 @@ void KoPart::openTemplate(const KUrl& url)
         d->document->resetURL();
         d->document->setEmpty();
     } else {
-        showLoadingErrorDialog();
+        d->document->showLoadingErrorDialog();
         d->document->initEmpty();
     }
     qApp->restoreOverrideCursor();
 }
 
-void KoPart::addRecentURLToAllShells(KUrl url)
+void KoPart::addRecentURLToAllMainWindows(KUrl url)
 {
-    // Add to recent actions list in our shells
-    foreach(KoMainWindow *mainWindow, d->shells) {
+    // Add to recent actions list in our mainWindows
+    foreach(KoMainWindow *mainWindow, d->mainWindows) {
         mainWindow->addRecentURL(url);
     }
 
 }
-
-void KoPart::setTitleModified(const QString &caption, bool mod)
-{
-    // we must be root doc so update caption in all related windows
-    foreach(KoMainWindow *mainWindow, d->shells) {
-        mainWindow->updateCaption(caption, mod);
-        mainWindow->updateReloadFileAction(d->document);
-        mainWindow->updateVersionsFileAction(d->document);
-    }
-}
-
-void KoPart::slotStarted(KIO::Job *job)
-{
-#ifndef Q_OS_WIN
-    if (job && job->ui()) {
-        job->ui()->setWindow(currentShell());
-    }
-#endif
-}
-
 
 void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
 {
@@ -451,7 +314,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
             }
             if (!fullTemplateName.isEmpty()) {
                 openTemplate(fullTemplateName);
-                shells().first()->setRootDocument(d->document, this);
+                mainWindows().first()->setRootDocument(d->document, this);
                 return;
             }
         }
@@ -466,7 +329,7 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         mainWindow->setCentralWidget(d->startUpWidget);
     }
 
-    mainWindow->setDocToOpen(this);
+    mainWindow->setPartToOpen(this);
 }
 
 void KoPart::deleteOpenPane(bool closing)
@@ -476,9 +339,9 @@ void KoPart::deleteOpenPane(bool closing)
         d->startUpWidget->deleteLater();
 
         if(!closing) {
-            shells().first()->setRootDocument(d->document, this);
-            KoPart::shells().first()->factory()->container("mainToolBar",
-                                                                  shells().first())->show();
+            mainWindows().first()->setRootDocument(d->document, this);
+            KoPart::mainWindows().first()->factory()->container("mainToolBar",
+                                                                  mainWindows().first())->show();
         }
     } else {
         emit closeEmbedInitDialog();
@@ -508,8 +371,7 @@ void KoPart::startCustomDocument()
 KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
                                        const QString& templateType)
 {
-    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-                                                               KoFilterManager::Import, KoServiceProvider::readExtraNativeMimeTypes());
+    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
@@ -524,6 +386,18 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &compon
 
     return openPane;
 }
+
+void KoPart::setComponentData(const KComponentData &componentData)
+{
+    d->m_componentData = componentData;
+
+    KGlobal::locale()->insertCatalog(componentData.catalogName());
+    // install 'instancename'data resource type
+    KGlobal::dirs()->addResourceType(QString(componentData.componentName() + "data").toUtf8(),
+                                     "data", componentData.componentName());
+}
+
+
 
 
 #include <KoPart.moc>

@@ -25,6 +25,7 @@ add_definitions(-Dcimg_use_vt100 )
 
 if(FFTW3_FOUND)
     add_definitions(-Dcimg_use_fftw3 )
+    add_definitions(-Dcimg_use_fftw3_singlethread )
 endif(FFTW3_FOUND)
 
 

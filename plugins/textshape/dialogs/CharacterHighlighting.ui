@@ -105,7 +105,7 @@
    <item>
     <layout class="QFormLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Underlining:</string>
        </property>
@@ -136,7 +136,7 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Strikethrough:</string>
        </property>
@@ -167,7 +167,7 @@
       </layout>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Capitalization:</string>
        </property>
@@ -180,7 +180,7 @@
       <widget class="QComboBox" name="capitalizationList"/>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel">
        <property name="text">
         <string>Position:</string>
        </property>

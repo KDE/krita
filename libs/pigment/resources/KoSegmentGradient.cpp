@@ -31,6 +31,7 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
+#include "KoMixColorsOp.h"
 
 #include <kdebug.h>
 #include <klocale.h>

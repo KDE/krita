@@ -29,7 +29,7 @@
 
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColor.h>
 
 #include "kis_paint_device.h"
@@ -400,132 +400,198 @@ bool KisTransformWorker::run()
     return true;
 }
 
-QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
+void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
 {
+    KIS_ASSERT_RECOVER_RETURN(qFloor(axis) == axis || (axis - qFloor(axis) == 0.5));
 
-    int pixelSize = dev->pixelSize();
-    KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
+    QRect mirrorRect = dev->exactBounds();
+    if (mirrorRect.width() <= 1) return;
 
-    QRect r;
+    /**
+     * We split the total mirror rect into two halves, which lay to
+     * the 'left' and 'right' from the axis. Effectively, these halves
+     * should be swapped, but there is a bit of optimization: some
+     * parts of these portions overlap and some don't. So former ones
+     * should be really swapped, but the latter ones just moved to the
+     * other side.
+     *
+     * So the algorithm consists of two stages:
+     *
+     * 1) Move the non-overlapping portion of the mirror rect to the
+     *    other side of the axis. The move may be either left-to-right or
+     *    right-to-left.
+     *
+     * 2) Use slow 'swap' operation for the remaining portion of the
+     *    mirrorRect.
+     *
+     * NOTE: the algorithm works with (column, row) coordinates which
+     *       are mapped to the real (x, y) depending on the value of
+     *       'isHorizontal' parameter.
+     */
 
-    if (selection) {
-        r = selection->selectedExactRect();
+    int leftStart;
+    int rightEnd;
+
+    if (isHorizontal) {
+        leftStart = mirrorRect.x();
+        rightEnd = mirrorRect.x() + mirrorRect.width();
     } else {
-        r = dev->exactBounds();
-
-        if (axis > 0 && !r.isEmpty()) {
-            // Extend rect so it has the same width on both sides of the axis
-            qreal distanceFromAxis = qMax(fabs((qreal)r.left() - axis), fabs((qreal)r.right() - axis));
-            QRect newRect(floor(axis - distanceFromAxis), r.y(), ceil(2*distanceFromAxis), r.height());
-            r = newRect;
-        }
+        leftStart = mirrorRect.y();
+        rightEnd = mirrorRect.y() + mirrorRect.height();
     }
 
-    if (r.width() <= 1) return r;
 
-    {
-        quint8 *dstPixels = new quint8[r.width() * pixelSize];
+    int leftCenterPoint = qFloor(axis) < axis ? qFloor(axis) : qFloor(axis);
+    int leftEnd = qMin(leftCenterPoint, rightEnd);
 
-        KisHLineConstIteratorSP srcIt = dev->createHLineConstIteratorNG(r.x(), r.top(), r.width());
+    int rightCenterPoint = qFloor(axis) < axis ? qCeil(axis) : qFloor(axis);
+    int rightStart = qMax(rightCenterPoint, leftStart);
 
-        KisHLineConstIteratorSP selIt;
-        if (selection) {
-            selIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.top(), r.width());
-        }
+    int leftSize = qMax(0, leftEnd - leftStart);
+    int rightSize = qMax(0, rightEnd - rightStart);
 
-        for (qint32 y = r.top(); y <= r.bottom(); ++y) {
+    int maxDistanceToAxis = qMax(leftCenterPoint - leftStart,
+                           rightEnd - rightCenterPoint);
 
-            quint8 *dstIt = dstPixels + (r.width() * pixelSize) - pixelSize;
 
-            do {
-                if (selIt) {
-                    if (*selIt->oldRawData() > SELECTION_THRESHOLD) {
-                        memcpy(dstIt, srcIt->oldRawData(), pixelSize);
-                        selIt->nextPixel();
-                    }
+    // Main variables for controlling the stages of the algorithm
+    bool moveLeftToRight = leftSize > rightSize;
+    int moveAmount = qAbs(leftSize - rightSize);
+    int swapAmount = qMin(leftSize, rightSize);
+
+    // Initial position of 'left' and 'right' block iterators
+    int initialLeftCol = leftCenterPoint - maxDistanceToAxis;
+    int initialRightCol = rightCenterPoint + maxDistanceToAxis - 1;
+
+
+    KisRandomAccessorSP leftIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
+    KisRandomAccessorSP rightIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
+    const quint8 *defaultPixel = dev->defaultPixel();
+
+    const int pixelSize = dev->pixelSize();
+    QByteArray buf(pixelSize, 0);
+
+    // Map (column, row) -> (x, y)
+    int rowsRemaining;
+    int row;
+
+    if (isHorizontal) {
+        rowsRemaining = mirrorRect.height();
+        row = mirrorRect.y();
+    } else {
+        rowsRemaining = mirrorRect.width();
+        row = mirrorRect.x();
+    }
+
+    int leftColPos = 0;
+    int rightColPos = 0;
+
+    const int &leftX = isHorizontal ? leftColPos : row;
+    const int &leftY = isHorizontal ? row : leftColPos;
+
+    const int &rightX = isHorizontal ? rightColPos : row;
+    const int &rightY = isHorizontal ? row : rightColPos;
+
+    while (rowsRemaining) {
+        leftColPos = initialLeftCol;
+        rightColPos = initialRightCol;
+
+        int rows = qMin(rowsRemaining, isHorizontal ? leftIt->numContiguousRows(leftY) : leftIt->numContiguousColumns(leftX));
+        int rowStride = isHorizontal ? leftIt->rowStride(leftX, leftY) : pixelSize;
+
+        if (moveLeftToRight) {
+            for (int i = 0; i < moveAmount; i++) {
+                leftIt->moveTo(leftX, leftY);
+                rightIt->moveTo(rightX, rightY);
+
+                quint8 *leftPtr = leftIt->rawData();
+                quint8 *rightPtr = rightIt->rawData();
+
+                for (int j = 0; j < rows; j++) {
+                    // left-to-right move
+                    memcpy(rightPtr, leftPtr, pixelSize);
+                    memcpy(leftPtr, defaultPixel, pixelSize);
+
+                    leftPtr += rowStride;
+                    rightPtr += rowStride;
                 }
-                else {
-                    memcpy(dstIt, srcIt->oldRawData(), pixelSize);
+
+                leftColPos++;
+                rightColPos--;
+            }
+        } else {
+            for (int i = 0; i < moveAmount; i++) {
+                leftIt->moveTo(leftX, leftY);
+                rightIt->moveTo(rightX, rightY);
+
+                quint8 *leftPtr = leftIt->rawData();
+                quint8 *rightPtr = rightIt->rawData();
+
+                for (int j = 0; j < rows; j++) {
+                    // right-to-left move
+                    memcpy(leftPtr, rightPtr, pixelSize);
+                    memcpy(rightPtr, defaultPixel, pixelSize);
+
+                    leftPtr += rowStride;
+                    rightPtr += rowStride;
                 }
-                dstIt -= pixelSize;
 
-            } while (srcIt->nextPixel());
-
-            dst->writeBytes(dstPixels, QRect(r.left(), y, r.width(), 1));
-            srcIt->nextRow();
+                leftColPos++;
+                rightColPos--;
+            }
         }
 
-        delete[] dstPixels;
-    }
-    KisPainter gc(dev);
+        for (int i = 0; i < swapAmount; i++) {
+            leftIt->moveTo(leftX, leftY);
+            rightIt->moveTo(rightX, rightY);
 
-    if (selection) {
-        dev->clearSelection(const_cast<KisSelection*>(selection));
-    }
-    else {
-        dev->clear(r);
-    }
-    gc.setCompositeOp(COMPOSITE_OVER);
-    gc.bitBlt(r.topLeft(), dst, r);
+            quint8 *leftPtr = leftIt->rawData();
+            quint8 *rightPtr = rightIt->rawData();
 
-    return r;
+            for (int j = 0; j < rows; j++) {
+                // swap operation
+                memcpy(buf.data(), leftPtr, pixelSize);
+                memcpy(leftPtr, rightPtr, pixelSize);
+                memcpy(rightPtr, buf.data(), pixelSize);
+
+                leftPtr += rowStride;
+                rightPtr += rowStride;
+            }
+
+            leftColPos++;
+            rightColPos--;
+        }
+
+        rowsRemaining -= rows;
+        row += rows;
+    }
 }
 
-QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSelection* selection)
+void KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis)
 {
-    int pixelSize = dev->pixelSize();
-    KisPaintDeviceSP dst = new KisPaintDevice(dev->colorSpace());
+    mirror_impl(dev, axis, true);
+}
 
-    /* Read a line from bottom to top and and from top to bottom and write their values to each other */
-    QRect r;
-    if (selection) {
-        r = selection->selectedExactRect();
-    } else {
-        r = dev->exactBounds();
+void KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis)
+{
+    mirror_impl(dev, axis, false);
+}
 
-        if (axis > 0) {
-            // Extend rect so it has the same height on both sides of the axis
-            qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
-            QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
-            r = newRect;
-        }
-    }
-    {
-        qint32 y1, y2;
-        for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
+void KisTransformWorker::mirrorX(KisPaintDeviceSP dev)
+{
+    QRect bounds = dev->exactBounds();
+    mirrorX(dev, bounds.x() + 0.5 * bounds.width());
+}
 
-            KisHLineConstIteratorSP itTop = dev->createHLineConstIteratorNG(r.x(), y1, r.width());
-            KisHLineIteratorSP itBottom = dst->createHLineIteratorNG(r.x(), y2, r.width());
-            KisHLineConstIteratorSP selIt;
-            if (selection) {
-                selIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.top(), r.width());
-            }
-            do {
-                if (selIt) {
-                    if (*selIt->oldRawData() > SELECTION_THRESHOLD) {
-                        memcpy(itBottom->rawData(), itTop->oldRawData(), pixelSize);
-                        selIt->nextPixel();
-                    }
-                }
-                else {
-                    memcpy(itBottom->rawData(), itTop->oldRawData(), pixelSize);
-                }
-            } while (itTop->nextPixel() && itBottom->nextPixel());
-        }
-    }
-    KisPainter gc(dev);
+void KisTransformWorker::mirrorY(KisPaintDeviceSP dev)
+{
+    QRect bounds = dev->exactBounds();
+    mirrorY(dev, bounds.y() + 0.5 * bounds.height());
+}
 
-    if (selection) {
-        dev->clearSelection(const_cast<KisSelection*>(selection));
-    }
-    else {
-        dev->clear(r);
-    }
-    gc.setCompositeOp(COMPOSITE_OVER);
-    gc.bitBlt(r.topLeft(), dst, r);
-
-    return r;
-
+void KisTransformWorker::mirror(KisPaintDeviceSP dev, qreal axis, Qt::Orientation orientation)
+{
+    mirror_impl(dev, axis, orientation == Qt::Horizontal);
 }
 
 void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPosition, const QRect& wrapRect)

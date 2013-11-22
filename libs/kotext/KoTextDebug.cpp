@@ -39,7 +39,6 @@
 #include "KoTextDocument.h"
 #include "KoTextBlockData.h"
 #include <KoInlineTextObjectManager.h>
-#include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoImageData.h>
 

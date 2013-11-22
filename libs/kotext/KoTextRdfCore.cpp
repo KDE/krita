@@ -71,8 +71,6 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
         QString sparqlQuery;
         QTextStream queryss(&sparqlQuery);
         queryss << ""
-            << "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-            << "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
             << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
             << ""
             << "select ?s ?p ?o \n"

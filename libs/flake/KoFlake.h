@@ -27,7 +27,6 @@
 
 class KoShape;
 class QGradient;
-class KoShapeBackground;
 
 /**
  * Flake reference

@@ -22,6 +22,7 @@
 #define KOMIXCOLORSOPIMPL_H
 
 #include "KoColorSpace.h"
+#include "KoMixColorsOp.h"
 
 template<class _CSTrait>
 class KoMixColorsOpImpl : public KoMixColorsOp

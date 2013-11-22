@@ -22,7 +22,7 @@
 #include "testutil.h"
 #include "qimage_based_test.h"
 
-#include "kis_pattern.h"
+#include <KoPattern.h>
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"
@@ -56,10 +56,10 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        shell = new KoMainWindow(doc->documentPart()->componentData());
-        view = new KisView2(doc->documentPart(), doc, shell);
+        mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
+        view = new KisView2(doc->documentPart(), doc, mainWindow);
 
-        KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
+        KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);
@@ -88,7 +88,7 @@ public:
         QTest::qSleep(500);
         QApplication::processEvents();
 
-        delete shell;
+        delete mainWindow;
         delete doc;
 
         /**
@@ -157,7 +157,7 @@ public:
 protected:
     KisView2 *view;
     KisDoc2 *doc;
-    KoMainWindow *shell;
+    KoMainWindow *mainWindow;
 };
 
 }

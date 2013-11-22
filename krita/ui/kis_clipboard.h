@@ -42,6 +42,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 {
 
     Q_OBJECT
+    Q_PROPERTY(bool clip READ hasClip NOTIFY clipCreated)
 
 public:
 
@@ -64,14 +65,19 @@ public:
      */
     KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup);
 
-    bool hasClip();
+    bool hasClip() const;
 
-    QSize clipSize();
+    QSize clipSize() const;
+
+signals:
+
+    void clipCreated();
 
 
 private slots:
 
     void clipboardDataChanged();
+
 private:
 
     KisClipboard();

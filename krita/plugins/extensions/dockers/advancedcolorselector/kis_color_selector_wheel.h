@@ -19,7 +19,6 @@
 #define KIS_COLOR_SELECTOR_WHEEL_H
 
 typedef unsigned int QRgb;
-class KoColorSpace;
 
 #include <QColor>
 #include <QImage>

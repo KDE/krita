@@ -41,7 +41,6 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 
-#include <KoColorSpace.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 

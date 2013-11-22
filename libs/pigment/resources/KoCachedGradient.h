@@ -21,10 +21,10 @@
 #include <QGradient>
 
 #include "KoAbstractGradient.h"
-#include "KoColor.h"
-#include "KoColorSpace.h"
 #include "KoResource.h"
 #include <pigment_export.h>
+
+class KoColorSpace;
 
 /**
  * KoAbstractGradient is the base class of all gradient resources

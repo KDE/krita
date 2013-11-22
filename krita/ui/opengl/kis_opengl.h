@@ -34,7 +34,6 @@
 #include <GL/glew.h>
 #endif
 
-
 #include <QtGlobal>
 #ifdef Q_WS_MAC
 #include <OpenGL/glu.h>
@@ -79,6 +78,8 @@ public:
      * Clear any error codes waiting to be read from glGetError().
      */
     static void clearError();
+
+    static bool supportsGLSL13();
 
 private:
     KisOpenGL();

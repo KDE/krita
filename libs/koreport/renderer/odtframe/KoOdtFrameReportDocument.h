@@ -24,9 +24,7 @@
 
 #include "reportpageoptions.h"
 
-#include <KoDocument.h>
-#include <KoStore.h>
-
+#include <QFile>
 #include <QMap>
 #include <QList>
 
@@ -35,6 +33,7 @@ class KoXmlWriter;
 class KoStoreDevice;
 class KoOdtFrameReportPrimitive;
 class KoStore;
+class KoGenStyles;
 
 class OROSection;
 

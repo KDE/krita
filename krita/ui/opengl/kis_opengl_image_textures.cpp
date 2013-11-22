@@ -21,6 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
@@ -46,6 +47,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_checkerTexture(0)
+    , m_allChannelsSelected(true)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
@@ -145,6 +147,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_storedImageBounds = m_image->bounds();
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
+
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
@@ -186,7 +189,6 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     QRect updateRect = rect & m_image->bounds();
     if (updateRect.isEmpty()) return info;
 
-
     /**
      * Why the rect is artificial? That's easy!
      * It does not represent any real piece of the image. It is
@@ -197,6 +199,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
      */
 
     QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
+    artificialRect &= m_image->bounds();
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
@@ -270,6 +273,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
         tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        KIS_ASSERT_RECOVER_RETURN(tile);
+
         tile->update(tileInfo);
         tileInfo.destroy();
 
@@ -340,8 +345,9 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
-    // TODO: make configurable
-    const GLint preferredTextureSize = 1024;
+    KisConfig cfg;
+
+    const GLint preferredTextureSize = cfg.openGLTextureSize();
 
     GLint maxTextureSize;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
@@ -349,7 +355,7 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);
 
-    texturesInfo->border = 1;
+    texturesInfo->border = cfg.textureOverlapBorder();
 
     texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;

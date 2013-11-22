@@ -190,11 +190,18 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
+#if QT_VERSION >= 0x040700
+    : QDeclarativeView(parent)
+#else
     : QAbstractScrollArea(parent)
+#endif
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
-    setFrameShape(NoFrame);
+    // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // And then our own Viewport
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
 
@@ -361,7 +368,7 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
         return;
 
     setPreferredCenterFractionY((verticalScrollBar()->value()
-                                 + viewport()->height() / 2.0) / documentSize().height());
+                                 + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)

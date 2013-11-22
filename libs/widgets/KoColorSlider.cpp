@@ -20,7 +20,9 @@
 #include "KoColorSlider.h"
 #include "KoColorSpace.h"
 
-#include <QColor>
+#include <KoColor.h>
+#include <KoMixColorsOp.h>
+
 #include <QPainter>
 #include <QTimer>
 

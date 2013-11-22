@@ -49,7 +49,7 @@
 #include <QPainter>
 #include <QTextLayout>
 #include <QMenu>
-#include <QScrollArea>
+#include <QScrollBar>
 
 class KoModeBox::Private
 {
@@ -234,6 +234,14 @@ void KoModeBox::locationChanged(Qt::DockWidgetArea area)
 void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
     if (canvas->canvas() == d->canvas) {
+        // Clear the minimumSize instigated by the previous tool
+        // The new minimumSize will be set in updateShownTools()
+        if (d->addedWidgets.contains(d->activeId)) {
+            ScrollArea *sa = qobject_cast<ScrollArea *>(d->addedWidgets[d->activeId]->parentWidget()->parentWidget());
+            sa->setMinimumWidth(0);
+            sa->setMinimumHeight(0);
+        }
+
         d->activeId = id;
         d->tabBar->blockSignals(true);
         int i = 0;
@@ -306,6 +314,7 @@ QIcon KoModeBox::createTextIcon(const KoToolButton button)
     }
 
     p.setFont(smallFont);
+    p.setPen(palette().text().color());
     textLayout.draw(&p, QPoint(0, 22));
     p.end();
 
@@ -363,7 +372,7 @@ void KoModeBox::addItem(const KoToolButton button)
         d->tabBar->setTabToolTip(index, button.button->toolTip());
     }
     d->tabBar->blockSignals(false);
-    QScrollArea *sa = new QScrollArea();
+    ScrollArea *sa = new ScrollArea();
     if (d->horizontalMode) {
         sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         sa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -412,7 +421,6 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
             && !button.section.contains("main")) {
             continue;
         }
-
         if (code.startsWith(QLatin1String("flake/"))) {
             addItem(button);
             continue;
@@ -525,6 +533,16 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
         if (specialCount == optionWidgetList.count()) {
             layout->setRowStretch(cnt, 100);
         }
+    }
+}
+
+void ScrollArea::showEvent(QShowEvent *e)
+{
+    QScrollArea::showEvent(e);
+    if (horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
+        setMinimumWidth(widget()->minimumSizeHint().width() + (verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0));
+    } else {
+        setMinimumHeight(widget()->minimumSizeHint().height() + (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->height() : 0));
     }
 }
 

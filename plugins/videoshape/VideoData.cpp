@@ -198,7 +198,7 @@ QUrl VideoData::playableUrl() const
     }
 }
 
-QString VideoData::tagForSaving(QUrl storeUrl, int &counter)
+QString VideoData::tagForSaving(int &counter)
 {
     if (!d->saveName.isEmpty())
         return d->saveName;

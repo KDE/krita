@@ -21,7 +21,6 @@
 #include <klocale.h>
 #include <kis_painter.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureSizeOption::KisPressureSizeOption()
         : KisCurveOption(i18n("Size"), "Size", KisPaintOpOption::brushCategory(), true )

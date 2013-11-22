@@ -29,7 +29,6 @@
 #include <klocale.h>
 
 #include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"

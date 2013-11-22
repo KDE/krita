@@ -18,6 +18,7 @@
  */
 
 #include "KoReportDesignerItemLine.h"
+
 #include "KoReportDesignerItemBase.h"
 #include "KoReportDesigner.h"
 
@@ -29,7 +30,6 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include <koproperty/EditorView.h>
-#include <KoGlobal.h>
 #include "reportscene.h"
 #include "krutils.h"
 

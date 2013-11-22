@@ -1,4 +1,5 @@
 install(FILES  
+    icon-kritasketch-256.png
     AboutKrita.png
     newlayer.png  	
     visible.png  	

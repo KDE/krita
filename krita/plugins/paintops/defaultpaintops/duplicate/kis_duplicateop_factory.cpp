@@ -23,7 +23,7 @@
 #include "kis_duplicateop_factory.h"
 
 #include <KoInputDevice.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>

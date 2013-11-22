@@ -41,7 +41,7 @@ public:
 
     /*! Not db-aware ctor. if \a owner is true, the field \a will be owned by this column,
      so you shouldn't care about destroying this field. */
-    TableViewColumn(Field& f, bool owner = false);
+    explicit TableViewColumn(Field& f, bool owner = false);
 
     /*! Not db-aware, convenience ctor, like above. The field is created using specified parameters that are
      equal to these accepted by KexiDB::Field ctor. The column will be the owner

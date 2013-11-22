@@ -172,7 +172,9 @@ public:
 
     void notifySelectionChanged();
 
-    KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
+    /// XXX: This method was marked KDE_DEPRECATED but without information on what to
+    /// replace it with. Undeprecate, therefore.
+    quint8 selected(qint32 x, qint32 y) const;
 
 private:
     friend class KisSelectionTest;

@@ -40,7 +40,6 @@
 
 class KoDocument;
 class KoColorSpace;
-class KoCompositeOp;
 class KoColor;
 
 class KisCompositeProgressProxy;
@@ -398,7 +397,7 @@ public:
      * Return the projection; that is, the complete, composited
      * representation of this image.
      */
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     /**
      * Return the number of layers (not other nodes) that are in this

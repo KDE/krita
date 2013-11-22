@@ -20,7 +20,6 @@
 #include <klocale.h>
 #include <kis_painter.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureMixOption::KisPressureMixOption()
         : KisCurveOption(i18n("Mix"), "Mix", KisPaintOpOption::colorCategory(), false)

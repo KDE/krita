@@ -19,7 +19,9 @@
 */
 
 #include "KoSimpleOdsDocument.h"
+
 #include <kdebug.h>
+#include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 #include "KoSimpleOdsSheet.h"

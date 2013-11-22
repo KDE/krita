@@ -64,7 +64,6 @@ public:
      */
     virtual ~KoApplication();
 
-    // ######### Bad name
     /**
      * Call this to start the application.
      *

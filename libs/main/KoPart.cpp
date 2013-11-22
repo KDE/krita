@@ -343,8 +343,6 @@ void KoPart::deleteOpenPane(bool closing)
             KoPart::mainWindows().first()->factory()->container("mainToolBar",
                                                                   mainWindows().first())->show();
         }
-    } else {
-        emit closeEmbedInitDialog();
     }
 }
 

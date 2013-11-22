@@ -711,8 +711,6 @@ void KisToolTransform::switchPoints(QPointF *p1, QPointF *p2)
 
 void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers)
 {
-    recalcOutline();
-
     if (!m_strokeId) {
         // do nothing
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {

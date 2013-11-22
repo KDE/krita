@@ -110,7 +110,6 @@ set(kritaimage_LIB_SRCS
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
-   kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp

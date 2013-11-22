@@ -42,7 +42,6 @@
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_background.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_count_visitor.h"
@@ -95,7 +94,6 @@
 class KisImage::KisImagePrivate
 {
 public:
-    KisBackgroundSP  backgroundPattern;
     quint32 lockCount;
     KisPerspectiveGrid* perspectiveGrid;
 
@@ -274,19 +272,6 @@ void KisImage::reselectGlobalSelection()
 {
     if(m_d->deselectedGlobalSelection) {
         setGlobalSelection(m_d->deselectedGlobalSelection);
-    }
-}
-
-KisBackgroundSP KisImage::backgroundPattern() const
-{
-    return m_d->backgroundPattern;
-}
-
-void KisImage::setBackgroundPattern(KisBackgroundSP background)
-{
-    if (background != m_d->backgroundPattern) {
-        m_d->backgroundPattern = background;
-        emit sigImageUpdated(bounds());
     }
 }
 
@@ -1092,9 +1077,6 @@ QImage KisImage::convertToQImage(qint32 x,
                                         KoColorConversionTransformation::InternalRenderingIntent,
                                         KoColorConversionTransformation::InternalConversionFlags);
 
-    if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
-    }
     if (!image.isNull()) {
 #ifdef WORDS_BIGENDIAN
         uchar * data = image.bits();
@@ -1174,10 +1156,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
                                                  KoColorConversionTransformation::InternalRenderingIntent,
                                                  KoColorConversionTransformation::InternalConversionFlags);
-
-    if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));
-    }
 
     delete [] scaledImageData;
 

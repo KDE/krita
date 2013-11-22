@@ -84,7 +84,7 @@ void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     if (tabletEvent) {
         QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
         this->tabletEvent(tabletEvent, docPoint);
-        forwardToTool(state, action, originalEvent, docPoint);
+        forwardToTool(state, action, tabletEvent, docPoint);
     } else if (touchEvent) {
         if (state == END && touchEvent->type() != QEvent::TouchEnd) {
             //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
@@ -97,7 +97,7 @@ void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         if (lastTabletEvent) {
             QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
             this->tabletEvent(lastTabletEvent, docPoint);
-            forwardToTool(state, action, originalEvent, docPoint);
+            forwardToTool(state, action, lastTabletEvent, docPoint);
         } else {
             QPointF docPoint = widgetToDocument(mouseEvent->posF());
             if (mouseEvent->type() == QEvent::MouseButtonPress) {

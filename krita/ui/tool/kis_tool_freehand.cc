@@ -165,6 +165,11 @@ void KisToolFreehand::endStroke()
     setCurrentNodeLocked(false);
 }
 
+bool KisToolFreehand::primaryActionSupportsHiResEvents() const
+{
+    return true;
+}
+
 void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 {
     // FIXME: workaround for the Duplicate Op

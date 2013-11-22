@@ -160,3 +160,9 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
         break;
     }
 }
+
+bool KisToolProxy::primaryActionSupportsHiResEvents() const
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    return activeTool && activeTool->primaryActionSupportsHiResEvents();
+}

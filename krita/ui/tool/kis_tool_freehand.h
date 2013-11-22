@@ -56,6 +56,8 @@ public:
 
 protected:
     bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
+
+    bool primaryActionSupportsHiResEvents() const;
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);

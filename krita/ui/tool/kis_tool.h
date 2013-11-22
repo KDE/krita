@@ -98,6 +98,7 @@ public:
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual void endPrimaryAction(KoPointerEvent *event);
     virtual void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+    virtual bool primaryActionSupportsHiResEvents() const;
 
     enum ToolAction {
         Primary,

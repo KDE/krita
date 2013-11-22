@@ -36,6 +36,7 @@ public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
 
     void forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+    bool primaryActionSupportsHiResEvents() const;
 
 private:
     KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);

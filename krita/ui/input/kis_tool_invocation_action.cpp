@@ -117,5 +117,5 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 
 bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
-    return true;
+    return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();
 }

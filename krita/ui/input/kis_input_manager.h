@@ -104,6 +104,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
+    void slotCompressedMoveEvent();
 
 private:
     class Private;

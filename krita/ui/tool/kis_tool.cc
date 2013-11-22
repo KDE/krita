@@ -450,6 +450,11 @@ void KisTool::endPrimaryAction(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
+bool KisTool::primaryActionSupportsHiResEvents() const
+{
+    return false;
+}
+
 void KisTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     Q_UNUSED(event);

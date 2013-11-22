@@ -31,7 +31,6 @@
 #include <QList>
 
 #define APP_MIMETYPE "application/x-krita-animation"
-#define KIS_MIME_TYPE "application/x-krita-animation"
 
 static const char CURRENT_DTD_VERSION[] = "1.0";
 

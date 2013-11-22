@@ -25,6 +25,8 @@
 #include "kis_animation_part.h"
 #include <./kranimstore/kis_animation_store.h>
 
+#define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
+
 class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 {
     Q_OBJECT

@@ -71,7 +71,7 @@
             <item>
              <widget class="QRadioButton" name="popupOnMouseClick">
               <property name="text">
-               <string notr="true">when pressing mid mousebutton</string>
+               <string>when pressing mid mousebutton</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -81,7 +81,7 @@
             <item>
              <widget class="QRadioButton" name="popupOnMouseOver">
               <property name="text">
-               <string>on mouse over.</string>
+               <string>on mouse over</string>
               </property>
              </widget>
             </item>

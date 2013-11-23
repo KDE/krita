@@ -24,22 +24,18 @@
 #include "KoDocumentRdf.h"
 #include "KoTextRdfCore.h"
 #include "KoRdfLocationTreeWidgetItem.h"
-
-#include <QTemporaryFile>
-#include <kdebug.h>
-#include <kfiledialog.h>
-
-// Don't use this until we become a plugin.
-#ifdef CAN_USE_MARBLE
-#undef CAN_USE_MARBLE
-#endif
-
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
 #include <marble/LatLonEdit.h>
 #include <marble/MarbleWidget.h>
 #include <marble/MarbleWidgetInputHandler.h>
 #endif
+// KDE
+#include <kdebug.h>
+#include <kfiledialog.h>
+// Qt
+#include <QTemporaryFile>
+
 
 using namespace Soprano;
 
@@ -84,7 +80,6 @@ void KoRdfLocation::showInViewer()
     viewWidget.map->centerOn(dlong(), dlat());
     ret->show();
 #endif
-    
 }
 
 void KoRdfLocation::exportToFile(const QString &fileNameConst) const

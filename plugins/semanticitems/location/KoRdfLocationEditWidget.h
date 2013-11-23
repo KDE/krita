@@ -48,9 +48,9 @@ public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
     ~KoRdfLocationEditWidget();
 
-//#ifdef CAN_USE_MARBLE
-//    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
-//#endif
+#ifdef CAN_USE_MARBLE
+   void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
+#endif
 
 public slots:
     void mouseMoveGeoPosition(const QString&);

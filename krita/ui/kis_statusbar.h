@@ -43,7 +43,6 @@ public:
 
 public slots:
 
-    void setZoom(int percentage);
     void documentMousePositionChanged(const QPointF &p);
     void imageSizeChanged();
     void setSelection(KisImageWSP image);

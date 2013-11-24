@@ -30,6 +30,7 @@
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
+#include "KoFileDialogHelper.h"
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
 #include "KoView.h"
@@ -65,7 +66,6 @@
 #include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
-#include <kfiledialog.h>
 
 #include <QtGlobal>
 #include <QBuffer>
@@ -2595,7 +2595,11 @@ bool KoDocument::queryClose()
         {
             if (d->m_url.isEmpty())
             {
-                KUrl url = KFileDialog::getSaveUrl(KUrl(), QString(), 0);
+                KoMainWindow *mainWindow = 0;
+                if (d->parentPart->mainWindows().count() > 0) {
+                    mainWindow = d->parentPart->mainWindows()[0];
+                }
+                KUrl url(KoFileDialogHelper::getSaveFileName(mainWindow));
                 if (url.isEmpty())
                     return false;
 

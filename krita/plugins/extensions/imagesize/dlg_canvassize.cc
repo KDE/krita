@@ -679,7 +679,7 @@ void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
         xOffset = (xDiff * xCoeff * 100.0) / m_newWidth;
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
-        const int resXDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? qRound(xDiff / m_resolution) : xDiff;
+        const double resXDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? xDiff / m_resolution : xDiff;
         xOffset = selectedUnit.toUserValue(resXDiff * xCoeff);
     }
 
@@ -687,7 +687,7 @@ void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
         yOffset = (yDiff * yCoeff * 100.0) / m_newHeight;
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
-        const int resYDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? qRound(yDiff / m_resolution) : yDiff;
+        const double resYDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? yDiff / m_resolution : yDiff;
         yOffset = selectedUnit.toUserValue(resYDiff * yCoeff);
     }
 }

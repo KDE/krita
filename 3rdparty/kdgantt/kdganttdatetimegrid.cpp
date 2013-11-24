@@ -25,6 +25,9 @@
 
 #include "kdganttabstractrowcontroller.h"
 
+#include <kcalendarsystem.h>
+#include <kdeversion.h>
+
 #include <QApplication>
 #include <QDateTime>
 #include <QPainter>
@@ -700,6 +703,8 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
 void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& headerRect, const QRectF& exposedRect,
                                 qreal offset, QWidget* widget )
 {
+    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+
     // For starters, support only the regular tab-per-day look
     QStyle* style = widget?widget->style():QApplication::style();
 
@@ -732,7 +737,11 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
         QStyleOptionHeader opt;
         opt.init( widget );
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*7., headerRect.height()/2. ).toRect();
-        opt.text = QString::number( dt.date().weekNumber() );
+#if KDE_IS_VERSION(4,7,0)
+        opt.text = QString::number( calendar->week(dt.date()) );
+#else
+        opt.text = QString::number( calendar->weekNumber(dt.date()) );
+#endif
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
         style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing
@@ -750,6 +759,8 @@ void DateTimeGrid::paintDayScaleHeader( QPainter* painter,  const QRectF& header
 void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& headerRect, const QRectF& exposedRect,
                                         qreal offset, QWidget* widget )
 {
+    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+
     QStyle* style = widget?widget->style():QApplication::style();
 
     // Paint a section for each week
@@ -763,7 +774,11 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         QStyleOptionHeader opt;
         opt.init( widget );
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()*7, headerRect.height()/2. ).toRect();
-        opt.text = QString::number( dt.date().weekNumber() );
+#if KDE_IS_VERSION(4,7,0)
+        opt.text = QString::number( calendar->week(dt.date()) );
+#else
+        opt.text = QString::number( calendar->weekNumber(dt.date()) );
+#endif
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
         style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing

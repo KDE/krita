@@ -2,6 +2,7 @@
  *  dlg_feather_selection.h -- part of Krita
  *
  *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,14 +24,26 @@
 #include "ui_wdg_feather_selection.h"
 #include <operations/kis_operation_ui_widget.h>
 
+class KisView2;
 class WdgFeatherSelection : public KisOperationUIWidget, public Ui::WdgFeatherSelection
 {
     Q_OBJECT
 
 public:
-    WdgFeatherSelection(QWidget *parent);
+    WdgFeatherSelection(QWidget *parent, KisView2 *view);
 
     virtual void getConfiguration(KisOperationConfiguration* config);
+
+private slots:
+    void slotRadiusChanged(int radius);
+    void slotRadiusChanged(double radius);
+    void slotUnitChanged(int index);
+
+private:
+    void updateRadiusUIValue(double value);
+
+    double m_resolution;
+    int m_radius;
 };
 
 #endif // DLG_GROW_SELECTION_H

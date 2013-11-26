@@ -76,6 +76,16 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
 
     m_rotationOption.applyFanCornersInfo(this);
+
+    /**
+     * Disable handling of the subpixel precision. In the smudge op we
+     * should read from the aligned areas of the image, so having
+     * additional internal offsets, created by the subpixel precision,
+     * will worsen the quality (at least because
+     * QRectF(m_dstDabRect).center() will not point to the real center
+     * of the brush anymore).
+     */
+    m_dabCache->disableSubpixelPrecision();
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -148,8 +158,14 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - scatteredPos).toPoint());
 
-    // Save the hot spot point for the next iteration
-    m_lastPaintPos = scatteredPos;
+    /**
+     * Save the center of the current dab to know where to read the
+     * data during the next pass. We do not save scatteredPos here,
+     * because it may slightly differ from the real center of the
+     * brush (due to some rounding effects), which will result in
+     * really weird quality.
+     */
+    m_lastPaintPos = QRectF(m_dstDabRect).center();
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(m_dstDabRect.width(), m_dstDabRect.height(),

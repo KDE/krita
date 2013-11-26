@@ -888,9 +888,13 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
-    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms|Xinput devel not found ")
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+
+if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
+    calligra_disable_product(KRITA_APP "Xinput devel not found ")
+endif(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     calligra_disable_product(ACTIVE "Qt version <= 4.7.0")

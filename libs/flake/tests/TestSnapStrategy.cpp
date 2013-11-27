@@ -160,8 +160,6 @@ void TestSnapStrategy::testExtensionSnap()
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
 
-    typedef QPair<int, int> KoPathPointIndexLocal;
-
     QPointF firstPoint(0,2);
     QPointF secondPoint(1,2);
     QPointF thirdPoint(2,3);
@@ -439,8 +437,6 @@ void TestSnapStrategy::testExtensionDecoration()
     qreal paramSnapDistanceTwo = 4;
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
-
-    typedef QPair<int, int> KoPathPointIndexLocal;
 
     QPointF firstPoint(0,2);
     QPointF secondPoint(1,2);

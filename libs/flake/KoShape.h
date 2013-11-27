@@ -36,6 +36,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
+#include <KoShapeBackground.h>
 
 //#include <KoSnapData.h>
 
@@ -47,7 +48,6 @@ class QPainterPath;
 
 class KoShapeContainer;
 class KoShapeStrokeModel;
-class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;

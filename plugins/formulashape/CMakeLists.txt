@@ -1,3 +1,11 @@
+# To hide all the warnings from the generated itex2MML code
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-label)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-function)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
                      ${QT_INCLUDES}

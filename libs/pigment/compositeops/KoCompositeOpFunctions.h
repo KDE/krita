@@ -152,7 +152,7 @@ inline T cfExclusion(T src, T dst) {
 template<class T>
 inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     if(src == zeroValue<T>())
         return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();

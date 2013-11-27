@@ -414,6 +414,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
+    if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
+        cbUseOpenGL->setVisible(false);
+        cbUseOpenGL->setMaximumHeight(0);
+    }
 #else
     grpOpenGL->setEnabled(false);
 #endif

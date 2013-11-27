@@ -1,5 +1,6 @@
 # To hide all the warnings from the generated itex2MML code
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-error)
     add_definitions(-Wno-unused-label)
     add_definitions(-Wno-sign-compare)
     add_definitions(-Wno-unused-function)

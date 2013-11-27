@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Solid Pattern Layer
 Name[ca]=Capa de patrons sòlids
+Name[ca@valencia]=Capa de patrons sòlids
 Name[de]=Ebene mit einfarbigen Mustern
 Name[es]=Capa de patrón sólido
 Name[hu]=Egyszínű minta réteg
@@ -17,6 +18,7 @@ Name[uk]=Шар суцільного візерунка
 Name[x-test]=xxSolid Pattern Layerxx
 Comment=generates a pattern layer
 Comment[ca]=Genera una capa de patrons
+Comment[ca@valencia]=Genera una capa de patrons
 Comment[de]=Erstellt eine Ebene mit Mustern
 Comment[es]=genera una capa de patrón
 Comment[hu]=egy minta réteget állít elő

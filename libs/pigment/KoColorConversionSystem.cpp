@@ -387,6 +387,8 @@ bool KoColorConversionSystem::existsPath(const QString& srcModelId, const QStrin
     const Node* srcNode = nodeFor(srcModelId, srcDepthId, srcProfileName);
     const Node* dstNode = nodeFor(dstModelId, dstDepthId, dstProfileName);
     if (srcNode == dstNode) return true;
+    if (!srcNode) return false;
+    if (!dstNode) return false;
     Path* path = findBestPath(srcNode, dstNode);
     bool exist = path;
     delete path;
@@ -398,6 +400,8 @@ bool KoColorConversionSystem::existsGoodPath(const QString& srcModelId, const QS
     const Node* srcNode = nodeFor(srcModelId, srcDepthId, srcProfileName);
     const Node* dstNode = nodeFor(dstModelId, dstDepthId, dstProfileName);
     if (srcNode == dstNode) return true;
+    if (!srcNode) return false;
+    if (!dstNode) return false;
     Path* path = findBestPath(srcNode, dstNode);
     bool existAndGood = path && path->isGood;
     delete path;

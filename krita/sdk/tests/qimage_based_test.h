@@ -59,6 +59,7 @@ public:
     // See KisProcessingTest for example
 
 protected:
+
     /**
      * Creates a complex image connected to a surrogate undo store
      */
@@ -208,15 +209,7 @@ protected:
     }
 
     KisNodeSP findNode(KisNodeSP root, const QString &name) {
-        if(root->name() == name) return root;
-
-        KisNodeSP child = root->firstChild();
-        while (child) {
-            if(root = findNode(child, name)) return root;
-            child = child->nextSibling();
-        }
-
-        return 0;
+        return TestUtil::findNode(root, name);
     }
 
 private:

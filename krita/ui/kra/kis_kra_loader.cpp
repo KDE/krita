@@ -640,7 +640,7 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageWSP 
 {
     Q_UNUSED(cs);
 
-    KisCloneLayer* layer = new KisCloneLayer(0, image, name, opacity);
+    KisCloneLayerSP layer = new KisCloneLayer(0, image, name, opacity);
 
     KisCloneInfo info;
     if (! (element.attribute(CLONE_FROM_UUID)).isNull()) {

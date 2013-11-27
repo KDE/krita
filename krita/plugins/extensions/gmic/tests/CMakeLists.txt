@@ -24,5 +24,5 @@ target_link_libraries(KisGmicTests gmic kritaimage ${QT_QTTEST_LIBRARY} ${QT_QTX
 
 
 set(kis_gmic_benchmarks_SRCS kis_gmic_benchmarks.cpp ${kritagmic_parser_PART_SRCS})
-kde4_add_unit_test(KisGmicBenchmark TESTNAME krita-plugins-extensions-gmic-GmicBenchmarks ${kis_gmic_benchmarks_SRCS})
+calligra_add_benchmark(KisGmicBenchmark TESTNAME krita-plugins-extensions-gmic-GmicBenchmarks ${kis_gmic_benchmarks_SRCS})
 target_link_libraries(KisGmicBenchmark gmic kritaimage ${QT_QTTEST_LIBRARY} ${QT_QTXML_LIBRARY})

@@ -28,7 +28,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
-#include <KoImageResource.h>
 #include <KoProperties.h>
 
 #include <kis_debug.h>

@@ -297,6 +297,8 @@ void KisTiledDataManager::purge(const QRect& area)
     foreach(KisTileSP tile, tilesToDelete) {
         m_hashTable->deleteTile(tile);
     }
+
+    recalculateExtent();
 }
 
 quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)

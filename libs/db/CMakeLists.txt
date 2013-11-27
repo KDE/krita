@@ -1,5 +1,13 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 
+# To hide all the warnings from embedded 3rd party software like icu
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-local-typedefs)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-function)
+    add_definitions(-Wno-unused-parameter)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
 option(CALLIGRADB_DEBUG_GUI "Debugging GUI for CalligraDB" OFF)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-calligradb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-calligradb.h )

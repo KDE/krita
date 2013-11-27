@@ -51,6 +51,10 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
 
+if(FFTW3_FOUND)
+  include_directories(${FFTW3_INCLUDE_DIRS})
+endif(FFTW3_FOUND)
+
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
   ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)

@@ -80,6 +80,7 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
+    app.setApplicationName("kritagemini");
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

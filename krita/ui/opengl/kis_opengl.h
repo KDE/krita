@@ -59,12 +59,6 @@ public:
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
-    /**
-     * Make the shared OpenGL context the current context. You should
-     * make the context current before creating textures, display lists,
-     * shader objects, etc, that are to be shared by multiple QGLWidgets.
-     */
-    static void makeContextCurrent();
 
     /**
      * Print any error messages waiting to be read from glGetError(). Use

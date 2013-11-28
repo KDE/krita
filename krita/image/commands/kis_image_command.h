@@ -59,8 +59,8 @@ protected:
     private:
         KisImageWSP m_image;
         QRect m_updateRect;
-        bool m_needsFullRefresh;
-        KisNodeSP m_node;
+        int m_removedNodeIndex;
+        KisNodeSP m_removedNodeParent;
     };
 
 protected:

@@ -52,6 +52,7 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *event);
     virtual bool event(QEvent* event);
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 private:

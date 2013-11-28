@@ -190,11 +190,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
-#if QT_VERSION >= 0x040700
-    : QDeclarativeView(parent)
-#else
     : QAbstractScrollArea(parent)
-#endif
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {

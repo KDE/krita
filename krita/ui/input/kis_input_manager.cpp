@@ -618,6 +618,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
         d->canvas->canvasWidget()->setFocus();
+        stop_ignore_cursor_events();
         break;
     case QEvent::Leave:
         /**

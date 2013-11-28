@@ -23,6 +23,8 @@ import org.krita.sketch 1.0
 Item {
     id: base;
 
+    property real panelHeight;
+
     function collapse() {
         if (d.peeking) {
             d.peeking.state = "collapsed";
@@ -35,7 +37,7 @@ Item {
         id: presetsPanel;
         objectName: "presets";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( presetsPanel );
         onCollapsed: endPeek( presetsPanel );
@@ -47,7 +49,7 @@ Item {
         id: layersPanel;
         objectName: "layers";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( layersPanel );
         onCollapsed: endPeek( layersPanel );
@@ -59,7 +61,7 @@ Item {
         id: filterPanel;
         objectName: "filter";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( filterPanel );
         onCollapsed: endPeek( filterPanel );
@@ -71,7 +73,7 @@ Item {
         id: selectPanel;
         objectName: "select";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( selectPanel );
         onCollapsed: endPeek( selectPanel );
@@ -83,7 +85,7 @@ Item {
         id: toolPanel;
         objectName: "tool";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( toolPanel );
         onCollapsed: endPeek( toolPanel );
@@ -95,7 +97,7 @@ Item {
         id: colorPanel;
         objectName: "color";
         width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
-        height: base.height;
+        height: base.panelHeight;
         page: base.parent;
         onPeek: beginPeek( colorPanel );
         onCollapsed: endPeek( colorPanel );
@@ -114,8 +116,9 @@ Item {
         objectName: "leftFull";
 
         anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
+//         anchors.bottom: parent.bottom;
         anchors.left: parent.left;
+        height: base.panelHeight;
 
         onHeightChanged: if (children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
@@ -128,8 +131,9 @@ Item {
         objectName: "rightFull";
 
         anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
+//         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
+        height: base.panelHeight;
 
         onHeightChanged: if (children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
@@ -386,31 +390,16 @@ Item {
         }
     }
 
-    onHeightChanged: {
-        if (height > width) {
-            state = "portrait";
-        }
-        else {
-            state = "";
-        }
-    }
-    onWidthChanged: {
-        if (height > width) {
-            state = "portrait";
-        }
-        else {
-            state = "";
-        }
-    }
-
     states: [
         State {
             name: "portrait";
+            when: base.panelHeight > base.width;
             PropertyChanges { target: centerTopArea1; x: Constants.GridWidth * 4 + 4; }
             PropertyChanges { target: leftArea; width: Constants.GridWidth * 4; }
             PropertyChanges { target: rightArea; width: Constants.GridWidth * 4; }
-            AnchorChanges { target: leftArea; anchors.bottom: parent.verticalCenter; }
-            AnchorChanges { target: rightArea; anchors.right: undefined; anchors.left: parent.left; anchors.top: parent.verticalCenter; }
+            PropertyChanges { target: leftArea; height: base.panelHeight / 2; }
+            AnchorChanges { target: rightArea; anchors.right: undefined; anchors.left: parent.left; anchors.top: leftArea.bottom; }
+            PropertyChanges { target: rightArea; height: base.panelHeight / 2; }
         }
     ]
 }

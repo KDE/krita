@@ -23,6 +23,8 @@ Item {
     id: base;
     property bool collapsed: true;
 
+    enabled: !collapsed;
+
     Rectangle {
         id: panel;
         width: parent.width;

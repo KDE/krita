@@ -771,7 +771,7 @@ void KisInputManager::setMirrorAxis()
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID" || toolId == "KisToolTransform") {
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {

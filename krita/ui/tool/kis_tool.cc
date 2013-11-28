@@ -503,9 +503,10 @@ void KisTool::deleteSelection()
 {
     KisSelectionSP selection = currentSelection();
     KisNodeSP node = currentNode();
-    KisPaintDeviceSP device;
 
-    if(node && (device = node->paintDevice())) {
+    if(node && node->hasEditablePaintDevice()) {
+        KisPaintDeviceSP device = node->paintDevice();
+
         image()->barrierLock();
         KisTransaction transaction(i18n("Clear"), device);
 

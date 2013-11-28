@@ -201,116 +201,87 @@ void KisToolPaint::setMode(ToolMode mode)
     KisTool::setMode(mode);
 }
 
+
+void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (pickColor(event->point, action)) {
+        setMode(SECONDARY_PAINT_MODE);
+        requestUpdateOutline(event->point);
+        useCursor(KisCursor::pickerCursor());
+    } else {
+        KisTool::beginAlternateAction(event, action);
+    }
+
+}
+
+void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (!pickColor(event->point, action)) {
+        KisTool::continueAlternateAction(event, action);
+    }
+}
+
+void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (pickColor(event->point, action)) {
+        setMode(KisTool::HOVER_MODE);
+        resetCursorStyle();
+        requestUpdateOutline(event->point);
+    } else {
+        KisTool::endAlternateAction(event, action);
+    }
+}
+
+bool KisToolPaint::pickColor(const QPointF &documentPixel,
+                             AlternateAction action)
+{
+    if (action != PickFgNode &&
+        action != PickBgNode &&
+        action != PickFgImage &&
+        action != PickBgImage) {
+
+        return false;
+    }
+
+    bool toForegroundColor = action == PickFgNode || action == PickFgImage;
+    bool fromCurrentNode = action == PickFgNode || action == PickBgNode;
+
+    int resource = toForegroundColor ?
+        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+
+    KisPaintDeviceSP device = fromCurrentNode ?
+        currentNode()->paintDevice() : image()->projection();
+
+    QPoint imagePoint = image()->documentToIntPixel(documentPixel);
+
+    canvas()->resourceManager()->
+        setResource(resource, KisToolUtils::pick(device, imagePoint));
+
+    return true;
+}
+
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
-    if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
-            event->modifiers() & Qt::ControlModifier &&
-            !specialModifierActive()) {
-
-        setMode(SECONDARY_PAINT_MODE);
-        useCursor(KisCursor::pickerCursor());
-
-        m_toForegroundColor = event->button() == Qt::LeftButton;
-        pickColor(event->point, event->modifiers() & Qt::AltModifier,
-                  m_toForegroundColor);
-        event->accept();
-    }
-    else {
-        KisTool::mousePressEvent(event);
-        if (mode() == KisTool::HOVER_MODE) {
-            requestUpdateOutline(event->point);
-        }
+    KisTool::mousePressEvent(event);
+    if (mode() == KisTool::HOVER_MODE) {
+        requestUpdateOutline(event->point);
     }
 }
 
 void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
-        pickColor(event->point, event->modifiers() & Qt::AltModifier,
-                  m_toForegroundColor);
-        event->accept();
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-        if (mode() == KisTool::HOVER_MODE) {
-            requestUpdateOutline(event->point);
-        }
+    KisTool::mouseMoveEvent(event);
+    if (mode() == KisTool::HOVER_MODE) {
+        requestUpdateOutline(event->point);
     }
 }
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
-        setMode(KisTool::HOVER_MODE);
-        resetCursorStyle();
-        event->accept();
-    } else {
-        KisTool::mouseReleaseEvent(event);
-        if (mode() == KisTool::HOVER_MODE) {
-            requestUpdateOutline(event->point);
-        }
+    KisTool::mouseReleaseEvent(event);
+    if (mode() == KisTool::HOVER_MODE) {
+        requestUpdateOutline(event->point);
     }
-}
-
-void KisToolPaint::keyPressEvent(QKeyEvent *event)
-{
-    if (mode() == KisTool::HOVER_MODE &&
-               event->key() == Qt::Key_Control) {
-        useCursor(KisCursor::pickerCursor());
-        m_specialHoverModifier = true;
-        event->accept();
-    } else if (mode() == KisTool::SECONDARY_PAINT_MODE) {
-        event->accept();
-    } else {
-        KisTool::keyPressEvent(event);
-    }
-}
-
-void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
-{
-    bool pickerCondition =
-        event->key() == Qt::Key_Control;
-
-    if(pickerCondition) {
-        m_specialHoverModifier = false;
-        if(mode() != KisTool::SECONDARY_PAINT_MODE) {
-            resetCursorStyle();
-            event->accept();
-        }
-    } else if (mode() == KisTool::SECONDARY_PAINT_MODE) {
-        event->accept();
-    } else {
-        KisTool::keyReleaseEvent(event);
-    }
-}
-
-bool KisToolPaint::specialHoverModeActive() const
-{
-    return mode() == KisTool::HOVER_MODE && m_specialHoverModifier;
-}
-
-void KisToolPaint::pickColor(const QPointF &documentPixel,
-                             bool fromCurrentNode,
-                             bool toForegroundColor)
-{
-    if(m_colorPickerDelayTimer.isActive()) {
-        return;
-    }
-    else {
-        m_colorPickerDelayTimer.setSingleShot(true);
-        m_colorPickerDelayTimer.start(100);
-    }
-
-    int resource = toForegroundColor ?
-                KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
-
-    KisPaintDeviceSP device = fromCurrentNode ?
-                currentNode()->paintDevice() : image()->projection();
-
-    QPoint imagePoint = image()->documentToIntPixel(documentPixel);
-
-    canvas()->resourceManager()->
-            setResource(resource, KisToolUtils::pick(device, imagePoint));
 }
 
 QWidget * KisToolPaint::createOptionWidget()
@@ -465,7 +436,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 
     if (mode() == KisTool::GESTURE_MODE ||
         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
-         ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
+         ((mode() == HOVER_MODE) ||
           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
 
         outlineMode = KisPaintOpSettings::CursorIsOutline;

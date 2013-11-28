@@ -92,6 +92,15 @@ public:
     void addAction(KisAbstractInputAction *action);
 
     /**
+     * Returns true if the currently running shortcut supports
+     * processing hi resolution flow of events from the tablet
+     * device. In most of the cases (except of the painting itself)
+     * too many events make the execution of the action too slow, so
+     * the action can decide whether it needs it.
+     */
+    bool supportsHiResInputEvents();
+
+    /**
      * Handles a key press event.
      * No autorepeat events should be passed to this method.
      *
@@ -161,17 +170,6 @@ public:
     bool touchBeginEvent(QTouchEvent *event);
     bool touchUpdateEvent(QTouchEvent *event);
     bool touchEndEvent(QTouchEvent *event);
-
-    /**
-     * Handles the High Resolution tablet events
-     * (used on Windows only)
-     *
-     * \param event the event that caused this call
-     *
-     * \return whether the event has been handled successfully and
-     * should be eaten by the events filter
-     */
-    bool tabletMoved(QTabletEvent *event);
 
     /**
      * Resets the internal state of the matcher

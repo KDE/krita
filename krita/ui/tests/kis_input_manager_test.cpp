@@ -353,28 +353,6 @@ void KisInputManagerTest::testMouseMoves()
     QCOMPARE(a->m_gotInput, true);
     a->reset();
 
-    // Check High Resolution events for usual action
-    QTabletEvent tabletEvent(QEvent::TabletMove, QPoint(), QPoint(), QPointF(),
-                             0, 0, 0.0, 0, 0, 0.0, 0.0, 0, Qt::NoModifier, 0);
-    QVERIFY(!m.tabletMoved(&tabletEvent));
-    QCOMPARE(a->m_gotInput, false);
-    a->reset();
-
-    // Check usual events for High Resolution actions
-    a->setHighResInputEvents(true);
-    QVERIFY(m.mouseMoved(&mouseEvent));
-    QCOMPARE(a->m_gotInput, true);
-    a->reset();
-    a->setHighResInputEvents(false);
-
-    // Check High Resolution for High Resolution actions
-    a->setHighResInputEvents(true);
-    QVERIFY(m.tabletMoved(&tabletEvent));
-    QCOMPARE(a->m_gotInput, true);
-    a->reset();
-    a->setHighResInputEvents(false);
-
-
     // Release Ctrl
     QVERIFY(!m.keyReleased(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);

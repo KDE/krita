@@ -75,7 +75,6 @@ struct KisTool::Private {
           currentGradient(0),
           currentGenerator(0),
           optionWidget(0),
-          spacePressed(0),
           cursorShader(0),
           useGLToolOutlineWorkaround(false)
     {
@@ -93,15 +92,6 @@ struct KisTool::Private {
     KisFilterConfiguration * currentGenerator;
     QWidget* optionWidget;
 
-    bool spacePressed;
-    QPointF lastDocumentPoint;
-    QPointF initialGestureDocPoint;
-    QPoint initialGestureGlobalPoint;
-
-    QTimer delayedGestureTimer;
-    QPointF delayedGestureOffset;
-    QPointF delayedGesturePoint;
-
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
 
     bool useGLToolOutlineWorkaround;
@@ -114,10 +104,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 {
     d->cursor = cursor;
     m_outlinePaintMode = XOR_MODE;
-
-    d->delayedGestureTimer.setSingleShot(true);
-    d->delayedGestureTimer.setInterval(40); // 25fps
-    connect(&d->delayedGestureTimer, SIGNAL(timeout()), SLOT(slotDelayedGesture()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
@@ -431,15 +417,6 @@ KisFilterConfiguration * KisTool::currentGenerator()
     return d->currentGenerator;
 }
 
-bool KisTool::specialModifierActive()
-{
-    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    bool popupPalletActive = canvas2->handlePopupPaletteIsVisible();
-
-    KisConfig cfg;
-    return popupPalletActive || (d->spacePressed && !cfg.clicklessSpacePan());
-}
-
 void KisTool::setMode(ToolMode mode) {
     m_mode = mode;
 }
@@ -448,130 +425,88 @@ KisTool::ToolMode KisTool::mode() const {
     return m_mode;
 }
 
-void KisTool::mousePressEvent(KoPointerEvent *event)
-{
-    KisConfig cfg;
-
-    if (isGestureSupported() &&
-            mode() == KisTool::HOVER_MODE &&
-            (event->button() == Qt::LeftButton &&
-             event->modifiers() == Qt::ShiftModifier)) {
-
-        initGesture(event->point);
-        event->accept();
-    }
-
-
-    d->lastDocumentPoint = event->point;
+KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
+    KIS_ASSERT_RECOVER_RETURN_VALUE(action != Primary, Secondary);
+    return (AlternateAction)action;
 }
 
-void KisTool::mouseMoveEvent(KoPointerEvent *event)
+void KisTool::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (mode() == GESTURE_MODE) {
-        processGesture(event->point);
-        event->accept();
-    }
-
-    d->lastDocumentPoint = event->point;
+    Q_UNUSED(event);
 }
 
-void KisTool::mouseReleaseEvent(KoPointerEvent *event)
+void KisTool::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
-    KisConfig cfg;
-
-    if (mode() == GESTURE_MODE) {
-        if (event->button() == Qt::LeftButton) {
-            endGesture();
-            event->accept();
-        }
-    }
-
-    d->lastDocumentPoint = event->point;
+    beginPrimaryAction(event);
 }
 
-void KisTool::keyPressEvent(QKeyEvent *event)
+void KisTool::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (mode() == GESTURE_MODE) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
+    Q_UNUSED(event);
 }
 
-void KisTool::keyReleaseEvent(QKeyEvent* event)
+void KisTool::endPrimaryAction(KoPointerEvent *event)
 {
-    if (mode() == GESTURE_MODE) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
+    Q_UNUSED(event);
 }
 
-void KisTool::initGesture(const QPointF &docPoint)
-{
-    setMode(GESTURE_MODE);
-    d->initialGestureDocPoint = docPoint;
-    d->initialGestureGlobalPoint = QCursor::pos();
-    useCursor(KisCursor::blankCursor());
-}
-
-void KisTool::processGesture(const QPointF &docPoint)
-{
-    QPointF lastWidgetPosition = convertDocumentToWidget(d->lastDocumentPoint);
-    QPointF actualWidgetPosition = convertDocumentToWidget(docPoint);
-
-    QPointF offset = actualWidgetPosition - lastWidgetPosition;
-
-    /**
-     * view pixels != widget pixels, but we do this anyway, we only
-     * need to scale the gesture down, not rotate or anything
-     */
-    QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
-
-    d->delayedGestureOffset += scaledOffset;
-    d->delayedGesturePoint = d->initialGestureDocPoint;
-    if (!d->delayedGestureTimer.isActive()) {
-        d->delayedGestureTimer.start();
-    }
-}
-
-void KisTool::endGesture()
-{
-    // d->delayedGestureOffset += QPointF();
-    d->delayedGesturePoint = d->initialGestureDocPoint;
-    if (!d->delayedGestureTimer.isActive()) {
-        d->delayedGestureTimer.start();
-    }
-
-    setMode(HOVER_MODE);
-    resetCursorStyle();
-    QCursor::setPos(d->initialGestureGlobalPoint);
-}
-
-void KisTool::slotDelayedGesture()
-{
-    gesture(d->delayedGestureOffset, d->delayedGesturePoint);
-    d->delayedGestureOffset = QPointF();
-}
-
-bool KisTool::isGestureSupported() const
+bool KisTool::primaryActionSupportsHiResEvents() const
 {
     return false;
 }
 
-void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
+void KisTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    Q_UNUSED(offsetInDocPixels);
-    Q_UNUSED(initialDocPoint);
+    Q_UNUSED(event);
+    Q_UNUSED(action);
 }
+
+void KisTool::beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action)
+{
+    beginAlternateAction(event, action);
+}
+
+void KisTool::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(action);
+}
+
+void KisTool::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    Q_UNUSED(event);
+    Q_UNUSED(action);
+}
+
+void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KisTool::mousePressEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KisTool::mouseReleaseEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void KisTool::mouseMoveEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+}
+
 
 void KisTool::deleteSelection()
 {
     KisSelectionSP selection = currentSelection();
     KisNodeSP node = currentNode();
-    KisPaintDeviceSP device;
 
-    if(node && (device = node->paintDevice())) {
+    if(node && node->hasEditablePaintDevice()) {
+        KisPaintDeviceSP device = node->paintDevice();
+
         image()->barrierLock();
         KisTransaction transaction(i18n("Clear"), device);
 

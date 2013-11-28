@@ -99,6 +99,14 @@ void KisShortcutMatcher::addAction(KisAbstractInputAction *action)
     m_d->actions.append(action);
 }
 
+bool KisShortcutMatcher::supportsHiResInputEvents()
+{
+    return
+        m_d->runningShortcut &&
+        m_d->runningShortcut->action() &&
+        m_d->runningShortcut->action()->supportsHiResInputEvents();
+}
+
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
 {
     bool retval = false;
@@ -257,25 +265,6 @@ Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
         flags |= b;
     }
     return flags;
-}
-
-bool KisShortcutMatcher::tabletMoved(QTabletEvent *event)
-{
-    if (!m_d->runningShortcut) return false;
-    bool retval = false;
-
-    KisAbstractInputAction *action = m_d->runningShortcut->action();
-    if (action->supportsHiResInputEvents()) {
-        QMouseEvent mouseEvent(QEvent::MouseMove,
-                               event->pos(),
-                               Qt::NoButton,
-                               listToFlags(m_d->buttons),
-                               event->modifiers());
-        action->inputEvent(&mouseEvent);
-        retval = true;
-    }
-
-    return retval;
 }
 
 void KisShortcutMatcher::reset()

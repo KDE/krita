@@ -159,14 +159,28 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     }
 }
 
-void KisToolCrop::deactivate()
+void KisToolCrop::cancelStroke()
 {
     m_haveCropSelection = false;
-    m_rectCrop = QRect(0, 0, 0, 0);
+    m_rectCrop = QRect();
     validateSelection();
     updateCanvasPixelRect(image()->bounds());
+}
 
+void KisToolCrop::deactivate()
+{
+    cancelStroke();
     KisTool::deactivate();
+}
+
+void KisToolCrop::requestStrokeEnd()
+{
+    if (m_haveCropSelection) crop();
+}
+
+void KisToolCrop::requestStrokeCancellation()
+{
+    cancelStroke();
 }
 
 void KisToolCrop::canvasResourceChanged(int key, const QVariant &res)
@@ -190,53 +204,30 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
     paintOutlineWithHandles(painter);
 }
 
-void KisToolCrop::mousePressEvent(KoPointerEvent *event)
+void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    setMode(KisTool::PAINT_MODE);
 
-        setMode(KisTool::PAINT_MODE);
+    QPoint pos = convertToPixelCoord(event).toPoint();
 
-        QPoint pos = convertToPixelCoord(event).toPoint();
-        /* QPoint pos = convertToIntPixelCoord(event);
+    if (!m_haveCropSelection) { //if the selection is not set
+        QRect bounds = image()->bounds();
+        m_rectCrop = QRect(pos.x(), pos.y(), bounds.width() / 2, bounds.height() / 2);
+        m_rectCrop &= bounds;
 
-        pos.setX(qBound(0, pos.x(), image()->width() - 1));
-        pos.setY(qBound(0, pos.y(), image()->height() - 1));
-        */
-
-        if (!m_haveCropSelection) { //if the selection is not set
-            m_rectCrop = QRect(pos.x(), pos.y(), 1, 1);
-            updateCanvasPixelRect(image()->bounds());
-        } else {
-            m_mouseOnHandleType = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
-            m_dragStart = pos;
-            m_center = m_rectCrop.center(); //store the center of the original so when we grow we are sure to have the same center
-            m_originalRatio = m_ratio; //this is the ratio we want to match some areas it is impossible to get this ratio because of integer width and height
-            //so if we update this as we go we will run into problems of drift in value. so set target on mouse click 
- 
-        }
-
-    }
-    else {
-        KisTool::mousePressEvent(event);
+        updateCanvasPixelRect(image()->bounds());
+    } else {
+        m_mouseOnHandleType = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
+        m_dragStart = pos;
+        m_center = m_rectCrop.center(); //store the center of the original so when we grow we are sure to have the same center
+        m_originalRatio = m_ratio; //this is the ratio we want to match some areas it is impossible to get this ratio because of integer width and height
+        //so if we update this as we go we will run into problems of drift in value. so set target on mouse click 
     }
 }
 
-void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
+void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
     QPointF pos = convertToPixelCoord(event);
-
-    if (m_haveCropSelection) {  //if the crop selection is set
-        //set resize cursor if we are on one of the handles
-        if(MOVE_CONDITION(event, KisTool::PAINT_MODE)){
-            //keep the same cursor as the one we clicked with
-            setMoveResizeCursor(m_mouseOnHandleType);
-        }else{
-            //hovering
-            qint32 type = mouseOnHandle(pixelToView(pos));
-            setMoveResizeCursor(type);
-        }
-    }
 
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         QRectF updateRect = boundingRect();
@@ -468,43 +459,47 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
     else {
         KisTool::mouseMoveEvent(event);
     }
+
 }
 
-
-void KisToolCrop::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
+    setMode(KisTool::HOVER_MODE);
 
-        m_haveCropSelection = true;
-        m_rectCrop = m_rectCrop.normalized();
+    m_haveCropSelection = true;
+    m_rectCrop = m_rectCrop.normalized();
 
-        QRectF updateRect = boundingRect();
+    QRectF updateRect = boundingRect();
 
-        validateSelection();
+    validateSelection();
 
-        updateRect |= boundingRect();
-        updateCanvasViewRect(updateRect);
-        qint32 type = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
-        setMoveResizeCursor(type);
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
+    updateRect |= boundingRect();
+    updateCanvasViewRect(updateRect);
+    qint32 type = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
+    setMoveResizeCursor(type);
+}
+
+void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
+{
+    QPointF pos = convertToPixelCoord(event);
+
+    if (m_haveCropSelection) {  //if the crop selection is set
+        //set resize cursor if we are on one of the handles
+        if(mode() == KisTool::PAINT_MODE) {
+            //keep the same cursor as the one we clicked with
+            setMoveResizeCursor(m_mouseOnHandleType);
+        }else{
+            //hovering
+            qint32 type = mouseOnHandle(pixelToView(pos));
+            setMoveResizeCursor(type);
+        }
     }
 }
 
-void KisToolCrop::mouseDoubleClickEvent(KoPointerEvent *)
+void KisToolCrop::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     if (m_haveCropSelection) crop();
-}
-
-void KisToolCrop::keyReleaseEvent(QKeyEvent* event)
-{
-    if(event->key() == Qt::Key_Return && m_haveCropSelection) {
-        crop();
-    }
-    KisTool::keyReleaseEvent(event);
-
 }
 
 //now updates all values regardless (to get rid of the recursive nature of the previous implementation that got into infinite loops)
@@ -635,7 +630,7 @@ void KisToolCrop::crop()
     } else {
         currentImage()->cropImage(cropRect);
     }
-    m_rectCrop = QRect(0, 0, 0, 0);
+    m_rectCrop = QRect();
 
     dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }

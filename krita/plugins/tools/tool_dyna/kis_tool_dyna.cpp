@@ -79,29 +79,23 @@ void KisToolDyna::initStroke(KoPointerEvent *event)
     KisToolFreehand::initStroke(event);
 }
 
-void KisToolDyna::mousePressEvent(KoPointerEvent *e)
+void KisToolDyna::beginPrimaryAction(KoPointerEvent *event)
 {
-    setMousePosition(e->point);
+    setMousePosition(event->point);
     m_mouse.init(m_mousePos.x(), m_mousePos.y());
     m_odelx = m_mousePos.x();
     m_odely = m_mousePos.y();
 
-    KisToolFreehand::mousePressEvent(e);
+    KisToolFreehand::beginPrimaryAction(event);
 }
 
-
-void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
+void KisToolDyna::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        KisToolFreehand::mouseMoveEvent(e);
-        return;
-    }
-
-    setMousePosition(e->point);
+    setMousePosition(event->point);
 
     if (applyFilter(m_mousePos.x(), m_mousePos.y())) {
-        KoPointerEvent newEvent = filterEvent(e);
-        KisToolFreehand::mouseMoveEvent(&newEvent);
+        KoPointerEvent newEvent = filterEvent(event);
+        KisToolFreehand::continuePrimaryAction(&newEvent);
     }
 }
 

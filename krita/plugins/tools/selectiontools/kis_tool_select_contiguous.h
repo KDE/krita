@@ -43,7 +43,7 @@ public:
     virtual QWidget* createOptionWidget();
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
 
 public slots:
     virtual void slotSetFuzziness(int);

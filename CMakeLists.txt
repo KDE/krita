@@ -9,14 +9,6 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
 endif()
 
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Werror)
-    add_definitions(-Wno-error=deprecated-declarations)
-    add_definitions(-Wdeprecated-declarations)
-    add_definitions(-Wno-error=cpp)
-    add_definitions(-Wcpp)
-endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-
 
  ############
 #############

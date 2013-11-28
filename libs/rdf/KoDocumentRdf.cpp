@@ -531,9 +531,7 @@ void KoDocumentRdf::expandStatementsReferencingSubject(QSharedPointer<Soprano::M
 
     foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(Node(), Node(), s.subject()).allElements();
-        foreach (const Soprano::Statement &e, all) {
-            addList << e;
-        }
+        addList.append(all);
     }
     _model->addStatements(addList);
 }
@@ -547,10 +545,7 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Mode
 
     foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(s.object(), Node(), Node()).allElements();
-        foreach (const Soprano::Statement &e, all) {
-            RDEBUG << "ADD obj:" << s.object() << " adding:" << e;
-            addList << e;
-        }
+        addList.append(all);
     }
     _model->addStatements(addList);
 }
@@ -559,13 +554,8 @@ void KoDocumentRdf::expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Mode
 {
     Q_ASSERT(_model);
     Q_ASSERT(d->model);
-    QList<Statement> addList;
-    QList<Statement> all = model()->listStatements(n, Node(), Node()).allElements();
+    QList<Statement> addList = model()->listStatements(n, Node(), Node()).allElements();
 
-    foreach (const Soprano::Statement &e, all) {
-        RDEBUG << "n:" << n << " adding:" << e;
-        addList << e;
-    }
     _model->addStatements(addList);
 }
 
@@ -612,9 +602,7 @@ void KoDocumentRdf::expandStatementsToIncludeOtherPredicates(QSharedPointer<Sopr
 
     foreach (const Soprano::Statement &s, allStatements) {
         QList<Statement> all = model()->listStatements(s.subject(), Node(), Node()).allElements();
-        foreach (const Soprano::Statement &e, all) {
-            addList << e;
-        }
+        addList.append(all);
     }
     _model->addStatements(addList);
 }

@@ -81,6 +81,7 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
+    app.setApplicationName("kritasketch");
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 

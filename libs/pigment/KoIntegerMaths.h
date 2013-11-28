@@ -20,17 +20,37 @@
 #ifndef KO_INTEGER_MATHS_H
 #define KO_INTEGER_MATHS_H
 
+#ifndef UINT8_MAX
 #define UINT8_MAX 255u
+#endif
+
+#ifndef UINT8_MIN
 #define UINT8_MIN 0u
+#endif
 
+#ifndef UINT16_MAX
 #define UINT16_MAX 65535u
+#endif
+
+#ifndef UINT16_MIN
 #define UINT16_MIN 0u
+#endif
 
+#ifndef UINT32_MAX
 #define UINT32_MAX (4294967295u)
-#define UINT32_MIN 0u
+#endif
 
+#ifndef UINT32_MIN
+#define UINT32_MIN 0u
+#endif
+
+#ifndef INT16_MAX
 #define INT16_MAX 32767
+#endif
+
+#ifndef INT16_MIN
 #define INT16_MIN -32768
+#endif
 
 // #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 

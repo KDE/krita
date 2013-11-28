@@ -117,6 +117,11 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
         }
     }
 
+    // Filthy hack alert -- this'll be properly fixed in the mvc branch.
+    if (qApp->applicationName() == "flow" && vec.size() == 2) {
+        return KoDocumentEntry(vec[1]);
+    }
+
     return KoDocumentEntry(vec[0]);
 }
 

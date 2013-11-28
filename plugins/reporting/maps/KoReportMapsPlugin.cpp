@@ -67,7 +67,7 @@ QObject* KoReportMapsPlugin::createDesignerInstance(KoReportDesigner* designer, 
     return new KoReportDesignerItemMaps(designer, scene, pos);
 }
 
-QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* item)
+QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* /*item*/)
 {
     myDebug() << "\e[35m======\e[0m";
     /*KoReportItemMaps *image = dynamic_cast<KoReportItemMaps*>(item);

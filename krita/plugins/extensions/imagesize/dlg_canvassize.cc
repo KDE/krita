@@ -281,7 +281,7 @@ void DlgCanvasSize::slotWidthUnitChanged(int index)
         m_page->newWidthDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newWidth->setVisible(false);
             m_page->newWidthDouble->setVisible(true);
         } else {
@@ -300,7 +300,7 @@ void DlgCanvasSize::slotHeightUnitChanged(int index)
         m_page->newHeightDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newHeight->setVisible(false);
             m_page->newHeightDouble->setVisible(true);
         } else {
@@ -363,7 +363,7 @@ void DlgCanvasSize::slotXOffsetUnitChanged(int index)
         m_page->xOffsetDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->xOffset->setVisible(false);
             m_page->xOffsetDouble->setVisible(true);
         } else {
@@ -382,7 +382,7 @@ void DlgCanvasSize::slotYOffsetUnitChanged(int index)
         m_page->yOffsetDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->yOffset->setVisible(false);
             m_page->yOffsetDouble->setVisible(true);
         } else {
@@ -403,11 +403,10 @@ void DlgCanvasSize::slotCanvasPreviewXOffsetChanged(int v)
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
         //const double convertedValue = xOffsetUnit.convertFromUnitToUnit(v, pixelUnit, xOffsetUnit);
 
-        if (selectedUnit != pixelUnit && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != pixelUnit) {
             m_page->xOffsetDouble->setValue(selectedUnit.toUserValue(v / m_resolution));
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(v / m_resolution) : v;
-            m_page->xOffset->setValue(finalValue);
+            m_page->xOffset->setValue(v);
         }
     }
 }
@@ -423,11 +422,10 @@ void DlgCanvasSize::slotCanvasPreviewYOffsetChanged(int v)
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
         //const double convertedValue = yOffsetUnit.convertFromUnitToUnit(v, pixelUnit, yOffsetUnit);
 
-        if (selectedUnit != pixelUnit && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != pixelUnit) {
             m_page->yOffsetDouble->setValue(selectedUnit.toUserValue(v / m_resolution));
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(v / m_resolution) : v;
-            m_page->yOffset->setValue(finalValue);
+            m_page->yOffset->setValue(v);
         }
     }
 }
@@ -440,14 +438,13 @@ void DlgCanvasSize::updateWidthUIValue(double value)
         m_page->newWidthDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->widthUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newWidthDouble->blockSignals(true);
             m_page->newWidthDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->newWidthDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->newWidth->blockSignals(true);
-            m_page->newWidth->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newWidth->setValue(selectedUnit.toUserValue(value));
             m_page->newWidth->blockSignals(false);
         }
     }
@@ -461,14 +458,13 @@ void DlgCanvasSize::updateHeightUIValue(double value)
         m_page->newHeightDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->heightUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newHeightDouble->blockSignals(true);
             m_page->newHeightDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->newHeightDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->newHeight->blockSignals(true);
-            m_page->newHeight->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newHeight->setValue(selectedUnit.toUserValue(value));
             m_page->newHeight->blockSignals(false);
         }
     }
@@ -482,14 +478,13 @@ void DlgCanvasSize::updateXOffsetUIValue(double value)
         m_page->xOffsetDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->xOffsetDouble->blockSignals(true);
             m_page->xOffsetDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->xOffsetDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->xOffset->blockSignals(true);
-            m_page->xOffset->setValue(qRound(selectedUnit.toUserValue(finalValue)));
+            m_page->xOffset->setValue(qRound(selectedUnit.toUserValue(value)));
             m_page->xOffset->blockSignals(false);
         }
     }
@@ -503,14 +498,13 @@ void DlgCanvasSize::updateYOffsetUIValue(double value)
         m_page->yOffsetDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->yOffsetDouble->blockSignals(true);
             m_page->yOffsetDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->yOffsetDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->yOffset->blockSignals(true);
-            m_page->yOffset->setValue(qRound(selectedUnit.toUserValue(finalValue)));
+            m_page->yOffset->setValue(qRound(selectedUnit.toUserValue(value)));
             m_page->yOffset->blockSignals(false);
         }
     }
@@ -645,14 +639,13 @@ void DlgCanvasSize::updateOffset(int id)
     expectedOffset(id, xOffset, yOffset);
 
     const KoUnit pixelUnit(KoUnit::Pixel);
-    const KoUnit pointUnit(KoUnit::Point);
 
     // update spinbox value (other widgets will be autoupdated later through valueChanged signal)
     if (m_page->xOffUnit->currentText() == percentStr) {
         m_page->xOffsetDouble->setValue(xOffset);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
-        if (pixelUnit != selectedUnit && pointUnit != selectedUnit) {
+        if (pixelUnit != selectedUnit) {
             m_page->xOffsetDouble->setValue(xOffset);
         } else {
             m_page->xOffset->setValue(qRound(xOffset));
@@ -664,7 +657,7 @@ void DlgCanvasSize::updateOffset(int id)
         m_page->yOffsetDouble->setValue(yOffset);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
-        if (pixelUnit != selectedUnit && pointUnit != selectedUnit) {
+        if (pixelUnit != selectedUnit) {
             m_page->yOffsetDouble->setValue(yOffset);
         } else {
             m_page->yOffset->setValue(qRound(yOffset));
@@ -686,7 +679,7 @@ void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
         xOffset = (xDiff * xCoeff * 100.0) / m_newWidth;
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
-        const int resXDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? qRound(xDiff / m_resolution) : xDiff;
+        const double resXDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? xDiff / m_resolution : xDiff;
         xOffset = selectedUnit.toUserValue(resXDiff * xCoeff);
     }
 
@@ -694,7 +687,7 @@ void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
         yOffset = (yDiff * yCoeff * 100.0) / m_newHeight;
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
-        const int resYDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? qRound(yDiff / m_resolution) : yDiff;
+        const double resYDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? yDiff / m_resolution : yDiff;
         yOffset = selectedUnit.toUserValue(resYDiff * yCoeff);
     }
 }

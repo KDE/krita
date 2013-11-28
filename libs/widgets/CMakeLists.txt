@@ -19,7 +19,6 @@ set(kowidgets_LIB_SRCS
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
-    KoImageResource.cpp
     KoPageLayoutDialog.cpp
     KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp

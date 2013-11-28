@@ -166,7 +166,7 @@ void DlgLayerSize::slotWidthUnitChanged(int index)
         m_page->newWidthDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newWidth->setVisible(false);
             m_page->newWidthDouble->setVisible(true);
         } else {
@@ -185,7 +185,7 @@ void DlgLayerSize::slotHeightUnitChanged(int index)
         m_page->newHeightDouble->setVisible(true);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(index);
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newHeight->setVisible(false);
             m_page->newHeightDouble->setVisible(true);
         } else {
@@ -226,14 +226,13 @@ void DlgLayerSize::updateWidthUIValue(double value)
         m_page->newWidthDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newWidthUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newWidthDouble->blockSignals(true);
             m_page->newWidthDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->newWidthDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->newWidth->blockSignals(true);
-            m_page->newWidth->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newWidth->setValue(selectedUnit.toUserValue(value));
             m_page->newWidth->blockSignals(false);
         }
     }
@@ -247,14 +246,13 @@ void DlgLayerSize::updateHeightUIValue(double value)
         m_page->newHeightDouble->blockSignals(false);
     } else {
         const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->newHeightUnit->currentIndex());
-        if (selectedUnit != KoUnit(KoUnit::Pixel) && selectedUnit != KoUnit(KoUnit::Point)) {
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
             m_page->newHeightDouble->blockSignals(true);
             m_page->newHeightDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
             m_page->newHeightDouble->blockSignals(false);
         } else {
-            const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
             m_page->newHeight->blockSignals(true);
-            m_page->newHeight->setValue(selectedUnit.toUserValue(finalValue));
+            m_page->newHeight->setValue(selectedUnit.toUserValue(value));
             m_page->newHeight->blockSignals(false);
         }
     }

@@ -25,6 +25,7 @@
 #include <Eigen/Core>
 #include <QVector2D>
 
+
 typedef Eigen::Matrix<qreal, 2, 1> KisVector2D;
 typedef Eigen::Matrix<qreal, 3, 1> KisVector3D;
 

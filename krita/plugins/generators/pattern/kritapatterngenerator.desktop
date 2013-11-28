@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Solid Pattern Layer
 Name[ca]=Capa de patrons sòlids
+Name[ca@valencia]=Capa de patrons sòlids
 Name[de]=Ebene mit einfarbigen Mustern
 Name[es]=Capa de patrón sólido
 Name[hu]=Egyszínű minta réteg
 Name[it]=Livello con modello solido
 Name[kk]=Тұтас өрнек қабаты
+Name[nb]=Solid mønsterlag
 Name[nl]=Laag van gevuld patroon
 Name[pl]=Układ jednolitego wzoru
 Name[pt]=Área de Padrão Sólido
@@ -16,11 +18,13 @@ Name[uk]=Шар суцільного візерунка
 Name[x-test]=xxSolid Pattern Layerxx
 Comment=generates a pattern layer
 Comment[ca]=Genera una capa de patrons
+Comment[ca@valencia]=Genera una capa de patrons
 Comment[de]=Erstellt eine Ebene mit Mustern
 Comment[es]=genera una capa de patrón
 Comment[hu]=egy minta réteget állít elő
 Comment[it]=genera un livello con modello
 Comment[kk]=өрнек қабатты құру
+Comment[nb]=oppretter et mønsterlag
 Comment[nl]=genereert een patroonlaag
 Comment[pl]=generuje układ wzoru
 Comment[pt]=gera uma camada de padrão

@@ -135,8 +135,6 @@ const KComponentData &KisFactory2::componentData()
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
-        s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
-
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
     }

@@ -2,6 +2,7 @@
  *  dlg_feather_selection.cc - part of Krita
  *
  *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,18 +21,85 @@
 
 #include "dlg_feather_selection.h"
 
-#include <klocale.h>
-#include <kis_debug.h>
+#include <KoUnit.h>
+#include <KoSizeGroup.h>
+#include <kis_view2.h>
+#include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgFeatherSelection::WdgFeatherSelection(QWidget* parent) : KisOperationUIWidget(i18n("Feather Selection"), parent)
+WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisView2* view)
+    : KisOperationUIWidget(i18n("Feather Selection"), parent)
+    , m_radius(1)
 {
+    Q_ASSERT(view);
+    KisImageWSP image = view->image();
+    Q_ASSERT(image);
+    m_resolution = image->yRes();
+
     setupUi(this);
+
+    spbRadius->setValue(m_radius);
+    spbRadius->setFocus();
+    spbRadius->setVisible(true);
+    spbRadiusDouble->setVisible(false);
+
+    cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
+    cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
+
+    // ensure that both spinboxes request the same horizontal size
+    KoSizeGroup *spbGroup = new KoSizeGroup(this);
+    spbGroup->addWidget(spbRadius);
+    spbGroup->addWidget(spbRadiusDouble);
+
+    connect(spbRadius, SIGNAL(valueChanged(int)), this, SLOT(slotRadiusChanged(int)));
+    connect(spbRadiusDouble, SIGNAL(valueChanged(double)), this, SLOT(slotRadiusChanged(double)));
+    connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
+}
+
+void WdgFeatherSelection::slotRadiusChanged(int radius)
+{
+    slotRadiusChanged((double) radius);
+}
+
+void WdgFeatherSelection::slotRadiusChanged(double radius)
+{
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    const double resRadius = (selectedUnit == KoUnit(KoUnit::Pixel)) ? radius : (radius * m_resolution);
+    m_radius = qRound(selectedUnit.fromUserValue(resRadius));
+}
+
+void WdgFeatherSelection::slotUnitChanged(int index)
+{
+    updateRadiusUIValue(m_radius);
+
+    const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbRadius->setVisible(false);
+        spbRadiusDouble->setVisible(true);
+    } else {
+        spbRadius->setVisible(true);
+        spbRadiusDouble->setVisible(false);
+    }
+}
+
+void WdgFeatherSelection::updateRadiusUIValue(double value)
+{
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbRadiusDouble->blockSignals(true);
+        spbRadiusDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+        spbRadiusDouble->blockSignals(false);
+    } else {
+        const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+        spbRadius->blockSignals(true);
+        spbRadius->setValue(selectedUnit.toUserValue(finalValue));
+        spbRadius->blockSignals(false);
+    }
 }
 
 void WdgFeatherSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    config->setProperty("radius", radiusSpinBox->value());
+    config->setProperty("radius", m_radius);
 }
 
 #include "dlg_feather_selection.moc"

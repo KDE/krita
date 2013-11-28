@@ -30,6 +30,9 @@
 #include "kis_clone_layer.h"
 #include "kis_image.h"
 
+#include "testutil.h"
+
+
 void KisCloneLayerTest::testCreation()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -184,6 +187,47 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     image->waitForDone();
 }
 
+void KisCloneLayerTest::testRemoveSourceLayerParent()
+{
+    KisImageSP image = createImage();
+    KisNodeSP root = image->root();
+
+    KisNodeSP group1 = TestUtil::findNode(root, "group1");
+    KisNodeSP group2 = TestUtil::findNode(root, "group2");
+    KisNodeSP cloneLayer1 = TestUtil::findNode(root, "clone_of_g1");
+
+
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer4 = new KisCloneLayer(paintLayer4, image, "clone_of_p4", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer4, group1);
+    image->addNode(cloneLayer4, group2);
+
+    Q_ASSERT(group1->lastChild() == KisNodeSP(paintLayer4));
+    Q_ASSERT(group2->lastChild() == KisNodeSP(cloneLayer4));
+    Q_ASSERT(TestUtil::findNode(group2, "clone_of_g1") == KisNodeSP(cloneLayer1));
+    Q_ASSERT(TestUtil::findNode(group2, "clone_of_p4") == KisNodeSP(cloneLayer4));
+
+    /**
+     * This test checks if the node reincarnates when the parent of
+     * the clone's source layer is removed.
+     *
+     * Here both group1 and paint4 are removed.
+     */
+    KUndo2Command *cmd = new KisImageLayerRemoveCommand(image, group1);
+    cmd->redo();
+    delete cmd;
+
+    KisNodeSP newCloneLayer1 = TestUtil::findNode(group2, "clone_of_g1");
+    KisNodeSP newCloneLayer4 = TestUtil::findNode(group2, "clone_of_p4");
+
+    QVERIFY(newCloneLayer1 != KisNodeSP(cloneLayer1));
+    QVERIFY(dynamic_cast<KisPaintLayer*>(newCloneLayer1.data()));
+
+    QVERIFY(newCloneLayer4 != KisNodeSP(cloneLayer4));
+    QVERIFY(dynamic_cast<KisPaintLayer*>(newCloneLayer4.data()));
+}
+
 void KisCloneLayerTest::testUndoingRemovingSource()
 {
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -236,6 +280,48 @@ void KisCloneLayerTest::testUndoingRemovingSource()
 
     delete cmd1;
     delete cmd2;
+}
+
+void KisCloneLayerTest::testDuplicateGroup()
+{
+    KisImageSP image = createImage();
+    KisNodeSP root = image->root();
+
+    KisNodeSP group1 = groupLayer1(image);
+
+    KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer4 = new KisCloneLayer(paintLayer4, image, "clone_of_p4", OPACITY_OPAQUE_U8);
+    KisLayerSP groupLayer4 = new KisGroupLayer(image, "group4", OPACITY_OPAQUE_U8);
+
+    image->addNode(paintLayer4, group1);
+    image->addNode(cloneLayer4, groupLayer4);
+    image->addNode(groupLayer4, group1);
+
+    Q_ASSERT(group1->lastChild() == KisNodeSP(groupLayer4));
+    Q_ASSERT(group1->lastChild()->lastChild() == KisNodeSP(cloneLayer4));
+    Q_ASSERT(group1->lastChild()->prevSibling() == KisNodeSP(paintLayer4));
+
+    KisNodeSP copyGroup1 = group1->clone();
+
+    KisNodeSP copyCloneLayer4 = copyGroup1->lastChild()->lastChild();
+    KisNodeSP copyGroupLayer4 = copyGroup1->lastChild();
+    KisNodeSP copyPaintLayer4 = copyGroup1->lastChild()->prevSibling();
+
+    QCOMPARE(copyPaintLayer4->name(), QString("paint4"));
+    QCOMPARE(copyGroupLayer4->name(), QString("group4"));
+    QCOMPARE(copyCloneLayer4->name(), QString("clone_of_p4"));
+
+    QVERIFY(copyPaintLayer4 != KisNodeSP(paintLayer4));
+    QVERIFY(copyGroupLayer4 != KisNodeSP(groupLayer4));
+    QVERIFY(copyCloneLayer4 != KisNodeSP(cloneLayer4));
+
+    KisCloneLayerSP newClone = dynamic_cast<KisCloneLayer*>(copyCloneLayer4.data());
+
+    /**
+     * The newly created clone should now point to the *newly created*
+     * paint layer, not to the previos one.
+     */
+    QCOMPARE(KisNodeSP(newClone->copyFrom()), copyPaintLayer4);
 }
 
 struct CyclingTester {

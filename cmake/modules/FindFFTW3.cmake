@@ -8,27 +8,23 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-if(NOT WIN32)
-include(FindPkgConfig)
-pkg_check_modules(FFTW3 QUIET fftw3>=3.2)
-endif()
+include(LibFindMacros)
+libfind_pkg_check_modules(FFTW3_PKGCONF fftw3>=3.2)
 
 find_path(FFTW3_INCLUDE_DIR
     NAMES fftw3.h
-    HINTS ${PC_FFTW3_INCLUDEDIR} ${PC_FFTW3_INCLUDE_DIRS}
-    PATH_SUFFIXES fftw3)
+    HINTS ${FFTW3_PKGCONF_INCLUDE_DIRS}
+    PATH_SUFFIXES fftw3
+)
 
 find_library(FFTW3_LIBRARY
     NAMES fftw3
-    HINTS ${PC_FFTW3_LIBDIR} ${PC_FFTW3_LIBRARY_DIRS})
+    HINTS ${FFTW3_PKGCONF_LIBRARY_DIRS}
+)
 
-set(FFTW3_LIBRARIES ${FFTW3_LIBRARY})
-set(FFTW3_INCLUDE_DIRS ${FFTW3_INCLUDE_DIR})
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(fftw3 DEFAULT_MSG FFTW3_LIBRARY FFTW3_INCLUDE_DIR)
-
-mark_as_advanced(FFTW3_INCLUDE_DIR FFTW3_LIBRARY)
+set(FFTW3_PROCESS_LIBS FFTW3_LIBRARY)
+set(FFTW3_PROCESS_INCLUDES FFTW3_INCLUDE_DIR)
+libfind_process(FFTW3)
 
 if(FFTW3_FOUND)
     message(STATUS "FFTW Found Version: " ${FFTW_VERSION})

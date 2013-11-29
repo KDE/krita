@@ -30,6 +30,7 @@
 #include <KoTextLoader.h>
 #include <KoXmlNS.h>
 #include <KoTextWriter.h>
+#include <KoShape.h>
 
 #include "KoTextDocument.h"
 
@@ -58,6 +59,7 @@ public:
     QString creator;
     QString date;
     QTextDocument contents;
+    KoShape *shape;
 };
 
 KoAnnotation::KoAnnotation(const QTextCursor &cursor)
@@ -95,6 +97,16 @@ void KoAnnotation::setMotherFrame(QTextFrame *frame)
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
     d->textFrame = cursor.insertFrame(format);
     d->document = frame->document();
+}
+
+void KoAnnotation::setAnnotationShape(KoShape *shape)
+{
+    d->shape = shape;
+}
+
+KoShape *KoAnnotation::annotationShape()
+{
+    return d->shape;
 }
 
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -143,7 +155,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                 else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                     // FIXME: What to do here?
                 }
-          }
+            }
             textLoader.loadBody(element, cursor);
 
             kDebug(32500) << "****** End Load ******";
@@ -169,15 +181,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
             inlineRdf()->saveOdf(context, writer);
         }
 
-        writer->startElement("dc:creator", false);
-        writer->addTextNode(d->creator);
-        writer->endElement(); // dc:creator
-        writer->startElement("dc:date", false);
-        writer->addTextNode(d->date);
-        writer->endElement(); // dc:date
-
-        KoTextWriter textWriter(context);
-        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        d->shape->saveOdf(context);
 
         writer->endElement(); //office:annotation
     } else if ((tagType == EndTag) && (position == rangeEnd())) {

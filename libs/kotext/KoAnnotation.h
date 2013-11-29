@@ -31,6 +31,7 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoAnnotationManager;
 class QTextFrame;
+class KoShape;
 
 /**
  * An annotation is a note made by the user regarding a part of the
@@ -94,6 +95,10 @@ public:
 
     /// return the current text
     QTextFrame *textFrame() const;
+
+    void setAnnotationShape(KoShape *shape);
+
+    KoShape *annotationShape();
 
 private:
 

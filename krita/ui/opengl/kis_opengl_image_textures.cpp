@@ -55,6 +55,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
+
+    m_useOcio = cfg.useOcio();
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
@@ -203,7 +205,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     KisConfig cfg;
     QBitArray channelFlags; // empty by default
 
-    if (!cfg.useOcio() && !m_allChannelsSelected) {
+    if (m_useOcio && !m_allChannelsSelected) {
         channelFlags = m_channelFlags;
     }
 

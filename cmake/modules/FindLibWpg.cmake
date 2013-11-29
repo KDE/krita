@@ -10,18 +10,18 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 include(LibFindMacros)
-libfind_package(LIBWPG LIBWPD)
+libfind_package(LIBWPG LibWpd)
 libfind_pkg_check_modules(LIBWPG_PKGCONF libwpg-0.2)
 
 find_path(LIBWPG_INCLUDE_DIR
     NAMES libwpg/libwpg.h
-    HINTS ${LIBWPG_PKGCONF_INCLUDE_DIRS}
+    HINTS ${LIBWPG_PKGCONF_INCLUDE_DIRS} ${LIBWPG_PKGCONF_INCLUDEDIR}
     PATH_SUFFIXES libwpg-0.2
 )
 
 find_library(LIBWPG_LIBRARY
     NAMES wpg libwpg wpg-0.2 libwpg-0.2
-    HINTS ${LIBWPG_PKGCONF_LIBRARY_DIRS}
+    HINTS ${LIBWPG_PKGCONF_LIBRARY_DIRS} ${LIBWPG_PKGCONF_LIBDIR}
 )
 
 set(LIBWPG_PROCESS_LIBS LIBWPG_LIBRARY LIBWPD_LIBRARIES)

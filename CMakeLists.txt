@@ -665,13 +665,13 @@ macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.o
 ##
 ## Test for WordPerfect Document Lib
 ##
-macro_optional_find_package(LIBWPD)
+macro_optional_find_package(LibWpd)
 macro_log_feature(LIBWPD_FOUND "LIBWPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
 
 ##
 ## Test for WordPerfect Graphics Lib
 ##
-macro_optional_find_package(LIBWPG)
+macro_optional_find_package(LibWpg)
 macro_log_feature(LIBWPG_FOUND "LIBWPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 
 ##

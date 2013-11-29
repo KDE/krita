@@ -665,14 +665,14 @@ macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.o
 ##
 ## Test for WordPerfect Document Lib
 ##
-macro_optional_find_package(WPD)
-macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
+macro_optional_find_package(LIBWPD)
+macro_log_feature(LIBWPD_FOUND "LIBWPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
 
 ##
 ## Test for WordPerfect Graphics Lib
 ##
-macro_optional_find_package(WPG)
-macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+macro_optional_find_package(LIBWPG)
+macro_log_feature(LIBWPG_FOUND "LIBWPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 
 ##
 ## Test for Microsoft Works Document Library
@@ -917,25 +917,25 @@ if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
+if (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
     calligra_disable_product(FILTER_VISIO_TO_ODG "libwpd|libwpg|libvisio devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
+endif (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if(NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libwpd|libwpg devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+endif(NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
+if(NOT LIBWPD_FOUND OR NOT LIBWPS_FOUND)
     calligra_disable_product(FILTER_WORKS_TO_ODT "libwpd|libwps devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
+endif(NOT LIBWPD_FOUND OR NOT LIBWPS_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(LIB_WRITERPERFECT "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+endif (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(FILTER_WPG_TO_SVG "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+endif (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
     calligra_disable_product(FILTER_PDF_TO_SVG "poppler xpdf headers not found or on win")

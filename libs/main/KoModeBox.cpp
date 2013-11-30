@@ -410,7 +410,7 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
-        QString code = button.visibilityCode;
+        QString toolCodes = button.visibilityCode;
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
         }
@@ -421,20 +421,24 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
             && !button.section.contains("main")) {
             continue;
         }
-        if (code.startsWith(QLatin1String("flake/"))) {
+        if (toolCodes.startsWith(QLatin1String("flake/"))) {
             addItem(button);
             continue;
         }
 
-        if (code.endsWith( QLatin1String( "/always"))) {
+        if (toolCodes.endsWith( QLatin1String( "/always"))) {
             addItem(button);
             continue;
-        } else if (code.isEmpty() && codes.count() != 0) {
+        } else if (toolCodes.isEmpty() && codes.count() != 0) {
             addItem(button);
             continue;
-        } else if (codes.contains(code)) {
-            addItem(button);
-            continue;
+        } else {
+           foreach (const QString shapeCode, codes) {
+                if (toolCodes.contains(shapeCode)) {
+                    addItem(button);
+                    break;
+                }
+           }
         }
     }
     if (newIndex != -1) {

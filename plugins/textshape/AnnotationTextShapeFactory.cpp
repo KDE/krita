@@ -60,7 +60,6 @@ AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
 
 KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    kDebug(31000) << "******* annotation shape factory Default shape *********";
     KoInlineTextObjectManager *manager = 0;
     KoTextRangeManager *locationManager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
@@ -106,13 +105,9 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
 
         //update the resources of the document
         annotation->updateDocumentData();
-
         annotation->setImageCollection(documentResources->imageCollection());
     }
 
-    // Here we should handel the size and position of shape
-    annotation->setSize(QSizeF(150, 100));
-    annotation->setPosition(QPointF(200, 300));
     // Should set if we don't set id it will set to TextShapeID.
     annotation->setShapeId(AnnotationShape_SHAPEID);
 
@@ -125,10 +120,6 @@ KoShape *AnnotationTextShapeFactory::createShape(const KoProperties *params, KoD
     Q_UNUSED(params);
     AnnotationTextShape *shape = static_cast<AnnotationTextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
-
-    // The size of shape
-//    shape->setSize(QSizeF(300, 200));
-//    shape->setPosition(QPointF(200, 300));
 
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());

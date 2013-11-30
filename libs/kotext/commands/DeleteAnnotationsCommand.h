@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,29 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextToolFactory.h"
-#include "TextTool.h"
-#include "TextShape.h"
-#include "AnnotationTextShape.h"
+#ifndef DELETEANNOTATIONSCOMMAND_H
+#define DELETEANNOTATIONSCOMMAND_H
 
-#include <KoIcon.h>
-#include <klocale.h>
+#include <kundo2command.h>
 
-TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+#include <QList>
+
+class QTextDocument;
+class KoAnnotation;
+class KoShape;
+
+class DeleteAnnotationsCommand : public KUndo2Command
 {
-    setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool-text"));
-    setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
-}
+public:
+    DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent);
+    virtual ~DeleteAnnotationsCommand();
 
-TextToolFactory::~TextToolFactory()
-{
-}
+    virtual void redo();
+    virtual void undo();
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new TextTool(canvas);
-}
+private:
+    QList<KoAnnotation *> m_annotations;
+    QTextDocument *m_document;
+    bool m_deleteAnnotations;
+};
+
+#endif /* DELETEANNOTATIONSCOMMAND_H */

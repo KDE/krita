@@ -207,4 +207,18 @@ void KoDocumentResourceManager::setOdfDocument(KoOdfDocument *currentDocument)
     setResource(OdfDocument, variant);
 }
 
+KoShapeController *KoDocumentResourceManager::shapeController() const
+{
+    if (!hasResource(ShapeController))
+        return 0;
+    return static_cast<KoShapeController *>(resource(ShapeController).value<void*>());
+}
+
+void KoDocumentResourceManager::setShapeController(KoShapeController *shapeController)
+{
+    QVariant variant;
+    variant.setValue<void*>(shapeController);
+    setResource(ShapeController, variant);
+}
+
 #include <KoDocumentResourceManager.moc>

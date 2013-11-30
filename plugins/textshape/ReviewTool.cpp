@@ -19,13 +19,37 @@
  */
 
 #include "ReviewTool.h"
+#include "AnnotationTextShape.h"
+
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
+#include <KoShapeRegistry.h>
+#include <KoAnnotation.h>
+#include <KoShapeController.h>
+#include "KoShapeBasedDocumentBase.h"
+#include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
+#include <KoShapeUserData.h>
+#include <KoTextShapeData.h>
+#include <KoGlobal.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
+#include <dialogs/SimpleAnnotationWidget.h>
+
+#include <kdebug.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kuser.h>
+
+#include <QDate>
+
 
 //#include "TextShape.h"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): TextTool(canvas),
     m_textEditor(0),
@@ -42,12 +66,16 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-
+    m_removeAnnotationAction = new KAction(i18n("Remove Comment"), this);
+    m_removeAnnotationAction->setToolTip(i18n("Remove Comment"));
+    addAction("remove_annotation", m_removeAnnotationAction);
+    connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));
 }
 
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
 {
     TextTool::mouseReleaseEvent(event);
+    event->accept();
 }
 void ReviewTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
 {
@@ -61,9 +89,10 @@ void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 {
     TextTool::mouseMoveEvent(event);
 }
-void ReviewTool::mousePressEvent(KoPointerEvent* event)
+void ReviewTool::mousePressEvent(KoPointerEvent *event)
 {
     TextTool::mousePressEvent(event);
+    m_currentAnnotationShape = dynamic_cast<AnnotationTextShape *>(textShape());
 }
 void ReviewTool::keyPressEvent(QKeyEvent* event)
 {
@@ -78,8 +107,25 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
     SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
-    sscw->setWindowTitle("SpellCheck");
-    widgets.append(sscw);
-    return widgets;
+    SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
 
+    connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    sscw->setWindowTitle(i18n("SpellCheck"));
+    widgets.append(sscw);
+
+    saw->setWindowTitle(i18n("Comments"));
+    widgets.append(saw);
+
+    return widgets;
+}
+
+void ReviewTool::removeAnnotation()
+{
+    if (m_currentAnnotationShape) {
+        QList<KoShape *> shapes;
+        shapes << m_currentAnnotationShape;
+        canvas()->addCommand(canvas()->shapeController()->removeShapes(shapes));
+        m_currentAnnotationShape = 0;
+    }
 }

@@ -73,9 +73,6 @@ public:
     /// @return the name of this annotation
     QString name() const;
 
-    QString creator() const;
-
-    QString date() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -85,16 +82,6 @@ public:
      */
     static QString createUniqueAnnotationName(const KoAnnotationManager* kam,
                                               QString annotationName, bool isEndMarker);
-
-    /**
-     * Set the textframe where we will create our own textframe within
-     * Our textframe is the one containing the real note contents.
-     * @param text the new text
-     */
-    void setMotherFrame(QTextFrame *frame);
-
-    /// return the current text
-    QTextFrame *textFrame() const;
 
     void setAnnotationShape(KoShape *shape);
 

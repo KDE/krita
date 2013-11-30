@@ -52,12 +52,13 @@ namespace Soprano
 TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoShapeController *shapeController,
-                                   KUndo2Command *parent, bool pasteAsText)
+                                   KoCanvasBase *canvas, KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
       m_mimeData(mimeData),
       m_document(document),
       m_rdf(0),
       m_shapeController(shapeController),
+      m_canvas(canvas),
       m_pasteAsText(pasteAsText),
       m_first(true)
 {
@@ -111,7 +112,7 @@ void TextPasteCommand::redo()
                 }
 #endif
 
-                KoTextPaste paste(editor, m_shapeController, rdfModel);
+                KoTextPaste paste(editor, m_shapeController, rdfModel, m_canvas, this);
                 paste.paste(odfType, m_mimeData);
 
 #ifdef SHOULD_BUILD_RDF

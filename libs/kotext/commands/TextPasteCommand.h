@@ -29,6 +29,7 @@ class KoDocumentRdfBase;
 class KoShapeController;
 class KoDocumentResourceManager;
 class QMimeData;
+class KoCanvasBase;
 
 class TextPasteCommand : public KUndo2Command
 {
@@ -37,7 +38,7 @@ public:
     TextPasteCommand(const QMimeData *mimeData,
                      QTextDocument *document,
                      KoShapeController *shapeController,
-                     KUndo2Command *parent = 0,
+                     KoCanvasBase *canvas, KUndo2Command *parent = 0, 
                      bool pasteAsText = false);
 
     virtual void undo();
@@ -49,6 +50,7 @@ private:
     QWeakPointer<QTextDocument> m_document;
     KoDocumentRdfBase *m_rdf;
     KoShapeController *m_shapeController;
+    KoCanvasBase *m_canvas;
     bool m_pasteAsText;
     bool m_first;
     QClipboard::Mode m_mode;

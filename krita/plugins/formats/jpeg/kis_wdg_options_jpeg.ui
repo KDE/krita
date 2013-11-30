@@ -6,32 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>270</height>
+    <width>478</width>
+    <height>205</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
-   <item>
-    <widget class="QCheckBox" name="chkPreview">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string comment="Show a preview of the image after saving to assess the quality difference">Preview image</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Size: 100KB</string>
-     </property>
-    </widget>
-   </item>
-   <item>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -42,144 +22,57 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <layout class="QGridLayout">
-         <item row="0" column="0" rowspan="2">
-          <widget class="QLabel" name="textLabel1">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>File size:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
+            <string>Compression</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="QLabel" name="textLabel3">
-             <property name="text">
-              <string comment="the file will be much compressed, thus small, but quality will be bad">Small</string>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string comment="the file will be good quality, but big">Big</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="1">
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="QSlider" name="qualityLevel">
-             <property name="toolTip">
-              <string>These settings determine how much information is lost during compression</string>
-             </property>
-             <property name="minimum">
-              <number>0</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="singleStep">
-              <number>1</number>
-             </property>
-             <property name="pageStep">
-              <number>1</number>
-             </property>
-             <property name="value">
-              <number>80</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="tickPosition">
-              <enum>QSlider::TicksBothSides</enum>
-             </property>
-             <property name="tickInterval">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="textLabel1_2">
-           <property name="text">
-            <string>Quality:</string>
+         <item>
+          <widget class="QSlider" name="qualityLevel">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;These settings determine how much information is lost during compression. Low: small files, bad quality. High: big files, good quality.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+           <property name="minimum">
+            <number>0</number>
            </property>
-           <property name="wordWrap">
-            <bool>false</bool>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="singleStep">
+            <number>1</number>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>80</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+           <property name="tickInterval">
+            <number>10</number>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <layout class="QHBoxLayout">
-           <item>
-            <widget class="QLabel" name="textLabel4_2">
-             <property name="text">
-              <string comment="the file will be much compressed, so the quality will be bad">Bad</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="textLabel4">
-             <property name="text">
-              <string comment="the quality will be good but the file will not be much compressed">Good</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <item>
+          <widget class="KIntNumInput" name="intQuality">
+           <property name="value">
+            <number>80</number>
+           </property>
+           <property name="minimum">
+            <number>0</number>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -262,7 +155,7 @@
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="tickPosition">
-            <enum>QSlider::TicksBothSides</enum>
+            <enum>QSlider::TicksBelow</enum>
            </property>
            <property name="tickInterval">
             <number>10</number>
@@ -415,7 +308,60 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>qualityLevel</tabstop>
+  <tabstop>intQuality</tabstop>
+  <tabstop>progressive</tabstop>
+  <tabstop>bnTransparencyFillColor</tabstop>
+  <tabstop>optimize</tabstop>
+  <tabstop>smoothLevel</tabstop>
+  <tabstop>baseLineJPEG</tabstop>
+  <tabstop>subsampling</tabstop>
+  <tabstop>metaDataFilters</tabstop>
+  <tabstop>exif</tabstop>
+  <tabstop>iptc</tabstop>
+  <tabstop>xmp</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>qualityLevel</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>intQuality</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>434</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intQuality</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>qualityLevel</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>445</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>397</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

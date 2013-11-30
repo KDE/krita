@@ -22,18 +22,13 @@
 
 #include "TextShape.h"
 #include <KoShapeContainer.h>
-#include <KoFrameShape.h>
 #include <KoTextShapeData.h>
-#include <KoTextDocument.h>
 
 #include <QTextDocument>
 #include <QPainter>
+
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
-class KoPageProvider;
-class KoImageCollection;
-class KoTextDocument;
-class TextShape;
 class KoTextDocumentLayout;
 
 #define AnnotationShape_SHAPEID "AnnotationTextShapeID"
@@ -41,6 +36,10 @@ class KoTextDocumentLayout;
 class AnnotationTextShape : public TextShape
 {
 public:
+    // Some constants
+    static const qreal  HeaderSpace = 25.0; // The space needed for the annotation header.
+    static const qreal  HeaderFontSize = 6.0;
+
     // For now we should give these parameters for TextShape.
     AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                         KoTextRangeManager *textRangeManager);
@@ -48,7 +47,7 @@ public:
 
     void setAnnotaionTextData(KoTextShapeData *textShape);
 
-    /// reimplemented
+    // reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter,
                         KoShapePaintingContext &paintcontext);
 
@@ -72,15 +71,19 @@ public:
      */
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
+    void setCreator(QString creator);
+    QString creator() const;
+    void setDate(QString date);
+    QString date() const;
+    void setDateString(QString date);
+    QString dateString() const;
+
 private:
     KoTextShapeData *m_textShapeData;
-    QRegion m_paintRegion;
-    KoParagraphStyle * m_paragraphStyle;
-    bool m_clip;
-    KoTextDocumentLayout *m_layout;
 
     QString m_creator;
     QString m_date;
+    QString m_dateString;       // another wayof storing the date. Not sure when it is used.
 };
 
 #endif // ANNOTATIONTEXTSHAPE_H

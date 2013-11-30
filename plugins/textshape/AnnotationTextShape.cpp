@@ -19,43 +19,70 @@
 
 #include "AnnotationTextShape.h"
 
-#include <KoTextLoader.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
-#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoViewConverter.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoTextLoader.h>
+#include <KoColorBackground.h>
 
+#include <QFont>
+#include <QPainter>
+#include <QPen>
+#include <QTextLayout>
 
 #include <kdebug.h>
-
-#include <QTextCursor>
-#include <QTextDocument>
 
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
                                          KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
+    , m_creator()
+    , m_date()
+    , m_dateString()
 {
+    setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::yellow)));
+    setGeometryProtected(true);
 }
 
 AnnotationTextShape::~AnnotationTextShape()
 {
 }
 
-void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShape)
+void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 {
-    m_textShapeData = textShape;
+    m_textShapeData = textShapeData;
+    m_textShapeData->setTopPadding(HeaderSpace);
+    m_textShapeData->setLeftPadding(qreal(4.0)); // Make it a little nicer
+    m_textShapeData->setRightPadding(qreal(4.0));
+    m_textShapeData->setBottomPadding(qreal(4.0));
+    m_textShapeData->setResizeMethod(KoTextShapeData::AutoGrowHeight);
 }
 
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
                                          KoShapePaintingContext &paintcontext)
 {
     TextShape::paintComponent(painter, converter, paintcontext);
+    QRectF clipRect = outlineRect();
+
+    // Paint creator and of creation of the annotation.
+    QPen peninfo (Qt::darkYellow);
+    QFont serifFont("Times", HeaderFontSize, QFont::Bold);
+    painter.setPen(peninfo);
+    painter.setFont(serifFont);
+
+    QDate date = QDate::fromString(m_date, Qt::ISODate);
+    QString info = "  " + m_creator + "\n  " + date.toString(Qt::LocalDate);
+    painter.drawText(clipRect, Qt::AlignTop, info);
 }
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    kDebug(31000) << "****** Start Load odf ******";
+    //kDebug(31000) << "****** Start Load odf ******";
 
     KoTextLoader textLoader(context);
     QTextCursor cursor(textShapeData()->document());
@@ -71,17 +98,19 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
         forEachElement(el, element) {
             if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
                 m_creator = el.text();
+                if (m_creator.isEmpty()) {
+                    m_creator = "Unknown";
+                }
             }
             else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
                 m_date = el.text();
             }
             else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
-                // FIXME: What to do here?
+                m_dateString = el.text();
             }
         }
         textLoader.loadBody(element, cursor);
-        kDebug(31000) << "****** End Load ******";
-        kDebug(31000) << "loaded Annotation: " << m_creator<< m_date;
+        //kDebug(31000) << "****** End Load ******";
     }
     else {
         // something pretty weird going on...
@@ -92,7 +121,7 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
 void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
 {
-    kDebug(31000) << " ****** Start saveing annotation shape **********";
+    //kDebug(31000) << " ****** Start saveing annotation shape **********";
     KoXmlWriter *writer = &context.xmlWriter();
 
     writer->startElement("dc:creator", false);
@@ -102,7 +131,41 @@ void AnnotationTextShape::saveOdf(KoShapeSavingContext &context) const
     writer->addTextNode(m_date);
     writer->endElement(); // dc:date
 
-    // I am not sure that this line is right or no?
-    kDebug(31000) << m_textShapeData->document()->toPlainText();
+    if (!m_dateString.isEmpty()) {
+        writer->startElement("meta:date-string", false);
+        writer->addTextNode(m_dateString);
+        writer->endElement(); // meta:date-string
+    }
+
     m_textShapeData->saveOdf(context, 0, 0, -1);
+}
+
+void AnnotationTextShape::setCreator(const QString creator)
+{
+    m_creator = creator;
+}
+
+QString AnnotationTextShape::creator() const
+{
+    return m_creator;
+}
+
+void AnnotationTextShape::setDate(QString date)
+{
+    m_date = date;
+}
+
+QString AnnotationTextShape::date() const
+{
+    return m_date;
+}
+
+void AnnotationTextShape::setDateString(QString dateString)
+{
+    m_dateString = dateString;
+}
+
+QString AnnotationTextShape::dateString() const
+{
+    return m_dateString;
 }

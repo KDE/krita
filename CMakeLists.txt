@@ -663,28 +663,64 @@ macro_optional_find_package(Okular)
 macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
-## Test for WordPerfect Document Lib
+## Test for libodfgen
 ##
-macro_optional_find_package(LibWpd)
-macro_log_feature(LIBWPD_FOUND "LIBWPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
+macro_optional_find_package(LibOdfGen)
+macro_log_feature(LIBODFGEN_FOUND "LibOdfGen"
+                  "Open Document Format Generation Library"
+                  "http://sf.net/p/libwpd/libodfgen/" FALSE ""
+                  "Required by various import filters"
+)
 
 ##
-## Test for WordPerfect Graphics Lib
+## Test for WordPerfect Document Library
+##
+macro_optional_find_package(LibWpd)
+macro_log_feature(LIBWPD_FOUND "LibWpd"
+                  "WordPerfect Document Library"
+                  "http://libwpd.sourceforge.net/" FALSE ""
+                  "Required by the Words WPD import filter"
+)
+
+##
+## Test for WordPerfect Graphics Library
 ##
 macro_optional_find_package(LibWpg)
-macro_log_feature(LIBWPG_FOUND "LIBWPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+macro_log_feature(LIBWPG_FOUND "LibWpg"
+                  "WordPerfect Graphics Library"
+                  "http://libwpg.sourceforge.net/" FALSE ""
+                  "Required by the Karbon WPG import filter"
+)
 
 ##
 ## Test for Microsoft Works Document Library
 ##
-macro_optional_find_package(LibWPS)
-macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
+macro_optional_find_package(LibWps)
+macro_log_feature(LIBWPS_FOUND "LibWps"
+                  "Microsoft Works Document Library"
+                  "http://libwps.sourceforge.net/" FALSE ""
+                  "Required by the Words WPS import filter"
+)
 
 ##
-## Test for libvisio
+## Test for Microsoft Visio Document Library
 ##
 macro_optional_find_package(LibVisio)
-macro_log_feature(LIBVISIO_FOUND "LibVisio" "Visio Import Filter Library" "http://www.freedesktop.org/wiki/Software/libvisio" FALSE "" "Required by the Flow visio import filter")
+macro_log_feature(LIBVISIO_FOUND "LibVisio"
+                  "Visio Import Filter Library"
+                  "http://www.freedesktop.org/wiki/Software/libvisio" FALSE ""
+                  "Required by the Flow visio import filter"
+)
+
+##
+## Test for Apple Keynote Document Library
+##
+macro_optional_find_package(LibEtonyek)
+macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
+                  "Apple Keynote Document Library"
+                  "http://www.freedesktop.org/wiki/Software/libetonyek/" FALSE ""
+                  "Required by the Stage keynote import filter"
+)
 
 ##
 ## Test for qt-poppler

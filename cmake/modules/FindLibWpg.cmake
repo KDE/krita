@@ -20,7 +20,7 @@ find_path(LIBWPG_INCLUDE_DIR
 )
 
 find_library(LIBWPG_LIBRARY
-    NAMES wpg libwpg wpg-0.2 libwpg-0.2
+    NAMES wpg wpg-0.2
     HINTS ${LIBWPG_PKGCONF_LIBRARY_DIRS} ${LIBWPG_PKGCONF_LIBDIR}
 )
 

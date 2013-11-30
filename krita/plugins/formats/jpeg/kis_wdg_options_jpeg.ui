@@ -12,26 +12,6 @@
   </property>
   <layout class="QVBoxLayout">
    <item>
-    <widget class="QCheckBox" name="chkPreview">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string comment="Show a preview of the image after saving to assess the quality difference">Preview image</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Size: 100KB</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>

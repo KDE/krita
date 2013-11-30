@@ -81,9 +81,6 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisMetaData::FilterRegistryModel frm;
     wdgUi.metaDataFilters->setModel(&frm);
 
-    // until we've got an actual quality preview here!
-    wdgUi.chkPreview->setVisible(false);
-
     QString filterConfig = KisConfig().exportConfiguration("JPEG");
     KisPropertiesConfiguration cfg;
     cfg.fromXML(filterConfig);

@@ -201,3 +201,8 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
         ++it;
     }
 }
+
+// only static const integral data members can be initialized within a class
+const qreal KoAnnotationLayoutManager::shapeSpace = 10.0; // Distance between annotation shapes.
+const qreal KoAnnotationLayoutManager::shapeWidth = 200.0; // Annotation shapes width.
+const qreal KoAnnotationLayoutManager::connectionPointLines = 50.0; //Connection point of lines from shape to this point and from this point to refText psoition.

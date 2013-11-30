@@ -36,10 +36,10 @@ class FLAKE_EXPORT KoAnnotationLayoutManager: public QObject
 {
     Q_OBJECT
 public:
-    static const qreal shapeSpace = 10.0; // Distance between annotation shapes.
-    static const qreal shapeWidth = 200.0; // Annotation shapes width.
+    static const qreal shapeSpace; // Distance between annotation shapes.
+    static const qreal shapeWidth; // Annotation shapes width.
     //Connection point of lines from shape to this point and from this point to refText psoition.
-    static const qreal connectionPointLines = 50.0;
+    static const qreal connectionPointLines;
 
     KoAnnotationLayoutManager(QObject *parent = 0);
     virtual ~KoAnnotationLayoutManager();

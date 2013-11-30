@@ -169,3 +169,6 @@ QString AnnotationTextShape::dateString() const
 {
     return m_dateString;
 }
+
+const qreal AnnotationTextShape::HeaderSpace = 25.0; // The space needed for the annotation header.
+const qreal AnnotationTextShape::HeaderFontSize = 6.0;

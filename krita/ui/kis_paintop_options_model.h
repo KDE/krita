@@ -34,6 +34,8 @@ struct KRITAUI_EXPORT KisOptionInfo
     int               index;
 };
 
+KRITAUI_EXPORT bool operator==(const KisOptionInfo& a, const KisOptionInfo& b);
+
 struct KRITAUI_EXPORT OptionInfoToQStringConverter {
     QString operator() (const KisOptionInfo &info) {
         return info.option->label();

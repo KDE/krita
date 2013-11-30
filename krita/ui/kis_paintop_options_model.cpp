@@ -72,3 +72,13 @@ bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& 
 
     return BaseOptionCategorizedListModel::setData(idx, value, role);
 }
+
+bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
+{
+    if (a.index != b.index) return false;
+    if (a.option->label() != b.option->label()) return false;
+    if (a.option->category() != b.option->category()) return false;
+    if (a.option->isCheckable() != b.option->isCheckable()) return false;
+    if (a.option->isChecked() != b.option->isChecked()) return false;
+    return true;
+}

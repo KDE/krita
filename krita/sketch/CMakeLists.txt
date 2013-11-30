@@ -11,7 +11,6 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/models
-                    ${KRITA_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(draganddrop)

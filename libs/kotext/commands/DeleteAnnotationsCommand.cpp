@@ -30,8 +30,8 @@
 DeleteAnnotationsCommand::DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_annotations(annotations)
-    , m_deleteAnnotations(false)
     , m_document(document)
+    , m_deleteAnnotations(false)
 {
 }
 

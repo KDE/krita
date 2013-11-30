@@ -24,7 +24,6 @@
 #include "TextDocumentInspectionPlugin.h"
 #endif
 #include "TextShapeFactory.h"
-#include "AnnotationTextShapeFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoDockRegistry.h>
@@ -51,7 +50,6 @@ TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
     KoToolRegistry::instance()->add(new ReviewToolFactory());
     KoToolRegistry::instance()->add(new ReferencesToolFactory());
     KoShapeRegistry::instance()->add(new TextShapeFactory());
-    KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
 }
 
 #include <TextPlugin.moc>

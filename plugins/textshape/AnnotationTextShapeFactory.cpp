@@ -43,7 +43,7 @@
 AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
     KoShapeFactoryBase(AnnotationShape_SHAPEID, i18n("Annotation"))
 {
-    setToolTip(i18n("Annotation shape to show annotaion content"));
+    setToolTip(i18n("Annotation shape to show annotation content"));
     QList<QPair<QString, QStringList> > odfElements;
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::office, QStringList("annotation")));
     setXmlElements(odfElements);

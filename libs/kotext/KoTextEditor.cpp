@@ -25,6 +25,7 @@
 
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoAnnotation.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
@@ -64,8 +65,10 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
+#include "commands/DeleteAnnotationsCommand.h"
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
+#include "commands/AddAnnotationCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -483,6 +486,30 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
+KoTextRangeManager *KoTextEditor::textRangeManager()
+{
+    return KoTextDocument(d->document).textRangeManager();
+}
+
+KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
+{
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
+
+    KoAnnotation *annotation = new KoAnnotation(d->caret);
+    KoTextRangeManager *textRangeManager = KoTextDocument(d->document).textRangeManager();
+    annotation->setManager(textRangeManager);
+    //FIXME: I need the name, a unique name, we can set selected text as annotation name or use createUniqueAnnotationName function
+    // to do it for us.
+    QString name = annotation->createUniqueAnnotationName(textRangeManager->annotationManager(), "", false);
+    annotation->setName(name);
+    annotation->setAnnotationShape(annotationShape);
+
+    addCommand(new AddAnnotationCommand(annotation, topCommand));
+
+    endEditBlock();
+
+    return annotation;
+}
 
 KoInlineObject *KoTextEditor::insertIndexMarker()
 {//TODO changeTracking
@@ -564,6 +591,12 @@ void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Com
 {
     Q_ASSERT(parent);
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
+}
+
+void KoTextEditor::removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(new DeleteAnnotationsCommand(annotations, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()

@@ -277,6 +277,8 @@ signals:
      */
     void layoutIsDirty();
 
+    void foundAnnotation(KoShape *annotationShape, QPointF refPosition);
+
 public slots:
     /**
      * Does the layout of the text.

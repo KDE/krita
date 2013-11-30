@@ -1,5 +1,6 @@
-/* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+/*
+ * This file is part of the KDE project
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -14,32 +15,28 @@
  * You should have received a copy of the GNU Library General Public License
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+ * Boston, MA 02110-1301, USA.*/
 
-#include "TextToolFactory.h"
-#include "TextTool.h"
-#include "TextShape.h"
-#include "AnnotationTextShape.h"
+#ifndef ADDANNOTATIONCOMMAND_H
+#define ADDANNOTATIONCOMMAND_H
 
-#include <KoIcon.h>
-#include <klocale.h>
+#include "AddTextRangeCommand.h"
 
-TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+class KoAnnotation;
+class KoShape;
+
+class AddAnnotationCommand : public AddTextRangeCommand
 {
-    setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool-text"));
-    setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
-}
+public:
+    explicit AddAnnotationCommand(KoAnnotation *range, KUndo2Command *parent = 0);
+    virtual ~AddAnnotationCommand();
 
-TextToolFactory::~TextToolFactory()
-{
-}
+    virtual void undo();
+    virtual void redo();
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new TextTool(canvas);
-}
+private:
+    KoAnnotation *m_annotation;
+    KoShape *m_shape;
+};
+
+#endif // ADDANNOTATIONCOMMAND_H

@@ -92,6 +92,14 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
+#include "AnnotationTextShape.h"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
+#include "KoShapeBasedDocumentBase.h"
+#include <KoAnnotation.h>
+#include <KoGlobal.h>
+#include <KoShapeRegistry.h>
+#include <kuser.h>
+
 #include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
@@ -472,6 +480,11 @@ void TextTool::createActions()
     action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
+
+    action = new KAction(i18n("Insert Comment"), this);
+    addAction("insert_annotation", action);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
@@ -1344,6 +1357,16 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         }
 
         useCursor(Qt::IBeamCursor);
+
+        // Set Arrow Cursor when mouse is on top of annotation shape.
+        if (selectedShape) {
+            if (selectedShape->shapeId() == "AnnotationTextShapeID") {
+                QPointF point(event->point);
+                if (point.y() <= (selectedShape->position().y() + 25))
+                    useCursor(Qt::ArrowCursor);
+            }
+        }
+
         return;
     } else {
         if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
@@ -1798,6 +1821,7 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 
 void TextTool::updateActions()
 {
+    bool notInAnnotation = !dynamic_cast<AnnotationTextShape *>(m_textShape);
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0) {
         return;
@@ -1829,13 +1853,13 @@ void TextTool::updateActions()
     if(m_textShapeData) {
         resizemethod = m_textShapeData->resizeMethod();
     }
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextShapeData::ShrinkToFitResize);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growWidthAction->setChecked(resizemethod == KoTextShapeData::AutoGrowWidth || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
     //update paragraphStyle GUI element
@@ -1877,17 +1901,19 @@ void TextTool::updateActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                             & KoCanvasResourceManager::NoAdvancedText);
     if (useAdvancedText) {
-        const QTextTable *table = textEditor->currentTable();
+        bool hasTable = textEditor->currentTable();
 
-        action("insert_tablerow_above")->setEnabled(table);
-        action("insert_tablerow_below")->setEnabled(table);
-        action("insert_tablecolumn_left")->setEnabled(table);
-        action("insert_tablecolumn_right")->setEnabled(table);
-        action("delete_tablerow")->setEnabled(table);
-        action("delete_tablecolumn")->setEnabled(table);
-        action("merge_tablecells")->setEnabled(table);
-        action("split_tablecells")->setEnabled(table);
+        action("insert_tablerow_above")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablerow_below")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_left")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_right")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablerow")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
+        action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
     }
+    action("insert_annotation")->setEnabled(notInAnnotation);
+    action("insert_table")->setEnabled(notInAnnotation);
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
@@ -2930,6 +2956,36 @@ void TextTool::setListLevel(int level)
         textEditor->addCommand(cll);
         editingPluginEvents();
     }
+}
+
+void TextTool::insertAnnotation()
+{
+    AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
+    textEditor()->addAnnotation(shape);
+
+    // Set annotation creator.
+    KConfig *config = KoGlobal::calligraConfig();
+    config->reparseConfiguration();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+    KConfigGroup cgs(&authorGroup, "Author-" + profile);
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
+        shape->setCreator(cgs.readEntry("creator"));
+    } else {
+        if (profile == "anonymous") {
+            shape->setCreator("Anonymous");
+        } else {
+            KUser user(KUser::UseRealUserID);
+            shape->setCreator(user.property(KUser::FullName).toString());
+        }
+    }
+    // Set Annotation creation date.
+    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
 }
 
 #include <TextTool.moc>

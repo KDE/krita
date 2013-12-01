@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007,2009,2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +16,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextShapeFactory.h"
-#include "TextShape.h"
+
+#include "AnnotationTextShapeFactory.h"
+#include "AnnotationTextShape.h"
 
 #include <KoProperties.h>
 #include <KoShape.h>
@@ -37,30 +36,29 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 #include <kundo2stack.h>
 #include <QTextCursor>
 
-TextShapeFactory::TextShapeFactory()
-        : KoShapeFactoryBase(TextShape_SHAPEID, i18n("Text"))
+AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
+    KoShapeFactoryBase(AnnotationShape_SHAPEID, i18n("Annotation"))
 {
-    setToolTip(i18n("A shape that shows text"));
+    setToolTip(i18n("Annotation shape to show annotation content"));
     QList<QPair<QString, QStringList> > odfElements;
-    odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
-    odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
+    odfElements.append(QPair<QString, QStringList>(KoXmlNS::office, QStringList("annotation")));
     setXmlElements(odfElements);
-    setLoadingPriority(1);
 
     KoShapeTemplate t;
-    t.name = i18n("Text");
-    t.iconName = koIconName("x-shape-text");
-    t.toolTip = i18n("Text Shape");
+    t.name = i18n("Annotation");
+    t.iconName = koIconName("x-shape-text"); // Any icon for now :)
+    t.toolTip = i18n("Annotation Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
     props->setProperty("demo", true);
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
+KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     KoInlineTextObjectManager *manager = 0;
     KoTextRangeManager *locationManager = 0;
@@ -82,9 +80,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
     if (!locationManager) {
         locationManager = new KoTextRangeManager();
     }
-    TextShape *text = new TextShape(manager, locationManager);
+    AnnotationTextShape *annotation = new AnnotationTextShape(manager, locationManager);
     if (documentResources) {
-        KoTextDocument document(text->textShapeData()->document());
+        KoTextDocument document(annotation->textShapeData()->document());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
             KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
@@ -92,41 +90,37 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
         }
 
         // this is needed so the shape can reinitialize itself with the stylemanager
-        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
+        annotation->textShapeData()->setDocument(annotation->textShapeData()->document(), true);
 
         document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::PageProvider)) {
             KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
-            text->setPageProvider(pp);
+            annotation->setPageProvider(pp);
         }
         if (documentResources->hasResource(KoText::ChangeTracker)) {
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
 
-        document.setShapeController(documentResources->shapeController());
-
         //update the resources of the document
-        text->updateDocumentData();
-
-        text->setImageCollection(documentResources->imageCollection());
+        annotation->updateDocumentData();
+        annotation->setImageCollection(documentResources->imageCollection());
     }
 
-    return text;
+    // Should set if we don't set id it will set to TextShapeID.
+    annotation->setShapeId(AnnotationShape_SHAPEID);
+
+    annotation->setAnnotaionTextData(annotation->textShapeData());
+    return annotation;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoDocumentResourceManager *documentResources) const
+KoShape *AnnotationTextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
-    TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
+    Q_UNUSED(params);
+    AnnotationTextShape *shape = static_cast<AnnotationTextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
-    shape->setSize(QSizeF(300, 200));
-    /*
-    QString text("text");
-    if (params->contains(text)) {
-        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-    }
-    */
+
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }
@@ -134,30 +128,8 @@ KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoDocumen
     return shape;
 }
 
-bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool AnnotationTextShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw) ||
-        (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
-}
-
-void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
-{
-    QVariant variant;
-    variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
-    manager->setResource(KoText::InlineTextObjectManager, variant);
-
-    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
-    manager->setResource(KoText::TextRangeManager, variant);
-
-    if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
-//        kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";
-        manager->setUndoStack(new KUndo2Stack(manager));
-    }
-    if (!manager->hasResource(KoText::StyleManager)) {
-        variant.setValue(new KoStyleManager(manager));
-        manager->setResource(KoText::StyleManager, variant);
-    }
-    if (!manager->imageCollection())
-        manager->setImageCollection(new KoImageCollection(manager));
+    return (e.localName() == "annotation" && e.namespaceURI() == KoXmlNS::office);
 }

@@ -122,12 +122,12 @@ void DlgClonesArray::syncOrthogonalToAngular()
     x = m_page->columnXOffset->value();
     y = m_page->columnYOffset->value();
     m_page->columnDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
-    m_page->columnAngle->setValue(kisRadiansToDegrees(atan2(y, x)));
+    m_page->columnAngle->setValue(kisRadiansToDegrees(atan2((double) y, (double) x)));
 
     x = m_page->rowXOffset->value();
     y = m_page->rowYOffset->value();
     m_page->rowDistance->setValue((float)sqrt(pow2(x) + pow2(y)));
-    m_page->rowAngle->setValue(kisRadiansToDegrees(atan2(y, x)));
+    m_page->rowAngle->setValue(kisRadiansToDegrees(atan2((double) y, (double) x)));
 
     setAngularSignalsEnabled(true);
     setDirty();

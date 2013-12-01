@@ -126,6 +126,7 @@ set(flake_SRCS
     KoTosContainerModel.cpp
     KoClipPath.cpp
     KoCurveFit.cpp
+    KoAnnotationLayoutManager.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

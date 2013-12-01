@@ -1084,19 +1084,31 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "annotation-end") {
+                // If the tag is annotation-end, there should already be a KoAnnotation
+                // with the same name as this one.  If so, just find it and set the end
+                // of the range to the current position.
                 KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
                 if (annotation) {
                     annotation->setRangeEnd(cursor.position());
                 }
             } else {
-                int position = cursor.position();
+                // if the tag is "annotation" then create a KoAnnotation
+                // and an annotation shape and call loadOdf() in them.
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
-                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
                 if (textRangeManager && annotation->loadOdf(ts, d->context)) {
                     textRangeManager->insert(annotation);
-                    cursor.setPosition(position);
-                    annotation->setRangeEnd(cursor.position());
+
+                    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
+                    // Don't show it before it's being laid out.
+                    //
+                    // Also this hides it in all applications but
+                    // those that have an annotation layout manager
+                    // (currently: words, author).
+                    shape->setVisible(false);
+
+                    d->textSharedData->shapeInserted(shape, element, d->context);
+                    annotation->setAnnotationShape(shape);
                 }
                 else {
                     kWarning(32500) << "Could not load annotation";
@@ -1468,7 +1480,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
     d->textSharedData->shapeInserted(shape, element, d->context);
 
     // page anchored shapes are handled differently
-    if (anchor->anchorType() == KoShapeAnchor::AnchorPage && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+    if (anchor->anchorType() == KoShapeAnchor::AnchorPage) {
         // nothing else to do
     } else if (anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
         KoAnchorInlineObject *anchorObject = new KoAnchorInlineObject(anchor);

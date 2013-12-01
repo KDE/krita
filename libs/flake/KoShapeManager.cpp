@@ -204,6 +204,10 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
+
+    // This signal is used in the annotation shape.
+    // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
+    shapeRemoved(shape);
 }
 
 void KoShapeManager::removeAdditional(KoShape *shape)
@@ -519,6 +523,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
         QTimer::singleShot(100, this, SLOT(updateTree()));
+    emit shapeChanged(shape);
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

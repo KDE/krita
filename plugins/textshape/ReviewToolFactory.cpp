@@ -20,6 +20,7 @@
 #include "ReviewToolFactory.h"
 #include "ReviewTool.h"
 #include "TextShape.h"
+#include "AnnotationTextShape.h"
 
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -37,7 +38,7 @@ ReviewToolFactory::ReviewToolFactory()
     setToolType(dynamicToolType()+",calligrawords");
     setIconName(koIconNameCStr("tool_review"));
     setPriority(30);
-    setActivationShapeId(TextShape_SHAPEID);
+    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }
 
 ReviewToolFactory::~ReviewToolFactory()

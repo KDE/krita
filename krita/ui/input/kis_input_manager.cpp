@@ -1,5 +1,4 @@
-/* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+/* This file is part of the KDE project * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -664,7 +663,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
 
-        if (tevent->type() == KisTabletEvent::TabletMoveEx &&
+        if (tevent->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx &&
             !d->matcher.supportsHiResInputEvents()) {
 
             d->compressedMoveEvent.reset(new KisTabletEvent(*tevent));

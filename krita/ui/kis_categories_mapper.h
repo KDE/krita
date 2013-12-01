@@ -42,11 +42,11 @@ signals:
 
 
 template<class TEntry, class TEntryToQStringConverter>
-class KRITAUI_EXPORT KisCategoriesMapper : public __CategoriesSignalsBase
+class KisCategoriesMapper : public __CategoriesSignalsBase
 {
 public:
 
-    class KRITAUI_EXPORT DataItem
+    class DataItem
     {
     public:
         DataItem(const QString &categoryName, KisCategoriesMapper *parent)

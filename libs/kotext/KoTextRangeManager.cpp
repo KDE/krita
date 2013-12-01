@@ -25,6 +25,7 @@
 #include "KoAnnotationManager.h"
 
 #include <QTextCursor>
+#include <kdebug.h>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
     : QObject(parent)

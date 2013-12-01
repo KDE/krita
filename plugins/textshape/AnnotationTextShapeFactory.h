@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,29 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextToolFactory.h"
-#include "TextTool.h"
-#include "TextShape.h"
-#include "AnnotationTextShape.h"
+#ifndef ANNOTATIONTEXTSHAPEFACTORY_H
+#define ANNOTATIONTEXTSHAPEFACTORY_H
 
-#include <KoIcon.h>
-#include <klocale.h>
+#include <KoShapeFactoryBase.h>
 
-TextToolFactory::TextToolFactory()
-        : KoToolFactoryBase("TextToolFactory_ID")
+class KoShape;
+
+class AnnotationTextShapeFactory : public KoShapeFactoryBase
 {
-    setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
-    setIconName(koIconNameCStr("tool-text"));
-    setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
-}
+public:
+    AnnotationTextShapeFactory();
+    ~AnnotationTextShapeFactory() {}
 
-TextToolFactory::~TextToolFactory()
-{
-}
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const;
+    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const;
+    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
 
-KoToolBase * TextToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new TextTool(canvas);
-}
+};
+
+#endif // ANNOTATIONTEXTSHAPEFACTORY_H

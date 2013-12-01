@@ -49,7 +49,7 @@ public:
      * Create a new Controller; typically not called by applications, only
      * by the KonCanvasBase constructor.
      * @param canvas the canvas this controller works for. The canvas can be 0
-     * @param shapeController the application provided shapeBasedDocument that we can call.
+     * @param shapeBasedDocument the application provided shapeBasedDocument that we can call.
      */
     KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
     /// destructor
@@ -102,7 +102,7 @@ public:
     /**
      * @brief Set the KoShapeBasedDocumentBase used to add/remove shapes.
      *
-     * NOTE: only Tables uses this method. Do not use it in your application. Tables
+     * NOTE: only Sheets uses this method. Do not use it in your application. Sheets
      * has to also call:
      * <code>KoToolManager::instance()->updateShapeControllerBase(shapeBasedDocument, canvas->canvasController());</code>
      *
@@ -117,6 +117,13 @@ public:
      * collection and others.
      */
     KoDocumentResourceManager *resourceManager() const;
+
+    /**
+     * @brief Returns the KoShapeBasedDocumentBase used to add/remove shapes.
+     *
+     * @return the KoShapeBasedDocumentBase
+     */
+    KoShapeBasedDocumentBase *documentBase() const;
 
 private:
     class Private;

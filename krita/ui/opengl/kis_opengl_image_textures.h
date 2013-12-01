@@ -152,6 +152,7 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+    bool m_useOcio;
     GLuint m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;

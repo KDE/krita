@@ -24,6 +24,8 @@
 
 #include "komain_export.h"
 
+// -- WARNING: do not edit values below, instead edit CALLIGRA_VERSION_*, etc in /CMakeLists.txt --
+
 /**
 * @def CALLIGRA_VERSION_STRING
 * @ingroup CalligraMacros
@@ -32,15 +34,21 @@
 * This macro contains the Calligra version in string form. As it is a macro,
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
+*
+* @note The version string might contain spaces and special characters,
+* especially for development versions of Calligra.
+* If you use that macro directly for a file format (e.g. OASIS Open Document)
+* or for a protocol (e.g. http) be careful that it is appropriate.
+* (Fictional) example: "2.8 Pre-Alpha"
 */
-#define CALLIGRA_VERSION_STRING "2.9 Pre-Alpha"
+#cmakedefine CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
  * @ingroup CalligraMacros
  * @brief Major version of Calligra, at compile time
 */
-#define CALLIGRA_VERSION_MAJOR 2
+#cmakedefine CALLIGRA_VERSION_MAJOR @CALLIGRA_VERSION_MAJOR@
 
 /**
  * @def CALLIGRA_STABLE_VERSION_MINOR
@@ -49,44 +57,43 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#define CALLIGRA_STABLE_VERSION_MINOR 9
+#cmakedefine CALLIGRA_STABLE_VERSION_MINOR @CALLIGRA_STABLE_VERSION_MINOR@
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
  * @ingroup CalligraMacros
- * @brief Release version of Calligra, at compile time
+ * @brief Release version of Calligra, at compile time.
+ * 89 for Alpha.
  */
-#define CALLIGRA_VERSION_RELEASE 89
+#cmakedefine CALLIGRA_VERSION_RELEASE @CALLIGRA_VERSION_RELEASE@
 
 /**
  * @def CALLIGRA_ALPHA
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in alpha stage
  */
-#define CALLIGRA_ALPHA 1
+#cmakedefine CALLIGRA_ALPHA @CALLIGRA_ALPHA@
 
 /**
  * @def CALLIGRA_BETA
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in beta stage
  */
-// #define CALLIGRA_BETA 1
+#cmakedefine CALLIGRA_BETA @CALLIGRA_BETA@
 
 /**
  * @def CALLIGRA_RC
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in "release candidate" stage
  */
-// #define CALLIGRA_RC 1
+#cmakedefine CALLIGRA_RC @CALLIGRA_RC@
 
 /**
  * @def CALLIGRA_STABLE
  * @ingroup CalligraMacros
- * @brief If defined (>=0), indicates at compile time that Calligra is in stable stage
+ * @brief If defined, indicates at compile time that Calligra is in stable stage
  */
-// #define CALLIGRA_STABLE 0
-
-// -- WARNING: do not edit values below this line --
+#cmakedefine CALLIGRA_STABLE @CALLIGRA_STABLE@
 
 /**
  * @def CALLIGRA_VERSION_MINOR

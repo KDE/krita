@@ -10,22 +10,38 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
 endif()
 
 
- ############
-#############
-## Options ##
-#############
-############
-
  ######################
 #######################
 ## Constants defines ##
 #######################
 ######################
 
+# define common versions of Calligra applications, used to generate calligraversion.h
+# update these version for every release:
+set(CALLIGRA_VERSION_STRING "2.9 Pre-Alpha")
+set(CALLIGRA_VERSION_MAJOR 2)
+set(CALLIGRA_STABLE_VERSION_MINOR 9)
+set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+#set(CALLIGRA_BETA 1) # uncomment only for Beta
+#set(CALLIGRA_RC 1) # uncomment only for RC
+
+if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
+    set(CALLIGRA_STABLE 1) # do not edit
+endif()
+
+message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
+
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "13.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "13")
+if(CALLIGRA_VERSION_MAJOR EQUAL 2)
+    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
+else()
+    # let's make sure we won't forget to update the "5"
+    message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+endif()
+set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -68,6 +84,11 @@ else (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
 endif (RELEASE_BUILD)
 
+ ############
+#############
+## Options ##
+#############
+############
 
 option(GHNS "support Get Hot New Stuff" OFF)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
@@ -794,6 +815,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}

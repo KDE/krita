@@ -173,18 +173,15 @@ bool KisToolFreehand::primaryActionSupportsHiResEvents() const
 void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 {
     // FIXME: workaround for the Duplicate Op
-    tryPickByPaintOp(event, PickFgNode);
+    tryPickByPaintOp(event, PickFgImage);
 
     requestUpdateOutline(event->point);
 
-    if (nodePaintAbility() != PAINT) {
+    if (!nodeEditable() || nodePaintAbility() != PAINT) {
         KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-        canvas2->view()->showFloatingMessage(i18n("Can't paint on vector layer."), koIcon("draw-brush"));
+        canvas2->view()->showFloatingMessage(i18n("Can't paint on this layer."), koIcon("draw-brush"));
+        event->ignore();
 
-        return;
-    }
-
-    if (!nodeEditable()) {
         return;
     }
 
@@ -200,11 +197,12 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     currentPaintOpPreset()->settings()->setCanvasMirroring(converter->xAxisMirrored(),
                                                            converter->yAxisMirrored());
     initStroke(event);
-    event->accept();
 }
 
 void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     requestUpdateOutline(event->point);
 
     /**
@@ -215,6 +213,9 @@ void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     endStroke();
 
     if (m_assistant) {
@@ -228,7 +229,6 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     }
 
     setMode(KisTool::HOVER_MODE);
-    event->accept();
 }
 
 bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction action)

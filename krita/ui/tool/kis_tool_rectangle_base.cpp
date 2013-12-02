@@ -48,7 +48,9 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
     if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
         (m_type == SELECT && !selectionEditable())) {
-            return;
+
+        event->ignore();
+        return;
     }
     setMode(KisTool::PAINT_MODE);
 
@@ -59,6 +61,8 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     QPointF pos = convertToPixelCoord(event);
 
     if (event->modifiers() & Qt::AltModifier) {
@@ -93,6 +97,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updateArea();

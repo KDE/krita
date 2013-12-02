@@ -73,7 +73,6 @@ void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
         m_axisPoint = convertToPixelCoord(event->point);
         requestUpdateOutline(event->point);
         updateCanvas();
-        event->accept();
     }
     else {
         initTransformations();
@@ -87,7 +86,6 @@ void KisToolMultihand::continuePrimaryAction(KoPointerEvent *event)
         m_axisPoint = convertToPixelCoord(event->point);
         requestUpdateOutline(event->point);
         updateCanvas();
-        event->accept();
     }
     else {
         KisToolFreehand::continuePrimaryAction(event);
@@ -100,7 +98,6 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
         requestUpdateOutline(event->point);
         finishAxisSetup();
-        event->accept();
     }
     else {
         KisToolFreehand::endPrimaryAction(event);

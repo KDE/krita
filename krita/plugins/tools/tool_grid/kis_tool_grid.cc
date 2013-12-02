@@ -95,8 +95,13 @@ void KisToolGrid::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolGrid::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    Q_UNUSED(event);
-    if (action != Secondary && action != PickFgNode) return;
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::beginAlternateAction(event, action);
+        return;
+    }
 
     KisConfig cfg;
     m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
@@ -107,7 +112,13 @@ void KisToolGrid::beginAlternateAction(KoPointerEvent *event, AlternateAction ac
 
 void KisToolGrid::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != Secondary && action != PickFgNode) return;
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::continueAlternateAction(event, action);
+        return;
+    }
 
     KisConfig cfg;
     m_dragEnd = convertToPixelCoord(event);
@@ -130,8 +141,14 @@ void KisToolGrid::continueAlternateAction(KoPointerEvent *event, AlternateAction
 
 void KisToolGrid::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
-    Q_UNUSED(event);
-    if (action != Secondary && action != PickFgNode) return;
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::endAlternateAction(event, action);
+        return;
+    }
+
     setMode(KisTool::HOVER_MODE);
 }
 

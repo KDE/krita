@@ -67,14 +67,14 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (!currentNode())
-        return;
-    KisPaintDeviceSP dev = currentNode()->projection();
+    KisPaintDeviceSP dev;
 
-    if (!dev || !currentNode()->visible())
-        return;
+    if (!currentNode() ||
+        !(dev = currentNode()->projection()) ||
+        !currentNode()->visible() ||
+        !selectionEditable()) {
 
-    if (!selectionEditable()) {
+        event->ignore();
         return;
     }
 

@@ -83,24 +83,21 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
 
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (!currentNode()) {
-        return;
-    }
+    KisPaintDeviceSP dev;
 
-    KisPaintDeviceSP dev = currentNode()->projection();
+    if (!currentNode() ||
+        !(dev = currentNode()->projection()) ||
+        !currentNode()->visible() ||
+        !selectionEditable()) {
 
-    if (!dev || !currentNode()->visible())
-        return;
-
-    if (!selectionEditable()) {
+        event->ignore();
         return;
     }
 
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas)
-        return;
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 

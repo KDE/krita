@@ -75,16 +75,20 @@ QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos, const QPoint &c
     return widgetToDocument(pos);
 }
 
-void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
+bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
 {
+    bool retval = true;
+
     QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
     QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     if (tabletEvent) {
         QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+        tabletEvent->accept();
         this->tabletEvent(tabletEvent, docPoint);
         forwardToTool(state, action, tabletEvent, docPoint);
+        retval = tabletEvent->isAccepted();
     } else if (touchEvent) {
         if (state == END && touchEvent->type() != QEvent::TouchEnd) {
             //Fake a touch end if we are "upgrading" a single-touch gesture to a multi-touch gesture.
@@ -96,10 +100,13 @@ void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
     } else if (mouseEvent) {
         if (lastTabletEvent) {
             QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+            lastTabletEvent->accept();
             this->tabletEvent(lastTabletEvent, docPoint);
             forwardToTool(state, action, lastTabletEvent, docPoint);
+            retval = lastTabletEvent->isAccepted();
         } else {
             QPointF docPoint = widgetToDocument(mouseEvent->posF());
+            mouseEvent->accept();
             if (mouseEvent->type() == QEvent::MouseButtonPress) {
                 mousePressEvent(mouseEvent, docPoint);
             } else if (mouseEvent->type() == QEvent::MouseButtonDblClick) {
@@ -110,6 +117,7 @@ void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
                 mouseMoveEvent(mouseEvent, docPoint);
             }
             forwardToTool(state, action, originalEvent, docPoint);
+            retval = mouseEvent->isAccepted();
         }
     } else if(event->type() == QEvent::KeyPress) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
@@ -118,6 +126,8 @@ void KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
         keyReleaseEvent(kevent);
     }
+
+    return retval;
 }
 
 void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, QEvent *event, const QPointF &docPoint)

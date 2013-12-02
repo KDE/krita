@@ -64,12 +64,11 @@ int KisToolInvocationAction::priority() const
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
-        inputManager()->toolProxy()->forwardEvent(
-            KisToolProxy::BEGIN, KisTool::Primary, event, event,
-            inputManager()->lastTabletEvent(),
-            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
-
-        d->active = true;
+        d->active =
+            inputManager()->toolProxy()->forwardEvent(
+                KisToolProxy::BEGIN, KisTool::Primary, event, event,
+                inputManager()->lastTabletEvent(),
+                inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
@@ -109,6 +108,8 @@ void KisToolInvocationAction::end(QEvent *event)
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
+    if (!d->active) return;
+
     inputManager()->toolProxy()->
         forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
                      inputManager()->lastTabletEvent(),

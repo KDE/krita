@@ -227,243 +227,240 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     QPointF pos = convertToPixelCoord(event);
 
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        QRectF updateRect = boundingRect();
-        if (!m_haveCropSelection) { //if the cropSelection is not yet set
-            m_rectCrop.setBottomRight(pos.toPoint());
-        } else { //if the crop selection is set
-            QPoint dragStop = pos.toPoint();
-            QPoint drag = dragStop - m_dragStart;
+    QRectF updateRect = boundingRect();
+    if (!m_haveCropSelection) { //if the cropSelection is not yet set
+        m_rectCrop.setBottomRight(pos.toPoint());
+    } else { //if the crop selection is set
+        QPoint dragStop = pos.toPoint();
+        QPoint drag = dragStop - m_dragStart;
 
-            if (m_mouseOnHandleType != None && m_dragStart != dragStop) {
-                if(!m_growCenter){ //normal don't grow outwards from center
-                    if (m_mouseOnHandleType == Inside) {
-                        m_rectCrop.translate(drag);
-                    } else if (m_forceRatio) {
-                        if (!m_forceWidth && !m_forceHeight) {
-                            QRect newRect = m_rectCrop;
-                            switch (m_mouseOnHandleType) {
-                            case(UpperLeft): {
-                                qint32 dep = (drag.x() + drag.y()) / 2;
-                                newRect.setTop(newRect.top() + dep);
-                                newRect.setLeft(newRect.right() - m_originalRatio * newRect.height());
-                            }
-                                break;
-                            case(LowerRight): {
-                                qint32 dep = (drag.x() + drag.y()) / 2;
-                                newRect.setBottom(newRect.bottom() + dep);
-                                newRect.setWidth((int)(m_originalRatio * newRect.height()));
-                                break;
-                            }
-                            case(UpperRight): {
-                                qint32 dep = (drag.x() - drag.y()) / 2;
-                                newRect.setTop(newRect.top() - dep);
-                                newRect.setWidth((int)(m_originalRatio * newRect.height()));
-                                break;
-                            }
-                            case(LowerLeft): {
-                                qint32 dep = (drag.x() - drag.y()) / 2;
-                                newRect.setBottom(newRect.bottom() - dep);
-                                newRect.setLeft((int)(newRect.right() - m_originalRatio * newRect.height()));
-                                break;
-                            }
-                            case(Upper):
-                                newRect.setTop(pos.y());
-                                newRect.setWidth((int)(newRect.height() * m_originalRatio));
-                                break;
-                            case(Lower):
-                                newRect.setBottom(pos.y());
-                                newRect.setWidth((int)(newRect.height() * m_originalRatio));
-                                break;
-                            case(Left):
-                                newRect.setLeft(pos.x());
-                                newRect.setHeight((int)(newRect.width() / m_originalRatio));
-                                break;
-                            case(Right):
-                                newRect.setRight(pos.x());
-                                newRect.setHeight((int)(newRect.width() / m_originalRatio));
-                                break;
-                            case(Inside):  // never happen
-                                break;
-                            }
-                            m_rectCrop = newRect;
+        if (m_mouseOnHandleType != None && m_dragStart != dragStop) {
+            if(!m_growCenter){ //normal don't grow outwards from center
+                if (m_mouseOnHandleType == Inside) {
+                    m_rectCrop.translate(drag);
+                } else if (m_forceRatio) {
+                    if (!m_forceWidth && !m_forceHeight) {
+                        QRect newRect = m_rectCrop;
+                        switch (m_mouseOnHandleType) {
+                        case(UpperLeft): {
+                            qint32 dep = (drag.x() + drag.y()) / 2;
+                            newRect.setTop(newRect.top() + dep);
+                            newRect.setLeft(newRect.right() - m_originalRatio * newRect.height());
                         }
+                            break;
+                        case(LowerRight): {
+                            qint32 dep = (drag.x() + drag.y()) / 2;
+                            newRect.setBottom(newRect.bottom() + dep);
+                            newRect.setWidth((int)(m_originalRatio * newRect.height()));
+                            break;
+                        }
+                        case(UpperRight): {
+                            qint32 dep = (drag.x() - drag.y()) / 2;
+                            newRect.setTop(newRect.top() - dep);
+                            newRect.setWidth((int)(m_originalRatio * newRect.height()));
+                            break;
+                        }
+                        case(LowerLeft): {
+                            qint32 dep = (drag.x() - drag.y()) / 2;
+                            newRect.setBottom(newRect.bottom() - dep);
+                            newRect.setLeft((int)(newRect.right() - m_originalRatio * newRect.height()));
+                            break;
+                        }
+                        case(Upper):
+                            newRect.setTop(pos.y());
+                            newRect.setWidth((int)(newRect.height() * m_originalRatio));
+                            break;
+                        case(Lower):
+                            newRect.setBottom(pos.y());
+                            newRect.setWidth((int)(newRect.height() * m_originalRatio));
+                            break;
+                        case(Left):
+                            newRect.setLeft(pos.x());
+                            newRect.setHeight((int)(newRect.width() / m_originalRatio));
+                            break;
+                        case(Right):
+                            newRect.setRight(pos.x());
+                            newRect.setHeight((int)(newRect.width() / m_originalRatio));
+                            break;
+                        case(Inside):  // never happen
+                            break;
+                        }
+                        m_rectCrop = newRect;
+                    }
+                } else {
+                    if (m_forceWidth) {
+                        m_rectCrop.setWidth(m_cropWidth);
                     } else {
-                        if (m_forceWidth) {
-                            m_rectCrop.setWidth(m_cropWidth);
-                        } else {
-                            switch (m_mouseOnHandleType) {
-                            case(LowerLeft):
-                            case(Left):
-                            case(UpperLeft):
-                                m_rectCrop.setLeft(pos.x());
+                        switch (m_mouseOnHandleType) {
+                        case(LowerLeft):
+                        case(Left):
+                        case(UpperLeft):
+                            m_rectCrop.setLeft(pos.x());
+                        break;
+                        case(Right):
+                        case(UpperRight):
+                        case(LowerRight):
+                            m_rectCrop.setRight(pos.x());
+                        break;
+                        default:
                             break;
-                            case(Right):
-                            case(UpperRight):
-                            case(LowerRight):
-                                m_rectCrop.setRight(pos.x());
-                            break;
-                            default:
-                                break;
-                            }
-                        }
-                        if (m_forceHeight) {
-                            m_rectCrop.setHeight(m_cropHeight);
-                        } else {
-                            switch (m_mouseOnHandleType) {
-                            case(UpperLeft):
-                            case(Upper):
-                            case(UpperRight):
-                                m_rectCrop.setTop(pos.y());
-                            break;
-                            case(LowerRight):
-                            case(LowerLeft):
-                            case(Lower):
-                                m_rectCrop.setBottom(pos.y());
-                            break;
-                            default:
-                                break;
-                            }
                         }
                     }
-
-                }else{ //grow from center
-                
-                    if (m_mouseOnHandleType == Inside) {
-                        m_rectCrop.translate(drag);
-                    } else if (m_forceRatio) {
-                        if (!m_forceWidth && !m_forceHeight) {
-                            QRect newRect = m_rectCrop;
-                            switch (m_mouseOnHandleType) {
-                            case(UpperLeft):{
-                                qint32 depy = -(drag.x()+drag.y())/2;
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy); //does not preserve center because of odd widths accumulating
-                                newRect.moveCenter(m_center); //fix straying center
-                                break;
-                            }
-                            case(LowerRight): {
-                                qint32 depy = (drag.x()+drag.y())/2;
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(UpperRight): {
-                                qint32 depy = (drag.x()-drag.y())/2;
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy);
-                                newRect.moveCenter(m_center);
-                                break;
-
-                            }
-                            case(LowerLeft): {
-
-                                qint32 depy = (drag.y()-drag.x())/2;
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(Upper):{
-                                qint32 depy = -drag.y();
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(Lower):{
-                                qint32 depy = drag.y();
-                                qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
-                                qint32 depx = depx2/2;
-                                newRect.adjust(-depx,-depy,depx2-depx,depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(Left):{
-                                qint32 depx = -drag.x();
-                                qint32 depy2 = ((2*depx+m_cropWidth)/m_originalRatio-m_cropHeight);
-                                qint32 depy = depy2/2;
-                                newRect.adjust(-depx,-depy,depx,depy2-depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(Right):{
-                                qint32 depx = drag.x();
-                                qint32 depy2 = ((2*depx+m_cropWidth)/m_originalRatio-m_cropHeight);
-                                qint32 depy = depy2/2;
-                                newRect.adjust(-depx,-depy,depx,depy2-depy);
-                                newRect.moveCenter(m_center);
-                                break;
-                            }
-                            case(Inside):  // never happen
-                                break;
-                            }
-                            m_rectCrop = newRect;
-                        }
+                    if (m_forceHeight) {
+                        m_rectCrop.setHeight(m_cropHeight);
                     } else {
-                        if (m_forceWidth) {
-                            m_rectCrop.setWidth(m_cropWidth);
-                        } else {
-                            switch (m_mouseOnHandleType) {
-                            case(LowerLeft):
-                            case(Left):
-                            case(UpperLeft):
-                                m_rectCrop.adjust(drag.x(),0,-drag.x(),0);
+                        switch (m_mouseOnHandleType) {
+                        case(UpperLeft):
+                        case(Upper):
+                        case(UpperRight):
+                            m_rectCrop.setTop(pos.y());
+                        break;
+                        case(LowerRight):
+                        case(LowerLeft):
+                        case(Lower):
+                            m_rectCrop.setBottom(pos.y());
+                        break;
+                        default:
                             break;
-                            case(Right):
-                            case(UpperRight):
-                            case(LowerRight):
-                                m_rectCrop.adjust(-drag.x(),0,drag.x(),0);
-                            break;
-                            default:
-                                break;
-                            }
-                        }
-                        if (m_forceHeight) {
-                            m_rectCrop.setHeight(m_cropHeight);
-                        } else {
-                            switch (m_mouseOnHandleType) {
-                            case(UpperLeft):
-                            case(Upper):
-                            case(UpperRight):
-                                m_rectCrop.adjust(0,drag.y(),0,-drag.y());
-                            break;
-                            case(LowerRight):
-                            case(LowerLeft):
-                            case(Lower):
-                                m_rectCrop.adjust(0,-drag.y(),0,drag.y());
-                            break;
-                            default:
-                                break;
-                            }
                         }
                     }
-
                 }
-                m_dragStart = dragStop;
+
+            }else{ //grow from center
+                
+                if (m_mouseOnHandleType == Inside) {
+                    m_rectCrop.translate(drag);
+                } else if (m_forceRatio) {
+                    if (!m_forceWidth && !m_forceHeight) {
+                        QRect newRect = m_rectCrop;
+                        switch (m_mouseOnHandleType) {
+                        case(UpperLeft):{
+                            qint32 depy = -(drag.x()+drag.y())/2;
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy); //does not preserve center because of odd widths accumulating
+                            newRect.moveCenter(m_center); //fix straying center
+                            break;
+                        }
+                        case(LowerRight): {
+                            qint32 depy = (drag.x()+drag.y())/2;
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(UpperRight): {
+                            qint32 depy = (drag.x()-drag.y())/2;
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy);
+                            newRect.moveCenter(m_center);
+                            break;
+
+                        }
+                        case(LowerLeft): {
+
+                            qint32 depy = (drag.y()-drag.x())/2;
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(Upper):{
+                            qint32 depy = -drag.y();
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(Lower):{
+                            qint32 depy = drag.y();
+                            qint32 depx2 = (m_originalRatio*(2*depy+m_cropHeight)-m_cropWidth);
+                            qint32 depx = depx2/2;
+                            newRect.adjust(-depx,-depy,depx2-depx,depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(Left):{
+                            qint32 depx = -drag.x();
+                            qint32 depy2 = ((2*depx+m_cropWidth)/m_originalRatio-m_cropHeight);
+                            qint32 depy = depy2/2;
+                            newRect.adjust(-depx,-depy,depx,depy2-depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(Right):{
+                            qint32 depx = drag.x();
+                            qint32 depy2 = ((2*depx+m_cropWidth)/m_originalRatio-m_cropHeight);
+                            qint32 depy = depy2/2;
+                            newRect.adjust(-depx,-depy,depx,depy2-depy);
+                            newRect.moveCenter(m_center);
+                            break;
+                        }
+                        case(Inside):  // never happen
+                            break;
+                        }
+                        m_rectCrop = newRect;
+                    }
+                } else {
+                    if (m_forceWidth) {
+                        m_rectCrop.setWidth(m_cropWidth);
+                    } else {
+                        switch (m_mouseOnHandleType) {
+                        case(LowerLeft):
+                        case(Left):
+                        case(UpperLeft):
+                            m_rectCrop.adjust(drag.x(),0,-drag.x(),0);
+                        break;
+                        case(Right):
+                        case(UpperRight):
+                        case(LowerRight):
+                            m_rectCrop.adjust(-drag.x(),0,drag.x(),0);
+                        break;
+                        default:
+                            break;
+                        }
+                    }
+                    if (m_forceHeight) {
+                        m_rectCrop.setHeight(m_cropHeight);
+                    } else {
+                        switch (m_mouseOnHandleType) {
+                        case(UpperLeft):
+                        case(Upper):
+                        case(UpperRight):
+                            m_rectCrop.adjust(0,drag.y(),0,-drag.y());
+                        break;
+                        case(LowerRight):
+                        case(LowerLeft):
+                        case(Lower):
+                            m_rectCrop.adjust(0,-drag.y(),0,drag.y());
+                        break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+
             }
+            m_dragStart = dragStop;
         }
-
-        validateSelection();
-        updateRect |= boundingRect();
-        updateCanvasViewRect(updateRect);
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
     }
 
+    validateSelection();
+    updateRect |= boundingRect();
+    updateCanvasViewRect(updateRect);
 }
 
 void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     m_haveCropSelection = true;
@@ -498,8 +495,10 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolCrop::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
     if (m_haveCropSelection) crop();
+
+    // this action will have no continuation
+    event->ignore();
 }
 
 //now updates all values regardless (to get rid of the recursive nature of the previous implementation that got into infinite loops)

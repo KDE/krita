@@ -94,10 +94,45 @@ public:
 // KoToolBase Implementation.
 
 public:
+
+    /**
+     * Called by KisToolProxy when a primary action for the tool is
+     * activated. The \p event stores the original event that
+     * activated the stroke. The \p event is _accepted_ by default. If
+     * the tool decides to ignore this particular action (e.g. when
+     * the node is not editable), it should call event->ignore(). Then
+     * no further continuePrimaryAction() or endPrimaryAction() will
+     * be called until the next user action.
+     */
     virtual void beginPrimaryAction(KoPointerEvent *event);
+
+    /**
+     * Called by KisToolProxy when the primary action is in progress
+     * of pointer movement.  If the tool has ignored the event in
+     * beginPrimaryAction(), this method will not be called.
+     */
     virtual void continuePrimaryAction(KoPointerEvent *event);
+
+    /**
+     * Called by KisToolProxy when the primary action is being
+     * finished, that is while mouseRelease or tabletRelease event.
+     * If the tool has ignored the event in beginPrimaryAction(), this
+     * method will not be called.
+     */
     virtual void endPrimaryAction(KoPointerEvent *event);
+
+    /**
+     * The same as beginPrimaryAction(), but called when the stroke is
+     * started by a double-click
+     *
+     * \see beginPrimaryAction()
+     */
     virtual void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+
+    /**
+     * Returns true if the tool can handle (and wants to handle) a
+     * very tight flow of input events from the tablet
+     */
     virtual bool primaryActionSupportsHiResEvents() const;
 
     enum ToolAction {

@@ -200,6 +200,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     // And then our own Viewport
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
+    d->viewportWidget->setFocusPolicy(Qt::NoFocus);
 
     //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);

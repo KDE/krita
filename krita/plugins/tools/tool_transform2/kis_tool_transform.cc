@@ -1808,7 +1808,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleY = fabs(m_scaleY_wOutModifier);
 
                 m_currentArgs.setScaleX((m_scaleX_wOutModifier > 0) ? a_scaleY : -a_scaleY);
@@ -1886,7 +1888,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleX = fabs(m_scaleX_wOutModifier);
 
                 m_currentArgs.setScaleY((m_scaleY_wOutModifier > 0) ? a_scaleX : -a_scaleX);
@@ -1976,7 +1980,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleX = fabs(m_scaleX_wOutModifier);
                 double a_scaleY = fabs(m_scaleY_wOutModifier);
 

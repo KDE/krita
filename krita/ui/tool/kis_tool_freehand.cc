@@ -233,7 +233,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 
 bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != PickFgNode) return false;
+    if (action != PickFgNode && action != PickFgImage) return false;
 
     /**
      * FIXME: we need some better way to implement modifiers

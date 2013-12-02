@@ -2227,7 +2227,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisNodeSP currentNode = this->currentNode();
 
-    if (!currentNode) {
+    if (!currentNode || !currentNode->hasEditablePaintDevice()) {
         return;
     }
 
@@ -2275,7 +2275,11 @@ void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
 
-    if (!m_currentArgs.isIdentity()) {
+    /**
+     * It might happen that the node has become locked while the stroke,
+     * so check that one more time before the end
+     */
+    if (!m_currentArgs.isIdentity() && m_transaction.rootNode()->hasEditablePaintDevice()) {
         transformDevices(m_transaction.rootNode(), m_workRecursively);
 
         image()->addJob(m_strokeId,
@@ -2404,8 +2408,6 @@ void KisToolTransform::slotUiChangedConfig()
 
 void KisToolTransform::slotApplyTransform()
 {
-    if (!nodeEditable()) return;
-
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     endStroke();
     QApplication::restoreOverrideCursor();

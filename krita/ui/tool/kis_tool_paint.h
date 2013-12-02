@@ -159,7 +159,7 @@ protected:
     bool m_toForegroundColor;
 
 private:
-    QPainterPath tryFixTooBigBrush(const QPainterPath &originalOutline);
+    QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
 
 private:
 

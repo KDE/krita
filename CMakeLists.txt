@@ -100,7 +100,6 @@ endif(NOT PRODUCTSET)
 # 3rd-party libs
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
-calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # building tools
 calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
@@ -185,7 +184,8 @@ calligra_define_product(FILTER_SHEETS_EXPORT "All Sheets export filter"  WANTS F
 calligra_define_product(FILTER_SHEETS "All Sheets filter"  WANTS FILTER_SHEETS_IMPORT FILTER_SHEETS_EXPORT)
 # Flow filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG)
+calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG FILTER_WPG_TO_ODG)
 calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filter"  WANTS )
 calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
@@ -198,8 +198,8 @@ calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPO
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" NEEDS LIB_MSO LIB_KOMSOOXML CALLIGRA_LIBS)
 calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART LIB_KOODF2)
 calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_KOODFREADER CALLIGRA_LIBS)
@@ -882,10 +882,6 @@ set(KDCHART_INCLUDES
 set(KDCHART_LIBS calligrakdchart)
 
 
-set(WRITERPERFECT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/filters/writerperfect
-)
-
 #############################################
 ####           filter libraries          ####
 #############################################
@@ -965,12 +961,9 @@ if(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
     calligra_disable_product(FILTER_WORKS_TO_ODT "libwps devel not found")
 endif(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
 
-if (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(LIB_WRITERPERFECT "libwpd|libwpg devel not found")
-endif (NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
-
 if (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(FILTER_WPG_TO_SVG "libwpg devel not found")
+    calligra_disable_product(FILTER_WPG_TO_ODG "libwpg devel not found")
 endif (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)

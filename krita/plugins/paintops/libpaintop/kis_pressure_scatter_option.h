@@ -38,10 +38,7 @@ class PAINTOP_EXPORT KisPressureScatterOption : public KisCurveOption
 public:
     KisPressureScatterOption();
 
-    /**
-    * Set the 
-    */
-    QPointF apply(const KisPaintInformation& info, qreal diameter) const;
+    QPointF apply(const KisPaintInformation& info, qreal width, qreal height) const;
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);

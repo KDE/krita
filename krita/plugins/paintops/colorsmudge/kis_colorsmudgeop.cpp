@@ -133,17 +133,18 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
 
-    // don't paint anything if the brush is too small
-    if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
-        return 1.0;
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
-    QPointF hotSpot      = brush->hotSpot(scale, scale, rotation, info);
+    QPointF scatteredPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
+
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
 
     /**
      * Update the brush mask.

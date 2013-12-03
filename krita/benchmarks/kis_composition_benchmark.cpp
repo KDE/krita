@@ -41,8 +41,10 @@
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
-// for posix_memalign()
-#include <stdlib.h>
+// for memalign()
+#if !defined(__APPLE__)
+#include <malloc.h>
+#endif
 
 const int alpha_pos = 3;
 
@@ -152,13 +154,15 @@ QVector<Tile> generateTiles(int size,
 #endif
 
     for (int i = 0; i < size; i++) {
-        void *ptr = NULL;
-        posix_memalign(&ptr, vecSize * 4, numPixels * 4 + srcAlignmentShift);
-        tiles[i].src = (quint8*)ptr + srcAlignmentShift;
-        posix_memalign(&ptr, vecSize * 4, numPixels * 4 + dstAlignmentShift);
-        tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
-        posix_memalign(&ptr, vecSize, numPixels);
-        tiles[i].mask = (quint8*)ptr;
+#if !defined(__APPLE__) // In OSX it's automatically aligned by 16 bytes
+        tiles[i].src = (quint8*)memalign(vecSize * 4, numPixels * 4 + srcAlignmentShift) + srcAlignmentShift;
+        tiles[i].dst = (quint8*)memalign(vecSize * 4, numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
+        tiles[i].mask = (quint8*)memalign(vecSize, numPixels);
+#else
+        tiles[i].src = (quint8*)malloc(numPixels * 4 + srcAlignmentShift) + srcAlignmentShift;
+        tiles[i].dst = (quint8*)malloc(numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
+        tiles[i].mask = (quint8*)malloc(numPixels);
+#endif
         generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
     }
 
@@ -552,6 +556,13 @@ void KisCompositionBenchmark::testRgb8CompositeOverReal_Aligned()
     benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
 }
 
+void KisCompositionBenchmark::testRgb8CompositeCopyLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoCompositeOp *op = cs->compositeOp(COMPOSITE_COPY);
+    benchmarkCompositeOp(op, "Copy");
+}
+
 void KisCompositionBenchmark::benchmarkMemcpy()
 {
     QVector<Tile> tiles =
@@ -572,11 +583,8 @@ void KisCompositionBenchmark::benchmarkUintFloat()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    void *ptr = NULL;
-    posix_memalign(&ptr, vecSize, dataSize);
-    quint8 *iData = (quint8*)ptr;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    float *fData = (float*)ptr;
+    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -598,11 +606,8 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    void *ptr = NULL;
-    posix_memalign(&ptr, vecSize, dataSize);
-    quint8 *iData = (quint8*)ptr;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    float *fData = (float*)ptr;
+    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -624,11 +629,8 @@ void KisCompositionBenchmark::benchmarkFloatUint()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    void *ptr = NULL;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    quint32 *iData = (quint32*)ptr;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    float *fData = (float*)ptr;
+    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -650,11 +652,8 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    void *ptr = NULL;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    quint32 *iData = (quint32*)ptr;
-    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
-    float *fData = (float*)ptr;
+    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
+    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {

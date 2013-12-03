@@ -141,10 +141,6 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
-signals:
-
-    void closeEmbedInitDialog();
-
 private slots:
 
     void startCustomDocument();

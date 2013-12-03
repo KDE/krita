@@ -87,7 +87,8 @@ struct IccColorProfile::Private {
     Shared* shared;
 };
 
-IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name) : KoColorProfile(QString()), d(new Private)
+IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal gamma, const QString &name)
+    : KoColorProfile(QString()), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
@@ -98,7 +99,8 @@ IccColorProfile::IccColorProfile(const KoRGBChromaticities& chromacities, qreal 
     init();
 }
 
-IccColorProfile::IccColorProfile(const QString &fileName) : KoColorProfile(fileName), d(new Private)
+IccColorProfile::IccColorProfile(const QString &fileName)
+    : KoColorProfile(fileName), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
@@ -107,7 +109,8 @@ IccColorProfile::IccColorProfile(const QString &fileName) : KoColorProfile(fileN
     d->shared->chromacities = 0;
 }
 
-IccColorProfile::IccColorProfile(const QByteArray& rawData) : KoColorProfile(""), d(new Private)
+IccColorProfile::IccColorProfile(const QByteArray& rawData)
+    : KoColorProfile(""), d(new Private)
 {
     d->shared = new Private::Shared();
     d->shared->count ++;
@@ -118,7 +121,9 @@ IccColorProfile::IccColorProfile(const QByteArray& rawData) : KoColorProfile("")
     init();
 }
 
-IccColorProfile::IccColorProfile(const IccColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
+IccColorProfile::IccColorProfile(const IccColorProfile& rhs)
+    : KoColorProfile(rhs)
+    , d(new Private(*rhs.d))
 {
     Q_ASSERT(d->shared);
     d->shared->count++;

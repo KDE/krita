@@ -30,7 +30,7 @@ class KisToolSelectSimilar : public KisToolSelectBase
     Q_OBJECT
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
     QWidget* createOptionWidget();
     void paint(QPainter&, const KoViewConverter &) {}
 public slots:

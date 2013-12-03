@@ -24,7 +24,7 @@
 class QPointF;
 class QTabletEvent;
 class QTouchEvent;
-class KoToolProxy;
+class KisToolProxy;
 class KisCanvas2;
 class KisInputAction;
 /**
@@ -57,7 +57,7 @@ public:
      * \param canvas The parent canvas.
      * \param proxy The application's tool proxy.
      */
-    explicit KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy);
+    explicit KisInputManager(KisCanvas2* canvas, KisToolProxy* proxy);
     /**
      * Destructor.
      */
@@ -78,7 +78,7 @@ public:
     /**
      * The tool proxy of the current application.
      */
-    KoToolProxy *toolProxy() const;
+    KisToolProxy *toolProxy() const;
 
     /**
      * Returns the event object for the last tablet event
@@ -104,6 +104,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
+    void slotCompressedMoveEvent();
 
 private:
     class Private;

@@ -93,20 +93,6 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_progress);
 }
 
-#define EPSILON 1e-6
-
-void KisStatusBar::setZoom(int zoom)
-{
-    Q_UNUSED(zoom);
-    /*
-        if (zoom < 1 - EPSILON) {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
-        } else {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
-        }
-    */
-}
-
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 {
     QPoint pixelPos = m_view->image()->documentToIntPixel(pos);

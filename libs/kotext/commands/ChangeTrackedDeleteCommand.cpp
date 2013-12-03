@@ -198,11 +198,7 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     QTextCharFormat format = editor->charFormat();
     editor->registerTrackedChange(*editor->cursor(), KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     //Paste the selected text from the clipboard... (XXX: is this really correct here?)
-    TextPasteCommand *pasteCommand =
-            new TextPasteCommand(QApplication::clipboard()->mimeData(QClipboard::Clipboard),
-                                 m_document.data(),
-                                 m_shapeController,
-                                 this);
+    TextPasteCommand *pasteCommand =0;
     pasteCommand->redo();
 
     // Convert it into a un-numbered list-item or a paragraph

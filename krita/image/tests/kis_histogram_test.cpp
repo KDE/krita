@@ -37,7 +37,10 @@ void KisHistogramTest::testCreation()
             continue;
         }
         KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
-        KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
+        if (producer) {
+            KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
+            Q_UNUSED(test);
+        }
     }
 }
 

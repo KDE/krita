@@ -103,6 +103,7 @@ public:
             columnsOrder = 0;
             columnsOrderWithoutAsterisks = 0;
             columnsOrderExpanded = 0;
+            orderByColumnList = 0;
             autoincFields = 0;
             autoIncrementSQLFieldsList.clear();
             columnInfosByNameExpanded.clear();

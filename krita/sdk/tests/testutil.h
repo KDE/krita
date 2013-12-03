@@ -51,6 +51,18 @@
 namespace TestUtil
 {
 
+inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
+    if(root->name() == name) return root;
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        if(root = findNode(child, name)) return root;
+        child = child->nextSibling();
+    }
+
+    return 0;
+}
+
 inline QString fetchDataFileLazy(const QString relativeFileName)
 {
     QString filename  =

@@ -83,6 +83,7 @@ struct KisDabCache::Private {
           sharpnessOption(0),
           textureOption(0),
           precisionOption(0),
+          subPixelPrecisionDisabled(false),
           cachedDabParameters(new SavedDabParameters)
     {}
     KisFixedPaintDeviceSP dab;
@@ -95,6 +96,7 @@ struct KisDabCache::Private {
     KisPressureSharpnessOption *sharpnessOption;
     KisTextureProperties *textureOption;
     KisPrecisionOption *precisionOption;
+    bool subPixelPrecisionDisabled;
 
     SavedDabParameters *cachedDabParameters;
 };
@@ -130,6 +132,11 @@ void KisDabCache::setTexturePostprocessing(KisTextureProperties *option)
 void KisDabCache::setPrecisionOption(KisPrecisionOption *option)
 {
     m_d->precisionOption = option;
+}
+
+void KisDabCache::disableSubpixelPrecision()
+{
+    m_d->subPixelPrecisionDisabled = true;
 }
 
 inline KisDabCache::SavedDabParameters
@@ -268,6 +275,11 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
     } else {
         KisPaintOp::splitCoordinate(pt.x(), &x, &subPixelX);
         KisPaintOp::splitCoordinate(pt.y(), &y, &subPixelY);
+    }
+
+    if (m_d->subPixelPrecisionDisabled) {
+        subPixelX = 0;
+        subPixelY = 0;
     }
 
     int width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);

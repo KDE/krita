@@ -65,7 +65,7 @@ void Maps::setResizeMode(const QString &rm)
     }
 }
 
-void Maps::setInlineImage(const QByteArray &ba)
+void Maps::setInlineImage(const QByteArray &/*ba*/)
 {
     //m_map->setInlineImageData(ba);
 }

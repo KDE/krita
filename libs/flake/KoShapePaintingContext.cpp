@@ -29,6 +29,7 @@ KoShapePaintingContext::KoShapePaintingContext()
     , showSpellChecking(false)
     , showSelections(true)
     , showInlineObjectVisualization(false)
+    , showAnnotations(false)
 {
 }
 
@@ -53,6 +54,7 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
     }
     showSpellChecking = !forPrint;
     showSelections = !forPrint;
+    showAnnotations = !forPrint;
 }
 
 KoShapePaintingContext::~KoShapePaintingContext()

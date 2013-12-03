@@ -239,73 +239,59 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
         }
 }
 
-
-void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
+void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_WB(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton | Qt::RightButton, Qt::NoModifier)) {
-
-        setMode(KisTool::PAINT_MODE);
-
-        bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
-        if (!sampleMerged) {
-            if (!currentNode()) {
-                KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
-                return;
-            }
-            if (!currentNode()->visible()) {
-                KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
-                return;
-            }
-        }
-
-        QPoint pos = convertToIntPixelCoord(event);
-        // the color picking has to start in the visible part of the layer
-        if (!currentImage()->bounds().contains(pos)) {
+    bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
+    if (!sampleMerged) {
+        if (!currentNode()) {
+            KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
+            event->ignore();
             return;
         }
-
-        //m_toForegroundColor = (event->button() == Qt::LeftButton);
-        pickColor(pos);
-        displayPickedColor();
-    }
-    else {
-        KisTool::mousePressEvent(event);
-    }
-}
-
-void KisToolColorPicker::mouseMoveEvent(KoPointerEvent *event)
-{
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        QPoint pos = convertToIntPixelCoord(event);
-        pickColor(pos);
-        displayPickedColor();
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
-}
-
-void KisToolColorPicker::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION_WB(event, KisTool::PAINT_MODE, Qt::LeftButton | Qt::RightButton)) {
-        setMode(KisTool::HOVER_MODE);
-
-        if (m_config.addPalette) {
-            KoColorSetEntry ent;
-            ent.color = m_pickedColor;
-            // We don't ask for a name, too intrusive here
-
-            KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-            palette->add(ent);
-
-            if (!palette->save()) {
-                KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
-            }
+        if (!currentNode()->visible()) {
+            KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
+            event->ignore();
+            return;
         }
     }
-    else {
-        KisTool::mouseReleaseEvent(event);
+
+    QPoint pos = convertToIntPixelCoord(event);
+    // the color picking has to start in the visible part of the layer
+    if (!currentImage()->bounds().contains(pos)) {
+        event->ignore();
+        return;
+    }
+
+    setMode(KisTool::PAINT_MODE);
+    pickColor(pos);
+    displayPickedColor();
+}
+
+void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
+{
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
+    QPoint pos = convertToIntPixelCoord(event);
+    pickColor(pos);
+    displayPickedColor();
+}
+
+void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
+    if (m_config.addPalette) {
+        KoColorSetEntry ent;
+        ent.color = m_pickedColor;
+        // We don't ask for a name, too intrusive here
+
+        KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+        palette->add(ent);
+
+        if (!palette->save()) {
+            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), i18n("Palette"));
+        }
     }
 }
 

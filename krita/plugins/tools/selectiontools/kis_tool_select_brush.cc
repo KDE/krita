@@ -98,31 +98,45 @@ void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
+void KisToolSelectBrush::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(mode() == KisTool::PAINT_MODE) {
-        /**
-         * Cancalling must be done at KisTool level
-         */
-//        resetSelection();
-//        return;
+    if (!selectionEditable()) {
+        event->ignore();
+        return;
     }
 
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    setMode(KisTool::PAINT_MODE);
 
-        if (!selectionEditable()) {
-            return;
-        }
+    m_lastPoint = convertToPixelCoord(event->point);
+    addPoint(m_lastPoint);
+}
 
-        setMode(KisTool::PAINT_MODE);
+void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
+{
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
-        m_lastPoint = convertToPixelCoord(event->point);
-        addPoint(m_lastPoint);
-    }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+    // this gives better performance
+    if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
+        return;
+
+    //randomise the point to workaround a bug in QPainterPath::operator|=()
+    //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
+    //will be fixed in version 4.7.0
+    qreal randomX=rand()%100;
+    randomX/=1000.;
+    qreal randomY=rand()%100;
+    randomY/=1000.;
+    QPointF smallRandomPoint(randomX, randomY);
+    addPoint(convertToPixelCoord(event->point)+smallRandomPoint);
+}
+
+void KisToolSelectBrush::endPrimaryAction(KoPointerEvent *event)
+{
+    Q_UNUSED(event;)
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
+    setMode(KisTool::HOVER_MODE);
+    applyToSelection(m_selection);
 }
 
 void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *event)
@@ -140,39 +154,6 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *event)
 
     brushRect.moveCenter(m_lastMousePosition);
     updateCanvasPixelRect(brushRect);
-
-    /**
-     * Do selection
-     */
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        // this gives better performance
-        if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
-            return;
-
-        //randomise the point to workaround a bug in QPainterPath::operator|=()
-        //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
-        //will be fixed in version 4.7.0
-        qreal randomX=rand()%100;
-        randomX/=1000.;
-        qreal randomY=rand()%100;
-        randomY/=1000.;
-        QPointF smallRandomPoint(randomX, randomY);
-        addPoint(convertToPixelCoord(event->point)+smallRandomPoint);
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
-}
-
-void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-        applyToSelection(m_selection);
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
-    }
 }
 
 void KisToolSelectBrush::deactivate()

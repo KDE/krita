@@ -88,108 +88,93 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KisToolGradient::mousePressEvent(KoPointerEvent *event)
+void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::ShiftModifier)) {
-
-        if (!nodeEditable()) {
-            return;
-        }
-
-        setMode(KisTool::PAINT_MODE);
-
-        m_startPos = convertToPixelCoord(event);
-        m_endPos = m_startPos;
-
+    if (!nodeEditable()) {
+        event->ignore();
+        return;
     }
-    else {
-        KisToolPaint::mousePressEvent(event);
-    }
+
+    setMode(KisTool::PAINT_MODE);
+
+    m_startPos = convertToPixelCoord(event);
+    m_endPos = m_startPos;
 }
 
-void KisToolGradient::mouseMoveEvent(KoPointerEvent *event)
+void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        QPointF pos = convertToPixelCoord(event);
+    /**
+     * TODO: The gradient tool is still not in strokes, so the end of
+     *       its action can call processEvent(), which would result in
+     *       nested event hadler calls. Please uncomment this line
+     *       when the tool is ported to strokes.
+     */
+    //KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
-        QRectF bound(m_startPos, m_endPos);
-        canvas()->updateCanvas(convertToPt(bound.normalized()));
+    QPointF pos = convertToPixelCoord(event);
 
-        if (event->modifiers() == Qt::ShiftModifier) {
-            m_endPos = straightLine(pos);
-        } else {
-            m_endPos = pos;
-        }
+    QRectF bound(m_startPos, m_endPos);
+    canvas()->updateCanvas(convertToPt(bound.normalized()));
 
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
-        canvas()->updateCanvas(convertToPt(bound.normalized()));
+    if (event->modifiers() == Qt::ShiftModifier) {
+        m_endPos = straightLine(pos);
+    } else {
+        m_endPos = pos;
     }
-    else {
-        KisToolPaint::mouseMoveEvent(event);
-    }
+
+    bound.setTopLeft(m_startPos);
+    bound.setBottomRight(m_endPos);
+    canvas()->updateCanvas(convertToPt(bound.normalized()));
 }
 
-void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
+    Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
 
-        if (!currentNode() || currentNode()->systemLocked())
-            return;
+    if (!currentNode() || currentNode()->systemLocked())
+        return;
 
-        QPointF pos = convertToPixelCoord(event);
-
-        if (event->modifiers() == Qt::ShiftModifier) {
-            m_endPos = straightLine(pos);
-        } else {
-            m_endPos = pos;
-        }
-
-        if (m_startPos == m_endPos) {
-            return;
-        }
-
-        KisSystemLocker locker(currentNode());
-
-        KisPaintDeviceSP device;
-
-        if (currentImage() && (device = currentNode()->paintDevice())) {
-            qApp->setOverrideCursor(Qt::BusyCursor);
-
-            KisUndoAdapter *undoAdapter = image()->undoAdapter();
-            undoAdapter->beginMacro(i18n("Gradient"));
-
-            KisGradientPainter painter(device, currentSelection());
-
-            KisResourcesSnapshotSP resources =
-                new KisResourcesSnapshot(image(), 0,
-                                         canvas()->resourceManager());
-            resources->setupPainter(&painter);
-
-            painter.beginTransaction("");
-
-            KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-            KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
-
-            updater->start(100, i18n("Gradient"));
-            painter.setProgress(updater->startSubtask());
-
-            painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
-            painter.endTransaction(undoAdapter);
-            undoAdapter->endMacro();
-
-            qApp->restoreOverrideCursor();
-            currentNode()->setDirty();
-            notifyModified();
-            delete updater;
-        }
-        canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
+    if (m_startPos == m_endPos) {
+        return;
     }
-    else {
-        KisToolPaint::mouseReleaseEvent(event);
+
+    KisSystemLocker locker(currentNode());
+
+    KisPaintDeviceSP device;
+
+    if (currentImage() && (device = currentNode()->paintDevice())) {
+        qApp->setOverrideCursor(Qt::BusyCursor);
+
+        KisUndoAdapter *undoAdapter = image()->undoAdapter();
+        undoAdapter->beginMacro(i18n("Gradient"));
+
+        KisGradientPainter painter(device, currentSelection());
+
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), 0,
+                                     canvas()->resourceManager());
+        resources->setupPainter(&painter);
+
+        painter.beginTransaction("");
+
+        KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
+        KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+
+        updater->start(100, i18n("Gradient"));
+        painter.setProgress(updater->startSubtask());
+
+        painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
+        painter.endTransaction(undoAdapter);
+        undoAdapter->endMacro();
+
+        qApp->restoreOverrideCursor();
+        currentNode()->setDirty();
+        notifyModified();
+        delete updater;
     }
+    canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
 }
 
 QPointF KisToolGradient::straightLine(QPointF point)

@@ -190,11 +190,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
-#if QT_VERSION >= 0x040700
-    : QDeclarativeView(parent)
-#else
     : QAbstractScrollArea(parent)
-#endif
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
@@ -204,6 +200,9 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     // And then our own Viewport
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
+    d->viewportWidget->setFocusPolicy(Qt::NoFocus);
+    setFocusPolicy(Qt::NoFocus);
+    setFrameStyle(0);
 
     //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);
@@ -272,10 +271,8 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     }
     canvas->setCanvasController(this);
     d->canvas = canvas;
-    d->viewportWidget->setCanvas(canvas->canvasWidget());
-    d->canvas->canvasWidget()->installEventFilter(this);
-    d->canvas->canvasWidget()->setMouseTracking(true);
-    setFocusProxy(d->canvas->canvasWidget());
+
+    changeCanvasWidget(canvas->canvasWidget());
 
     proxyObject->emitCanvasSet(this);
     QTimer::singleShot(0, this, SLOT(activate()));
@@ -291,10 +288,15 @@ KoCanvasBase* KoCanvasControllerWidget::canvas() const
 
 void KoCanvasControllerWidget::changeCanvasWidget(QWidget *widget)
 {
-    Q_ASSERT(d->viewportWidget->canvas());
-    widget->setCursor(d->viewportWidget->canvas()->cursor());
-    d->viewportWidget->canvas()->removeEventFilter(this);
+    if (d->viewportWidget->canvas()) {
+        widget->setCursor(d->viewportWidget->canvas()->cursor());
+        d->viewportWidget->canvas()->removeEventFilter(this);
+    }
+
     d->viewportWidget->setCanvas(widget);
+    setFocusProxy(d->canvas->canvasWidget());
+    d->viewportWidget->setFocusPolicy(Qt::NoFocus);
+
     widget->installEventFilter(this);
     widget->setMouseTracking(true);
 }

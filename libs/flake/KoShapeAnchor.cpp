@@ -347,16 +347,17 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
 {
     d->offset = shape()->position();
 
-    if (! shape()->hasAdditionalAttribute("text:anchor-type"))
-        return false;
     QString anchorType = shape()->additionalAttribute("text:anchor-type");
+
     if (anchorType == "char") {
         d->anchorType = AnchorToCharacter;
     } else if (anchorType == "as-char") {
         d->anchorType = AnchorAsCharacter;
+        d->horizontalRel = HChar;
+        d->horizontalPos = HLeft;
     } else if (anchorType == "paragraph") {
         d->anchorType = AnchorParagraph;
-    } else if (anchorType == "page") {
+    } else {
         d->anchorType = AnchorPage;
         // it has different defaults at least LO thinks so - ODF doesn't define defaults for this
         d->horizontalPos = HFromLeft;
@@ -488,64 +489,6 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
 
     // if svg:x or svg:y should be ignored set new position
     shape()->setPosition(d->offset);
-
-    if (element.hasAttributeNS(KoXmlNS::calligra, "anchor-type")) {
-        QString anchorType = element.attributeNS(KoXmlNS::calligra, "anchor-type"); // our enriched properties
-        QStringList types = anchorType.split('|');
-        if (types.count() > 1) {
-            QString vertical = types[0];
-            QString horizontal = types[1];
-            if (vertical == "TopOfFrame") {
-                d->verticalRel = VPageContent;
-                d->verticalPos = VTop;
-            } else if (vertical == "TopOfParagraph") {
-                d->verticalRel = VParagraph;
-                d->verticalPos = VTop;
-            } else if (vertical == "AboveCurrentLine") {
-                d->verticalRel = VLine;
-                d->verticalPos = VTop;
-            } else if (vertical == "BelowCurrentLine") {
-                d->verticalRel = VLine;
-                d->verticalPos = VBottom;
-            } else if (vertical == "BottomOfParagraph") {
-                d->verticalRel = VParagraph;
-                d->verticalPos = VBottom;
-            } else if (vertical == "BottomOfFrame") {
-                d->verticalRel = VPageContent;
-                d->verticalPos = VBottom;
-            } else if (vertical == "VerticalOffset") {
-                d->verticalRel = VLine;
-                d->verticalPos = VTop;
-            }
-
-            if (horizontal == "Left") {
-                d->horizontalRel = HPageContent;
-                d->horizontalPos = HLeft;
-            } else if (horizontal == "Right") {
-                d->horizontalRel = HPageContent;
-                d->horizontalPos = HRight;
-            } else if (horizontal == "Center") {
-                d->horizontalRel = HPageContent;
-                d->horizontalPos = HCenter;
-            } else if (horizontal == "ClosestToBinding") {
-                d->horizontalRel = HPageContent;
-                d->horizontalPos = HInside;
-            } else if (horizontal == "FurtherFromBinding") {
-                d->horizontalRel = HPageContent;
-                d->horizontalPos = HOutside;
-            } else if (horizontal == "HorizontalOffset") {
-                d->horizontalRel = HChar;
-                d->horizontalPos = HLeft;
-            }
-        }
-        d->offset = QPointF();
-     }
-
-    if (d->anchorType == AnchorAsCharacter) {
-        d->horizontalRel = HChar;
-        d->horizontalPos = HLeft;
-    }
-
 
     return true;
 }

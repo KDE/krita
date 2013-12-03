@@ -70,102 +70,137 @@ void KisToolMove::requestStrokeCancellation()
     cancelStroke();
 }
 
-void KisToolMove::mousePressEvent(KoPointerEvent *event)
+void KisToolMove::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton,
-                          Qt::ControlModifier | Qt::ShiftModifier)) {
+    startAction(event, m_moveToolMode);
+}
 
-        setMode(KisTool::PAINT_MODE);
+void KisToolMove::continuePrimaryAction(KoPointerEvent *event)
+{
+    continueAction(event);
+}
 
-        QPoint pos = convertToPixelCoord(event).toPoint();
-        m_dragStart = pos;
-        m_lastDragPos = m_dragStart;
+void KisToolMove::endPrimaryAction(KoPointerEvent *event)
+{
+    endAction(event);
+}
 
-        KisNodeSP node;
-        KisImageSP image = this->image();
+void KisToolMove::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == PickFgNode) {
+        MoveToolMode mode = m_moveToolMode;
 
-        KisSelectionSP selection = currentSelection();
-
-        if(!m_moveToolMode == MoveSelectedLayer &&
-           event->modifiers() != Qt::ControlModifier) {
-
-            bool wholeGroup = !selection &&
-                (m_moveToolMode == MoveGroup ||
-                 event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier));
-
-            node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
+        if (mode == MoveSelectedLayer || mode == MoveGroup) {
+            mode = MoveFirstLayer;
+        } else if (mode == MoveFirstLayer) {
+            mode = MoveSelectedLayer;
         }
 
-        if((!node && !(node = currentNode())) || !node->isEditable()) return;
+        startAction(event, mode);
+    } else if (action == PickFgImage) {
+        startAction(event, MoveGroup);
+    } else {
+        KisTool::beginAlternateAction(event, action);
+    }
+}
 
-        /**
-         * If the target node has changed, the stroke should be
-         * restarted. Otherwise just continue processing current node.
-         */
-        if (m_strokeId) {
-            if (node == m_currentlyProcessingNode) {
-                return;
-            } else {
-                endStroke();
-            }
-        }
+void KisToolMove::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == PickFgNode || action == PickFgImage) {
+        continueAction(event);
+    } else {
+        KisTool::continueAlternateAction(event, action);
+    }
+}
 
-        KisStrokeStrategy *strategy;
+void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == PickFgNode || action == PickFgImage) {
+        endAction(event);
+    } else {
+        KisTool::endAlternateAction(event, action);
+    }
+}
 
-        KisPaintLayerSP paintLayer =
-            dynamic_cast<KisPaintLayer*>(node.data());
+void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
+{
+    QPoint pos = convertToPixelCoord(event).toPoint();
+    m_dragStart = pos;
+    m_lastDragPos = m_dragStart;
 
-        if (paintLayer && selection &&
-            !selection->isTotallyUnselected(image->bounds())) {
+    KisNodeSP node;
+    KisImageSP image = this->image();
 
-            strategy =
-                new MoveSelectionStrokeStrategy(paintLayer,
-                                                selection,
-                                                image.data(),
-                                                image->postExecutionUndoAdapter());
+    KisSelectionSP selection = currentSelection();
+
+    if (mode != MoveSelectedLayer) {
+        bool wholeGroup = !selection &&  mode == MoveGroup;
+        node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
+    }
+
+    if ((!node && !(node = currentNode())) || !node->isEditable()) {
+        event->ignore();
+        return;
+    }
+
+    setMode(KisTool::PAINT_MODE);
+
+    /**
+     * If the target node has changed, the stroke should be
+     * restarted. Otherwise just continue processing current node.
+     */
+    if (m_strokeId) {
+        if (node == m_currentlyProcessingNode) {
+            return;
         } else {
-            strategy =
-                new MoveStrokeStrategy(node, image.data(),
-                                       image->postExecutionUndoAdapter(),
-                                       image->undoAdapter());
+            endStroke();
         }
+    }
 
-        m_strokeId = image->startStroke(strategy);
-        m_currentlyProcessingNode = node;
+    KisStrokeStrategy *strategy;
+
+    KisPaintLayerSP paintLayer =
+        dynamic_cast<KisPaintLayer*>(node.data());
+
+    if (paintLayer && selection &&
+        !selection->isTotallyUnselected(image->bounds())) {
+
+        strategy =
+            new MoveSelectionStrokeStrategy(paintLayer,
+                                            selection,
+                                            image.data(),
+                                            image->postExecutionUndoAdapter());
+    } else {
+        strategy =
+            new MoveStrokeStrategy(node, image.data(),
+                                   image->postExecutionUndoAdapter(),
+                                   image->undoAdapter());
     }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+
+    m_strokeId = image->startStroke(strategy);
+    m_currentlyProcessingNode = node;
 }
 
-void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
+void KisToolMove::continueAction(KoPointerEvent *event)
 {
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        if (!m_strokeId) return;
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
-        QPoint pos = convertToPixelCoord(event).toPoint();
-        pos = applyModifiers(event->modifiers(), pos);
-        drag(pos);
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
+    if (!m_strokeId) return;
+
+    QPoint pos = convertToPixelCoord(event).toPoint();
+    pos = applyModifiers(event->modifiers(), pos);
+    drag(pos);
 }
 
-void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolMove::endAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-        if (!m_strokeId) return;
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
+    if (!m_strokeId) return;
 
-        QPoint pos = convertToPixelCoord(event).toPoint();
-        pos = applyModifiers(event->modifiers(), pos);
-        drag(pos);
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
-    }
+    QPoint pos = convertToPixelCoord(event).toPoint();
+    pos = applyModifiers(event->modifiers(), pos);
+    drag(pos);
 }
 
 void KisToolMove::drag(const QPoint& newPos)

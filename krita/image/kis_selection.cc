@@ -36,7 +36,7 @@ struct KisSelection::Private {
     }
 
     // used for forwarding setDirty signals only
-    KisNodeSP parentNode;
+    KisNodeWSP parentNode;
 
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsBaseSP defaultBounds;

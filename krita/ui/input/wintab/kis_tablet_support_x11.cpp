@@ -416,7 +416,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     int pointerType = QTabletEvent::UnknownPointer;
     const XDeviceMotionEvent *motion = 0;
     XDeviceButtonEvent *button = 0;
-    KisTabletEvent::ExtraEventType t;
+    KisTabletEvent::ExtraEventType t = KisTabletEvent::TabletMoveEx;
     Qt::KeyboardModifiers modifiers = 0;
 
 #if QT_VERSION >= 0x040800
@@ -426,7 +426,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 #endif
 
 #if !defined (Q_OS_IRIX)
-    XID device_id;
+    XID device_id = 0;
 #endif
 
     if (ev->type == tablet->xinput_motion) {

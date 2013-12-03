@@ -44,8 +44,8 @@ public:
     KisToolFill(KoCanvasBase * canvas);
     virtual ~KisToolFill();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual QWidget * createOptionWidget();
 

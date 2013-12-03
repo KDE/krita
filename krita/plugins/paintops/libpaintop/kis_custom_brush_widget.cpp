@@ -19,7 +19,6 @@
 
 #include "kis_custom_brush_widget.h"
 
-#include <KoImageResource.h>
 #include <kis_debug.h>
 #include <QLabel>
 #include <QImage>

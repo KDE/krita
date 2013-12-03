@@ -35,7 +35,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 
 if(FFTW3_FOUND)
-  target_link_libraries(gmic ${FFTW3_LIBRARIES})
+  target_link_libraries(gmic ${FFTW3_LIBRARIES} pthread)
 endif(FFTW3_FOUND)
 
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)

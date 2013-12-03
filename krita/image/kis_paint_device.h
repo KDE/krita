@@ -227,6 +227,12 @@ public:
      */
     void clear(const QRect & rc);
 
+    /**
+     * Frees the memory occupied by the pixels containing default
+     * values. The extents() and exactBounds() of the image will
+     * probably also shrink
+     */
+    void purgeDefaultPixels();
 
     /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the

@@ -76,6 +76,16 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
 
     m_rotationOption.applyFanCornersInfo(this);
+
+    /**
+     * Disable handling of the subpixel precision. In the smudge op we
+     * should read from the aligned areas of the image, so having
+     * additional internal offsets, created by the subpixel precision,
+     * will worsen the quality (at least because
+     * QRectF(m_dstDabRect).center() will not point to the real center
+     * of the brush anymore).
+     */
+    m_dabCache->disableSubpixelPrecision();
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -123,17 +133,18 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
 
-    // don't paint anything if the brush is too small
-    if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
-        return 1.0;
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
-    QPointF hotSpot      = brush->hotSpot(scale, scale, rotation, info);
+    QPointF scatteredPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
+
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
 
     /**
      * Update the brush mask.
@@ -148,8 +159,14 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - scatteredPos).toPoint());
 
-    // Save the hot spot point for the next iteration
-    m_lastPaintPos = scatteredPos;
+    /**
+     * Save the center of the current dab to know where to read the
+     * data during the next pass. We do not save scatteredPos here,
+     * because it may slightly differ from the real center of the
+     * brush (due to some rounding effects), which will result in
+     * really weird quality.
+     */
+    m_lastPaintPos = QRectF(m_dstDabRect).center();
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(m_dstDabRect.width(), m_dstDabRect.height(),

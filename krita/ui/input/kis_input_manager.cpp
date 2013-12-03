@@ -1,5 +1,4 @@
-/* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+/* This file is part of the KDE project * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +26,7 @@
 #include <kactioncollection.h>
 #include <QApplication>
 
-#include <KoToolProxy.h>
+#include "kis_tool_proxy.h"
 
 #include <kis_canvas2.h>
 #include <kis_view2.h>
@@ -54,6 +53,7 @@
 #include "kis_shortcut_configuration.h"
 
 #include <input/kis_tablet_event.h>
+#include <kis_signal_compressor.h>
 
 
 class KisInputManager::Private
@@ -70,6 +70,7 @@ public:
     #endif
         , lastTabletEvent(0)
         , lastTouchEvent(0)
+        , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
         , logTabletEvents(false)
     {
     }
@@ -86,11 +87,12 @@ public:
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
     void saveTouchEvent( QTouchEvent* event );
+    bool handleKisTabletEvent(QObject *object, KisTabletEvent *tevent);
 
     KisInputManager *q;
 
     KisCanvas2 *canvas;
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
 
     bool setMirrorMode;
     bool forwardAllEventsToTool;
@@ -104,6 +106,9 @@ public:
     QTouchEvent *lastTouchEvent;
 
     KisAbstractInputAction *defaultInputAction;
+
+    KisSignalCompressor moveEventCompressor;
+    QScopedPointer<KisTabletEvent> compressedMoveEvent;
 
     bool logTabletEvents;
     void debugMouseEvent(QEvent *event);
@@ -455,7 +460,7 @@ void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
     }
 }
 
-KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
+KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     : QObject(canvas), d(new Private(this))
 {
     d->canvas = canvas;
@@ -477,6 +482,8 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
+    connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
+
 
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
@@ -618,6 +625,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
         d->canvas->canvasWidget()->setFocus();
+        stop_ignore_cursor_events();
         break;
     case QEvent::Leave:
         /**
@@ -643,16 +651,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //event.
         QTabletEvent* tabletEvent = static_cast<QTabletEvent*>(event);
         d->saveTabletEvent(tabletEvent);
-
-#ifdef Q_OS_WIN
-        if (event->type() == QEvent::TabletMove) {
-            retval = d->matcher.tabletMoved(static_cast<QTabletEvent*>(event));
-            event->setAccepted(retval);
-        }
-#else
         event->ignore();
-#endif
-
 
         break;
     }
@@ -664,16 +663,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);
 
-        QTabletEvent qte = tevent->toQTabletEvent();
-        qte.ignore();
-        retval = eventFilter(object, &qte);
-        tevent->setAccepted(qte.isAccepted());
+        if (tevent->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx &&
+            !d->matcher.supportsHiResInputEvents()) {
 
-        if (!retval && !qte.isAccepted()) {
-            QMouseEvent qme = tevent->toQMouseEvent();
-            qme.ignore();
-            retval = eventFilter(object, &qme);
-            tevent->setAccepted(qme.isAccepted());
+            d->compressedMoveEvent.reset(new KisTabletEvent(*tevent));
+            d->moveEventCompressor.start();
+            retval = true;
+        } else {
+            slotCompressedMoveEvent();
+            retval = d->handleKisTabletEvent(object, tevent);
         }
 
         /**
@@ -717,12 +715,39 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return !retval ? d->processUnhandledEvent(event) : true;
 }
 
+bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEvent *tevent)
+{
+    bool retval = false;
+
+    QTabletEvent qte = tevent->toQTabletEvent();
+    qte.ignore();
+    retval = q->eventFilter(object, &qte);
+    tevent->setAccepted(qte.isAccepted());
+
+    if (!retval && !qte.isAccepted()) {
+        QMouseEvent qme = tevent->toQMouseEvent();
+        qme.ignore();
+        retval = q->eventFilter(object, &qme);
+        tevent->setAccepted(qme.isAccepted());
+    }
+
+    return retval;
+}
+
+void KisInputManager::slotCompressedMoveEvent()
+{
+    if (d->compressedMoveEvent) {
+        (void) d->handleKisTabletEvent(this, d->compressedMoveEvent.data());
+        d->compressedMoveEvent.reset();
+    }
+}
+
 KisCanvas2* KisInputManager::canvas() const
 {
     return d->canvas;
 }
 
-KoToolProxy* KisInputManager::toolProxy() const
+KisToolProxy* KisInputManager::toolProxy() const
 {
     return d->toolProxy;
 }
@@ -746,7 +771,7 @@ void KisInputManager::setMirrorAxis()
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID" || toolId == "KisToolTransform") {
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {

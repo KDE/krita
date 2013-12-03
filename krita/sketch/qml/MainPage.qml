@@ -68,7 +68,7 @@ Page {
 
     PanelBar {
         id: panelBar;
-        height: parent.height;
+        panelHeight: parent.height;
         width: parent.width;
     }
 

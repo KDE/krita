@@ -47,6 +47,8 @@ class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
 class KoShapeAnchor;
 class KoBookmark;
+class KoAnnotation;
+class KoTextRangeManager;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -236,7 +238,16 @@ public slots:
      *
      * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor *> &anchors, KUndo2Command *parent);
+
+    /**
+     * Remove the KoAnnotation objects from the document.
+     *
+     * NOTE: Call this method only when the shapes belonging to the annotations have been deleted.
+     * This is not the way to delete annotations directly - instead delete the shape or
+     * delete the text containing the annotation
+     */
+    void removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.
@@ -248,6 +259,11 @@ public slots:
     /// add a bookmark on current cursor location or current selection
     KoBookmark *addBookmark(const QString &name);
 
+    /// Add an annotation at the current cursor location or the current selection.
+    KoAnnotation *addAnnotation(KoShape *annotationShape);
+
+    KoTextRangeManager *textRangeManager();
+
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
      */
@@ -255,27 +271,11 @@ public slots:
 
     /**
      * paste the given mimedata object at the current position
+     * @param canvas the canvas we used when placing the shape.
      * @param mimeData: the mimedata containing text, html or odf
-     * @param shapeController the canvas' shapeController
      * @param pasteAsText: if true, paste without formatting
      */
-    void paste(const QMimeData *mimeData,
-               KoShapeController *shapeController,
-               bool pasteAsText=false);
-
-    /**
-     * Insert the selection from the given KoTextEditor. If there is no selection, the entire
-     * content of the document behind the editor is used. This changes the cursor position of
-     * the editor instance. Note that this is another text editor, preferably on another document!
-     *
-     * @param editor the KoTextEditor instance.
-     * @param shapeController the canvas' shapeController
-     * @param pasteAsText: if true, paste without formatting
-     * @returns true if the operation succeeded
-     */
-    bool paste(KoTextEditor *editor,
-               KoShapeController *shapeController,
-               bool pasteAsText = false);
+    void paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool pasteAsText=false);
 
     /**
      * @param numberingEnabled when true, we will enable numbering for the current paragraph (block).

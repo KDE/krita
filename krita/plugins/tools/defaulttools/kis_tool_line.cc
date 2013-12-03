@@ -97,169 +97,116 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
     KisToolPaint::paint(gc,converter);
 }
 
-void KisToolLine::keyPressEvent(QKeyEvent *event)
+void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (mode() != KisTool::PAINT_MODE) {
-        KisToolPaint::keyPressEvent(event);
+    if (nodePaintAbility() == NONE || !nodeEditable()) {
+        event->ignore();
         return;
     }
 
-    event->accept();
+    setMode(KisTool::PAINT_MODE);
+
+    m_startPos = KisPaintInformation(
+        convertToPixelCoord(event),
+        PRESSURE_DEFAULT,
+        m_cbTilt->isChecked() ? event->xTilt() : 0.0,
+        m_cbTilt->isChecked() ? event->yTilt() : 0.0,
+        m_cbRotation->isChecked() ? event->rotation() : 0.0,
+        m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
+        );
+
+    m_endPos      = m_startPos;
+    m_maxPressure = 0.0f;
 }
 
-void KisToolLine::keyReleaseEvent(QKeyEvent *event)
+void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (mode() != KisToolPaint::PAINT_MODE) {
-        KisToolPaint::keyReleaseEvent(event);
-        return;
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
+    // First ensure the old temp line is deleted
+    updatePreview();
+
+    QPointF pos = convertToPixelCoord(event);
+
+    if (event->modifiers() == Qt::AltModifier) {
+        QPointF trans = pos - m_endPos.pos();
+        m_startPos.setPos(m_startPos.pos() + trans);
+        m_endPos.setPos(m_endPos.pos() + trans);
+    } else if (event->modifiers() == Qt::ShiftModifier) {
+        m_endPos.setPos(straightLine(pos));
+    } else {
+        m_endPos.setPos(pos);
     }
-    event->accept();
+
+    m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
+    updatePreview();
+    KisToolPaint::requestUpdateOutline(event->point);
 }
 
-void KisToolLine::mousePressEvent(KoPointerEvent *event)
+void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton,
-                          Qt::AltModifier | Qt::ShiftModifier)) {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
 
-        if (nodePaintAbility() == NONE) {
-           return;
-        }
+    updatePreview();
 
-        if (!nodeEditable()) {
-            return;
-        }
-
-        setMode(KisTool::PAINT_MODE);
-
-        m_startPos = KisPaintInformation(
-            convertToPixelCoord(event),
+    if(m_bnVaryingEnds->isChecked()) {
+        m_endPos = KisPaintInformation(
+            m_endPos.pos(),
             PRESSURE_DEFAULT,
             m_cbTilt->isChecked() ? event->xTilt() : 0.0,
             m_cbTilt->isChecked() ? event->yTilt() : 0.0,
             m_cbRotation->isChecked() ? event->rotation() : 0.0,
             m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
-        );
-
-        m_endPos      = m_startPos;
-        m_maxPressure = 0.0f;
-    }
-    else {
-        KisToolPaint::mousePressEvent(event);
-    }
-}
-
-
-void KisToolLine::mouseMoveEvent(KoPointerEvent *event)
-{
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        // First ensure the old temp line is deleted
-        updatePreview();
-
-        QPointF pos = convertToPixelCoord(event);
-
-        if (event->modifiers() == Qt::AltModifier) {
-            QPointF trans = pos - m_endPos.pos();
-            m_startPos.setPos(m_startPos.pos() + trans);
-            m_endPos.setPos(m_endPos.pos() + trans);
-        } else if (event->modifiers() == Qt::ShiftModifier) {
-            m_endPos.setPos(straightLine(pos));
-        } else {
-            m_endPos.setPos(pos);
-        }
-
-        m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
-        updatePreview();
-        KisToolPaint::requestUpdateOutline(event->point);
-    }
-    else {
-        KisToolPaint::mouseMoveEvent(event);
-    }
-}
-
-void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-
-        updatePreview();
-
-        QPointF pos = convertToPixelCoord(event);
-
-        if(m_bnVaryingEnds->isChecked()) {
-            m_endPos = KisPaintInformation(
-                m_endPos.pos(),
-                PRESSURE_DEFAULT,
-                m_cbTilt->isChecked() ? event->xTilt() : 0.0,
-                m_cbTilt->isChecked() ? event->yTilt() : 0.0,
-                m_cbRotation->isChecked() ? event->rotation() : 0.0,
-                m_cbTangPressure->isChecked() ? event->tangentialPressure() : 0.0
             );
-        }
-
-        if (event->modifiers() == Qt::AltModifier) {
-            QPointF trans = pos - m_endPos.pos();
-            m_startPos.setPos(m_startPos.pos() + trans);
-            m_endPos.setPos(m_endPos.pos() + trans);
-        } else if (event->modifiers() == Qt::ShiftModifier) {
-            m_endPos.setPos(straightLine(pos));
-        } else {
-            m_endPos.setPos(pos);
-        }
-
-        if (m_startPos.pos() == m_endPos.pos())
-            return;
-
-        if(m_cbPressure->isChecked()) {
-            m_startPos.setPressure(m_maxPressure);
-            m_endPos.setPressure(m_maxPressure);
-        }
-
-        NodePaintAbility nodeAbility = nodePaintAbility();
-        if (nodeAbility == NONE) {
-           return;
-        }
-#ifdef ENABLE_RECORDING
-        if (image()) {
-            KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
-            setupPaintAction(&linePaintAction);
-            linePaintAction.addLine(m_startPos, m_endPos);
-            image()->actionRecorder()->addAction(linePaintAction);
-        }
-#endif
-
-        if (nodeAbility == PAINT) {
-            KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
-                                               image(),
-                                               canvas()->resourceManager(),
-                                               KisPainter::StrokeStyleBrush,
-                                               KisPainter::FillStyleNone);
-            helper.paintLine(m_startPos, m_endPos);
-        }
-        else {
-            KoPathShape* path = new KoPathShape();
-            path->setShapeId(KoPathShapeId);
-
-            QTransform resolutionMatrix;
-            resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-            path->moveTo(resolutionMatrix.map(m_startPos.pos()));
-            path->lineTo(resolutionMatrix.map(m_endPos.pos()));
-            path->normalize();
-
-            KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
-            path->setStroke(border);
-
-            KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
-            canvas()->addCommand(cmd);
-        }
     }
-    else {
-        KisToolPaint::mouseReleaseEvent(event);
+
+    if (m_startPos.pos() == m_endPos.pos())
+        return;
+
+    if(m_cbPressure->isChecked()) {
+        m_startPos.setPressure(m_maxPressure);
+        m_endPos.setPressure(m_maxPressure);
+    }
+
+    NodePaintAbility nodeAbility = nodePaintAbility();
+    if (nodeAbility == NONE) {
         return;
     }
-    notifyModified();
-}
+#ifdef ENABLE_RECORDING
+    if (image()) {
+        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
+        setupPaintAction(&linePaintAction);
+        linePaintAction.addLine(m_startPos, m_endPos);
+        image()->actionRecorder()->addAction(linePaintAction);
+    }
+#endif
 
+    if (nodeAbility == PAINT) {
+        KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
+                                           image(),
+                                           canvas()->resourceManager(),
+                                           KisPainter::StrokeStyleBrush,
+                                           KisPainter::FillStyleNone);
+        helper.paintLine(m_startPos, m_endPos);
+    }
+    else {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+
+        QTransform resolutionMatrix;
+        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+        path->moveTo(resolutionMatrix.map(m_startPos.pos()));
+        path->lineTo(resolutionMatrix.map(m_endPos.pos()));
+        path->normalize();
+
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        path->setStroke(border);
+
+        KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
+        canvas()->addCommand(cmd);
+    }
+}
 
 QPointF KisToolLine::straightLine(QPointF point)
 {

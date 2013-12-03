@@ -109,6 +109,9 @@ public:
 
     KoPointerEvent(KoPointerEvent *event, const QPointF& point);
 
+    KoPointerEvent(const KoPointerEvent &rhs);
+
+
     ~KoPointerEvent();
 
     /**
@@ -252,10 +255,13 @@ public:
 
 protected:
     friend class KoToolProxy;
+    friend class KisToolProxy;
     friend class KisScratchPadEventFilter;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
 private:
+    KoPointerEvent& operator=(const KoPointerEvent &rhs);
+
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QEvent *m_event;
 

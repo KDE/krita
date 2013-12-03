@@ -38,9 +38,9 @@ public:
     KisToolSelectOutline(KoCanvasBase *canvas);
     virtual ~KisToolSelectOutline();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -49,6 +49,7 @@ public slots:
 
 private:
     void updateFeedback();
+    void updateCanvas();
 
     QPainterPath * m_paintPath;
     vQPointF m_points;

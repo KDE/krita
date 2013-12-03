@@ -24,45 +24,38 @@
 
 #include "flake/kis_node_shape.h"
 #include "kis_tool_shape.h"
+#include "kis_delegated_tool.h"
 #include <KoIcon.h>
 
 class KisSelectionOptions;
 class KoCanvasBase;
+class KisToolPencil;
 
-class KisToolPencil : public KisToolShape
+
+class __KisToolPencilLocalTool : public KoPencilTool {
+public:
+    __KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool);
+    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+    virtual void addPathShape(KoPathShape* pathShape, bool closePath);
+
+    using KoPencilTool::createOptionWidgets;
+
+private:
+    KisToolPencil* const m_parentTool;
+};
+
+typedef KisDelegatedTool<KisToolShape, __KisToolPencilLocalTool> DelegatedPencilTool;
+
+class KisToolPencil : public DelegatedPencilTool
 {
-
     Q_OBJECT
 
 public:
     KisToolPencil(KoCanvasBase * canvas);
-    virtual ~KisToolPencil();
-
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-    
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
 
 private:
-    /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
-
-    class LocalTool : public KoPencilTool {
-        friend class KisToolPencil;
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolPencil* selectingTool);
-        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-        virtual void addPathShape(KoPathShape* pathShape, bool closePath);
-    private:
-        KisToolPencil* const m_parentTool;
-    };
-    LocalTool* const m_localTool;
-
+    friend class __KisToolPencilLocalTool;
 };
 
 class KisToolPencilFactory : public KoToolFactoryBase

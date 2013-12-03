@@ -148,13 +148,6 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             }
         }
     }
-    const QByteArray mimetype = "application/x-krita";
-    location =  external ? QString() : uri;
-    location += "mimetype";
-    if (store->open(location)) {
-        store->write(mimetype);
-        store->close();
-    }
 
     saveAssistants(store, uri,external);
     return true;

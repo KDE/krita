@@ -196,6 +196,9 @@ public:
     bool showOutlineWhilePainting() const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
+    qreal outlineSizeMinimum() const;
+    void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
+
     int autoSaveInterval() const;
     void setAutoSaveInterval(int seconds) const;
 

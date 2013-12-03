@@ -66,35 +66,41 @@ KisToolMultihand::~KisToolMultihand()
 {
 }
 
-void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
+void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
 {
     if(m_setupAxisFlag) {
         setMode(KisTool::OTHER);
-        m_axisPoint = convertToPixelCoord(e->point);
-        requestUpdateOutline(e->point);
+        m_axisPoint = convertToPixelCoord(event->point);
+        requestUpdateOutline(event->point);
         updateCanvas();
-        e->accept();
     }
     else {
-        if (!nodeEditable()) {
-            return;
-        }
-
         initTransformations();
-        KisToolFreehand::mousePressEvent(e);
+        KisToolFreehand::beginPrimaryAction(event);
     }
 }
 
-void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
+void KisToolMultihand::continuePrimaryAction(KoPointerEvent *event)
 {
     if(mode() == KisTool::OTHER) {
-        m_axisPoint = convertToPixelCoord(e->point);
-        requestUpdateOutline(e->point);
+        m_axisPoint = convertToPixelCoord(event->point);
+        requestUpdateOutline(event->point);
         updateCanvas();
-        e->accept();
     }
     else {
-        KisToolFreehand::mouseMoveEvent(e);
+        KisToolFreehand::continuePrimaryAction(event);
+    }
+}
+
+void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
+{
+    if(mode() == KisTool::OTHER) {
+        setMode(KisTool::HOVER_MODE);
+        requestUpdateOutline(event->point);
+        finishAxisSetup();
+    }
+    else {
+        KisToolFreehand::endPrimaryAction(event);
     }
 }
 
@@ -122,19 +128,6 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
             path.lineTo(m_axisPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axisPoint.y()+diagonal*sin(m_angle+M_PI_2));
             paintToolOutline(&gc, pixelToView(path));
         }
-    }
-}
-
-void KisToolMultihand::mouseReleaseEvent(KoPointerEvent* e)
-{
-    if(mode() == KisTool::OTHER) {
-        setMode(KisTool::HOVER_MODE);
-        requestUpdateOutline(e->point);
-        finishAxisSetup();
-        e->accept();
-    }
-    else {
-        KisToolFreehand::mouseReleaseEvent(e);
     }
 }
 

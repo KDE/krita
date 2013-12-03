@@ -77,6 +77,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
+   commands/kis_image_layer_remove_command_impl.cpp
    commands/kis_image_node_lower_command.cpp
    commands/kis_image_node_raise_command.cpp
    commands/kis_image_node_to_bottom_command.cpp
@@ -110,7 +111,6 @@ set(kritaimage_LIB_SRCS
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
-   kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp

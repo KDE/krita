@@ -414,6 +414,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
     }
+    if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
+        cbUseOpenGL->setVisible(false);
+        cbUseOpenGL->setMaximumHeight(0);
+    }
 #else
     grpOpenGL->setEnabled(false);
 #endif
@@ -770,8 +774,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
-#else
-        cfg.chkUseTextureBuffer(false);
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

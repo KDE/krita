@@ -20,11 +20,33 @@
 #define __KIS_TOOL_PROXY_H
 
 #include <KoToolProxy.h>
+#include <kis_tool.h>
+
 
 class KisToolProxy : public KoToolProxy
 {
 public:
+    enum ActionState {
+        BEGIN,
+        CONTINUE,
+        END
+    };
+
+public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
+
+    /**
+     * Forwards the event to the active tool and returns true if the
+     * event 'was not ignored'.  That is by default the event is
+     * considered accepted, but the tool can explicitly ignore it.
+     */
+    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+    bool primaryActionSupportsHiResEvents() const;
+
+private:
+    KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);
+    QPointF tabletToDocument(const QPointF &globalPos, const QPoint &canvasOriginWorkaround);
+    void forwardToTool(ActionState state, KisTool::ToolAction action, QEvent *event, const QPointF &docPoint);
 
 protected:
     QPointF widgetToDocument(const QPointF &widgetPoint) const;

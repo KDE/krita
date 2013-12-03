@@ -196,9 +196,6 @@ void KisClearActionFactory::run(KisView2 *view)
 {
     // XXX: "Add saving of XML data for Clear action"
 
-    KisNodeSP node = view->activeNode();
-    if (!node || !node->hasEditablePaintDevice()) return;
-
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 

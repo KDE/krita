@@ -46,6 +46,8 @@
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
+#include <KoAnnotationLayoutManager.h>
+#include <KoAnnotation.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -81,6 +83,7 @@ public:
        , allowPositionInlineObject(true)
        , continuationObstruction(0)
        , referencedLayout(0)
+       , annotationLayoutManager(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -122,6 +125,8 @@ public:
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
+
+    KoAnnotationLayoutManager *annotationLayoutManager;
 
     qreal defaultTabSizing;
     qreal y;
@@ -606,6 +611,23 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
+        }
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
+        if (annotation) {
+            int position = range->rangeStart();
+            QTextBlock block = range->document()->findBlock(position);
+            QTextLine line = block.layout()->lineForTextPosition(position - block.position());
+            QPointF refPos(line.cursorToX(position - block.position()), line.y());
+
+            KoShape *refShape = d->anchoringRootArea->associatedShape();
+            //KoTextShapeData *refTextShapeData;
+            //refPos += QPointF(refTextShapeData->leftPadding(), -refTextShapeData->documentOffset() + refTextShapeData->topPadding());
+
+            refPos += QPointF(0, -d->anchoringRootArea->top());
+            refPos = refShape->absoluteTransformation(0).map(refPos);
+
+            //FIXME we need a more precise position than anchorParagraph Rect
+            emit foundAnnotation(annotation->annotationShape(), refPos);
         }
     }
 }

@@ -22,7 +22,11 @@
 
 #include "kis_input_manager.h"
 #include "kis_canvas2.h"
-#include <KoToolProxy.h>
+#include "kis_tool_proxy.h"
+
+#include <QApplication>
+#include "kis_cursor.h"
+
 
 KisChangePrimarySettingAction::KisChangePrimarySettingAction()
 {
@@ -47,7 +51,11 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if (mouseEvent) {
         QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-        inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
     }
 }
 
@@ -56,16 +64,26 @@ void KisChangePrimarySettingAction::end(QEvent *event)
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if (mouseEvent) {
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-        inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToDocument(mouseEvent->posF()));
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
     }
 
     KisAbstractInputAction::end(event);
 }
 
-void KisChangePrimarySettingAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
-    Q_UNUSED(lastPos);
+    if (event && event->type() == QEvent::MouseMove) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, pos.toPoint(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToDocument(pos));
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+    }
 }

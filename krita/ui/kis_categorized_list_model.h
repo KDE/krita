@@ -63,7 +63,7 @@ private slots:
 };
 
 template<class TEntry, class TEntryToQStringConverter>
-class KRITAUI_EXPORT KisCategorizedListModel : public __CategorizedListModelBase
+class KisCategorizedListModel : public __CategorizedListModelBase
 {
 public:
     typedef TEntry Entry_Type;

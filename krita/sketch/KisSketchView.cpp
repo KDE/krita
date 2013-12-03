@@ -62,6 +62,7 @@
 #include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
 #include <input/kis_input_manager.h>
+#include <input/kis_tablet_event.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_zoom_manager.h>
 #include <kis_selection_manager.h>
@@ -90,6 +91,7 @@ public:
         , selectionExtras(0)
         , undoAction(0)
         , redoAction(0)
+        , tabletEventCount(0)
     { }
     ~Private() {
         delete selectionExtras;
@@ -120,6 +122,8 @@ public:
     QTimer *savedTimer;
     QAction* undoAction;
     QAction* redoAction;
+
+    unsigned char tabletEventCount;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -434,6 +438,18 @@ bool KisSketchView::event( QEvent* event )
 
             return true;
         }
+        case KisTabletEvent::TabletPressEx:
+        case KisTabletEvent::TabletReleaseEx:
+            emit interactionStarted();
+            d->canvas->inputManager()->eventFilter(this, event);
+            return true;
+        case KisTabletEvent::TabletMoveEx:
+            d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
+#ifdef Q_OS_X11
+            if(d->tabletEventCount % 2 == 0)
+#endif
+                d->canvas->inputManager()->eventFilter(this, event);
+            return true;
         default:
             break;
     }
@@ -486,9 +502,9 @@ bool KisSketchView::sceneEvent(QEvent* event)
 	    return true;
         default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
-            emit interactionStarted();
+                emit interactionStarted();
                 return true;
-        }
+            }
         }
     }
     return QDeclarativeItem::sceneEvent(event);

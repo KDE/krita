@@ -48,7 +48,7 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::finishEllipse(const QRectF& rect)
+void KisToolEllipse::finishRect(const QRectF& rect)
 {
     if (rect.isEmpty())
         return;

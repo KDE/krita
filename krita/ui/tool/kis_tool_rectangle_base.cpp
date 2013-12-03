@@ -31,13 +31,11 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
 
 void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(converter);
-    Q_ASSERT(currentImage());
-
     if(mode() == KisTool::PAINT_MODE) {
-        paintRectangle(gc,QRect());
+        paintRectangle(gc, pixelToView(QRectF(m_dragStart, m_dragEnd)).toRect());
     }
-    KisToolPaint::paint(gc,converter);
+
+    KisToolPaint::paint(gc, converter);
 }
 
 void KisToolRectangleBase::deactivate()
@@ -46,92 +44,74 @@ void KisToolRectangleBase::deactivate()
     KisToolShape::deactivate();
 }
 
-void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
+void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton,
-                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
+    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
+        (m_type == SELECT && !selectionEditable())) {
 
-        if (m_type == PAINT) {
-            if (!nodeEditable() || nodePaintAbility() == NONE) {
-                return;
-            }
-        } else {
-            if (!selectionEditable()) {
-                return;
-            }
-        }
-        setMode(KisTool::PAINT_MODE);
-        m_dragStart = m_dragCenter = m_dragEnd = convertToPixelCoord(event);
+        event->ignore();
+        return;
     }
-    else {
-        KisToolShape::mousePressEvent(event);
-    }
+    setMode(KisTool::PAINT_MODE);
+
+    QPointF pos = convertToPixelCoord(event);
+    m_dragStart = m_dragCenter = m_dragEnd = pos;
+    event->accept();
 }
 
-void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
+void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        QPointF pos = convertToPixelCoord(event);
-        updateArea();
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
-        // move (alt) or resize rectangle
-        if (event->modifiers() & Qt::AltModifier) {
-            QPointF trans = pos - m_dragEnd;
-            m_dragStart += trans;
-            m_dragEnd += trans;
-        } else {
-            QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-                                  ? m_dragCenter : m_dragStart);
-            // square?
-            if (event->modifiers() & Qt::ShiftModifier) {
-                double size = qMax(fabs(diag.x()), fabs(diag.y()));
-                double w = diag.x() < 0 ? -size : size;
-                double h = diag.y() < 0 ? -size : size;
-                diag = QPointF(w, h);
-            }
+    QPointF pos = convertToPixelCoord(event);
 
-            // resize around center point?
-            if (event->modifiers() & Qt::ControlModifier) {
-                m_dragStart = m_dragCenter - diag;
-                m_dragEnd = m_dragCenter + diag;
-            } else {
-                m_dragEnd = m_dragStart + diag;
-            }
+    if (event->modifiers() & Qt::AltModifier) {
+        QPointF trans = pos - m_dragEnd;
+        m_dragStart += trans;
+        m_dragEnd += trans;
+    } else {
+        QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
+                              ? m_dragCenter : m_dragStart);
+        // square?
+        if (event->modifiers() & Qt::ShiftModifier) {
+            double size = qMax(fabs(diag.x()), fabs(diag.y()));
+            double w = diag.x() < 0 ? -size : size;
+            double h = diag.y() < 0 ? -size : size;
+            diag = QPointF(w, h);
         }
 
-        updateArea();
-
-        m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
-                               (m_dragStart.y() + m_dragEnd.y()) / 2);
-
-        KisToolPaint::requestUpdateOutline(event->point);
+        // resize around center point?
+        if (event->modifiers() & Qt::ControlModifier) {
+            m_dragStart = m_dragCenter - diag;
+            m_dragEnd = m_dragCenter + diag;
+        } else {
+            m_dragEnd = m_dragStart + diag;
+        }
     }
-    else {
-        KisToolShape::mouseMoveEvent(event);
-    }
+    updateArea();
+
+    m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
+                           (m_dragStart.y() + m_dragEnd.y()) / 2);
+    KisToolPaint::requestUpdateOutline(event->point);
 }
 
-void KisToolRectangleBase::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
 
-        updateArea();
-        finishRect(QRectF(m_dragStart, m_dragEnd));
-    }
-    else {
-        KisToolShape::mouseReleaseEvent(event);
-    }
+    updateArea();
+
+    finishRect(QRectF(m_dragStart, m_dragEnd).normalized());
+    event->accept();
 }
 
-
-void KisToolRectangleBase::paintRectangle(QPainter& gc, const QRect&)
+void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRect &viewRect)
 {
-    Q_ASSERT(canvas() && currentImage());
+    KIS_ASSERT_RECOVER_RETURN(canvas());
 
     QPainterPath path;
-    path.addRect(pixelToView(QRectF(m_dragStart, m_dragEnd).toRect()));
+    path.addRect(viewRect);
     paintToolOutline(&gc, path);
 }
 

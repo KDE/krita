@@ -19,6 +19,7 @@
 
 #include <QBitArray>
 
+#include <KoChannelInfo.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>

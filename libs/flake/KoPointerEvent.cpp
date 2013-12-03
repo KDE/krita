@@ -119,10 +119,19 @@ KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int
 
 KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF &point)
     : point(point)
+    , touchPoints(event->touchPoints)
     , m_event(event->m_event)
     , d(new Private(*(event->d)))
 {
     Q_ASSERT(m_event);
+}
+
+KoPointerEvent::KoPointerEvent(const KoPointerEvent &rhs)
+    : point(rhs.point)
+    , touchPoints(rhs.touchPoints)
+    , m_event(rhs.m_event)
+    , d(new Private(*rhs.d))
+{
 }
 
 KoPointerEvent::~KoPointerEvent()

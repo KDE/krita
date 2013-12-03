@@ -54,7 +54,7 @@ public:
         KDialog * dialog = new KDialog(view);
         Q_CHECK_PTR(dialog);
 
-        T* configWidget = new T(dialog);
+        T* configWidget = new T(dialog, view);
         dialog->setCaption(configWidget->caption());
         dialog->setMainWidget(configWidget);
         bool success = false;

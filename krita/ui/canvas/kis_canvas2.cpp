@@ -105,7 +105,7 @@ public:
 #ifdef HAVE_OPENGL
     int openGLFilterMode;
 #endif
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;

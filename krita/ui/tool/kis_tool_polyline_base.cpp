@@ -66,33 +66,58 @@ void KisToolPolylineBase::requestStrokeCancellation()
     cancelStroke();
 }
 
-void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
+void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
+
     if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
         (m_type == SELECT && !selectionEditable())) {
 
+        event->ignore();
         return;
     }
 
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::ShiftModifier)) {
-
-        if(m_dragging &&
-           (m_closeSnappingActivated ||
-            event->modifiers() == Qt::ShiftModifier)) {
-
-            if (m_closeSnappingActivated) {
-                m_points.append(m_points.first());
-            }
-
-            endStroke();
-        } else {
-            setMode(KisTool::PAINT_MODE);
-            m_dragging = true;
+    if(m_dragging && m_closeSnappingActivated) {
+        if (m_closeSnappingActivated) {
+            m_points.append(m_points.first());
         }
+        endStroke();
     } else {
-        KisToolShape::mousePressEvent(event);
+        setMode(KisTool::PAINT_MODE);
+        m_dragging = true;
     }
+}
+
+void KisToolPolylineBase::endPrimaryAction(KoPointerEvent *event)
+{
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
+
+    if(m_dragging) {
+        m_dragStart = convertToPixelCoord(event);
+        m_dragEnd = m_dragStart;
+        m_points.append(m_dragStart);
+    }
+}
+
+void KisToolPolylineBase::beginPrimaryDoubleClickAction(KoPointerEvent *event)
+{
+    endStroke();
+
+    // this action will have no continuation
+    event->ignore();
+}
+
+void KisToolPolylineBase::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action != ChangeSize || !m_dragging) {
+        KisToolPaint::beginAlternateAction(event, action);
+    }
+
+    if (m_closeSnappingActivated) {
+        m_points.append(m_points.first());
+    }
+    endStroke();
 }
 
 void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
@@ -114,36 +139,8 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
 
         updateCanvasViewRect(QRectF(basePoint, 2 * QSize(SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH, SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH)).translated(-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH,-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH));
         KisToolPaint::requestUpdateOutline(event->point);
-    }
-
-    KisToolShape::mouseMoveEvent(event);
-}
-
-void KisToolPolylineBase::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-
-        if(m_dragging) {
-            m_dragStart = convertToPixelCoord(event);
-            m_dragEnd = m_dragStart;
-            m_points.append(m_dragStart);
-        }
-    }
-    else {
-        KisToolShape::mouseReleaseEvent(event);
-    }
-}
-
-void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *event)
-{
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
-
-        endStroke();
-    }
-    else {
-        KisToolShape::mousePressEvent(event);
+    } else {
+        KisToolPaint::mouseMoveEvent(event);
     }
 }
 

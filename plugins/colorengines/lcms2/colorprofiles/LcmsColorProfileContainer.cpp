@@ -33,7 +33,9 @@
 class LcmsColorProfileContainer::Private
 {
 public:
-    Private() : valid(false), suitableForOutput(false) { }
+    Private()
+        : valid(false)
+        , suitableForOutput(false) { }
 
     cmsHPROFILE profile;
     cmsColorSpaceSignature colorSpaceSignature;
@@ -47,13 +49,13 @@ public:
 };
 
 LcmsColorProfileContainer::LcmsColorProfileContainer()
-        : d(new Private())
+    : d(new Private())
 {
     d->profile = 0;
 }
 
 LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data * data)
-        : d(new Private())
+    : d(new Private())
 {
     d->data = data;
     d->profile = 0;
@@ -106,20 +108,20 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
     }
 
     cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries,
-                          transferFunctions);
+                                              transferFunctions);
     QString name = _profileName;
 
     if (name.isEmpty()) {
         name = QString("lcms virtual RGB profile - R(%1, %2) G(%3, %4) B(%5, %6) W(%7, %8) gamma %9")
-               .arg(primaries.Red.x)
-               .arg(primaries.Red.y)
-               .arg(primaries.Green.x)
-               .arg(primaries.Green.y)
-               .arg(primaries.Blue.x)
-               .arg(primaries.Blue.y)
-               .arg(whitePoint.x)
-               .arg(whitePoint.y)
-               .arg(gamma);
+                .arg(primaries.Red.x)
+                .arg(primaries.Red.y)
+                .arg(primaries.Green.x)
+                .arg(primaries.Green.y)
+                .arg(primaries.Blue.x)
+                .arg(primaries.Blue.y)
+                .arg(whitePoint.x)
+                .arg(whitePoint.y)
+                .arg(gamma);
     }
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
@@ -163,18 +165,28 @@ bool LcmsColorProfileContainer::init()
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);
         cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
-        d->productDescription = QString::fromWCharArray(buffer);
+        d->name = QString::fromWCharArray(buffer);
         d->valid = true;
         cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
-        d->name = QString::fromWCharArray(buffer);
+        d->productDescription = QString::fromWCharArray(buffer);
 
         cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->manufacturer = QString::fromWCharArray(buffer);
         
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                               || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
-                                    cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
+                || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
+                     cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
+
+        dbgPigment << "Loaded ICC Profile"
+                   << "\n\tSignature:" << d->colorSpaceSignature
+                   << "\n\tDevice class:" << d->deviceClass
+                   << "\n\tDescription:" << d->productDescription
+                   << "\n\tValid:" << d->valid
+                   << "\n\tName:" << d->name
+                   << "\n\tManufacturer:" << d->manufacturer
+                   << "\n\tSuitable for output:" << d->suitableForOutput;
+
         return true;
     }
 
@@ -183,15 +195,6 @@ bool LcmsColorProfileContainer::init()
 
 cmsHPROFILE LcmsColorProfileContainer::lcmsProfile() const
 {
-#if 0
-    if (d->profile = 0) {
-        QFile file(d->filename);
-        file.open(QIODevice::ReadOnly);
-        d->rawData = file.readAll();
-        d->profile = cmsOpenProfileFromMem((void*)d->rawData.constData(), (DWORD)d->rawData.size());
-        file.close();
-    }
-#endif
     return d->profile;
 }
 
@@ -248,7 +251,7 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
     const cmsUInt32Number transformFlags = cmsFLAGS_LOWRESPRECALC;
 
     cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat,
-                              INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
+                                                 INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
 
     struct XYZPixel {
         qreal X;
@@ -286,6 +289,7 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
     cmsCloseProfile(XYZProfile);
     KoCIExyY res;
     lcmsToPigmentViceVersaStructureCopy(res, xyzPixelxyY);
+
     return res;
 }
 

@@ -47,13 +47,11 @@ public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
-    virtual int flags() const;
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
+    virtual int flags() const;
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const;

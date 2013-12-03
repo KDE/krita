@@ -55,15 +55,17 @@ public:
     virtual int flags() const;
 
 protected:
-    bool isGestureSupported() const;
-    void gesture(const QPointF &offsetInDocPixels,
-                 const QPointF &initialDocPoint);
+    bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
+    bool primaryActionSupportsHiResEvents() const;
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual bool wantsAutoScroll() const;
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
@@ -110,6 +112,10 @@ private:
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;
+
+    QPointF m_initialGestureDocPoint;
+    QPointF m_lastDocumentPoint;
+    QPoint m_initialGestureGlobalPoint;
 };
 
 

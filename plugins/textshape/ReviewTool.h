@@ -26,6 +26,7 @@ class KoTextEditor;
 class KoTextShapeData;
 class KoViewConverter;
 class TextShape;
+class SimpleAnnotationWidget;
 
 class KAction;
 
@@ -42,6 +43,7 @@ template <class T> class QVector;
 
 class ReviewTool : public TextTool
 {
+    Q_OBJECT
 public:
     explicit ReviewTool(KoCanvasBase *canvas);
     ~ReviewTool();
@@ -57,8 +59,8 @@ public:
 
     virtual QList<QWidget *> createOptionWidgets();
 
-private slots:
-
+public slots:
+    void removeAnnotation();
 
 private:
 
@@ -66,6 +68,8 @@ private:
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
     TextShape *m_textShape;
+    KAction *m_removeAnnotationAction;
+    KoShape *m_currentAnnotationShape;
 };
 
 #endif // REVIEWTOOL_H

@@ -100,6 +100,7 @@ set(kotext_LIB_SRCS
     commands/ChangeStylesCommand.cpp
     commands/ChangeStylesMacroCommand.cpp
     commands/DeleteAnchorsCommand.cpp
+    commands/DeleteAnnotationsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
@@ -111,6 +112,7 @@ set(kotext_LIB_SRCS
     commands/ListItemNumberingCommand.cpp
     commands/TextPasteCommand.cpp
     commands/AddTextRangeCommand.cpp
+    commands/AddAnnotationCommand.cpp
     commands/ParagraphFormattingCommand.cpp
 
     KoTextDrag.cpp

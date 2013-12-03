@@ -44,7 +44,7 @@ public:
     virtual ~KisToolEllipse();
 
 protected:
-    virtual void finishEllipse(const QRectF& rect);
+    virtual void finishRect(const QRectF& rect);
 };
 
 class KisToolEllipseFactory : public KoToolFactoryBase

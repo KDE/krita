@@ -62,5 +62,3 @@ void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
     m_parentTool->addPathShape(pathShape, i18n("Path"));
 }
-
-#include "kis_tool_path.moc"

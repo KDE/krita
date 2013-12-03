@@ -525,6 +525,11 @@ void KisPaintDevice::crop(const QRect &rect)
     m_d->currentStrategy()->crop(rect);
 }
 
+void KisPaintDevice::purgeDefaultPixels()
+{
+    m_d->dataManager->purge(m_d->dataManager->extent());
+}
+
 void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
 {
     m_d->dataManager->setDefaultPixel(defPixel);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>340</width>
-    <height>349</height>
+    <width>367</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>1000000</number>
+         <number>100000</number>
         </property>
        </widget>
       </item>
@@ -55,7 +55,7 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>1000000</number>
+         <number>100000</number>
         </property>
        </widget>
       </item>
@@ -71,11 +71,14 @@
       </item>
       <item row="0" column="2">
        <widget class="QDoubleSpinBox" name="newWidthDouble">
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
-         <double>1.000000000000000</double>
+         <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>10000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -84,11 +87,14 @@
       </item>
       <item row="1" column="2">
        <widget class="QDoubleSpinBox" name="newHeightDouble">
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
-         <double>1.000000000000000</double>
+         <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>10000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -200,20 +206,23 @@
       <item row="0" column="2">
        <widget class="QSpinBox" name="xOffset">
         <property name="minimum">
-         <number>-1000000</number>
+         <number>-100000</number>
         </property>
         <property name="maximum">
-         <number>1000000</number>
+         <number>100000</number>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
        <widget class="QDoubleSpinBox" name="xOffsetDouble">
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
-         <double>-1000000.000000000000000</double>
+         <double>-10000.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>10000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -259,20 +268,23 @@
       <item row="1" column="2">
        <widget class="QSpinBox" name="yOffset">
         <property name="minimum">
-         <number>-1000000</number>
+         <number>-100000</number>
         </property>
         <property name="maximum">
-         <number>1000000</number>
+         <number>100000</number>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QDoubleSpinBox" name="yOffsetDouble">
+        <property name="decimals">
+         <number>4</number>
+        </property>
         <property name="minimum">
-         <double>-1000000.000000000000000</double>
+         <double>-10000.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>10000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -306,7 +318,16 @@
          <enum>QFrame::Sunken</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
           <number>2</number>
          </property>
          <item>

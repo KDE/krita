@@ -45,6 +45,7 @@ public:
     bool showSpellChecking;
     bool showSelections;
     bool showInlineObjectVisualization;
+    bool showAnnotations;
 };
 
 #endif /* KOSHAPEPAINTINGCONTEXT_H */

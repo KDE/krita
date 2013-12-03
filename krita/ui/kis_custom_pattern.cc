@@ -18,7 +18,6 @@
 
 #include "kis_custom_pattern.h"
 
-#include <KoImageResource.h>
 #include <KoResourceServerProvider.h>
 #include <KoPattern.h>
 

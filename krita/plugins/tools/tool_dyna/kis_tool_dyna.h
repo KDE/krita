@@ -84,9 +84,8 @@ public:
     virtual ~KisToolDyna();
 
     QWidget * createOptionWidget();
-
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
 
 protected:
     virtual void initStroke(KoPointerEvent *event);

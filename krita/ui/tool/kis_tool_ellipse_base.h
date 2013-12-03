@@ -20,38 +20,15 @@
 #ifndef KIS_TOOL_ELLIPSE_BASE_H
 #define KIS_TOOL_ELLIPSE_BASE_H
 
-#include <kis_tool_shape.h>
+#include <kis_tool_rectangle_base.h>
 #include <kis_cursor.h>
 
-class KRITAUI_EXPORT KisToolEllipseBase : public KisToolShape
+class KRITAUI_EXPORT KisToolEllipseBase : public KisToolRectangleBase
 {
-Q_OBJECT
 public:
-    enum ToolType {
-        PAINT,
-        SELECT
-    };
-
     KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_ellipse_cursor.png", 6, 6));
-    ~KisToolEllipseBase();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    virtual void deactivate();
-
-protected:
-    virtual void finishEllipse(const QRectF& rect) = 0;
-    void updateArea();
-
-private:
-    void paintEllipse(QPainter& gc, const QRect& rc);
-
-    QPointF m_dragCenter;
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-    ToolType m_type;
+    void paintRectangle(QPainter &gc, const QRect &viewRect);
 };
 
 #endif // KIS_TOOL_ELLIPSE_BASE_H

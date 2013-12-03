@@ -35,6 +35,7 @@ class KoShape;
 class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;
+class KoShapeController;
 
 /**
  * The KoResourceManager contains a set of per-canvas <i>or</i> per-document
@@ -78,6 +79,7 @@ enum DocumentResource {
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
+    ShapeController,       ///< The KoShapeController for the document
 
     KarbonStart = 1000,      ///< Base number for Karbon specific values.
     KexiStart = 2000,        ///< Base number for Kexi specific values.
@@ -243,6 +245,9 @@ enum DocumentResource {
 
     KoOdfDocument *odfDocument() const;
     void setOdfDocument(KoOdfDocument *currentDocument);
+
+    KoShapeController *shapeController() const;
+    void setShapeController(KoShapeController *shapeController);
 
 signals:
     /**

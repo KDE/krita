@@ -25,6 +25,7 @@
 
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoAnnotation.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
@@ -64,8 +65,10 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
+#include "commands/DeleteAnnotationsCommand.h"
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
+#include "commands/AddAnnotationCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -483,6 +486,30 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 
     return bookmark;
 }
+KoTextRangeManager *KoTextEditor::textRangeManager()
+{
+    return KoTextDocument(d->document).textRangeManager();
+}
+
+KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
+{
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
+
+    KoAnnotation *annotation = new KoAnnotation(d->caret);
+    KoTextRangeManager *textRangeManager = KoTextDocument(d->document).textRangeManager();
+    annotation->setManager(textRangeManager);
+    //FIXME: I need the name, a unique name, we can set selected text as annotation name or use createUniqueAnnotationName function
+    // to do it for us.
+    QString name = annotation->createUniqueAnnotationName(textRangeManager->annotationManager(), "", false);
+    annotation->setName(name);
+    annotation->setAnnotationShape(annotationShape);
+
+    addCommand(new AddAnnotationCommand(annotation, topCommand));
+
+    endEditBlock();
+
+    return annotation;
+}
 
 KoInlineObject *KoTextEditor::insertIndexMarker()
 {//TODO changeTracking
@@ -566,6 +593,12 @@ void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Com
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
 }
 
+void KoTextEditor::removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(new DeleteAnnotationsCommand(annotations, d->document, parent));
+}
+
 void KoTextEditor::insertFrameBreak()
 {
     if (isEditProtected()) {
@@ -598,92 +631,19 @@ void KoTextEditor::insertFrameBreak()
     emit cursorPositionChanged();
 }
 
-//TODO: use the KoTextDocument provided shapeController. Then remove the parameter sent from the TextTool
-void KoTextEditor::paste(const QMimeData *mimeData,
-                         KoShapeController *shapeController,
-                         bool pasteAsText)
+void KoTextEditor::paste(KoCanvasBase *canvas, const QMimeData *mimeData, bool pasteAsText)
 {
     if (isEditProtected()) {
         return;
     }
 
+    KoShapeController *shapeController = KoTextDocument(d->document).shapeController();
+
     addCommand(new TextPasteCommand(mimeData,
                                     d->document,
                                     shapeController,
-                                    0,
+                                    canvas, 0,
                                     pasteAsText));
-}
-
-bool KoTextEditor::paste(KoTextEditor *editor,
-                         KoShapeController *shapeController,
-                         bool pasteAsText)
-{
-
-    Q_ASSERT(editor);
-    Q_ASSERT(editor != this);
-
-    if (!editor->hasSelection()) {
-        editor->setPosition(0);
-        editor->movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    }
-
-    int from = editor->position();
-    int to = editor->anchor();
-    KoTextOdfSaveHelper saveHelper(editor->document(), from, to);
-    KoTextDrag drag;
-#ifdef SHOULD_BUILD_RDF
-    KoDocumentRdfBase *rdf = 0;
-    if (shapeController->resourceManager()->hasResource(KoText::DocumentRdf)) {
-        rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
-        saveHelper.setRdfModel(rdf->model());
-    }
-#endif
-    drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-
-    beginEditBlock();
-
-    if (hasSelection()) {
-        addCommand(new DeleteCommand(DeleteCommand::NextChar, d->document, shapeController));
-    }
-
-    // check for mime type
-    const QMimeData *data = drag.mimeData();
-
-    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
-                    || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
-        KoOdf::DocumentType odfType = KoOdf::Text;
-        if (!data->hasFormat(KoOdf::mimeType(odfType))) {
-            odfType = KoOdf::OpenOfficeClipboard;
-        }
-
-        if (pasteAsText) {
-            insertText(data->text());
-        } else {
-            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
-#ifdef SHOULD_BUILD_RDF
-            if(!rdf) {
-                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
-            } else {
-                rdfModel = rdf->model();
-            }
-#endif
-
-            //kDebug() << "pasting odf text";
-            KoTextPaste paste(this, shapeController, rdfModel);
-            paste.paste(odfType, data);
-            //kDebug() << "done with pasting odf";
-
-#ifdef SHOULD_BUILD_RDF
-            if (rdf) {
-                rdf->updateInlineRdfStatements(d->document);
-            }
-#endif
-        }
-    }
-
-    endEditBlock();
-
-    return true;
 }
 
 void KoTextEditor::deleteChar(bool previous, KUndo2Command *parent)

@@ -1808,7 +1808,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleY = fabs(m_scaleY_wOutModifier);
 
                 m_currentArgs.setScaleX((m_scaleX_wOutModifier > 0) ? a_scaleY : -a_scaleY);
@@ -1886,7 +1888,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleX = fabs(m_scaleX_wOutModifier);
 
                 m_currentArgs.setScaleY((m_scaleY_wOutModifier > 0) ? a_scaleX : -a_scaleX);
@@ -1976,7 +1980,9 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // applies the shift modifier
-            if (event->modifiers() & Qt::ShiftModifier) {
+            if (m_currentArgs.keepAspectRatio() !=
+                bool(event->modifiers() & Qt::ShiftModifier)) {
+
                 double a_scaleX = fabs(m_scaleX_wOutModifier);
                 double a_scaleY = fabs(m_scaleY_wOutModifier);
 
@@ -2227,7 +2233,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
 
     KisNodeSP currentNode = this->currentNode();
 
-    if (!currentNode) {
+    if (!currentNode || !currentNode->hasEditablePaintDevice()) {
         return;
     }
 
@@ -2275,7 +2281,11 @@ void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
 
-    if (!m_currentArgs.isIdentity()) {
+    /**
+     * It might happen that the node has become locked while the stroke,
+     * so check that one more time before the end
+     */
+    if (!m_currentArgs.isIdentity() && m_transaction.rootNode()->hasEditablePaintDevice()) {
         transformDevices(m_transaction.rootNode(), m_workRecursively);
 
         image()->addJob(m_strokeId,
@@ -2404,8 +2414,6 @@ void KisToolTransform::slotUiChangedConfig()
 
 void KisToolTransform::slotApplyTransform()
 {
-    if (!nodeEditable()) return;
-
     QApplication::setOverrideCursor(KisCursor::waitCursor());
     endStroke();
     QApplication::restoreOverrideCursor();

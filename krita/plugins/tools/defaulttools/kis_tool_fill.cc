@@ -80,6 +80,7 @@ KisToolFill::~KisToolFill()
 void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
     if (!nodeEditable()) {
+        event->ignore();
         return;
     }
 
@@ -91,6 +92,8 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 void KisToolFill::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() ||
@@ -99,7 +102,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    // TODO: remove this block after recording refactorign
+    // TODO: remove this block after recording refactoring
     if (image()) {
         KisNodeSP projectionNode;
         if(m_unmerged) {

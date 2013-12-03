@@ -91,6 +91,7 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
 {
     if (!nodeEditable()) {
+        event->ignore();
         return;
     }
 
@@ -102,6 +103,14 @@ void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
 {
+    /**
+     * TODO: The gradient tool is still not in strokes, so the end of
+     *       its action can call processEvent(), which would result in
+     *       nested event hadler calls. Please uncomment this line
+     *       when the tool is ported to strokes.
+     */
+    //KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     QPointF pos = convertToPixelCoord(event);
 
     QRectF bound(m_startPos, m_endPos);
@@ -121,6 +130,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
 void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() || currentNode()->systemLocked())

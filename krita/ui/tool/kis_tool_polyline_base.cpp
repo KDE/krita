@@ -73,6 +73,7 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
     if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
         (m_type == SELECT && !selectionEditable())) {
 
+        event->ignore();
         return;
     }
 
@@ -89,6 +90,7 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolPolylineBase::endPrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if(m_dragging) {
@@ -100,8 +102,10 @@ void KisToolPolylineBase::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolPolylineBase::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
     endStroke();
+
+    // this action will have no continuation
+    event->ignore();
 }
 
 void KisToolPolylineBase::beginAlternateAction(KoPointerEvent *event, AlternateAction action)

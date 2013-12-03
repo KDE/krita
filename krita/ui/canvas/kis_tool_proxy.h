@@ -35,7 +35,12 @@ public:
 public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
 
-    void forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+    /**
+     * Forwards the event to the active tool and returns true if the
+     * event 'was not ignored'.  That is by default the event is
+     * considered accepted, but the tool can explicitly ignore it.
+     */
+    bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
     bool primaryActionSupportsHiResEvents() const;
 
 private:

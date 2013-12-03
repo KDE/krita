@@ -633,6 +633,16 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
 }
 
+qreal KisConfig::outlineSizeMinimum() const
+{
+    return m_cfg.readEntry("OutlineSizeMinimum", 1.0);
+}
+
+void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
+{
+    m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
+}
+
 int KisConfig::autoSaveInterval()  const
 {
     return m_cfg.readEntry("AutoSaveInterval", KoDocument::defaultAutoSave());

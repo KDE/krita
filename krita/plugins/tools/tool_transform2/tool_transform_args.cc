@@ -40,7 +40,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_transfPoints = QVector<QPointF>();
     m_warpType = KisWarpTransformWorker::AFFINE_TRANSFORM;
     m_alpha = 1.0;
-    m_keepAspectRatio = true;
+    m_keepAspectRatio = false;
 
     setFilterId("Bicubic");
 }
@@ -121,7 +121,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_warpType = warpType;
     m_alpha = alpha;
     m_defaultPoints = defaultPoints;
-    m_keepAspectRatio = true;
+    m_keepAspectRatio = false;
     setFilterId("Bicubic");
 }
 

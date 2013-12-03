@@ -101,6 +101,7 @@ void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolSelectBrush::beginPrimaryAction(KoPointerEvent *event)
 {
     if (!selectionEditable()) {
+        event->ignore();
         return;
     }
 
@@ -112,6 +113,8 @@ void KisToolSelectBrush::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     // this gives better performance
     if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
         return;
@@ -129,7 +132,8 @@ void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectBrush::endPrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event;)
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
     setMode(KisTool::HOVER_MODE);
     applyToSelection(m_selection);

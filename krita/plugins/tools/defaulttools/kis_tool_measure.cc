@@ -152,6 +152,8 @@ void KisToolMeasure::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     // Erase old temporary lines
     canvas()->updateCanvas(convertToPt(boundingRect()));
 
@@ -172,6 +174,8 @@ void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolMeasure::endPrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     Q_UNUSED(event);
     setMode(KisTool::HOVER_MODE);
 }

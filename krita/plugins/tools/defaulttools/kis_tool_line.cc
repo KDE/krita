@@ -99,11 +99,8 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
-    if (nodePaintAbility() == NONE) {
-        return;
-    }
-
-    if (!nodeEditable()) {
+    if (nodePaintAbility() == NONE || !nodeEditable()) {
+        event->ignore();
         return;
     }
 
@@ -124,6 +121,8 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     // First ensure the old temp line is deleted
     updatePreview();
 
@@ -146,6 +145,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updatePreview();

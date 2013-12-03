@@ -150,10 +150,12 @@ void KisToolPaint::deactivate()
     KisTool::deactivate();
 }
 
-QPainterPath KisToolPaint::tryFixTooBigBrush(const QPainterPath &originalOutline)
+QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
     KisConfig cfg;
     if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+
+    const qreal minThresholdSize = cfg.outlineSizeMinimum();
 
     /**
      * If the brush outline is bigger than the canvas itself (which
@@ -166,16 +168,21 @@ QPainterPath KisToolPaint::tryFixTooBigBrush(const QPainterPath &originalOutline
 
     QPainterPath outline = originalOutline;
     QRectF boundingRect = outline.boundingRect();
+    const qreal sum = boundingRect.width() + boundingRect.height();
 
-    if (boundingRect.width() + boundingRect.height() > maxThresholdSum) {
+    QPointF center = boundingRect.center();
+
+    if (sum > maxThresholdSum) {
         const int hairOffset = 7;
-        QPointF center = boundingRect.center();
 
         outline.moveTo(center.x(), center.y() - hairOffset);
         outline.lineTo(center.x(), center.y() + hairOffset);
 
         outline.moveTo(center.x() - hairOffset, center.y());
         outline.lineTo(center.x() + hairOffset, center.y());
+    } else if (sum < minThresholdSize) {
+        outline = QPainterPath();
+        outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
     }
 
     return outline;
@@ -185,7 +192,7 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    QPainterPath path = tryFixTooBigBrush(pixelToView(m_currentOutline));
+    QPainterPath path = tryFixBrushOutline(pixelToView(m_currentOutline));
     paintToolOutline(&gc, path);
 }
 

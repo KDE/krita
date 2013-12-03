@@ -66,18 +66,20 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
                                          KoShapePaintingContext &paintcontext)
 {
-    TextShape::paintComponent(painter, converter, paintcontext);
-    QRectF clipRect = outlineRect();
+    if (paintcontext.showAnnotations) {
+        TextShape::paintComponent(painter, converter, paintcontext);
+        QRectF clipRect = outlineRect();
 
-    // Paint creator and of creation of the annotation.
-    QPen peninfo (Qt::darkYellow);
-    QFont serifFont("Times", HeaderFontSize, QFont::Bold);
-    painter.setPen(peninfo);
-    painter.setFont(serifFont);
+        // Paint creator and of creation of the annotation.
+        QPen peninfo (Qt::darkYellow);
+        QFont serifFont("Times", HeaderFontSize, QFont::Bold);
+        painter.setPen(peninfo);
+        painter.setFont(serifFont);
 
-    QDate date = QDate::fromString(m_date, Qt::ISODate);
-    QString info = "  " + m_creator + "\n  " + date.toString(Qt::LocalDate);
-    painter.drawText(clipRect, Qt::AlignTop, info);
+        QDate date = QDate::fromString(m_date, Qt::ISODate);
+        QString info = "  " + m_creator + "\n  " + date.toString(Qt::LocalDate);
+        painter.drawText(clipRect, Qt::AlignTop, info);
+    }
 }
 
 bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

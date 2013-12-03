@@ -241,16 +241,16 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
 {
-    setMode(KisTool::PAINT_MODE);
-
     bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
     if (!sampleMerged) {
         if (!currentNode()) {
             KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
+            event->ignore();
             return;
         }
         if (!currentNode()->visible()) {
             KMessageBox::information(0, i18n("Cannot pick a color as the active layer is not visible."));
+            event->ignore();
             return;
         }
     }
@@ -258,16 +258,19 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     QPoint pos = convertToIntPixelCoord(event);
     // the color picking has to start in the visible part of the layer
     if (!currentImage()->bounds().contains(pos)) {
+        event->ignore();
         return;
     }
 
-    //m_toForegroundColor = (event->button() == Qt::LeftButton);
+    setMode(KisTool::PAINT_MODE);
     pickColor(pos);
     displayPickedColor();
 }
 
 void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     QPoint pos = convertToIntPixelCoord(event);
     pickColor(pos);
     displayPickedColor();
@@ -276,6 +279,7 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
 void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
 
     if (m_config.addPalette) {
         KoColorSetEntry ent;

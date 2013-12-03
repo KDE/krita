@@ -124,8 +124,6 @@ void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction acti
 
 void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 {
-    setMode(KisTool::PAINT_MODE);
-
     QPoint pos = convertToPixelCoord(event).toPoint();
     m_dragStart = pos;
     m_lastDragPos = m_dragStart;
@@ -140,7 +138,12 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
         node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
     }
 
-    if((!node && !(node = currentNode())) || !node->isEditable()) return;
+    if ((!node && !(node = currentNode())) || !node->isEditable()) {
+        event->ignore();
+        return;
+    }
+
+    setMode(KisTool::PAINT_MODE);
 
     /**
      * If the target node has changed, the stroke should be
@@ -180,6 +183,8 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
 void KisToolMove::continueAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+
     if (!m_strokeId) return;
 
     QPoint pos = convertToPixelCoord(event).toPoint();
@@ -189,6 +194,7 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 
 void KisToolMove::endAction(KoPointerEvent *event)
 {
+    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
     if (!m_strokeId) return;
 

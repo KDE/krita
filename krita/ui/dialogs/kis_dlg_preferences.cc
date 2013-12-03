@@ -774,8 +774,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
-#else
-        cfg.chkUseTextureBuffer(false);
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

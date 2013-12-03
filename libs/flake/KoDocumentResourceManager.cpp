@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 #include "KoShape.h"
+#include "KoShapeController.h"
 #include "KoResourceManager_p.h"
 
 class KoDocumentResourceManager::Private
@@ -211,13 +212,13 @@ KoShapeController *KoDocumentResourceManager::shapeController() const
 {
     if (!hasResource(ShapeController))
         return 0;
-    return static_cast<KoShapeController *>(resource(ShapeController).value<void*>());
+    return resource(ShapeController).value<KoShapeController *>();
 }
 
 void KoDocumentResourceManager::setShapeController(KoShapeController *shapeController)
 {
     QVariant variant;
-    variant.setValue<void*>(shapeController);
+    variant.setValue<KoShapeController *>(shapeController);
     setResource(ShapeController, variant);
 }
 

@@ -552,7 +552,7 @@ bool KoToolProxy::paste()
         }
     }
 
-   if (!success) {
+    if (!success) {
         const QMimeData *data = QApplication::clipboard()->mimeData();
 
         QList<QImage> imageList;
@@ -598,14 +598,11 @@ bool KoToolProxy::paste()
 
                     KoShape *shape = factory->createShape(&params, canvas->shapeController()->resourceManager());
                     shape->setPosition(p);
-                    if (cmd) {
-                        // add shapes to the document
-                        canvas->shapeController()->addShapeDirect(shape, cmd);
 
-                        success = true;
-                    } else {
-                        delete shape;
-                    }
+                    // add shape to the document
+                    canvas->shapeController()->addShapeDirect(shape, cmd);
+
+                    success = true;
                 }
             }
             canvas->addCommand(cmd);

@@ -141,10 +141,6 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void KisToolPaint::deactivate()
 {
-    disconnect(actions().value("make_brush_color_lighter"), 0, this, 0);
-    disconnect(actions().value("make_brush_color_darker"), 0, this, 0);
-    disconnect(actions().value("increase_opacity"), 0, this, 0);
-    disconnect(actions().value("decrease_opacity"), 0, this, 0);
     disconnect(actions().value("increase_brush_size"), 0, this, 0);
     disconnect(actions().value("decrease_brush_size"), 0, this, 0);
     KisTool::deactivate();

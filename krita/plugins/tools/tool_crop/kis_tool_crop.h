@@ -159,6 +159,7 @@ private:
 
     qint32 m_handleSize;
     bool m_haveCropSelection;
+    bool m_lastCropSelectionWasReset;
     qint32 m_mouseOnHandleType;
 
     CropToolType m_cropType;

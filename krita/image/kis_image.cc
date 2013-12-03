@@ -1478,9 +1478,12 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::notifySelectionChanged()
 {
-    if (!m_d->disableUIUpdateSignals) {
-        m_d->legacyUndoAdapter->emitSelectionChanged();
-    }
+    /**
+     * The selection is calculated asynchromously, so it is not
+     * handled by disableUIUpdates() and other special signals of
+     * KisImageSignalRouter
+     */
+    m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,

@@ -47,6 +47,8 @@ private slots:
     void testRgb8CompositeAlphaDarkenReal_Aligned();
     void testRgb8CompositeOverReal_Aligned();
 
+    void testRgb8CompositeCopyLegacy();
+
     void benchmarkMemcpy();
 
     void benchmarkUintFloat();

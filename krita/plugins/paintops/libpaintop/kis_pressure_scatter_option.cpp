@@ -93,12 +93,14 @@ void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguratio
         KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
 }
 
-QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal diameter) const
+QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal width, qreal height) const
 {
     if ((!m_axisX && !m_axisY) || (!isChecked())) {
         return info.pos();
     }
-    
+
+    // just use the most significant dimension for calculations
+    qreal diameter = qMax(width, height);
     qreal sensorValue = computeValue(info);
 
     qreal jitter = (2.0 * drand48() - 1.0) * diameter * sensorValue;

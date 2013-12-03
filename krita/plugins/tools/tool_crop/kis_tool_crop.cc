@@ -49,7 +49,6 @@
 #include <kis_layer.h>
 #include <kis_canvas2.h>
 #include <kis_view2.h>
-#include <KoZoomController.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
 
@@ -111,6 +110,7 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     m_rectCrop = QRect(0, 0, 0, 0);
     m_handleSize = 13;
     m_haveCropSelection = false;
+    m_lastCropSelectionWasReset = false;
     m_cropTypeSelectable = false;
     m_cropType = ImageCropType;
     m_cropX = 0;
@@ -138,11 +138,6 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     if (sel) {
         sel->updateProjection();
         m_rectCrop = sel->selectedExactRect();
-        m_haveCropSelection = true;
-        validateSelection();
-    } else {
-        QRect bounds = image()->bounds();
-        m_rectCrop = QRect(bounds.width() / 4, bounds.height() / 4, bounds.width() / 2, bounds.height() / 2);
         m_haveCropSelection = true;
         validateSelection();
     }
@@ -210,18 +205,23 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 
     QPoint pos = convertToPixelCoord(event).toPoint();
 
-    if (!m_haveCropSelection) { //if the selection is not set
-        QRect bounds = image()->bounds();
-        m_rectCrop = QRect(pos.x(), pos.y(), bounds.width() / 2, bounds.height() / 2);
-        m_rectCrop &= bounds;
+    m_dragStart = pos;
 
+    if (!m_haveCropSelection) { //if the selection is not set
+        m_rectCrop = QRect();
         updateCanvasPixelRect(image()->bounds());
     } else {
         m_mouseOnHandleType = mouseOnHandle(pixelToView(convertToPixelCoord(event)));
-        m_dragStart = pos;
-        m_center = m_rectCrop.center(); //store the center of the original so when we grow we are sure to have the same center
-        m_originalRatio = m_ratio; //this is the ratio we want to match some areas it is impossible to get this ratio because of integer width and height
-        //so if we update this as we go we will run into problems of drift in value. so set target on mouse click 
+        if (m_mouseOnHandleType != None) {
+            m_center = m_rectCrop.center(); //store the center of the original so when we grow we are sure to have the same center
+            m_originalRatio = m_ratio; //this is the ratio we want to match some areas it is impossible to get this ratio because of integer width and height
+            //so if we update this as we go we will run into problems of drift in value. so set target on mouse click
+        } else {
+            m_lastCropSelectionWasReset = true;
+            m_haveCropSelection = false;
+            m_rectCrop = QRect();
+            updateCanvasPixelRect(image()->bounds());
+        }
     }
 }
 
@@ -233,7 +233,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 
     QRectF updateRect = boundingRect();
     if (!m_haveCropSelection) { //if the cropSelection is not yet set
-        m_rectCrop.setBottomRight(pos.toPoint());
+        m_rectCrop = QRect(m_dragStart, pos.toPoint());
     } else { //if the crop selection is set
         QPoint dragStop = pos.toPoint();
         QPoint drag = dragStop - m_dragStart;
@@ -463,12 +463,26 @@ void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
     KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    m_haveCropSelection = true;
     m_rectCrop = m_rectCrop.normalized();
 
-    QRectF updateRect = boundingRect();
+    QRectF viewCropRect = pixelToView(m_rectCrop);
+
+    if (viewCropRect.width() < m_handleSize ||
+        viewCropRect.height() < m_handleSize) {
+
+        if (m_lastCropSelectionWasReset) {
+            m_rectCrop = QRect();
+        } else {
+            m_rectCrop = image()->bounds();
+        }
+    }
+
+    m_lastCropSelectionWasReset = false;
+    m_haveCropSelection = !m_rectCrop.isEmpty();
 
     validateSelection();
+
+    QRectF updateRect = boundingRect();
 
     updateRect |= boundingRect();
     updateCanvasViewRect(updateRect);
@@ -506,11 +520,9 @@ void KisToolCrop::validateSelection(bool updateratio)
 {
     if (canvas() && image()) {
         if(!m_grow){
-            m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
-            m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
-            m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
-            m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
+            m_rectCrop &= image()->bounds();
         }
+
         QRect r = m_rectCrop.normalized();
         m_cropX = r.x();
         m_cropY = r.y();
@@ -608,6 +620,9 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
+    KIS_ASSERT_RECOVER_RETURN(currentImage());
+    if (m_rectCrop.isEmpty()) return;
+
     if (m_cropType == LayerCropType) {
         //Cropping layer
         if (!nodeEditable()) {
@@ -618,9 +633,6 @@ void KisToolCrop::crop()
     m_haveCropSelection = false;
     useCursor(cursor());
 
-    if (!currentImage())
-        return;
-
     QRect cropRect = m_rectCrop.normalized();
 
     // The visitor adds the undo steps to the macro
@@ -630,8 +642,6 @@ void KisToolCrop::crop()
         currentImage()->cropImage(cropRect);
     }
     m_rectCrop = QRect();
-
-    dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)

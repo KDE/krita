@@ -117,7 +117,10 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF cursorPos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
+    QPointF cursorPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
     quint8 origFlow    = painter()->flow();

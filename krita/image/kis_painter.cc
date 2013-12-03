@@ -1110,6 +1110,8 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
         fillPainterPath(path);
     }
 
+    if (d->strokeStyle == StrokeStyleNone) return;
+
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
     KisDistanceInformation saveDist;

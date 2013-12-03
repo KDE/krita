@@ -49,7 +49,6 @@
 #include <kis_layer.h>
 #include <kis_canvas2.h>
 #include <kis_view2.h>
-#include <KoZoomController.h>
 #include <kis_floating_message.h>
 #include <kis_group_layer.h>
 
@@ -643,8 +642,6 @@ void KisToolCrop::crop()
         currentImage()->cropImage(cropRect);
     }
     m_rectCrop = QRect();
-
-    dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisToolCrop::setCropTypeLegacy(int cropType)

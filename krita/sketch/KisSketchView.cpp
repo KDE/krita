@@ -445,10 +445,10 @@ bool KisSketchView::event( QEvent* event )
             return true;
         case KisTabletEvent::TabletMoveEx:
             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
+#ifdef Q_OS_X11
             if(d->tabletEventCount % 2 == 0)
-            {
+#endif
                 d->canvas->inputManager()->eventFilter(this, event);
-            }
             return true;
         default:
             break;

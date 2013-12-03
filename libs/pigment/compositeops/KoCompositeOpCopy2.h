@@ -52,18 +52,24 @@ public:
         using namespace Arithmetic;
         opacity = mul(maskAlpha, opacity);
 
-        if(dstAlpha != zeroValue<channels_type>()) {
-            // blend the color channels
-            for(qint32 i=0; i<channels_nb; ++i)
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
-                    dst[i] = lerp(dst[i], src[i], opacity);
-        }
-        else {
+        if(dstAlpha == zeroValue<channels_type>() ||
+           (srcAlpha == unitValue<channels_type>() &&
+            opacity == unitValue<channels_type>())) {
+
+
             // don't blend if the color of the destination is undefined (has zero opacity)
             // copy the source channel instead
             for(qint32 i=0; i<channels_nb; ++i)
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                     dst[i] = src[i];
+        }
+        else {
+            channels_type srcBlend = mul(opacity, srcAlpha);
+
+            // blend the color channels
+            for(qint32 i=0; i<channels_nb; ++i)
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+                    dst[i] = lerp(dst[i], src[i], srcBlend);
         }
 
         // blend the alpha channel

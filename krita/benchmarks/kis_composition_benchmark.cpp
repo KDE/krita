@@ -556,6 +556,13 @@ void KisCompositionBenchmark::testRgb8CompositeOverReal_Aligned()
     benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
 }
 
+void KisCompositionBenchmark::testRgb8CompositeCopyLegacy()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoCompositeOp *op = cs->compositeOp(COMPOSITE_COPY);
+    benchmarkCompositeOp(op, "Copy");
+}
+
 void KisCompositionBenchmark::benchmarkMemcpy()
 {
     QVector<Tile> tiles =

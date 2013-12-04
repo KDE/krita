@@ -26,6 +26,7 @@
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -83,6 +84,8 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     if (!input)
         return KoFilter::NoDocumentCreated;
 
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -92,7 +95,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    if (hasShapeLayerChild(image->root())) {
+    if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
         KMessageBox::information(0,
                                  i18n("This image contains vector, clone or generated layers..\nThese layers will be saved as raster layers."),
                                  i18n("Warning"),

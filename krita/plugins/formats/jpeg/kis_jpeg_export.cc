@@ -167,10 +167,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
-
-
     QString filename = m_chain->outputFile();
-
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 

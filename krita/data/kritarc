@@ -152,6 +152,9 @@ Collapsed=false
 [krita][DockWidget ToolBox]
 Collapsed=false
 
+[krita][Toolbar mainToolBar]
+ToolButtonStyle=IconOnly
+
 [KoShapeCollection]
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,RectangleShape
 

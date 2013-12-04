@@ -59,9 +59,8 @@ public:
     bool visit(KisSelectionMask*) {
         return true;
     }
-    bool visit(KisExternalLayer*) {
-        return true;
-    }
+    bool visit(KisExternalLayer*);
+
     bool visit(KisAdjustmentLayer*) {
         return true;
     }

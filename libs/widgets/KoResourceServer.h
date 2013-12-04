@@ -64,7 +64,6 @@ public:
     KoResourceServerBase(const QString& type, const QString& extensions)
         : m_type(type)
         , m_extensions(extensions)
-        , m_cancelled(false)
     {
     }
 
@@ -79,8 +78,6 @@ public:
     * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     QString extensions() const { return m_extensions; }
-
-    void cancel() { m_cancelled = true; }
 
     QStringList fileNames() const
     {
@@ -101,7 +98,6 @@ private:
 
 protected:
 
-    bool   m_cancelled;
     QMutex m_loadLock;
 
 };
@@ -141,8 +137,8 @@ public:
         kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
 
-        while (!filenames.empty() && !m_cancelled)
-        {
+        while (!filenames.empty()) {
+
             QString front = filenames.first();
             filenames.pop_front();
 

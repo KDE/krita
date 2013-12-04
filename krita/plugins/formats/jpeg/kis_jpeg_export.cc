@@ -70,6 +70,12 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
+        return KoFilter::NoDocumentCreated;
+
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("JPEG Export Options"));
@@ -109,7 +115,11 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
-    
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
+
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
     cfg.setProperty("progressive", options.progressive);
@@ -157,11 +167,9 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
-    QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::NoDocumentCreated;
+
+    QString filename = m_chain->outputFile();
 
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
@@ -169,12 +177,10 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();
 
-    KisJPEGConverter kpc(output);
+    KisJPEGConverter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     image->unlock();

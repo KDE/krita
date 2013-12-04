@@ -49,14 +49,14 @@ KisResourceServerProvider::KisResourceServerProvider()
     m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    if (qApp->applicationName().toLower().contains("test")) {
+    if (!qApp->applicationName().toLower().contains("krita")) {
         paintOpPresetThread->wait();
     }
 
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
-    if (qApp->applicationName().toLower().contains("test")) {
+    if (!qApp->applicationName().toLower().contains("krita")) {
         workspaceThread->wait();
     }
 

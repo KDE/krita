@@ -144,7 +144,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
 
     KisConfig cfg;
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
         KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
@@ -217,6 +217,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
 
+    action = new KAction(i18n("Brush option slider 3"), this);
+    view->actionCollection()->addAction("brushslider3", action);
+    action->setDefaultWidget(m_sliderChooser[2]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[2], SLOT(showPopupWidget()));
+
     action = new KAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Right));
@@ -283,6 +288,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -469,7 +477,7 @@ void KisPaintopBox::setWidgetState(int flags)
         m_settingsWidget->setEnabled(flags & ENABLE_PRESETS);
     }
     
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         if(flags & (ENABLE_OPACITY|DISABLE_OPACITY))
             m_sliderChooser[i]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
         
@@ -483,7 +491,7 @@ void KisPaintopBox::setWidgetState(int flags)
 
 void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 {
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
         slider->blockSignals(true);
         slider->setValue(value);
@@ -737,6 +745,11 @@ void KisPaintopBox::slotSlider2Changed()
     sliderChanged(1);
 }
 
+void KisPaintopBox::slotSlider3Changed()
+{
+    sliderChanged(2);
+}
+
 void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 {
     Q_UNUSED(canvas);
@@ -771,7 +784,7 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
     }
     m_blockUpdate = true;
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
         opacitySlider->blockSignals(true);
         opacitySlider->setValue(opacity);

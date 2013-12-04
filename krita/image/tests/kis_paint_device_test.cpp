@@ -955,50 +955,50 @@ void KisPaintDeviceTest::testWrappedRandomAccessor()
     KisRandomAccessorSP dstIt = dev->createRandomAccessorNG(x, y);
 
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = 23;
     y = 23;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = 3;
     y = 23;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = 23;
     y = 3;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = -17;
     y = 3;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = 3;
     y = -17;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 
     x = -17;
     y = -17;
     dstIt->moveTo(x, y);
     QVERIFY(!memcmp(dstIt->rawData(), c1.data(), pixelSize));
-    QCOMPARE(dstIt->numContiguousColumns(x), 61);
-    QCOMPARE(dstIt->numContiguousRows(y), 61);
+    QCOMPARE(dstIt->numContiguousColumns(x), 17);
+    QCOMPARE(dstIt->numContiguousRows(y), 17);
 }
 
 #include "kis_iterator_ng.h"

@@ -86,7 +86,7 @@ public:
      * should set the parent manually if he wants to get the
      * signals
      */
-    void setParentNode(KisNodeSP node);
+    void setParentNode(KisNodeWSP node);
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
@@ -180,7 +180,7 @@ private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
-    KisNodeSP parentNode() const;
+    KisNodeWSP parentNode() const;
 
     void copyFrom(const KisSelection &rhs);
 

@@ -281,12 +281,12 @@ void KisSelectionTest::testSetParentNodeAfterCreation()
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(0));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(0));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(0));
 
     selection->setParentNode(image->root());
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 
@@ -300,7 +300,7 @@ void KisSelectionTest::testSetParentNodeBeforeCreation()
 
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 

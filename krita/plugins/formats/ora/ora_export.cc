@@ -77,10 +77,10 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
 
@@ -89,7 +89,7 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
+    KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
     if (hasShapeLayerChild(image->root())) {
@@ -99,11 +99,11 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
                                  "krita/ora/vector");
     }
 
-    OraConverter kpc(output);
+    OraConverter kpc(input);
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, image, output->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KoFilter::OK;
     }

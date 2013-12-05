@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <klocale.h>
 #include <kis_assert_exception.h>
+#include <string>
 
 /**
  * TODO: Add automatic saving of the documents

@@ -121,7 +121,6 @@ endif(NOT PRODUCTSET)
 # 3rd-party libs
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
-calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # building tools
 calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
@@ -205,8 +204,9 @@ calligra_define_product(FILTER_SHEETS_IMPORT "All Sheets import filter"  WANTS F
 calligra_define_product(FILTER_SHEETS_EXPORT "All Sheets export filter"  WANTS FILTER_SHEETS_TO_XLS FILTER_SHEETS_TO_CSV FILTER_SHEETS_TO_GNUMERIC FILTER_SHEETS_TO_OPENCALC FILTER_SHEETS_TO_HTML FILTER_KSPREAD_TO_LATEX)
 calligra_define_product(FILTER_SHEETS "All Sheets filter"  WANTS FILTER_SHEETS_IMPORT FILTER_SHEETS_EXPORT)
 # Flow filters
-calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
-calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG)
+calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG FILTER_WPG_TO_ODG)
 calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filter"  WANTS )
 calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
@@ -219,8 +219,8 @@ calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPO
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" NEEDS LIB_MSO LIB_KOMSOOXML CALLIGRA_LIBS)
 calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART LIB_KOODF2)
 calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_KOODFREADER CALLIGRA_LIBS)
@@ -684,28 +684,64 @@ macro_optional_find_package(Okular)
 macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
-## Test for WordPerfect Document Lib
+## Test for libodfgen
 ##
-macro_optional_find_package(WPD)
-macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
+macro_optional_find_package(LibOdfGen)
+macro_log_feature(LIBODFGEN_FOUND "LibOdfGen"
+                  "Open Document Format Generation Library"
+                  "http://sf.net/p/libwpd/libodfgen/" FALSE ""
+                  "Required by various import filters"
+)
 
 ##
-## Test for WordPerfect Graphics Lib
+## Test for WordPerfect Document Library
 ##
-macro_optional_find_package(WPG)
-macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+macro_optional_find_package(LibWpd)
+macro_log_feature(LIBWPD_FOUND "LibWpd"
+                  "WordPerfect Document Library"
+                  "http://libwpd.sourceforge.net/" FALSE ""
+                  "Required by the Words WPD import filter"
+)
+
+##
+## Test for WordPerfect Graphics Library
+##
+macro_optional_find_package(LibWpg)
+macro_log_feature(LIBWPG_FOUND "LibWpg"
+                  "WordPerfect Graphics Library"
+                  "http://libwpg.sourceforge.net/" FALSE ""
+                  "Required by the Karbon WPG import filter"
+)
 
 ##
 ## Test for Microsoft Works Document Library
 ##
-macro_optional_find_package(LibWPS)
-macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
+macro_optional_find_package(LibWps)
+macro_log_feature(LIBWPS_FOUND "LibWps"
+                  "Microsoft Works Document Library"
+                  "http://libwps.sourceforge.net/" FALSE ""
+                  "Required by the Words WPS import filter"
+)
 
 ##
-## Test for libvisio
+## Test for Microsoft Visio Document Library
 ##
 macro_optional_find_package(LibVisio)
-macro_log_feature(LIBVISIO_FOUND "LibVisio" "Visio Import Filter Library" "http://www.freedesktop.org/wiki/Software/libvisio" FALSE "" "Required by the Flow visio import filter")
+macro_log_feature(LIBVISIO_FOUND "LibVisio"
+                  "Visio Import Filter Library"
+                  "http://www.freedesktop.org/wiki/Software/libvisio" FALSE ""
+                  "Required by the Flow visio import filter"
+)
+
+##
+## Test for Apple Keynote Document Library
+##
+macro_optional_find_package(LibEtonyek)
+macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
+                  "Apple Keynote Document Library"
+                  "http://www.freedesktop.org/wiki/Software/libetonyek/" FALSE ""
+                  "Required by the Stage keynote import filter"
+)
 
 ##
 ## Test for qt-poppler
@@ -868,10 +904,6 @@ set(KDCHART_INCLUDES
 set(KDCHART_LIBS calligrakdchart)
 
 
-set(WRITERPERFECT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/filters/writerperfect
-)
-
 #############################################
 ####           filter libraries          ####
 #############################################
@@ -910,9 +942,13 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
-    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms|Xinput devel not found ")
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+
+if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
+    calligra_disable_product(KRITA_APP "Xinput devel not found ")
+endif(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     calligra_disable_product(ACTIVE "Qt version <= 4.7.0")
@@ -935,25 +971,22 @@ if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
-    calligra_disable_product(FILTER_VISIO_TO_ODG "libwpd|libwpg|libvisio devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
+if (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
+    calligra_disable_product(FILTER_VISIO_TO_ODG "libvisio devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libwpd|libwpg devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+endif(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
-    calligra_disable_product(FILTER_WORKS_TO_ODT "libwpd|libwps devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
+if(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
+    calligra_disable_product(FILTER_WORKS_TO_ODT "libwps devel not found")
+endif(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(LIB_WRITERPERFECT "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(FILTER_WPG_TO_SVG "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
+    calligra_disable_product(FILTER_WPG_TO_SVG "libwpg devel not found")
+    calligra_disable_product(FILTER_WPG_TO_ODG "libwpg devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
     calligra_disable_product(FILTER_PDF_TO_SVG "poppler xpdf headers not found or on win")

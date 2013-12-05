@@ -725,8 +725,12 @@ void KisNodeManager::shear(double angleX, double angleY)
 
 void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
-    // XXX: implement scale for masks as well
-    m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+    KisNodeSP node = activeNode();
+    KIS_ASSERT_RECOVER_RETURN(node);
+
+    m_d->view->image()->scaleNode(node, sx, sy, filterStrategy);
+
+    nodesUpdated();
 }
 
 void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)

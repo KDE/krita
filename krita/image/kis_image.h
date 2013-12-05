@@ -193,6 +193,7 @@ public:
     void cropNode(KisNodeSP node, const QRect& newRect);
 
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.

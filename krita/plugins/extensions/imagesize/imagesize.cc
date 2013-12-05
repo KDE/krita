@@ -23,28 +23,23 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <KoProgressUpdater.h>
-#include <KoUpdater.h>
 
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-#include <kis_selection.h>
-#include <kis_selection_manager.h>
-#include <kis_transaction.h>
+
 #include <kis_image_manager.h>
 #include <kis_node_manager.h>
-#include <kis_transform_visitor.h>
-#include <widgets/kis_progress_widget.h>
-#include <commands_new/kis_image_set_resolution_command.h>
+#include <kis_group_layer.h>
+#include <kis_selection_mask.h>
+#include <kis_selection.h>
 
 #include "dlg_imagesize.h"
 #include "dlg_canvassize.h"
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"
-#include "kis_canvas_resource_provider.h"
 #include "kis_action.h"
 
 K_PLUGIN_FACTORY(ImageSizeFactory, registerPlugin<ImageSize>();)
@@ -148,43 +143,29 @@ void ImageSize::slotLayerSize()
 void ImageSize::slotSelectionScale()
 {
     KisImageWSP image = m_view->image();
+    KisLayerSP layer = m_view->activeLayer();
 
-    if (!image) return;
+    KIS_ASSERT_RECOVER_RETURN(image && layer);
 
-    KisPaintDeviceSP layer = m_view->activeDevice();
+    KisSelectionMaskSP selectionMask = layer->selectionMask();
+    if (!selectionMask) {
+        selectionMask = image->rootLayer()->selectionMask();
+    }
 
-    if (!layer) return;
+    KIS_ASSERT_RECOVER_RETURN(selectionMask);
 
-    KisSelectionSP selection = m_view->selection();
-    if (!selection) return;
-
-    QRect rc = selection->selectedRect();
-
+    QRect rc = selectionMask->selection()->selectedRect();
     DlgLayerSize * dlgSize = new DlgLayerSize(m_view, "SelectionScale", rc.width(), rc.height(), image->yRes());
-    Q_CHECK_PTR(dlgSize);
     dlgSize->setCaption(i18n("Scale Selection"));
 
-    KoProgressUpdater* pu = m_view->createProgressUpdater();
-    QPointer<KoUpdater> u = pu->startSubtask();
-
     if (dlgSize->exec() == QDialog::Accepted) {
-        KisPixelSelectionSP pixelSelection = selection->pixelSelection().data();
-        KisSelectionTransaction transaction(i18n("Scale Selection"), pixelSelection);
-
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(pixelSelection,
-                                  (double)w / ((double)(rc.width())),
-                                  (double)h / ((double)(rc.height())),
-                                  0, 0, 0.0, 0.0, 0.0, 0, 0, u,
-                                  dlgSize->filterType()
-                                 );
-        worker.run();
-        worker.transformPixelSelectionOutline(pixelSelection);
 
-        transaction.commit(image->undoAdapter());
-        layer->setDirty();
-        pu->deleteLater();
+        image->scaleNode(selectionMask,
+                         qreal(w) / rc.width(),
+                         qreal(h) / rc.height(),
+                         dlgSize->filterType());
     }
     delete dlgSize;
 }

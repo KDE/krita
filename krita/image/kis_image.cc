@@ -57,7 +57,6 @@
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
-#include "kis_transform_visitor.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
 
@@ -69,6 +68,7 @@
 #include "kis_legacy_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
 
+#include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
@@ -520,6 +520,28 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
         applicator.applyCommand(new KisImageResizeCommand(this, size));
     }
 
+    applicator.end();
+}
+
+void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
+{
+    QString actionName(i18n("Scale Layer"));
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(sx, sy,
+                                          0, 0,
+                                          QPointF(),
+                                          0,
+                                          0, 0,
+                                          filterStrategy);
+
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
 

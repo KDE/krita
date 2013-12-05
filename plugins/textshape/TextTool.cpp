@@ -1055,11 +1055,12 @@ QMimeData *TextTool::generateMimeData() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
+#ifdef SHOULD_BUILD_RDF
     KoDocumentResourceManager *rm = 0;
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-#ifdef SHOULD_BUILD_RDF
+
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {

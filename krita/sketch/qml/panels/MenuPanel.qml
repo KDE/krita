@@ -146,10 +146,10 @@ Item {
                 id: switchButton;
                 width: visible ? Constants.GridWidth : 0;
                 height: Constants.GridHeight;
-                visible: switchToDesktopAction !== undefined;
+                visible: (typeof switchToDesktopAction !== "undefined");
                 color: "#000000"
                 shadow: false
-                enabled: switchToDesktopAction ? switchToDesktopAction.enabled : false;
+                enabled: (typeof switchToDesktopAction === "undefined") ? false : switchToDesktopAction.enabled;
                 image: "../images/svg/icon-switch.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "switchToDesktop" );

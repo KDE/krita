@@ -71,6 +71,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
 {
     Q_ASSERT(renderingIntent < 4);
 
+    KisOpenGL::makeContextCurrent();
+
     getTextureSize(&m_texturesInfo);
 
     glGenTextures(1, &m_checkerTexture);
@@ -106,6 +108,8 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
+    KisOpenGL::makeContextCurrent();
+
     if (imageCanShareTextures()) {
         ImageTexturesMap::iterator it = imageTexturesMap.find(image);
 
@@ -137,6 +141,8 @@ QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
+    KisOpenGL::makeContextCurrent();
+
     destroyImageTextureTiles();
     updateTextureFormat();
 
@@ -170,6 +176,7 @@ void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
     if(m_textureTiles.isEmpty()) return;
 
+    KisOpenGL::makeContextCurrent();
     foreach(KisTextureTile *tile, m_textureTiles) {
         delete tile;
     }
@@ -240,6 +247,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if(!glInfo) return;
 
+    KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
 
     KisTextureTileUpdateInfo tileInfo;
@@ -278,6 +286,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 
 void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 {
+    KisOpenGL::makeContextCurrent();
 
     glBindTexture(GL_TEXTURE_2D, m_checkerTexture);
 

@@ -53,6 +53,7 @@ Q_SIGNALS:
     void colorChanged(QColor newColor, qreal newAlpha, bool backgroundChanged);
 
 protected:
+    virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);

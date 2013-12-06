@@ -19,8 +19,8 @@
 #define KIS_ANIMATION_STORE_H
 
 #include <QByteArray>
-#include <KZip>
-#include <KArchiveDirectory>
+#include <QDir>
+#include <QFile>
 
 class KisAnimationStore
 {
@@ -47,8 +47,8 @@ public:
     QIODevice* getDevice(QString location);
 
 private:
-    KZip* m_zip;
-    KArchiveDirectory* m_currentDir;
+    QFile* m_currentFile;
+    QDir* m_dir;
     int m_dataLength;
 };
 

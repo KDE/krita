@@ -17,11 +17,13 @@
 
 #include "kis_animation_store.h"
 #include <KDebug>
+#include <QDir>
+#include <QFile>
 
 KisAnimationStore::KisAnimationStore(QString filename)
 {
-    m_zip = new KZip(filename);
-    m_currentDir = 0;
+    m_dir = new QDir(filename);
+    m_dir->mkdir(filename);
 }
 
 KisAnimationStore::~KisAnimationStore()
@@ -31,87 +33,75 @@ KisAnimationStore::~KisAnimationStore()
 
 void KisAnimationStore::enterDirectory(QString directory)
 {
-
-}
+    if(!m_dir->cd(directory)){
+        m_dir->mkdir(m_dir->absolutePath() + "/" + directory);
+        m_dir->cd(directory);
+    }
+ }
 
 void KisAnimationStore::leaveDirectory()
 {
-
+    m_dir->cdUp();
 }
 
 void KisAnimationStore::writeDataToFile(QByteArray data)
 {
-    m_dataLength = data.length();
-    m_zip->writeData(data.data(), data.length());
+    m_currentFile->write(data.data(), data.length());
 }
 
 void KisAnimationStore::writeDataToFile(const char *data, qint64 length)
 {
-    m_dataLength = length;
-    m_zip->writeData(data, length);
+    m_currentFile->write(data, length);
 }
 
 void KisAnimationStore::openFileWriting(QString filename)
 {
-    m_zip->prepareWriting(filename, "", "", 0);
+    m_currentFile = new QFile(m_dir->absoluteFilePath(filename));
+    m_currentFile->open(QFile::WriteOnly);
 }
 
 void KisAnimationStore::openStore(QIODevice::OpenMode mode)
 {
-    m_zip->open(mode);
+
 }
 
 void KisAnimationStore::closeFileWriting()
 {
-    m_zip->finishWriting(m_dataLength);
+    m_currentFile->close();
 }
 
 void KisAnimationStore::closeStore()
 {
-    m_zip->close();
+
 }
 
 void KisAnimationStore::setCompressionEnabled(bool e)
 {
-    if(e) {
-        m_zip->setCompression(KZip::DeflateCompression);
-    }
-    else {
-        m_zip->setCompression(KZip::NoCompression);
-    }
+
 }
 
 QIODevice* KisAnimationStore::getDevice(QString location)
 {
-    if(m_zip->directory()->entry(location)) {
-        QIODevice* dev = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(location))->createDevice();
-        return dev;
-    } else {
-        return 0;
-    }
+    return m_currentFile;
 }
 
 bool KisAnimationStore::hasFile(QString location) const
 {
-    bool f = m_zip->directory()->entries().contains(location);
-    return f;
+    return true;
 }
 
 void KisAnimationStore::readFromFile(QString filename, char *buffer, qint64 length)
 {
-    QIODevice* file = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice();
+    /*QIODevice* file = static_cast<const KZipFileEntry*>(m_zip->directory()->entry(filename))->createDevice();
     file->read(buffer, length);
     file->close();
-    delete file;
+    delete file;*/
 }
 
 void KisAnimationStore::setMimetype()
 {
-    m_zip->open(QIODevice::ReadWrite);
-
     QByteArray mimetype("x-krita-animation");
-
-    m_zip->writeFile("mimetype", "user", "group", mimetype.data(), mimetype.size());
-
-    m_zip->close();
+    this->openFileWriting("mimetype");
+    this->writeDataToFile(mimetype);
+    this->closeFileWriting();
 }

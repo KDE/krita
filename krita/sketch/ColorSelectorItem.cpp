@@ -42,6 +42,7 @@ public:
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
         , changeBackground(false)
+        , shown(true)
     {
         ring = new KisColorSelectorRing(selector);
         triangle = new KisColorSelectorTriangle(selector);
@@ -84,6 +85,7 @@ public:
     void commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role);
     bool colorUpdateAllowed;
     bool changeBackground;
+    bool shown;
 };
 
 void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role)
@@ -126,6 +128,8 @@ ColorSelectorItem::~ColorSelectorItem()
 
 void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    if(!d->shown)
+        return;
     Q_UNUSED(option)
     Q_UNUSED(widget)
     QRectF bounds = boundingRect();
@@ -258,6 +262,17 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
     d->main->setColor(d->currentColor);
     d->sub->setColor(d->currentColor);
     update();
+}
+
+bool ColorSelectorItem::shown() const
+{
+    return d->shown;
+}
+
+void ColorSelectorItem::setShown(bool newShown)
+{
+    d->shown = newShown;
+    emit shownChanged();
 }
 
 void ColorSelectorItem::setAlpha(int percentValue)

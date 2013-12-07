@@ -210,10 +210,11 @@ calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTE
 calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filter"  WANTS )
 calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
+calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_KPR_TO_OPD "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter" NEEDS LIB_MSO CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
+calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filter"  WANTS )
 calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
 # Words filters
@@ -971,21 +972,25 @@ if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
+if (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)
+    calligra_disable_product(FILTER_KEY_TO_ODP "libodfgen|libetonyek devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)
+
 if (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
-    calligra_disable_product(FILTER_VISIO_TO_ODG "libvisio devel not found")
+    calligra_disable_product(FILTER_VISIO_TO_ODG "libodfgen|libvisio devel not found")
 endif (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
 
 if(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libwpd|libwpg devel not found")
+    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libodfgen|libwpd|libwpg devel not found")
 endif(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
 if(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
-    calligra_disable_product(FILTER_WORKS_TO_ODT "libwps devel not found")
+    calligra_disable_product(FILTER_WORKS_TO_ODT "libodfgen|libwps devel not found")
 endif(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
 
 if (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
     calligra_disable_product(FILTER_WPG_TO_SVG "libwpg devel not found")
-    calligra_disable_product(FILTER_WPG_TO_ODG "libwpg devel not found")
+    calligra_disable_product(FILTER_WPG_TO_ODG "libodfgen|libwpg devel not found")
 endif (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)

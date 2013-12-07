@@ -116,6 +116,13 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
                      inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
 }
 
+void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
+{
+    d->active = true;
+    inputEvent(event);
+    d->active = false;
+}
+
 bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
     return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();

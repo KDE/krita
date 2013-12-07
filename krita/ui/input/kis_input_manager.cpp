@@ -105,7 +105,7 @@ public:
     QTabletEvent *lastTabletEvent;
     QTouchEvent *lastTouchEvent;
 
-    KisAbstractInputAction *defaultInputAction;
+    KisToolInvocationAction *defaultInputAction;
 
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
@@ -319,8 +319,11 @@ void KisInputManager::Private::setupActions()
 {
     QList<KisAbstractInputAction*> actions = KisInputProfileManager::instance()->actions();
     foreach(KisAbstractInputAction *action, actions) {
-        if(dynamic_cast<KisToolInvocationAction*>(action)) {
-            defaultInputAction = action;
+        KisToolInvocationAction *toolAction =
+            dynamic_cast<KisToolInvocationAction*>(action);
+
+        if(toolAction) {
+            defaultInputAction = toolAction;
         }
     }
 
@@ -338,7 +341,7 @@ bool KisInputManager::Private::processUnhandledEvent(QEvent *event)
             event->type() == QEvent::KeyPress ||
             event->type() == QEvent::KeyRelease) {
 
-        defaultInputAction->inputEvent(event);
+        defaultInputAction->processUnhandledEvent(event);
         retval = true;
     }
 

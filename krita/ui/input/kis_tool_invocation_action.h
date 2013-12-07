@@ -44,6 +44,8 @@ public:
     void end(QEvent *event);
     void inputEvent(QEvent* event);
 
+    void processUnhandledEvent(QEvent* event);
+
     bool supportsHiResInputEvents() const;
 
 private:

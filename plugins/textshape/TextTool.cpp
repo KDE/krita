@@ -1902,8 +1902,9 @@ void TextTool::updateActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                             & KoCanvasResourceManager::NoAdvancedText);
     if (useAdvancedText) {
-        bool hasTable = textEditor->currentTable();
+        action("insert_table")->setEnabled(notInAnnotation);
 
+        bool hasTable = textEditor->currentTable();
         action("insert_tablerow_above")->setEnabled(hasTable && notInAnnotation);
         action("insert_tablerow_below")->setEnabled(hasTable && notInAnnotation);
         action("insert_tablecolumn_left")->setEnabled(hasTable && notInAnnotation);
@@ -1914,7 +1915,6 @@ void TextTool::updateActions()
         action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
     }
     action("insert_annotation")->setEnabled(notInAnnotation);
-    action("insert_table")->setEnabled(notInAnnotation);
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());

@@ -32,8 +32,8 @@
 #include "mypaint_paintop_settings_widget.h"
 
 MyPaintSettings::MyPaintSettings()
-    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                 KisCurrentOutlineFetcher::ROTATION_OPTION),
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION),
       m_options(0)
 {
 }

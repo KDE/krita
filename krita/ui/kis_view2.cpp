@@ -563,6 +563,7 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                        activateWindow();
                     }
                     else if (action == replaceCurrentDocument) {
                         if (m_d->doc->isModified()) {

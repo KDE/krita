@@ -55,6 +55,8 @@
 #include <input/kis_tablet_event.h>
 #include <kis_signal_compressor.h>
 
+#include "kis_extended_modifiers_mapper.h"
+
 
 class KisInputManager::Private
 {
@@ -641,6 +643,17 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->matcher.reset();
+
+        { // Emulate pressing of the key that are already pressed
+            KisExtendedModifiersMapper mapper;
+
+            Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+            foreach (Qt::Key key, mapper.queryExtendedModifiers()) {
+                QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
+                eventFilter(object, &kevent);
+            }
+        }
+
         stop_ignore_cursor_events();
         break;
     case QEvent::TabletPress:

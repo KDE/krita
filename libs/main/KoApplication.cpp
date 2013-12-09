@@ -96,8 +96,14 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif
 
-#ifdef Q_OS_MAC
-#if 0
+#ifdef Q_OS_MACX
+    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
+    {
+        // fix Mac OS X 10.9 (mavericks) font issue
+        // https://bugreports.qt-project.org/browse/QTBUG-32789
+        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
+    }
+/*
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
     if (styleSheetPath.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
@@ -109,8 +115,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     QString styleSheet = QLatin1String(file.readAll());
     file.close();
     setStyleSheet(styleSheet);
-#endif
-
+*/
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 

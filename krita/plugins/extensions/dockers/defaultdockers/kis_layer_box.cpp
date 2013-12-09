@@ -215,6 +215,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
 
+    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
@@ -374,7 +375,6 @@ void KisLayerBox::updateUI()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
-    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
     m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
 

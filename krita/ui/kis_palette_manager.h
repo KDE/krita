@@ -22,7 +22,7 @@
 
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
-#include <QDialog>
+#include <kdialog.h>
 
 class KoID;
 class QStringListModel;
@@ -33,7 +33,7 @@ class KoFavoriteResourceManager;
 class KisPaintopBox;
 class KisPresetChooser;
 
-class KisPaletteManager : public QDialog
+class KisPaletteManager : public KDialog
 {
     Q_OBJECT
 

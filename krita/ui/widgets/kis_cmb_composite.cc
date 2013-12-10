@@ -72,6 +72,8 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
 
     connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
     connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));
+
+    selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
@@ -94,7 +96,6 @@ KoID KisCompositeOpComboBox::selectedCompositeOp() const {
     if (m_model->entryAt(op, m_model->index(currentIndex(), 0))) {
         return op;
     }
-
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 

@@ -137,7 +137,6 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
         if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
         if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
-        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF); // to fix an old bug in krita's ora export
         if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
         if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
         if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
@@ -148,7 +147,11 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         compop = compop.remove(0, 6);
         layer->setCompositeOp(compop);
     }
-
+    else {
+        // to fix old bugs in krita's ora export
+        if (compop == "color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
+        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF);
+    }
 
 }
 

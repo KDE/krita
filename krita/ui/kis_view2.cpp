@@ -29,6 +29,7 @@
 #include "kis_view2.h"
 #include <QPrinter>
 
+#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QGridLayout>
 #include <QRect>
@@ -207,6 +208,7 @@ public:
     KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
+    KAction *openResourcesDirectory;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -318,6 +320,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvasController, SLOT(mirrorCanvas(bool)));
+
+    m_d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
+    m_d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    m_d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    actionCollection()->addAction("open_resources_directory", m_d->openResourcesDirectory);
+    connect(m_d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
     actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
@@ -1434,6 +1442,12 @@ void KisView2::showJustTheCanvas(bool toggled)
 void KisView2::toggleTabletLogger()
 {
     m_d->canvas->toggleTabletLogger();
+}
+
+void KisView2::openResourcesDirectory()
+{
+    QString dir = KStandardDirs::locateLocal("data", "krita");
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

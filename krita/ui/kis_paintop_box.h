@@ -149,7 +149,6 @@ private:
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
     KisView2*                            m_view;
-    QPushButton*                         m_paletteButton;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;

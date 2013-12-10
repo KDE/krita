@@ -109,6 +109,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton = new QToolButton(this);
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
+
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setIcon(koIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
@@ -176,9 +177,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(30);
 
-    m_paletteButton = new QPushButton(i18n("Save to Palette"));
-    m_paletteButton->setFixedHeight(30);
-
     m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(koIcon("document-multiple"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
@@ -190,7 +188,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     baseLayout->addWidget(m_paintopWidget);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
-    KAction* action;
+
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -203,6 +201,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
     compositeLayout->setContentsMargins(0, 0, 0, 0);
+
+    KAction* action;
+
     action = new KAction(i18n("Brush composite"), this);
     view->actionCollection()->addAction("composite_actions", action);
     action->setDefaultWidget(compositeActions);
@@ -237,6 +238,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
+    action = new KAction(i18n("Save to Brush Palette"), this);
+    view->actionCollection()->addAction("palette_manager", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSaveToFavouriteBrushes()));
+
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
     mirrorLayout->addWidget(hMirrorButton);
@@ -245,10 +250,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action = new KAction(i18n("Mirror"), this);
     view->actionCollection()->addAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
-
-    action = new KAction(i18n("Add to palette"), this);
-    view->actionCollection()->addAction("palette_manager", action);
-    action->setDefaultWidget(m_paletteButton);
 
     action = new KAction(i18n("Workspaces"), this);
     view->actionCollection()->addAction("workspaces", action);
@@ -275,7 +276,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
-    connect(m_paletteButton      , SIGNAL(clicked())                          , SLOT(slotSaveToFavouriteBrushes()));
     connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
     connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));

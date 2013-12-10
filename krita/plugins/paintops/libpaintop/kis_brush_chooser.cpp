@@ -291,9 +291,7 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     qreal oldWidth = m_brush->width() * m_brush->scale();
     qreal newWidth = oldWidth + xPixels;
 
-    if (newWidth <= 0.1) {
-        newWidth = 0.1;
-    }
+    newWidth = qMax(newWidth, 0.1);
 
     m_slSize->setValue(newWidth);
 }

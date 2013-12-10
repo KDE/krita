@@ -66,6 +66,16 @@ public:
     void toggleTabletLogger();
 
     /**
+     * Installs the input manager as an event filter for \p receiver.
+     * Please note that KisInputManager is supposed to handle events
+     * for a single receiver only. This is defined by the fact that it
+     * resends some of the events back through the Qt's queue to the
+     * reciever. That is why the input manager will assert when it gets
+     * an event with wrong destination.
+     */
+    void setupAsEventFilter(QObject *receiver);
+
+    /**
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event );

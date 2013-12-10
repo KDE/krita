@@ -118,9 +118,10 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
 {
+    bool savedState = d->active;
     d->active = true;
     inputEvent(event);
-    d->active = false;
+    d->active = savedState;
 }
 
 bool KisToolInvocationAction::supportsHiResInputEvents() const

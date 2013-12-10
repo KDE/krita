@@ -60,7 +60,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     , m_removeButton(0)
     , m_resourceManager(manager)
 {
-    setWindowTitle(i18n("Palette Manager"));
+    setWindowTitle(i18n("Select Favorite Presets"));
     setButtons(KDialog::Close);
 
 
@@ -76,7 +76,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     QFrame *HSeparator = new QFrame();
     HSeparator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-    m_saveButton = new QPushButton (i18n("Add to Palette"));
+    m_saveButton = new QPushButton (i18n("Add to Favorites"));
     m_saveButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
     m_saveButton->setEnabled(false);
 

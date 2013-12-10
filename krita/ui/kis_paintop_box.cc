@@ -238,7 +238,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
 
-    action = new KAction(i18n("Save to Brush Palette"), this);
+    action = new KAction(i18n("Select Favorite Presets..."), this);
     view->actionCollection()->addAction("palette_manager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotSaveToFavouriteBrushes()));
 

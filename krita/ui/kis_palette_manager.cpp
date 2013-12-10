@@ -59,7 +59,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)
-    , m_paintOpBox(paintOpBox)
 {
     setWindowTitle(i18n("Palette Manager"));
 
@@ -152,7 +151,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 KisPaletteManager::~KisPaletteManager()
 {
     m_resourceManager = 0;
-    m_paintOpBox = 0;
 }
 
 void KisPaletteManager::slotAddBrush()

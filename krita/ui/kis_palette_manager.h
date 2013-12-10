@@ -57,7 +57,6 @@ private:
     QPushButton *m_saveButton;
     QPushButton *m_removeButton;
     KoFavoriteResourceManager *m_resourceManager;
-    KisPaintopBox *m_paintOpBox;
     KisPresetChooser* m_allPresetsView;
     KisPresetChooser* m_palettePresetsView;
 };

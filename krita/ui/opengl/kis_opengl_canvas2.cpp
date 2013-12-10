@@ -485,7 +485,10 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
     if (!d->checkerShader->link()) {
-        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will close now.")).arg(d->checkerShader->log()), QMessageBox::Close);
+        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->checkerShader->log()), QMessageBox::Close);
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+        cfg.setCanvasState("OPENGL_FAILED");
         exit(1);
     }
     Q_ASSERT(d->checkerShader->isLinked());
@@ -515,7 +518,10 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
     if (!d->displayShader->link()) {
-        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will close now.")).arg(d->displayShader->log()), QMessageBox::Close);
+        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->displayShader->log()), QMessageBox::Close);
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+        cfg.setCanvasState("OPENGL_FAILED");
         exit(1);
     }
 

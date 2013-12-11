@@ -24,13 +24,14 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
+class KisView2;
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
     Q_OBJECT
 
 public:
-    KisCanvasController(QWidget *parent, KActionCollection * actionCollection);
+    KisCanvasController(KisView2 *parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);

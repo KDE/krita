@@ -21,10 +21,12 @@
 #include <QMouseEvent>
 #include <QTabletEvent>
 
+#include <klocale.h>
+
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-
+#include "kis_view2.h"
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
@@ -32,6 +34,7 @@ struct KisCanvasController::Private {
     {
     }
 
+    KisView2 *view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
 
@@ -73,10 +76,11 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(QWidget *parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
+    m_d->view = parent;
 }
 
 KisCanvasController::~KisCanvasController()
@@ -149,6 +153,11 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
+
+    if (!canvas()->canvasIsOpenGL() && value) {
+        m_d->view->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
+                                            "To visualize wrap-around mode, enable OpenGL."), QIcon());
+    }
 
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);

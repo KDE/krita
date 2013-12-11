@@ -85,7 +85,7 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
         // Workaround for bug 279740, preset popup widget resizes after it's shown for the first time
         // so we catch that and correct the position
         KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(widget);
-        if(presetPopup) {
+        if (presetPopup) {
             connect(presetPopup, SIGNAL(sizeChanged()), this, SLOT(adjustPosition()));
         }
     }
@@ -136,6 +136,11 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
+    KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(m_d->popupWidget);
+    if (presetPopup && presetPopup->detached()) {
+        return;
+    }
+
     QSize popSize = m_d->popupWidget->size();
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
@@ -152,7 +157,6 @@ void KisPopupButton::adjustPosition()
     // The preset popup never should be shown over the toolbar, but other popups need
     // to be able to be moved up. BUG: https://bugs.kde.org/show_bug.cgi?id=327977,
     // see also commit 275758d4d0aaf398941295a4bf7ae9755bed2cb0
-    KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(m_d->popupWidget);
     if(!presetPopup) {
         if (popupRect.bottom() > screenRect.bottom())
             popupRect.translate(0, -m_d->frame->height());

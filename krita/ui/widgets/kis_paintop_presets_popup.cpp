@@ -61,6 +61,7 @@ public:
     bool detached;
     bool ignoreHideEvents;
     QSize minimumSettingsWidgetSize;
+    QRect detachedGeometry;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -237,19 +238,23 @@ void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e) {
     menu.exec(e->globalPos());
 }
 
-void KisPaintOpPresetsPopup::switchDetached()
+void KisPaintOpPresetsPopup::switchDetached(bool show)
 {
     if (parentWidget()) {
 
         m_d->detached = !m_d->detached;
+
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
-            parentWidget()->show();
+            if (show) {
+                parentWidget()->show();
+            }
             m_d->ignoreHideEvents = false;
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
+            parentWidget()->hide();
         }
 
         KisConfig cfg;
@@ -301,19 +306,31 @@ void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
 
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
 {
-    if(m_d->ignoreHideEvents) {
+    if (m_d->ignoreHideEvents) {
         return;
     }
     if (m_d->detached) {
-        switchDetached();
+        m_d->detachedGeometry = window()->geometry();
     }
     QWidget::hideEvent(event);
+}
+
+void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
+{
+    if (m_d->detached) {
+        window()->setGeometry(m_d->detachedGeometry);
+    }
 }
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     emit sizeChanged();
+}
+
+bool KisPaintOpPresetsPopup::detached() const
+{
+    return m_d->detached;
 }
 
 void KisPaintOpPresetsPopup::slotSwitchPresetStrip(bool visible)

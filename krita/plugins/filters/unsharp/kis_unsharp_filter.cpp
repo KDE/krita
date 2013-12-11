@@ -43,7 +43,6 @@
 KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), categoryEnhance(), i18n("&Unsharp Mask..."))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }

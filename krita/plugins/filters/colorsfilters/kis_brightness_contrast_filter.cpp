@@ -161,7 +161,6 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 

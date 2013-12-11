@@ -70,7 +70,6 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i1
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 

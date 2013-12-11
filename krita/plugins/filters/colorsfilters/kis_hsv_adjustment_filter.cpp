@@ -32,7 +32,6 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_U)));
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const

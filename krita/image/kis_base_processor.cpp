@@ -160,11 +160,6 @@ bool KisBaseProcessor::supportsAdjustmentLayers() const
     return d->supportsAdjustmentLayers;
 }
 
-bool KisBaseProcessor::supportsIncrementalPainting() const
-{
-    return d->supportsIncrementalPainting;
-}
-
 bool KisBaseProcessor::supportsThreading() const
 {
     return d->supportsThreading;
@@ -183,11 +178,6 @@ void KisBaseProcessor::setSupportsPainting(bool v)
 void KisBaseProcessor::setSupportsAdjustmentLayers(bool v)
 {
     d->supportsAdjustmentLayers = v;
-}
-
-void KisBaseProcessor::setSupportsIncrementalPainting(bool v)
-{
-    d->supportsIncrementalPainting = v;
 }
 
 void KisBaseProcessor::setSupportsThreading(bool v)

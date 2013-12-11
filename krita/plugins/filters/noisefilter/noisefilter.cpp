@@ -69,7 +69,6 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Rando
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const

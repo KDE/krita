@@ -190,7 +190,6 @@ KisDesaturateFilter::KisDesaturateFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
     setShowConfigurationWidget(false);
 }

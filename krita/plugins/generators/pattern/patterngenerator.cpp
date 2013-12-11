@@ -69,7 +69,6 @@ KoPatternGenerator::KoPatternGenerator() : KisGenerator(id(), KoID("basic"), i18
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KoPatternGenerator::factoryConfiguration(const KisPaintDeviceSP) const

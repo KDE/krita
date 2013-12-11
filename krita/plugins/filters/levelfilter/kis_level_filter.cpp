@@ -49,7 +49,6 @@ KisLevelFilter::KisLevelFilter()
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 

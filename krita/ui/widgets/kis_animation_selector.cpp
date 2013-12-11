@@ -152,9 +152,7 @@ void KisAnimationSelector::openAnimation()
 
     KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
-    store->openStore(QIODevice::ReadOnly);
     QByteArray xmlData = store->getDevice("maindoc.xml")->readAll();
-    store->closeStore();
 
     QDomDocument doc;
     doc.setContent(xmlData);

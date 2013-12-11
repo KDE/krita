@@ -109,9 +109,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
     QString location = this->getFrameFile(frame.x(), frame.y());
 
-    d->store->openStore();
     bool hasFile = d->store->hasFile(location);
-    d->store->closeStore();
 
     if(hasFile) {
 
@@ -175,12 +173,11 @@ void KisAnimationDoc::updateXML()
     frameElement.setAttribute("layer", d->currentFramePosition.y());
     d->frameElement.appendChild(frameElement);
 
-    d->store->openStore();
     d->store->openFileWriting("maindoc.xml");
     d->store->writeDataToFile(d->doc.toByteArray());
-    d->store->closeFileWriting();
-    d->store->closeStore();
+    d->store->closeFile();
 }
+
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
 
@@ -288,13 +285,11 @@ void KisAnimationDoc::preSaveAnimation()
     d->frameElement = d->doc.createElement("frames");
     d->root.appendChild(d->frameElement);
 
-    d->store->openStore();
     d->store->openFileWriting("maindoc.xml");
 
     d->store->writeDataToFile(d->doc.toByteArray());
 
-    d->store->closeFileWriting();
-    d->store->closeStore();
+    d->store->closeFile();
 
     QRect initialFramePosition(0, 0, 10, 20);
     d->currentFramePosition = initialFramePosition;

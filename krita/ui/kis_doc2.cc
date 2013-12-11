@@ -522,7 +522,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
     //qDebug() << "setCurrentImage()" << this->documentPart()->shells().at(0);
     QList<KoCanvasObserverBase*> canvasObservers;
     KoCanvasBase* tmpCanvas;
-    kWarning() << this->documentPart()->viewCount();
+
     if(this->documentPart()->viewCount() > 0) {
         if(this->documentPart()->views().at(0)->mainWindow()->canvasObservers().count() > 0) {
             //qDebug() << "Unsetting canvas" << this->documentPart()->shells().at(0)->canvasObservers();

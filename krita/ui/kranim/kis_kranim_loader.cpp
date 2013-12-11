@@ -55,8 +55,6 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QStr
 {
     KisPaintDeviceSP dev = layer->paintDevice();
 
-    store->openStore(QIODevice::ReadOnly);
-
     if(store->hasFile(location)) {
         QIODevice* file = store->getDevice(location);
         if(!dev->read(file)) {
@@ -68,10 +66,12 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QStr
         int pixelSize = dev->colorSpace()->pixelSize();
 
         quint8* defPixel = new quint8[pixelSize];
-        store->readFromFile(location + ".defaultpixel", (char*)defPixel, pixelSize);
+
+        store->openFileReading(location + ".defaultpixel");
+        store->readFromFile((char*)defPixel, pixelSize);
+        store->closeFile();
+
         dev->setDefaultPixel(defPixel);
         delete[] defPixel;
     }
-
-    store->closeStore();
 }

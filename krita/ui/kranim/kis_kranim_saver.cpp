@@ -70,21 +70,6 @@ QDomElement KisKranimSaver::saveMetaData(QDomDocument &doc, QDomNode root)
     return metaDataElement;
 }
 
-bool KisKranimSaver::saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external)
-{
-    m_d->store = store;
-
-    QString location = "mimetype";
-    const QByteArray mimetype = "application/x-kritaanimation";
-
-    if(store->open(location)) {
-        store->write(mimetype);
-        store->close();
-    }
-
-    return true;
-}
-
 void KisKranimSaver::saveFrame(KisAnimationStore *store, KisLayerSP frame, QRect framePosition)
 {
     if(frame) {
@@ -96,18 +81,12 @@ void KisKranimSaver::saveFrame(KisAnimationStore *store, KisPaintDeviceSP device
 {
     QString location = "frame" + QString::number(framePosition.x()) +"layer" + QString::number(framePosition.y());
 
-    store->openStore();
-    store->setCompressionEnabled(true);
-
     store->openFileWriting(location);
     m_writer = new KisAnimationStoreWriter(store);
     device->write(*m_writer);
-    store->closeFileWriting();
+    store->closeFile();
 
     store->openFileWriting(location + ".defaultpixel");
     store->writeDataToFile((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
-    store->closeFileWriting();
-
-    store->setCompressionEnabled(false);
-    store->closeStore();
+    store->closeFile();
 }

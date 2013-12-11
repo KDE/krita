@@ -30,20 +30,25 @@ public:
 
 public:
     void enterDirectory(QString directory);
-    void leaveDirectory();
-    void writeDataToFile(QByteArray data);
-    void writeDataToFile(const char *data, qint64 length);
-    void readFromFile(QString filename, char* buffer, qint64 length);
-    void setCompressionEnabled(bool e);
-    void openFileWriting(QString filename);
-    void closeFileWriting();
 
-    void openStore(QIODevice::OpenMode mode = QIODevice::ReadWrite);
-    void closeStore();
+    void leaveDirectory();
+
+    void writeDataToFile(QByteArray data);
+
+    void writeDataToFile(const char *data, qint64 length);
+
+    void readFromFile(char* buffer, qint64 length);
+
+    void openFileWriting(QString filename);
+
+    void openFileReading(QString filename);
+
+    void closeFile();
 
     void setMimetype();
 
     bool hasFile(QString location) const;
+
     QIODevice* getDevice(QString location);
 
 private:

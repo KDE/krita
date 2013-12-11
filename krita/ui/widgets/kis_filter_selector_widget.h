@@ -46,7 +46,7 @@ public:
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
     void setView(KisView2 *view);
-    void setPaintDevice(KisPaintDeviceSP);
+    void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfiguration* configuration();
     void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;

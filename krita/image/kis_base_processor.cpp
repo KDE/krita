@@ -48,8 +48,7 @@ struct KisBaseProcessor::Private {
     Private()
             : bookmarkManager(0)
             , supportsPainting(false)
-            , supportsAdjustmentLayers(false)
-            , supportsIncrementalPainting(true)
+            , supportsAdjustmentLayers(true)
             , supportsThreading(true)
             , showConfigurationWidget(true)
             , colorSpaceIndependence(FULLY_INDEPENDENT) {
@@ -63,7 +62,6 @@ struct KisBaseProcessor::Private {
     KShortcut shortcut;
     bool supportsPainting;
     bool supportsAdjustmentLayers;
-    bool supportsIncrementalPainting;
     bool supportsThreading;
     bool showConfigurationWidget;
     ColorSpaceIndependence colorSpaceIndependence;

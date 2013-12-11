@@ -62,7 +62,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     wdgFilterNodeCreation.filterSelector->setView(view);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
-    wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
+    wdgFilterNodeCreation.filterSelector->setPaintDevice(false, paintDevice);
     wdgFilterNodeCreation.layerName->setText(layerName);
 
     connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));

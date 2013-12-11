@@ -71,7 +71,7 @@ KisFilterDialog::KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManage
         d->uiFilterDialog.pushButtonCreateMaskEffect->setVisible(false);
     }
 
-    d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
+    d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->original());
     d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
     d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 

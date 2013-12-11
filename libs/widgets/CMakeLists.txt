@@ -7,11 +7,6 @@ if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif (LIBATTICA_FOUND)
 
-if(NEPOMUK)
-    include(SopranoAddOntology)
-    include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
-endif(NEPOMUK)
-
 set(kowidgets_LIB_SRCS
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
@@ -88,10 +83,6 @@ if(GHNS)
 else(GHNS)
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 endif (GHNS)
-
-if(NEPOMUK)
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${NEPOMUK_LIBRARIES} ${SOPRANO_LIBRARIES})
-endif(NEPOMUK)
 
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
 

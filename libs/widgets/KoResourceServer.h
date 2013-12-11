@@ -465,16 +465,6 @@ public:
     }
 
 
-#ifdef NEPOMUK
-    void updateNepomukXML(bool nepomukOn)
-    {
-        KoResourceTagging* tagObject = new KoResourceTagging(type(),extensions());
-        tagObject->setNepomukBool(nepomukOn);
-        tagObject->updateNepomukXML(nepomukOn);
-        delete tagObject;
-        m_tagObject->setNepomukBool(nepomukOn);
-    }
-#endif
 protected:
 
     /**

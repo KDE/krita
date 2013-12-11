@@ -31,9 +31,6 @@
 #include <KoConfig.h>
 
 
-#ifdef NEPOMUK
-#include <Nepomuk/Resource>
-#endif
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
@@ -60,12 +57,6 @@ public:
 
     void serializeTags();
 
-
-    void setNepomukBool(bool nepomukOn);
-#ifdef NEPOMUK
-    void updateNepomukXML(bool nepomukOn);
-#endif
-
 private:
     void readXMLFile(bool serverIdentity=true);
     void writeXMLFile(bool serverIdentity=true);
@@ -78,22 +69,11 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-#ifdef NEPOMUK
-    QList<Nepomuk::Resource> readNepomukRepo();
-    void writeNepomukRepo(bool serverIdentity=true);
-    void updateTagRepoFromNepomuk(bool serverIdentity=true);
-    void addNepomukTag(const QString& fileName,const QString& tag);
-    void delNepomukTag(const QString& fileName,const QString& tag);
-    QString adjustedNepomukFileName(const QString &fileName) const;
-    QString correctedNepomukFileName(const QString &fileName) const;
-#endif
-
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;
     QString m_tagsXMLFile;
     QString m_serverExtensions;
 
-    bool m_nepomukOn;
     KConfigGroup m_config;
 };
 

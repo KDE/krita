@@ -91,7 +91,6 @@ endif (RELEASE_BUILD)
 ############
 
 option(GHNS "support Get Hot New Stuff" OFF)
-option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
@@ -318,10 +317,6 @@ if (GHNS)
     endif (NOT LIBATTICA_FOUND)
 endif (GHNS)
 
-if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
-  set(NEPOMUK FALSE)
-endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
-
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
 if(KDE4_BUILD_TESTS)
@@ -402,7 +397,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
                   "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -583,18 +578,6 @@ if(NOT WIN32)
 else(NOT WIN32)
   set(REQUIRED_Xinput_FOUND TRUE)
 endif(NOT WIN32)
-
-##
-## Test for Nepomuk
-##
-if(NEPOMUK)
-    macro_optional_find_package(Nepomuk)
-    if(NOT NEPOMUK_FOUND)
-        set(NEPOMUK FALSE)
-    endif(NOT NEPOMUK_FOUND)
-    add_definitions(-DDISABLE_NEPOMUK_LEGACY)
-    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
-endif(NEPOMUK)
 
 ##
 ## Test for KActivities
@@ -820,12 +803,12 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
 # vectorimage
-set(VECTORIMAGE_INCLUDES 
+set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
-                   
+
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_BINARY_DIR}/libs/kotext

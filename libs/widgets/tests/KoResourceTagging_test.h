@@ -34,9 +34,6 @@ private slots:
     void testAddingDeletingTag();
     void testSearchingTag();
     void testReadWriteXML();
-#ifdef NEPOMUK
-    void testNepomukBackend();
-#endif
 private:
     void addData();
     KoResourceTagging* m_tagObject;

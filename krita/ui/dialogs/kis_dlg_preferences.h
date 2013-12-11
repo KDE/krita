@@ -71,10 +71,6 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
 
- private slots:
-
-    void tagBackendChange(bool on);
-
 };
 
 //=======================

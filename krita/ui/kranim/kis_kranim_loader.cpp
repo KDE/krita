@@ -56,12 +56,12 @@ void KisKranimLoader::loadFrame(KisLayerSP layer, KisAnimationStore *store, QStr
     KisPaintDeviceSP dev = layer->paintDevice();
 
     if(store->hasFile(location)) {
+        store->openFileReading(location);
         QIODevice* file = store->getDevice(location);
         if(!dev->read(file)) {
             dev->disconnect();
         }
-        file->close();
-        delete file;
+        store->closeFile();
 
         int pixelSize = dev->colorSpace()->pixelSize();
 

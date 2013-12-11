@@ -105,7 +105,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         this->preSaveAnimation();
         return;
     }
-    this->getFrameFile(frame.x(), frame.y());
 
     QString location = this->getFrameFile(frame.x(), frame.y());
 

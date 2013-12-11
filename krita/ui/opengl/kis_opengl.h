@@ -79,6 +79,10 @@ public:
      */
     static void clearError();
 
+    /**
+     * @brief supportsGLSL13
+     * @return true if we have a modern opengl capable of high-quality filtering
+     */
     static bool supportsGLSL13();
 
 private:

@@ -247,6 +247,7 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
+            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(false);
             if (show) {
                 parentWidget()->show();
             }
@@ -254,6 +255,8 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
+            KisConfig cfg;
+            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
             parentWidget()->hide();
         }
 

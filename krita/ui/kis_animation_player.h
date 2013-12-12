@@ -33,12 +33,6 @@ public:
 
     void pause();
 
-    void createCache(int length);
-
-    void dropCache();
-
-    bool isCached();
-
     bool isPlaying();
 
 private:

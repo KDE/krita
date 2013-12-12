@@ -43,49 +43,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisAnimationDoc *doc)
     d->store = doc->getStore();
     d->cached = false;
     d->playing = false;
-    //d->animation = doc->getAnimation();
-}
-
-void KisAnimationPlayer::createCache(int length)
-{
-    d->cached = true;
-
-    d->animation = d->doc->getAnimation();
-
-    QString location;
-
-    for(int frame = 0 ; frame < length ; frame++) {
-
-        location = "frame" + QString::number(frame * 10) + "layer0";
-
-        if(d->store->hasFile(location)) {
-            KisImageWSP currentImage = new KisImage(d->doc->createUndoStore(), d->animation->width(), d->animation->height(), d->animation->colorSpace(), d->animation->name());
-
-            connect(currentImage.data(), SIGNAL(sigImageModified()), d->doc, SLOT(setImageModified()));
-            currentImage->setResolution(d->animation->resolution(), d->animation->resolution());
-
-            KisLayerSP currentLayer = new KisPaintLayer(currentImage.data(), currentImage->nextLayerName(), d->animation->bgColor().opacityU8(), d->animation->colorSpace());
-            currentLayer->setName("testFrame");
-
-            currentLayer->paintDevice()->setDefaultPixel(d->animation->bgColor().data());
-
-            currentImage->addNode(currentLayer.data(), currentImage->rootLayer().data());
-
-            d->cache->append(currentImage);
-        }
-    }
-}
-
-void KisAnimationPlayer::dropCache()
-{
-    d->cache = 0;
-    delete d->cache;
-    d->cached = false;
-}
-
-bool KisAnimationPlayer::isCached()
-{
-    return d->cached;
 }
 
 bool KisAnimationPlayer::isPlaying()

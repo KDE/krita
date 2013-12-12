@@ -310,13 +310,7 @@ KisAnimation* KisAnimationDoc::getAnimation()
 
 void KisAnimationDoc::play()
 {
-    if(!d->player->isCached()) {
-        d->player->createCache(300);
-    }
-
     d->player->play();
-
-    d->player->dropCache();
 }
 
 void KisAnimationDoc::pause()
@@ -331,8 +325,6 @@ void KisAnimationDoc::stop()
     if(d->player->isPlaying()) {
         d->player->stop();
     }
-
-    d->player->dropCache();
 }
 
 #include "kis_animation_doc.moc"

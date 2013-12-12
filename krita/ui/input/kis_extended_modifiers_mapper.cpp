@@ -137,21 +137,21 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
 #else /* Q_WS_X11 */
 
-    Qt::KeyboardModifiers modifiers = queryStandardModifiers();
+    Qt::KeyboardModifiers standardModifiers = queryStandardModifiers();
 
-    if (modifiers & Qt::ShiftModifier) {
+    if (standardModifiers & Qt::ShiftModifier) {
         modifiers << Qt::Key_Shift;
     }
 
-    if (modifiers & Qt::ControlModifier) {
+    if (standardModifiers & Qt::ControlModifier) {
         modifiers << Qt::Key_Control;
     }
 
-    if (modifiers & Qt::AltModifier) {
+    if (standardModifiers & Qt::AltModifier) {
         modifiers << Qt::Key_Alt;
     }
 
-    if (modifiers & Qt::MetaModifier) {
+    if (standardModifiers & Qt::MetaModifier) {
         modifiers << Qt::Key_Meta;
     }
 

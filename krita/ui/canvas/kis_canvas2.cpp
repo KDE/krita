@@ -346,6 +346,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
+    KisOpenGL::initialMakeContextCurrent();
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);

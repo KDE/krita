@@ -210,7 +210,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintGL()
 {
-    makeCurrent();
     renderCanvasGL();
 
     QPainter gc(this);

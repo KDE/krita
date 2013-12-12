@@ -43,9 +43,9 @@ struct PickerTraitReal {
 
 struct PickerTraitInt {
     typedef int coord_type;
-    typedef KisRandomAccessorSP accessor_type;
+    typedef KisRandomConstAccessorSP accessor_type;
     static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
-        return dev->createRandomAccessorNG(0,0);
+        return dev->createRandomConstAccessorNG(0,0);
     }
 
     template <bool useOldData>
@@ -53,8 +53,7 @@ struct PickerTraitInt {
         if (useOldData) {
             memcpy(data, accessor->oldRawData(), cs->pixelSize());
         } else {
-            // FIXME: do not create non-const accessor for non-old data
-            memcpy(data, accessor->rawData(), cs->pixelSize());
+            memcpy(data, accessor->rawDataConst(), cs->pixelSize());
         }
     }
 };

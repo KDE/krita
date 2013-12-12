@@ -31,6 +31,7 @@
 #include <QMap>
 #include <QDebug>
 #include <kundo2command.h>
+#include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
@@ -492,18 +493,10 @@ void KisShapeLayer::resetCache()
 }
 
 KUndo2Command* KisShapeLayer::crop(const QRect & rect) {
-    QRectF croppedRect = m_d->converter->viewToDocument(rect);
-    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    if(shapes.isEmpty())
-        return 0;
+    QPoint oldPos(x(), y());
+    QPoint newPos = oldPos - rect.topLeft();
 
-    QList<QPointF> previousPositions;
-    QList<QPointF> newPositions;
-    foreach(const KoShape* shape, shapes) {
-        previousPositions.append(shape->position());
-        newPositions.append(shape->position() - croppedRect.topLeft());
-    }
-    return new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+    return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
 KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {

@@ -27,12 +27,10 @@
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
-                                       KisPostExecutionUndoAdapter *undoAdapter,
-                                       KisUndoAdapter *legacyUndoAdapter)
+                                       KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(i18n("Move Stroke"), false, undoAdapter),
       m_node(node),
-      m_updatesFacade(updatesFacade),
-      m_legacyUndoAdapter(legacyUndoAdapter)
+      m_updatesFacade(updatesFacade)
 {
     setSupportsWrapAroundMode(true);
 }
@@ -119,8 +117,7 @@ void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
 {
     QPoint nodeOffset(node->x(), node->y());
 
-    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset,
-                            m_legacyUndoAdapter, parent);
+    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
 
     KisNodeSP child = node->firstChild();
     while(child) {

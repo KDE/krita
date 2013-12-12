@@ -52,7 +52,7 @@ protected:
         Q_UNUSED(painter);
 
         KisNodeSP node = resources->currentNode();
-        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter(), image->undoAdapter());
+        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
     }
 
     void addPaintingJobs(KisImageWSP image,

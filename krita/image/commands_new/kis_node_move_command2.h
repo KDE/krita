@@ -32,7 +32,7 @@ class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KUndo2Command
 {
 
 public:
-    KisNodeMoveCommand2(KisNodeSP node, const QPoint& oldPos, const QPoint& newPos, KisUndoAdapter *undoAdapter, KUndo2Command *parent = 0);
+    KisNodeMoveCommand2(KisNodeSP node, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
     virtual ~KisNodeMoveCommand2();
 
     virtual void redo();

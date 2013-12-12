@@ -42,8 +42,7 @@ public:
 
 public:
     MoveStrokeStrategy(KisNodeSP node, KisUpdatesFacade *updatesFacade,
-                       KisPostExecutionUndoAdapter *undoAdapter,
-                       KisUndoAdapter *legacyUndoAdapter);
+                       KisPostExecutionUndoAdapter *undoAdapter);
 
     /**
      * You can use deferred initialization of the node pointer
@@ -67,7 +66,6 @@ private:
 private:
     KisNodeSP m_node;
     KisUpdatesFacade *m_updatesFacade;
-    KisUndoAdapter *m_legacyUndoAdapter;
     QPoint m_finalOffset;
     QRect m_dirtyRect;
 };

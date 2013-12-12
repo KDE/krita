@@ -173,8 +173,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     } else {
         strategy =
             new MoveStrokeStrategy(node, image.data(),
-                                   image->postExecutionUndoAdapter(),
-                                   image->undoAdapter());
+                                   image->postExecutionUndoAdapter());
     }
 
     m_strokeId = image->startStroke(strategy);

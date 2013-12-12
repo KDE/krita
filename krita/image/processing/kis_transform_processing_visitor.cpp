@@ -150,7 +150,7 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
 
         QPoint oldPos(clone->x(), clone->y());
         QPoint newPos(newTrans.dx(), newTrans.dy());
-        KUndo2Command *command = new KisNodeMoveCommand2(clone, oldPos, newPos, undoAdapter);
+        KUndo2Command *command = new KisNodeMoveCommand2(clone, oldPos, newPos);
         undoAdapter->addCommand(command);
     }
 }

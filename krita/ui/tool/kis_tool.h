@@ -170,6 +170,7 @@ public:
 
     void mousePressEvent(KoPointerEvent *event);
     void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseTripleClickEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
 

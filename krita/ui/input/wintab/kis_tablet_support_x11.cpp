@@ -87,6 +87,8 @@ struct KisX11Data
         XTabletStylus,
         XTabletEraser,
 
+        XInputTablet,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -103,6 +105,9 @@ static const char * kis_x11_atomnames = {
     // Tablet
     "STYLUS\0"
     "ERASER\0"
+
+    // XInput tablet device
+    "TABLET\0"
 };
 
 KisX11Data *kis_x11Data = 0;
@@ -196,7 +201,7 @@ void kis_x11_init_tablet()
 #else
 
 
-                if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus)) {
+                if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) ||devs->type == KIS_ATOM(XInputTablet)) {
                     deviceType = QTabletEvent::Stylus;
                     if (wacomDeviceName()->isEmpty())
                         wacomDeviceName()->append(devs->name);

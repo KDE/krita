@@ -516,17 +516,18 @@ void KisInputManager::toggleTabletLogger()
 
 void KisInputManager::setupAsEventFilter(QObject *receiver)
 {
-    receiver->installEventFilter(this);
+    if (d->eventsReceiver) {
+        d->eventsReceiver->removeEventFilter(this);
+    }
 
-    KIS_ASSERT_RECOVER_RETURN(!d->eventsReceiver);
     d->eventsReceiver = receiver;
+    d->eventsReceiver->installEventFilter(this);
 }
 
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    KIS_ASSERT_RECOVER_NOOP(object == d->eventsReceiver);
-
     bool retval = false;
+    if (object != d->eventsReceiver) return retval;
 
     // KoToolProxy needs to pre-process some events to ensure the
     // global shortcuts (not the input manager's ones) are not

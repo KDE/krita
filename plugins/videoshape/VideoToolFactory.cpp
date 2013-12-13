@@ -28,7 +28,7 @@
 VideoToolFactory::VideoToolFactory()
     :KoToolFactoryBase("VideoToolFactoryId")
 {
-    setToolTip(i18n("Video tool"));
+    setToolTip(i18n("Video handling"));
     setIconName(koIconNameCStr("video-x-generic"));
     setToolType(dynamicToolType());
     setPriority(1);

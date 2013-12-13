@@ -31,7 +31,7 @@
 KoCreatePathToolFactory::KoCreatePathToolFactory()
         : KoToolFactoryBase(KoCreatePathTool_ID)
 {
-    setToolTip(i18n("Create Path"));
+    setToolTip(i18n("Draw path"));
     setToolType(mainToolType());
     setPriority(2);
     setIconName(koIconNameCStr("createpath"));

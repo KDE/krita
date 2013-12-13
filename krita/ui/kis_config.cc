@@ -403,7 +403,7 @@ int KisConfig::numMipmapLevels() const
 
 int KisConfig::textureOverlapBorder() const
 {
-    return 1 << qMax(0, numMipmapLevels() - 1);
+    return 1 << qMax(0, numMipmapLevels());
 }
 
 qint32 KisConfig::maxNumberOfThreads()

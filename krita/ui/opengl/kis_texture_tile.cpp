@@ -237,8 +237,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
 
     if(imageRect.top() == patchRect.top()) {
-        int shift = patchSize.width() * patchOffset.y() * pixelSize;
-
         int start = 0;
         int end = patchOffset.y() - 1;
         for (int i = start; i <= end; i++) {
@@ -247,7 +245,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                             patchSize.width(), 1,
                             m_texturesInfo->format,
                             m_texturesInfo->type,
-                            updateInfo.data() + shift);
+                            updateInfo.data());
         }
     }
 
@@ -258,7 +256,6 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
         for (int i = start; i < end; i++) {
-
             glTexSubImage2D(GL_TEXTURE_2D, 0,
                             patchOffset.x(), i,
                             patchSize.width(), 1,
@@ -277,7 +274,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         for(int i = 0; i < patchSize.height(); i++) {
             memcpy(dstPtr, srcPtr, pixelSize);
 
-            srcPtr += tileSize.width() * pixelSize;
+            srcPtr += patchSize.width() * pixelSize;
             dstPtr += pixelSize;
         }
 
@@ -302,14 +299,13 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         for(int i = 0; i < patchSize.height(); i++) {
             memcpy(dstPtr, srcPtr, pixelSize);
 
-            srcPtr += tileSize.width() * pixelSize;
+            srcPtr += patchSize.width() * pixelSize;
             dstPtr += pixelSize;
         }
 
         int start = patchOffset.x() + patchSize.width();
         int end = tileSize.width() - 1;
         for (int i = start; i <= end; i++) {
-
             glTexSubImage2D(GL_TEXTURE_2D, 0,
                             i, patchOffset.y(),
                             1, patchSize.height(),

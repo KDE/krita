@@ -36,6 +36,12 @@
  */
 bool kis_tabletChokeMouse = false;
 
+/**
+ * This variable is true when at least one of our tablet is a Evdev
+ * one. In such a case we need to request the extension events from
+ * the server manually
+ */
+bool kis_haveEvdevTablets = false;
 
 // from include/Xwacom.h
 #  define XWACOM_PARAM_TOOLID 322
@@ -202,6 +208,7 @@ void kis_x11_init_tablet()
 
 
                 if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) ||devs->type == KIS_ATOM(XInputTablet)) {
+                    kis_haveEvdevTablets = devs->type == KIS_ATOM(XInputTablet);
                     deviceType = QTabletEvent::Stylus;
                     if (wacomDeviceName()->isEmpty())
                         wacomDeviceName()->append(devs->name);
@@ -554,6 +561,29 @@ void KisTabletSupportX11::init()
     kis_x11_init_tablet();
 }
 
+void evdevEventsActivationWorkaround(WId window)
+{
+    /**
+     * Evdev devices send us events *only* in case we requested
+     * them for every window which desires to get them, so just
+     * do it as it wants
+     */
+    static QSet<WId> registeredWindows;
+    if (registeredWindows.contains(window)) return;
+
+    registeredWindows.insert(window);
+
+    QTabletDeviceDataList *tablets = qt_tablet_devices();
+    for (int i = 0; i < tablets->size(); ++i) {
+        QTabletDeviceData &tab = tablets->operator [](i);
+
+        int res = XSelectExtensionEvent(KIS_X11->display,
+                                        window,
+                                        tab.eventList,
+                                        tab.eventCount);
+    }
+}
+
 bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
 {
     XEvent *event = static_cast<XEvent*>(ev);
@@ -570,6 +600,9 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
         return true;
     }
 
+    if (kis_haveEvdevTablets && event->type == EnterNotify) {
+        evdevEventsActivationWorkaround((WId)event->xany.window);
+    }
 
     QTabletDeviceDataList *tablets = qt_tablet_devices();
     for (int i = 0; i < tablets->size(); ++i) {

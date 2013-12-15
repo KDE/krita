@@ -35,7 +35,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-
 #include <KoIcon.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings_widget.h>
@@ -137,6 +136,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
+    m_d->detachedGeometry = QRect(100, 100, 0, 0);
 }
 
 

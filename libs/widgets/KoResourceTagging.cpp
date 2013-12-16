@@ -57,8 +57,6 @@ void KoResourceTagging::addTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagging::addTag(const QString& fileName, const QString& tag)
 {
-    qDebug() << fileName << tag;
-
     if (m_tagRepo.contains(fileName, tag)) {
         return;
     }

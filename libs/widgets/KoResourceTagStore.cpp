@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "KoResourceTagging.h"
+#include "KoResourceTagStore.h"
 
 #include <QDebug>
 #include <QStringList>
@@ -26,7 +26,7 @@
 #include <QFile>
 #include <QDir>
 
-KoResourceTagging::KoResourceTagging(const QString& resourceType, const QString& extensions)
+KoResourceTagStore::KoResourceTagStore(const QString& resourceType, const QString& extensions)
 {
     m_serverExtensions = extensions;
     m_tagsXMLFile =  KStandardDirs::locateLocal("data", "krita/tags/" + resourceType + "_tags.xml");
@@ -34,28 +34,33 @@ KoResourceTagging::KoResourceTagging(const QString& resourceType, const QString&
     readXMLFile();
 }
 
-KoResourceTagging::~KoResourceTagging()
+KoResourceTagStore::~KoResourceTagStore()
 {
     serializeTags();
 }
 
-QStringList KoResourceTagging::assignedTagsList(KoResource* resource) const
+QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
 {
     return m_tagRepo.values(adjustedFileName(resource->filename()));
 }
 
-QStringList KoResourceTagging::tagNamesList() const
+QStringList KoResourceTagStore::tagNamesList() const
 {
     return m_tagList.uniqueKeys();
 }
 
-void KoResourceTagging::addTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 {
-    QString fileName = adjustedFileName(resource->filename());
-    addTag(fileName, tag);
+    if (!resource) {
+        m_tagList.insert(tag, 0);
+    }
+    else {
+        QString fileName = adjustedFileName(resource->filename());
+        addTag(fileName, tag);
+    }
 }
 
-void KoResourceTagging::addTag(const QString& fileName, const QString& tag)
+void KoResourceTagStore::addTag(const QString& fileName, const QString& tag)
 {
     if (m_tagRepo.contains(fileName, tag)) {
         return;
@@ -70,7 +75,7 @@ void KoResourceTagging::addTag(const QString& fileName, const QString& tag)
     }
 }
 
-void KoResourceTagging::delTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 {
     QString fileName = adjustedFileName(resource->filename());
 
@@ -87,7 +92,7 @@ void KoResourceTagging::delTag(KoResource* resource, const QString& tag)
     }
 }
 
-QStringList KoResourceTagging::searchTag(const QString& lineEditText)
+QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
 {
     QStringList tagsList = lineEditText.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     if (tagsList.isEmpty()) {
@@ -116,7 +121,7 @@ QStringList KoResourceTagging::searchTag(const QString& lineEditText)
     return removeAdjustedFileNames(keysList);
 }
 
-void KoResourceTagging::writeXMLFile(bool serverIdentity)
+void KoResourceTagStore::writeXMLFile(bool serverIdentity)
 {
     QFile f(m_tagsXMLFile);
     bool fileExists = f.exists();
@@ -134,7 +139,8 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("tags");
         doc.appendChild(root);
-    } else {
+    }
+    else {
         if (!doc.setContent(&f)) {
             kWarning() << "The file could not be parsed.";
             return;
@@ -211,7 +217,7 @@ void KoResourceTagging::writeXMLFile(bool serverIdentity)
 
 }
 
-void KoResourceTagging::readXMLFile(bool serverIdentity)
+void KoResourceTagStore::readXMLFile(bool serverIdentity)
 {
 
     QString inputFile;
@@ -259,7 +265,7 @@ void KoResourceTagging::readXMLFile(bool serverIdentity)
 
 }
 
-bool KoResourceTagging::isServerResource(const QString &resourceName) const
+bool KoResourceTagStore::isServerResource(const QString &resourceName) const
 {
     bool removeChild = false;
     QStringList extensionsList = m_serverExtensions.split(':');
@@ -272,7 +278,7 @@ bool KoResourceTagging::isServerResource(const QString &resourceName) const
     return removeChild;
 }
 
-QString KoResourceTagging::adjustedFileName(const QString &fileName) const
+QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
 {
     if (!isServerResource(fileName)) {
         return fileName + "-krita" + m_serverExtensions.split(':').takeFirst().remove('*');
@@ -280,7 +286,7 @@ QString KoResourceTagging::adjustedFileName(const QString &fileName) const
     return fileName;
 }
 
-QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList)
+QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList)
 {
     foreach(const QString & fileName, fileNamesList) {
         if (fileName.contains("-krita")) {
@@ -293,7 +299,7 @@ QStringList KoResourceTagging::removeAdjustedFileNames(QStringList fileNamesList
 
 
 
-void KoResourceTagging::serializeTags()
+void KoResourceTagStore::serializeTags()
 {
     writeXMLFile();
 }

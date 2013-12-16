@@ -18,8 +18,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef KORESOURCETAGGING_H
-#define KORESOURCETAGGING_H
+#ifndef KORESOURCETAGSTORE_H
+#define KORESOURCETAGSTORE_H
 
 
 #include <kdebug.h>
@@ -34,7 +34,7 @@
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
-class KOWIDGETS_EXPORT KoResourceTagging
+class KOWIDGETS_EXPORT KoResourceTagStore
 {
 
 public:
@@ -43,13 +43,16 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagging(const QString& resourceType, const QString& extensions);
-    ~KoResourceTagging();
+    explicit KoResourceTagStore(const QString& resourceType, const QString& extensions);
+    ~KoResourceTagStore();
 
     QStringList assignedTagsList(KoResource* resource) const;
 
+    /// Add the given tag to the tag store. The resource can be empty, in which case
+    /// the tag is added bug unused
     void addTag(KoResource* resource, const QString& tag);
 
+    /// Remove the given tag for the given resource.
     void delTag(KoResource* resource, const QString& tag);
 
     QStringList tagNamesList() const;
@@ -79,4 +82,4 @@ private:
 };
 
 
-#endif // KORESOURCETAGGING_H
+#endif // KORESOURCETAGSTORE_H

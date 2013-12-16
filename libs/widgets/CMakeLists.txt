@@ -50,7 +50,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
-    KoResourceTagging.cpp
+    KoResourceTagStore.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -129,7 +129,7 @@ install( FILES
     KoResourceServerAdapter.h
     KoResourceServerObserver.h
     KoResourceServerProvider.h
-    KoResourceTagging.h
+    KoResourceTagStore.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h

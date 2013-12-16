@@ -141,8 +141,10 @@ void KoResourceTaggingManager::syncTagBoxEntryAddition(const QString& tag)
 void KoResourceTaggingManager::contextCreateNewTag(const QString& tag)
 {
     if (!tag.isEmpty()) {
+        d->model->addTag(0, tag);
         d->model->tagCategoryAdded(tag);
         d->tagChooser->setCurrentIndex(d->tagChooser->findIndexOf(tag));
+        updateTaggedResourceView();
     }
 }
 

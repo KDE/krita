@@ -21,9 +21,9 @@
 
 #include <QtTest>
 #include <KoConfig.h>
-#include "KoResourceTagging.h"
+#include "KoResourceTagStore.h"
 
-class KoResourceTagging_test : public QObject
+class KoResourceTagStore_test : public QObject
 {
     Q_OBJECT
 
@@ -36,7 +36,7 @@ private slots:
     void testReadWriteXML();
 private:
     void addData();
-    KoResourceTagging* m_tagObject;
+    KoResourceTagStore* m_tagObject;
     QStringList m_resourceNames, m_tags;
 };
 

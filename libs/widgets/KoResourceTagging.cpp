@@ -52,12 +52,13 @@ QStringList KoResourceTagging::tagNamesList() const
 void KoResourceTagging::addTag(KoResource* resource, const QString& tag)
 {
     QString fileName = adjustedFileName(resource->filename());
-
     addTag(fileName, tag);
 }
 
 void KoResourceTagging::addTag(const QString& fileName, const QString& tag)
 {
+    qDebug() << fileName << tag;
+
     if (m_tagRepo.contains(fileName, tag)) {
         return;
     }
@@ -75,17 +76,16 @@ void KoResourceTagging::delTag(KoResource* resource, const QString& tag)
 {
     QString fileName = adjustedFileName(resource->filename());
 
-    if (! m_tagRepo.contains(fileName, tag)) {
+    if (!m_tagRepo.contains(fileName, tag)) {
         return;
     }
 
     m_tagRepo.remove(fileName, tag);
-    int val = m_tagList.value(tag);
 
-    m_tagList.remove(tag);
-
-    if (val != 0 && val != 1) {
-        m_tagList.insert(tag, --val);
+    if (m_tagList.contains(tag)) {
+        if (m_tagList[tag] > 0) {
+            m_tagList[tag]--;
+        }
     }
 }
 

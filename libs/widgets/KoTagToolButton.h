@@ -23,51 +23,36 @@
  *    Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTAGCHOOSERWIDGET_H
-#define KOTAGCHOOSERWIDGET_H
+#ifndef KOTAGTOOLBUTTON_H
+#define KOTAGTOOLBUTTON_H
 
 #include <QWidget>
 
-class KoTagChooserWidget : public QWidget
+class KoTagToolButton : public QWidget
 {
     Q_OBJECT
 
-public:
-    explicit KoTagChooserWidget(QWidget* parent);
-    virtual ~KoTagChooserWidget();
-    void setCurrentIndex(int index);
-    int findIndexOf(QString tagName);
-    void insertItem(QString tagName);
-    void insertItemAt(int index, QString tag);
-    QString currentlySelectedTag();
-    QStringList allTags();
-    bool selectedTagIsReadOnly();
-    void removeItem(QString item);
-    void addItems(QStringList tagNames);
-    void addReadOnlyItem(QString tagName);
-    void clear();
-    void setUndeletionCandidate(const QString &tag);
+private:
+    explicit KoTagToolButton(QWidget* parent = 0);
+    virtual ~KoTagToolButton();
+    void readOnlyMode(bool activate);
+    void setUndeletionCandidate(const QString &deletedTagName);
 
 signals:
     void newTagRequested(const QString &tagname);
-    void tagDeletionRequested(const QString &tagname);
-    void tagRenamingRequested(const QString &oldTagname, const QString &newTagname);
-    void tagUndeletionRequested(const QString &tagname);
-    void tagUndeletionListPurgeRequested();
+    void renamingOfCurrentTagRequested(const QString &tagname);
+    void deletionOfCurrentTagRequested();
+    void undeletionOfTagRequested(const QString &tagname);
+    void purgingOfTagUndeleteListRequested();
     void popupMenuAboutToShow();
-    void tagChosen(const QString &tag);
 
 private slots:
-    void tagRenamingRequested(const QString &newName);
-    void tagOptionsContextMenuAboutToShow();
-    void contextDeleteCurrentTag();
+    void onTagUndeleteClicked();
 
 private:
-    /// pimpl because chooser will most likely get upgraded at some point
     class Private;
     Private* const d;
-
+    friend class KoTagChooserWidget;
 };
-;
 
-#endif // KOTAGCHOOSERWIDGET_H
+#endif // KOTAGTOOLBUTTON_H

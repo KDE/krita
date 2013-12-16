@@ -8,6 +8,7 @@ if (LIBATTICA_FOUND)
 endif (LIBATTICA_FOUND)
 
 set(kowidgets_LIB_SRCS
+    KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
     KoResourceTaggingInterface.cpp

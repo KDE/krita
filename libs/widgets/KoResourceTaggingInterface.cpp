@@ -43,7 +43,7 @@ public:
     {}
 
     TaggedResourceSet(const QString& tagName, const QList<KoResource*>& resources)
-        :tagName(tagName), resources(resources)
+        : tagName(tagName), resources(resources)
     {}
 
     QString tagName;
@@ -87,10 +87,10 @@ void KoResourceTaggingInterface::undeleteTag(const QString & tagToUndelete)
     if (allTags.contains(tagName)) {
         bool ok;
         tagName = QInputDialog::getText(
-                d->tagChooser, i18n("Unable to undelete tag"),
-                i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"),
-                QLineEdit::Normal,
-                tagName, &ok);
+                      d->tagChooser, i18n("Unable to undelete tag"),
+                      i18n("<qt>The tag you are trying to undelete already exists in tag list.<br>Please enter a new, unique name for it.</qt>"),
+                      QLineEdit::Normal,
+                      tagName, &ok);
 
         if (!ok || allTags.contains(tagName) || tagName.isEmpty()) {
             QMessageBox msgBox;
@@ -103,9 +103,9 @@ void KoResourceTaggingInterface::undeleteTag(const QString & tagToUndelete)
 
     QList<KoResource*> serverResources = d->model->serverResources();
 
-    foreach(KoResource* resource, d->lastDeletedTag.resources) {
+    foreach(KoResource * resource, d->lastDeletedTag.resources) {
         if (serverResources.contains(resource)) {
-            addResourceTag(resource,tagName);
+            addResourceTag(resource, tagName);
         }
     }
     d->model->tagCategoryAdded(tagName);
@@ -124,10 +124,9 @@ void KoResourceTaggingInterface::addResourceTag(KoResource* resource, const QStr
     QStringList tagsList = d->model->assignedTagsList(resource);
     if (tagsList.isEmpty()) {
         d->model->addTag(resource, tagName);
-    }
-    else {
-        foreach(const QString &tag, tagsList) {
-            if(tag.compare(tagName)) {
+    } else {
+        foreach(const QString & tag, tagsList) {
+            if (tag.compare(tagName)) {
                 d->model->addTag(resource, tagName);
             }
         }
@@ -179,7 +178,7 @@ void KoResourceTaggingInterface::contextRemoveTagFromResource(KoResource* resour
 void KoResourceTaggingInterface::removeTagFromComboBox(const QString &tag)
 {
     QList<KoResource*> resources = d->model->currentlyVisibleResources();
-    foreach(KoResource* resource, resources) {
+    foreach(KoResource * resource, resources) {
         removeResourceTag(resource, tag);
     }
     d->model->tagCategoryRemoved(tag);
@@ -191,8 +190,8 @@ void KoResourceTaggingInterface::removeResourceTag(KoResource* resource, const Q
 {
     QStringList tagsList = d->model->assignedTagsList(resource);
 
-    foreach(const QString &oldName, tagsList) {
-        if(!oldName.compare(tagName)) {
+    foreach(const QString & oldName, tagsList) {
+        if (!oldName.compare(tagName)) {
             d->model->deleteTag(resource, oldName);
         }
     }
@@ -203,7 +202,7 @@ void KoResourceTaggingInterface::renameTag(const QString &oldName, const QString
     if (!d->model->tagNamesList().contains(newName)) {
         QList<KoResource*> resources = d->model->currentlyVisibleResources();
 
-        foreach(KoResource* resource, resources) {
+        foreach(KoResource * resource, resources) {
             removeResourceTag(resource, oldName);
             addResourceTag(resource, newName);
         }
@@ -222,12 +221,11 @@ void KoResourceTaggingInterface::updateTaggedResourceView()
 
 void KoResourceTaggingInterface::tagChooserIndexChanged(const QString& lineEditText)
 {
-    if ( !d->tagChooser->selectedTagIsReadOnly()) {
+    if (!d->tagChooser->selectedTagIsReadOnly()) {
         d->currentTag = lineEditText;
         d->tagFilter->allowSave(true);
         d->model->enableResourceFiltering(true);
-    }
-    else {
+    } else {
         d->model->enableResourceFiltering(false);
         d->tagFilter->allowSave(false);
         d->currentTag.clear();
@@ -251,8 +249,7 @@ void KoResourceTaggingInterface::tagSearchLineEditTextChanged(const QString& lin
     //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
     if (d->tagChooser->selectedTagIsReadOnly()) {
         d->model->enableResourceFiltering(!lineEditText.isEmpty());
-    }
-    else {
+    } else {
         d->model->enableResourceFiltering(true);
     }
 }
@@ -261,11 +258,11 @@ void KoResourceTaggingInterface::tagSaveButtonPressed()
 {
     if (!d->tagChooser->selectedTagIsReadOnly()) {
         QList<KoResource*> newResources = d->model->currentlyVisibleResources();
-        foreach(KoResource* oldRes, d->originalResources) {
+        foreach(KoResource * oldRes, d->originalResources) {
             if (!newResources.contains(oldRes))
                 removeResourceTag(oldRes, d->currentTag);
         }
-        foreach(KoResource* newRes, newResources) {
+        foreach(KoResource * newRes, newResources) {
             if (!d->originalResources.contains(newRes))
                 addResourceTag(newRes, d->currentTag);
         }
@@ -274,7 +271,7 @@ void KoResourceTaggingInterface::tagSaveButtonPressed()
     updateTaggedResourceView();
 }
 
-void KoResourceTaggingInterface::contextMenuRequested (KoResource* resource, const QStringList& resourceTags, const QPoint& pos)
+void KoResourceTaggingInterface::contextMenuRequested(KoResource* resource, const QStringList& resourceTags, const QPoint& pos)
 {
     /* no visible tag chooser usually means no intended tag interaction,
      * context menu makes no sense then either */
@@ -282,26 +279,26 @@ void KoResourceTaggingInterface::contextMenuRequested (KoResource* resource, con
         return;
 
     KoResourceItemChooserContextMenu menu(
-            resource,
-            resourceTags,
-            d->tagChooser->currentlySelectedTag(),
-            d->tagChooser->allTags());
+        resource,
+        resourceTags,
+        d->tagChooser->currentlySelectedTag(),
+        d->tagChooser->allTags());
 
-    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)),
-            this, SLOT(contextAddTagToResource(KoResource*,QString)));
+    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*, QString)),
+            this, SLOT(contextAddTagToResource(KoResource*, QString)));
 
-    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)),
-            this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
+    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*, QString)),
+            this, SLOT(contextRemoveTagFromResource(KoResource*, QString)));
 
-    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
-            this, SLOT(contextCreateNewTag(KoResource*,QString)));
+    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*, QString)),
+            this, SLOT(contextCreateNewTag(KoResource*, QString)));
     menu.exec(pos);
 }
 
 void KoResourceTaggingInterface::contextMenuRequested(KoResource* currentResource, QPoint pos)
 {
-    if(currentResource) {
-       contextMenuRequested(currentResource, d->model->assignedTagsList(currentResource), pos);
+    if (currentResource) {
+        contextMenuRequested(currentResource, d->model->assignedTagsList(currentResource), pos);
     }
 }
 
@@ -334,8 +331,8 @@ KoResourceTaggingInterface::KoResourceTaggingInterface(KoResourceModel* model, Q
             this, SLOT(contextCreateNewTag(QString)));
     connect(d->tagChooser, SIGNAL(tagDeletionRequested(QString)),
             this, SLOT(removeTagFromComboBox(QString)));
-    connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString,QString)),
-            this, SLOT(renameTag(QString,QString)));
+    connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString, QString)),
+            this, SLOT(renameTag(QString, QString)));
     connect(d->tagChooser, SIGNAL(tagUndeletionRequested(QString)),
             this, SLOT(undeleteTag(QString)));
     connect(d->tagChooser, SIGNAL(tagUndeletionListPurgeRequested()),

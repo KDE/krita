@@ -34,7 +34,8 @@
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
  */
-class KOWIDGETS_EXPORT KoResourceTagging {
+class KOWIDGETS_EXPORT KoResourceTagging
+{
 
 public:
 
@@ -47,9 +48,9 @@ public:
 
     QStringList assignedTagsList(KoResource* resource) const;
 
-    void addTag(KoResource* resource,const QString& tag);
+    void addTag(KoResource* resource, const QString& tag);
 
-    void delTag(KoResource* resource,const QString& tag);
+    void delTag(KoResource* resource, const QString& tag);
 
     QStringList tagNamesList() const;
 
@@ -58,12 +59,12 @@ public:
     void serializeTags();
 
 private:
-    void readXMLFile(bool serverIdentity=true);
-    void writeXMLFile(bool serverIdentity=true);
+    void readXMLFile(bool serverIdentity = true);
+    void writeXMLFile(bool serverIdentity = true);
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;
-    void addTag(const QString& fileName,const QString& tag);
+    void addTag(const QString& fileName, const QString& tag);
     /// If resource filenames have no extensions, then we add "-krita.extension".
     QString adjustedFileName(const QString &fileName) const;
     /// Removes the adjustements before going to the server

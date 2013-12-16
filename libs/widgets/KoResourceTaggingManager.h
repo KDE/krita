@@ -32,12 +32,12 @@
 class KoResourceModel;
 class KoResource;
 
-class KoResourceTaggingInterface : public QObject
+class KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingInterface(KoResourceModel*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModel*, QWidget* parent);
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;
     QString currentTag();

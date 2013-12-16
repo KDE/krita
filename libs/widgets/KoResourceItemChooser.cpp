@@ -52,7 +52,7 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
-#include "KoResourceTaggingInterface.h"
+#include "KoResourceTaggingManager.h"
 
 class KoResourceItemChooser::Private
 {
@@ -65,7 +65,7 @@ public:
         , grayscalePreview(false)
     {}
     KoResourceModel* model;
-    KoResourceTaggingInterface* tagChooser;
+    KoResourceTaggingManager* tagChooser;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     QToolButton  *viewModeButton;
@@ -161,7 +161,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
 
-    d->tagChooser = new KoResourceTaggingInterface(d->model, this);
+    d->tagChooser = new KoResourceTaggingManager(d->model, this);
 
     layout->addWidget(d->tagChooser->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);

@@ -20,6 +20,7 @@
 
 #include "KoResourceTagging.h"
 
+#include <QDebug>
 #include <QStringList>
 #include <kstandarddirs.h>
 #include <QFile>
@@ -57,20 +58,16 @@ void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
 
 void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
 {
-    if( m_tagRepo.contains ( fileName, tag ) ) {
+    if (m_tagRepo.contains(fileName, tag)) {
         return;
     }
 
-    m_tagRepo.insert( fileName, tag );
+    m_tagRepo.insert(fileName, tag);
 
-    if(m_tagList.contains(tag))
-    {
-        int val = m_tagList.value(tag);
-        m_tagList.remove(tag);
-        m_tagList.insert(tag, ++val);
+    if (m_tagList.contains(tag)) {
+        m_tagList[tag]++;
     }
-    else
-    {
+    else {
         m_tagList.insert(tag,1);
     }
 }

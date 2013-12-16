@@ -23,8 +23,8 @@
  *    Boston, MA 02110-1301, USA.
  */
 
-#ifndef KORESOURCETAGGINGINTERFACE_H
-#define KORESOURCETAGGINGINTERFACE_H
+#ifndef KORESOURCETAGGINGMANAGER_H
+#define KORESOURCETAGGINGMANAGER_H
 
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"

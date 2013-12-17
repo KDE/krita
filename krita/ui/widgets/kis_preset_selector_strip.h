@@ -60,6 +60,7 @@ private:
     * instead of class methods
     */
     KoResourceItemView* m_resourceItemView;
+    QString m_currentPaintopID;
 };
 
 

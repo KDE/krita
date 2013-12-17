@@ -19,10 +19,8 @@
 #define KIS_FILE_LAYER_H
 
 #include "kis_external_layer_iface.h"
+#include "kis_safe_document_loader.h"
 
-#include <QFileSystemWatcher>
-
-class KisDoc2;
 class KisPart2;
 
 /**
@@ -57,20 +55,15 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
 public slots:
-
-    void reloadImage();
+    void slotLoadingFinished();
 
 private:
-    KisDoc2 *m_doc;
-
     QString m_basePath;
     QString m_filename;
     bool m_scaleToImageResolution;
 
     KisPaintDeviceSP m_image;
-
-    QFileSystemWatcher m_fileWatcher;
-
+    KisSafeDocumentLoader m_loader;
 };
 
 #endif // KIS_FILE_LAYER_H

@@ -280,11 +280,10 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* resource, const 
     if (!resource || !d->tagChooser->isVisible())
         return;
 
-    KoResourceItemChooserContextMenu menu(
-        resource,
-        resourceTags,
-        d->tagChooser->currentlySelectedTag(),
-        d->tagChooser->allTags());
+    KoResourceItemChooserContextMenu menu(resource,
+                                          resourceTags,
+                                          d->tagChooser->currentlySelectedTag(),
+                                          d->tagChooser->allTags());
 
     connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*, QString)),
             this, SLOT(contextAddTagToResource(KoResource*, QString)));

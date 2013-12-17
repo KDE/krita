@@ -215,9 +215,10 @@ QStringList KoResourceModel::assignedTagsList(KoResource *resource) const
     return m_resourceAdapter->assignedTagsList(resource);
 }
 
-void KoResourceModel::addTag(KoResource* resource,const QString& tag)
+void KoResourceModel::addTag(KoResource* resource, const QString& tag)
 {
     m_resourceAdapter->addTag(resource, tag);
+    emit tagBoxEntryAdded(tag);
 }
 
 void KoResourceModel::deleteTag(KoResource *resource, const QString &tag)

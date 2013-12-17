@@ -23,6 +23,7 @@
  *    Boston, MA 02110-1301, USA.
  */
 
+#include <QDebug>
 #include <QToolButton>
 #include <QGridLayout>
 
@@ -136,6 +137,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
     if (findIndexOf(tagName) == -1) {
         insertItemAt(index, tagName);
     }
+    d->tags.append(tagName);
 }
 
 void KoTagChooserWidget::insertItemAt(int index, QString tag)

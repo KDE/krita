@@ -220,10 +220,10 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
         }
     }
 
-    f.remove();
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
-    }
+//    f.remove();
+//    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+//        kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
+//    }
     QTextStream metastream(&f);
     metastream << doc.toByteArray();
 

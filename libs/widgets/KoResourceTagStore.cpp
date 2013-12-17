@@ -62,7 +62,6 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::addTag(const QString& fileName, const QString& tag)
 {
-    qDebug() << fileName << tag;
     if (m_tagRepo.contains(fileName, tag)) {
         return;
     }
@@ -127,7 +126,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
     QFile f(m_tagsXMLFile);
     //bool fileExists = f.exists();
 
-    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
         return;
     }

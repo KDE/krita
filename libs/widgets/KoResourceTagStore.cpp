@@ -62,6 +62,7 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::addTag(const QString& fileName, const QString& tag)
 {
+    qDebug() << fileName << tag;
     if (m_tagRepo.contains(fileName, tag)) {
         return;
     }
@@ -265,7 +266,7 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
         if (resourceEl.tagName() == "resource") {
             QString resourceName = resourceEl.attribute("identifier");
             resourceName.replace(QString("~"), QDir::homePath());
-            if (isServerResource(resourceName) || !serverIdentity) {
+            if (resourceName == "dummy" || isServerResource(resourceName) || !serverIdentity) {
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
                 for (int j = 0; j < tagNodesList.count() ; j++) {
                     QDomElement tagEl = tagNodesList.at(j).toElement();

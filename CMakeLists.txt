@@ -45,6 +45,17 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+# fetch git revision for the current build
+
+set(CALLIGRA_GIT_SHA1_STRING "")
+
+include(GetGitRevisionDescription)
+get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+
+if(GIT_SHA1)
+    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
+    set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
+endif(GIT_SHA1)
 
  ########################
 #########################

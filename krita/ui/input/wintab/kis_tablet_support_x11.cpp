@@ -577,10 +577,10 @@ void evdevEventsActivationWorkaround(WId window)
     for (int i = 0; i < tablets->size(); ++i) {
         QTabletDeviceData &tab = tablets->operator [](i);
 
-        int res = XSelectExtensionEvent(KIS_X11->display,
-                                        window,
-                                        tab.eventList,
-                                        tab.eventCount);
+        XSelectExtensionEvent(KIS_X11->display,
+                              window,
+                              tab.eventList,
+                              tab.eventCount);
     }
 }
 

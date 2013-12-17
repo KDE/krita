@@ -124,72 +124,71 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
 void KoResourceTagStore::writeXMLFile(bool serverIdentity)
 {
     QFile f(m_tagsXMLFile);
-    bool fileExists = f.exists();
+    //bool fileExists = f.exists();
 
-    if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
         return;
     }
     QDomDocument doc;
     QDomElement root;
 
-    if (!fileExists) {
+
+//    if (!fileExists || !doc.setContent(&f)) {
+//        createCleanFile = true;
+//    }
+//    else {
+//        root = doc.documentElement();
+//        if (root.tagName() != "tags") {
+//            createCleanFile = true;
+//        }
+//    }
+
+//    if (createCleanFile) {
         QDomDocument docTemp("tags");
         doc = docTemp;
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("tags");
         doc.appendChild(root);
-    }
-    else {
-        if (!doc.setContent(&f)) {
-            kWarning() << "The file could not be parsed.";
-            return;
-        }
-
-        root = doc.documentElement();
-        if (root.tagName() != "tags") {
-            kWarning() << "The file doesn't seem to be of interest.";
-            return;
-        }
-    }
+//    }
 
     QStringList resourceNames = m_tagRepo.uniqueKeys();
 
     resourceNames.replaceInStrings(QDir::homePath(), QString("~"));
 
-    if (fileExists) {
-        QDomNodeList resourceNodesList = root.childNodes();
-        /// resource are checked and added or removed according to need.
-        for (int i = 0; i < resourceNodesList.count() ; i++) {
-            QDomElement resourceEl = resourceNodesList.at(i).toElement();
-            if (resourceEl.tagName() == "resource") {
-                if (resourceNames.contains(resourceEl.attribute("identifier"))) {
-                    resourceNames.removeAll(resourceEl.attribute("identifier"));
-                    /// Tags are checked for a resource and added or removed according to need.
-                    QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-                    QStringList tags = m_tagRepo.values((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath()));
-                    for (int j = 0; j < tagNodesList.count() ; j++) {
-                        QDomElement tagEl = tagNodesList.at(j).toElement();
-                        if (tags.contains(tagEl.text())) {
-                            tags.removeAll(tagEl.text());
-                        } else {
-                            resourceNodesList.at(i).removeChild(tagNodesList.at(j--));
-                        }
-                    }
-                    foreach(const QString & tag, tags) {
-                        QDomElement newTagEl = doc.createElement("tag");
-                        QDomText tagNameText = doc.createTextNode(tag);
-                        newTagEl.appendChild(tagNameText);
-                        resourceNodesList.at(i).appendChild(newTagEl);
-                    }
-                } else {
-                    if (isServerResource((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath())) || !serverIdentity) {
-                        root.removeChild(resourceNodesList.at(i--));
-                    }
-                }
-            }
-        }
-    }
+//    if (fileExists) {
+//        QDomNodeList resourceNodesList = root.childNodes();
+//        /// resource are checked and added or removed according to need.
+//        for (int i = 0; i < resourceNodesList.count() ; i++) {
+//            QDomElement resourceEl = resourceNodesList.at(i).toElement();
+//            if (resourceEl.tagName() == "resource") {
+//                if (resourceNames.contains(resourceEl.attribute("identifier"))) {
+//                    resourceNames.removeAll(resourceEl.attribute("identifier"));
+//                    /// Tags are checked for a resource and added or removed according to need.
+//                    QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+//                    QStringList tags = m_tagRepo.values((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath()));
+//                    for (int j = 0; j < tagNodesList.count() ; j++) {
+//                        QDomElement tagEl = tagNodesList.at(j).toElement();
+//                        if (tags.contains(tagEl.text())) {
+//                            tags.removeAll(tagEl.text());
+//                        } else {
+//                            resourceNodesList.at(i).removeChild(tagNodesList.at(j--));
+//                        }
+//                    }
+//                    foreach(const QString & tag, tags) {
+//                        QDomElement newTagEl = doc.createElement("tag");
+//                        QDomText tagNameText = doc.createTextNode(tag);
+//                        newTagEl.appendChild(tagNameText);
+//                        resourceNodesList.at(i).appendChild(newTagEl);
+//                    }
+//                } else {
+//                    if (isServerResource((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath())) || !serverIdentity) {
+//                        root.removeChild(resourceNodesList.at(i--));
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     foreach(QString resourceName, resourceNames) {
 
@@ -203,7 +202,21 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
             tagEl.appendChild(tagNameText);
             resourceEl.appendChild(tagEl);
         }
+
         root.appendChild(resourceEl);
+    }
+
+    // Now write empty tags
+    foreach(const QString &tag, m_tagList.uniqueKeys())  {
+        if (m_tagList[tag] == 0) {
+            QDomElement resourceEl = doc.createElement("resource");
+            resourceEl.setAttribute("identifier", "dummy");
+            QDomElement tagEl = doc.createElement("tag");
+            QDomText tagNameText = doc.createTextNode(tag);
+            tagEl.appendChild(tagNameText);
+            resourceEl.appendChild(tagEl);
+            root.appendChild(resourceEl);
+        }
     }
 
     f.remove();

@@ -589,42 +589,49 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
 
     qint32 x, y, w, h;
     QRect rc = exactBounds();
+
     x = rc.x();
     y = rc.y();
     w = rc.width();
     h = rc.height();
 
-
-    KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
-    KisRandomAccessorSP dstIt = dst.createRandomAccessorNG(x, y);
-
-    for (qint32 row = y; row < y + h; ++row) {
-
-        qint32 column = x;
-        qint32 columnsRemaining = w;
-
-        while (columnsRemaining > 0) {
-
-            qint32 numContiguousDstColumns = dstIt->numContiguousColumns(column);
-            qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(column);
-
-            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = qMin(columns, columnsRemaining);
-
-            srcIt->moveTo(column, row);
-            dstIt->moveTo(column, row);
-
-            const quint8 *srcData = srcIt->rawDataConst();
-            quint8 *dstData = dstIt->rawData();
-
-            m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, conversionFlags);
-
-            column += columns;
-            columnsRemaining -= columns;
-        }
-
+    if (w == 0 || h == 0) {
+        quint8 *defPixel = dstColorSpace->allocPixelBuffer(1, true);
+        m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
+        setDefaultPixel(defPixel);
+        delete defPixel;
     }
+    else {
+        KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
+        KisRandomAccessorSP dstIt = dst.createRandomAccessorNG(x, y);
 
+        for (qint32 row = y; row < y + h; ++row) {
+
+            qint32 column = x;
+            qint32 columnsRemaining = w;
+
+            while (columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(column);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(column);
+
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+                columns = qMin(columns, columnsRemaining);
+
+                srcIt->moveTo(column, row);
+                dstIt->moveTo(column, row);
+
+                const quint8 *srcData = srcIt->rawDataConst();
+                quint8 *dstData = dstIt->rawData();
+
+                m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, conversionFlags);
+
+                column += columns;
+                columnsRemaining -= columns;
+            }
+
+        }
+    }
     KisDataManagerSP oldData = m_d->dataManager;
     const KoColorSpace *oldColorSpace = m_d->colorSpace;
 
@@ -637,6 +644,8 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     setDataManager(dst.m_d->dataManager, dstColorSpace);
 
     return cmd;
+
+
 }
 
 void KisPaintDevice::setProfile(const KoColorProfile * profile)

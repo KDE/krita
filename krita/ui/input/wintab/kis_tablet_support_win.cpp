@@ -346,19 +346,27 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         QPoint globalPos(qRound(hiResGlobal.x()), qRound(hiResGlobal.y()));
 
         // make sure the tablet event get's sent to the proper widget...
-        QWidget *w = QApplication::activePopupWidget();
+        QWidget *w = 0;
 
         /**
          * Find the appropriate window in an order of preference
          */
 
+        if (!w) w = qApp->widgetAt(globalPos);
+        if (!w) w = QWidget::find(msg.hwnd);
+
+        QWidget *parentOverride = 0;
+
+        if (!parentOverride) parentOverride = qApp->activePopupWidget();
+        if (!parentOverride) parentOverride = qApp->activeModalWidget();
+
+        if (!w || (parentOverride && !parentOverride->isAncestorOf(w))) {
+            w = parentOverride;
+        }
+
         if (kis_tablet_pressed) {
             w = kis_tablet_pressed;
         }
-
-        if (!w) w = qApp->activeModalWidget();
-        if (!w) w = qApp->widgetAt(globalPos);
-        if (!w) w = QWidget::find(msg.hwnd);
 
         if (t == KisTabletEvent::TabletPressEx && !kis_tablet_pressed) {
             kis_tablet_pressed = w;

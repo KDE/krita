@@ -189,7 +189,6 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
             const QString name = doc->url().path();
             kDebug(30003) << "saving" << name;
 
-            store->pushDirectory();
             if (doc->nativeOasisMimeType().isEmpty()) {
                 // Embedded object doesn't support OpenDocument, save in the old format.
                 kDebug(30003) << "Embedded object doesn't support OpenDocument, save in the old format.";
@@ -199,15 +198,19 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
                 }
             } else {
                 // To make the children happy cd to the correct directory
+                store->pushDirectory();
                 store->enterDirectory(name);
 
-                if (!doc->saveOdf(documentContext)) {
+                bool ok = doc->saveOdf(documentContext);
+
+                // Now that we're done leave the directory again
+                store->popDirectory();
+
+                if (!ok) {
                     kWarning(30003) << "KoEmbeddedDocumentSaver::saveEmbeddedDocuments failed";
                     return false;
                 }
-                // Now that we're done leave the directory again
             }
-            store->popDirectory();
 
             Q_ASSERT(doc->url().protocol() == INTERNAL_PROTOCOL);
             path = store->currentDirectory();

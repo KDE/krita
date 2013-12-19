@@ -986,7 +986,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                         this,
                         i18n("untitled"),
                         (isExporting() && !d->lastExportUrl.isEmpty()) ?
-                            d->lastExportUrl.url() : suggestedURL.url(),
+                            d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile(),
                         mimeFilter));
 
         QByteArray outputFormat = _native_format;

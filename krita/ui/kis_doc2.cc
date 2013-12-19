@@ -439,10 +439,18 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 QPixmap KisDoc2::generatePreview(const QSize& size)
 {
     if (m_d->image) {
-        QSize newSize = m_d->image->bounds().size();
+        QRect bounds = m_d->image->bounds();
+        QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
 
-        QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        QImage image;
+        if (bounds.width() < 10000 && bounds.height() < 10000) {
+            image = m_d->image->convertToQImage(m_d->image->bounds(), 0);
+        }
+        else {
+            image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        }
+        image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);

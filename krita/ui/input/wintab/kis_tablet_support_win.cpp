@@ -457,6 +457,24 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
     case WT_CTXCLOSE:
         qt_tablet_context = 0;
         break;
+    case WM_ACTIVATE: {
+        /**
+         * Workaround for a focus bug by Qt
+         *
+         * Looks like modal windows do not grab focus on Windows. The
+         * parent widget will still be regarded as a focusWidget()
+         * although it gets no events. So notify the pure parent that
+         * he is not in focus anymore.
+         */
+        QWidget *modalWidget = QApplication::activeModalWidget();
+        if (modalWidget) {
+            QWidget *w = QApplication::focusWidget();
+            bool active = msg->wParam == WA_ACTIVE || msg->wParam == WA_CLICKACTIVE;
+            QFocusEvent fevent(active ? QEvent::FocusIn : QEvent::FocusOut);
+            QApplication::sendEvent(w, &fevent);
+        }
+        break;
+    }
     case WM_MOUSELEAVE:
         mouseEnteredFlag = false;
         break;

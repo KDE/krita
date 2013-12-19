@@ -874,10 +874,10 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
             return;
         }
 
-        bool scaleToImageResolution = dlg.scaleToImageResolution();
+        KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,
-                       new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
+                       new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8));
     }
 
 }

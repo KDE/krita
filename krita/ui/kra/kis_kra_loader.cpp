@@ -528,10 +528,19 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
     bool scale = (element.attribute("scale", "true")  == "true");
+    int scalingMethod = element.attribute("scalingmethod", "-1").toInt();
+    if (scalingMethod < 0) {
+        if (scale) {
+            scalingMethod = KisFileLayer::ToImagePPI;
+        }
+        else {
+            scalingMethod = KisFileLayer::None;
+        }
+    }
 
     QString documentPath = m_d->document->url().toLocalFile();
     QFileInfo info(documentPath);
-    KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, scale, name, opacity);
+    KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;

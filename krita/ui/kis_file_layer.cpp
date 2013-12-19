@@ -23,15 +23,16 @@
 #include "kis_filter_strategy.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
+#include "kis_image.h"
 
 #include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
 
-KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity)
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
     , m_filename(filename)
-    , m_scaleToImageResolution(scaleToImageResolution)
+    , m_scalingMethod(scaleToImageResolution)
 {
     connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
     m_loader.setPath(path());
@@ -49,7 +50,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     m_filename = rhs.m_filename;
     Q_ASSERT(QFile::exists(rhs.path()));
 
-    m_scaleToImageResolution = rhs.m_scaleToImageResolution;
+    m_scalingMethod = rhs.m_scalingMethod;
 
     connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
     m_loader.setPath(path());
@@ -107,27 +108,28 @@ QString KisFileLayer::path() const
     }
 }
 
-void KisFileLayer::setScaleToImageResolution(bool scale)
+KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
 {
-    m_scaleToImageResolution = scale;
-    m_loader.reloadImage();
-}
-
-bool KisFileLayer::scaleToImageResolution() const
-{
-    return m_scaleToImageResolution;
+    return m_scalingMethod;
 }
 
 void KisFileLayer::slotLoadingFinished()
 {
     KisImageWSP importedImage = m_loader.image();
     m_image = importedImage->projection();
-
-    if (m_scaleToImageResolution && (image()->xRes() != importedImage->xRes()
-                                     || image()->yRes() != importedImage->yRes()))
-    {
+    if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
+                                          || image()->yRes() != importedImage->yRes())) {
         qreal xscale = image()->xRes() / importedImage->xRes();
         qreal yscale = image()->yRes() / importedImage->yRes();
+
+        KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+        worker.run();
+    }
+    else if (m_scalingMethod == ToImageSize) {
+        QSize sz = importedImage->size();
+        sz.scale(image()->size(), Qt::KeepAspectRatio);
+        qreal xscale =  sz.width() / importedImage->width();
+        qreal yscale = sz.height() / importedImage->height();
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }

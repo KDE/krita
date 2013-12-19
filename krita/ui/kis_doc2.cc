@@ -187,8 +187,8 @@ bool KisDoc2::load(QIODevice *dev)
 {
     prepareForImport();
 
-    KoStore *store = KoStore::createStore(dev, KoStore::Read);
-    if (store->bad()) {
+    KoStore *store = KoStore::createStore(dev, KoStore::Read, "application/x-krita", KoStore::Zip);
+    if (!store || store->bad()) {
         delete store;
         return false;
     }

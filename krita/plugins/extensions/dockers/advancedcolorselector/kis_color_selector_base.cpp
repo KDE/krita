@@ -396,6 +396,7 @@ void KisColorSelectorBase::setHidingDistanceAndTime(int distance, int time)
 
 void KisColorSelectorBase::privateCreatePopup()
 {
+    if (!m_canvas) return;
     m_popup = createPopup();
     Q_ASSERT(m_popup);
     m_popup->setWindowFlags(Qt::FramelessWindowHint|Qt::SubWindow|Qt::X11BypassWindowManagerHint);

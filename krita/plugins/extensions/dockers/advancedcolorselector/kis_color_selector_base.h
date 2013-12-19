@@ -20,6 +20,8 @@
 
 #include <QWidget>
 #include <QRgb>
+#include <QPointer>
+#include <kis_canvas2.h>
 
 class QColor;
 class KoColor;
@@ -77,7 +79,7 @@ private:
     void privateCreatePopup();
 
 protected:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
     bool m_colorUpdateAllowed;

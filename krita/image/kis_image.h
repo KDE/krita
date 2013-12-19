@@ -247,8 +247,10 @@ public:
      *
      * This does not create an undo action; only call it when creating or
      * loading an image.
+     *
+     * @returns false if the profile could not be assigned
      */
-    void assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile);
 
     /**
      * Returns the current undo adapter. You can add new commands to the

@@ -718,20 +718,19 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
     setModified();
 }
 
-void KisImage::assignImageProfile(const KoColorProfile *profile)
+bool KisImage::assignImageProfile(const KoColorProfile *profile)
 {
-    if (!profile) return;
+    if (!profile) return false;
 
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
 
-    Q_ASSERT(dstCs);
-    Q_ASSERT(srcCs);
+    if (!dstCs) return false;
 
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
-    m_d->rootLayer->accept(visitor);
+    return m_d->rootLayer->accept(visitor);
 
 }
 

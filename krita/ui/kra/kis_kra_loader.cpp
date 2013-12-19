@@ -268,14 +268,14 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
             //qDebug() << "managed to read data:" << res;
             store->close();
             if (res) {
-                //qDebug() << "Success, trying to read the profile for:" << image->colorSpace()->colorModelId().id() <<  image->colorSpace()->colorDepthId().id();
+                qDebug() << "Success, trying to read the profile for:" << image->colorSpace()->colorModelId().id() <<  image->colorSpace()->colorDepthId().id();
                 const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
                 if (profile && profile->valid()) {
-                    //qDebug() << "profile is valid" << profile->name();
-                    image->assignImageProfile(profile);
+                    qDebug() << "profile is valid" << profile->name();
+                    res = image->assignImageProfile(profile);
                 }
-                else {
-                    //qDebug() << "profile not valid, getting profile for name" << KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile();
+                if (!res) {
+                    qDebug() << "profile not valid, getting profile for name" << KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile();
                     profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
                     Q_ASSERT(profile && profile->valid());
                     image->assignImageProfile(profile);

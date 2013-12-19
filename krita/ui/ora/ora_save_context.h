@@ -22,8 +22,9 @@ class KoStore;
 #include <kis_meta_data_entry.h>
 
 #include "kis_open_raster_save_context.h"
+#include <krita_export.h>
 
-class OraSaveContext : public KisOpenRasterSaveContext
+class KRITAUI_EXPORT OraSaveContext : public KisOpenRasterSaveContext
 {
 public:
     OraSaveContext(KoStore* _store);

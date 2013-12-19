@@ -768,13 +768,13 @@ private slots:
     /// Called by the undo stack when undo or redo is called
     void slotUndoStackIndexChanged(int idx);
 
+protected:
+    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
 private:
-
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
-    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 

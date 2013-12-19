@@ -69,6 +69,7 @@
 #include <KoShape.h>
 #include <KoToolManager.h>
 #include <KoPart.h>
+#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -180,6 +181,36 @@ KisDoc2::~KisDoc2()
     m_d->image.clear();
 
     delete m_d;
+}
+
+bool KisDoc2::load(QIODevice *dev)
+{
+    prepareForImport();
+
+    KoStore *store = KoStore::createStore(dev, KoStore::Read);
+    if (store->bad()) {
+        delete store;
+        return false;
+    }
+
+    KoXmlDocument doc = KoXmlDocument(true);
+    if (!oldLoadAndParse(store, "root", doc)) {
+        delete store;
+        return false;
+    }
+
+    if (!loadXML(doc, store)) {
+        delete store;
+        return false;
+    }
+
+    if (!completeLoading(store)) {
+        delete store;
+        return false;
+    }
+
+    delete store;
+    return true;
 }
 
 QByteArray KisDoc2::mimeType() const

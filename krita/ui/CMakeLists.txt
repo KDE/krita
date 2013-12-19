@@ -144,6 +144,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
+    ora/ora_load_context.cc
+    ora/ora_save_context.cc
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc

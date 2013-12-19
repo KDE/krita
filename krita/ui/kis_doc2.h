@@ -76,6 +76,9 @@ public:
     virtual ~KisDoc2();
 
 public:
+
+    bool load(QIODevice *dev);
+
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual int supportedSpecialFormats() const;

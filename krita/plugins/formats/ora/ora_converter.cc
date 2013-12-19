@@ -57,6 +57,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
+        delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
     store->disallowNameExpansion();

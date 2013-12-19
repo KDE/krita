@@ -54,10 +54,12 @@
 typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
 typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
+typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
 static PtrWTGet ptrWTGet = 0;
+static PtrWTOverlap ptrWTOverlap = 0;
 
 /**
  * A cached array for fetching packets from the WinTab queue
@@ -143,6 +145,7 @@ static void initWinTabFunctions()
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
+    ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
 #ifdef DEBUG_WINTAB_TABLET
@@ -445,12 +448,23 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
     MSG *msg = static_cast<MSG*>(message);
     Q_UNUSED(result);
 
+    static bool mouseEnteredFlag = false;
+
     switch(msg->message){
     case WT_CTXOPEN:
         qt_tablet_context = reinterpret_cast<HCTX>(msg->wParam);
         break;
     case WT_CTXCLOSE:
         qt_tablet_context = 0;
+        break;
+    case WM_MOUSELEAVE:
+        mouseEnteredFlag = false;
+        break;
+    case WM_MOUSEMOVE:
+        if (qt_tablet_context && !mouseEnteredFlag) {
+            ptrWTOverlap(qt_tablet_context, true);
+            mouseEnteredFlag = true;
+        }
         break;
     case WT_PROXIMITY:
             if (ptrWTPacketsGet && ptrWTInfo) {

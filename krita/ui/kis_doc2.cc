@@ -36,6 +36,7 @@
 #include <QWidget>
 #include <QList>
 #include <QTimer>
+#include <QScopedPointer>
 
 // KDE
 #include <krun.h>
@@ -183,33 +184,28 @@ KisDoc2::~KisDoc2()
     delete m_d;
 }
 
-bool KisDoc2::load(QIODevice *dev)
+bool KisDoc2::loadFromDevice(QIODevice *dev)
 {
     prepareForImport();
 
-    KoStore *store = KoStore::createStore(dev, KoStore::Read, "application/x-krita", KoStore::Zip);
+    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Read, "application/x-krita", KoStore::Zip));
     if (!store || store->bad()) {
-        delete store;
         return false;
     }
 
     KoXmlDocument doc = KoXmlDocument(true);
-    if (!oldLoadAndParse(store, "root", doc)) {
-        delete store;
+    if (!oldLoadAndParse(store.data(), "root", doc)) {
         return false;
     }
 
-    if (!loadXML(doc, store)) {
-        delete store;
+    if (!loadXML(doc, store.data())) {
         return false;
     }
 
-    if (!completeLoading(store)) {
-        delete store;
+    if (!completeLoading(store.data())) {
         return false;
     }
 
-    delete store;
     return true;
 }
 

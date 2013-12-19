@@ -12,13 +12,15 @@
 
 #include "kra.h"
 
+#include <kzip.h>
+
 #include <QImage>
 
 #include <kdebug.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-
+#include <KoStore.h>
 
 KraHandler::KraHandler()
 {
@@ -36,7 +38,7 @@ bool KraHandler::canRead() const
 bool KraHandler::read(QImage *image)
 {
     KisDoc2 doc;
-    bool retval = doc.load(device());
+    bool retval = doc.loadFromDevice(device());
     if (!retval) return false;
 
     *image = doc.image()->projection()->convertToQImage(0);
@@ -60,7 +62,16 @@ bool KraHandler::canRead(QIODevice *device)
         qWarning("KraHandler::canRead() called with no device");
         return false;
     }
-    return true;
+
+    KZip zip(device);
+    if (!zip.open(QIODevice::ReadOnly)) return false;
+
+    const KArchiveEntry *entry = zip.directory()->entry("mimetype");
+    if (!entry || !entry->isFile()) return false;
+
+    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+
+    return (qstrcmp(fileZipEntry->data().constData(), "application/x-krita") == 0);
 }
 
 
@@ -77,19 +88,13 @@ QStringList KraPlugin::keys() const
     return QStringList() << "kra" << "KRA";
 }
 
-QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
+QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice */*device*/, const QByteArray &format) const
 {
     if (format == "kra" || format == "KRA")
         return Capabilities(CanRead);
-    if (!format.isEmpty())
-        return 0;
-    if (!device->isOpen())
+    else
         return 0;
 
-    Capabilities cap;
-    if (device->isReadable() && KraHandler::canRead(device))
-        cap |= CanRead;
-    return cap;
 }
 
 QImageIOHandler *KraPlugin::create(QIODevice *device, const QByteArray &format) const

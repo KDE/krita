@@ -13,6 +13,9 @@
 #include "ora.h"
 
 #include <QImage>
+#include <QScopedPointer>
+
+#include <kzip.h>
 
 #include <KoStore.h>
 
@@ -41,21 +44,19 @@ bool OraHandler::canRead() const
 
 bool OraHandler::read(QImage *image)
 {
-    KoStore *store = KoStore::createStore(device(), KoStore::Read, "image/openraster", KoStore::Zip);
+    QScopedPointer<KoStore> store(KoStore::createStore(device(), KoStore::Read, "image/openraster", KoStore::Zip));
     if (!store || store->bad()) {
-        delete store;
         return false;
     }
     store->disallowNameExpansion();
     KisDoc2 doc;
-    OraLoadContext olc(store);
+    OraLoadContext olc(store.data());
     KisOpenRasterStackLoadVisitor orslv(&doc, &olc);
     orslv.loadImage();
     KisImageWSP img = orslv.image();
     img->initialRefreshGraph();
     *image = img->projection()->convertToQImage(0);
 
-    delete store;
     return true;
 }
 
@@ -73,10 +74,19 @@ QByteArray OraHandler::name() const
 bool OraHandler::canRead(QIODevice *device)
 {
     if (!device) {
-        qWarning("OraHandler::canRead() called with no device");
+        qWarning("KraHandler::canRead() called with no device");
         return false;
     }
-    return true;
+
+    KZip zip(device);
+    if (!zip.open(QIODevice::ReadOnly)) return false;
+
+    const KArchiveEntry *entry = zip.directory()->entry("mimetype");
+    if (!entry || !entry->isFile()) return false;
+
+    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+
+    return (qstrcmp(fileZipEntry->data().constData(), "image/openraster") == 0);
 }
 
 
@@ -93,19 +103,13 @@ QStringList OraPlugin::keys() const
     return QStringList() << "ora" << "ORA";
 }
 
-QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
+QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice */*device*/, const QByteArray &format) const
 {
     if (format == "ora" || format == "ORA")
         return Capabilities(CanRead);
-    if (!format.isEmpty())
-        return 0;
-    if (!device->isOpen())
+    else
         return 0;
 
-    Capabilities cap;
-    if (device->isReadable() && OraHandler::canRead(device))
-        cap |= CanRead;
-    return cap;
 }
 
 QImageIOHandler *OraPlugin::create(QIODevice *device, const QByteArray &format) const

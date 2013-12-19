@@ -77,7 +77,7 @@ public:
 
 public:
 
-    bool load(QIODevice *dev);
+    bool loadFromDevice(QIODevice *dev);
 
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);

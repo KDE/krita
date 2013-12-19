@@ -48,6 +48,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_monitorProfile(0)
     , m_checkerTexture(0)
     , m_allChannelsSelected(true)
+    , m_useOcio(false)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();

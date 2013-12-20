@@ -62,7 +62,7 @@ class KisAbstractInputAction;
  * When the action is in "Ready" state, it means that all the
  * modifiers for the action are already pressed and we are only
  * waiting for a user to press the mouse button and start a stroke. In
- * this state the action can show the user its Cursor to notify him
+ * this state the action can show the user its Cursor to notify the user
  * what is going to happen next.
  *
  * In the "Running" state, the action has full access to the user

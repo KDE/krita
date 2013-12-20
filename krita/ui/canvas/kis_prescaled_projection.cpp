@@ -210,8 +210,8 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     }
 
     /**
-     * We needn't this stuff ouside KisImage's area. Lets user
-     * paint there, anyway we won't show him anything =)
+     * We needn't this stuff ouside KisImage's area. We're not displaying
+     * anything painted outside the image anyway.
      */
     QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();
     if (croppedImageRect.isEmpty()) return new KisPPUpdateInfo();

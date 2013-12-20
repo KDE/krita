@@ -65,7 +65,7 @@ class QTouchEvent;
  * - Warp mode allows the user to warp the selection of the canvas
  * by grabbing and moving control points placed on the image.
  *   The user can either work with default control points, like a grid
- *   whose density can be modified, or place the control points himself.
+ *   whose density can be modified, or place the control points manually.
  * The modifications made on the selected pixels are applied only when
  * the user clicks the Apply button : the semi-transparent image displayed
  * until the user click that button is only a preview.

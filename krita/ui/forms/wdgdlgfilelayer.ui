@@ -79,7 +79,7 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="radioScaleToImageSize">
         <property name="text">
-         <string>Scale to Image SIze</string>
+         <string>Scale to Image Size</string>
         </property>
        </widget>
       </item>

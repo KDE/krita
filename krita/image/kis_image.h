@@ -712,12 +712,13 @@ public slots:
 
     /**
      * This method is called by the UI (*not* by the creator of the
-     * stroke) when it thinks current stroke should undo its last
-     * action. For example, when the user presses Ctrl+Z while some
-     * stroke is active. If the creator of the stroke supports undoing
-     * of intermediate actions, it will be notified about this request
-     * and (if it decides he likes to do it) will undo its last
-     * action.
+     * stroke) when it thinks the current stroke should undo its last
+     * action, for example, when the user presses Ctrl+Z while some
+     * stroke is active.
+     *
+     * If the creator of the stroke supports undoing of intermediate
+     * actions, it will be notified about this request and can undo
+     * its last action.
      */
     void requestUndoDuringStroke();
 

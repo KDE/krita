@@ -69,7 +69,7 @@ public:
      * The method is called when the action is yet to be started,
      * that is, e.g. the user has pressed all the modifiers for the
      * action but hasn't started painting yet. This method is a right
-     * place to show the user what he is going to do, e.g. change the
+     * place to show the user what is going to happen, e.g. change the
      * cursor.
      */
     virtual void activate();

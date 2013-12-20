@@ -146,7 +146,7 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     // and read and parse it on demand when the image data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual image data. We need the latter so if someone else gets the same
-    // image data he can find this data and share (insert warm fuzzy feeling here).
+    // image data they can find this data and share (insert warm fuzzy feeling here).
     //
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeImages.contains(storeKey))

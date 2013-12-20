@@ -118,7 +118,7 @@ public slots:
      * Returns next preferred zoom level that should be used for
      * zoom in operations.
      *
-     * This can be used by the caller, when he needs some special
+     * This can be used by the caller, when it needs some special
      * mode of zooming (e.g. relative to point) and needs
      * KoCanvasControllerWidget to accomplish this.
      */
@@ -128,7 +128,7 @@ public slots:
      * Returns previous preferred zoom level that should be used for
      * zoom out operations.
      *
-     * This can be used by the caller, when he needs some special
+     * This can be used by the caller, when it needs some special
      * mode of zooming (e.g. relative to point) and needs
      * KoCanvasControllerWidget to accomplish this.
      */

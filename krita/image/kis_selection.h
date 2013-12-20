@@ -83,7 +83,7 @@ public:
     /**
      * The paint device of the pixel selection should report
      * about it's setDirty events to its parent. The creator
-     * should set the parent manually if he wants to get the
+     * should set the parent manually if it wants to get the
      * signals
      */
     void setParentNode(KisNodeWSP node);

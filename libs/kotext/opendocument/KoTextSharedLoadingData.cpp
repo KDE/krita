@@ -581,7 +581,7 @@ void KoTextSharedLoadingData::addOutlineStyle(KoShapeLoadingContext &context, Ko
     if (styleManager && outlineStyleElem.isElement()) {
         KoListStyle *outlineStyle = new KoListStyle();
         outlineStyle->loadOdf(context, outlineStyleElem);
-        styleManager->setOutlineStyle(outlineStyle); // style manager owns it now. he will take care of deleting it.
+        styleManager->setOutlineStyle(outlineStyle); // style manager owns it now and will take care of deleting it.
     }
 }
 

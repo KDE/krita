@@ -122,7 +122,7 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
     // and read and parse it on demand when the video data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual video data. We need the latter so if someone else gets the same
-    // video data he can find this data and share (warm fuzzy feeling here)
+    // video data they can find this data and share (warm fuzzy feeling here)
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeVideos.contains(storeKey))
         return new VideoData(*(d->storeVideos.value(storeKey)));

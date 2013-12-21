@@ -44,14 +44,19 @@ bool OraHandler::canRead() const
 
 bool OraHandler::read(QImage *image)
 {
+//    qDebug() << "orahandler::read" << kBacktrace();
+//    if (QFile *f = qobject_cast<QFile*>(device())) {
+//        qDebug() << "\t" << f->fileName();
+//    }
+
     QScopedPointer<KoStore> store(KoStore::createStore(device(), KoStore::Read, "image/openraster", KoStore::Zip));
     if (!store || store->bad()) {
         return false;
     }
     store->disallowNameExpansion();
-    KisDoc2 doc;
+
     OraLoadContext olc(store.data());
-    KisOpenRasterStackLoadVisitor orslv(&doc, &olc);
+    KisOpenRasterStackLoadVisitor orslv(0, &olc);
     orslv.loadImage();
     KisImageWSP img = orslv.image();
     img->initialRefreshGraph();

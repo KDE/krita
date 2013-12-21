@@ -44,14 +44,14 @@
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
     vKisNodeSP activeNodes;
-    KisDoc2* doc;
+    KisUndoStore* undoStore;
     KisOpenRasterLoadContext* loadContext;
 };
 
-KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc)
+KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore* undoStore, KisOpenRasterLoadContext* orlc)
         : d(new Private)
 {
-    d->doc = doc;
+    d->undoStore = undoStore;
     d->loadContext = orlc;
 }
 
@@ -92,7 +92,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
 
             dbgFile << ppVar(width) << ppVar(height);
 
-            d->image = new KisImage(d->doc->createUndoStore(), width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+            d->image = new KisImage(d->undoStore, width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !

@@ -28,7 +28,7 @@ class QDomElement;
 class KoStore;
 
 class KisAdjustmentLayer;
-class KisDoc2;
+class KisUndoStore;
 class KisGroupLayer;
 class KisOpenRasterLoadContext;
 class KisPaintLayer;
@@ -36,7 +36,7 @@ class KisPaintLayer;
 class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor
 {
 public:
-    KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc);
+    KisOpenRasterStackLoadVisitor(KisUndoStore *undoStore, KisOpenRasterLoadContext* orlc);
     virtual ~KisOpenRasterStackLoadVisitor();
 
 public:

@@ -13,14 +13,18 @@
 #include "kra.h"
 
 #include <kzip.h>
+#include <kdebug.h>
 
 #include <QImage>
+#include <QIODevice>
+#include <QFile>
 
-#include <kdebug.h>
+#include <KoStore.h>
+#include <KoXmlReader.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <KoStore.h>
+#include <kra/kis_kra_loader.h>
 
 KraHandler::KraHandler()
 {
@@ -37,11 +41,66 @@ bool KraHandler::canRead() const
 
 bool KraHandler::read(QImage *image)
 {
-    KisDoc2 doc;
-    bool retval = doc.loadFromDevice(device());
-    if (!retval) return false;
+//    qDebug() << "krahandler::read" << kBacktrace();
+//    if (QFile *f = qobject_cast<QFile*>(device())) {
+//        qDebug() << "\t" << f->fileName();
+//    }
 
-    *image = doc.image()->projection()->convertToQImage(0);
+    QScopedPointer<KoStore> store(KoStore::createStore(device(), KoStore::Read, "application/x-krita", KoStore::Zip));
+    if (!store || store->bad()) {
+        return false;
+    }
+
+    KoXmlDocument doc = KoXmlDocument(true);
+
+    if (!store->open("root")) {
+        return false;
+    }
+
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
+    store->close();
+    if (!ok) {
+        return false;
+    }
+
+    if (doc.doctype().name() != "DOC") {
+        return false;
+    }
+
+    KoXmlElement root = doc.documentElement();
+
+    int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
+    if (syntaxVersion > 2)
+        return false;
+
+    if (!root.hasChildNodes()) {
+        return false;
+    }
+
+    KisKraLoader loader(0, syntaxVersion);
+
+    KisImageSP img;
+
+    // Legacy from the multi-image .kra file period.
+    for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement()) {
+            if (node.nodeName() == "IMAGE") {
+                KoXmlElement elem = node.toElement();
+                if (!(img = loader.loadXML(elem)))
+                    return false;
+
+            } else {
+                return false;
+            }
+        }
+    }
+
+    loader.loadBinaryData(store.data(), img, "", false);
+    img->initialRefreshGraph();
+    *image = img->projection()->convertToQImage(0);
     return true;
 }
 

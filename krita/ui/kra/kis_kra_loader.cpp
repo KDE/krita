@@ -231,7 +231,12 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             }
         }
 
-        image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+        if (m_d->document) {
+            image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+        }
+        else {
+            image = new KisImage(0, width, height, cs, name);
+        }
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
@@ -255,7 +260,6 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
 void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QString & uri, bool external)
 {
-
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
     QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
@@ -305,9 +309,9 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     }
 
 
-    if (m_d->document->documentInfo()->aboutInfo("title").isNull())
+    if (m_d->document && m_d->document->documentInfo()->aboutInfo("title").isNull())
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
-    if (m_d->document->documentInfo()->aboutInfo("comment").isNull())
+    if (m_d->document && m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
     loadAssistants(store, uri, external);
 }
@@ -538,7 +542,10 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
         }
     }
 
-    QString documentPath = m_d->document->url().toLocalFile();
+    QString documentPath;
+    if (m_d->document) {
+        documentPath = m_d->document->url().toLocalFile();
+    }
     QFileInfo info(documentPath);
     KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
     Q_CHECK_PTR(layer);
@@ -603,8 +610,11 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageWSP 
     Q_UNUSED(cs);
 
     QString attr;
-
-    KisShapeLayer* layer = new KisShapeLayer(0, m_d->document->shapeController(), image, name, opacity);
+    KoShapeBasedDocumentBase * shapeController = 0;
+    if (m_d->document) {
+        shapeController = m_d->document->shapeController();
+    }
+    KisShapeLayer* layer = new KisShapeLayer(0, shapeController, image, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;

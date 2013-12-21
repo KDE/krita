@@ -63,7 +63,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     store->disallowNameExpansion();
 
     OraLoadContext olc(store);
-    KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
+    KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
     m_image = orslv.image();
     m_activeNodes = orslv.activeNodes();

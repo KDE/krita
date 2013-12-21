@@ -77,8 +77,6 @@ public:
 
 public:
 
-    bool loadFromDevice(QIODevice *dev);
-
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual int supportedSpecialFormats() const;

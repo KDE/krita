@@ -59,7 +59,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
-#include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoStore.h>
@@ -182,31 +181,6 @@ KisDoc2::~KisDoc2()
     m_d->image.clear();
 
     delete m_d;
-}
-
-bool KisDoc2::loadFromDevice(QIODevice *dev)
-{
-    prepareForImport();
-
-    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Read, "application/x-krita", KoStore::Zip));
-    if (!store || store->bad()) {
-        return false;
-    }
-
-    KoXmlDocument doc = KoXmlDocument(true);
-    if (!oldLoadAndParse(store.data(), "root", doc)) {
-        return false;
-    }
-
-    if (!loadXML(doc, store.data())) {
-        return false;
-    }
-
-    if (!completeLoading(store.data())) {
-        return false;
-    }
-
-    return true;
 }
 
 QByteArray KisDoc2::mimeType() const

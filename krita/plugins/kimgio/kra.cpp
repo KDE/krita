@@ -22,6 +22,7 @@
 #include <KoStore.h>
 #include <KoXmlReader.h>
 
+#include <kis_group_layer.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kra/kis_kra_loader.h>
@@ -43,7 +44,7 @@ bool KraHandler::read(QImage *image)
 {
 //    qDebug() << "krahandler::read" << kBacktrace();
 //    if (QFile *f = qobject_cast<QFile*>(device())) {
-//        qDebug() << "\t" << f->fileName();
+//        qDebug() f->fileName();
 //    }
 
     QScopedPointer<KoStore> store(KoStore::createStore(device(), KoStore::Read, "application/x-krita", KoStore::Zip));
@@ -56,6 +57,8 @@ bool KraHandler::read(QImage *image)
     if (!store->open("root")) {
         return false;
     }
+
+    store->disallowNameExpansion();
 
     // Error variables for QDomDocument::setContent
     QString errorMsg;
@@ -82,24 +85,26 @@ bool KraHandler::read(QImage *image)
 
     KisKraLoader loader(0, syntaxVersion);
 
-    KisImageSP img;
+    KisImageWSP img;
 
     // Legacy from the multi-image .kra file period.
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 KoXmlElement elem = node.toElement();
-                if (!(img = loader.loadXML(elem)))
+                if (!(img = loader.loadXML(elem))) {
                     return false;
+                }
+                break;
 
             } else {
                 return false;
             }
         }
     }
-
     loader.loadBinaryData(store.data(), img, "", false);
     img->initialRefreshGraph();
+
     *image = img->projection()->convertToQImage(0);
     return true;
 }

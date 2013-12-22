@@ -564,7 +564,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->setAccepted(retval);
         break;
     }
-    case QEvent::ShortcutOverride:
     case QEvent::KeyPress: {
         if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);

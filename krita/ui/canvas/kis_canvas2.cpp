@@ -582,6 +582,15 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
 void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 {
+    /**
+     * It might happen that the canvas type is switched while the
+     * update info is being stuck in the Qt's signals queue. Than a wrong
+     * type of the info may come. So just check it here.
+     */
+    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+    if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
+        return;
+
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
@@ -597,7 +606,6 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 #endif
     }
     else {
-
         // See comment in startUpdateCanvasProjection()
         Q_ASSERT(m_d->prescaledProjection);
 

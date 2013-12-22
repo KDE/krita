@@ -40,6 +40,7 @@ public:
 private:
     friend class KisBrushTest;
     int findNearestLevel(qreal scale, qreal *baseScale);
+    void appendPyramidLevel(const QImage &image);
 
     static void calculateParams(qreal scale, qreal rotation,
                                 qreal subPixelX, qreal subPixelY,
@@ -55,7 +56,16 @@ private:
 private:
     QSize m_originalSize;
     qreal m_baseScale;
-    QVector<QImage> m_levels;
+
+    struct PyramidLevel {
+        PyramidLevel() {}
+        PyramidLevel(QImage _image, QSize _size) : image(_image), size(_size) {}
+
+        QImage image;
+        QSize size;
+    };
+
+    QVector<PyramidLevel> m_levels;
 };
 
 #endif /* __KIS_QIMAGE_PYRAMID_H */

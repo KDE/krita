@@ -564,7 +564,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->setAccepted(retval);
         break;
     }
-    case QEvent::KeyPress: {
+    case QEvent::ShortcutOverride: {
         if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);

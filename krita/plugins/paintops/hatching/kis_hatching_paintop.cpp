@@ -110,7 +110,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                              info, 1.0, &dstRect);
 
     // sanity check
-    Q_ASSERT(dstRect.size() == maskDab->bounds().size());
+    KIS_ASSERT_RECOVER_NOOP(dstRect.size() == maskDab->bounds().size());
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/

@@ -256,7 +256,10 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
     if (transform.isIdentity() &&
         srcImage.format() == QImage::Format_ARGB32) {
 
-        return srcImage;
+        return srcImage.copy(QPAINTER_WORKAROUND_BORDER,
+                             QPAINTER_WORKAROUND_BORDER,
+                             srcImage.width() - 2 * QPAINTER_WORKAROUND_BORDER,
+                             srcImage.height() - 2 * QPAINTER_WORKAROUND_BORDER);
     }
 
     QImage dstImage(dstSize, QImage::Format_ARGB32);

@@ -110,7 +110,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
                                      &m_dstDabRect);
 
     // sanity check
-    Q_ASSERT(m_dstDabRect.size() == m_maskDab->bounds().size());
+    KIS_ASSERT_RECOVER_NOOP(m_dstDabRect.size() == m_maskDab->bounds().size());
 }
 
 inline void KisColorSmudgeOp::getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y)

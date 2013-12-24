@@ -851,7 +851,6 @@ KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, q
 
 KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 {
-    m_d->cache.invalidate();
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
     return new KisRandomSubAccessor(pd);
 }

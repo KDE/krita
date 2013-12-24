@@ -218,6 +218,17 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         }
     }
 
+    if (m_handleDrag) {
+        // TODO: Shift-press should now be handled using the alternate actions
+        // if (event->modifiers() & Qt::ShiftModifier) {
+        //     m_handleDrag->uncache();
+        //     m_handleDrag = m_handleDrag->split()[0];
+        //     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+        // }
+        m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+        return;
+    }
+
     m_assistantDrag = 0;
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
@@ -250,6 +261,7 @@ void KisRulerAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     } else {
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
     }
+
     m_canvas->updateCanvas();
 }
 

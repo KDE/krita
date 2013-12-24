@@ -145,6 +145,7 @@ private:
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
+    const KoColorSpace* tilesColorSpace() const;
 
 private:
     KisImageWSP m_image;

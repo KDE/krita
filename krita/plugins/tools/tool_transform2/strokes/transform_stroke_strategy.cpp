@@ -25,6 +25,7 @@
 
 #include <klocale.h>
 #include <kis_node.h>
+#include <kis_external_layer_iface.h>
 #include <kis_transaction.h>
 #include <kis_painter.h>
 #include <kis_transform_worker.h>
@@ -98,6 +99,42 @@ KisPaintDeviceSP TransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
     return cache;
 }
 
+KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
+                                         KisPaintDeviceSP device,
+                                         KoUpdaterPtr updater,
+                                         QVector3D *transformedCenter /* OUT */)
+{
+    {
+        KisTransformWorker t(0,
+                             config.scaleX(), config.scaleY(),
+                             config.shearX(), config.shearY(),
+                             config.originalCenter().x(),
+                             config.originalCenter().y(),
+                             config.aZ(),
+                             0, // set X and Y translation
+                             0, // to null for calculation
+                             0,
+                             config.filter());
+
+        *transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
+    }
+
+    QPointF translation = config.transformedCenter() - (*transformedCenter).toPointF();
+
+    KisTransformWorker transformWorker(device,
+                                       config.scaleX(), config.scaleY(),
+                                       config.shearX(), config.shearY(),
+                                       config.originalCenter().x(),
+                                       config.originalCenter().y(),
+                                       config.aZ(),
+                                       (int)(translation.x()),
+                                       (int)(translation.y()),
+                                       updater,
+                                       config.filter());
+
+    return transformWorker;
+}
+
 bool TransformStrokeStrategy::checkBelongsToSelection(KisPaintDeviceSP device) const
 {
     return m_selection &&
@@ -130,6 +167,24 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::NORMAL);
 
                 td->node->setDirty(oldExtent | td->node->extent());
+            } if (KisExternalLayer *extLayer =
+                  dynamic_cast<KisExternalLayer*>(td->node.data())) {
+
+                if (td->config.mode() == ToolTransformArgs::WARP) {
+                    qWarning() << "Warp transform of an external layer is not supported:" << extLayer->name();
+                } else {
+                    if (td->config.aX() || td->config.aY()) {
+                        qWarning() << "Perspective transform of an external layer is not supported:" << extLayer->name();
+                    }
+
+                    QVector3D transformedCenter;
+                    KisTransformWorker w = createTransformWorker(td->config, 0, 0, &transformedCenter);
+                    QTransform t = w.transform();
+
+                    runAndSaveCommand(KUndo2CommandSP(extLayer->transform(t)),
+                                      KisStrokeJobData::CONCURRENT,
+                                      KisStrokeJobData::NORMAL);;
+                }
             }
         } else if (m_selection) {
 
@@ -209,37 +264,12 @@ void TransformStrokeStrategy::transformDevice(const ToolTransformArgs &config,
         worker.run();
     } else {
         QVector3D transformedCenter;
-
-        {
-            KisTransformWorker t(0,
-                                 config.scaleX(), config.scaleY(),
-                                 config.shearX(), config.shearY(),
-                                 config.originalCenter().x(),
-                                 config.originalCenter().y(),
-                                 config.aZ(),
-                                 0, // set X and Y translation
-                                 0, // to null for calculation
-                                 0,
-                                 config.filter());
-
-            transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
-        }
-
-        QPointF translation = config.transformedCenter() - transformedCenter.toPointF();
-
         KoUpdaterPtr updater1 = helper->updater();
         KoUpdaterPtr updater2 = helper->updater();
 
-        KisTransformWorker transformWorker(device,
-                                           config.scaleX(), config.scaleY(),
-                                           config.shearX(), config.shearY(),
-                                           config.originalCenter().x(),
-                                           config.originalCenter().y(),
-                                           config.aZ(),
-                                           (int)(translation.x()),
-                                           (int)(translation.y()),
-                                           updater1,
-                                           config.filter());
+        KisTransformWorker transformWorker =
+            createTransformWorker(config, device, updater1, &transformedCenter);
+
         transformWorker.run();
 
         KisPerspectiveTransformWorker perspectiveWorker(device,

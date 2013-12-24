@@ -393,7 +393,26 @@ private:
 
     QImage m_currImg; // origImg transformed using m_transform
     KisPaintDeviceSP m_selectedPortionCache;
-    KisStrokeId m_strokeId;
+
+    struct StrokeData {
+        StrokeData() {}
+        StrokeData(KisStrokeId strokeId) : m_strokeId(strokeId) {}
+
+        void clear() {
+            m_strokeId.clear();
+            m_clearedNodes.clear();
+        }
+
+        const KisStrokeId strokeId() const { return m_strokeId; }
+        void addClearedNode(KisNodeSP node) { m_clearedNodes.append(node); }
+        const QVector<KisNodeWSP>& clearedNodes() const { return m_clearedNodes; }
+
+    private:
+        KisStrokeId m_strokeId;
+        QVector<KisNodeWSP> m_clearedNodes;
+    };
+    StrokeData m_strokeData;
+
     bool m_workRecursively;
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations

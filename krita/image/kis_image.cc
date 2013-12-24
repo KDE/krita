@@ -211,7 +211,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 void KisImage::nodeChanged(KisNode* node)
 {
     KisNodeGraphListener::nodeChanged(node);
-
+    requestStrokeEnd();
     m_d->signalRouter->emitNodeChanged(node);
 }
 

@@ -227,7 +227,7 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
     bool needForceRatio = this->forceRatio() != bool(event->modifiers() & Qt::ShiftModifier);
@@ -461,7 +461,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     m_rectCrop = m_rectCrop.normalized();

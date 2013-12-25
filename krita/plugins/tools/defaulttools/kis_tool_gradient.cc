@@ -109,7 +109,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
      *       nested event hadler calls. Please uncomment this line
      *       when the tool is ported to strokes.
      */
-    //KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    //CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
 
@@ -130,7 +130,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
 void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() || currentNode()->systemLocked())

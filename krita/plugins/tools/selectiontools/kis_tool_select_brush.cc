@@ -113,7 +113,7 @@ void KisToolSelectBrush::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     // this gives better performance
     if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
@@ -133,7 +133,7 @@ void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
 void KisToolSelectBrush::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event;)
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     setMode(KisTool::HOVER_MODE);
     applyToSelection(m_selection);

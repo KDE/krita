@@ -61,7 +61,7 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
 
@@ -97,7 +97,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updateArea();

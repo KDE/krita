@@ -269,7 +269,7 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPoint pos = convertToIntPixelCoord(event);
     pickColor(pos);
@@ -279,7 +279,7 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
 void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config.addPalette) {
         KoColorSetEntry ent;

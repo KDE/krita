@@ -201,7 +201,7 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     requestUpdateOutline(event->point);
 
@@ -214,7 +214,7 @@ void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     endStroke();
 

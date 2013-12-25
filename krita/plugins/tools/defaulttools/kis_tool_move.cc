@@ -182,7 +182,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
 void KisToolMove::continueAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (!m_strokeId) return;
 
@@ -193,7 +193,7 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 
 void KisToolMove::endAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
     if (!m_strokeId) return;
 

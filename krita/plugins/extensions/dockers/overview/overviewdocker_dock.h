@@ -19,28 +19,34 @@
 #define _OVERVIEW_DOCK_H_
 
 #include <QDockWidget>
-#include <QTimer>
-
 #include <KoCanvasObserverBase.h>
 
-class KisCanvas2;
 class QLabel;
+class KisCanvas2;
+class KisSignalCompressor;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
-    OverviewDockerDock( );
+    OverviewDockerDock();
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
+
 public slots:
-    void kickTimer();
     void startUpdateCanvasProjection();
+
 protected:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *event);
+    void showEvent(QShowEvent *event);
+
 private:
+    QSize calculatePreviewSize(const QSize &widgetSize);
+
+private:
+    QPixmap m_originalPixmap;
     QLabel *m_preview;
-    KisCanvas2* m_canvas;
-    QTimer m_delayTimer;
+    KisCanvas2 *m_canvas;
+    KisSignalCompressor *m_compressor;
 };
 
 

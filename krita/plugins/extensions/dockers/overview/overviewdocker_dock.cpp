@@ -22,70 +22,91 @@
 
 #include <klocale.h>
 
-#include <KoCanvasBase.h>
-
 #include "kis_canvas2.h"
-#include "kis_view2.h"
-#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_signal_compressor.h"
+
 
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
     , m_canvas(0)
+    , m_compressor(new KisSignalCompressor(500, KisSignalCompressor::POSTPONE, this))
 {
     QWidget *page = new QWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(page);
 
     m_preview = new QLabel(page);
-    m_preview->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_preview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     m_preview->setAlignment(Qt::AlignCenter);
     m_preview->setFrameStyle(QFrame::Sunken);
 
     layout->addWidget(m_preview);
 
     setWidget(page);
-    m_delayTimer.setSingleShot(true);
-    connect(&m_delayTimer, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
+
+    connect(m_compressor, SIGNAL(timeout()), SLOT(startUpdateCanvasProjection()));
 }
 
 void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
+        m_canvas->image()->disconnect(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(m_canvas);
-    if (!m_canvas) return;
+    KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
-    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(kickTimer()), Qt::UniqueConnection);
-    kickTimer();
+    connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)), m_compressor, SLOT(start()), Qt::UniqueConnection);
+    m_compressor->start();
 }
 
-void OverviewDockerDock::kickTimer()
+QSize OverviewDockerDock::calculatePreviewSize(const QSize &widgetSize)
 {
-    m_delayTimer.start(100);
+    const int previewMargin = 5;
+
+    QSize imageSize(m_canvas->image()->bounds().size());
+    imageSize.scale(widgetSize - QSize(previewMargin, previewMargin),
+                    Qt::KeepAspectRatio);
+
+    return imageSize;
 }
 
 void OverviewDockerDock::startUpdateCanvasProjection()
 {
     if (!m_canvas) return;
 
-    QSize sz(m_canvas->image()->bounds().size());
-    sz.scale(m_preview->width() -5, m_preview->height() -5, Qt::KeepAspectRatio);
-    QImage img = m_canvas->image()->projection()->createThumbnail(sz.width(), sz.height());
-    m_preview->setPixmap(QPixmap::fromImage(img));
-}
+    KisImageSP image = m_canvas->image();
+    QSize previewSize = calculatePreviewSize(m_preview->size());
 
-void OverviewDockerDock::resizeEvent(QResizeEvent * event)
-{
-    if (m_canvas && m_preview->pixmap()) {
-        m_preview->setPixmap(m_preview->pixmap()->scaled(event->size().width()/2, event->size().height()/2, Qt::KeepAspectRatio));
-        kickTimer();
+    if (isVisible() && previewSize.isValid()) {
+        QImage img =
+            image->projection()->
+            createThumbnail(previewSize.width(), previewSize.height(), image->bounds());
+
+        m_originalPixmap = QPixmap::fromImage(img);
+        m_preview->setPixmap(m_originalPixmap);
     }
 }
 
+void OverviewDockerDock::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event);
+    m_compressor->start();
+}
+
+void OverviewDockerDock::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    if (m_canvas && m_preview->pixmap()) {
+        if (!m_originalPixmap.isNull()) {
+            QSize newSize = calculatePreviewSize(m_preview->size());
+            m_preview->setPixmap(m_originalPixmap.scaled(newSize));
+        }
+        m_compressor->start();
+    }
+}
 
 
 #include "overviewdocker_dock.moc"

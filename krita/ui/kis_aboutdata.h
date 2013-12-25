@@ -30,12 +30,15 @@
 KAboutData * newKritaAboutData()
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    QString version = calligraVersion;
+    QString version;
 
-    if (!gitVersion.isEmpty()) {
-        version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
-    }
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
 
     KAboutData * aboutData = new KAboutData("krita", 0,
                                             ki18n("Krita"),

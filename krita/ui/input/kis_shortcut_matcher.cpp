@@ -49,7 +49,6 @@ public:
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
-    QList<KisAbstractInputAction*> actions;
 
     QList<Qt::Key> keys;
     QList<Qt::MouseButton> buttons;
@@ -75,7 +74,6 @@ KisShortcutMatcher::~KisShortcutMatcher()
 {
     qDeleteAll(m_d->singleActionShortcuts);
     qDeleteAll(m_d->strokeShortcuts);
-    qDeleteAll(m_d->actions);
     delete m_d;
 }
 
@@ -92,11 +90,6 @@ void KisShortcutMatcher::addShortcut(KisStrokeShortcut *shortcut)
 void KisShortcutMatcher::addShortcut( KisTouchShortcut* shortcut )
 {
     m_d->touchShortcuts.append(shortcut);
-}
-
-void KisShortcutMatcher::addAction(KisAbstractInputAction *action)
-{
-    m_d->actions.append(action);
 }
 
 bool KisShortcutMatcher::supportsHiResInputEvents()

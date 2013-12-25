@@ -39,6 +39,7 @@ public:
     virtual ~KisToolInvocationAction();
 
     virtual int priority() const;
+    virtual bool canIgnoreModifiers() const;
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);

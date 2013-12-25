@@ -58,7 +58,12 @@ KisToolInvocationAction::~KisToolInvocationAction()
 
 int KisToolInvocationAction::priority() const
 {
-    return 10;
+    return 0;
+}
+
+bool KisToolInvocationAction::canIgnoreModifiers() const
+{
+    return true;
 }
 
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)

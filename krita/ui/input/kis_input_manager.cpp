@@ -72,6 +72,7 @@ public:
     #endif
         , lastTabletEvent(0)
         , lastTouchEvent(0)
+        , defaultInputAction(0)
         , eventsReceiver(0)
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
         , logTabletEvents(false)
@@ -842,7 +843,6 @@ void KisInputManager::profileChanged()
     }
     else {
         kWarning() << "No Input Profile Found: canvas interaction will be impossible";
-
     }
 }
 

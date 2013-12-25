@@ -111,6 +111,11 @@ int KisAbstractInputAction::priority() const
     return 0;
 }
 
+bool KisAbstractInputAction::canIgnoreModifiers() const
+{
+    return false;
+}
+
 QHash< QString, int > KisAbstractInputAction::shortcutIndexes() const
 {
     return d->indexes;

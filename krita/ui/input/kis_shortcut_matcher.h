@@ -89,7 +89,6 @@ public:
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);
-    void addAction(KisAbstractInputAction *action);
 
     /**
      * Returns true if the currently running shortcut supports

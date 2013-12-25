@@ -129,7 +129,6 @@ void KisInputManagerTest::testKeyEvents()
     KisShortcutMatcher m;
 
     TestingAction *a = new TestingAction();
-    m.addAction(a);
 
 
     m.addShortcut(
@@ -274,7 +273,6 @@ void KisInputManagerTest::testReleaseUnnecessaryModifiers()
     KisShortcutMatcher m;
 
     TestingAction *a = new TestingAction();
-    m.addAction(a);
 
     m.addShortcut(
         createStrokeShortcut(a, 13,
@@ -320,7 +318,6 @@ void KisInputManagerTest::testMouseMoves()
     KisShortcutMatcher m;
 
     TestingAction *a = new TestingAction();
-    m.addAction(a);
 
     m.addShortcut(
         createStrokeShortcut(a, 13,

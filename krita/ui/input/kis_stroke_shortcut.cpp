@@ -41,7 +41,12 @@ KisStrokeShortcut::~KisStrokeShortcut()
 
 int KisStrokeShortcut::priority() const
 {
-    return m_d->modifiers.size() * 2 + m_d->buttons.size() + action()->priority();
+    int buttonScore = 0;
+    foreach (Qt::MouseButton button, m_d->buttons) {
+        buttonScore += Qt::XButton2 - button;
+    }
+
+    return m_d->modifiers.size() * 0xFFFF + buttonScore * 0xFF + action()->priority();
 }
 
 void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
@@ -56,8 +61,11 @@ void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
 bool KisStrokeShortcut::matchReady(const QList<Qt::Key> &modifiers,
                                    const QList<Qt::MouseButton> &buttons)
 {
-    if (!compareKeys(m_d->modifiers, modifiers) ||
-        buttons.size() < m_d->buttons.size() - 1) {
+    bool modifiersOk =
+        (m_d->modifiers.isEmpty() && action()->canIgnoreModifiers()) ||
+        compareKeys(m_d->modifiers, modifiers);
+
+    if (!modifiersOk || buttons.size() < m_d->buttons.size() - 1) {
 
         return false;
     }

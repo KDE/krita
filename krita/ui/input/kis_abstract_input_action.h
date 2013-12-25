@@ -137,6 +137,13 @@ public:
      */
     virtual int priority() const;
 
+    /**
+     * Returns true if an action can run with any modifiers pressed
+     * (the shortcut's modifiers list must be empty for that). That is
+     * used for making one type of actions default one.
+     */
+    virtual bool canIgnoreModifiers() const;
+
 protected:
     /**
      * The input manager this action belongs to.

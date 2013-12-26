@@ -37,6 +37,8 @@ private slots:
     void testSelectionExactBounds();
     void testSetParentNodeAfterCreation();
     void testSetParentNodeBeforeCreation();
+
+    void testOutlineGeneration();
 };
 
 #endif

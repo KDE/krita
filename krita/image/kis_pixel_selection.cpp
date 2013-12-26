@@ -331,6 +331,17 @@ void KisPixelSelection::recalculateOutlineCache()
 
     foreach (const QPolygon &polygon, outline()) {
         m_d->outlineCache.addPolygon(polygon);
+
+        /**
+         * The outline generation algorithm has a small bug, which
+         * results in the starting point be repeated twice in the
+         * beginning of the path, instead of being put to the
+         * end. Here we just explicitly close the path to workaround
+         * it.
+         *
+         * \see KisSelectionTest::testOutlineGeneration()
+         */
+        m_d->outlineCache.closeSubpath();
     }
 
     m_d->outlineCacheValid = true;

@@ -32,26 +32,26 @@ void KisColorSelectorSimple::setColor(const QColor &c)
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.hslSaturationF());
-        m_lastClickPos.setY(1.-c.lightnessF());
+        m_lastClickPos.setY(1. - c.lightnessF());
         emit paramChanged(-1, -1, -1, c.hslSaturationF(), c.lightnessF());
         break;
     case KisColorSelector::LH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1.-c.lightnessF());
+        m_lastClickPos.setY(1. - c.lightnessF());
         emit paramChanged(c.hueF(), -1, -1, -1, c.lightnessF());
         break;
     case KisColorSelector::SV:
         m_lastClickPos.setX(c.saturationF());
-        m_lastClickPos.setY(1-c.valueF());
+        m_lastClickPos.setY(1. - c.valueF());
         emit paramChanged(-1, c.saturationF(), c.valueF(), -1, -1);
         break;
     case KisColorSelector::SV2: {
         qreal xRel = c.hsvSaturationF();
         qreal yRel = 0.5;
-        
+
         if(xRel != 1.0)
             yRel = 1.0 - qBound<qreal>(0.0, (c.valueF() - xRel) / (1.0 - xRel), 1.0);
-        
+
         m_lastClickPos.setX(xRel);
         m_lastClickPos.setY(yRel);
         emit paramChanged(-1, -1, -1, xRel, yRel);
@@ -59,17 +59,17 @@ void KisColorSelectorSimple::setColor(const QColor &c)
     }
     case KisColorSelector::VH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(c.valueF());
+        m_lastClickPos.setY(1. - c.valueF());
         emit paramChanged(c.hueF(), -1, c.valueF(), -1, -1);
         break;
     case KisColorSelector::hsvSH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1-c.saturationF());
+        m_lastClickPos.setY(1. - c.saturationF());
         emit paramChanged(c.hueF(), c.saturationF(), -1, -1, -1);
         break;
     case KisColorSelector::hslSH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1-c.hslSaturationF());
+        m_lastClickPos.setY(1 - c.hslSaturationF());
         emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
         break;
     case KisColorSelector::L:

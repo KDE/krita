@@ -249,26 +249,28 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
 void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mouseMoveEvent(e);
-    
+
     mouseEvent(e);
 }
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
-    KisColorSelectorBase::mouseReleaseEvent(e);
-    if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
+    e->setAccepted(false);
+    KisColorSelectorBase::mousePressEvent(e);
+
+    if(!e->isAccepted() &&
+       m_lastColor != m_currentColor &&
+       m_currentColor.isValid()) {
+
         m_lastColor=m_currentColor;
         if(e->button() == Qt::LeftButton)
             m_lastColorRole=Foreground;
         else
             m_lastColorRole=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
 
-//        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-//            hidePopup();
-//        }
+        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
     }
-    e->accept();
+
     m_grabbingComponent=0;
 }
 

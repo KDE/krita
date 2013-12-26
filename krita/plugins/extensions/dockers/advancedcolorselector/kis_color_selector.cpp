@@ -243,6 +243,7 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
             m_grabbingComponent=m_subComponent;
 
         mouseEvent(e);
+        e->accept();
     }
 }
 
@@ -251,6 +252,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
     KisColorSelectorBase::mouseMoveEvent(e);
 
     mouseEvent(e);
+    e->accept();
 }
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
@@ -269,6 +271,7 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
             m_lastColorRole=Background;
 
         commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
+        e->accept();
     }
 
     m_grabbingComponent=0;

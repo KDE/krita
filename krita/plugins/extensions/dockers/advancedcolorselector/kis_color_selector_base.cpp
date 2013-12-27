@@ -383,7 +383,9 @@ void KisColorSelectorBase::lazyCreatePopup()
 
 void KisColorSelectorBase::showPopup(Move move)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_popup);
+    // This slot may be called by some action,
+    // so we need to be able to handle it
+    lazyCreatePopup();
 
     QPoint cursorPos = QCursor::pos();
 

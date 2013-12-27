@@ -85,6 +85,13 @@ const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
                    QString());
 }
 
+bool KisPixelSelection::read(QIODevice *stream)
+{
+    bool retval = KisPaintDevice::read(stream);
+    m_d->outlineCacheValid = false;
+    return retval;
+}
+
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
 {
     QRect r = rc.normalized();

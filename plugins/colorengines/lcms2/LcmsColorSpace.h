@@ -319,7 +319,7 @@ public:
         cmsSetColorSpace(adj->profiles[1], cmsSigLabData);
         cmsSetPCS(adj->profiles[1], cmsSigLabData);
 
-        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::IntentAbsoluteColorimetric);
+        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::AdjustmentRenderingIntent);
 
         // Creates a LUT with 3D grid only
         cmsPipeline* Lut = cmsPipelineAlloc(0, 3, 3);
@@ -350,8 +350,8 @@ public:
         cmsPipelineFree(Lut);
 
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::IntentAbsoluteColorimetric,
-                                                            KoColorConversionTransformation::HighQuality);
+                                                            KoColorConversionTransformation::AdjustmentRenderingIntent,
+                                                            KoColorConversionTransformation::InternalConversionFlags);
 
         return adj;
     }

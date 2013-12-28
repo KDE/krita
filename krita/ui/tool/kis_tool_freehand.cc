@@ -178,8 +178,6 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     requestUpdateOutline(event->point);
 
     if (!nodeEditable() || nodePaintAbility() != PAINT) {
-        KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-        canvas2->view()->showFloatingMessage(i18n("Can't paint on this layer."), koIcon("draw-brush"));
         event->ignore();
 
         return;

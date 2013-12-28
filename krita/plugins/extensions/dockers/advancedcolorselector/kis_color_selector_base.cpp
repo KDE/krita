@@ -389,9 +389,14 @@ void KisColorSelectorBase::showPopup(Move move)
 
     QPoint cursorPos = QCursor::pos();
 
-    if(move == MoveToMousePosition)
+    if (move == MoveToMousePosition) {
         m_popup->move(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2);
+        QRect rc = m_popup->geometry();
+        if (rc.x() < 0) rc.setX(0);
+        if (rc.y() < 0) rc.setY(0);
+        m_popup->setGeometry(rc);
 
+    }
     m_popup->show();
     m_popup->m_colorPreviewPopup->show();
 }

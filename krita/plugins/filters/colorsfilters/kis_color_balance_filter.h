@@ -47,8 +47,6 @@ public:
 
 	virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
-    using KisFilter::process;
-
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
 	static inline KoID id() {

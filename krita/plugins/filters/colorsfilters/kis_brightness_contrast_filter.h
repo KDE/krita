@@ -86,7 +86,6 @@ public:
     KisBrightnessContrastFilter();
 
 public:
-    using KisFilter::process;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 

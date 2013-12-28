@@ -41,7 +41,7 @@ class KisAutoContrast : public KisFilter
 public:
     KisAutoContrast();
 public:
-    using KisFilter::process;
+
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,

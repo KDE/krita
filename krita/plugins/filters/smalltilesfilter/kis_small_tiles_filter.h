@@ -32,8 +32,6 @@ public:
     KisSmallTilesFilter();
 
 public:
-    using KisFilter::process;
-
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,

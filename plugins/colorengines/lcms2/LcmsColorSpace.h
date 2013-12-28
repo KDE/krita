@@ -301,61 +301,6 @@ public:
     }
 
 
-    virtual KoColorTransformation *createDesaturateAdjustment() const {
-        if (!d->profile) return 0;
-        KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
-
-        adj->profiles[0] = d->profile->lcmsProfile();
-        adj->profiles[2] = d->profile->lcmsProfile();
-        adj->csProfile = d->profile->lcmsProfile();
-
-        adj->profiles[1] = cmsCreateProfilePlaceholder(0);
-        if (!adj->profiles[1]) { // can't allocate
-            delete adj;
-            return NULL;
-        }
-
-        cmsSetDeviceClass(adj->profiles[1], cmsSigAbstractClass);
-        cmsSetColorSpace(adj->profiles[1], cmsSigLabData);
-        cmsSetPCS(adj->profiles[1], cmsSigLabData);
-
-        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::AdjustmentRenderingIntent);
-
-        // Creates a LUT with 3D grid only
-        cmsPipeline* Lut = cmsPipelineAlloc(0, 3, 3);
-
-        cmsStage* stage = cmsStageAllocCLut16bit(0, 32, 3, 3, 0);
-
-        if (!cmsStageSampleCLut16bit(stage, desaturateSampler, static_cast<void*>(0), 0)) {
-            // Shouldn't reach here
-            cmsStageFree(stage);
-            cmsPipelineFree(Lut);
-            cmsCloseProfile(adj->profiles[1]);
-            delete adj;
-            return NULL;
-        }
-        cmsPipelineInsertStage(Lut, cmsAT_BEGIN, stage);
-
-        // Create tags
-
-        cmsWriteTag(adj->profiles[1], cmsSigDeviceMfgDescTag, (void*) "(krita internal)");
-        cmsWriteTag(adj->profiles[1], cmsSigProfileDescriptionTag, (void*) "krita saturation abstract profile");
-        cmsWriteTag(adj->profiles[1], cmsSigDeviceModelDescTag, (void*) "saturation built-in");
-
-        cmsWriteTag(adj->profiles[1], cmsSigMediaWhitePointTag, (void*) cmsD50_XYZ());
-
-        cmsWriteTag(adj->profiles[1], cmsSigAToB0Tag, (void*) Lut);
-
-        // LUT is already on virtual profile
-        cmsPipelineFree(Lut);
-
-        adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::AdjustmentRenderingIntent,
-                                                            KoColorConversionTransformation::InternalConversionFlags);
-
-        return adj;
-    }
-
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {
         if (!d->profile) return 0;
 
@@ -425,26 +370,6 @@ private:
         return iccp->asLcms();
     }
 
-    static int desaturateSampler(register const cmsUInt16Number In[], register cmsUInt16Number Out[], void*) {
-        cmsCIELab LabIn, LabOut;
-        cmsCIELCh LChIn, LChOut;
-
-        cmsLabEncoded2Float(&LabIn, In);
-
-        cmsLab2LCh(&LChIn, &LabIn);
-
-        // Do some adjusts on LCh
-        LChOut.L = LChIn.L;
-        LChOut.C = 0;
-        LChOut.h = LChIn.h;
-
-        cmsLCh2Lab(&LabOut, &LChOut);
-
-        // Back to encoded
-        cmsFloat2LabEncoded(Out, &LabOut);
-
-        return true;
-    }
     Private * const d;
 };
 

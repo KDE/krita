@@ -52,9 +52,8 @@ public:
 
     static inline KoID id() {
         return KoID("levels", i18n("Levels"));
-    };
+    }
 
-    virtual bool workWith(KoColorSpace* cs) const;
 };
 
 

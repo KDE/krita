@@ -61,12 +61,6 @@ KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, con
     return new KisLevelConfigWidget(parent, dev);
 }
 
-bool KisLevelFilter::workWith(KoColorSpace* cs) const
-{
-    Q_UNUSED(cs);
-    return true;
-}
-
 KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
     if (!config) {

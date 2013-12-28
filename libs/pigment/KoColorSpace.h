@@ -437,12 +437,6 @@ public:
     virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const = 0;
 
     /**
-     * Create an adjustment object for desaturating
-     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
-     */
-    virtual KoColorTransformation *createDesaturateAdjustment() const = 0;
-
-    /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.

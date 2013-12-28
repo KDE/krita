@@ -175,12 +175,6 @@ const
     return new KisBrightnessContrastFilterConfiguration();
 }
 
-
-bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
-{
-    return (cs->profile() != 0);
-}
-
 KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);

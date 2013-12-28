@@ -49,18 +49,21 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_selection.h>
-#include "kis_histogram.h"
-#include "kis_hsv_adjustment_filter.h"
-#include "kis_brightness_contrast_filter.h"
-#include "kis_perchannel_filter.h"
-#include "kis_color_balance_filter.h"
-#include "filter/kis_filter_registry.h"
+#include <kis_histogram.h>
+#include <filter/kis_filter_registry.h>
 #include <kis_painter.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>
+
+
+#include "kis_hsv_adjustment_filter.h"
+#include "kis_brightness_contrast_filter.h"
+#include "kis_perchannel_filter.h"
+#include "kis_color_balance_filter.h"
+#include "kis_desaturate_filter.h"
 
 K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
 K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
@@ -93,11 +96,6 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Au
     setSupportsAdjustmentLayers(false);
     setColorSpaceIndependence(TO_LAB16);
     setShowConfigurationWidget(false);
-}
-
-bool KisAutoContrast::workWith(const KoColorSpace* cs) const
-{
-    return (cs->profile() != 0);
 }
 
 void KisAutoContrast::processImpl(KisPaintDeviceSP device,
@@ -182,30 +180,4 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     } while(iter->nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
     delete[] transfer;
     delete adj;
-}
-
-
-//==================================================================
-
-KisDesaturateFilter::KisDesaturateFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
-{
-    setSupportsPainting(true);
-    setColorSpaceIndependence(TO_LAB16);
-    setShowConfigurationWidget(false);
-}
-
-KisDesaturateFilter::~KisDesaturateFilter()
-{
-}
-
-bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const
-{
-    return (cs->profile() != 0);
-}
-
-KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
-{
-    Q_UNUSED(config);
-    return cs->createDesaturateAdjustment();
 }

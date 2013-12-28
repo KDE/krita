@@ -140,8 +140,7 @@ void KisFilterManager::updateGUI()
     for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
 
-        bool localEnable = enable &&
-            it.key()->workWith(activeNode->paintDevice()->compositionSourceColorSpace());
+        bool localEnable = enable;
 
         it.value()->setEnabled(localEnable);
     }

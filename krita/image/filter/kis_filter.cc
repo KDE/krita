@@ -136,11 +136,6 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 }
 
-bool KisFilter::workWith(const KoColorSpace* cs) const
-{
-    Q_UNUSED(cs); return true;
-}
-
 QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const
 {
     Q_UNUSED(c);

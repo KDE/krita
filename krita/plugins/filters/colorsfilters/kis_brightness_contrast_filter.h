@@ -96,8 +96,6 @@ public:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-
-    virtual bool workWith(const KoColorSpace* cs) const;
 };
 
 

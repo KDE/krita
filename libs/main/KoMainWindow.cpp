@@ -92,6 +92,7 @@
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QPointer>
+#include <QByteArray>
 
 #include "thememanager.h"
 
@@ -390,49 +391,43 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
 
     createMainwindowGUI();
     d->mainWindowGuiIsBuilt = true;
-#ifndef Q_OS_WIN
+
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
     if (!initialGeometrySet()) {
+        QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
+        if (!restoreGeometry(geom)) {
+            const int scnum = QApplication::desktop()->screenNumber(parentWidget());
+            QRect desk = QApplication::desktop()->availableGeometry(scnum);
+            // if the desktop is virtual then use virtual screen size
+            if (QApplication::desktop()->isVirtualDesktop()) {
+                desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
+                desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
+            }
 
-        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QApplication::desktop()->availableGeometry(scnum);
-        // if the desktop is virtual then use virtual screen size
-        if (QApplication::desktop()->isVirtualDesktop()) {
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
-        }
+            quint32 x = desk.x();
+            quint32 y = desk.y();
+            quint32 w = 0;
+            quint32 h = 0;
 
-        quint32 x = desk.x();
-        quint32 y = desk.y();
-        quint32 w = 0;
-        quint32 h = 0;
+            // Default size -- maximize on small screens, something useful on big screens
+            const int deskWidth = desk.width();
+            if (deskWidth > 1024) {
+                // a nice width, and slightly less than total available
+                // height to componensate for the window decs
+                w = ( deskWidth / 3 ) * 2;
+                h = desk.height();
+            }
+            else {
+                w = desk.width();
+                h = desk.height();
+            }
 
-        // Default size -- maximize on small screens, something useful on big screens
-        const int deskWidth = desk.width();
-        if (deskWidth > 1024) {
-            // a nice width, and slightly less than total available
-            // height to componensate for the window decs
-            w = ( deskWidth / 3 ) * 2;
-            h = desk.height();
+            setGeometry(x, y, w, h);
         }
-        else {
-            w = desk.width();
-            h = desk.height();
-        }
-        // KDE doesn't restore the x,y position, so let's do that ourselves
-        KConfigGroup cfg(KGlobal::config(), "MainWindow");
-        x = cfg.readEntry("ko_x", x);
-        y = cfg.readEntry("ko_y", y);
-        setGeometry(x, y, w, h);
     }
-#endif
-
-    // Now ask kde to restore the size of the window; this could probably be replaced by
-    // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
-    // way of doing things.
-    KConfigGroup config(KGlobal::config(), "MainWindow");
-    restoreWindowSize( config );
+    restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 
     d->dockerManager = new KoDockerManager(this);
 }
@@ -445,8 +440,9 @@ void KoMainWindow::setNoCleanup(bool noCleanup)
 KoMainWindow::~KoMainWindow()
 {
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
-    cfg.writeEntry("ko_x", frameGeometry().x());
-    cfg.writeEntry("ko_y", frameGeometry().y());
+    cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
+    cfg.writeEntry("ko_windowstate", saveState().toBase64());
+
     {
         KConfigGroup group(KGlobal::config(), "theme");
         group.writeEntry("Theme", d->themeManager->currentThemeName());

@@ -1,0 +1,100 @@
+/*
+ *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kis_shade_selector_line_editor.h"
+
+KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
+    : KisShadeSelectorLineBase(parent)
+{
+    QVBoxLayout* layout = new QVBoxLayout(this);
+
+    QHBoxLayout* lineOne = new QHBoxLayout();
+    layout->addLayout(lineOne);
+    lineOne->addWidget(new QLabel(i18n("Delta: ")));
+
+    m_hueDelta = new QDoubleSpinBox();
+    lineOne->addWidget(m_hueDelta);
+    m_saturationDelta = new QDoubleSpinBox();
+    lineOne->addWidget(m_saturationDelta);
+    m_valueDelta = new QDoubleSpinBox();
+    lineOne->addWidget(m_valueDelta);
+
+    QHBoxLayout* lineTwo = new QHBoxLayout();
+    layout->addLayout(lineTwo);
+    lineTwo->addWidget(new QLabel(i18n("Shift: ")));
+
+    m_hueShift = new QDoubleSpinBox();
+    lineTwo->addWidget(m_hueShift);
+    m_saturationShift = new QDoubleSpinBox();
+    lineTwo->addWidget(m_saturationShift);
+    m_valueShift = new QDoubleSpinBox();
+    lineTwo->addWidget(m_valueShift);
+
+
+    m_hueDelta->setRange(-1, 1);
+    m_saturationDelta->setRange(-1, 1);
+    m_valueDelta->setRange(-1, 1);
+    m_hueShift->setRange(-1, 1);
+    m_saturationShift->setRange(-1, 1);
+    m_valueShift->setRange(-1, 1);
+
+    m_hueDelta->setSingleStep(0.1);
+    m_saturationDelta->setSingleStep(0.1);
+    m_valueDelta->setSingleStep(0.1);
+    m_hueShift->setSingleStep(0.05);
+    m_saturationShift->setSingleStep(0.05);
+    m_valueShift->setSingleStep(0.05);
+
+    connect(m_hueDelta, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+    connect(m_saturationDelta, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+    connect(m_valueDelta, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+    connect(m_hueShift, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+    connect(m_saturationShift, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+    connect(m_valueShift, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
+
+}
+
+QString KisShadeSelectorLineEditor::toString() const
+{
+    return QString("%1|%2|%3|%4|%5|%6|%7")
+        .arg(m_lineNumber)
+        .arg(m_hueDelta->value())
+        .arg(m_saturationDelta->value())
+        .arg(m_valueDelta->value())
+        .arg(m_hueShift->value())
+        .arg(m_saturationShift->value())
+        .arg(m_valueShift->value());
+}
+
+void KisShadeSelectorLineEditor::fromString(const QString &string)
+{
+    QStringList strili = string.split('|');
+    m_lineNumber = strili.at(0).toInt();
+    m_hueDelta->setValue(strili.at(1).toDouble());
+    m_saturationDelta->setValue(strili.at(2).toDouble());
+    m_valueDelta->setValue(strili.at(3).toDouble());
+    if(strili.size()==4) return;            // don't crash, if reading old config files.
+    m_hueShift->setValue(strili.at(4).toDouble());
+    m_saturationShift->setValue(strili.at(5).toDouble());
+    m_valueShift->setValue(strili.at(6).toDouble());
+}
+
+void KisShadeSelectorLineEditor::valueChanged() {
+    emit requestActivateLine(this);
+}

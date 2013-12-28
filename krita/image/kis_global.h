@@ -117,5 +117,10 @@ inline T kisRadiansToDegrees(T radians) {
     return radians * 180.0 / M_PI;
 }
 
+template<class T, typename U>
+inline T kisGrowRect(const T &rect, U offset) {
+    return rect.adjusted(-offset, -offset, offset, offset);
+}
+
 #endif // KISGLOBAL_H_
 

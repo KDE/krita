@@ -20,7 +20,7 @@
 
 #include <QComboBox>
 
-class KisShadeSelectorLineComboBoxPrivate;
+class KisShadeSelectorLineComboBoxPopup;
 class KisShadeSelectorLine;
 
 class KisShadeSelectorLineComboBox : public QComboBox
@@ -32,7 +32,6 @@ public:
     void showPopup();
     QString configuration() const;
     void setLineNumber(int n);
-//    QSize sizeHint() const;
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -46,7 +45,7 @@ public slots:
     void setLineHeight(int height);
 
 private:
-    KisShadeSelectorLineComboBoxPrivate* m_private;
+    KisShadeSelectorLineComboBoxPopup* m_popup;
     KisShadeSelectorLine* m_currentLine;
 
 };

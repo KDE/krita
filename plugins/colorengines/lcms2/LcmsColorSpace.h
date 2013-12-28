@@ -309,10 +309,6 @@ public:
         adj->profiles[2] = d->profile->lcmsProfile();
         adj->csProfile = d->profile->lcmsProfile();
 
-        BCHSWADJUSTS bchsw;
-
-        bchsw.Saturation = -25;
-
         adj->profiles[1] = cmsCreateProfilePlaceholder(0);
         if (!adj->profiles[1]) { // can't allocate
             delete adj;
@@ -323,14 +319,14 @@ public:
         cmsSetColorSpace(adj->profiles[1], cmsSigLabData);
         cmsSetPCS(adj->profiles[1], cmsSigLabData);
 
-        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::AdjustmentRenderingIntent);
+        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::IntentAbsoluteColorimetric);
 
         // Creates a LUT with 3D grid only
         cmsPipeline* Lut = cmsPipelineAlloc(0, 3, 3);
 
         cmsStage* stage = cmsStageAllocCLut16bit(0, 32, 3, 3, 0);
 
-        if (!cmsStageSampleCLut16bit(stage, desaturateSampler, static_cast<void*>(&bchsw), 0)) {
+        if (!cmsStageSampleCLut16bit(stage, desaturateSampler, static_cast<void*>(0), 0)) {
             // Shouldn't reach here
             cmsStageFree(stage);
             cmsPipelineFree(Lut);
@@ -354,8 +350,8 @@ public:
         cmsPipelineFree(Lut);
 
         adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::InternalRenderingIntent,
-                                                            KoColorConversionTransformation::InternalConversionFlags);
+                                                            KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                            KoColorConversionTransformation::HighQuality);
 
         return adj;
     }
@@ -429,16 +425,9 @@ private:
         return iccp->asLcms();
     }
 
-    typedef struct {
-        qreal Saturation;
-
-    } BCHSWADJUSTS, *LPBCHSWADJUSTS;
-
-
-    static int desaturateSampler(register const cmsUInt16Number In[], register cmsUInt16Number Out[], register void* /*Cargo*/) {
+    static int desaturateSampler(register const cmsUInt16Number In[], register cmsUInt16Number Out[], void*) {
         cmsCIELab LabIn, LabOut;
         cmsCIELCh LChIn, LChOut;
-        //LPBCHSWADJUSTS bchsw = (LPBCHSWADJUSTS) Cargo;
 
         cmsLabEncoded2Float(&LabIn, In);
 
@@ -446,7 +435,7 @@ private:
 
         // Do some adjusts on LCh
         LChOut.L = LChIn.L;
-        LChOut.C = 0;//LChIn.C + bchsw->Saturation;
+        LChOut.C = 0;
         LChOut.h = LChIn.h;
 
         cmsLCh2Lab(&LabOut, &LChOut);

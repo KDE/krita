@@ -97,6 +97,7 @@ void KisFilterDialog::setFilter(KisFilterSP f)
     Q_ASSERT(f);
     setWindowTitle(f->name());
     d->uiFilterDialog.filterSelection->setFilter(f);
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     updatePreview();
 }
 

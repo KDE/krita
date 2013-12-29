@@ -435,7 +435,10 @@ void KisLayerManager::layerProperties()
         KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
+        Qt::WindowFlags flags = dialog->windowFlags();
+        dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
         dialog->show();
+
     }
 }
 

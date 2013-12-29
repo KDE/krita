@@ -31,8 +31,8 @@ class KisDynamicSensorFuzzy : public KisDynamicSensor
 public:
     KisDynamicSensorFuzzy();
     virtual ~KisDynamicSensorFuzzy() { }
-    virtual qreal value(const KisPaintInformation&) {
-        return rand() / (qreal)RAND_MAX;
+    virtual qreal value(const KisPaintInformation &info) {
+        return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
     }
 };
 

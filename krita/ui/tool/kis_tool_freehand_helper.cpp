@@ -140,7 +140,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
                                                    KisPaintOpSettings::OutlineMode mode) const
 {
     const KisPaintOpSettings *settings = globalSettings;
-    KisPaintInformation info(savedCursorPos);
+    KisPaintInformation info = KisPaintInformation::createHoveringModeInfo(savedCursorPos);
     KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
 
     if (!m_d->painterInfos.isEmpty()) {

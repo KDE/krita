@@ -150,6 +150,29 @@ public:
     /// Number of ms since the beginning of the stroke
     int currentTime() const;
 
+    /**
+     * The paint information may be generated not only during real
+     * stroke when the actual painting is happening, but also when the
+     * cursor is hovering the canvas. In this mode some of the sensors
+     * work a bit differently. The most outstanding example is Fuzzy
+     * sensor, which returns unit value in this mode, otherwise it is
+     * too irritating for a user.
+     *
+     * This value is true only for paint information objects created with
+     * createHoveringModeInfo() constructor.
+     *
+     * \see createHoveringModeInfo()
+     */
+    bool isHoveringMode() const;
+
+    /**
+     * Create a fake info object with isHoveringMode() property set to
+     * true.
+     *
+     * \see isHoveringMode()
+     */
+    static KisPaintInformation createHoveringModeInfo(const QPointF &pos);
+
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);

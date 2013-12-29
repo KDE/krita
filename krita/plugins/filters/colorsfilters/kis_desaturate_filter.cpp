@@ -97,8 +97,11 @@ KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget * parent, Qt::WFlag
     m_page->setupUi(this);
     m_group = new QButtonGroup(this);
     m_group->addButton(m_page->radioLightness, 0);
-    m_group->addButton(m_page->radioLuminosity, 1);
-    m_group->addButton(m_page->radioAverage, 2);
+    m_group->addButton(m_page->radioLuminosityBT709, 1);
+    m_group->addButton(m_page->radioLuminosityBT601, 2);
+    m_group->addButton(m_page->radioAverage, 3);
+    m_group->addButton(m_page->radioMin, 4);
+    m_group->addButton(m_page->radioMax, 5);
     m_group->setExclusive(true);
     connect(m_group, SIGNAL(buttonClicked(int)), SIGNAL(sigConfigurationItemChanged()));
 }

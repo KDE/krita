@@ -58,25 +58,42 @@ public:
             g = SCALE_TO_FLOAT(src->green);
             b = SCALE_TO_FLOAT(src->blue);
 
-
-
+            // http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
             switch(m_type) {
             case 0: // lightness
             {
                 gray = (qMax(qMax(r, g), b) + qMin(qMin(r, g), b)) / 2;
                 break;
             }
-            case 1: // luminosity
+            case 1: // luminosity BT 709
             {
                 gray = r * 0.2126 + g * 0.7152 + b * 0.0722;
                 break;
 
             }
-            case 2: // average
+
+            case 2: // luminosity BT 601
+            {
+                gray = r * 0.299 + g * 0.587 + b * 0.114;
+                break;
+
+            }
+            case 3: // average
             {
                 gray = (r + g + b) / 2;
                 break;
             }
+            case 4: // min
+            {
+                gray = qMin(qMin(r, g), b);
+                break;
+            }
+            case 5: // min
+            {
+                gray = qMax(qMax(r, g), b);
+                break;
+            }
+
             default:
                 ;
             }

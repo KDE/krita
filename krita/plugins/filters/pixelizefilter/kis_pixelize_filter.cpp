@@ -58,6 +58,8 @@
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
 {
     setSupportsPainting(true);
+    setSupportsThreading(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
@@ -98,9 +100,7 @@ void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
             qint32 w = pixelWidth;
             w = qMin(w, width - x);
 
-            for (qint32 i = 0; i < pixelSize; i++) {
-                average[i] = 0;
-            }
+            average.fill(0, pixelSize);
             count = 0;
 
             //read
@@ -144,3 +144,4 @@ KisFilterConfiguration* KisPixelizeFilter::factoryConfiguration(const KisPaintDe
     config->setProperty("pixelHeight", 10);
     return config;
 }
+

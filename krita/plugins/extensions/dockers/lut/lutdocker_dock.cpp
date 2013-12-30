@@ -219,7 +219,7 @@ void LutDockerDock::updateDisplaySettings()
     m_page->setEnabled(m_canvas->canvasIsOpenGL() && m_canvas->view()->image()->colorSpace()->colorDepthId().id().startsWith("F"));
 
 //    qDebug() << "updateDisplaySettings();" << m_chkUseOcio->isChecked() << m_ocioConfig << m_canvas->canvasIsOpenGL();
-    if (m_chkUseOcio->isChecked() && m_ocioConfig && m_canvas->canvasIsOpenGL()) {
+    if (m_chkUseOcio->isChecked() && m_ocioConfig && m_canvas->canvasIsOpenGL() && m_canvas->view()->image()->colorSpace()->colorDepthId().id().startsWith("F")) {
         m_displayFilter->config = m_ocioConfig;
 //        qDebug() << "\t" << m_displayFilter->config;
         m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());

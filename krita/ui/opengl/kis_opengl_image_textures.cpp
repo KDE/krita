@@ -69,6 +69,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_checkerTexture(0)
+    , m_allChannelsSelected(true)
+    , m_useOcio(false)
 {
     Q_ASSERT(renderingIntent < 4);
 
@@ -209,12 +211,15 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     int firstRow = yToRow(artificialRect.top());
     int lastRow = yToRow(artificialRect.bottom());
 
-
-    KisConfig cfg;
     QBitArray channelFlags; // empty by default
 
-    if (m_useOcio && !m_allChannelsSelected) {
-        channelFlags = m_channelFlags;
+    if (!m_channelFlags.size() == m_image->projection()->colorSpace()->channels().size()) {
+        setChannelFlags(QBitArray());
+    }
+    if (!m_useOcio) { // Ocio does its own channel flipping
+        if (!m_allChannelsSelected) { // and we do it only if necessary
+            channelFlags = m_channelFlags;
+        }
     }
 
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
@@ -343,6 +348,11 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
     QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
+    if (m_channelFlags.size() != channelInfo.size()) {
+        m_channelFlags = QBitArray();
+    }
+
     for (int i = 0; i < m_channelFlags.size(); ++i) {
         if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
             selectedChannels++;

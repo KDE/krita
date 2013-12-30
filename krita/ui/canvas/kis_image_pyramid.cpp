@@ -136,6 +136,11 @@ void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
     QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
+    if (channelInfo.size() != m_channelFlags.size()) {
+        m_channelFlags = QBitArray();
+    }
+
     for (int i = 0; i < m_channelFlags.size(); ++i) {
         if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
             selectedChannels++;
@@ -226,10 +231,14 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 #endif
     }
     else {
+        QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+        if (!m_channelFlags.size() == channelInfo.size()) {
+            setChannelFlags(QBitArray());
+        }
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
 
             quint8 *dst = projectionCs->allocPixelBuffer(numPixels);
-            QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
 

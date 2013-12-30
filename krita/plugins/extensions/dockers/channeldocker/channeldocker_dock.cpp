@@ -59,6 +59,7 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
         m_model->slotLayerActivated(view->image()->rootLayer());
         KisPaintDeviceSP dev = view->image()->projection();
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+        connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_canvas, SLOT(channelSelectionChanged()));
     }
 
     connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
@@ -66,3 +67,4 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
 
 #include "channeldocker_dock.moc"
+

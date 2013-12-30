@@ -401,18 +401,10 @@ void KisCanvas2::connectCurrentImage()
         m_d->prescaledProjection->setImage(image);
     }
 
-    connect(image, SIGNAL(sigImageUpdated(QRect)),
-            SLOT(startUpdateCanvasProjection(QRect)),
-            Qt::DirectConnection);
-
-    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
-            this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
-
-    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-            SLOT(startResizingImage()),
-            Qt::DirectConnection);
-    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
-            this, SLOT(finishResizingImage(qint32,qint32)));
+    connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
+    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)), SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
+    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
     startResizingImage();
 
@@ -566,6 +558,7 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
         KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
 
         emit sigCanvasCacheUpdated(info);

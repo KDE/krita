@@ -88,7 +88,7 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
                                                                   layer->opacity(), layer->opacity(),
                                                                   layer->compositeOpId(), layer->compositeOpId(),
                                                                   layer->name(), layer->name(),
-                                                                  layer->channelFlags(), m_emptyChannelFlags, true);
+                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
     m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->resetCache();
@@ -103,13 +103,20 @@ bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
 
 bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
 {
+    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+        layer->setChannelFlags(m_emptyChannelFlags);
+        KisPaintLayer *paintLayer = 0;
+        if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+            paintLayer->setChannelLockFlags(QBitArray());
+        }
+
+    }
+
     KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
                                                                   layer->opacity(), layer->opacity(),
                                                                   layer->compositeOpId(), layer->compositeOpId(),
                                                                   layer->name(), layer->name(),
-                                                                  layer->channelFlags(), m_emptyChannelFlags, true);
-
-    m_image->undoAdapter()->addCommand(propsCommand);
+                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
 
     if (layer->original()) {
         KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
@@ -135,15 +142,8 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
             delete cmd;
     }
 
-    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
-        layer->setChannelFlags(QBitArray());
-        KisPaintLayer *paintLayer = 0;
-        if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
-            paintLayer->setChannelLockFlags(QBitArray());
-        }
 
-    }
-
+    m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->setDirty();
 

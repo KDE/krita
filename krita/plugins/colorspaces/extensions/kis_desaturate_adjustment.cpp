@@ -95,7 +95,7 @@ public:
             }
 
             default:
-                ;
+                gray = 0;
             }
             dst->red = SCALE_FROM_FLOAT(gray);
             dst->green = SCALE_FROM_FLOAT(gray);

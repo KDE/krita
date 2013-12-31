@@ -464,6 +464,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    if (m_d->filterManager->isStrokeRunning()) {
+        m_d->filterManager->cancel();
+    }
+
     {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {

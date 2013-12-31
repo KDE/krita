@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="21"
+   height="21"
+   id="svg3771"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="deletelayer.svg"
+   inkscape:export-filename="/home/jens/KDE/krita/finished/deletelayer.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3773" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.24699"
+     inkscape:cx="13.934613"
+     inkscape:cy="18.315191"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="1563"
+     inkscape:window-height="878"
+     inkscape:window-x="37"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3779"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3776">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,-11)">
+    <path
+       sodipodi:type="arc"
+       style="fill:#262626;fill-opacity:1;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4484"
+       sodipodi:cx="16.5"
+       sodipodi:cy="16.5"
+       sodipodi:rx="13.5"
+       sodipodi:ry="13.5"
+       d="m 30,16.5 a 13.5,13.5 0 1 1 -27,0 13.5,13.5 0 1 1 27,0 z"
+       transform="matrix(0.67135836,0,0,0.67487822,-0.61653839,10.369467)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4471"
+       sodipodi:cx="16"
+       sodipodi:cy="16"
+       sodipodi:rx="15"
+       sodipodi:ry="15"
+       d="M 31,16 C 31,24.284271 24.284271,31 16,31 7.7157288,31 1,24.284271 1,16 1,7.7157288 7.7157288,1 16,1 24.284271,1 31,7.7157288 31,16 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;stroke:#808080;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4477"
+       sodipodi:cx="14"
+       sodipodi:cy="14"
+       sodipodi:rx="13"
+       sodipodi:ry="13"
+       d="M 27,14 A 13,13 0 1 1 1,14 13,13 0 1 1 27,14 z"
+       transform="matrix(0.72419713,0,0,0.72408302,0.35947762,11.36006)" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4479"
+       width="12.600051"
+       height="4.2005305"
+       x="4.1975484"
+       y="19.394987"
+       rx="1.4000057"
+       ry="1.0965425" />
+  </g>
+</svg>

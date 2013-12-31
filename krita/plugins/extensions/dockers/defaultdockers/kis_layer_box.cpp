@@ -161,7 +161,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnDelete->setIcon(koIcon("delete"));
+    m_wdgLayerBox->bnDelete->setIcon(koIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
@@ -183,10 +183,10 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnProperties->setIcon(koIcon("properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("delete"), i18n("&Remove Layer"), this);
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
@@ -204,7 +204,7 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("document-properties"), i18n("&Properties..."),this);
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));

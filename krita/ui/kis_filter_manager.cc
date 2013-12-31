@@ -47,8 +47,11 @@
 
 
 struct KisFilterManager::Private {
-    Private() : reapplyAction(0), actionCollection(0) {
-
+    Private()
+        : reapplyAction(0)
+        , actionCollection(0)
+        , filterDialog(0)
+    {
     }
     KAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
@@ -61,6 +64,8 @@ struct KisFilterManager::Private {
     KisStrokeId currentStrokeId;
 
     QSignalMapper actionsMapper;
+
+    KisDlgFilter *filterDialog;
 };
 
 KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc) : d(new Private)
@@ -156,6 +161,11 @@ void KisFilterManager::reapplyLastFilter()
 
 void KisFilterManager::showFilterDialog(const QString &filterId)
 {
+    if (d->filterDialog && d->filterDialog->isVisible()) {
+        KisFilterSP filter = KisFilterRegistry::instance()->value(filterId);
+        d->filterDialog->setFilter(filter);
+        return;
+    }
     /**
      * The UI should show only after every running stroke is finished,
      * so the barrier is added here.
@@ -193,10 +203,11 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
     }
 
     if (filter->showConfigurationWidget()) {
-        KisFilterDialog* dialog = new KisFilterDialog(d->view , d->view->activeNode(), this);
-        dialog->setFilter(filter);
-        dialog->setVisible(true);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        if (!d->filterDialog) {
+            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this);
+        }
+        d->filterDialog->setFilter(filter);
+        d->filterDialog->setVisible(true);
     } else {
         apply(KisSafeFilterConfigurationSP(filter->defaultConfiguration(d->view->activeNode()->original())));
         finish();

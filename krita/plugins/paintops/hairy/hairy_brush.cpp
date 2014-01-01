@@ -52,7 +52,7 @@ HairyBrush::HairyBrush()
     srand48(time(0));
     m_counter = 0;
     m_lastAngle = 0.0;
-    m_oldPressure = 0.0f;
+    m_oldPressure = 1.0f;
    
     m_saturationId = -1;
     m_transfo = 0;
@@ -420,14 +420,18 @@ inline void HairyBrush::darkenPixel(int wx, int wy, const KoColor &color){
 
 double HairyBrush::computeMousePressure(double distance)
 {
-    double scale = 20.0;
-    double minPressure = 0.02;
+    static const double scale = 20.0;
+    static const double minPressure = 0.02;
+
     double oldPressure = m_oldPressure;
 
     double factor = 1.0 - distance / scale;
     if (factor < 0.0) factor = 0.0;
 
     double result = ((4.0 * oldPressure) + minPressure + factor) / 5.0;
+
+    qDebug() << "computeMousePressure(). scale" << oldPressure << factor << result;
+
     m_oldPressure = result;
     return result;
 }

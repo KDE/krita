@@ -416,15 +416,16 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
             if (deskWidth > 1024) {
                 // a nice width, and slightly less than total available
                 // height to componensate for the window decs
-                w = ( deskWidth / 3 ) * 2;
-                h = desk.height();
+                w = (deskWidth / 3) * 2;
+                h = (desk.height() / 3) * 2;
             }
             else {
                 w = desk.width();
                 h = desk.height();
             }
 
-            setGeometry(x, y, w, h);
+            move(x,y);
+            setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));

@@ -30,10 +30,10 @@
 #include <math.h>
 
 #define maxPresetCount 10
-#define brushInnerRadius 80.0
-#define brushOuterRadius 130.0
-#define colorInnerRadius 55.0
-#define colorOuterRadius 75.0
+#define brushInnerRadius 120.0
+#define brushOuterRadius 140.0
+#define colorInnerRadius 75.0
+#define colorOuterRadius 95.0
 #define brushRadius (brushInnerRadius+brushOuterRadius)/2
 
 class PopupColorTriangle : public KoTriangleColorSelector
@@ -85,6 +85,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 {
     m_triangleColorSelector  = new PopupColorTriangle(this);
     m_triangleColorSelector->move(90, 90);
+    m_triangleColorSelector->resize(140, 140);
     m_triangleColorSelector->setVisible(true);
 
     setAutoFillBackground(true);
@@ -200,7 +201,7 @@ void KisPopupPalette::setVisible(bool b)
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(280,280);
+    return QSize(320,320);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)

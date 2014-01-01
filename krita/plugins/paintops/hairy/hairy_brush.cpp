@@ -430,8 +430,6 @@ double HairyBrush::computeMousePressure(double distance)
 
     double result = ((4.0 * oldPressure) + minPressure + factor) / 5.0;
 
-    qDebug() << "computeMousePressure(). scale" << oldPressure << factor << result;
-
     m_oldPressure = result;
     return result;
 }

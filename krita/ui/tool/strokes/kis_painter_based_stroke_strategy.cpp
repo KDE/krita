@@ -128,9 +128,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             indirect->setTemporaryOpacity(m_resources->opacity());
 
             QBitArray channelLockFlags = m_resources->channelLockFlags();
-            if (channelLockFlags.size() > 0) {
-                indirect->setTemporaryChannelFlags(channelLockFlags);
-            }
+            indirect->setTemporaryChannelFlags(channelLockFlags);
         }
         else {
             hasIndirectPainting = false;

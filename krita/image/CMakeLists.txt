@@ -161,7 +161,6 @@ set(kritaimage_LIB_SRCS
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
    ${__per_arch_circle_mask_generator_objs}
-   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp

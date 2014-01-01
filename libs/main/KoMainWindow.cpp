@@ -815,6 +815,7 @@ void KoMainWindow::slotLoadCompleted()
         // We had no document, set the new one
         setRootDocument(newdoc);
     }
+    slotProgress(-1);
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
@@ -1618,7 +1619,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 void KoMainWindow::slotProgress(int value)
 {
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
-    if (value <= -1) {
+    if (value <= -1 || value >= 100) {
         if (d->progress) {
             statusBar()->removeWidget(d->progress);
             delete d->progress;

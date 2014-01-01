@@ -131,7 +131,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     switchPortraitLandscape();
 }
 
-void KisCustomImageWidget::showEvent(QShowEvent *){
+void KisCustomImageWidget::showEvent(QShowEvent *)
+{
+    fillPredefined();
     this->createButton->setFocus(); 
 }
 
@@ -271,6 +273,8 @@ void KisCustomImageWidget::screenSizeClicked()
 
 void KisCustomImageWidget::fillPredefined()
 {
+    cmbPredefined->clear();
+
     cmbPredefined->addItem("");
 
     QString appName = KGlobal::mainComponent().componentName();

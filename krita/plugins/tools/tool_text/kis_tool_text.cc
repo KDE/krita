@@ -35,13 +35,66 @@
 
 
 KisToolText::KisToolText(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
 }
 
 KisToolText::~KisToolText()
 {
+}
+
+void KisToolText::beginPrimaryAction(KoPointerEvent *event)
+{
+    setMode(KisTool::PAINT_MODE);
+
+    QPointF pos = convertToPixelCoord(event);
+    m_dragStart = m_dragCenter = m_dragEnd = pos;
+    event->accept();
+}
+
+void KisToolText::continuePrimaryAction(KoPointerEvent *event)
+{
+    QPointF pos = convertToPixelCoord(event);
+
+    if (event->modifiers() & Qt::AltModifier) {
+        QPointF trans = pos - m_dragEnd;
+        m_dragStart += trans;
+        m_dragEnd += trans;
+    } else {
+        QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
+                              ? m_dragCenter : m_dragStart);
+        // square?
+        if (event->modifiers() & Qt::ShiftModifier) {
+            double size = qMax(fabs(diag.x()), fabs(diag.y()));
+            double w = diag.x() < 0 ? -size : size;
+            double h = diag.y() < 0 ? -size : size;
+            diag = QPointF(w, h);
+        }
+
+        // resize around center point?
+        if (event->modifiers() & Qt::ControlModifier) {
+            m_dragStart = m_dragCenter - diag;
+            m_dragEnd = m_dragCenter + diag;
+        } else {
+            m_dragEnd = m_dragStart + diag;
+        }
+    }
+    updateArea();
+
+    m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
+                           (m_dragStart.y() + m_dragEnd.y()) / 2);
+    KisToolPaint::requestUpdateOutline(event->point);
+}
+
+void KisToolText::endPrimaryAction(KoPointerEvent *event)
+{
+    setMode(KisTool::HOVER_MODE);
+
+    updateArea();
+
+    finishRect(QRectF(m_dragStart, m_dragEnd).normalized());
+    event->accept();
 }
 
 void KisToolText::finishRect(const QRectF &rect)

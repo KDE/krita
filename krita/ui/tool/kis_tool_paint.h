@@ -78,9 +78,9 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);

@@ -34,9 +34,9 @@ public:
 
     explicit KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 
-    void beginPrimaryAction(KoPointerEvent *event);
-    void continuePrimaryAction(KoPointerEvent *event);
-    void endPrimaryAction(KoPointerEvent *event);
+    virtual void beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+    virtual void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
     virtual void deactivate();
@@ -44,14 +44,15 @@ public:
 protected:
     virtual void finishRect(const QRectF&)=0;
 
-private:
-    virtual void paintRectangle(QPainter &gc, const QRect &viewRect);
-    void updateArea();
-
     QPointF m_dragCenter;
     QPointF m_dragStart;
     QPointF m_dragEnd;
     ToolType m_type;
+
+    void updateArea();
+    virtual void paintRectangle(QPainter &gc, const QRect &viewRect);
+
+
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

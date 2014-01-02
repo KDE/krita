@@ -24,8 +24,11 @@
 #include <KoViewConverter.h>
 
 
-KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor) :
-    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_type(type)
+KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor)
+    : KisToolShape(canvas, cursor)
+    , m_dragStart(0, 0)
+    , m_dragEnd(0, 0)
+    , m_type(type)
 {
 }
 

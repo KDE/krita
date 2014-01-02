@@ -35,6 +35,10 @@ public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
 
+    virtual void beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+    virtual void endPrimaryAction(KoPointerEvent *event);
+
     virtual QList< QWidget* > createOptionWidgets();
 
     virtual KisPainter::FillStyle fillStyle();

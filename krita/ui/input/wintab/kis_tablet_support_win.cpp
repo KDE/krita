@@ -83,6 +83,13 @@ bool qt_tablet_tilt_support;
  */
 QPointer<QWidget> kis_tablet_pressed = 0;
 
+/**
+ * The hash taple of available cursor, containing information about
+ * each curror, its resolution and capabilities
+ */
+typedef QHash<quint64, QTabletDeviceData> QTabletCursorInfo;
+Q_GLOBAL_STATIC(QTabletCursorInfo, tCursorInfo)
+QTabletDeviceData currentTabletPointer;
 
 /**
  * This is a default implementation of a class for converting the
@@ -114,9 +121,13 @@ private:
         const int leftButtonValue = 0x1;
         const int middleButtonValue = 0x2;
         const int rightButtonValue = 0x4;
+        const int doubleClickButtonValue = 0x7;
+
+        button = currentTabletPointer.buttonsMap.value(button);
 
         return button == leftButtonValue ? Qt::LeftButton :
             button == rightButtonValue ? Qt::RightButton :
+            button == doubleClickButtonValue ? Qt::MiddleButton :
             button == middleButtonValue ? Qt::MiddleButton :
             button ? Qt::LeftButton /* fallback item */ :
             Qt::NoButton;
@@ -125,15 +136,6 @@ private:
 
 static KisTabletSupportWin::ButtonsConverter *globalButtonsConverter =
     new DefaultButtonsConverter();
-
-
-/**
- * The hash taple of available cursor, containing information about
- * each curror, its resolution and capabilities
- */
-typedef QHash<quint64, QTabletDeviceData> QTabletCursorInfo;
-Q_GLOBAL_STATIC(QTabletCursorInfo, tCursorInfo)
-QTabletDeviceData currentTabletPointer;
 
 /**
  * Resolves the WINTAB api functions
@@ -509,6 +511,14 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
 
                     currentTabletPointer = globalCursorInfo->value(uniqueId);
                     tabletUpdateCursor(currentTabletPointer, currentCursor);
+
+                    BYTE logicalButtons[32];
+                    memset(logicalButtons, 0, 32);
+                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
+
+                    currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
+                    currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
+                    currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
                 }
             }
         break;

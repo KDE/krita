@@ -424,6 +424,9 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
                 h = desk.height();
             }
 
+            x += (desk.width() - w) / 2;
+            y += (desk.height() - h) / 2;
+
             move(x,y);
             setGeometry(geometry().x(), geometry().y(), w, h);
         }

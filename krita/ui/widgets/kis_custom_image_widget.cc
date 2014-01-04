@@ -32,7 +32,7 @@
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
-
+#include <QSpacerItem>
 
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
@@ -90,6 +90,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
     
+    imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));

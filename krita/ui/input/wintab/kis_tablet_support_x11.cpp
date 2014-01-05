@@ -28,6 +28,8 @@
 #include "kis_tablet_support.h"
 #include "wacomcfg.h"
 
+//#define DEBUG_TABLET_EVENTS
+
 /**
  * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
  * intended to block Mouse events after any accepted Tablet event. In
@@ -305,6 +307,18 @@ void kis_x11_init_tablet()
                         device_data.maxTanPressure = 0;
                         device_data.minZ = 0;
                         device_data.maxZ = 0;
+
+#ifdef DEBUG_TABLET_EVENTS
+                        qDebug() << "=== Getting tablet limits ===";
+                        qDebug() << ppVar(a[0].min_value) << ppVar(a[0].max_value);
+                        qDebug() << ppVar(a[1].min_value) << ppVar(a[1].max_value);
+                        qDebug() << ppVar(a[2].min_value) << ppVar(a[2].max_value) << " <-- pressure";
+                        qDebug() << ppVar(a[3].min_value) << ppVar(a[3].max_value);
+                        qDebug() << ppVar(a[4].min_value) << ppVar(a[4].max_value);
+                        qDebug() << ppVar(a[5].min_value) << ppVar(a[5].max_value);
+                        qDebug() << "=============================";
+#endif /* DEBUG_TABLET_EVENTS */
+
 #endif
 
                         // got the max pressure no need to go further...
@@ -501,6 +515,51 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         hiRes = tablet->scaleCoord(motion->axis_data[0], motion->axis_data[1],
                                     screenArea.x(), screenArea.width(),
                                     screenArea.y(), screenArea.height());
+
+        /**
+         * Workaround "pressure" bug of the evdev driver.
+         *
+         * The bug results in the pressure drop to zero when real
+         * pressure is 1.0 or higher.
+         */
+        if (!pressure &&
+            motion->state & (Button1Mask | Button2Mask | Button3Mask) &&
+            tablet->lastMotionPressureWorkaround > (tablet->minPressure + tablet->maxPressure) / 2) {
+
+            qDebug() << "Workaround broken pressure:" << pressure << "->" << tablet->lastMotionPressureWorkaround;
+            pressure = tablet->lastMotionPressureWorkaround;
+        }
+
+        /**
+         * Workaround "jumping" bug of the evdev driver
+         *
+         * Sometimes hiRes position accidentally jumps to the topleft
+         * corner of the image. The global position still sticks to
+         * the correct position.  Such jumps happen quite rarely and do
+         * not continue for more than 1-2 motion events, so we will
+         * just drop this event to avoid dizzy lines due to rounding
+         * by 'global' position.
+         */
+        if (hiRes.y() < 0.3 * global.y()) {
+
+            qDebug() << "Workaround broken HiRes coords: event eaten" << ppVar(hiRes) << ppVar(global);
+            return true;
+        }
+
+        tablet->lastMotionPressureWorkaround = pressure;
+
+#ifdef DEBUG_TABLET_EVENTS
+        qDebug() << "*** MotionEvent ***";
+        qDebug() << ppVar(hiRes);
+        qDebug() << ppVar(global);
+        qDebug() << ppVar(pressure);
+        qDebug() << ppVar(rotation);
+        qDebug() << ppVar(xTilt) << ppVar(yTilt);
+        qDebug() << ppVar(motion->deviceid);
+        qDebug() << ppVar(tablet->minPressure) << ppVar(tablet->maxPressure);
+        qDebug() << "*******************";
+#endif /* DEBUG_TABLET_EVENTS */
+
     } else if (button) {
         xTilt = (short) button->axis_data[3];
         yTilt = (short) button->axis_data[4];
@@ -509,6 +568,38 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         hiRes = tablet->scaleCoord(button->axis_data[0], button->axis_data[1],
                                     screenArea.x(), screenArea.width(),
                                     screenArea.y(), screenArea.height());
+
+        /**
+         * Workaround "tablet press" bug of the evdev driver
+         *
+         * Evdev driver returns null hi-res position for the Tablet Press event.
+         * That is weird, but we can do nothing better than just fill it with
+         * rounded 'global' position.
+         */
+        if (!button->axis_data[0] &&
+            !button->axis_data[1] &&
+            !global.isNull()) {
+
+            qDebug() << "Workaround null Tablet Press position!";
+            hiRes = global;
+        }
+
+        tablet->lastMotionPressureWorkaround = pressure;
+
+#ifdef DEBUG_TABLET_EVENTS
+        qDebug() << "*** ButtonEvent ***";
+        qDebug() << ppVar(pressure);
+        qDebug() << ppVar(rotation);
+        qDebug() << ppVar(xTilt) << ppVar(yTilt);
+        qDebug() << ppVar(button->deviceid);
+        qDebug() << ppVar(button->axis_data[0]) << ppVar(button->axis_data[1]);
+        qDebug() << ppVar(tablet->minPressure) << ppVar(tablet->maxPressure);
+        qDebug() << ppVar(global);
+        qDebug() << ppVar(curr);
+        qDebug() << ppVar(hiRes);
+        qDebug() << "*******************";
+#endif /* DEBUG_TABLET_EVENTS */
+
     }
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;

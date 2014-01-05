@@ -33,6 +33,7 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 
 
@@ -44,8 +45,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_smudgePainter(new KisPainter(m_tempDev)),
     m_colorRatePainter(new KisPainter(m_tempDev)),
     m_smudgeRateOption("SmudgeRate"),
-    m_colorRateOption("ColorRate"),
-    m_colorPicker(painter->device(), painter->paintColor())
+    m_colorRateOption("ColorRate")
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -205,7 +205,10 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // of the dab and fill  the temporary paint device with that color
 
         KoColor color = painter()->paintColor();
-        m_colorPicker.pickColor(pt.x(), pt.y(), color.data());
+
+        KisCrossDeviceColorPickerInt colorPicker(painter()->device(), color);
+        colorPicker.pickColor(pt.x(), pt.y(), color.data());
+
         m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
     }
 

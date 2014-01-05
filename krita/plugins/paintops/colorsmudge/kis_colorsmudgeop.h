@@ -33,7 +33,6 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
-#include <kis_cross_device_color_picker.h>
 
 class QPointF;
 class KoAbstractGradient;
@@ -71,7 +70,6 @@ private:
     KisPressureGradientOption m_gradientOption;
     QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisCrossDeviceColorPickerInt m_colorPicker;
     QPointF                   m_lastPaintPos;
 };
 

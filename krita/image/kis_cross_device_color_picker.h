@@ -58,6 +58,19 @@ struct PickerTraitInt {
     }
 };
 
+/**
+ * The picker class is supposed to help to pick color from one device
+ * and automatically convert it to the color space of another device
+ *
+ * WARNING: Please note, that if you want to access correct rawData(),
+ *          you shouldn't store the picker class (as well as any
+ *          random accessor class) across different calls to
+ *          paintAt. This is related to the fact that
+ *          KisRandomAccessor has an internal cache of the tiles, but
+ *          any tile may become 'old' with the time, so you'll end up
+ *          reading from the old tile instead of current one.
+ */
+
 template <class Traits>
 class KisCrossDeviceColorPickerImpl
 {

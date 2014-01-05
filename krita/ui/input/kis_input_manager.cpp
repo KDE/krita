@@ -186,7 +186,7 @@ void KisInputManager::Private::debugTabletEvent(QEvent *event)
 
 #define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
 #define stop_ignore_cursor_events() d->ignoreQtCursorEvents = false
-#define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) { retval = true; break; }
+#define break_if_should_ignore_cursor_events() if (d->ignoreQtCursorEvents) break;
 
 
 static inline QList<Qt::Key> KEYS() {

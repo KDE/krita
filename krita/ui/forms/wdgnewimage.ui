@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>682</width>
-    <height>524</height>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -335,8 +335,8 @@
          <widget class="QGraphicsView" name="clipPreview">
           <property name="minimumSize">
            <size>
-            <width>200</width>
-            <height>200</height>
+            <width>100</width>
+            <height>100</height>
            </size>
           </property>
           <property name="maximumSize">

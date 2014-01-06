@@ -580,7 +580,7 @@ MainWindow::~MainWindow()
 #ifdef Q_OS_WIN
 bool MainWindow::winEvent( MSG * message, long * result )
 {
-    if (message->message == WM_SETTINGCHANGE)
+    if (message && message->message == WM_SETTINGCHANGE && message->lParam)
     {
         if (wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
             d->notifySlateModeChange();

@@ -80,6 +80,9 @@ public:
      */
     bool eventFilter(QObject* object, QEvent* event );
 
+    void attachPriorityEventFilter(QObject *filter);
+    void detachPriorityEventFilter(QObject *filter);
+
     /**
      * Return the canvas this input manager is associated with.
      */

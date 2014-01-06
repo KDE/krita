@@ -27,6 +27,7 @@
 #include <kis_debug.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <input/kis_input_manager.h>
 #include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -108,11 +109,11 @@ void KisInfinityManager::imagePositionChanged()
     setVisible(visible);
 
     if (visible && !m_filterInstalled) {
-        view()->canvasBase()->canvasWidget()->installEventFilter(this);
+        view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
     }
 
     if (!visible && m_filterInstalled) {
-        view()->canvasBase()->canvasWidget()->removeEventFilter(this);
+        view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
     }
 }
 

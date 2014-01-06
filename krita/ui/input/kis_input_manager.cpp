@@ -115,6 +115,8 @@ public:
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
 
+    QSet<QObject*> priorityEventFilter;
+
     bool logTabletEvents;
     void debugMouseEvent(QEvent *event);
     void debugTabletEvent(QEvent *event);
@@ -515,6 +517,16 @@ void KisInputManager::toggleTabletLogger()
     }
 }
 
+void KisInputManager::attachPriorityEventFilter(QObject *filter)
+{
+    d->priorityEventFilter.insert(filter);
+}
+
+void KisInputManager::detachPriorityEventFilter(QObject *filter)
+{
+    d->priorityEventFilter.remove(filter);
+}
+
 void KisInputManager::setupAsEventFilter(QObject *receiver)
 {
     if (d->eventsReceiver) {
@@ -529,6 +541,20 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     bool retval = false;
     if (object != d->eventsReceiver) return retval;
+
+    if (!d->ignoreQtCursorEvents ||
+        (event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::MouseButtonDblClick &&
+         event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseMove &&
+         event->type() != QEvent::TabletPress &&
+         event->type() != QEvent::TabletMove &&
+         event->type() != QEvent::TabletRelease)) {
+
+        foreach (QObject *filter, d->priorityEventFilter) {
+            if (filter->eventFilter(object, event)) return true;
+        }
+    }
 
     // KoToolProxy needs to pre-process some events to ensure the
     // global shortcuts (not the input manager's ones) are not
@@ -749,13 +775,13 @@ bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEv
 
     QTabletEvent qte = tevent->toQTabletEvent();
     qte.ignore();
-    QApplication::sendEvent(object, &qte);
+    q->eventFilter(object, &qte);
     tevent->setAccepted(qte.isAccepted());
 
     if (!retval && !qte.isAccepted()) {
         QMouseEvent qme = tevent->toQMouseEvent();
         qme.ignore();
-        QApplication::sendEvent(object, &qme);
+        q->eventFilter(object, &qme);
         tevent->setAccepted(qme.isAccepted());
     }
 

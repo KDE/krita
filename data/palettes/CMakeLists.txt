@@ -2,15 +2,14 @@
 ########### install files ###############
 
 install( FILES  
-concept-cookie.gpl
-default.gpl
-gradient.gpl
-marker.gpl
-ps.gpl
-swatche.gpl
-web.gpl
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/palettes)
-
-
-
-
+    concept-cookie.gpl
+    default.gpl
+    gradient.gpl
+    marker.gpl
+    ps.gpl
+    swatch-cmyk.gpl
+    swatch-colored-grey.gpl
+    swatche.gpl
+    swatch-rgb.gpl
+    web.gpl
+DESTINATION ${DATA_INSTALL_DIR}/calligra/palettes)

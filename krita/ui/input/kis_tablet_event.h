@@ -88,6 +88,8 @@ public:
                             rotation(), z(), modifiers(), uniqueId());
     }
 
+    inline void workaroundResetPressure(qreal pressure) { mPress = pressure; }
+
 protected:
     QPoint mPos, mGPos;
     QPointF mHiResGlobalPos;

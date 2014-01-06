@@ -470,10 +470,12 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
          */
         QWidget *modalWidget = QApplication::activeModalWidget();
         if (modalWidget) {
-            QWidget *w = QApplication::focusWidget();
-            bool active = msg->wParam == WA_ACTIVE || msg->wParam == WA_CLICKACTIVE;
-            QFocusEvent fevent(active ? QEvent::FocusIn : QEvent::FocusOut);
-            QApplication::sendEvent(w, &fevent);
+            QWidget *focusWidget = QApplication::focusWidget();
+            if (focusWidget) {
+                bool active = msg->wParam == WA_ACTIVE || msg->wParam == WA_CLICKACTIVE;
+                QFocusEvent focusEvent(active ? QEvent::FocusIn : QEvent::FocusOut);
+                QApplication::sendEvent(focusWidget, &focusEvent);
+            }
         }
         break;
     }

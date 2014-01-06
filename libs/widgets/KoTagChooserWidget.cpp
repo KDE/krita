@@ -136,8 +136,9 @@ void KoTagChooserWidget::insertItem(QString tagName)
     int index = tags.indexOf(tagName);
     if (findIndexOf(tagName) == -1) {
         insertItemAt(index, tagName);
+        d->tags.append(tagName);
     }
-    d->tags.append(tagName);
+
 }
 
 void KoTagChooserWidget::insertItemAt(int index, QString tag)

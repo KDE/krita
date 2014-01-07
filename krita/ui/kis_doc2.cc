@@ -218,6 +218,7 @@ bool KisDoc2::saveNativeFormat(const QString &file)
 
     if (!m_d->image->tryBarrierLock()) {
         if (isAutosaving()) {
+            setDisregardAutosaveFailure(true);
             if (realAutoSaveInterval) {
                 setAutoSave(emergencyAutoSaveInterval);
             }
@@ -230,7 +231,7 @@ bool KisDoc2::saveNativeFormat(const QString &file)
             }
         }
     }
-
+    setDisregardAutosaveFailure(false);
     bool retval = KoDocument::saveNativeFormat(file);
     m_d->image->unlock();
     setAutoSave(realAutoSaveInterval);

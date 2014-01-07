@@ -667,7 +667,7 @@ protected:
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
-
+    void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading

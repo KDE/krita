@@ -35,6 +35,8 @@ public:
 public:
     KisToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
 
+    void forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
+
     /**
      * Forwards the event to the active tool and returns true if the
      * event 'was not ignored'.  That is by default the event is

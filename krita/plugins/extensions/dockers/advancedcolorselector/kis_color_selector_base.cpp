@@ -416,7 +416,7 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 
     m_colorUpdateAllowed=false;
 
-    if (role==Foreground)
+    if (role == Foreground)
         m_canvas->resourceManager()->setForegroundColor(color);
     else
         m_canvas->resourceManager()->setBackgroundColor(color);
@@ -434,9 +434,9 @@ void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());
         updateColorPreview(c);
-        if(m_colorUpdateAllowed==false)
-            return;
-        setColor(c);
+        if (m_colorUpdateAllowed) {
+            setColor(c);
+        }
     }
 }
 

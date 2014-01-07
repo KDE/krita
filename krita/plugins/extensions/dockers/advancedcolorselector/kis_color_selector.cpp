@@ -295,12 +295,21 @@ void KisColorSelector::setColor(const QColor &color)
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
-    if(m_grabbingComponent && (e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)) {
+    if (m_grabbingComponent && (e->buttons() & Qt::LeftButton || e->buttons() & Qt::RightButton)) {
+
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         m_currentColor=m_mainComponent->currentColor();
         KoColor kocolor(m_currentColor, colorSpace());
         updateColorPreview(kocolor.toQColor());
+
+        if (e->buttons() & Qt::LeftButton) {
+            commitColor(kocolor, Foreground);
+        }
+        else if (e->buttons() & Qt::RightButton) {
+            commitColor(kocolor, Background);
+        }
+
     }
 }
 

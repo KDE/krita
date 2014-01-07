@@ -7,4 +7,9 @@
          </magic>
          <glob pattern="*.flipbook"/>
   </mime-type>
+  <mime-type type="application/x-krita-paintoppreset">
+         <comment xml:lang="en">Krita Brush Preset</comment>
+         <glob pattern="*.kpp"/>
+  </mime-type>
+
 </mime-info>

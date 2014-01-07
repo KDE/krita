@@ -86,7 +86,7 @@ protected:
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
-    virtual void requestUpdateOutline(const QPointF &outlineDocPoint);
+    virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
     /** If the paint tool support outline like brushes, set to true.
     *   If not (e.g. gradient tool), set to false. Default is false.
@@ -96,7 +96,8 @@ protected:
     }
 
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
-                                KisPaintOpSettings::OutlineMode outlineMode);
+                                        const KoPointerEvent *event,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
     bool pickColor(const QPointF &documentPixel, AlternateAction action);

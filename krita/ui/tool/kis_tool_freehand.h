@@ -76,6 +76,7 @@ protected:
     virtual void endStroke();
 
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        const KoPointerEvent *event,
                                         KisPaintOpSettings::OutlineMode outlineMode);
 
 

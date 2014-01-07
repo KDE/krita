@@ -92,7 +92,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                            (m_dragStart.y() + m_dragEnd.y()) / 2);
-    KisToolPaint::requestUpdateOutline(event->point);
+    KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)

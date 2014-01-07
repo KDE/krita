@@ -171,7 +171,12 @@ public:
      *
      * \see isHoveringMode()
      */
-    static KisPaintInformation createHoveringModeInfo(const QPointF &pos);
+    static KisPaintInformation createHoveringModeInfo(const QPointF &pos,
+                                                      qreal pressure = PRESSURE_DEFAULT,
+                                                      qreal xTilt = 0.0, qreal yTilt = 0.0,
+                                                      qreal rotation = 0.0,
+                                                      qreal tangentialPressure = 0.0,
+                                                      qreal perspective = 1.0);
 
     void toXML(QDomDocument&, QDomElement&) const;
 

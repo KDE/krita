@@ -175,7 +175,7 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     // FIXME: workaround for the Duplicate Op
     tryPickByPaintOp(event, PickFgImage);
 
-    requestUpdateOutline(event->point);
+    requestUpdateOutline(event->point, event);
 
     if (!nodeEditable() || nodePaintAbility() != PAINT) {
         event->ignore();
@@ -201,7 +201,7 @@ void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    requestUpdateOutline(event->point);
+    requestUpdateOutline(event->point, event);
 
     /**
      * Actual painting
@@ -294,7 +294,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
 
     currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
-    requestUpdateOutline(m_initialGestureDocPoint);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     m_lastDocumentPoint = event->point;
 }
@@ -309,7 +309,7 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
     }
 
     QCursor::setPos(m_initialGestureGlobalPoint);
-    requestUpdateOutline(m_initialGestureDocPoint);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);
     resetCursorStyle();
@@ -347,11 +347,13 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 }
 
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
-                                          KisPaintOpSettings::OutlineMode outlineMode)
+                                             const KoPointerEvent *event,
+                                             KisPaintOpSettings::OutlineMode outlineMode)
 {
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
 
     return m_helper->paintOpOutline(imagePos,
+                                    event,
                                     currentPaintOpPreset()->settings(),
                                     outlineMode);
 }

@@ -132,9 +132,20 @@ bool KisPaintInformation::isHoveringMode() const
     return d->isHoveringMode;
 }
 
-KisPaintInformation KisPaintInformation::createHoveringModeInfo(const QPointF &pos)
+KisPaintInformation
+KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
+                                            qreal pressure,
+                                            qreal xTilt, qreal yTilt,
+                                            qreal rotation,
+                                            qreal tangentialPressure,
+                                            qreal perspective)
 {
-    KisPaintInformation info(pos);
+    KisPaintInformation info(pos,
+                             pressure,
+                             xTilt, yTilt,
+                             rotation,
+                             tangentialPressure,
+                             perspective, 0);
     info.d->isHoveringMode = true;
     return info;
 }

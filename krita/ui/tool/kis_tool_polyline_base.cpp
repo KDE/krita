@@ -139,7 +139,7 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
             (basePoint - pixelToView(m_dragEnd)).manhattanLength() < SNAPPING_THRESHOLD;
 
         updateCanvasViewRect(QRectF(basePoint, 2 * QSize(SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH, SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH)).translated(-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH,-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH));
-        KisToolPaint::requestUpdateOutline(event->point);
+        KisToolPaint::requestUpdateOutline(event->point, event);
     } else {
         KisToolPaint::mouseMoveEvent(event);
     }

@@ -140,7 +140,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
     m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
     updatePreview();
-    KisToolPaint::requestUpdateOutline(event->point);
+    KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolLine::endPrimaryAction(KoPointerEvent *event)

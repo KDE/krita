@@ -209,7 +209,7 @@ void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction a
 {
     if (pickColor(event->point, action)) {
         setMode(SECONDARY_PAINT_MODE);
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, event);
         useCursor(KisCursor::pickerCursor());
     } else {
         KisTool::beginAlternateAction(event, action);
@@ -229,7 +229,7 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
     if (pickColor(event->point, action)) {
         setMode(KisTool::HOVER_MODE);
         resetCursorStyle();
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, event);
     } else {
         KisTool::endAlternateAction(event, action);
     }
@@ -267,7 +267,7 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
     KisTool::mousePressEvent(event);
     if (mode() == KisTool::HOVER_MODE) {
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, event);
     }
 }
 
@@ -275,7 +275,7 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
 {
     KisTool::mouseMoveEvent(event);
     if (mode() == KisTool::HOVER_MODE) {
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, event);
     }
 }
 
@@ -283,7 +283,7 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
     KisTool::mouseReleaseEvent(event);
     if (mode() == KisTool::HOVER_MODE) {
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, event);
     }
 }
 
@@ -413,7 +413,7 @@ void KisToolPaint::increaseBrushSize()
         increment = 10;
     }
     currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
-    requestUpdateOutline(m_outlineDocPoint);
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::decreaseBrushSize()
@@ -426,10 +426,10 @@ void KisToolPaint::decreaseBrushSize()
         decrement = -10;
     }
     currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
-    requestUpdateOutline(m_outlineDocPoint);
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
-void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
+void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
     if (!m_supportOutline) return;
 
@@ -446,7 +446,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
     }
 
     m_outlineDocPoint = outlineDocPoint;
-    m_currentOutline = getOutlinePath(m_outlineDocPoint, outlineMode);
+    m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
 
     QRectF outlinePixelRect = m_currentOutline.boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
@@ -473,8 +473,11 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 }
 
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
+                                          const KoPointerEvent *event,
                                           KisPaintOpSettings::OutlineMode outlineMode)
 {
+    Q_UNUSED(event);
+
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
         brushOutline(KisPaintInformation(imagePos), outlineMode);

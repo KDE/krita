@@ -43,6 +43,11 @@ public:
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
 
+protected:
+
+    void hideEvent(QHideEvent *);
+    void showEvent(QShowEvent *);
+
 private slots:
     void slotFgColorChanged(const KoColor &color);
     void slotColorSelectorChanged(const QColor &color);

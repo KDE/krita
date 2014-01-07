@@ -43,7 +43,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     m_layout = new QVBoxLayout(this);
     m_updateAllowed = true;
     m_delayTimer = new QTimer(this);
-    m_delayTimer->setInterval(50);
+    m_delayTimer->setInterval(5);
     connect(m_delayTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
 
 

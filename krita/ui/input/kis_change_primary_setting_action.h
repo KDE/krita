@@ -33,7 +33,9 @@ public:
     explicit KisChangePrimarySettingAction();
     virtual ~KisChangePrimarySettingAction();
 
-    virtual int priority() const;
+    void activate();
+    void deactivate();
+    int priority() const;
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);

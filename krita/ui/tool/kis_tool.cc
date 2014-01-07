@@ -76,7 +76,8 @@ struct KisTool::Private {
           currentGenerator(0),
           optionWidget(0),
           cursorShader(0),
-          useGLToolOutlineWorkaround(false)
+          useGLToolOutlineWorkaround(false),
+          isOutlineEnabled(false)
     {
     }
 
@@ -95,7 +96,7 @@ struct KisTool::Private {
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
 
     bool useGLToolOutlineWorkaround;
-
+    bool isOutlineEnabled;
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -503,6 +504,15 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
+bool KisTool::isOutlineEnabled() const
+{
+    return d->isOutlineEnabled;
+}
+
+void KisTool::setOutlineEnabled(bool value)
+{
+    d->isOutlineEnabled = value;
+}
 
 void KisTool::deleteSelection()
 {

@@ -403,6 +403,12 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
     return NONE;
 }
 
+void KisToolPaint::setOutlineEnabled(bool enabled)
+{
+    KisTool::setOutlineEnabled(enabled);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
 void KisToolPaint::increaseBrushSize()
 {
     int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
@@ -437,10 +443,11 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     KisPaintOpSettings::OutlineMode outlineMode;
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
-    if (mode() == KisTool::GESTURE_MODE ||
-        ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
-         ((mode() == HOVER_MODE) ||
-          (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
+    if (isOutlineEnabled() &&
+        (mode() == KisTool::GESTURE_MODE ||
+         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
+          ((mode() == HOVER_MODE) ||
+           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
         outlineMode = KisPaintOpSettings::CursorIsOutline;
     }

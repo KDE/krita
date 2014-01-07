@@ -56,6 +56,16 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
+void KisToolInvocationAction::activate()
+{
+    inputManager()->toolProxy()->setToolOutlineEnabled(true);
+}
+
+void KisToolInvocationAction::deactivate()
+{
+    inputManager()->toolProxy()->setToolOutlineEnabled(false);
+}
+
 int KisToolInvocationAction::priority() const
 {
     return 0;

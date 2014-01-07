@@ -680,7 +680,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     case QEvent::FocusIn:
         //Clear all state so we don't have half-matched shortcuts dangling around.
-        d->matcher.reset();
+        d->matcher.reinitialize();
 
         { // Emulate pressing of the key that are already pressed
             KisExtendedModifiersMapper mapper;
@@ -842,7 +842,6 @@ QPointF KisInputManager::widgetToDocument(const QPointF& position)
 
 void KisInputManager::profileChanged()
 {
-    d->matcher.reset();
     d->matcher.clearShortcuts();
 
     KisInputProfile *profile = KisInputProfileManager::instance()->currentProfile();

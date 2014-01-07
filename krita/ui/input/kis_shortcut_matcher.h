@@ -171,12 +171,13 @@ public:
     bool touchEndEvent(QTouchEvent *event);
 
     /**
-     * Resets the internal state of the matcher
+     * Resets the internal state of the matcher and activates the
+     * prepared action if possible.
      *
      * This should be done when the window has lost the focus for
      * some time, so that several events could be lost
      */
-    void reset();
+    void reinitialize();
 
     /**
      * Disables the start of any actions.
@@ -194,6 +195,8 @@ public:
 
 private:
     friend class KisInputManagerTest;
+
+    void reset();
 
     bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);

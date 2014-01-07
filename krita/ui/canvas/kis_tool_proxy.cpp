@@ -23,8 +23,10 @@
 
 
 KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
-    : KoToolProxy(canvas, parent)
+    : KoToolProxy(canvas, parent),
+      m_toolOutlineEnabled(false)
 {
+    connect(this, SIGNAL(toolChanged(const QString&)), SLOT(slotResetToolOutline()));
 }
 
 QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
@@ -187,4 +189,20 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
 {
     KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
     return activeTool && activeTool->primaryActionSupportsHiResEvents();
+}
+
+void KisToolProxy::slotResetToolOutline()
+{
+    setToolOutlineEnabled(m_toolOutlineEnabled);
+}
+
+void KisToolProxy::setToolOutlineEnabled(bool value)
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+
+    if (activeTool) {
+        activeTool->setOutlineEnabled(value);
+    }
+
+    m_toolOutlineEnabled = value;
 }

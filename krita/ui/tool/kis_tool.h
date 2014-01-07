@@ -182,6 +182,9 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
     void mouseMoveEvent(KoPointerEvent *event);
 
+    bool isOutlineEnabled() const;
+    virtual void setOutlineEnabled(bool value);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();

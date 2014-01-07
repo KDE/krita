@@ -25,6 +25,7 @@
 
 class KisToolProxy : public KoToolProxy
 {
+    Q_OBJECT
 public:
     enum ActionState {
         BEGIN,
@@ -45,6 +46,11 @@ public:
     bool forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround);
     bool primaryActionSupportsHiResEvents() const;
 
+    void setToolOutlineEnabled(bool value);
+
+private slots:
+    void slotResetToolOutline();
+
 private:
     KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);
     QPointF tabletToDocument(const QPointF &globalPos, const QPoint &canvasOriginWorkaround);
@@ -52,6 +58,9 @@ private:
 
 protected:
     QPointF widgetToDocument(const QPointF &widgetPoint) const;
+
+private:
+    bool m_toolOutlineEnabled;
 };
 
 #endif /* __KIS_TOOL_PROXY_H */

@@ -39,6 +39,16 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 }
 
+void KisChangePrimarySettingAction::activate()
+{
+    inputManager()->toolProxy()->setToolOutlineEnabled(true);
+}
+
+void KisChangePrimarySettingAction::deactivate()
+{
+    inputManager()->toolProxy()->setToolOutlineEnabled(false);
+}
+
 int KisChangePrimarySettingAction::priority() const
 {
     return 8;

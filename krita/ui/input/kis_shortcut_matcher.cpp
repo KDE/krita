@@ -260,6 +260,15 @@ Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
     return flags;
 }
 
+void KisShortcutMatcher::reinitialize()
+{
+    reset();
+    if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+}
+
 void KisShortcutMatcher::reset()
 {
     m_d->keys.clear();

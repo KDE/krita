@@ -65,7 +65,7 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
 
 void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 {
-    // round the size of the are to the nearest integer instead of getting aligned rect
+    // round the size of the area to the nearest integer instead of getting aligned rect
     QSize widgetSize = coordinatesConverter->imageRectInWidgetPixels().toRect().size();
     q->updateDocumentSize(widgetSize, true);
 

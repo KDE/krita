@@ -189,6 +189,12 @@ QCursor KisCursor::pickerMinusCursor()
 
     return QCursor(picker_bitmap, picker_mask, 6, 25);
 }
+
+QCursor KisCursor::pickLayerCursor()
+{
+    return load("precise-pick-layer-icon.xpm", 7, 23);
+}
+
 QCursor KisCursor::penCursor()
 {
     static unsigned char pen_bits[] = {

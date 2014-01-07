@@ -28,6 +28,7 @@
 #include <kis_image.h>
 #include <kis_view2.h>
 #include <kis_node_manager.h>
+#include <kis_cursor.h>
 
 #include "kis_input_manager.h"
 #include "kis_tool_utils.h"
@@ -61,7 +62,7 @@ int KisSelectLayerAction::priority() const
 
 void KisSelectLayerAction::activate()
 {
-    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    QApplication::setOverrideCursor(KisCursor::pickLayerCursor());
 }
 
 void KisSelectLayerAction::deactivate()

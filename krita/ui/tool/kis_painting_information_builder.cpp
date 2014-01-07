@@ -105,13 +105,13 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,
-                                                           pressureToCurve(event->pressure()),
+                                                           PRESSURE_DEFAULT,
                                                            event->xTilt(), event->yTilt(),
                                                            event->rotation(),
-                                                           event->tangentialPressure(),
+                                                           0.0,
                                                            perspective);
     } else {
-        return KisPaintInformation(imagePoint);
+        return KisPaintInformation::createHoveringModeInfo(imagePoint);
     }
 }
 

@@ -447,7 +447,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
     if (!preset) {
         if (rserver->resources().isEmpty()) {
             KMessageBox::error(this, i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));

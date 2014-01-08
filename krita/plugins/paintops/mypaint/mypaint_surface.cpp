@@ -41,9 +41,9 @@ MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPainter* painter)
 {
     m_rgb16 = KoColorSpaceRegistry::instance()->rgb16();
     // fake a mypaint tile
-    m_dstData = m_dst->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
-    m_srcData = m_src->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
-    m_dstRgb16Data = m_rgb16->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
+    m_dstData = new quint8[m_dst->colorSpace()->pixelSize() * TILE_SIZE * TILE_SIZE, true];
+    m_srcData = new quint8[m_src->colorSpace()->pixelSize() * TILE_SIZE * TILE_SIZE, true];
+    m_dstRgb16Data = new quint8[m_rgb16->pixelSize() * TILE_SIZE * TILE_SIZE, true];
 }
 
 bool MyPaintSurface::draw_dab (float x, float y,

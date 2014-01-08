@@ -223,7 +223,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
             projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
 
-            float *dst = reinterpret_cast<float*>(projectionCs->allocPixelBuffer(numPixels));
+            float *dst = reinterpret_cast<float*>(new quint8[projectionCs->pixelSize() * numPixels]);
             half *src = reinterpret_cast<half*>(originalBytes);
 
             for (quint32 i = 0; i < numPixels; ++i) {

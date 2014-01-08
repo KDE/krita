@@ -316,7 +316,11 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
+#if QT_VERSION >= 0x040700
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
+#else
                  0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
+#endif
 
 }
 

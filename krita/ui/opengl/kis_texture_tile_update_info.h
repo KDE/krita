@@ -134,7 +134,14 @@ public:
 
         if (m_numPixels > 0) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-            quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
+            Q_ASSERT(m_numPixels == numPixels);
+            quint8* dstBuffer = 0;
+            try {
+                 dstBuffer = dstCS->allocPixelBuffer(numPixels);
+            }
+            catch (std::bad_alloc) {
+                qFatal("KisTextureTileUpdate::convertTo. Could not allocate enough memory.");
+            }
 
             // FIXME: rendering intent
             Q_ASSERT(dstBuffer && m_patchPixels);

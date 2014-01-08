@@ -221,8 +221,11 @@ void KisTextureProperties::recalculateMask()
         QRect rc = tf.mapRect(mask.rect());
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-
-    QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
+#if QT_VERSION >= 0x040700
+    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.constBits() );
+#else
+    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.bits() );
+#endif
     int width = mask.width();
     int height = mask.height();
 

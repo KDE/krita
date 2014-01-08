@@ -1181,7 +1181,7 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
 
         delete [] scaledImageData;
 
-#ifdef __BIG_ENDIAN__
+#ifdef WORDS_BIGENDIAN
         uchar * data = image.bits();
         for (int i = 0; i < image.width() * image.height(); ++i) {
             uchar r, g, b, a;

@@ -148,7 +148,6 @@ public:
 
         if (m_numPixels > 0) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-            Q_ASSERT(m_numPixels == numPixels);
             quint8* dstBuffer = 0;
             try {
                  dstBuffer = new quint8[dstCS->pixelSize() * numPixels];

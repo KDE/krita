@@ -531,7 +531,7 @@ void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
-    quint8 * floatRGBApixel = new quint[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
+    quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
     int pos = 0;
     for (int y = 0; y < rc.height(); y++)

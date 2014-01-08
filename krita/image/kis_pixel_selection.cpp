@@ -287,8 +287,8 @@ QVector<QPolygon> KisPixelSelection::outline() const
     qint32 height = selectionExtent.height();
 
     KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
-    // If the selection is small using a buffer is much fast
-    if (width*height < 5000000) {
+    // If the selection is small using a buffer is much faster
+    try {
         quint8* buffer = new quint8[width*height];
         readBytes(buffer, xOffset, yOffset, width, height);
 
@@ -297,6 +297,11 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
+    catch(std::bad_alloc) {
+        // Allocating so much memory failed, so we fall through to the slow option.
+        warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
+    }
+
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 

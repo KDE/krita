@@ -1130,73 +1130,79 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
         return QImage();
     }
 
-    qint32 imageWidth = width();
-    qint32 imageHeight = height();
-    quint32 pixelSize = colorSpace()->pixelSize();
+    try {
+        qint32 imageWidth = width();
+        qint32 imageHeight = height();
+        quint32 pixelSize = colorSpace()->pixelSize();
 
-    double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
-    double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
+        double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
+        double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
 
-    QRect srcRect;
+        QRect srcRect;
 
-    srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
-    srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
-    srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
-    srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
+        srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
+        srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
+        srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
+        srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
 
-    KisPaintDeviceSP mergedImage = projection();
-    quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
+        KisPaintDeviceSP mergedImage = projection();
+        quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
 
-    quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
-    const qint32 imageRowX = srcRect.x();
+        quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
+        const qint32 imageRowX = srcRect.x();
 
-    for (qint32 y = 0; y < scaledRect.height(); ++y) {
+        for (qint32 y = 0; y < scaledRect.height(); ++y) {
 
-        qint32 dstY = scaledRect.y() + y;
-        qint32 dstX = scaledRect.x();
-        qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
+            qint32 dstY = scaledRect.y() + y;
+            qint32 dstX = scaledRect.x();
+            qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
 
-        mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
+            mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
 
-        quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
-        quint32 columnsRemaining = scaledRect.width();
+            quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
+            quint32 columnsRemaining = scaledRect.width();
 
-        while (columnsRemaining > 0) {
+            while (columnsRemaining > 0) {
 
-            qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
+                qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
 
-            memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
+                memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
 
-            ++dstX;
-            dstPixel += pixelSize;
-            --columnsRemaining;
+                ++dstX;
+                dstPixel += pixelSize;
+                --columnsRemaining;
+            }
         }
-    }
-    delete [] imageRow;
+        delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
-                                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                                 KoColorConversionTransformation::InternalConversionFlags);
+        QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
+                                                     KoColorConversionTransformation::InternalRenderingIntent,
+                                                     KoColorConversionTransformation::InternalConversionFlags);
 
-    delete [] scaledImageData;
+        delete [] scaledImageData;
 
 #ifdef __BIG_ENDIAN__
-    uchar * data = image.bits();
-    for (int i = 0; i < image.width() * image.height(); ++i) {
-        uchar r, g, b, a;
-        a = data[0];
-        b = data[1];
-        g = data[2];
-        r = data[3];
-        data[0] = r;
-        data[1] = g;
-        data[2] = b;
-        data[3] = a;
-        data += 4;
-    }
+        uchar * data = image.bits();
+        for (int i = 0; i < image.width() * image.height(); ++i) {
+            uchar r, g, b, a;
+            a = data[0];
+            b = data[1];
+            g = data[2];
+            r = data[3];
+            data[0] = r;
+            data[1] = g;
+            data[2] = b;
+            data[3] = a;
+            data += 4;
+        }
 #endif
 
-    return image;
+        return image;
+    }
+    catch (std::bad_alloc) {
+        warnKrita << "KisImage::convertToQImage ran out of memory";
+        return QImage();
+    }
 }
 
 void KisImage::notifyLayersChanged()

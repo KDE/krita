@@ -124,7 +124,12 @@ void KisFilter::process(const KisPaintDeviceSP src,
         transaction = new KisTransaction("", temporary);
     }
 
-    processImpl(temporary, applyRect, config, progressUpdater);
+    try {
+        processImpl(temporary, applyRect, config, progressUpdater);
+    }
+    catch (std::bad_alloc) {
+        warnKrita << "Filter" << name() << "failed to allocate enough memory to run.";
+    }
 
 
     if(transaction) {

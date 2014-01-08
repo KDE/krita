@@ -384,11 +384,25 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (d->device) */
-    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    quint8* dstBytes = 0;
+    try {
+        dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bitBltWithFixedSelectio std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "dst bytes";
+        return;
+    }
+
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     // Copy the relevant bytes of raw data from srcDev
-    quint8* srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
+    quint8* srcBytes = 0;
+    try {
+        srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bitBltWithFixedSelectio std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "src bytes";
+        return;
+    }
+
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
 
     QRect selBounds = selection->bounds();
@@ -415,7 +429,14 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         /* Read the user selection (d->selection) bytes into an array, ready
         to merge in the next block*/
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
-        quint8* mergedSelectionBytes = new quint8[ totalBytes ];
+        quint8* mergedSelectionBytes = 0;
+        try {
+            mergedSelectionBytes = new quint8[ totalBytes ];
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPainter::bitBltWithFixedSelectio std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
+            return;
+        }
+
         d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)

@@ -98,8 +98,8 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-                             : KisBrush(filename)
-                             , d(new Private)
+    : KisBrush(filename)
+    , d(new Private)
 {
     d->ownData = false;
     d->useColorAsMask = false;

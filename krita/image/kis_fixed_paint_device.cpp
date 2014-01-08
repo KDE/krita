@@ -21,7 +21,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-
 #include "kis_debug.h"
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
@@ -162,19 +161,25 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
                                              intent, conversionFlags);
     } else {
-        int pSize = pixelSize();
-        int deviceWidth = m_bounds.width();
-        quint8* newData = new quint8[w * h * pSize];
-        quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
-        quint8* dstPtr = newData;
-        // copy the right area out of the paint device into data
-        for (int row = 0; row < h; row++) {
-            memcpy(dstPtr, srcPtr, w * pSize);
-            srcPtr += deviceWidth * pSize;
-            dstPtr += w * pSize;
+        try {
+            // XXX: fill the image row by row!
+            int pSize = pixelSize();
+            int deviceWidth = m_bounds.width();
+            quint8* newData = new quint8[w * h * pSize];
+            quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
+            quint8* dstPtr = newData;
+            // copy the right area out of the paint device into data
+            for (int row = 0; row < h; row++) {
+                memcpy(dstPtr, srcPtr, w * pSize);
+                srcPtr += deviceWidth * pSize;
+                dstPtr += w * pSize;
+            }
+            QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
+            return image;
         }
-        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
-        return image;
+        catch(std::bad_alloc) {
+            return QImage();
+        }
     }
 }
 

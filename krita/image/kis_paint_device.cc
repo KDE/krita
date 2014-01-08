@@ -721,7 +721,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     if (h < 0)
         return QImage();
 
-    quint8 * data;
+    quint8 *data = 0;
     try {
         data = new quint8 [w * h * pixelSize()];
     } catch (std::bad_alloc) {

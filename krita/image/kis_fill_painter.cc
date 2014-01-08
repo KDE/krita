@@ -25,6 +25,7 @@
 #include <cfloat>
 #include <stack>
 
+#include <QMessageBox>
 #include <QFontInfo>
 #include <QFontMetrics>
 #include <QPen>
@@ -298,9 +299,15 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
     std::stack<FillSegment> stack;
 
+    Status* map = 0;
     stack.push(FillSegment(startX, startY/*, 0*/));
-
-    Status* map = new Status[m_size];
+    try {
+        map = new Status[m_size];
+    }
+    catch(std::bad_alloc) {
+        warnKrita << "KisFillPainter::createFloodSelection failed to allocate" << m_size << "bytes";
+        return new KisSelection(new KisSelectionDefaultBounds(device()));
+    }
 
     memset(map, None, m_size * sizeof(Status));
 

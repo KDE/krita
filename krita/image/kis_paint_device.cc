@@ -688,19 +688,24 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
 #endif
     } else {
-        quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
-        KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
+        try {
+            quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
+            KoColorSpaceRegistry::instance()
+                    ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
 #if QT_VERSION >= 0x040700
-                ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
+                    ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
 #else
-                ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
+                    ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
 #endif
-                                  KoColorConversionTransformation::InternalRenderingIntent,
-                                  KoColorConversionTransformation::InternalConversionFlags);
+                                      KoColorConversionTransformation::InternalRenderingIntent,
+                                      KoColorConversionTransformation::InternalConversionFlags);
 
-        writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
-        delete[] dstData;
+            writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
+            delete[] dstData;
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPaintDevice::convertFromQImage: Could not allocate" << image.width() * image.height() * pixelSize() << "bytes";
+            return;
+        }
     }
     m_d->cache.invalidate();
 }

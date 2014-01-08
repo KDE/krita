@@ -67,7 +67,15 @@ public:
     void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
-        m_patchPixels = new quint8[m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height()];
+        if (!m_patchPixels) {
+            try {
+                m_patchPixels = new quint8[m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height()];
+            }
+            catch (std::bad_alloc) {
+                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
+            }
+
+        }
 
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
@@ -79,7 +87,13 @@ public:
 
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
-            quint8 *dst = new quint8[m_patchColorSpace->pixelSize() * numPixels];
+            quint8 *dst = 0;
+            try {
+                dst = new quint8[m_patchColorSpace->pixelSize() * numPixels];
+            }
+            catch (std::bad_alloc) {
+                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
+            }
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
             int channelSize = channelInfo[selectedChannelIndex]->size();

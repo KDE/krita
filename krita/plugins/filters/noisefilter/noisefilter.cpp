@@ -110,7 +110,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
 
     KisRectIteratorSP srcIt = device->createRectIteratorNG(applyRect);
 
-    quint8* interm = new quint8[ cs->pixelSize()];
+    quint8* interm = new quint8[cs->pixelSize()];
     double threshold = (100.0 - level) * 0.01;
 
     qint16 weights[2];

@@ -36,7 +36,7 @@ void KisTransactionTest::testUndo()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(0, 0, 512, 512, pixel);
 
@@ -77,7 +77,7 @@ void KisTransactionTest::testRedo()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(0, 0, 512, 512, pixel);
 

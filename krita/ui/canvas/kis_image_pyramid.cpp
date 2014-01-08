@@ -204,7 +204,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
     quint32 numPixels = rect.width() * rect.height();
 
-    quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
+    quint8 *originalBytes = new quint8[originalProjection->colorSpace()->pixelSize() * numPixels];
     originalProjection->readBytes(originalBytes, rect);
 
     if (m_displayFilter && m_useOcio
@@ -237,7 +237,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         }
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
 
-            quint8 *dst = projectionCs->allocPixelBuffer(numPixels);
+            quint8 *dst = new quint8[projectionCs->pixelSize() * numPixels];
 
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
@@ -282,7 +282,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         }
     }
 
-    quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
+    quint8 *dstBytes = new quint8[m_monitorColorSpace->pixelSize() * numPixels];
     projectionCs->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent, m_conversionFlags);
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);

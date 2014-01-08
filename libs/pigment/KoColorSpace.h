@@ -302,12 +302,6 @@ public:
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
-     * This functions allocates the ncessary memory for numPixels number of pixels.
-     * It is your responsibility to delete[] it.
-     */
-    quint8 *allocPixelBuffer(quint32 numPixels, bool clear = false, quint8 defaultvalue = 0) const;
-
-    /**
      * Convert the specified data to Lab (D50). All colorspaces are guaranteed to support this
      *
      * @param src the source data

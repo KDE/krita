@@ -596,7 +596,8 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     h = rc.height();
 
     if (w == 0 || h == 0) {
-        quint8 *defPixel = dstColorSpace->allocPixelBuffer(1, true);
+        quint8 *defPixel = new quint8[dstColorSpace->pixelSize()];
+        memset(defPixel, 0, pixelSize());
         m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
         setDefaultPixel(defPixel);
         delete defPixel;

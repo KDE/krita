@@ -48,7 +48,7 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
 
 inline quint8* allocatePixels(const KoColorSpace *colorSpace, int numPixels)
 {
-    quint8 *bytes = colorSpace->allocPixelBuffer(64 * 64 * 10);
+    quint8 *bytes = new quint8[colorSpace->pixelSize() * 64 * 64 * 10];
 
     KoColor color(Qt::red, colorSpace);
     const int pixelSize = colorSpace->pixelSize();

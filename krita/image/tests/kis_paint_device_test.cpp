@@ -136,7 +136,7 @@ void KisPaintDeviceTest::testGeometry()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(0, 0, 512, 512, pixel);
 
@@ -202,7 +202,7 @@ void KisPaintDeviceTest::testCrop()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(-14, 8, 433, 512, pixel);
 
@@ -223,7 +223,8 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
     dev->convertFromQImage(image, 0);
-    quint8* bytes = cs->allocPixelBuffer(image.width() * image.height());
+
+    quint8* bytes = new quint8[cs->pixelSize() * image.width() * image.height()];
     memset(bytes, 0, image.width() * image.height() * dev->pixelSize());
     dev->readBytes(bytes, image.rect());
 
@@ -413,10 +414,10 @@ void KisPaintDeviceTest::testCaching()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* whitePixel = cs->allocPixelBuffer(1);
+    quint8* whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
 
-    quint8* blackPixel = cs->allocPixelBuffer(1);
+    quint8* blackPixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::black, blackPixel);
 
     dev->fill(0, 0, 512, 512, whitePixel);
@@ -451,7 +452,7 @@ void KisPaintDeviceTest::testRegion()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* whitePixel = cs->allocPixelBuffer(1);
+    quint8* whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
 
     dev->fill(0, 0, 10, 10, whitePixel);
@@ -494,7 +495,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(QColor(255, 200, 155, 100), pixel);
     dev->fill(0, 0, 5000, 5000, pixel);
     delete[] pixel;
@@ -550,7 +551,6 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QCOMPARE(c1.green(), 200);
     QCOMPARE(c1.blue(), 155);
     QCOMPARE(c1.alpha(), 100);
-
 
     qDeleteAll(planes);
     swappedPlanes.clear();

@@ -191,11 +191,10 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
     }
 }
 
-
 void KisFixedPaintDevice::clear(const QRect & rc)
 {
     KoColor c(Qt::black, m_colorSpace);
-    quint8* black = m_colorSpace->allocPixelBuffer(1);
+    quint8* black = new quint8[pixelSize()];
     memcpy(black, c.data(), m_colorSpace->pixelSize());
     m_colorSpace->setOpacity(black, OPACITY_TRANSPARENT_U8, 1);
     fill(rc.x(), rc.y(), rc.width(), rc.height(), black);

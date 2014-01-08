@@ -151,7 +151,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(m_d->x);
         dev->setY(m_d->y);
-        quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
+        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+
         colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
                                     KoColorConversionTransformation::InternalRenderingIntent,
                                     KoColorConversionTransformation::InternalConversionFlags);

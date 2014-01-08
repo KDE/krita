@@ -72,7 +72,7 @@ public:
      * place to show the user what is going to happen, e.g. change the
      * cursor.
      */
-    virtual void activate();
+    virtual void activate(int shortcut);
 
     /**
      * The method is called when the action is not a candidate for
@@ -81,7 +81,7 @@ public:
      *
      * \see activate()
      */
-    virtual void deactivate();
+    virtual void deactivate(int shortcut);
 
     /**
      * Begin the action.

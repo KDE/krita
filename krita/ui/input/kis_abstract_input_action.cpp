@@ -46,12 +46,14 @@ KisAbstractInputAction::~KisAbstractInputAction()
     delete d;
 }
 
-void KisAbstractInputAction::activate()
+void KisAbstractInputAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
-void KisAbstractInputAction::deactivate()
+void KisAbstractInputAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
 void KisAbstractInputAction::begin(int shortcut, QEvent *event)

@@ -256,6 +256,28 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
     return !paintOpIgnoredEvent;
 }
 
+void KisToolFreehand::activateAlternateAction(AlternateAction action)
+{
+    if (action != ChangeSize) {
+        KisToolPaint::activateAlternateAction(action);
+        return;
+    }
+
+    useCursor(KisCursor::blankCursor());
+    setOutlineEnabled(true);
+}
+
+void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
+{
+    if (action != ChangeSize) {
+        KisToolPaint::deactivateAlternateAction(action);
+        return;
+    }
+
+    resetCursorStyle();
+    setOutlineEnabled(false);
+}
+
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (tryPickByPaintOp(event, action)) return;
@@ -268,7 +290,6 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
     setMode(GESTURE_MODE);
     m_initialGestureDocPoint = event->point;
     m_initialGestureGlobalPoint = QCursor::pos();
-    useCursor(KisCursor::blankCursor());
 
     m_lastDocumentPoint = event->point;
 }
@@ -312,7 +333,6 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
     requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);
-    resetCursorStyle();
 }
 
 bool KisToolFreehand::wantsAutoScroll() const

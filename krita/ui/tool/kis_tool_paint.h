@@ -78,6 +78,12 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual void activatePrimaryAction();
+    virtual void deactivatePrimaryAction();
+
+    virtual void activateAlternateAction(AlternateAction action);
+    virtual void deactivateAlternateAction(AlternateAction action);
+
     virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
@@ -86,7 +92,6 @@ protected:
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
-    void setOutlineEnabled(bool enabled);
     virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
     /** If the paint tool support outline like brushes, set to true.
@@ -101,6 +106,9 @@ protected:
                                         KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
+    bool isOutlineEnabled() const;
+    void setOutlineEnabled(bool enabled);
+
     bool pickColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
@@ -176,6 +184,7 @@ private:
 
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    bool m_isOutlineEnabled;
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

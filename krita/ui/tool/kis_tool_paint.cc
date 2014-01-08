@@ -71,7 +71,8 @@
 #include <kis_paintop_preset.h>
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-    : KisTool(canvas, cursor)
+    : KisTool(canvas, cursor),
+      m_isOutlineEnabled(false)
 {
     m_specialHoverModifier = false;
     m_optionWidgetLayout = 0;
@@ -204,13 +205,39 @@ void KisToolPaint::setMode(ToolMode mode)
     KisTool::setMode(mode);
 }
 
+void KisToolPaint::activateAlternateAction(AlternateAction action)
+{
+    if (action != PickFgNode &&
+        action != PickBgNode &&
+        action != PickFgImage &&
+        action != PickBgImage) {
+
+        KisTool::activateAlternateAction(action);
+        return;
+    }
+
+    useCursor(KisCursor::pickerCursor());
+}
+
+void KisToolPaint::deactivateAlternateAction(AlternateAction action)
+{
+    if (action != PickFgNode &&
+        action != PickBgNode &&
+        action != PickFgImage &&
+        action != PickBgImage) {
+
+        KisTool::deactivateAlternateAction(action);
+        return;
+    }
+
+    resetCursorStyle();
+}
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (pickColor(event->point, action)) {
         setMode(SECONDARY_PAINT_MODE);
         requestUpdateOutline(event->point, event);
-        useCursor(KisCursor::pickerCursor());
     } else {
         KisTool::beginAlternateAction(event, action);
     }
@@ -228,7 +255,6 @@ void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction act
 {
     if (pickColor(event->point, action)) {
         setMode(KisTool::HOVER_MODE);
-        resetCursorStyle();
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::endAlternateAction(event, action);
@@ -403,9 +429,24 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
     return NONE;
 }
 
-void KisToolPaint::setOutlineEnabled(bool enabled)
+void KisToolPaint::activatePrimaryAction()
 {
-    KisTool::setOutlineEnabled(enabled);
+    setOutlineEnabled(true);
+}
+
+void KisToolPaint::deactivatePrimaryAction()
+{
+    setOutlineEnabled(false);
+}
+
+bool KisToolPaint::isOutlineEnabled() const
+{
+    return m_isOutlineEnabled;
+}
+
+void KisToolPaint::setOutlineEnabled(bool value)
+{
+    m_isOutlineEnabled = value;
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 

@@ -61,13 +61,15 @@ int KisRotateCanvasAction::priority() const
     return 3;
 }
 
-void KisRotateCanvasAction::activate()
+void KisRotateCanvasAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::setOverrideCursor(KisCursor::rotateCursor());
 }
 
-void KisRotateCanvasAction::deactivate()
+void KisRotateCanvasAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

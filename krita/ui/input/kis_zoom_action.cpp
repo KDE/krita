@@ -130,13 +130,15 @@ int KisZoomAction::priority() const
     return 4;
 }
 
-void KisZoomAction::activate()
+void KisZoomAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::setOverrideCursor(KisCursor::zoomCursor());
 }
 
-void KisZoomAction::deactivate()
+void KisZoomAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

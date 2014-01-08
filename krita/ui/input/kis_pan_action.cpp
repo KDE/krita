@@ -68,13 +68,15 @@ int KisPanAction::priority() const
     return 5;
 }
 
-void KisPanAction::activate()
+void KisPanAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }
 
-void KisPanAction::deactivate()
+void KisPanAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

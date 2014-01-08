@@ -56,14 +56,16 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
-void KisToolInvocationAction::activate()
+void KisToolInvocationAction::activate(int shortcut)
 {
-    inputManager()->toolProxy()->setToolOutlineEnabled(true);
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
 }
 
-void KisToolInvocationAction::deactivate()
+void KisToolInvocationAction::deactivate(int shortcut)
 {
-    inputManager()->toolProxy()->setToolOutlineEnabled(false);
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 }
 
 int KisToolInvocationAction::priority() const

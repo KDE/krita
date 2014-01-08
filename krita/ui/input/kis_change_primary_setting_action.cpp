@@ -39,14 +39,16 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 }
 
-void KisChangePrimarySettingAction::activate()
+void KisChangePrimarySettingAction::activate(int shortcut)
 {
-    inputManager()->toolProxy()->setToolOutlineEnabled(true);
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::AlternateChangeSize);
 }
 
-void KisChangePrimarySettingAction::deactivate()
+void KisChangePrimarySettingAction::deactivate(int shortcut)
 {
-    inputManager()->toolProxy()->setToolOutlineEnabled(false);
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::AlternateChangeSize);
 }
 
 int KisChangePrimarySettingAction::priority() const

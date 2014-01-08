@@ -360,12 +360,12 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QMouseEven
     if (goodCandidate) {
         if (m_d->readyShortcut) {
             if (m_d->readyShortcut != goodCandidate) {
-                m_d->readyShortcut->action()->deactivate();
-                goodCandidate->action()->activate();
+                m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+                goodCandidate->action()->activate(goodCandidate->shortcutIndex());
             }
             m_d->readyShortcut = 0;
         } else {
-            goodCandidate->action()->activate();
+            goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         }
 
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
@@ -387,16 +387,16 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 
     if (goodCandidate) {
         if (m_d->readyShortcut && m_d->readyShortcut != goodCandidate) {
-            m_d->readyShortcut->action()->deactivate();
+            m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
             m_d->readyShortcut = 0;
         }
 
         if (!m_d->readyShortcut) {
-            goodCandidate->action()->activate();
+            goodCandidate->action()->activate(goodCandidate->shortcutIndex());
             m_d->readyShortcut = goodCandidate;
         }
     } else if (m_d->readyShortcut) {
-        m_d->readyShortcut->action()->deactivate();
+        m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
         m_d->readyShortcut = 0;
     }
 }
@@ -409,8 +409,9 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QMouseEv
     if (m_d->runningShortcut->matchBegin(button)) {
         if (m_d->runningShortcut->action()) {
             KisAbstractInputAction* action = m_d->runningShortcut->action();
+            int shortcutIndex = m_d->runningShortcut->shortcutIndex();
             action->end(event);
-            action->deactivate();
+            action->deactivate(shortcutIndex);
         }
         m_d->runningShortcut = 0;
     }
@@ -441,7 +442,7 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
                                    event->modifiers());
             tryEndRunningShortcut(Qt::LeftButton, &mouseEvent);
         }
-        goodCandidate->action()->activate();
+        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 
         m_d->touchShortcut = goodCandidate;
@@ -455,7 +456,7 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
 {
     if(m_d->touchShortcut) {
         m_d->touchShortcut->action()->end(event);
-        m_d->touchShortcut->action()->deactivate();
+        m_d->touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
         m_d->touchShortcut = 0;
 
         return true;

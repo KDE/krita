@@ -24,7 +24,8 @@
 
 KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
     : KoToolProxy(canvas, parent),
-      m_toolOutlineEnabled(false)
+      m_isActionActivated(false),
+      m_lastAction(KisTool::Primary)
 {
     connect(this, SIGNAL(toolChanged(const QString&)), SLOT(slotResetToolOutline()));
 }
@@ -191,18 +192,45 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
     return activeTool && activeTool->primaryActionSupportsHiResEvents();
 }
 
-void KisToolProxy::slotResetToolOutline()
+void KisToolProxy::setActiveTool(KoToolBase *tool)
 {
-    setToolOutlineEnabled(m_toolOutlineEnabled);
+    if (m_isActionActivated) {
+        deactivateToolAction(m_lastAction);
+        KoToolProxy::setActiveTool(tool);
+        activateToolAction(m_lastAction);
+    } else {
+        KoToolProxy::setActiveTool(tool);
+    }
 }
 
-void KisToolProxy::setToolOutlineEnabled(bool value)
+void KisToolProxy::activateToolAction(KisTool::ToolAction action)
 {
     KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
 
     if (activeTool) {
-        activeTool->setOutlineEnabled(value);
+        if (action == KisTool::Primary) {
+            activeTool->activatePrimaryAction();
+        } else {
+            activeTool->activateAlternateAction(KisTool::actionToAlternateAction(action));
+        }
     }
 
-    m_toolOutlineEnabled = value;
+    m_isActionActivated = true;
+    m_lastAction = action;
+}
+
+void KisToolProxy::deactivateToolAction(KisTool::ToolAction action)
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+
+    if (activeTool) {
+        if (action == KisTool::Primary) {
+            activeTool->deactivatePrimaryAction();
+        } else {
+            activeTool->deactivateAlternateAction(KisTool::actionToAlternateAction(action));
+        }
+    }
+
+    m_isActionActivated = false;
+    m_lastAction = action;
 }

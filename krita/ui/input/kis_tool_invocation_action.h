@@ -38,8 +38,8 @@ public:
     explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();
 
-    void activate();
-    void deactivate();
+    void activate(int shortcut);
+    void deactivate(int shortcut);
 
     virtual int priority() const;
     virtual bool canIgnoreModifiers() const;

@@ -62,6 +62,9 @@ protected:
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
+    void activateAlternateAction(AlternateAction action);
+    void deactivateAlternateAction(AlternateAction action);
+
     void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);

@@ -231,13 +231,14 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
             QRect tileRect = calculateTileRect(col, row);
             QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
 
-            KisTextureTileUpdateInfo tileInfo(col, row,
-                                              tileTextureRect,
-                                              updateRect,
-                                              m_image->bounds());
+            KisTextureTileUpdateInfoSP tileInfo(
+                new KisTextureTileUpdateInfo(col, row,
+                                             tileTextureRect,
+                                             updateRect,
+                                             m_image->bounds()));
             // Don't update empty tiles
-            if (tileInfo.valid()) {
-                tileInfo.retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
+            if (tileInfo->valid()) {
+                tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
                 info->tileList.append(tileInfo);
             }
             else {
@@ -283,15 +284,15 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KIS_OPENGL_CLEAR_ERROR();
 
     const KoColorSpace *dstCS = tilesColorSpace();
-    KisTextureTileUpdateInfo tileInfo;
 
+    KisTextureTileUpdateInfoSP tileInfo;
     foreach(tileInfo, glInfo->tileList) {
-        tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
-        KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+        KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
-        tile->update(tileInfo);
-        tileInfo.destroy();
+        tile->update(*tileInfo);
+        tileInfo->destroy();
 
         KIS_OPENGL_PRINT_ERROR();
     }

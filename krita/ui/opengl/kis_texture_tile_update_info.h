@@ -31,7 +31,9 @@
 
 
 class KisTextureTileUpdateInfo;
-typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
+typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
+typedef QVector<KisTextureTileUpdateInfoSP> KisTextureTileUpdateInfoSPList;
+
 
 class KisTextureTileUpdateInfo
 {
@@ -53,6 +55,7 @@ public:
     }
 
     ~KisTextureTileUpdateInfo() {
+        KIS_ASSERT_RECOVER_NOOP(!m_patchPixels);
     }
 
     void destroy() {
@@ -188,6 +191,9 @@ public:
     inline bool valid() const {
         return m_numPixels > 0;
     }
+
+private:
+    Q_DISABLE_COPY(KisTextureTileUpdateInfo);
 
 private:
     qint32 m_tileCol;

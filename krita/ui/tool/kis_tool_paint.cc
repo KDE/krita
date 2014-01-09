@@ -207,16 +207,22 @@ void KisToolPaint::setMode(ToolMode mode)
 
 void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
-    if (action != PickFgNode &&
-        action != PickBgNode &&
-        action != PickFgImage &&
-        action != PickBgImage) {
-
+    switch (action) {
+    case PickFgNode:
+        useCursor(KisCursor::pickerLayerForegroundCursor());
+        break;
+    case PickBgNode:
+        useCursor(KisCursor::pickerLayerBackgroundCursor());
+        break;
+    case PickFgImage:
+        useCursor(KisCursor::pickerImageForegroundCursor());
+        break;
+    case PickBgImage:
+        useCursor(KisCursor::pickerImageBackgroundCursor());
+        break;
+    default:
         KisTool::activateAlternateAction(action);
-        return;
-    }
-
-    useCursor(KisCursor::pickerCursor());
+    };
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)

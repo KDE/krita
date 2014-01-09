@@ -63,8 +63,11 @@ int KisRotateCanvasAction::priority() const
 
 void KisRotateCanvasAction::activate(int shortcut)
 {
-    Q_UNUSED(shortcut);
-    QApplication::setOverrideCursor(KisCursor::rotateCursor());
+    if (shortcut == DiscreteRotateToggleShortcut) {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasDiscreteCursor());
+    } else /* if (shortcut == SmoothRotateToggleShortcut) */ {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasSmoothCursor());
+    }
 }
 
 void KisRotateCanvasAction::deactivate(int shortcut)

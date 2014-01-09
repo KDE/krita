@@ -132,8 +132,11 @@ int KisZoomAction::priority() const
 
 void KisZoomAction::activate(int shortcut)
 {
-    Q_UNUSED(shortcut);
-    QApplication::setOverrideCursor(KisCursor::zoomCursor());
+    if (shortcut == DiscreteZoomToggleShortcut) {
+        QApplication::setOverrideCursor(KisCursor::zoomDiscreteCursor());
+    } else /* if (shortcut == SmoothZoomToggleShortcut) */ {
+        QApplication::setOverrideCursor(KisCursor::zoomSmoothCursor());
+    }
 }
 
 void KisZoomAction::deactivate(int shortcut)

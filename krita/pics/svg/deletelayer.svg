@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="21"
-   height="21"
+   width="22"
+   height="22"
    id="svg3771"
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="deletelayer.svg"
-   inkscape:export-filename="/home/jens/KDE/krita/finished/deletelayer.png"
+   inkscape:export-filename="../deletelayer.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -25,20 +25,20 @@
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.24699"
-     inkscape:cx="13.934613"
-     inkscape:cy="18.315191"
+     inkscape:zoom="26.881134"
+     inkscape:cx="8.9398371"
+     inkscape:cy="10.681654"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1563"
-     inkscape:window-height="878"
-     inkscape:window-x="37"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1">
+     inkscape:window-width="1407"
+     inkscape:window-height="970"
+     inkscape:window-x="2069"
+     inkscape:window-y="98"
+     inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
        id="grid3779"
@@ -61,46 +61,17 @@
   </metadata>
   <g
      id="layer1"
-     inkscape:label="Layer 1"
+     inkscape:label="shape"
      inkscape:groupmode="layer"
-     transform="translate(0,-11)">
+     transform="translate(0,-10)"
+     style="display:inline">
     <path
-       sodipodi:type="arc"
-       style="fill:#262626;fill-opacity:1;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path4484"
-       sodipodi:cx="16.5"
-       sodipodi:cy="16.5"
-       sodipodi:rx="13.5"
-       sodipodi:ry="13.5"
-       d="m 30,16.5 a 13.5,13.5 0 1 1 -27,0 13.5,13.5 0 1 1 27,0 z"
-       transform="matrix(0.67135836,0,0,0.67487822,-0.61653839,10.369467)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:none;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path4471"
-       sodipodi:cx="16"
-       sodipodi:cy="16"
-       sodipodi:rx="15"
-       sodipodi:ry="15"
-       d="M 31,16 C 31,24.284271 24.284271,31 16,31 7.7157288,31 1,24.284271 1,16 1,7.7157288 7.7157288,1 16,1 24.284271,1 31,7.7157288 31,16 z" />
-    <path
-       sodipodi:type="arc"
-       style="fill:none;stroke:#808080;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path4477"
-       sodipodi:cx="14"
-       sodipodi:cy="14"
-       sodipodi:rx="13"
-       sodipodi:ry="13"
-       d="M 27,14 A 13,13 0 1 1 1,14 13,13 0 1 1 27,14 z"
-       transform="matrix(0.72419713,0,0,0.72408302,0.35947762,11.36006)" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#262626;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect4479"
-       width="12.600051"
-       height="4.2005305"
-       x="4.1975484"
-       y="19.394987"
-       rx="1.4000057"
-       ry="1.0965425" />
+       sodipodi:type="inkscape:offset"
+       inkscape:radius="-0.007375563"
+       inkscape:original="M 14.25 15.75 L 10.4375 19.53125 L 6.71875 15.8125 L 4.78125 17.71875 L 8.5 21.46875 L 4.71875 25.21875 L 6.71875 27.21875 L 10.46875 23.4375 L 14.25 27.21875 L 16.1875 25.3125 L 12.40625 21.53125 L 16.21875 17.75 L 14.25 15.75 z "
+       style="fill:#000000;fill-opacity:0.74635571999999994;stroke:#ffffff;stroke-width:0.24446593;stroke-miterlimit:4;stroke-opacity:0.90379010000000004;stroke-dasharray:none;filter:url(#filter3796)"
+       id="path3758"
+       d="m 14.25,15.75 -3.8125,3.78125 -3.71875,-3.71875 -1.9375,1.90625 3.71875,3.75 -3.78125,3.75 2,2 3.75,-3.78125 3.78125,3.78125 1.9375,-1.90625 -3.78125,-3.78125 3.8125,-3.78125 -1.96875,-2 z"
+       transform="matrix(1.021247,0,0,1.0240297,0.43382033,-1.1412619)" />
   </g>
 </svg>

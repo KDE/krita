@@ -135,6 +135,7 @@ public:
         sketchView = new SketchDeclarativeView();
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
+#ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
@@ -142,6 +143,10 @@ public:
         sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/kritagemini/kritagemini.qml";
+#else
+        sketchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+        QString mainqml = KGlobal::dirs()->findResource("data", "kritagemini/kritagemini.qml");
+#endif
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {

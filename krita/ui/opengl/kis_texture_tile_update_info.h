@@ -55,6 +55,7 @@ public:
     }
 
     ~KisTextureTileUpdateInfo() {
+        destroy();
         KIS_ASSERT_RECOVER_NOOP(!m_patchPixels);
     }
 

@@ -102,6 +102,14 @@ void KisToolFreehand::resetCursorStyle()
     case CURSOR_STYLE_OUTLINE:
         useCursor(KisCursor::blankCursor());
         break;
+    case CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+    case CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+        useCursor(KisCursor::triangleRightHandedCursor());
+        break;
+    case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+    case CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+        useCursor(KisCursor::triangleLeftHandedCursor());
+        break;
     case CURSOR_STYLE_TOOLICON:
     default:
         KisToolPaint::resetCursorStyle();

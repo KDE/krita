@@ -492,7 +492,10 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
-         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
+         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
+           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
+           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
+           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 

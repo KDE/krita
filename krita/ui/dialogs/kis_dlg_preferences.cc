@@ -94,6 +94,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Small Circle"));
     m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
     m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Lefthanded"));
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());

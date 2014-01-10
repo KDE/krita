@@ -97,6 +97,8 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
             if (otherWindow->chunk.size()) {
                 m_file.unmap(otherWindow->window);
             }
+#else
+            Q_UNUSED(otherWindow);
 #endif
 
             m_file.resize(newSize);

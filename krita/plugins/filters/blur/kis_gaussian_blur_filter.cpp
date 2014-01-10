@@ -64,7 +64,7 @@ KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPai
 
 inline qreal sigmaFromRadius(qreal radius)
 {
-    return 0.3 * radius + 0.8;
+    return 0.3 * radius + 0.3;
 }
 
 inline uint kernelSizeFromRadius(qreal radius)

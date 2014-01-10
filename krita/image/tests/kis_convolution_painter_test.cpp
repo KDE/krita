@@ -307,7 +307,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
 inline qreal sigmaFromRadius(qreal radius)
 {
-    return 0.3 * radius + 0.8;
+    return 0.3 * radius + 0.3;
 }
 
 inline uint kernelSizeFromRadius(qreal radius)
@@ -323,9 +323,9 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
    KisPainter gc(dev);
 
 
-   qreal horizontalRadius = 25, verticalRadius = 25;
+   qreal horizontalRadius = 5, verticalRadius = 5;
    
-   for(int i = 0; i < 20 ; i++, horizontalRadius++, verticalRadius++)
+   for(int i = 0; i < 3 ; i++, horizontalRadius+=5, verticalRadius+=5)
    {
        QTime timer;
        timer.start();

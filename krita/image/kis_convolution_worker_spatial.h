@@ -27,13 +27,16 @@ template <class _IteratorFactory_>
 class KisConvolutionWorkerSpatial : public KisConvolutionWorker<_IteratorFactory_>
 {
 public:
-    KisConvolutionWorkerSpatial(KisPainter *painter, KoUpdater *progress) : KisConvolutionWorker<_IteratorFactory_>(painter, progress) {
-        m_pixelPtrCache = 0;
-        m_pixelPtrCacheCopy = 0;
-        m_minClamp = 0;
-        m_maxClamp = 0;
-        m_absoluteOffset = 0;
-        m_alphaCachePos = -1;
+    KisConvolutionWorkerSpatial(KisPainter *painter, KoUpdater *progress)
+        : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
+          m_pixelPtrCache(0),
+          m_pixelPtrCacheCopy(0),
+          m_minClamp(0),
+          m_maxClamp(0),
+          m_absoluteOffset(0),
+          m_alphaCachePos(-1),
+          m_alphaRealPos(-1)
+    {
     }
 
     ~KisConvolutionWorkerSpatial() {
@@ -349,8 +352,8 @@ private:
     quint32 m_convolveChannelsNo;
     quint32 m_cacheSize, m_pixelSize;
 
-    quint32 m_alphaCachePos;
-    quint32 m_alphaRealPos;
+    int m_alphaCachePos;
+    int m_alphaRealPos;
 
     qreal *m_kernelData;
     double** m_pixelPtrCache, ** m_pixelPtrCacheCopy;

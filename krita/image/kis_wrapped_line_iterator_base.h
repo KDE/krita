@@ -43,6 +43,8 @@ public:
                                                        writable);
         }
         m_strategy.completeInitialization(&m_iterators, &m_splitRect);
+        m_iterationAreaSize =
+            m_strategy.originalRectToColumnsRows(m_splitRect.originalRect());
 
         m_currentIterator = m_strategy.leftColumnIterator();
     }
@@ -53,7 +55,8 @@ public:
             result = trySwitchColumn();
         }
 
-        return result;
+        m_currentPos.rx()++;
+        return m_currentPos.rx() < m_iterationAreaSize.width();
     }
 
     bool nextPixels(qint32 n) {
@@ -62,7 +65,8 @@ public:
             result = trySwitchColumn();
         }
 
-        return result;
+        m_currentPos.rx() += n;
+        return m_currentPos.rx() < m_iterationAreaSize.width();
     }
 
     void nextRow() {
@@ -71,6 +75,8 @@ public:
         }
 
         m_currentIterator = m_strategy.leftColumnIterator();
+        m_currentPos.rx() = 0;
+        m_currentPos.ry()++;
     }
 
     void nextColumn() {
@@ -90,30 +96,49 @@ public:
     }
 
     qint32 nConseqPixels() const {
-        return m_currentIterator->nConseqPixels();
+        qint32 iteratorChunk =
+            m_currentIterator->nConseqPixels();
+        return qMin(iteratorChunk,
+                    m_iterationAreaSize.width() - m_currentPos.x());
     }
 
     qint32 x() const {
-        return m_splitRect.wrappedXToX(m_currentIterator->x());
+        return (m_splitRect.originalRect().topLeft() +
+                m_strategy.columnRowToXY(m_currentPos)).x();
     }
 
     qint32 y() const {
-        return m_splitRect.wrappedYToY(m_currentIterator->y());
+        return (m_splitRect.originalRect().topLeft() +
+                m_strategy.columnRowToXY(m_currentPos)).y();
+    }
+
+    void resetPixelPos() {
+        qCritical() << "CRITICAL: resetPixelPos() is not implemented";
+    }
+
+    void resetRowPos() {
+        qCritical() << "CRITICAL: resetRowPos() is not implemented";
+    }
+
+    void resetColumnPos() {
+        resetRowPos();
     }
 
 private:
     bool trySwitchColumn() {
-        int result =
-            m_currentIterator == m_strategy.leftColumnIterator() &&
-            m_strategy.rightColumnIterator();
+        int result = true;
 
-        if (result) {
+        if (m_currentIterator == m_strategy.leftColumnIterator() &&
+            m_strategy.rightColumnIterator()) {
+
             m_currentIterator = m_strategy.rightColumnIterator();
+
+        } else if (m_strategy.trySwitchColumnForced()) {
+
+            m_currentIterator = m_strategy.leftColumnIterator();
+
         } else {
-            result = m_strategy.trySwitchColumnForced();
-            if (result) {
-                m_currentIterator = m_strategy.leftColumnIterator();
-            }
+            result = false;
         }
 
         return result;
@@ -122,6 +147,8 @@ private:
 private:
 
     KisWrappedRect m_splitRect;
+    QSize m_iterationAreaSize; // columns x rows
+    QPoint m_currentPos; // column, row
     QVector<typename IteratorStrategy::IteratorTypeSP> m_iterators;
     typename IteratorStrategy::IteratorTypeSP m_currentIterator;
     IteratorStrategy m_strategy;

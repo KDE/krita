@@ -63,6 +63,9 @@ public:
      * Move to the next row
      */
     virtual void nextRow() = 0;
+
+    virtual void resetPixelPos() = 0;
+    virtual void resetRowPos() = 0;
 };
 
 /**
@@ -89,6 +92,9 @@ public:
      * Move to the next row
      */
     virtual void nextColumn() = 0;
+
+    virtual void resetPixelPos() = 0;
+    virtual void resetColumnPos() = 0;
 };
 
 /**

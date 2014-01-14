@@ -50,22 +50,17 @@ template<class _IteratorFactory_>
 class KisConvolutionWorkerFFT : public KisConvolutionWorker<_IteratorFactory_>
 {
 public:
-    KisConvolutionWorkerFFT(KisPainter *painter, KoUpdater *progress) : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
-            m_currentProgress(0)
+    KisConvolutionWorkerFFT(KisPainter *painter, KoUpdater *progress)
+        : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
+          m_currentProgress(0),
+          m_kernelFFT(0)
     {
-        m_kernelFFT = 0;
-        m_channelFFT = 0;
-
-        m_minClamp = 0;
-        m_maxClamp = 0;
-        m_absoluteOffset = 0;
-
-        m_channelPtr = 0;
     }
 
     ~KisConvolutionWorkerFFT()
     {
     }
+
 
     virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect)
     {
@@ -87,9 +82,15 @@ public:
         const quint32 halfKernelWidth = (kernel->width() - 1) / 2;
         const quint32 halfKernelHeight = (kernel->height() - 1) / 2;
 
-        m_fftWidth = areaSize.width() + kernel->width() - 1;
-        m_fftHeight = areaSize.height() + kernel->height() - 1;
-        optimumDimensions(m_fftWidth, m_fftHeight);
+        m_fftWidth = areaSize.width() + 4 * halfKernelWidth;
+        m_fftHeight = areaSize.height() + 2 * halfKernelHeight;
+
+        /**
+         * FIXME: check whether this "optimization" is needed to
+         * be uncommented. My tests showed about 30% better performance
+         * when the line is commented out (DK).
+         */
+        //optimumDimensions(m_fftWidth, m_fftHeight);
 
         m_fftLength = m_fftHeight * (m_fftWidth / 2 + 1);
         m_extraMem = m_fftWidth % 2 ? 1 : 2;
@@ -100,89 +101,32 @@ public:
         fftFillKernelMatrix(kernel, m_kernelFFT);
 
         // find out which channels need convolving
-        QList<KoChannelInfo *> convChannelList = this->convolvableChannelList(src);
-        m_noOfChannels = convChannelList.count();
+        QList<KoChannelInfo*> convChannelList = this->convolvableChannelList(src);
 
-        // Pentalis comment: Find out if one of those is the alpha channel
-        qint32 alphaChannelIndex = -1;  //-1 = FALSE
-        for (quint32 i = 0; i < m_noOfChannels; ++i) {
-            if (convChannelList.at(i)->channelType() == KoChannelInfo::ALPHA) {
-                alphaChannelIndex = i;
-            }
-        }
-        
-        m_channelFFT = new fftw_complex*[m_noOfChannels];
-        for (quint32 i = 0; i < m_noOfChannels; ++i)
+        m_channelFFT.resize(convChannelList.count());
+        for (quint32 i = 0; i < m_channelFFT.size(); ++i) {
             m_channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
-
-        // fill in function
-        QVector<PtrToDouble> toDoubleFuncPtr(m_noOfChannels);
-
-        KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
-        if (!mathToolbox->getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr))
-            return;
-
-        m_channelPtr = new double*[m_noOfChannels];
-        for (quint32 k = 0; k < m_noOfChannels; ++k)
-            m_channelPtr[k] = (double*)m_channelFFT[k];
-
-        typename _IteratorFactory_::HLineConstIterator hitSrc = _IteratorFactory_::createHLineConstIterator(src, srcPos.x() - halfKernelWidth, srcPos.y() - halfKernelHeight, m_fftWidth, dataRect);
-        
-        for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow) {
-
-            do {
-                for (quint32 k = 0; k < m_noOfChannels; ++k) {
-                    *m_channelPtr[k]++ = toDoubleFuncPtr[k](hitSrc->oldRawData(), convChannelList[k]->pos());
-                }
-            } while (hitSrc->nextPixel());
-
-            for (quint32 k = 0; k < m_noOfChannels; ++k) {
-                m_channelPtr[k] += m_extraMem;
-            }
-
-            hitSrc->nextRow();
         }
-        
-        // Pentalis comment: All the code below is devoted to premultiplying alpha, obviously there's no need for that if there's no alpha channel in the convolution list
-        if (alphaChannelIndex >= 0)
-        {
-            // Pentalis comment: Resetting m_channelPtr to the start (according to the loop above), or what I think is the start
-            for (quint32 k = 0; k < m_noOfChannels; ++k)
-                m_channelPtr[k] = (double*)m_channelFFT[k];
-            
-            // Pentalis comment: I'll keep trying till this thing works and I never have to touch it again  UPDATE: WORKED!
-            
-            // Pentalis comment: Iterate over the same pixels again but this time with a different intent
-            for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
-            {
-                for (quint32 srcCol = 0; srcCol < m_fftWidth; ++srcCol)
-                {
-                    for (quint32 k = 0; k < m_noOfChannels; ++k) {
-                        // Pentalis comment: Pass to the next loop if you hit the alpha channel,
-                        // make sure to increment *m_channelPtr[k]  (this was a bug that took hours to find)
-                        if (k == (quint32)alphaChannelIndex) {
-                            (void)*m_channelPtr[k]++;  // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
-                            continue;
-                        }
-                        
-                        // Pentalis comments: PREMULTIPLY BY ALPHA
-                        // This code works because m_channelPtr has already been filled entirely
-                        *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex];
-                        (void)*m_channelPtr[k]++;   // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
-                    }
-                }
 
-                for (quint32 k = 0; k < m_noOfChannels; ++k) {
-                    m_channelPtr[k] += m_extraMem;
-                }
-            }
-        }
-        
+        const double kernelFactor = kernel->factor() ? kernel->factor() : 1;
+        const double fftScale = 1.0 / (m_fftHeight * m_fftWidth) / kernelFactor;
+
+        FFTInfo info (fftScale, convChannelList, kernel, this->m_painter->device()->colorSpace());
+        int cacheRowStride = m_fftWidth + m_extraMem;
+
+        fillCacheFromDevice(src,
+                            QRect(srcPos.x() - halfKernelWidth,
+                                  srcPos.y() - halfKernelHeight,
+                                  m_fftWidth,
+                                  m_fftHeight),
+                            cacheRowStride,
+                            info, dataRect);
+
         addToProgress(10);
         if (isInterrupted()) return;
-        
+
         // calculate number off fft operations required for progress reporting
-        const float progressPerFFT = (100 - 30) / (double)(m_noOfChannels * 2 + 1);
+        const float progressPerFFT = (100 - 30) / (double)(convChannelList.count() * 2 + 1);
 
         // perform FFT
         fftw_plan fftwPlanForward, fftwPlanBackward;
@@ -196,7 +140,7 @@ public:
         addToProgress(progressPerFFT);
         if (isInterrupted()) return;
 
-        for (quint32 k = 0; k < m_noOfChannels; ++k)
+        for (quint32 k = 0; k < m_channelFFT.size(); ++k)
         {
             fftw_execute_dft_r2c(fftwPlanForward, (double*)(m_channelFFT[k]), m_channelFFT[k]);
             addToProgress(progressPerFFT);
@@ -214,118 +158,214 @@ public:
         fftw_destroy_plan(fftwPlanBackward);
         KisConvolutionWorkerFFTLock::fftwMutex.unlock();
 
-        // calculate final result
-        const double kernelFactor = kernel->factor() ? kernel->factor() : 1;
-        const double fftScale = 1.0 / (m_fftHeight * m_fftWidth) / kernelFactor;
-        const quint32 areaWidth = areaSize.width();
-        const quint32 areaHeight = areaSize.height();
 
-        // offset pointers
-        const quint32 rowOffsetPtr = m_fftWidth - areaSize.width() + m_extraMem;
-        const quint32 offsetPtr = (2 * (m_fftWidth/2 + 1)) * halfKernelHeight + halfKernelWidth;
-        for (quint32 k = 0; k < m_noOfChannels; ++k)
-            m_channelPtr[k] = (double*)m_channelFFT[k] + offsetPtr;
+        writeResultToDevice(QRect(dstPos.x(), dstPos.y(), areaSize.width(), areaSize.height()),
+                            cacheRowStride, halfKernelWidth, halfKernelHeight,
+                            info, dataRect);
 
-        QVector<PtrFromDouble> fromDoubleFuncPtr(m_noOfChannels);
-        if (!mathToolbox->getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr))
-            return;
-
-        typename _IteratorFactory_::HLineIterator hitDst = _IteratorFactory_::createHLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.width(), dataRect);
-        typename _IteratorFactory_::HLineIterator hitSrcCpy = _IteratorFactory_::createHLineIterator(src, srcPos.x(), srcPos.y(), areaSize.width(), dataRect);
-
-        double channelPixelValue;
-
-        double *m_maxClamp = new double[convChannelList.count()];
-        double *m_minClamp = new double[convChannelList.count()];
-        m_absoluteOffset = new double[convChannelList.count()];
-        for (quint16 i = 0; i < convChannelList.count(); ++i)
-        {
-            m_minClamp[i] = mathToolbox->minChannelValue(convChannelList[i]);
-            m_maxClamp[i] = mathToolbox->maxChannelValue(convChannelList[i]);
-            m_absoluteOffset[i] = (m_maxClamp[i] - m_minClamp[i]) * kernel->offset();
-        }
-
-        // Pentalis comment: if there IS an alpha Channel...
-        if (alphaChannelIndex >= 0)
-        {
-            double alphaChannelPixelValue;
-            for (quint32 y = 0; y < areaHeight; ++y)
-            {
-                for (quint32 x = 0; x < areaWidth; ++x)
-                {
-                    // Pentalis comment: This needs to be done only once and before we iterate over the channels
-                    alphaChannelPixelValue = *(m_channelPtr[alphaChannelIndex]) * fftScale + m_absoluteOffset[alphaChannelIndex];
-                    
-                    for (quint32 k = 0; k < m_noOfChannels; ++k)
-                    {
-                        channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
-                        
-                        if (k != (quint32)alphaChannelIndex) {
-                            // Pentalis comment: divide the PREMULTIPLIED (see conditionals above) channels by the
-                            // CONVOLUTED alpha channel. Also, avoid division by zero.
-                            if (alphaChannelIndex != 0) {
-                                channelPixelValue /= alphaChannelPixelValue;
-                            }
-                        }
-                        
-                        // clamp values
-                        if (channelPixelValue > m_maxClamp[k])
-                            channelPixelValue = m_maxClamp[k];
-                        else if (channelPixelValue < m_minClamp[k])
-                            channelPixelValue = m_minClamp[k];
-
-                        fromDoubleFuncPtr[k](hitDst->rawData(), convChannelList[k]->pos(), channelPixelValue);
-
-                        ++m_channelPtr[k];
-                    }
-
-                    hitDst->nextPixel();
-                    hitSrcCpy->nextPixel();
-                }
-
-                for (quint32 k = 0; k < m_noOfChannels; ++k)
-                    m_channelPtr[k] += rowOffsetPtr;
-
-                hitDst->nextRow();
-                hitSrcCpy->nextRow();
-            }
-        }
-        else 
-        {
-            
-            for (quint32 y = 0; y < areaHeight; ++y)
-            {
-                for (quint32 x = 0; x < areaWidth; ++x)
-                {
-                    for (quint32 k = 0; k < m_noOfChannels; ++k)
-                    {
-                        channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
-                        
-                        // clamp values
-                        if (channelPixelValue > m_maxClamp[k])
-                            channelPixelValue = m_maxClamp[k];
-                        else if (channelPixelValue < m_minClamp[k])
-                            channelPixelValue = m_minClamp[k];
-
-                        fromDoubleFuncPtr[k](hitDst->rawData(), convChannelList[k]->pos(), channelPixelValue);
-
-                        ++m_channelPtr[k];
-                    }
-
-                    hitDst->nextPixel();
-                    hitSrcCpy->nextPixel();
-                }
-
-                for (quint32 k = 0; k < m_noOfChannels; ++k)
-                    m_channelPtr[k] += rowOffsetPtr;
-
-                hitDst->nextRow();
-                hitSrcCpy->nextRow();
-            }
-        }
-        
         addToProgress(20);
         cleanUp();
+    }
+
+    struct FFTInfo {
+        FFTInfo(qreal _fftScale,
+                QList<KoChannelInfo*> _convChannelList,
+                const KisConvolutionKernelSP kernel,
+                const KoColorSpace *colorSpace)
+            : fftScale(_fftScale),
+              convChannelList(_convChannelList),
+              alphaCachePos(-1),
+              alphaRealPos(-1)
+        {
+            KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(colorSpace->mathToolboxId().id());
+
+            for (int i = 0; i < convChannelList.count(); ++i) {
+                minClamp.append(mathToolbox->minChannelValue(convChannelList[i]));
+                maxClamp.append(mathToolbox->maxChannelValue(convChannelList[i]));
+                absoluteOffset.append((maxClamp[i] - minClamp[i]) * kernel->offset());
+
+                if (convChannelList[i]->channelType() == KoChannelInfo::ALPHA) {
+                    alphaCachePos = i;
+                    alphaRealPos = convChannelList[i]->pos();
+                }
+            }
+
+            toDoubleFuncPtr.resize(convChannelList.count());
+            fromDoubleFuncPtr.resize(convChannelList.count());
+
+            bool result = mathToolbox->getToDoubleChannelPtr(convChannelList, toDoubleFuncPtr);
+            result &= mathToolbox->getFromDoubleChannelPtr(convChannelList, fromDoubleFuncPtr);
+
+            KIS_ASSERT(result);
+        }
+
+        inline int numChannels() const {
+            return convChannelList.size();
+        }
+
+
+        QVector<qreal> minClamp;
+        QVector<qreal> maxClamp;
+        QVector<qreal> absoluteOffset;
+
+        qreal fftScale;
+        QList<KoChannelInfo*> convChannelList;
+
+        QVector<PtrToDouble> toDoubleFuncPtr;
+        QVector<PtrFromDouble> fromDoubleFuncPtr;
+
+        int alphaCachePos;
+        int alphaRealPos;
+    };
+
+    void fillCacheFromDevice(KisPaintDeviceSP src,
+                             const QRect &rect,
+                             const int cacheRowStride,
+                             const FFTInfo &info,
+                             const QRect &dataRect) {
+
+        typename _IteratorFactory_::HLineConstIterator hitSrc =
+            _IteratorFactory_::createHLineConstIterator(src,
+                                                        rect.x(), rect.y(), rect.width(),
+                                                        dataRect);
+
+        QVector<double*> channelPtr(info.numChannels());
+
+        for (quint32 k = 0; k < channelPtr.size(); ++k) {
+            channelPtr[k] = (double*)m_channelFFT[k];
+        }
+
+        for (quint32 y = 0; y < rect.height(); ++y) {
+            QVector<double*> cacheRowStart(channelPtr);
+
+            for (quint32 x = 0; x < rect.width(); ++x) {
+                const quint8 *data = hitSrc->oldRawData();
+
+                // no alpha is a rare case, so just multiply by 1.0 in that case
+                double alphaValue = info.alphaRealPos >= 0 ?
+                    info.toDoubleFuncPtr[info.alphaCachePos](data, info.alphaRealPos) : 1.0;
+
+                for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                    if (k != info.alphaCachePos) {
+                        const quint32 channelPos = info.convChannelList[k]->pos();
+                        *channelPtr[k] = info.toDoubleFuncPtr[k](data, channelPos) * alphaValue;
+                    } else {
+                        *channelPtr[k] = alphaValue;
+                    }
+
+                    channelPtr[k]++;
+                }
+
+                hitSrc->nextPixel();
+            }
+
+            for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                channelPtr[k] = cacheRowStart[k] + cacheRowStride;
+            }
+
+            hitSrc->nextRow();
+        }
+
+    }
+
+
+    inline void limitValue(qreal *value, qreal lowBound, qreal highBound) {
+        if (*value > highBound) {
+            *value = highBound;
+        } else if (*value < lowBound){
+            *value = lowBound;
+        }
+    }
+
+    template <bool additionalMultiplierActive>
+    inline qreal writeOneChannelFromCache(quint8* dstPtr,
+                                          const quint32 channel,
+                                          const int channelPos,
+                                          const FFTInfo &info,
+                                          const QVector<double*> &channelPtr,
+                                          const qreal additionalMultiplier = 0.0) {
+        qreal channelPixelValue;
+
+        if (additionalMultiplierActive) {
+            channelPixelValue = (*(channelPtr[channel]) * info.fftScale + info.absoluteOffset[channel]) * additionalMultiplier;
+        } else {
+            channelPixelValue = *(channelPtr[channel]) * info.fftScale + info.absoluteOffset[channel];
+        }
+
+        limitValue(&channelPixelValue, info.minClamp[channel], info.maxClamp[channel]);
+
+        info.fromDoubleFuncPtr[channel](dstPtr, channelPos, channelPixelValue);
+
+        return channelPixelValue;
+    }
+
+    void writeResultToDevice(const QRect &rect,
+                             const int cacheRowStride,
+                             const int halfKernelWidth,
+                             const int halfKernelHeight,
+                             const FFTInfo &info,
+                             const QRect &dataRect) {
+
+        typename _IteratorFactory_::HLineIterator hitDst =
+            _IteratorFactory_::createHLineIterator(this->m_painter->device(),
+                                                   rect.x(), rect.y(), rect.width(),
+                                                   dataRect);
+
+        int initialOffset = cacheRowStride * halfKernelHeight + halfKernelWidth;
+
+        QVector<double*> channelPtr(info.numChannels());
+
+        for (quint32 k = 0; k < channelPtr.size(); ++k) {
+            channelPtr[k] = (double*)m_channelFFT[k] + initialOffset;
+        }
+
+        for (quint32 y = 0; y < rect.height(); ++y) {
+            QVector<double*> cacheRowStart(channelPtr);
+
+            for (quint32 x = 0; x < rect.width(); ++x) {
+                quint8 *dstPtr = hitDst->rawData();
+
+                if (info.alphaCachePos >= 0) {
+                    qreal alphaValue =
+                        writeOneChannelFromCache<false>(dstPtr,
+                                                        info.alphaCachePos,
+                                                        info.convChannelList[info.alphaCachePos]->pos(),
+                                                        info,
+                                                        channelPtr);
+                    qreal alphaValueInv = 1.0 / alphaValue;
+
+                    for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                        if (k != info.alphaCachePos) {
+                            writeOneChannelFromCache<true>(dstPtr,
+                                                           k,
+                                                           info.convChannelList[k]->pos(),
+                                                           info,
+                                                           channelPtr,
+                                                           alphaValueInv);
+                        }
+                        ++channelPtr[k];
+                    }
+                } else {
+                    for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                        writeOneChannelFromCache<false>(dstPtr,
+                                                        k,
+                                                        info.convChannelList[k]->pos(),
+                                                        info,
+                                                        channelPtr);
+                        ++channelPtr[k];
+                    }
+                }
+
+                hitDst->nextPixel();
+            }
+
+            for (quint32 k = 0; k < channelPtr.size(); ++k) {
+                channelPtr[k] = cacheRowStart[k] + cacheRowStride;
+            }
+
+            hitDst->nextRow();
+        }
+
     }
 
 private:
@@ -359,20 +399,20 @@ private:
     void fftMultiply(fftw_complex* channel, fftw_complex* kernel)
     {
         // perform complex multiplication
-        fftw_complex *m_channelPtr = channel;
+        fftw_complex *channelPtr = channel;
         fftw_complex *kernelPtr = kernel;
 
         fftw_complex tmp;
 
         for (quint32 pixelPos = 0; pixelPos < m_fftLength; ++pixelPos)
         {
-            tmp[0] = ((*m_channelPtr)[0] * (*kernelPtr)[0]) - ((*m_channelPtr)[1] * (*kernelPtr)[1]);
-            tmp[1] = ((*m_channelPtr)[0] * (*kernelPtr)[1]) + ((*m_channelPtr)[1] * (*kernelPtr)[0]);
+            tmp[0] = ((*channelPtr)[0] * (*kernelPtr)[0]) - ((*channelPtr)[1] * (*kernelPtr)[1]);
+            tmp[1] = ((*channelPtr)[0] * (*kernelPtr)[1]) + ((*channelPtr)[1] * (*kernelPtr)[0]);
 
-            (*m_channelPtr)[0] = tmp[0];
-            (*m_channelPtr)[1] = tmp[1];
+            (*channelPtr)[0] = tmp[0];
+            (*channelPtr)[1] = tmp[1];
 
-            ++m_channelPtr;
+            ++channelPtr;
             ++kernelPtr;
         }
     }
@@ -454,28 +494,17 @@ private:
             fftw_free(m_kernelFFT);
         }
 
-        // free channel fft data
-        if (m_channelFFT) {
-            for (uint i = 0; i < m_noOfChannels; ++i) {
-                fftw_free(m_channelFFT[i]);
-            }
-
-            delete[] m_channelFFT;
+        foreach (fftw_complex *channel, m_channelFFT) {
+            fftw_free(channel);
         }
-
-        if (m_minClamp) delete[] m_minClamp;
-        if (m_maxClamp) delete[] m_maxClamp;
-        if (m_absoluteOffset) delete[] m_absoluteOffset;
-        if (m_channelPtr) delete[] m_channelPtr;
+        m_channelFFT.clear();
     }
 private:
-    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_noOfChannels, m_extraMem;
+    quint32 m_fftWidth, m_fftHeight, m_fftLength, m_extraMem;
     float m_currentProgress;
 
     fftw_complex* m_kernelFFT;
-    fftw_complex** m_channelFFT;
-    double* m_minClamp, *m_maxClamp, *m_absoluteOffset;
-    double** m_channelPtr;
+    QVector<fftw_complex*> m_channelFFT;
 };
 
 #endif

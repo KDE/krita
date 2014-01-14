@@ -1020,6 +1020,41 @@ static bool nextRowGeneral(KisRectIteratorSP it, int y, const QRect &rc) {
     return false;
 }
 
+template <class T>
+bool checkXY(const QPoint &pt, const QPoint &realPt) {
+    Q_UNUSED(pt);
+    Q_UNUSED(realPt);
+    return false;
+}
+
+template <>
+bool checkXY<KisHLineIteratorSP>(const QPoint &pt, const QPoint &realPt) {
+    return pt == realPt;
+}
+
+template <>
+bool checkXY<KisVLineIteratorSP>(const QPoint &pt, const QPoint &realPt) {
+    return pt.x() == realPt.y() && pt.y() == realPt.x();
+}
+
+template <class T>
+bool checkConseqPixels(int value, const QPoint &pt, const QRect &rect) {
+    Q_UNUSED(value);
+    Q_UNUSED(pt);
+    Q_UNUSED(rect);
+    return false;
+}
+
+template <>
+bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const QRect &rect) {
+    return value == rect.x() + rect.width() - pt.x();
+}
+
+template <>
+bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &pt, const QRect &rect) {
+    return value == 1;
+}
+
 template <class IteratorSP>
 IteratorSP createIterator(KisPaintDeviceSP dev, const QRect &rc) {
     Q_UNUSED(dev);
@@ -1105,6 +1140,74 @@ void KisPaintDeviceTest::testWrappedVLineIterator()
 void KisPaintDeviceTest::testWrappedRectIterator()
 {
     testWrappedLineIterator<KisRectIteratorSP>("rect_iterator");
+}
+
+template <class IteratorSP>
+void testWrappedLineIteratorReadMoreThanBounds(QString testName)
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    // fill device with a gradient
+    QRect bounds = dev->defaultBounds()->bounds();
+    for (int y = bounds.y(); y < bounds.y() + bounds.height(); y++) {
+        for (int x = bounds.x(); x < bounds.x() + bounds.width(); x++) {
+            QColor c((10 * x) % 255, (10 * y) % 255, 0, 255);
+            dev->setPixel(x, y, c);
+        }
+    }
+
+    // test rect doesn't fit the wrap rect in both dimentions
+    const QRect &rect(bounds.adjusted(-6,-6,8,8));
+    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG(rect.x(), rect.y());
+    IteratorSP it = createIterator<IteratorSP>(dev, rect);
+
+    for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+        for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
+            quint8 *data = it->rawData();
+
+            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), rect));
+
+            dstIt->moveTo(x, y);
+            memcpy(dstIt->rawData(), data, cs->pixelSize());
+
+            QVERIFY(checkXY<IteratorSP>(QPoint(it->x(), it->y()), QPoint(x,y)));
+
+            bool stepDone = it->nextPixel();
+            QCOMPARE(stepDone, x < rect.x() + rect.width() - 1);
+        }
+        if (!nextRowGeneral(it, y, rect)) break;
+    }
+
+    testName = QString("%1_%2_%3_%4_%5")
+        .arg(testName)
+        .arg(rect.x())
+        .arg(rect.y())
+        .arg(rect.width())
+        .arg(rect.height());
+
+    QRect rc = rect;
+    QImage result = dst->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QImage ref = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName));
+}
+
+void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()
+{
+    testWrappedLineIteratorReadMoreThanBounds<KisHLineIteratorSP>("hline_iterator");
+}
+
+void KisPaintDeviceTest::testWrappedVLineIteratorReadMoreThanBounds()
+{
+    testWrappedLineIteratorReadMoreThanBounds<KisVLineIteratorSP>("vline_iterator");
+}
+
+void KisPaintDeviceTest::testWrappedRectIteratorReadMoreThanBounds()
+{
+    // FIXME: Huge rect support is not implemented for the rect iterator
+    //testWrappedLineIteratorReadMoreThanBounds<KisRectIteratorSP>("rect_iterator");
 }
 
 void KisPaintDeviceTest::testMoveWrapAround()
@@ -1209,5 +1312,3 @@ void KisPaintDeviceTest::testCacheState()
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"
-
-

@@ -117,6 +117,14 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEng
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)
 {
+    /**
+     * Force BORDER_IGNORE op for the wraparound mode,
+     * because the paint device has its own special
+     * iterators, which do everything for us.
+     */
+    if (src->defaultBounds()->wrapAroundMode()) {
+        borderOp = BORDER_IGNORE;
+    }
 
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
@@ -143,27 +151,8 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         }
         break;
     }
-    return;
-    case BORDER_DEFAULT_FILL : {
-        KisConvolutionWorker<StandardIteratorFactory> *worker;
-        worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
-        worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
-        delete worker;
-        break;
-    }
-    case BORDER_WRAP: {
-        qFatal("Not implemented");
-    }
-    case BORDER_AVOID:
-    default : {
-        // TODO should probably be computed from the exactBounds...
-        qint32 kw = kernel->width();
-        qint32 kh = kernel->height();
-        QPoint tr((kw - 1) / 2, (kh - 1) / 2);
-        srcPos += tr;
-        dstPos += tr;
-        areaSize -= QSize(kw - 1, kh - 1);
-
+    case BORDER_IGNORE:
+    default: {
         KisConvolutionWorker<StandardIteratorFactory> *worker;
         worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
         worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());

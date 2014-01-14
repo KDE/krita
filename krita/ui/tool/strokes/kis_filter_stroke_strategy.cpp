@@ -50,6 +50,7 @@ KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
     m_d->cancelSilently = false;
     m_d->secondaryTransaction = 0;
 
+    setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 

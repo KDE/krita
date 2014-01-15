@@ -238,6 +238,9 @@ private:
     void genericFillStart(int startX, int startY, KisPaintDeviceSP projection);
     void genericFillEnd(KisPaintDeviceSP filled);
 
+    KisSelectionSP createFloodSelectionFast(int startX, int startY, KisPaintDeviceSP projection, quint8 *map);
+    KisSelectionSP createFloodSelectionFrugal(int startX, int startY, KisPaintDeviceSP projection);
+
     KisSelectionSP m_fillSelection;
 
     int m_feather;

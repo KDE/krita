@@ -29,6 +29,7 @@
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
+#include <kis_gaussian_kernel.h>
 
 #include "ui_wdg_gaussian_blur.h"
 
@@ -62,17 +63,6 @@ KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPai
     return config;
 }
 
-inline qreal sigmaFromRadius(qreal radius)
-{
-    return 0.3 * radius + 0.3;
-}
-
-inline uint kernelSizeFromRadius(qreal radius)
-{
-    return 6 * ceil(sigmaFromRadius(radius)) + 1;
-}
-
-
 void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
                                         const QRect& rect,
                                         const KisFilterConfiguration* config,
@@ -99,41 +89,14 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
-    // compute horizontal kernel
-    uint horizKernelSize = kernelSizeFromRadius(horizontalRadius);
-    Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
-
-    const qreal horizSigma = sigmaFromRadius(horizontalRadius);
-    const qreal horizMultiplicand = 1 / (sqrt(2 * M_PI * horizSigma * horizSigma));
-    const qreal horizExponentMultiplicand = 1 / (2 * horizSigma * horizSigma);
-    const qreal horizCenter = 0.5 * horizKernelSize;
-
-    for (uint x = 0; x < horizKernelSize; x++) {
-            qreal xDistance = horizCenter - x;
-            horizGaussian(0, x) = horizMultiplicand * exp( -xDistance * xDistance * horizExponentMultiplicand );
-        }
-
-    // compute vertical kernel
-    uint verticalKernelSize = kernelSizeFromRadius(verticalRadius);
-    Matrix<qreal, Dynamic, Dynamic> verticalGaussian(verticalKernelSize, 1);
-
-    const qreal verticalSigma = sigmaFromRadius(verticalRadius);
-    const qreal verticalMultiplicand = 1 / (sqrt(2 * M_PI * verticalSigma * verticalSigma));
-    const qreal verticalExponentMultiplicand = 1 / (2 * verticalSigma * verticalSigma);
-    const qreal verticalCenter = 0.5 * verticalKernelSize;
-
-    for (uint y = 0; y < verticalKernelSize; y++)
-    {
-        qreal yDistance = verticalCenter - y;
-        verticalGaussian(y, 0) = verticalMultiplicand * exp( -yDistance * yDistance * verticalExponentMultiplicand );
-    }
-
     if ( (horizontalRadius > 0) && (verticalRadius > 0) )
     {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
 
-        KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
-        KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
+        KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
+        KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
+
+        qreal verticalCenter = qreal(kernelVertical->height()) / 2.0;
 
         KisConvolutionPainter horizPainter(interm);
         horizPainter.setChannelFlags(channelFlags);
@@ -143,7 +106,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
 
-        
+
         KisConvolutionPainter verticalPainter(device);
         verticalPainter.setChannelFlags(channelFlags);
         verticalPainter.setProgress(progressUpdater);
@@ -157,7 +120,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
             painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
-            KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
+            KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
             painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
         }
 
@@ -167,7 +130,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
             painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
-            KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
+            KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
             painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
         }
     }
@@ -180,8 +143,8 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
      * NOTE: integer devision by two is done on purpose,
      *       because the kernel size is always odd
      */
-    const int halfWidth = (_config->getProperty("horizRadius", value)) ? kernelSizeFromRadius(value.toFloat()) / 2 : 5;
-    const int halfHeight = (_config->getProperty("vertRadius", value)) ? kernelSizeFromRadius(value.toFloat()) / 2 : 5;
+    const int halfWidth = (_config->getProperty("horizRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
+    const int halfHeight = (_config->getProperty("vertRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
@@ -189,8 +152,8 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
 QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
 {
     QVariant value;
-    const int halfWidth = (_config->getProperty("horizRadius", value)) ? kernelSizeFromRadius(value.toFloat()) / 2 : 5;
-    const int halfHeight = (_config->getProperty("vertRadius", value)) ? kernelSizeFromRadius(value.toFloat()) / 2 : 5;
+    const int halfWidth = (_config->getProperty("horizRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
+    const int halfHeight = (_config->getProperty("vertRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
 
     return rect.adjusted( -halfWidth, -halfHeight, halfWidth, halfHeight);
 }

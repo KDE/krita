@@ -31,6 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
+#include <kis_gaussian_kernel.h>
 #include <kis_mask_generator.h>
 #include "testutil.h"
 
@@ -305,16 +306,6 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     }
 }
 
-inline qreal sigmaFromRadius(qreal radius)
-{
-    return 0.3 * radius + 0.3;
-}
-
-inline uint kernelSizeFromRadius(qreal radius)
-{
-    return 6 * ceil(sigmaFromRadius(radius)) + 1;
-}
-
 void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix)
 {
    QBitArray channelFlags =
@@ -331,37 +322,12 @@ void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useF
        timer.start();
 
        gc.beginTransaction("");
-       uint horizKernelSize = kernelSizeFromRadius(horizontalRadius);
-       Matrix<qreal, Dynamic, Dynamic> horizGaussian(1, horizKernelSize);
 
-       const qreal horizSigma = sigmaFromRadius(horizontalRadius);
-       const qreal horizMultiplicand = 1 / (sqrt(2 * M_PI * horizSigma * horizSigma));
-       const qreal horizExponentMultiplicand = 1 / (2 * horizSigma * horizSigma);
-       const qreal horizCenter = 0.5 * horizKernelSize;
-
-       for (uint x = 0; x < horizKernelSize; x++) {
-               qreal xDistance = horizCenter - x;
-               horizGaussian(0, x) = horizMultiplicand * exp( -xDistance * xDistance * horizExponentMultiplicand );
-           }
-
-       uint verticalKernelSize = kernelSizeFromRadius(verticalRadius);
-       Matrix<qreal, Dynamic, Dynamic> verticalGaussian(verticalKernelSize, 1);
-
-       const qreal verticalSigma = sigmaFromRadius(verticalRadius);
-       const qreal verticalMultiplicand = 1 / (sqrt(2 * M_PI * verticalSigma * verticalSigma));
-       const qreal verticalExponentMultiplicand = 1 / (2 * verticalSigma * verticalSigma);
-       const qreal verticalCenter = 0.5 * verticalKernelSize;
-
-       for (uint y = 0; y < verticalKernelSize; y++)
-       {
-           qreal yDistance = verticalCenter - y;
-           verticalGaussian(y, 0) = verticalMultiplicand * exp( -yDistance * yDistance * verticalExponentMultiplicand );
-       }
        if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
-    
-           KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
-           KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
+
+           KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
+           KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
 
            const QRect applyRect = dev->exactBounds();
 

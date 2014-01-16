@@ -39,6 +39,7 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->doubleHalfSize, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
     connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(widget()->chkLightnessOnly, SIGNAL(stateChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisWdgUnsharp::~KisWdgUnsharp()
@@ -52,6 +53,7 @@ void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)
     widget()->doubleHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toDouble() : 4.0);
     widget()->doubleAmount->setValue((config->getProperty("amount", value)) ? value.toDouble() : 0.1);
     widget()->intThreshold->setValue((config->getProperty("threshold", value)) ? value.toUInt() : 20);
+    widget()->chkLightnessOnly->setChecked((config->getProperty("lightnessOnly", value)) ? value.toBool() : true);
 }
 
 KisPropertiesConfiguration* KisWdgUnsharp::configuration() const
@@ -60,6 +62,7 @@ KisPropertiesConfiguration* KisWdgUnsharp::configuration() const
     config->setProperty("halfSize", widget()->doubleHalfSize->value());
     config->setProperty("amount", widget()->doubleAmount->value());
     config->setProperty("threshold", widget()->intThreshold->value());
+    config->setProperty("lightnessOnly", widget()->chkLightnessOnly->isChecked());
     return config;
 }
 

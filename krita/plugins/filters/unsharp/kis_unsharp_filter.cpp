@@ -61,6 +61,7 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
     config->setProperty("halfSize", 5);
     config->setProperty("amount", 0.5);
     config->setProperty("threshold", 10);
+    config->setProperty("lightnessOnly", true);
     return config;
 }
 

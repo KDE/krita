@@ -52,7 +52,7 @@
    <item>
     <widget class="QCheckBox" name="chkTitlebar">
      <property name="text">
-      <string>Titlebar</string>
+      <string>Titlebar (hiding the titlebar will make Krita go full-screen)</string>
      </property>
     </widget>
    </item>

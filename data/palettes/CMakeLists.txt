@@ -3,6 +3,8 @@
 
 install( FILES  
     concept-cookie.gpl
+    pixelart-16.gpl
+    pixelart-32.gpl
     default.gpl
     gradient.gpl
     marker.gpl

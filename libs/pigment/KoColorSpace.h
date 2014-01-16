@@ -458,6 +458,13 @@ public:
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
 
     /**
+     * Get the difference between 2 colors, normalized in the range (0,255). This function
+     * takes the Alpha channel of the pixel into account. Alpha channel has the same
+     * weight as Lightness channel.
+     */
+    virtual quint8 differenceA(const quint8* src1, const quint8* src2) const = 0;
+
+    /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).
      */
     virtual KoMixColorsOp* mixColorsOp() const;

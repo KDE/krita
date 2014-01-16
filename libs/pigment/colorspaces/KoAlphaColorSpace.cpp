@@ -298,6 +298,11 @@ quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) con
     return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
+quint8 KoAlphaColorSpace::differenceA(const quint8 *src1, const quint8 *src2) const
+{
+    return difference(src1, src2);
+}
+
 QString KoAlphaColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     Q_ASSERT(channelIndex < channelCount());

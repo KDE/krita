@@ -174,7 +174,7 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
 
     for (int j = 0; j < rect.height(); j++) {
         do {
-            quint8 diff = cs->difference(dstIt->oldRawData(), dstIt->rawDataConst());
+            quint8 diff = cs->differenceA(dstIt->oldRawData(), dstIt->rawDataConst());
             if (diff > threshold) {
                 cs->toLabA16(dstIt->oldRawData(), (quint8*)labColorSrc, 1);
                 cs->toLabA16(dstIt->rawDataConst(), (quint8*)labColorDst, 1);

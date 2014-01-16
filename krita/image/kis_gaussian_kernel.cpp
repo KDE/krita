@@ -84,3 +84,51 @@ KisGaussianKernel::createVerticalKernel(qreal radius)
     Matrix<qreal, Dynamic, Dynamic> matrix = createVerticalMatrix(radius);
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
+
+void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
+                                      const QRect& rect,
+                                      qreal xRadius, qreal yRadius,
+                                      const QBitArray &channelFlags,
+                                      KoUpdater *progressUpdater)
+{
+    QPoint srcTopLeft = rect.topLeft();
+
+    if (xRadius > 0.0 && yRadius > 0.0) {
+        KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
+
+        KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
+        KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);
+
+        qreal verticalCenter = qreal(kernelVertical->height()) / 2.0;
+
+        KisConvolutionPainter horizPainter(interm);
+        horizPainter.setChannelFlags(channelFlags);
+        horizPainter.setProgress(progressUpdater);
+        horizPainter.applyMatrix(kernelHoriz, device,
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
+                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
+
+
+        KisConvolutionPainter verticalPainter(device);
+        verticalPainter.setChannelFlags(channelFlags);
+        verticalPainter.setProgress(progressUpdater);
+        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+
+    } else if (xRadius > 0.0) {
+        KisConvolutionPainter painter(device);
+        painter.setChannelFlags(channelFlags);
+        painter.setProgress(progressUpdater);
+
+        KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
+        painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+
+    } else if (yRadius > 0.0) {
+        KisConvolutionPainter painter(device);
+        painter.setChannelFlags(channelFlags);
+        painter.setProgress(progressUpdater);
+
+        KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);
+        painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+    }
+}

@@ -42,6 +42,21 @@ public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     int overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const;
+
+private:
+    void processLightnessOnly(KisPaintDeviceSP device,
+                              const QRect &rect,
+                              quint8 threshold,
+                              qreal weights[2],
+                              qreal factor,
+                              const QBitArray &channelFlags) const;
+
+    void processRaw(KisPaintDeviceSP device,
+                    const QRect &rect,
+                    quint8 threshold,
+                    qreal weights[2],
+                    qreal factor,
+                    const QBitArray &channelFlags) const;
 };
 
 #endif

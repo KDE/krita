@@ -25,6 +25,8 @@
 #include <Eigen/Core>
 using namespace Eigen;
 
+class QRect;
+
 class KRITAIMAGE_EXPORT KisGaussianKernel
 {
 public:
@@ -42,6 +44,12 @@ public:
 
     static qreal sigmaFromRadius(qreal radius);
     static int kernelSizeFromRadius(qreal radius);
+
+    static void applyGaussian(KisPaintDeviceSP device,
+                              const QRect& rect,
+                              qreal xRadius, qreal yRadius,
+                              const QBitArray &channelFlags,
+                              KoUpdater *updater);
 };
 
 #endif /* __KIS_GAUSSIAN_KERNEL_H */

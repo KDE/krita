@@ -69,8 +69,6 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
                                         KoUpdater* progressUpdater
                                         ) const
 {
-    QPoint srcTopLeft = rect.topLeft();
-
     Q_ASSERT(device != 0);
 
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
@@ -89,51 +87,9 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
-    if ( (horizontalRadius > 0) && (verticalRadius > 0) )
-    {
-        KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
-
-        KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
-        KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
-
-        qreal verticalCenter = qreal(kernelVertical->height()) / 2.0;
-
-        KisConvolutionPainter horizPainter(interm);
-        horizPainter.setChannelFlags(channelFlags);
-        horizPainter.setProgress(progressUpdater);
-        horizPainter.applyMatrix(kernelHoriz, device,
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 srcTopLeft - QPoint(0, ceil(verticalCenter)),
-                                 rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
-
-
-        KisConvolutionPainter verticalPainter(device);
-        verticalPainter.setChannelFlags(channelFlags);
-        verticalPainter.setProgress(progressUpdater);
-        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-    }
-    else
-    {
-        if (horizontalRadius > 0)
-        {
-            KisConvolutionPainter painter(device);
-            painter.setChannelFlags(channelFlags);
-            painter.setProgress(progressUpdater);
-
-            KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
-            painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-        }
-
-        if (verticalRadius > 0)
-        {
-            KisConvolutionPainter painter(device);
-            painter.setChannelFlags(channelFlags);
-            painter.setProgress(progressUpdater);
-
-            KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
-            painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
-        }
-    }
+    KisGaussianKernel::applyGaussian(device, rect,
+                                     horizontalRadius, verticalRadius,
+                                     channelFlags, progressUpdater);
 }
 
 QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const

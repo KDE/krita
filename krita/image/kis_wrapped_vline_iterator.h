@@ -37,6 +37,14 @@ public:
     {
     }
 
+    inline QSize originalRectToColumnsRows(const QRect &rect) {
+        return QSize(rect.height(), rect.width());
+    }
+
+    inline QPoint columnRowToXY(const QPoint &pt) const {
+        return QPoint(pt.y(), pt.x());
+    }
+
     inline IteratorTypeSP createIterator(KisDataManager *dataManager,
                                          const QRect &rc,
                                          qint32 offsetX, qint32 offsetY,
@@ -69,12 +77,20 @@ public:
         bool needSwitching = leftColumnIterator()->x() == m_lastColumnCoord;
 
             if (needSwitching) {
-                if (m_iteratorColumnStart != KisWrappedRect::TOPRIGHT &&
+                if (m_iteratorColumnStart == KisWrappedRect::TOPLEFT &&
                     m_iterators->at(KisWrappedRect::TOPRIGHT)) {
 
                     m_iteratorColumnStart = KisWrappedRect::TOPRIGHT;
+                    m_lastColumnCoord = m_splitRect->topRight().right();
+                } else /* if (m_iteratorColumnStart == KisWrappedRect::TOPRIGHT) */ {
+                    m_iteratorColumnStart = KisWrappedRect::TOPLEFT;
+                    m_lastColumnCoord = m_splitRect->topLeft().right();
 
-                    m_lastColumnCoord = m_splitRect->bottomLeft().right();
+                    foreach (IteratorTypeSP it, *m_iterators) {
+                        if (it) {
+                            it->resetColumnPos();
+                        }
+                    }
                 }
             }
 
@@ -89,7 +105,12 @@ public:
     }
 
     inline bool trySwitchColumnForced() {
-        return false;
+        leftColumnIterator()->resetPixelPos();
+        if (rightColumnIterator()) {
+            rightColumnIterator()->resetPixelPos();
+        }
+
+        return true;
     }
 
 private:

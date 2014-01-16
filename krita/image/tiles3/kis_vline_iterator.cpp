@@ -39,6 +39,8 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_top = y;
     m_bottom = y + h - 1;
 
+    m_left = m_x;
+
     m_havePixels = (h == 0) ? false : true;
     if (m_top > m_bottom) {
         m_havePixels = false;
@@ -64,6 +66,27 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     }
     m_index = 0;
     switchToTile(m_topInTopmostTile);
+}
+
+void KisVLineIterator2::resetPixelPos()
+{
+    m_y = m_top;
+
+    m_index = 0;
+    switchToTile(m_topInTopmostTile);
+
+    m_havePixels = true;
+}
+
+void KisVLineIterator2::resetColumnPos()
+{
+    m_x = m_left;
+
+    m_column = xToCol(m_x);
+    m_xInTile = calcXInTile(m_x, m_column);
+    preallocateTiles();
+
+    resetPixelPos();
 }
 
 bool KisVLineIterator2::nextPixel()

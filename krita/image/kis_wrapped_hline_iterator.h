@@ -34,6 +34,14 @@ public:
     {
     }
 
+    inline QSize originalRectToColumnsRows(const QRect &rect) {
+        return rect.size();
+    }
+
+    inline QPoint columnRowToXY(const QPoint &pt) const {
+        return pt;
+    }
+
     inline IteratorTypeSP createIterator(KisDataManager *dataManager,
                                          const QRect &rc,
                                          qint32 offsetX, qint32 offsetY,
@@ -65,17 +73,25 @@ public:
     inline bool trySwitchIteratorStripe() {
         bool needSwitching = leftColumnIterator()->y() == m_lastRowCoord;
 
-            if (needSwitching) {
-                if (m_iteratorRowStart != KisWrappedRect::BOTTOMLEFT &&
-                    m_iterators->at(KisWrappedRect::BOTTOMLEFT)) {
+        if (needSwitching) {
+            if (m_iteratorRowStart == KisWrappedRect::TOPLEFT &&
+                m_iterators->at(KisWrappedRect::BOTTOMLEFT)) {
 
-                    m_iteratorRowStart = KisWrappedRect::BOTTOMLEFT;
+                m_iteratorRowStart = KisWrappedRect::BOTTOMLEFT;
+                m_lastRowCoord = m_splitRect->bottomLeft().bottom();
+            } else /* if (m_iteratorRowStart == KisWrappedRect::BOTTOMLEFT) */ {
+                m_iteratorRowStart = KisWrappedRect::TOPLEFT;
+                m_lastRowCoord = m_splitRect->topLeft().bottom();
 
-                    m_lastRowCoord = m_splitRect->bottomLeft().bottom();
+                foreach (IteratorTypeSP it, *m_iterators) {
+                    if (it) {
+                        it->resetRowPos();
+                    }
                 }
             }
+        }
 
-            return needSwitching;
+        return needSwitching;
     }
 
     inline void iteratorsToNextRow() {
@@ -86,7 +102,11 @@ public:
     }
 
     inline bool trySwitchColumnForced() {
-        return false;
+        leftColumnIterator()->resetPixelPos();
+        if (rightColumnIterator()) {
+            rightColumnIterator()->resetPixelPos();
+        }
+        return true;
     }
 
 private:

@@ -33,6 +33,16 @@ public:
     {
     }
 
+    inline QSize originalRectToColumnsRows(const QRect &rect) {
+        return QSize(rect.width() * rect.height(), 1);
+    }
+
+    inline QPoint columnRowToXY(const QPoint &pt) const {
+        int col = pt.x();
+        int width = m_splitRect->originalRect().width();
+        return QPoint(col % width, col / width);
+    }
+
     inline IteratorTypeSP createIterator(KisDataManager *dataManager,
                                          const QRect &rc,
                                          qint32 offsetX, qint32 offsetY,
@@ -50,6 +60,19 @@ public:
                                        KisWrappedRect *splitRect) {
         m_splitRect = splitRect;
         m_iterators = iterators;
+
+        int iterationWidth = m_splitRect->topLeft().width() + m_splitRect->topRight().width();
+        int iterationHeight = m_splitRect->topLeft().height() + m_splitRect->topRight().height();
+
+        if (m_splitRect->wrapRect().width() < m_splitRect->originalRect().width() ||
+            m_splitRect->wrapRect().width() < m_splitRect->originalRect().height()) {
+
+            qCritical() << "CRITICAL: KisWrappedRectIterator does *not* support";
+            qCritical() << "          iteration over area larger than the wrapRect";
+            qCritical() << "          (not implemented).";
+            qCritical() << "          The result is UNDEFINED!";
+            KIS_ASSERT_RECOVER_NOOP(false);
+        }
     }
 
     inline IteratorTypeSP leftColumnIterator() const {

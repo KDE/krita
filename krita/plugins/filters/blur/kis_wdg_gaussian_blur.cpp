@@ -41,12 +41,19 @@ KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(paren
 
     m_widget->aspectButton->setKeepAspectRatio(false);
 
-    connect(m_widget->horizontalRadius, SIGNAL(valueChanged(int)), this, SLOT(horizontalRadiusChanged(int)));
-    connect(m_widget->verticalRadius, SIGNAL(valueChanged(int)), this, SLOT(verticalRadiusChanged(int)));
-    connect(m_widget->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectLockChanged(bool)));
+    m_widget->horizontalRadius->setRange(0.0, 100.0, 2);
+    m_widget->horizontalRadius->setSingleStep(0.2);
+    m_widget->horizontalRadius->setValue(0.5);
+    connect(m_widget->horizontalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(horizontalRadiusChanged(qreal)));
 
-    connect(m_widget->horizontalRadius, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_widget->verticalRadius, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    m_widget->verticalRadius->setRange(0.0, 100.0, 2);
+    m_widget->verticalRadius->setSingleStep(0.2);
+    m_widget->verticalRadius->setValue(0.5);
+    connect(m_widget->verticalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(verticalRadiusChanged(qreal)));
+
+    connect(m_widget->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectLockChanged(bool)));
+    connect(m_widget->horizontalRadius, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->verticalRadius, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisWdgGaussianBlur::~KisWdgGaussianBlur()
@@ -67,26 +74,40 @@ void KisWdgGaussianBlur::setConfiguration(const KisPropertiesConfiguration* conf
 {
     QVariant value;
     if (config->getProperty("horizRadius", value)) {
-        m_widget->horizontalRadius->setValue(value.toInt());
+        m_widget->horizontalRadius->setValue(value.toFloat());
     }
     if (config->getProperty("vertRadius", value)) {
-        m_widget->verticalRadius->setValue(value.toInt());
+        m_widget->verticalRadius->setValue(value.toFloat());
     }
     if (config->getProperty("lockAspect", value)) {
         m_widget->aspectButton->setKeepAspectRatio(value.toBool());
     }
 }
 
-void KisWdgGaussianBlur::horizontalRadiusChanged(int v)
+void KisWdgGaussianBlur::horizontalRadiusChanged(qreal v)
 {
-    if (m_widget->aspectButton->keepAspectRatio())
+    m_widget->horizontalRadius->blockSignals(true);
+    m_widget->horizontalRadius->setValue(v);
+    m_widget->horizontalRadius->blockSignals(false);
+
+    if (m_widget->aspectButton->keepAspectRatio()) {
+        m_widget->verticalRadius->blockSignals(true);
         m_widget->verticalRadius->setValue(v);
+        m_widget->verticalRadius->blockSignals(false);
+    }
 }
 
-void KisWdgGaussianBlur::verticalRadiusChanged(int v)
+void KisWdgGaussianBlur::verticalRadiusChanged(qreal v)
 {
-    if (m_widget->aspectButton->keepAspectRatio())
+    m_widget->verticalRadius->blockSignals(true);
+    m_widget->verticalRadius->setValue(v);
+    m_widget->verticalRadius->blockSignals(false);
+
+    if (m_widget->aspectButton->keepAspectRatio()) {
+        m_widget->horizontalRadius->blockSignals(true);
         m_widget->horizontalRadius->setValue(v);
+        m_widget->horizontalRadius->blockSignals(false);
+    }
 }
 
 void KisWdgGaussianBlur::aspectLockChanged(bool v)

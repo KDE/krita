@@ -119,6 +119,7 @@ set(kritaimage_LIB_SRCS
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
+   kis_gaussian_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
    kis_default_bounds_base.cpp

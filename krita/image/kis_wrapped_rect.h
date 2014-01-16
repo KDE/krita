@@ -44,8 +44,8 @@ struct KisWrappedRect : public QVector<QRect> {
     };
 
     KisWrappedRect(const QRect &rc, const QRect &wrapRect)
-        : m_originalRectOrigin(rc.topLeft()),
-          m_wrapRect(wrapRect)
+        : m_wrapRect(wrapRect),
+          m_originalRect(rc)
     {
         if (wrapRect.contains(rc)) {
             append(rc);
@@ -94,25 +94,17 @@ struct KisWrappedRect : public QVector<QRect> {
         return this->at(BOTTOMRIGHT);
     }
 
-    inline int wrappedXToX(int x) const {
-        x -= topLeft().x();
-        if (x < 0) x += m_wrapRect.width();
-        x += m_originalRectOrigin.x();
-
-        return x;
+    QRect wrapRect() const {
+        return m_wrapRect;
     }
 
-    inline int wrappedYToY(int y) const {
-        y -= topLeft().y();
-        if (y < 0) y += m_wrapRect.height();
-        y += m_originalRectOrigin.y();
-
-        return y;
+    QRect originalRect() const {
+        return m_originalRect;
     }
 
 private:
-    QPoint m_originalRectOrigin;
     QRect m_wrapRect;
+    QRect m_originalRect;
 };
 
 #endif /* __KIS_WRAPPED_RECT_H */

@@ -20,7 +20,7 @@
 
 #include <ksharedconfig.h>
 #include <kglobal.h>
-
+#include <KoConfig.h>
 
 KisImageConfig::KisImageConfig()
     : m_config(KGlobal::config()->group(""))
@@ -202,6 +202,12 @@ int KisImageConfig::totalRAM()
     {
         totalMemory = status.ullTotalPhys >> 20;
     }
+
+	// For 32 bit windows, the total memory available is at max the 2GB per process memory limit.
+#if defined ENV32BIT
+	totalMemory = qMin(totalMemory, 2000);
+#endif 
+
 #endif
 
     if(error) {

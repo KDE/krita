@@ -60,6 +60,17 @@
 
 #include <stdlib.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#if _WIN32 || _WIN64
+   #if _WIN64
+     #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+#endif
+#endif
 
 KoApplication* KoApplication::KoApp = 0;
 
@@ -161,9 +172,45 @@ public:
     QSplashScreen *m_splash;
 };
 
+#if defined(Q_OS_WIN) && defined(ENV32BIT)
+typedef bool (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, bool);
+
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+bool isWow64()
+{
+    bool bIsWow64 = false;
+
+    //IsWow64Process is not available on all supported versions of Windows.
+    //Use GetModuleHandle to get a handle to the DLL that contains the function
+    //and GetProcAddress to get a pointer to the function if available.
+
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    if(NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+        {
+            //handle error
+        }
+    }
+    return bIsWow64;
+}
+#endif
+
 bool KoApplication::start()
 {
 #ifdef Q_OS_WIN
+#ifdef ENV32BIT
+    if (isWow64) {
+	QMessageBox::information(0, qApp->applicationName(), 
+                                i18n("You are running an X86 build on a 64 bits Windows.\n"
+                                     "This is not recommended.\n"
+                                     "Please download and install an X64 build instead."));
+
+    }
+#endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

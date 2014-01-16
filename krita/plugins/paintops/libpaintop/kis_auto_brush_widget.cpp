@@ -330,7 +330,7 @@ void KisAutoBrushWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
     Q_UNUSED(dyPixels);
 
     qreal newWidth = inputRadius->value() + dxPixels;
-    newWidth = qMax(newWidth, 0.1);
+    newWidth = qMax(newWidth, qreal(0.1));
 
     inputRadius->setValue(newWidth);
 }

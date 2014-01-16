@@ -25,8 +25,6 @@
 #include <QPointF>
 #include <QList>
 #include <QMap>
-#include <QQueue>
-#include <input/kis_tablet_event.h>
 #include <QTabletEvent>
 
 
@@ -84,24 +82,6 @@ struct QTabletDeviceData
      * some cases, e.g. when real pressure is near 1.0.
      */
     short lastMotionPressureWorkaround;
-
-    struct EventWrapper {
-        EventWrapper()
-        : event(KisTabletEvent::TabletMoveEx, QPoint(), QPoint(), QPointF(), 0, 0, 0.0, 0, 0, 0.0, 0.0, 0, Qt::NoModifier, 0, Qt::NoButton, Qt::NoButton), widget(0)
-        {
-        }
-
-        EventWrapper(const KisTabletEvent &_event,
-                     QWidget *_widget)
-            : event(_event), widget(_widget)
-        {
-        }
-
-        KisTabletEvent event;
-        QWidget *widget;
-    };
-
-    QQueue<EventWrapper> queuedEvents;
 #endif
 };
 

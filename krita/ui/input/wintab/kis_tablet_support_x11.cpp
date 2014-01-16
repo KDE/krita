@@ -419,26 +419,6 @@ static Qt::MouseButton translateMouseButton(int b)
         Qt::LeftButton /* fallback */;
 }
 
-bool releaseQueuedTabletEvents(QTabletDeviceData *tablet, bool resetPressure)
-{
-    bool retval = false;
-
-    while (!tablet->queuedEvents.isEmpty()) {
-        QTabletDeviceData::EventWrapper w = tablet->queuedEvents.dequeue();
-
-        if (resetPressure) {
-            w.event.workaroundResetPressure(qreal(tablet->lastMotionPressureWorkaround / qreal(tablet->maxPressure - tablet->minPressure)));
-        }
-        qDebug() << "Releasing queued event" << ppVar(resetPressure);
-
-        w.event.ignore();
-        QApplication::sendEvent(w.widget, &w.event);
-        retval = w.event.isAccepted();
-    }
-
-    return retval;
-}
-
 bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *defaultWidget)
 {
     Q_ASSERT(defaultWidget);
@@ -464,7 +444,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     XDeviceButtonEvent *button = 0;
     KisTabletEvent::ExtraEventType t = KisTabletEvent::TabletMoveEx;
     Qt::KeyboardModifiers modifiers = 0;
-    bool queueEventWorkaround = false;
 
 #if QT_VERSION >= 0x040800
     modifiers = QApplication::queryKeyboardModifiers();
@@ -537,7 +516,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
                                     screenArea.x(), screenArea.width(),
                                     screenArea.y(), screenArea.height());
 
-
         /**
          * Workaround "pressure" bug of the evdev driver.
          *
@@ -545,11 +523,11 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
          * pressure is 1.0 or higher.
          */
         if (!pressure &&
-            motion->state & (Button1Mask | Button2Mask | Button3Mask)) {
-            qDebug() << "Workaround broken pressure: queueing" << pressure << "->" << tablet->lastMotionPressureWorkaround;
-            queueEventWorkaround = true;
-        } else {
-            tablet->lastMotionPressureWorkaround = pressure;
+            motion->state & (Button1Mask | Button2Mask | Button3Mask) &&
+            tablet->lastMotionPressureWorkaround > (tablet->minPressure + tablet->maxPressure) / 2) {
+
+            qDebug() << "Workaround broken pressure:" << pressure << "->" << tablet->lastMotionPressureWorkaround;
+            pressure = tablet->lastMotionPressureWorkaround;
         }
 
         /**
@@ -567,6 +545,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
             qDebug() << "Workaround broken HiRes coords: event eaten" << ppVar(hiRes) << ppVar(global);
             return true;
         }
+
+        tablet->lastMotionPressureWorkaround = pressure;
 
 #ifdef DEBUG_TABLET_EVENTS
         qDebug() << "*** MotionEvent ***";
@@ -661,14 +641,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
                      qtbutton, qtbuttons);
 
 
-    if (!queueEventWorkaround) {
-        releaseQueuedTabletEvents(tablet, t != KisTabletEvent::TabletReleaseEx);
-        e.ignore();
-        QApplication::sendEvent(w, &e);
-    } else {
-        qDebug() << "Enqueueing an event";
-        tablet->queuedEvents.enqueue(QTabletDeviceData::EventWrapper(e, w));
-    }
+    e.ignore();
+    QApplication::sendEvent(w, &e);
 
     return e.isAccepted();
 }

@@ -75,14 +75,6 @@ struct QTabletDeviceData
 #ifdef Q_WS_WIN
     QMap<quint8, quint8> buttonsMap;
 #endif
-
-#ifdef Q_WS_X11
-    /**
-     * Workaround for the evdev driver, which reports zero pressure in
-     * some cases, e.g. when real pressure is near 1.0.
-     */
-    short lastMotionPressureWorkaround;
-#endif
 };
 
 static inline int sign(int x)

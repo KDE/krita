@@ -354,7 +354,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
-    setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));

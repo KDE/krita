@@ -20,6 +20,7 @@
 #define KIS_INPUTMANAGER_H
 
 #include <QObject>
+#include <krita_export.h>
 
 class QPointF;
 class QTabletEvent;
@@ -46,7 +47,7 @@ class KisInputAction;
  *
  * \todo Implement shortcut configuration
  */
-class KisInputManager : public QObject
+class KRITAUI_EXPORT KisInputManager : public QObject
 {
     Q_OBJECT
 
@@ -113,6 +114,7 @@ public:
 
 public Q_SLOTS:
     void setMirrorAxis();
+	void stopIgnoringEvents();
 
 private Q_SLOTS:
     void slotToolChanged();

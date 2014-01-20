@@ -96,6 +96,7 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
 
 QColor KisColorSelectorComponent::currentColor()
 {
+
     return selectColor(m_lastX, m_lastY);
 }
 

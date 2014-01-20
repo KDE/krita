@@ -61,13 +61,25 @@ void KisColorSelectorWheel::setColor(const QColor &c)
     m_lastClickPos.setY(sin(angle)*radius+0.5);
 
     //workaround for bug 279500
-    setLastMousePosition(m_lastClickPos.x()*width(), m_lastClickPos.y()*height());
+
+
+    if(m_lastClickPos!=QPoint(-1,-1) && m_parent->displayBlip()) {
+        QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
+        if(width()<height())
+            pos.setY(pos.y()+height()/2-width()/2);
+        else
+            pos.setX(pos.x()+width()/2-height()/2);
+   
+   setLastMousePosition(pos.x(), pos.y());
+
+   
+   }
+
 }
 
 QColor KisColorSelectorWheel::selectColor(int x, int y)
 {
     m_kocolor.convertTo(colorSpace());
-
     int xWheel = x-width()/2;
     int yWheel = y-height()/2;
 
@@ -108,11 +120,13 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
     m_lastClickPos.setX(cos(angle)*radius+0.5);
     m_lastClickPos.setY(sin(angle)*radius+0.5);
 
+
     return colorAt(x, y, true);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)
 {
+
     if(isDirty()) {
         m_kocolor.convertTo(colorSpace());
 
@@ -144,6 +158,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     painter->drawImage(0,0, m_pixelCache);
 
     // draw blips
+   
     if(m_lastClickPos!=QPoint(-1,-1) && m_parent->displayBlip()) {
         QPoint pos = (m_lastClickPos*qMin(width(), height())).toPoint();
         if(width()<height())
@@ -198,8 +213,8 @@ const QColor& KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     default:
         Q_ASSERT(false);
         m_qcolor = QColor();
+   
         return m_qcolor;
     }
-
     return m_qcolor;
 }

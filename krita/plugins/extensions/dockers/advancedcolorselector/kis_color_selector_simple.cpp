@@ -32,17 +32,17 @@ void KisColorSelectorSimple::setColor(const QColor &c)
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.hslSaturationF());
-        m_lastClickPos.setY(1. - c.lightnessF());
+        m_lastClickPos.setY(1 - c.lightnessF());
         emit paramChanged(-1, -1, -1, c.hslSaturationF(), c.lightnessF());
         break;
     case KisColorSelector::LH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1. - c.lightnessF());
+        m_lastClickPos.setY(1 - c.lightnessF());
         emit paramChanged(c.hueF(), -1, -1, -1, c.lightnessF());
         break;
     case KisColorSelector::SV:
         m_lastClickPos.setX(c.saturationF());
-        m_lastClickPos.setY(1. - c.valueF());
+        m_lastClickPos.setY(1 - c.valueF());
         emit paramChanged(-1, c.saturationF(), c.valueF(), -1, -1);
         break;
     case KisColorSelector::SV2: {
@@ -59,21 +59,21 @@ void KisColorSelectorSimple::setColor(const QColor &c)
     }
     case KisColorSelector::VH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1. - c.valueF());
+        m_lastClickPos.setY(1 - c.valueF());
         emit paramChanged(c.hueF(), -1, c.valueF(), -1, -1);
         break;
     case KisColorSelector::hsvSH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1. - c.saturationF());
+        m_lastClickPos.setY(1 - c.saturationF());
         emit paramChanged(c.hueF(), c.saturationF(), -1, -1, -1);
         break;
     case KisColorSelector::hslSH:
-        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
+        m_lastClickPos.setX(qBound<qreal>(0., c.hslHueF(), 1.));
         m_lastClickPos.setY(1 - c.hslSaturationF());
         emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
         break;
     case KisColorSelector::L:
-        m_lastClickPos.setX(c.lightnessF());
+        m_lastClickPos.setX(qBound<qreal>(0., c.lightnessF(), 1.));
         emit paramChanged(-1, -1, -1, -1, c.lightnessF());
         break;
     case KisColorSelector::V:
@@ -81,11 +81,11 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         emit paramChanged(-1, -1, c.valueF(), -1, -1);
         break;
     case KisColorSelector::hsvS:
-        m_lastClickPos.setX(c.saturationF());
+        m_lastClickPos.setX( c.saturationF() );
         emit paramChanged(-1, c.saturationF(), -1, -1, -1);
         break;
     case KisColorSelector::hslS:
-        m_lastClickPos.setX(c.hslSaturationF());
+        m_lastClickPos.setX( c.hslSaturationF() );
         emit paramChanged(-1, -1, -1, c.hslSaturationF(), -1);
         break;
     case KisColorSelector::H:
@@ -97,10 +97,14 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         break;
     }
     emit update();
+setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
+
 }
 
 QColor KisColorSelectorSimple::selectColor(int x, int y)
 {
+
+
     m_kocolor.convertTo(colorSpace());
 
     m_lastClickPos.setX(x/qreal(width()));

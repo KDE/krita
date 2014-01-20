@@ -131,6 +131,13 @@ public:
     void setActionEnabled( int actions, bool enable );
 
     /**
+     * @brief Set the view mode
+     *
+     * @param mode the new view mode
+     */
+    void setViewMode( KoPAViewMode* mode );
+
+    /**
      * Set the active page and updates the UI
      */
     void doUpdateActivePage( KoPAPageBase * page );

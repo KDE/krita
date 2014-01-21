@@ -94,7 +94,7 @@ bool KisHLineIterator2::nextPixel()
     } else {
         ++m_x;
         m_data += m_pixelSize;
-        if (m_data < m_dataRight)
+        if (m_x <= m_rightmostInTile)
             m_oldData += m_pixelSize;
         else {
             // Switching to the beginning of the next tile
@@ -128,7 +128,7 @@ void KisHLineIterator2::nextRow()
 
 qint32 KisHLineIterator2::nConseqPixels() const
 {
-    return (m_dataRight - m_data) / m_pixelSize;
+    return qMin(m_rightmostInTile, m_right) - m_x + 1;
 }
 
 
@@ -192,7 +192,7 @@ void KisHLineIterator2::switchToTile(qint32 xInTile)
 
     int offset_row = m_pixelSize * (m_yInTile * KisTileData::WIDTH);
     m_data += offset_row;
-    m_dataRight = m_data + m_tileWidth;
+    m_rightmostInTile = (m_leftCol + m_index + 1) * KisTileData::WIDTH - 1;
     int offset_col = m_pixelSize * xInTile;
     m_data  += offset_col;
     m_oldData += offset_row + offset_col;

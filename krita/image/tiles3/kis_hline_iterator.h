@@ -60,7 +60,6 @@ private:
     quint32 m_index;    // current col in tilemgr
     quint32 m_tileWidth;
     quint8 *m_data;
-    quint8 *m_dataRight;
     quint8 *m_oldData;
     bool m_havePixels;
     
@@ -69,6 +68,8 @@ private:
     qint32 m_top;
     qint32 m_leftCol;
     qint32 m_rightCol;
+
+    qint32 m_rightmostInTile; // limited by the current tile border only
 
     qint32 m_leftInLeftmostTile;
     qint32 m_yInTile;

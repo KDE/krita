@@ -29,6 +29,7 @@
 #include "kis_random_sub_accessor.h"
 #include <kis_iterator_ng.h>
 #include <kis_repeat_iterators_pixel.h>
+#include <kis_sequential_iterator.h>
 
 #include "kis_paint_device.h"
 
@@ -67,6 +68,44 @@ void KisIteratorBenchmark::rectIter(const KoColorSpace * colorSpace)
         qDebug() << "RectIterator run (with nConseqPixels)" << i  << "took" << t.elapsed();
         t.restart();
     }
+
+    delete[] bytes;
+}
+
+void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
+{
+
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
+
+    quint8 * bytes = new quint8[colorSpace->pixelSize() * 64*64];
+    memset(bytes, 128, 64 * 64 * colorSpace->pixelSize());
+
+    QTime t;
+    t.start();
+
+    for (int i = 0; i < 3; i++) {
+        KisSequentialIterator it(dev, QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
+        do {
+            memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+        } while (it.nextPixel());
+
+        qDebug() << "SequentialIterator run " << i  << "took" << t.elapsed();
+        t.restart();
+    }
+
+    t.restart();
+
+    for (int i = 0; i < 3; i++) {
+        KisSequentialConstIterator it(dev, QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
+        do {
+            //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+        } while (it.nextPixel());
+
+        qDebug() << "SequentialConstIterator run " << i  << "took" << t.elapsed();
+        t.restart();
+    }
+
+
 
     delete[] bytes;
 }
@@ -136,7 +175,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
         KisVLineIteratorSP it = dev.createVLineIteratorNG(0, 0, TEST_HEIGHT);
         for (int j = 0; j < TEST_WIDTH; j++) {
             do {
-                //memcpy(it->rawData(), bytes, colorSpace->pixelSize());
+                memcpy(it->rawData(), bytes, colorSpace->pixelSize());
             } while(it->nextPixel());
             it->nextColumn();
         }
@@ -226,6 +265,7 @@ void KisIteratorBenchmark::runBenchmark()
     hLineIterNG(cs);
     vLineIterNG(cs);
     rectIter(cs);
+    sequentialIter(cs);
     randomAccessor(cs);
 }
 

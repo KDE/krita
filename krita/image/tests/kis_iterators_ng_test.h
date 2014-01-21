@@ -36,6 +36,7 @@ private:
     void writeBytes(const KoColorSpace * cs);
     void fill(const KoColorSpace * cs);
     void rectIter(const KoColorSpace * cs);
+    void sequentialIter(const KoColorSpace * colorSpace);
     void hLineIter(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
 
@@ -44,6 +45,7 @@ private slots:
     void vLineIter();
     void writeBytes();
     void fill();
+    void sequentialIter();
     void rectIter();
     void hLineIter();
     void randomAccessor();

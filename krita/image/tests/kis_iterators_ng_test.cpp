@@ -31,6 +31,8 @@
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
+#include "kis_sequential_iterator.h"
+
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -41,7 +43,6 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
         qDebug() << "Testing with" << cs->id();
         if (cs->id() != "GRAYU16") // No point in testing extend for GRAYU16
             (this->*funcPtr)(cs);
-
     }
 }
 
@@ -178,6 +179,90 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     
 
     delete[] bytes;
+}
+
+void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
+{
+
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
+
+    QCOMPARE(dev->extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+
+    // Const does not extend the extent
+    {
+        KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
+        while (it.nextPixel());
+        QCOMPARE(dev->extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+        QCOMPARE(dev->exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    }
+
+    // Non-const does
+    {
+        KisSequentialIterator it(dev, QRect(0, 0, 128, 128));
+        int i = -1;
+
+        do {
+            i++;
+            KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
+            memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
+        } while (it.nextPixel());
+
+        QCOMPARE(dev->extent(), QRect(0, 0, 128, 128));
+        QCOMPARE(dev->exactBounds(), QRect(0, 0, 128, 128));
+    }
+
+    { // check const iterator
+        KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
+        int i = -1;
+
+        do {
+            i++;
+            KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
+            QVERIFY(memcmp(it.rawDataConst(), c.data(), colorSpace->pixelSize()) == 0);
+        } while (it.nextPixel());
+
+        QCOMPARE(dev->extent(), QRect(0, 0, 128, 128));
+        QCOMPARE(dev->exactBounds(), QRect(0, 0, 128, 128));
+    }
+
+    dev->clear();
+
+    {
+        KisSequentialIterator it(dev, QRect(10, 10, 128, 128));
+        int i = -1;
+
+        do {
+            i++;
+            KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
+
+            memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
+        } while (it.nextPixel());
+
+        QCOMPARE(dev->extent(), QRect(0, 0, 3 * 64, 3 * 64));
+        QCOMPARE(dev->exactBounds(), QRect(10, 10, 128, 128));
+    }
+
+    dev->clear();
+    dev->setX(10);
+    dev->setY(-15);
+
+    {
+        KisSequentialIterator it(dev, QRect(10, 10, 128, 128));
+        int i = -1;
+
+        do {
+            i++;
+            KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
+
+            memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
+        } while (it.nextPixel());
+        QCOMPARE(dev->extent(), QRect(10, -15, 128, 192));
+        QCOMPARE(dev->exactBounds(), QRect(10, 10, 128, 128));
+    }
+    {
+        KisSequentialIterator it(dev, QRect(10, 10, 128, 128));
+        QCOMPARE(it.rawData(), it.oldRawData());
+    }
 }
 
 void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
@@ -361,6 +446,11 @@ void KisIteratorTest::fill()
 void KisIteratorTest::rectIter()
 {
     allCsApplicator(&KisIteratorTest::rectIter);
+}
+
+void KisIteratorTest::sequentialIter()
+{
+    allCsApplicator(&KisIteratorTest::sequentialIter);
 }
 
 void KisIteratorTest::hLineIter()

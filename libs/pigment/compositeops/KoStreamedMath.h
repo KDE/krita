@@ -23,16 +23,8 @@
 #include <Vc/IO>
 
 #include <stdint.h>
+#include <KoAlwaysInline.h>
 
-#ifndef ALWAYS_INLINE
-#if defined __GNUC__
-#define ALWAYS_INLINE inline __attribute__((__always_inline__))
-#elif defined _MSC_VER
-#define ALWAYS_INLINE __forceinline
-#else
-#define ALWAYS_INLINE inline
-#endif
-#endif
 
 template<Vc::Implementation _impl>
 struct KoStreamedMath {

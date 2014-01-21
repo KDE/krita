@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ITERATOR_BENCHMARK_H
-#define KIS_ITERATOR_BENCHMARK_H
+#ifndef __KO_ALWAYS_INLINE_H
+#define __KO_ALWAYS_INLINE_H
 
-#include <QtTest>
-
-class KoColorSpace;
-
-class KisIteratorBenchmark : public QObject
-{
-    Q_OBJECT
-
-private:
-    void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs));
-
-    void vLineIterNG(const KoColorSpace * cs);
-    void sequentialIter(const KoColorSpace * colorSpace);
-    void rectIter(const KoColorSpace * cs);
-    void hLineIterNG(const KoColorSpace * cs);
-    void randomAccessor(const KoColorSpace * cs);
-
-
-private slots:
-
-    void runBenchmark();
-};
-
+#ifndef ALWAYS_INLINE
+#if defined __GNUC__
+#define ALWAYS_INLINE inline __attribute__((__always_inline__))
+#elif defined _MSC_VER
+#define ALWAYS_INLINE __forceinline
+#else
+#define ALWAYS_INLINE inline
+#endif
 #endif
 
+#endif /* __KO_ALWAYS_INLINE_H */

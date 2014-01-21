@@ -939,43 +939,62 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     QRect layerProjectionExtent = layer->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
+    bool alphaDisabled = layer->alphaChannelDisabled();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
     KisPaintDeviceSP mergedDevice;
 
-    if (layer->compositeOpId() != prevLayer->compositeOpId() || layer->opacity() != prevLayer->opacity()) {
+    if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
 
         mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
         KisPainter gc(mergedDevice);
 
+        //Copy the pixels of previous layer with their actual alpha value
+        prevLayer->disableAlphaChannel(false);
         gc.setChannelFlags(prevLayer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
         gc.setOpacity(prevLayer->opacity());
 
         gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
 
+        //Restore the previous prevLayer disableAlpha status for correct undo/redo
+        prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
+        //Paint the pixels of the current layer, using their actual alpha value
+        layer->disableAlphaChannel(false);
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
 
         gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        layer->disableAlphaChannel(alphaDisabled);
     }
     else {
+        //Copy prevLayer
         lock();
         mergedDevice = new KisPaintDevice(*prevLayer->projection());
         unlock();
 
+        //Paint layer on the copy
         KisPainter gc(mergedDevice);
+        layer->disableAlphaChannel(false);
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
+
         gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        layer->disableAlphaChannel(alphaDisabled);
     }
+
 
     KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
-    mergedLayer->disableAlphaChannel(prevLayer->alphaChannelDisabled());
+    mergedLayer->disableAlphaChannel(prevAlphaDisabled);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;

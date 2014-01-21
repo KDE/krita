@@ -157,7 +157,10 @@ qreal Constants::hugeFontSize() const
 
 bool Constants::isLandscape() const
 {
-    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
+	// If user switches certain settings in windows, activeWindow can become null.
+	if(qApp->activeWindow())
+	    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
+	return true;
 }
 
 #include "Constants.moc"

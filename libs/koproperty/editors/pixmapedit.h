@@ -46,16 +46,12 @@ public:
 
 public slots:
     void setValue(const QVariant &value);
-//moved    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-//    void resizeEvent(QResizeEvent *ev);
-    bool eventFilter(QObject *o, QEvent *ev);
 
 signals:
     void commitData( QWidget * editor );
 
 protected:
-//    virtual void setReadOnlyInternal(bool readOnly);
+    virtual bool eventFilter(QObject *o, QEvent *ev);
 
 protected slots:
     /*! Helper used by selectPixmap(). Can be also used by subclassess.

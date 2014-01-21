@@ -35,6 +35,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
+#include <KoConfig.h>
 
 #include <kdeversion.h>
 #include <klocale.h>
@@ -60,6 +61,10 @@
 
 #include <stdlib.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#endif
 
 KoApplication* KoApplication::KoApp = 0;
 

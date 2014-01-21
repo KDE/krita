@@ -224,12 +224,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     action = new KAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Right));
+    action->setShortcut(KShortcut(Qt::Key_Comma));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new KAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Left));
+    action->setShortcut(KShortcut(Qt::Key_Stop));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new KAction(i18n("Switch to Previous Preset"), this);

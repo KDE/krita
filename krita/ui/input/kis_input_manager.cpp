@@ -537,6 +537,11 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     d->eventsReceiver->installEventFilter(this);
 }
 
+void KisInputManager::stopIgnoringEvents()
+{
+	stop_ignore_cursor_events();
+}
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     bool retval = false;

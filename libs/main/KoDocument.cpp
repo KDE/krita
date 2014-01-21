@@ -1262,7 +1262,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     if (autosaveOpened) {
         resetURL(); // Force save to act like 'Save As'
         setReadWrite(true); // enable save button
-        QFile::remove(url.toLocalFile()); // and remove the autosave file
+        setModified(true);
     }
     else {
         d->parentPart->addRecentURLToAllMainWindows(_url);

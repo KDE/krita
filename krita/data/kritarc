@@ -168,7 +168,7 @@ ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
 ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId,GuidesTool_ID
 
 [favoriteList]
-favoritePresets=Basic_Airbrush,Basic_ink_10,Hairy_clean,Hatch_diag_S,Pencil_2B,Pencil_HB,Sketch_ink_small,Sketch_wires,
+favoritePresets=Basic_tip_default,Basic_circle_wet,Block_basic,Bristles_hairy,Eraser_circle,Eraser_hard,Eraser_soft,Mix_dull,Mix_smear_soft,Ink_gpen_10
 
 
 [advancedColorSelector]

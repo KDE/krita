@@ -166,9 +166,47 @@ public:
     QSplashScreen *m_splash;
 };
 
+#if defined(Q_OS_WIN) && defined(ENV32BIT)
+typedef bool (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, bool);
+
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+bool isWow64()
+{
+    bool bIsWow64 = false;
+
+    //IsWow64Process is not available on all supported versions of Windows.
+    //Use GetModuleHandle to get a handle to the DLL that contains the function
+    //and GetProcAddress to get a pointer to the function if available.
+
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    if(NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+        {
+            //handle error
+        }
+    }
+    return bIsWow64;
+}
+#endif
+
 bool KoApplication::start()
 {
 #ifdef Q_OS_WIN
+#ifdef ENV32BIT
+    if (isWow64()) {
+    	KMessageBox::information(0, 
+                                 i18n("You are running an 32 bits build on a 64 bits Windows.\n"
+                                      "This is not recommended.\n"
+                                      "Please download and install the x64 build instead."),
+                                 qApp->applicationName(), 
+                                 "calligra_32_on_64_warning");
+
+    }
+#endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

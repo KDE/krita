@@ -190,6 +190,9 @@ public:
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
 
+    bool antialiasSelectionOutline() const;
+    void setAntialiasSelectionOutline(bool v) const;
+
     bool showRootLayer() const;
     void setShowRootLayer(bool showRootLayer) const;
 

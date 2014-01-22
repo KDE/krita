@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>468</height>
+    <height>503</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -165,6 +165,13 @@
        <widget class="QCheckBox" name="chkCurveAntialiasing">
         <property name="text">
          <string>Enable curve anti-aliasing</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkSelectionOutlineAntialiasing">
+        <property name="text">
+         <string>Enable selection outline anti-aliasing</string>
         </property>
        </widget>
       </item>

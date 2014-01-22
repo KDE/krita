@@ -34,6 +34,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_coordinates_converter.h"
+#include "kis_config.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -140,11 +141,8 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     gc.save();
     gc.setTransform(QTransform(), false);
 
-    // Disable antialiasing. This allow us to draw the selection outline with a consistent look in all zoom levels.
-    // Reason: The selection outline is 1 pixel width. Antialiasing will produce a fuzzy gray line of 2 pixels in most cases,
-    // but sometimes can produce a clear line of 1 pixel, while still producing other fuzzy lines at the same time! Thus,
-    // the overall look is not consistent if antialiasing is enabled for 1 pixel width lines.
-    gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, false);
+    KisConfig cfg;
+    gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, cfg.antialiasSelectionOutline());
 
     QTransform transform = converter->imageToWidgetTransform();
 

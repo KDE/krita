@@ -135,9 +135,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     setFont(QFont("sans-serif"));
 
-    #ifdef Q_WS_X11
     KWindowSystem::setType( winId(), NET::Notification );
-    #endif
 
     m_timer.setSingleShot( true );
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));

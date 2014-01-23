@@ -21,25 +21,28 @@
 
 #include "imagesplit.h"
 
+#include <QStringList>
+#include <QDir>
+#include <QDesktopServices>
+
 #include <klocale.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
+#include <kmimetype.h>
+
+#include <KoFilterManager.h>
+#include <KoFileDialogHelper.h>
+#include <KoDocument.h>
+
+#include <kis_debug.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_action.h>
-
 #include <kis_doc2.h>
-#include <KoDocument.h>
-#include <kmimetype.h>
-#include <QStringList>
-#include <KoFilterManager.h>
-#include <kfiledialog.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <QDir>
-
 #include <kis_paint_device.h>
+
 #include "dlg_imagesplit.h"
 
 K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
@@ -126,21 +129,20 @@ void Imagesplit::slotImagesplit()
             for(int i=0;i<(numVerticalLines+1);i++) {
               for(int j=0;j<(numHorizontalLines+1);j++)
               {
-                    QString mimelist = listMimeFilter.join(" ");
-                    KFileDialog fd(KUrl(QString()), mimelist, m_view);
-                    fd.setObjectName("Save Image on Split");
-                    fd.setCaption(i18n("Save Image on Split"));
-                    fd.setMimeFilter(listMimeFilter, listMimeFilter.at(0));
-                    fd.setOperationMode(KFileDialog::Saving);
+                    QString filename = KoFileDialogHelper::getSaveFileName(m_view,
+                                                                           i18n("Save Image on Split"),
+                                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                                           listMimeFilter,
+                                                                           "",
+                                                                           "OpenDocument");
 
-                    if (!fd.exec()) return;
+                    KUrl url = KUrl::fromLocalFile(filename);
 
-                    KUrl url = fd.selectedUrl();
-                    QString mimefilter = fd.currentMimeFilter();
+                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+                    QString mimefilter = mime->name();
 
                     if (url.isEmpty())
                         return;
-
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),mimefilter,url);
                 }
             }

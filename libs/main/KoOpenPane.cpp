@@ -134,7 +134,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, con
     d->m_componentData = componentData;
     d->setupUi(this);
 
-    m_mimeFiletr = mimeFilter;
+    m_mimeFilter = mimeFilter;
     d->m_openExistingButton->setText(i18n("Open Existing Document"));
 
     connect(d->m_openExistingButton, SIGNAL(clicked()),
@@ -198,15 +198,14 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
-    KConfigGroup group = KGlobal::config()->group("File Dialogs");
-    QString defaultDir = group.readEntry("OpenDialog");
-    if (defaultDir.isEmpty())
-        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url = KoFileDialogHelper::getOpenFileName(this,
-                                               i18n("Open Existing Document"),
-                                               defaultDir,
-                                               m_mimeFiletr);
-    group.writeEntry("OpenDialog", url);
+                                                      i18n("Open Existing Document"),
+                                                      (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+                                                        ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                                                        : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
+                                                      m_mimeFilter,
+                                                      "",
+                                                      "OpenDocument");
     emit openExistingFile(KUrl(url));
 }
 

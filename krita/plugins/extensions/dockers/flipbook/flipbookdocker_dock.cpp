@@ -28,6 +28,7 @@
 #include <kactioncollection.h>
 #include <kurl.h>
 
+#include <KoFileDialogHelper.h>
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoZoomController.h>
@@ -157,8 +158,12 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 
 void FlipbookDockerDock::saveFlipbook()
 {
-    QString filename = KFileDialog::getSaveFileName(KUrl("kfiledialog:///OpenDialog"),
-                                                    "*.flipbook", this, i18n("Save flipbook"));
+    QString filename = KoFileDialogHelper::getSaveFileName(this,
+                                                           i18n("Save flipbook"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           QStringList("*.flipbook"),
+                                                           "",
+                                                           "OpenDocument");
     if (!filename.isEmpty()) {
         m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);

@@ -45,13 +45,13 @@
 #include <KoColorProfile.h>
 #include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoFileDialogHelper.h>
 #include <KoPart.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kfiledialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
@@ -299,7 +299,10 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    filename = KoFileDialogHelper::getOpenFileName(m_page,
+                                                   i18n("Select OpenColorIO Configuration"),
+                                                   QDir::cleanPath(filename),
+                                                   QStringList("*.ocio|OpenColorIO configuration (*.ocio)"));
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);

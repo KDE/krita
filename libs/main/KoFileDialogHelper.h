@@ -38,53 +38,68 @@ public:
      * @brief getOpenFileName - used for open an existing document
      * @param parent The parent of the file dialog
      * @param caption Caption of the file dialog
-     * @param dir Directory when file dialog appear
+     * @param dir the default directory the file dialog shows. If uniqueName is provided, this will be replaced by the last open directory.
      * @param mimeList List of mimetypes user can select in the file dialog
      * @param selectedMime Mimetype selected by default
+     * @param uniqueName the name for the file dialog. This will be used to open the filedialog in the last open location, instead the specified directory.
+     *
      * @return The name of the entry user selected in the file dialog
+     *
      */
     static QString getOpenFileName(QWidget *parent = 0,
                                    const QString &caption = QString(),
                                    const QString &dir = QString(),
                                    const QStringList &mimeList = QStringList(),
-                                   const QString &defaultMime = QString());
+                                   const QString &defaultMime = QString(),
+                                   const QString uniqueName = QString());
 
     static QStringList getOpenFileNames(QWidget *parent = 0,
                                         const QString &caption = QString(),
                                         const QString &dir = QString(),
                                         const QStringList &mimeList = QStringList(),
-                                        const QString &defaultMime = QString());
+                                        const QString &defaultMime = QString(),
+                                        const QString uniqueName = QString());
 
     static QString getOpenDirectory(QWidget *parent = 0,
                                     const QString &caption = QString(),
-                                    const QString &dir = QString());
+                                    const QString &dir = QString(),
+                                    const QString uniqueName = QString());
 
     static QString getImportFileName(QWidget *parent = 0,
                                      const QString &caption = QString(),
                                      const QString &dir = QString(),
                                      const QStringList &mimeList = QStringList(),
-                                     const QString &defaultMime = QString());
+                                     const QString &defaultMime = QString(),
+                                     const QString uniqueName = QString());
 
     static QStringList getImportFileNames(QWidget *parent = 0,
                                           const QString &caption = QString(),
                                           const QString &dir = QString(),
                                           const QStringList &mimeList = QStringList(),
-                                          const QString &defaultMime = QString());
+                                          const QString &defaultMime = QString(),
+                                          const QString uniqueName = QString());
 
     static QString getImportDirectory(QWidget *parent = 0,
                                       const QString &caption = QString(),
-                                      const QString &dir = QString());
+                                      const QString &dir = QString(),
+                                      const QString uniqueName = QString());
 
     static QString getSaveFileName(QWidget *parent = 0,
                                    const QString &caption = QString(),
                                    const QString &dir = QString(),
                                    const QStringList &mimeList = QStringList(),
-                                   const QString &defaultMime = QString());
+                                   const QString &defaultMime = QString(),
+                                   const QString uniqueName = QString());
 
 private:
-    static const QString getFilterString(const QStringList &mimeList,
-                                         bool withAllSupported = true);
+
+    static const QString getDefaultDir(const QString &defaultDir, const QString &dialogName);
+    static void saveDefaultDir(const QString &fileName, const QString &dialogName);
+
+    static const QString getFilterString(const QStringList &mimeList, bool withAllSupported = true);
+
     static const QString getFilterString(const QString &defaultMime);
+
     static QStringList getFileNames(QWidget *parent,
                                     const QString &caption,
                                     const QString &dir,

@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 
+#include <KoFileDialogHelper.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
@@ -271,7 +272,10 @@ void LutDockerDock::selectOcioConfiguration()
     //qDebug() << "selectOcioConfiguration";
     QString filename = m_txtConfigurationPath->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", this);
+    filename = KoFileDialogHelper::getOpenFileName(this,
+                                                   i18n("Select OpenColorIO Configuration"),
+                                                   QDir::cleanPath(filename),
+                                                   QStringList("*.ocio"));
     QFile f(filename);
     if (f.exists()) {
         m_txtConfigurationPath->setText(filename);

@@ -30,6 +30,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 
+#include <KoFileDialogHelper.h>
 #include <KoApplication.h>
 #include <KoFilterManager.h>
 
@@ -97,10 +98,12 @@ void KisDlgFileLayer::slotSelectFile()
     if (!m_basePath.isEmpty()) {
         startUrl.setPath(m_basePath);
     }
-    QString url = KFileDialog::getOpenFileName(startUrl,
-                                               mimeFilter.join(" "),
-                                               this,
-                                               i18n("Select file to use as dynamic file layer."));
+    QString url = KoFileDialogHelper::getOpenFileName(this,
+                                                      i18n("Select file to use as dynamic file layer."),
+                                                      startUrl.toLocalFile(),
+                                                      mimeFilter,
+                                                      "",
+                                                      "OpenDocument");
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);
     }

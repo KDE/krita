@@ -115,17 +115,17 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     }
 
 
-    KisRectConstIteratorSP it = l->paintDevice()->createRectConstIteratorNG(image->bounds());
+    KisSequentialConstIterator it(l->paintDevice(), image->bounds());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     KisPNGOptions options;
     bool isThereAlpha = false;
     do {
-        if (cs->opacityU8(it->oldRawData()) != OPACITY_OPAQUE_U8) {
+        if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
             break;
         }
-    } while (it->nextPixel());
+    } while (it.nextPixel());
 
     if (qApp->applicationName() != "qttest") {
 

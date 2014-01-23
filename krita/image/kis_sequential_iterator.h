@@ -98,6 +98,20 @@ public:
         m_policy.updatePointersCache();
     }
 
+    inline int nConseqPixels() const {
+        return m_columnsLeft;
+    }
+
+    inline bool nextPixels(int numPixels) {
+        // leave one step for the nextPixel() call
+        numPixels--;
+
+        m_columnsLeft -= numPixels;
+        m_columnOffset += numPixels * m_pixelSize;
+
+        return nextPixel();
+    }
+
     inline bool nextPixel() {
         m_columnsLeft--;
 
@@ -120,6 +134,15 @@ public:
 
         }
         return m_columnsLeft > 0;
+    }
+
+
+    ALWAYS_INLINE int x() const {
+        return m_policy.m_iter->x() + m_numConseqPixels - m_columnsLeft;
+    }
+
+    ALWAYS_INLINE int y() const {
+        return m_policy.m_iter->y();
     }
 
     // SFINAE: This method becomes undefined for const version of the

@@ -1013,13 +1013,6 @@ static bool nextRowGeneral(KisVLineIteratorSP it, int y, const QRect &rc) {
     return y < rc.width();
 }
 
-static bool nextRowGeneral(KisRectIteratorSP it, int y, const QRect &rc) {
-    Q_UNUSED(it);
-    Q_UNUSED(y);
-    Q_UNUSED(rc);
-    return false;
-}
-
 template <class T>
 bool checkXY(const QPoint &pt, const QPoint &realPt) {
     Q_UNUSED(pt);
@@ -1072,12 +1065,6 @@ template <>
 KisVLineIteratorSP createIterator(KisPaintDeviceSP dev,
                                   const QRect &rc) {
     return dev->createVLineIteratorNG(rc.x(), rc.y(), rc.height());
-}
-
-template <>
-KisRectIteratorSP createIterator(KisPaintDeviceSP dev,
-                                 const QRect &rc) {
-    return dev->createRectIteratorNG(rc);
 }
 
 template <class IteratorSP>
@@ -1135,11 +1122,6 @@ void KisPaintDeviceTest::testWrappedHLineIterator()
 void KisPaintDeviceTest::testWrappedVLineIterator()
 {
     testWrappedLineIterator<KisVLineIteratorSP>("vline_iterator");
-}
-
-void KisPaintDeviceTest::testWrappedRectIterator()
-{
-    testWrappedLineIterator<KisRectIteratorSP>("rect_iterator");
 }
 
 template <class IteratorSP>
@@ -1202,12 +1184,6 @@ void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()
 void KisPaintDeviceTest::testWrappedVLineIteratorReadMoreThanBounds()
 {
     testWrappedLineIteratorReadMoreThanBounds<KisVLineIteratorSP>("vline_iterator");
-}
-
-void KisPaintDeviceTest::testWrappedRectIteratorReadMoreThanBounds()
-{
-    // FIXME: Huge rect support is not implemented for the rect iterator
-    //testWrappedLineIteratorReadMoreThanBounds<KisRectIteratorSP>("rect_iterator");
 }
 
 void KisPaintDeviceTest::testMoveWrapAround()

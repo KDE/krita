@@ -51,7 +51,6 @@
 
 #include "tiles3/kis_hline_iterator.h"
 #include "tiles3/kis_vline_iterator.h"
-#include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
@@ -827,17 +826,6 @@ KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qin
 KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
 {
     return m_d->currentStrategy()->createVLineConstIteratorNG(x, y, w);
-}
-
-KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect &rc)
-{
-    m_d->cache.invalidate();
-    return m_d->currentStrategy()->createRectIteratorNG(rc);
-}
-
-KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(const QRect &rc) const
-{
-    return m_d->currentStrategy()->createRectConstIteratorNG(rc);
 }
 
 KisRepeatHLineConstIteratorSP KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const

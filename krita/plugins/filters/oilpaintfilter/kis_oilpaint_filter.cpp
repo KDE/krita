@@ -43,7 +43,7 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include "kis_iterator_ng.h"
+#include <kis_iterator_ng.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -161,12 +161,12 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     int height = (2 * Radius) + 1;
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
-    KisRectIteratorSP it = src->createRectIteratorNG(QRect(startx, starty, width, height));
+    KisSequentialConstIterator srcIt(src, QRect(startx, starty, width, height));
     do {
 
-        cs->normalisedChannelsValue(it->rawData(), channel);
+        cs->normalisedChannelsValue(srcIt.rawDataConst(), channel);
 
-        I = (uint)(cs->intensity8(it->rawData()) * Scale);
+        I = (uint)(cs->intensity8(srcIt.rawDataConst()) * Scale);
         IntensityCount[I]++;
 
         if (IntensityCount[I] == 1) {
@@ -176,7 +176,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
                 AverageChannels[I][i] += channel[i];
             }
         }
-    } while (it->nextPixel());
+    } while (srcIt.nextPixel());
 
     I = 0;
     int MaxInstance = 0;

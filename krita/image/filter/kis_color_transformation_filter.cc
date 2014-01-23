@@ -32,7 +32,6 @@
 #endif
 #include <kis_iterator_ng.h>
 
-
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {
 }
@@ -57,18 +56,17 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
     if (!colorTransformation) return;
 
-    KisRectIteratorSP it = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
     int p = 0;
     int conseq;
     do {
-    
-        conseq = it->nConseqPixels();
+        conseq = it.nConseqPixels();
 
-        colorTransformation->transform(it->oldRawData(), it->rawData(), conseq);
+        colorTransformation->transform(it.oldRawData(), it.rawData(), conseq);
 
         if (progressUpdater) progressUpdater->setValue(p += conseq);
 
-    } while(it->nextPixels(conseq));
+    } while(it.nextPixels(conseq));
     delete colorTransformation;
 
 }

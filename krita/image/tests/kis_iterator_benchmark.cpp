@@ -29,48 +29,12 @@
 #include "kis_random_sub_accessor.h"
 #include <kis_iterator_ng.h>
 #include <kis_repeat_iterators_pixel.h>
-#include <kis_sequential_iterator.h>
 
 #include "kis_paint_device.h"
 
 #define TEST_WIDTH 3000
 #define TEST_HEIGHT 3000
 
-void KisIteratorBenchmark::rectIter(const KoColorSpace * colorSpace)
-{
-
-    KisPaintDevice dev(colorSpace);
-
-    quint8 * bytes = new quint8[colorSpace->pixelSize() * 64*64];
-    memset(bytes, 128, 64 * 64 * colorSpace->pixelSize());
-
-    QTime t;
-    t.start();
-
-    for (int i = 0; i < 3; i++) {
-        KisRectIteratorSP it = dev.createRectIteratorNG(QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
-        do {
-            memcpy(it->rawData(), bytes, colorSpace->pixelSize());
-        } while (it->nextPixel());
-
-        qDebug() << "RectIterator run " << i  << "took" << t.elapsed();
-        t.restart();
-    }
-
-    for (int i = 0; i < 3; i++) {
-        KisRectIteratorSP it = dev.createRectIteratorNG(QRect(0, 0, TEST_WIDTH, TEST_HEIGHT));
-        int nConseqPixels;
-        do {
-            nConseqPixels = it->nConseqPixels();
-            memcpy(it->rawData(), bytes, nConseqPixels * colorSpace->pixelSize());
-        } while (it->nextPixels(nConseqPixels));
-
-        qDebug() << "RectIterator run (with nConseqPixels)" << i  << "took" << t.elapsed();
-        t.restart();
-    }
-
-    delete[] bytes;
-}
 
 void KisIteratorBenchmark::sequentialIter(const KoColorSpace * colorSpace)
 {
@@ -264,7 +228,6 @@ void KisIteratorBenchmark::runBenchmark()
 
     hLineIterNG(cs);
     vLineIterNG(cs);
-    rectIter(cs);
     sequentialIter(cs);
     randomAccessor(cs);
 }

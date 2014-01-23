@@ -164,7 +164,7 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     // apply
     KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
 
-    KisRectIteratorSP iter = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
 
     qint32 totalCost = (applyRect.width() * applyRect.height()) / 100;
     if (totalCost == 0) totalCost = 1;
@@ -172,12 +172,12 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
 
     quint32 npix;
     do {
-        npix = iter->nConseqPixels();
+        npix = it.nConseqPixels();
         // adjust
-        adj->transform(iter->oldRawData(), iter->rawData(), npix);
+        adj->transform(it.oldRawData(), it.rawData(), npix);
         pixelsProcessed += npix;
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    } while(iter->nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
+    } while(it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
     delete[] transfer;
     delete adj;
 }

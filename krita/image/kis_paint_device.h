@@ -669,9 +669,6 @@ public:
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRectIteratorSP createRectIteratorNG(const QRect &rc);
-    KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const;
-
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
 

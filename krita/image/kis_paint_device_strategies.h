@@ -22,7 +22,6 @@
 #include "kis_wrapped_rect.h"
 #include "kis_wrapped_hline_iterator.h"
 #include "kis_wrapped_vline_iterator.h"
-#include "kis_wrapped_rect_iterator.h"
 #include "kis_wrapped_random_accessor.h"
 
 
@@ -106,17 +105,6 @@ public:
     virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
         return new KisVLineIterator2(m_d->dataManager.data(), x, y, w, m_d->x, m_d->y, false);
     }
-
-
-    virtual KisRectIteratorSP createRectIteratorNG(const QRect &rc) {
-        m_d->cache.invalidate();
-        return new KisRectIterator2(m_d->dataManager.data(), rc.x(), rc.y(), rc.width(), rc.height(), m_d->x, m_d->y, true);
-    }
-
-    virtual KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const{
-        return new KisRectIterator2(m_d->dataManager.data(), rc.x(), rc.y(), rc.width(), rc.height(), m_d->x, m_d->y, false);
-    }
-
 
     virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
         m_d->cache.invalidate();
@@ -316,24 +304,6 @@ public:
             return KisPaintDeviceStrategy::createVLineConstIteratorNG(x, y, h);
         }
         return new KisWrappedVLineIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, false);
-    }
-
-    virtual KisRectIteratorSP createRectIteratorNG(const QRect &rc) {
-        m_d->cache.invalidate();
-
-        KisWrappedRect splitRect(rc, m_wrapRect);
-        if (!splitRect.isSplit()) {
-            return KisPaintDeviceStrategy::createRectIteratorNG(rc);
-        }
-        return new KisWrappedRectIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, true);
-    }
-
-    virtual KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const {
-        KisWrappedRect splitRect(rc, m_wrapRect);
-        if (!splitRect.isSplit()) {
-            return KisPaintDeviceStrategy::createRectConstIteratorNG(rc);
-        }
-        return new KisWrappedRectIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, false);
     }
 
     virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {

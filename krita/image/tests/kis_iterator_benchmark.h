@@ -32,7 +32,6 @@ private:
 
     void vLineIterNG(const KoColorSpace * cs);
     void sequentialIter(const KoColorSpace * colorSpace);
-    void rectIter(const KoColorSpace * cs);
     void hLineIterNG(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
 

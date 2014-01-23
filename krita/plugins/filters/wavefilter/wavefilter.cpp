@@ -148,7 +148,7 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     int verticalshift = (config && config->getProperty("verticalshift", value)) ? value.toInt() : 50;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
-    KisRectIteratorSP dstIt = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator dstIt(device, applyRect);
     KisWaveCurve* verticalcurve;
     if (verticalshape == 1)
         verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
@@ -162,12 +162,12 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     
     KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
     do {
-        double xv = horizontalcurve->valueAt(dstIt->y(), dstIt->x());
-        double yv = verticalcurve->valueAt(dstIt->x(), dstIt->y());
+        double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
+        double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
         srcRSA->moveTo(QPointF(xv, yv));
-        srcRSA->sampledOldRawData(dstIt->rawData());
+        srcRSA->sampledOldRawData(dstIt.rawData());
         if (progressUpdater) progressUpdater->setProgress((++count) / cost);
-    }while (dstIt->nextPixel());
+    } while (dstIt.nextPixel());
     delete horizontalcurve;
     delete verticalcurve;
 }

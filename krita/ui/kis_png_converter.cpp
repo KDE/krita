@@ -865,11 +865,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
 
-        KisRectConstIteratorSP it = device->createRectConstIteratorNG(image->bounds());
+        KisSequentialIterator it(device, image->bounds());
 
         bool toomuchcolor = false;
         do {
-            const quint8* c = it->oldRawData();
+            const quint8* c = it.oldRawData();
             bool findit = false;
             for (int i = 0; i < num_palette; i++) {
                 if (palette[i].red == c[2] &&
@@ -889,7 +889,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                 palette[num_palette].blue = c[0];
                 num_palette++;
             }
-        }  while (it->nextPixel());
+        }  while (it.nextPixel());
 
         if (!toomuchcolor) {
             dbgFile << "Found a palette of " << num_palette << " colors";

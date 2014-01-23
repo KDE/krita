@@ -107,7 +107,7 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randH(seedH);
     KisRandomGenerator randV(seedV);
 
-    KisRectIteratorSP dstIt = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator dstIt(device, applyRect);
     KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG(0, 0);
 
     double threshold = (100 - level) / 100.0;
@@ -117,16 +117,16 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
     const quint8* pixels[2];
     KoMixColorsOp * mixOp = cs->mixColorsOp();
     do{
-        if (randT.doubleRandomAt(dstIt->x(), dstIt->y()) > threshold) {
-            int x = static_cast<int>(dstIt->x() + windowsize * (randH.doubleRandomAt(dstIt->x(), dstIt->y()) - 0.5));
-            int y = static_cast<int>(dstIt->y() +  windowsize * (randV.doubleRandomAt(dstIt->x(), dstIt->y()) -0.5));
+        if (randT.doubleRandomAt(dstIt.x(), dstIt.y()) > threshold) {
+            int x = static_cast<int>(dstIt.x() + windowsize * (randH.doubleRandomAt(dstIt.x(), dstIt.y()) - 0.5));
+            int y = static_cast<int>(dstIt.y() +  windowsize * (randV.doubleRandomAt(dstIt.x(), dstIt.y()) -0.5));
             srcRA->moveTo(x, y);
             pixels[0] = srcRA->oldRawData();
-            pixels[1] = dstIt->oldRawData();
-            mixOp->mixColors(pixels, weights, 2, dstIt->rawData());
+            pixels[1] = dstIt.oldRawData();
+            mixOp->mixColors(pixels, weights, 2, dstIt.rawData());
         }
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while(dstIt->nextPixel());
+    } while(dstIt.nextPixel());
 
 }
 

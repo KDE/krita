@@ -194,14 +194,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(QRect(0, 0, sw, sh));
+        KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {
-            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + dstRect.x(), dstIt->y() + dstRect.y())) + translat);
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
             srcAcc->moveTo(p);
-            srcAcc->sampledOldRawData(dstIt->rawData());
-        } while (dstIt->nextPixel());
+            srcAcc->sampledOldRawData(dstIt.rawData());
+        } while (dstIt.nextPixel());
 
 
     } else {

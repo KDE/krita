@@ -108,28 +108,6 @@ public:
     virtual ~KisVLineIteratorNG();
 };
 
-/**
- * Create an iterator over a rectangle section of a paint device, the path followed by
- * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
- * use this type of iterator if you are combining two differents layers.
- */
-class KRITAIMAGE_EXPORT KisRectConstIteratorNG : public virtual KisBaseConstIteratorNG
-{
-    Q_DISABLE_COPY(KisRectConstIteratorNG)
-public:
-    KisRectConstIteratorNG() {}
-    virtual ~KisRectConstIteratorNG();
-};
-
-/**
- * Also support writing.
- */
-class KRITAIMAGE_EXPORT KisRectIteratorNG : public KisRectConstIteratorNG, public KisBaseIteratorNG
-{
-    Q_DISABLE_COPY(KisRectIteratorNG)
-public:
-    KisRectIteratorNG() {}
-    virtual ~KisRectIteratorNG();
-};
+#include "kis_sequential_iterator.h"
 
 #endif

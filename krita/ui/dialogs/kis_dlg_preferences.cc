@@ -394,6 +394,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
+    chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
@@ -412,6 +413,7 @@ void DisplaySettingsTab::setDefault()
     colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
     chkCurveAntialiasing->setChecked(true);
+    chkSelectionOutlineAntialiasing->setChecked(false);
     chkChannelsAsColor->setChecked(false);
 }
 
@@ -748,6 +750,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
+        cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());

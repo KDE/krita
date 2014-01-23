@@ -613,6 +613,16 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
+bool KisConfig::antialiasSelectionOutline() const
+{
+    return m_cfg.readEntry("AntialiasSelectionOutline", false);
+}
+
+void KisConfig::setAntialiasSelectionOutline(bool v) const
+{
+    m_cfg.writeEntry("AntialiasSelectionOutline", v);
+}
+
 bool KisConfig::showRootLayer() const
 {
     return m_cfg.readEntry("ShowRootLayer", false);

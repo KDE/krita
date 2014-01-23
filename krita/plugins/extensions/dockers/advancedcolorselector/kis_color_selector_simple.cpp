@@ -97,7 +97,8 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         break;
     }
     emit update();
-setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
+    //Workaround for bug 317648
+    setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
 
 }
 

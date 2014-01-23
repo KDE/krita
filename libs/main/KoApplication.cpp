@@ -167,13 +167,13 @@ public:
 };
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
-typedef bool (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, bool);
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
 LPFN_ISWOW64PROCESS fnIsWow64Process;
 
-bool isWow64()
+BOOL isWow64()
 {
-    bool bIsWow64 = false;
+    BOOL bIsWow64 = FALSE;
 
     //IsWow64Process is not available on all supported versions of Windows.
     //Use GetModuleHandle to get a handle to the DLL that contains the function

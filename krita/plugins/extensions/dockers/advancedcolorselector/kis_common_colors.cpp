@@ -43,6 +43,7 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
 {
     m_reloadButton = new QPushButton();
     m_reloadButton->setIcon(koIcon("view-refresh"));
+    m_reloadButton->setToolTip(i18n("Create a list of colors from the image"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
 
     QList<QWidget*> tmpList;

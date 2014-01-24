@@ -390,45 +390,45 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     }
 }
 
-void KisCanvas2::connectCurrentImage()
+void KisCanvas2::initializeImage()
 {
     KisImageWSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
-
-    if (!m_d->currentCanvasIsOpenGL) {
-        Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->setImage(image);
-    }
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)), SLOT(updateCanvasProjection(KisUpdateInfoSP)));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
+    connectCurrentCanvas();
+}
+
+void KisCanvas2::connectCurrentCanvas()
+{
+    KisImageWSP image = m_d->view->image();
+
+    if (!m_d->currentCanvasIsOpenGL) {
+        Q_ASSERT(m_d->prescaledProjection);
+        m_d->prescaledProjection->setImage(image);
+    }
+
     startResizingImage();
 
     emit imageChanged(image);
 }
 
-void KisCanvas2::disconnectCurrentImage()
+void KisCanvas2::disconnectCurrentCanvas()
 {
-    m_d->coordinatesConverter->setImage(0);
-
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->disconnect(this);
         m_d->openGLImageTextures->disconnect(m_d->view->image());
 #else
-        qFatal("Bad use of disconnectCurrentImage(). It shouldn't have happened =(");
+        qFatal("Bad use of disconnectCurrentCanvas(). It shouldn't have happened =(");
 #endif
     }
-
-    disconnect(SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)));
-
-    // for sigSizeChanged()
-    m_d->view->image()->disconnect(this);
 }
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
@@ -445,9 +445,9 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
          m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
-        disconnectCurrentImage();
+        disconnectCurrentCanvas();
         createCanvas(useOpenGL);
-        connectCurrentImage();
+        connectCurrentCanvas();
         notifyZoomChanged();
     }
 

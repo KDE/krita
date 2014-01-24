@@ -855,7 +855,7 @@ void KisView2::slotLoadingFinished()
      */
     //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
 
-    m_d->canvas->connectCurrentImage();
+    m_d->canvas->initializeImage();
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));

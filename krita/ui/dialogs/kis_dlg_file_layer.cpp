@@ -21,6 +21,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QDesktopServices>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -94,13 +95,9 @@ void KisDlgFileLayer::slotSelectFile()
 {
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    KUrl startUrl("kfiledialog:///OpenDialog");
-    if (!m_basePath.isEmpty()) {
-        startUrl.setPath(m_basePath);
-    }
     QString url = KoFileDialogHelper::getOpenFileName(this,
                                                       i18n("Select file to use as dynamic file layer."),
-                                                      startUrl.toLocalFile(),
+                                                      m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
                                                       mimeFilter,
                                                       "",
                                                       "OpenDocument");

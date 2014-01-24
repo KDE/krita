@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 #include <QModelIndex>
+#include <QStringList>
 #include <QDesktopServices>
 
 #include <klocale.h>
@@ -188,9 +189,12 @@ void FlipbookDockerDock::newFlipbook()
 
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
-                                                     mimeFilter.join(" "),
-                                                     this, i18n("Select files to add to flipbook"));
+    QStringList urls = KoFileDialogHelper::getOpenFileNames(this,
+                                                            i18n("Select files to add to flipbook"),
+                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                            mimeFilter,
+                                                            "",
+                                                            "OpenDocument");
 
     if (urls.size() < 1) return;
 
@@ -224,8 +228,13 @@ void FlipbookDockerDock::openFlipbook()
 
     KisImageSP oldImage = m_canvas->view()->image();
 
+    QString filename = KoFileDialogHelper::getOpenFileName(this,
+                                                           i18n("Load flipbook"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           QStringList("*.flipbook"),
+                                                           "",
+                                                           "OpenDocument");
 
-    QString filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///OpenDialog"), "*.flipbook", this, i18n("Load flipbook"));
     if (!QFile::exists(filename)) return;
 
     KisFlipbook *flipbook = new KisFlipbook();
@@ -251,9 +260,12 @@ void FlipbookDockerDock::addImage()
 {
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
-                                                     mimeFilter.join(" "),
-                                                     this, i18n("Select files to add to flipbook"));
+    QStringList urls = KoFileDialogHelper::getOpenFileNames(this,
+                                                            i18n("Select files to add to flipbook"),
+                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                            mimeFilter,
+                                                            "",
+                                                            "OpenDocument");
 
     if (urls.size() < 1) return;
 

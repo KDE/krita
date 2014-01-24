@@ -63,6 +63,9 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     if (m_id == "gbr_brush") {
         KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
         if (gbrbrush) {
+            /**
+             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+             */
             gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
         }
     }

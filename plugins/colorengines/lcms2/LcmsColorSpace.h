@@ -370,15 +370,15 @@ public:
         cmsFloat64Number db;
         cmsFloat64Number dAlpha;
 
-        dL = fabs(labF1.L - labF2.L);
-        da = fabs(labF1.a - labF2.a);
-        db = fabs(labF1.b - labF2.b);
+        dL = fabs((qreal)(labF1.L - labF2.L));
+        da = fabs((qreal)(labF1.a - labF2.a));
+        db = fabs((qreal)(labF1.b - labF2.b));
 
         static const int LabAAlphaPos = 3;
         static const cmsFloat64Number alphaScale = 100.0 / KoColorSpaceMathsTraits<quint16>::max;
         quint16 alpha1 = reinterpret_cast<quint16*>(lab1)[LabAAlphaPos];
         quint16 alpha2 = reinterpret_cast<quint16*>(lab2)[LabAAlphaPos];
-        dAlpha = fabs(alpha1 - alpha2) * alphaScale;
+        dAlpha = fabs((qreal)(alpha1 - alpha2)) * alphaScale;
 
         qreal diff = pow(dL * dL + da * da + db * db + dAlpha * dAlpha, 0.5);
 

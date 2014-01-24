@@ -682,15 +682,33 @@ void KisNodeManager::mirrorNodeY()
 
 void KisNodeManager::activateNextNode()
 {
-    if (activeNode() && activeNode()->nextSibling()) {
-        slotNonUiActivatedNode(activeNode()->nextSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->nextSibling();
+
+    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
+        node = activeNode->parent();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
 void KisNodeManager::activatePreviousNode()
 {
-    if (activeNode() && activeNode()->prevSibling()) {
-        slotNonUiActivatedNode(activeNode()->prevSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->prevSibling();
+
+    if (!node && activeNode->parent()) {
+        node = activeNode->parent()->prevSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 

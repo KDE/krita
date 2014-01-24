@@ -157,3 +157,15 @@ void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAda
     return visitor.visit(this, undoAdapter);
 }
 
+KUndo2Command* KisFileLayer::crop(const QRect & rect)
+{
+    qWarning() << "WARNING: File Layer does not support cropping!" << name();
+    return 0;
+}
+
+KUndo2Command* KisFileLayer::transform(const QTransform &transform)
+{
+    qWarning() << "WARNING: File Layer does not support transformations!" << name();
+    return 0;
+}
+

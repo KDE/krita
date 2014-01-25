@@ -199,7 +199,7 @@ bool KoApplication::start()
 #ifdef ENV32BIT
     if (isWow64()) {
     	KMessageBox::information(0, 
-                                 i18n("You are running an 32 bits build on a 64 bits Windows.\n"
+                                 i18n("You are running a 32 bits build on a 64 bits Windows.\n"
                                       "This is not recommended.\n"
                                       "Please download and install the x64 build instead."),
                                  qApp->applicationName(), 

@@ -102,6 +102,10 @@ endif (WIN32)
 # =============================================================================
 
 kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+set_target_properties(kritasketchlib
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
+
 
 target_link_libraries(kritasketchlib
     ${QT_QTDECLARATIVE_LIBRARY}

@@ -26,6 +26,7 @@
 class KoPathShape;
 class KoShapeStroke;
 class KoPathPoint;
+class KoStrokeConfigWidget;
 
 #include "basicflakes_export.h"
 
@@ -57,7 +58,7 @@ protected:
      */
     virtual void addPathShape(KoPathShape* path, bool closePath);
 
-    KoShapeStroke * currentStroke();
+    KoShapeStroke* createStroke();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 
@@ -92,7 +93,7 @@ private:
     KoPathPoint *m_existingStartPoint; ///< an existing path point we started a new path at
     KoPathPoint *m_existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
-
+    KoStrokeConfigWidget *m_strokeWidget;
 };
 
 #endif // _KOPENCILTOOL_H_

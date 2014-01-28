@@ -106,7 +106,7 @@ void KoPencilTool::mousePressEvent(KoPointerEvent *event)
     if (! m_shape) {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
-        m_shape->setStroke(currentStroke());
+        m_shape->setStroke(createStroke());
         m_points.clear();
 
         QPointF point = event->point;
@@ -270,6 +270,8 @@ void KoPencilTool::finish(bool closePath)
     if (! path)
         return;
 
+    path->setShapeId(KoPathShapeId);
+    path->setStroke(createStroke());
     addPathShape(path, closePath);
 }
 
@@ -333,11 +335,11 @@ QList<QWidget *> KoPencilTool::createOptionWidgets()
     optionWidget->setObjectName(i18n("Pencil"));
     optionWidget->setWindowTitle(i18n("Pencil"));
     widgets.append(optionWidget);
-    
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Line"));
-    strokeWidget->setCanvas(canvas());
-    widgets.append(strokeWidget);
+
+    m_strokeWidget = new KoStrokeConfigWidget(0);
+    m_strokeWidget->setWindowTitle(i18n("Line"));
+    m_strokeWidget->setCanvas(canvas());
+    widgets.append(m_strokeWidget);
     return widgets;
 }
 
@@ -359,9 +361,6 @@ void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
         }
     }
 
-    // set the proper shape id
-    path->setShapeId(KoPathShapeId);
-    path->setStroke(currentStroke());
     KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
     if (cmd) {
         KoSelection *selection = canvas()->shapeManager()->selection();
@@ -401,10 +400,12 @@ void KoPencilTool::setDelta(double delta)
         m_combineAngle = delta;
 }
 
-KoShapeStroke * KoPencilTool::currentStroke()
+KoShapeStroke* KoPencilTool::createStroke()
 {
-    KoShapeStroke * stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
-    stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+    KoShapeStroke *stroke = 0;
+    if (m_strokeWidget) {
+        stroke = m_strokeWidget->createShapeStroke();
+    }
     return stroke;
 }
 

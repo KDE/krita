@@ -429,13 +429,7 @@ KoShapeStroke *KoCreatePathTool::createStroke()
 
     KoShapeStroke *stroke = 0;
     if (d->strokeWidget) {
-        stroke = new KoShapeStroke();
-        stroke->setColor(d->strokeWidget->color());
-        stroke->setLineWidth(d->strokeWidget->lineWidth());
-        stroke->setCapStyle(d->strokeWidget->capStyle());
-        stroke->setJoinStyle(d->strokeWidget->joinStyle());
-        stroke->setMiterLimit(d->strokeWidget->miterLimit());
-        stroke->setLineStyle(d->strokeWidget->lineStyle(), d->strokeWidget->lineDashes());
+        stroke = d->strokeWidget->createShapeStroke();
     }
     return stroke;
 }

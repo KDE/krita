@@ -158,9 +158,9 @@ public:
                         currentAuxWidgets.insert(s);
                     }
                 }
-                //if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
+                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
                     housekeeperLayout->setRowStretch(cnt, 10000);
-                //}
+                }
                 break;
             }
             default:
@@ -197,7 +197,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
     KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
-    d->tabbed = cfg.readEntry("TabbedMode", true);
+    d->tabbed = cfg.readEntry("TabbedMode", false);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     setFeatures(DockWidgetMovable|DockWidgetFloatable);

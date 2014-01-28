@@ -932,6 +932,10 @@ bool KisToolCrop::forceRatio() const
 QWidget* KisToolCrop::createOptionWidget()
 {
     KisToolCropConfigWidget* optWidget = new KisToolCropConfigWidget(0, this);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
 
     Q_CHECK_PTR(optWidget);
     optWidget->setObjectName(toolId() + " option widget");

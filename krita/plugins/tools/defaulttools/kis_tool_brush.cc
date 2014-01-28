@@ -116,6 +116,11 @@ QWidget * KisToolBrush::createOptionWidget()
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
     optionWidget->setObjectName(toolId() + "option widget");
 
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionWidget);
     m_cmbSmoothingType->addItems(QStringList() << i18n("No Smoothing") << i18n("Basic Smoothing") << i18n("Weighted Smoothing"));

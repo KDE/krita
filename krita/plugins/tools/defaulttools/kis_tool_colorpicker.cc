@@ -325,6 +325,11 @@ QWidget* KisToolColorPicker::createOptionWidget()
     m_optionsWidget->setObjectName(toolId() + " option widget");
     m_optionsWidget->listViewChannels->setSortingEnabled(false);
 
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+
     updateOptionWidget();
 
     connect(m_optionsWidget->cbUpdateCurrentColor, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));

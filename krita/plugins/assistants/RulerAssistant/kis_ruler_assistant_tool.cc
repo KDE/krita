@@ -609,6 +609,12 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
+
+        // See https://bugs.kde.org/show_bug.cgi?id=316896
+        QWidget *specialSpacer = new QWidget(m_optionsWidget);
+        specialSpacer->setObjectName("SpecialSpacer");
+        specialSpacer->setFixedSize(0, 0);
+
         m_options.loadButton->setIcon(koIcon("document-open"));
         m_options.saveButton->setIcon(koIcon("document-save"));
         m_options.deleteButton->setIcon(koIcon("edit-delete"));

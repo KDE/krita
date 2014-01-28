@@ -419,7 +419,7 @@ private:
 
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisToolTransformConfigWidget *m_optWidget;
+    KisToolTransformConfigWidget *m_optionsWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)

@@ -103,7 +103,7 @@ void KisToolText::finishRect(const QRectF &rect)
         return;
 
     QRectF r = convertToPt(rect);
-    QString shapeString = (m_optionWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
+    QString shapeString = (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
@@ -128,17 +128,22 @@ void KisToolText::finishRect(const QRectF &rect)
 
 QList< QWidget* > KisToolText::createOptionWidgets()
 {
-    m_optionWidget = new KisTextToolOptionWidget();
+    m_optionsWidget = new KisTextToolOptionWidget();
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+
     QList< QWidget* > widgets;
-    widgets.append(m_optionWidget);
+    widgets.append(m_optionsWidget);
     return widgets;
 }
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
-    if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+    if(m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
         return KisPainter::FillStyleNone;
-    return m_optionWidget->style();
+    return m_optionsWidget->style();
 }
 
 void KisToolText::slotActivateTextTool()

@@ -28,6 +28,7 @@
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include <KoIcon.h>
 #include "KoColor.h"

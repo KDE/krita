@@ -329,6 +329,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
     updateOptionWidget();
 

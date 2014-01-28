@@ -404,7 +404,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleSnap->setChecked(false);
     angleSnap->setCheckable(true);
     layout->addWidget(angleSnap, 1, 1);
-    QWidget *specialSpacer =new QWidget();
+    QWidget *specialSpacer = new QWidget();
     specialSpacer->setObjectName("SpecialSpacer");
     layout->addWidget(specialSpacer, 2, 1);
     angleWidget->setWindowTitle(i18n("Angle Constraints"));

@@ -614,6 +614,7 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
         QWidget *specialSpacer = new QWidget(m_optionsWidget);
         specialSpacer->setObjectName("SpecialSpacer");
         specialSpacer->setFixedSize(0, 0);
+        m_optionsWidget->layout()->addWidget(specialSpacer);
 
         m_options.loadButton->setIcon(koIcon("document-open"));
         m_options.saveButton->setIcon(koIcon("document-save"));

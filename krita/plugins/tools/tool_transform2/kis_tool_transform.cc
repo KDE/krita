@@ -2373,6 +2373,7 @@ QWidget* KisToolTransform::createOptionWidget() {
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
 
     connect(m_optionsWidget, SIGNAL(sigConfigChanged()),

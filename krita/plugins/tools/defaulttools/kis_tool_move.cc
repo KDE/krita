@@ -240,6 +240,7 @@ QWidget* KisToolMove::createOptionWidget()
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 

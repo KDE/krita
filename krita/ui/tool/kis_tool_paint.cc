@@ -324,15 +324,17 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    // See https://bugs.kde.org/show_bug.cgi?id=316896
-    QWidget *specialSpacer = new QWidget(optionWidget);
-    specialSpacer->setObjectName("SpecialSpacer");
-    specialSpacer->setFixedSize(0, 0);
-
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(1);
+
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    verticalLayout->addWidget(specialSpacer);
+    verticalLayout->addWidget(specialSpacer);
 
     m_optionsWidgetLayout = new QGridLayout();
     m_optionsWidgetLayout->setColumnStretch(1, 1);
@@ -340,11 +342,6 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addLayout(m_optionsWidgetLayout);
     m_optionsWidgetLayout->setSpacing(1);
     m_optionsWidgetLayout->setMargin(0);
-
-    QWidget *w = new QWidget();
-    w->setObjectName("SpecialSpacer");
-
-    verticalLayout->addWidget(w);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);

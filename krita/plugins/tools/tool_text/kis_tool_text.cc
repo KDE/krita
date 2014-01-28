@@ -133,6 +133,7 @@ QList< QWidget* > KisToolText::createOptionWidgets()
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
     QList< QWidget* > widgets;
     widgets.append(m_optionsWidget);

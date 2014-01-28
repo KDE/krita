@@ -190,7 +190,7 @@ QWidget* KisToolMeasure::createOptionWidget()
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
     specialSpacer->setFixedSize(0, 0);
-
+    m_optionsWidget->layout()->addWidget(specialSpacer);
 
     m_optionsWidget->setObjectName(toolId() + " option widget");
     connect(this, SIGNAL(sigDistanceChanged(double)), m_optionsWidget, SLOT(slotSetDistance(double)));

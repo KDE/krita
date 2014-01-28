@@ -278,7 +278,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 
     KoXmlElement root;
     KoXmlNode node;
-    KisImageSP image;
+    KisImageWSP image;
 
     if (!init())
         return false;

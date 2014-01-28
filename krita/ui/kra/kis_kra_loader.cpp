@@ -159,10 +159,10 @@ KisKraLoader::~KisKraLoader()
 }
 
 
-KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
+KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
     QString attr;
-    KisImageSP image = 0;
+    KisImageWSP image = 0;
     QString name;
     qint32 width;
     qint32 height;
@@ -175,15 +175,15 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     if ((attr = element.attribute(MIME)) == NATIVE_MIMETYPE) {
 
         if ((m_d->imageName = element.attribute(NAME)).isNull())
-            return KisImageSP(0);
+            return KisImageWSP(0);
 
         if ((attr = element.attribute(WIDTH)).isNull()) {
-            return KisImageSP(0);
+            return KisImageWSP(0);
         }
         width = attr.toInt();
 
         if ((attr = element.attribute(HEIGHT)).isNull()) {
-            return KisImageSP(0);
+            return KisImageWSP(0);
         }
         height = attr.toInt();
 
@@ -227,7 +227,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
             if (cs == 0) {
                 warnFile << "Could not open colorspace";
-                return KisImageSP(0);
+                return KisImageWSP(0);
             }
         }
 

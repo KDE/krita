@@ -83,16 +83,9 @@ bool KraHandler::read(QImage *image)
         return false;
     }
 
+    KisKraLoader loader(0, syntaxVersion);
 
-    KisDoc2 surrogateDocument;
-    QFile *realFile = dynamic_cast<QFile*>(device());
-    if (realFile) {
-        surrogateDocument.setUrl(KUrl(realFile->fileName()));
-    }
-
-    KisKraLoader loader(&surrogateDocument, syntaxVersion);
-
-    KisImageSP img;
+    KisImageWSP img;
 
     // Legacy from the multi-image .kra file period.
     for (KoXmlNode node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {

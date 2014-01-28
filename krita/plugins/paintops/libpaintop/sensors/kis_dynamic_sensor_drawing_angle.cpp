@@ -53,7 +53,7 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     QCheckBox *fanCornersEnabled = new QCheckBox(i18n("Fan Corners"), w);
 
     KisSliderSpinBox *fanCornersStep = new KisSliderSpinBox(w);
-    fanCornersStep->setRange(0, 90);
+    fanCornersStep->setRange(5, 90);
     fanCornersStep->setSingleStep(1);
     fanCornersStep->setSuffix(i18n("°"));
 

@@ -49,7 +49,7 @@ public:
      * Loading is done in two steps: first all xml is loaded, then, in finishLoading,
      * the actual layer data is loaded.
      */
-    KisImageWSP loadXML(const KoXmlElement& elem);
+    KisImageSP loadXML(const KoXmlElement& elem);
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 

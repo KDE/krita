@@ -534,7 +534,10 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     }
 
     d->eventsReceiver = receiver;
-    d->eventsReceiver->installEventFilter(this);
+
+    if (d->eventsReceiver) {
+        d->eventsReceiver->installEventFilter(this);
+    }
 }
 
 void KisInputManager::stopIgnoringEvents()

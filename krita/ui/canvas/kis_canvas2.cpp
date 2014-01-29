@@ -190,7 +190,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
-    m_d->inputManager->setupAsEventFilter(widget);
+
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);

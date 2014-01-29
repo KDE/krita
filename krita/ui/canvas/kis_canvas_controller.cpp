@@ -27,6 +27,7 @@
 #include "kis_canvas2.h"
 #include "kis_image.h"
 #include "kis_view2.h"
+#include "input/kis_input_manager.h"
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
@@ -37,6 +38,8 @@ struct KisCanvasController::Private {
     KisView2 *view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
+
+    KisInputManager *globalEventFilter;
 
     void emitPointerPositionChangedSignals(QEvent *event);
     void updateDocumentSizeAfterTransform();
@@ -85,6 +88,10 @@ KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * a
 
 KisCanvasController::~KisCanvasController()
 {
+    if (m_d->globalEventFilter) {
+        m_d->globalEventFilter->setupAsEventFilter(0);
+    }
+
     delete m_d;
 }
 
@@ -93,9 +100,19 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(kritaCanvas);
 
+    m_d->globalEventFilter = kritaCanvas->inputManager();
+
     m_d->coordinatesConverter =
         const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
     KoCanvasControllerWidget::setCanvas(canvas);
+}
+
+void KisCanvasController::changeCanvasWidget(QWidget *widget)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->globalEventFilter);
+
+    m_d->globalEventFilter->setupAsEventFilter(widget);
+    KoCanvasControllerWidget::changeCanvasWidget(widget);
 }
 
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)

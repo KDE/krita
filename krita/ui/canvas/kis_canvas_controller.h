@@ -35,6 +35,7 @@ public:
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void changeCanvasWidget(QWidget *widget);
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
 

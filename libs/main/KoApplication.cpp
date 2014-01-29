@@ -246,6 +246,13 @@ bool KoApplication::start()
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
         kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+        QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
+                                                                                    "This might be an installation issue.\n"
+                                                                                    "Try restarting, running kbuildsycoca4.exe or reinstalling."));
+#ifdef Q_OS_WIN
+        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
+#endif
         return false;
     }
 

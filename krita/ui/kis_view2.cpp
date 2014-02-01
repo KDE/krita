@@ -1384,9 +1384,53 @@ void KisView2::showStatusBar(bool toggled)
     }
 }
 
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+#include <QGLContext>
+#endif
+
 void KisView2::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
+
+/**
+ * Workaround for a broken Intel video driver on Windows :(
+ * See bug 330040
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+
+    if (toggled && cfg.useOpenGL()) {
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        bool failingDriver = renderer.startsWith("Intel(R) HD Graphics");
+
+        if (failingDriver &&
+            cfg.hideStatusbarFullscreen() &&
+            cfg.hideDockersFullscreen() &&
+            cfg.hideTitlebarFullscreen() &&
+            cfg.hideMenuFullscreen() &&
+            cfg.hideToolbarFullscreen() &&
+            cfg.hideScrollbarsFullscreen()) {
+
+            int result =
+                KMessageBox::warningYesNo(this,
+                                          "Intel(R) HD Graphics video adapters "
+                                          "are known to have problems with running "
+                                          "Krita in pure canvas only mode. At least "
+                                          "one UI control must be shown to "
+                                          "workaround it.\n\nShow the scroll bars?",
+                                          "Failing video adapter",
+                                          KStandardGuiItem::yes(),
+                                          KStandardGuiItem::no(),
+                                          "messagebox_WorkaroundIntelVideoOnWindows");
+
+            if (result == KMessageBox::Yes) {
+                cfg.setHideScrollbarsFullscreen(false);
+            }
+        }
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
+
     KToggleAction *action;
 
     if (cfg.hideStatusbarFullscreen()) {

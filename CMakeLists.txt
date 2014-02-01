@@ -390,9 +390,9 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.1)
+set(SQLITE_RECOMMENDED_VERSION 3.8.2)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
 macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
                   "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"

@@ -110,8 +110,8 @@ void KisToolText::finishRect(const QRectF &rect)
         shape->setPosition(r.topLeft());
         // If the shape is an artistic shape we keep the aspect ratio so the text isn't stretched
         if (shapeString == "ArtisticText") {
-            qreal ratio = rect.height()/shape->size().height();
-            r.setWidth(shape->size().width()*ratio);
+            qreal ratio = shape->size().width() / shape->size().height();
+            r.setWidth(convertToPt(rect).height() * ratio);
         }
         shape->setSize(r.size());
         addShape(shape);

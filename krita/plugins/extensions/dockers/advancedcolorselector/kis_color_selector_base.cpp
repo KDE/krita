@@ -280,7 +280,9 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
 {
-    hidePopup();
+    if (m_isPopup) {
+        hidePopup();
+    }
 }
 
 qreal distance(const QColor& c1, const QColor& c2)

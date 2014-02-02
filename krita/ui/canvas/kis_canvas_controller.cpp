@@ -115,6 +115,16 @@ void KisCanvasController::changeCanvasWidget(QWidget *widget)
     KoCanvasControllerWidget::changeCanvasWidget(widget);
 }
 
+void KisCanvasController::keyPressEvent(QKeyEvent *event)
+{
+    /**
+     * Dirty Hack Alert:
+     * Do not call the KoCanvasControllerWidget::keyPressEvent()
+     * to avoid activation of Pan and Default tool activation shortcuts
+     */
+    Q_UNUSED(event);
+}
+
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();

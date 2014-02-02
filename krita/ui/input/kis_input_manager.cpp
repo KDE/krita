@@ -447,27 +447,14 @@ void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
 
 void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
 {
-    bool needResetSavedEvent = true;
-
-#ifdef Q_OS_WIN
     /**
-     * For linux platform each mouse event corresponds to a single
-     * tablet event so the saved tablet event is deleted after any
-     * mouse event.
-     *
-     * For windows platform the mouse events get compressed so one
-     * mouse event may correspond to a few tablet events, so we keep a
-     * saved tablet event till the end of the stroke, that is till
-     * mouseRelese event
+     * On both Windows and Linux each mouse event corresponds to a
+     * single tablet event, so the saved event must be reset after
+     * every mouse-related event
      */
-    needResetSavedEvent = type == QEvent::MouseButtonRelease;
-#else
-    Q_UNUSED(type);
-#endif
-    if (needResetSavedEvent) {
-        delete lastTabletEvent;
-        lastTabletEvent = 0;
-    }
+
+    delete lastTabletEvent;
+    lastTabletEvent = 0;
 }
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)

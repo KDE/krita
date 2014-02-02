@@ -401,6 +401,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
+
+    /**
+     * We will get more update signals from the configuration widgets
+     * but they might be delayed by some internal deferring timers,
+     * so just call the slot directly
+     */
+    slotUpdatePreset();
 }
 
 KoID KisPaintopBox::defaultPaintOp()

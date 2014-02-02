@@ -53,11 +53,13 @@
  */
 typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
 typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
+typedef int  (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
 typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
+static PtrWTPacketsPeek ptrWTPacketsPeek = 0;
 static PtrWTGet ptrWTGet = 0;
 static PtrWTOverlap ptrWTOverlap = 0;
 
@@ -147,6 +149,7 @@ static void initWinTabFunctions()
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
+    ptrWTPacketsPeek = (PtrWTPacketsGet)library.resolve("WTPacketsPeek");
     ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
@@ -489,10 +492,10 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
         }
         break;
     case WT_PROXIMITY:
-            if (ptrWTPacketsGet && ptrWTInfo) {
+            if (ptrWTPacketsPeek && ptrWTInfo) {
                 const bool enteredProximity = LOWORD(msg->lParam) != 0;
                 PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-                const int totalPacks = ptrWTPacketsGet(qt_tablet_context, 1, proximityBuffer);
+                const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
                 if (totalPacks > 0) {
                     const UINT currentCursor = proximityBuffer[0].pkCursor;
 

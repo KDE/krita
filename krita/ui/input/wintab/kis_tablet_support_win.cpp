@@ -283,6 +283,29 @@ static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
     }
 }
 
+class EventEater : public QObject {
+public:
+    EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
+
+    bool eventFilter(QObject* object, QEvent* event ) {
+        if (event->type() == m_eventType) {
+            m_eventType = QEvent::None;
+            return true;
+        }
+
+        return QObject::eventFilter(object, event);
+    }
+
+    void pleaseEatNextEvent(QEvent::Type eventType) {
+        m_eventType = eventType;
+    }
+
+private:
+    QEvent::Type m_eventType;
+};
+
+static EventEater *globalEventEater = 0;
+
 bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                       int numPackets)
 {
@@ -430,7 +453,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         e.ignore();
         sendEvent = qApp->sendEvent(w, &e);
 
-        if (!e.isAccepted()) {
+        if (e.isAccepted()) {
+            globalEventEater->pleaseEatNextEvent(e.getMouseEventType());
+        } else {
             QTabletEvent t = e.toQTabletEvent();
             qApp->sendEvent(w,  &t);
         }
@@ -440,6 +465,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
 
 void KisTabletSupportWin::init()
 {
+    globalEventEater = new EventEater(qApp);
+    qApp->installEventFilter(globalEventEater);
+
     initWinTabFunctions();
 }
 

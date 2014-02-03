@@ -39,7 +39,7 @@ FileSystemModel::FileSystemModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private)
 {
     d->dir.setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
-    d->dir.setSorting(QDir::DirsFirst | QDir::Name);
+    d->dir.setSorting(QDir::DirsFirst | QDir::Name | QDir::IgnoreCase);
 
     QHash<int, QByteArray> roles;
     roles.insert(FileNameRole, "fileName");

@@ -152,7 +152,10 @@ Item {
                 enabled: (typeof switchToDesktopAction === "undefined") ? false : switchToDesktopAction.enabled;
                 image: "../images/svg/icon-switch.svg"
                 highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "switchToDesktop" );
+                onClicked: {
+                    base.buttonClicked( "switchToDesktop" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: minimizeButton;
@@ -162,7 +165,10 @@ Item {
                 shadow: false
                 image: "../images/svg/icon-minimize.svg"
                 highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "minimize" );
+                onClicked: {
+                    base.buttonClicked( "minimize" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: closeButton;

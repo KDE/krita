@@ -41,14 +41,14 @@
 * or for a protocol (e.g. http) be careful that it is appropriate.
 * (Fictional) example: "2.8 Pre-Alpha"
 */
-#cmakedefine CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
+#define CALLIGRA_VERSION_STRING "@CALLIGRA_VERSION_STRING@"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
  * @ingroup CalligraMacros
  * @brief Major version of Calligra, at compile time
 */
-#cmakedefine CALLIGRA_VERSION_MAJOR @CALLIGRA_VERSION_MAJOR@
+#define CALLIGRA_VERSION_MAJOR @CALLIGRA_VERSION_MAJOR@
 
 /**
  * @def CALLIGRA_STABLE_VERSION_MINOR
@@ -57,7 +57,7 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#cmakedefine CALLIGRA_STABLE_VERSION_MINOR @CALLIGRA_STABLE_VERSION_MINOR@
+#define CALLIGRA_STABLE_VERSION_MINOR @CALLIGRA_STABLE_VERSION_MINOR@
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
@@ -65,7 +65,7 @@
  * @brief Release version of Calligra, at compile time.
  * 89 for Alpha.
  */
-#cmakedefine CALLIGRA_VERSION_RELEASE @CALLIGRA_VERSION_RELEASE@
+#define CALLIGRA_VERSION_RELEASE @CALLIGRA_VERSION_RELEASE@
 
 /**
  * @def CALLIGRA_ALPHA

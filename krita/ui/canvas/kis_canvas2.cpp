@@ -580,9 +580,11 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
      * update info is being stuck in the Qt's signals queue. Than a wrong
      * type of the info may come. So just check it here.
      */
+#ifdef HAVE_OPENGL
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
         return;
+#endif
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL

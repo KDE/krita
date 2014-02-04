@@ -176,11 +176,6 @@ public:
         KoGlobal::initialize();
 
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
-        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
-        }
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);

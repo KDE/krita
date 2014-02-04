@@ -569,6 +569,7 @@ QWidget* KisTool::createOptionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
+#ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
     if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
@@ -632,7 +633,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
         painter->endNativePainting();
     }
-    else if (m_outlinePaintMode == XOR_MODE) {
+    else
+#endif // HAVE_OPENGL
+        if (m_outlinePaintMode == XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);

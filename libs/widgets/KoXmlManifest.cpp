@@ -15,6 +15,7 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+<<<<<<< HEAD
 #include "KoXmlManifest.h"
 
 KoXmlManifest::KoXmlManifest(QString xmlName):KoXmlGenerator(xmlName)

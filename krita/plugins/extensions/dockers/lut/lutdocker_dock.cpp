@@ -154,9 +154,10 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 void LutDockerDock::slotImageColorSpaceChanged()
 {
     //qDebug() << "slotImageColorSpaceChanged();";
-    const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->view() && m_canvas->view()->image()) {
+        const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
+
         refillComboboxes();
 
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());

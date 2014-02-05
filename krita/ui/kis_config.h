@@ -38,6 +38,9 @@ public:
     KisConfig();
     ~KisConfig();
 
+    int modificationSeqNo() const;
+    void updateModificationSeqNo();
+
     bool useProjections() const;
     void setUseProjections(bool useProj) const;
 

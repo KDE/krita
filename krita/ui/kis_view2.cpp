@@ -234,6 +234,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     setXMLFile("krita.rc");
 
+    // activate inter-process updates of the shortcuts
+    connect(mainWindow(), SIGNAL(keyBindingsChanged()), KisConfigNotifier::instance(), SLOT(forceNotifyOtherInstances()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
@@ -425,12 +429,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     setAcceptDrops(true);
 
-    KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-    foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-        collection->setConfigGroup("krita/shortcuts");
-        collection->readSettings(&group);
-    }
-
     KisInputProfileManager::instance()->loadProfiles();
 
 #if 0
@@ -468,13 +466,6 @@ KisView2::~KisView2()
         m_d->filterManager->cancel();
     }
 
-    {
-        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
-        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
-            collection->setConfigGroup("krita/shortcuts");
-            collection->writeSettings(&group);
-        }
-    }
     delete m_d;
 }
 
@@ -972,6 +963,10 @@ void KisView2::updateGUI()
     m_d->actionManager->updateGUI();
 }
 
+void KisView2::slotConfigChanged()
+{
+    mainWindow()->guiFactory()->refreshActionProperties();
+}
 
 void KisView2::slotPreferences()
 {

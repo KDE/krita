@@ -1,20 +1,33 @@
+/* This file is part of the KDE project
+   Copyright (C) 2014, Victor Lafon <metabolic.ewilan@hotmail.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either 
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public 
+   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "KoXmlMeta.h"
 
-//Ctor
 KoXmlMeta::KoXmlMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
 }
 
-//Ctor
-//- file : QFile associated to a XML document
 KoXmlMeta::KoXmlMeta(QFile *file):KoXmlGenerator(file)
 {
 
 }
 
-//Ctor
 KoXmlMeta::KoXmlMeta(QString name,QString license,QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
@@ -24,8 +37,6 @@ KoXmlMeta::KoXmlMeta(QString name,QString license,QString xmlName):KoXmlGenerato
     addTag("license",license,true);
 }
 
-//Ctor
-//- resourceTagList : list of resource tags linked to the set of resources
 KoXmlMeta::KoXmlMeta(QString* resourceTagList,QString name,QString license,QString description,
                      QString author,QString created,QString modified,QString xmlName)
                         :KoXmlGenerator(xmlName)
@@ -45,13 +56,11 @@ KoXmlMeta::KoXmlMeta(QString* resourceTagList,QString name,QString license,QStri
     }
 }
 
-//Dtor
 KoXmlMeta::~KoXmlMeta()
 {
 
 }
 
-//Used for sorting file
 KoXmlMeta::TagEnum KoXmlMeta::getTagEnumValue(QString tagName)
 {
     if (tagName=="name") {
@@ -80,9 +89,6 @@ KoXmlMeta::TagEnum KoXmlMeta::getTagEnumValue(QString tagName)
     }
 }
 
-//Check/sort the file to be easily comprehensible
-//Any tag which doesn't exist in the enum TagEnum will be considered as Other
-//and will be placed at the end of the file
 void KoXmlMeta::checkSort()
 {
     QDomNode prev;
@@ -123,8 +129,6 @@ void KoXmlMeta::checkSort()
     }
 }
 
-//Add tag with value as Text
-//Replace Value if already exists
 QDomElement KoXmlMeta::addTag(QString tagName,QString textValue,bool emptyFile)
 {
     tagName=tagName.toLower();
@@ -158,25 +162,4 @@ QDomElement KoXmlMeta::addTag(QString tagName,QString textValue,bool emptyFile)
         }
     }
 }
-
-/*
-//Parcours en profondeur récursif complet
-QDomNode KoXmlMeta::getFirstTag(QDomElement start,QString tagName)
-{
-    QDomNode n = start.firstChild();
-    while(!n.isNull())
-    {
-        QDomElement e = n.toElement();
-        if(e.tagName()==tagName)
-            return n;
-        else
-        {
-            QDomNode res=getFirstTag(e,tagName);
-            if(!res.isNull())
-                return res;
-        }
-        n = n.nextSibling();
-    }
-    return n;
-}*/
 

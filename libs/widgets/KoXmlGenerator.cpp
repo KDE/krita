@@ -1,3 +1,20 @@
+/* This file is part of the KDE project
+   Copyright (C) 2014, Victor Lafon <metabolic.ewilan@hotmail.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either 
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public 
+   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "KoXmlGenerator.h"
 #include <QtXml/QDomElement>
 #include <QFile>
@@ -6,14 +23,12 @@
 #include <iostream>
 using namespace std;
 
-/*Ctor*/
+
 KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
 {
     root=xmlDocument.documentElement();
 }
 
-/*Ctor
- *- file : QFile associated to a XML document*/
 KoXmlGenerator::KoXmlGenerator(QFile *file,QString rootTag):xmlDocument(file->fileName().section('.',0,0))
 {
     if (!file->open(QIODevice::ReadOnly)) {
@@ -41,21 +56,16 @@ KoXmlGenerator::KoXmlGenerator(QFile *file,QString rootTag):xmlDocument(file->fi
     }
 }
 
-//Dtor
 KoXmlGenerator::~KoXmlGenerator()
 {
 
 }
 
-//Check/sort the file to be easily comprehensible.
 void KoXmlGenerator::checkSort()
 {
 
 }
 
-/*Append tagName tag to the root of the document.
- *If textValue!="", the tag will have a text child having textValue as data.
- *-> Returns the created node.*/
 QDomElement KoXmlGenerator::addTag(QString tagName,QString textValue,bool emptyFile)
 {
     QDomElement child = xmlDocument.createElement(tagName);
@@ -68,8 +78,6 @@ QDomElement KoXmlGenerator::addTag(QString tagName,QString textValue,bool emptyF
     return child;
 }
 
-/*Remove the first tagName tag.
- *If textValue!="", the tag must have a text child having textValue as data.*/
 bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
 {
     QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
@@ -95,7 +103,6 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
     }
 }
 
-//Remove all the tagName tags of the Xml File.
 void KoXmlGenerator::removeTag(QString tagName)
 {
     QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
@@ -110,9 +117,6 @@ void KoXmlGenerator::removeTag(QString tagName)
     }
 }
 
-/*Looks for a value among the nodes of the lists.
- *Nodes are considered as having only one child, which is Text one.
- *-> Returns the first right node, or null node if not found.*/
 QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
 {
     QDomNode node;
@@ -127,20 +131,16 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
     return QDomNode();
 }
 
-//Show the Xml file
 void KoXmlGenerator::show()
 {
     cout<<qPrintable(toString());
 }
 
-//Returns QString containing Xml data
 QString KoXmlGenerator::toString()
 {
     return xmlDocument.toString();
 }
 
-/*Copy the QDomDocument to the linked file (file is created if not existing)
- *-> Returns the name of the file generated.*/
 QString KoXmlGenerator::toFile()
 {
     QString xmlName=xmlDocument.doctype().name().append(".xml");

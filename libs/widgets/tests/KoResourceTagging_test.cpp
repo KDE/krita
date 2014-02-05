@@ -46,7 +46,7 @@ void KoResourceTagging_test::addData()
 }
 
 void KoResourceTagging_test::testAddingDeletingTag()
-{    
+{
     /*
      * Adding Tags testing
      */
@@ -144,51 +144,6 @@ void KoResourceTagging_test::testReadWriteXML()
 
     delete m_tagObject;
 }
-
-#ifdef NEPOMUK
-void KoResourceTagging_test::testNepomukBackend()
-{
-    m_tagObject = new KoResourceTagging("*.test");
-
-    KoResource* resource = new KoPattern(m_resourceNames.at(0));
-    m_tagObject->addTag(resource,m_tags.at(0));
-
-    resource = new KoPattern(m_resourceNames.at(1));
-    m_tagObject->addTag(resource,m_tags.at(1));
-
-    delete m_tagObject;
-
-    m_tagObject = new KoResourceTagging("*.test");
-
-    m_tagObject->setNepomukBool(true);
-    /// Here the XML repo will get copied into Nepomuk Repo -- write into nepomuk will be tested.
-    m_tagObject->updateNepomukXML(true);
-    /// Updated the m_tagObject to false so that we can able to compare xml object with Nepomuk object
-    m_tagObject->setNepomukBool(false);
-
-    KoResourceTagging* tagObjectForNepo;
-    /// At the start-up, the read functionality from the nepomuk is tested here.
-    tagObjectForNepo = new KoResourceTagging("*.test");
-
-    QCOMPARE(m_tagObject->tagNamesList(),tagObjectForNepo->tagNamesList());
-    resource = new KoPattern(m_resourceNames.at(0));
-    QCOMPARE(m_tagObject->assignedTagsList(resource),tagObjectForNepo->assignedTagsList(resource));
-    resource = new KoPattern(m_resourceNames.at(1));
-    QCOMPARE(m_tagObject->assignedTagsList(resource),tagObjectForNepo->assignedTagsList(resource));
-
-    /// Reset the m_tagObject values - helps in running the test twice
-    m_tagObject->updateNepomukXML(false);
-
-    resource = new KoPattern(m_resourceNames.at(0));
-    m_tagObject->delTag(resource,m_tags.at(0));
-
-    resource = new KoPattern(m_resourceNames.at(1));
-    m_tagObject->delTag(resource,m_tags.at(1));
-
-    delete m_tagObject;
-    delete tagObjectForNepo;
-}
-#endif
 
 QTEST_KDEMAIN(KoResourceTagging_test, GUI)
 

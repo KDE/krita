@@ -48,7 +48,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisPressureSpacingOptionWidget());
     addMirrorOption();
 
-    addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
+    addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Length"), i18n("Length: "), "SmudgeRate", true));
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());

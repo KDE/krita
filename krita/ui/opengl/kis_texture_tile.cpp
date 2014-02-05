@@ -222,7 +222,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
      */
 
     /**
-     * WARN: This can repeat stripes of 1px width only!
+     * WARN: The width of the stripes will be equal to the broder
+     *       width of the tiles.
      */
 
     const int pixelSize = updateInfo.pixelSize();
@@ -232,27 +233,36 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     const QRect patchRect = QRect(m_textureRectInImagePixels.topLeft() +
                                   patchOffset,
                                   patchSize);
+    const QSize tileSize = updateInfo.tileRect().size();
+
 
     if(imageRect.top() == patchRect.top()) {
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-                        patchOffset.x(), patchOffset.y() - 1,
-                        patchSize.width(), 1,
-                        m_texturesInfo->format,
-                        m_texturesInfo->type,
-                        updateInfo.data());
+        int start = 0;
+        int end = patchOffset.y() - 1;
+        for (int i = start; i <= end; i++) {
+            glTexSubImage2D(GL_TEXTURE_2D, 0,
+                            patchOffset.x(), i,
+                            patchSize.width(), 1,
+                            m_texturesInfo->format,
+                            m_texturesInfo->type,
+                            updateInfo.data());
+        }
     }
 
     if (imageRect.bottom() == patchRect.bottom()) {
         int shift = patchSize.width() * (patchSize.height() - 1) *
                 pixelSize;
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-                        patchOffset.x(), patchOffset.y() + patchSize.height(),
-                        patchSize.width(), 1,
-                        m_texturesInfo->format,
-                        m_texturesInfo->type,
-                        updateInfo.data() + shift);
-
+        int start = patchOffset.y() + patchSize.height();
+        int end = tileSize.height() - 1;
+        for (int i = start; i < end; i++) {
+            glTexSubImage2D(GL_TEXTURE_2D, 0,
+                            patchOffset.x(), i,
+                            patchSize.width(), 1,
+                            m_texturesInfo->format,
+                            m_texturesInfo->type,
+                            updateInfo.data() + shift);
+        }
     }
 
     if (imageRect.left() == patchRect.left()) {
@@ -268,13 +278,16 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             dstPtr += pixelSize;
         }
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-                        patchOffset.x() - 1, patchOffset.y(),
-                        1, patchSize.height(),
-                        m_texturesInfo->format,
-                        m_texturesInfo->type,
-                        columnBuffer.constData());
-
+        int start = 0;
+        int end = patchOffset.x() - 1;
+        for (int i = start; i <= end; i++) {
+            glTexSubImage2D(GL_TEXTURE_2D, 0,
+                            i, patchOffset.y(),
+                            1, patchSize.height(),
+                            m_texturesInfo->format,
+                            m_texturesInfo->type,
+                            columnBuffer.constData());
+        }
     }
 
     if (imageRect.right() == patchRect.right()) {
@@ -290,12 +303,16 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
             dstPtr += pixelSize;
         }
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0,
-                        patchOffset.x() + patchSize.width(), patchOffset.y(),
-                        1, patchSize.height(),
-                        m_texturesInfo->format,
-                        m_texturesInfo->type,
-                        columnBuffer.constData());
+        int start = patchOffset.x() + patchSize.width();
+        int end = tileSize.width() - 1;
+        for (int i = start; i <= end; i++) {
+            glTexSubImage2D(GL_TEXTURE_2D, 0,
+                            i, patchOffset.y(),
+                            1, patchSize.height(),
+                            m_texturesInfo->format,
+                            m_texturesInfo->type,
+                            columnBuffer.constData());
+        }
     }
 
     setNeedsMipmapRegeneration();

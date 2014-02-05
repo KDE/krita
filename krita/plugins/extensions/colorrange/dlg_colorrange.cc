@@ -258,13 +258,16 @@ void DlgColorRange::slotAdd(bool on)
 
 void DlgColorRange::slotSelectClicked()
 {
+    KisPaintDeviceSP device = m_view->activeDevice();
+    KIS_ASSERT_RECOVER_RETURN(device);
+
+    QRect rc = device->exactBounds();
+    if (rc.isEmpty()) return;
+
     QApplication::setOverrideCursor(KisCursor::waitCursor());
+
     qint32 x, y, w, h;
-    QRect rc = m_view->activeDevice()->exactBounds();
-    x = rc.x();
-    y = rc.y();
-    w = rc.width();
-    h = rc.height();
+    rc.getRect(&x, &y, &w, &h);
 
     const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
 

@@ -117,14 +117,14 @@ void KisMaskTest::testSelectionParent()
         KisMaskSP mask = new TestMask;
         mask->initSelection(image->rootLayer());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
     }
 
     {
         KisMaskSP mask = new TestMask;
         mask->setSelection(new KisSelection());
         KisSelectionSP selection = mask->selection();
-        QCOMPARE(selection->parentNode(), KisNodeSP(mask));
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
     }
 }
 
@@ -160,7 +160,7 @@ void KisMaskTest::testDeferredOffsetInitialization()
     QCOMPARE(mask->y(), 0);
 
     KisSelectionSP selection = mask->selection();
-    QCOMPARE(selection->parentNode(), KisNodeSP(mask));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)

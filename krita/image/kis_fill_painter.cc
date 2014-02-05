@@ -25,6 +25,7 @@
 #include <cfloat>
 #include <stack>
 
+#include <QMessageBox>
 #include <QFontInfo>
 #include <QFontMetrics>
 #include <QPen>
@@ -250,13 +251,12 @@ struct FillSegment {
 //    FillSegment* parent;
 };
 
-typedef enum { None = 0, Added = 1, Checked = 2 } Status;
+static const quint8 None = 0;
+static const quint8 Added = 1;
+static const quint8 Checked = 2;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection)
 {
-    bool canOptimizeDifferences = (projection->colorSpace()->pixelSize() == 4);
-    QHash<quint32, quint8> differences;
-
     if (m_width < 0 || m_height < 0) {
         if (selection() && m_careForSelection) {
             QRect rc = selection()->selectedExactRect();
@@ -272,6 +272,25 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
         return new KisSelection(new KisSelectionDefaultBounds(device()));
 
+    m_size = m_width * m_height;
+
+    try {
+        quint8 *map = new quint8[m_size];
+        memset(map, None, m_size);
+        return createFloodSelectionFast(startX, startY, projection, map); // deletes map
+    }
+    catch (std::bad_alloc) {
+        warnKrita << "KisFillPainter::createFloodSelection failed to allocate" << m_width * m_height << "bytes.";
+        return createFloodSelectionFrugal(startX, startY, projection);
+    }
+
+}
+
+KisSelectionSP KisFillPainter::createFloodSelectionFast(int startX, int startY, KisPaintDeviceSP projection, quint8 *map)
+{
+    bool canOptimizeDifferences = (projection->colorSpace()->pixelSize() == 4);
+    QHash<quint32, quint8> differences;
+
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
 
     // sample merged?
@@ -284,8 +303,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         sourceDevice = device();
     }
 
-    m_size = m_width * m_height;
-
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
     KisPixelSelectionSP pSel = selection->pixelSelection();
 
@@ -297,12 +314,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     memcpy(source, pixelIt->rawData(), sourceDevice->pixelSize());
 
     std::stack<FillSegment> stack;
-
     stack.push(FillSegment(startX, startY/*, 0*/));
-
-    Status* map = new Status[m_size];
-
-    memset(map, None, m_size * sizeof(Status));
 
     int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
     if (progressUpdater()) progressUpdater()->setProgress(0);
@@ -318,7 +330,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         FillSegment segment = stack.top();
         stack.pop();
         if (map[m_width * segment.y + segment.x] == Checked) {
-            //delete segment;
             continue;
         }
         map[m_width * segment.y + segment.x] = Checked;
@@ -347,7 +358,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
         if (diff > m_threshold
                 || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
-            //delete segment;
             continue;
         }
 
@@ -366,6 +376,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             Q_ASSERT(y - 1 < m_height);
             stack.push(FillSegment(x, y - 1));
         }
+
         if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
             map[m_width *(y + 1) + x] = Added;
             Q_ASSERT(x >= 0);
@@ -420,6 +431,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     Q_ASSERT(y - 1 < m_height);
                     stack.push(FillSegment(x, y - 1));
                 }
+
                 if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
                     map[m_width *(y + 1) + x] = Added;
                     Q_ASSERT(x >= 0);
@@ -438,8 +450,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         }
 
         x = segment.x + 1;
-        //delete segment;
-        //segment = 0;
 
         if (x >= m_width) {
             continue;
@@ -481,7 +491,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
             if (m_fuzzy) {
                 *selIt->rawData() = quint8(MAX_SELECTED - diff);
-            } else{
+            } else {
                 *selIt->rawData() = MAX_SELECTED;
             }
 
@@ -493,6 +503,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 Q_ASSERT(y - 1 < m_height);
                 stack.push(FillSegment(x, y - 1));
             }
+
             if (y < (m_height - 1) && (map[m_width *(y + 1) + x] == None)) {
                 map[m_width *(y + 1) + x] = Added;
                 Q_ASSERT(x >= 0);
@@ -517,7 +528,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         }
     }
 
-
     delete[] map;
     delete[] source;
 
@@ -533,8 +543,292 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         KisFeatherSelectionFilter feathery(m_feather);
         feathery.process(pSel, selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
     }
-    
+
+    selection->updateProjection();
+
+    return selection;}
+
+
+KisSelectionSP KisFillPainter::createFloodSelectionFrugal(int startX, int startY, KisPaintDeviceSP projection)
+{
+    bool canOptimizeDifferences = (projection->colorSpace()->pixelSize() == 4);
+    QHash<quint32, quint8> differences;
+    KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
+
+    // sample merged?
+    if (m_sampleMerged) {
+        if (!projection) {
+            return new KisSelection(new KisSelectionDefaultBounds(device()));
+        }
+        sourceDevice = projection;
+    } else {
+        sourceDevice = device();
+    }
+
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device()));
+    KisPixelSelectionSP pSel = selection->pixelSelection();
+
+    const KoColorSpace * devColorSpace = sourceDevice->colorSpace();
+
+    quint8* source = new quint8[sourceDevice->pixelSize()];
+    KisRandomAccessorSP pixelIt = sourceDevice->createRandomAccessorNG(startX, startY);
+
+    memcpy(source, pixelIt->rawData(), sourceDevice->pixelSize());
+
+    std::stack<FillSegment> stack;
+    stack.push(FillSegment(startX, startY/*, 0*/));
+
+    KisPaintDeviceSP map = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "map");
+
+    const quint8 defPixel = 0;
+    map->setDefaultPixel(&defPixel);
+
+    KisRandomAccessorSP mapAccessor = map->createRandomAccessorNG(startX, startY);
+
+    int progressPercent = 0; int pixelsDone = 0; int currentPercent = 0;
+    if (progressUpdater()) progressUpdater()->setProgress(0);
+
+    bool hasSelection = m_careForSelection && this->selection();
+    KisSelectionSP srcSel;
+
+    if (hasSelection) {
+        srcSel = this->selection();
+    }
+
+    while (!stack.empty()) {
+        FillSegment segment = stack.top();
+        stack.pop();
+        mapAccessor->moveTo(segment.x, segment.y);
+        if (mapAccessor->rawDataConst()[0] == Checked) {
+            continue;
+        }
+        memset(mapAccessor->rawData(), Checked, 1);
+
+        int x = segment.x;
+        int y = segment.y;
+        Q_ASSERT(x >= 0);
+        Q_ASSERT(x < m_width);
+        Q_ASSERT(y >= 0);
+        Q_ASSERT(y < m_height);
+
+        pixelIt->moveTo(x,y);
+        quint8 diff;
+        if (canOptimizeDifferences) {
+            if (differences.contains(*reinterpret_cast<quint32*>(pixelIt->rawData()))) {
+                diff = differences[*reinterpret_cast<quint32*>(pixelIt->rawData())];
+            }
+            else {
+                diff = devColorSpace->difference(source, pixelIt->rawData());
+                differences[*reinterpret_cast<quint32*>(pixelIt->rawData())] = diff;
+            }
+        }
+        else {
+            diff = devColorSpace->difference(source, pixelIt->rawData());
+        }
+
+        if (diff > m_threshold
+                || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
+            continue;
+        }
+
+        KisRandomAccessorSP selIt = pSel->createRandomAccessorNG(x, y);
+
+        if (m_fuzzy) {
+            *selIt->rawData() = quint8(MAX_SELECTED - diff);
+        } else
+            *selIt->rawData() = MAX_SELECTED;
+
+        mapAccessor->moveTo(x, y - 1);
+        if (y > 0 && (mapAccessor->rawDataConst()[0] == None)) {
+            memset(mapAccessor->rawData(), None, 1);
+            Q_ASSERT(x >= 0);
+            Q_ASSERT(x < m_width);
+            Q_ASSERT(y - 1 >= 0);
+            Q_ASSERT(y - 1 < m_height);
+            stack.push(FillSegment(x, y - 1));
+        }
+        mapAccessor->moveTo(x, y + 1);
+        if (y < (m_height - 1) && (mapAccessor->rawDataConst()[0] == None)) {
+            memset(mapAccessor->rawData(), Added, 1);
+            Q_ASSERT(x >= 0);
+            Q_ASSERT(x < m_width);
+            Q_ASSERT(y + 1 >= 0);
+            Q_ASSERT(y + 1 < m_height);
+            stack.push(FillSegment(x, y + 1));
+        }
+
+        ++pixelsDone;
+
+        bool stop = false;
+
+        --x;
+        pixelIt->moveTo(x,y);
+        selIt->moveTo(x,y);
+
+        if (x > 0) {
+            // go to the left
+            while (!stop && x >= 0) {
+                mapAccessor->moveTo(x, y);
+                if (mapAccessor->rawDataConst()[0] == Checked) {
+                    break;
+                }
+                memset(mapAccessor->rawData(), Checked, 1);
+                quint8 diff;
+                if (canOptimizeDifferences) {
+                    if (differences.contains(*reinterpret_cast<quint32*>(pixelIt->rawData()))) {
+                        diff = differences[*reinterpret_cast<quint32*>(pixelIt->rawData())];
+                    }
+                    else {
+                        diff = devColorSpace->difference(source, pixelIt->rawData());
+                        differences[*reinterpret_cast<quint32*>(pixelIt->rawData())] = diff;
+                    }
+                }
+                else {
+                    diff = devColorSpace->difference(source, pixelIt->rawData());
+                }
+                if (diff > m_threshold
+                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
+                    stop = true;
+                    continue;
+                }
+
+                if (m_fuzzy) {
+                    *selIt->rawData() = quint8(MAX_SELECTED - diff);
+                } else{
+                    *selIt->rawData() = MAX_SELECTED;
+                }
+
+                mapAccessor->moveTo(x, y - 1);
+                if (y > 0 && (mapAccessor->rawDataConst()[0] == None)) {
+                    memset(mapAccessor->rawData(), Added, 1);
+                    Q_ASSERT(x >= 0);
+                    Q_ASSERT(x < m_width);
+                    Q_ASSERT(y - 1 >= 0);
+                    Q_ASSERT(y - 1 < m_height);
+                    stack.push(FillSegment(x, y - 1));
+                }
+                mapAccessor->moveTo(x, y + 1);
+                if (y < (m_height - 1) && (mapAccessor->rawDataConst()[0] == None)) {
+                    memset(mapAccessor->rawData(), Added, 1);
+                    Q_ASSERT(x >= 0);
+                    Q_ASSERT(x < m_width);
+                    Q_ASSERT(y + 1 >= 0);
+                    Q_ASSERT(y + 1 < m_height);
+                    stack.push(FillSegment(x, y + 1));
+                }
+                ++pixelsDone;
+
+                --x;
+                pixelIt->moveTo(x,y);
+                selIt->moveTo(x,y);
+            }
+        }
+
+        x = segment.x + 1;
+
+        if (x >= m_width) {
+            continue;
+        }
+        Q_ASSERT(x >= 0);
+        Q_ASSERT(x < m_width);
+        Q_ASSERT(y >= 0);
+        Q_ASSERT(y < m_height);
+
+        mapAccessor->moveTo(x, y);
+        if (mapAccessor->rawDataConst()[0] == Checked) {
+            continue;
+        }
+
+        // and go to the right
+        pixelIt->moveTo(x, y);
+        selIt->moveTo(x, y);
+
+        stop = false;
+        while (!stop && x < m_width) {
+            mapAccessor->moveTo(x, y);
+            if (mapAccessor->rawDataConst()[0] == Checked) {
+                break;
+            }
+            quint8 diff;
+            if (canOptimizeDifferences) {
+                if (differences.contains(*reinterpret_cast<quint32*>(pixelIt->rawData()))) {
+                    diff = differences[*reinterpret_cast<quint32*>(pixelIt->rawData())];
+                }
+                else {
+                    diff = devColorSpace->difference(source, pixelIt->rawData());
+                    differences[*reinterpret_cast<quint32*>(pixelIt->rawData())] = diff;
+                }
+            }
+            else {
+                diff = devColorSpace->difference(source, pixelIt->rawData());
+            }
+            memset(mapAccessor->rawData(), Checked, 1);
+
+            if (diff > m_threshold
+                    || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
+                stop = true;
+                continue;
+            }
+
+            if (m_fuzzy) {
+                *selIt->rawData() = quint8(MAX_SELECTED - diff);
+            } else {
+                *selIt->rawData() = MAX_SELECTED;
+            }
+
+            mapAccessor->moveTo(x, y - 1);
+            if (y > 0 && (mapAccessor->rawDataConst()[0] == None)) {
+                memset(mapAccessor->rawData(), Added, 1);
+                Q_ASSERT(x >= 0);
+                Q_ASSERT(x < m_width);
+                Q_ASSERT(y >= 0);
+                Q_ASSERT(y - 1 < m_height);
+                stack.push(FillSegment(x, y - 1));
+            }
+
+            mapAccessor->moveTo(x, y + 1);
+            if (y < (m_height - 1) && (mapAccessor->rawDataConst()[0] == None)) {
+                //map[m_width *(y + 1) + x] = Added;
+                memset(mapAccessor->rawData(), Added, 1);
+                Q_ASSERT(x >= 0);
+                Q_ASSERT(x < m_width);
+                Q_ASSERT(y + 1 >= 0);
+                Q_ASSERT(y + 1 < m_height);
+                stack.push(FillSegment(x, y + 1));
+            }
+            ++pixelsDone;
+
+            ++x;
+            pixelIt->moveTo(x,y);
+            selIt->moveTo(x,y);
+        }
+
+        if (m_size > 0) {
+            progressPercent = (pixelsDone * 100) / m_size;
+            if (progressPercent > currentPercent) {
+                if (progressUpdater()) progressUpdater()->setProgress(progressPercent);
+                currentPercent = progressPercent;
+            }
+        }
+    }
+
+    delete[] source;
+
+    if (m_sizemod > 0) {
+        KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+        biggy.process(pSel, selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+    }
+    else if (m_sizemod < 0) {
+        KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
+        tiny.process(pSel, selection->selectedRect());
+    }
+    if (m_feather > 0) {
+        KisFeatherSelectionFilter feathery(m_feather);
+        feathery.process(pSel, selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+    }
+
     selection->updateProjection();
 
     return selection;
 }
+

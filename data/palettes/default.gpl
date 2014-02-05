@@ -1,0 +1,125 @@
+GIMP Palette
+Name: Default
+Columns: 20
+# by Deevad 12/2013
+#
+255 255 255    White
+242 242 242    Grey 242
+230 230 230    Grey 230
+217 217 217    Grey 217
+204 204 204    Grey 204
+191 191 191    Grey 191
+178 178 178    Grey 178
+166 166 166    Grey 166
+153 153 153    Grey 153
+140 140 140    Grey 140
+128 128 128    MID-Grey
+115 115 115    Grey 115
+102 102 102    Grey 102
+89 89 89    Grey 89
+76 76 76    Grey 76
+64 64 64    Grey 64
+51 51 51    Grey 51
+38 38 38    Grey 38
+26 26 26    Grey 26
+0 0 0    Black
+43 0 0    Dark deep Red
+120 4 34    Dark crimson
+168 31 61    Deep carmine
+208 0 0    English-red
+254 53 33    Tomato
+251 59 2    Orange-red
+254 139 104    Salmon
+254 167 17    Dark tangerine
+255 234 0    None
+242 252 36    Lemon yellow
+14 14 37    midnight blue
+0 48 82    Prussian blue
+47 68 118    Dark grey blue
+0 70 170    Cobalt blue
+30 116 253    None
+119 179 254    Bright french blue
+170 199 254    Bright steel blue
+207 230 254    Ice blue
+233 247 255    frost blue
+246 253 255    cold white
+52 18 12    Bistre
+107 40 51    Dark cordovan
+99 53 45    Bole
+162 64 43    Chestnut
+189 99 64    choco
+216 143 87    Persian orange
+254 194 142    Apricot
+254 218 187    Unbleached silk
+254 228 179    Peach
+241 226 197    Straw
+15 28 33    None
+29 50 57    Medium jungle green
+46 78 78    Dark slate grey
+73 103 92    Dark grullo green
+0 127 127    Teal
+66 169 175    Turquoise
+108 173 198    Cerulean frost
+172 216 185    Tiffany green
+214 229 222    None
+238 245 240    None
+59 35 0    None
+95 62 29    None
+183 65 0    Sienna
+255 106 0    None
+254 139 0    Orange
+255 177 0    None
+215 152 11    Yellow ochre
+193 177 127    Sand
+209 179 139    Tan
+231 203 143    Dark wheat
+18 46 29    None
+42 60 55    None
+31 81 43    None
+70 135 104    None
+64 155 104    Sea green
+53 135 87    None
+118 197 120    Mint
+174 204 181    Timberwolf
+184 244 245    Celeste
+216 255 244    None
+36 20 34    None
+44 17 57    None
+68 21 33    None
+77 38 137    Violet
+137 22 136    Purple
+192 74 109    Dark thulian pink
+221 48 98    Cerise
+254 19 146    Deep pink
+254 101 203    Rose pink
+254 202 218    Pink
+28 51 34    Cal Poly Pomona
+0 67 32    Forest green
+41 127 0    Napier green
+89 147 43    None
+92 127 0    None
+130 211 34    None
+212 220 24    None
+188 245 28    Green-yellow
+230 243 133    Bright chartreuse
+239 255 201    None
+0 0 0    None
+127 0 0    None
+255 0 0    RGB Red
+255 0 127    None
+255 0 254    RGB Magenta
+255 125 255    half-Magenta
+255 125 125    dim-Red
+255 127 0    None
+255 255 0    RGB Yellow
+255 255 125    half-Yellow
+0 0 127    None
+63 0 127    None
+0 0 255    RGB Blue
+127 0 255    None
+125 125 255    dim-Blue
+0 255 255    RGB Cyan
+125 255 255    half-Cyan
+125 255 125    dim-Green
+0 255 0    RGB Green
+0 255 127    None

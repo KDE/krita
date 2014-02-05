@@ -952,6 +952,19 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     }
 }
 
+void KoPAView::setViewMode(KoPAViewMode* mode)
+{
+    KoPAViewMode* previousViewMode = viewMode();
+    KoPAViewBase::setViewMode(mode);
+
+    if (previousViewMode && mode != previousViewMode) {
+        disconnect(d->doc, SIGNAL(shapeAdded(KoShape *)), previousViewMode, SLOT(addShape(KoShape *)));
+        disconnect(d->doc, SIGNAL(shapeRemoved(KoShape *)), previousViewMode, SLOT(removeShape(KoShape *)));
+    }
+    connect(d->doc, SIGNAL(shapeAdded(KoShape *)), mode, SLOT(addShape(KoShape *)));
+    connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), mode, SLOT(removeShape(KoShape *)));
+}
+
 QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
 {
     return d->doc->pageThumbnail(page, size);
@@ -1262,3 +1275,4 @@ void KoPAView::updateUnit(const KoUnit &unit)
 }
 
 #include <KoPAView.moc>
+

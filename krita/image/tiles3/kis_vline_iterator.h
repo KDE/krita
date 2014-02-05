@@ -41,6 +41,9 @@ public:
     KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisVLineIterator2();
 
+    virtual void resetPixelPos();
+    virtual void resetColumnPos();
+
     virtual bool nextPixel();
     virtual void nextColumn();
     virtual const quint8* rawDataConst() const;
@@ -64,6 +67,7 @@ private:
 
     qint32 m_top;
     qint32 m_bottom;
+    qint32 m_left;
     qint32 m_topRow;
     qint32 m_bottomRow;
 

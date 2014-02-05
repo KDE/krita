@@ -77,7 +77,9 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_common_colors_recalculation_runner.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_minimal_shade_selector.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_editor.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box_popup.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_lines_settings.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_container.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base.cpp
@@ -100,6 +102,10 @@ endif (WIN32)
 # =============================================================================
 
 kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+set_target_properties(kritasketchlib
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
+
 
 target_link_libraries(kritasketchlib
     ${QT_QTDECLARATIVE_LIBRARY}

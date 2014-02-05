@@ -22,6 +22,8 @@
 
 #ifdef HAVE_OPENGL
 
+#include <QMessageBox>
+
 #include <KoColorSpace.h>
 #include "kis_image.h"
 #include "kis_paint_device.h"
@@ -29,9 +31,10 @@
 #include <KoColorConversionTransformation.h>
 #include <KoChannelInfo.h>
 
-
 class KisTextureTileUpdateInfo;
-typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
+typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;
+typedef QVector<KisTextureTileUpdateInfoSP> KisTextureTileUpdateInfoSPList;
+
 
 class KisTextureTileUpdateInfo
 {
@@ -53,6 +56,8 @@ public:
     }
 
     ~KisTextureTileUpdateInfo() {
+        destroy();
+        KIS_ASSERT_RECOVER_NOOP(!m_patchPixels);
     }
 
     void destroy() {
@@ -63,7 +68,16 @@ public:
     void retrieveData(KisImageWSP image, QBitArray m_channelFlags, bool onlyOneChannelSelected, int selectedChannelIndex)
     {
         m_patchColorSpace = image->projection()->colorSpace();
-        m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
+        if (!m_patchPixels) {
+            try {
+                m_patchPixels = new quint8[m_patchColorSpace->pixelSize() * m_patchRect.width() * m_patchRect.height()];
+            }
+            catch (std::bad_alloc) {
+                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
+            }
+
+        }
 
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
@@ -75,7 +89,14 @@ public:
 
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
-            quint8 *dst = m_patchColorSpace->allocPixelBuffer(numPixels);
+            quint8 *dst = 0;
+            try {
+                dst = new quint8[m_patchColorSpace->pixelSize() * numPixels];
+            }
+            catch (std::bad_alloc) {
+                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                qFatal("KisTextureTileUpdate::retrieveData: Could not allocate enough memory (1).");
+            }
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
             int channelSize = channelInfo[selectedChannelIndex]->size();
@@ -130,7 +151,14 @@ public:
 
         if (m_numPixels > 0) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
-            quint8* dstBuffer = dstCS->allocPixelBuffer(numPixels);
+            quint8* dstBuffer = 0;
+            try {
+                 dstBuffer = new quint8[dstCS->pixelSize() * numPixels];
+            }
+            catch (std::bad_alloc) {
+                QMessageBox::critical(0, i18n("Fatal Error"), i18n("Krita has run out of memory and has to close."));
+                qFatal("KisTextureTileUpdate::convertTo. Could not allocate enough memory.");
+            }
 
             // FIXME: rendering intent
             Q_ASSERT(dstBuffer && m_patchPixels);
@@ -188,6 +216,9 @@ public:
     inline bool valid() const {
         return m_numPixels > 0;
     }
+
+private:
+    Q_DISABLE_COPY(KisTextureTileUpdateInfo);
 
 private:
     qint32 m_tileCol;

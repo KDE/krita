@@ -61,7 +61,6 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categ
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsThreading(false);
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
 }
 

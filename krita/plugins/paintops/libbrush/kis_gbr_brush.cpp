@@ -98,8 +98,8 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
 KisGbrBrush::KisGbrBrush(const QString& filename,
                          const QByteArray& data,
                          qint32 & dataPos)
-                             : KisBrush(filename)
-                             , d(new Private)
+    : KisBrush(filename)
+    , d(new Private)
 {
     d->ownData = false;
     d->useColorAsMask = false;
@@ -475,14 +475,29 @@ KisGbrBrush* KisGbrBrush::clone() const
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     predefinedBrushToXML("gbr_brush", e);
+    e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));
     KisBrush::toXML(d, e);
 }
 
 void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)
 {
-    d->useColorAsMask = useColorAsMask;
-    resetBoundary();
-    clearBrushPyramid();
+    /**
+     * WARNING: There is a problem in the brush server, since it
+     * returns not copies of brushes, but direct pointers to them. It
+     * means that the brushes are shared among all the currently
+     * present paintops, which might be a problem for e.g. Multihand
+     * Brush Tool.
+     *
+     * Right now, all the instances of Multihand Brush Tool share the
+     * same brush, so there is no problem in this sharing, unless we
+     * reset the internal state of the brush on our way.
+     */
+
+    if (useColorAsMask != d->useColorAsMask) {
+        d->useColorAsMask = useColorAsMask;
+        resetBoundary();
+        clearBrushPyramid();
+    }
 }
 bool KisGbrBrush::useColorAsMask() const
 {

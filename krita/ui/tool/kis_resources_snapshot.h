@@ -57,6 +57,7 @@ public:
     bool needsAirbrushing() const;
     int airbrushingRate() const;
 
+    void setOpacity(qreal opacity);
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
 

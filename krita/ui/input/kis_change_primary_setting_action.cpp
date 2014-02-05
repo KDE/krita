@@ -39,6 +39,18 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 }
 
+void KisChangePrimarySettingAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::AlternateChangeSize);
+}
+
+void KisChangePrimarySettingAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::AlternateChangeSize);
+}
+
 int KisChangePrimarySettingAction::priority() const
 {
     return 8;

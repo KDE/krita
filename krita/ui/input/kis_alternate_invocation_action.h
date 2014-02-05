@@ -21,6 +21,7 @@
 
 #include "kis_abstract_input_action.h"
 #include <QScopedPointer>
+#include "kis_tool.h"
 
 /**
  * \brief Alternate Invocation implementation of KisAbstractInputAction.
@@ -47,11 +48,17 @@ public:
     explicit KisAlternateInvocationAction();
     virtual ~KisAlternateInvocationAction();
 
+    void activate(int shortcut);
+    void deactivate(int shortcut);
+
     virtual int priority() const;
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
     void inputEvent(QEvent* event);
+
+private:
+    KisTool::ToolAction shortcutToToolAction(int shortcut);
 
 private:
     struct Private;

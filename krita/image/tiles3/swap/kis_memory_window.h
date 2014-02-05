@@ -49,19 +49,34 @@ public:
     quint8* getWriteChunkPtr(const KisChunkData &writeChunk);
 
 private:
-    void adjustWindow(const KisChunkData &requestedChunk, quint8 **window,
-                      KisChunkData *windowChunk, quint64 windowSize);
+    struct MappingWindow {
+        MappingWindow(quint64 _defaultSize)
+            : chunk(0,0),
+              window(0),
+              defaultSize(_defaultSize)
+        {
+        }
+
+        quint8* calculatePointer(const KisChunkData &other) const {
+            return window + other.m_begin - chunk.m_begin;
+        }
+
+        KisChunkData chunk;
+        quint8 *window;
+        const quint64 defaultSize;
+    };
+
+
+private:
+    void adjustWindow(const KisChunkData &requestedChunk,
+                      MappingWindow *adjustingWindow,
+                      MappingWindow *otherWindow);
 
 private:
     KTemporaryFile m_file;
-    KisChunkData m_readWindowChunk;
-    KisChunkData m_writeWindowChunk;
 
-    quint8 *m_readWindow;
-    quint8 *m_writeWindow;
-
-    quint64 m_readWindowSize;
-    quint64 m_writeWindowSize;
+    MappingWindow m_readWindowEx;
+    MappingWindow m_writeWindowEx;
 };
 
 #endif /* __KIS_MEMORY_WINDOW_H */

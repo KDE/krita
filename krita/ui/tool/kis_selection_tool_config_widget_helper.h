@@ -53,7 +53,7 @@ public Q_SLOTS:
     void slotSetSelectionMode(int mode);
 
 private:
-    KisSelectionOptions* m_optionWidget;
+    KisSelectionOptions* m_optionsWidget;
     SelectionAction m_selectionAction;
     SelectionMode m_selectionMode;
 

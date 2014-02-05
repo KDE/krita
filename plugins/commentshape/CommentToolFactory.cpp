@@ -27,7 +27,7 @@
 CommentToolFactory::CommentToolFactory()
 : KoToolFactoryBase("CommentToolFactory")
 {
-    setToolTip(i18n("Comment Tool"));
+    setToolTip(i18n("Comment"));
     setToolType(mainToolType());
     setIconName(koIconNameCStr("tool_comment"));
     setActivationShapeId(COMMENTSHAPEID);

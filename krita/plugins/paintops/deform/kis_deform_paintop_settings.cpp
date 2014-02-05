@@ -25,8 +25,8 @@
 #include <kis_deform_option.h>
 
 KisDeformPaintOpSettings::KisDeformPaintOpSettings()
-    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                 KisCurrentOutlineFetcher::ROTATION_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION)
 {
 }
 

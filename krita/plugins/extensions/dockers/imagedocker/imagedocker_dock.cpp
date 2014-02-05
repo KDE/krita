@@ -36,6 +36,7 @@
 #include <QAbstractListModel>
 #include <QButtonGroup>
 #include <QDesktopServices>
+#include <QTemporaryFile>
 
 #include "ui_wdgimagedocker.h"
 #include "ui_wdgImageViewPopup.h"
@@ -227,6 +228,8 @@ ImageDockerDock::ImageDockerDock():
     connect(m_zoomButtons            , SIGNAL(buttonClicked(int))                     , SLOT(slotCloseZoomPopup()));
 
     setWidget(m_ui);
+
+    setAcceptDrops(true);
 }
 
 ImageDockerDock::~ImageDockerDock()
@@ -236,6 +239,48 @@ ImageDockerDock::~ImageDockerDock()
     delete m_thumbModel;
     delete m_imgListModel;
     delete m_zoomButtons;
+
+    qDeleteAll(m_temporaryFiles);
+}
+
+void ImageDockerDock::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->setAccepted(event->mimeData()->hasImage() ||
+                       event->mimeData()->hasUrls());
+}
+
+void ImageDockerDock::dropEvent(QDropEvent *event)
+{
+    QImage image;
+    if (event->mimeData()->hasImage()) {
+        image = qvariant_cast<QImage>(event->mimeData()->imageData());
+    }
+
+    // TODO: use KIO to fetch images from http:// urls
+
+    if (!image.isNull()) {
+        QTemporaryFile *file = new QTemporaryFile(QDir::tempPath () + QDir::separator() + "krita_reference_dnd_XXXXXX.png");
+        m_temporaryFiles.append(file);
+
+        file->open();
+        image.save(file, "PNG");
+        file->close();
+
+        slotOpenImage(file->fileName());
+    } else if (event->mimeData()->hasUrls()) {
+        QList<QUrl> urls = event->mimeData()->urls();
+
+        foreach(const QUrl &url, urls) {
+            QString path = url.path();
+            QFileInfo info(path);
+
+            if (info.exists() &&
+                !QImageReader::imageFormat(path).isEmpty()) {
+
+                slotOpenImage(path);
+            }
+        }
+    }
 }
 
 void ImageDockerDock::setCanvas(KoCanvasBase* canvas)

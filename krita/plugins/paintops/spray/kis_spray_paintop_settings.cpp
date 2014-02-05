@@ -27,8 +27,8 @@
 #include <kis_airbrush_option.h>
 
 KisSprayPaintOpSettings::KisSprayPaintOpSettings()
-    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                 KisCurrentOutlineFetcher::ROTATION_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION)
 {
 }
 

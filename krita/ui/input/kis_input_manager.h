@@ -20,6 +20,7 @@
 #define KIS_INPUTMANAGER_H
 
 #include <QObject>
+#include <krita_export.h>
 
 class QPointF;
 class QTabletEvent;
@@ -46,7 +47,7 @@ class KisInputAction;
  *
  * \todo Implement shortcut configuration
  */
-class KisInputManager : public QObject
+class KRITAUI_EXPORT KisInputManager : public QObject
 {
     Q_OBJECT
 
@@ -66,9 +67,22 @@ public:
     void toggleTabletLogger();
 
     /**
+     * Installs the input manager as an event filter for \p receiver.
+     * Please note that KisInputManager is supposed to handle events
+     * for a single receiver only. This is defined by the fact that it
+     * resends some of the events back through the Qt's queue to the
+     * reciever. That is why the input manager will assert when it gets
+     * an event with wrong destination.
+     */
+    void setupAsEventFilter(QObject *receiver);
+
+    /**
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event );
+
+    void attachPriorityEventFilter(QObject *filter);
+    void detachPriorityEventFilter(QObject *filter);
 
     /**
      * Return the canvas this input manager is associated with.
@@ -100,6 +114,7 @@ public:
 
 public Q_SLOTS:
     void setMirrorAxis();
+	void stopIgnoringEvents();
 
 private Q_SLOTS:
     void slotToolChanged();

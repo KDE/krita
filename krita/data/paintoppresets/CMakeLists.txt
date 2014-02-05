@@ -17,6 +17,7 @@ Bristle_frottis.kpp
 Bristles_hairy.kpp
 Bristles_textured.kpp
 Bristles_wet.kpp
+Chalk_brush.kpp
 Clone_tool.kpp
 Curve_curvy.kpp
 Curve_ink.kpp
@@ -25,6 +26,7 @@ Curve_smooth.kpp
 Eraser_circle.kpp
 Eraser_hard.kpp
 Eraser_soft.kpp
+FX_blur_light.kpp
 FX_color_HSY.kpp
 FX_explode.kpp
 FX_glow_add.kpp
@@ -95,7 +97,9 @@ Smudge_rake.kpp
 Smudge_rake_2.kpp
 Smudge_soft.kpp
 Smudge_textured.kpp
+Special_dyna_dots.kpp
 Special_FuzzyColor.kpp
+Special_particles_crazy.kpp
 Splat_mix_cells.kpp
 Splat_texture.kpp
 Splat_texture_2.kpp

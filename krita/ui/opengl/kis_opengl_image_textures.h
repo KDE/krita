@@ -145,6 +145,7 @@ private:
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
+    const KoColorSpace* tilesColorSpace() const;
 
 private:
     KisImageWSP m_image;
@@ -152,7 +153,6 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-    bool m_useOcio;
     GLuint m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;
@@ -163,6 +163,8 @@ private:
     bool m_allChannelsSelected;
     bool m_onlyOneChannelSelected;
     int m_selectedChannelIndex;
+
+    bool m_useOcio;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

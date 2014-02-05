@@ -161,7 +161,6 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
@@ -174,12 +173,6 @@ KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const 
 const
 {
     return new KisBrightnessContrastFilterConfiguration();
-}
-
-
-bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
-{
-    return (cs->profile() != 0);
 }
 
 KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const

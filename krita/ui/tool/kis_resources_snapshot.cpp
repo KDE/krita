@@ -221,6 +221,11 @@ int KisResourcesSnapshot::airbrushingRate() const
     return m_d->currentPaintOpPreset->settings()->rate();
 }
 
+void KisResourcesSnapshot::setOpacity(qreal opacity)
+{
+    m_d->opacity = opacity * OPACITY_OPAQUE_U8;
+}
+
 quint8 KisResourcesSnapshot::opacity() const
 {
     return m_d->opacity;

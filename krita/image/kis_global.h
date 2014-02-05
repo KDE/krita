@@ -48,7 +48,11 @@ enum enumCursorStyle {
     CURSOR_STYLE_NO_CURSOR = 4,
     CURSOR_STYLE_SMALL_ROUND = 5,
     CURSOR_STYLE_OUTLINE_CENTER_DOT = 6,
-    CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7
+    CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7,
+    CURSOR_STYLE_TRIANGLE_RIGHTHANDED = 8,
+    CURSOR_STYLE_TRIANGLE_LEFTHANDED = 9,
+    CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED = 10,
+    CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED = 11
 };
 
 /*
@@ -115,6 +119,11 @@ inline T kisDegreesToRadians(T degrees) {
 template<typename T>
 inline T kisRadiansToDegrees(T radians) {
     return radians * 180.0 / M_PI;
+}
+
+template<class T, typename U>
+inline T kisGrowRect(const T &rect, U offset) {
+    return rect.adjusted(-offset, -offset, offset, offset);
 }
 
 #endif // KISGLOBAL_H_

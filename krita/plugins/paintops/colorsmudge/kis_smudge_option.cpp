@@ -29,7 +29,10 @@
 
 KisSmudgeOption::KisSmudgeOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisRateOption(name, label, checked, category),
-    mMode(SMEARING_MODE) { }
+    mMode(SMEARING_MODE)
+{
+    setValueRange(0.01, 1.0);
+}
 
 void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {

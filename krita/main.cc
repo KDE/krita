@@ -54,7 +54,9 @@
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 #ifdef Q_WS_X11
-    setenv("QT_NO_GLIB", "1", true);
+    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        setenv("QT_NO_GLIB", "1", true);
+    }
 #endif
 
     int state;

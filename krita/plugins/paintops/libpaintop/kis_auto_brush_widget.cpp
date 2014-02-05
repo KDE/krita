@@ -328,7 +328,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 void KisAutoBrushWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     Q_UNUSED(dyPixels);
-    inputRadius->setValue( inputRadius->value() + qRound(dxPixels) );
+
+    qreal newWidth = inputRadius->value() + dxPixels;
+    newWidth = qMax(newWidth, qreal(0.1));
+
+    inputRadius->setValue(newWidth);
 }
 
 QSizeF KisAutoBrushWidget::brushSize() const

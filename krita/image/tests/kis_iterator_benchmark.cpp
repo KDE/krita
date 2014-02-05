@@ -40,8 +40,8 @@ void KisIteratorBenchmark::rectIter(const KoColorSpace * colorSpace)
 
     KisPaintDevice dev(colorSpace);
 
-    quint8 * bytes = colorSpace->allocPixelBuffer(64*64);
-    memset(bytes, 128, 64*64 * colorSpace->pixelSize());
+    quint8 * bytes = new quint8[colorSpace->pixelSize() * 64*64];
+    memset(bytes, 128, 64 * 64 * colorSpace->pixelSize());
 
     QTime t;
     t.start();
@@ -75,8 +75,8 @@ void KisIteratorBenchmark::hLineIterNG(const KoColorSpace * colorSpace)
 {
     KisPaintDevice dev(colorSpace);
 
-    quint8 * bytes = colorSpace->allocPixelBuffer(128);
-    memset(bytes, 128, 128*colorSpace->pixelSize());
+    quint8 * bytes = new quint8[colorSpace->pixelSize() * 128];
+    memset(bytes, 128, 128 * colorSpace->pixelSize());
 
     QTime t;
     t.start();
@@ -126,7 +126,7 @@ void KisIteratorBenchmark::vLineIterNG(const KoColorSpace * colorSpace)
 {
 
     KisPaintDevice dev(colorSpace);
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
+    quint8 * bytes = new quint8[colorSpace->pixelSize()];
     memset(bytes, 128, colorSpace->pixelSize());
 
     QTime t;
@@ -160,8 +160,8 @@ void KisIteratorBenchmark::randomAccessor(const KoColorSpace * colorSpace)
 {
 
     KisPaintDevice dev(colorSpace);
-    quint8 * bytes = colorSpace->allocPixelBuffer(128);
-    memset(bytes, 128, 128*colorSpace->pixelSize());
+    quint8 * bytes = new quint8[colorSpace->pixelSize() * 128];
+    memset(bytes, 128, 128 * colorSpace->pixelSize());
 
     QTime t;
     t.start();

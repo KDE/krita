@@ -42,7 +42,7 @@
 #include <QDomDocument>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
-#include "KoResourceTagging.h"
+#include "KoResourceTagStore.h"
 
 #include "kowidgets_export.h"
 
@@ -64,7 +64,6 @@ public:
     KoResourceServerBase(const QString& type, const QString& extensions)
         : m_type(type)
         , m_extensions(extensions)
-        , m_cancelled(false)
     {
     }
 
@@ -79,8 +78,6 @@ public:
     * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     QString extensions() const { return m_extensions; }
-
-    void cancel() { m_cancelled = true; }
 
     QStringList fileNames() const
     {
@@ -101,7 +98,6 @@ private:
 
 protected:
 
-    bool   m_cancelled;
     QMutex m_loadLock;
 
 };
@@ -119,7 +115,7 @@ public:
     {
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
-        m_tagObject = new KoResourceTagging(type, extensions);
+        m_tagStore = new KoResourceTagStore(type, extensions);
     }
 
     virtual ~KoResourceServer()
@@ -128,7 +124,7 @@ public:
             qDeleteAll(m_resources);
         }
         m_resources.clear();
-        delete m_tagObject;
+        delete m_tagStore;
     }
 
     /**
@@ -141,8 +137,8 @@ public:
         kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
 
-        while (!filenames.empty() && !m_cancelled)
-        {
+        while (!filenames.empty()) {
+
             QString front = filenames.first();
             filenames.pop_front();
 
@@ -416,32 +412,32 @@ public:
     /// the below functions helps to access tagObject functions
     QStringList assignedTagsList( KoResource* resource ) const
     {
-        return m_tagObject->assignedTagsList(resource);
+        return m_tagStore->assignedTagsList(resource);
     }
 
     QStringList tagNamesList() const
     {
-        return m_tagObject->tagNamesList();
+        return m_tagStore->tagNamesList();
     }
 
     void addTag( KoResource* resource,const QString& tag)
     {
-        m_tagObject->addTag(resource,tag);
+        m_tagStore->addTag(resource,tag);
     }
 
     void delTag( KoResource* resource,const QString& tag)
     {
-        m_tagObject->delTag(resource,tag);
+        m_tagStore->delTag(resource,tag);
     }
 
     QStringList searchTag(const QString& lineEditText)
     {
-        return m_tagObject->searchTag(lineEditText);
+        return m_tagStore->searchTag(lineEditText);
     }
 
     void tagCategoryAdded(const QString& tag)
     {
-        m_tagObject->serializeTags();
+        m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTagAddition(tag);
         }
@@ -449,7 +445,7 @@ public:
 
     void tagCategoryRemoved(const QString& tag)
     {
-        m_tagObject->serializeTags();
+        m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTagRemoval(tag);
         }
@@ -457,28 +453,18 @@ public:
 
     void tagCategoryMembersChanged()
     {
-        m_tagObject->serializeTags();
+        m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
     }
 
-    KoResourceTagging * tagObject() const
+    KoResourceTagStore * tagObject() const
     {
-        return m_tagObject;
+        return m_tagStore;
     }
 
 
-#ifdef NEPOMUK
-    void updateNepomukXML(bool nepomukOn)
-    {
-        KoResourceTagging* tagObject = new KoResourceTagging(type(),extensions());
-        tagObject->setNepomukBool(nepomukOn);
-        tagObject->updateNepomukXML(nepomukOn);
-        delete tagObject;
-        m_tagObject->setNepomukBool(nepomukOn);
-    }
-#endif
 protected:
 
     /**
@@ -604,7 +590,7 @@ private:
     bool m_deleteResource; // false if the resource is a shared pointer object
     QString m_blackListFile;
     QStringList m_blackListFileNames;
-    KoResourceTagging* m_tagObject;
+    KoResourceTagStore* m_tagStore;
 
 };
 

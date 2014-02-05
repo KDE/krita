@@ -37,7 +37,6 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(true);
 }
 
 void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,

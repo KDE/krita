@@ -91,6 +91,12 @@ void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) 
     KisRandomAccessorSP accessor = dab->createRandomAccessorNG( qRound(pos.x()), qRound(pos.y()) );
     const KoColorSpace * cs = dab->colorSpace();
 
+    QRect boundingRect;
+
+    if (m_properties->scale.x() < 0 || m_properties->scale.y() < 0) {
+        boundingRect = dab->defaultBounds()->bounds();
+    }
+
     for (int i = 0; i < m_properties->iterations; i++) {
         for (int j = 0; j < m_properties->particleCount; j++) {
             /*
@@ -119,7 +125,19 @@ void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) 
             m_particleNextPos[j] *= m_properties->gravity;
             m_particlePos[j] = m_particlePos[j] + (m_particleNextPos[j] * TIME);
 
-            paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
+            /**
+             * When the scale is negative the equation becomes
+             * unstable, and the point coordinates grow to infinity,
+             * so just limit them in that case.
+             *
+             * Generally, the effect of instability might be quite
+             * interesting for the painters.
+             */
+            if (boundingRect.isEmpty() ||
+                boundingRect.contains(m_particlePos[j].toPoint())) {
+
+                paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
+            }
 
         }//for j
     }//for i

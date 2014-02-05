@@ -29,7 +29,6 @@ KisColorBalanceFilter::KisColorBalanceFilter()
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_B)));
 	setSupportsPainting(true);
-	setSupportsIncrementalPainting(false);
 }
 
 KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const

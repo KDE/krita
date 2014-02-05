@@ -81,7 +81,7 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF point = convertToPixelCoord(event);
     m_paintPath->lineTo(pixelToView(point));
@@ -92,7 +92,7 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

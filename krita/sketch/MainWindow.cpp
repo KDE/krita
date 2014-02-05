@@ -72,6 +72,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QDeclarativeView* view = new SketchDeclarativeView();
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
+#ifdef Q_OS_WIN
     QDir appdir(qApp->applicationDirPath());
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
@@ -79,6 +80,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
     view->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
     QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/kritasketch.qml";
+#else
+    view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+    QString mainqml = KGlobal::dirs()->findResource("appdata", "kritasketch.qml");
+#endif
 
     Q_ASSERT(QFile::exists(mainqml));
     if (!QFile::exists(mainqml)) {

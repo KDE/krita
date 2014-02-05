@@ -104,9 +104,11 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument *
         ref = doc->url().url();
     }
 
-    //<draw:object draw:style-name="standard" xml:id="1" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-    kDebug(30003) << "KoEmbeddedDocumentSaver::addEmbeddedDocument saving reference to embedded document as" << ref;
+    kDebug(30003) << "saving reference to embedded document as" << ref;
     writer.addAttribute("xlink:href", /*"#" + */ref);
+
+    //<draw:object xlink:type="simple" xlink:show="embed"
+    //    xlink:actuate="onLoad" xlink:href="#./Object 1"/>
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
@@ -137,11 +139,7 @@ void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element
     writer.startElement(element);
     // Write the attributes that refer to the file.
 
-    //<draw:object draw:style-name="standard" draw:id="1" xml:id="1"
-    //             draw:layer="layout" svg:width="14.973cm"
-    //             svg:height="4.478cm" svg:x="11.641cm"
-    //             svg:y="14.613cm" xlink:href="#./Object 1"
-    //             xlink:type="simple" xlink:show="embed"
+    //<draw:object xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed"
     //             xlink:actuate="onLoad"/>
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
@@ -177,10 +175,10 @@ void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const Q
 
 bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext & documentContext)
 {
-    KoStore * store = documentContext.odfStore.store();
+    KoStore *store = documentContext.odfStore.store();
 
     // Write embedded documents.
-    foreach(KoOdfDocument * doc, d->documents) {
+    foreach(KoOdfDocument *doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
             kDebug(30003) << " external (don't save) url:" << doc->url().url();
@@ -203,12 +201,15 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoOdfDocument::SavingContext
                 store->pushDirectory();
                 store->enterDirectory(name);
 
-                if (!doc->saveOdf(documentContext)) {
+                bool ok = doc->saveOdf(documentContext);
+
+                // Now that we're done leave the directory again
+                store->popDirectory();
+
+                if (!ok) {
                     kWarning(30003) << "KoEmbeddedDocumentSaver::saveEmbeddedDocuments failed";
                     return false;
                 }
-                // Now that we're done leave the directory again
-                store->popDirectory();
             }
 
             Q_ASSERT(doc->url().protocol() == INTERNAL_PROTOCOL);

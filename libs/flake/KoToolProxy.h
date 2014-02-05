@@ -154,7 +154,7 @@ public:
     void dropEvent(QDropEvent *event, const QPointF &point);
  
     /// Set the new active tool.
-    void setActiveTool(KoToolBase *tool);
+    virtual void setActiveTool(KoToolBase *tool);
 
     /// \internal
     KoToolProxyPrivate *priv();

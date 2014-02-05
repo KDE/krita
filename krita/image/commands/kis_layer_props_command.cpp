@@ -24,8 +24,9 @@
 
 #include <klocale.h>
 
-#include "KoColor.h"
-#include "KoColorProfile.h"
+#include <KoColor.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
 
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -33,21 +34,21 @@
 #include "kis_undo_adapter.h"
 
 KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
-        qint32 oldOpacity, qint32 newOpactiy,
-        const QString& oldCompositeOp, const QString& newCompositeOp,
-        const QString& oldName, const QString& newName,
-        const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
-        bool undoChannelFlags)
-        : KisLayerCommand(i18nc("(qtundo-format)", "Property Changes"), layer)
-        , m_oldName(oldName)
-        , m_newName(newName)
-        , m_oldOpacity(oldOpacity)
-        , m_newOpacity(newOpactiy)
-        , m_oldCompositeOp(oldCompositeOp)
-        , m_newCompositeOp(newCompositeOp)
-        , m_oldChannelFlags(oldChannelFlags)
-        , m_newChannelFlags(newChannelFlags)
-        , m_undoChannelFlags(undoChannelFlags)
+                                           qint32 oldOpacity, qint32 newOpactiy,
+                                           const QString& oldCompositeOp, const QString& newCompositeOp,
+                                           const QString& oldName, const QString& newName,
+                                           const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
+                                           bool undoChannelFlags)
+    : KisLayerCommand(i18nc("(qtundo-format)", "Property Changes"), layer)
+    , m_oldName(oldName)
+    , m_newName(newName)
+    , m_oldOpacity(oldOpacity)
+    , m_newOpacity(newOpactiy)
+    , m_oldCompositeOp(oldCompositeOp)
+    , m_newCompositeOp(newCompositeOp)
+    , m_oldChannelFlags(oldChannelFlags)
+    , m_newChannelFlags(newChannelFlags)
+    , m_undoChannelFlags(undoChannelFlags)
 {
 }
 

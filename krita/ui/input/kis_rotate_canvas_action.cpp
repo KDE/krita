@@ -61,13 +61,18 @@ int KisRotateCanvasAction::priority() const
     return 3;
 }
 
-void KisRotateCanvasAction::activate()
+void KisRotateCanvasAction::activate(int shortcut)
 {
-    QApplication::setOverrideCursor(KisCursor::rotateCursor());
+    if (shortcut == DiscreteRotateToggleShortcut) {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasDiscreteCursor());
+    } else /* if (shortcut == SmoothRotateToggleShortcut) */ {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasSmoothCursor());
+    }
 }
 
-void KisRotateCanvasAction::deactivate()
+void KisRotateCanvasAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

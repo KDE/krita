@@ -146,6 +146,9 @@ KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
     m_doc = doc;
     m_job = 0;
     m_stop = false;
+
+    TIFFSetWarningHandler(0);
+    TIFFSetErrorHandler(0);
 }
 
 KisTIFFConverter::~KisTIFFConverter()

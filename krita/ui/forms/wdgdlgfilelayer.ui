@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>120</height>
+    <width>400</width>
+    <height>196</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -16,10 +16,7 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <property name="fieldGrowthPolicy">
-    <enum>QFormLayout::ExpandingFieldsGrow</enum>
-   </property>
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -64,13 +61,36 @@
     </layout>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QCheckBox" name="chkScaleToImageResolution">
-     <property name="text">
-      <string>Scale To Image Resolution</string>
+    <widget class="QGroupBox" name="grpScalingOptions">
+     <property name="title">
+      <string>Scaling Options</string>
      </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioDontScale">
+        <property name="text">
+         <string>No Scaling</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioScaleToImageSize">
+        <property name="text">
+         <string>Scale to Image Size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioScalePPI">
+        <property name="text">
+         <string>Adapt to Image Resolution (ppi)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

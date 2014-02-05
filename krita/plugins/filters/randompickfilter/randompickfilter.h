@@ -40,7 +40,6 @@ class KisFilterRandomPick : public KisFilter
 public:
     KisFilterRandomPick();
 public:
-    using KisFilter::process;
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,

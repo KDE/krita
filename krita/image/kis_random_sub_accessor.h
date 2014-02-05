@@ -57,7 +57,7 @@ private:
     KisPaintDeviceSP m_device;
     int m_position, m_end;
     QPointF m_currentPoint;
-    KisRandomAccessorSP m_randomAccessor;
+    KisRandomConstAccessorSP m_randomAccessor;
 };
 
 #endif

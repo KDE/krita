@@ -61,12 +61,14 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -78,7 +80,6 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
-
 
     QString filterConfig = KisConfig().exportConfiguration("JP2");
     KisPropertiesConfiguration cfg;
@@ -94,6 +95,10 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
     
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
@@ -106,12 +111,10 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();
 
-    jp2Converter kpc(output);
+    jp2Converter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

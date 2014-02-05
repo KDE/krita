@@ -73,6 +73,11 @@ KoFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByt
         return KoFilter::InvalidFormat;
     }
 
+
+
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;

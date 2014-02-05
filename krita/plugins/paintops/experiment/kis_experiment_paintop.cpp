@@ -49,6 +49,8 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_smoothingThreshold = m_experimentOption.smoothing;
 
     m_useMirroring = painter->hasMirroring();
+    m_windingFill = m_experimentOption.windingFill;
+    m_hardEdge = m_experimentOption.hardEdge;
 
     if (m_useMirroring) {
         m_originalDevice = source()->createCompositionSourceDevice();
@@ -68,7 +70,13 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 
 void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
 {
+    if (m_windingFill) {
+        m_path.setFillRule(Qt::WindingFill);
+    }
+
     if (m_useMirroring) {
+        m_originalPainter->setAntiAliasPolygonFill(!m_hardEdge);
+
         foreach(const QRect &rect, changedRegion.rects()) {
             m_originalPainter->fillPainterPath(m_path, rect);
             painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
@@ -76,6 +84,7 @@ void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
     } else {
         painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
         painter()->setCompositeOp(COMPOSITE_COPY);
+        painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
         foreach(const QRect &rect, changedRegion.rects()) {
             painter()->fillPainterPath(m_path, rect);

@@ -35,6 +35,8 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_left = x;
     m_right = x + w - 1;
 
+    m_top = y;
+
     m_havePixels = (w == 0) ? false : true;
     if (m_left > m_right) {
         m_havePixels = false;
@@ -60,6 +62,27 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
     }
     m_index = 0;
     switchToTile(m_leftInLeftmostTile);
+}
+
+void KisHLineIterator2::resetPixelPos()
+{
+    m_x = m_left;
+
+    m_index = 0;
+    switchToTile(m_leftInLeftmostTile);
+
+    m_havePixels = true;
+}
+
+void KisHLineIterator2::resetRowPos()
+{
+    m_y = m_top;
+
+    m_row = yToRow(m_y);
+    m_yInTile = calcYInTile(m_y, m_row);
+    preallocateTiles();
+
+    resetPixelPos();
 }
 
 bool KisHLineIterator2::nextPixel()

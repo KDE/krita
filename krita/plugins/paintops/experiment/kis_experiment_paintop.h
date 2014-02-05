@@ -57,6 +57,9 @@ private:
     int m_displaceCoeff;
     QPainterPath m_lastPaintedPath;
 
+    bool m_windingFill;
+    bool m_hardEdge;
+
     bool m_speedEnabled;
     int m_speedMultiplier;
     qreal m_savedSpeedCoeff;

@@ -68,6 +68,7 @@ public:
         KoColor bgColor(Qt::white, image->colorSpace());
         view->resourceProvider()->setBGColor(bgColor);
         view->resourceProvider()->setFGColor(fgColor);
+        view->resourceProvider()->setOpacity(1.0);
 
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);

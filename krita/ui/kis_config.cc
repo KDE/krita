@@ -403,7 +403,7 @@ int KisConfig::numMipmapLevels() const
 
 int KisConfig::textureOverlapBorder() const
 {
-    return 1 << qMax(0, numMipmapLevels() - 1);
+    return 1 << qMax(0, numMipmapLevels());
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -611,6 +611,16 @@ bool KisConfig::antialiasCurves() const
 void KisConfig::setAntialiasCurves(bool v) const
 {
     m_cfg.writeEntry("antialiascurves", v);
+}
+
+bool KisConfig::antialiasSelectionOutline() const
+{
+    return m_cfg.readEntry("AntialiasSelectionOutline", false);
+}
+
+void KisConfig::setAntialiasSelectionOutline(bool v) const
+{
+    m_cfg.writeEntry("AntialiasSelectionOutline", v);
 }
 
 bool KisConfig::showRootLayer() const

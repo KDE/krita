@@ -589,42 +589,50 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
 
     qint32 x, y, w, h;
     QRect rc = exactBounds();
+
     x = rc.x();
     y = rc.y();
     w = rc.width();
     h = rc.height();
 
-
-    KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
-    KisRandomAccessorSP dstIt = dst.createRandomAccessorNG(x, y);
-
-    for (qint32 row = y; row < y + h; ++row) {
-
-        qint32 column = x;
-        qint32 columnsRemaining = w;
-
-        while (columnsRemaining > 0) {
-
-            qint32 numContiguousDstColumns = dstIt->numContiguousColumns(column);
-            qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(column);
-
-            qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
-            columns = qMin(columns, columnsRemaining);
-
-            srcIt->moveTo(column, row);
-            dstIt->moveTo(column, row);
-
-            const quint8 *srcData = srcIt->rawDataConst();
-            quint8 *dstData = dstIt->rawData();
-
-            m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, conversionFlags);
-
-            column += columns;
-            columnsRemaining -= columns;
-        }
-
+    if (w == 0 || h == 0) {
+        quint8 *defPixel = new quint8[dstColorSpace->pixelSize()];
+        memset(defPixel, 0, pixelSize());
+        m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
+        setDefaultPixel(defPixel);
+        delete defPixel;
     }
+    else {
+        KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
+        KisRandomAccessorSP dstIt = dst.createRandomAccessorNG(x, y);
 
+        for (qint32 row = y; row < y + h; ++row) {
+
+            qint32 column = x;
+            qint32 columnsRemaining = w;
+
+            while (columnsRemaining > 0) {
+
+                qint32 numContiguousDstColumns = dstIt->numContiguousColumns(column);
+                qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(column);
+
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
+                columns = qMin(columns, columnsRemaining);
+
+                srcIt->moveTo(column, row);
+                dstIt->moveTo(column, row);
+
+                const quint8 *srcData = srcIt->rawDataConst();
+                quint8 *dstData = dstIt->rawData();
+
+                m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent, conversionFlags);
+
+                column += columns;
+                columnsRemaining -= columns;
+            }
+
+        }
+    }
     KisDataManagerSP oldData = m_d->dataManager;
     const KoColorSpace *oldColorSpace = m_d->colorSpace;
 
@@ -637,6 +645,8 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     setDataManager(dst.m_d->dataManager, dstColorSpace);
 
     return cmd;
+
+
 }
 
 void KisPaintDevice::setProfile(const KoColorProfile * profile)
@@ -672,17 +682,30 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (!profile && colorSpace()->id() == "RGBA") {
+#if QT_VERSION >= 0x040700
+        writeBytes(image.constBits(), offsetX, offsetY, image.width(), image.height());
+#else
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
+#endif
     } else {
-        quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
-        KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
-                ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
-                                  KoColorConversionTransformation::InternalRenderingIntent,
-                                  KoColorConversionTransformation::InternalConversionFlags);
+        try {
+            quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
+            KoColorSpaceRegistry::instance()
+                    ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
+#if QT_VERSION >= 0x040700
+                    ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
+#else
+                    ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
+#endif
+                                      KoColorConversionTransformation::InternalRenderingIntent,
+                                      KoColorConversionTransformation::InternalConversionFlags);
 
-        writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
-        delete[] dstData;
+            writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
+            delete[] dstData;
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPaintDevice::convertFromQImage: Could not allocate" << image.width() * image.height() * pixelSize() << "bytes";
+            return;
+        }
     }
     m_d->cache.invalidate();
 }
@@ -712,7 +735,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     if (h < 0)
         return QImage();
 
-    quint8 * data;
+    quint8 *data = 0;
     try {
         data = new quint8 [w * h * pixelSize()];
     } catch (std::bad_alloc) {
@@ -842,7 +865,6 @@ KisRandomConstAccessorSP KisPaintDevice::createRandomConstAccessorNG(qint32 x, q
 
 KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 {
-    m_d->cache.invalidate();
     KisPaintDevice* pd = const_cast<KisPaintDevice*>(this);
     return new KisRandomSubAccessor(pd);
 }

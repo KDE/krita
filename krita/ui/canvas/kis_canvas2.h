@@ -222,10 +222,8 @@ public:
 
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
-
+    void initializeImage();
     // interface for KisView2 only
-    void connectCurrentImage();
-    void disconnectCurrentImage();
     void resetCanvas(bool useOpenGL);
 
     void createFavoriteResourceManager(KisPaintopBox*);
@@ -235,6 +233,8 @@ public:
 private:
     Q_DISABLE_COPY(KisCanvas2)
 
+    void connectCurrentCanvas();
+    void disconnectCurrentCanvas();
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();

@@ -70,34 +70,35 @@ KisBrushSP KisClipboardBrushWidget::brush(){
 
 void KisClipboardBrushWidget::slotUseBrushClicked(){
 
-    if(m_clipboard->hasClip()){
+    if (m_clipboard->hasClip()) {
 
-        if(m_brush){
+        if (m_brush) {
             bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());
 
-            if(!removedCorrectly){
+            if (!removedCorrectly) {
                 kWarning() << "Brush was not removed correctly from the resource server";
             }
         }
 
         pd = m_clipboard->clip(QRect(0,0,0,0), false);        //Weird! Don't know how this works!
-        QRect rc = pd->exactBounds();
+        if (pd) {
+            QRect rc = pd->exactBounds();
 
-        m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
 
-        m_brush->setSpacing(spacingSlider->value());
-        m_brush->setFilename(TEMPORARY_CLIPBOARD_BRUSH_FILENAME);
-        m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
-        m_brush->setValid(true);
+            m_brush->setSpacing(spacingSlider->value());
+            m_brush->setFilename(TEMPORARY_CLIPBOARD_BRUSH_FILENAME);
+            m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
+            m_brush->setValid(true);
 
-        KisBrushServer::instance()->brushServer()->addResource(m_brush.data(), false);
+            KisBrushServer::instance()->brushServer()->addResource(m_brush.data(), false);
 
-        preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
 
-        emit sigBrushChanged();
+            emit sigBrushChanged();
+        }
     }
-
-    else{
+    else {
         preview->setText("No clip.");
     }
 }

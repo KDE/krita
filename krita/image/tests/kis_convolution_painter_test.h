@@ -20,8 +20,10 @@
 #define KIS_CONVOLUTION_PAINTER_TEST_H
 
 #include <QtTest>
+#include <kis_types.h>
 
 class QBitArray;
+
 
 class KisConvolutionPainterTest : public QObject
 {
@@ -29,6 +31,10 @@ class KisConvolutionPainterTest : public QObject
 
 private:
     void testAsymmConvolutionImp(QBitArray channelFlags);
+    void testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix);
+    void testGaussian(bool useFftw);
+    void testGaussianSmall(bool useFftw);
+    void testGaussianDetails(bool useFftw);
 
 private slots:
 
@@ -42,6 +48,14 @@ private slots:
     void testAsymmSkipAlpha();
 
     void benchmarkConvolution();
+    void testGaussianSpatial();
+    void testGaussianFFTW();
+
+    void testGaussianSmallSpatial();
+    void testGaussianSmallFFTW();
+
+    void testGaussianDetailsSpatial();
+    void testGaussianDetailsFFTW();
 };
 
 #endif

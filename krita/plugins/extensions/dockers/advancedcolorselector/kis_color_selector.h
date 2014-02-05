@@ -134,6 +134,7 @@ private:
     bool m_blipDisplay;
     ColorRole m_lastColorRole;
 
+
 public:
     void setDisplayBlip(bool disp) {m_blipDisplay = disp;}
     bool displayBlip() const {return m_blipDisplay;}

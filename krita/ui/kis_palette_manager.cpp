@@ -55,13 +55,14 @@
 #include <kconfiggroup.h>
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
-    : QDialog(paintOpBox)
+    : KDialog(paintOpBox)
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)
-    , m_paintOpBox(paintOpBox)
 {
-    setWindowTitle(i18n("Palette Manager"));
+    setWindowTitle(i18n("Select Favorite Presets"));
+    setButtons(KDialog::Close);
+
 
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
@@ -75,7 +76,7 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     QFrame *HSeparator = new QFrame();
     HSeparator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-    m_saveButton = new QPushButton (i18n("Add to Palette"));
+    m_saveButton = new QPushButton (i18n("Add to Favorites"));
     m_saveButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
     m_saveButton->setEnabled(false);
 
@@ -138,7 +139,9 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     mainLayout->addWidget(VSeparator);
     mainLayout->addLayout(rightLayout);
 
-    setLayout(mainLayout);
+    QWidget *mainPage = new QWidget(this);
+    mainPage->setLayout(mainLayout);
+    setMainWidget(mainPage);
 
     /*SIGNALS AND SLOTS*/
     connect(m_allPresetsView, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotUpdateAddButton()) );
@@ -152,7 +155,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 KisPaletteManager::~KisPaletteManager()
 {
     m_resourceManager = 0;
-    m_paintOpBox = 0;
 }
 
 void KisPaletteManager::slotAddBrush()

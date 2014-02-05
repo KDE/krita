@@ -111,7 +111,7 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 
     connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    sscw->setWindowTitle(i18n("SpellCheck"));
+    sscw->setWindowTitle(i18n("Spell check"));
     widgets.append(sscw);
 
     saw->setWindowTitle(i18n("Comments"));

@@ -87,6 +87,7 @@ set(kritaui_LIB_SRCS
     kis_part2.cpp
     kis_factory2.cc
     kis_file_layer.cpp
+    kis_safe_document_loader.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp
@@ -151,6 +152,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
+    ora/ora_load_context.cc
+    ora/ora_save_context.cc
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
@@ -224,6 +227,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     input/kis_input_manager.cpp
+    input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -273,14 +277,19 @@ if(WIN32)
         )
 endif(WIN32)
 
-if(UNIX AND NOT APPLE)
+if(UNIX)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support.cpp
-        input/wintab/kis_tablet_support_x11.cpp
         )
-endif(UNIX AND NOT APPLE)
+    if(NOT APPLE)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            input/wintab/kis_tablet_support_x11.cpp
+            )
+    endif(NOT APPLE)
+endif(UNIX)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

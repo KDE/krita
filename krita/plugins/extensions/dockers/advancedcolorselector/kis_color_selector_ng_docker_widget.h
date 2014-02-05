@@ -20,10 +20,11 @@
 #define KIS_COLOR_SELECTOR_NG_DOCKER_WIDGET_H
 
 #include <QWidget>
+#include <QPointer>
+#include <kis_canvas2.h>
 
 class KAction;
 
-class KisCanvas2;
 class KisCommonColors;
 class KisColorHistory;
 class KisColorSelectorContainer;
@@ -59,7 +60,7 @@ private:
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
 
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 
 };
 

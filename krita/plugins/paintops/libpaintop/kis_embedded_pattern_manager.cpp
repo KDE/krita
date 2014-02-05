@@ -70,6 +70,21 @@ struct KisEmbeddedPatternManager::Private {
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern)
 {
     QByteArray patternMD5 = pattern->md5();
+
+    /**
+     * The process of saving a pattern may be quite expensive, so
+     * we won't rewrite the pattern if has the same md5-sum and at
+     * least some data is present
+     */
+    QByteArray existingMD5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
+    QString existingPatternBase64 = setting->getString("Texture/Pattern/PatternMD5").toLatin1();
+
+    if (patternMD5 == existingMD5 &&
+        !existingPatternBase64.isEmpty()) {
+
+        return;
+    }
+
     setting->setProperty("Texture/Pattern/PatternMD5", patternMD5.toBase64());
 
     QByteArray ba;

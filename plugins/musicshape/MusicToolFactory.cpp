@@ -29,7 +29,7 @@
 MusicToolFactory::MusicToolFactory()
     : KoToolFactoryBase("MusicToolFactoryId")
 {
-    setToolTip( i18n( "Music editing tool, parts" ) );
+    setToolTip( i18n( "Music editing, parts" ) );
     setIconName(koIconNameCStr("musicshape"));
     setToolType( dynamicToolType() );
     setPriority( 2 );

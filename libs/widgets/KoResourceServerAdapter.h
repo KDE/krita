@@ -43,23 +43,24 @@ public:
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
-    virtual void importResourceFile(const QString & filename, bool fileCreation=true) = 0;
+    virtual void importResourceFile(const QString & filename, bool fileCreation = true) = 0;
     virtual QString extensions() const = 0;
-    virtual void setCurrentTag(const QString& currentTag)=0;
-    virtual void enableResourceFiltering(bool tagSearch)=0;
-    virtual void updateServer()=0;
-    virtual QStringList assignedTagsList( KoResource* resource )=0;
-    virtual QStringList tagNamesList()=0;
-    virtual void addTag( KoResource* resource,const QString& tag)=0;
-    virtual void deleteTag( KoResource* resource,const QString& tag)=0;
-    virtual void searchTextChanged(const QString& searchString)=0;
+    virtual void setCurrentTag(const QString& currentTag) = 0;
+    virtual void enableResourceFiltering(bool tagSearch) = 0;
+    virtual void updateServer() = 0;
+    virtual QStringList assignedTagsList(KoResource* resource) = 0;
+    virtual QStringList tagNamesList() = 0;
+    virtual void addTag(const QString& tag) = 0;
+    virtual void addTag(KoResource* resource, const QString& tag) = 0;
+    virtual void deleteTag(KoResource* resource, const QString& tag) = 0;
+    virtual void searchTextChanged(const QString& searchString) = 0;
     // these call the server.
-    virtual void tagCategoryMembersChanged()=0;
-    virtual void tagCategoryAdded(const QString& tag)=0;
-    virtual void tagCategoryRemoved(const QString& tag)=0;
+    virtual void tagCategoryMembersChanged() = 0;
+    virtual void tagCategoryAdded(const QString& tag) = 0;
+    virtual void tagCategoryRemoved(const QString& tag) = 0;
 
-    virtual void setFilterIncludes(const QStringList& filteredNames)=0;
-    virtual QStringList searchTag(const QString& lineEditText)=0;
+    virtual void setFilterIncludes(const QStringList& filteredNames) = 0;
+    virtual QStringList searchTag(const QString& lineEditText) = 0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -91,34 +92,34 @@ public:
     {
         m_changeCounter = 0;
         m_oldChangeCounter = 0;
-        m_enableFiltering=false;
+        m_enableFiltering = false;
         m_resourceFilter.setTagObject(m_resourceServer->tagObject());
     }
 
     virtual ~KoResourceServerAdapter()
     {
-        if( m_resourceServer )
+        if (m_resourceServer)
             m_resourceServer->removeObserver(this);
     }
 
     void connectToResourceServer()
     {
-        if( m_resourceServer )
+        if (m_resourceServer)
             m_resourceServer->addObserver(this);
     }
 
     virtual QList<KoResource*> resources()
     {
-        if( ! m_resourceServer )
+        if (! m_resourceServer)
             return QList<KoResource*>();
 
         bool cacheDirty = serverResourceCacheInvalid();
-        if(cacheDirty) {
+        if (cacheDirty) {
             cacheServerResources(m_resourceServer->resources());
         }
-        if ( m_enableFiltering) {
+        if (m_enableFiltering) {
             if (m_resourceFilter.filtersHaveChanged() || cacheDirty) {
-                m_filteredResources = m_resourceFilter.filterResources( m_serverResources );
+                m_filteredResources = m_resourceFilter.filterResources(m_serverResources);
             }
             return m_filteredResources;
         }
@@ -127,11 +128,11 @@ public:
 
     bool addResource(KoResource* resource)
     {
-        if( ! m_resourceServer )
+        if (! m_resourceServer)
             return false;
 
         T* res = dynamic_cast<T*>(resource);
-        if(res)
+        if (res)
             return m_resourceServer->addResource(res);
 
         return false;
@@ -139,19 +140,19 @@ public:
 
     bool removeResource(KoResource* resource)
     {
-        if( ! m_resourceServer )
+        if (! m_resourceServer)
             return false;
 
         T* res = dynamic_cast<T*>(resource);
-        if(res)
+        if (res)
             return m_resourceServer->removeResource(res);
 
         return false;
     }
 
-    void importResourceFile(const QString & filename , bool fileCreation=true)
+    void importResourceFile(const QString & filename , bool fileCreation = true)
     {
-        if( ! m_resourceServer )
+        if (! m_resourceServer)
             return;
         m_resourceServer->importResourceFile(filename, fileCreation);
     }
@@ -165,153 +166,131 @@ public:
         m_resourceServer->removeResourceFile(filename);
     }
 
-    void resourceAdded(T* resource)
-    {
+    void resourceAdded(T* resource) {
         serverResourceCacheInvalid(true);
         emitResourceAdded(resource);
     }
 
-    void removingResource(T* resource)
-    {
+    void removingResource(T* resource) {
         serverResourceCacheInvalid(true);
         emitRemovingResource(resource);
     }
 
-    void resourceChanged(T* resource)
-    {
+    void resourceChanged(T* resource) {
         serverResourceCacheInvalid(true);
         emitResourceChanged(resource);
     }
 
-    void syncTaggedResourceView()
-    {
+    void syncTaggedResourceView() {
         serverResourceCacheInvalid(true);
         m_resourceFilter.rebuildCurrentTagFilenames();
         emitTagsWereChanged();
     }
 
-    void syncTagAddition(const QString& tag)
-    {
+    void syncTagAddition(const QString& tag) {
         emitTagCategoryWasAdded(tag);
     }
 
-    void syncTagRemoval(const QString& tag)
-    {
+    void syncTagRemoval(const QString& tag) {
         emitTagCategoryWasRemoved(tag);
     }
 
-    QString extensions() const
-    {
-        if( ! m_resourceServer )
+    QString extensions() const {
+        if (! m_resourceServer)
             return QString();
 
         return m_resourceServer->extensions();
     }
 
-    void setCurrentTag(const QString& resourceFileNames)
-    {
+    void setCurrentTag(const QString& resourceFileNames) {
         serverResourceCacheInvalid(true);
         m_resourceFilter.setCurrentTag(resourceFileNames);
     }
 
-    void enableResourceFiltering(bool enable )
-    {
+    void enableResourceFiltering(bool enable) {
         m_enableFiltering = enable;
     }
 
-    void updateServer()
-    {
+    void updateServer() {
         emitRemovingResource(0);
     }
 
-    QStringList assignedTagsList( KoResource* resource )
-    {
+    QStringList assignedTagsList(KoResource* resource) {
         return m_resourceServer->assignedTagsList(resource);
     }
 
-    QStringList tagNamesList()
-    {
+    QStringList tagNamesList() {
         return m_resourceServer->tagNamesList();
     }
 
-    void addTag( KoResource* resource,const QString& tag)
-    {
-        m_resourceServer->addTag(resource,tag);
+    void addTag(const QString& tag) {
+        m_resourceServer->addTag(0, tag);
     }
 
-    void deleteTag( KoResource* resource,const QString& tag)
-    {
-        m_resourceServer->delTag(resource,tag);
+    void addTag(KoResource* resource, const QString& tag) {
+        m_resourceServer->addTag(resource, tag);
     }
 
-    void setFilterIncludes(const QStringList& filteredNames)
-    {
+    void deleteTag(KoResource* resource, const QString& tag) {
+        m_resourceServer->delTag(resource, tag);
+    }
+
+    void setFilterIncludes(const QStringList& filteredNames) {
         m_resourceFilter.setInclusions(filteredNames);
     }
 
-    void searchTextChanged(const QString& searchString)
-    {
+    void searchTextChanged(const QString& searchString) {
         m_resourceFilter.setFilters(searchString);
         serverResourceCacheInvalid(true);
     }
 
-    QStringList searchTag(const QString& lineEditText)
-    {
+    QStringList searchTag(const QString& lineEditText) {
         return m_resourceServer->searchTag(lineEditText);
     }
 
     // called by model to notify server of change
-    void tagCategoryMembersChanged()
-    {
+    void tagCategoryMembersChanged() {
         m_resourceServer->tagCategoryMembersChanged();
     }
 
-    void tagCategoryAdded(const QString& tag)
-    {
+    void tagCategoryAdded(const QString& tag) {
         m_resourceServer->tagCategoryAdded(tag);
     }
 
-    void tagCategoryRemoved(const QString& tag)
-    {
+    void tagCategoryRemoved(const QString& tag) {
         m_resourceServer->tagCategoryRemoved(tag);
     }
 
-    virtual QList<KoResource*> serverResources()
-    {
+    virtual QList<KoResource*> serverResources() {
         return m_serverResources;
     }
 
 protected:
-    KoResourceServer<T>* resourceServer() const
-    {
+    KoResourceServer<T>* resourceServer() const {
         return m_resourceServer;
     }
 protected:
     KoResourceFiltering m_resourceFilter;
 private:
-    bool serverResourceCacheInvalid() const
-    {
+    bool serverResourceCacheInvalid() const {
         return m_changeCounter != m_oldChangeCounter;
     }
 
-    void serverResourceCacheInvalid(bool yes)
-    {
+    void serverResourceCacheInvalid(bool yes) {
         if (yes) {
             ++m_changeCounter;
-        }
-        else {
+        } else {
             m_oldChangeCounter = m_changeCounter;
         }
     }
 
-    void cacheServerResources(const QList< T* > &serverResources)
-    {
+    void cacheServerResources(const QList< T* > &serverResources) {
         m_serverResources.clear();
 
-        foreach( T* resource, serverResources ) {
-            m_serverResources.append( resource );
+        foreach(T * resource, serverResources) {
+            m_serverResources.append(resource);
         }
-        serverResourceCacheInvalid (false);
+        serverResourceCacheInvalid(false);
     }
 
     KoResourceServer<T>* m_resourceServer;

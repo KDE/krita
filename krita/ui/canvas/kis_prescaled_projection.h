@@ -136,13 +136,6 @@ private:
     void updateViewportSize();
 
     /**
-     * preScale and draw onto the scaled projection the specified rect,
-     * in canvas view pixels.
-     */
-    QRect preScale(const QRect & rc);
-
-
-    /**
      * This creates an empty update information and fills it with the only
      * parameter: @p dirtyImageRect
      * This function is supposed to be run in the context of the image

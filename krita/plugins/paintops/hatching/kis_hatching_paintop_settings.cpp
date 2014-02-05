@@ -92,5 +92,6 @@ void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
     if(!getProperty(HATCHING_VERSION, v) || v == "1")
     {
         setProperty("Hatching/thickness", 2.0 * getDouble("Hatching/thickness"));
-    }    
+    }
+    setProperty(HATCHING_VERSION, "2"); // make sure it's saved as version 2 next time
 }

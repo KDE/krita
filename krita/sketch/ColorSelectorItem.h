@@ -28,6 +28,8 @@ class ColorSelectorItem : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(bool changeBackground READ changeBackground WRITE setChangeBackground NOTIFY changeBackgroundChanged)
+    // This is a heuristic assistance property - if this is set to false, the item will not be painted
+    Q_PROPERTY(bool shown READ shown WRITE setShown NOTIFY shownChanged)
 public:
     ColorSelectorItem(QDeclarativeItem* parent = 0);
     virtual ~ColorSelectorItem();
@@ -39,14 +41,19 @@ public:
     bool changeBackground() const;
     void setChangeBackground(bool newChangeBackground);
 
+    bool shown() const;
+    void setShown(bool newShown);
+
     Q_INVOKABLE void setAlpha(int percentValue);
 
 Q_SIGNALS:
     void viewChanged();
     void changeBackgroundChanged();
+    void shownChanged();
     void colorChanged(QColor newColor, qreal newAlpha, bool backgroundChanged);
 
 protected:
+    virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);

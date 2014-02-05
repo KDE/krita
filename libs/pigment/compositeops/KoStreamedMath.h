@@ -79,8 +79,12 @@ template<bool useMask, bool useFlow, class Compositor>
     }
 }
 
+static inline quint8 round_float_to_uint(float value) {
+    return quint8(value + float(0.5));
+}
+
 static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
-    return quint8(qint16(b - a) * alpha + a);
+    return round_float_to_uint(qint16(b - a) * alpha + a);
 }
 
 /**
@@ -169,11 +173,14 @@ static inline void write_channels_32(quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(alpha)) << 24;
-    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(c1)) & mask) << 16;
-    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(c2)) & mask) <<  8;
+    // FIXME: Use single-instruction rounding + conversion
+    //        The achieve that we need to implement Vc::iRound()
+
+    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(Vc::round(alpha))) << 24;
+    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(Vc::round(c1))) & mask) << 16;
+    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(Vc::round(c2))) & mask) <<  8;
     v1 = v1 | v2;
-    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(c3)) & mask;
+    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(Vc::round(c3))) & mask;
     v3 = v3 | v4;
 
     *((Vc::uint_v*)data) = v1 | v3;

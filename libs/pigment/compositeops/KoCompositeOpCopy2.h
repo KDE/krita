@@ -53,8 +53,7 @@ public:
         opacity = mul(maskAlpha, opacity);
 
         if(dstAlpha == zeroValue<channels_type>() ||
-           (srcAlpha == unitValue<channels_type>() &&
-            opacity == unitValue<channels_type>())) {
+           opacity == unitValue<channels_type>()) {
 
 
             // don't blend if the color of the destination is undefined (has zero opacity)
@@ -64,6 +63,13 @@ public:
                     dst[i] = src[i];
         }
         else {
+            /**
+             * In case the mask is not opaque, we should also pre-blend
+             * the source pixel alpha channel to the mask. Otherwise
+             * the blacks of the fully transparent source pixel will
+             * be mixed into destination event when the source alpha
+             * is negligible.
+             */
             channels_type srcBlend = mul(opacity, srcAlpha);
 
             // blend the color channels

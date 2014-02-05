@@ -99,7 +99,7 @@ bool KCanvasPreview::isInRegion(QPoint point)
 
 double KCanvasPreview::scalingFactor()
 {
-    // take into account offset frame size to show him when the canvas are shrinked
+    // take into account offset frame size to show when the canvas has been shrinked
     const int maxHeight = (m_height > m_imageHeight) ? m_height : m_imageHeight;
     const int maxWidth = (m_width > m_imageWidth) ? m_width : m_imageWidth;
 

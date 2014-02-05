@@ -68,32 +68,6 @@ private:
     Private* const d;
 
 };
-
-class KoTagToolButton : public QWidget
-{
-    Q_OBJECT
-
-private:
-    explicit KoTagToolButton(QWidget* parent = 0);
-    virtual ~KoTagToolButton();
-    void readOnlyMode(bool activate);
-    void setUndeletionCandidate(const QString &deletedTagName);
-
-signals:
-    void newTagRequested(const QString &tagname);
-    void renamingOfCurrentTagRequested(const QString &tagname);
-    void deletionOfCurrentTagRequested();
-    void undeletionOfTagRequested(const QString &tagname);
-    void purgingOfTagUndeleteListRequested();
-    void popupMenuAboutToShow();
-
-private slots:
-    void onTagUndeleteClicked();
-
-private:
-    class Private;
-    Private* const d;
-    friend class KoTagChooserWidget;
-};
+;
 
 #endif // KOTAGCHOOSERWIDGET_H

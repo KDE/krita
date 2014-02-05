@@ -257,7 +257,7 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
 {
     for (uint i = 0; i < node->childCount(); ++i) {
         KisNodeSP child = node->at(i);
-        if (child->inherits("KisPaintLayer")) {
+        if (child->inherits("KisPaintLayer") || child->inherits("KisShapeLayer")) {
             layers << child;
         }
         if (child->childCount() > 0) {

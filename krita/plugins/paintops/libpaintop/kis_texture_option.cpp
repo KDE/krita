@@ -196,9 +196,11 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
 
 void KisTextureOption::resetGUI(KoResource* res)
 {
-    KoPattern *pat = static_cast<KoPattern *>(res);
-    m_optionWidget->offsetSliderX->setRange(0, pat->image().width() / 2);
-    m_optionWidget->offsetSliderY->setRange(0, pat->image().height() / 2);
+    KoPattern *pattern = static_cast<KoPattern *>(res);
+    if (!pattern) return;
+
+    m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
+    m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
 }
 
 void KisTextureProperties::recalculateMask()
@@ -221,8 +223,11 @@ void KisTextureProperties::recalculateMask()
         QRect rc = tf.mapRect(mask.rect());
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
-
-    QRgb* pixel = reinterpret_cast<QRgb*>( mask.bits() );
+#if QT_VERSION >= 0x040700
+    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.constBits() );
+#else
+    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.bits() );
+#endif
     int width = mask.width();
     int height = mask.height();
 

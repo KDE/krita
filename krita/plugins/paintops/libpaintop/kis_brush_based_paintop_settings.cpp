@@ -26,9 +26,9 @@
 
 
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
-    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                 KisCurrentOutlineFetcher::ROTATION_OPTION |
-                                 KisCurrentOutlineFetcher::MIRROR_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+                                                     KisCurrentOutlineFetcher::ROTATION_OPTION |
+                                                     KisCurrentOutlineFetcher::MIRROR_OPTION)
 {
 }
 

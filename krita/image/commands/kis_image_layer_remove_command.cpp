@@ -37,10 +37,15 @@ KisImageLayerRemoveCommand::~KisImageLayerRemoveCommand()
 void KisImageLayerRemoveCommand::addSubtree(KisImageWSP image, KisNodeSP node)
 {
     // Simple tail-recursion to remove nodes in bottom-up way
-    KisNodeSP child = node->firstChild();
+    //
+    // Alert: the nodes must be traversed in last-to-first order,
+    //        because each KisImageLayerRemoveCommandImpl stores a
+    //        pointer to the previous node of the stack
+
+    KisNodeSP child = node->lastChild();
     while (child) {
         addSubtree(image, child);
-        child = child->nextSibling();
+        child = child->prevSibling();
     }
 
     new KisImageLayerRemoveCommandImpl(image, node, this);

@@ -68,7 +68,6 @@ KisSharpenFilter::KisSharpenFilter()
         : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Sharpen"))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);

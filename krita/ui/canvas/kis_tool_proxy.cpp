@@ -23,7 +23,9 @@
 
 
 KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
-    : KoToolProxy(canvas, parent)
+    : KoToolProxy(canvas, parent),
+      m_isActionActivated(false),
+      m_lastAction(KisTool::Primary)
 {
 }
 
@@ -73,6 +75,18 @@ QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos, const QPoint &c
 {
     const QPointF pos = globalPos - canvasOriginWorkaround;
     return widgetToDocument(pos);
+}
+
+void KisToolProxy::forwardMouseHoverEvent(QMouseEvent *mouseEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
+{
+    if (lastTabletEvent) {
+        QPointF docPoint = tabletToDocument(lastTabletEvent->hiResGlobalPos(), canvasOriginWorkaround);
+        this->tabletEvent(lastTabletEvent, docPoint);
+    } else {
+        KIS_ASSERT_RECOVER_RETURN(mouseEvent->type() == QEvent::MouseMove);
+        QPointF docPoint = widgetToDocument(mouseEvent->posF());
+        mouseMoveEvent(mouseEvent, docPoint);
+    }
 }
 
 bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, QEvent *event, QEvent *originalEvent, QTabletEvent *lastTabletEvent, const QPoint &canvasOriginWorkaround)
@@ -175,4 +189,47 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
 {
     KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
     return activeTool && activeTool->primaryActionSupportsHiResEvents();
+}
+
+void KisToolProxy::setActiveTool(KoToolBase *tool)
+{
+    if (m_isActionActivated) {
+        deactivateToolAction(m_lastAction);
+        KoToolProxy::setActiveTool(tool);
+        activateToolAction(m_lastAction);
+    } else {
+        KoToolProxy::setActiveTool(tool);
+    }
+}
+
+void KisToolProxy::activateToolAction(KisTool::ToolAction action)
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+
+    if (activeTool) {
+        if (action == KisTool::Primary) {
+            activeTool->activatePrimaryAction();
+        } else {
+            activeTool->activateAlternateAction(KisTool::actionToAlternateAction(action));
+        }
+    }
+
+    m_isActionActivated = true;
+    m_lastAction = action;
+}
+
+void KisToolProxy::deactivateToolAction(KisTool::ToolAction action)
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+
+    if (activeTool) {
+        if (action == KisTool::Primary) {
+            activeTool->deactivatePrimaryAction();
+        } else {
+            activeTool->deactivateAlternateAction(KisTool::actionToAlternateAction(action));
+        }
+    }
+
+    m_isActionActivated = false;
+    m_lastAction = action;
 }

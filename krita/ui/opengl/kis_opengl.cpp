@@ -115,6 +115,18 @@ void KisOpenGL::createContext()
 #endif
 }
 
+void KisOpenGL::initialMakeContextCurrent()
+{
+    sharedContextWidget()->makeCurrent();
+}
+
+void KisOpenGL::makeContextCurrent()
+{
+#ifdef Q_OS_WIN
+    sharedContextWidget()->makeCurrent();
+#endif
+}
+
 QGLWidget *KisOpenGL::sharedContextWidget()
 {
     if (SharedContextWidget == 0) {

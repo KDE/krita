@@ -227,9 +227,10 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
+    bool needForceRatio = this->forceRatio() != bool(event->modifiers() & Qt::ShiftModifier);
 
     QRectF updateRect = boundingRect();
     if (!m_haveCropSelection) { //if the cropSelection is not yet set
@@ -242,7 +243,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
             if(!m_growCenter){ //normal don't grow outwards from center
                 if (m_mouseOnHandleType == Inside) {
                     m_rectCrop.translate(drag);
-                } else if (m_forceRatio) {
+                } else if (needForceRatio) {
                     if (!m_forceWidth && !m_forceHeight) {
                         QRect newRect = m_rectCrop;
                         switch (m_mouseOnHandleType) {
@@ -334,7 +335,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
                 
                 if (m_mouseOnHandleType == Inside) {
                     m_rectCrop.translate(drag);
-                } else if (m_forceRatio) {
+                } else if (needForceRatio) {
                     if (!m_forceWidth && !m_forceHeight) {
                         QRect newRect = m_rectCrop;
                         switch (m_mouseOnHandleType) {
@@ -460,7 +461,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     m_rectCrop = m_rectCrop.normalized();
@@ -766,7 +767,7 @@ void KisToolCrop::setCropWidth(int w)
         m_rectCrop.setWidth(w);
     }
 
-    if (m_forceRatio) {
+    if (forceRatio()) {
         m_rectCrop.setHeight((int)(w / m_ratio));
     }
 
@@ -815,7 +816,7 @@ void KisToolCrop::setCropHeight(int h)
         m_rectCrop.setHeight(h);
     }
 
-    if (m_forceRatio) {
+    if (forceRatio()) {
         m_rectCrop.setWidth((int)(h * m_ratio));
     }
 
@@ -930,29 +931,34 @@ bool KisToolCrop::forceRatio() const
 
 QWidget* KisToolCrop::createOptionWidget()
 {
-    KisToolCropConfigWidget* optWidget = new KisToolCropConfigWidget(0, this);
+    KisToolCropConfigWidget* optionsWidget = new KisToolCropConfigWidget(0, this);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    optionsWidget->layout()->addWidget(specialSpacer);
 
-    Q_CHECK_PTR(optWidget);
-    optWidget->setObjectName(toolId() + " option widget");
+    Q_CHECK_PTR(optionsWidget);
+    optionsWidget->setObjectName(toolId() + " option widget");
 
-    connect(optWidget->bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
+    connect(optionsWidget->bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
-    connect(optWidget, SIGNAL(cropTypeChanged(int)), this, SLOT(setCropTypeLegacy(int)));
-    connect(optWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
-    connect(optWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
-    connect(optWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
-    connect(optWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
-    connect(optWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
-    connect(optWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
-    connect(optWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
-    connect(optWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
-    connect(optWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
-    connect(optWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
-    connect(optWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
+    connect(optionsWidget, SIGNAL(cropTypeChanged(int)), this, SLOT(setCropTypeLegacy(int)));
+    connect(optionsWidget, SIGNAL(cropXChanged(int)), this, SLOT(setCropX(int)));
+    connect(optionsWidget, SIGNAL(cropYChanged(int)), this, SLOT(setCropY(int)));
+    connect(optionsWidget, SIGNAL(cropHeightChanged(int)), this, SLOT(setCropHeight(int)));
+    connect(optionsWidget, SIGNAL(forceHeightChanged(bool)), this, SLOT(setForceHeight(bool)));
+    connect(optionsWidget, SIGNAL(cropWidthChanged(int)), this, SLOT(setCropWidth(int)));
+    connect(optionsWidget, SIGNAL(forceWidthChanged(bool)), this, SLOT(setForceWidth(bool)));
+    connect(optionsWidget, SIGNAL(ratioChanged(double)), this, SLOT(setRatio(double)));
+    connect(optionsWidget, SIGNAL(forceRatioChanged(bool)), this, SLOT(setForceRatio(bool)));
+    connect(optionsWidget, SIGNAL(decorationChanged(int)), this, SLOT(setDecoration(int)));
+    connect(optionsWidget, SIGNAL(allowGrowChanged(bool)), this, SLOT(setAllowGrow(bool)));
+    connect(optionsWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
 
-    optWidget->setFixedHeight(optWidget->sizeHint().height());
+    optionsWidget->setFixedHeight(optionsWidget->sizeHint().height());
 
-    return optWidget;
+    return optionsWidget;
 }
 
 QRectF KisToolCrop::lowerRightHandleRect(QRectF cropBorderRect)

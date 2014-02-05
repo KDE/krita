@@ -76,7 +76,6 @@ set(flake_SRCS
     KoShapeLoadingContext.cpp
     KoLoadingShapeUpdater.cpp
     KoPathShapeLoader.cpp
-    ShapeDeleter_p.cpp
     KoShapeStrokeModel.cpp
     KoShapeStroke.cpp
     KoShapeBackground.cpp

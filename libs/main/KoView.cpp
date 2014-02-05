@@ -194,8 +194,15 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
     }
 
     actionCollection()->addAssociatedWidget(this);
-    foreach(QAction* action, actionCollection()->actions())
+
+    /**
+     * WARNING: This code changes the context of global shortcuts
+     *          only. All actions added later will have the default
+     *          context, which is Qt::WindowShortcut!
+     */
+    foreach(QAction* action, actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    }
 }
 
 KoView::~KoView()

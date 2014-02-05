@@ -458,12 +458,6 @@ target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
-set(kis_transform_visitor_test_SRCS kis_transform_visitor_test.cpp )
-kde4_add_unit_test(KisTransformVisitorTest TESTNAME krita-image-KisTransformVisitorTest ${kis_transform_visitor_test_SRCS})
-target_link_libraries(KisTransformVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_transform_worker_test_SRCS kis_transform_worker_test.cpp )
 kde4_add_unit_test(KisTransformWorkerTest TESTNAME krita-image-KisTransformWorkerTest ${kis_transform_worker_test_SRCS})
 target_link_libraries(KisTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

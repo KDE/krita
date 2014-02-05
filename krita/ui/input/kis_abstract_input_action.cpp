@@ -46,12 +46,14 @@ KisAbstractInputAction::~KisAbstractInputAction()
     delete d;
 }
 
-void KisAbstractInputAction::activate()
+void KisAbstractInputAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
-void KisAbstractInputAction::deactivate()
+void KisAbstractInputAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
 void KisAbstractInputAction::begin(int shortcut, QEvent *event)
@@ -109,6 +111,11 @@ QString KisAbstractInputAction::description() const
 int KisAbstractInputAction::priority() const
 {
     return 0;
+}
+
+bool KisAbstractInputAction::canIgnoreModifiers() const
+{
+    return false;
 }
 
 QHash< QString, int > KisAbstractInputAction::shortcutIndexes() const

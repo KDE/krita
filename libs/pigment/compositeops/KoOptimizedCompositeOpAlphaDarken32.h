@@ -231,7 +231,7 @@ struct AlphaDarkenCompositor32 {
             dstAlpha = lerp(zeroFlowAlpha, fullFlowAlpha, flow) * uint8Max;
         }
 
-        dst[alpha_pos] = quint8(dstAlpha);
+        dst[alpha_pos] = KoStreamedMath<_impl>::round_float_to_uint(dstAlpha);
     }
 };
 

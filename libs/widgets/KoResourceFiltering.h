@@ -28,7 +28,7 @@
 
 #include "kowidgets_export.h"
 
-class KoResourceTagging;
+class KoResourceTagStore;
 
 class KOWIDGETS_EXPORT KoResourceFiltering
 {
@@ -41,7 +41,7 @@ public:
     void setTagSetFilenames(const QStringList& filenames);
     void setCurrentTag(const QString& tagSet);
     void rebuildCurrentTagFilenames();
-    void setTagObject(KoResourceTagging* tagObject);
+    void setTagObject(KoResourceTagStore* tagObject);
     void setFilters(const QString& searchString);
     QList<KoResource*> filterResources(QList< KoResource* > resources);
     void setInclusions(const QStringList &inclusions);

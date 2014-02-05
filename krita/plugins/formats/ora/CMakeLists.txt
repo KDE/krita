@@ -3,8 +3,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita/ui/ora ${CMAKE_SOURCE_DIR}/krita/
 
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc
-    ora_load_context.cc
-    ora_save_context.cc
     )
 
 set(kritaoraimport_PART_SRCS

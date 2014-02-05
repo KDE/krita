@@ -49,7 +49,10 @@ public:
     virtual bool nextPixels(qint32 n);
     virtual qint32 x() const;
     virtual qint32 y() const;
-    
+
+    virtual void resetPixelPos();
+    virtual void resetRowPos();
+
 private:
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
@@ -63,6 +66,7 @@ private:
     
     qint32 m_right;
     qint32 m_left;
+    qint32 m_top;
     qint32 m_leftCol;
     qint32 m_rightCol;
 

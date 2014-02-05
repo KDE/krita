@@ -33,8 +33,6 @@ class KisGaussianBlurFilter : public KisFilter
 public:
     KisGaussianBlurFilter();
 public:
-    using KisFilter::process;
-
     void processImpl(KisPaintDeviceSP device,
                      const QRect& rect,
                      const KisFilterConfiguration* config,

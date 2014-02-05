@@ -69,10 +69,10 @@ public:
      * The method is called when the action is yet to be started,
      * that is, e.g. the user has pressed all the modifiers for the
      * action but hasn't started painting yet. This method is a right
-     * place to show the user what he is going to do, e.g. change the
+     * place to show the user what is going to happen, e.g. change the
      * cursor.
      */
-    virtual void activate();
+    virtual void activate(int shortcut);
 
     /**
      * The method is called when the action is not a candidate for
@@ -81,7 +81,7 @@ public:
      *
      * \see activate()
      */
-    virtual void deactivate();
+    virtual void deactivate(int shortcut);
 
     /**
      * Begin the action.
@@ -136,6 +136,13 @@ public:
      * to resolve conflicts when multiple actions can be activated.
      */
     virtual int priority() const;
+
+    /**
+     * Returns true if an action can run with any modifiers pressed
+     * (the shortcut's modifiers list must be empty for that). That is
+     * used for making one type of actions default one.
+     */
+    virtual bool canIgnoreModifiers() const;
 
 protected:
     /**

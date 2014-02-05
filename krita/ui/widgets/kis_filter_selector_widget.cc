@@ -105,14 +105,14 @@ void KisFilterSelectorWidget::setView(KisView2 *view)
     d->view = view;
 }
 
-void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
+void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _paintDevice)
 {
     if (!_paintDevice) return;
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->thumb->setDefaultBounds(new ThumbnailBounds());
-    d->filtersModel = new KisFiltersModel(d->thumb);
+    d->filtersModel = new KisFiltersModel(showAll, d->thumb);
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }

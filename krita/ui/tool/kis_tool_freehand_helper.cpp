@@ -136,11 +136,12 @@ void KisToolFreehandHelper::setSmoothness(const KisSmoothingOptions &smoothingOp
 }
 
 QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
+                                                   const KoPointerEvent *event,
                                                    const KisPaintOpSettings *globalSettings,
                                                    KisPaintOpSettings::OutlineMode mode) const
 {
     const KisPaintOpSettings *settings = globalSettings;
-    KisPaintInformation info(savedCursorPos);
+    KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
     KisDistanceInformation distanceInfo(m_d->lastOutlinePos.pushThroughHistory(savedCursorPos), 0);
 
     if (!m_d->painterInfos.isEmpty()) {

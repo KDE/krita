@@ -122,6 +122,12 @@ int main( int argc, char** argv )
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
+	
+	if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
+        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
+		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+    }
 
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,

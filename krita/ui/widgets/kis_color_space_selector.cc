@@ -20,6 +20,7 @@
 
 #include "kis_color_space_selector.h"
 
+#include <KoFileDialogHelper.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -37,7 +38,6 @@
 #include <QDesktopServices>
 
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kio/copyjob.h>
@@ -175,8 +175,14 @@ void KisColorSpaceSelector::colorSpaceChanged()
 
 void KisColorSpaceSelector::installProfile()
 {
-    KUrl homedir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    QStringList profileNames = KFileDialog::getOpenFileNames(homedir, "*.icm *.icc", this, "Install Color Profiles");
+    QStringList mime;
+    mime << "*.icm" <<  "*.icc";
+    QStringList profileNames = KoFileDialogHelper::getOpenFileNames(this,
+                                                                    i18n("Install Color Profiles"),
+                                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                                    mime,
+                                                                    "",
+                                                                    "OpenDocumentICC");
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);

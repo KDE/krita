@@ -7,15 +7,11 @@ if (LIBATTICA_FOUND)
     include_directories(${LIBATTICA_INCLUDE_DIR})
 endif (LIBATTICA_FOUND)
 
-if(NEPOMUK)
-    include(SopranoAddOntology)
-    include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
-endif(NEPOMUK)
-
 set(kowidgets_LIB_SRCS
+    KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
-    KoResourceTaggingInterface.cpp
+    KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
@@ -54,7 +50,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
-    KoResourceTagging.cpp
+    KoResourceTagStore.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -70,7 +66,10 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
-
+    
+    KoXmlGenerator.cpp
+	KoXmlManifest.cpp
+	KoXmlMeta.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -89,10 +88,6 @@ else(GHNS)
     target_link_libraries(kowidgets kotext pigmentcms kowidgetutils)
 endif (GHNS)
 
-if(NEPOMUK)
-    target_link_libraries(kowidgets kotext pigmentcms kowidgetutils ${NEPOMUK_LIBRARIES} ${SOPRANO_LIBRARIES})
-endif(NEPOMUK)
-
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms kowidgetutils ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kowidgets PROPERTIES
@@ -103,7 +98,7 @@ install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     KoResourceItemChooserContextMenu.h
-    KoResourceTaggingInterface.h
+    KoResourceTaggingManager.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h
@@ -137,10 +132,14 @@ install( FILES
     KoResourceServerAdapter.h
     KoResourceServerObserver.h
     KoResourceServerProvider.h
-    KoResourceTagging.h
+    KoResourceTagStore.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
+
+	KoXmlGenerator.h
+	KoXmlManifest.h
+	KoXmlMeta.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

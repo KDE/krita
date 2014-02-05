@@ -102,6 +102,14 @@ void KisToolFreehand::resetCursorStyle()
     case CURSOR_STYLE_OUTLINE:
         useCursor(KisCursor::blankCursor());
         break;
+    case CURSOR_STYLE_TRIANGLE_RIGHTHANDED:
+    case CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED:
+        useCursor(KisCursor::triangleRightHandedCursor());
+        break;
+    case CURSOR_STYLE_TRIANGLE_LEFTHANDED:
+    case CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED:
+        useCursor(KisCursor::triangleLeftHandedCursor());
+        break;
     case CURSOR_STYLE_TOOLICON:
     default:
         KisToolPaint::resetCursorStyle();
@@ -175,11 +183,9 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     // FIXME: workaround for the Duplicate Op
     tryPickByPaintOp(event, PickFgImage);
 
-    requestUpdateOutline(event->point);
+    requestUpdateOutline(event->point, event);
 
     if (!nodeEditable() || nodePaintAbility() != PAINT) {
-        KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-        canvas2->view()->showFloatingMessage(i18n("Can't paint on this layer."), koIcon("draw-brush"));
         event->ignore();
 
         return;
@@ -201,9 +207,9 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    requestUpdateOutline(event->point);
+    requestUpdateOutline(event->point, event);
 
     /**
      * Actual painting
@@ -214,7 +220,7 @@ void KisToolFreehand::continuePrimaryAction(KoPointerEvent *event)
 void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     endStroke();
 
@@ -258,6 +264,28 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
     return !paintOpIgnoredEvent;
 }
 
+void KisToolFreehand::activateAlternateAction(AlternateAction action)
+{
+    if (action != ChangeSize) {
+        KisToolPaint::activateAlternateAction(action);
+        return;
+    }
+
+    useCursor(KisCursor::blankCursor());
+    setOutlineEnabled(true);
+}
+
+void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
+{
+    if (action != ChangeSize) {
+        KisToolPaint::deactivateAlternateAction(action);
+        return;
+    }
+
+    resetCursorStyle();
+    setOutlineEnabled(false);
+}
+
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (tryPickByPaintOp(event, action)) return;
@@ -270,7 +298,6 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
     setMode(GESTURE_MODE);
     m_initialGestureDocPoint = event->point;
     m_initialGestureGlobalPoint = QCursor::pos();
-    useCursor(KisCursor::blankCursor());
 
     m_lastDocumentPoint = event->point;
 }
@@ -296,7 +323,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
 
     currentPaintOpPreset()->settings()->changePaintOpSize(scaledOffset.x(), scaledOffset.y());
-    requestUpdateOutline(m_initialGestureDocPoint);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     m_lastDocumentPoint = event->point;
 }
@@ -311,10 +338,9 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
     }
 
     QCursor::setPos(m_initialGestureGlobalPoint);
-    requestUpdateOutline(m_initialGestureDocPoint);
+    requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);
-    resetCursorStyle();
 }
 
 bool KisToolFreehand::wantsAutoScroll() const
@@ -349,11 +375,13 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 }
 
 QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
-                                          KisPaintOpSettings::OutlineMode outlineMode)
+                                             const KoPointerEvent *event,
+                                             KisPaintOpSettings::OutlineMode outlineMode)
 {
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
 
     return m_helper->paintOpOutline(imagePos,
+                                    event,
                                     currentPaintOpPreset()->settings(),
                                     outlineMode);
 }

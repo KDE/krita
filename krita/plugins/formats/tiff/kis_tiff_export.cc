@@ -63,11 +63,11 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
-    if (!output)
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
-    const KoColorSpace* cs = output->image()->colorSpace();
+    const KoColorSpace* cs = input->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
         kdb->optionswdg->kComboBoxPredictor->removeItem(1);
@@ -84,6 +84,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
             return KoFilter::UserCancelled;
         }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+
+    }
+    input->image()->waitForDone();
+
     KisTIFFOptions options = kdb->options();
 
     if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
@@ -101,19 +107,19 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KisImageSP image;
 
     if (options.flatten) {
-        image = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");
-        image->setResolution(output->image()->xRes(), output->image()->yRes());
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->image()->projection()));
+        image = new KisImage(0, input->image()->width(), input->image()->height(), input->image()->colorSpace(), "");
+        image->setResolution(input->image()->xRes(), input->image()->yRes());
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*input->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
     } else {
-        image = output->image();
+        image = input->image();
     }
 
     image->refreshGraph();
     image->lock();
 
-    KisTIFFConverter ktc(output);
+    KisTIFFConverter ktc(input);
     /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
         vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;

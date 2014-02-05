@@ -100,7 +100,6 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                        const KoColor &color, const KoColor &bgColor)
 {
     // initializing painter
-
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
@@ -153,11 +152,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     qreal rotationZ = 0.0;
     qreal particleScale = 1.0;
 
-    int steps = 118;
     bool shouldColor = true;
     if (m_colorProperties->fillBackground){
         m_painter->setPaintColor(bgColor);
-        paintCircle(m_painter,x,y,m_radius,steps);
+        paintCircle(m_painter,x,y,m_radius);
     }
 
     QTransform m;
@@ -260,17 +258,17 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             case 0:
             {
                 if (m_shapeProperties->width == m_shapeProperties->height){
-                    paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , steps);
+                    paintCircle(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5));
                 }else
                 {
-                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), rotationZ , steps);
+                    paintEllipse(m_painter, nx + x, ny + y, qRound(jitteredWidth * 0.5) , qRound(jitteredHeight * 0.5), rotationZ);
                 }
                 break;
             }
             // rectangle
             case 1:
             {
-                paintRectangle(m_painter, nx + x, ny + y, qRound(jitteredWidth) , qRound(jitteredHeight), rotationZ , steps);
+                paintRectangle(m_painter, nx + x, ny + y, qRound(jitteredWidth) , qRound(jitteredHeight), rotationZ);
                 break;
             }
             // wu-particle
@@ -397,10 +395,11 @@ void SprayBrush::paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor
     memcpy(writeAccessor->rawData(), pcolor.data(), m_dabPixelSize);
 }
 
-void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps)
+void SprayBrush::paintCircle(KisPainter* painter, qreal x, qreal y, int radius)
 {
     QPainterPath path;
-    // circle x, circle y
+    // TODO: leaving this here, in the future we might want to spray regular polygons (hexagon, octagon, etc.)
+    /*int steps = 12;
     qreal cx, cy;
 
     qreal length = 2.0 * M_PI;
@@ -418,10 +417,10 @@ void SprayBrush::paintCircle(KisPainter * painter, qreal x, qreal y, int radius,
 
         path.lineTo(cx, cy);
     }
-    path.closeSubpath();
+    path.closeSubpath();*/
+    path.addEllipse(QPointF(x,y),radius,radius);
     painter->fillPainterPath(path);
 }
-
 
 
 void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int b, qreal angle, int steps)
@@ -447,9 +446,8 @@ void SprayBrush::paintEllipse(KisPainter* painter, qreal x, qreal y, int a, int 
     painter->fillPainterPath(path);
 }
 
-void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width, int height, qreal angle, int steps)
+void SprayBrush::paintRectangle(KisPainter* painter, qreal x, qreal y, int width, int height, qreal angle)
 {
-    Q_UNUSED(steps);
     QPainterPath path;
     QTransform transform;
 
@@ -554,4 +552,9 @@ void SprayBrush::paintOutline(KisPaintDeviceSP dev , const KoColor &outlineColor
         accessor->moveTo(antiPixels[i].x(), antiPixels[i].y());
         memcpy(accessor->rawData(), outlineColor.data(), dev->colorSpace()->pixelSize());
     }
+}
+
+void SprayBrush::setFixedDab(KisFixedPaintDeviceSP dab)
+{
+    m_fixedDab = dab;
 }

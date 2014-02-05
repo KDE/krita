@@ -24,8 +24,11 @@
 #include <KoViewConverter.h>
 
 
-KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor) :
-    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_type(type)
+KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor)
+    : KisToolShape(canvas, cursor)
+    , m_dragStart(0, 0)
+    , m_dragEnd(0, 0)
+    , m_type(type)
 {
 }
 
@@ -61,7 +64,7 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
 
@@ -92,12 +95,12 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                            (m_dragStart.y() + m_dragEnd.y()) / 2);
-    KisToolPaint::requestUpdateOutline(event->point);
+    KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updateArea();

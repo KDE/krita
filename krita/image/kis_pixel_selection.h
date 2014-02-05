@@ -54,6 +54,8 @@ public:
 
     const KoColorSpace* compositionSourceColorSpace() const;
 
+    bool read(QIODevice *stream);
+
     /**
      * Fill the specified rect with the specified selectedness.
      */

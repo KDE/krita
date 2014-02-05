@@ -41,6 +41,10 @@ public:
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
                                        int timeElapsed);
+
+    KisPaintInformation hover(const QPointF &imagePoint,
+                              const KoPointerEvent *event);
+
 protected slots:
     void updateSettings();
 

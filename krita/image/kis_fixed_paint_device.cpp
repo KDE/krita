@@ -21,7 +21,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-
 #include "kis_debug.h"
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
@@ -123,13 +122,21 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
 
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
+#if QT_VERSION >= 0x040700
+        memcpy(data(), image.constBits(), image.byteCount());
+#else
         memcpy(data(), image.bits(), image.byteCount());
+#endif
     } else {
         KoColorSpaceRegistry::instance()
-        ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
-                          KoColorConversionTransformation::InternalRenderingIntent,
-                          KoColorConversionTransformation::InternalConversionFlags);
+            ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
+#if QT_VERSION >= 0x040700
+            ->convertPixelsTo(image.constBits(), data(), colorSpace(), image.width() * image.height(),
+#else
+            ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
+#endif
+                              KoColorConversionTransformation::InternalRenderingIntent,
+                              KoColorConversionTransformation::InternalConversionFlags);
     }
 }
 
@@ -162,27 +169,32 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
                                              intent, conversionFlags);
     } else {
-        int pSize = pixelSize();
-        int deviceWidth = m_bounds.width();
-        quint8* newData = new quint8[w * h * pSize];
-        quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
-        quint8* dstPtr = newData;
-        // copy the right area out of the paint device into data
-        for (int row = 0; row < h; row++) {
-            memcpy(dstPtr, srcPtr, w * pSize);
-            srcPtr += deviceWidth * pSize;
-            dstPtr += w * pSize;
+        try {
+            // XXX: fill the image row by row!
+            int pSize = pixelSize();
+            int deviceWidth = m_bounds.width();
+            quint8* newData = new quint8[w * h * pSize];
+            quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
+            quint8* dstPtr = newData;
+            // copy the right area out of the paint device into data
+            for (int row = 0; row < h; row++) {
+                memcpy(dstPtr, srcPtr, w * pSize);
+                srcPtr += deviceWidth * pSize;
+                dstPtr += w * pSize;
+            }
+            QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
+            return image;
         }
-        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
-        return image;
+        catch(std::bad_alloc) {
+            return QImage();
+        }
     }
 }
-
 
 void KisFixedPaintDevice::clear(const QRect & rc)
 {
     KoColor c(Qt::black, m_colorSpace);
-    quint8* black = m_colorSpace->allocPixelBuffer(1);
+    quint8* black = new quint8[pixelSize()];
     memcpy(black, c.data(), m_colorSpace->pixelSize());
     m_colorSpace->setOpacity(black, OPACITY_TRANSPARENT_U8, 1);
     fill(rc.x(), rc.y(), rc.width(), rc.height(), black);

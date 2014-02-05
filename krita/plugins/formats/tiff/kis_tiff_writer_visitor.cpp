@@ -35,6 +35,7 @@
 #include <generator/kis_generator_layer.h>
 #include "kis_tiff_converter.h"
 #include <kis_iterator_ng.h>
+#include <kis_shape_layer.h>
 
 namespace
 {
@@ -143,6 +144,15 @@ bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
     return saveLayerProjection(layer);
 }
 
+bool KisTIFFWriterVisitor::visit(KisExternalLayer* layer)
+{
+    // a shape layer has a nice paint device we can save.
+    if (qobject_cast<KisShapeLayer*>(layer)) {
+        return saveLayerProjection(layer);
+    }
+    return true;
+}
+
 bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
 {
     dbgFile << "visiting on layer" << layer->name() << "";
@@ -197,7 +207,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     qint32 width = layer->image()->width();
     bool r = true;
     for (int y = 0; y < height; y++) {
-        KisHLineConstIteratorSP it = layer->paintDevice()->createHLineConstIteratorNG(0, y, width);
+        KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
                 quint8 poses[] = { 0, 1 };

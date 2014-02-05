@@ -21,6 +21,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QDesktopServices>
 
 #include <klineedit.h>
 #include <klocale.h>
@@ -30,6 +31,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 
+#include <KoFileDialogHelper.h>
 #include <KoApplication.h>
 #include <KoFilterManager.h>
 
@@ -37,6 +39,7 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_node.h>
+#include <kis_file_layer.h>
 
 KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
     : KDialog(parent)
@@ -70,9 +73,17 @@ QString KisDlgFileLayer::layerName() const
     return dlgWidget.txtLayerName->text();
 }
 
-bool KisDlgFileLayer::scaleToImageResolution() const
+KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
 {
-    return dlgWidget.chkScaleToImageResolution->isChecked();
+    if (dlgWidget.radioDontScale->isChecked()) {
+        return KisFileLayer::None;
+    }
+    else if (dlgWidget.radioScaleToImageSize->isChecked()) {
+        return KisFileLayer::ToImageSize;
+    }
+    else {
+        return KisFileLayer::ToImagePPI;
+    }
 }
 
 QString KisDlgFileLayer::fileName() const
@@ -84,14 +95,12 @@ void KisDlgFileLayer::slotSelectFile()
 {
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    KUrl startUrl("kfiledialog:///OpenDialog");
-    if (!m_basePath.isEmpty()) {
-        startUrl.setPath(m_basePath);
-    }
-    QString url = KFileDialog::getOpenFileName(startUrl,
-                                               mimeFilter.join(" "),
-                                               this,
-                                               i18n("Select file to use as dynamic file layer."));
+    QString url = KoFileDialogHelper::getOpenFileName(this,
+                                                      i18n("Select file to use as dynamic file layer."),
+                                                      m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
+                                                      mimeFilter,
+                                                      "",
+                                                      "OpenDocument");
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);
     }

@@ -56,7 +56,6 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_I)));
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setShowConfigurationWidget(false);
 }
 

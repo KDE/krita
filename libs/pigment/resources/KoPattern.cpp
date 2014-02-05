@@ -363,7 +363,7 @@ KoPattern* KoPattern::clone() const
 QByteArray KoPattern::md5() const
 {
     if (m_md5.isEmpty() && !image().isNull()) {
-        m_md5 = generateMD5(image());
+        m_md5 = generateMD5(image().convertToFormat(QImage::Format_ARGB32));
     }
     return m_md5;
 }

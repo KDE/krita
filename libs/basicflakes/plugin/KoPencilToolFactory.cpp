@@ -29,7 +29,7 @@
 KoPencilToolFactory::KoPencilToolFactory()
         : KoToolFactoryBase("KoPencilTool")
 {
-    setToolTip(i18n("Freehand Path Drawing Tool"));
+    setToolTip(i18n("Freehand path"));
     setToolType("karbon, krita");
     setIconName(koIconNameCStr("draw-freehand"));
     setPriority(3);

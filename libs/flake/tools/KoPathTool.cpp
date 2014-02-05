@@ -503,6 +503,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 // start rubberband selection
                 Q_ASSERT(m_currentStrategy == 0);
                 m_currentStrategy = new KoPathPointRubberSelectStrategy(this, event->point);
+                event->accept();
             }
         }
     }

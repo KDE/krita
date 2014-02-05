@@ -27,7 +27,7 @@
 ArtisticTextToolFactory::ArtisticTextToolFactory()
     : KoToolFactoryBase("ArtisticTextToolFactoryID")
 {
-    setToolTip( i18n("Artistic Text Editing Tool") );
+    setToolTip( i18n("Artistic text editing") );
     setToolType( dynamicToolType() );
     setIconName(koIconNameCStr("artistictext-tool"));
     setPriority( 1 );

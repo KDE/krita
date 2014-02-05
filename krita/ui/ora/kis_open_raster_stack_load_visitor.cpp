@@ -44,14 +44,14 @@
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
     vKisNodeSP activeNodes;
-    KisDoc2* doc;
+    KisUndoStore* undoStore;
     KisOpenRasterLoadContext* loadContext;
 };
 
-KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc)
+KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore* undoStore, KisOpenRasterLoadContext* orlc)
         : d(new Private)
 {
-    d->doc = doc;
+    d->undoStore = undoStore;
     d->loadContext = orlc;
 }
 
@@ -92,7 +92,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
 
             dbgFile << ppVar(width) << ppVar(height);
 
-            d->image = new KisImage(d->doc->createUndoStore(), width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+            d->image = new KisImage(d->undoStore, width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !
@@ -137,7 +137,6 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
         if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
         if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
-        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF); // to fix an old bug in krita's ora export
         if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
         if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
         if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
@@ -148,7 +147,11 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         compop = compop.remove(0, 6);
         layer->setCompositeOp(compop);
     }
-
+    else {
+        // to fix old bugs in krita's ora export
+        if (compop == "color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
+        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF);
+    }
 
 }
 

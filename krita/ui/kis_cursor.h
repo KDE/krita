@@ -50,6 +50,17 @@ public:
     static QCursor splitHCursor();        // horizontal splitting
     static QCursor pointingHandCursor();  // a pointing hand
 
+    static QCursor zoomSmoothCursor();
+    static QCursor zoomDiscreteCursor();
+    static QCursor rotateCanvasSmoothCursor();
+    static QCursor rotateCanvasDiscreteCursor();
+    static QCursor pickerImageForegroundCursor();
+    static QCursor pickerImageBackgroundCursor();
+    static QCursor pickerLayerForegroundCursor();
+    static QCursor pickerLayerBackgroundCursor();
+    static QCursor triangleLeftHandedCursor();
+    static QCursor triangleRightHandedCursor();
+
     // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
     static QCursor moveCursor();          // move tool cursor
     static QCursor penCursor();           // pen tool cursor
@@ -58,17 +69,17 @@ public:
     static QCursor eraserCursor();        // eraser tool cursor
     static QCursor fillerCursor();        // filler tool cursor
     static QCursor pickerCursor();        // color picker cursor
-    static QCursor pickerPlusCursor();        // color picker cursor
-    static QCursor pickerMinusCursor();        // color picker cursor
+    static QCursor pickerPlusCursor();    // color picker cursor
+    static QCursor pickerMinusCursor();   // color picker cursor
+    static QCursor pickLayerCursor();     // pick layer cursor
     static QCursor colorChangerCursor();  // color changer tool cursor
     static QCursor selectCursor();        // select cursor
-    static QCursor zoomCursor();          // zoom tool cursor
     static QCursor handCursor();          // hand tool cursor
     static QCursor openHandCursor();      // Pan tool cursor
     static QCursor closedHandCursor();    // Pan tool cursor
     static QCursor rotateCursor();    // Transform tool cursor
 
-    // Makes a 32x32 bitmap that is compatible with different plattfroms
+    // Makes a 32x32 bitmap that is compatible with different platforms
     static QBitmap bitmapFromData(const QSize& size, unsigned char* data);
 
     // Load a cursor from an image file. The image should have an alpha channel

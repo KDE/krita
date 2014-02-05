@@ -1,5 +1,7 @@
 project(krita)
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 # To avoid the confusion of an endless stream of Eigen warnings. 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs)
@@ -24,6 +26,13 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
+configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
 
 include(CheckFunctionExists)
 
@@ -147,7 +156,7 @@ install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-if (${QTVERSION} VERSION_GREATER 4.7.0)
-add_subdirectory(sketch)
-add_subdirectory(gemini)
-endif (${QTVERSION} VERSION_GREATER 4.7.0)
+if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
+    add_subdirectory(sketch)
+    add_subdirectory(gemini)
+endif (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

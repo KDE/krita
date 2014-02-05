@@ -35,6 +35,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
+#include <KoConfig.h>
 
 #include <kdeversion.h>
 #include <klocale.h>
@@ -60,6 +61,10 @@
 
 #include <stdlib.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#endif
 
 KoApplication* KoApplication::KoApp = 0;
 
@@ -96,8 +101,14 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif
 
-#ifdef Q_OS_MAC
-#if 0
+#ifdef Q_OS_MACX
+    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
+    {
+        // fix Mac OS X 10.9 (mavericks) font issue
+        // https://bugreports.qt-project.org/browse/QTBUG-32789
+        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
+    }
+/*
     QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
     if (styleSheetPath.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
@@ -109,8 +120,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     QString styleSheet = QLatin1String(file.readAll());
     file.close();
     setStyleSheet(styleSheet);
-#endif
-
+*/
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
@@ -156,9 +166,47 @@ public:
     QSplashScreen *m_splash;
 };
 
+#if defined(Q_OS_WIN) && defined(ENV32BIT)
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+BOOL isWow64()
+{
+    BOOL bIsWow64 = FALSE;
+
+    //IsWow64Process is not available on all supported versions of Windows.
+    //Use GetModuleHandle to get a handle to the DLL that contains the function
+    //and GetProcAddress to get a pointer to the function if available.
+
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    if(NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+        {
+            //handle error
+        }
+    }
+    return bIsWow64;
+}
+#endif
+
 bool KoApplication::start()
 {
 #ifdef Q_OS_WIN
+#ifdef ENV32BIT
+    if (isWow64()) {
+    	KMessageBox::information(0, 
+                                 i18n("You are running a 32 bits build on a 64 bits Windows.\n"
+                                      "This is not recommended.\n"
+                                      "Please download and install the x64 build instead."),
+                                 qApp->applicationName(), 
+                                 "calligra_32_on_64_warning");
+
+    }
+#endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -198,6 +246,13 @@ bool KoApplication::start()
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
         kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+        QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
+                                                                                    "This might be an installation issue.\n"
+                                                                                    "Try restarting, running kbuildsycoca4.exe or reinstalling."));
+#ifdef Q_OS_WIN
+        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
+#endif
         return false;
     }
 

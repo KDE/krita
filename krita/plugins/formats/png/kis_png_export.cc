@@ -74,10 +74,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
 
@@ -91,7 +91,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
-    KisImageWSP image = output->image();
+    KisImageWSP image = input->image();
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
+
     image->refreshGraph();
     image->lock();
     KisPaintDeviceSP pd;
@@ -125,7 +128,6 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     } while (it->nextPixel());
 
     if (qApp->applicationName() != "qttest") {
-
 
         bool sRGB = cs->profile()->name().toLower().contains("srgb");
 
@@ -206,7 +208,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KUrl url;
     url.setPath(filename);
 
-    KisPNGConverter kpc(output);
+    KisPNGConverter kpc(input);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();

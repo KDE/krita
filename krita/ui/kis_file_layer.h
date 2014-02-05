@@ -19,11 +19,10 @@
 #define KIS_FILE_LAYER_H
 
 #include "kis_external_layer_iface.h"
+#include "kis_safe_document_loader.h"
 
-#include <QFileSystemWatcher>
-
-class KisDoc2;
 class KisPart2;
+
 
 /**
  * @brief The KisFileLayer class loads a particular file as a layer into the layer stack.
@@ -32,7 +31,14 @@ class KisFileLayer : public KisExternalLayer
 {
     Q_OBJECT
 public:
-    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity);
+
+    enum ScalingMethod {
+        None,
+        ToImageSize,
+        ToImagePPI
+    };
+
+    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
     ~KisFileLayer();
     KisFileLayer(const KisFileLayer& rhs);
 
@@ -47,8 +53,8 @@ public:
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
     QString path() const;
-    void setScaleToImageResolution(bool scale);
-    bool scaleToImageResolution() const;
+
+    ScalingMethod scalingMethod() const;
     
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
@@ -56,21 +62,19 @@ public:
     bool accept(KisNodeVisitor&);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-public slots:
+    KUndo2Command* crop(const QRect & rect);
+    KUndo2Command* transform(const QTransform &transform);
 
-    void reloadImage();
+public slots:
+    void slotLoadingFinished();
 
 private:
-    KisDoc2 *m_doc;
-
     QString m_basePath;
     QString m_filename;
-    bool m_scaleToImageResolution;
+    ScalingMethod m_scalingMethod;
 
     KisPaintDeviceSP m_image;
-
-    QFileSystemWatcher m_fileWatcher;
-
+    KisSafeDocumentLoader m_loader;
 };
 
 #endif // KIS_FILE_LAYER_H

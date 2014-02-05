@@ -194,7 +194,9 @@ void KisRepeatHLineIteratorPixelBase<T>::createIterator()
     if (startY > (this->m_dataRect.y() + this->m_dataRect.height() - 1)) {
         startY = (this->m_dataRect.y() + this->m_dataRect.height() - 1);
     }
-    this->m_iterator = new T(this->m_dm, this->m_startIteratorX, startY, this->m_dataRect.width(), this->m_offsetX, this->m_offsetY, false);
+
+    int width = this->m_dataRect.x() + this->m_dataRect.width() - this->m_startIteratorX;
+    this->m_iterator = new T(this->m_dm, this->m_startIteratorX, startY, width, this->m_offsetX, this->m_offsetY, false);
     this->m_realX = this->m_startX;
 }
 
@@ -254,7 +256,9 @@ void KisRepeatVLineIteratorPixelBase<T>::createIterator()
     if (startX > (this->m_dataRect.x() + this->m_dataRect.width() - 1)) {
         startX = (this->m_dataRect.x() + this->m_dataRect.width() - 1);
     }
-    this->m_iterator = new T(this->m_dm, startX, this->m_startIteratorY, this->m_dataRect.height(), this->m_offsetX, this->m_offsetY, false);
+
+    int height = this->m_dataRect.y() + this->m_dataRect.height() - this->m_startIteratorY;
+    this->m_iterator = new T(this->m_dm, startX, this->m_startIteratorY, height, this->m_offsetX, this->m_offsetY, false);
     this->m_realY = this->m_startY;
 }
 

@@ -40,7 +40,6 @@ KisSimpleNoiseReducer::KisSimpleNoiseReducer()
         : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
 }
 
 KisSimpleNoiseReducer::~KisSimpleNoiseReducer()

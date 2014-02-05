@@ -71,7 +71,7 @@ void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
     if(m_setupAxisFlag) {
         setMode(KisTool::OTHER);
         m_axisPoint = convertToPixelCoord(event->point);
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
     else {
@@ -84,7 +84,7 @@ void KisToolMultihand::continuePrimaryAction(KoPointerEvent *event)
 {
     if(mode() == KisTool::OTHER) {
         m_axisPoint = convertToPixelCoord(event->point);
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
     else {
@@ -96,7 +96,7 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
 {
     if(mode() == KisTool::OTHER) {
         setMode(KisTool::HOVER_MODE);
-        requestUpdateOutline(event->point);
+        requestUpdateOutline(event->point, 0);
         finishAxisSetup();
     }
     else {

@@ -259,6 +259,7 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
     static_cast<KisPresetProxyAdapter*>(m_adapter)->setPresetFilter(paintOpId);
+    updateViewSettings();
 }
 
 

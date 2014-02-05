@@ -64,12 +64,16 @@ public:
     inline Qt::MouseButton button() const { return mouseButton; }
     inline Qt::MouseButtons buttons() const { return mouseButtons; }
 
-    inline QMouseEvent toQMouseEvent() const {
-        QEvent::Type t =
+    inline QEvent::Type getMouseEventType() const {
+        return
             (ExtraEventType) type() == TabletMoveEx ? MouseMove :
             (ExtraEventType) type() == TabletPressEx ? MouseButtonPress :
             (ExtraEventType) type() == TabletReleaseEx ? MouseButtonRelease :
             QEvent::None;
+    }
+
+    inline QMouseEvent toQMouseEvent() const {
+        QEvent::Type t = getMouseEventType();
 
         return QMouseEvent(t, pos(), globalPos(),
                            button(), buttons(), modifiers());

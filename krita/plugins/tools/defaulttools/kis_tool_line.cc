@@ -121,7 +121,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     // First ensure the old temp line is deleted
     updatePreview();
@@ -140,12 +140,12 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
     m_maxPressure = qMax(m_maxPressure, float(pressureToCurve(event->pressure())));
     updatePreview();
-    KisToolPaint::requestUpdateOutline(event->point);
+    KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     updatePreview();

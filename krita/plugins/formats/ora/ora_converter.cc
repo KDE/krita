@@ -57,12 +57,13 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
+        delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
     store->disallowNameExpansion();
 
     OraLoadContext olc(store);
-    KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
+    KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
     m_image = orslv.image();
     m_activeNodes = orslv.activeNodes();
@@ -109,7 +110,17 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
 
         KoStoreDevice io(store);
         if (io.open(QIODevice::WriteOnly)) {
-            preview.save(&io, "PNG", 0);
+            preview.save(&io, "PNG");
+        }
+        io.close();
+        store->close();
+    }
+
+    if (store->open("mergedimage.png")) {
+        QImage mergedimage = image->projection()->convertToQImage(0);
+        KoStoreDevice io(store);
+        if (io.open(QIODevice::WriteOnly)) {
+            mergedimage.save(&io, "PNG");
         }
         io.close();
         store->close();

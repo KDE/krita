@@ -47,14 +47,14 @@ void KisImageViewport::setImage(const QPixmap& pixmap, qreal scale)
 {
     m_scale        = scale;
     m_pixmap       = pixmap;
-    m_cachedPixmap = pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    m_cachedPixmap = pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void KisImageViewport::setScale(qreal scale)
 {
     if(!qFuzzyCompare(scale, m_scale)) {
         m_scale        = scale;
-        m_cachedPixmap = m_pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        m_cachedPixmap = m_pixmap.scaled(imageRect().size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 }
 

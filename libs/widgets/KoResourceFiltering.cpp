@@ -18,7 +18,7 @@
  */
 
 #include "KoResourceFiltering.h"
-#include "KoResourceTagging.h"
+#include "KoResourceTagStore.h"
 
 class KoResourceFiltering::Private
 {
@@ -34,7 +34,7 @@ public:
     QRegExp isExactMatch;
     QRegExp searchTokenizer;
     bool hasNewFilters;
-    KoResourceTagging *tagObject;
+    KoResourceTagStore *tagObject;
     QStringList tagSetFilenames;
     QStringList includedNames;
     QStringList excludedNames;
@@ -212,7 +212,7 @@ void KoResourceFiltering::setCurrentTag(const QString& tagSet)
     rebuildCurrentTagFilenames();
 }
 
-void KoResourceFiltering::setTagObject(KoResourceTagging* tagObject)
+void KoResourceFiltering::setTagObject(KoResourceTagStore* tagObject)
 {
     d->tagObject = tagObject;
 }

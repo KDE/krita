@@ -22,23 +22,24 @@
 
 #include "desktopviewproxy.h"
 
-#include "MainWindow.h"
-#include <sketch/DocumentManager.h>
-
-#include <KoMainWindow.h>
-#include <KoFilterManager.h>
-#include <KoDocumentEntry.h>
-
-#include <kactioncollection.h>
-
 #include <QProcess>
 #include <QDir>
 #include <QApplication>
-#include <KFileDialog>
-#include <KLocalizedString>
+#include <QDesktopServices>
+
+#include <klocalizedstring.h>
 #include <krecentfilesaction.h>
+#include <kactioncollection.h>
+
 #include <boost/config/posix_features.hpp>
 
+#include <KoMainWindow.h>
+#include <KoFilterManager.h>
+#include <KoFileDialogHelper.h>
+#include <KoDocumentEntry.h>
+
+#include "MainWindow.h"
+#include <sketch/DocumentManager.h>
 #include <kis_doc2.h>
 
 class DesktopViewProxy::Private
@@ -104,35 +105,22 @@ void DesktopViewProxy::fileNew()
 
 void DesktopViewProxy::fileOpen()
 {
-#ifdef Q_WS_WIN
-    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
-    // TODO provide support for "last visited" directory
-    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), d->desktopView);
-#else
-    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), d->desktopView);
-#endif
-    dialog->setObjectName("file dialog");
-    dialog->setMode(KFile::File);
-    dialog->setCaption(i18n("Open Document"));
-
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     KService::Ptr service = entry.service();
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KIS_MIME_TYPE,
                                                                KoFilterManager::Import,
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
-    dialog->setMimeFilter(mimeFilter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    KUrl url(dialog->selectedUrl());
-    delete dialog;
 
-    if (url.isEmpty())
-        return;
+    QString filename = KoFileDialogHelper::getOpenFileName(d->desktopView,
+                                                           i18n("Open Document"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           mimeFilter,
+                                                           "",
+                                                           "OpenDocument");
+    if (filename.isEmpty()) return;
 
-    DocumentManager::instance()->openDocument(url.toLocalFile(), d->isImporting);
+    DocumentManager::instance()->openDocument(filename, d->isImporting);
 }
 
 void DesktopViewProxy::fileSave()

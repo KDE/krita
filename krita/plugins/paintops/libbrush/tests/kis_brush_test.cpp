@@ -292,5 +292,53 @@ void KisBrushTest::testPyramidLevelRounding()
     QCOMPARE(baseLevel, 5);
 }
 
+// see comment in KisQImagePyramid::appendPyramidLevel
+void KisBrushTest::testQPainterTransformationBorder()
+{
+    QImage image1(10, 10, QImage::Format_ARGB32);
+    QImage image2(12, 12, QImage::Format_ARGB32);
+
+    image1.fill(0);
+    image2.fill(0);
+
+    {
+        QPainter gc(&image1);
+        gc.fillRect(QRect(0,0,10,10),Qt::black);
+    }
+
+    {
+        QPainter gc(&image2);
+        gc.fillRect(QRect(1,1,10,10),Qt::black);
+    }
+
+    image1.save("src1.png");
+    image2.save("src2.png");
+
+    {
+        QImage canvas(100, 100, QImage::Format_ARGB32);
+        canvas.fill(0);
+        QPainter gc(&canvas);
+        QTransform transform;
+        transform.rotate(15);
+        gc.setTransform(transform);
+        gc.setRenderHints(QPainter::SmoothPixmapTransform);
+        gc.drawImage(QPointF(50,50), image1);
+        gc.end();
+        canvas.save("canvas1.png");
+    }
+    {
+        QImage canvas(100, 100, QImage::Format_ARGB32);
+        canvas.fill(0);
+        QPainter gc(&canvas);
+        QTransform transform;
+        transform.rotate(15);
+        gc.setTransform(transform);
+        gc.setRenderHints(QPainter::SmoothPixmapTransform);
+        gc.drawImage(QPointF(50,50), image2);
+        gc.end();
+        canvas.save("canvas2.png");
+    }
+}
+
 QTEST_KDEMAIN(KisBrushTest, GUI)
 #include "kis_brush_test.moc"

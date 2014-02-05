@@ -173,8 +173,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     } else {
         strategy =
             new MoveStrokeStrategy(node, image.data(),
-                                   image->postExecutionUndoAdapter(),
-                                   image->undoAdapter());
+                                   image->postExecutionUndoAdapter());
     }
 
     m_strokeId = image->startStroke(strategy);
@@ -183,7 +182,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
 
 void KisToolMove::continueAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (!m_strokeId) return;
 
@@ -194,7 +193,7 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 
 void KisToolMove::endAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
     if (!m_strokeId) return;
 
@@ -237,6 +236,12 @@ void KisToolMove::cancelStroke()
 QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
     connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),

@@ -28,6 +28,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoStopGradient.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <KoPattern.h>
 #include <kis_paint_device.h>
@@ -43,8 +44,8 @@
 #include "canvas/kis_canvas2.h"
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
-        : m_view(view)
-        , m_displayProfile(0)
+    : m_view(view)
+    , m_displayProfile(0)
 {
     m_fGChanged = true;
     m_enablefGChange = true;    // default to true, so that colour history is working without popup palette
@@ -65,10 +66,10 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
     m_resourceManager = resourceManager;
 
     QVariant v;
-    v.setValue(KoColor(Qt::black, m_view->image()->colorSpace()));
+    v.setValue(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
     m_resourceManager->setResource(KoCanvasResourceManager::ForegroundColor, v);
 
-    v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
+    v.setValue(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
     m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
 
     setCurrentCompositeOp(COMPOSITE_OVER);

@@ -143,9 +143,10 @@ void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
     KisColorSelectorBase::mouseReleaseEvent(event);
     event->setAccepted(false);
     KisColorSelectorBase::mouseReleaseEvent(event);
-    if(event->isAccepted() || !rect().contains(event->pos()))
+    if (event->isAccepted() || !rect().contains(event->pos()))
         return;
 
+    if (!m_canvas) return;
 
     KoColor color;
     if(colorAt(event->pos(), &color)) {

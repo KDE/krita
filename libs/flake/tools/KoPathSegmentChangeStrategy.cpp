@@ -43,7 +43,7 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const
     // infinite size, which blocks the application for a long period of time. A bigger value
     // is mathematically uncorrect, but it avoids to block application, it also avoid to create
     // an huge path shape by accident, and anyway, but it does not prevent the user to create one
-    // if he choose so.
+    // if they choose so.
     const qreal eps = 1e-2;
     // force segment parameter range to avoid division by zero
     m_segmentParam = qBound(eps, m_segmentParam, qreal(1.0)-eps);

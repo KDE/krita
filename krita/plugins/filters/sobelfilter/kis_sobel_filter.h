@@ -29,9 +29,7 @@ class KisSobelFilter : public KisFilter
 public:
     KisSobelFilter();
 public:
-    using KisFilter::process;
-
-    void processImpl(KisPaintDeviceSP device,
+        void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,
                      KoUpdater* progressUpdater

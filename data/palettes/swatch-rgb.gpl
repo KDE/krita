@@ -1,0 +1,570 @@
+GIMP Palette
+Name: Swatch RGB
+Columns: 20
+#
+# Author : Spencer Goldade ( aka Spencerg ) 
+# original URL : http://cghub.com/scripts/view/200/
+# original filename : photoshop-swatches-rgb-color-wheel-swatch-set.aco
+# readapted as a *.gpl file on 12/2013 by Deevad, with permission of the author
+#
+
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 39 255   0	Untitled
+ 68 255   8	Untitled
+ 90 255   6	Untitled
+120 255  11	Untitled
+140 255  10	Untitled
+169 255   9	Untitled
+178 239  14	Untitled
+189 255   8	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 19 246  17	Untitled
+ 19 255  13	Untitled
+ 71 255  19	Untitled
+ 99 255  22	Untitled
+122 255  27	Untitled
+153 255  28	Untitled
+175 255  25	Untitled
+200 255  22	Untitled
+221 255  15	Untitled
+244 250  11	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  5 255  52	Untitled
+ 11 255  39	Untitled
+ 22 255  29	Untitled
+ 49 255  29	Untitled
+ 79 255  40	Untitled
+111 255  48	Untitled
+139 255  53	Untitled
+166 255  58	Untitled
+188 255  51	Untitled
+213 255  47	Untitled
+232 255  35	Untitled
+248 247  24	Untitled
+254 234  15	Untitled
+240 203  15	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  5 255  86	Untitled
+  9 255  72	Untitled
+ 21 255  67	Untitled
+ 38 255  57	Untitled
+ 59 255  58	Untitled
+ 96 255  71	Untitled
+131 255  90	Untitled
+164 255  98	Untitled
+185 255  96	Untitled
+206 255  90	Untitled
+226 255  80	Untitled
+245 252  67	Untitled
+253 239  49	Untitled
+255 220  33	Untitled
+255 197  20	Untitled
+255 177   9	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 31 255 135	Untitled
+ 10 255 107	Untitled
+ 19 255 100	Untitled
+ 40 255  98	Untitled
+ 64 255  99	Untitled
+ 92 255 103	Untitled
+125 255 116	Untitled
+160 255 131	Untitled
+189 255 143	Untitled
+207 255 148	Untitled
+226 255 145	Untitled
+240 255 120	Untitled
+252 247  99	Untitled
+255 231  79	Untitled
+255 207  56	Untitled
+255 185  32	Untitled
+255 163  19	Untitled
+255 142   7	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  7 255 141	Untitled
+ 19 255 131	Untitled
+ 40 255 135	Untitled
+ 65 255 131	Untitled
+ 91 255 138	Untitled
+130 255 149	Untitled
+157 255 161	Untitled
+189 255 177	Untitled
+214 255 189	Untitled
+226 255 191	Untitled
+238 255 185	Untitled
+250 254 169	Untitled
+255 243 144	Untitled
+255 220 112	Untitled
+255 195  79	Untitled
+255 167  50	Untitled
+255 145  29	Untitled
+255 127  11	Untitled
+255 255 255	Untitled
+152 255 222	Untitled
+ 11 255 166	Untitled
+ 25 255 162	Untitled
+ 49 255 159	Untitled
+ 82 255 164	Untitled
+125 255 179	Untitled
+152 255 182	Untitled
+192 255 202	Untitled
+211 255 208	Untitled
+230 255 216	Untitled
+248 255 215	Untitled
+255 251 203	Untitled
+255 252 204	Untitled
+255 238 182	Untitled
+255 215 147	Untitled
+255 188 106	Untitled
+255 154  66	Untitled
+255 129  39	Untitled
+255 107  18	Untitled
+240  88  12	Untitled
+  9 255 197	Untitled
+ 14 255 193	Untitled
+ 33 255 190	Untitled
+ 64 255 191	Untitled
+104 255 198	Untitled
+149 255 210	Untitled
+184 255 216	Untitled
+212 255 228	Untitled
+230 255 233	Untitled
+244 255 240	Untitled
+248 255 243	Untitled
+253 255 236	Untitled
+255 248 224	Untitled
+255 234 201	Untitled
+255 212 170	Untitled
+255 179 124	Untitled
+255 149  90	Untitled
+255 115  53	Untitled
+255  92  27	Untitled
+255  70  10	Untitled
+  7 255 217	Untitled
+ 16 255 218	Untitled
+ 42 255 216	Untitled
+ 74 255 218	Untitled
+122 255 222	Untitled
+167 255 230	Untitled
+201 255 235	Untitled
+227 255 241	Untitled
+245 255 245	Untitled
+251 255 250	Untitled
+253 255 250	Untitled
+255 254 248	Untitled
+255 246 239	Untitled
+255 234 221	Untitled
+255 208 188	Untitled
+255 174 146	Untitled
+255 139 103	Untitled
+255 100  62	Untitled
+255  68  29	Untitled
+255  46  11	Untitled
+  4 253 239	Untitled
+ 18 253 239	Untitled
+ 43 254 239	Untitled
+ 77 254 241	Untitled
+123 254 247	Untitled
+167 255 245	Untitled
+212 255 250	Untitled
+234 255 252	Untitled
+251 255 252	Untitled
+253 255 253	Untitled
+255 254 253	Untitled
+255 252 251	Untitled
+255 245 243	Untitled
+255 231 228	Untitled
+255 200 193	Untitled
+255 164 154	Untitled
+255 117 109	Untitled
+255  79  70	Untitled
+255  45  35	Untitled
+255  28  13	Untitled
+  4 237 253	Untitled
+ 20 242 252	Untitled
+ 38 240 253	Untitled
+ 90 244 253	Untitled
+130 245 255	Untitled
+175 246 255	Untitled
+211 248 255	Untitled
+234 250 255	Untitled
+249 253 255	Untitled
+253 253 255	Untitled
+255 253 254	Untitled
+255 251 253	Untitled
+255 245 246	Untitled
+255 226 231	Untitled
+255 198 206	Untitled
+255 158 169	Untitled
+255 111 124	Untitled
+255  69  82	Untitled
+255  36  48	Untitled
+255  18  29	Untitled
+  4 215 255	Untitled
+ 16 216 255	Untitled
+ 36 215 255	Untitled
+ 72 213 255	Untitled
+121 220 255	Untitled
+158 225 255	Untitled
+199 233 255	Untitled
+227 240 255	Untitled
+244 246 255	Untitled
+249 249 255	Untitled
+252 251 255	Untitled
+253 248 255	Untitled
+255 238 250	Untitled
+255 218 235	Untitled
+255 183 207	Untitled
+255 144 175	Untitled
+255  98 136	Untitled
+255  57  99	Untitled
+255  29  68	Untitled
+255  11  48	Untitled
+  4 195 255	Untitled
+ 12 193 255	Untitled
+ 32 188 255	Untitled
+ 60 183 255	Untitled
+105 194 255	Untitled
+147 203 255	Untitled
+173 207 255	Untitled
+213 224 255	Untitled
+228 231 255	Untitled
+240 237 255	Untitled
+247 240 255	Untitled
+250 237 255	Untitled
+255 226 251	Untitled
+255 197 233	Untitled
+255 172 215	Untitled
+255 128 181	Untitled
+255  82 144	Untitled
+255  52 115	Untitled
+255  23  93	Untitled
+255  10  73	Untitled
+ 67 192 255	Untitled
+  9 167 255	Untitled
+ 23 160 255	Untitled
+ 46 155 255	Untitled
+ 74 160 255	Untitled
+117 165 255	Untitled
+152 179 255	Untitled
+176 183 255	Untitled
+206 201 255	Untitled
+227 216 255	Untitled
+237 216 255	Untitled
+249 214 255	Untitled
+254 197 252	Untitled
+255 168 241	Untitled
+255 140 213	Untitled
+255 107 190	Untitled
+255  68 160	Untitled
+255  34 128	Untitled
+255  19 110	Untitled
+240  12  88	Untitled
+255 255 255	Untitled
+  4 141 255	Untitled
+ 16 130 255	Untitled
+ 29 125 255	Untitled
+ 54 124 255	Untitled
+ 86 126 255	Untitled
+115 135 255	Untitled
+151 153 255	Untitled
+187 173 255	Untitled
+204 174 255	Untitled
+221 180 255	Untitled
+234 174 255	Untitled
+246 162 255	Untitled
+255 143 245	Untitled
+255 106 222	Untitled
+255  71 194	Untitled
+255  47 169	Untitled
+255  26 143	Untitled
+255  12 128	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 52 144 255	Untitled
+  7 105 255	Untitled
+ 17  97 255	Untitled
+ 35  91 255	Untitled
+ 55  88 255	Untitled
+ 86  95 255	Untitled
+116 104 255	Untitled
+155 123 255	Untitled
+185 137 255	Untitled
+195 127 255	Untitled
+222 129 255	Untitled
+238 120 255	Untitled
+234  97 236	Untitled
+255  74 230	Untitled
+255  52 209	Untitled
+255  30 185	Untitled
+255  14 160	Untitled
+240  12 139	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  4  86 255	Untitled
+ 12  76 255	Untitled
+ 20  63 255	Untitled
+ 36  56 255	Untitled
+ 61  58 255	Untitled
+ 95  68 255	Untitled
+129  79 255	Untitled
+151  85 255	Untitled
+182  89 255	Untitled
+206  87 255	Untitled
+224  73 255	Untitled
+242  56 253	Untitled
+253  43 240	Untitled
+255  31 220	Untitled
+255  16 198	Untitled
+255   9 179	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  4  48 255	Untitled
+ 10  39 255	Untitled
+ 24  25 255	Untitled
+ 44  27 255	Untitled
+ 80  37 255	Untitled
+111  45 255	Untitled
+141  51 255	Untitled
+163  51 255	Untitled
+185  46 255	Untitled
+211  44 255	Untitled
+232  29 255	Untitled
+247  23 247	Untitled
+255  13 231	Untitled
+255   7 212	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 14  26 255	Untitled
+ 21  14 255	Untitled
+ 46  12 255	Untitled
+ 73  18 255	Untitled
+ 95  20 255	Untitled
+127  23 255	Untitled
+150  23 255	Untitled
+174  22 255	Untitled
+199  18 255	Untitled
+223  15 255	Untitled
+242   9 251	Untitled
+251  26 242	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+ 50   9 255	Untitled
+ 71   6 255	Untitled
+ 92   7 255	Untitled
+118   8 255	Untitled
+144   8 255	Untitled
+166   8 255	Untitled
+192   7 255	Untitled
+210   4 255	Untitled
+212   6 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+  1  43  51	Untitled
+ 10  29  51	Untitled
+  0   0  51	Untitled
+ 24   2  51	Untitled
+ 51   6  49	Untitled
+ 51   3  26	Untitled
+ 51   0   0	Untitled
+ 51  29   2	Untitled
+ 51  47   3	Untitled
+ 34  51   2	Untitled
+  0  51   0	Untitled
+  2  51  29	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+ 51  51  51	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+  1  87 102	Untitled
+ 20  57 102	Untitled
+  0   0 102	Untitled
+ 48   3 102	Untitled
+102  11  97	Untitled
+102   5  52	Untitled
+102   0   0	Untitled
+102  57   3	Untitled
+102  94   6	Untitled
+ 68 102   4	Untitled
+  0 102   0	Untitled
+  3 102  57	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+102 102 102	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+  2 130 153	Untitled
+ 31  86 153	Untitled
+  0   0 153	Untitled
+ 71   5 153	Untitled
+153  17 146	Untitled
+153   8  78	Untitled
+153   0   0	Untitled
+153  86   5	Untitled
+153 141   9	Untitled
+102 153   6	Untitled
+  0 153   0	Untitled
+  5 153  86	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+153 153 153	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+  2 174 204	Untitled
+ 41 114 204	Untitled
+  0   0 204	Untitled
+ 95   6 204	Untitled
+204  22 195	Untitled
+204  10 104	Untitled
+204   0   0	Untitled
+204 115   6	Untitled
+204 188  12	Untitled
+135 204   8	Untitled
+  0 204   0	Untitled
+  6 204 115	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+204 204 204	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+  2 195 229	Untitled
+ 46 129 229	Untitled
+  0   0 229	Untitled
+107   7 229	Untitled
+229  25 219	Untitled
+229  11 117	Untitled
+229   0   0	Untitled
+229 129   7	Untitled
+229 212  14	Untitled
+152 229   9	Untitled
+  0 229   0	Untitled
+  7 229 129	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+229 229 229	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+  3 217 255	Untitled
+ 51 143 255	Untitled
+  0   0 255	Untitled
+119   8 255	Untitled
+255  28 244	Untitled
+255  13 130	Untitled
+255   0   0	Untitled
+255 144   8	Untitled
+255 235  15	Untitled
+169 255  10	Untitled
+  0 255   0	Untitled
+  8 255 144	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled
+255 255 255	Untitled

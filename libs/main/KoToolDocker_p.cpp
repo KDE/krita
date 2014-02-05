@@ -31,6 +31,7 @@
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
+#include <QApplication>
 #include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
@@ -157,8 +158,8 @@ public:
                         currentAuxWidgets.insert(s);
                     }
                 }
-                if (specialCount == currentWidgetList.count()) {
-                    housekeeperLayout->setRowStretch(cnt, 100);
+                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
+                    housekeeperLayout->setRowStretch(cnt, 10000);
                 }
                 break;
             }

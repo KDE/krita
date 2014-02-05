@@ -45,13 +45,13 @@
 #include <KoColorProfile.h>
 #include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoFileDialogHelper.h>
 #include <KoPart.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kfiledialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
@@ -61,13 +61,6 @@
 
 #include <KoIcon.h>
 #include <KoConfig.h>
-
-#ifdef NEPOMUK
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
-#endif
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -101,12 +94,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Small Circle"));
     m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
     m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
-
-#ifdef NEPOMUK
-    grpResourceTagging->show();
-#else
-    grpResourceTagging->hide();
-#endif
+    m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Lefthanded"));
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
@@ -118,19 +109,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
-
-#ifdef NEPOMUK
-    KConfigGroup tagConfig = KConfigGroup( KGlobal::config(), "resource tagging" );
-    bool val = tagConfig.readEntry("nepomuk_usage_for_resource_tagging", false);
-    if(!val) {
-        radioXml->setChecked(true);
-    }
-    else {
-        radioNepomuk->setChecked(true);
-    }
-
-    connect(radioNepomuk,SIGNAL(toggled(bool)),SLOT(tagBackendChange(bool)));
-#endif
 
 }
 
@@ -174,22 +152,6 @@ bool GeneralTab::showOutlineWhilePainting()
     return m_showOutlinePainting->isChecked();
 }
 
-void GeneralTab::tagBackendChange(bool on)
-{
-#ifdef NEPOMUK
-    KoResourceServer<KoPattern>* tagServer = KoResourceServerProvider::instance()->patternServer();
-
-    if(radioNepomuk->isChecked()) {
-        tagServer->updateNepomukXML(on);
-    }
-
-    if (radioXml->isChecked()){
-        tagServer->updateNepomukXML(on);
-    }
-#endif
-}
-
-//---------------------------------------------------------------------------------------------------
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
@@ -337,7 +299,10 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    filename = KoFileDialogHelper::getOpenFileName(m_page,
+                                                   i18n("Select OpenColorIO Configuration"),
+                                                   QDir::cleanPath(filename),
+                                                   QStringList("*.ocio|OpenColorIO configuration (*.ocio)"));
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);
@@ -413,6 +378,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
+        // Don't show the high quality filtering mode if it's not available
+        if (!KisOpenGL::supportsGLSL13()) {
+            cmbFilterMode->removeItem(3);
+        }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         cbUseOpenGL->setVisible(false);
@@ -428,6 +397,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
+    chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
@@ -446,6 +416,7 @@ void DisplaySettingsTab::setDefault()
     colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
     chkCurveAntialiasing->setChecked(true);
+    chkSelectionOutlineAntialiasing->setChecked(false);
     chkChannelsAsColor->setChecked(false);
 }
 
@@ -782,6 +753,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
+        cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());

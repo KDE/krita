@@ -301,65 +301,6 @@ public:
     }
 
 
-    virtual KoColorTransformation *createDesaturateAdjustment() const {
-        if (!d->profile) return 0;
-        KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);
-
-        adj->profiles[0] = d->profile->lcmsProfile();
-        adj->profiles[2] = d->profile->lcmsProfile();
-        adj->csProfile = d->profile->lcmsProfile();
-
-        BCHSWADJUSTS bchsw;
-
-        bchsw.Saturation = -25;
-
-        adj->profiles[1] = cmsCreateProfilePlaceholder(0);
-        if (!adj->profiles[1]) { // can't allocate
-            delete adj;
-            return NULL;
-        }
-
-        cmsSetDeviceClass(adj->profiles[1], cmsSigAbstractClass);
-        cmsSetColorSpace(adj->profiles[1], cmsSigLabData);
-        cmsSetPCS(adj->profiles[1], cmsSigLabData);
-
-        cmsSetHeaderRenderingIntent(adj->profiles[1], KoColorConversionTransformation::AdjustmentRenderingIntent);
-
-        // Creates a LUT with 3D grid only
-        cmsPipeline* Lut = cmsPipelineAlloc(0, 3, 3);
-
-        cmsStage* stage = cmsStageAllocCLut16bit(0, 32, 3, 3, 0);
-
-        if (!cmsStageSampleCLut16bit(stage, desaturateSampler, static_cast<void*>(&bchsw), 0)) {
-            // Shouldn't reach here
-            cmsStageFree(stage);
-            cmsPipelineFree(Lut);
-            cmsCloseProfile(adj->profiles[1]);
-            delete adj;
-            return NULL;
-        }
-        cmsPipelineInsertStage(Lut, cmsAT_BEGIN, stage);
-
-        // Create tags
-
-        cmsWriteTag(adj->profiles[1], cmsSigDeviceMfgDescTag, (void*) "(krita internal)");
-        cmsWriteTag(adj->profiles[1], cmsSigProfileDescriptionTag, (void*) "krita saturation abstract profile");
-        cmsWriteTag(adj->profiles[1], cmsSigDeviceModelDescTag, (void*) "saturation built-in");
-
-        cmsWriteTag(adj->profiles[1], cmsSigMediaWhitePointTag, (void*) cmsD50_XYZ());
-
-        cmsWriteTag(adj->profiles[1], cmsSigAToB0Tag, (void*) Lut);
-
-        // LUT is already on virtual profile
-        cmsPipelineFree(Lut);
-
-        adj->cmstransform  = cmsCreateMultiprofileTransform(adj->profiles, 3, this->colorSpaceType(), this->colorSpaceType(),
-                                                            KoColorConversionTransformation::InternalRenderingIntent,
-                                                            KoColorConversionTransformation::InternalConversionFlags);
-
-        return adj;
-    }
-
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {
         if (!d->profile) return 0;
 
@@ -398,11 +339,49 @@ public:
                 || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
             return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
         Q_ASSERT(this->toLabA16Converter());
-        this->toLabA16Converter()->transform(src1, lab1, 1),
-                this->toLabA16Converter()->transform(src2, lab2, 1),
-                cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
+        this->toLabA16Converter()->transform(src1, lab1, 1);
+        this->toLabA16Converter()->transform(src2, lab2, 1);
+        cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
         cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
         qreal diff = cmsDeltaE(&labF1, &labF2);
+        if (diff > 255)
+            return 255;
+        else
+            return qint8(diff);
+    }
+
+    virtual quint8 differenceA(const quint8* src1, const quint8* src2) const {
+        quint8 lab1[8];
+        quint8 lab2[8];
+        cmsCIELab labF1;
+        cmsCIELab labF2;
+
+        if (this->opacityU8(src1) == OPACITY_TRANSPARENT_U8
+                || this->opacityU8(src2) == OPACITY_TRANSPARENT_U8)
+            return (this->opacityU8(src1) == this->opacityU8(src2) ? 0 : 255);
+        Q_ASSERT(this->toLabA16Converter());
+        this->toLabA16Converter()->transform(src1, lab1, 1);
+        this->toLabA16Converter()->transform(src2, lab2, 1);
+        cmsLabEncoded2Float(&labF1, (cmsUInt16Number *)lab1);
+        cmsLabEncoded2Float(&labF2, (cmsUInt16Number *)lab2);
+
+        cmsFloat64Number dL;
+        cmsFloat64Number da;
+        cmsFloat64Number db;
+        cmsFloat64Number dAlpha;
+
+        dL = fabs((qreal)(labF1.L - labF2.L));
+        da = fabs((qreal)(labF1.a - labF2.a));
+        db = fabs((qreal)(labF1.b - labF2.b));
+
+        static const int LabAAlphaPos = 3;
+        static const cmsFloat64Number alphaScale = 100.0 / KoColorSpaceMathsTraits<quint16>::max;
+        quint16 alpha1 = reinterpret_cast<quint16*>(lab1)[LabAAlphaPos];
+        quint16 alpha2 = reinterpret_cast<quint16*>(lab2)[LabAAlphaPos];
+        dAlpha = fabs((qreal)(alpha1 - alpha2)) * alphaScale;
+
+        qreal diff = pow(dL * dL + da * da + db * db + dAlpha * dAlpha, 0.5);
+
         if (diff > 255)
             return 255;
         else
@@ -429,33 +408,6 @@ private:
         return iccp->asLcms();
     }
 
-    typedef struct {
-        qreal Saturation;
-
-    } BCHSWADJUSTS, *LPBCHSWADJUSTS;
-
-
-    static int desaturateSampler(register const cmsUInt16Number In[], register cmsUInt16Number Out[], register void* /*Cargo*/) {
-        cmsCIELab LabIn, LabOut;
-        cmsCIELCh LChIn, LChOut;
-        //LPBCHSWADJUSTS bchsw = (LPBCHSWADJUSTS) Cargo;
-
-        cmsLabEncoded2Float(&LabIn, In);
-
-        cmsLab2LCh(&LChIn, &LabIn);
-
-        // Do some adjusts on LCh
-        LChOut.L = LChIn.L;
-        LChOut.C = 0;//LChIn.C + bchsw->Saturation;
-        LChOut.h = LChIn.h;
-
-        cmsLCh2Lab(&LabOut, &LChOut);
-
-        // Back to encoded
-        cmsFloat2LabEncoded(Out, &LabOut);
-
-        return true;
-    }
     Private * const d;
 };
 

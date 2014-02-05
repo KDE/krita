@@ -22,9 +22,11 @@
 #include <QWidget>
 #include <QPolygonF>
 #include <QTransform>
+#ifdef HAVE_OPENGL
 #include <QGLShaderProgram>
 #include <QGLFramebufferObject>
 #include <QGLContext>
+#endif
 
 #include <klocale.h>
 #include <kaction.h>
@@ -74,9 +76,13 @@ struct KisTool::Private {
         : currentPattern(0),
           currentGradient(0),
           currentGenerator(0),
+#ifdef HAVE_OPENGL
           optionWidget(0),
           cursorShader(0),
           useGLToolOutlineWorkaround(false)
+#else
+          optionWidget(0)
+#endif
     {
     }
 
@@ -92,10 +98,11 @@ struct KisTool::Private {
     KisFilterConfiguration * currentGenerator;
     QWidget* optionWidget;
 
+#ifdef HAVE_OPENGL
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+#endif
 
     bool useGLToolOutlineWorkaround;
-
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -140,7 +147,9 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
 KisTool::~KisTool()
 {
+#ifdef HAVE_OPENGL
     delete d->cursorShader;
+#endif
     delete d;
 }
 
@@ -430,6 +439,14 @@ KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
     return (AlternateAction)action;
 }
 
+void KisTool::activatePrimaryAction()
+{
+}
+
+void KisTool::deactivatePrimaryAction()
+{
+}
+
 void KisTool::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -453,6 +470,16 @@ void KisTool::endPrimaryAction(KoPointerEvent *event)
 bool KisTool::primaryActionSupportsHiResEvents() const
 {
     return false;
+}
+
+void KisTool::activateAlternateAction(AlternateAction action)
+{
+    Q_UNUSED(action);
+}
+
+void KisTool::deactivateAlternateAction(AlternateAction action)
+{
+    Q_UNUSED(action);
 }
 
 void KisTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -483,6 +510,11 @@ void KisTool::mouseDoubleClickEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
+void KisTool::mouseTripleClickEvent(KoPointerEvent *event)
+{
+    mouseDoubleClickEvent(event);
+}
+
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -497,7 +529,6 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
 }
-
 
 void KisTool::deleteSelection()
 {
@@ -548,6 +579,7 @@ QWidget* KisTool::createOptionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
+#ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
     if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
@@ -611,7 +643,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
         painter->endNativePainting();
     }
-    else if (m_outlinePaintMode == XOR_MODE) {
+    else
+#endif // HAVE_OPENGL
+        if (m_outlinePaintMode == XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
@@ -642,16 +676,26 @@ void KisTool::resetCursorStyle()
 void KisTool::slotToggleFgBg()
 {
     KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
-    KoColor c = resourceManager->foregroundColor();
-    resourceManager->setForegroundColor(resourceManager->backgroundColor());
-    resourceManager->setBackgroundColor(c);
+    KoColor newFg = resourceManager->backgroundColor();
+    KoColor newBg = resourceManager->foregroundColor();
+
+    /**
+     * NOTE: Some of color selectors do not differentiate foreground
+     *       and background colors, so if one wants them to end up
+     *       being set up to foreground color, it should be set the
+     *       last.
+     */
+    resourceManager->setBackgroundColor(newBg);
+    resourceManager->setForegroundColor(newFg);
 }
 
 void KisTool::slotResetFgBg()
 {
     KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
-    resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+
+    // see a comment in slotToggleFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
+    resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 

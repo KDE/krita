@@ -77,20 +77,21 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    setMode(KisTool::PAINT_MODE);
+
     if(m_dragging && m_closeSnappingActivated) {
         if (m_closeSnappingActivated) {
             m_points.append(m_points.first());
         }
         endStroke();
     } else {
-        setMode(KisTool::PAINT_MODE);
         m_dragging = true;
     }
 }
 
 void KisToolPolylineBase::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if(m_dragging) {
@@ -138,7 +139,7 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
             (basePoint - pixelToView(m_dragEnd)).manhattanLength() < SNAPPING_THRESHOLD;
 
         updateCanvasViewRect(QRectF(basePoint, 2 * QSize(SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH, SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH)).translated(-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH,-SNAPPING_HANDLE_RADIUS + PREVIEW_LINE_WIDTH));
-        KisToolPaint::requestUpdateOutline(event->point);
+        KisToolPaint::requestUpdateOutline(event->point, event);
     } else {
         KisToolPaint::mouseMoveEvent(event);
     }

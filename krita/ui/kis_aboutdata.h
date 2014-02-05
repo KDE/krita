@@ -24,13 +24,25 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <calligraversion.h>
+#include <calligragitversion.h>
 #include <KoIcon.h>
 
 KAboutData * newKritaAboutData()
 {
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
+
     KAboutData * aboutData = new KAboutData("krita", 0,
                                             ki18n("Krita"),
-                                            CALLIGRA_VERSION_STRING,
+                                            version.toLatin1(),
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
                                             ki18n("(c) 1999-2013 The Krita team.\n"),

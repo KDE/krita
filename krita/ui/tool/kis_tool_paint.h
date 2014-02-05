@@ -78,15 +78,21 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
-    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void activatePrimaryAction();
+    virtual void deactivatePrimaryAction();
+
+    virtual void activateAlternateAction(AlternateAction action);
+    virtual void deactivateAlternateAction(AlternateAction action);
+
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
-    virtual void requestUpdateOutline(const QPointF &outlineDocPoint);
+    virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
     /** If the paint tool support outline like brushes, set to true.
     *   If not (e.g. gradient tool), set to false. Default is false.
@@ -96,9 +102,13 @@ protected:
     }
 
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
-                                KisPaintOpSettings::OutlineMode outlineMode);
+                                        const KoPointerEvent *event,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
+    bool isOutlineEnabled() const;
+    void setOutlineEnabled(bool enabled);
+
     bool pickColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
@@ -164,7 +174,7 @@ private:
 private:
 
     bool m_specialHoverModifier;
-    QGridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionsWidgetLayout;
 
     bool m_supportOutline;
 
@@ -174,6 +184,7 @@ private:
 
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    bool m_isOutlineEnabled;
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

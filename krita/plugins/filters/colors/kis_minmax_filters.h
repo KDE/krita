@@ -29,8 +29,6 @@ public:
 
     KisFilterMax();
 
-    using KisFilter::process;
-
     void processImpl(KisPaintDeviceSP src,
                      const QRect& size,
                      const KisFilterConfiguration* config,
@@ -48,8 +46,6 @@ class KisFilterMin : public KisFilter
 public:
     KisFilterMin();
 public:
-
-    using KisFilter::process;
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& rect,

@@ -52,7 +52,7 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
-#include "KoResourceTaggingInterface.h"
+#include "KoResourceTaggingManager.h"
 
 class KoResourceItemChooser::Private
 {
@@ -65,7 +65,7 @@ public:
         , grayscalePreview(false)
     {}
     KoResourceModel* model;
-    KoResourceTaggingInterface* tagChooser;
+    KoResourceTaggingManager* tagManager;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     QToolButton  *viewModeButton;
@@ -161,12 +161,12 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
 
-    d->tagChooser = new KoResourceTaggingInterface(d->model, this);
+    d->tagManager = new KoResourceTaggingManager(d->model, this);
 
-    layout->addWidget(d->tagChooser->tagChooserWidget(), 0, 0);
+    layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
     layout->addWidget(d->splitter, 1, 0, 1, 2);
-    layout->addWidget(d->tagChooser->tagFilterWidget(), 2, 0, 1, 2);
+    layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 2);
     layout->addLayout(buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
@@ -275,7 +275,7 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
 void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
-    d->tagChooser->showTaggingBar(showSearchBar, showOpBar);
+    d->tagManager->showTaggingBar(showSearchBar, showOpBar);
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -477,7 +477,7 @@ KoResourceItemView *KoResourceItemChooser::itemView() const
 
 void KoResourceItemChooser::contextMenuRequested(const QPoint& pos)
 {
-    d->tagChooser->contextMenuRequested(currentResource(), pos);
+    d->tagManager->contextMenuRequested(currentResource(), pos);
 }
 
 void KoResourceItemChooser::setViewModeButtonVisible(bool visible)

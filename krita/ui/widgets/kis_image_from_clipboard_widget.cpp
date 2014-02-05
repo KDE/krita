@@ -74,7 +74,8 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, KisDoc2* doc, qint
     // create clipboard preview and show it   
     createClipboardPreview();
     grpClipboard->show();
-    
+    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));

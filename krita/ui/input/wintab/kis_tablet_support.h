@@ -24,6 +24,7 @@
 #include <QPointer>
 #include <QPointF>
 #include <QList>
+#include <QMap>
 #include <QTabletEvent>
 
 
@@ -68,6 +69,11 @@ struct QTabletDeviceData
     int tabletDeviceType;
     int tabletPointerType;
     int capabilityMask;
+#endif
+
+    // Added by Krita
+#ifdef Q_WS_WIN
+    QMap<quint8, quint8> buttonsMap;
 #endif
 };
 

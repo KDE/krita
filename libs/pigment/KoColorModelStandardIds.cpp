@@ -22,11 +22,11 @@
 #include <klocale.h>
 
 
-const KoID AlphaColorModelID("A", ki18n("Alpha"));
-const KoID RGBAColorModelID("RGBA", ki18n("Red Green Blue"));
+const KoID AlphaColorModelID("A", ki18n("Alpha mask"));
+const KoID RGBAColorModelID("RGBA", ki18n("RGB"));
 const KoID XYZAColorModelID("XYZA", ki18n("XYZ"));
-const KoID LABAColorModelID("LABA", ki18n("L a* b*"));
-const KoID CMYKAColorModelID("CMYKA", ki18n("Cyan Magenta Yellow Black"));
+const KoID LABAColorModelID("LABA", ki18n("L*a*b*"));
+const KoID CMYKAColorModelID("CMYKA", ki18n("CMYK"));
 const KoID GrayAColorModelID("GRAYA", ki18n("Grayscale"));
 const KoID GrayColorModelID("GRAY", ki18n("Grayscale (without transparency)"));
 const KoID YCbCrAColorModelID("YCbCrA", ki18n("YCbCr"));

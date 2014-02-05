@@ -83,7 +83,7 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 
 QRect KisSelectionDefaultBounds::bounds() const
 {
-    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
 }
 

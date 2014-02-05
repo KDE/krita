@@ -27,6 +27,9 @@ const QString EXPERIMENT_SMOOTHING_ENABLED = "Experiment/smoothing";
 const QString EXPERIMENT_SMOOTHING_VALUE = "Experiment/smoothingValue";
 const QString EXPERIMENT_SPEED_ENABLED = "Experiment/speedEnabled";
 const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
+const QString EXPERIMENT_WINDING_FILL = "Experiment/windingFill";
+const QString EXPERIMENT_HARD_EDGE = "Experiment/hardEdge";
+
 
 
 class KisExperimentOpOptionsWidget;
@@ -60,6 +63,8 @@ class ExperimentOption{
         qreal speed;
         bool isSmoothingEnabled;
         qreal smoothing;
+        bool windingFill;
+        bool hardEdge;
 
         void readOptionSetting(const KisPropertiesConfiguration* setting){
             isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
@@ -68,6 +73,8 @@ class ExperimentOption{
             speed = setting->getDouble(EXPERIMENT_SPEED_VALUE, 50.0);
             isSmoothingEnabled = setting->getBool(EXPERIMENT_SMOOTHING_ENABLED);
             smoothing = setting->getDouble(EXPERIMENT_SMOOTHING_VALUE, 20.0);
+            windingFill = setting->getBool(EXPERIMENT_WINDING_FILL);
+            hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
         }
 };
 

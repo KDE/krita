@@ -25,7 +25,6 @@ KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix,
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const

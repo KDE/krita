@@ -35,7 +35,7 @@
 
 
 KisToolText::KisToolText(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
 }
@@ -44,21 +44,74 @@ KisToolText::~KisToolText()
 {
 }
 
+void KisToolText::beginPrimaryAction(KoPointerEvent *event)
+{
+    setMode(KisTool::PAINT_MODE);
+
+    QPointF pos = convertToPixelCoord(event);
+    m_dragStart = m_dragCenter = m_dragEnd = pos;
+    event->accept();
+}
+
+void KisToolText::continuePrimaryAction(KoPointerEvent *event)
+{
+    QPointF pos = convertToPixelCoord(event);
+
+    if (event->modifiers() & Qt::AltModifier) {
+        QPointF trans = pos - m_dragEnd;
+        m_dragStart += trans;
+        m_dragEnd += trans;
+    } else {
+        QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
+                              ? m_dragCenter : m_dragStart);
+        // square?
+        if (event->modifiers() & Qt::ShiftModifier) {
+            double size = qMax(fabs(diag.x()), fabs(diag.y()));
+            double w = diag.x() < 0 ? -size : size;
+            double h = diag.y() < 0 ? -size : size;
+            diag = QPointF(w, h);
+        }
+
+        // resize around center point?
+        if (event->modifiers() & Qt::ControlModifier) {
+            m_dragStart = m_dragCenter - diag;
+            m_dragEnd = m_dragCenter + diag;
+        } else {
+            m_dragEnd = m_dragStart + diag;
+        }
+    }
+    updateArea();
+
+    m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
+                           (m_dragStart.y() + m_dragEnd.y()) / 2);
+    KisToolPaint::requestUpdateOutline(event->point, event);
+}
+
+void KisToolText::endPrimaryAction(KoPointerEvent *event)
+{
+    setMode(KisTool::HOVER_MODE);
+
+    updateArea();
+
+    finishRect(QRectF(m_dragStart, m_dragEnd).normalized());
+    event->accept();
+}
+
 void KisToolText::finishRect(const QRectF &rect)
 {
     if (rect.isNull())
         return;
 
     QRectF r = convertToPt(rect);
-    QString shapeString = (m_optionWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
+    QString shapeString = (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
     KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setPosition(r.topLeft());
         // If the shape is an artistic shape we keep the aspect ratio so the text isn't stretched
         if (shapeString == "ArtisticText") {
-            qreal ratio = rect.height()/shape->size().height();
-            r.setWidth(shape->size().width()*ratio);
+            qreal ratio = shape->size().width() / shape->size().height();
+            r.setWidth(convertToPt(rect).height() * ratio);
         }
         shape->setSize(r.size());
         addShape(shape);
@@ -75,17 +128,23 @@ void KisToolText::finishRect(const QRectF &rect)
 
 QList< QWidget* > KisToolText::createOptionWidgets()
 {
-    m_optionWidget = new KisTextToolOptionWidget();
+    m_optionsWidget = new KisTextToolOptionWidget();
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
     QList< QWidget* > widgets;
-    widgets.append(m_optionWidget);
+    widgets.append(m_optionsWidget);
     return widgets;
 }
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
-    if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+    if(m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
         return KisPainter::FillStyleNone;
-    return m_optionWidget->style();
+    return m_optionsWidget->style();
 }
 
 void KisToolText::slotActivateTextTool()

@@ -46,7 +46,7 @@
 */
 #include <locale>
 #ifndef gmic_version
-#define gmic_version 1580
+#define gmic_version 1582
 
 // Define environment variables.
 #ifndef gmic_split_compilation
@@ -139,14 +139,14 @@ namespace cimg_library {
 // Define the G'MIC exception class.
 //----------------------------------
 struct gmic_exception {
-  gmic_image<char> _command, _message;
+  gmic_image<char> _command_help, _message;
 
   gmic_exception() {}
 
   gmic_exception(const char *const command, const char *const message) {
     if (command) {
-      _command.assign(std::strlen(command)+1,1,1,1);
-      std::strcpy(_command._data,command);
+      _command_help.assign(std::strlen(command)+1,1,1,1);
+      std::strcpy(_command_help._data,command);
     }
     if (message) {
       _message.assign(std::strlen(message)+1,1,1,1);
@@ -157,8 +157,8 @@ struct gmic_exception {
   const char *what() const { // Give the error message returned by the G'MIC interpreter.
     return _message._data?_message._data:"";
   }
-  const char *command() const {
-    return _command._data?_command._data:"";
+  const char *command_help() const {
+    return _command_help._data?_command_help._data:"";
   }
 };
 
@@ -208,11 +208,14 @@ struct gmic {
   gmic& add_commands(const char *const data_commands,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256]);
+                     gmic_list<char> (&commands_has_arguments)[256],
+                     const char *const commands_file=0);
   gmic& add_commands(std::FILE *const file,
+                     const char *const filename,
                      gmic_list<char> (&commands_names)[256],
                      gmic_list<char> (&commands)[256],
-                     gmic_list<char> (&commands_has_arguments)[256]);
+                     gmic_list<char> (&commands_has_arguments)[256],
+                     const bool add_debug_infos=false);
   gmic_image<char> scope2string(const bool is_last_slash=true) const;
   gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
                                 const bool is_last_slash=true) const;
@@ -293,6 +296,7 @@ struct gmic {
   gmic& remove_images(gmic_list<T>& images, gmic_list<char>& images_names,
                       const gmic_image<unsigned int>& selection,
                       const unsigned int start, const unsigned int end);
+
   template<typename T>
   gmic& parse(const gmic_list<char>& commands_line,
 	      gmic_list<T> &images, gmic_list<char> &images_names) {
@@ -351,7 +355,8 @@ struct gmic {
   gmic_display instant_window[10];
 #endif // #if cimg_display!=0
   gmic_list<char> commands[256], commands_names[256], commands_has_arguments[256],
-    variables[256], variables_names[256], scope;
+    _variables[256], _variables_names[256], *variables[256], *variables_names[256],
+    commands_files, scope;
   gmic_list<unsigned int> dowhiles, repeatdones;
   gmic_image<unsigned char> background3d, light3d;
   gmic_image<float> pose3d;
@@ -359,10 +364,10 @@ struct gmic {
   float focale3d, light3d_x, light3d_y, light3d_z, specular_lightness3d, specular_shininess3d,
     _progress, *progress;
   bool is_released, is_debug, is_start, is_quit, is_return, is_double3d, is_default_type,
-    check_elif;
+    is_debug_infos, check_elif;
   int verbosity, render3d, renderd3d;
   volatile int _cancel, *cancel;
-  unsigned int nb_carriages;
+  unsigned int nb_carriages, debug_filename, debug_line;
   unsigned long reference_time;
 
 }; // End of the 'gmic' class.

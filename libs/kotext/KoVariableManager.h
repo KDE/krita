@@ -36,7 +36,7 @@ class KoVariableManagerPrivate;
  * A document can maintain a list of name-value pairs, which we call variables.
  * These initially exist solely in the variableManager as such name/value pairs
  * and can be managed by setValue(), value() and remove().
- * When the user chooses to use one of these pairs in the text-document he can create a
+ * When the user chooses to use one of these pairs in the text-document they can create a
  * new KoNamedVariable by calling KoVariableManager::createVariable()
  * use that and insert that into the text-document.
  * Changing the value will lead to directly change the value of all variables

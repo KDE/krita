@@ -384,11 +384,25 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (d->device) */
-    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    quint8* dstBytes = 0;
+    try {
+        dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "dst bytes";
+        return;
+    }
+
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     // Copy the relevant bytes of raw data from srcDev
-    quint8* srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
+    quint8* srcBytes = 0;
+    try {
+        srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "src bytes";
+        return;
+    }
+
     srcDev->readBytes(srcBytes, srcX, srcY, srcWidth, srcHeight);
 
     QRect selBounds = selection->bounds();
@@ -415,7 +429,14 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         /* Read the user selection (d->selection) bytes into an array, ready
         to merge in the next block*/
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
-        quint8* mergedSelectionBytes = new quint8[ totalBytes ];
+        quint8* mergedSelectionBytes = 0;
+        try {
+            mergedSelectionBytes = new quint8[ totalBytes ];
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
+            return;
+        }
+
         d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
@@ -763,7 +784,13 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
-    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    quint8* dstBytes = 0;
+    try {
+         dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bltFixed std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
+        return;
+    }
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     const quint8 *srcRowStart = srcDev->data() +
@@ -782,9 +809,17 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
         /* d->selection is a KisPaintDevice, so first a readBytes is performed to
         get the area of interest... */
         KisPaintDeviceSP selectionProjection = d->selection->projection();
-        quint8* selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
+        quint8* selBytes = 0;
+        try {
+            selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
+        }
+        catch (std::bad_alloc) {
+            delete[] dstBytes;
+            return;
+        }
+
         selectionProjection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
-        d->paramInfo.maskRowStart  = selBytes;
+        d->paramInfo.maskRowStart = selBytes;
         d->paramInfo.maskRowStride = srcWidth * selectionProjection->pixelSize();
     }
 
@@ -836,7 +871,13 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
-    quint8* dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    quint8* dstBytes = 0;
+    try {
+        dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
+    } catch (std::bad_alloc) {
+        warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
+        return;
+    }
     d->device->readBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     const quint8 *srcRowStart = srcDev->data() +
@@ -861,7 +902,14 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         /* Read the user selection (d->selection) bytes into an array, ready
         to merge in the next block*/
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
-        quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
+        quint8 * mergedSelectionBytes = 0;
+        try {
+            mergedSelectionBytes = new quint8[ totalBytes ];
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << totalBytes << "total bytes";
+            delete[] dstBytes;
+            return;
+        }
         d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
@@ -2460,30 +2508,30 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
     d->polygonMaskImage = QImage();
 }
 
-void KisPainter::setLockAlpha(bool protect)
-{
-    if(d->paramInfo.channelFlags.isEmpty()) {
-        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true);
-    }
+//void KisPainter::setLockAlpha(bool protect)
+//{
+//    if(d->paramInfo.channelFlags.isEmpty()) {
+//        d->paramInfo.channelFlags = d->colorSpace->channelFlags(true, true);
+//    }
 
-    QBitArray switcher =
-        d->colorSpace->channelFlags(protect, !protect);
+//    QBitArray switcher =
+//        d->colorSpace->channelFlags(protect, !protect);
 
-    if(protect) {
-        d->paramInfo.channelFlags &= switcher;
-    }
-    else {
-        d->paramInfo.channelFlags |= switcher;
-    }
+//    if(protect) {
+//        d->paramInfo.channelFlags &= switcher;
+//    }
+//    else {
+//        d->paramInfo.channelFlags |= switcher;
+//    }
 
-    Q_ASSERT(quint32(d->paramInfo.channelFlags.size()) == d->colorSpace->channelCount());
-}
+//    Q_ASSERT(quint32(d->paramInfo.channelFlags.size()) == d->colorSpace->channelCount());
+//}
 
-bool KisPainter::alphaLocked() const
-{
-    QBitArray switcher = d->colorSpace->channelFlags(false, true);
-    return !(d->paramInfo.channelFlags & switcher).count(true);
-}
+//bool KisPainter::alphaLocked() const
+//{
+//    QBitArray switcher = d->colorSpace->channelFlags(false, true);
+//    return !(d->paramInfo.channelFlags & switcher).count(true);
+//}
 
 void KisPainter::setRenderingIntent(KoColorConversionTransformation::Intent intent)
 {

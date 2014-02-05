@@ -46,7 +46,10 @@ void KoPatternTest::testRoundTripMd5()
     qDebug() << "PAT Name:" << patPattern.name();
     qDebug() << "PAT Filename:" << patPattern.filename();
 
-    QCOMPARE(pngPattern.image(), patPattern.image());
+    qDebug() << pngPattern.image().format();
+    qDebug() << patPattern.image().format();
+
+    QCOMPARE(pngPattern.image().convertToFormat(QImage::Format_ARGB32), patPattern.image().convertToFormat(QImage::Format_ARGB32));
     QCOMPARE(pngPattern.md5(), patPattern.md5());
 }
 

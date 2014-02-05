@@ -136,6 +136,11 @@ void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
     QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
+    if (channelInfo.size() != m_channelFlags.size()) {
+        m_channelFlags = QBitArray();
+    }
+
     for (int i = 0; i < m_channelFlags.size(); ++i) {
         if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
             selectedChannels++;
@@ -199,7 +204,14 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
     quint32 numPixels = rect.width() * rect.height();
 
-    quint8 *originalBytes = originalProjection->colorSpace()->allocPixelBuffer(numPixels);
+    quint8 *originalBytes = 0;
+    try {
+        originalBytes = new quint8[originalProjection->colorSpace()->pixelSize() * numPixels];
+    }
+    catch (std::bad_alloc) {
+        qFatal("KisImagePyramid::retrieveImageData: could not allocate enough memory (1)");
+    }
+
     originalProjection->readBytes(originalBytes, rect);
 
     if (m_displayFilter && m_useOcio
@@ -211,7 +223,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
             projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
 
-            float *dst = reinterpret_cast<float*>(projectionCs->allocPixelBuffer(numPixels));
+            float *dst = reinterpret_cast<float*>(new quint8[projectionCs->pixelSize() * numPixels]);
             half *src = reinterpret_cast<half*>(originalBytes);
 
             for (quint32 i = 0; i < numPixels; ++i) {
@@ -226,10 +238,19 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
 #endif
     }
     else {
+        QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+        if (!m_channelFlags.size() == channelInfo.size()) {
+            setChannelFlags(QBitArray());
+        }
         if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
+            quint8 *dst = 0;
+            try {
+                 dst = new quint8[projectionCs->pixelSize() * numPixels];
+            } catch (std::bad_alloc) {
+                qFatal("KisImagePyramid::retrieveImageData: could not allocate enough memory (2)");
+            }
 
-            quint8 *dst = projectionCs->allocPixelBuffer(numPixels);
-            QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
 
@@ -273,7 +294,14 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
         }
     }
 
-    quint8 *dstBytes = m_monitorColorSpace->allocPixelBuffer(numPixels);
+    quint8 *dstBytes = 0;
+    try {
+        dstBytes = new quint8[m_monitorColorSpace->pixelSize() * numPixels];
+    }
+    catch (std::bad_alloc) {
+        qFatal("KisImagePyramid::retrieveImageData: could not allocate enough memory (3)");
+    }
+
     projectionCs->convertPixelsTo(originalBytes, dstBytes, m_monitorColorSpace, numPixels, m_renderingIntent, m_conversionFlags);
 
     m_pyramid[ORIGINAL_INDEX]->writeBytes(dstBytes, rect);

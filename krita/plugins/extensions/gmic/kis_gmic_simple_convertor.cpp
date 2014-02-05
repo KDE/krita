@@ -310,7 +310,7 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
     int tileHeight = it->numContiguousRows(0);
     Q_ASSERT(tileWidth == 64);
     Q_ASSERT(tileHeight == 64);
-    quint8 * convertedTile = rgbaFloat32bitcolorSpace->allocPixelBuffer(tileWidth * tileHeight);
+    quint8 * convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
 
     // grayscale and rgb case does not have alpha, so let's fill 4th channel of rgba tile with opacity opaque
     if (gmicImage._spectrum == 1 || gmicImage._spectrum == 3)
@@ -444,7 +444,7 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
     int tileHeight = it->numContiguousRows(0);
     Q_ASSERT(tileWidth == 64);
     Q_ASSERT(tileHeight == 64);
-    quint8 * convertedTile = rgbaFloat32bitcolorSpace->allocPixelBuffer(tileWidth * tileHeight);
+    quint8 * convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
 
     while (rowsRemaining > 0) {
 
@@ -531,7 +531,7 @@ void KisGmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
-    quint8 * floatRGBApixel = rgbaFloat32bitcolorSpace->allocPixelBuffer(optimalBufferSize);
+    quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
     int pos = 0;
     for (int y = 0; y < rc.height(); y++)
@@ -584,7 +584,7 @@ void KisGmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, 
     float r,g,b,a;
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
-    quint8 * floatRGBApixel = rgbaFloat32bitcolorSpace->allocPixelBuffer(optimalBufferSize);
+    quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
 
     KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent;

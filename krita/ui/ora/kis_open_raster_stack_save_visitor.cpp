@@ -114,6 +114,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         QDomElement imageElt = d->layerStack.createElement("image");
         int width = layer->image()->width();
         int height = layer->image()->height();
+        imageElt.setAttribute("version", "0.0.1");
         imageElt.setAttribute("w", width);
         imageElt.setAttribute("h", height);
         imageElt.appendChild(elt);

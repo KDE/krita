@@ -1,26 +1,38 @@
+/* This file is part of the KDE project
+   Copyright (C) 2014, Victor Lafon <metabolic.ewilan@hotmail.fr>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either 
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public 
+   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "KoXmlManifest.h"
 
-//Ctor
 KoXmlManifest::KoXmlManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
 }
 
-//Ctor
-//- file : QFile associated to a XML document
 KoXmlManifest::KoXmlManifest(QFile *file):KoXmlGenerator(file,"package")
 {
 
 }
 
-//Dtor
 KoXmlManifest::~KoXmlManifest()
 {
 
 }
 
-//Used for sorting file
 KoXmlManifest::TagEnum KoXmlManifest::getTagEnumValue(QString tagName)
 {
     if (tagName=="brushes") {
@@ -52,9 +64,6 @@ KoXmlManifest::TagEnum KoXmlManifest::getTagEnumValue(QString tagName)
     }
 }
 
-//Check/sort the file to be easily comprehensible
-//Any tag which doesn't exist in the enum TagList will be considered as Other
-//and will be placed at the end of the file
 void KoXmlManifest::checkSort()
 {
     QDomNode prev;
@@ -107,9 +116,7 @@ void KoXmlManifest::merge(QDomNode dest,QDomNode src)
     root.removeChild(src);
 }
 
-//Add tag with value as Text
-//Replace Value if already exists
-//If the file is empty (like in Ctor), bool value is set on true (default: false)
+
 QDomElement KoXmlManifest::addTag(QString fileTypeName,QString fileName,bool emptyFile)
 {
     fileTypeName=fileTypeName.toLower();

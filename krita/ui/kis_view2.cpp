@@ -973,8 +973,6 @@ void KisView2::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-        KisConfig cfg;
-
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
         // compositing, and they don't connect to the confignotifier

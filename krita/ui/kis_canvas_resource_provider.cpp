@@ -145,6 +145,7 @@ void KisCanvasResourceProvider::resetDisplayProfile(int screen)
 {
     KisConfig cfg;
     m_displayProfile = cfg.displayProfile(screen);
+    //qDebug() << "display profile for screen" << screen << m_displayProfile;
     emit sigDisplayProfileChanged(m_displayProfile);
 }
 

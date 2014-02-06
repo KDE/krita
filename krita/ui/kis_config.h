@@ -91,7 +91,7 @@ public:
     void setCursorStyle(enumCursorStyle style) const;
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override = false) const;
+    void setMonitorProfile(const QString & monitorProfile, bool override) const;
     static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1) const;
 

@@ -334,8 +334,6 @@ qint32 KoPattern::height() const
 void KoPattern::setImage(const QImage& image)
 {
     m_image = image;
-    m_image.detach();
-
     setValid(true);
 }
 

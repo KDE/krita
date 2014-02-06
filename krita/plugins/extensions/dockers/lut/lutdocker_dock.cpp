@@ -217,6 +217,8 @@ void LutDockerDock::gammaSliderReleased()
 
 void LutDockerDock::updateDisplaySettings()
 {
+    if (!m_canvas || !m_canvas->view() || !m_canvas->view()->image()) return;
+
     m_page->setEnabled(m_canvas->canvasIsOpenGL() && m_canvas->view()->image()->colorSpace()->colorDepthId().id().startsWith("F"));
 
 //    qDebug() << "updateDisplaySettings();" << m_chkUseOcio->isChecked() << m_ocioConfig << m_canvas->canvasIsOpenGL();

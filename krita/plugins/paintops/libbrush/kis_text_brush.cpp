@@ -27,6 +27,15 @@
 #include "kis_gbr_brush.h"
 #include "kis_brushes_pipe.h"
 
+#include <kis_threaded_text_rendering_workaround.h>
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+#include <QApplication>
+#include <QWidget>
+#include <QThread>
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+
 class KisTextBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
 public:
@@ -66,6 +75,18 @@ public:
     }
 
     static QImage renderChar(const QString& text, const QFont &font) {
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+        QWidget *focusWidget = qApp->focusWidget();
+        if (focusWidget) {
+            QThread *guiThread = focusWidget->thread();
+            if (guiThread != QThread::currentThread()) {
+                qWarning() << "WARNING: Rendering text in non-GUI thread!"
+                           << "That may lead to hangups and crashes on some"
+                           << "versions of X11/Qt!";
+            }
+        }
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
         QFontMetrics metric(font);
         QRect rect = metric.boundingRect(text);
 

@@ -42,16 +42,44 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty("requiredBrushFile", brushFileName);
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
 {
+    QDomElement element;
+
     QString brushDefinition = setting->getString("brush_definition");
     if (!brushDefinition.isEmpty()) {
         QDomDocument d;
         d.setContent( brushDefinition, false );
-        QDomElement e = d.firstChildElement("Brush" );
-        m_brush = KisBrush::fromXML( e );
+        element = d.firstChildElement("Brush" );
+    }
+
+    return element;
+}
+
+void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    QDomElement element = getBrushXMLElement(setting);
+
+    if (!element.isNull()) {
+        m_brush = KisBrush::fromXML(element);
     }
 }
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+
+#include "kis_text_brush_factory.h"
+
+bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration* setting)
+{
+    static QString textBrushId = KisTextBrushFactory().id();
+
+    QDomElement element = getBrushXMLElement(setting);
+    QString brushType = element.attribute("type");
+
+    return brushType == textBrushId;
+}
+
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 KisBrushSP KisBrushOption::brush() const
 {

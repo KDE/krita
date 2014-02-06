@@ -31,7 +31,12 @@ QStringList KisPaintOpFactory::whiteListedCompositeOps() const
     return m_whiteListedCompositeOps;
 }
 
-
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+void KisPaintOpFactory::preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings)
+{
+    Q_UNUSED(settings);
+}
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 void KisPaintOpFactory::setUserVisible(PaintopVisibility visibility)
 {

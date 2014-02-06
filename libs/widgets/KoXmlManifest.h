@@ -37,14 +37,14 @@ public:
      * Create a virtual XML file.
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlManifest(QString="manifest");
+    KoXmlManifest(QString xmlName="manifest");
     
     /**
      * Constructor
      * Create a virtual XML file, extracting data from an existing file.
      * @param file the virtual file used as data for Xml file.
      */
-    KoXmlManifest(QFile*);
+    KoXmlManifest(QFile *file);
     
     ///Destructor
     ~KoXmlManifest();

@@ -23,6 +23,7 @@
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorSpaceMaths.h>
 
 #include "kis_display_filter.h"
 #include "kis_painter.h"
@@ -215,26 +216,41 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     originalProjection->readBytes(originalBytes, rect);
 
     if (m_displayFilter && m_useOcio
-            && projectionCs->colorModelId() == RGBAColorModelID
-            && ( projectionCs->colorDepthId() == Float16BitsColorDepthID
-                 || projectionCs->colorDepthId() == Float32BitsColorDepthID)) {
+            && projectionCs->colorModelId() == RGBAColorModelID) {
 #ifdef HAVE_OCIO
-#ifdef HAVE_OPENEXR	    
-        if (projectionCs->colorDepthId() == Float16BitsColorDepthID) {
+        if (projectionCs->colorDepthId() != Float32BitsColorDepthID) {
+            const KoColorSpace *originalCs = m_originalImage->projection()->colorSpace();
             projectionCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
 
-            float *dst = reinterpret_cast<float*>(new quint8[projectionCs->pixelSize() * numPixels]);
-            half *src = reinterpret_cast<half*>(originalBytes);
+            KoChannelInfo::enumChannelValueType cT = originalCs->channels()[0]->channelValueType();
 
-            for (quint32 i = 0; i < numPixels; ++i) {
-                dst[i] = src[i];
+            float *dst = new float[projectionCs->channelCount() * numPixels];
+            for (uint i = 0; i < numPixels; ++i) {
+                if (cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8) {
+                    dst[i * 4 + 0] = KoColorSpaceMaths<quint8, float>::scaleToA(originalBytes[i * 4 + 2]);
+                    dst[i * 4 + 1] = KoColorSpaceMaths<quint8, float>::scaleToA(originalBytes[i * 4 + 1]);
+                    dst[i * 4 + 2] = KoColorSpaceMaths<quint8, float>::scaleToA(originalBytes[i * 4 + 0]);
+                    dst[i * 4 + 3] = KoColorSpaceMaths<quint8, float>::scaleToA(originalBytes[i * 4 + 3]);
+                }
+                else if (cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16) {
+                    dst[i * 4 + 0] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<quint16*>(originalBytes)[i * 4 + 2]);
+                    dst[i * 4 + 1] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<quint16*>(originalBytes)[i * 4 + 1]);
+                    dst[i * 4 + 2] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<quint16*>(originalBytes)[i * 4 + 0]);
+                    dst[i * 4 + 3] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<quint16*>(originalBytes)[i * 4 + 3]);
+                }
+#ifdef HAVE_OPENEXR
+                else if (cT == KoChannelInfo::FLOAT16) {
+                    dst[i * 4 + 0] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<half*>(originalBytes)[i * 4 + 0]);
+                    dst[i * 4 + 1] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<half*>(originalBytes)[i * 4 + 1]);
+                    dst[i * 4 + 2] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<half*>(originalBytes)[i * 4 + 2]);
+                    dst[i * 4 + 3] = KoColorSpaceMaths<quint16, float>::scaleToA(reinterpret_cast<half*>(originalBytes)[i * 4 + 3]);
+                }
+#endif
             }
             delete[] originalBytes;
             originalBytes = reinterpret_cast<quint8*>(dst);
-
         }
         m_displayFilter->filter(originalBytes, originalBytes, numPixels);
-#endif
 #endif
     }
     else {
@@ -512,3 +528,4 @@ void KisImagePyramid::configChanged()
     KisConfig cfg;
     m_useOcio = cfg.useOcio();
 }
+

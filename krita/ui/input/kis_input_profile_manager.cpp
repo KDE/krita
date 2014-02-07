@@ -177,6 +177,13 @@ QList< KisAbstractInputAction * > KisInputProfileManager::actions()
     return d->actions;
 }
 
+
+struct ProfileEntry {
+    QString name;
+    QString fullpath;
+    int version;
+};
+
 void KisInputProfileManager::loadProfiles()
 {
     //Remove any profiles that already exist
@@ -187,11 +194,6 @@ void KisInputProfileManager::loadProfiles()
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
     QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
-    struct ProfileEntry {
-        QString name;
-        QString fullpath;
-        int version;
-    };
 
     QMap<QString, QList<ProfileEntry> > profileEntries;
 

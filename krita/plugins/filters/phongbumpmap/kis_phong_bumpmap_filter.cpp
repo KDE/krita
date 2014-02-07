@@ -20,6 +20,7 @@
 #include "kis_phong_bumpmap_config_widget.h"
 #include "phong_pixel_processor.h"
 
+#include "kis_debug.h"
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
 #include "KoUpdater.h"
@@ -64,7 +65,6 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     KoChannelInfo *m_heightChannel = 0;
 
     foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
-        qDebug() << "channel" << channel->name() << "user chosen channel" << userChosenHeightChannel;
         if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
         }
@@ -72,7 +72,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (!m_heightChannel) {
         m_heightChannel = device->colorSpace()->channels().first();
     }
-    Q_ASSERT(m_heightChannel);
+    KIS_ASSERT_RECOVER_RETURN(m_heightChannel);
 
     QRect inputArea = applyRect;
     QRect outputArea = applyRect;

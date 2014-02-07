@@ -21,20 +21,8 @@
 
 #include "../kis_dynamic_sensor.h"
 
-#include <kis_paintop.h>
-#include <KoID.h>
 
 #include "kis_paint_information.h"
-
-class KisDynamicSensorFuzzy : public KisDynamicSensor
-{
-public:
-    KisDynamicSensorFuzzy();
-    virtual ~KisDynamicSensorFuzzy() { }
-    virtual qreal value(const KisPaintInformation &info) {
-        return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
-    }
-};
 
 class KisDynamicSensorSpeed : public KisDynamicSensor
 {

@@ -17,11 +17,7 @@
  */
 
 #include "kis_dynamic_sensors.h"
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
-{
-    setMinimumLabel(QString()); // TODO use dice icon
-    setMaximumLabel(QString());
-}
+
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {

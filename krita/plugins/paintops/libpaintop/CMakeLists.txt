@@ -60,6 +60,7 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
+    sensors/kis_dynamic_sensor_fuzzy.cpp
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
@@ -81,6 +82,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     sensors/SensorFadeConfiguration.ui
+
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )

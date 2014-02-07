@@ -20,6 +20,7 @@
 #include "kis_pressure_opacity_option.h"
 #include "sensors/kis_dynamic_sensor_list.h"
 #include "sensors/kis_dynamic_sensor_drawing_angle.h"
+#include "sensors/kis_dynamic_sensor_fuzzy.h"
 #include <klocale.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
@@ -31,8 +32,11 @@ KisPressureRotationOption::KisPressureRotationOption()
           m_canvasAxisXMirrored(false),
           m_canvasAxisYMirrored(false)
 {
-    setMinimumLabel(i18n("0°"));
-    setMaximumLabel(i18n("360°"));
+
+     setMinimumLabel(i18n("0°"));
+     setMaximumLabel(i18n("360°"));
+     m_fuzzyflag = true;
+
 }
 
 double KisPressureRotationOption::apply(const KisPaintInformation & info) const
@@ -48,8 +52,44 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
         1.0 - computeValue(info) :
         0.5 + computeValue(info);
 
-    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
-}
+    /* Special Case for Fuzzy Sensor to provide for Positive and Negative Rotation */
+    KisDynamicSensor *sensor = this->sensor();
+    KisDynamicSensorList *sensorList;
+    if (sensor->id() == FuzzyId.id() ||
+        ((sensorList = dynamic_cast<KisDynamicSensorList*>(sensor)) &&
+         (sensor = sensorList->getSensor(FuzzyId.id()))))
+    {
+
+            KisDynamicSensorFuzzy *s =
+                dynamic_cast<KisDynamicSensorFuzzy*>(sensor);
+            Q_ASSERT(s);
+            if(s->rotationModeEnabled())
+            {
+                if(m_fuzzyflag == true)
+                {
+                    m_fuzzyflag = false;
+                    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
+                }
+                else
+                {
+                    m_fuzzyflag = true;
+                    return ((2.0*M_PI)-fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
+
+                }
+            }
+            else
+            {
+                return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
+            }
+    }
+    else //If Fuzzy is not selected at all
+    {
+        return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
+
+    }
+
+
+ }
 
 void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {

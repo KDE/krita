@@ -24,6 +24,7 @@
 #include "sensors/kis_dynamic_sensor_drawing_angle.h"
 #include "sensors/kis_dynamic_sensor_time.h"
 #include "sensors/kis_dynamic_sensor_fade.h"
+#include "sensors/kis_dynamic_sensor_fuzzy.h"
 #include "sensors/kis_dynamic_sensor_list.h"
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id)
@@ -212,3 +213,4 @@ bool KisDynamicSensor::dependsOnCanvasRotation() const
 {
     return true;
 }
+

@@ -34,12 +34,17 @@ public:
     KisPressureRotationOption();
     double apply(const KisPaintInformation & info) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-
     void applyFanCornersInfo(KisPaintOp *op);
+    bool mutable m_fuzzyflag ;
+
 private:
     qreal m_defaultAngle;
     bool m_canvasAxisXMirrored;
     bool m_canvasAxisYMirrored;
+
+
+
+
 
 };
 

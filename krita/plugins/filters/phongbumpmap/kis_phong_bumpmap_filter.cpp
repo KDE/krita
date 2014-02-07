@@ -64,10 +64,15 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     KoChannelInfo *m_heightChannel = 0;
 
     foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
+        qDebug() << "channel" << channel->name() << "user chosen channel" << userChosenHeightChannel;
         if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
         }
     }
+    if (!m_heightChannel) {
+        m_heightChannel = device->colorSpace()->channels().first();
+    }
+    Q_ASSERT(m_heightChannel);
 
     QRect inputArea = applyRect;
     QRect outputArea = applyRect;

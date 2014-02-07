@@ -27,6 +27,7 @@
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 #include <boost/type_traits.hpp>
+#include <boost/utility/enable_if.hpp>
 
 template <typename T>
 struct __impl_has_typedef_needs_preinitialization {

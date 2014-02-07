@@ -1033,3 +1033,13 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
 {
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
+
+int KisConfig::numDefaultLayers() const
+{
+    return m_cfg.readEntry("NumberOfLayersForNewImage", 2);
+}
+
+void KisConfig::setNumDefaultLayers(int num)
+{
+    m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}

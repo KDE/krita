@@ -53,6 +53,11 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+
 #include <kis_paintop_preset.h>
 #include <KoPattern.h>
 #include <kis_config.h>
@@ -210,6 +215,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
+
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable

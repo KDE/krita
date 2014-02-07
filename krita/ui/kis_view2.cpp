@@ -119,7 +119,6 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 
-#include <QDebug>
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
@@ -965,7 +964,9 @@ void KisView2::updateGUI()
 
 void KisView2::slotConfigChanged()
 {
-    mainWindow()->guiFactory()->refreshActionProperties();
+	if (mainWindow() && mainWindow()->guiFactory()) {
+	    mainWindow()->guiFactory()->refreshActionProperties();
+	}
 }
 
 void KisView2::slotPreferences()

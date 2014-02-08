@@ -1098,6 +1098,24 @@ QByteArray QuerySchema::tableAlias(uint position) const
     return d->tableAliases.value(position);
 }
 
+QByteArray QuerySchema::tableAlias(const QString& tableName) const
+{
+    const int pos = tablePosition(tableName);
+    if (pos == -1) {
+        return QByteArray();
+    }
+    return d->tableAliases.value(pos);
+}
+
+QString QuerySchema::tableAliasOrName(const QString& tableName) const
+{
+    const int pos = tablePosition(tableName);
+    if (pos == -1) {
+        return QString();
+    }
+    return KexiDB::iifNotEmpty(d->tableAliases.value(pos), tableName);
+}
+
 int QuerySchema::tablePositionForAlias(const QByteArray& name) const
 {
     return d->tablePositionForAlias(name);

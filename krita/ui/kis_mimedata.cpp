@@ -62,7 +62,8 @@ QStringList KisMimeData::formats () const
         f << "application/x-krita-node"
           << "application/x-krita-node-url"
           << "application/x-qt-image"
-          << "application/zip";
+          << "application/zip"
+          << "application/x-krita-node-internal-pointer";
     }
     return f;
 }
@@ -123,8 +124,17 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         file.close();
 
         return QUrl(temporaryPath).toEncoded();
-    }
-    else {
+    } else if (mimetype == "application/x-krita-node-internal-pointer") {
+
+        QDomDocument doc("krita_internal_node_pointer");
+        QDomElement element = doc.createElement("pointer");
+        element.setAttribute("application_pid", (qint64)QApplication::applicationPid());
+        element.setAttribute("pointer_value", (qint64)m_node.data());
+        doc.appendChild(element);
+
+        return doc.toByteArray();
+
+    } else {
         return QMimeData::retrieveData(mimetype, preferredType);
     }
 }
@@ -158,8 +168,27 @@ KisNodeSP KisMimeData::tryLoadInternalNode(const QMimeData *data,
                                            KisShapeController *shapeController,
                                            bool /* IN-OUT */ &copyNode)
 {
+    // Qt 4.7 way
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
     KisNodeSP node = mimedata ? mimedata->node() : 0;
+
+    // Qt 4.8 way
+    if (!node && data->hasFormat("application/x-krita-node-internal-pointer")) {
+        QByteArray nodeXml = data->data("application/x-krita-node-internal-pointer");
+
+        QDomDocument doc;
+        doc.setContent(nodeXml);
+
+        QDomElement element = doc.documentElement();
+        qint64 pid = element.attribute("application_pid").toLongLong();
+        qint64 pointerValue = element.attribute("pointer_value").toLongLong();
+
+        if (pid == QApplication::applicationPid() &&
+            pointerValue) {
+
+            node = reinterpret_cast<KisNode*>(pointerValue);
+        }
+    }
 
     if (node && (copyNode || node->graphListener() != image.data())) {
         node = node->clone();

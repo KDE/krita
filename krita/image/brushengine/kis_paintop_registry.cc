@@ -80,6 +80,8 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset)
 {
+    if (!preset) return;
+
     KisPaintOpFactory *f = value(preset->paintOp().id());
     f->preinitializePaintOpIfNeeded(preset->settings());
 }

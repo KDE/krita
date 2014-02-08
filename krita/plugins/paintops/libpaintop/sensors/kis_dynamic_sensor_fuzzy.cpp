@@ -35,7 +35,7 @@ QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidg
 {
     QWidget *w = new QWidget(parent);
 
-    QCheckBox *rotationModeEnabled = new QCheckBox(i18n("Positve and\nNegative\nRotation"), w);
+    QCheckBox *rotationModeEnabled = new QCheckBox(i18n("Positive and\nNegative\nRotation"), w);
 
     connect(rotationModeEnabled, SIGNAL(stateChanged(int)), SLOT(setRotationModeEnabled(int)));
     connect(rotationModeEnabled, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));

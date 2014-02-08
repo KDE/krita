@@ -44,7 +44,7 @@ public:
      * Create a virtual XML file, extracting data from an existing file.
      * @param file the virtual file used as data for Xml file.
      */
-    KoXmlManifest(QFile *file);
+    KoXmlManifest(QIODevice *device);
     
     ///Destructor
     ~KoXmlManifest();

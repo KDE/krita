@@ -49,7 +49,7 @@ public:
      * @param file the virtual file used as data for Xml file.
      * @param rootName the name of the root tag that should be contained in the file.
      */
-    KoXmlGenerator(QFile *file,QString rootName="");
+    KoXmlGenerator(QIODevice *device,QString rootName="");
 
     ///Destructor
     virtual ~KoXmlGenerator();

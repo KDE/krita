@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Lesser General Public 
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "KoXmlManifest.h"
+#include "KoXmlResourceBundleManifest.h"
 
 KoXmlManifest::KoXmlManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -22,7 +22,7 @@ KoXmlManifest::KoXmlManifest(QString xmlName):KoXmlGenerator(xmlName)
     xmlDocument.appendChild(root);
 }
 
-KoXmlManifest::KoXmlManifest(QFile *file):KoXmlGenerator(file,"package")
+KoXmlManifest::KoXmlManifest(QIODevice *device):KoXmlGenerator(device,"package")
 {
 
 }

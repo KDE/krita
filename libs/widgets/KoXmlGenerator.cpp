@@ -29,8 +29,11 @@ KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
     root=xmlDocument.documentElement();
 }
 
-KoXmlGenerator::KoXmlGenerator(QFile *file,QString rootTag):xmlDocument(file->fileName().section('.',0,0))
+KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag)
 {
+    QFile *file=(QFile*)device;
+    xmlDocument=QDomDocument(file->fileName().section('.',0,0));
+
     if (!file->open(QIODevice::ReadOnly)) {
         exit(1);
     }

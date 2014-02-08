@@ -43,7 +43,7 @@ public:
      * Create a virtual XML file, extracting data from an existing file.
      * @param file the virtual file used as data for Xml file.
      */
-    KoXmlMeta(QFile *file);
+    KoXmlMeta(QIODevice *device);
 
     /**
      * Constructor

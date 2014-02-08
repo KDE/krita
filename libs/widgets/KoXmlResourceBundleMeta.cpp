@@ -15,7 +15,7 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "KoXmlMeta.h"
+#include "KoXmlResourceBundleMeta.h"
 
 KoXmlMeta::KoXmlMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -23,7 +23,7 @@ KoXmlMeta::KoXmlMeta(QString xmlName):KoXmlGenerator(xmlName)
     xmlDocument.appendChild(root);
 }
 
-KoXmlMeta::KoXmlMeta(QFile *file):KoXmlGenerator(file)
+KoXmlMeta::KoXmlMeta(QIODevice *device):KoXmlGenerator(device)
 {
 
 }

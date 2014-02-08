@@ -68,8 +68,8 @@ set(kowidgets_LIB_SRCS
     KoResourceFiltering.cpp
     
     KoXmlGenerator.cpp
-	KoXmlManifest.cpp
-	KoXmlMeta.cpp
+	KoXmlResourceBundleManifest.cpp
+	KoXmlResourceBundleMeta.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -138,8 +138,8 @@ install( FILES
     KoDockWidgetTitleBarButton.h
 
 	KoXmlGenerator.h
-	KoXmlManifest.h
-	KoXmlMeta.h
+	KoXmlResourceBundleManifest.h
+	KoXmlResourceBundleMeta.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

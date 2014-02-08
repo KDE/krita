@@ -1306,7 +1306,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                         s_additional_joins += QString::fromLatin1("LEFT OUTER JOIN %1 AS %2 ON %3.%4=%5.%6")
                                               .arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
                                               .arg(internalUniqueTableAlias)
-                                              .arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
+                                              .arg(escapeIdentifier(querySchema.tableAliasOrName(f->table()->name()), options.identifierEscaping))
                                               .arg(escapeIdentifier(f->name(), options.identifierEscaping))
                                               .arg(internalUniqueTableAlias)
                                               .arg(escapeIdentifier(boundField->name(), options.identifierEscaping));
@@ -1407,7 +1407,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         if (!sql.isEmpty())
             s = QLatin1String(", ");
         if (querySchema.masterTable())
-            s += (escapeIdentifier(querySchema.masterTable()->name()) + QLatin1Char('.'));
+            s += (escapeIdentifier(querySchema.tableAliasOrName(querySchema.masterTable()->name())) + QLatin1Char('.'));
         s += driver->behaviour()->ROW_ID_FIELD_NAME;
         sql += s;
     }

@@ -475,7 +475,7 @@ public:
      now call tableAlias(1) to see if we have used alias for this column (t2.d)
      or just a table name (table2.d).
 
-     These checkings are performed e.g. by Connection::queryStatement()
+     These checkings are performed e.g. by Connection::selectStatement()
      to construct a statement string maximally identical to originally
      defined query statement.
 

@@ -64,11 +64,6 @@ KisDynamicSensor* KisMultiSensorsSelector::currentHighlighted()
     return d->model->getSensor(d->form.sensorsList->currentIndex());
 }
 
-KisDynamicSensor* KisMultiSensorsSelector::current()
-{
-    return 0;
-}
-
 void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;

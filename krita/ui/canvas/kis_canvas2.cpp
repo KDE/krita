@@ -58,6 +58,7 @@
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
+#include "kis_deferred_signal.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -480,13 +481,20 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
 {
     KisImageWSP image = this->image();
 
-    Q_ASSERT(renderingIntent < 4);
+    KIS_ASSERT_RECOVER_RETURN(renderingIntent < 4);
 
     m_d->monitorProfile = monitorProfile;
     m_d->renderingIntent = renderingIntent;
     m_d->conversionFlags = conversionFlags;
 
-    image->barrierLock();
+    if (!image->tryBarrierLock()) {
+        boost::function<void ()> callback(
+            boost::bind(&KisCanvas2::setMonitorProfile, this,
+                        monitorProfile, renderingIntent, conversionFlags));
+
+        KisDeferredSignal::deferSignal(1000, callback);
+        return;
+    }
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
@@ -508,7 +516,14 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
 void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     KisImageWSP image = this->image();
-    image->barrierLock();
+
+    if (!image->tryBarrierLock()) {
+        boost::function<void ()> callback(
+            boost::bind(&KisCanvas2::setDisplayFilter, this, displayFilter));
+
+        KisDeferredSignal::deferSignal(1000, callback);
+        return;
+    }
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL

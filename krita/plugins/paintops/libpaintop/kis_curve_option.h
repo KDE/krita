@@ -55,9 +55,6 @@ public:
     qreal minValue() const;
     qreal maxValue() const;
     qreal value() const;
-    KisCubicCurve curve() const;
-    
-    void setCurve(const KisCubicCurve& curve);
 
     KisDynamicSensor* sensor() const;
     void setSensor(KisDynamicSensor* sensor);

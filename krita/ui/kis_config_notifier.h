@@ -41,34 +41,17 @@ public:
      */
     void notifyConfigChanged(void);
 
-public slots:
-    /**
-     * This method forcefully touches the config file which makes other
-     * instances of Krita to reread the config and hotkeys.
-     */
-    void forceNotifyOtherInstances();
-
 signals:
     /**
      * This signal is emitted whenever notifyConfigChanged() is called.
      */
     void configChanged(void);
 
-private slots:
-    void configFileDirectoryChanged();
-    void fileChangedCompressed();
-
-private:
-    inline QString configFileName() const;
-
 private:
     KisConfigNotifier();
     ~KisConfigNotifier();
     KisConfigNotifier(const KisConfigNotifier&);
     KisConfigNotifier operator=(const KisConfigNotifier&);
-
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
 
 #endif // KIS_CONFIG_NOTIFIER_H_

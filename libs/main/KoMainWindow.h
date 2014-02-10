@@ -192,8 +192,6 @@ signals:
     /// and the document anymore.
     void loadCompleted();
 
-    void keyBindingsChanged();
-
 public slots:
 
     /**

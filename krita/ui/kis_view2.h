@@ -204,7 +204,6 @@ signals:
 
 private slots:
 
-    void slotConfigChanged();
     void slotPreferences();
     void slotBlacklistCleanup();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);

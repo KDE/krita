@@ -75,15 +75,6 @@ KisConfig::~KisConfig()
     s_synchLocker.unlock();
 }
 
-int KisConfig::modificationSeqNo() const
-{
-    return m_cfg.readEntry("modificationSeqNo", 0);
-}
-
-void KisConfig::updateModificationSeqNo()
-{
-    m_cfg.writeEntry("modificationSeqNo", modificationSeqNo() + 1);
-}
 
 bool KisConfig::useProjections() const
 {

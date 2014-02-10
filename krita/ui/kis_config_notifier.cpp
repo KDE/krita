@@ -28,16 +28,6 @@ KisConfigNotifier::KisConfigNotifier()
 KisConfigNotifier::~KisConfigNotifier()
 {
     dbgRegistry << "deleting KisConfigNotifier";
-
-#if QT_VERSION < 0x040800
-    /**
-     * Qt 4.7 has a bug in destruction of QFileSystemWatcher which
-     * leads to a hangup. It is probably some threading race
-     * condition.  Anyway, the bug is not reproducible on Qt 4.8, so
-     * just leak the pointer when running on a buggy Qt.
-     */
-    const_cast<QScopedPointer<KisConfigNotifier::Private>*>(&m_d)->take();
-#endif
 }
 
 KisConfigNotifier *KisConfigNotifier::instance()

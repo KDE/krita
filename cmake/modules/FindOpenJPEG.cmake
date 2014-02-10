@@ -14,7 +14,7 @@ PATHS
     /usr/local/include/openjpeg
     /usr/local/include
     /usr/include/openjpeg
-    /usr/include/openjpegr-1.5
+    /usr/include/openjpeg-1.5
     /usr/include
 PATH_SUFFIXES openjpeg
 )

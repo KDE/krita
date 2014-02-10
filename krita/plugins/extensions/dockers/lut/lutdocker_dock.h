@@ -23,7 +23,6 @@
 #include <QLabel>
 
 #include <QDockWidget>
-#include <QScopedPointer>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
@@ -66,11 +65,10 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    virtual void unsetCanvas() { m_canvas = 0; }
 
 private slots:
 
-    void slotConfigChanged();
     void slotImageColorSpaceChanged();
 
     void exposureValueChanged(double exposure);
@@ -92,8 +90,14 @@ private slots:
     void clearLut();
 
 private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
+
+    QWidget *m_page;
+
+    KisCanvas2 *m_canvas;
+    OCIO::ConstConfigRcPtr m_ocioConfig;
+    OcioDisplayFilter *m_displayFilter;
+
+    bool m_draggingSlider;
 };
 
 

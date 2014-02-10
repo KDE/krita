@@ -52,64 +52,17 @@
 
 #include "ocio_display_filter.h"
 
-
-struct LutDockerDock::Private {
-    Private()
-        : page(0),
-          canvas(0),
-          displayFilter(0),
-          draggingSlider(false),
-          lastConfigSnapshot(KisConfig())
-    {
-    }
-
-    QWidget *page;
-    KisCanvas2 *canvas;
-    OCIO::ConstConfigRcPtr ocioConfig;
-    OcioDisplayFilter *displayFilter;
-
-    bool draggingSlider;
-
-    struct KritaOcioConfigSnapshot
-    {
-        KritaOcioConfigSnapshot(const KisConfig &config)
-            : m_useOcio(config.useOcio()),
-              m_useOcioEnvironmentVariable(config.useOcioEnvironmentVariable()),
-              m_ocioConfigurationPath(config.ocioConfigurationPath()),
-              m_ocioLutPath(config.ocioLutPath())
-            {
-            }
-
-        bool operator ==(const KritaOcioConfigSnapshot &rhs) {
-            return
-                m_useOcio == rhs.m_useOcio &&
-                m_useOcioEnvironmentVariable == rhs.m_useOcioEnvironmentVariable &&
-                m_ocioConfigurationPath == rhs.m_ocioConfigurationPath &&
-                m_ocioLutPath == rhs.m_ocioLutPath;
-        }
-
-        bool operator !=(const KritaOcioConfigSnapshot &rhs) {
-            return !(*this == rhs);
-        }
-
-        bool m_useOcio;
-        bool m_useOcioEnvironmentVariable;
-        QString m_ocioConfigurationPath;
-        QString m_ocioLutPath;
-    };
-
-    KritaOcioConfigSnapshot lastConfigSnapshot;
-};
-
 LutDockerDock::LutDockerDock()
-    : QDockWidget(i18n("LUT Management")),
-      m_d(new Private())
+    : QDockWidget(i18n("LUT Management"))
+    , m_canvas(0)
+    , m_displayFilter(0)
+    , m_draggingSlider(false)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    m_d->page = new QWidget(this);
-    setupUi(m_d->page);
-    setWidget(m_d->page);
+    m_page = new QWidget(this);
+    setupUi(m_page);
+    setWidget(m_page);
 
     KisConfig cfg;
     m_chkUseOcio->setChecked(cfg.useOcio());
@@ -169,28 +122,28 @@ LutDockerDock::LutDockerDock()
     connect(m_cmbView, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
     connect(m_cmbComponents, SIGNAL(currentIndexChanged(int)), SLOT(updateDisplaySettings()));
 
-    m_d->draggingSlider = false;
+    m_draggingSlider = false;
 
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
 
-    m_d->displayFilter = new OcioDisplayFilter;
+    m_displayFilter = new OcioDisplayFilter;
 
     resetOcioConfiguration();
 }
 
 LutDockerDock::~LutDockerDock()
 {
-    delete m_d->displayFilter;
+    delete m_displayFilter;
 }
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 {
     //qDebug() << "setCanvas";
     if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
-        m_d->canvas = canvas;
-        if (m_d->canvas) {
-            connect(m_d->canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
-            canvas->setDisplayFilter(m_d->displayFilter);
+        m_canvas = canvas;
+        if (m_canvas) {
+            connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
+            canvas->setDisplayFilter(m_displayFilter);
         }
         slotImageColorSpaceChanged();
 
@@ -198,34 +151,19 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
     updateDisplaySettings();
 }
 
-void LutDockerDock::unsetCanvas()
-{
-    m_d->canvas = 0;
-}
-
-void LutDockerDock::slotConfigChanged()
-{
-    KisConfig cfg;
-    Private::KritaOcioConfigSnapshot snapshot(cfg);
-
-    if (m_d->lastConfigSnapshot != snapshot) {
-        slotImageColorSpaceChanged();
-    }
-}
-
 void LutDockerDock::slotImageColorSpaceChanged()
 {
     //qDebug() << "slotImageColorSpaceChanged();";
 
-    if (m_d->canvas && m_d->canvas->view() && m_d->canvas->view()->image()) {
-        const KoColorSpace *cs = m_d->canvas->view()->image()->colorSpace();
+    if (m_canvas && m_canvas->view() && m_canvas->view()->image()) {
+        const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
 
-        m_d->page->setEnabled(cs->colorModelId() == RGBAColorModelID);
+        m_page->setEnabled(cs->colorModelId() == RGBAColorModelID);
 
         refillComboboxes();
 
-        m_exposureDoubleWidget->setValue(m_d->canvas->view()->resourceProvider()->HDRExposure());
-        m_gammaDoubleWidget->setValue(m_d->canvas->view()->resourceProvider()->HDRGamma());
+        m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
+        m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
 
         m_cmbComponents->clear();
         m_cmbComponents->addSqueezedItem(i18n("Luminance"));
@@ -236,26 +174,25 @@ void LutDockerDock::slotImageColorSpaceChanged()
         m_cmbComponents->setCurrentIndex(1); // All Channels...
     }
     updateDisplaySettings();
-    m_d->lastConfigSnapshot = Private::KritaOcioConfigSnapshot(KisConfig());
 }
 
 void LutDockerDock::exposureValueChanged(double exposure)
 {
     //qDebug() << "exposureValueChanged();" << exposure;
-    if (m_d->canvas && !m_d->draggingSlider) {
-        m_d->canvas->view()->resourceProvider()->setHDRExposure(exposure);
+    if (m_canvas && !m_draggingSlider) {
+        m_canvas->view()->resourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
 }
 
 void LutDockerDock::exposureSliderPressed()
 {
-    m_d->draggingSlider = true;
+    m_draggingSlider = true;
 }
 
 void LutDockerDock::exposureSliderReleased()
 {
-    m_d->draggingSlider = false;
+    m_draggingSlider = false;
     exposureValueChanged(m_exposureDoubleWidget->value());
 }
 
@@ -263,54 +200,54 @@ void LutDockerDock::exposureSliderReleased()
 void LutDockerDock::gammaValueChanged(double gamma)
 {
     //qDebug() << "gammaValueChanged" << gamma;
-    if (m_d->canvas && !m_d->draggingSlider) {
-        m_d->canvas->view()->resourceProvider()->setHDRGamma(gamma);
+    if (m_canvas && !m_draggingSlider) {
+        m_canvas->view()->resourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }
 }
 
 void LutDockerDock::gammaSliderPressed()
 {
-    m_d->draggingSlider = true;
+    m_draggingSlider = true;
 }
 
 void LutDockerDock::gammaSliderReleased()
 {
-    m_d->draggingSlider = false;
+    m_draggingSlider = false;
     gammaValueChanged(m_gammaDoubleWidget->value());
 }
 
 
 void LutDockerDock::updateDisplaySettings()
 {
-    if (!m_d->canvas || !m_d->canvas->view() || !m_d->canvas->view()->image()) return;
+    if (!m_canvas || !m_canvas->view() || !m_canvas->view()->image()) return;
 
-    m_d->page->setEnabled(m_d->canvas->view()->image()->colorSpace()->colorModelId() == RGBAColorModelID);
+    m_page->setEnabled(m_canvas->view()->image()->colorSpace()->colorModelId() == RGBAColorModelID);
 
-    //    qDebug() << "updateDisplaySettings();" << m_chkUseOcio->isChecked() << m_d->ocioConfig << m_d->canvas->canvasIsOpenGL();
-    if (m_chkUseOcio->isChecked() && m_d->ocioConfig) {
-        m_d->displayFilter->config = m_d->ocioConfig;
-        //        qDebug() << "\t" << m_d->displayFilter->config;
-        m_d->displayFilter->inputColorSpaceName = m_d->ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
-        //        qDebug() << "\t" << m_d->displayFilter->inputColorSpaceName;
-        m_d->displayFilter->displayDevice = m_d->ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
-        //        qDebug() << "\t" << m_d->displayFilter->displayDevice;
-        m_d->displayFilter->view = m_d->ocioConfig->getView(m_d->displayFilter->displayDevice, m_cmbView->currentIndex());
-        //        qDebug() << "\t" << m_d->displayFilter->view;
-        m_d->displayFilter->gamma = m_gammaDoubleWidget->value();
-        //        qDebug() << "\t" << m_d->displayFilter->gamma;
-        m_d->displayFilter->exposure = m_exposureDoubleWidget->value();
-        //        qDebug() << "\t" << m_d->displayFilter->exposure;
-        m_d->displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
-        //        qDebug() << "\t" << m_d->displayFilter->swizzle;
+    //    qDebug() << "updateDisplaySettings();" << m_chkUseOcio->isChecked() << m_ocioConfig << m_canvas->canvasIsOpenGL();
+    if (m_chkUseOcio->isChecked() && m_ocioConfig) {
+        m_displayFilter->config = m_ocioConfig;
+        //        qDebug() << "\t" << m_displayFilter->config;
+        m_displayFilter->inputColorSpaceName = m_ocioConfig->getColorSpaceNameByIndex(m_cmbInputColorSpace->currentIndex());
+        //        qDebug() << "\t" << m_displayFilter->inputColorSpaceName;
+        m_displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
+        //        qDebug() << "\t" << m_displayFilter->displayDevice;
+        m_displayFilter->view = m_ocioConfig->getView(m_displayFilter->displayDevice, m_cmbView->currentIndex());
+        //        qDebug() << "\t" << m_displayFilter->view;
+        m_displayFilter->gamma = m_gammaDoubleWidget->value();
+        //        qDebug() << "\t" << m_displayFilter->gamma;
+        m_displayFilter->exposure = m_exposureDoubleWidget->value();
+        //        qDebug() << "\t" << m_displayFilter->exposure;
+        m_displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
+        //        qDebug() << "\t" << m_displayFilter->swizzle;
 
-        m_d->displayFilter->updateProcessor();
-        m_d->canvas->setDisplayFilter(m_d->displayFilter);
+        m_displayFilter->updateProcessor();
+        m_canvas->setDisplayFilter(m_displayFilter);
     }
     else {
-        m_d->canvas->setDisplayFilter(0);
+        m_canvas->setDisplayFilter(0);
     }
-    m_d->canvas->updateCanvas();
+    m_canvas->updateCanvas();
 }
 
 void LutDockerDock::updateWidgets()
@@ -356,23 +293,23 @@ void LutDockerDock::selectOcioConfiguration()
 
 void LutDockerDock::resetOcioConfiguration()
 {
-    m_d->ocioConfig.reset();
+    m_ocioConfig.reset();
     KisConfig cfg;
     //qDebug() << "resetOcioConfiguration" << cfg.useOcioEnvironmentVariable() << cfg.ocioConfigurationPath();
     try {
         if (cfg.useOcioEnvironmentVariable()) {
             //qDebug() << "using OCIO from the environment";
-            m_d->ocioConfig = OCIO::Config::CreateFromEnv();
+            m_ocioConfig = OCIO::Config::CreateFromEnv();
         }
         else {
             QString configFile = cfg.ocioConfigurationPath();
             //qDebug() << "using OCIO config file" << configFile;
             if (QFile::exists(configFile)) {
-                m_d->ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
+                m_ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
             }
         }
-        if (m_d->ocioConfig) {
-            OCIO::SetCurrentConfig(m_d->ocioConfig );
+        if (m_ocioConfig) {
+            OCIO::SetCurrentConfig(m_ocioConfig );
         }
         refillComboboxes();
     }
@@ -388,35 +325,35 @@ void LutDockerDock::refillComboboxes()
 
     m_cmbInputColorSpace->clear();
 
-    if (!m_d->ocioConfig) return;
+    if (!m_ocioConfig) return;
 
-    int numOcioColorSpaces = m_d->ocioConfig->getNumColorSpaces();
+    int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
     for(int i = 0; i < numOcioColorSpaces; ++i) {
-        const char *cs = m_d->ocioConfig->getColorSpaceNameByIndex(i);
-        OCIO::ConstColorSpaceRcPtr colorSpace = m_d->ocioConfig->getColorSpace(cs);
+        const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
+        OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
         m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
     }
     m_cmbInputColorSpace->blockSignals(false);
 
-    //    int numRoles = m_d->ocioConfig->getNumRoles();
+    //    int numRoles = m_ocioConfig->getNumRoles();
     //    for (int i = 0; i < numRoles; ++i) {
-    //        //qDebug() << "role" << m_d->ocioConfig->getRoleName(i);
+    //        //qDebug() << "role" << m_ocioConfig->getRoleName(i);
     //    }
 
     m_cmbDisplayDevice->blockSignals(true);
     m_cmbDisplayDevice->clear();
-    int numDisplays = m_d->ocioConfig->getNumDisplays();
+    int numDisplays = m_ocioConfig->getNumDisplays();
     for (int i = 0; i < numDisplays; ++i) {
-        m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_d->ocioConfig->getDisplay(i)));
+        m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
 
     }
     m_cmbDisplayDevice->blockSignals(false);
     refillViewCombobox();
 
-    //    int numLooks = m_d->ocioConfig->getNumLooks();
+    //    int numLooks = m_ocioConfig->getNumLooks();
     //    //qDebug() << "number of looks" << numLooks;
     //    for (int i = 0; i < numLooks; ++i) {
-    //        //qDebug() << "look" << m_d->ocioConfig->getLookNameByIndex(i);
+    //        //qDebug() << "look" << m_ocioConfig->getLookNameByIndex(i);
     //    }
 
 
@@ -427,14 +364,14 @@ void LutDockerDock::refillViewCombobox()
     //    qDebug() << "refillViewCombobox();";
     m_cmbView->blockSignals(true);
     m_cmbView->clear();
-    if (!m_d->ocioConfig) return;
+    if (!m_ocioConfig) return;
 
-    const char *display = m_d->ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
-    int numViews = m_d->ocioConfig->getNumViews(display);
+    const char *display = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
+    int numViews = m_ocioConfig->getNumViews(display);
 
     for (int j = 0; j < numViews; ++j) {
-        //        qDebug() << "\tview" << m_d->ocioConfig->getView(display, j);
-        m_cmbView->addSqueezedItem(QString::fromUtf8(m_d->ocioConfig->getView(display, j)));
+        //        qDebug() << "\tview" << m_ocioConfig->getView(display, j);
+        m_cmbView->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getView(display, j)));
     }
     m_cmbView->blockSignals(false);
 }

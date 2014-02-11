@@ -56,13 +56,8 @@ inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const Q
 
 void KisAnimationLayerBox::onCanvasReady()
 {
-    this->connectActionToButton(m_dock->m_addPaintLayerAction, "add_new_paint_layer");
     connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
-
-    this->connectActionToButton(m_dock->m_addVectorLayerAction, "add_new_shape_layer");
     connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
-
-    m_nodeManager = m_dock->getCanvas()->view()->nodeManager();
 }
 
 void KisAnimationLayerBox::updateUI()

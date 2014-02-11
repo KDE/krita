@@ -106,6 +106,9 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         return;
     }
 
+    // Dump the content of the current frame
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+
     QString location = this->getFrameFile(frame.x(), frame.y());
 
     bool hasFile = d->store->hasFile(location);
@@ -128,6 +131,39 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
         setCurrentImage(d->image);
     }
+}
+
+QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
+{
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    for(int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+
+        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
+            frameNumbers.append(node.attributes().namedItem("number").nodeValue().toInt());
+        }
+    }
+
+    qSort(frameNumbers);
+
+    if(frameNumbers.contains(frame)) {
+        QRect parentFramePos(frame, layer, 10, 20);
+        return parentFramePos;
+    }
+
+    int frameN;
+    for(int i = 0 ; i < frameNumbers.length() ; i++) {
+        if(frameNumbers.at(i) < frame) {
+            frameN = frameNumbers.at(i);
+        }
+    }
+
+    QRect parentFramePos(frameN, layer, 10, 20);
+
+    return parentFramePos;
 }
 
 QString KisAnimationDoc::getFrameFile(int frame, int layer)

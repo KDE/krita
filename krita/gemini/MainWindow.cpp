@@ -229,7 +229,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));

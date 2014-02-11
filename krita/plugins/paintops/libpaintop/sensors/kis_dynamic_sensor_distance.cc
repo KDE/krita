@@ -23,7 +23,6 @@
 #include "ui_SensorDistanceConfiguration.h"
 
 #include "kis_paint_information.h"
-#include "kis_sensor_selector.h"
 
 KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_measuredDistance(0.0), m_length(30), m_periodic(true)
 {

@@ -46,7 +46,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_flow_opacity_option_widget.cpp
     kis_pressure_spacing_option_widget.cpp
     kis_current_outline_fetcher.cpp
-    kis_sensor_selector.cc
     kis_text_brush_chooser.cpp
     kis_brush_based_paintop_options_widget.cpp
     kis_brush_based_paintop_settings.cpp
@@ -77,7 +76,6 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     forms/wdgcoloroptions.ui
     forms/wdgbrushchooser.ui
     forms/wdgCompositeOpOption.ui
-    forms/SensorSelector.ui
     forms/wdgflowopacityoption.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui

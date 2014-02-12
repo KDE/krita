@@ -38,6 +38,10 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
 
 #include "kis_config.h"
 
@@ -59,6 +63,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
+
+    // Load filters and other plugins in the gui thread
+    Q_UNUSED(KisFilterRegistry::instance());
+    Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);

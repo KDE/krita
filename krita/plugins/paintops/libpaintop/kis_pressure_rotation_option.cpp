@@ -35,7 +35,7 @@ KisPressureRotationOption::KisPressureRotationOption()
 
      setMinimumLabel(i18n("0°"));
      setMaximumLabel(i18n("360°"));
-     m_fuzzyflag = true;
+
 
 }
 
@@ -57,35 +57,22 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
     KisDynamicSensorList *sensorList;
     if (sensor->id() == FuzzyId.id() ||
         ((sensorList = dynamic_cast<KisDynamicSensorList*>(sensor)) &&
-         (sensor = sensorList->getSensor(FuzzyId.id()))))
-    {
+         (sensor = sensorList->getSensor(FuzzyId.id())))) {
 
             KisDynamicSensorFuzzy *s =
                 dynamic_cast<KisDynamicSensorFuzzy*>(sensor);
             Q_ASSERT(s);
-            if(s->rotationModeEnabled())
-            {
-                if(m_fuzzyflag == true)
-                {
-                    m_fuzzyflag = false;
-                    return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
-                }
-                else
-                {
-                    m_fuzzyflag = true;
-                    return ((2.0*M_PI)-fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
+            if(s->rotationModeEnabled()) {
+               return rand()%2 == 0?fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI):
+                              ((2.0*M_PI)-fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
 
-                }
             }
-            else
-            {
+            else {
                 return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
             }
     }
-    else //If Fuzzy is not selected at all
-    {
+    else { //If Fuzzy is not selected at all
         return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
-
     }
 
 

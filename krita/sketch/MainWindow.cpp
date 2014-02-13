@@ -56,7 +56,7 @@
 class MainWindow::Private
 {
 public:
-    Private(MainWindow* qq) : q(qq), allowClose(true)
+    Private(MainWindow* qq) : q(qq), allowClose(true), sketchKisView(0)
 	{
         centerer = new QTimer(q);
         centerer->setInterval(10);

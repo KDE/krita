@@ -32,6 +32,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QTimer>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -42,7 +43,10 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_paintop.h"
 #include "kis_paintop_registry.h"
+#include <KoZoomController.h>
 
+#include "kis_view2.h"
+#include <kis_canvas_controller.h>
 #include "kis_config.h"
 
 #include "SketchDeclarativeView.h"
@@ -52,13 +56,22 @@
 class MainWindow::Private
 {
 public:
-    Private() : allowClose(true) { }
+    Private(MainWindow* qq) : q(qq), allowClose(true)
+	{
+        centerer = new QTimer(q);
+        centerer->setInterval(10);
+        centerer->setSingleShot(true);
+        connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+	}
+	MainWindow* q;
+	KisView2* sketchKisView;
     bool allowClose;
     QString currentSketchPage;
+	QTimer *centerer;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
-    : QMainWindow( parent, flags ), d( new Private )
+    : QMainWindow( parent, flags ), d( new Private(this) )
 {
     qApp->setActiveWindow( this );
 
@@ -130,6 +143,35 @@ void MainWindow::setCurrentSketchPage(QString newPage)
 {
     d->currentSketchPage = newPage;
     emit currentSketchPageChanged();
+}
+void MainWindow::adjustZoomOnDocumentChangedAndStuff()
+{
+	if (d->sketchKisView) {
+        qApp->processEvents();
+        d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        qApp->processEvents();
+        QPoint center = d->sketchKisView->rect().center();
+        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
+    }
+}
+
+QObject* MainWindow::sketchKisView() const
+{
+    return d->sketchKisView;
+}
+
+void MainWindow::setSketchKisView(QObject* newView)
+{
+    if (d->sketchKisView)
+        d->sketchKisView->disconnect(this);
+    if (d->sketchKisView != newView)
+    {
+        d->sketchKisView = qobject_cast<KisView2*>(newView);
+        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->centerer->start();
+        emit sketchKisViewChanged();
+    }
 }
 
 void MainWindow::minimize()

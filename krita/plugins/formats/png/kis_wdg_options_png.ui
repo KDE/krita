@@ -211,7 +211,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
    <item row="4" column="0">
     <widget class="QCheckBox" name="chkForceSRGB">
      <property name="text">
-      <string>Force save as sRGB</string>
+      <string>Force convert to sRGB</string>
      </property>
     </widget>
    </item>

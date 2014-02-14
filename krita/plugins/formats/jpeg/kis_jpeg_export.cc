@@ -30,6 +30,8 @@
 #include <kpluginfactory.h>
 #include <kcolorbutton.h>
 
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
 #include <KoFilterManager.h>
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -101,6 +103,11 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
+    const KoColorSpace* cs = image->projection()->colorSpace();
+    bool sRGB = cs->profile()->name().toLower().contains("srgb");
+    wdgUi.chkForceSRGB->setVisible(!sRGB);
+    wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
+
     QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
     wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
     wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
@@ -126,6 +133,9 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     options.quality = wdgUi.qualityLevel->value();
     cfg.setProperty("quality", options.quality);
+
+    options.forceSRGB = wdgUi.chkForceSRGB->isChecked();
+    cfg.setProperty("forceSRGB", options.forceSRGB);
 
     // Advanced
     options.optimize = wdgUi.optimize->isChecked();
@@ -160,7 +170,6 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     }
 
     cfg.setProperty("filters", enabledFilters);
-
 
     KisConfig().setExportConfiguration("JPEG", cfg);
 

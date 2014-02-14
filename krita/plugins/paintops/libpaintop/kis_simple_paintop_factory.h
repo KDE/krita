@@ -45,7 +45,7 @@ struct __impl_has_typedef_needs_preinitialization {
 
 template <typename T>
 struct has_typedef_needs_preinitialization
-    : public boost::integral_constant <bool, __impl_has_typedef_needs_preinitialization<T>::value>
+        : public boost::integral_constant <bool, __impl_has_typedef_needs_preinitialization<T>::value>
 {};
 
 template <typename T>
@@ -65,7 +65,8 @@ void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename boo
 /**
  * Base template class for simple paintop factories
  */
-template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePaintOpFactory  : public KisPaintOpFactory {
+template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePaintOpFactory  : public KisPaintOpFactory
+{
 
 public:
 
@@ -77,24 +78,20 @@ public:
         , m_name(name)
         , m_category(category)
         , m_pixmap(pixmap)
-        , m_model(model)
-        {
-            setPriority(priority);
-        }
+        , m_model(model) {
+        setPriority(priority);
+    }
 
-    virtual ~KisSimplePaintOpFactory()
-        {
-        }
+    virtual ~KisSimplePaintOpFactory() {
+    }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings)
-    {
+    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings) {
         preinitializeOpStatically<Op>(settings);
     }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-    KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0)
-    {
+    KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image = 0) {
         const OpSettings *opSettings = dynamic_cast<const OpSettings *>(settings.data());
         Q_ASSERT(settings == 0 || opSettings != 0);
 
@@ -103,36 +100,30 @@ public:
         return op;
     }
 
-    KisPaintOpSettingsSP settings(KisImageWSP image)
-    {
+    KisPaintOpSettingsSP settings(KisImageWSP image) {
         Q_UNUSED(image);
         KisPaintOpSettingsSP settings = new OpSettings();
         settings->setModelName(m_model);
         return settings;
     }
 
-    KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent)
-    {
+    KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) {
         return new OpSettingsWidget(parent);
     }
 
-    QString id() const
-    {
+    QString id() const {
         return m_id;
     }
 
-    QString name() const
-    {
+    QString name() const {
         return m_name;
     }
 
-    QString pixmap()
-    {
+    QString pixmap() {
         return m_pixmap;
     }
 
-    QString category() const
-    {
+    QString category() const {
         return m_category;
     }
 private:

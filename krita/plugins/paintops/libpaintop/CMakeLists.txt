@@ -13,7 +13,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_color_source.cpp
     kis_color_source_option.cpp
     kis_color_source_option_widget.cpp
-    kis_curve_label.cpp
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
     kis_custom_brush_widget.cpp
@@ -56,7 +55,6 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc
-    sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
     sensors/kis_dynamic_sensor_fuzzy.cpp

@@ -26,7 +26,7 @@
 #include <kis_compositeop_option.h>
 
 KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     addPaintOpOption(new KisDynaOpOption());
     addPaintOpOption(new KisCompositeOpOption(true));

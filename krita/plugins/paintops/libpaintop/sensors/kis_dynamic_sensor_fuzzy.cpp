@@ -28,7 +28,7 @@
 
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
-    setMinimumLabel(QString()); //TODO use the dice icon
+    setMinimumLabel(QString());
     setMaximumLabel(QString());
 }
 QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidget *ss)

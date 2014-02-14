@@ -41,12 +41,12 @@ KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinit
     }
 
     qreal density = brushDefinition.attribute("density", "1.0").toDouble(&result);
-    if (!result){
+    if (!result) {
         density = c.toDouble(brushDefinition.attribute("density"));
     }
 
     double spacing = brushDefinition.attribute("spacing", "1.0").toDouble(&result);
-    if (!result){
+    if (!result) {
         spacing = c.toDouble(brushDefinition.attribute("spacing"));
     }
 

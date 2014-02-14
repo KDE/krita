@@ -32,8 +32,7 @@ class TestBrushOp : public TestUtil::QImageBasedTest
 {
 public:
     TestBrushOp(const QString &presetFileName)
-        : QImageBasedTest("brushop")
-    {
+        : QImageBasedTest("brushop") {
         m_presetFileName = presetFileName;
     }
 
@@ -148,7 +147,7 @@ public:
     }
 
     virtual void doPaint(KisPainter &gc) {
-        KisPaintInformation pi(QPointF(100,100), 1.0);
+        KisPaintInformation pi(QPointF(100, 100), 1.0);
 
         KisDistanceInformation dist;
         gc.paintAt(pi, &dist);
@@ -161,22 +160,21 @@ class TestBrushOpLines : public TestBrushOp
 {
 public:
     TestBrushOpLines(const QString &presetFileName)
-        : TestBrushOp(presetFileName)
-    {
+        : TestBrushOp(presetFileName) {
     }
 
     void doPaint(KisPainter &gc) {
 
         QVector<KisPaintInformation> vector;
 
-        vector << KisPaintInformation(QPointF(100,100));
-        vector << KisPaintInformation(QPointF(200,150));
-        vector << KisPaintInformation(QPointF(100,350));
+        vector << KisPaintInformation(QPointF(100, 100));
+        vector << KisPaintInformation(QPointF(200, 150));
+        vector << KisPaintInformation(QPointF(100, 350));
 
         KisDistanceInformation dist;
 
         for (int i = 1; i < vector.size(); i++) {
-            gc.paintLine(vector[i-1], vector[i], &dist);
+            gc.paintLine(vector[i - 1], vector[i], &dist);
         }
     }
 };

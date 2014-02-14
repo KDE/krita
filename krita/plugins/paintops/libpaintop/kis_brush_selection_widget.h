@@ -60,7 +60,9 @@ public:
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
-    bool presetIsValid() { return m_presetIsValid; }
+    bool presetIsValid() {
+        return m_presetIsValid;
+    }
 
     void writeOptionSetting(KisPropertiesConfiguration* settings) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -82,11 +84,11 @@ private:
 
 private:
     enum Type {
-      AUTOBRUSH,
-      PREDEFINEDBRUSH,
-      CUSTOMBRUSH,
-      TEXTBRUSH,
-      CLIPBOARDBRUSH
+        AUTOBRUSH,
+        PREDEFINEDBRUSH,
+        CUSTOMBRUSH,
+        TEXTBRUSH,
+        CLIPBOARDBRUSH
     };
 
     bool m_presetIsValid;

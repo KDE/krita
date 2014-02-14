@@ -75,36 +75,36 @@ private:
     struct DabPosition;
 private:
     inline SavedDabParameters getDabParameters(const KoColor& color,
-                                               double scaleX, double scaleY,
-                                               double angle,
-                                               const KisPaintInformation& info,
-                                               double subPixelX, double subPixelY,
-                                               qreal softnessFactor,
-                                               MirrorProperties mirrorProperties);
+            double scaleX, double scaleY,
+            double angle,
+            const KisPaintInformation& info,
+            double subPixelX, double subPixelY,
+            qreal softnessFactor,
+            MirrorProperties mirrorProperties);
     inline KisDabCache::DabPosition
-        calculateDabRect(const QPointF &cursorPoint,
-                         double scaleX, double scaleY,
-                         double angle,
-                         const KisPaintInformation& info,
-                         const MirrorProperties &mirrorProperties);
+    calculateDabRect(const QPointF &cursorPoint,
+                     double scaleX, double scaleY,
+                     double angle,
+                     const KisPaintInformation& info,
+                     const MirrorProperties &mirrorProperties);
 
     inline
-        QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
-                                                 const QSize &realDabSize);
+    QRect correctDabRectWhenFetchedFromCache(const QRect &dabRect,
+            const QSize &realDabSize);
 
     inline KisFixedPaintDeviceSP tryFetchFromCache(const SavedDabParameters &params,
-                                                   const KisPaintInformation& info,
-                                                   QRect *dstDabRect);
+            const KisPaintInformation& info,
+            QRect *dstDabRect);
 
     inline KisFixedPaintDeviceSP fetchDabCommon(const KoColorSpace *cs,
-                                                const KisColorSource *colorSource,
-                                                const KoColor& color,
-                                                const QPointF &cursorPoint,
-                                                double scaleX, double scaleY,
-                                                double angle,
-                                                const KisPaintInformation& info,
-                                                qreal softnessFactor,
-                                                QRect *dstDabRect);
+            const KisColorSource *colorSource,
+            const KoColor& color,
+            const QPointF &cursorPoint,
+            double scaleX, double scaleY,
+            double angle,
+            const KisPaintInformation& info,
+            qreal softnessFactor,
+            QRect *dstDabRect);
 
     void postProcessDab(KisFixedPaintDeviceSP dab,
                         const QPoint &dabTopLeft,

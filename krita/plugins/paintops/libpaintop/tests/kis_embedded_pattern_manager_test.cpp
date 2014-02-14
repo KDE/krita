@@ -30,7 +30,8 @@
 #include <kis_properties_configuration.h>
 #include <kis_resource_server_provider.h>
 
-KoPattern *createPattern() {
+KoPattern *createPattern()
+{
     QImage image(512, 512, QImage::Format_ARGB32);
     image.fill(255);
 
@@ -55,7 +56,7 @@ void KisEmbeddedPatternManagerTest::init()
 
 void KisEmbeddedPatternManagerTest::cleanUp()
 {
-    foreach(KoPattern *p, KoResourceServerProvider::instance()->patternServer()->resources()) {
+    foreach(KoPattern * p, KoResourceServerProvider::instance()->patternServer()->resources()) {
         if (p->filename().contains("__test_pattern")) {
             QFile file(p->filename());
             file.remove();
@@ -91,12 +92,12 @@ enum NameStatus {
 };
 
 KisPropertiesConfiguration createXML(NameStatus nameStatus,
-                                        bool hasMd5)
+                                     bool hasMd5)
 {
     QString fileName("./__test_pattern_path.pat");
 
     QString name;
-    switch(nameStatus) {
+    switch (nameStatus) {
     case VALID:
         name = "__test_pattern_name";
         break;
@@ -137,7 +138,7 @@ KoPattern* findOnServer(QByteArray md5)
     KoPattern *pattern = 0;
 
     if (!md5.isEmpty()) {
-        foreach(KoResource *res, KoResourceServerProvider::instance()->patternServer()->resources()) {
+        foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
             KoPattern *pat = static_cast<KoPattern *>(res);
             if (pat->md5() == md5) {
                 pattern = pat;

@@ -42,7 +42,7 @@ public:
     bool useMovementPaint() const;
     bool useCounter() const;
     bool useOldData() const;
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

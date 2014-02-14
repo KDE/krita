@@ -29,34 +29,35 @@ class KisCurveOption;
 class KisDynamicSensor;
 
 /**
- *
  * XXX; Add a reset button!
  */
 class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
-public:    
-    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider=false);
+public:
+    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider = false);
     ~KisCurveOptionWidget();
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
     bool isCheckable();
     bool isChecked() const;
     void setChecked(bool checked);
-    
+
+protected:
+
     KisCurveOption* curveOption();
     QWidget* curveWidget();
 
 private slots:
+
     void transferCurve();
-    void setSensor(KisDynamicSensor* sensor);
-    void updateSensorCurveLabels(KisDynamicSensor* sensor);
-    void updateCurve(KisDynamicSensor* sensor);
+    void updateSensorCurveLabels(KisDynamicSensor *sensor);
+    void updateCurve(KisDynamicSensor *sensor);
     void updateValues();
     void disableWidgets(bool disable);
-    
+
 private:
     QWidget* m_widget;
     Ui_WdgCurveOption* m_curveOptionWidget;

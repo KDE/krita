@@ -76,14 +76,14 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
             }
         }
         dit->nextPixel();
-    } while(cit->nextPixel());
+    } while (cit->nextPixel());
 }
 
 void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
 {
     Q_UNUSED(sx);
     Q_UNUSED(sy);
-    
+
     if (!m_mixingEnabled) return;
 
     KisFixedPaintDevice canvas(device->colorSpace());

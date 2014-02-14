@@ -34,7 +34,7 @@ const QString SPRAYSHAPE_FOLLOW_CURSOR_WEIGHT = "SprayShape/followCursorWeigth";
 const QString SPRAYSHAPE_DRAWING_ANGLE = "SprayShape/followDrawingAngle";
 const QString SPRAYSHAPE_DRAWING_ANGLE_WEIGHT = "SprayShape/followDrawingAngleWeigth";
 
-// My intention is to have the option dialog more general so that it can be share 
+// My intention is to have the option dialog more general so that it can be share
 // hence the suffix ShapeDynamics
 const QString SHAPE_DYNAMICS_ENABLED = "ShapeDynamics/enabled";
 const QString SHAPE_DYNAMICS_RANDOM_SIZE = "ShapeDynamics/randomSize";
@@ -55,19 +55,20 @@ class KisSprayShapeDynamicsOption : public KisPaintOpOption
 public:
     KisSprayShapeDynamicsOption();
     ~KisSprayShapeDynamicsOption();
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
     void setupBrushPreviewSignals();
-    
+
 private:
     KisShapeDynamicsOptionsWidget * m_options;
 };
 
 
-class KisShapeDynamicsProperties{
+class KisShapeDynamicsProperties
+{
 public:
     bool enabled;
     // particle size dynamics
@@ -83,11 +84,10 @@ public:
     qreal followDrawingAngleWeight;
 
 public:
-    
-    void loadSettings(const KisPropertiesConfiguration* settings){
+
+    void loadSettings(const KisPropertiesConfiguration* settings) {
         // Krita 2.2
-        if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2")
-        {
+        if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2") {
             randomSize = settings->getBool(SPRAYSHAPE_RANDOM_SIZE);
             // rotation
             fixedRotation = settings->getBool(SPRAYSHAPE_FIXED_ROTATION);
@@ -101,8 +101,7 @@ public:
             enabled = true;
         }
         // Krita latest
-        else
-        {
+        else {
             enabled = settings->getBool(SHAPE_DYNAMICS_ENABLED);
             // particle type size
             randomSize = settings->getBool(SHAPE_DYNAMICS_RANDOM_SIZE);
@@ -115,7 +114,7 @@ public:
             randomRotationWeight = settings->getDouble(SHAPE_DYNAMICS_RANDOM_ROTATION_WEIGHT);
             followCursorWeigth = settings->getDouble(SHAPE_DYNAMICS_FOLLOW_CURSOR_WEIGHT);
             followDrawingAngleWeight = settings->getDouble(SHAPE_DYNAMICS_DRAWING_ANGLE_WEIGHT);
-        }        
+        }
     }
 };
 

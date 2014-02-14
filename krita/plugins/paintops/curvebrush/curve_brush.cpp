@@ -98,55 +98,56 @@ QPointF CurveBrush::getCubicBezier(const QPointF &p0, const QPointF &p1, const Q
 
 void CurveBrush::putPixel(QPointF pos, KoColor &color)
 {
-        int ipx = int (pos.x());
-        int ipy = int (pos.y());
-        qreal fx = pos.x() - ipx;
-        qreal fy = pos.y() - ipy;
+    int ipx = int (pos.x());
+    int ipy = int (pos.y());
+    qreal fx = pos.x() - ipx;
+    qreal fy = pos.y() - ipy;
 
-        qreal btl = (1 - fx) * (1 - fy);
-        qreal btr = (fx)   * (1 - fy);
-        qreal bbl = (1 - fx) * (fy);
-        qreal bbr = (fx)   * (fy);
+    qreal btl = (1 - fx) * (1 - fy);
+    qreal btr = (fx)   * (1 - fy);
+    qreal bbl = (1 - fx) * (fy);
+    qreal bbr = (fx)   * (fy);
 
-        color.setOpacity(btl);
-        m_writeAccessor->moveTo(ipx  , ipy);
-        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
-            memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
-        }
+    color.setOpacity(btl);
+    m_writeAccessor->moveTo(ipx  , ipy);
+    if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
+    }
 
-        color.setOpacity(btr);
-        m_writeAccessor->moveTo(ipx + 1, ipy);
-        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
-            memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
-        }
+    color.setOpacity(btr);
+    m_writeAccessor->moveTo(ipx + 1, ipy);
+    if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
+    }
 
-        color.setOpacity(bbl);
-        m_writeAccessor->moveTo(ipx, ipy + 1);
-        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
-            memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
-        }
+    color.setOpacity(bbl);
+    m_writeAccessor->moveTo(ipx, ipy + 1);
+    if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
+    }
 
-        color.setOpacity(bbr);
-        m_writeAccessor->moveTo(ipx + 1, ipy + 1);
-        if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
-            memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
-        }
+    color.setOpacity(bbr);
+    m_writeAccessor->moveTo(ipx + 1, ipy + 1);
+    if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
+        memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
+    }
 }
 
-void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/) {
+void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/)
+{
     if (m_pens.isEmpty()) {
-        m_pens.append(Pen(pi1,0.0,1.0));
+        m_pens.append(Pen(pi1, 0.0, 1.0));
     }
 
     qreal dx = pi2.x() - pi1.x();
     qreal dy = pi2.y() - pi1.y();
-    for (int i = 0; i < m_pens.length(); i++){
+    for (int i = 0; i < m_pens.length(); i++) {
         Pen &pen = m_pens[i];
 
         QPointF endPoint(dx, dy);
 
         QPainterPath path;
-        path.moveTo(0,0);
+        path.moveTo(0, 0);
         path.lineTo(dx, dy);
 
         QTransform transform;
@@ -164,17 +165,18 @@ void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/) {
     }
 
     qreal branchThreshold = 0.5;
-    if ((m_branch * drand48() > branchThreshold) && (m_pens.length() < 1024)){
-         int index = floor(drand48() * (m_pens.length()-1));
+    if ((m_branch * drand48() > branchThreshold) && (m_pens.length() < 1024)) {
+        int index = floor(drand48() * (m_pens.length() - 1));
 
-         m_newPen.pos = m_pens.at(index).pos;
-         m_newPen.rotation = drand48() * M_PI/32;//atan(dy/dx) + (drand48() - 0.5) * M_PI/32;
-         m_newPen.scale = drand48() * m_pens.at(index).scale;
-         m_pens.append(m_newPen);
-         qDebug() << m_pens.length();
-         m_branch = 0;
-      } else {
-         m_branch++;
-      }
+        m_newPen.pos = m_pens.at(index).pos;
+        m_newPen.rotation = drand48() * M_PI / 32; //atan(dy/dx) + (drand48() - 0.5) * M_PI/32;
+        m_newPen.scale = drand48() * m_pens.at(index).scale;
+        m_pens.append(m_newPen);
+        qDebug() << m_pens.length();
+        m_branch = 0;
+    }
+    else {
+        m_branch++;
+    }
 }
 

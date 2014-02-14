@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2006-2007,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -82,7 +82,7 @@ class KisDynamicSensorAscension : public KisDynamicSensor
 public:
     KisDynamicSensorAscension();
     virtual ~KisDynamicSensorAscension() {}
-    virtual qreal value(const KisPaintInformation& info){
+    virtual qreal value(const KisPaintInformation& info) {
         return KisPaintInformation::ascension(info, true);
     }
 };
@@ -92,7 +92,7 @@ class KisDynamicSensorDeclination : public KisDynamicSensor
 public:
     KisDynamicSensorDeclination();
     virtual ~KisDynamicSensorDeclination() {}
-    virtual qreal value(const KisPaintInformation& info){
+    virtual qreal value(const KisPaintInformation& info) {
         return KisPaintInformation::declination(info, 60.0, 60.0, true);
     }
 };

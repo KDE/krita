@@ -27,7 +27,8 @@
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
-class TextBrushInitializationWorkaround {
+class TextBrushInitializationWorkaround
+{
 public:
     static TextBrushInitializationWorkaround* instance() {
         K_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance);
@@ -40,7 +41,8 @@ public:
             brushOption.readOptionSetting(settings);
             m_brush = brushOption.brush();
             m_settings = settings;
-        } else {
+        }
+        else {
             m_brush = 0;
             m_settings = 0;
         }
@@ -67,7 +69,7 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP 
 
 
 KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
 {
     Q_ASSERT(settings);
 
@@ -101,7 +103,7 @@ KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
 bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
 {
     return scale * m_brush->width() < 0.01 ||
-    scale * m_brush->height() < 0.01;
+           scale * m_brush->height() < 0.01;
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
@@ -125,7 +127,8 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int d
 
     if (!isotropicSpacing) {
         spacing = QPointF(dabWidth, dabHeight);
-    } else {
+    }
+    else {
         qreal significantDimension = qMax(dabWidth, dabHeight);
         spacing = QPointF(significantDimension, significantDimension);
     }

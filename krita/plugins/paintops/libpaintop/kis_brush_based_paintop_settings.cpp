@@ -27,14 +27,14 @@
 
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION |
-                                                     KisCurrentOutlineFetcher::MIRROR_OPTION)
+            KisCurrentOutlineFetcher::ROTATION_OPTION |
+            KisCurrentOutlineFetcher::MIRROR_OPTION)
 {
 }
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if(hasProperty("PaintOpAction")) {
+    if (hasProperty("PaintOpAction")) {
         return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
     }
     return true;
@@ -57,7 +57,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
 
     KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
 
-    if(!widget) {
+    if (!widget) {
         return KisPaintOpSettings::brushOutline(info, mode);
     }
 
@@ -68,7 +68,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
 
 bool KisBrushBasedPaintOpSettings::isValid()
 {
-    QString filename = getString("requiredBrushFile","");
+    QString filename = getString("requiredBrushFile", "");
     if (!filename.isEmpty()) {
         KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
         if (!brush) {

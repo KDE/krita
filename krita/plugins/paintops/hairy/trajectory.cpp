@@ -34,11 +34,10 @@ Trajectory::~Trajectory()
 
 void Trajectory::addPoint(QPointF pos)
 {
-    if (m_i >= m_path.size()){
+    if (m_i >= m_path.size()) {
         m_path.append(pos);
         m_i++;
-    }else
-    {
+    } else {
         m_path[m_i] = pos;
         m_i++;
     }
@@ -133,7 +132,8 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
         if (yd > 0) {
             m = 1.0f / m;
             incr = 1;
-        } else {
+        }
+        else {
             m = -1.0f / m;
             incr = -1;
         }
@@ -147,7 +147,8 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
         int incr;
         if (xd > 0) {
             incr = 1;
-        } else {
+        }
+        else {
             incr = -1;
             m = -m;
         }

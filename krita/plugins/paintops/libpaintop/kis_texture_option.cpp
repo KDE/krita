@@ -52,8 +52,7 @@ class KisTextureOptionWidget : public QWidget
 public:
 
     KisTextureOptionWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+        : QWidget(parent) {
         QFormLayout *formLayout = new QFormLayout(this);
         formLayout->setMargin(0);
 
@@ -212,7 +211,7 @@ void KisTextureProperties::recalculateMask()
     QImage mask = pattern->image();
 
     if (mask.format() != QImage::Format_RGB32 ||
-        mask.format() != QImage::Format_ARGB32) {
+            mask.format() != QImage::Format_ARGB32) {
 
         mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
@@ -224,9 +223,9 @@ void KisTextureProperties::recalculateMask()
         mask = mask.scaled(rc.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 #if QT_VERSION >= 0x040700
-    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.constBits() );
+    const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.constBits());
 #else
-    const QRgb* pixel = reinterpret_cast<const QRgb*>( mask.bits() );
+    const QRgb* pixel = reinterpret_cast<const QRgb*>(mask.bits());
 #endif
     int width = mask.width();
     int height = mask.height();
@@ -236,8 +235,8 @@ void KisTextureProperties::recalculateMask()
 
     KisHLineIteratorSP iter = m_mask->createHLineIteratorNG(0, 0, width);
 
-    for (int row = 0; row < height; ++row ) {
-        for (int col = 0; col < width; ++col ) {
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
             const QRgb currentPixel = pixel[row * width + col];
 
             const int red = qRed(currentPixel);
@@ -255,7 +254,8 @@ void KisTextureProperties::recalculateMask()
             if (cutoffPolicy == 1 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
                 // mask out the dab if it's outside the pattern's cuttoff points
                 maskValue = OPACITY_TRANSPARENT_F;
-            } else if (cutoffPolicy == 2 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
+            }
+            else if (cutoffPolicy == 2 && (maskValue < (cutoffLeft / 255.0) || maskValue > (cutoffRight / 255.0))) {
                 maskValue = OPACITY_OPAQUE_F;
             }
 
@@ -290,7 +290,7 @@ void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *sett
     cutoffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy", 0);
 
     m_strengthOption.readOptionSetting(setting);
-    m_strengthOption.sensor()->reset();
+    m_strengthOption.resetAllSensors();
 
     recalculateMask();
 }
@@ -317,7 +317,8 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
         for (int col = 0; col < rect.width(); ++col) {
             if (texturingMode == MULTIPLY) {
                 dab->colorSpace()->multiplyAlpha(dabData, quint8(*iter->oldRawData() * pressure), 1);
-            } else {
+            }
+            else {
                 int pressureOffset = (1.0 - pressure) * 255;
 
                 qint16 maskA = *iter->oldRawData() + pressureOffset;

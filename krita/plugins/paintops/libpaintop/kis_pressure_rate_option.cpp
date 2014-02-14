@@ -29,7 +29,7 @@
 #include <KoColorSpaceConstants.h>
 
 KisPressureRateOption::KisPressureRateOption()
-        : KisCurveOption(i18n("Rate"), "Rate", KisPaintOpOption::brushCategory(), true)
+    : KisCurveOption(i18n("Rate"), "Rate", KisPaintOpOption::brushCategory(), true)
 {
 }
 
@@ -56,7 +56,8 @@ void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* 
     if (setting->getString("RateVersion", "1") == "1") {
         m_rate = setting->getInt("RatePressure");
         setChecked(true);
-    } else {
+    }
+    else {
         m_rate = setting->getInt("RateValue");
     }
 }

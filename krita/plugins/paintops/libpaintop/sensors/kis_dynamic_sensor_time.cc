@@ -37,7 +37,8 @@ qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
     if (m_time > m_length) {
         if (m_periodic) {
             m_time = (int)fmod((float)m_time, (float)m_length);
-        } else {
+        }
+        else {
             m_time = m_length;
         }
     }

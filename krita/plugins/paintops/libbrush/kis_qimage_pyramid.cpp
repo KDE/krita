@@ -40,7 +40,7 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
         QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() <= MIPMAP_SIZE_THRESHOLD ||
-            scaledSize.height() <= MIPMAP_SIZE_THRESHOLD) {
+                scaledSize.height() <= MIPMAP_SIZE_THRESHOLD) {
 
             if (m_levels.isEmpty()) {
                 m_baseScale = scale;
@@ -62,7 +62,7 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
         QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() == 0 ||
-            scaledSize.height() == 0) break;
+                scaledSize.height() == 0) break;
 
         appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
@@ -95,7 +95,8 @@ int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale)
     return level;
 }
 
-inline QRect roundRect(const QRectF &rc) {
+inline QRect roundRect(const QRectF &rc)
+{
     /**
      * This is an analog of toAlignedRect() with the only difference
      * that it rounds corner values instead of doing floor/ceil.
@@ -126,12 +127,12 @@ QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
 
         QRectF rotatedBounds = rotationTransform.mapRect(baseBounds);
         transform = rotationTransform *
-            QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
+                    QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
     }
 
     return transform *
-        QTransform::fromScale(scaleX, scaleY) *
-        QTransform::fromTranslate(subPixelX, subPixelY);
+           QTransform::fromScale(scaleX, scaleY) *
+           QTransform::fromTranslate(subPixelX, subPixelY);
 }
 
 void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
@@ -254,7 +255,7 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
                     &transform, &dstSize);
 
     if (transform.isIdentity() &&
-        srcImage.format() == QImage::Format_ARGB32) {
+            srcImage.format() == QImage::Format_ARGB32) {
 
         return srcImage.copy(QPAINTER_WORKAROUND_BORDER,
                              QPAINTER_WORKAROUND_BORDER,

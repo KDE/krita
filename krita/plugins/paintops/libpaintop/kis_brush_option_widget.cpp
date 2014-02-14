@@ -26,7 +26,7 @@
 
 
 KisBrushOptionWidget::KisBrushOptionWidget()
-        : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::brushCategory(), true)
+    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::brushCategory(), true)
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();

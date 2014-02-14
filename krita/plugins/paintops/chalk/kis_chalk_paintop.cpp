@@ -38,19 +38,19 @@
 #include <kis_pressure_opacity_option.h>
 
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     m_opacityOption.readOptionSetting(settings);
-    m_opacityOption.sensor()->reset();
+    m_opacityOption.resetAllSensors();
 
     m_properties.readOptionSetting(settings);
 
     KoColorTransformation* transfo = 0;
-    if (m_properties.inkDepletion && m_properties.useSaturation){
+    if (m_properties.inkDepletion && m_properties.useSaturation) {
         transfo = painter->device()->compositionSourceColorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
     }
-    m_chalkBrush = new ChalkBrush( &m_properties, transfo );
+    m_chalkBrush = new ChalkBrush(&m_properties, transfo);
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -64,7 +64,8 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    } else {
+    }
+    else {
         m_dab->clear();
     }
 
@@ -79,7 +80,7 @@ KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
     return 1.0;
 }

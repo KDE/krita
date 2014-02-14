@@ -30,9 +30,9 @@
 #include <QHBoxLayout>
 #include <QDomElement>
 
-class KisDynamicSensorFuzzy : public QObject,public KisDynamicSensor
+class KisDynamicSensorFuzzy : public QObject, public KisDynamicSensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     bool dependsOnCanvasRotation() const;
     QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
@@ -47,7 +47,7 @@ public:
     KisDynamicSensorFuzzy();
     virtual ~KisDynamicSensorFuzzy() {}
     qreal value(const KisPaintInformation &info) {
-        return !info.isHoveringMode() ?rand() / (qreal)RAND_MAX : 1.0;
+        return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
     }
 
 public slots:

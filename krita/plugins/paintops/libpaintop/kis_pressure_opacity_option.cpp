@@ -23,7 +23,7 @@
 
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
+    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
 {
     m_checkable = false;
     setMinimumLabel(i18n("Transparent"));
@@ -41,17 +41,19 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {
-        QList<QPointF> points = sensor()->curve().points();
-        QList<QPointF> points_new;
-        foreach(const QPointF &p, points)
-        {
-            points_new.push_back( QPointF(p.x() * 0.5, p.y()));
+        KisDynamicSensor *pressureSensor = sensor(PressureId.id(), true);
+        if (pressureSensor) {
+            QList<QPointF> points = pressureSensor->curve().points();
+            QList<QPointF> points_new;
+            foreach(const QPointF & p, points) {
+                points_new.push_back(QPointF(p.x() * 0.5, p.y()));
+            }
+            pressureSensor->setCurve(KisCubicCurve(points_new));
         }
-        sensor()->setCurve(KisCubicCurve(points_new));
     }
 }
 
-quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInformation& info) const
+quint8 KisPressureOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
 {
 
     if (!isChecked()) {

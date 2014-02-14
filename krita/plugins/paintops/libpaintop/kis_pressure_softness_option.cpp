@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -20,13 +20,13 @@
 #include <klocale.h>
 
 KisPressureSoftnessOption::KisPressureSoftnessOption()
-        : KisCurveOption(i18n("Softness"),
-                         "Softness",
-                         KisPaintOpOption::brushCategory(),
-                         false,
-                         1.0,
-                         0.1,
-                         1.0)
+    : KisCurveOption(i18n("Softness"),
+                     "Softness",
+                     KisPaintOpOption::brushCategory(),
+                     false,
+                     1.0,
+                     0.1,
+                     1.0)
 {
     setMinimumLabel(i18n("Soft"));
     setMaximumLabel(i18n("Hard"));

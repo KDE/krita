@@ -35,7 +35,7 @@ DynaBrush::DynaBrush()
 
     // default values from Paul Haeberli code
     /*m_cursorFilter.setUseFixedAngle(true);
-    m_cursorFilter.setFixedAngles(0.6,0.2); 
+    m_cursorFilter.setFixedAngles(0.6,0.2);
     initWidth = 1.5;
     widthRange = 0.05;*/
     m_odelx = 0.0;
@@ -53,7 +53,7 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     if (!m_initialized) {
         m_cursorFilter.initFilterPosition(mx, my);
         m_cursorFilter.setUseFixedAngle(m_properties->useFixedAngle);
-        m_cursorFilter.setFixedAngles(m_properties->xAngle,m_properties->yAngle);
+        m_cursorFilter.setFixedAngles(m_properties->xAngle, m_properties->yAngle);
         m_cursorFilter.setMass(m_properties->mass);
         m_cursorFilter.setDrag(m_properties->drag);
 
@@ -81,14 +81,14 @@ DynaBrush::~DynaBrush()
 void DynaBrush::drawSegment(KisPainter &painter)
 {
     qreal wid = (m_properties->widthRange - m_cursorFilter.velocity()) * m_properties->initWidth;
-    
+
     if (wid < 0.00001) {
         wid = 0.00001;
     }
 
     qreal delx = m_cursorFilter.angleX() * wid;
     qreal dely = m_cursorFilter.angleY() * wid;
-    
+
     qreal px = m_cursorFilter.prevX();
     qreal py = m_cursorFilter.prevY();
     qreal nx = m_cursorFilter.x();
@@ -118,7 +118,7 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nowl.ry() *= m_canvasHeight;
     nowr.ry() *= m_canvasHeight;
 
-    if (m_properties->enableLine){
+    if (m_properties->enableLine) {
         painter.drawLine(prev, now);
     }
 
@@ -132,12 +132,15 @@ void DynaBrush::drawSegment(KisPainter &painter)
         if (m_properties->useTwoCircles) {
             drawCircle(painter, now.x(), now.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         }
-        
-    } else if (m_properties->action == 1) {
+
+    }
+    else if (m_properties->action == 1) {
         drawQuad(painter, prevr, prevl, nowl, nowr);
-    } else if (m_properties->action == 2) {
+    }
+    else if (m_properties->action == 2) {
         drawWire(painter, prevr, prevl, nowl, nowr);
-    } else if (m_properties->action == 3) {
+    }
+    else if (m_properties->action == 3) {
         drawLines(painter, prev, now, m_properties->lineCount);
     }
 

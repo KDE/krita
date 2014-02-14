@@ -40,8 +40,8 @@
 #include <kis_perspective_grid.h>
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
-        : m_image(image)
-        , m_isOffsetNotUptodate(false)
+    : m_image(image)
+    , m_isOffsetNotUptodate(false)
 {
 }
 
@@ -76,7 +76,8 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
         ignoreEvent = false;
-    } else {
+    }
+    else {
         if (m_isOffsetNotUptodate) {
             m_offset = info.pos() - m_position;
             m_isOffsetNotUptodate = false;
@@ -91,13 +92,14 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
 void KisDuplicateOpSettings::activate()
 {
     KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
-    if(!options)
+    if (!options)
         return;
 
     if (m_image && m_image->perspectiveGrid()->countSubGrids() != 1) {
         options->m_duplicateOption->setHealing(false);
         options->m_duplicateOption->setPerspective(false);
-    } else {
+    }
+    else {
         options->m_duplicateOption->setPerspective(false);
     }
 }
@@ -145,7 +147,8 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     QRectF rect2 = copy.boundingRect();
     if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
         copy.translate(m_position - info.pos());
-    } else {
+    }
+    else {
         copy.translate(-m_offset);
     }
 

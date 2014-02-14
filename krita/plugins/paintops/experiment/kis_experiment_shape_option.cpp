@@ -26,41 +26,41 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 
 };
 
 KisExperimentShapeOption::KisExperimentShapeOption()
-        : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     // save this to be able to restore it back
     m_maxSize = 1000;
-    
+
     m_options = new KisShapeOptionsWidget();
     m_useAspect = m_options->aspectButton->keepAspectRatio();
     computeAspect();
 
     // UI signals
     connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectToggled(bool)));
-    connect(m_options->randomSlider,SIGNAL(valueChanged(int)),this,SLOT(randomValueChanged(int)));
-    connect(m_options->followSlider,SIGNAL(valueChanged(int)),this,SLOT(followValueChanged(int)));
-    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
+    connect(m_options->randomSlider, SIGNAL(valueChanged(int)), this, SLOT(randomValueChanged(int)));
+    connect(m_options->followSlider, SIGNAL(valueChanged(int)), this, SLOT(followValueChanged(int)));
+    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), this, SLOT(prepareImage()));
 
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
 
     connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(changeSizeUI(bool)));
-    
+
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->angleSlider, SLOT(setEnabled(bool)));
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomSlider, SLOT(setEnabled(bool)));
     connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followSlider, SLOT(setEnabled(bool)));
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->fixedRotationSPBox, SLOT(setEnabled(bool)));
     connect(m_options->randomRotation, SIGNAL(toggled(bool)), m_options->randomWeightSPBox, SLOT(setEnabled(bool)));
     connect(m_options->followCursor, SIGNAL(toggled(bool)), m_options->followCursorWeightSPBox, SLOT(setEnabled(bool)));
-    
+
     setConfigurationPage(m_options);
 }
 
@@ -158,26 +158,25 @@ qreal KisExperimentShapeOption::randomRotationWeight() const
 void KisExperimentShapeOption::randomValueChanged(int value)
 {
     qreal relative = value / (qreal)m_options->randomSlider->maximum() ;
-    m_options->randomWeightSPBox->setValue( relative * m_options->randomWeightSPBox->maximum() );
+    m_options->randomWeightSPBox->setValue(relative * m_options->randomWeightSPBox->maximum());
 }
 
 
 void KisExperimentShapeOption::followValueChanged(int value)
 {
     qreal relative = value / (qreal)m_options->followSlider->maximum() ;
-    m_options->followCursorWeightSPBox->setValue( relative * m_options->followCursorWeightSPBox->maximum() );
+    m_options->followCursorWeightSPBox->setValue(relative * m_options->followCursorWeightSPBox->maximum());
 }
 
 
 void KisExperimentShapeOption::prepareImage()
 {
     QString path = m_options->imageUrl->url().toLocalFile();
-    if (QFile::exists(path)){
+    if (QFile::exists(path)) {
         m_image = QImage(path);
-        if (!m_image.isNull())
-        {
-            m_options->widthSpin->setValue( m_image.width() );
-            m_options->heightSpin->setValue( m_image.height() );
+        if (!m_image.isNull()) {
+            m_options->widthSpin->setValue(m_image.width());
+            m_options->heightSpin->setValue(m_image.height());
         }
     }
 }
@@ -192,13 +191,14 @@ void KisExperimentShapeOption::aspectToggled(bool toggled)
 
 void KisExperimentShapeOption::updateHeight(int value)
 {
-    if (m_useAspect){
-        int newHeight = qRound(value * 1.0/m_aspect);
+    if (m_useAspect) {
+        int newHeight = qRound(value * 1.0 / m_aspect);
         m_options->heightSpin->blockSignals(true);
         m_options->heightSpin->setValue(newHeight);
         m_options->heightSlider->setValue(newHeight);
         m_options->heightSpin->blockSignals(false);
-    }else{
+    }
+    else {
         computeAspect();
     }
 }
@@ -206,13 +206,14 @@ void KisExperimentShapeOption::updateHeight(int value)
 
 void KisExperimentShapeOption::updateWidth(int value)
 {
-    if (m_useAspect){
+    if (m_useAspect) {
         int newWidth = qRound(value * m_aspect);
         m_options->widthSpin->blockSignals(true);
-        m_options->widthSpin->setValue( newWidth );
-        m_options->widthSlider->setValue( newWidth );
+        m_options->widthSpin->setValue(newWidth);
+        m_options->widthSlider->setValue(newWidth);
         m_options->widthSpin->blockSignals(false);
-    }else{
+    }
+    else {
         computeAspect();
     }
 }
@@ -230,22 +231,23 @@ void KisExperimentShapeOption::computeAspect()
 void KisExperimentShapeOption::changeSizeUI(bool proportionalSize)
 {
     // if proportionalSize is false, pixel size is used
-    if (!proportionalSize){
-        m_options->widthSlider->setMaximum( m_maxSize );
-        m_options->widthSpin->setMaximum( m_maxSize );
+    if (!proportionalSize) {
+        m_options->widthSlider->setMaximum(m_maxSize);
+        m_options->widthSpin->setMaximum(m_maxSize);
         m_options->widthSpin->setSuffix("");
-        m_options->heightSlider->setMaximum( m_maxSize );
-        m_options->heightSpin->setMaximum( m_maxSize );
+        m_options->heightSlider->setMaximum(m_maxSize);
+        m_options->heightSpin->setMaximum(m_maxSize);
         m_options->heightSpin->setSuffix("");
-    }else{
-        m_options->widthSlider->setMaximum( 100 );
-        m_options->widthSpin->setMaximum( 100 );
+    }
+    else {
+        m_options->widthSlider->setMaximum(100);
+        m_options->widthSpin->setMaximum(100);
         m_options->widthSpin->setSuffix("%");
-        m_options->heightSlider->setMaximum( 100 );
-        m_options->heightSpin->setMaximum( 100 );
+        m_options->heightSlider->setMaximum(100);
+        m_options->heightSpin->setMaximum(100);
         m_options->heightSpin->setSuffix("%");
     }
-    
-    m_options->widthSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
-    m_options->heightSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
+
+    m_options->widthSlider->setPageStep(m_options->widthSlider->maximum() / 10);
+    m_options->heightSlider->setPageStep(m_options->widthSlider->maximum() / 10);
 }

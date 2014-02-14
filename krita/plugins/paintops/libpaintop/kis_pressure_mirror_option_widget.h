@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,16 +27,16 @@ class QCheckBox;
 class PAINTOP_EXPORT KisPressureMirrorOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
-    
+
 public:
     KisPressureMirrorOptionWidget();
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private slots:
     void horizontalMirrorChanged(bool mirror);
     void verticalMirrorChanged(bool mirror);
-    
+
 private:
     QCheckBox* m_horizontalMirror;
     QCheckBox* m_verticalMirror;

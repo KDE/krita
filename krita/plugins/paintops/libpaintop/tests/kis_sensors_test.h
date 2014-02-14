@@ -34,7 +34,7 @@ private slots:
 
     void testDrawingAngle();
 private:
-    void testBound(KisDynamicSensor* sensor);
+    void testBound(KisDynamicSensor *sensor);
 private:
     QList<KisPaintInformation> paintInformations;
 };

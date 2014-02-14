@@ -41,7 +41,7 @@ public:
     ~KisHairyBristleOption();
 
     void setScaleFactor(qreal scale) const;
-    
+
     bool useMousePressure() const;
 
     double scaleFactor() const;

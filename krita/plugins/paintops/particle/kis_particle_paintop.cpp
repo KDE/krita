@@ -40,8 +40,8 @@
 #include "particle_brush.h"
 
 KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
+    : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_UNUSED(image);
 
@@ -49,9 +49,9 @@ KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *setting
     m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);
     m_properties.gravity = settings->getDouble(PARTICLE_GRAVITY);
     m_properties.weight = settings->getDouble(PARTICLE_WEIGHT);
-    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X),settings->getDouble(PARTICLE_SCALE_Y));
+    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X), settings->getDouble(PARTICLE_SCALE_Y));
 
-    m_particleBrush.setProperties( &m_properties );
+    m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
 
     m_first = true;
@@ -81,7 +81,7 @@ void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPain
     }
 
 
-    if (m_first){
+    if (m_first) {
         m_particleBrush.setInitialPosition(pi1.pos());
         m_first = false;
     }
@@ -90,5 +90,5 @@ void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPain
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc, m_dab);
 }

@@ -26,7 +26,7 @@
 
 KisDeformPaintOpSettings::KisDeformPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
-                                                     KisCurrentOutlineFetcher::ROTATION_OPTION)
+            KisCurrentOutlineFetcher::ROTATION_OPTION)
 {
 }
 
@@ -38,18 +38,20 @@ bool KisDeformPaintOpSettings::paintIncremental()
 bool KisDeformPaintOpSettings::isAirbrushing() const
 {
     // version 2.3
-    if (hasProperty(AIRBRUSH_ENABLED)){
+    if (hasProperty(AIRBRUSH_ENABLED)) {
         return getBool(AIRBRUSH_ENABLED);
-    }else{
+    }
+    else {
         return getBool(DEFORM_USE_MOVEMENT_PAINT);
     }
 }
 
 int KisDeformPaintOpSettings::rate() const
 {
-    if (hasProperty(AIRBRUSH_RATE)){
+    if (hasProperty(AIRBRUSH_RATE)) {
         return getInt(AIRBRUSH_RATE);
-    }else{
+    }
+    else {
         return KisPaintOpSettings::rate();
     }
 }
@@ -57,7 +59,7 @@ int KisDeformPaintOpSettings::rate() const
 QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline){
+    if (mode == CursorIsOutline) {
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));

@@ -30,31 +30,31 @@ public:
     Bristle();
     ~Bristle();
 
-    inline float x() const{
+    inline float x() const {
         return m_x;
     }
 
-    inline float y() const{
+    inline float y() const {
         return m_y;
     }
 
-    inline float prevX() const{
+    inline float prevX() const {
         return m_prevX;
     }
 
-    inline float prevY() const{
+    inline float prevY() const {
         return m_prevY;
     }
 
-    inline float length() const{
+    inline float length() const {
         return m_length;
     }
 
-    inline  const KoColor &color() const{
+    inline  const KoColor &color() const {
         return m_color;
     }
 
-    inline int counter() const{
+    inline int counter() const {
         return m_counter;
     }
 
@@ -62,12 +62,12 @@ public:
         m_counter++;
     }
 
-    inline float inkAmount() const{
+    inline float inkAmount() const {
         return m_inkAmount;
     };
 
     inline float distanceCenter() {
-        return std::sqrt(m_x*m_x + m_y*m_y);
+        return std::sqrt(m_x * m_x + m_y * m_y);
     }
 
     inline void setX(float x) {
@@ -77,18 +77,18 @@ public:
         m_y = y;
     }
 
-    inline void setPrevX(float prevX){
+    inline void setPrevX(float prevX) {
         m_prevX = prevX;
     }
-    
-    inline void setPrevY(float prevY){
+
+    inline void setPrevY(float prevY) {
         m_prevY = prevY;
     }
-    
-    inline bool enabled() const{
+
+    inline bool enabled() const {
         return m_enabled;
     }
-    
+
     void setLength(float length);
     void setColor(const KoColor &color);
 
@@ -96,8 +96,8 @@ public:
     void removeInk(float value);
     void setInkAmount(float inkAmount);
     void setEnabled(bool enabled);
-    
-    
+
+
 private:
     void init(float x, float y, float length);
 

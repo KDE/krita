@@ -52,7 +52,7 @@ public:
                        KisColorProperties * colorProperties,
                        KisShapeProperties * shapeProperties,
                        KisShapeDynamicsProperties * shapeDynamicsProperties,
-                       KisBrushSP brush){
+                       KisBrushSP brush) {
         m_properties = properties;
         m_colorProperties = colorProperties;
         m_shapeProperties = shapeProperties;
@@ -61,8 +61,6 @@ public:
     }
 
     void setFixedDab(KisFixedPaintDeviceSP dab);
-
-
 
 private:
     KoColor m_inkColor;
@@ -105,12 +103,12 @@ private:
     // TODO: move this somewhere where I can reuse it
     /// convert radians to degrees
     inline qreal rad2deg(qreal rad) const {
-        return rad * (180.0/M_PI);
+        return rad * (180.0 / M_PI);
     }
 
     /// convert degrees to radians
     inline qreal deg2rad(quint16 deg) const {
-        return deg * (M_PI/180.0);
+        return deg * (M_PI / 180.0);
     }
 };
 

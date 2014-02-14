@@ -35,7 +35,8 @@
 #include <kis_compositeop_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent),m_sprayArea(new KisSprayOpOption())
+    : KisPaintOpOptionsWidget(parent)
+    , m_sprayArea(new KisSprayOpOption())
 {
     addPaintOpOption(m_sprayArea);
     addPaintOpOption(new KisSprayShapeOption());
@@ -68,7 +69,7 @@ KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() cons
 void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     Q_UNUSED(y);
-    m_sprayArea->setDiameter( m_sprayArea->diameter() + qRound(x) );
+    m_sprayArea->setDiameter(m_sprayArea->diameter() + qRound(x));
 }
 
 QSizeF KisSprayPaintOpSettingsWidget::paintOpSize() const

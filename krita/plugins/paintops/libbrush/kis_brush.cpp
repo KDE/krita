@@ -283,8 +283,7 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
 KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
     KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element);
-    if(brush && element.attribute("BrushVersion", "1") == "1")
-    {
+    if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
     return brush;
@@ -297,8 +296,8 @@ qint32 KisBrush::maskWidth(double scale, double angle, qreal subPixelX, qreal su
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0) angle += 2 * M_PI;
-    if(angle > 2 * M_PI) angle -= 2 * M_PI;
+    if (angle < 0) angle += 2 * M_PI;
+    if (angle > 2 * M_PI) angle -= 2 * M_PI;
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
@@ -313,8 +312,8 @@ qint32 KisBrush::maskHeight(double scale, double angle, qreal subPixelX, qreal s
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0) angle += 2 * M_PI;
-    if(angle > 2 * M_PI) angle -= 2 * M_PI;
+    if (angle < 0) angle += 2 * M_PI;
+    if (angle > 2 * M_PI) angle -= 2 * M_PI;
     scale *= d->scale;
 
     return KisQImagePyramid::imageSize(QSize(width(), height()),
@@ -327,8 +326,12 @@ double KisBrush::maskAngle(double angle) const
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0)      { angle += 2*M_PI; }
-    if(angle > 2*M_PI) { angle -= 2*M_PI; }
+    if (angle < 0)      {
+        angle += 2 * M_PI;
+    }
+    if (angle > 2 * M_PI) {
+        angle -= 2 * M_PI;
+    }
 
     return angle;
 }
@@ -350,7 +353,8 @@ double KisBrush::spacing() const
     return d->spacing;
 }
 
-void KisBrush::notifyCachedDabPainted() {
+void KisBrush::notifyCachedDabPainted()
+{
 }
 
 void KisBrush::prepareBrushPyramid() const
@@ -385,10 +389,10 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, doubl
 
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                                                   ColoringInformation* coloringInformation,
-                                                   double scaleX, double scaleY, double angle,
-                                                   const KisPaintInformation& info_,
-                                                   double subPixelX, double subPixelY, qreal softnessFactor) const
+        ColoringInformation* coloringInformation,
+        double scaleX, double scaleY, double angle,
+        const KisPaintInformation& info_,
+        double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(info_);
@@ -397,8 +401,8 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0) angle += 2 * M_PI;
-    if(angle > 2 * M_PI) angle -= 2 * M_PI;
+    if (angle < 0) angle += 2 * M_PI;
+    if (angle > 2 * M_PI) angle -= 2 * M_PI;
     scaleX *= d->scale;
     scaleY *= d->scale;
 
@@ -438,7 +442,8 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             for (int x = 0; x < maskWidth; x++) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
-                } else {
+                }
+                else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
                     coloringInformation->nextColumn();
                 }
@@ -456,7 +461,8 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                 src += 4;
                 dst++;
             }
-        } else {
+        }
+        else {
             const quint8 *src = maskPointer;
             quint8 *dst = alphaArray;
             for (int x = 0; x < maskWidth; x++) {
@@ -481,17 +487,17 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 }
 
 KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
-                                            double scale, double angle,
-                                            const KisPaintInformation& info,
-                                            double subPixelX, double subPixelY) const
+        double scale, double angle,
+        const KisPaintInformation& info,
+        double subPixelX, double subPixelY) const
 {
     Q_ASSERT(valid());
     Q_UNUSED(info);
     angle += d->angle;
 
     // Make sure the angle stay in [0;2*M_PI]
-    if(angle < 0) angle += 2 * M_PI;
-    if(angle > 2 * M_PI) angle -= 2 * M_PI;
+    if (angle < 0) angle += 2 * M_PI;
+    if (angle > 2 * M_PI) angle -= 2 * M_PI;
     scale *= d->scale;
 
     prepareBrushPyramid();
@@ -515,11 +521,12 @@ void KisBrush::generateBoundary() const
     KisFixedPaintDeviceSP dev;
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0/scale(), -angle(), KisPaintInformation());
-    } else {
+        dev = paintDevice(KoColorSpaceRegistry::instance()->rgb8(), 1.0 / scale(), -angle(), KisPaintInformation());
+    }
+    else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         dev = new KisFixedPaintDevice(cs);
-        mask(dev, KoColor(Qt::black, cs) , 1.0/scale(), 1.0/scale(), -angle(), KisPaintInformation());
+        mask(dev, KoColor(Qt::black, cs) , 1.0 / scale(), 1.0 / scale(), -angle(), KisPaintInformation());
     }
 
     d->boundary = new KisBoundary(dev);
@@ -535,12 +542,12 @@ const KisBoundary* KisBrush::boundary() const
 
 void KisBrush::setScale(qreal _scale)
 {
-  d->scale = _scale;
+    d->scale = _scale;
 }
 
 qreal KisBrush::scale() const
 {
-  return d->scale;
+    return d->scale;
 }
 
 void KisBrush::setAngle(qreal _rotation)

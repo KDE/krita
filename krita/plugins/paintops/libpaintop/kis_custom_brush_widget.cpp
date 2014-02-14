@@ -48,8 +48,8 @@
 #include "kis_iterator_ng.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
-        : KisWdgCustomBrush(parent)
-        , m_image(image)
+    : KisWdgCustomBrush(parent)
+    , m_image(image)
 {
     setWindowTitle(caption);
     preview->setScaledContents(true);
@@ -82,7 +82,7 @@ KisBrushSP KisCustomBrushWidget::brush()
 
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
-    if (!m_brushCreated){
+    if (!m_brushCreated) {
         slotUpdateCurrentBrush(0);
         m_brushCreated = true;
     }
@@ -92,14 +92,13 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
     if (brushStyle->currentIndex() == 0) {
         comboBox2->setEnabled(false);
-    }
-    else {
+    } else {
         comboBox2->setEnabled(true);
     }
     if (m_image) {
         createBrush();
-        if (m_brush){
-            preview->setPixmap(QPixmap::fromImage( m_brush->image() ));
+        if (m_brush) {
+            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
         }
     }
     emit sigBrushChanged();
@@ -115,9 +114,9 @@ void KisCustomBrushWidget::slotUpdateSpacing(qreal spacing)
 
 void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
-    if (m_brush){
-        static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( useColorAsMask );
-        preview->setPixmap(QPixmap::fromImage( m_brush->image() ));
+    if (m_brush) {
+        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        preview->setPixmap(QPixmap::fromImage(m_brush->image()));
     }
     emit sigBrushChanged();
 }
@@ -132,7 +131,8 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     if (brushStyle->currentIndex() == 0) {
         extension = ".gbr";
-    } else {
+    }
+    else {
         extension = ".gih";
     }
 
@@ -154,20 +154,21 @@ void KisCustomBrushWidget::slotAddPredefined()
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter) {
-        KisGbrBrush * resource = static_cast<KisGbrBrush*>( m_brush.data() )->clone();
+        KisGbrBrush * resource = static_cast<KisGbrBrush*>(m_brush.data())->clone();
         resource->setFilename(tempFileName);
 
-        if (nameLineEdit->text().isEmpty()){
+        if (nameLineEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
-        }else{
-            resource->setName( name );
+        }
+        else {
+            resource->setName(name);
         }
 
-        if (colorAsMask->isChecked()){
+        if (colorAsMask->isChecked()) {
             resource->makeMaskImage();
         }
 
-        m_rServerAdapter->addResource( resource );
+        m_rServerAdapter->addResource(resource);
     }
 }
 
@@ -176,10 +177,10 @@ void KisCustomBrushWidget::createBrush()
     if (!m_image)
         return;
 
-    if (m_brush){
+    if (m_brush) {
         // don't delete shared pointer, please
-        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(  m_brush.data() );
-        if (!removedCorrectly){
+        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(m_brush.data());
+        if (!removedCorrectly) {
             kWarning() << "Brush was not removed correctly for the resource server";
         }
     }
@@ -191,7 +192,7 @@ void KisCustomBrushWidget::createBrush()
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
         m_image->unlock();
 
-        if (!selection){
+        if (!selection) {
             m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
         }
         else {
@@ -216,7 +217,8 @@ void KisCustomBrushWidget::createBrush()
             m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
         }
 
-    } else {
+    }
+    else {
         // For each layer in the current image, create a new image, and add it to the list
         QVector< QVector<KisPaintDevice*> > devices;
         devices.push_back(QVector<KisPaintDevice*>());
@@ -250,13 +252,13 @@ void KisCustomBrushWidget::createBrush()
         m_image->unlock();
     }
 
-    static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );
+    static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(colorAsMask->isChecked());
     m_brush->setSpacing(spacingSlider->value());
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
 
-    KisBrushServer::instance()->brushServer()->addResource( m_brush.data() , false);
+    KisBrushServer::instance()->brushServer()->addResource(m_brush.data() , false);
 }
 
 void KisCustomBrushWidget::setImage(KisImageWSP image)

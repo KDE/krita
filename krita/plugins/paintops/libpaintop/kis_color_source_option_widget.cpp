@@ -35,17 +35,16 @@ struct KisColorSourceOptionWidget::Private {
     QMap<QString, QRadioButton*> id2radio;
 };
 
-KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n("Source"), KisPaintOpOption::colorCategory(), true ), d(new Private)
+KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n("Source"), KisPaintOpOption::colorCategory(), true), d(new Private)
 {
     m_checkable = false;
     QWidget* configurationWidget = new QWidget;
-  
+
     QGroupBox* groupBox = new QGroupBox(configurationWidget);
     groupBox->setObjectName(QString::fromUtf8("groupBox"));
     QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
-    
-    foreach(const KoID& id, KisColorSourceOption::sourceIds())
-    {
+
+    foreach(const KoID & id, KisColorSourceOption::sourceIds()) {
         QRadioButton* radioButton = new QRadioButton(groupBox);
         radioButton->setText(id.name());
         d->id2radio[id.id()] = radioButton;
@@ -58,7 +57,7 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n
     verticalLayout_2->addStretch();
 
     setConfigurationPage(configurationWidget);
-  
+
 }
 
 KisColorSourceOptionWidget::~KisColorSourceOptionWidget()
@@ -75,18 +74,15 @@ void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfigurat
 {
     d->option.readOptionSetting(setting);
     QRadioButton* rb = d->id2radio.value(d->option.colorSourceTypeId());
-    if(rb)
-    {
+    if (rb) {
         rb->setChecked(true);
     }
 }
 
 void KisColorSourceOptionWidget::sourceChanged()
 {
-    for(QMap<QString, QRadioButton*>::iterator it = d->id2radio.begin(); it != d->id2radio.end(); ++it)
-    {
-        if(it.value()->isChecked())
-        {
+    for (QMap<QString, QRadioButton*>::iterator it = d->id2radio.begin(); it != d->id2radio.end(); ++it) {
+        if (it.value()->isChecked()) {
             d->option.setColorSourceType(it.key());
             break;
         }

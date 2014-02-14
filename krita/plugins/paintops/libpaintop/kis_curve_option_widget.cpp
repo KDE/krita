@@ -82,6 +82,8 @@ void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settin
 
 void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+    setting->dump();
+
     m_curveOption->readOptionSetting(setting);
 
     m_curveOptionWidget->checkBoxUseCurve->blockSignals(true);

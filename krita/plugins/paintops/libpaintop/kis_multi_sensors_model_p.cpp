@@ -71,11 +71,14 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             return false;
         }
         else {
+            //qDebug() << "Asking for" << KisDynamicSensor::sensorsIds()[index.row()].id();
             KisDynamicSensor *sensor = m_curveOption->sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), false);
+            //qDebug() << "\tgot" << sensor;
             if (!sensor) {
                 sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id());
                 m_curveOption->replaceSensor(sensor);
             }
+            //qDebug() << "Setting" << sensor->name() << "active:" << checked;
             sensor->setActive(checked);
             return true;
         }

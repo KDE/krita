@@ -96,7 +96,7 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     }
 
     if (activeSensors().size() == 1) {
-        setting->setProperty(m_name + "Sensor", m_sensorMap.values().first()->toXML());
+        setting->setProperty(m_name + "Sensor", activeSensors().first()->toXML());
     }
     else {
         QDomDocument doc = QDomDocument("params");
@@ -104,12 +104,10 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
         doc.appendChild(root);
         root.setAttribute("id", "sensorslist");
 
-        foreach (KisDynamicSensor* sensor, m_sensorMap.values()) {
-            if (sensor->isActive()) {
-                QDomElement childelt = doc.createElement("ChildSensor");
-                sensor->toXML(doc, childelt);
-                root.appendChild(childelt);
-            }
+        foreach (KisDynamicSensor* sensor, activeSensors()) {
+            QDomElement childelt = doc.createElement("ChildSensor");
+            sensor->toXML(doc, childelt);
+            root.appendChild(childelt);
         }
         setting->setProperty(m_name + "Sensor", doc.toString());
     }
@@ -127,9 +125,13 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
 
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
 {
+    //qDebug() << "readNamedOptionSetting" << prefix;
+    setting->dump();
+
     if (m_checkable) {
         setChecked(setting->getBool("Pressure" + prefix, false));
     }
+    //qDebug() << "\tPressure" + prefix << isChecked();
 
     // Replace all sensors with the inactive defaults
     foreach(const KoID& sensorId, KisDynamicSensor::sensorsIds()) {
@@ -142,6 +144,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         if (s) {
             replaceSensor(s);
             s->setActive(true);
+            //qDebug() << "\tsingle sensor" << s->id() << s->isActive() << "added";
         }
     }
     else {
@@ -157,6 +160,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
                     if (s) {
                         replaceSensor(s);
                         s->setActive(true);
+                        //qDebug() << "\tchild sensor" << s->id() << s->isActive() << "added";
                     }
                 }
             }
@@ -164,17 +168,19 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         }
     }
 
-    // Only load the old curve format if the curve wasn't saved by the sensor
-    // This will give every sensor the same curve.
-    if (!setting->getString(prefix + "Sensor").contains("curve")) {
-        if (setting->getBool("Custom" + prefix, false)) {
-            foreach(KisDynamicSensor *s, m_sensorMap.values()) {
-                s->setCurve(setting->getCubicCurve("Curve" + prefix));
-                s->setActive(true);
-                replaceSensor(s);
-            }
-        }
-    }
+//    // Only load the old curve format if the curve wasn't saved by the sensor
+//    // This will give every sensor the same curve.
+//    //qDebug() << ">>>>>>>>>>>" << prefix + "Sensor" << setting->getString(prefix + "Sensor");
+//    if (!setting->getString(prefix + "Sensor").contains("curve")) {
+//        //qDebug() << "\told format";
+//        if (setting->getBool("Custom" + prefix, false)) {
+//            foreach(KisDynamicSensor *s, m_sensorMap.values()) {
+//                s->setCurve(setting->getCubicCurve("Curve" + prefix));
+//                s->setActive(true);
+//                replaceSensor(s);
+//            }
+//        }
+//    }
 
     // At least one sensor needs to be active
     if (activeSensors().size() == 0) {
@@ -182,8 +188,15 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     }
 
     m_value = setting->getDouble(m_name + "Value", m_maxValue);
+    //qDebug() << "\t" + m_name + "Value" << m_value;
+
     m_useCurve = setting->getBool(m_name + "UseCurve", true);
+    //qDebug() << "\t" + m_name + "UseCurve" << m_useSameCurve;
+
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
+    //qDebug() << "\t" + m_name + "UseSameCurve" << m_useSameCurve;
+
+    //qDebug() << "-----------------";
 }
 
 void KisCurveOption::replaceSensor(KisDynamicSensor *s)
@@ -334,6 +347,7 @@ void KisCurveOption::setValue(qreal value)
 
 double KisCurveOption::computeValue(const KisPaintInformation& info) const
 {
+    //qDebug() << ">>>>>>>>>" << name() << "computeValue. Use Curve" << m_useCurve << "use same curve" << m_useSameCurve << "m_separateCurveValue" << m_separateCurveValue;
     if (!m_useCurve) {
         if (m_separateCurveValue) {
             return 1.0;
@@ -345,6 +359,7 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
     else {
         qreal t = 1.0;
         foreach (KisDynamicSensor* s, m_sensorMap.values()) {
+            //qDebug() << "\tTesting" << s->name() << s->isActive();
             if (s->isActive()) {
                 t *= s->parameter(info);
             }

@@ -91,9 +91,6 @@ void KisCurveOption::resetAllSensors()
 
 void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    qDebug() << "=================================================";
-    qDebug() << "write settings" << m_name << "Active" << activeSensors().size();
-
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
     }
@@ -120,9 +117,6 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
 
-    setting->dump();
-    qDebug() << "=================================================";
-
 }
 
 void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -133,10 +127,6 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
 
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
 {
-    qDebug() << "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv";
-
-    qDebug() << "Reading settings" << m_name << activeSensors().size();
-
     if (m_checkable) {
         setChecked(setting->getBool("Pressure" + prefix, false));
     }
@@ -191,9 +181,6 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_value = setting->getDouble(m_name + "Value", m_maxValue);
     m_useCurve = setting->getBool(m_name + "UseCurve", true);
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
-
-    qDebug() << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
-
 }
 
 void KisCurveOption::replaceSensor(KisDynamicSensor *sensor)
@@ -265,8 +252,6 @@ void KisCurveOption::setCurveUsed(bool useCurve)
 
 void KisCurveOption::setCurve(const QString &sensorId, bool useSameCurve, const KisCubicCurve &curve)
 {
-    qDebug() << "Setting curve for" << sensorId << "use same curve" << useSameCurve;
-
     // No switch in state, don't mess with the cache
     if (useSameCurve == m_useSameCurve) {
         if (useSameCurve) {

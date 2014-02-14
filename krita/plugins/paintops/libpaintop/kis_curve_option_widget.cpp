@@ -43,8 +43,6 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
     , m_curveOptionWidget(new Ui_WdgCurveOption())
     , m_curveOption(curveOption)
 {
-    qDebug() << "Creating KisCurveOptionWidget" << this;
-
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
 
@@ -104,9 +102,6 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
-
-    qDebug() << "Loaded" << m_curveOption->name() << "with" << m_curveOption->activeSensors().size() << "Active sensors";
-
 }
 
 bool KisCurveOptionWidget::isCheckable()

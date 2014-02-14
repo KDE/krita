@@ -33,7 +33,6 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
-    qDebug() << "Creating multisensor selector" << this;
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
     d->model = new KisMultiSensorsModel(this);

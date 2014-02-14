@@ -358,12 +358,15 @@ double KisCurveOption::computeValue(const KisPaintInformation& info) const
     }
     else {
         qreal t = 1.0;
+        int count = 0;
         foreach (KisDynamicSensor* s, m_sensorMap.values()) {
             //qDebug() << "\tTesting" << s->name() << s->isActive();
             if (s->isActive()) {
                 t *= s->parameter(info);
+                count++;
             }
         }
+        t /= count;
         if (m_separateCurveValue) {
             return t;
         }

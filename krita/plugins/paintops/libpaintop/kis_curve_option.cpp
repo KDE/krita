@@ -141,6 +141,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         KisDynamicSensor *s = KisDynamicSensor::createFromXML(sensorDefinition);
         if (s) {
             replaceSensor(s);
+            s->setActive(true);
         }
     }
     else {
@@ -169,6 +170,8 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         if (setting->getBool("Custom" + prefix, false)) {
             foreach(KisDynamicSensor *s, m_sensorMap.values()) {
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
+                s->setActive(true);
+                replaceSensor(s);
             }
         }
     }
@@ -183,21 +186,14 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
 }
 
-void KisCurveOption::replaceSensor(KisDynamicSensor *sensor)
+void KisCurveOption::replaceSensor(KisDynamicSensor *s)
 {
-    Q_ASSERT(sensor);
+    Q_ASSERT(s);
 
-    if (m_sensorMap.contains(sensor->id())) {
-        m_sensorMap.remove(sensor->id());
+    if (m_sensorMap.contains(s->id()) && m_sensorMap[s->id()] != s) {
+        delete m_sensorMap.take(s->id());
     }
-
-    if (m_curveCache.contains(sensor->id())) {
-        sensor->setCurve(m_curveCache[sensor->id()]);
-    }
-
-    m_sensorMap[sensor->id()] = sensor;
-
-
+    m_sensorMap[s->id()] = s;
 }
 
 KisDynamicSensor *KisCurveOption::sensor(const QString& sensorId, bool active) const

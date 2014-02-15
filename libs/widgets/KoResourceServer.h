@@ -120,8 +120,10 @@ public:
 
     virtual ~KoResourceServer()
     {
-        foreach(T* res, m_resources) {
-            delete res;
+        if (m_deleteResource) {
+            foreach(T* res, m_resources) {
+                delete res;
+            }
         }
         m_resources.clear();
         delete m_tagStore;

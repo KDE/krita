@@ -288,6 +288,7 @@ void KisInputProfileManager::saveProfiles()
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
 
         config.group("General").writeEntry("name", p->name());
+        config.group("General").writeEntry("version", PROFILE_VERSION);
 
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
             KConfigGroup grp = config.group(action->name());

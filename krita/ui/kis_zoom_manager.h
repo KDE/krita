@@ -66,7 +66,7 @@ private slots:
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
-
+    void showGuides();
 
 private:
 
@@ -80,6 +80,7 @@ private:
     KoZoomAction * m_zoomAction;
     QWidget * m_zoomActionWidget;
     KAction *m_100pct;
+    QAction * m_showGuidesAction;
 };
 
 #endif

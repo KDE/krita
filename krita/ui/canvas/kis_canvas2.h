@@ -85,6 +85,8 @@ public:
 
 public: // KoCanvasBase implementation
 
+    KoGuidesData *guidesData();
+
     bool canvasIsOpenGL();
 
     void gridSize(qreal *horizontal, qreal *vertical) const;

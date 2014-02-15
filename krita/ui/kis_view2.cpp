@@ -270,14 +270,16 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
-    createManagers();
     createActions();
+    createManagers();
 
     m_d->controlFrame = new KisControlFrame(this);
 
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
+
+
 
     // krita/krita.rc must also be modified to add actions to the menu entries
 

@@ -141,6 +141,11 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
+    // then paint the guides
+    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
+                                                              *m_d->viewConverter,
+                                                              updateWidgetRect);
+
     gc.restore();
 }
 

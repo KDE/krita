@@ -950,6 +950,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
+
         gc.setChannelFlags(prevLayer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
         gc.setOpacity(prevLayer->opacity());
@@ -960,7 +961,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
         //Paint the pixels of the current layer, using their actual alpha value
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
@@ -978,7 +981,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Paint layer on the copy
         KisPainter gc(mergedDevice);
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());

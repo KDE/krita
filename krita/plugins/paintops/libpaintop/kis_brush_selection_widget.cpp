@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Mohit Goyal    <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,8 +85,15 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     uiWdgBrushChooser.sliderPrecision->setSingleStep(1);
     uiWdgBrushChooser.sliderPrecision->setPageStep(1);
     connect(uiWdgBrushChooser.sliderPrecision, SIGNAL(valueChanged(int)), SLOT(precisionChanged(int)));
+    connect(uiWdgBrushChooser.autoPrecisionCheckBox, SIGNAL(stateChanged(int)), SLOT(setAutoPrecisionEnabled(int)));
+    connect(uiWdgBrushChooser.deltaValueSpinBox, SIGNAL(valueChanged(double)), SLOT(setDeltaValue(double)));
+    connect(uiWdgBrushChooser.sizeToStartFromSpinBox, SIGNAL(valueChanged(double)), SLOT(setSizeToStartFrom(double)));
     uiWdgBrushChooser.sliderPrecision->setValue(4);
     setPrecisionEnabled(false);
+    uiWdgBrushChooser.label->setVisible(false);
+    uiWdgBrushChooser.label_2->setVisible(false);
+    uiWdgBrushChooser.deltaValueSpinBox->setVisible(false);
+    uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(false);
 
     m_presetIsValid = true;
 }
@@ -198,6 +206,11 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
             m_brushChooser->setBrush(brush);
             m_brushChooser->setBrushSize(dxPixels, dyPixels);
         }
+    }
+    if(m_precisionOption.autoPrecisionEnabled())
+    {
+        m_precisionOption.setAutoPrecision(this->brushSize().width());
+        emit sigPrecisionChanged();
     }
 }
 
@@ -324,6 +337,39 @@ void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, i
     m_buttonGroup->addButton(button, id);
     m_chooserMap[m_buttonGroup->id(button)] = widget;
     widget->hide();
+}
+void KisBrushSelectionWidget::setAutoPrecisionEnabled(int value)
+{
+    m_precisionOption.setAutoPrecisionEnabled(value);
+    if(m_precisionOption.autoPrecisionEnabled())
+    {
+        m_precisionOption.setAutoPrecision(this->brushSize().height());
+        setPrecisionEnabled(false);
+        uiWdgBrushChooser.label->setVisible(true);
+        uiWdgBrushChooser.label_2->setVisible(true);
+        uiWdgBrushChooser.deltaValueSpinBox->setVisible(true);
+        uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(true);
+
+    }
+    else
+    {
+        setPrecisionEnabled(true);
+        uiWdgBrushChooser.label->setVisible(false);
+        uiWdgBrushChooser.label_2->setVisible(false);
+        uiWdgBrushChooser.deltaValueSpinBox->setVisible(false);
+        uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(false);
+    }
+
+}
+void KisBrushSelectionWidget::setSizeToStartFrom(double value)
+{
+    m_precisionOption.setSizeToStartFrom(value);
+}
+
+void KisBrushSelectionWidget::setDeltaValue(double value)
+{
+    m_precisionOption.setDeltaValue(value);
+
 }
 
 #include "kis_brush_selection_widget.moc"

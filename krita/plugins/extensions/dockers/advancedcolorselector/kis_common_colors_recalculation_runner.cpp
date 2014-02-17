@@ -125,7 +125,7 @@ private:
 
 void KisCommonColorsRecalculationRunner::run()
 {
-    parent->delayedSetColors(extractColors());
+    m_commonColors->setColors(extractColors());
 }
 
 QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()
@@ -136,7 +136,7 @@ QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()
     QList<VBox> boxes;
     boxes.append(startBox);
 
-    while (boxes.size()<numColors*3/5 && colors.size()>numColors*3/5) {
+    while (boxes.size()<m_numColors*3/5 && colors.size()>m_numColors*3/5) {
         int biggestBox=-1;
         int biggestBoxPopulation=-1;
 
@@ -155,7 +155,7 @@ QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()
     }
 
 
-    while (boxes.size()<numColors && colors.size()>numColors) {
+    while (boxes.size()<m_numColors && colors.size()>m_numColors) {
         int biggestBox=-1;
         int biggestBoxAxisSize=-1;
 
@@ -186,17 +186,17 @@ QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()
 
 QList<QRgb> KisCommonColorsRecalculationRunner::getColors()
 {
-    int width = imageData.width();
-    int height = imageData.height();
+    int width = m_imageData.width();
+    int height = m_imageData.height();
 
     QImage tmpImage;
     int pixelCount = height*width;
     if(pixelCount> (1<<16)) {
         qreal factor = sqrt((1<<16)/(qreal) pixelCount);
-        tmpImage=imageData.scaledToWidth(width*factor);
+        tmpImage=m_imageData.scaledToWidth(width*factor);
     }
     else {
-        tmpImage=imageData;
+        tmpImage=m_imageData;
     }
     width=tmpImage.width();
     height=tmpImage.height();

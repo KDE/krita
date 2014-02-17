@@ -35,12 +35,9 @@ public:
     KisColorSelectorBase* createPopup() const;
 
 public slots:
-    void delayedSetColors(QList<KoColor> colors);
+    void setColors(QList<KoColor> colors);
     void updateSettings();
     void recalculate();
-
-protected slots:
-    void updateColors();
 
 private:
     QMutex m_mutex;

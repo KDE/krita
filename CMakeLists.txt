@@ -9,11 +9,6 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
     cmake_policy(SET CMP0017 NEW)
 endif()
 
- ############
-#############
-## Options ##
-#############
-############
 
  ######################
 #######################
@@ -21,13 +16,46 @@ endif()
 #######################
 ######################
 
+# define common versions of Calligra applications, used to generate calligraversion.h
+# update these version for every release:
+set(CALLIGRA_VERSION_STRING "2.9 Pre-Alpha")
+set(CALLIGRA_VERSION_MAJOR 2)
+set(CALLIGRA_STABLE_VERSION_MINOR 9)
+set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test releases, set 0 for first Stable, etc.
+set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
+#set(CALLIGRA_BETA 1) # uncomment only for Beta
+#set(CALLIGRA_RC 1) # uncomment only for RC
+
+if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
+    set(CALLIGRA_STABLE 1) # do not edit
+endif()
+
+message(STATUS "Calligra version: ${CALLIGRA_VERSION_STRING}")
+
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "13.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "13")
+if(CALLIGRA_VERSION_MAJOR EQUAL 2)
+    math(EXPR GENERIC_CALLIGRA_LIB_VERSION_MAJOR "${CALLIGRA_STABLE_VERSION_MINOR} + 5")
+else()
+    # let's make sure we won't forget to update the "5"
+    message(FATAL_ERROR "Reminder: please update offset == 5 used to compute GENERIC_CALLIGRA_LIB_VERSION_MAJOR to something bigger")
+endif()
+set(GENERIC_CALLIGRA_LIB_VERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "${GENERIC_CALLIGRA_LIB_VERSION_MAJOR}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+# fetch git revision for the current build
+
+set(CALLIGRA_GIT_SHA1_STRING "")
+
+include(GetGitRevisionDescription)
+get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+
+if(GIT_SHA1)
+    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
+    set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
+endif(GIT_SHA1)
 
  ########################
 #########################
@@ -67,9 +95,14 @@ else (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
 endif (RELEASE_BUILD)
 
+ ############
+#############
+## Options ##
+#############
+############
 
+option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
 option(GHNS "support Get Hot New Stuff" OFF)
-option(NEPOMUK "support NEPOMUK Tagging" ON)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
@@ -99,7 +132,6 @@ endif(NOT PRODUCTSET)
 # 3rd-party libs
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
-calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
 # building tools
 calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
@@ -117,20 +149,20 @@ calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  NEEDS LIB_KOODF2 CALLIGRA_
 calligra_define_product(SCRIPTING "Scripting feature") # TODO
 calligra_define_product(RDF "RDF feature")
 # plugins
-calligra_define_product(PLUGIN_TEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_TEXTSHAPE "Text shape plugin"  NEEDS CALLIGRA_LIBS)
 # apps
 calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEXTSHAPE)
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(STAGE_PART "Stage engine"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
-calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS SCRIPTING)
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)"  NEEDS SHEETS_PART)
 calligra_define_product(AUTHOR_APP "Full Author (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(KARBON_APP "Full Karbon (for Desktop)"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(KRITA_APP "Full Krita (for Desktop)"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(KEXI_APP "Full Kexi (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_CALLIGRADB)
+calligra_define_product(KEXI_APP "Full Kexi (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_CALLIGRADB SCRIPTING)
 calligra_define_product(FLOW_APP "Full Flow (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
-calligra_define_product(PLAN_APP "Full Plan (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
+calligra_define_product(PLAN_APP "Full Plan (for Desktop)"  NEEDS CALLIGRA_LIBS LIB_KOREPORT LIB_KDCHART LIB_KDGANTT SCRIPTING)
 calligra_define_product(BRAINDUMP_APP "Full Braindump (for Desktop)"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(DOC "Calligra Documentations")
 # extras
@@ -141,28 +173,28 @@ calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
 # more plugins
-calligra_define_product(PLUGIN_COLORENGINES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_MUSICSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_SPACENAVIGATOR ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_DOCKERS ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_TEXTEDITING ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION ""  NEEDS KEXI_APP SHEETS_PART)
-calligra_define_product(PLUGIN_DEFAULTTOOLS ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_PATHSHAPES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_VARIABLES ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_CHARTSHAPE "" NEEDS CALLIGRA_LIBS LIB_KDCHART)
-calligra_define_product(PLUGIN_PICTURESHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_PLUGINSHAPE ""  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_FORMULASHAPE ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_SPACENAVIGATOR "SpaceNavigator input plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_ARTISTICTEXTSHAPE "Artistic shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_DOCKERS "Default dockers plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi"  NEEDS KEXI_APP SHEETS_PART)
+calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" NEEDS CALLIGRA_LIBS LIB_KDCHART)
+calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_PLUGINSHAPE "Plugin shape plugin"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_FORMULASHAPE "Formula shape plugin"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligra"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_VECTORSHAPE "" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
-calligra_define_product(PLUGIN_REPORTING ""  NEEDS LIB_KOREPORT LIB_KDCHART)
+calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
+calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  NEEDS LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  NEEDS RDF CALLIGRA_LIBS)
 # staging plugins
-calligra_define_product(PLUGIN_GOOGLEDOCS "" STAGING  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_THREEDSHAPE ""  STAGING  NEEDS CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES ""  STAGING  NEEDS SHEETS_PART)
+calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_SHEETS_PIVOTTABLES "Plugin for Sheets adding pivot tables"  STAGING  NEEDS SHEETS_PART)
 # Sheets filters
 calligra_define_product(FILTER_XLSX_TO_ODS "XLSX to ODS filter" NEEDS LIB_KOMSOOXML SHEETS_PART)
 calligra_define_product(FILTER_XLS_TO_SHEETS "Sheets XLS import filter" NEEDS LIB_MSO LIB_KOMSOOXML SHEETS_PART)
@@ -183,22 +215,24 @@ calligra_define_product(FILTER_SHEETS_IMPORT "All Sheets import filter"  WANTS F
 calligra_define_product(FILTER_SHEETS_EXPORT "All Sheets export filter"  WANTS FILTER_SHEETS_TO_XLS FILTER_SHEETS_TO_CSV FILTER_SHEETS_TO_GNUMERIC FILTER_SHEETS_TO_OPENCALC FILTER_SHEETS_TO_HTML FILTER_KSPREAD_TO_LATEX)
 calligra_define_product(FILTER_SHEETS "All Sheets filter"  WANTS FILTER_SHEETS_IMPORT FILTER_SHEETS_EXPORT)
 # Flow filters
-calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
-calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG)
+calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG FILTER_WPG_TO_ODG)
 calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filter"  WANTS )
 calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
+calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_KPR_TO_OPD "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter" NEEDS LIB_MSO CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
+calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filter"  WANTS )
 calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" NEEDS LIB_MSO LIB_KOMSOOXML CALLIGRA_LIBS)
 calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART LIB_KOODF2)
 calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_KOODFREADER CALLIGRA_LIBS)
@@ -206,7 +240,7 @@ calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  NEEDS CALLIGRA_LI
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDS_IMPORT "All Words import filter"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
+calligra_define_product(FILTER_WORDS_IMPORT "All Words import filter"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_APPLIXWORD_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
 calligra_define_product(FILTER_WORDS_EXPORT "All Words export filter"  WANTS FILTER_ODT_TO_ASCII FILTER_ODT_TO_MOBI FILTER_ODT_TO_EPUB2 FILTER_ODT_TO_HTML)
 calligra_define_product(FILTER_WORDS "All Words filter"  WANTS FILTER_WORDS_IMPORT FILTER_WORDS_EXPORT)
 # Plan filters
@@ -238,10 +272,10 @@ calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FI
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
 calligra_define_product(ACTIVE "Calligra Active"  NEEDS SHEETS_PART STAGE_PART WORDS_PART)
-calligra_define_product(CALLIGRA ""  NEEDS CALLIGRA_LIBS)
+calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLIGRA_LIBS)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
-calligra_define_product(CSTESTER "" NEEDS SHEETS_PART STAGE_PART WORDS_PART)
+calligra_define_product(CSTESTER "cstester " NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 
 # For new products see cmake/productsets/README, "How to add another product?"
 
@@ -260,10 +294,15 @@ set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
 if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus Qt3Support)
 else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
 endif (QT3SUPPORT)
+
+if (USEOPENGL)
+    find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
+endif (USEOPENGL)
+
 
 include (KDE4Defaults)
 include (MacroLibrary)
@@ -294,10 +333,6 @@ if (GHNS)
         MESSAGE(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
     endif (NOT LIBATTICA_FOUND)
 endif (GHNS)
-
-if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
-  set(NEPOMUK FALSE)
-endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
 
 macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
@@ -361,9 +396,9 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.7.15)
+set(SQLITE_RECOMMENDED_VERSION 3.8.2)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
 macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
                   "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
@@ -379,7 +414,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
                   "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -389,21 +424,23 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-macro_optional_find_package(OpenGL)
+if (USEOPENGL)
+    macro_optional_find_package(OpenGL)
 
-if(OPENGL_FOUND)
-    message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-    if(QT_QTOPENGL_FOUND)
-        message(STATUS "Found Qt OpenGL support")
-        set(HAVE_OPENGL 1)
-    else(QT_QTOPENGL_FOUND)
-        message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-    endif(QT_QTOPENGL_FOUND)
-else(OPENGL_FOUND)
-    message(STATUS "Did NOT find OpenGL libraries")
-endif(OPENGL_FOUND)
+    if(OPENGL_FOUND)
+        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+        if(QT_QTOPENGL_FOUND)
+            message(STATUS "Found Qt OpenGL support")
+            set(HAVE_OPENGL 1)
+        else(QT_QTOPENGL_FOUND)
+            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+        endif(QT_QTOPENGL_FOUND)
+    else(OPENGL_FOUND)
+        message(STATUS "Did NOT find OpenGL libraries")
+    endif(OPENGL_FOUND)
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif(USEOPENGL)
 
-macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
 ## Test for kdepimlibs
@@ -562,18 +599,6 @@ else(NOT WIN32)
 endif(NOT WIN32)
 
 ##
-## Test for Nepomuk
-##
-if(NEPOMUK)
-    macro_optional_find_package(Nepomuk)
-    if(NOT NEPOMUK_FOUND)
-        set(NEPOMUK FALSE)
-    endif(NOT NEPOMUK_FOUND)
-    add_definitions(-DDISABLE_NEPOMUK_LEGACY)
-    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
-endif(NEPOMUK)
-
-##
 ## Test for KActivities
 ##
 macro_optional_find_package(KActivities 6.1.0)
@@ -662,28 +687,64 @@ macro_optional_find_package(Okular)
 macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
-## Test for WordPerfect Document Lib
+## Test for libodfgen
 ##
-macro_optional_find_package(WPD)
-macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
+macro_optional_find_package(LibOdfGen)
+macro_log_feature(LIBODFGEN_FOUND "LibOdfGen"
+                  "Open Document Format Generation Library"
+                  "http://sf.net/p/libwpd/libodfgen/" FALSE ""
+                  "Required by various import filters"
+)
 
 ##
-## Test for WordPerfect Graphics Lib
+## Test for WordPerfect Document Library
 ##
-macro_optional_find_package(WPG)
-macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
+macro_optional_find_package(LibWpd)
+macro_log_feature(LIBWPD_FOUND "LibWpd"
+                  "WordPerfect Document Library"
+                  "http://libwpd.sourceforge.net/" FALSE ""
+                  "Required by the Words WPD import filter"
+)
+
+##
+## Test for WordPerfect Graphics Library
+##
+macro_optional_find_package(LibWpg)
+macro_log_feature(LIBWPG_FOUND "LibWpg"
+                  "WordPerfect Graphics Library"
+                  "http://libwpg.sourceforge.net/" FALSE ""
+                  "Required by the Karbon WPG import filter"
+)
 
 ##
 ## Test for Microsoft Works Document Library
 ##
-macro_optional_find_package(LibWPS)
-macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
+macro_optional_find_package(LibWps)
+macro_log_feature(LIBWPS_FOUND "LibWps"
+                  "Microsoft Works Document Library"
+                  "http://libwps.sourceforge.net/" FALSE ""
+                  "Required by the Words WPS import filter"
+)
 
 ##
-## Test for libvisio
+## Test for Microsoft Visio Document Library
 ##
 macro_optional_find_package(LibVisio)
-macro_log_feature(LIBVISIO_FOUND "LibVisio" "Visio Import Filter Library" "http://www.freedesktop.org/wiki/Software/libvisio" FALSE "" "Required by the Flow visio import filter")
+macro_log_feature(LIBVISIO_FOUND "LibVisio"
+                  "Visio Import Filter Library"
+                  "http://www.freedesktop.org/wiki/Software/libvisio" FALSE ""
+                  "Required by the Flow visio import filter"
+)
+
+##
+## Test for Apple Keynote Document Library
+##
+macro_optional_find_package(LibEtonyek)
+macro_log_feature(LIBETONYEK_FOUND "LibEtonyek"
+                  "Apple Keynote Document Library"
+                  "http://www.freedesktop.org/wiki/Software/libetonyek/" FALSE ""
+                  "Required by the Stage keynote import filter"
+)
 
 ##
 ## Test for qt-poppler
@@ -761,12 +822,12 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
 # vectorimage
-set(VECTORIMAGE_INCLUDES 
+set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
-                   
+
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_BINARY_DIR}/libs/kotext
@@ -793,6 +854,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
@@ -845,10 +907,6 @@ set(KDCHART_INCLUDES
 set(KDCHART_LIBS calligrakdchart)
 
 
-set(WRITERPERFECT_INCLUDES
-    ${CMAKE_SOURCE_DIR}/filters/writerperfect
-)
-
 #############################################
 ####           filter libraries          ####
 #############################################
@@ -887,9 +945,13 @@ if(NOT EIGEN2_FOUND)
     calligra_disable_product(SHEETS_PART "Eigen devel not found")
 endif(NOT EIGEN2_FOUND)
 
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
-    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms|Xinput devel not found ")
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT REQUIRED_Xinput_FOUND)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+    calligra_disable_product(KRITA_APP "SharedMimeInfo|libeigen2|libexiv2|lcms devel not found ")
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+
+if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
+    calligra_disable_product(KRITA_APP "Xinput devel not found ")
+endif(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
 
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     calligra_disable_product(ACTIVE "Qt version <= 4.7.0")
@@ -912,25 +974,26 @@ if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
-    calligra_disable_product(FILTER_VISIO_TO_ODG "libwpd|libwpg|libvisio devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND OR NOT LIBVISIO_FOUND)
+if (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)
+    calligra_disable_product(FILTER_KEY_TO_ODP "libodfgen|libetonyek devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libwpd|libwpg devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
+    calligra_disable_product(FILTER_VISIO_TO_ODG "libodfgen|libvisio devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBVISIO_FOUND)
 
-if(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
-    calligra_disable_product(FILTER_WORKS_TO_ODT "libwpd|libwps devel not found")
-endif(NOT WPD_FOUND OR NOT LIBWPS_FOUND)
+if(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
+    calligra_disable_product(FILTER_WORDPERFECT_TO_ODT "libodfgen|libwpd|libwpg devel not found")
+endif(NOT LIBODFGEN_FOUND OR NOT LIBWPD_FOUND OR NOT LIBWPG_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(LIB_WRITERPERFECT "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
+    calligra_disable_product(FILTER_WORKS_TO_ODT "libodfgen|libwps devel not found")
+endif(NOT LIBODFGEN_FOUND OR NOT LIBWPS_FOUND)
 
-if (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
-    calligra_disable_product(FILTER_WPG_TO_SVG "libwpd|libwpg devel not found")
-endif (NOT WPD_FOUND OR NOT LIBWPG_FOUND)
+if (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
+    calligra_disable_product(FILTER_WPG_TO_SVG "libwpg devel not found")
+    calligra_disable_product(FILTER_WPG_TO_ODG "libodfgen|libwpg devel not found")
+endif (NOT LIBODFGEN_FOUND OR NOT LIBWPG_FOUND)
 
 if (WIN32 OR NOT POPPLER_XPDF_HEADERS_FOUND)
     calligra_disable_product(FILTER_PDF_TO_SVG "poppler xpdf headers not found or on win")

@@ -51,63 +51,105 @@ void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     m_canvas->updateCanvas();
 }
 
-void KisToolGrid::mousePressEvent(KoPointerEvent *event)
-{
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::ControlModifier)) {
-
-        setMode(KisTool::PAINT_MODE);
-
-        m_dragStart = convertToPixelCoord(event);
-        KisConfig cfg;
-        if (event->modifiers() == Qt::ControlModifier) {
-            m_currentMode = SCALE;
-        } else {
-            m_currentMode = TRANSLATION;
-        }
-
-        if (m_currentMode == TRANSLATION) {
-            m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
-        } else {
-            m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
-        }
-    }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+inline QPointF modPoints(const QPointF &x1, const QPointF &x2) {
+    return QPointF(std::fmod(x1.x(), x2.x()), std::fmod(x1.y(), x2.y()));
 }
 
-
-void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
-{
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        KisConfig cfg;
-        int subdivisions = cfg.getGridSubdivisions();
-        m_dragEnd = convertToPixelCoord(event);
-        if (m_currentMode == TRANSLATION) {
-            QPoint newoffset = m_initialOffset + (m_dragEnd - m_dragStart).toPoint();
-            cfg.setGridOffsetX(newoffset.x() % (cfg.getGridHSpacing() * subdivisions));
-            cfg.setGridOffsetY(newoffset.y() % (cfg.getGridVSpacing() * subdivisions));
-        } else { // SCALE
-            QPoint newSize = m_initialSpacing + (m_dragEnd - m_dragStart).toPoint();
-            if (newSize.x() >= 1) cfg.setGridHSpacing(newSize.x());
-            if (newSize.y() >= 1) cfg.setGridVSpacing(newSize.y());
-        }
-        m_canvas->updateCanvas();
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
+inline QPointF divPoints(const QPointF &x1, const QPointF &x2) {
+    return QPointF(x1.x() / x2.x(), x1.y() / x2.y());
 }
 
-void KisToolGrid::mouseReleaseEvent(KoPointerEvent *event)
+inline QPointF mulPoints(const QPointF &x1, const QPointF &x2) {
+    return QPointF(x1.x() * x2.x(), x1.y() * x2.y());
+}
+
+void KisToolGrid::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
+    setMode(KisTool::PAINT_MODE);
+
+    m_dragStart = convertToPixelCoord(event);
+    KisConfig cfg;
+    m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+    m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
+}
+
+void KisToolGrid::continuePrimaryAction(KoPointerEvent *event)
+{
+    KisConfig cfg;
+    m_dragEnd = convertToPixelCoord(event);
+
+    QPointF newOffset = m_initialOffset + m_dragEnd - m_dragStart;
+    newOffset = modPoints(newOffset, qreal(cfg.getGridSubdivisions()) * m_initialSpacing);
+
+    cfg.setGridOffsetX(newOffset.x());
+    cfg.setGridOffsetY(newOffset.y());
+
+    m_canvas->updateCanvas();
+}
+
+void KisToolGrid::endPrimaryAction(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    setMode(KisTool::HOVER_MODE);
+}
+
+void KisToolGrid::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::beginAlternateAction(event, action);
+        return;
     }
-    else {
-        KisTool::mouseReleaseEvent(event);
+
+    KisConfig cfg;
+    m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
+    m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
+
+    m_dragStart = convertToPixelCoord(event);
+}
+
+void KisToolGrid::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::continueAlternateAction(event, action);
+        return;
     }
+
+    KisConfig cfg;
+    m_dragEnd = convertToPixelCoord(event);
+
+    QPoint newSpacing = m_initialSpacing + (m_dragEnd - m_dragStart).toPoint();
+
+    QPointF newOffset = m_dragStart - divPoints(mulPoints(modPoints(m_dragStart - m_initialOffset, m_initialSpacing), newSpacing), m_initialSpacing);
+    newOffset = modPoints(newOffset, qreal(cfg.getGridSubdivisions()) * newSpacing);
+
+    if (newSpacing.x() >= 1 && newSpacing.y() >= 1) {
+        cfg.setGridHSpacing(newSpacing.x());
+        cfg.setGridVSpacing(newSpacing.y());
+
+        cfg.setGridOffsetX(newOffset.x());
+        cfg.setGridOffsetY(newOffset.y());
+    }
+
+    m_canvas->updateCanvas();
+}
+
+void KisToolGrid::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action != Secondary &&
+        action != PickFgNode &&
+        action != PickFgImage) {
+
+        KisTool::endAlternateAction(event, action);
+        return;
+    }
+
+    setMode(KisTool::HOVER_MODE);
 }
 
 void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)

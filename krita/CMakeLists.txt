@@ -1,5 +1,13 @@
 project(krita)
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+# To avoid the confusion of an endless stream of Eigen warnings. 
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-local-typedefs)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/tests/data/)
 
 macro(macro_add_unittest_definitions)
@@ -18,6 +26,13 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
+configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
 
 include(CheckFunctionExists)
 
@@ -133,26 +148,6 @@ endif (Q_WS_MAC)
 target_link_libraries(kdeinit_krita kritaui)
 target_link_libraries(krita kdeinit_krita)
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    find_package(OpenCTL)
-    find_package(OpenShiva)
-    find_package(QtShiva )
-    
-    if(NOT ${OPENCTL_VERSION} VERSION_GREATER 0.9.15.1 )
-        # Workaround for the following issues:
-        # http://bugs.kde.org/274675 http://bugs.kde.org/248051
-        # http://redmine.opengtl.org/issues/72
-        message(status "Found OpenGTL < 0.9.15.1, on a 64 bits system, krita will be forced linked to the libraries to make sure opengtl symbols are available")
-        if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
-            target_link_libraries(krita ${OPENSHIVA_LDFLAGS})
-        endif()
-
-        if(OPENCTL_FOUND AND OPENEXR_FOUND)
-            target_link_libraries(krita ${OPENCTL_LDFLAGS})
-        endif()
-    endif()
-endif()
-
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
@@ -160,7 +155,7 @@ install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-if (${QTVERSION} VERSION_GREATER 4.7.0)
-add_subdirectory(sketch)
-add_subdirectory(gemini)
-endif (${QTVERSION} VERSION_GREATER 4.7.0)
+if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
+    add_subdirectory(sketch)
+    add_subdirectory(gemini)
+endif (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

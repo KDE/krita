@@ -110,13 +110,13 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     }
 
     m_canvas = canvas;
-    Q_ASSERT(canvas);
+
     m_commonColorsWidget->setCanvas(canvas);
     m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
 
 
-    if (m_canvas->view()->nodeManager()) {
+    if (m_canvas && m_canvas->view()->nodeManager()) {
         connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
@@ -141,7 +141,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 
 void KisColorSelectorNgDockerWidget::openSettings()
 {
-    Q_ASSERT(m_canvas);
+    if (!m_canvas) return;
 
     KisColorSelectorSettingsDialog settings;
     if(settings.exec()==QDialog::Accepted) {

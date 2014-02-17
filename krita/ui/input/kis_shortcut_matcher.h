@@ -62,7 +62,7 @@ class KisAbstractInputAction;
  * When the action is in "Ready" state, it means that all the
  * modifiers for the action are already pressed and we are only
  * waiting for a user to press the mouse button and start a stroke. In
- * this state the action can show the user its Cursor to notify him
+ * this state the action can show the user its Cursor to notify the user
  * what is going to happen next.
  *
  * In the "Running" state, the action has full access to the user
@@ -89,7 +89,15 @@ public:
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
     void addShortcut(KisTouchShortcut *shortcut);
-    void addAction(KisAbstractInputAction *action);
+
+    /**
+     * Returns true if the currently running shortcut supports
+     * processing hi resolution flow of events from the tablet
+     * device. In most of the cases (except of the painting itself)
+     * too many events make the execution of the action too slow, so
+     * the action can decide whether it needs it.
+     */
+    bool supportsHiResInputEvents();
 
     /**
      * Handles a key press event.
@@ -163,23 +171,13 @@ public:
     bool touchEndEvent(QTouchEvent *event);
 
     /**
-     * Handles the High Resolution tablet events
-     * (used on Windows only)
-     *
-     * \param event the event that caused this call
-     *
-     * \return whether the event has been handled successfully and
-     * should be eaten by the events filter
-     */
-    bool tabletMoved(QTabletEvent *event);
-
-    /**
-     * Resets the internal state of the matcher
+     * Resets the internal state of the matcher and activates the
+     * prepared action if possible.
      *
      * This should be done when the window has lost the focus for
      * some time, so that several events could be lost
      */
-    void reset();
+    void reinitialize();
 
     /**
      * Disables the start of any actions.
@@ -197,6 +195,8 @@ public:
 
 private:
     friend class KisInputManagerTest;
+
+    void reset();
 
     bool tryRunKeyShortcut(Qt::Key key, QKeyEvent *event);
     bool tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event);

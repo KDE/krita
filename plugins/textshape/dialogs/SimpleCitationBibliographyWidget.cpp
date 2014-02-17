@@ -16,10 +16,12 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "SimpleCitationBibliographyWidget.h"
 #include "ReferencesTool.h"
 #include "BibliographyPreview.h"
 #include "BibliographyTemplate.h"
+#include <KoBibliographyInfo.h>
 
 #include <kaction.h>
 #include <kdebug.h>

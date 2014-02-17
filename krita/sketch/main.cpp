@@ -39,7 +39,14 @@
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
+
+
+#if defined Q_OS_WIN
 #include "stdlib.h"
+#include <ui/input/wintab/kis_tablet_support_win.h>
+#elif defined Q_WS_X11
+#include <ui/input/wintab/kis_tablet_support_x11.h>
+#endif
 
 
 int main( int argc, char** argv )
@@ -60,6 +67,7 @@ int main( int argc, char** argv )
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
     options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
+    options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -74,6 +82,7 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
+    app.setApplicationName("kritasketch");
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
@@ -107,6 +116,14 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 #endif
 
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    app.setEventFilter(&KisTabletSupportWin::eventFilter);
+#elif defined Q_WS_X11
+    KisTabletSupportX11::init();
+    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+#endif
+
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
@@ -125,11 +142,11 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
-#ifdef Q_OS_WIN
-    window.showFullScreen();
-#else
-    window.show();
-#endif
+    if (args->isSet("windowed")) {
+        window.show();
+    } else {
+        window.showFullScreen();
+    }
 
     return app.exec();
 }

@@ -130,13 +130,18 @@ int KisZoomAction::priority() const
     return 4;
 }
 
-void KisZoomAction::activate()
+void KisZoomAction::activate(int shortcut)
 {
-    QApplication::setOverrideCursor(KisCursor::zoomCursor());
+    if (shortcut == DiscreteZoomToggleShortcut) {
+        QApplication::setOverrideCursor(KisCursor::zoomDiscreteCursor());
+    } else /* if (shortcut == SmoothZoomToggleShortcut) */ {
+        QApplication::setOverrideCursor(KisCursor::zoomSmoothCursor());
+    }
 }
 
-void KisZoomAction::deactivate()
+void KisZoomAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

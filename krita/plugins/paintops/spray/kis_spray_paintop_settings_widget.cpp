@@ -35,23 +35,18 @@
 #include <kis_compositeop_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
+    , m_sprayArea(new KisSprayOpOption())
 {
-    m_sprayOption =  new KisSprayOpOption();
-    m_sprayShapeOption = new KisSprayShapeOption();
-    m_sprayShapeDynamicOption = new KisSprayShapeDynamicsOption();
-    m_ColorOption = new KisColorOption();
-    m_brushOption = new KisBrushOptionWidget();
-
+    addPaintOpOption(m_sprayArea);
+    addPaintOpOption(new KisSprayShapeOption());
+    addPaintOpOption(new KisBrushOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-
-    addPaintOpOption(m_brushOption);
     addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(m_sprayOption);
-    addPaintOpOption(m_sprayShapeOption);
-    addPaintOpOption(m_sprayShapeDynamicOption);
-    addPaintOpOption(m_ColorOption);
+
+    addPaintOpOption(new KisSprayShapeDynamicsOption());
+    addPaintOpOption(new KisColorOption());
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisAirbrushOption());
@@ -74,12 +69,12 @@ KisPropertiesConfiguration*  KisSprayPaintOpSettingsWidget::configuration() cons
 void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     Q_UNUSED(y);
-    m_sprayOption->setDiameter( m_sprayOption->diameter() + qRound(x) );
+    m_sprayArea->setDiameter(m_sprayArea->diameter() + qRound(x));
 }
 
 QSizeF KisSprayPaintOpSettingsWidget::paintOpSize() const
 {
-    qreal width = m_sprayOption->diameter();
-    qreal height = width * m_sprayOption->brushAspect();
+    qreal width = m_sprayArea->diameter();
+    qreal height = width * m_sprayArea->brushAspect();
     return QSizeF(width, height);
 }

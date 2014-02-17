@@ -36,7 +36,7 @@ public:
 
     void setRadius(int radius) const;
     void setScaleFactor(qreal scale) const;
-    
+
     int radius() const;
     double sigma() const;
     bool isbrushDimension1D() const;

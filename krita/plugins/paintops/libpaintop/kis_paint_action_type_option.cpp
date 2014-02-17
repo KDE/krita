@@ -27,14 +27,14 @@ class KisPaintActionWidget: public QWidget, public Ui::WdgIncremental
 {
 public:
     KisPaintActionWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 
 KisPaintActionTypeOption::KisPaintActionTypeOption()
-        : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_optionWidget = new KisPaintActionWidget();
@@ -55,9 +55,11 @@ enumPaintActionType KisPaintActionTypeOption::paintActionType() const
 {
     if (m_optionWidget->radioBuildup->isChecked()) {
         return BUILDUP;
-    } else if (m_optionWidget->radioWash->isChecked()) {
+    }
+    else if (m_optionWidget->radioWash->isChecked()) {
         return WASH;
-    } else {
+    }
+    else {
         return WASH;
     }
 }

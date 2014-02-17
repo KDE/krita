@@ -24,6 +24,9 @@
 #define MIPMAP_SIZE_THRESHOLD 512
 #define MAX_MIPMAP_SCALE 8.0
 
+#define QPAINTER_WORKAROUND_BORDER 1
+
+
 KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 {
     Q_ASSERT(!baseImage.isNull());
@@ -37,13 +40,13 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
         QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() <= MIPMAP_SIZE_THRESHOLD ||
-            scaledSize.height() <= MIPMAP_SIZE_THRESHOLD) {
+                scaledSize.height() <= MIPMAP_SIZE_THRESHOLD) {
 
             if (m_levels.isEmpty()) {
                 m_baseScale = scale;
             }
 
-            m_levels.append(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
         }
 
         scale *= 0.5;
@@ -52,16 +55,16 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
     if (m_levels.isEmpty()) {
         m_baseScale = 1.0;
     }
-    m_levels.append(baseImage);
+    appendPyramidLevel(baseImage);
 
     scale = 0.5;
     while (true) {
         QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() == 0 ||
-            scaledSize.height() == 0) break;
+                scaledSize.height() == 0) break;
 
-        m_levels.append(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
         scale *= 0.5;
     }
@@ -92,7 +95,8 @@ int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale)
     return level;
 }
 
-inline QRect roundRect(const QRectF &rc) {
+inline QRect roundRect(const QRectF &rc)
+{
     /**
      * This is an analog of toAlignedRect() with the only difference
      * that it rounds corner values instead of doing floor/ceil.
@@ -123,12 +127,12 @@ QTransform baseBrushTransform(qreal scaleX, qreal scaleY,
 
         QRectF rotatedBounds = rotationTransform.mapRect(baseBounds);
         transform = rotationTransform *
-            QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
+                    QTransform::fromTranslate(-rotatedBounds.x(), -rotatedBounds.y());
     }
 
     return transform *
-        QTransform::fromScale(scaleX, scaleY) *
-        QTransform::fromTranslate(subPixelX, subPixelY);
+           QTransform::fromScale(scaleX, scaleY) *
+           QTransform::fromTranslate(subPixelX, subPixelY);
 }
 
 void KisQImagePyramid::calculateParams(qreal scale, qreal rotation,
@@ -214,32 +218,58 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
     return dstSize;
 }
 
+void KisQImagePyramid::appendPyramidLevel(const QImage &image)
+{
+    /**
+     * QPainter has a bug: when doing a transformation it decides that
+     * all the pixels outside of the image (source rect) are equal to
+     * the border pixels (CLAMP in terms of openGL). This means that
+     * there will be no smooth scaling on the border of the image when
+     * it is rotated.  To workaround this bug we need to add one pixel
+     * wide border to the image, so that it transforms smoothly.
+     *
+     * See a unittest in: KisBrushTest::testQPainterTransformationBorder
+     */
+    QSize levelSize = image.size();
+    QImage tmp = image.convertToFormat(QImage::Format_ARGB32);
+    tmp = tmp.copy(-QPAINTER_WORKAROUND_BORDER,
+                   -QPAINTER_WORKAROUND_BORDER,
+                   image.width() + 2 * QPAINTER_WORKAROUND_BORDER,
+                   image.height() + 2 * QPAINTER_WORKAROUND_BORDER);
+    m_levels.append(PyramidLevel(tmp, levelSize));
+}
+
 QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
                                      qreal subPixelX, qreal subPixelY)
 {
     qreal baseScale = -1.0;
     int level = findNearestLevel(scale, &baseScale);
 
-    const QImage &srcImage = m_levels[level];
+    const QImage &srcImage = m_levels[level].image;
 
     QTransform transform;
     QSize dstSize;
 
     calculateParams(scale, rotation, subPixelX, subPixelY,
-                    m_originalSize, baseScale, srcImage.size(),
+                    m_originalSize, baseScale, m_levels[level].size,
                     &transform, &dstSize);
 
     if (transform.isIdentity() &&
-        srcImage.format() == QImage::Format_ARGB32) {
+            srcImage.format() == QImage::Format_ARGB32) {
 
-        return srcImage;
+        return srcImage.copy(QPAINTER_WORKAROUND_BORDER,
+                             QPAINTER_WORKAROUND_BORDER,
+                             srcImage.width() - 2 * QPAINTER_WORKAROUND_BORDER,
+                             srcImage.height() - 2 * QPAINTER_WORKAROUND_BORDER);
     }
 
     QImage dstImage(dstSize, QImage::Format_ARGB32);
     dstImage.fill(0);
 
     QPainter gc(&dstImage);
-    gc.setTransform(transform);
+    gc.setTransform(
+        QTransform::fromTranslate(-QPAINTER_WORKAROUND_BORDER,
+                                  -QPAINTER_WORKAROUND_BORDER) * transform);
     gc.setRenderHints(QPainter::SmoothPixmapTransform);
     gc.drawImage(QPointF(), srcImage);
     gc.end();

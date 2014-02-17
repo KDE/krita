@@ -18,8 +18,7 @@
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 
-#include <QDebug>
-
+#include "DebugPigment.h"
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpOver32.h"
 
@@ -46,15 +45,15 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<VC_IM
 
 inline void printFeatureSupported(const QString &feature, Vc::Implementation impl)
 {
-    qDebug() << "\t" << feature << "\t---\t" << (Vc::isImplementationSupported(impl) ? "yes" : "no");
+  dbgPigment << "\t" << feature << "\t---\t" << (Vc::isImplementationSupported(impl) ? "yes" : "no");
 }
 
 template<>
 KoReportCurrentArch::ReturnType
 KoReportCurrentArch::create<VC_IMPL>(ParamType)
 {
-    qDebug() << "Compiled for arch:" << stringify(VC_IMPL);
-    qDebug() << "Features supported:";
+    dbgPigment << "Compiled for arch:" << stringify(VC_IMPL);
+    dbgPigment << "Features supported:";
     printFeatureSupported("SSE2", Vc::SSE2Impl);
     printFeatureSupported("SSSE3", Vc::SSSE3Impl);
     printFeatureSupported("SSE4.1", Vc::SSE41Impl);

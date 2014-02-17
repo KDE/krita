@@ -36,6 +36,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
+#include <KoShapeBackground.h>
 
 //#include <KoSnapData.h>
 
@@ -47,7 +48,6 @@ class QPainterPath;
 
 class KoShapeContainer;
 class KoShapeStrokeModel;
-class KoShapeBackground;
 class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
@@ -969,19 +969,6 @@ public:
      *                     block until the result is finished.
      */
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
-
-    /**
-     * Schedule the shape for thread-safe deletion.
-     * After calling this method will self-delete in the main threads event loop.
-     * If your code deletes a shape and your code can possibly be running in a separate thread,
-     * you should use this method to delete the shape.
-     * The reason for this is that If you delete a shape from another thread then it is
-     * possible the main
-     * thread will use it after its been removed, while painting for example.
-     *
-     * Note that in contrary to the equivalent method on QObject, you can not call this more than once.
-     */
-    void deleteLater();
 
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;

@@ -33,7 +33,7 @@
 
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
-    : KisPaintOp( painter )
+    : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     m_firstRun = true;
@@ -49,6 +49,8 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_smoothingThreshold = m_experimentOption.smoothing;
 
     m_useMirroring = painter->hasMirroring();
+    m_windingFill = m_experimentOption.windingFill;
+    m_hardEdge = m_experimentOption.hardEdge;
 
     if (m_useMirroring) {
         m_originalDevice = source()->createCompositionSourceDevice();
@@ -56,7 +58,8 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
         m_originalPainter->setCompositeOp(COMPOSITE_COPY);
         m_originalPainter->setPaintColor(painter->paintColor());
         m_originalPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
-    } else {
+    }
+    else {
         m_originalPainter = 0;
     }
 }
@@ -68,23 +71,31 @@ KisExperimentPaintOp::~KisExperimentPaintOp()
 
 void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
 {
+    if (m_windingFill) {
+        m_path.setFillRule(Qt::WindingFill);
+    }
+
     if (m_useMirroring) {
-        foreach(const QRect &rect, changedRegion.rects()) {
+        m_originalPainter->setAntiAliasPolygonFill(!m_hardEdge);
+
+        foreach(const QRect & rect, changedRegion.rects()) {
             m_originalPainter->fillPainterPath(m_path, rect);
             painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
         }
-    } else {
+    }
+    else {
         painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
         painter()->setCompositeOp(COMPOSITE_COPY);
+        painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
-        foreach(const QRect &rect, changedRegion.rects()) {
+        foreach(const QRect & rect, changedRegion.rects()) {
             painter()->fillPainterPath(m_path, rect);
         }
     }
 }
 
 QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation& pi1,
-                                                     const KisPaintInformation& pi2)
+        const KisPaintInformation& pi2)
 {
     const qreal fadeFactor = 0.6;
 
@@ -106,7 +117,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
     Q_UNUSED(currentDistance);
     if (!painter()) return;
 
-    if (m_firstRun){
+    if (m_firstRun) {
         m_firstRun = false;
 
         m_path.moveTo(pi1.pos());
@@ -123,7 +134,8 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
         m_savedSmoothingDistance = 0;
         m_savedSmoothingPoint = m_center;
 
-    }else{
+    }
+    else {
 
         const QPointF pos1 = pi1.pos();
         QPointF pos2 = pi2.pos();
@@ -152,7 +164,8 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
                 m_savedSmoothingDistance = 0;
             }
-        } else {
+        }
+        else {
             m_path.lineTo(pos2);
             m_savedPoints << pos1;
             m_savedPoints << pos2;
@@ -181,9 +194,9 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
         QRect pathBounds = m_path.boundingRect().toRect();
         int distanceMetric = qMax(pathBounds.width(), pathBounds.height());
 
-        if(elapsedTime > timeThreshold ||
-           (!m_displaceEnabled &&
-            m_savedUpdateDistance > distanceMetric / 8)) {
+        if (elapsedTime > timeThreshold ||
+                (!m_displaceEnabled &&
+                 m_savedUpdateDistance > distanceMetric / 8)) {
 
             if (m_displaceEnabled) {
                 /**
@@ -200,11 +213,12 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                 if (distanceMetric < pathSizeThreshold) {
 
                     QRectF changedRect = m_path.boundingRect().toRect() |
-                        m_lastPaintedPath.boundingRect().toRect();
-                    changedRect.adjust(-1,-1,1,1);
+                                         m_lastPaintedPath.boundingRect().toRect();
+                    changedRect.adjust(-1, -1, 1, 1);
 
                     changedRegion = changedRect.toRect();
-                } else {
+                }
+                else {
                     QPainterPath diff1 = m_path - m_lastPaintedPath;
                     QPainterPath diff2 = m_lastPaintedPath - m_path;
 
@@ -213,7 +227,8 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
                 paintRegion(changedRegion);
                 m_lastPaintedPath = m_path;
-            } else if (!m_savedPoints.isEmpty()) {
+            }
+            else if (!m_savedPoints.isEmpty()) {
                 QRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
                 paintRegion(changedRegion);
             }
@@ -272,11 +287,11 @@ QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qre
     qreal distance = 0;
 
     int count = path.elementCount();
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < count; i++) {
         QPainterPath::Element e = path.elementAt(i);
         QPointF endPoint = QPointF(e.x, e.y);
 
-        switch(e.type){
+        switch (e.type) {
         case QPainterPath::MoveToElement:
             newPath.moveTo(endPoint);
             break;
@@ -287,7 +302,7 @@ QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qre
                 newPath.lineTo(endPoint);
             }
             break;
-        case QPainterPath::CurveToElement:{
+        case QPainterPath::CurveToElement: {
             Q_ASSERT(i + 2 < count);
 
             if (!tryMergePoints(newPath, startPoint, endPoint,
@@ -330,34 +345,34 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
     QPointF ctrl1;
     QPointF ctrl2;
     QPointF endPoint;
-    for (int i = 0; i < count; i++){
+    for (int i = 0; i < count; i++) {
         QPainterPath::Element e = path.elementAt(i);
-        switch(e.type){
-            case QPainterPath::MoveToElement:{
-                newPath.moveTo(getAngle(QPointF(e.x,e.y),lastPoint,speed));
-                break;
-            }
-            case QPainterPath::LineToElement:{
-                newPath.lineTo(getAngle(QPointF(e.x,e.y),lastPoint,speed));
-                break;
-            }
-            case QPainterPath::CurveToElement:{
-                curveElementCounter = 0;
-                endPoint = getAngle(QPointF(e.x,e.y),lastPoint,speed);
-                break;
-            }
-            case QPainterPath::CurveToDataElement:{
-                curveElementCounter++;
+        switch (e.type) {
+        case QPainterPath::MoveToElement: {
+            newPath.moveTo(getAngle(QPointF(e.x, e.y), lastPoint, speed));
+            break;
+        }
+        case QPainterPath::LineToElement: {
+            newPath.lineTo(getAngle(QPointF(e.x, e.y), lastPoint, speed));
+            break;
+        }
+        case QPainterPath::CurveToElement: {
+            curveElementCounter = 0;
+            endPoint = getAngle(QPointF(e.x, e.y), lastPoint, speed);
+            break;
+        }
+        case QPainterPath::CurveToDataElement: {
+            curveElementCounter++;
 
-                if (curveElementCounter == 1){
-                    ctrl1 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
-                }
-                else if (curveElementCounter == 2){
-                    ctrl2 = getAngle(QPointF(e.x,e.y),lastPoint,speed);
-                    newPath.cubicTo(ctrl1,ctrl2,endPoint);
-                }
-                break;
+            if (curveElementCounter == 1) {
+                ctrl1 = getAngle(QPointF(e.x, e.y), lastPoint, speed);
             }
+            else if (curveElementCounter == 2) {
+                ctrl2 = getAngle(QPointF(e.x, e.y), lastPoint, speed);
+                newPath.cubicTo(ctrl1, ctrl2, endPoint);
+            }
+            break;
+        }
         }
 
     }// for

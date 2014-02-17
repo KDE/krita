@@ -224,7 +224,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     if(m_canvas && m_canvas->resourceManager()) {
         if (m_lastColorRole==Foreground) {
             setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
-        } else {
+        } else if (m_lastColorRole==Background) {
             setColor(m_canvas->resourceManager()->backgroundColor().toQColor());
         }
     }
@@ -243,32 +243,39 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
             m_grabbingComponent=m_subComponent;
 
         mouseEvent(e);
+        e->accept();
     }
 }
 
 void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mouseMoveEvent(e);
-    
+
     mouseEvent(e);
+    e->accept();
 }
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
-    KisColorSelectorBase::mouseReleaseEvent(e);
-    if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
+    e->setAccepted(false);
+    KisColorSelectorBase::mousePressEvent(e);
+
+    if(!e->isAccepted() &&
+       m_lastColor != m_currentColor &&
+       m_currentColor.isValid()) {
+   
         m_lastColor=m_currentColor;
         if(e->button() == Qt::LeftButton)
-            m_lastColorRole=Foreground;
-        else
-            m_lastColorRole=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
+   {
+            m_lastColorRole=Foreground;}
+        else if (e->button() == Qt::RightButton)
+   {
+            m_lastColorRole=Background;}
 
-//        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-//            hidePopup();
-//        }
+        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
+        e->accept();
     }
-    e->accept();
+
     m_grabbingComponent=0;
 }
 
@@ -290,12 +297,21 @@ void KisColorSelector::setColor(const QColor &color)
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
-    if(m_grabbingComponent && (e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)) {
-        m_grabbingComponent->mouseEvent(e->x(), e->y());
+    if (m_grabbingComponent && (e->buttons() & Qt::LeftButton || e->buttons() & Qt::RightButton)) {
 
+        m_grabbingComponent->mouseEvent(e->x(), e->y());
+   
         m_currentColor=m_mainComponent->currentColor();
         KoColor kocolor(m_currentColor, colorSpace());
         updateColorPreview(kocolor.toQColor());
+
+        if (e->buttons() & Qt::LeftButton) {
+            commitColor(kocolor, Foreground);
+        }
+        else if (e->buttons() & Qt::RightButton) {
+            commitColor(kocolor, Background);
+        }
+
     }
 }
 

@@ -53,7 +53,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(koIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("selection-info").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
@@ -91,20 +91,6 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_imageSizeLabel);
     m_view->removeStatusBarItem(m_pointerPositionLabel);
     m_view->removeStatusBarItem(m_progress);
-}
-
-#define EPSILON 1e-6
-
-void KisStatusBar::setZoom(int zoom)
-{
-    Q_UNUSED(zoom);
-    /*
-        if (zoom < 1 - EPSILON) {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
-        } else {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
-        }
-    */
 }
 
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)

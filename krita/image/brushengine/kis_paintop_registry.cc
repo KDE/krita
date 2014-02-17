@@ -77,6 +77,16 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return s_instance;
 }
 
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset)
+{
+    if (!preset) return;
+
+    KisPaintOpFactory *f = value(preset->paintOp().id());
+    f->preinitializePaintOpIfNeeded(preset->settings());
+}
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const
 {
     if (painter == 0) {

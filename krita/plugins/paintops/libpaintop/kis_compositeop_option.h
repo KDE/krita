@@ -34,21 +34,21 @@ class KoID;
 class PAINTOP_EXPORT KisCompositeOpOption: public KisPaintOpOption
 {
     Q_OBJECT
-    
+
 public:
-     KisCompositeOpOption(bool createConfigWidget=false);
+    KisCompositeOpOption(bool createConfigWidget = false);
     ~KisCompositeOpOption();
-    
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private slots:
     void slotCompositeOpChanged(const QModelIndex& index);
     void slotEraserToggled(bool toggled);
-    
+
 private:
     void changeCompositeOp(const KoID& compositeOp);
-    
+
 private:
     QLabel*                   m_label;
     QPushButton*              m_bnEraser;

@@ -148,9 +148,7 @@ void testMirrorNode(bool useShapeLayer, const QString &name, bool mirrorX)
     QTest::qWait(1000);
     t.image->waitForDone();
 
-    if (mirrorX && !useShapeLayer) {
-        QEXPECT_FAIL("", "The user may run Mirror Layer concurrently, but it is not ported to strokes yet. At least it doesn't crash.", Continue);
-    }
+    QEXPECT_FAIL("", "The user may run Mirror Layer concurrently, but it is not ported to strokes yet. At least it doesn't crash.", Continue);
     QVERIFY(t.checkLayersFuzzy(name));
 }
 

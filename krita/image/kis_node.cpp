@@ -34,6 +34,8 @@
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 
+#include "kis_clone_layer.h"
+
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
@@ -63,7 +65,75 @@ public:
     KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
+
+    const KisNode* findSymmetricClone(const KisNode *srcRoot,
+                                      const KisNode *dstRoot,
+                                      const KisNode *srcTarget);
+    void processDuplicatedClones(const KisNode *srcDuplicationRoot,
+                                 const KisNode *dstDuplicationRoot,
+                                 KisNode *node);
 };
+
+/**
+ * Finds the layer in \p dstRoot subtree, which has the same path as
+ * \p srcTarget has in \p srcRoot
+ */
+const KisNode* KisNode::Private::findSymmetricClone(const KisNode *srcRoot,
+                                                    const KisNode *dstRoot,
+                                                    const KisNode *srcTarget)
+{
+    if (srcRoot == srcTarget) return dstRoot;
+
+    KisSafeReadNodeList::const_iterator srcIter = srcRoot->m_d->nodes.constBegin();
+    KisSafeReadNodeList::const_iterator dstIter = dstRoot->m_d->nodes.constBegin();
+
+    for (; srcIter != srcRoot->m_d->nodes.constEnd(); srcIter++, dstIter++) {
+
+        KIS_ASSERT_RECOVER_RETURN_VALUE((srcIter != srcRoot->m_d->nodes.constEnd()) ==
+                                        (dstIter != dstRoot->m_d->nodes.constEnd()), 0);
+
+        const KisNode *node = findSymmetricClone(srcIter->data(), dstIter->data(), srcTarget);
+        if (node) return node;
+
+    }
+
+    return 0;
+}
+
+/**
+ * This function walks through a subtrees of old and new layers and
+ * searches for clone layers. For each clone layer it checks whether
+ * its copyFrom() lays inside the old subtree, and if it is so resets
+ * it to the corresponding layer in the new subtree.
+ *
+ * That is needed when the user duplicates a group layer with all its
+ * layer subtree. In such a case all the "internal" clones must stay
+ * "internal" and not point to the layers of the older group.
+ */
+void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot,
+                                               const KisNode *dstDuplicationRoot,
+                                               KisNode *node)
+{
+    if (KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node)) {
+        KIS_ASSERT_RECOVER_RETURN(clone->copyFrom());
+        const KisNode *newCopyFrom = findSymmetricClone(srcDuplicationRoot,
+                                                        dstDuplicationRoot,
+                                                        clone->copyFrom());
+
+        if (newCopyFrom) {
+            KisLayer *newCopyFromLayer = dynamic_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
+            KIS_ASSERT_RECOVER_RETURN(newCopyFromLayer);
+
+            clone->setCopyFrom(newCopyFromLayer);
+        }
+    }
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, node->m_d->nodes) {
+        KisNode *child = const_cast<KisNode*>((*iter).data());
+        processDuplicatedClones(srcDuplicationRoot, dstDuplicationRoot, child);
+    }
+}
 
 KisNode::KisNode()
         : m_d(new Private())
@@ -71,7 +141,6 @@ KisNode::KisNode()
     m_d->parent = 0;
     m_d->graphListener = 0;
 }
-
 
 KisNode::KisNode(const KisNode & rhs)
         : KisBaseNode(rhs)
@@ -87,6 +156,8 @@ KisNode::KisNode(const KisNode & rhs)
         m_d->nodes.append(child);
         child->setParent(this);
     }
+
+    m_d->processDuplicatedClones(&rhs, this, this);
 }
 
 KisNode::~KisNode()

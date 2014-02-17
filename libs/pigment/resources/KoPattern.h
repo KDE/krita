@@ -34,6 +34,7 @@ public:
      * @param filename the file name to save and load from.
      */
     explicit KoPattern(const QString &filename);
+    KoPattern(const QImage &image, const QString &name, const QString &folderName);
     virtual ~KoPattern();
 
 public:
@@ -51,11 +52,17 @@ public:
     QString defaultFileExtension() const;
 
     KoPattern& operator=(const KoPattern& pattern);
+
+    KoPattern* clone() const;
+
+    QByteArray md5() const;
+
 private:
     bool init(QByteArray& data);
 
 private:
     QImage m_image;
+    mutable QByteArray m_md5;
 };
 
 #endif // KOPATTERN_H

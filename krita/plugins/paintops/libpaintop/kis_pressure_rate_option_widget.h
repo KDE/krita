@@ -27,15 +27,15 @@ class QSlider;
 class PAINTOP_EXPORT KisPressureRateOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
-    
+
 public:
     KisPressureRateOptionWidget();
 
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private slots:
     void rateChanged(int rate);
-    
+
 private:
     QSlider* m_rateSlider;
 };

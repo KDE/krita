@@ -28,6 +28,7 @@
 #include "kis_shape_controller.h"
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
+#include "kis_resource_server_provider.h"
 
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
@@ -37,6 +38,7 @@
 #include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
+#include <KoResourceServerProvider.h>
 
 #include <kapplication.h>
 #include <kglobal.h>
@@ -52,6 +54,10 @@ KisPart2::KisPart2(QObject *parent)
 {
     setComponentData(KisFactory2::componentData());
     setTemplateType("krita_template");
+
+    // Preload all the resources in the background
+    Q_UNUSED(KoResourceServerProvider::instance());
+    Q_UNUSED(KisResourceServerProvider::instance());
 }
 
 KisPart2::~KisPart2()

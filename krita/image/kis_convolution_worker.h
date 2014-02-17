@@ -58,10 +58,10 @@ struct RepeatIteratorFactory {
     inline static KisVLineIteratorSP createVLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect&) {
         return src->createVLineIteratorNG(x, y, h);
     }
-    inline static KisRepeatHLineConstIteratorSP createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& _dataRect) {
+    inline static HLineConstIterator createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& _dataRect) {
         return src->createRepeatHLineConstIterator(x, y, w, _dataRect);
     }
-    inline static KisRepeatVLineConstIteratorSP createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect& _dataRect) {
+    inline static VLineConstIterator createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect& _dataRect) {
         return src->createRepeatVLineConstIterator(x, y, h, _dataRect);
     }
 };

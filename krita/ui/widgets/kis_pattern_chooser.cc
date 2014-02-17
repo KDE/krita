@@ -30,19 +30,19 @@
 #include <kfiledialog.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
+#include <KoResourceServerProvider.h>
 
 
 #include "kis_global.h"
-#include "kis_pattern.h"
-#include "kis_resource_server_provider.h"
+#include "KoPattern.h"
 
-KisPatternChooser::KisPatternChooser(QWidget *parent)
+KoPatternChooser::KoPatternChooser(QWidget *parent)
         : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KisPattern> * rserver = KisResourceServerProvider::instance()->patternServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
+    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoPattern>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->showPreview(true);
     m_itemChooser->setPreviewTiled(true);
@@ -70,21 +70,21 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     setLayout(mainLayout);
 }
 
-KisPatternChooser::~KisPatternChooser()
+KoPatternChooser::~KoPatternChooser()
 {
 }
 
-KoResource *  KisPatternChooser::currentResource()
+KoResource *  KoPatternChooser::currentResource()
 {
     return m_itemChooser->currentResource();
 }
 
-void KisPatternChooser::setCurrentPattern(KoResource *resource)
+void KoPatternChooser::setCurrentPattern(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
 
-void KisPatternChooser::setCurrentItem(int row, int column)
+void KoPatternChooser::setCurrentItem(int row, int column)
 {
     m_itemChooser->setCurrentItem(row, column);
     if (currentResource()) {
@@ -92,32 +92,32 @@ void KisPatternChooser::setCurrentItem(int row, int column)
     }
 }
 
-void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
+void KoPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 {
     m_itemChooser->setPreviewOrientation(orientation);
 }
 
-void KisPatternChooser::update(KoResource * resource)
+void KoPatternChooser::update(KoResource * resource)
 {
-    KisPattern *pattern = static_cast<KisPattern *>(resource);
+    KoPattern *pattern = static_cast<KoPattern *>(resource);
 
     QString text = QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height());
     m_lbName->setText(text);
 }
 
-void KisPatternChooser::setGrayscalePreview(bool grayscale)
+void KoPatternChooser::setGrayscalePreview(bool grayscale)
 {
     m_itemChooser->setGrayscalePreview(grayscale);
 }
 
-void KisPatternChooser::showEvent(QShowEvent*)
+void KoPatternChooser::showEvent(QShowEvent*)
 {
     updateItemSize();
 }
 
-void KisPatternChooser::updateItemSize()
+void KoPatternChooser::updateItemSize()
 {
-    KisPattern* current = static_cast<KisPattern*>(currentResource());
+    KoPattern* current = static_cast<KoPattern*>(currentResource());
     int width = m_itemChooser->viewSize().width();
     int cols = width/50 + 1;
     m_itemChooser->setRowHeight(floor((double)width/cols));

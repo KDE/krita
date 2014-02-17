@@ -101,6 +101,8 @@ void KisStrokeStrategyUndoCommandBased::runAndSaveCommand(KUndo2CommandSP comman
                                                           KisStrokeJobData::Sequentiality sequentiality,
                                                           KisStrokeJobData::Exclusivity exclusivity)
 {
+    if (!command) return;
+
     command->redo();
     notifyCommandDone(command, sequentiality, exclusivity);
 }

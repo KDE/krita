@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal    <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,4 +39,57 @@ int KisPrecisionOption::precisionLevel() const
 void KisPrecisionOption::setPrecisionLevel(int precisionLevel)
 {
     m_precisionLevel = precisionLevel;
+}
+void KisPrecisionOption::setAutoPrecisionEnabled(int value)
+{
+    m_autoPrecisionEnabled = value;
+}
+
+void KisPrecisionOption::setDeltaValue(double value)
+{
+    m_deltaValue = value;
+}
+
+void KisPrecisionOption::setSizeToStartFrom(double value)
+{
+    m_sizeToStartFrom = value;
+}
+bool KisPrecisionOption::autoPrecisionEnabled()
+{
+    return m_autoPrecisionEnabled;
+}
+
+double KisPrecisionOption::deltaValue()
+{
+    return m_deltaValue;
+}
+
+double KisPrecisionOption::sizeToStartFrom()
+{
+    return m_sizeToStartFrom;
+}
+void KisPrecisionOption::setAutoPrecision(double brushSize)
+{
+    double deltaValue = this->deltaValue();
+    double sizeToStartFrom = this ->sizeToStartFrom();
+    if (brushSize <= sizeToStartFrom + deltaValue)
+    {
+        this->setPrecisionLevel(5);
+    }
+    else if (brushSize > sizeToStartFrom + deltaValue && brushSize <= sizeToStartFrom + deltaValue*3)
+    {
+        this->setPrecisionLevel(4);
+    }
+    else if (brushSize > sizeToStartFrom + deltaValue*2 && brushSize <= sizeToStartFrom + deltaValue*4)
+    {
+        this->setPrecisionLevel(3);
+    }
+    else if (brushSize > sizeToStartFrom + deltaValue*3 && brushSize <= sizeToStartFrom + deltaValue*5)
+    {
+        this->setPrecisionLevel(2);
+    }
+    else if (brushSize > sizeToStartFrom + deltaValue*4)
+    {
+        this->setPrecisionLevel(1);
+    }
 }

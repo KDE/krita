@@ -127,14 +127,13 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true,true);
+    m_itemChooser->showTaggingBar(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -242,16 +241,24 @@ void KisBrushChooser::update(KoResource * resource)
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
 
     if (brush) {
+        blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
-                .arg(i18n(brush->name().toUtf8().data()))
-                .arg(brush->width())
-                .arg(brush->height());
+                       .arg(i18n(brush->name().toUtf8().data()))
+                       .arg(brush->width())
+                       .arg(brush->height());
 
         m_lbName->setText(text);
+        m_slSpacing->blockSignals(true);
         m_slSpacing->setValue(brush->spacing());
-        m_slRotation->setValue(brush->angle() * 180 / M_PI);
-        m_slSize->setValue(brush->width() * brush->scale());
+        m_slSpacing->blockSignals(false);
 
+        m_slRotation->blockSignals(true);
+        m_slRotation->setValue(brush->angle() * 180 / M_PI);
+        m_slRotation->blockSignals(false);
+
+        m_slSize->blockSignals(true);
+        m_slSize->setValue(brush->width() * brush->scale());
+        m_slSize->blockSignals(false);
 
         // useColorAsMask support is only in gimp brush so far
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
@@ -259,16 +266,22 @@ void KisBrushChooser::update(KoResource * resource)
             m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
         }
         m_chkColorMask->setEnabled(brush->hasColor() && gimpBrush);
+        blockSignals(false);
 
+        slotActivatedBrush(brush);
         emit sigBrushChanged();
     }
 }
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
+    if (m_brush) {
+        m_brush->clearBrushPyramid();
+    }
     KisBrush* brush = dynamic_cast<KisBrush*>(resource);
     if (brush) {
         m_brush = brush;
+        m_brush->prepareBrushPyramid();
     }
 }
 
@@ -278,9 +291,7 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     qreal oldWidth = m_brush->width() * m_brush->scale();
     qreal newWidth = oldWidth + xPixels;
 
-    if (newWidth <= 0.1) {
-        newWidth = 0.1;
-    }
+    newWidth = qMax(newWidth, qreal(0.1));
 
     m_slSize->setValue(newWidth);
 }

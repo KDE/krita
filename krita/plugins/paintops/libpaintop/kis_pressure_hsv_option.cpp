@@ -22,28 +22,27 @@
 
 KisPressureHSVOption* KisPressureHSVOption::createHueOption()
 {
-    return new KisPressureHSVOption(i18n("Hue"), "h", -1, 1 );
+    return new KisPressureHSVOption(i18n("Hue"), "h", -1, 1);
 }
 
 KisPressureHSVOption* KisPressureHSVOption::createSaturationOption()
 {
-    return new KisPressureHSVOption(i18n("Saturation"), "s", -1, 1 );
+    return new KisPressureHSVOption(i18n("Saturation"), "s", -1, 1);
 }
 
 KisPressureHSVOption* KisPressureHSVOption::createValueOption()
 {
-    return new KisPressureHSVOption(i18n("Value"), "v", -1, 1 );
+    return new KisPressureHSVOption(i18n("Value"), "v", -1, 1);
 }
 
-struct KisPressureHSVOption::Private
-{
+struct KisPressureHSVOption::Private {
     QString parameterName;
     int paramId;
     double min, max;
 };
 
 KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& parameterName, double min, double max)
-        : KisCurveOption(name, parameterName, KisPaintOpOption::colorCategory(), false), d(new Private)
+    : KisCurveOption(name, parameterName, KisPaintOpOption::colorCategory(), false), d(new Private)
 {
     d->parameterName = parameterName;
     d->paramId = -1;
@@ -56,24 +55,20 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     QString fullPercent = i18n("100%");
     QString zeroPercent = i18n("0%");
 
-    if (parameterName == "h")
-    {
+    if (parameterName == "h") {
         setMaximumLabel(QString(fullPercent + br + i18n("CW hue")));
-        setMinimumLabel(QString(zeroPercent + br +i18n("CCW hue") + br + activeColorMsg));
+        setMinimumLabel(QString(zeroPercent + br + i18n("CCW hue") + br + activeColorMsg));
     }
-    else if (parameterName == "s")
-    {
+    else if (parameterName == "s") {
         setMaximumLabel(QString(fullPercent + br + i18n("More saturation")));
-        setMinimumLabel(QString(zeroPercent + br +i18n("Less saturation ") + br + activeColorMsg));
+        setMinimumLabel(QString(zeroPercent + br + i18n("Less saturation ") + br + activeColorMsg));
 
     }
-    else if (parameterName == "v")
-    {
+    else if (parameterName == "v") {
         setMaximumLabel(QString(fullPercent + br + i18n("Higher value")));
         setMinimumLabel(QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg));
     }
-    else
-    {
+    else {
         // defaults to unchanged labels
         dbgPlugins << "Unknown parameter for " << name << ", parameterName " << parameterName;
     }
@@ -86,8 +81,7 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         return;
     }
 
-    if(d->paramId == -1)
-    {
+    if (d->paramId == -1) {
         d->paramId = transfo->parameterId(d->parameterName);
     }
 

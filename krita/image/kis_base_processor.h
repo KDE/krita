@@ -123,12 +123,6 @@ public:
     bool supportsAdjustmentLayers() const;
 
     /**
-     * Can this filter work incrementally when painting, or do we need to work
-     * on the state as it was before painting started. The former is faster.
-     */
-    bool supportsIncrementalPainting() const;
-
-    /**
      * This filter supports cutting up the work area and filtering
      * each chunk in a separate thread. Filters that need access to the
      * whole area for correct computations should return false.
@@ -153,7 +147,6 @@ protected:
 
     void setSupportsPainting(bool v);
     void setSupportsAdjustmentLayers(bool v);
-    void setSupportsIncrementalPainting(bool v);
     void setSupportsThreading(bool v);
     void setColorSpaceIndependence(ColorSpaceIndependence v);
     void setShowConfigurationWidget(bool v);

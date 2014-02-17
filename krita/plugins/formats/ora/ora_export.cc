@@ -26,6 +26,7 @@
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -77,33 +78,35 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
+    KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    if (hasShapeLayerChild(image->root())) {
+    if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
         KMessageBox::information(0,
                                  i18n("This image contains vector, clone or generated layers..\nThese layers will be saved as raster layers."),
                                  i18n("Warning"),
                                  "krita/ora/vector");
     }
 
-    OraConverter kpc(output);
+    OraConverter kpc(input);
 
     KisImageBuilder_Result res;
 
-    if ((res = kpc.buildFile(url, image, output->activeNodes())) == KisImageBuilder_RESULT_OK) {
+    if ((res = kpc.buildFile(url, image, input->activeNodes())) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
         return KoFilter::OK;
     }

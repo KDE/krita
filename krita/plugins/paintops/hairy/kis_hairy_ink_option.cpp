@@ -25,13 +25,13 @@ class KisInkOptionsWidget: public QWidget, public Ui::WdgInkOptions
 {
 public:
     KisInkOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisHairyInkOption::KisHairyInkOption()
-        : KisPaintOpOption(i18n("Ink depletion"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(i18n("Ink depletion"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = true;
     m_options = new KisInkOptionsWidget();
@@ -44,9 +44,9 @@ KisHairyInkOption::KisHairyInkOption()
     connect(m_options->bristleLengthSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->bristleInkAmountSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkDepletionSlider, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->inkCurve, SIGNAL(modified()),SIGNAL(sigSettingChanged()));
-    connect(m_options->soakInkCBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    
+    connect(m_options->inkCurve, SIGNAL(modified()), SIGNAL(sigSettingChanged()));
+    connect(m_options->soakInkCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
@@ -73,7 +73,7 @@ void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* sett
 
 void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-    settings->setProperty(HAIRY_INK_DEPLETION_ENABLED, isChecked() );
+    settings->setProperty(HAIRY_INK_DEPLETION_ENABLED, isChecked());
     settings->setProperty(HAIRY_INK_AMOUNT, inkAmount());
     settings->setProperty(HAIRY_INK_USE_SATURATION, useSaturation());
     settings->setProperty(HAIRY_INK_USE_OPACITY, useOpacity());
@@ -83,7 +83,7 @@ void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings)
     settings->setProperty(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT, bristleInkAmountWeight());
     settings->setProperty(HAIRY_INK_DEPLETION_WEIGHT, inkDepletionWeight());
     settings->setProperty(HAIRY_INK_DEPLETION_CURVE, qVariantFromValue(m_options->inkCurve->curve()));
-    settings->setProperty(HAIRY_INK_SOAK,m_options->soakInkCBox->isChecked());
+    settings->setProperty(HAIRY_INK_SOAK, m_options->soakInkCBox->isChecked());
 }
 
 

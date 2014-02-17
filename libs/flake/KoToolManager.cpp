@@ -272,7 +272,6 @@ void KoToolManager::Private::switchTool(const QString &id, bool temporary)
     canvasData->activeToolId = id;
     KoToolBase *tool = canvasData->allTools.value(id);
     if (! tool) {
-        kWarning(30006) << "KoToolManager::switchTool() " << (temporary ? "temporary" : "") << " got request to unknown tool: '" << id << "'";
         return;
     }
 

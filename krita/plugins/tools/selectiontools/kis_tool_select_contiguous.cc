@@ -65,54 +65,47 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::mousePressEvent(KoPointerEvent *event)
+void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    KisPaintDeviceSP dev;
 
-        if (!currentNode())
-            return;
-        KisPaintDeviceSP dev = currentNode()->projection();
+    if (!currentNode() ||
+        !(dev = currentNode()->projection()) ||
+        !currentNode()->visible() ||
+        !selectionEditable()) {
 
-        if (!dev || !currentNode()->visible())
-            return;
+        event->ignore();
+        return;
+    }
 
-        if (!selectionEditable()) {
-            return;
-        }
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
+    QPoint pos = convertToIntPixelCoord(event);
+    QRect rc = currentImage()->bounds();
+    KisFillPainter fillpainter(dev);
+    fillpainter.setHeight(rc.height());
+    fillpainter.setWidth(rc.width());
+    fillpainter.setFillThreshold(m_fuzziness);
+    fillpainter.setSampleMerged(!m_limitToCurrentLayer);
 
-        QPoint pos = convertToIntPixelCoord(event);
-        QRect rc = currentImage()->bounds();
-        KisFillPainter fillpainter(dev);
-        fillpainter.setHeight(rc.height());
-        fillpainter.setWidth(rc.width());
-        fillpainter.setFillThreshold(m_fuzziness);
-        fillpainter.setSampleMerged(!m_limitToCurrentLayer);
+    KisImageWSP image = currentImage();
+    image->lock();
+    fillpainter.setFeather(m_feather);
+    fillpainter.setSizemod(m_sizemod);
+    KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
+    image->unlock();
 
-        KisImageWSP image = currentImage();
-        image->lock();
-        fillpainter.setFeather(m_feather);
-        fillpainter.setSizemod(m_sizemod);
-        KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), image->projection());
-        image->unlock();
-
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        if (!kisCanvas || !selection->pixelSelection()) {
-            QApplication::restoreOverrideCursor();
-            return;
-        }
-
-        selection->pixelSelection()->invalidateOutlineCache();
-        KisSelectionToolHelper helper(kisCanvas, i18n("Contiguous Area Selection"));
-        helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
-
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (!kisCanvas || !selection->pixelSelection()) {
         QApplication::restoreOverrideCursor();
+        return;
     }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+
+    selection->pixelSelection()->invalidateOutlineCache();
+    KisSelectionToolHelper helper(kisCanvas, i18n("Contiguous Area Selection"));
+    helper.selectPixelSelection(selection->pixelSelection(), selectionAction());
+
+    QApplication::restoreOverrideCursor();
 }
 
 void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)

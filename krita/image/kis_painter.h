@@ -50,7 +50,7 @@ class KoCompositeOp;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisTransaction;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisPaintInformation;
 class KisPaintOp;
@@ -609,10 +609,10 @@ public:
     bool hasMirroring() const;
 
     /// Set the current pattern
-    void setPattern(const KisPattern * pattern);
+    void setPattern(const KoPattern * pattern);
 
     /// Returns the currently set pattern
-    const KisPattern * pattern() const;
+    const KoPattern * pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it
@@ -725,13 +725,12 @@ public:
     */
     void setMaskImageSize(qint32 width, qint32 height);
 
-    /**
-     * If the alpha channel is locked, the alpha values of the paint device we are painting on
-     * will not change.
-     */
-    void setLockAlpha(bool protect);
-    bool alphaLocked() const;
-
+//    /**
+//     * If the alpha channel is locked, the alpha values of the paint device we are painting on
+//     * will not change.
+//     */
+//    void setLockAlpha(bool protect);
+//    bool alphaLocked() const;
 
     /**
      * set the rendering intent in case pixels need to be converted before painting

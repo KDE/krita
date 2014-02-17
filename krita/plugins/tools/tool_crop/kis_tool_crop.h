@@ -69,11 +69,12 @@ public:
 
     virtual QWidget* createOptionWidget();
 
-    virtual void mousePressEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+
     virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *e);
-    virtual void keyReleaseEvent(QKeyEvent* event);
     virtual void canvasResourceChanged(int key, const QVariant &res);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -112,6 +113,9 @@ public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
+
     void crop();
 
     void setCropTypeLegacy(int cropType);
@@ -130,6 +134,7 @@ public slots:
     void setGrowCenter(bool g);
 
 private:
+    void cancelStroke();
     QRectF boundingRect();
     QRectF borderLineRect();
     QPainterPath handlesPath();
@@ -154,6 +159,7 @@ private:
 
     qint32 m_handleSize;
     bool m_haveCropSelection;
+    bool m_lastCropSelectionWasReset;
     qint32 m_mouseOnHandleType;
 
     CropToolType m_cropType;

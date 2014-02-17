@@ -25,12 +25,11 @@
 #include "kis_color_source.h"
 #include <kis_painter.h>
 #include <kis_paint_device.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
-struct KisColorSourceOption::Private
-{
+struct KisColorSourceOption::Private {
     Private()
-        :type(PLAIN)
+        : type(PLAIN)
     {}
 
     KisColorSourceOption::Type type;
@@ -45,22 +44,21 @@ QMap<QString, KisColorSourceOption::Type> KisColorSourceOption::Private::id2type
 
 void KisColorSourceOption::Private::addType(KisColorSourceOption::Type _type, KoID _id)
 {
-  type2id[_type] = _id;
-  id2type[_id.id()] = _type;
+    type2id[_type] = _id;
+    id2type[_id.id()] = _type;
 }
 
 
 KisColorSourceOption::KisColorSourceOption() : d(new Private)
 {
-  if(Private::type2id.isEmpty())
-  {
-    Private::addType(PLAIN, KoID("plain", i18n("Plain color")));
-    Private::addType(GRADIENT, KoID("gradient", i18n("Gradient")));
-    Private::addType(UNIFORM_RANDOM, KoID("uniform_random", i18n("Uniform random")));
-    Private::addType(TOTAL_RANDOM, KoID("total_random", i18n("Total random")));
-    Private::addType(PATTERN, KoID("pattern", i18n("Pattern")));
-    Private::addType(PATTERN_LOCKED, KoID("lockedpattern", i18n("Locked pattern")));
-  }
+    if (Private::type2id.isEmpty()) {
+        Private::addType(PLAIN, KoID("plain", i18n("Plain color")));
+        Private::addType(GRADIENT, KoID("gradient", i18n("Gradient")));
+        Private::addType(UNIFORM_RANDOM, KoID("uniform_random", i18n("Uniform random")));
+        Private::addType(TOTAL_RANDOM, KoID("total_random", i18n("Total random")));
+        Private::addType(PATTERN, KoID("pattern", i18n("Pattern")));
+        Private::addType(PATTERN_LOCKED, KoID("lockedpattern", i18n("Locked pattern")));
+    }
 }
 
 KisColorSourceOption::~KisColorSourceOption()
@@ -81,20 +79,26 @@ void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration* s
 
 KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _painter) const
 {
-    switch(d->type)
-    {
-      case PLAIN:
+    switch (d->type) {
+    case PLAIN:
         return new KisPlainColorSource(_painter->backgroundColor(), _painter->paintColor());
-      case GRADIENT:
-          return new KisGradientColorSource(_painter->gradient(), _painter->paintColor().colorSpace());
-      case UNIFORM_RANDOM:
+    case GRADIENT:
+        return new KisGradientColorSource(_painter->gradient(), _painter->paintColor().colorSpace());
+    case UNIFORM_RANDOM:
         return new KisUniformRandomColorSource();
-      case TOTAL_RANDOM:
+    case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
-      case PATTERN:
-        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->paintColor().colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), false);
-      case PATTERN_LOCKED:
-        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->paintColor().colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), true);
+    case PATTERN: {
+        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+        dev->convertFromQImage(_painter->pattern()->image(), 0);
+        return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
+    }
+    case PATTERN_LOCKED: {
+        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+        dev->convertFromQImage(_painter->pattern()->image(), 0);
+        return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);
+
+    }
     }
     qFatal("Unknown color source");
     return 0;

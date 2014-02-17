@@ -55,12 +55,10 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
 
-    foreach(KisPressureHSVOption* option, m_hsvOptions)
-    {
+    foreach(KisPressureHSVOption * option, m_hsvOptions) {
         option->readOptionSetting(settings);
-        option->sensor()->reset();
-        if(option->isChecked() && !m_hsvTransformation)
-        {
+        option->resetAllSensors();
+        if (option->isChecked() && !m_hsvTransformation) {
             m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
@@ -75,13 +73,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
 
-    m_opacityOption.sensor()->reset();
-    m_sizeOption.sensor()->reset();
-    m_softnessOption.sensor()->reset();
-    m_sharpnessOption.sensor()->reset();
-    m_darkenOption.sensor()->reset();
-    m_rotationOption.sensor()->reset();
-    m_scatterOption.sensor()->reset();
+    m_opacityOption.resetAllSensors();
+    m_sizeOption.resetAllSensors();
+    m_softnessOption.resetAllSensors();
+    m_sharpnessOption.resetAllSensors();
+    m_darkenOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+    m_scatterOption.resetAllSensors();
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
@@ -117,7 +115,10 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF cursorPos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
+    QPointF cursorPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
     quint8 origFlow    = painter()->flow();
@@ -127,7 +128,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     m_darkenOption.apply(m_colorSource, info);
 
     if (m_hsvTransformation) {
-        foreach(KisPressureHSVOption* option, m_hsvOptions) {
+        foreach(KisPressureHSVOption * option, m_hsvOptions) {
             option->apply(m_hsvTransformation, info);
         }
         m_colorSource->applyColorTransformation(m_hsvTransformation);
@@ -135,13 +136,13 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
     QRect dabRect;
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
-                                                     m_colorSource,
-                                                     cursorPos,
-                                                     scale, scale,
-                                                     rotation,
-                                                     info,
-                                                     m_softnessOption.apply(info),
-                                                     &dabRect);
+                                m_colorSource,
+                                cursorPos,
+                                scale, scale,
+                                rotation,
+                                info,
+                                m_softnessOption.apply(info),
+                                &dabRect);
 
     // sanity check for the size calculation code
     if (dab->bounds().size() != dabRect.size()) {
@@ -163,11 +164,12 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
 {
-    if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
+    if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
         if (!m_lineCacheDevice) {
             m_lineCacheDevice = source()->createCompositionSourceDevice();
-        } else {
+        }
+        else {
             m_lineCacheDevice->clear();
         }
 
@@ -177,7 +179,8 @@ void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInforma
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-    } else {
+    }
+    else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);
     }
 }

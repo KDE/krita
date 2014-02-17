@@ -39,38 +39,38 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
 {
     /*--------DO NOT REMOVE please, use this to review the XML config tree
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
-   
+
     QMap<QString, QVariant>::const_iterator i;
     for (i = rofl.constBegin(); i != rofl.constEnd(); ++i)
         qDebug() << i.key() << ":" << i.value();
     /----------DO NOT REMOVE----------------*/
-    
+
     convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");
     convenienttwin->enabledcurveopacity = getBool("PressureOpacity");
     convenienttwin->enabledcurveseparation = getBool("PressureSeparation");
     convenienttwin->enabledcurvesize = getBool("PressureSize");
     convenienttwin->enabledcurvethickness = getBool("PressureThickness");
-    
+
     convenienttwin->angle = getDouble("Hatching/angle");
     convenienttwin->separation = getDouble("Hatching/separation");
     convenienttwin->thickness = getDouble("Hatching/thickness");
     convenienttwin->origin_x = getDouble("Hatching/origin_x");
     convenienttwin->origin_y = getDouble("Hatching/origin_y");
-    
+
     convenienttwin->nocrosshatching = getBool("Hatching/bool_nocrosshatching");
     convenienttwin->perpendicular = getBool("Hatching/bool_perpendicular");
     convenienttwin->minusthenplus = getBool("Hatching/bool_minusthenplus");
     convenienttwin->plusthenminus = getBool("Hatching/bool_plusthenminus");
     convenienttwin->moirepattern = getBool("Hatching/bool_moirepattern");
-    
+
     convenienttwin->separationintervals = getInt("Hatching/separationintervals");
-    
+
     //convenienttwin->trigonometryalgebra = getBool("Hatching/bool_trigonometryalgebra");
     //convenienttwin->scratchoff = getBool("Hatching/bool_scratchoff");
     convenienttwin->antialias = getBool("Hatching/bool_antialias");
     convenienttwin->opaquebackground = getBool("Hatching/bool_opaquebackground");
     convenienttwin->subpixelprecision = getBool("Hatching/bool_subpixelprecision");
-                         
+
     if (getBool("Hatching/bool_nocrosshatching"))
         convenienttwin->crosshatchingstyle = 0;
     else if (getBool("Hatching/bool_perpendicular"))
@@ -81,7 +81,7 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
         convenienttwin->crosshatchingstyle = 3;
     if (getBool("Hatching/bool_moirepattern"))
         convenienttwin->crosshatchingstyle = 4;
-    
+
 }
 
 void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
@@ -89,8 +89,8 @@ void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
     setProperty(HATCHING_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
     KisBrushBasedPaintOpSettings::fromXML(elt);
     QVariant v;
-    if(!getProperty(HATCHING_VERSION, v) || v == "1")
-    {
+    if (!getProperty(HATCHING_VERSION, v) || v == "1") {
         setProperty("Hatching/thickness", 2.0 * getDouble("Hatching/thickness"));
-    }    
+    }
+    setProperty(HATCHING_VERSION, "2"); // make sure it's saved as version 2 next time
 }

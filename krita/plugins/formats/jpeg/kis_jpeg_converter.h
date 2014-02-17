@@ -74,6 +74,7 @@ struct KisJPEGOptions {
     bool xmp;
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
+    bool forceSRGB;
 };
 
 namespace KisMetaData

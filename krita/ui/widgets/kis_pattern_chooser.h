@@ -24,14 +24,14 @@
 
 class QLabel;
 
-class KRITAUI_EXPORT KisPatternChooser : public QFrame
+class KRITAUI_EXPORT KoPatternChooser : public QFrame
 {
 
     Q_OBJECT
 
 public:
-    KisPatternChooser(QWidget *parent = 0);
-    virtual ~KisPatternChooser();
+    KoPatternChooser(QWidget *parent = 0);
+    virtual ~KoPatternChooser();
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected

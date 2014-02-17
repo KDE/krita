@@ -27,7 +27,7 @@ class KisBrushSizeOptionsWidget: public QWidget, public Ui::WdgBrushSizeOptions
 {
 public:
     KisBrushSizeOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 
@@ -35,20 +35,20 @@ public:
 
 
 KisBrushSizeOption::KisBrushSizeOption()
-        : KisPaintOpOption(i18n("Brush tip"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush tip"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisBrushSizeOptionsWidget();
 
-    connect(m_options->diameter,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->scale,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->aspectBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->spacing,SIGNAL(valueChanged(double)),SIGNAL( sigSettingChanged()));
-    connect(m_options->rotationBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->densityBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->diameter, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scale, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->spacing, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->rotationBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densityBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMove, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMove, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);
@@ -62,13 +62,13 @@ KisBrushSizeOption::~KisBrushSizeOption()
 
 int KisBrushSizeOption::diameter() const
 {
-        return qRound(m_options->diameter->value());
+    return qRound(m_options->diameter->value());
 }
 
 
 void KisBrushSizeOption::setDiameter(int diameter)
 {
-        m_options->diameter->setValue(diameter);
+    m_options->diameter->setValue(diameter);
 }
 
 qreal KisBrushSizeOption::brushAspect() const
@@ -79,26 +79,26 @@ qreal KisBrushSizeOption::brushAspect() const
 
 void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( BRUSH_DIAMETER, m_options->diameter->value() );
-    setting->setProperty( BRUSH_ASPECT, m_options->aspectBox->value() );
-    setting->setProperty( BRUSH_ROTATION, m_options->rotationBox->value() );
-    setting->setProperty( BRUSH_SCALE, m_options->scale->value() );
-    setting->setProperty( BRUSH_SPACING, m_options->spacing->value() );
-    setting->setProperty( BRUSH_DENSITY, m_options->densityBox->value() );
-    setting->setProperty( BRUSH_JITTER_MOVEMENT, m_options->jitterMove->value());
-    setting->setProperty( BRUSH_JITTER_MOVEMENT_ENABLED, m_options->jitterMoveBox->isChecked());
+    setting->setProperty(BRUSH_DIAMETER, m_options->diameter->value());
+    setting->setProperty(BRUSH_ASPECT, m_options->aspectBox->value());
+    setting->setProperty(BRUSH_ROTATION, m_options->rotationBox->value());
+    setting->setProperty(BRUSH_SCALE, m_options->scale->value());
+    setting->setProperty(BRUSH_SPACING, m_options->spacing->value());
+    setting->setProperty(BRUSH_DENSITY, m_options->densityBox->value());
+    setting->setProperty(BRUSH_JITTER_MOVEMENT, m_options->jitterMove->value());
+    setting->setProperty(BRUSH_JITTER_MOVEMENT_ENABLED, m_options->jitterMoveBox->isChecked());
 }
 
 void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->diameter->setValue( setting->getDouble(BRUSH_DIAMETER) );
-    m_options->aspectBox->setValue( setting->getDouble(BRUSH_ASPECT) );
-    m_options->rotationBox->setValue( setting->getDouble(BRUSH_ROTATION) );
-    m_options->scale->setValue( setting->getDouble(BRUSH_SCALE) );
-    m_options->spacing->setValue( setting->getDouble(BRUSH_SPACING) );
-    m_options->densityBox->setValue( setting->getDouble(BRUSH_DENSITY) );
-    m_options->jitterMove->setValue( setting->getDouble(BRUSH_JITTER_MOVEMENT) );
-    m_options->jitterMoveBox->setChecked( setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED) );
+    m_options->diameter->setValue(setting->getDouble(BRUSH_DIAMETER));
+    m_options->aspectBox->setValue(setting->getDouble(BRUSH_ASPECT));
+    m_options->rotationBox->setValue(setting->getDouble(BRUSH_ROTATION));
+    m_options->scale->setValue(setting->getDouble(BRUSH_SCALE));
+    m_options->spacing->setValue(setting->getDouble(BRUSH_SPACING));
+    m_options->densityBox->setValue(setting->getDouble(BRUSH_DENSITY));
+    m_options->jitterMove->setValue(setting->getDouble(BRUSH_JITTER_MOVEMENT));
+    m_options->jitterMoveBox->setChecked(setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED));
 
 }
 

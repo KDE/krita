@@ -52,19 +52,12 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
 {
-    if (m_view) {
-        KoToolManager::instance()->switchBackRequested();
-    }
-
     delete m_widget;
 }
 
 void KisWdgColorToAlpha::setView(KisView2 *view)
 {
     m_view = view;
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
-
-    KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
 }
 
 void KisWdgColorToAlpha::slotFgColorChanged(const KoColor &color)
@@ -100,6 +93,22 @@ KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
     config->setProperty("targetcolor", widget()->colorSelector->color());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;
+}
+
+void KisWdgColorToAlpha::hideEvent(QHideEvent *)
+{
+    if (m_view) {
+        disconnect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        KoToolManager::instance()->switchBackRequested();
+    }
+}
+
+void KisWdgColorToAlpha::showEvent(QShowEvent *)
+{
+    if (m_view) {
+        connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
+    }
 }
 
 

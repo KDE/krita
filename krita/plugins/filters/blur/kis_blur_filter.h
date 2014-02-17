@@ -28,7 +28,6 @@ class KisBlurFilter : public KisFilter
 public:
     KisBlurFilter();
 public:
-    using KisFilter::process;
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& size,

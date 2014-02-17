@@ -30,6 +30,8 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
+    AnnotationTextShape.cpp
+    AnnotationTextShapeFactory.cpp
 
     ChangeTracker.cpp
     ReviewTool.cpp
@@ -104,6 +106,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
+    dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
@@ -152,6 +155,9 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableOfContentsConfigure.ui
     dialogs/SimpleLinksWidget.ui
     dialogs/TableOfContentsStyleConfigure.ui
+    dialogs/SimpleAnnotationWidget.ui
+
+
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui

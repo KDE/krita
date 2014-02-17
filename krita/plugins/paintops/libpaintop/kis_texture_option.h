@@ -30,7 +30,7 @@
 #include <QRect>
 
 class KisTextureOptionWidget;
-class KisPattern;
+class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
 
@@ -39,7 +39,7 @@ class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
     Q_OBJECT
 public:
 
-    explicit KisTextureOption(QObject *parent= 0);
+    explicit KisTextureOption(QObject *parent = 0);
     virtual ~KisTextureOption();
 
 public slots:
@@ -70,15 +70,7 @@ public:
     };
 
     bool enabled;
-    qreal scale;
-    int offsetX;
-    int offsetY;
-    TexturingMode texturingMode;
-    bool invert;
-    KisPattern *pattern;
-    int cutoffLeft;
-    int cutoffRight;
-    int cutoffPolicy;
+
     /**
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
@@ -86,6 +78,18 @@ public:
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfiguration *setting);
+
+private:
+
+    qreal scale;
+    int offsetX;
+    int offsetY;
+    TexturingMode texturingMode;
+    bool invert;
+    KoPattern *pattern;
+    int cutoffLeft;
+    int cutoffRight;
+    int cutoffPolicy;
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

@@ -23,27 +23,27 @@ class KisSketchOpOptionsWidget: public QWidget, public Ui::WdgSketchOptions
 {
 public:
     KisSketchOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisSketchOpOption::KisSketchOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
-    connect(m_options->offsetSPBox,SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->lineWidthSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->densitySPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->simpleModeCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->connectionCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->magnetifyCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->randomRGBCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->randomOpacityCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceDensityCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->distanceOpacityCHbox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    
+    connect(m_options->offsetSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->densitySPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->simpleModeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->connectionCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->magnetifyCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomRGBCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
@@ -54,13 +54,13 @@ KisSketchOpOption::~KisSketchOpOption()
 
 void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-    settings->setProperty(SKETCH_OFFSET,m_options->offsetSPBox->value());
+    settings->setProperty(SKETCH_OFFSET, m_options->offsetSPBox->value());
     settings->setProperty(SKETCH_PROBABILITY, m_options->densitySPBox->value() * 0.01);
-    settings->setProperty(SKETCH_USE_SIMPLE_MODE,m_options->simpleModeCHBox->isChecked());
+    settings->setProperty(SKETCH_USE_SIMPLE_MODE, m_options->simpleModeCHBox->isChecked());
     settings->setProperty(SKETCH_MAKE_CONNECTION, m_options->connectionCHBox->isChecked());
-    settings->setProperty(SKETCH_MAGNETIFY,m_options->magnetifyCHBox->isChecked());
-    settings->setProperty(SKETCH_RANDOM_RGB,m_options->randomRGBCHbox->isChecked());
-    settings->setProperty(SKETCH_LINE_WIDTH,m_options->lineWidthSPBox->value());
+    settings->setProperty(SKETCH_MAGNETIFY, m_options->magnetifyCHBox->isChecked());
+    settings->setProperty(SKETCH_RANDOM_RGB, m_options->randomRGBCHbox->isChecked());
+    settings->setProperty(SKETCH_LINE_WIDTH, m_options->lineWidthSPBox->value());
     settings->setProperty(SKETCH_RANDOM_OPACITY, m_options->randomOpacityCHbox->isChecked());
     settings->setProperty(SKETCH_DISTANCE_DENSITY, m_options->distanceDensityCHBox->isChecked());
     settings->setProperty(SKETCH_DISTANCE_OPACITY, m_options->distanceOpacityCHbox->isChecked());
@@ -68,16 +68,16 @@ void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings)
 
 void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
-        m_options->offsetSPBox->setValue( settings->getDouble(SKETCH_OFFSET) );
-        m_options->simpleModeCHBox->setChecked(settings->getBool(SKETCH_USE_SIMPLE_MODE));
-        m_options->connectionCHBox->setChecked(settings->getBool(SKETCH_MAKE_CONNECTION));
-        m_options->magnetifyCHBox->setChecked(settings->getBool(SKETCH_MAGNETIFY));
-        m_options->lineWidthSPBox->setValue(settings->getInt(SKETCH_LINE_WIDTH));
-        m_options->densitySPBox->setValue(settings->getDouble(SKETCH_PROBABILITY) * 100.0);
-        m_options->randomRGBCHbox->setChecked(settings->getBool(SKETCH_RANDOM_RGB));
-        m_options->randomOpacityCHbox->setChecked(settings->getBool(SKETCH_RANDOM_OPACITY));
-        m_options->distanceDensityCHBox->setChecked(settings->getBool(SKETCH_DISTANCE_DENSITY));
-        m_options->distanceOpacityCHbox->setChecked(settings->getBool(SKETCH_DISTANCE_OPACITY));
+    m_options->offsetSPBox->setValue(settings->getDouble(SKETCH_OFFSET));
+    m_options->simpleModeCHBox->setChecked(settings->getBool(SKETCH_USE_SIMPLE_MODE));
+    m_options->connectionCHBox->setChecked(settings->getBool(SKETCH_MAKE_CONNECTION));
+    m_options->magnetifyCHBox->setChecked(settings->getBool(SKETCH_MAGNETIFY));
+    m_options->lineWidthSPBox->setValue(settings->getInt(SKETCH_LINE_WIDTH));
+    m_options->densitySPBox->setValue(settings->getDouble(SKETCH_PROBABILITY) * 100.0);
+    m_options->randomRGBCHbox->setChecked(settings->getBool(SKETCH_RANDOM_RGB));
+    m_options->randomOpacityCHbox->setChecked(settings->getBool(SKETCH_RANDOM_OPACITY));
+    m_options->distanceDensityCHBox->setChecked(settings->getBool(SKETCH_DISTANCE_DENSITY));
+    m_options->distanceOpacityCHbox->setChecked(settings->getBool(SKETCH_DISTANCE_OPACITY));
 }
 
 

@@ -24,7 +24,7 @@ class KisSprayOpOptionsWidget: public QWidget, public Ui::WdgSprayOptions
 {
 public:
     KisSprayOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
         // this allows to setup the component still in designer and it is needed for showing slider
         spacingSpin->setRange(spacingSpin->minimum(), spacingSpin->maximum(), 0.25, spacingSpin->showSlider());
@@ -34,7 +34,7 @@ public:
 };
 
 KisSprayOpOption::KisSprayOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Spray area"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
@@ -47,9 +47,9 @@ KisSprayOpOption::KisSprayOpOption()
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->gaussianBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));

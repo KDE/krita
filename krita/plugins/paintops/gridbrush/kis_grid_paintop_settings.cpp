@@ -26,7 +26,7 @@
 #include <kis_color_option.h>
 
 KisGridPaintOpSettings::KisGridPaintOpSettings()
-    : KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::NO_OPTION)
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION)
 {
 }
 

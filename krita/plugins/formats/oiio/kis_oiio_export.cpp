@@ -48,10 +48,10 @@ KoFilter::ConversionStatus KisOiioExport::convert(const QByteArray& from, const 
 {
     dbgFile << "Oiio export! From:" << from << ", To:" << to << "";
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
@@ -62,11 +62,14 @@ KoFilter::ConversionStatus KisOiioExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    QRect rc = output->image()->bounds();
-    output->image()->refreshGraph();
-    output->image()->lock();
-    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
-    output->image()->unlock();
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
+
+    QRect rc = input->image()->bounds();
+    input->image()->refreshGraph();
+    input->image()->lock();
+    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
+    input->image()->unlock();
     image.save(url.toLocalFile());
     return KoFilter::OK;
 }

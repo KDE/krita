@@ -27,7 +27,7 @@
 KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathToolFactoryId")
 {
-    setToolTip(i18n("Path editing tool"));
+    setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());
     setIconName(koIconNameCStr("editpath"));
     setPriority(2);

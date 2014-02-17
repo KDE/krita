@@ -27,6 +27,7 @@
 
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
+#include <input/kis_tablet_event.h>
 
 #include "KisSketchView.h"
 #include "gemini/ViewModeSwitchEvent.h"
@@ -48,6 +49,7 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     setAttribute(Qt::WA_NoSystemBackground);
     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    viewport()->installEventFilter(this);
 }
 
 SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
@@ -67,6 +69,7 @@ SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     setAttribute(Qt::WA_NoSystemBackground);
     viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    viewport()->installEventFilter(this);
 }
 
 SketchDeclarativeView::~SketchDeclarativeView()
@@ -169,4 +172,32 @@ bool SketchDeclarativeView::event( QEvent* event )
             break;
     }
     return QGraphicsView::event( event );
+}
+
+bool SketchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
+{
+    switch(static_cast<int>(e->type())) {
+        case KisTabletEvent::TabletMoveEx:
+        case KisTabletEvent::TabletPressEx:
+        case KisTabletEvent::TabletReleaseEx: {
+            if (m_canvasWidget.data())
+            {
+                //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
+                //functionality.s
+                KisTabletEvent* ev = static_cast<KisTabletEvent*>(e);
+                QList<QGraphicsItem*> items = scene()->items(ev->pos());
+                Q_FOREACH(QGraphicsItem* item, items)
+                {
+                    if(scene()->sendEvent(item, e))
+                        return true;
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+
+    return QDeclarativeView::eventFilter(watched, e);
 }

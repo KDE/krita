@@ -19,7 +19,8 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
 #define srand48 srand
-inline double drand48() {
+inline double drand48()
+{
     return double(rand()) / RAND_MAX;
 }
 #endif
@@ -49,7 +50,7 @@ ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation*
     else {
         m_saturationId = -1;
     }
-    
+
 
     m_counter = 0;
     m_properties = properties;
@@ -79,10 +80,10 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
 
         if (m_properties->useSaturation) {
             if (m_transfo) {
-                m_transfo->setParameter(m_saturationId,result);
+                m_transfo->setParameter(m_saturationId, result);
                 m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
             }
-            
+
         }
 
         if (m_properties->useOpacity) {
@@ -90,16 +91,16 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             m_inkColor.setOpacity(opacity);
         }
     }
-    
+
     int pixelX, pixelY;
     int radiusSquared = m_properties->radius * m_properties->radius;
     double dirtThreshold = 0.5;
-    
+
     for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
-        int bySquared = by*by;
+        int bySquared = by * by;
         for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
             // let's call that noise from ground to chalk :)
-            if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
+            if (((bx * bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
                 continue;
             }
 

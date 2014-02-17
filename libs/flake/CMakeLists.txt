@@ -76,7 +76,6 @@ set(flake_SRCS
     KoShapeLoadingContext.cpp
     KoLoadingShapeUpdater.cpp
     KoPathShapeLoader.cpp
-    ShapeDeleter_p.cpp
     KoShapeStrokeModel.cpp
     KoShapeStroke.cpp
     KoShapeBackground.cpp
@@ -126,6 +125,7 @@ set(flake_SRCS
     KoTosContainerModel.cpp
     KoClipPath.cpp
     KoCurveFit.cpp
+    KoAnnotationLayoutManager.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -218,8 +218,8 @@ kde4_add_ui_files(flake_SRCS
 
 kde4_add_library(flake SHARED ${flake_SRCS})
 
-target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${QT_QTDECLARATIVE_LIBRARY} pigmentcms kowidgetutils koodf)
-target_link_libraries(flake LINK_INTERFACE_LIBRARIES ${QT_QTDECLARATIVE_LIBRARY} pigmentcms kowidgetutils koodf)
+target_link_libraries(flake ${KDE4_KDEUI_LIBS} pigmentcms kowidgetutils koodf)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms kowidgetutils koodf)
 target_link_libraries(flake kundo2)
 target_link_libraries(flake LINK_INTERFACE_LIBRARIES kundo2)
 

@@ -41,7 +41,7 @@ public:
      * Create a new KisPixelSelection. This selection will not have a
      * parent paint device.
      */
-    KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds = 0, KisSelectionSP parentSelection = 0);
+    KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds = 0, KisSelectionWSP parentSelection = 0);
 
     /**
      * Copy the selection
@@ -53,6 +53,8 @@ public:
     KisSelectionComponent* clone(KisSelection*);
 
     const KoColorSpace* compositionSourceColorSpace() const;
+
+    bool read(QIODevice *stream);
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -111,8 +113,8 @@ public:
     void setOutlineCache(const QPainterPath &cache);
     void invalidateOutlineCache();
 
-    void setParentSelection(KisSelectionSP selection);
-    KisSelectionSP parentSelection() const;
+    void setParentSelection(KisSelectionWSP selection);
+    KisSelectionWSP parentSelection() const;
 
     virtual void renderToProjection(KisPaintDeviceSP projection);
     virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);

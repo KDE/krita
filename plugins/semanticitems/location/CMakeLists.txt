@@ -9,17 +9,17 @@ set(calligra_semanticitem_location_LIB_SRCS
     KoRdfLocationTreeWidgetItem.cpp
 )
 
-#    if(MARBLE_FOUND)
-#        kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
-#           KoRdfLocationEditWidgetMarble.ui
-#           KoRdfLocationViewWidgetMarble.ui
-#        )
-#    else(MARBLE_FOUND)
+if(MARBLE_FOUND)
     kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
-       KoRdfLocationEditWidget.ui
-       KoRdfLocationViewWidget.ui
+        KoRdfLocationEditWidgetMarble.ui
+        KoRdfLocationViewWidgetMarble.ui
     )
-#    endif(MARBLE_FOUND)
+else(MARBLE_FOUND)
+    kde4_add_ui_files( calligra_semanticitem_location_LIB_SRCS
+        KoRdfLocationEditWidget.ui
+        KoRdfLocationViewWidget.ui
+    )
+endif(MARBLE_FOUND)
 
 kde4_add_plugin(calligra_semanticitem_location ${calligra_semanticitem_location_LIB_SRCS})
 

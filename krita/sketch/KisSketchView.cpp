@@ -62,6 +62,7 @@
 #include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
 #include <input/kis_input_manager.h>
+#include <input/kis_tablet_event.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_zoom_manager.h>
 #include <kis_selection_manager.h>
@@ -90,6 +91,7 @@ public:
         , selectionExtras(0)
         , undoAction(0)
         , redoAction(0)
+        , tabletEventCount(0)
     { }
     ~Private() {
         delete selectionExtras;
@@ -103,9 +105,9 @@ public:
 
     KisSketchView* q;
 
-    KisDoc2* doc;
-    KisView2* view;
-    KisCanvas2* canvas;
+    QPointer<KisDoc2> doc;
+    QPointer<KisView2> view;
+    QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;
 
     QWidget *canvasWidget;
@@ -120,6 +122,8 @@ public:
     QTimer *savedTimer;
     QAction* undoAction;
     QAction* redoAction;
+
+    unsigned char tabletEventCount;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -313,13 +317,17 @@ void KisSketchView::documentAboutToBeDeleted()
 void KisSketchView::documentChanged()
 {
     d->doc = DocumentManager::instance()->document();
+	if (!d->doc) return;
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-    d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(d->doc, QApplication::activeWindow()));
-    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
-    emit viewChanged();
+	KisSketchPart *part = DocumentManager::instance()->part();
+	Q_ASSERT(part);
+	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
+    d->view = view;
 
+    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    
     d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
     d->view->hide();
     d->canvas = d->view->canvasBase();
@@ -362,6 +370,8 @@ void KisSketchView::documentChanged()
 
     d->view->actionCollection()->action("zoom_to_100pct")->trigger();
     d->resetDocumentPosition();
+
+	emit viewChanged();
 }
 
 bool KisSketchView::event( QEvent* event )
@@ -434,6 +444,18 @@ bool KisSketchView::event( QEvent* event )
 
             return true;
         }
+        case KisTabletEvent::TabletPressEx:
+        case KisTabletEvent::TabletReleaseEx:
+            emit interactionStarted();
+            d->canvas->inputManager()->eventFilter(this, event);
+            return true;
+        case KisTabletEvent::TabletMoveEx:
+            d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
+#ifdef Q_OS_X11
+            if(d->tabletEventCount % 2 == 0)
+#endif
+                d->canvas->inputManager()->eventFilter(this, event);
+            return true;
         default:
             break;
     }
@@ -479,16 +501,17 @@ bool KisSketchView::sceneEvent(QEvent* event)
             emit interactionStarted();
             return true;
         }
-	case QEvent::TabletPress:
-	case QEvent::TabletMove:
-	case QEvent::TabletRelease:
-	    QApplication::sendEvent(d->canvasWidget, event);
-	    return true;
-        default:
+		case QEvent::TabletPress:
+		case QEvent::TabletMove:
+		case QEvent::TabletRelease:
+			d->canvas->inputManager()->stopIgnoringEvents();
+			QApplication::sendEvent(d->canvasWidget, event);
+			return true;
+		default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
-            emit interactionStarted();
+                emit interactionStarted();
                 return true;
-        }
+            }
         }
     }
     return QDeclarativeItem::sceneEvent(event);

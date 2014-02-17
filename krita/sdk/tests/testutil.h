@@ -51,6 +51,18 @@
 namespace TestUtil
 {
 
+inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
+    if(root->name() == name) return root;
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        if(root = findNode(child, name)) return root;
+        child = child->nextSibling();
+    }
+
+    return 0;
+}
+
 inline QString fetchDataFileLazy(const QString relativeFileName)
 {
     QString filename  =
@@ -214,9 +226,22 @@ inline bool checkQImage(const QImage &image, const QString &testName,
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
 
-    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
-               testName + QDir::separator() +
-               prefix + QDir::separator() + filename);
+    QString fullPath = fetchDataFileLazy(testName + QDir::separator() +
+                                         prefix + QDir::separator() + filename);
+
+    if (fullPath.isEmpty()) {
+        // Try without the testname subdirectory
+        fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+                                     filename);
+    }
+
+    if (fullPath.isEmpty()) {
+        // Try without the prefix subdirectory
+        fullPath = fetchDataFileLazy(testName + QDir::separator() +
+                                     filename);
+    }
+
+    QImage ref(fullPath);
 
     bool valid = true;
     QPoint t;

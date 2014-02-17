@@ -42,8 +42,8 @@
 #include <KoColorSpaceRegistry.h>
 
 KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-                   : KisBrushBasedPaintOp(settings, painter)
-                   , m_image(image)
+    : KisBrushBasedPaintOp(settings, painter)
+    , m_image(image)
 {
     m_settings = new KisHatchingPaintOpSettings();
     settings->initializeTwin(m_settings);
@@ -55,11 +55,11 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *setting
     m_thicknessOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
-    m_crosshatchingOption.sensor()->reset();
-    m_separationOption.sensor()->reset();
-    m_thicknessOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
-    m_sizeOption.sensor()->reset();
+    m_crosshatchingOption.resetAllSensors();
+    m_separationOption.resetAllSensors();
+    m_thicknessOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+    m_sizeOption.resetAllSensors();
 }
 
 KisHatchingPaintOp::~KisHatchingPaintOp()
@@ -110,7 +110,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                              info, 1.0, &dstRect);
 
     // sanity check
-    Q_ASSERT(dstRect.size() == maskDab->bounds().size());
+    KIS_ASSERT_RECOVER_NOOP(dstRect.size() == maskDab->bounds().size());
 
     /*-----Convenient renaming for the limits of the maskDab, this will be used
     to hatch a dab of just the right size------*/
@@ -120,7 +120,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
     if (m_settings->opaquebackground) {
         KoColor aersh = painter()->backgroundColor();
-        m_hatchedDab->fill(0, 0, (sw-1), (sh-1), aersh.data()); //this plus yellow background = french fry brush
+        m_hatchedDab->fill(0, 0, (sw - 1), (sh - 1), aersh.data()); //this plus yellow background = french fry brush
     }
 
     // Trick for moire pattern to look better
@@ -146,11 +146,10 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
         }
         else if (m_settings->moirepattern) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue)*180), painter()->paintColor());
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 180), painter()->paintColor());
             donotbasehatch = true;
         }
-    }
-    else {
+    } else {
         if (m_settings->perpendicular) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
         }
@@ -172,7 +171,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
-    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab, 0, 0, maskDab,
+    painter()->renderMirrorMaskSafe(QRect(QPoint(x, y), QSize(sw, sh)), m_hatchedDab, 0, 0, maskDab,
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
 

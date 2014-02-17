@@ -24,34 +24,34 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisGridShapeOption::KisGridShapeOption()
-        : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
-    connect(m_options->shapeCBox,SIGNAL(currentIndexChanged(int)),SIGNAL( sigSettingChanged()));
+    connect(m_options->shapeCBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 
 KisGridShapeOption::~KisGridShapeOption()
 {
-    delete m_options; 
+    delete m_options;
 }
 
 
-int KisGridShapeOption::shape() const {
+int KisGridShapeOption::shape() const
+{
     return m_options->shapeCBox->currentIndex();
 }
 
 void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( GRIDSHAPE_SHAPE, shape() );
+    setting->setProperty(GRIDSHAPE_SHAPE, shape());
 }
 
 

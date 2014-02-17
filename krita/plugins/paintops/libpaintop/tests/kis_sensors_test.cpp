@@ -23,26 +23,25 @@
 
 KisSensorsTest::KisSensorsTest()
 {
-    paintInformations.append(KisPaintInformation(QPointF(0,0), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(0,1), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(1,2), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(2,2), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(3,1), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(3,0), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(2,-1), 0, 0, 0, 0.0, 0.0, 1.0 ));
-    paintInformations.append(KisPaintInformation(QPointF(1,-1), 0, 0, 0, 0.0, 0.0, 1.0 ));
+    paintInformations.append(KisPaintInformation(QPointF(0, 0), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(0, 1), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(1, 2), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(2, 2), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(3, 1), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(3, 0), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(2, -1), 0, 0, 0, 0.0, 0.0, 1.0));
+    paintInformations.append(KisPaintInformation(QPointF(1, -1), 0, 0, 0, 0.0, 0.0, 1.0));
 }
 
 void KisSensorsTest::testDrawingAngle()
 {
-    KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(DrawingAngleId);
+    KisDynamicSensor *sensor = KisDynamicSensor::id2Sensor(DrawingAngleId);
     testBound(sensor);
 }
 
-void KisSensorsTest::testBound(KisDynamicSensor* sensor)
+void KisSensorsTest::testBound(KisDynamicSensor *sensor)
 {
-    foreach(const KisPaintInformation& pi, paintInformations)
-    {
+    foreach(const KisPaintInformation & pi, paintInformations) {
         double v = sensor->parameter(pi);
         QVERIFY(v >= 0.0);
         QVERIFY(v <= 1.0);

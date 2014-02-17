@@ -30,6 +30,11 @@
 #include <math.h>
 
 #define maxPresetCount 10
+#define brushInnerRadius 120.0
+#define brushOuterRadius 140.0
+#define colorInnerRadius 75.0
+#define colorOuterRadius 95.0
+#define brushRadius (brushInnerRadius+brushOuterRadius)/2
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -80,6 +85,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
 {
     m_triangleColorSelector  = new PopupColorTriangle(this);
     m_triangleColorSelector->move(90, 90);
+    m_triangleColorSelector->resize(140, 140);
     m_triangleColorSelector->setVisible(true);
 
     setAutoFillBackground(true);
@@ -195,7 +201,7 @@ void KisPopupPalette::setVisible(bool b)
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(280,280);
+    return QSize(320,320);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -250,10 +256,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.fillPath(path, currColor);
         painter.drawPath(path);
     }
-
-    //painting recent colors : bevel (raised)
-    drawArcRisen (painter, Qt::darkGray, Qt::white, 51);
-    drawArcRisen (painter, Qt::white, Qt::darkGray, 34);
 
     //painting recent colors
     painter.setPen(Qt::NoPen);
@@ -321,16 +323,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() *-1 *rotationAngle);
         }
     }
-}
-
-void KisPopupPalette::drawArcRisen (QPainter& painter, const QColor& color1, const QColor& color2, int radius)
-{
-    QRadialGradient gradient;
-    gradient.setColorAt(1, color1);
-    gradient.setColorAt(0, color2);
-    gradient.setFocalPoint(sin(M_PI/4)*radius, cos(M_PI/4)*radius);
-    painter.setPen(QPen(QBrush(gradient), 3, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-    painter.drawEllipse(-1*radius+0.5, -1*radius+0.5, 2*radius+0.5, 2*radius+0.5);
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)

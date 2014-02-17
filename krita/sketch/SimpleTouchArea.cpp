@@ -17,6 +17,7 @@
  */
 
 #include "SimpleTouchArea.h"
+#include <input/kis_tablet_event.h>
 #include <QTouchEvent>
 #include <QApplication>
 
@@ -28,6 +29,20 @@ SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
 
 SimpleTouchArea::~SimpleTouchArea()
 {
+}
+
+bool SimpleTouchArea::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case KisTabletEvent::TabletPressEx:
+        case KisTabletEvent::TabletReleaseEx:
+        case KisTabletEvent::TabletMoveEx:
+            event->ignore();
+            return true;
+        default:
+            break;
+    }
+    return QDeclarativeItem::event(event);
 }
 
 bool SimpleTouchArea::sceneEvent(QEvent* event)

@@ -39,7 +39,7 @@ public:
      * @param name The name that will be shown in the ui
      * @param image The image the command will be working on.
      */
-    KisImageCommand(const QString& name, KisImageWSP image);
+    KisImageCommand(const QString& name, KisImageWSP image, KUndo2Command *parent = 0);
     virtual ~KisImageCommand();
 
 protected:
@@ -59,8 +59,8 @@ protected:
     private:
         KisImageWSP m_image;
         QRect m_updateRect;
-        bool m_needsFullRefresh;
-        KisNodeSP m_node;
+        int m_removedNodeIndex;
+        KisNodeSP m_removedNodeParent;
     };
 
 protected:

@@ -35,7 +35,7 @@ public:
 
     void setColors(QList<KoColor> colors);
     QList<KoColor> colors() const {return m_colors;}
-    virtual void setCanvas(KisCanvas2 *canvas) {m_canvas=canvas;}
+    virtual void setCanvas(KisCanvas2 *canvas) { m_canvas = canvas; }
     virtual void unsetCanvas() { KisColorSelectorBase::unsetCanvas(); m_canvas = 0;}
 
 public slots:

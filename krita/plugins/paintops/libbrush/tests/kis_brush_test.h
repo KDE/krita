@@ -41,6 +41,8 @@ private slots:
 
     void benchmarkMaskScaling();
     void testPyramidLevelRounding();
+
+    void testQPainterTransformationBorder();
 };
 
 #endif

@@ -37,54 +37,60 @@ KisOutlineGenerator::KisOutlineGenerator(const KoColorSpace* cs, quint8 defaultO
 
 QVector<QPolygon> KisOutlineGenerator::outline(quint8* buffer, qint32 xOffset, qint32 yOffset, qint32 width, qint32 height)
 {
-  
-    quint8* marks = new quint8[width*height];
-    memset(marks, 0, width *height);
     QVector<QPolygon> paths;
 
-    int nodes = 0;
-    for (qint32 y = 0; y < height; y++) {
-        for (qint32 x = 0; x < width; x++) {
-            
-            if (m_cs->opacityU8(buffer + (y*width+x)*m_cs->pixelSize()) == m_defaultOpacity)
-                continue;
+    try {
+        quint8* marks = new quint8[width*height];
+        memset(marks, 0, width *height);
 
-            EdgeType startEdge = TopEdge;
 
-            EdgeType edge = startEdge;
-            while (edge != NoEdge && (marks[y*width+x] & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height))) {
-                edge = nextEdge(edge);
-                if (edge == startEdge)
-                    edge = NoEdge;
-            }
+        int nodes = 0;
+        for (qint32 y = 0; y < height; y++) {
+            for (qint32 x = 0; x < width; x++) {
 
-            if (edge != NoEdge) {
-                QPolygon path;
-                path << QPoint(x + xOffset, y + yOffset);
+                if (m_cs->opacityU8(buffer + (y*width+x)*m_cs->pixelSize()) == m_defaultOpacity)
+                    continue;
 
-                bool clockwise = edge == BottomEdge;
+                EdgeType startEdge = TopEdge;
 
-                qint32 row = y, col = x;
-                EdgeType currentEdge = edge;
-                EdgeType lastEdge = currentEdge;
-                do {
-                    //While following a straight line no points need to be added
-                    if (lastEdge != currentEdge) {
-                        appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
-                        nodes++;
-                        lastEdge = currentEdge;
-                    }
+                EdgeType edge = startEdge;
+                while (edge != NoEdge && (marks[y*width+x] & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height))) {
+                    edge = nextEdge(edge);
+                    if (edge == startEdge)
+                        edge = NoEdge;
+                }
 
-                    marks[row*width+col] |= 1 << currentEdge;
-                    nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
-                } while (row != y || col != x || currentEdge != edge);
+                if (edge != NoEdge) {
+                    QPolygon path;
+                    path << QPoint(x + xOffset, y + yOffset);
 
-                if(!m_simple || !clockwise)
-                    paths.push_back(path);
+                    bool clockwise = edge == BottomEdge;
+
+                    qint32 row = y, col = x;
+                    EdgeType currentEdge = edge;
+                    EdgeType lastEdge = currentEdge;
+                    do {
+                        //While following a straight line no points need to be added
+                        if (lastEdge != currentEdge) {
+                            appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
+                            nodes++;
+                            lastEdge = currentEdge;
+                        }
+
+                        marks[row*width+col] |= 1 << currentEdge;
+                        nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
+                    } while (row != y || col != x || currentEdge != edge);
+
+                    if(!m_simple || !clockwise)
+                        paths.push_back(path);
+                }
             }
         }
+        delete[] marks;
     }
-    delete[] marks;
+    catch(std::bad_alloc) {
+        warnKrita << "KisOutlineGenerator::outline ran out of memory allocating " <<  width << "*" << height << "marks";
+    }
 
     return paths;
 }

@@ -27,7 +27,7 @@
 #include <KoUpdater.h>
 
 #include "kis_paint_device.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_types.h"
 #include "kis_selection.h"
 

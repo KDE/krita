@@ -72,6 +72,7 @@ public:
     virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
 
     virtual quint8 difference(const quint8 *src1, const quint8 *src2) const;
+    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const;
 
     virtual quint32 colorChannelCount() const {
         return 0;
@@ -138,10 +139,7 @@ public:
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;
     }
-    virtual KoColorTransformation* createDesaturateAdjustment() const {
-        warnPigment << i18n("Undefined operation in the alpha color space");
-        return 0;
-    }
+
     virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
         warnPigment << i18n("Undefined operation in the alpha color space");
         return 0;

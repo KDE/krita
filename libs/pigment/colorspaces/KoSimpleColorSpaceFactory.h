@@ -88,7 +88,7 @@ public:
     }
 
     virtual QString defaultProfile() const {
-        return QString();
+        return QString("default");
     }
 protected:
     virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {

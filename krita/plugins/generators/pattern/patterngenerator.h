@@ -35,11 +35,11 @@ public:
     virtual ~KritaPatternGenerator();
 };
 
-class KisPatternGenerator : public KisGenerator
+class KoPatternGenerator : public KisGenerator
 {
 public:
 
-    KisPatternGenerator();
+    KoPatternGenerator();
 
     using KisGenerator::generate;
 

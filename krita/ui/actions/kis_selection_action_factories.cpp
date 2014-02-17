@@ -172,6 +172,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(view->image(), 0, view->resourceProvider()->resourceManager());
+    resources->setOpacity(1.0);
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(QPoint(0, 0), // start position
@@ -195,9 +196,6 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 void KisClearActionFactory::run(KisView2 *view)
 {
     // XXX: "Add saving of XML data for Clear action"
-
-    KisNodeSP node = view->activeNode();
-    if (!node || !node->hasEditablePaintDevice()) return;
 
     view->canvasBase()->toolProxy()->deleteSelection();
 }

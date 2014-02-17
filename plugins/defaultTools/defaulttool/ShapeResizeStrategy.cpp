@@ -126,15 +126,42 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     if (scaleFromCenter) {
         distance *= 2.0;
     }
-    qreal zoomX=1, zoomY=1;
-    if (m_left)
-        zoomX = (startWidth - distance.x()) / startWidth;
-    else if (m_right)
-        zoomX = (startWidth + distance.x()) / startWidth;
-    if (m_top)
-        zoomY = (startHeight - distance.y()) / startHeight;
-    else if (m_bottom)
-        zoomY = (startHeight + distance.y()) / startHeight;
+
+    qreal newWidth = startWidth;
+    qreal newHeight = startHeight;
+
+    if (m_left) {
+        newWidth = startWidth - distance.x();
+    } else if (m_right) {
+        newWidth = startWidth + distance.x();
+    }
+
+    if (m_top) {
+        newHeight = startHeight - distance.y();
+    } else if (m_bottom) {
+        newHeight = startHeight + distance.y();
+    }
+
+    /**
+     * Do not let a shape be less than 1px in size in current view
+     * coordinates.  If the user wants it to be smaller, he can just
+     * zoom-in a bit.
+     */
+    QSizeF minViewSize(1.0, 1.0);
+    QSizeF minDocSize = tool()->canvas()->viewConverter()->viewToDocument(minViewSize);
+
+    if (qAbs(newWidth) < minDocSize.width()) {
+        int sign = newWidth >= 0.0 ? 1 : -1; // zero -> '1'
+        newWidth = sign * minDocSize.width();
+    }
+
+    if (qAbs(newHeight) < minDocSize.height()) {
+        int sign = newHeight >= 0.0 ? 1 : -1; // zero -> '1'
+        newHeight = sign * minDocSize.height();
+    }
+
+    qreal zoomX = newWidth / startWidth;
+    qreal zoomY = newHeight / startHeight;
 
     if (keepAspect) {
         const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;

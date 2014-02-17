@@ -74,12 +74,21 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, FILE_LAYER, layer);
 
-        QString path = dynamic_cast<KisFileLayer*>(layer)->path();
+        KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
+
+        QString path = fileLayer->path();
 
         QDir d(QFileInfo(m_url).absolutePath());
 
         layerElement.setAttribute("source", d.relativeFilePath(path));
-        layerElement.setAttribute("scale", dynamic_cast<KisFileLayer*>(layer)->scaleToImageResolution() ?  "true" : "false");
+
+        if (fileLayer->scalingMethod() == KisFileLayer::ToImagePPI) {
+            layerElement.setAttribute("scale", "true");
+        }
+        else {
+            layerElement.setAttribute("scale", "false");
+        }
+        layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
 
         m_elem.appendChild(layerElement);

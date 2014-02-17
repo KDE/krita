@@ -38,9 +38,9 @@
 #include <kis_cubic_curve.h>
 
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
-        : KisWdgAutobrush(parent, name)
-        , m_autoBrush(0)
-        , m_linkFade(false)
+    : KisWdgAutobrush(parent, name)
+    , m_autoBrush(0)
+    , m_linkFade(false)
 {
 
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
@@ -92,11 +92,11 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     density->setSingleStep(1);
     density->setValue(100);
     density->setSuffix("%");
-    connect(density, SIGNAL(valueChanged(qreal)),this, SLOT(spinBoxDensityChanged(qreal)));
+    connect(density, SIGNAL(valueChanged(qreal)), this, SLOT(spinBoxDensityChanged(qreal)));
 
     KisCubicCurve topLeftBottomRightLinearCurve;
-    topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0,1.0));
-    topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0,0.0));
+    topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0, 1.0));
+    topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0, 0.0));
     softnessCurve->setCurve(topLeftBottomRightLinearCurve);
     connect(softnessCurve, SIGNAL(modified()), this, SLOT(paramChanged()));
 
@@ -105,8 +105,8 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));
 
     QList<KoID> ids = KisMaskGenerator::maskGeneratorIds();
-    for (int i=0;i<ids.size();i++){
-        comboBoxMaskType->insertItem(i,ids[i].name());
+    for (int i = 0; i < ids.size(); i++) {
+        comboBoxMaskType->insertItem(i, ids[i].name());
     }
 
     connect(comboBoxMaskType, SIGNAL(activated(int)), SLOT(paramChanged()));
@@ -136,19 +136,24 @@ void KisAutoBrushWidget::paramChanged()
     if (comboBoxMaskType->currentIndex() == 2) { // gaussian brush
         if (comboBoxShape->currentIndex() == 0) {
             kas = new KisGaussCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
-        } else {
+        }
+        else {
             kas = new KisGaussRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         }
-    } else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
+    }
+    else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
         if (comboBoxShape->currentIndex() == 0) {
             kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
-        } else {
-            kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(),softnessCurve->curve());
         }
-    } else {// default == 0 or any other
+        else {
+            kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve());
+        }
+    }
+    else {// default == 0 or any other
         if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
             kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
-        } else {
+        }
+        else {
             kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         }
     }
@@ -180,10 +185,12 @@ void KisAutoBrushWidget::paramChanged()
 
 void KisAutoBrushWidget::setStackedWidget(int index)
 {
-    if (index == 1)
+    if (index == 1) {
         stackedWidget->setCurrentIndex(1);
-    else
+    }
+    else {
         stackedWidget->setCurrentIndex(0);
+    }
 }
 
 void KisAutoBrushWidget::spinBoxHorizontalChanged(qreal a)
@@ -267,7 +274,7 @@ void KisAutoBrushWidget::spinBoxDensityChanged(qreal a)
     density->blockSignals(true);
     density->setValue(a);
     density->blockSignals(false);
-    paramChanged();   
+    paramChanged();
 }
 
 void KisAutoBrushWidget::linkFadeToggled(bool b)
@@ -289,15 +296,17 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
     KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
-    if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE){
+    if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
         comboBoxShape->setCurrentIndex(0);
-    } else if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) {
+    }
+    else if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) {
         comboBoxShape->setCurrentIndex(1);
-    } else {
+    }
+    else {
         comboBoxShape->setCurrentIndex(2);
     }
 
-    comboBoxMaskType->setCurrentIndex( comboBoxMaskType->findText( aBrush->maskGenerator()->name() ) );
+    comboBoxMaskType->setCurrentIndex(comboBoxMaskType->findText(aBrush->maskGenerator()->name()));
 
 
     inputRadius->setValue(aBrush->maskGenerator()->diameter());
@@ -317,7 +326,7 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
 
-    if(!aBrush->maskGenerator()->curveString().isEmpty()) {
+    if (!aBrush->maskGenerator()->curveString().isEmpty()) {
         KisCubicCurve curve;
         curve.fromString(aBrush->maskGenerator()->curveString());
         softnessCurve->setCurve(curve);
@@ -328,7 +337,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
 void KisAutoBrushWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     Q_UNUSED(dyPixels);
-    inputRadius->setValue( inputRadius->value() + qRound(dxPixels) );
+
+    qreal newWidth = inputRadius->value() + dxPixels;
+    newWidth = qMax(newWidth, qreal(0.1));
+
+    inputRadius->setValue(newWidth);
 }
 
 QSizeF KisAutoBrushWidget::brushSize() const

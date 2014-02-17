@@ -29,6 +29,7 @@
 #include "kis_view2.h"
 #include <QPrinter>
 
+#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QGridLayout>
 #include <QRect>
@@ -118,7 +119,6 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 
-#include <QDebug>
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
@@ -207,6 +207,7 @@ public:
     KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
+    KAction *openResourcesDirectory;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -269,14 +270,16 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
-    createManagers();
     createActions();
+    createManagers();
 
     m_d->controlFrame = new KisControlFrame(this);
 
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
+
+
 
     // krita/krita.rc must also be modified to add actions to the menu entries
 
@@ -318,6 +321,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvasController, SLOT(mirrorCanvas(bool)));
+
+    m_d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
+    m_d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    m_d->openResourcesDirectory->setWhatsThis(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
+    actionCollection()->addAction("open_resources_directory", m_d->openResourcesDirectory);
+    connect(m_d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
     actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
@@ -439,7 +448,14 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
+    if (!preset) {
+        if (rserver->resources().isEmpty()) {
+            KMessageBox::error(this, i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+            exit(0);
+        }
+        preset = rserver->resources().first();
+    }
     if (preset) {
         paintOpBox()->resourceSelected(preset);
     }
@@ -449,6 +465,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    if (m_d->filterManager->isStrokeRunning()) {
+        m_d->filterManager->cancel();
+    }
+
     {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
@@ -556,6 +576,7 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertManyLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                        activateWindow();
                     }
                     else if (action == replaceCurrentDocument) {
                         if (m_d->doc->isModified()) {
@@ -610,6 +631,16 @@ bool KisView2::event( QEvent* event )
 
             syncObject->initialized = true;
 
+            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+            if(mainWindow) {
+                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                foreach(QDockWidget* widget, dockWidgets) {
+                    if (widget->isFloating()) {
+                        widget->hide();
+                    }
+                }
+            }
+
             return true;
         }
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
@@ -645,6 +676,17 @@ bool KisView2::event( QEvent* event )
 
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();
+
+
+                QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+                if(mainWindow) {
+                    QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                    foreach(QDockWidget* widget, dockWidgets) {
+                        if (widget->isFloating()) {
+                            widget->show();
+                        }
+                    }
+                }
 
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
                 canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
@@ -835,7 +877,7 @@ void KisView2::slotLoadingFinished()
      */
     //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
 
-    m_d->canvas->connectCurrentImage();
+    m_d->canvas->initializeImage();
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
@@ -952,14 +994,11 @@ void KisView2::updateGUI()
     m_d->actionManager->updateGUI();
 }
 
-
 void KisView2::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-        KisConfig cfg;
-
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
         // compositing, and they don't connect to the confignotifier
@@ -1364,9 +1403,53 @@ void KisView2::showStatusBar(bool toggled)
     }
 }
 
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+#include <QGLContext>
+#endif
+
 void KisView2::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
+
+/**
+ * Workaround for a broken Intel video driver on Windows :(
+ * See bug 330040
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+
+    if (toggled && cfg.useOpenGL()) {
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        bool failingDriver = renderer.startsWith("Intel(R) HD Graphics");
+
+        if (failingDriver &&
+            cfg.hideStatusbarFullscreen() &&
+            cfg.hideDockersFullscreen() &&
+            cfg.hideTitlebarFullscreen() &&
+            cfg.hideMenuFullscreen() &&
+            cfg.hideToolbarFullscreen() &&
+            cfg.hideScrollbarsFullscreen()) {
+
+            int result =
+                KMessageBox::warningYesNo(this,
+                                          "Intel(R) HD Graphics video adapters "
+                                          "are known to have problems with running "
+                                          "Krita in pure canvas only mode. At least "
+                                          "one UI control must be shown to "
+                                          "workaround it.\n\nShow the scroll bars?",
+                                          "Failing video adapter",
+                                          KStandardGuiItem::yes(),
+                                          KStandardGuiItem::no(),
+                                          "messagebox_WorkaroundIntelVideoOnWindows");
+
+            if (result == KMessageBox::Yes) {
+                cfg.setHideScrollbarsFullscreen(false);
+            }
+        }
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
+
     KToggleAction *action;
 
     if (cfg.hideStatusbarFullscreen()) {
@@ -1426,6 +1509,12 @@ void KisView2::showJustTheCanvas(bool toggled)
 void KisView2::toggleTabletLogger()
 {
     m_d->canvas->toggleTabletLogger();
+}
+
+void KisView2::openResourcesDirectory()
+{
+    QString dir = KStandardDirs::locateLocal("data", "krita");
+    QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

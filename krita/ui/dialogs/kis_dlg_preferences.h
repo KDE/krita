@@ -71,10 +71,6 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
 
- private slots:
-
-    void tagBackendChange(bool on);
-
 };
 
 //=======================
@@ -103,6 +99,9 @@ private slots:
     void refillPrintProfiles(const KoID & s);
     void selectOcioConfigPath();
     void enableOcioConfigPath(bool);
+    void installProfile();
+    void toggleAllowMonitorProfileSelection(bool useSystemProfile);
+
 public:
     void setDefault();
     WdgColorSettings  *m_page;

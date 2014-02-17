@@ -110,7 +110,7 @@ qreal KisToolPan::calculateAngle(QPointF oldPoint,
     return (180 / 3.14) * (newAngle - oldAngle);
 }
 
-void KisToolPan::mousePressEvent(KoPointerEvent *e)
+void KisToolPan::beginPrimaryAction(KoPointerEvent *event)
 {
     m_lastPosition = convertDocumentToWidget(e->point);
     e->accept();
@@ -123,19 +123,7 @@ void KisToolPan::mousePressEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolPan::adjustCursor()
-{
-    QPoint pt = canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
-
-    if(m_rotationMode && isInCheckerArea(pt)) {
-        useCursor(KisCursor::pointingHandCursor());
-    }
-    else {
-        useCursor(m_defaultCursor);
-    }
-}
-
-void KisToolPan::mouseMoveEvent(KoPointerEvent *e)
+void KisToolPan::continuePrimaryAction(KoPointerEvent *event)
 {
     Q_ASSERT(canvas());
     Q_ASSERT(canvas()->canvasController());
@@ -162,12 +150,24 @@ void KisToolPan::mouseMoveEvent(KoPointerEvent *e)
     m_lastPosition = actualPosition;
 }
 
-void KisToolPan::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolPan::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(e);
     m_defaultCursor = KisCursor::openHandCursor();
     kritaCanvasController()->rotateCanvas(0.0);
     adjustCursor();
+}
+
+void KisToolPan::adjustCursor()
+{
+    QPoint pt = canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
+
+    if(m_rotationMode && isInCheckerArea(pt)) {
+        useCursor(KisCursor::pointingHandCursor());
+    }
+    else {
+        useCursor(m_defaultCursor);
+    }
 }
 
 void KisToolPan::keyPressEvent(QKeyEvent *event)

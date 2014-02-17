@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>590</width>
-    <height>164</height>
+    <width>448</width>
+    <height>193</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,6 +116,19 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="KisColorSpaceSelector" name="colorSpaceSelector" native="true"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; This changes only the colorspace of the rendered image. To convert the colorspace of the layers, use Convert Image Colorspace.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

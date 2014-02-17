@@ -39,7 +39,13 @@
 
 #include "sketch/SketchInputContext.h"
 
+
+#if defined Q_OS_WIN
 #include "stdlib.h"
+#include <ui/input/wintab/kis_tablet_support_win.h>
+#elif defined Q_WS_X11
+#include <ui/input/wintab/kis_tablet_support_x11.h>
+#endif
 
 
 int main( int argc, char** argv )
@@ -74,20 +80,12 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
+    app.setApplicationName("kritagemini");
 
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
-    QPixmap pm(splash_screen_xpm);
-    QSplashScreen splash(pm);
-    splash.show();
-    splash.showMessage(".");
-    app.processEvents();
-
+#ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
-#ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
@@ -116,6 +114,29 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/lib");
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 #endif
+
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    app.setEventFilter(&KisTabletSupportWin::eventFilter);
+#elif defined Q_WS_X11
+    KisTabletSupportX11::init();
+    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+#endif
+	
+	if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
+        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
+		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+    }
+
+    // then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
+    // so use an xpm.
+    QPixmap pm(splash_screen_xpm);
+    QSplashScreen splash(pm);
+    splash.show();
+    splash.showMessage(".");
+    app.processEvents();
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);

@@ -68,9 +68,9 @@ public:
     KisToolMeasure(KoCanvasBase * canvas);
     virtual ~KisToolMeasure();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -93,7 +93,7 @@ private:
     }
 
 private:
-    KisToolMeasureOptionsWidget *m_optWidget;
+    KisToolMeasureOptionsWidget *m_optionsWidget;
 
     QPointF m_startPos;
     QPointF m_endPos;

@@ -21,10 +21,13 @@
 #include <QMouseEvent>
 #include <QTabletEvent>
 
+#include <klocale.h>
+
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "kis_image.h"
-
+#include "kis_view2.h"
+#include "input/kis_input_manager.h"
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
@@ -32,8 +35,11 @@ struct KisCanvasController::Private {
     {
     }
 
+    KisView2 *view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
+
+    KisInputManager *globalEventFilter;
 
     void emitPointerPositionChangedSignals(QEvent *event);
     void updateDocumentSizeAfterTransform();
@@ -62,7 +68,7 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
 
 void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 {
-    // round the size of the are to the nearest integer instead of getting aligned rect
+    // round the size of the area to the nearest integer instead of getting aligned rect
     QSize widgetSize = coordinatesConverter->imageRectInWidgetPixels().toRect().size();
     q->updateDocumentSize(widgetSize, true);
 
@@ -73,14 +79,19 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(QWidget *parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
+    m_d->view = parent;
 }
 
 KisCanvasController::~KisCanvasController()
 {
+    if (m_d->globalEventFilter) {
+        m_d->globalEventFilter->setupAsEventFilter(0);
+    }
+
     delete m_d;
 }
 
@@ -89,9 +100,29 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(kritaCanvas);
 
+    m_d->globalEventFilter = kritaCanvas->inputManager();
+
     m_d->coordinatesConverter =
         const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
     KoCanvasControllerWidget::setCanvas(canvas);
+}
+
+void KisCanvasController::changeCanvasWidget(QWidget *widget)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->globalEventFilter);
+
+    m_d->globalEventFilter->setupAsEventFilter(widget);
+    KoCanvasControllerWidget::changeCanvasWidget(widget);
+}
+
+void KisCanvasController::keyPressEvent(QKeyEvent *event)
+{
+    /**
+     * Dirty Hack Alert:
+     * Do not call the KoCanvasControllerWidget::keyPressEvent()
+     * to avoid activation of Pan and Default tool activation shortcuts
+     */
+    Q_UNUSED(event);
 }
 
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
@@ -149,6 +180,11 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
+
+    if (!canvas()->canvasIsOpenGL() && value) {
+        m_d->view->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
+                                            "To visualize wrap-around mode, enable OpenGL."), QIcon());
+    }
 
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);

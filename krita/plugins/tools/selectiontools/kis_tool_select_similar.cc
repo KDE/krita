@@ -81,56 +81,46 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
 {
 }
 
-void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
+void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    KisPaintDeviceSP dev;
 
-        if (!currentNode()) {
-            return;
-        }
+    if (!currentNode() ||
+        !(dev = currentNode()->projection()) ||
+        !currentNode()->visible() ||
+        !selectionEditable()) {
 
-        KisPaintDeviceSP dev = currentNode()->projection();
-
-        if (!dev || !currentNode()->visible())
-            return;
-
-        if (!selectionEditable()) {
-            return;
-        }
-
-        QPointF pos = convertToPixelCoord(event);
-
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        if (!kisCanvas)
-            return;
-
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-        KoColor c;
-        dev->pixel(pos.x(), pos.y(), &c);
-
-        // XXX we should make this configurable: "allow to select transparent"
-        // if (opacity > OPACITY_TRANSPARENT)
-        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-
-        QRect rc;
-        if (dev->colorSpace()->difference(c.data(), dev->defaultPixel()) <= m_fuzziness) {
-            rc = image()->bounds();
-        } else {
-            rc = dev->exactBounds();
-        }
-        selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
-
-        tmpSel->invalidateOutlineCache();
-        KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
-        helper.selectPixelSelection(tmpSel, selectionAction());
-
-        QApplication::restoreOverrideCursor();
+        event->ignore();
+        return;
     }
-    else {
-        KisTool::mousePressEvent(event);
+
+    QPointF pos = convertToPixelCoord(event);
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+
+    KoColor c;
+    dev->pixel(pos.x(), pos.y(), &c);
+
+    // XXX we should make this configurable: "allow to select transparent"
+    // if (opacity > OPACITY_TRANSPARENT)
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+
+    QRect rc;
+    if (dev->colorSpace()->difference(c.data(), dev->defaultPixel()) <= m_fuzziness) {
+        rc = image()->bounds();
+    } else {
+        rc = dev->exactBounds();
     }
+    selectByColor(dev, tmpSel, c.data(), m_fuzziness, rc);
+
+    tmpSel->invalidateOutlineCache();
+    KisSelectionToolHelper helper(kisCanvas, i18n("Similar Selection"));
+    helper.selectPixelSelection(tmpSel, selectionAction());
+
+    QApplication::restoreOverrideCursor();
 }
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)

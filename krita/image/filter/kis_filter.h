@@ -105,8 +105,6 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater = 0 ) const;
 
-    bool workWith(const KoColorSpace* cs) const;
-
     /**
      * Some filters need pixels outside the current processing rect to compute the new
      * value (for instance, convolution filters)

@@ -79,6 +79,7 @@ void SpecificColorSelectorDock::unsetCanvas()
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
     if (!node) return;
+    if (!node->paintDevice()) return;
     if (!m_colorSelector) return;
     if (!m_colorSelector->customColorSpaceUsed()) {
         const KoColorSpace *cs = node->paintDevice() ?

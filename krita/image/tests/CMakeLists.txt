@@ -411,8 +411,8 @@ target_link_libraries(KisPaintopTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_
 ########### next target ###############
 
 set(kis_pattern_test_SRCS kis_pattern_test.cpp )
-kde4_add_unit_test(KisPatternTest TESTNAME krita-image-KisPatternTest ${kis_pattern_test_SRCS})
-target_link_libraries(KisPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+kde4_add_unit_test(KoPatternTest TESTNAME krita-image-KoPatternTest ${kis_pattern_test_SRCS})
+target_link_libraries(KoPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -455,12 +455,6 @@ target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTES
 set(kis_shared_ptr_vector_test_SRCS kis_shared_ptr_vector_test.cpp )
 kde4_add_unit_test(KisSharedPtrVectorTest TESTNAME krita-image-KisSharedPtrVectorTest ${kis_shared_ptr_vector_test_SRCS})
 target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_transform_visitor_test_SRCS kis_transform_visitor_test.cpp )
-kde4_add_unit_test(KisTransformVisitorTest TESTNAME krita-image-KisTransformVisitorTest ${kis_transform_visitor_test_SRCS})
-target_link_libraries(KisTransformVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

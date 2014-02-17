@@ -31,7 +31,7 @@
 #include <KoMainWindow.h>
 #include <KoResource.h>
 
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
 #include "kis_view2.h"

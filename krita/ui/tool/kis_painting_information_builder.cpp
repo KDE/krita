@@ -98,6 +98,23 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                timeElapsed);
 }
 
+KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
+                                                         const KoPointerEvent *event)
+{
+    qreal perspective = calculatePerspective(imagePoint);
+
+    if (event) {
+        return KisPaintInformation::createHoveringModeInfo(imagePoint,
+                                                           PRESSURE_DEFAULT,
+                                                           event->xTilt(), event->yTilt(),
+                                                           event->rotation(),
+                                                           0.0,
+                                                           perspective);
+    } else {
+        return KisPaintInformation::createHoveringModeInfo(imagePoint);
+    }
+}
+
 qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
 {
     return m_pressureSamples.at(qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION));

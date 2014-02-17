@@ -679,7 +679,12 @@ QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStart
         line = layout->createLine();
         if (!line.isValid())
             break;
-        line.setNumColumns(lk.columns, lk.lineWidth);
+        line.setLineWidth(lk.lineWidth);
+        if (lk.columns != line.textLength()) {
+            // As setNumColumns might break differently we only use it if setLineWidth doesn't give
+            // the same textLength as we had before
+            line.setNumColumns(lk.columns, lk.lineWidth);
+        }
         line.setPosition(lk.position);
     }
     documentLayout()->allowPositionInlineObject(true);

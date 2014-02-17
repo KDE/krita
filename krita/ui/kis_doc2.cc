@@ -36,6 +36,7 @@
 #include <QWidget>
 #include <QList>
 #include <QTimer>
+#include <QScopedPointer>
 
 // KDE
 #include <krun.h>
@@ -58,7 +59,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
-#include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoStore.h>
@@ -69,6 +69,7 @@
 #include <KoShape.h>
 #include <KoToolManager.h>
 #include <KoPart.h>
+#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -217,6 +218,7 @@ bool KisDoc2::saveNativeFormat(const QString &file)
 
     if (!m_d->image->tryBarrierLock()) {
         if (isAutosaving()) {
+            setDisregardAutosaveFailure(true);
             if (realAutoSaveInterval) {
                 setAutoSave(emergencyAutoSaveInterval);
             }
@@ -229,7 +231,7 @@ bool KisDoc2::saveNativeFormat(const QString &file)
             }
         }
     }
-
+    setDisregardAutosaveFailure(false);
     bool retval = KoDocument::saveNativeFormat(file);
     m_d->image->unlock();
     setAutoSave(realAutoSaveInterval);
@@ -275,7 +277,6 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     }
 
     KoXmlElement root;
-    QString attr;
     KoXmlNode node;
     KisImageWSP image;
 
@@ -353,7 +354,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
-    setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
@@ -439,10 +439,18 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 QPixmap KisDoc2::generatePreview(const QSize& size)
 {
     if (m_d->image) {
-        QSize newSize = m_d->image->bounds().size();
+        QRect bounds = m_d->image->bounds();
+        QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
 
-        QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        QImage image;
+        if (bounds.width() < 10000 && bounds.height() < 10000) {
+            image = m_d->image->convertToQImage(m_d->image->bounds(), 0);
+        }
+        else {
+            image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        }
+        image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);

@@ -154,39 +154,39 @@ KisLayerBox::KisLayerBox()
         actions[i]->setActionGroup(group);
     }
 
-    m_wdgLayerBox->bnAdd->setIcon(koIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIcon(koIcon("addlayer"));
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnDelete->setIcon(koIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIcon(koIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(koIcon("go-up"));
+    m_wdgLayerBox->bnRaise->setIcon(koIcon("arrowupblr"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(koIcon("go-down"));
+    m_wdgLayerBox->bnLower->setIcon(koIcon("arrowdown"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLeft->setEnabled(true);
-    m_wdgLayerBox->bnLeft->setIcon(koIcon("arrow-left"));
+    m_wdgLayerBox->bnLeft->setIcon(koIcon("removefromfolder"));
     m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRight->setEnabled(true);
-    m_wdgLayerBox->bnRight->setIcon(koIcon("arrow-right"));
+    m_wdgLayerBox->bnRight->setIcon(koIcon("addtofolder"));
     m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnProperties->setIcon(koIcon("document-properties"));
+    m_wdgLayerBox->bnProperties->setIcon(koIcon("properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("edit-delete"), i18n("&Remove Layer"), this);
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
@@ -204,7 +204,7 @@ KisLayerBox::KisLayerBox()
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("document-properties"), i18n("&Properties..."),this);
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
@@ -215,6 +215,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
 
+    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
@@ -364,7 +365,8 @@ void KisLayerBox::notifyImageDeleted()
 
 void KisLayerBox::updateUI()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
+    if (!m_nodeManager) return;
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
 
@@ -374,7 +376,6 @@ void KisLayerBox::updateUI()
                                        || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
-    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
 
     m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
 

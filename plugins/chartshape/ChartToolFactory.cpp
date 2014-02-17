@@ -39,7 +39,7 @@ using namespace KChart;
 ChartToolFactory::ChartToolFactory()
     : KoToolFactoryBase("ChartToolFactory_ID")
 {
-    setToolTip (i18n("Chart Editing Tool"));
+    setToolTip (i18n("Chart editing"));
     setToolType (dynamicToolType());
     setIconName(koIconNameCStr("kchart"));
     setPriority (1);

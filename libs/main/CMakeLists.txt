@@ -1,5 +1,11 @@
 add_subdirectory( tests )
 
+# generate calligraversion.h
+configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
+
+# generate calligragitversion.h
+configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
@@ -170,7 +176,8 @@ install( FILES
     KoPrintJob.h
     KoVersionDialog.h
     KoView.h
-    calligraversion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

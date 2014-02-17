@@ -97,24 +97,24 @@ void KisAutoBrushTest::testSizeRotation()
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
-        QCOMPARE(a->maskWidth(1.0,0.0,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(1.0,0.0,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(2.0,0.0,0.0,0.0, KisPaintInformation()), 20);
-        QCOMPARE(a->maskHeight(2.0,0.0,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(0.5,0.0,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(0.5,0.0,0.0,0.0, KisPaintInformation()), 3);
-        QCOMPARE(a->maskWidth(1.0,M_PI,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskHeight(1.0,M_PI,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskWidth(1.0,M_PI_2,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(1.0,M_PI_2,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(1.0,-M_PI_2,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(1.0,-M_PI_2,0.0,0.0, KisPaintInformation()), 10);
-        QCOMPARE(a->maskWidth(1.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskHeight(1.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 11);
-        QCOMPARE(a->maskWidth(2.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 21);
-        QCOMPARE(a->maskHeight(2.0,0.25*M_PI,0.0,0.0, KisPaintInformation()), 21);
-        QCOMPARE(a->maskWidth(0.5,0.25*M_PI,0.0,0.0, KisPaintInformation()), 5);
-        QCOMPARE(a->maskHeight(0.5,0.25*M_PI,0.0,0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(2.0, 0.0, 0.0, 0.0, KisPaintInformation()), 20);
+        QCOMPARE(a->maskHeight(2.0, 0.0, 0.0, 0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(0.5, 0.0, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5, 0.0, 0.0, 0.0, KisPaintInformation()), 3);
+        QCOMPARE(a->maskWidth(1.0, M_PI, 0.0, 0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskHeight(1.0, M_PI, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskWidth(1.0, M_PI_2, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0, M_PI_2, 0.0, 0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0, -M_PI_2, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(1.0, -M_PI_2, 0.0, 0.0, KisPaintInformation()), 10);
+        QCOMPARE(a->maskWidth(1.0, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 11);
+        QCOMPARE(a->maskHeight(1.0, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 11);
+        QCOMPARE(a->maskWidth(2.0, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 21);
+        QCOMPARE(a->maskHeight(2.0, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 21);
+        QCOMPARE(a->maskWidth(0.5, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 5);
+        QCOMPARE(a->maskHeight(0.5, 0.25 * M_PI, 0.0, 0.0, KisPaintInformation()), 5);
     }
 }
 
@@ -125,7 +125,7 @@ void KisAutoBrushTest::testCopyMasking()
     int h = 64;
     int x = 0;
     int y = 0;
-    QRect rc(x,y,w,h);
+    QRect rc(x, y, w, h);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -139,15 +139,15 @@ void KisAutoBrushTest::testCopyMasking()
     tempDev->convertToQImage(0).save("tempDev.png");
 #endif
 
-    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w,1.0,0.5,0.5,2);
-    KisAutoBrush brush(mask,0,0);
+    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w, 1.0, 0.5, 0.5, 2);
+    KisAutoBrush brush(mask, 0, 0);
 
     KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);
-    brush.mask(maskDab,black,1,1,0,KisPaintInformation());
+    brush.mask(maskDab, black, 1, 1, 0, KisPaintInformation());
     maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 
 #ifdef SAVE_OUTPUT_IMAGES
-    maskDab->convertToQImage(0,0,0,64,64).save("maskDab.png");
+    maskDab->convertToQImage(0, 0, 0, 64, 64).save("maskDab.png");
 #endif
 
     QCOMPARE(tempDev->exactBounds(), rc);
@@ -156,13 +156,13 @@ void KisAutoBrushTest::testCopyMasking()
     KisFixedPaintDeviceSP dev2fixed = new KisFixedPaintDevice(cs);
     dev2fixed->setRect(rc);
     dev2fixed->initialize();
-    tempDev->readBytes(dev2fixed->data(),rc);
+    tempDev->readBytes(dev2fixed->data(), rc);
     dev2fixed->convertToQImage(0).save("converted-tempDev-to-fixed.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPainter painter(dev);
     painter.setCompositeOp(COMPOSITE_COPY);
-    painter.bltFixedWithFixedSelection(x, y, dev2fixed, maskDab, 0,0,0,0,rc.width(), rc.height() );
+    painter.bltFixedWithFixedSelection(x, y, dev2fixed, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
     //painter.bitBltWithFixedSelection(x, y, tempDev, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
 
 #ifdef SAVE_OUTPUT_IMAGES

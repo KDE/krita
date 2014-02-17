@@ -34,32 +34,32 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_coordinates_converter.h"
+#include "kis_config.h"
+
+static const unsigned int ANT_LENGTH = 4;
+static const unsigned int ANT_SPACE = 4;
+static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view),
       m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
+      m_outlinePath(),
+      m_offset(0),
+      m_antsPen(Qt::CustomDashLine),
+      m_outlinePen(Qt::SolidLine),
       m_mode(Ants)
 {
-    m_offset = 0;
+    QVector<qreal> antDashPattern;
+    antDashPattern << ANT_LENGTH << ANT_SPACE;
+    m_antsPen.setDashPattern(antDashPattern);
+    m_antsPen.setCosmetic(true);
+    m_antsPen.setColor(Qt::black);
 
-    QRgb white = QColor(Qt::white).rgb();
-    QRgb black = QColor(Qt::black).rgb();
-
-    for (int i = 0; i < 8; i++) {
-        QImage texture(8, 8, QImage::Format_RGB32);
-        for (int y = 0; y < 8; y++) {
-            QRgb *pixel = reinterpret_cast<QRgb *>(texture.scanLine(y));
-            for (int x = 0; x < 8; x++) {
-                pixel[x] = ((x + y + i) % 8 < 4) ? black : white;
-            }
-        }
-        QBrush brush;
-        brush.setTextureImage(texture);
-        m_brushes << brush;
-    }
+    m_outlinePen.setCosmetic(true);
+    m_outlinePen.setColor(Qt::white);
 
     m_antsTimer = new QTimer(this);
-    m_antsTimer->setInterval(300);
+    m_antsTimer->setInterval(150);
     m_antsTimer->setSingleShot(false);
     connect(m_antsTimer, SIGNAL(timeout()), SLOT(antsAttackEvent()));
 
@@ -123,7 +123,8 @@ void KisSelectionDecoration::antsAttackEvent()
     if (!selection) return;
 
     if (selectionIsActive()) {
-        m_offset = (m_offset + 1) % 8;
+        m_offset = (m_offset + 1) % ANT_ADVANCE_WIDTH;
+        m_antsPen.setDashOffset(m_offset);
         view()->canvasBase()->updateCanvas();
     }
 }
@@ -135,20 +136,23 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
     Q_ASSERT_X(m_mode == Ants, "KisSelectionDecoration.cc", "MASK MODE NOT SUPPORTED YET!");
 
     if (!selectionIsActive()) return;
-    KisSelectionSP selection = view()->selection();
+    if (m_outlinePath.isEmpty()) return;
 
     gc.save();
     gc.setTransform(QTransform(), false);
-    gc.setRenderHints(0);
 
-    QPen pen(m_brushes[m_offset], 0);
+    KisConfig cfg;
+    gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, cfg.antialiasSelectionOutline());
+
     QTransform transform = converter->imageToWidgetTransform();
 
-    gc.setPen(pen);
+    // render selection outline in white
+    gc.setPen(m_outlinePen);
+    gc.drawPath(transform.map(m_outlinePath));
 
-    if (!m_outlinePath.isEmpty()) {
-        gc.drawPath(transform.map(m_outlinePath));
-    }
+    // render marching ants in black (above the white outline)
+    gc.setPen(m_antsPen);
+    gc.drawPath(transform.map(m_outlinePath));
 
     gc.restore();
 }

@@ -33,27 +33,29 @@ public:
 
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
-    
+
     /// size settings
     bool proportional() const;
     int width() const;
     int height() const;
-    
-    /// random size 
+
+    /// random size
     bool jitterShapeSize() const;
 
     bool fixedRotation() const;
     int fixedAngle() const;
-   
+
     bool randomRotation() const;
     qreal randomRotationWeight() const;
-    
+
     bool followCursor() const;
     qreal followCursorWeigth() const;
-    
-    QImage image() const { return m_image; }
 
-    /// TODO: serialization 
+    QImage image() const {
+        return m_image;
+    }
+
+    /// TODO: serialization
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
@@ -61,21 +63,21 @@ private:
     QImage m_image;
     bool m_useAspect;
     qreal m_aspect;
-    
+
     int m_maxSize;
 private:
     void setupBrushPreviewSignals();
     void computeAspect();
 
 private slots:
-            void randomValueChanged(int value);
-            void followValueChanged(int value);
-            void prepareImage();
-            void aspectToggled(bool toggled);
-            void updateHeight(int value);
-            void updateWidth(int value);
-            
-            void changeSizeUI(bool proportionalSize);
+    void randomValueChanged(int value);
+    void followValueChanged(int value);
+    void prepareImage();
+    void aspectToggled(bool toggled);
+    void updateHeight(int value);
+    void updateWidth(int value);
+
+    void changeSizeUI(bool proportionalSize);
 };
 
 #endif // KIS_EXPERIMENT_SHAPE_OPTION_H

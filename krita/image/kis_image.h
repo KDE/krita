@@ -147,16 +147,6 @@ public:
     bool locked() const;
 
     /**
-     * @return the image that is used as background tile.
-     */
-    KisBackgroundSP backgroundPattern() const;
-
-    /**
-     * Set a 64x64 tile for the background of the image.
-     */
-    void setBackgroundPattern(KisBackgroundSP image);
-
-    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */
@@ -203,6 +193,7 @@ public:
     void cropNode(KisNodeSP node, const QRect& newRect);
 
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.
@@ -256,8 +247,10 @@ public:
      *
      * This does not create an undo action; only call it when creating or
      * loading an image.
+     *
+     * @returns false if the profile could not be assigned
      */
-    void assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile);
 
     /**
      * Returns the current undo adapter. You can add new commands to the
@@ -719,12 +712,13 @@ public slots:
 
     /**
      * This method is called by the UI (*not* by the creator of the
-     * stroke) when it thinks current stroke should undo its last
-     * action. For example, when the user presses Ctrl+Z while some
-     * stroke is active. If the creator of the stroke supports undoing
-     * of intermediate actions, it will be notified about this request
-     * and (if it decides he likes to do it) will undo its last
-     * action.
+     * stroke) when it thinks the current stroke should undo its last
+     * action, for example, when the user presses Ctrl+Z while some
+     * stroke is active.
+     *
+     * If the creator of the stroke supports undoing of intermediate
+     * actions, it will be notified about this request and can undo
+     * its last action.
      */
     void requestUndoDuringStroke();
 

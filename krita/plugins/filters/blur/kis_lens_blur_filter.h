@@ -34,7 +34,6 @@ class KisLensBlurFilter : public KisFilter
 public:
     KisLensBlurFilter();
 public:
-    using KisFilter::process;
 
     void processImpl(KisPaintDeviceSP src,
                      const QRect& size,

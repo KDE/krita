@@ -135,9 +135,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     setFont(QFont("sans-serif"));
 
-    #ifdef Q_WS_X11
     KWindowSystem::setType( winId(), NET::Notification );
-    #endif
 
     m_timer.setSingleShot( true );
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));
@@ -145,6 +143,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
 void KisFloatingMessage::showMessage()
 {
+
     setGeometry(determineMetrics(fontMetrics().width('x')));
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
@@ -201,25 +200,29 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     const QSize newSize = rect.size();
     QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
-    if (parentWidget() && m_showOverParent) {
-        screen = parentWidget()->geometry();
-        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(0, 0)));
-    }
+
     QPoint newPos(MARGIN, MARGIN);
 
-    // move to the right
-    newPos.rx() = screen.width() - MARGIN - newSize.width();
-
-    //ensure we don't dip below the screen
-    if (newPos.y() + newSize.height() > screen.height() - MARGIN) {
-        newPos.ry() = screen.height() - MARGIN - newSize.height();
+    if (parentWidget() && m_showOverParent) {
+        screen = parentWidget()->geometry();
+        screen.setTopLeft(parentWidget()->mapToGlobal(QPoint(MARGIN, MARGIN)));
+        newPos = screen.topLeft();
     }
+    else {
+        // move to the right
+        newPos.rx() = screen.width() - MARGIN - newSize.width();
 
-    // correct for screen position
-    newPos += screen.topLeft();
-    if (parentWidget()) {
-        // Move a bit to the left as there could be a scrollbar
-        newPos.setX(newPos.x() - MARGIN);
+        //ensure we don't dip below the screen
+        if (newPos.y() + newSize.height() > screen.height() - MARGIN) {
+            newPos.ry() = screen.height() - MARGIN - newSize.height();
+        }
+        // correct for screen position
+        newPos += screen.topLeft();
+
+        if (parentWidget()) {
+            // Move a bit to the left as there could be a scrollbar
+            newPos.setX(newPos.x() - MARGIN);
+        }
     }
 
     QRect rc(newPos, rect.size());

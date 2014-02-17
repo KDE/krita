@@ -27,6 +27,7 @@
 #include <cstdlib>
 
 // Qt includes.
+#include <QDebug>
 #include <QtGlobal>
 #include <QPainter>
 #include <QPoint>
@@ -35,20 +36,23 @@
 #include <QBrush>
 #include <QLinearGradient>
 
+#define MARGIN 5
+#define HANDLE_SIZE 10
+
 KisGradientSlider::KisGradientSlider(QWidget *parent)
-        : QWidget(parent)
-        , m_leftmost(0)
-        , m_rightmost(0)
-        , m_grabIndex(0)
-        , m_scalingFactor(0)
-        , m_blackCursor(0)
-        , m_whiteCursor(0)
-        , m_gammaCursor(0)
-        , m_black(0)
-        , m_white(255)
-        , m_gamma(1.0)
-        , m_gammaEnabled(false)
-        , m_feedback(false)
+    : QWidget(parent)
+    , m_leftmost(0)
+    , m_rightmost(0)
+    , m_grabIndex(0)
+    , m_scalingFactor(0)
+    , m_blackCursor(0)
+    , m_whiteCursor(0)
+    , m_gammaCursor(0)
+    , m_black(0)
+    , m_white(255)
+    , m_gamma(1.0)
+    , m_gammaEnabled(false)
+    , m_feedback(false)
 {
     m_grabCursor = None;
 
@@ -70,32 +74,36 @@ int KisGradientSlider::white() const
     return m_white;
 }
 
-void KisGradientSlider::paintEvent(QPaintEvent *)
+void KisGradientSlider::paintEvent(QPaintEvent *e)
 {
+    QWidget::paintEvent(e);
+
     int x, y;
-    int wWidth = width();
+    int wWidth = width() - (2 * MARGIN);
     int wHeight = height();
 
     const int gradientHeight = qRound((double)wHeight / 7.0 * 2);
 
     QPainter p1(this);
+    p1.fillRect(rect(), palette().background());
+    p1.setPen(Qt::black);
+    p1.drawRect(MARGIN, MARGIN, width() - 2 * MARGIN, height() - 2 * MARGIN - HANDLE_SIZE);
 
     // Draw first gradient
-    QLinearGradient grayGradient(0, 0, wWidth - 1, gradientHeight);
+    QLinearGradient grayGradient(MARGIN, 0, wWidth, gradientHeight);
     grayGradient.setColorAt(0, Qt::black);
     grayGradient.setColorAt(1, Qt::white);
-    p1.fillRect(0, 0, wWidth, gradientHeight, QBrush(grayGradient));
+    p1.fillRect(MARGIN, 0, wWidth, gradientHeight, QBrush(grayGradient));
 
     // Draw second gradient
     y = gradientHeight;
+    p1.fillRect(MARGIN, y, wWidth, gradientHeight, Qt::white);
+
     if (m_blackCursor > 0) {
-        p1.fillRect(0, y, (int)m_blackCursor, gradientHeight, QBrush(Qt::black));
+        p1.fillRect(MARGIN, y, m_blackCursor + MARGIN, gradientHeight, Qt::black);
     }
-    if (m_whiteCursor < wWidth) {
-        p1.fillRect((int)m_whiteCursor, y, wWidth, gradientHeight, QBrush(Qt::white));
-    }
-    for (x = (int)m_blackCursor; x < (int)m_whiteCursor; ++x) {
-        double inten = (double)(x - m_blackCursor) / (double)(m_whiteCursor - m_blackCursor);
+    for (x = (int)m_blackCursor + MARGIN; x < (int)m_whiteCursor - MARGIN; ++x) {
+        double inten = (double)(x - (m_blackCursor + MARGIN)) / (double)((m_whiteCursor - MARGIN) - (m_blackCursor + MARGIN));
         inten = pow(inten, (1.0 / m_gamma));
         int gray = (int)(255 * inten);
         p1.setPen(QColor(gray, gray, gray));
@@ -110,9 +118,9 @@ void KisGradientSlider::paintEvent(QPaintEvent *)
 
     const int cursorHalfBase = (int)(gradientHeight / 1.5);
 
-    a[0] = QPoint(m_blackCursor, y);
-    a[1] = QPoint(m_blackCursor + cursorHalfBase, wHeight - 1);
-    a[2] = QPoint(m_blackCursor - cursorHalfBase, wHeight - 1);
+    a[0] = QPoint(m_blackCursor + MARGIN, y);
+    a[1] = QPoint(m_blackCursor + MARGIN + cursorHalfBase, wHeight - 1);
+    a[2] = QPoint(m_blackCursor + MARGIN - cursorHalfBase, wHeight - 1);
     p1.setBrush(Qt::black);
     p1.drawPolygon(a, 3);
 
@@ -124,16 +132,16 @@ void KisGradientSlider::paintEvent(QPaintEvent *)
         p1.drawPolygon(a, 3);
     }
 
-    a[0] = QPoint(m_whiteCursor, y);
-    a[1] = QPoint(m_whiteCursor + cursorHalfBase, wHeight - 1);
-    a[2] = QPoint(m_whiteCursor - cursorHalfBase, wHeight - 1);
+    a[0] = QPoint(m_whiteCursor - MARGIN, y);
+    a[1] = QPoint(m_whiteCursor - MARGIN + cursorHalfBase, wHeight - 1);
+    a[2] = QPoint(m_whiteCursor - MARGIN - cursorHalfBase, wHeight - 1);
     p1.setBrush(Qt::white);
     p1.drawPolygon(a, 3);
 }
 
 void KisGradientSlider::resizeEvent(QResizeEvent *)
 {
-    m_scalingFactor = (double)width() / 255;
+    m_scalingFactor = (double)(width() - MARGIN) / 255;
     calculateCursorPositions();
     update();
 }
@@ -206,12 +214,12 @@ void KisGradientSlider::mousePressEvent(QMouseEvent * e)
         m_grabCursor = closest_cursor;
         m_leftmost = m_blackCursor;
         m_rightmost = m_whiteCursor;
-        {
-            double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
-            double mid = (double)m_blackCursor + delta;
-            double tmp = (x - mid) / delta;
-            m_gamma = 1.0 / pow(10, tmp);
-        }
+    {
+        double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+        double mid = (double)m_blackCursor + delta;
+        double tmp = (x - mid) / delta;
+        m_gamma = 1.0 / pow(10, tmp);
+    }
         break;
     default:
         break;
@@ -296,7 +304,8 @@ void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
 void KisGradientSlider::calculateCursorPositions()
 {
     m_blackCursor = qRound(m_black * m_scalingFactor);
-    m_whiteCursor = qRound(m_white * m_scalingFactor);
+    m_whiteCursor = qRound(m_white * m_scalingFactor) + MARGIN;
+
     m_gammaCursor = calculateGammaCursor();
 }
 

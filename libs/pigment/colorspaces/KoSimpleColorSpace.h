@@ -75,6 +75,13 @@ public:
         return 0;
     }
 
+    virtual quint8 differenceA(const quint8 *src1, const quint8 *src2) const {
+        Q_UNUSED(src1);
+        Q_UNUSED(src2);
+        warnPigment << i18n("Undefined operation in the %1 space", m_name);
+        return 0;
+    }
+
     virtual quint32 colorSpaceType() const {
         return 0;
     }

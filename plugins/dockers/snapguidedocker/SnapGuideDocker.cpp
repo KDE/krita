@@ -74,6 +74,7 @@ void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
 
 void SnapGuideDocker::unsetCanvas()
 {
+    setWidget(0);
     d->canvas = 0;
 }
 

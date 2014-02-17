@@ -23,7 +23,6 @@
 #include "ui_SensorDistanceConfiguration.h"
 
 #include "kis_paint_information.h"
-#include "kis_sensor_selector.h"
 
 KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_measuredDistance(0.0), m_length(30), m_periodic(true)
 {
@@ -36,8 +35,8 @@ qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
     m_measuredDistance += pi.drawingDistance();
 
     m_measuredDistance = m_periodic ?
-        fmod(m_measuredDistance, m_length) :
-        qMin(m_measuredDistance, (qreal)m_length);
+                         fmod(m_measuredDistance, m_length) :
+                         qMin(m_measuredDistance, (qreal)m_length);
 
     return 1.0 - m_measuredDistance / m_length;
 }

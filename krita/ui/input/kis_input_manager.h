@@ -20,11 +20,12 @@
 #define KIS_INPUTMANAGER_H
 
 #include <QObject>
+#include <krita_export.h>
 
 class QPointF;
 class QTabletEvent;
 class QTouchEvent;
-class KoToolProxy;
+class KisToolProxy;
 class KisCanvas2;
 class KisInputAction;
 /**
@@ -46,7 +47,7 @@ class KisInputAction;
  *
  * \todo Implement shortcut configuration
  */
-class KisInputManager : public QObject
+class KRITAUI_EXPORT KisInputManager : public QObject
 {
     Q_OBJECT
 
@@ -57,7 +58,7 @@ public:
      * \param canvas The parent canvas.
      * \param proxy The application's tool proxy.
      */
-    explicit KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy);
+    explicit KisInputManager(KisCanvas2* canvas, KisToolProxy* proxy);
     /**
      * Destructor.
      */
@@ -66,9 +67,22 @@ public:
     void toggleTabletLogger();
 
     /**
+     * Installs the input manager as an event filter for \p receiver.
+     * Please note that KisInputManager is supposed to handle events
+     * for a single receiver only. This is defined by the fact that it
+     * resends some of the events back through the Qt's queue to the
+     * reciever. That is why the input manager will assert when it gets
+     * an event with wrong destination.
+     */
+    void setupAsEventFilter(QObject *receiver);
+
+    /**
      * Event filter method. Overridden from QObject.
      */
     bool eventFilter(QObject* object, QEvent* event );
+
+    void attachPriorityEventFilter(QObject *filter);
+    void detachPriorityEventFilter(QObject *filter);
 
     /**
      * Return the canvas this input manager is associated with.
@@ -78,7 +92,7 @@ public:
     /**
      * The tool proxy of the current application.
      */
-    KoToolProxy *toolProxy() const;
+    KisToolProxy *toolProxy() const;
 
     /**
      * Returns the event object for the last tablet event
@@ -100,10 +114,12 @@ public:
 
 public Q_SLOTS:
     void setMirrorAxis();
+	void stopIgnoringEvents();
 
 private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
+    void slotCompressedMoveEvent();
 
 private:
     class Private;

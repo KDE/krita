@@ -36,7 +36,7 @@
 TemplateToolFactory::TemplateToolFactory()
     : KoToolFactoryBase("TemplateToolFactoryId")
 {
-    setToolTip( i18n( "Template shape editing tool" ) );
+    setToolTip( i18n( "Template shape editing" ) );
     setIconName(koIconNameCStr("x-template"));
     setToolType(dynamicToolType());
     setPriority(1);

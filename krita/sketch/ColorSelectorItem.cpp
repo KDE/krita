@@ -42,6 +42,7 @@ public:
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
         , changeBackground(false)
+        , shown(true)
     {
         ring = new KisColorSelectorRing(selector);
         triangle = new KisColorSelectorTriangle(selector);
@@ -62,6 +63,8 @@ public:
     {
         selector->deleteLater();
     }
+    void repaint();
+    QImage paintedItem;
 
     ColorSelectorItem* q;
 
@@ -84,6 +87,7 @@ public:
     void commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role);
     bool colorUpdateAllowed;
     bool changeBackground;
+    bool shown;
 };
 
 void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role)
@@ -126,8 +130,27 @@ ColorSelectorItem::~ColorSelectorItem()
 
 void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
+    if(!d->shown)
+        return;
     Q_UNUSED(option)
     Q_UNUSED(widget)
+    painter->drawImage(boundingRect(), d->paintedItem);
+
+}
+
+void ColorSelectorItem::Private::repaint()
+{
+    paintedItem = QImage(q->boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+    paintedItem.fill(Qt::transparent);
+    QPainter painter;
+    painter.begin(&paintedItem);
+    main->paintEvent(&painter);
+    sub->paintEvent(&painter);
+    painter.end();
+}
+
+void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
     QRectF bounds = boundingRect();
     if (d->selector->configuration().subType==KisColorSelector::Ring)
     {
@@ -177,9 +200,8 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
         else
             d->selector->setColor(d->view->resourceProvider()->resourceManager()->backgroundColor().toQColor());
     }
-
-    d->main->paintEvent(painter);
-    d->sub->paintEvent(painter);
+    d->repaint();
+    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -215,6 +237,7 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
         d->currentColor=d->main->currentColor();
         d->currentColor.setAlphaF(alpha);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        d->repaint();
         update();
     }
 }
@@ -258,6 +281,17 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
     d->main->setColor(d->currentColor);
     d->sub->setColor(d->currentColor);
     update();
+}
+
+bool ColorSelectorItem::shown() const
+{
+    return d->shown;
+}
+
+void ColorSelectorItem::setShown(bool newShown)
+{
+    d->shown = newShown;
+    emit shownChanged();
 }
 
 void ColorSelectorItem::setAlpha(int percentValue)

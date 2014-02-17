@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 KisLineWidthOption::KisLineWidthOption()
-        : KisCurveOption(i18n("Line width"), "Line width", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Line width"), "Line width", KisPaintOpOption::brushCategory(), false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));

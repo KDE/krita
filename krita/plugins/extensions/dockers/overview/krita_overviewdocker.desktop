@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Overview Docker
 Name[ca]=Acoblador de vista general
+Name[ca@valencia]=Acoblador de vista general
 Name[cs]=Dok přehledů
 Name[de]=Übersicht-Docker
 Name[es]=Acoplable de vista general
 Name[hu]=Áttekintő dokkoló
 Name[it]=Area di aggancio dell'anteprima
 Name[kk]=Шолу докері
+Name[nb]=Oversikt-dokker
 Name[nl]=Vastzetter voor overzicht
 Name[pl]=Dokowanie przeglądu
 Name[pt]=Área de Visão Geral
@@ -17,10 +19,12 @@ Name[uk]=Панель ескіза
 Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
 Comment[ca]=Acoblador per mostrar una vista general d'una imatge
+Comment[ca@valencia]=Acoblador per mostrar una vista general d'una imatge
 Comment[de]=Docker für die Anzeige einer Bildübersicht
 Comment[es]=Acoplable para mostrar la vista general de una imagen
 Comment[it]=Area di aggancio per mostra l'anteprima di un'immagine
 Comment[kk]=Кескіннің жалпы шолуын көрсететін докері
+Comment[nb]=Dokker for å vise en bildeoversikt
 Comment[nl]=Vastzetter voor het tonen van een overzicht van afbeeldingen
 Comment[pl]=Dokowanie do pokazywania przeglądu obrazu
 Comment[pt]=Área de apresentação da visão geral da imagem

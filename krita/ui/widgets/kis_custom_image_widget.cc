@@ -32,7 +32,7 @@
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
-
+#include <QSpacerItem>
 
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
@@ -59,6 +59,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_config.h>
 
 #include "kis_clipboard.h"
 #include "kis_doc2.h"
@@ -90,6 +91,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
     
+    imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
@@ -127,11 +129,16 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
+    KisConfig cfg;
+    intNumLayers->setValue(cfg.numDefaultLayers());
+
     fillPredefined();
     switchPortraitLandscape();
 }
 
-void KisCustomImageWidget::showEvent(QShowEvent *){
+void KisCustomImageWidget::showEvent(QShowEvent *)
+{
+    fillPredefined();
     this->createButton->setFocus(); 
 }
 
@@ -238,7 +245,15 @@ void KisCustomImageWidget::createNewImage()
         }
        
         layer->setDirty(QRect(0, 0, width, height));
+        for(int i = 1; i < intNumLayers->value(); ++i) {
+            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+            image->addNode(layer, image->root(), i);
+            layer->setDirty(QRect(0, 0, width, height));
+        }
     }
+
+    KisConfig cfg;
+    cfg.setNumDefaultLayers(intNumLayers->value());
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const
@@ -271,6 +286,8 @@ void KisCustomImageWidget::screenSizeClicked()
 
 void KisCustomImageWidget::fillPredefined()
 {
+    cmbPredefined->clear();
+
     cmbPredefined->addItem("");
 
     QString appName = KGlobal::mainComponent().componentName();

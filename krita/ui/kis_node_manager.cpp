@@ -18,6 +18,8 @@
 
 #include "kis_node_manager.h"
 
+#include <QDesktopServices>
+
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
@@ -26,6 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
+#include <KoFileDialogHelper.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -398,6 +401,11 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet)
         activeNode = m_d->view->image()->root();
     }
 
+    KIS_ASSERT_RECOVER_RETURN(activeNode);
+    if (activeNode->systemLocked()) {
+        return;
+    }
+
     // XXX: make factories for this kind of stuff,
     //      with a registry
 
@@ -675,17 +683,47 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
+inline bool checkForGlobalSelection(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data()) && node->parent() && !node->parent()->parent();
+}
+
 void KisNodeManager::activateNextNode()
 {
-    if (activeNode() && activeNode()->nextSibling()) {
-        slotNonUiActivatedNode(activeNode()->nextSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->nextSibling();
+
+    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
+        node = activeNode->parent();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->nextSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
 void KisNodeManager::activatePreviousNode()
 {
-    if (activeNode() && activeNode()->prevSibling()) {
-        slotNonUiActivatedNode(activeNode()->prevSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->prevSibling();
+
+    if (!node && activeNode->parent()) {
+        node = activeNode->parent()->prevSibling();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->prevSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
@@ -725,8 +763,12 @@ void KisNodeManager::shear(double angleX, double angleY)
 
 void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
-    // XXX: implement scale for masks as well
-    m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+    KisNodeSP node = activeNode();
+    KIS_ASSERT_RECOVER_RETURN(node);
+
+    m_d->view->image()->scaleNode(node, sx, sy, filterStrategy);
+
+    nodesUpdated();
 }
 
 void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)
@@ -756,27 +798,19 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
+    QString filename = KoFileDialogHelper::getSaveFileName(m_d->view,
+                                                           i18n("Export Node"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
 
-    KFileDialog fd(KUrl(QString()), mimelist, m_d->view);
-    fd.setObjectName("Export Node");
-    fd.setCaption(i18n("Export Node"));
-    fd.setMimeFilter(listMimeFilter);
-    fd.setOperationMode(KFileDialog::Saving);
+    if (filename.isEmpty()) return;
 
-    if (!fd.exec()) return;
+    KUrl url = KUrl::fromLocalFile(filename);
 
-    KUrl url = fd.selectedUrl();
-    QString mimefilter = fd.currentMimeFilter();
+    if (url.isEmpty()) return;
 
-    if (mimefilter.isNull()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-    }
-
-    if (url.isEmpty())
-        return;
+    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QString mimefilter = mime->name();
 
     KisImageWSP image = m_d->view->image();
 

@@ -124,7 +124,12 @@ void KisFilter::process(const KisPaintDeviceSP src,
         transaction = new KisTransaction("", temporary);
     }
 
-    processImpl(temporary, applyRect, config, progressUpdater);
+    try {
+        processImpl(temporary, applyRect, config, progressUpdater);
+    }
+    catch (std::bad_alloc) {
+        warnKrita << "Filter" << name() << "failed to allocate enough memory to run.";
+    }
 
 
     if(transaction) {
@@ -134,11 +139,6 @@ void KisFilter::process(const KisPaintDeviceSP src,
         p.setSelection(selection);
         p.bitBlt(applyRect.topLeft(), temporary, applyRect);
     }
-}
-
-bool KisFilter::workWith(const KoColorSpace* cs) const
-{
-    Q_UNUSED(cs); return true;
 }
 
 QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const

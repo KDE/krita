@@ -42,6 +42,8 @@ namespace MusicCore {
 class MusicRenderer {
 public:
     struct RenderState {
+        RenderState() : clef(0) {}
+
         MusicCore::Clef* clef;
     };
 

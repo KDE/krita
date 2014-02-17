@@ -76,7 +76,7 @@ public:
      * The viewconverter and document offset are necessary to convert all
      * the QTouchPoints to KoTouchPoints that work in document coordinates.
      */
-    void touchEvent(QTouchEvent *event, KoViewConverter *viewConverter, const QPointF &documentOffset);
+    void touchEvent(QTouchEvent *event);
 
     /// Forwarded to the current KoToolBase
     void tabletEvent(QTabletEvent *event, const QPointF &point);
@@ -154,7 +154,7 @@ public:
     void dropEvent(QDropEvent *event, const QPointF &point);
  
     /// Set the new active tool.
-    void setActiveTool(KoToolBase *tool);
+    virtual void setActiveTool(KoToolBase *tool);
 
     /// \internal
     KoToolProxyPrivate *priv();

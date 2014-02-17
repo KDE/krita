@@ -107,6 +107,8 @@ public:
     KoOdfBibliographyConfiguration bibliographyConfiguration;
     KoCharacterStyle *defaultCharacterStyle;
     KoParagraphStyle *defaultParagraphStyle;
+
+    QList<KoShape *> insertedShapes;
 };
 
 KoTextSharedLoadingData::KoTextSharedLoadingData()
@@ -579,7 +581,7 @@ void KoTextSharedLoadingData::addOutlineStyle(KoShapeLoadingContext &context, Ko
     if (styleManager && outlineStyleElem.isElement()) {
         KoListStyle *outlineStyle = new KoListStyle();
         outlineStyle->loadOdf(context, outlineStyleElem);
-        styleManager->setOutlineStyle(outlineStyle); // style manager owns it now. he will take care of deleting it.
+        styleManager->setOutlineStyle(outlineStyle); // style manager owns it now and will take care of deleting it.
     }
 }
 
@@ -650,8 +652,13 @@ KoOdfBibliographyConfiguration KoTextSharedLoadingData::bibliographyConfiguratio
 
 void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
 {
-    Q_UNUSED(shape);
+    d->insertedShapes.append(shape);
     Q_UNUSED(element);
+}
+
+QList<KoShape *> KoTextSharedLoadingData::insertedShapes() const
+{
+    return d->insertedShapes;
 }
 
 void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)

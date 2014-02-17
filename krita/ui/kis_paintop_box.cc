@@ -109,6 +109,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton = new QToolButton(this);
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
+
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setIcon(koIcon("draw-eraser"));
     eraseAction->setShortcut(Qt::Key_E);
@@ -129,7 +130,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(koIcon("object-flip-horizontal"));
+    hMirrorAction->setIcon(koIcon("symmetry-horyzontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
@@ -138,13 +139,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(koIcon("object-flip-vertical"));
+    vMirrorAction->setIcon(koIcon("symmetry-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
 
     KisConfig cfg;
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
         KisDoubleSliderSpinBox* slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow"   , i18n("Flow:"));
@@ -176,11 +177,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(30);
 
-    m_paletteButton = new QPushButton(i18n("Save to Palette"));
-    m_paletteButton->setFixedHeight(30);
-
     m_workspaceWidget = new KisPopupButton(view);
-    m_workspaceWidget->setIcon(koIcon("document-multiple"));
+    m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -190,7 +188,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     baseLayout->addWidget(m_paintopWidget);
     baseLayout->setContentsMargins(0, 0, 0, 0);
 
-    KAction* action;
     m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -203,6 +200,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
     compositeLayout->setContentsMargins(0, 0, 0, 0);
+
+    KAction* action;
+
     action = new KAction(i18n("Brush composite"), this);
     view->actionCollection()->addAction("composite_actions", action);
     action->setDefaultWidget(compositeActions);
@@ -217,20 +217,29 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     action->setDefaultWidget(m_sliderChooser[1]);
     connect(action, SIGNAL(triggered()), m_sliderChooser[1], SLOT(showPopupWidget()));
 
+    action = new KAction(i18n("Brush option slider 3"), this);
+    view->actionCollection()->addAction("brushslider3", action);
+    action->setDefaultWidget(m_sliderChooser[2]);
+    connect(action, SIGNAL(triggered()), m_sliderChooser[2], SLOT(showPopupWidget()));
+
     action = new KAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Right));
+    action->setShortcut(KShortcut(Qt::Key_Comma));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new KAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Left));
+    action->setShortcut(KShortcut(Qt::Key_Stop));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new KAction(i18n("Switch to Previous Preset"), this);
     view->actionCollection()->addAction("previous_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
+
+    action = new KAction(i18n("Select Favorite Presets..."), this);
+    view->actionCollection()->addAction("palette_manager", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotSaveToFavouriteBrushes()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -241,20 +250,16 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     view->actionCollection()->addAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
 
-    action = new KAction(i18n("Add to palette"), this);
-    view->actionCollection()->addAction("palette_manager", action);
-    action->setDefaultWidget(m_paletteButton);
-
     action = new KAction(i18n("Workspaces"), this);
     view->actionCollection()->addAction("workspaces", action);
     action->setDefaultWidget(m_workspaceWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
-    m_presetsPopup->switchDetached();
+    m_presetsPopup->switchDetached(false);
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
-    m_presetsChooserPopup->setFixedSize(500, 500);
+    m_presetsChooserPopup->setFixedSize(500, 600);
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -270,7 +275,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
-    connect(m_paletteButton      , SIGNAL(clicked())                          , SLOT(slotSaveToFavouriteBrushes()));
     connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
     connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
@@ -283,6 +287,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
     connect(m_sliderChooser[1]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider2Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
+    connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -394,6 +401,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
+
+    /**
+     * We will get more update signals from the configuration widgets
+     * but they might be delayed by some internal deferring timers,
+     * so just call the slot directly
+     */
+    slotUpdatePreset();
 }
 
 KoID KisPaintopBox::defaultPaintOp()
@@ -469,7 +483,7 @@ void KisPaintopBox::setWidgetState(int flags)
         m_settingsWidget->setEnabled(flags & ENABLE_PRESETS);
     }
     
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         if(flags & (ENABLE_OPACITY|DISABLE_OPACITY))
             m_sliderChooser[i]->getWidget("opacity")->setEnabled(flags & ENABLE_OPACITY);
         
@@ -483,7 +497,7 @@ void KisPaintopBox::setWidgetState(int flags)
 
 void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
 {
-    for(int i=0; i<2; ++i) {
+    for(int i=0; i<3; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
         slider->blockSignals(true);
         slider->setValue(value);
@@ -737,6 +751,11 @@ void KisPaintopBox::slotSlider2Changed()
     sliderChanged(1);
 }
 
+void KisPaintopBox::slotSlider3Changed()
+{
+    sliderChanged(2);
+}
+
 void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 {
     Q_UNUSED(canvas);
@@ -771,7 +790,7 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
     }
     m_blockUpdate = true;
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         KisDoubleSliderSpinBox *opacitySlider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>("opacity");
         opacitySlider->blockSignals(true);
         opacitySlider->setValue(opacity);

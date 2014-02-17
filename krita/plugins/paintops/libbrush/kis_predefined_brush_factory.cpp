@@ -20,6 +20,7 @@
 
 #include <QDomDocument>
 #include "kis_brush_server.h"
+#include "kis_gbr_brush.h"
 
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
@@ -39,12 +40,12 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     KisBrushSP brush = rServer->resourceByFilename(brushFileName);
 
     //Fallback for files that still use the old format
-    if(!brush) {
+    if (!brush) {
         QFileInfo info(brushFileName);
         brush = rServer->resourceByFilename(info.fileName());
     }
 
-    if(!brush) {
+    if (!brush) {
         brush = rServer->resources().first();
     }
 
@@ -58,6 +59,16 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
 
     double scale = brushDefinition.attribute("scale", "1.0").toDouble();
     brush->setScale(scale);
+
+    if (m_id == "gbr_brush") {
+        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
+        if (gbrbrush) {
+            /**
+             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+             */
+            gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
+        }
+    }
 
     return brush;
 }

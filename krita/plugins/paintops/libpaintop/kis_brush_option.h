@@ -22,6 +22,7 @@
 #define KIS_BRUSH_OPTION_H_
 
 #include "kis_brush.h"
+#include <kis_threaded_text_rendering_workaround.h>
 
 class KisPropertiesConfiguration;
 
@@ -33,8 +34,11 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     KisBrushSP brush() const;
-    
     void setBrush(KisBrushSP brush);
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    static bool isTextBrush(const KisPropertiesConfiguration* setting);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:
     KisBrushSP m_brush;

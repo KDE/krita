@@ -92,6 +92,14 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
+#include "AnnotationTextShape.h"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
+#include "KoShapeBasedDocumentBase.h"
+#include <KoAnnotation.h>
+#include <KoGlobal.h>
+#include <KoShapeRegistry.h>
+#include <kuser.h>
+
 #include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
@@ -472,6 +480,11 @@ void TextTool::createActions()
     action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
+
+    action = new KAction(i18n("Insert Comment"), this);
+    addAction("insert_annotation", action);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
@@ -965,7 +978,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         // on windows we do not have data if we try to paste this selection
         if (data) {
             m_prevCursorPosition = m_textEditor.data()->position();
-            m_textEditor.data()->paste(data,canvas()->shapeController(), canvas()->resourceManager());
+            m_textEditor.data()->paste(canvas(), data, canvas()->resourceManager());
             editingPluginEvents();
         }
     }
@@ -1042,11 +1055,12 @@ QMimeData *TextTool::generateMimeData() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData->document(), from, to);
     KoTextDrag drag;
 
+#ifdef SHOULD_BUILD_RDF
     KoDocumentResourceManager *rm = 0;
     if (canvas()->shapeController()) {
         rm = canvas()->shapeController()->resourceManager();
     }
-#ifdef SHOULD_BUILD_RDF
+
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
@@ -1080,13 +1094,21 @@ bool TextTool::paste()
 {
     const QMimeData *data = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
 
-    // on windows we do not have data if we try to paste this selection
+    // on windows we do not have data if we try to paste the selection
     if (!data) return false;
 
-    m_prevCursorPosition = m_textEditor.data()->position();
-    m_textEditor.data()->paste(data, canvas()->shapeController());
-    editingPluginEvents();
-    return true;
+    // since this is not paste-as-text we will not paste in urls, but instead let KoToolProxy solve it
+    if (data->hasUrls()) return false;
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+        ||  data->hasText()) {
+        m_prevCursorPosition = m_textEditor.data()->position();
+        m_textEditor.data()->paste(canvas(), data);
+        editingPluginEvents();
+        return true;
+    }
+
+    return false;
 }
 
 void TextTool::cut()
@@ -1199,7 +1221,7 @@ void TextTool::dropEvent(QDropEvent *event, const QPointF &)
     }
     m_prevCursorPosition = insertCursor.position();
     m_textEditor.data()->setPosition(m_prevCursorPosition);
-    m_textEditor.data()->paste(event->mimeData(), canvas()->shapeController());
+    m_textEditor.data()->paste(canvas(), event->mimeData());
     m_textEditor.data()->setPosition(m_prevCursorPosition);
     //since the paste made insertCursor we can now use that for the end position
     m_textEditor.data()->setPosition(insertCursor.position(), QTextCursor::KeepAnchor);
@@ -1336,6 +1358,16 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         }
 
         useCursor(Qt::IBeamCursor);
+
+        // Set Arrow Cursor when mouse is on top of annotation shape.
+        if (selectedShape) {
+            if (selectedShape->shapeId() == "AnnotationTextShapeID") {
+                QPointF point(event->point);
+                if (point.y() <= (selectedShape->position().y() + 25))
+                    useCursor(Qt::ArrowCursor);
+            }
+        }
+
         return;
     } else {
         if (m_tableDragInfo.tableHit == KoPointedAt::ColumnDivider) {
@@ -1790,6 +1822,7 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 
 void TextTool::updateActions()
 {
+    bool notInAnnotation = !dynamic_cast<AnnotationTextShape *>(m_textShape);
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0) {
         return;
@@ -1821,13 +1854,13 @@ void TextTool::updateActions()
     if(m_textShapeData) {
         resizemethod = m_textShapeData->resizeMethod();
     }
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextShapeData::ShrinkToFitResize);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growWidthAction->setChecked(resizemethod == KoTextShapeData::AutoGrowWidth || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
     //update paragraphStyle GUI element
@@ -1869,17 +1902,19 @@ void TextTool::updateActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                             & KoCanvasResourceManager::NoAdvancedText);
     if (useAdvancedText) {
-        const QTextTable *table = textEditor->currentTable();
+        action("insert_table")->setEnabled(notInAnnotation);
 
-        action("insert_tablerow_above")->setEnabled(table);
-        action("insert_tablerow_below")->setEnabled(table);
-        action("insert_tablecolumn_left")->setEnabled(table);
-        action("insert_tablecolumn_right")->setEnabled(table);
-        action("delete_tablerow")->setEnabled(table);
-        action("delete_tablecolumn")->setEnabled(table);
-        action("merge_tablecells")->setEnabled(table);
-        action("split_tablecells")->setEnabled(table);
+        bool hasTable = textEditor->currentTable();
+        action("insert_tablerow_above")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablerow_below")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_left")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_right")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablerow")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
+        action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
     }
+    action("insert_annotation")->setEnabled(notInAnnotation);
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
@@ -2164,9 +2199,12 @@ void TextTool::pasteAsText()
     // on windows we do not have data if we try to paste this selection
     if (!data) return;
 
-    m_prevCursorPosition = m_textEditor.data()->position();
-    textEditor->paste(data, canvas()->shapeController(), true);
-    editingPluginEvents();
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+        ||  data->hasText()) {
+        m_prevCursorPosition = m_textEditor.data()->position();
+        m_textEditor.data()->paste(canvas(), data, true);
+        editingPluginEvents();
+    }
 }
 
 void TextTool::bold(bool bold)
@@ -2919,6 +2957,36 @@ void TextTool::setListLevel(int level)
         textEditor->addCommand(cll);
         editingPluginEvents();
     }
+}
+
+void TextTool::insertAnnotation()
+{
+    AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
+    textEditor()->addAnnotation(shape);
+
+    // Set annotation creator.
+    KConfig *config = KoGlobal::calligraConfig();
+    config->reparseConfiguration();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+    KConfigGroup cgs(&authorGroup, "Author-" + profile);
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
+        shape->setCreator(cgs.readEntry("creator"));
+    } else {
+        if (profile == "anonymous") {
+            shape->setCreator("Anonymous");
+        } else {
+            KUser user(KUser::UseRealUserID);
+            shape->setCreator(user.property(KUser::FullName).toString());
+        }
+    }
+    // Set Annotation creation date.
+    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
 }
 
 #include <TextTool.moc>

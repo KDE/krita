@@ -25,6 +25,7 @@
 #include "kis_texture_option.h"
 #include "kis_precision_option.h"
 #include "kis_pressure_mirror_option.h"
+#include <kis_threaded_text_rendering_workaround.h>
 
 
 class KisPropertiesConfiguration;
@@ -51,6 +52,11 @@ public:
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    typedef int needs_preinitialization;
+    static void preinitializeOpStatically(const KisPaintOpSettingsSP settings);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 protected: // XXX: make private!
 

@@ -253,7 +253,7 @@ void KisSelectionTest::testCopy()
 void KisSelectionTest::testSelectionExactBounds()
 {
     QRect referenceImageRect(0,0,1000,1000);
-    QRect referenceDeviceRect(10,10,1000,1000);
+    QRect referenceDeviceRect(100,100,1040,1040);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -269,9 +269,11 @@ void KisSelectionTest::testSelectionExactBounds()
     KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device, image));
 
     quint8 defaultPixel = MAX_SELECTED;
-    selection->projection()->setDefaultPixel(&defaultPixel);
+    selection->pixelSelection()->setDefaultPixel(&defaultPixel);
 
-    QCOMPARE(selection->selectedExactRect(), referenceImageRect | referenceDeviceRect);
+    // the selection uses device's extent only for performance reasons
+    // \see bug 320213
+    QCOMPARE(selection->selectedExactRect(), device->extent() | referenceImageRect);
 }
 
 void KisSelectionTest::testSetParentNodeAfterCreation()
@@ -281,12 +283,12 @@ void KisSelectionTest::testSetParentNodeAfterCreation()
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(0));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(0));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(0));
 
     selection->setParentNode(image->root());
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 
@@ -300,8 +302,37 @@ void KisSelectionTest::testSetParentNodeBeforeCreation()
 
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
 
-    QCOMPARE(selection->parentNode(), KisNodeSP(image->root()));
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
     QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
+}
+
+void KisSelectionTest::testOutlineGeneration()
+{
+    KisSelectionSP sel = new KisSelection();
+    sel->pixelSelection()->select(QRect(428,436, 430,211), 128);
+
+    QVERIFY(sel->outlineCacheValid());
+
+    QPainterPath originalOutline = sel->outlineCache();
+
+    sel->pixelSelection()->invalidateOutlineCache();
+    sel->recalculateOutlineCache();
+
+    QPainterPath calculatedOutline = sel->outlineCache();
+
+    QPainterPath closedSubPath = calculatedOutline;
+    closedSubPath.closeSubpath();
+
+    /**
+     * Our outline generation code has a small problem: it can
+     * generate a polygon, which isn't closed (it'll repeat the first
+     * point instead). There is a special workaround for it in
+     * KisPixelSelection::recalculateOutlineCache(), which explicitly
+     * closes the path, so here we just check it.
+     */
+
+    bool isClosed = closedSubPath == calculatedOutline;
+    QVERIFY(isClosed);
 }
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)

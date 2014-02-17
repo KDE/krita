@@ -51,14 +51,14 @@ vec4 filterPureLinear8(sampler2D texture, vec2 texcoord)
     vec4 p1 = textureLod(texture, vec2(texcoord.x - offset, texcoord.y - offset), level);
     vec4 p2 = textureLod(texture, vec2(texcoord.x + offset, texcoord.y - offset), level);
 
-    vec4 p3 = 4.0*textureLod(texture, vec2(texcoord.x, texcoord.y), level);
+    vec4 p3 = vec4(4.0) * textureLod(texture, vec2(texcoord.x, texcoord.y), level);
 
     vec4 p4 = textureLod(texture, vec2(texcoord.x - offset, texcoord.y + offset), level);
     vec4 p5 = textureLod(texture, vec2(texcoord.x + offset, texcoord.y + offset), level);
 
-    vec4 p6 = 3.0 * textureLod(texture, vec2(texcoord.x, texcoord.y), level + 1.0);
+    vec4 p6 = vec4(3.0) * textureLod(texture, vec2(texcoord.x, texcoord.y), level + 1.0);
 
-    return (p1 + p2 + p3 + p4 + p5 + p6) / 11.0;
+    return (p1 + p2 + p3 + p4 + p5 + p6) / vec4(11.0);
 
 }
 

@@ -32,7 +32,9 @@ public:
     const QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
     QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
 
-    inline int size() const { return m_size; }
+    inline int size() const {
+        return m_size;
+    }
 
 private:
     QVector<QPointF> m_path;

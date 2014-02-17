@@ -104,7 +104,6 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), categoryOther(), i18n("&Wave...
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
 
 }

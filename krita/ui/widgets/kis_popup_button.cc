@@ -20,6 +20,7 @@
 
 #include "widgets/kis_popup_button.h"
 
+#include <QPointer>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QFrame>
@@ -33,13 +34,11 @@
 
 struct KisPopupButton::Private {
     Private()
-        : frame(0)
-        , frameLayout(0)
-        , popupWidget(0)
+        : frameLayout(0)
     {}
-    QFrame* frame;
-    QHBoxLayout* frameLayout;
-    QWidget* popupWidget;
+    QScopedPointer<QFrame> frame;
+    QPointer<QWidget> popupWidget;
+    QPointer<QHBoxLayout> frameLayout;
 };
 
 KisPopupButton::KisPopupButton(QWidget* parent)
@@ -67,25 +66,29 @@ void KisPopupButton::setAlwaysVisible(bool v)
 
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
-    delete m_d->popupWidget;
-    delete m_d->frame;
     if (widget) {
-        m_d->frame = new QFrame(this);
+        /**
+         * Set parent explicitly to null to avoid propagation of the
+         * ignored events (specifically, QEvent::ShortcutOverride) to
+         * the view object. This avoids starting global actions while
+         * the PopUp is active. See bug 329842.
+         */
+        m_d->frame.reset(new QFrame(0));
         m_d->frame->setObjectName("popup frame");
         m_d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
         m_d->frame->setWindowFlags(Qt::Popup);
-        m_d->frameLayout = new QHBoxLayout(m_d->frame);
+        m_d->frameLayout = new QHBoxLayout(m_d->frame.data());
         m_d->frameLayout->setMargin(0);
         m_d->frameLayout->setSizeConstraint(QLayout::SetFixedSize);
         m_d->frame->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         m_d->popupWidget = widget;
-        m_d->popupWidget->setParent(m_d->frame);
+        m_d->popupWidget->setParent(m_d->frame.data());
         m_d->frameLayout->addWidget(m_d->popupWidget);
 
         // Workaround for bug 279740, preset popup widget resizes after it's shown for the first time
         // so we catch that and correct the position
         KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(widget);
-        if(presetPopup) {
+        if (presetPopup) {
             connect(presetPopup, SIGNAL(sizeChanged()), this, SLOT(adjustPosition()));
         }
     }
@@ -136,6 +139,11 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
+    KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(m_d->popupWidget.data());
+    if (presetPopup && presetPopup->detached()) {
+        return;
+    }
+
     QSize popSize = m_d->popupWidget->size();
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
@@ -148,8 +156,15 @@ void KisPopupButton::adjustPosition()
         popupRect.translate(screenRect.right() - popupRect.right(), 0);
     if (popupRect.left() < screenRect.left())
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    //if (popupRect.bottom() > screenRect.bottom())
-    //    popupRect.translate(0, -m_d->frame->height());
+
+    // The preset popup never should be shown over the toolbar, but other popups need
+    // to be able to be moved up. BUG: https://bugs.kde.org/show_bug.cgi?id=327977,
+    // see also commit 275758d4d0aaf398941295a4bf7ae9755bed2cb0
+    if(!presetPopup) {
+        if (popupRect.bottom() > screenRect.bottom())
+            popupRect.translate(0, -m_d->frame->height());
+    }
+
     m_d->frame->setGeometry(popupRect);
 }
 

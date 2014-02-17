@@ -58,12 +58,12 @@ void KisBoundary::generateBoundary()
 }
 
 void KisBoundary::paint(QPainter& painter) const
-{ 
+{
     QPen pen;
     pen.setWidth(0);
     pen.setBrush(Qt::black);
     painter.setPen(pen);
-    
+
     foreach(const QPolygon & polygon, d->m_boundary) {
         painter.drawPolygon(polygon);
     }

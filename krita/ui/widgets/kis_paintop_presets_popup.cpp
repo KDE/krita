@@ -35,7 +35,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-
 #include <KoIcon.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings_widget.h>
@@ -61,6 +60,7 @@ public:
     bool detached;
     bool ignoreHideEvents;
     QSize minimumSettingsWidgetSize;
+    QRect detachedGeometry;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -136,13 +136,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->minimumSettingsWidgetSize = QSize(0, 0);
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
+    m_d->detachedGeometry = QRect(100, 100, 0, 0);
 }
 
 
 KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 {
-    if (m_d->settingsWidget)
-    {
+    if (m_d->settingsWidget) {
         m_d->layout->removeWidget(m_d->settingsWidget);
         m_d->settingsWidget->hide();
         m_d->settingsWidget->setParent(0);
@@ -153,7 +153,7 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 
 void KisPaintOpPresetsPopup::slotCheckPresetValidity()
 {
-    if (m_d->settingsWidget){
+    if (m_d->settingsWidget) {
         m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled( m_d->settingsWidget->presetIsValid() );
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setEnabled( m_d->settingsWidget->presetIsValid() );
     }
@@ -173,9 +173,10 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     if (m_d->settingsWidget){
         connect(m_d->settingsWidget,SIGNAL(sigConfigurationItemChanged()),this,SLOT(slotCheckPresetValidity()));
         slotCheckPresetValidity();
-        if (m_d->settingsWidget->supportScratchBox()){
+        if (m_d->settingsWidget->supportScratchBox()) {
             showScratchPad();
-        }else{
+        }
+        else {
             hideScratchPad();
         }
     }
@@ -237,19 +238,26 @@ void KisPaintOpPresetsPopup::contextMenuEvent(QContextMenuEvent *e) {
     menu.exec(e->globalPos());
 }
 
-void KisPaintOpPresetsPopup::switchDetached()
+void KisPaintOpPresetsPopup::switchDetached(bool show)
 {
     if (parentWidget()) {
 
         m_d->detached = !m_d->detached;
+
         if (m_d->detached) {
             m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
-            parentWidget()->show();
+            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(false);
+            if (show) {
+                parentWidget()->show();
+            }
             m_d->ignoreHideEvents = false;
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
+            KisConfig cfg;
+            m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
+            parentWidget()->hide();
         }
 
         KisConfig cfg;
@@ -301,19 +309,31 @@ void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
 
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
 {
-    if(m_d->ignoreHideEvents) {
+    if (m_d->ignoreHideEvents) {
         return;
     }
     if (m_d->detached) {
-        switchDetached();
+        m_d->detachedGeometry = window()->geometry();
     }
     QWidget::hideEvent(event);
+}
+
+void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
+{
+    if (m_d->detached) {
+        window()->setGeometry(m_d->detachedGeometry);
+    }
 }
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
     emit sizeChanged();
+}
+
+bool KisPaintOpPresetsPopup::detached() const
+{
+    return m_d->detached;
 }
 
 void KisPaintOpPresetsPopup::slotSwitchPresetStrip(bool visible)

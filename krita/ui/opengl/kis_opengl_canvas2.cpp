@@ -33,6 +33,7 @@
 #include <QMatrix>
 #include <QDebug>
 #include <QThread>
+#include <QMessageBox>
 
 #include <QGLShaderProgram>
 #include <QGLFramebufferObject>
@@ -209,7 +210,6 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintGL()
 {
-    makeCurrent();
     renderCanvasGL();
 
     QPainter gc(this);
@@ -483,9 +483,12 @@ void KisOpenGLCanvas2::initializeCheckerShader()
     d->checkerShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->checkerShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    if (! d->checkerShader->link()) {
-        qDebug() << "OpenGL error" << glGetError();
-        qFatal("Failed linking checker shader");
+    if (!d->checkerShader->link()) {
+        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->checkerShader->log()), QMessageBox::Close);
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+        cfg.setCanvasState("OPENGL_FAILED");
+        exit(1);
     }
     Q_ASSERT(d->checkerShader->isLinked());
 }
@@ -513,9 +516,12 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     d->displayShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
     d->displayShader->bindAttributeLocation("a_textureCoordinate", PROGRAM_TEXCOORD_ATTRIBUTE);
 
-    if (! d->displayShader->link()) {
-        qDebug() << "OpenGL error" << glGetError();
-        qFatal("Failed linking display shader");
+    if (!d->displayShader->link()) {
+        QMessageBox::critical(this, "Fatal Error", QString(i18n("Krita could not initialize the OpenGL canvas:\n %1.\n Krita will disable OpenGL and close now.")).arg(d->displayShader->log()), QMessageBox::Close);
+        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+        cfg.setCanvasState("OPENGL_FAILED");
+        exit(1);
     }
 
     Q_ASSERT(d->displayShader->isLinked());

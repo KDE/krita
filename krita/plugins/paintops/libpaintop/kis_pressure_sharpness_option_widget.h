@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,13 +29,13 @@ class KisDoubleSliderSpinBox;
 class PAINTOP_EXPORT KisPressureSharpnessOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
-    
+
 public:
     KisPressureSharpnessOptionWidget();
-    
+
 private slots:
     void setThreshold(int threshold);
-    
+
 private:
     KisSliderSpinBox* m_threshold;
 };

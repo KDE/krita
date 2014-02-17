@@ -220,6 +220,9 @@ public:
     /// @return the value converted to points for internal use
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
+    /// Get the description string of the given unit
+    static QString unitDescription(KoUnit::Type type);
+
     /// Get the symbol string of the unit
     QString symbol() const;
 

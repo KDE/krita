@@ -21,51 +21,45 @@
 
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
-#include "kis_doc2.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
+#include "kis_image.h"
 
 #include <KoProgressUpdater.h>
 #include <KoProgressProxy.h>
 
-KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity)
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
-    , m_doc(new KisDoc2())
     , m_basePath(basePath)
     , m_filename(filename)
-    , m_scaleToImageResolution(scaleToImageResolution)
+    , m_scalingMethod(scaleToImageResolution)
 {
-    if (QFile::exists(path())) {
-        m_fileWatcher.addPath(path());
-    }
-    connect(&m_fileWatcher, SIGNAL(fileChanged(QString)), SLOT(reloadImage()));
-    reloadImage();
+    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    m_loader.setPath(path());
+    m_loader.reloadImage();
 }
 
 KisFileLayer::~KisFileLayer()
 {
-    delete m_doc;
 }
 
 KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     : KisExternalLayer(rhs)
-    , m_doc(new KisDoc2())
 {
-    connect(&m_fileWatcher, SIGNAL(fileChanged(QString)), SLOT(reloadImage()));
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
     Q_ASSERT(QFile::exists(rhs.path()));
-    if (QFile::exists(path())) {
-        m_fileWatcher.addPath(path());
-    }
 
-    m_scaleToImageResolution = rhs.m_scaleToImageResolution;
-    reloadImage();
+    m_scalingMethod = rhs.m_scalingMethod;
+
+    connect(&m_loader, SIGNAL(loadingFinished()), SLOT(slotLoadingFinished()));
+    m_loader.setPath(path());
+    m_loader.reloadImage();
 }
 
 void KisFileLayer::resetCache()
 {
-    reloadImage();
+    m_loader.reloadImage();
 }
 
 const KoColorSpace *KisFileLayer::colorSpace() const
@@ -92,11 +86,11 @@ KoDocumentSectionModel::PropertyList KisFileLayer::sectionModelProperties() cons
 
 void KisFileLayer::setFileName(const QString &basePath, const QString &filename)
 {
-    m_fileWatcher.removePath(m_basePath + '/' + m_filename);
     m_basePath = basePath;
     m_filename = filename;
-    m_fileWatcher.addPath(m_basePath + '/' + m_filename);
-    reloadImage();
+
+    m_loader.setPath(path());
+    m_loader.reloadImage();
 }
 
 QString KisFileLayer::fileName() const
@@ -114,33 +108,31 @@ QString KisFileLayer::path() const
     }
 }
 
-void KisFileLayer::setScaleToImageResolution(bool scale)
+KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
 {
-    m_scaleToImageResolution = scale;
-    reloadImage();
+    return m_scalingMethod;
 }
 
-bool KisFileLayer::scaleToImageResolution() const
+void KisFileLayer::slotLoadingFinished()
 {
-    return m_scaleToImageResolution;
-}
-
-
-void KisFileLayer::reloadImage()
-{
-    m_doc->openUrl(path());
-    KisImageWSP importedImage = m_doc->image();
+    KisImageWSP importedImage = m_loader.image();
     m_image = importedImage->projection();
-
-    if (m_scaleToImageResolution && (image()->xRes() != importedImage->xRes()
-                                     || image()->yRes() != importedImage->yRes()))
-    {
+    if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
+                                          || image()->yRes() != importedImage->yRes())) {
         qreal xscale = image()->xRes() / importedImage->xRes();
         qreal yscale = image()->yRes() / importedImage->yRes();
+
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
-
+    else if (m_scalingMethod == ToImageSize) {
+        QSize sz = importedImage->size();
+        sz.scale(image()->size(), Qt::KeepAspectRatio);
+        qreal xscale =  sz.width() / importedImage->width();
+        qreal yscale = sz.height() / importedImage->height();
+        KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+        worker.run();
+    }
 
     setDirty();
 }
@@ -163,5 +155,17 @@ bool KisFileLayer::accept(KisNodeVisitor& visitor)
 void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
 {
     return visitor.visit(this, undoAdapter);
+}
+
+KUndo2Command* KisFileLayer::crop(const QRect & rect)
+{
+    qWarning() << "WARNING: File Layer does not support cropping!" << name();
+    return 0;
+}
+
+KUndo2Command* KisFileLayer::transform(const QTransform &transform)
+{
+    qWarning() << "WARNING: File Layer does not support transformations!" << name();
+    return 0;
 }
 

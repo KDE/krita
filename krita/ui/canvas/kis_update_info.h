@@ -47,7 +47,7 @@ typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 class KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
-    KisTextureTileUpdateInfoList tileList;
+    KisTextureTileUpdateInfoSPList tileList;
     QRect dirtyViewportRect();
 };
 #endif /* HAVE_OPENGL */

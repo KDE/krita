@@ -125,19 +125,6 @@ void KoColorSpace::addChannel(KoChannelInfo * ci)
 {
     d->channels.push_back(ci);
 }
-
-quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels, bool clear, quint8 defaultvalue) const
-{
-    if (numPixels == 0) {
-        return 0;
-    }
-    quint8* buf = new quint8[pixelSize()*numPixels];
-    if (clear) {
-        memset(buf, defaultvalue, pixelSize() * numPixels);
-    }
-    return buf;
-}
-
 bool KoColorSpace::hasCompositeOp(const QString& id) const
 {
     return d->compositeOps.contains(id);
@@ -147,7 +134,6 @@ QList<KoCompositeOp*> KoColorSpace::compositeOps() const
 {
     return d->compositeOps.values();
 }
-
 
 KoMixColorsOp* KoColorSpace::mixColorsOp() const
 {

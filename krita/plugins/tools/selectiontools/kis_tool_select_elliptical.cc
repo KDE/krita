@@ -56,7 +56,7 @@ void KisToolSelectElliptical::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
+void KisToolSelectElliptical::finishRect(const QRectF &rect)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);

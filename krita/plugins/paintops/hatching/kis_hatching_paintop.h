@@ -63,37 +63,37 @@ private:
     KisHatchingPaintOpSettings* m_settings;
     KisImageWSP m_image;
     HatchingBrush * m_hatchingBrush;
-    
+
     /**
      *  PaintDevice that will be filled with a single pass of
      *  hatching by HatchingBrush::hatch
      */
     KisPaintDeviceSP m_hatchedDab;
-    
+
     /**
-     *  Curve to control the intensity of crosshatching 
+     *  Curve to control the intensity of crosshatching
      *  according to user preferences set in the GUI
      */
     KisHatchingPressureCrosshatchingOption m_crosshatchingOption;
-    
+
     /**
      *  Curve to control the dynamics of separation with
      *  device input
      */
     KisHatchingPressureSeparationOption m_separationOption;
-    
+
     /**
      *  Curve to control the thickness of the hatching lines
      *  with device input
      */
     KisHatchingPressureThicknessOption m_thicknessOption;
-    
+
     /**
      *  Curve to control the opacity of the entire dab
      *  with device input
      */
     KisPressureOpacityOption m_opacityOption;
-    
+
     /**
      *  Curve to control the size of the entire dab
      *  with device input

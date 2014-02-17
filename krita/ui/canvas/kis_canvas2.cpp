@@ -105,7 +105,7 @@ public:
 #ifdef HAVE_OPENGL
     int openGLFilterMode;
 #endif
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -190,7 +190,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
-    widget->installEventFilter(m_d->inputManager);
+
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
@@ -346,6 +346,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
+    KisOpenGL::initialMakeContextCurrent();
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
@@ -389,53 +390,45 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     }
 }
 
-void KisCanvas2::connectCurrentImage()
+void KisCanvas2::initializeImage()
 {
     KisImageWSP image = m_d->view->image();
 
     m_d->coordinatesConverter->setImage(image);
+
+    connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
+    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)), SLOT(updateCanvasProjection(KisUpdateInfoSP)));
+    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
+    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
+
+    connectCurrentCanvas();
+}
+
+void KisCanvas2::connectCurrentCanvas()
+{
+    KisImageWSP image = m_d->view->image();
 
     if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setImage(image);
     }
 
-    connect(image, SIGNAL(sigImageUpdated(QRect)),
-            SLOT(startUpdateCanvasProjection(QRect)),
-            Qt::DirectConnection);
-
-    connect(this, SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)),
-            this, SLOT(updateCanvasProjection(KisUpdateInfoSP)));
-
-    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-            SLOT(startResizingImage()),
-            Qt::DirectConnection);
-    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)),
-            this, SLOT(finishResizingImage(qint32,qint32)));
-
     startResizingImage();
 
     emit imageChanged(image);
 }
 
-void KisCanvas2::disconnectCurrentImage()
+void KisCanvas2::disconnectCurrentCanvas()
 {
-    m_d->coordinatesConverter->setImage(0);
-
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->disconnect(this);
         m_d->openGLImageTextures->disconnect(m_d->view->image());
 #else
-        qFatal("Bad use of disconnectCurrentImage(). It shouldn't have happened =(");
+        qFatal("Bad use of disconnectCurrentCanvas(). It shouldn't have happened =(");
 #endif
     }
-
-    disconnect(SIGNAL(sigCanvasCacheUpdated(KisUpdateInfoSP)));
-
-    // for sigSizeChanged()
-    m_d->view->image()->disconnect(this);
 }
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
@@ -452,9 +445,9 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
          m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
-        disconnectCurrentImage();
+        disconnectCurrentCanvas();
         createCanvas(useOpenGL);
-        connectCurrentImage();
+        connectCurrentCanvas();
         notifyZoomChanged();
     }
 
@@ -565,6 +558,7 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
+        m_d->openGLImageTextures->setChannelFlags(m_d->channelFlags);
         KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
 
         emit sigCanvasCacheUpdated(info);
@@ -581,6 +575,17 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
 void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 {
+    /**
+     * It might happen that the canvas type is switched while the
+     * update info is being stuck in the Qt's signals queue. Than a wrong
+     * type of the info may come. So just check it here.
+     */
+#ifdef HAVE_OPENGL
+    bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
+    if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
+        return;
+#endif
+
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
@@ -596,7 +601,6 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 #endif
     }
     else {
-
         // See comment in startUpdateCanvasProjection()
         Q_ASSERT(m_d->prescaledProjection);
 
@@ -833,5 +837,11 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
+
+KoGuidesData *KisCanvas2::guidesData()
+{
+    return &m_d->view->document()->guidesData();
+}
+
 
 #include "kis_canvas2.moc"

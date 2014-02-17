@@ -125,6 +125,7 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        Q_UNUSED(object);
 /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor) {
@@ -170,6 +171,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        Q_UNUSED(object);
         /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor)

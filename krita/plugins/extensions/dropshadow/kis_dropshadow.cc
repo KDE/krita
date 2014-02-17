@@ -113,7 +113,13 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     }
     if (blurradius > 0) {
         bShadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-        gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
+        try {
+            gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
+        }
+        catch (std::bad_alloc) {
+            warnKrita << "KisDropShadow: Gaussian Blur failed to allocate enough memory.";
+        }
+
         shadowDev = bShadowDev;
     }
 

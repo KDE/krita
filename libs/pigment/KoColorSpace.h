@@ -168,13 +168,6 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) const = 0;
 
     /**
-     * Convert the value of the channel at the specified position into
-     * a 16-bit value. This may be upscaling or downscaling, depending
-     * on the defined value of the channel
-     */
-    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const = 0;
-
-    /**
      * Set dstPixel to the pixel containing only the given channel of srcPixel. The remaining channels
      * should be set to whatever makes sense for 'empty' channels of this color space,
      * with the intent being that the pixel should look like it only has the given channel.
@@ -300,12 +293,6 @@ public:
                                    const KoColorProfile *  dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent,
                                    KoColorConversionTransformation::ConversionFlags conversionFlags) const;
-
-    /**
-     * This functions allocates the ncessary memory for numPixels number of pixels.
-     * It is your responsibility to delete[] it.
-     */
-    quint8 *allocPixelBuffer(quint32 numPixels, bool clear = false, quint8 defaultvalue = 0) const;
 
     /**
      * Convert the specified data to Lab (D50). All colorspaces are guaranteed to support this
@@ -437,12 +424,6 @@ public:
     virtual KoColorTransformation *createBrightnessContrastAdjustment(const quint16 *transferValues) const = 0;
 
     /**
-     * Create an adjustment object for desaturating
-     * This function is thread-safe, but you need to create one KoColorTransformation per thread.
-     */
-    virtual KoColorTransformation *createDesaturateAdjustment() const = 0;
-
-    /**
      * Create an adjustment object for adjusting individual channels
      * transferValues is an array of colorChannelCount number of 256 bins array with values from 0 to 0xFFFF
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
@@ -468,6 +449,13 @@ public:
      * other transparency levels are not regarded when finding the difference.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;
+
+    /**
+     * Get the difference between 2 colors, normalized in the range (0,255). This function
+     * takes the Alpha channel of the pixel into account. Alpha channel has the same
+     * weight as Lightness channel.
+     */
+    virtual quint8 differenceA(const quint8* src1, const quint8* src2) const = 0;
 
     /**
      * @return the mix color operation of this colorspace (do not delete it locally, it's deleted by the colorspace).

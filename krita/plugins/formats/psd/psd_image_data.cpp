@@ -225,7 +225,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
-    QRect rc = dev->exactBounds();
+    QRect rc(0, 0, m_header->width, m_header->height);
     QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
 
     quint64 channelLengthPos = io->pos();

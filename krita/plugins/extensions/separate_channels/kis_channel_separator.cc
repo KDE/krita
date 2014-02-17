@@ -22,10 +22,12 @@
  */
 
 #include "kis_channel_separator.h"
-#include <limits.h>
 
+#include <limits.h>
 #include <stdlib.h>
 #include <vector>
+
+#include <QDesktopServices>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -33,11 +35,11 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>
-#include <kfiledialog.h>
 
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoFileDialogHelper.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -233,27 +235,25 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 adapter.addNode(l.data(), image->rootLayer(), 0);
-            } else {
-                QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-                QString mimelist = listMimeFilter.join(" ");
+            }
+            else {
 
-                KFileDialog fd(QString(), mimelist, m_view);
-                fd.setObjectName("Export Layer");
-                fd.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
-                fd.setMimeFilter(listMimeFilter);
-                fd.setOperationMode(KFileDialog::Saving);
-                fd.setUrl(KUrl(ch->name()));
-                if (!fd.exec()) return;
 
-                KUrl url = fd.selectedUrl();
-                QString mimefilter = fd.currentMimeFilter();
+                QString fileName = KoFileDialogHelper::getSaveFileName(m_view,
+                                                                       i18n("Export Layer") + '(' + ch->name() + ')',
+                                                                       QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                                       KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export),
+                                                                       "",
+                                                                       "OpenDocument");
+
+                KUrl url = KUrl::fromLocalFile(fileName);
 
                 if (url.isEmpty())
                     return;
-                if (mimefilter.isNull()) {
-                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                    mimefilter = mime->name();
-                }
+
+
+                KMimeType::Ptr mime = KMimeType::findByUrl(url);
+                QString mimefilter = mime->name();
 
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));

@@ -42,8 +42,8 @@ void KisGmicApplicator::apply(KisImageWSP image, KisNodeSP node, const QString &
     emitSignals << ModifiedSignal;
 
     KisProcessingApplicator applicator(image, node,
-                                   KisProcessingApplicator::RECURSIVE,
-                                   emitSignals, actionName);
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
 
 
     QSharedPointer< gmic_list<float> > gmicLayers(new gmic_list<float>);

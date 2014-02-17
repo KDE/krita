@@ -41,21 +41,23 @@ void TestKoColor::testForModel(QString model)
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(model, KoColorSpaceRegistry::AllColorSpaces);
     foreach(const KoID& depthId, depthIDs) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(model, depthId.id() , "");
-        KoColor kc(cs);
-        kc.fromQColor(qc);
-        QDomDocument doc;
-        QDomElement elt = doc.createElement("color");
-        kc.toXML(doc, elt);
-        doc.appendChild(elt);
-        dbgPigment << doc.toString();
-        KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString, QString>());
-        QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()),
-                 QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
-                 .arg(kc.colorSpace()->colorModelId().id())
-                 .arg(kc.colorSpace()->colorDepthId().id())
-                 .arg(kcu.colorSpace()->colorModelId().id())
-                 .arg(kcu.colorSpace()->colorDepthId().id()).toLatin1());
-        QVERIFY(cs->difference(kcu.data(), kc.data()) <= 1);
+        if (cs) {
+            KoColor kc(cs);
+            kc.fromQColor(qc);
+            QDomDocument doc;
+            QDomElement elt = doc.createElement("color");
+            kc.toXML(doc, elt);
+            doc.appendChild(elt);
+            dbgPigment << doc.toString();
+            KoColor kcu = KoColor::fromXML(elt.firstChildElement(), depthId.id(), QHash<QString, QString>());
+            QVERIFY2(*(kc.colorSpace()) == *(kcu.colorSpace()),
+                     QString("Not identical color space (colorModelId = %1 depthId = %2) != (colorModelId = %3 depthId = %4) ")
+                     .arg(kc.colorSpace()->colorModelId().id())
+                     .arg(kc.colorSpace()->colorDepthId().id())
+                     .arg(kcu.colorSpace()->colorModelId().id())
+                     .arg(kcu.colorSpace()->colorDepthId().id()).toLatin1());
+            QVERIFY(cs->difference(kcu.data(), kc.data()) <= 1);
+        }
     }
 
 }

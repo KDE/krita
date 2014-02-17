@@ -73,26 +73,18 @@ void ColorRange::slotActivated()
 
 void ColorRange::selectOpaque()
 {
-    KisCanvas2 * canvas = m_view->canvasBase();
-    if (!canvas)
-        return;
-    
-    KisNodeSP node = m_view->activeNode();
-    if(!node)
-        return;
-    
-    KisPaintDeviceSP device = node->paintDevice();
-    if (!device) return;
-    
-    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
-    
-    qint32 x, y, w, h;
+    KisCanvas2 *canvas = m_view->canvasBase();
+    KisPaintDeviceSP device = m_view->activeNode()->projection();
+    KIS_ASSERT_RECOVER_RETURN(canvas && device);
+
     QRect rc = device->exactBounds();
-    x = rc.x();
-    y = rc.y();
-    w = rc.width();
-    h = rc.height();
-    
+    if (rc.isEmpty()) return;
+
+    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
+
+    qint32 x, y, w, h;
+    rc.getRect(&x, &y, &w, &h);
+
     const KoColorSpace * cs = device->colorSpace();
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 

@@ -31,7 +31,7 @@ class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
 class KisRecordedPaintAction;
-class KisPattern;
+class KoPattern;
 
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
@@ -57,10 +57,11 @@ public:
     bool needsAirbrushing() const;
     int airbrushingRate() const;
 
+    void setOpacity(qreal opacity);
     quint8 opacity() const;
     const KoCompositeOp* compositeOp() const;
 
-    KisPattern* currentPattern() const;
+    KoPattern* currentPattern() const;
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;

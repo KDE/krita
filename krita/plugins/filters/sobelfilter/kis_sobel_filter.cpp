@@ -126,7 +126,7 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
     Q_CHECK_PTR(curRow);
     quint8* nextRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
-    quint8* dest = new quint8[ width  * pixelSize];
+    quint8* dest = new quint8[width  * pixelSize];
     Q_CHECK_PTR(dest);
 
     quint8* pr = prevRow + pixelSize;

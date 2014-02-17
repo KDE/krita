@@ -29,8 +29,6 @@ class QDomElement;
 /**
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
- *
- * This replaces the KisKrayon facility that used to be present in Krayon.
  */
 class PIGMENTCMS_EXPORT KoResource
 {
@@ -58,7 +56,8 @@ public:
     virtual bool save() = 0;
 
     /**
-     * Returns a QImage representing this resource.  This image could be null.
+     * Returns a QImage representing this resource.  This image could be null. The image can
+     * be in any valid QImage::Format.
      */
     virtual QImage image() const {
         return QImage();

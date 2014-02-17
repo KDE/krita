@@ -397,6 +397,12 @@ bool KisTransformWorker::run()
         m_progressUpdater->setProgress(100);
     }
 
+    /**
+     * Purge the tiles which might be left after scaling down the
+     * image
+     */
+    m_dev->purgeDefaultPixels();
+
     return true;
 }
 

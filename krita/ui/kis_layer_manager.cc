@@ -63,8 +63,8 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_paint_device.h>
+#include <kis_selection.h>
 #include <flake/kis_shape_layer.h>
-#include <kis_transform_visitor.h>
 #include <kis_undo_adapter.h>
 #include <kis_painter.h>
 #include <metadata/kis_meta_data_store.h>
@@ -79,6 +79,8 @@
 #include "dialogs/kis_dlg_file_layer.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
+#include "kis_node_visitor.h"
+#include "kis_paint_layer.h"
 #include "commands/kis_image_commands.h"
 #include "commands/kis_layer_commands.h"
 #include "commands/kis_node_commands.h"
@@ -433,7 +435,10 @@ void KisLayerManager::layerProperties()
         KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
+        Qt::WindowFlags flags = dialog->windowFlags();
+        dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
         dialog->show();
+
     }
 }
 
@@ -672,29 +677,6 @@ void KisLayerManager::layerBack()
     layer->parent()->setDirty();
 }
 
-void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy)
-{
-    if (!m_view->image()) return;
-
-    KisLayerSP layer = activeLayer();
-    if (!layer) return;
-
-    KoProgressUpdater* updater = m_view->createProgressUpdater();
-    KoUpdaterPtr u = updater->startSubtask();
-
-    m_view->image()->undoAdapter()->beginMacro(i18n("Scale Layer"));
-
-    KisTransformVisitor visitor(m_view->image(), sx, sy, 0.0, 0.0, 0.0, 0, 0, u, filterStrategy);
-    layer->accept(visitor);
-
-    m_view->image()->undoAdapter()->endMacro();
-    m_doc->setModified(true);
-    layersUpdated();
-    m_view->canvas()->update();
-
-    updater->deleteLater();
-}
-
 void KisLayerManager::rotateLayer(double radians)
 {
     if (!m_view->image()) return;
@@ -895,10 +877,10 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
             return;
         }
 
-        bool scaleToImageResolution = dlg.scaleToImageResolution();
+        KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,
-                       new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
+                       new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8));
     }
 
 }

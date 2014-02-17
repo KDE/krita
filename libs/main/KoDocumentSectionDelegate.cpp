@@ -140,8 +140,8 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                             model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
                         }
                         /* Now set the current node's clickedProperty back to True, to save the user time
-                        (obviously, if the user is clicking one item with ctrl+click, he's interested in that
-                        item to have a True property value while the others are in stasis and set to False) */
+                        (obviously, if the user is clicking one item with ctrl+click, that item should
+                        have a True property, value while the others are in stasis and set to False) */
                         // First refresh propertyList, otherwise old data will be saved back causing bugs
                         propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                         propertyList[clickedProperty].state = true;

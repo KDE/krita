@@ -185,12 +185,6 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
 KisSelectionSP KisMask::selection() const
 {
-    /**
-     * The mask is created without any selection present.
-     * You must always init the selection with initSelection() method.
-     */
-    Q_ASSERT(m_d->selection);
-
     return m_d->selection;
 }
 

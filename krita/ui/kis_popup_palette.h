@@ -19,12 +19,6 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
-#define brushInnerRadius 80.0
-#define brushOuterRadius 130.0
-#define colorInnerRadius 55.0
-#define colorOuterRadius 75.0
-#define brushRadius (brushInnerRadius+brushOuterRadius)/2
-
 #include <kis_types.h>
 #include <QWidget>
 #include <QQueue>
@@ -84,7 +78,6 @@ private:
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
-    void drawArcRisen(QPainter& painter, const QColor& color1, const QColor& color2, int radius);
     bool isPointInPixmap(QPointF&, int pos);
 
     QPainterPath pathFromPresetIndex(int index);

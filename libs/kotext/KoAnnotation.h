@@ -31,6 +31,7 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoAnnotationManager;
 class QTextFrame;
+class KoShape;
 
 /**
  * An annotation is a note made by the user regarding a part of the
@@ -72,9 +73,6 @@ public:
     /// @return the name of this annotation
     QString name() const;
 
-    QString creator() const;
-
-    QString date() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -85,15 +83,9 @@ public:
     static QString createUniqueAnnotationName(const KoAnnotationManager* kam,
                                               QString annotationName, bool isEndMarker);
 
-    /**
-     * Set the textframe where we will create our own textframe within
-     * Our textframe is the one containing the real note contents.
-     * @param text the new text
-     */
-    void setMotherFrame(QTextFrame *frame);
+    void setAnnotationShape(KoShape *shape);
 
-    /// return the current text
-    QTextFrame *textFrame() const;
+    KoShape *annotationShape();
 
 private:
 

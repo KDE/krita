@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Krita QML Export Filter
+Name[bs]=Krita QML izvozni Filter
 Name[ca]=Filtre d'exportació QML per al Krita
 Name[ca@valencia]=Filtre d'exportació QML per al Krita
 Name[cs]=Exportní filtr do formátu QML pro Kritu
@@ -14,6 +15,7 @@ Name[hu]=Krita QML exportszűrő
 Name[it]=Filtro di esportazione QML per Krita
 Name[kk]=Krita -> QML экспорт сүзгісі
 Name[mr]=क्रिटा QML निर्यात गाळणी
+Name[nb]=QML eksportfilter for Krita
 Name[nl]=QML-exportfilter voor Krita
 Name[pl]=Filtr eksportu QML z Krita
 Name[pt]=Filtro de Exportação de QML para o Krita

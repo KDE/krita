@@ -63,7 +63,6 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const

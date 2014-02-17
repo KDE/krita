@@ -24,9 +24,9 @@
 #include "kis_layer.h"
 
 
-KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
-        : KUndo2Command(name)
-        , m_image(image)
+KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image, KUndo2Command *parent)
+    : KUndo2Command(name, parent)
+    , m_image(image)
 {
 }
 
@@ -43,35 +43,38 @@ KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
                                             const QRect &updateRect)
     : m_image(image), m_updateRect(updateRect)
 {
-    m_needsFullRefresh = false;
-
-    if(!isLayer(removedNode)) {
-        m_node = removedNode->parent();
-    }
-    else {
-        m_node = removedNode;
-        while((m_node = m_node->nextSibling()) && !isLayer(m_node));
-
-        if(!m_node) {
-            m_node = removedNode;
-            while((m_node = m_node->prevSibling()) && !isLayer(m_node));
-        }
-
-        if(!m_node) {
-            m_node = removedNode->parent();
-            m_needsFullRefresh = true;
-        }
-    }
+    /**
+     * We are saving an index, but not shared pointer, because the
+     * target node may suddenly reincarnate into another type of a
+     * layer during the removal process
+     */
+    m_removedNodeParent = removedNode->parent();
+    m_removedNodeIndex = m_removedNodeParent ? m_removedNodeParent->index(removedNode) : -1;
 }
 
 void KisImageCommand::UpdateTarget::update() {
-    if (!m_node) return;
+    if (!m_removedNodeParent) return;
+    KIS_ASSERT_RECOVER_RETURN(m_removedNodeIndex >= 0);
 
-    if (m_needsFullRefresh) {
-        m_image->refreshGraphAsync(m_node);
-        m_node->setDirty(m_updateRect);
+    KisNodeSP node;
+    int index = m_removedNodeIndex;
+
+    while ((node = m_removedNodeParent->at(index)) && !isLayer(node)) {
+        index++;
     }
-    else {
-        m_node->setDirty(m_updateRect);
+
+    if (!node) {
+        index = qMax(0, m_removedNodeIndex - 1);
+
+        while ((node = m_removedNodeParent->at(index)) && !isLayer(node)) {
+            index--;
+        }
+    }
+
+    if (node) {
+        node->setDirty(m_updateRect);
+    } else {
+        m_image->refreshGraphAsync(m_removedNodeParent);
+        m_removedNodeParent->setDirty(m_updateRect);
     }
 }

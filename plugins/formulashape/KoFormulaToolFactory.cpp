@@ -27,7 +27,7 @@
 KoFormulaToolFactory::KoFormulaToolFactory()
            : KoToolFactoryBase("KoFormulaToolFactoryId")
 {
-    setToolTip( i18n( "Formula editing tool" ) );
+    setToolTip( i18n( "Formula editing" ) );
     setToolType( dynamicToolType() );
     setIconName(koIconNameCStr("edittext"));
     setPriority( 1 );

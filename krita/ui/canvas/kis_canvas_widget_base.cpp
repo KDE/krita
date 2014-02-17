@@ -141,6 +141,11 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
 
+    // then paint the guides
+    m_d->canvas->view()->document()->guidesData().paintGuides(gc,
+                                                              *m_d->viewConverter,
+                                                              updateWidgetRect);
+
     gc.restore();
 }
 
@@ -172,7 +177,6 @@ QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
 void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
 {
     Q_UNUSED(value);
-    qWarning() << "Wrap Around mode is not available for this type of canvas!";
 }
 
 QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)

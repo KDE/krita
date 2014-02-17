@@ -143,10 +143,10 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
+    if (!input)
         return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
@@ -174,6 +174,11 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    input->image()->waitForDone();
+
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
@@ -182,7 +187,7 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
 
     bool bitmap = (to == "image/x-portable-bitmap");
 
-    KisImageWSP image = output->image();
+    KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();

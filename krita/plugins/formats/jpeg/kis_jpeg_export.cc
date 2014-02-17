@@ -30,6 +30,8 @@
 #include <kpluginfactory.h>
 #include <kcolorbutton.h>
 
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
 #include <KoFilterManager.h>
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
@@ -70,6 +72,12 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
+        return KoFilter::NoDocumentCreated;
+
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
 
     KDialog* kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("JPEG Export Options"));
@@ -80,9 +88,6 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     wdgUi.setupUi(wdg);
     KisMetaData::FilterRegistryModel frm;
     wdgUi.metaDataFilters->setModel(&frm);
-
-    // until we've got an actual quality preview here!
-    wdgUi.chkPreview->setVisible(false);
 
     QString filterConfig = KisConfig().exportConfiguration("JPEG");
     KisPropertiesConfiguration cfg;
@@ -98,6 +103,11 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
+    const KoColorSpace* cs = image->projection()->colorSpace();
+    bool sRGB = cs->profile()->name().toLower().contains("srgb");
+    wdgUi.chkForceSRGB->setVisible(!sRGB);
+    wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
+
     QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(',');
     wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
     wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
@@ -112,13 +122,20 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
-    
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
+
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
     cfg.setProperty("progressive", options.progressive);
 
     options.quality = wdgUi.qualityLevel->value();
     cfg.setProperty("quality", options.quality);
+
+    options.forceSRGB = wdgUi.chkForceSRGB->isChecked();
+    cfg.setProperty("forceSRGB", options.forceSRGB);
 
     // Advanced
     options.optimize = wdgUi.optimize->isChecked();
@@ -154,30 +171,22 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     cfg.setProperty("filters", enabledFilters);
 
-
     KisConfig().setExportConfiguration("JPEG", cfg);
 
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-
-    if (!output)
-        return KoFilter::NoDocumentCreated;
-
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();
 
-    KisJPEGConverter kpc(output);
+    KisJPEGConverter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     image->unlock();

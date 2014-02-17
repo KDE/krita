@@ -33,11 +33,13 @@ public:
     explicit KisChangePrimarySettingAction();
     virtual ~KisChangePrimarySettingAction();
 
-    virtual int priority() const;
+    void activate(int shortcut);
+    void deactivate(int shortcut);
+    int priority() const;
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
-    void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+    void inputEvent(QEvent* event);
 };
 
 #endif // KISCHANGEPRIMARYSETTINGACTION_H

@@ -29,7 +29,7 @@ class KisEmbossFilter : public KisFilter
 public:
     KisEmbossFilter();
 public:
-    using KisFilter::process;
+
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
                      const KisFilterConfiguration* config,

@@ -124,8 +124,14 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 
 void ChannelModel::slotLayerActivated(KisLayerSP layer)
 {
+    beginResetModel();
     m_currentLayer = layer;
-    reset();
+    endResetModel();
+}
+
+void ChannelModel::slotColorSpaceChanged(const KoColorSpace */*colorSpace*/)
+{
+    slotLayerActivated(m_currentLayer);
 }
 
 #include "channelmodel.moc"

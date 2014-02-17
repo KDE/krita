@@ -475,9 +475,8 @@ QString KisFeatherSelectionFilter::name()
 
 QRect KisFeatherSelectionFilter::changeRect(const QRect& rect)
 {
-    // multiply by 2 due to BORDER_AVOID flag
-    return rect.adjusted(-2 * m_radius, -2 * m_radius,
-                            2 * m_radius, 2 * m_radius);
+    return rect.adjusted(-m_radius, -m_radius,
+                         m_radius, m_radius);
 }
 
 void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
@@ -500,12 +499,12 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
     KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->colorSpace());
     KisConvolutionPainter horizPainter(interm);
     horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true));
-    horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
+    horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_REPEAT);
     horizPainter.end();
 
     KisConvolutionPainter verticalPainter(pixelSelection);
     verticalPainter.setChannelFlags(pixelSelection->colorSpace()->channelFlags(false, true));
-    verticalPainter.applyMatrix(kernelVertical, interm, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_AVOID);
+    verticalPainter.applyMatrix(kernelVertical, interm, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_REPEAT);
     verticalPainter.end();
 }
 

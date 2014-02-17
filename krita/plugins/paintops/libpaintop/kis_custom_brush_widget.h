@@ -43,7 +43,7 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
 public:
     KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        spacingSlider->setRange(0.0,1.0, 2);
+        spacingSlider->setRange(0.0, 1.0, 2);
         spacingSlider->setValue(DEFAULT_SPACING);
     }
 };
@@ -66,7 +66,7 @@ private slots:
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
     void slotUpdateSpacing(qreal spacing);
     void slotUpdateUseColorAsMask(bool useColorAsMask);
-    
+
 signals:
 
     void sigBrushChanged();

@@ -32,7 +32,7 @@ class KoToolBase;
  * See ODF:
  * 9.9 Presentation Events
  * Many objects inside a presentation document support special presentation events. For example, a
- * user can advance the presentation one frame when he clicks on an object with a corresponding
+ * user can advance the presentation one frame when clicking on an object with a corresponding
  * event. Presentation events are contained with a graphic object's event listener table. See section
  * 9.2.21 for details.
  *

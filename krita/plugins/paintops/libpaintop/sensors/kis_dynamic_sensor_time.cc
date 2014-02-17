@@ -23,7 +23,6 @@
 #include "ui_SensorTimeConfiguration.h"
 
 #include "kis_paint_information.h"
-#include "kis_sensor_selector.h"
 
 KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(3 * 1000), m_periodic(true)
 {
@@ -38,7 +37,8 @@ qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
     if (m_time > m_length) {
         if (m_periodic) {
             m_time = (int)fmod((float)m_time, (float)m_length);
-        } else {
+        }
+        else {
             m_time = m_length;
         }
     }

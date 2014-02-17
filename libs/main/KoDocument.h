@@ -235,7 +235,7 @@ public:
     /**
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.
-     * If you asked the user about something and he chose "Cancel",
+     * If you asked the user about something and they chose "Cancel",
      * set the message to the magic string "USER_CANCELED", to skip the error dialog.
      */
     void setErrorMessage(const QString& errMsg);
@@ -667,7 +667,7 @@ protected:
     QString newObjectName();
 
     QString autoSaveFile(const QString & path) const;
-
+    void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
@@ -768,13 +768,13 @@ private slots:
     /// Called by the undo stack when undo or redo is called
     void slotUndoStackIndexChanged(int idx);
 
+protected:
+    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
 private:
-
     bool saveToStream(QIODevice *dev);
 
     QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
 
-    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
     bool loadNativeFormatFromStore(const QString& file);
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 

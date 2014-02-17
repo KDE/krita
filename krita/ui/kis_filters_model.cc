@@ -75,11 +75,15 @@ struct KisFiltersModel::Private {
     QHash<int, const KisFilter*> filterToWatcher;
 };
 
-KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
+KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
+    : d(new Private)
 {
     d->thumb = thumb;
     QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
     foreach(const KisFilterSP filter, filters) {
+        if (!showAll && !filter->supportsAdjustmentLayers()) {
+            continue;
+        }
         Q_ASSERT(filter);
         if (!d->categories.contains(filter->menuCategory().id())) {
             Private::Category cat;

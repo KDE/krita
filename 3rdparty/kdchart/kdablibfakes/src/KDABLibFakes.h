@@ -56,8 +56,8 @@
 #define ISNAN(x) std::isnan(x)
 #define ISINF(x) std::isinf(x)
 #else
-#define ISNAN(x) isnan(x)
-#define ISINF(x) isinf(x)
+#define ISNAN(x) std::isnan(x)
+#define ISINF(x) std::isinf(x)
 #endif
 
 

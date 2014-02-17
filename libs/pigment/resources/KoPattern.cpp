@@ -23,9 +23,19 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
+#include <limits.h>
+#include <stdlib.h>
+
+#include <QFileInfo>
+#include <QDir>
+#include <QCryptographicHash>
+#include <QPoint>
+#include <QSize>
 #include <QImage>
 #include <QMap>
 #include <QFile>
+#include <QBuffer>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,10 +55,42 @@ struct GimpPatternHeader {
 quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
+QByteArray generateMD5(const QImage &pattern)
+{
+#if QT_VERSION >= 0x040700
+    QByteArray ba = QByteArray::fromRawData((const char*)pattern.constBits(), pattern.byteCount());
+#else
+    QByteArray ba = QByteArray::fromRawData((const char*)pattern.bits(), pattern.byteCount());
+#endif
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    return md5.result();
+}
+
+
 KoPattern::KoPattern(const QString& file)
     : KoResource(file)
 {
 }
+
+KoPattern::KoPattern(const QImage &image, const QString &name, const QString &folderName)
+    : KoResource(QString())
+{
+    setImage(image);
+    setName(name);
+
+    QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
+
+    int i = 1;
+    while (fileInfo.exists()) {
+        fileInfo.setFile(folderName + QDir::separator() +
+                         name + QString("%1").arg(i) + defaultFileExtension());
+        i++;
+    }
+
+    setFilename(fileInfo.filePath());
+}
+
 
 KoPattern::~KoPattern()
 {
@@ -75,16 +117,8 @@ bool KoPattern::load()
     } else {
         result = m_image.load(filename());
         setValid(result);
-
-        /**
-         * All our resources code expects the image() of the resource
-         * to be in ARGB32 format, so convert the image when its format
-         * differs
-         */
-        if (result && m_image.format() != QImage::Format_ARGB32) {
-            m_image = m_image.convertToFormat(QImage::Format_ARGB32);
-        }
     }
+
     return result;
 }
 
@@ -207,15 +241,12 @@ bool KoPattern::init(QByteArray& bytes)
     }
     k = bh.header_size;
 
-
     if (bh.bytes == 1) {
         // Grayscale
         qint32 val;
         for (quint32 y = 0; y < bh.height; ++y) {
             QRgb* pixels = reinterpret_cast<QRgb*>( m_image.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
-
-
                 if (k > dataSize) {
                     kWarning(30009) << "failed in gray";
                     return false;
@@ -225,6 +256,9 @@ bool KoPattern::init(QByteArray& bytes)
                 pixels[x] = qRgb(val, val, val);
             }
         }
+        // It was grayscale, so make the pattern as small as possible
+        // by converting it to Indexed8
+        m_image = m_image.convertToFormat(QImage::Format_Indexed8);
     } else if (bh.bytes == 2) {
         // Grayscale + A
         qint32 val;
@@ -300,8 +334,6 @@ qint32 KoPattern::height() const
 void KoPattern::setImage(const QImage& image)
 {
     m_image = image;
-    m_image.detach();
-
     setValid(true);
 }
 
@@ -317,3 +349,20 @@ QString KoPattern::defaultFileExtension() const
 {
     return QString(".pat");
 }
+
+KoPattern* KoPattern::clone() const
+{
+    KoPattern* pattern = new KoPattern(filename());
+    pattern->setImage(image());
+    pattern->setName(name());
+    return pattern;
+}
+
+QByteArray KoPattern::md5() const
+{
+    if (m_md5.isEmpty() && !image().isNull()) {
+        m_md5 = generateMD5(image().convertToFormat(QImage::Format_ARGB32));
+    }
+    return m_md5;
+}
+

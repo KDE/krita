@@ -65,7 +65,10 @@ public:
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
-    QPainterPath paintOpOutline(const QPointF &savedCursorPos, const KisPaintOpSettings *globalSettings, KisPaintOpSettings::OutlineMode mode) const;
+    QPainterPath paintOpOutline(const QPointF &savedCursorPos,
+                                const KoPointerEvent *event,
+                                const KisPaintOpSettings *globalSettings,
+                                KisPaintOpSettings::OutlineMode mode) const;
 
 protected:
 

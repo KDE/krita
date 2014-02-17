@@ -136,72 +136,67 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
     gc.setPen(old);
 }
 
-void KisToolMeasure::mousePressEvent(KoPointerEvent *event)
+void KisToolMeasure::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                          Qt::LeftButton, Qt::AltModifier)) {
+    setMode(KisTool::PAINT_MODE);
 
-        setMode(KisTool::PAINT_MODE);
+    // Erase old temporary lines
+    canvas()->updateCanvas(convertToPt(boundingRect()));
 
-        // Erase old temporary lines
-        canvas()->updateCanvas(convertToPt(boundingRect()));
+    m_startPos = convertToPixelCoord(event);
+    m_endPos = m_startPos;
 
-        m_startPos = convertToPixelCoord(event);
-        m_endPos = m_startPos;
-
-        emit sigDistanceChanged(0.0);
-        emit sigAngleChanged(0.0);
-    }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+    emit sigDistanceChanged(0.0);
+    emit sigAngleChanged(0.0);
 }
 
-void KisToolMeasure::mouseMoveEvent(KoPointerEvent *event)
+void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        // Erase old temporary lines
-        canvas()->updateCanvas(convertToPt(boundingRect()));
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-        QPointF pos = convertToPixelCoord(event);
+    // Erase old temporary lines
+    canvas()->updateCanvas(convertToPt(boundingRect()));
 
-        if (event->modifiers() == Qt::AltModifier) {
-            QPointF trans = pos - m_endPos;
-            m_startPos += trans;
-            m_endPos += trans;
-        } else {
-            m_endPos = pos;
-        }
+    QPointF pos = convertToPixelCoord(event);
 
-        canvas()->updateCanvas(convertToPt(boundingRect()));
-        emit sigDistanceChanged(distance());
-        emit sigAngleChanged(angle());
+    if (event->modifiers() == Qt::AltModifier) {
+        QPointF trans = pos - m_endPos;
+        m_startPos += trans;
+        m_endPos += trans;
+    } else {
+        m_endPos = pos;
     }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
+
+    canvas()->updateCanvas(convertToPt(boundingRect()));
+    emit sigDistanceChanged(distance());
+    emit sigAngleChanged(angle());
 }
 
-void KisToolMeasure::mouseReleaseEvent(KoPointerEvent *event)
+void KisToolMeasure::endPrimaryAction(KoPointerEvent *event)
 {
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
-    }
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    Q_UNUSED(event);
+    setMode(KisTool::HOVER_MODE);
 }
 
 QWidget* KisToolMeasure::createOptionWidget()
 {
     if (!currentImage())
         return 0;
-    m_optWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
-    m_optWidget->setObjectName(toolId() + " option widget");
-    connect(this, SIGNAL(sigDistanceChanged(double)), m_optWidget, SLOT(slotSetDistance(double)));
-    connect(this, SIGNAL(sigAngleChanged(double)), m_optWidget, SLOT(slotSetAngle(double)));
-    m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
-    return m_optWidget;
+    m_optionsWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
+
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
+    m_optionsWidget->setObjectName(toolId() + " option widget");
+    connect(this, SIGNAL(sigDistanceChanged(double)), m_optionsWidget, SLOT(slotSetDistance(double)));
+    connect(this, SIGNAL(sigAngleChanged(double)), m_optionsWidget, SLOT(slotSetAngle(double)));
+    m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
+    return m_optionsWidget;
 }
 
 double KisToolMeasure::angle()

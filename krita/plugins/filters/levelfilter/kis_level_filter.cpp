@@ -49,7 +49,6 @@ KisLevelFilter::KisLevelFilter()
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
@@ -60,12 +59,6 @@ KisLevelFilter::~KisLevelFilter()
 KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     return new KisLevelConfigWidget(parent, dev);
-}
-
-bool KisLevelFilter::workWith(KoColorSpace* cs) const
-{
-    Q_UNUSED(cs);
-    return true;
 }
 
 KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const

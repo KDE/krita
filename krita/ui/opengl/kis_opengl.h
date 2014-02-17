@@ -66,6 +66,8 @@ public:
      */
     static void makeContextCurrent();
 
+    static void initialMakeContextCurrent();
+
     /**
      * Print any error messages waiting to be read from glGetError(). Use
      * the helper macro KIS_OPENGL_PRINT_ERROR() to generate the source
@@ -79,6 +81,10 @@ public:
      */
     static void clearError();
 
+    /**
+     * @brief supportsGLSL13
+     * @return true if we have a modern opengl capable of high-quality filtering
+     */
     static bool supportsGLSL13();
 
 private:

@@ -20,6 +20,8 @@
 
 #include <QWidget>
 #include <QRgb>
+#include <QPointer>
+#include <kis_canvas2.h>
 
 class QColor;
 class KoColor;
@@ -56,15 +58,18 @@ public:
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
     QColor findGeneratingColor(const KoColor& ref) const;
 
-    void mouseMoveEvent(QMouseEvent *);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+
 protected:
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
-    void setHidingDistanceAndTime(int distance, int time);
+    void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
 
 protected slots:
@@ -74,16 +79,16 @@ protected slots:
     virtual void canvasResourceChanged(int key, const QVariant& v);
 
 private:
-    void privateCreatePopup();
+    void lazyCreatePopup();
 
 protected:
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
     bool m_colorUpdateAllowed;
+    bool m_colorUpdateSelf;
 
 private:
-    int m_hideDistance;
     QTimer* m_hideTimer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;

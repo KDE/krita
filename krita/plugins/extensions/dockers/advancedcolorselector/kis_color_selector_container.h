@@ -19,12 +19,13 @@
 #define KIS_COLOR_SELECTOR_CONTAINER_H
 
 #include <QWidget>
+#include <QPointer>
+#include <kis_canvas2.h>
 
 class KisColorSelector;
 class KisMyPaintShadeSelector;
 class KisMinimalShadeSelector;
 class QBoxLayout;
-class KisCanvas2;
 class KAction;
 
 class KisColorSelectorContainer : public QWidget
@@ -63,7 +64,7 @@ private:
     KAction* m_mypaintAction;
     KAction* m_minimalAction;
 
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 #endif // KIS_COLOR_SELECTOR_CONTAINER_H

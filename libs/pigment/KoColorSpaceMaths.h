@@ -273,7 +273,6 @@ public:
      * This function will scale a value of type _T to fit into a _Tdst.
      */
     inline static _Tdst scaleToA(_T a) {
-//         return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
         return _Tdst(dst_compositetype(a) * KoColorSpaceMathsTraits<_Tdst>::unitValue / KoColorSpaceMathsTraits<_T>::unitValue);
     }
 

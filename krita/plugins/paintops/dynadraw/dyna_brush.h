@@ -29,7 +29,8 @@
 
 #include "filter.h"
 
-class KisDynaProperties{
+class KisDynaProperties
+{
 public:
     qreal initWidth;
     qreal mass;
@@ -62,7 +63,7 @@ public:
         m_cursorPos.setY(point.y() / m_canvasHeight);
     }
 
-    void setProperties(KisDynaProperties * properties){
+    void setProperties(KisDynaProperties * properties) {
         m_properties = properties;
     }
     void setCanvasSize(int width, int height) {
@@ -87,7 +88,7 @@ private:
                    int count);
 
     KoColor m_inkColor;
-    
+
     int m_canvasWidth;
     int m_canvasHeight;
 

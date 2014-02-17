@@ -28,18 +28,18 @@
 
 class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
-    
+
 public:
     KisHatchingPaintOpSettings();
     virtual ~KisHatchingPaintOpSettings();
-    
+
     //Dialogs enabled
     bool enabledcurvecrosshatching;
     bool enabledcurveopacity;
     bool enabledcurveseparation;
     bool enabledcurvesize;
     bool enabledcurvethickness;
-    
+
     //Hatching Options
     double angle;
     double separation;
@@ -53,23 +53,23 @@ public:
     bool moirepattern;
     int crosshatchingstyle;
     int separationintervals;
-    
+
     //Hatching Preferences
     //bool trigonometryalgebra;
     //bool scratchoff;
     bool antialias;
     bool subpixelprecision;
     bool opaquebackground;
-    
+
     //Crosshatching, Separation and Thickness curves
     double crosshatchingsensorvalue;
     double separationsensorvalue;
     double thicknesssensorvalue;
-    
+
     void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;
     virtual void fromXML(const QDomElement&);
-        
+
 };
 
 #endif

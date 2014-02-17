@@ -65,7 +65,7 @@ class QTouchEvent;
  * - Warp mode allows the user to warp the selection of the canvas
  * by grabbing and moving control points placed on the image.
  *   The user can either work with default control points, like a grid
- *   whose density can be modified, or place the control points himself.
+ *   whose density can be modified, or place the control points manually.
  * The modifications made on the selected pixels are applied only when
  * the user clicks the Apply button : the semi-transparent image displayed
  * until the user click that button is only a preview.
@@ -393,14 +393,33 @@ private:
 
     QImage m_currImg; // origImg transformed using m_transform
     KisPaintDeviceSP m_selectedPortionCache;
-    KisStrokeId m_strokeId;
+
+    struct StrokeData {
+        StrokeData() {}
+        StrokeData(KisStrokeId strokeId) : m_strokeId(strokeId) {}
+
+        void clear() {
+            m_strokeId.clear();
+            m_clearedNodes.clear();
+        }
+
+        const KisStrokeId strokeId() const { return m_strokeId; }
+        void addClearedNode(KisNodeSP node) { m_clearedNodes.append(node); }
+        const QVector<KisNodeWSP>& clearedNodes() const { return m_clearedNodes; }
+
+    private:
+        KisStrokeId m_strokeId;
+        QVector<KisNodeWSP> m_clearedNodes;
+    };
+    StrokeData m_strokeData;
+
     bool m_workRecursively;
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisToolTransformConfigWidget *m_optWidget;
+    KisToolTransformConfigWidget *m_optionsWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)

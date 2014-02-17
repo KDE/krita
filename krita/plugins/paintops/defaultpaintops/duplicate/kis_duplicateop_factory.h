@@ -53,8 +53,8 @@ public:
     virtual QString pixmap() {
         return "krita-duplicate.png";
     }
-    
-    virtual QString category() const{
+
+    virtual QString category() const {
         return KisPaintOpFactory::categoryStable();
     }
 

@@ -62,7 +62,19 @@ KoCompositeOp::ParameterInfo& KoCompositeOp::ParameterInfo::operator=(const Para
 
 void KoCompositeOp::ParameterInfo::copy(const ParameterInfo &rhs)
 {
-    memcpy(this, &rhs, sizeof(ParameterInfo));
+    dstRowStart = rhs.dstRowStart;
+    dstRowStride = rhs.dstRowStride;
+    srcRowStart = rhs.srcRowStart;
+    srcRowStride = rhs.srcRowStride;
+    maskRowStart = rhs.maskRowStart;
+    maskRowStride = rhs.maskRowStride;
+    rows = rhs.rows;
+    cols = rhs.cols;
+    opacity = rhs.opacity;
+    flow = rhs.flow;
+    _lastOpacityData = rhs._lastOpacityData;
+    channelFlags = rhs.channelFlags;
+
     lastOpacity = rhs.lastOpacity == &rhs.opacity ?
         &opacity : &_lastOpacityData;
 }

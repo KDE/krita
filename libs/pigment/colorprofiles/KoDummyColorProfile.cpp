@@ -21,7 +21,7 @@
 
 KoDummyColorProfile::KoDummyColorProfile()
 {
-    setName("");
+    setName("default");
 }
 
 KoDummyColorProfile::~KoDummyColorProfile()

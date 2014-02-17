@@ -38,11 +38,17 @@ public:
     explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();
 
+    void activate(int shortcut);
+    void deactivate(int shortcut);
+
     virtual int priority() const;
+    virtual bool canIgnoreModifiers() const;
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
     void inputEvent(QEvent* event);
+
+    void processUnhandledEvent(QEvent* event);
 
     bool supportsHiResInputEvents() const;
 

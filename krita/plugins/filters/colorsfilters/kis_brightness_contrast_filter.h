@@ -86,7 +86,6 @@ public:
     KisBrightnessContrastFilter();
 
 public:
-    using KisFilter::process;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
@@ -96,8 +95,6 @@ public:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-
-    virtual bool workWith(const KoColorSpace* cs) const;
 };
 
 

@@ -53,8 +53,13 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+
 #include <kis_paintop_preset.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_config.h>
 #include <kis_factory2.h>
 #include <kis_doc2.h>
@@ -135,6 +140,7 @@ public:
         sketchView = new SketchDeclarativeView();
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
+#ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
@@ -142,6 +148,10 @@ public:
         sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/kritagemini/kritagemini.qml";
+#else
+        sketchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+        QString mainqml = KGlobal::dirs()->findResource("data", "kritagemini/kritagemini.qml");
+#endif
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
@@ -171,11 +181,6 @@ public:
         KoGlobal::initialize();
 
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
-        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
-        }
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -211,6 +216,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     setWindowTitle(i18n("Krita Gemini"));
 
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
+
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
     // default if it's no cursor (that's most likely due to a broken config)
@@ -220,7 +229,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
@@ -580,7 +589,7 @@ MainWindow::~MainWindow()
 #ifdef Q_OS_WIN
 bool MainWindow::winEvent( MSG * message, long * result )
 {
-    if (message->message == WM_SETTINGCHANGE)
+    if (message && message->message == WM_SETTINGCHANGE && message->lParam)
     {
         if (wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
             d->notifySlateModeChange();

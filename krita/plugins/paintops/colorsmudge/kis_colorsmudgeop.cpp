@@ -33,6 +33,7 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 
 
@@ -44,8 +45,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_smudgePainter(new KisPainter(m_tempDev)),
     m_colorRatePainter(new KisPainter(m_tempDev)),
     m_smudgeRateOption("SmudgeRate"),
-    m_colorRateOption("ColorRate"),
-    m_colorPicker(painter->device(), painter->paintColor())
+    m_colorRateOption("ColorRate")
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -60,14 +60,14 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_scatterOption.readOptionSetting(settings);
     m_gradientOption.readOptionSetting(settings);
 
-    m_sizeOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
-    m_spacingOption.sensor()->reset();
-    m_smudgeRateOption.sensor()->reset();
-    m_colorRateOption.sensor()->reset();
-    m_rotationOption.sensor()->reset();
-    m_scatterOption.sensor()->reset();
-    m_gradientOption.sensor()->reset();
+    m_sizeOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+    m_spacingOption.resetAllSensors();
+    m_smudgeRateOption.resetAllSensors();
+    m_colorRateOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+    m_scatterOption.resetAllSensors();
+    m_gradientOption.resetAllSensors();
 
     m_gradient = painter->gradient();
 
@@ -76,6 +76,16 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRatePainter->setCompositeOp(painter->compositeOp()->id());
 
     m_rotationOption.applyFanCornersInfo(this);
+
+    /**
+     * Disable handling of the subpixel precision. In the smudge op we
+     * should read from the aligned areas of the image, so having
+     * additional internal offsets, created by the subpixel precision,
+     * will worsen the quality (at least because
+     * QRectF(m_dstDabRect).center() will not point to the real center
+     * of the brush anymore).
+     */
+    m_dabCache->disableSubpixelPrecision();
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
@@ -100,7 +110,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
                                      &m_dstDabRect);
 
     // sanity check
-    Q_ASSERT(m_dstDabRect.size() == m_maskDab->bounds().size());
+    KIS_ASSERT_RECOVER_NOOP(m_dstDabRect.size() == m_maskDab->bounds().size());
 }
 
 inline void KisColorSmudgeOp::getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y)
@@ -117,23 +127,24 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     KisBrushSP brush = m_brush;
 
     // Simple error catching
-    if(!painter()->device() || !brush || !brush->canPaintFor(info))
+    if (!painter()->device() || !brush || !brush->canPaintFor(info))
         return 1.0;
 
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
 
-    // don't paint anything if the brush is too small
-    if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
-        return 1.0;
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
-    QPointF hotSpot      = brush->hotSpot(scale, scale, rotation, info);
+    QPointF scatteredPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
+
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
 
     /**
      * Update the brush mask.
@@ -148,8 +159,14 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
     QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - scatteredPos).toPoint());
 
-    // Save the hot spot point for the next iteration
-    m_lastPaintPos = scatteredPos;
+    /**
+     * Save the center of the current dab to know where to read the
+     * data during the next pass. We do not save scatteredPos here,
+     * because it may slightly differ from the real center of the
+     * brush (due to some rounding effects), which will result in
+     * really weird quality.
+     */
+    m_lastPaintPos = QRectF(m_dstDabRect).center();
 
     KisSpacingInformation spacingInfo =
         effectiveSpacing(m_dstDabRect.width(), m_dstDabRect.height(),
@@ -166,7 +183,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     QString              oldModeId = painter()->compositeOp()->id();
     qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
 
-    if(m_image && m_overlayModeOption.isChecked()) {
+    if (m_image && m_overlayModeOption.isChecked()) {
         m_image->blockUpdates();
         m_backgroundPainter->bitBlt(QPoint(), m_image->projection(), srcDabRect);
         m_image->unblockUpdates();
@@ -177,7 +194,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_tempDev->clear(QRect(QPoint(), m_dstDabRect.size()));
     }
 
-    if(m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
+    if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
         // cut out the area from the canvas under the brush
         // and blit it to the temporary painting device
         m_smudgePainter->bitBlt(QPoint(), painter()->device(), srcDabRect);
@@ -188,16 +205,19 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // of the dab and fill  the temporary paint device with that color
 
         KoColor color = painter()->paintColor();
-        m_colorPicker.pickColor(pt.x(), pt.y(), color.data());
+
+        KisCrossDeviceColorPickerInt colorPicker(painter()->device(), color);
+        colorPicker.pickColor(pt.x(), pt.y(), color.data());
+
         m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
     }
 
     // if the user selected the color smudge option
     // we will mix some color into the temporary painting device (m_tempDev)
-    if(m_colorRateOption.isChecked()) {
+    if (m_colorRateOption.isChecked()) {
         // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
-        qreal maxColorRate = qMax<qreal>(1.0-m_smudgeRateOption.getRate(), 0.2);
+        qreal maxColorRate = qMax<qreal>(1.0 - m_smudgeRateOption.getRate(), 0.2);
         m_colorRateOption.apply(*m_colorRatePainter, info, 0.0, maxColorRate, fpOpacity);
 
         // paint a rectangle with the current color (foreground color)
@@ -214,7 +234,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // then first blit the region under the brush from the image projection
     // to the painting device to prevent a rapid build up of alpha value
     // if the color to be smudged is semi transparent
-    if(m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
+    if (m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
         painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->setOpacity(OPACITY_OPAQUE_U8);
         m_image->blockUpdates();

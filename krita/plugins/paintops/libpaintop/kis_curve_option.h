@@ -36,16 +36,24 @@ class KisDynamicSensor;
 
 /**
  * KisCurveOption is the base class for paintop options that are
- * defined through a curve.
+ * defined through one or more curves.
+ *
+ * Note: it is NOT a KisPaintOpOption, even though the API is pretty similar!
+ *
  */
 class PAINTOP_EXPORT KisCurveOption
 {
 public:
-    KisCurveOption(const QString & label, const QString& name, const QString& category,
-                   bool checked, qreal value=1.0, qreal min=0.0, qreal max=1.0, bool useCurve=true, bool separateCurveValue=false);
-    
+    KisCurveOption(const QString& label,
+                   const QString& name,
+                   const QString& category,
+                   bool checked,
+                   qreal value = 1.0,
+                   qreal min = 0.0,
+                   qreal max = 1.0);
+
     virtual ~KisCurveOption();
-    
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -55,63 +63,66 @@ public:
     qreal minValue() const;
     qreal maxValue() const;
     qreal value() const;
-    KisCubicCurve curve() const;
-    
-    void setCurve(const KisCubicCurve& curve);
 
-    KisDynamicSensor* sensor() const;
-    void setSensor(KisDynamicSensor* sensor);
+    void resetAllSensors();
+    KisDynamicSensor *sensor(const QString &sensorId, bool active) const;
+    void replaceSensor(KisDynamicSensor *sensor);
+    QList<KisDynamicSensor*> sensors();
+    QList<KisDynamicSensor*> activeSensors() const;
 
     bool isCheckable();
     bool isChecked() const;
     bool isCurveUsed() const;
+    bool isSameCurveUsed() const;
+
+    void setSeparateCurveValue(bool separateCurveValue);
+
     void setChecked(bool checked);
     void setCurveUsed(bool useCurve);
+    void setCurve(const QString &sensorId, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
-    
-    const KisCurveLabel& minimumLabel() const;
-    const KisCurveLabel& maximumLabel() const;
-    
-    double computeValue(const KisPaintInformation& info) const {
-        if(m_useCurve) {
-            if(m_separateCurveValue)
-                return m_sensor->parameter(info);
-            else
-                return m_minValue + (m_value - m_minValue) * m_sensor->parameter(info);
-        }
-        
-        if(m_separateCurveValue)
-            return 1.0;
-        
-        return m_value;
-    }
-    
+
+    const QString& minimumLabel() const;
+    const QString& maximumLabel() const;
+
+    /**
+     * Uses the curves set on the sensors to compute a single
+     * double value that can control the parameters of a brush.
+     */
+    double computeValue(const KisPaintInformation& info) const;
+
 protected:
-    void setMinimumLabel(const KisCurveLabel& _label);
-    void setMaximumLabel(const KisCurveLabel& _label);
+
+    void setMinimumLabel(const QString& _label);
+    void setMaximumLabel(const QString& _label);
     void setValueRange(qreal min, qreal max);
-    
+
     /**
      * Read the option using the prefix in argument
      */
     void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
 
-protected:
+    QString m_name;
     QString m_label;
     QString m_category;
-    KisDynamicSensor* m_sensor;
-    QString m_name;
+
     bool m_checkable;
     bool m_checked;
-    
+    bool m_useCurve;
+    bool m_useSameCurve;
+    bool m_separateCurveValue;
+
+    QMap<QString, KisDynamicSensor*> m_sensorMap;
+    QMap<QString, KisCubicCurve> m_curveCache;
+
 private:
-    bool          m_useCurve;
-    bool          m_separateCurveValue;
-    qreal         m_value;
-    qreal         m_minValue;
-    qreal         m_maxValue;
-    KisCurveLabel m_minimumLabel;
-    KisCurveLabel m_maximumLabel;
+
+    qreal m_value;
+    qreal m_minValue;
+    qreal m_maxValue;
+    QString m_minimumLabel;
+    QString m_maximumLabel;
+
 };
 
 #endif

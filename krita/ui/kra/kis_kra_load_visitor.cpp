@@ -266,7 +266,6 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
             m_store->close();
             return false;
         }
-
         m_store->close();
     } else {
         kError() << "No image data: that's an error! " << device << ", " << location;
@@ -282,6 +281,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         }
         m_store->close();
     }
+
     return true;
 }
 
@@ -342,9 +342,9 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
 
     KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
 
-    if (!backend->supportLoading()) {
+    if (!backend || !backend->supportLoading()) {
         dbgFile << "Backend " << backend->id() << " does not support loading.";
-        return false;
+        return true;
     }
 
     QString location = getLocation(node, QString(".") + backend->id() +  DOT_METADATA);

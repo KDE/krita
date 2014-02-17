@@ -62,6 +62,12 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
+        return KoFilter::NoDocumentCreated;
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
+
     KDialog dialog;
     dialog.setWindowTitle(i18n("OpenEXR Export Options"));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
@@ -83,26 +89,21 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
             return KoFilter::UserCancelled;
         }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
 
     cfg.setProperty("flatten", widget.flatten->isChecked());
     KisConfig().setExportConfiguration("EXR", cfg);
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-
-    if (!output)
-        return KoFilter::NoDocumentCreated;
-
-
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
-
-    exrConverter kpc(output);
+    exrConverter kpc(input);
 
     if (widget.flatten->isChecked()) {
         image->refreshGraph();

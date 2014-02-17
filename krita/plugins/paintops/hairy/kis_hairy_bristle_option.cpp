@@ -24,9 +24,9 @@ class KisBristleOptionsWidget: public QWidget, public Ui::WdgBristleOptions
 {
 public:
     KisBristleOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
-        
+
         rndBox->setRange(-10.0, 10.0, 2);
         rndBox->setValue(2.0);
 
@@ -43,11 +43,11 @@ public:
 };
 
 KisHairyBristleOption::KisHairyBristleOption()
-        : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisBristleOptionsWidget();
-    
+
     // signals
     connect(m_options->mousePressureCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->thresholdCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
@@ -55,9 +55,9 @@ KisHairyBristleOption::KisHairyBristleOption()
     connect(m_options->scaleBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->shearBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->densityBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
-    connect(m_options->connectedCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));    
-    connect(m_options->antialiasCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));    
-    connect(m_options->compositingCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));    
+    connect(m_options->connectedCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->antialiasCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->compositingCBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 
@@ -84,12 +84,12 @@ void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* 
 
 void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(HAIRY_BRISTLE_THRESHOLD,m_options->thresholdCBox->isChecked());
-    config->setProperty(HAIRY_BRISTLE_USE_MOUSEPRESSURE,m_options->mousePressureCBox->isChecked());
-    config->setProperty(HAIRY_BRISTLE_SCALE,m_options->scaleBox->value());
-    config->setProperty(HAIRY_BRISTLE_SHEAR,m_options->shearBox->value());
-    config->setProperty(HAIRY_BRISTLE_RANDOM,m_options->rndBox->value());
-    config->setProperty(HAIRY_BRISTLE_DENSITY,m_options->densityBox->value());
+    config->setProperty(HAIRY_BRISTLE_THRESHOLD, m_options->thresholdCBox->isChecked());
+    config->setProperty(HAIRY_BRISTLE_USE_MOUSEPRESSURE, m_options->mousePressureCBox->isChecked());
+    config->setProperty(HAIRY_BRISTLE_SCALE, m_options->scaleBox->value());
+    config->setProperty(HAIRY_BRISTLE_SHEAR, m_options->shearBox->value());
+    config->setProperty(HAIRY_BRISTLE_RANDOM, m_options->rndBox->value());
+    config->setProperty(HAIRY_BRISTLE_DENSITY, m_options->densityBox->value());
     config->setProperty(HAIRY_BRISTLE_CONNECTED, m_options->connectedCBox->isChecked());
     config->setProperty(HAIRY_BRISTLE_ANTI_ALIASING, m_options->antialiasCBox->isChecked());
     config->setProperty(HAIRY_BRISTLE_USE_COMPOSITING, m_options->compositingCBox->isChecked());

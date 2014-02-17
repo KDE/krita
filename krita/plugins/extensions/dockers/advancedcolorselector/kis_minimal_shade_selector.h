@@ -18,6 +18,9 @@
 #ifndef KIS_MINIMAL_SHADE_SELECTOR_H
 #define KIS_MINIMAL_SHADE_SELECTOR_H
 
+#include <QPointer>
+#include <kis_canvas2.h>
+
 #include "kis_color_selector_base.h"
 
 class KisShadeSelectorLine;
@@ -48,7 +51,7 @@ protected:
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;
     QColor m_lastColor;
-    KisCanvas2* m_canvas;
+    QPointer<KisCanvas2> m_canvas;
 };
 
 #endif

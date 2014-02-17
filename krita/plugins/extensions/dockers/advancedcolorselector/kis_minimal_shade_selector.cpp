@@ -32,8 +32,9 @@
 #include "kis_shade_selector_line.h"
 
 
-KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
-    KisColorSelectorBase(parent), m_canvas(0)
+KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent)
+    : KisColorSelectorBase(parent)
+    , m_canvas(0)
 {
     setAcceptDrops(true);
 

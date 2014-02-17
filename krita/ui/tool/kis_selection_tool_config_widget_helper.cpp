@@ -23,7 +23,7 @@
 
 
 KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)
-    : m_optionWidget(0),
+    : m_optionsWidget(0),
       m_selectionAction(SELECTION_REPLACE),
       m_selectionMode(PIXEL_SELECTION),
       m_windowTitle(windowTitle)
@@ -32,22 +32,29 @@ KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QSt
 
 void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, const QString &toolId)
 {
-    m_optionWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_optionWidget);
-    m_optionWidget->setObjectName(toolId + "option widget");
-    m_optionWidget->setWindowTitle(m_windowTitle);
-    m_optionWidget->setAction(m_selectionAction);
+    m_optionsWidget = new KisSelectionOptions(canvas);
+    Q_CHECK_PTR(m_optionsWidget);
 
-    connect(m_optionWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
-    connect(m_optionWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
+    m_optionsWidget->setObjectName(toolId + "option widget");
+    m_optionsWidget->setWindowTitle(m_windowTitle);
+    m_optionsWidget->setAction(m_selectionAction);
 
-    m_optionWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    m_optionWidget->adjustSize();
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
+    connect(m_optionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optionsWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
+
+    m_optionsWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_optionsWidget->adjustSize();
 }
 
 KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const
 {
-    return m_optionWidget;
+    return m_optionsWidget;
 }
 
 SelectionMode KisSelectionToolConfigWidgetHelper::selectionMode() const
@@ -64,7 +71,7 @@ void KisSelectionToolConfigWidgetHelper::slotSetAction(int action)
 {
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT && m_selectionAction != action) {
         m_selectionAction = (SelectionAction)action;
-        m_optionWidget->setAction(action);
+        m_optionsWidget->setAction(action);
         emit selectionActionChanged(action);
     }
 }

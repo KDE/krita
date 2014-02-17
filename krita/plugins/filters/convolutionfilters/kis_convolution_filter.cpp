@@ -36,7 +36,6 @@
 KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
         : KisFilter(id, category, entry)
 {
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 

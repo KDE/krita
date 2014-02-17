@@ -37,7 +37,6 @@ KisWaveletNoiseReduction::KisWaveletNoiseReduction()
         : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
 {
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setSupportsThreading(false);
 }
 

@@ -262,8 +262,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         cfg.setUseOpenGL(false);
     }
     grp.writeEntry("CreatingCanvas", true);
+    grp.sync();
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
+    grp.sync();
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);

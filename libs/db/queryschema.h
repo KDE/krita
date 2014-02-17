@@ -472,10 +472,10 @@ public:
      For example, for "SELECT t2.id FROM table1 t1, table2 t2" query statement,
      columnBoundToTable(0) returns 1, what means that table at position 1
      (within FROM section) is bound to column at position 0, so we can
-     now call tableAlias(1) to see if we have used alias for this column (t2.d)
-     or just a table name (table2.d).
+     now call tableAlias(1) to see if we have used alias for this column (t2.id)
+     or just a table name (table2.id).
 
-     These checkings are performed e.g. by Connection::selectStatement()
+     These checks are performed e.g. by Connection::selectStatement()
      to construct a statement string maximally identical to originally
      defined query statement.
 

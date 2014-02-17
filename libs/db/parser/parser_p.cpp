@@ -425,7 +425,7 @@ QuerySchema* buildSelectQuery(
                 t_e = e->toVariable();
             }
             assert(t_e);
-            QString tname = t_e->name.toLatin1();
+            QString tname = t_e->name;
             TableSchema *s = parser->db()->tableSchema(tname);
             if (!s) {
                 setError(//i18n("Field List Error"),

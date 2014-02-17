@@ -751,7 +751,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
     d->visibility.setBit(position, visible);
 
     //bind to table
-    if (bindToTable < -1 && bindToTable > (int)d->tables.count()) {
+    if (bindToTable < -1 || bindToTable > int(d->tables.count())) {
         KexiDBWarn << "QuerySchema::insertField(): bindToTable (" << bindToTable
         << ") out of range";
         bindToTable = -1;

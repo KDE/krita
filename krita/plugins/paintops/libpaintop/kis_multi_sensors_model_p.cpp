@@ -52,6 +52,7 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
         QString selectedSensorId = KisDynamicSensor::sensorsIds()[index.row()].id();
         KisDynamicSensor *sensor = m_curveOption->sensor(selectedSensorId, false);
         if (sensor) {
+            //qDebug() << sensor->id() << sensor->isActive();
             return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
         }
         else {

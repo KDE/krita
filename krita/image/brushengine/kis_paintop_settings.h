@@ -170,7 +170,7 @@ public:
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
-    virtual bool isValid();
+    virtual bool isValid() const;
 
     /// Check if the settings are loadable, that might the case if we can fallback to something
     /// Overwrite if the settings can do some kind of fallback

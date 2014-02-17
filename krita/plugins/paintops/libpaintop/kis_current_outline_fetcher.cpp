@@ -62,10 +62,10 @@ void KisCurrentOutlineFetcher::setDirty()
 }
 
 QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info,
-        const KisPaintOpSettings *settings,
-        const QPainterPath &originalOutline,
-        qreal additionalScale,
-        qreal additionalRotation) const
+                                                    const KisPaintOpSettings *settings,
+                                                    const QPainterPath &originalOutline,
+                                                    qreal additionalScale,
+                                                    qreal additionalRotation) const
 {
     if (d->isDirty) {
         if (d->sizeOption) {

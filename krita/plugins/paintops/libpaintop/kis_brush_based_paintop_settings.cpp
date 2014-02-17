@@ -66,7 +66,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformatio
     return outlineFetcher()->fetchOutline(info, this, brush->outline(), brush->scale(), brush->angle());
 }
 
-bool KisBrushBasedPaintOpSettings::isValid()
+bool KisBrushBasedPaintOpSettings::isValid() const
 {
     QString filename = getString("requiredBrushFile", "");
     if (!filename.isEmpty()) {

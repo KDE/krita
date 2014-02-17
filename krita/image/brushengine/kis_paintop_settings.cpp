@@ -128,7 +128,7 @@ KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
     return d->settingsWidget.data();
 }
 
-bool KisPaintOpSettings::isValid()
+bool KisPaintOpSettings::isValid() const
 {
     return true;
 }
@@ -144,11 +144,9 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
 
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    Q_UNUSED(info);
-
     QPainterPath path;
     if (mode == CursorIsOutline){
-        path = ellipseOutline(10,10,1.0,0).translated(info.pos());
+        path = ellipseOutline(10, 10, 1.0, 0).translated(info.pos());
     }
 
     return path;

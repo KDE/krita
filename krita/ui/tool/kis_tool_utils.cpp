@@ -22,10 +22,12 @@
 #include <kis_layer.h>
 
 namespace KisToolUtils {
+
     KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
     {
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
+        pickedColor.setOpacity(OPACITY_OPAQUE_U8);
         return pickedColor;
     }
 

@@ -27,10 +27,13 @@ using namespace std;
 KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
 {
     root=xmlDocument.documentElement();
+    this->device=0;
 }
 
 KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((QFile*)device)->fileName().section('.',0,0))
 {
+    this->device=device;
+
     if (!device->open(QIODevice::ReadOnly)) {
         exit(1);
     }
@@ -150,17 +153,23 @@ QString KoXmlGenerator::toString()
 QString KoXmlGenerator::toFile()
 {
     QString xmlName=getName().append(".xml");
-    QFile file(xmlName);
 
-    if (!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Truncate)) {
+    if (device!=0) {
+        xmlName=((QFile*)device)->fileName();
+    }
+    else {
+        device=new QFile(xmlName);
+    }
+
+    if (!device->open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Truncate)) {
         return "";
     }
     else {
-        QTextStream flux(&file);
+        QTextStream flux(device);
 
         flux.setCodec("UTF-8");
         flux<<toString();
-        file.close();
+        device->close();
         return xmlName;
     }
 }

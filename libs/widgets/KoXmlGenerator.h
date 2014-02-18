@@ -23,7 +23,7 @@
 #include <QtXml/QDomNode>
 #include <QtXml/QDomNodeList>
 
-class QFile;
+class QIODevice;
 
 class KoXmlGenerator
 {
@@ -34,6 +34,9 @@ protected:
 
     ///@description The element considered as root of the XML tree of the document
     QDomElement root;
+
+    ///@description The device if initialized using second constructor
+    QIODevice *device;
 
 public:
     /**

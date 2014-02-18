@@ -200,6 +200,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
     QPoint pos = convertToPixelCoord(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
+    endStroke();
 }
 
 void KisToolMove::drag(const QPoint& newPos)

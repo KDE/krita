@@ -63,14 +63,13 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     setWindowTitle(i18n("Select Favorite Presets"));
     setButtons(KDialog::Close);
 
-
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
-    m_allPresetsView->showTaggingBar(false,false);
+    m_allPresetsView->showTaggingBar(false, false);
 
     m_palettePresetsView = new KisPresetChooser(this);
     m_palettePresetsView->showButtons(false);
-    m_palettePresetsView->showTaggingBar(false,false);
+    m_palettePresetsView->showTaggingBar(false, false);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
@@ -95,7 +94,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     /*RIGHT COMPONENTS*/
     m_removeButton = new QPushButton(i18n("Remove Preset"));
     m_removeButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
-    m_removeButton->setEnabled(false);//set the button to center
 
     /*RIGHT LAYOUT*/
     QVBoxLayout *rightLayout = new QVBoxLayout();
@@ -187,7 +185,7 @@ void KisPaletteManager::slotUpdateAddButton()
 
 void KisPaletteManager::slotEnableRemoveButton()
 {
-    KoResource * resource = m_allPresetsView->currentResource();
+    KoResource *resource = m_allPresetsView->currentResource();
     m_removeButton->setEnabled(resource != 0);
 }
 
@@ -214,6 +212,7 @@ void KisPaletteManager::updatePaletteView()
         out.append(QString("\"%1\"").arg(fav));
     }
     m_palettePresetsView->filterPaletteFavorites(out);
+    slotEnableRemoveButton();
 }
 
 void KisPaletteManager::slotThumbnailMode()

@@ -50,7 +50,6 @@
 class KisAnnotation : public KisShared
 {
 
-
 public:
 
     /**
@@ -63,9 +62,9 @@ public:
      * @param data a binary blob containing the annotation data
      */
     KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
-            : m_type(type),
-            m_description(description),
-            m_annotation(data) {}
+        : m_type(type),
+          m_description(description),
+          m_annotation(data) {}
 
     /**
      * gets a non-localized strin identifying the type of the

@@ -141,7 +141,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
         if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
         if (compop == "svg:saturation") layer->setCompositeOp(COMPOSITE_SATURATION);
-
+        if (compop == "svg:exclusion") layer->setCompositeOp(COMPOSITE_EXCLUSION);
     }
     else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);

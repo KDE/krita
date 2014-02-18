@@ -113,7 +113,7 @@ public slots:
     void slotChangeFGColorSelector(KoColor c);
 
 private:
-    KisPaletteManager *m_favoriteBrushManager;
+    KisPaletteManager* m_favoriteBrushManager;
     KisPopupPalette* m_popupPalette;
     KisPaintopBox* m_paintopBox;
 

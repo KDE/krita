@@ -83,6 +83,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+    else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
 }

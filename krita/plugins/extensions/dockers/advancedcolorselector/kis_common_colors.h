@@ -42,7 +42,6 @@ public slots:
 private:
     QMutex m_mutex;
     QTimer m_recalculationTimer;
-    QTimer m_delayUpdateTimer;
     QPushButton* m_reloadButton;
     QList<KoColor> m_calculatedColors;
     KisImageWSP m_image;

@@ -55,13 +55,9 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     m_recalculationTimer.setInterval(2000);
     m_recalculationTimer.setSingleShot(true);
 
-    m_delayUpdateTimer.setInterval(1);
-    m_delayUpdateTimer.setSingleShot(true);
-
     connect(&m_recalculationTimer, SIGNAL(timeout()),
             this,                  SLOT(recalculate()));
-    connect(&m_delayUpdateTimer,   SIGNAL(timeout()),
-            this,                  SLOT(updateColors()));
+
 }
 
 void KisCommonColors::setCanvas(KisCanvas2 *canvas)

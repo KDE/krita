@@ -1755,6 +1755,7 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
+        saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();

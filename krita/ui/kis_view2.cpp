@@ -1449,38 +1449,45 @@ void KisView2::showJustTheCanvas(bool toggled)
 
 #endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
 
-
-    KToggleAction *action;
+    KoMainWindow* main = mainWindow();
+    if(!main) {
+        main = window()->findChildren<KoMainWindow*>().value(0);
+    }
+    if(!main) {
+        dbgUI << "Unable to switch to canvas-only mode, main window not found";
+        return;
+    }
 
     if (cfg.hideStatusbarFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
+        if(main->statusBar() && main->statusBar()->isVisible() == toggled) {
+            main->statusBar()->setVisible(!toggled);
+        }
+    }
+
+    if (cfg.hideDockersFullscreen()) {
+        KToggleAction* action = qobject_cast<KToggleAction*>(main->actionCollection()->action("view_toggledockers"));
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }
     }
 
-    if (cfg.hideDockersFullscreen() && mainWindow()) {
-        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-        if (action && action->isChecked() == toggled) {
-            action->setChecked(!toggled);
+    if (cfg.hideTitlebarFullscreen()) {
+        if(toggled) {
+            window()->setWindowState( window()->windowState() | Qt::WindowFullScreen);
+        } else {
+            window()->setWindowState( window()->windowState() & ~Qt::WindowFullScreen);
         }
     }
 
-    if (cfg.hideTitlebarFullscreen() && mainWindow()) {
-        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
-        if (action && action->isChecked() != toggled) {
-            action->setChecked(toggled);
+    if (cfg.hideMenuFullscreen()) {
+        if (main->menuBar()->isVisible() == toggled) {
+            main->menuBar()->setVisible(!toggled);
         }
     }
 
-    if (cfg.hideMenuFullscreen() && mainWindow()) {
-        if (mainWindow()->menuBar()->isVisible() == toggled) {
-            mainWindow()->menuBar()->setVisible(!toggled);
-        }
-    }
-
-    if (cfg.hideToolbarFullscreen() && mainWindow()) {
-        foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
+    if (cfg.hideToolbarFullscreen()) {
+        QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
+        foreach(QToolBar* toolbar, toolBars) {
             if (toolbar->isVisible() == toggled) {
                 toolbar->setVisible(!toggled);
             }

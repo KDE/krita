@@ -20,7 +20,7 @@
 
 #include "KoXmlGenerator.h"
 
-class KoXmlMeta: public KoXmlGenerator
+class KoXmlResourceBundleMeta: public KoXmlGenerator
 {
 private:
     /**
@@ -36,14 +36,14 @@ public:
      * Create a virtual XML file.
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlMeta(QString xmlName="meta");
+    KoXmlResourceBundleMeta(QString xmlName="meta");
     
     /**
      * Constructor
      * Create a virtual XML file, extracting data from an existing file.
      * @param file the virtual file used as data for Xml file.
      */
-    KoXmlMeta(QIODevice *device);
+    KoXmlResourceBundleMeta(QIODevice *device);
 
     /**
      * Constructor
@@ -52,7 +52,7 @@ public:
      * @param license the license of the package
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlMeta(QString name,QString license,QString fileName="meta");
+    KoXmlResourceBundleMeta(QString name,QString license,QString fileName="meta");
 
     /**
      * Constructor
@@ -66,11 +66,11 @@ public:
      * @param modified the last modification date of the package
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlMeta(QString *resourceTagList,QString name ,QString license,QString description="",
+    KoXmlResourceBundleMeta(QString *resourceTagList,QString name ,QString license,QString description="",
         QString author="",QString created="",QString modified="",QString xmlName="meta");
 
     ///Destructor
-	~KoXmlMeta();
+	~KoXmlResourceBundleMeta();
 
     /**
      * @param tagName the name of the tag

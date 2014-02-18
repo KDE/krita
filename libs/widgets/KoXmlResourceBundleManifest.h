@@ -20,7 +20,7 @@
 
 #include "KoXmlGenerator.h"
 
-class KoXmlManifest: public KoXmlGenerator
+class KoXmlResourceBundleManifest: public KoXmlGenerator
 {
 private:
     /**
@@ -37,17 +37,17 @@ public:
      * Create a virtual XML file.
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlManifest(QString xmlName="manifest");
+    KoXmlResourceBundleManifest(QString xmlName="manifest");
     
     /**
      * Constructor
      * Create a virtual XML file, extracting data from an existing file.
      * @param file the virtual file used as data for Xml file.
      */
-    KoXmlManifest(QIODevice *device);
+    KoXmlResourceBundleManifest(QIODevice *device);
     
     ///Destructor
-    ~KoXmlManifest();
+    ~KoXmlResourceBundleManifest();
 
     /**
      * @param tagName the name of the tag

@@ -29,21 +29,18 @@ KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
     root=xmlDocument.documentElement();
 }
 
-KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag)
+KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((QFile*)device)->fileName().section('.',0,0))
 {
-    QFile *file=(QFile*)device;
-    xmlDocument=QDomDocument(file->fileName().section('.',0,0));
-
-    if (!file->open(QIODevice::ReadOnly)) {
+    if (!device->open(QIODevice::ReadOnly)) {
         exit(1);
     }
 
-    if (!xmlDocument.setContent(file)) {
-        file->close();
+    if (!xmlDocument.setContent(device)) {
+        device->close();
         exit(1);
     }
     else {
-        file->close();
+        device->close();
         if (rootTag!="") {
             QDomNodeList rootList=xmlDocument.elementsByTagName(rootTag);
             if (rootList.size()!=1) {
@@ -54,7 +51,7 @@ KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag)
             }
         }
         else {
-            root=xmlDocument.documentElement();
+            root=xmlDocument.documentElement();	//TODO Check that it's the right root
         }
     }
 }
@@ -64,6 +61,11 @@ KoXmlGenerator::~KoXmlGenerator()
 
 }
 
+QString KoXmlGenerator::getName()
+{
+	return xmlDocument.doctype().name();
+}
+
 void KoXmlGenerator::checkSort()
 {
 
@@ -71,6 +73,7 @@ void KoXmlGenerator::checkSort()
 
 QDomElement KoXmlGenerator::addTag(QString tagName,QString textValue,bool emptyFile)
 {
+    Q_UNUSED(emptyFile);
     QDomElement child = xmlDocument.createElement(tagName);
     root.appendChild(child);
 
@@ -146,7 +149,7 @@ QString KoXmlGenerator::toString()
 
 QString KoXmlGenerator::toFile()
 {
-    QString xmlName=xmlDocument.doctype().name().append(".xml");
+    QString xmlName=getName().append(".xml");
     QFile file(xmlName);
 
     if (!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Truncate)) {

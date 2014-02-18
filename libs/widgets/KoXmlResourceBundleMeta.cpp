@@ -17,18 +17,18 @@
 
 #include "KoXmlResourceBundleMeta.h"
 
-KoXmlMeta::KoXmlMeta(QString xmlName):KoXmlGenerator(xmlName)
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
 }
 
-KoXmlMeta::KoXmlMeta(QIODevice *device):KoXmlGenerator(device)
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QIODevice *device):KoXmlGenerator(device)
 {
 
 }
 
-KoXmlMeta::KoXmlMeta(QString name,QString license,QString xmlName):KoXmlGenerator(xmlName)
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString name,QString license,QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
@@ -37,7 +37,7 @@ KoXmlMeta::KoXmlMeta(QString name,QString license,QString xmlName):KoXmlGenerato
     addTag("license",license,true);
 }
 
-KoXmlMeta::KoXmlMeta(QString* resourceTagList,QString name,QString license,QString description,
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString* resourceTagList,QString name,QString license,QString description,
                      QString author,QString created,QString modified,QString xmlName)
                         :KoXmlGenerator(xmlName)
 {
@@ -56,12 +56,12 @@ KoXmlMeta::KoXmlMeta(QString* resourceTagList,QString name,QString license,QStri
     }
 }
 
-KoXmlMeta::~KoXmlMeta()
+KoXmlResourceBundleMeta::~KoXmlResourceBundleMeta()
 {
 
 }
 
-KoXmlMeta::TagEnum KoXmlMeta::getTagEnumValue(QString tagName)
+KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QString tagName)
 {
     if (tagName=="name") {
             return Name;
@@ -89,7 +89,7 @@ KoXmlMeta::TagEnum KoXmlMeta::getTagEnumValue(QString tagName)
     }
 }
 
-void KoXmlMeta::checkSort()
+void KoXmlResourceBundleMeta::checkSort()
 {
     QDomNode prev;
     QDomNode current = root.firstChild();
@@ -129,7 +129,7 @@ void KoXmlMeta::checkSort()
     }
 }
 
-QDomElement KoXmlMeta::addTag(QString tagName,QString textValue,bool emptyFile)
+QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bool emptyFile)
 {
     tagName=tagName.toLower();
 

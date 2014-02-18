@@ -16,23 +16,23 @@
 */
 #include "KoXmlResourceBundleManifest.h"
 
-KoXmlManifest::KoXmlManifest(QString xmlName):KoXmlGenerator(xmlName)
+KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
 }
 
-KoXmlManifest::KoXmlManifest(QIODevice *device):KoXmlGenerator(device,"package")
+KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QIODevice *device):KoXmlGenerator(device,"package")
 {
 
 }
 
-KoXmlManifest::~KoXmlManifest()
+KoXmlResourceBundleManifest::~KoXmlResourceBundleManifest()
 {
 
 }
 
-KoXmlManifest::TagEnum KoXmlManifest::getTagEnumValue(QString tagName)
+KoXmlResourceBundleManifest::TagEnum KoXmlResourceBundleManifest::getTagEnumValue(QString tagName)
 {
     if (tagName=="brushes") {
         return Brush;
@@ -63,7 +63,7 @@ KoXmlManifest::TagEnum KoXmlManifest::getTagEnumValue(QString tagName)
     }
 }
 
-void KoXmlManifest::checkSort()
+void KoXmlResourceBundleManifest::checkSort()
 {
     QDomNode prev;
     QDomNode current = root.firstChild();
@@ -104,7 +104,7 @@ void KoXmlManifest::checkSort()
     }
 }
 
-void KoXmlManifest::merge(QDomNode dest,QDomNode src)
+void KoXmlResourceBundleManifest::merge(QDomNode dest,QDomNode src)
 {
     QDomNode node=src.firstChild();
     while (!node.isNull()) {
@@ -116,7 +116,7 @@ void KoXmlManifest::merge(QDomNode dest,QDomNode src)
 }
 
 
-QDomElement KoXmlManifest::addTag(QString fileTypeName,QString fileName,bool emptyFile)
+QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fileName,bool emptyFile)
 {
     fileTypeName=fileTypeName.toLower();
 

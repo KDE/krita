@@ -45,14 +45,17 @@ public:
 
     /**
      * Constructor
-     * Create a virtual XML file, extracting data from an existing file.
-     * @param file the virtual file used as data for Xml file.
+     * Create a virtual XML file, extracting data from an existing device.
+     * @param device the virtual device used as data for Xml file.
      * @param rootName the name of the root tag that should be contained in the file.
      */
     KoXmlGenerator(QIODevice *device,QString rootName="");
 
     ///Destructor
     virtual ~KoXmlGenerator();
+
+    ///@return the name of the XML document
+    QString getName();
 
     ///Check/sort the file to be easily comprehensible.
     virtual void checkSort();

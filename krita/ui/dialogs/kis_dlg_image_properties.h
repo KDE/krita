@@ -49,6 +49,9 @@ public:
 
     const KoColorSpace * colorSpace();
 
+private slots:
+
+    void setAnnotation(const QString& type);
 private:
 
     WdgImageProperties * m_page;

@@ -66,6 +66,13 @@ public:
     virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers);
 
     /**
+     * This function is called to set random offsets to the brush whenever the mouse is clicked. It is
+     * specific to when the pattern option is set.
+     *
+     */
+    virtual void setRandomOffset();
+
+    /**
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
      */

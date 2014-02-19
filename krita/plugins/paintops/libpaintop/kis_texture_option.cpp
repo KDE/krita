@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2012
+ * Copyright (C) Mohit Goyal <mohit.bits2011@gmail.com>, (C) 2014
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include <QComboBox>
 #include <QTransform>
 #include <QPainter>
+#include <QBoxLayout>
 
 #include <klocale.h>
 
@@ -46,6 +48,7 @@
 #include <kis_fixed_paint_device.h>
 #include <kis_gradient_slider.h>
 #include "kis_embedded_pattern_manager.h"
+#include <time.h>
 
 class KisTextureOptionWidget : public QWidget
 {
@@ -71,13 +74,22 @@ public:
 
         formLayout->addRow(i18n("Scale:"), scaleSlider);
 
+
+        QBoxLayout *offsetLayoutX = new QBoxLayout(QBoxLayout::LeftToRight,this);
         offsetSliderX = new KisSliderSpinBox(this);
         offsetSliderX->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        formLayout->addRow(i18n("Horizontal Offset:"), offsetSliderX);
+        randomOffsetX = new QCheckBox(i18n("Random Offset"),this);
+        offsetLayoutX->addWidget(offsetSliderX,1,0);
+        offsetLayoutX->addWidget(randomOffsetX,0,0);
+        formLayout->addRow(i18n("Horizontal Offset:"), offsetLayoutX);
 
+        QBoxLayout *offsetLayoutY = new QBoxLayout(QBoxLayout::LeftToRight,this);
         offsetSliderY = new KisSliderSpinBox(this);
         offsetSliderY->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        formLayout->addRow(i18n("Vertical Offset:"), offsetSliderY);
+        randomOffsetY = new QCheckBox(i18n("Random Offset"),this);
+        offsetLayoutY->addWidget(offsetSliderY,1,0);
+        offsetLayoutY->addWidget(randomOffsetY,0,0);
+        formLayout->addRow(i18n("Vertical Offset:"), offsetLayoutY);
 
         cmbTexturingMode = new QComboBox(this);
         cmbTexturingMode->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -111,7 +123,9 @@ public:
     KoPatternChooser *chooser;
     KisMultipliersDoubleSliderSpinBox *scaleSlider;
     KisSliderSpinBox *offsetSliderX;
+    QCheckBox *randomOffsetX;
     KisSliderSpinBox *offsetSliderY;
+    QCheckBox *randomOffsetY;
     QComboBox *cmbTexturingMode;
     KisGradientSlider *cutoffSlider;
     QComboBox *cmbCutoffPolicy;
@@ -130,6 +144,8 @@ KisTextureOption::KisTextureOption(QObject *)
     connect(m_optionWidget->chooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->scaleSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderX, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->randomOffsetX, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->randomOffsetY, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->offsetSliderY, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
@@ -151,8 +167,33 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     if (!pattern) return;
 
     qreal scale = m_optionWidget->scaleSlider->value();
+
     int offsetX = m_optionWidget->offsetSliderX->value();
+    if (m_optionWidget ->randomOffsetX->isChecked()) {
+
+        m_optionWidget -> offsetSliderX ->setEnabled(false);
+        m_optionWidget -> offsetSliderX ->blockSignals(true);
+        m_optionWidget -> offsetSliderX ->setValue(offsetX);
+        m_optionWidget -> offsetSliderX ->blockSignals(false);
+        srand(time(0));
+    }
+    else {
+        m_optionWidget -> offsetSliderX ->setEnabled(true);
+    }
+
     int offsetY = m_optionWidget->offsetSliderY->value();
+    if (m_optionWidget ->randomOffsetY->isChecked()) {
+
+        m_optionWidget -> offsetSliderY ->setEnabled(false);
+        m_optionWidget -> offsetSliderY ->blockSignals(true);
+        m_optionWidget -> offsetSliderY ->setValue(offsetY);
+        m_optionWidget -> offsetSliderY ->blockSignals(false);
+        srand(time(0));
+    }
+    else {
+        m_optionWidget -> offsetSliderY ->setEnabled(true);
+    }
+    
     int texturingMode = m_optionWidget->cmbTexturingMode->currentIndex();
     bool invert = (m_optionWidget->chkInvert->checkState() == Qt::Checked);
 
@@ -165,6 +206,10 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty("Texture/Pattern/CutoffPolicy", m_optionWidget->cmbCutoffPolicy->currentIndex());
     setting->setProperty("Texture/Pattern/Invert", invert);
     setting->setProperty("Texture/Pattern/Enabled", isChecked());
+    setting->setProperty("Texture/Pattern/MaximumOffsetX",m_optionWidget -> offsetSliderX ->maximum());
+    setting->setProperty("Texture/Pattern/MaximumOffsetY",m_optionWidget -> offsetSliderY ->maximum());
+    setting->setProperty("Texture/Pattern/isRandomOffsetX",m_optionWidget ->randomOffsetX ->isChecked());
+    setting->setProperty("Texture/Pattern/isRandomOffsetY",m_optionWidget ->randomOffsetY ->isChecked());
 
     KisEmbeddedPatternManager::saveEmbeddedPattern(setting, pattern);
 }

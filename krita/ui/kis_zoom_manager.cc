@@ -184,13 +184,12 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 }
 
-void KisZoomManager::mousePositionChanged(const QPoint &pos)
+void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
 {
-    QPoint canvasShift = m_view->canvasBase()->coordinatesConverter()->flakeToWidget(QPointF(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY())).toPoint();
-    QPoint viewPos = pos - canvasShift;
+    QPoint pt = viewPos - m_rulersOffset;
 
-    m_horizontalRuler->updateMouseCoordinate(viewPos.x());
-    m_verticalRuler->updateMouseCoordinate(viewPos.y());
+    m_horizontalRuler->updateMouseCoordinate(pt.x());
+    m_verticalRuler->updateMouseCoordinate(pt.y());
 }
 
 void KisZoomManager::toggleShowRulers(bool show)
@@ -240,10 +239,10 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 void KisZoomManager::pageOffsetChanged()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    QPoint canvasShift = widgetRect.topLeft().toPoint();
+    m_rulersOffset = widgetRect.topLeft().toPoint();
 
-    m_horizontalRuler->setOffset(canvasShift.x());
-    m_verticalRuler->setOffset(canvasShift.y());
+    m_horizontalRuler->setOffset(m_rulersOffset.x());
+    m_verticalRuler->setOffset(m_rulersOffset.y());
 }
 
 void KisZoomManager::zoomTo100()

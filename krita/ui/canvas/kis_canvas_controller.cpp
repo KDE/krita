@@ -28,6 +28,7 @@
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "input/kis_input_manager.h"
+#include "input/kis_tablet_event.h"
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
@@ -50,14 +51,12 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
     if (!coordinatesConverter) return;
 
     QPoint pointerPos;
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    if (mouseEvent) {
+    if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
         pointerPos = mouseEvent->pos();
-    } else {
-        QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
-        if (tabletEvent) {
-            pointerPos = tabletEvent->pos();
-        }
+    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
+        pointerPos = tabletEvent->pos();
+    } else if (KisTabletEvent *kisTabletEvent = dynamic_cast<KisTabletEvent*>(event)) {
+        pointerPos = kisTabletEvent->pos();
     }
 
     QPointF documentPos = coordinatesConverter->widgetToDocument(pointerPos);
@@ -129,7 +128,7 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
 {
     KoCanvasBase *canvas = this->canvas();
     if (canvas && canvas->canvasWidget() && (watched == canvas->canvasWidget())) {
-        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
+        if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove || event->type() == (QEvent::Type)KisTabletEvent::TabletMoveEx) {
             m_d->emitPointerPositionChangedSignals(event);
             return false;
         }

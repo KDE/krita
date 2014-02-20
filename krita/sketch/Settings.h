@@ -25,9 +25,9 @@
 
 #include "KisSketchView.h"
 
-#include "image/krita_export.h"
+#include "krita_sketch_export.h"
 
-class KRITASKETCH_EXPORT Settings : public QObject
+class KRITA_SKETCH_EXPORT Settings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)

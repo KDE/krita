@@ -34,6 +34,7 @@
 #include <QGraphicsScene>
 #include <QSpacerItem>
 
+#include <kmessagebox.h>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
 #include <kfiledialog.h>
@@ -208,14 +209,43 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    createNewImage();
-
-    emit documentSelected();
+    if (createNewImage()) {
+        emit documentSelected();
+    }
 }
 
-void KisCustomImageWidget::createNewImage()
+bool KisCustomImageWidget::createNewImage()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
+
+    if (cs->colorModelId() == RGBAColorModelID &&
+        cs->colorDepthId() == Integer8BitsColorDepthID) {
+
+        const KoColorProfile *profile = cs->profile();
+
+        if (profile->name().contains("linear") ||
+            profile->name().contains("scRGB") ||
+            profile->info().contains("linear") ||
+            profile->info().contains("scRGB")) {
+
+            int result =
+                KMessageBox::warningContinueCancel(this,
+                                                   "Linear gamma RGB color spaces are not supposed to be used "
+                                                   "in 8-bit integer modes. It is suggested to use 16-bit integer "
+                                                   "or any floating point colorspace for linear profiles.\n\n"
+                                                   "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                                   "or \"Cancel\" to return to the settings dialog.",
+                                                   "Linear RGB + 8bit integer");
+
+            if (result == KMessageBox::Cancel) {
+                qDebug() << "Model RGB8" << "NOT SUPPORTED";
+                qDebug() << ppVar(cs->name());
+                qDebug() << ppVar(cs->profile()->name());
+                qDebug() << ppVar(cs->profile()->info());
+                return false;
+            }
+        }
+    }
 
     QColor qc = cmbColor->color();
 
@@ -254,6 +284,8 @@ void KisCustomImageWidget::createNewImage()
 
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
+
+    return true;
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const

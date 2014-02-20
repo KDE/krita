@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transaction_based_command.h"
+#include "kis_gui_context_command_p.h"
+#include "kundo2command.h"
 
-KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
-    : KUndo2Command(text, parent), m_firstRedo(true), m_transactionData(0)
+KisGuiContextCommandDelegate::KisGuiContextCommandDelegate(QObject *parent)
+    : QObject(parent)
 {
 }
 
-KisTransactionBasedCommand::~KisTransactionBasedCommand()
+void KisGuiContextCommandDelegate::executeCommand(KUndo2Command *command, bool undo)
 {
-    delete m_transactionData;
-}
-
-void KisTransactionBasedCommand::redo()
-{
-    if (m_firstRedo) {
-        m_transactionData = paint();
-    }
-
-    if (m_transactionData) {
-        m_transactionData->redo();
+    if (!undo) {
+        command->redo();
+    } else {
+        command->undo();
     }
 }
-
-void KisTransactionBasedCommand::undo()
-{
-    if (m_transactionData) {
-        m_transactionData->undo();
-    }
-}
-

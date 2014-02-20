@@ -177,7 +177,7 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
 
         outline.moveTo(center.x() - hairOffset, center.y());
         outline.lineTo(center.x() + hairOffset, center.y());
-    } else if (sum < minThresholdSize) {
+    } else if (sum < minThresholdSize && !outline.isEmpty()) {
         outline = QPainterPath();
         outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
     }

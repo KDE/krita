@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Filter";
-    panelColor: "#000000";
+    colorSet: "filter";
 
     actions: [
         Button {

@@ -22,53 +22,53 @@
 #include <QApplication>
 #include <QWidget>
 
-Theme::Theme(QObject* parent)
+OldTheme::OldTheme(QObject* parent)
     : QObject(parent)
 {
 
 }
 
-QColor Theme::mainColor() const
+QColor OldTheme::mainColor() const
 {
     return QColor( 0, 0, 64 );
 }
 
-QColor Theme::highlightColor() const
+QColor OldTheme::highlightColor() const
 {
     return QColor( 220, 220, 220 );
 }
 
-QColor Theme::secondaryColor() const
+QColor OldTheme::secondaryColor() const
 {
     return QColor( 128, 0, 0 );
 }
 
-QColor Theme::tertiaryColor() const
+QColor OldTheme::tertiaryColor() const
 {
     return QColor( 219, 160, 0 );
 }
 
-QColor Theme::quaternaryColor() const
+QColor OldTheme::quaternaryColor() const
 {
     return QColor( 0, 130, 30 );
 }
 
-QColor Theme::textColor() const
+QColor OldTheme::textColor() const
 {
     return QColor( 50, 50, 50 );
 }
 
-QColor Theme::secondaryTextColor() const
+QColor OldTheme::secondaryTextColor() const
 {
     return QColor( 90, 90, 90 );
 }
 
-QColor Theme::positiveColor() const
+QColor OldTheme::positiveColor() const
 {
     return QColor( 0, 128, 0 );
 }
 
-QColor Theme::negativeColor() const
+QColor OldTheme::negativeColor() const
 {
     return QColor( 128, 0, 0 );
 }
@@ -76,7 +76,7 @@ QColor Theme::negativeColor() const
 Constants::Constants(QObject* parent)
     : QObject(parent)
 {
-    m_theme = new Theme( this );
+    m_theme = new OldTheme( this );
 
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
     m_gridHeight = qApp->activeWindow()->height() / gridHeight();

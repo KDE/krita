@@ -40,6 +40,7 @@
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
 #include "KeyboardModel.h"
+#include "Theme.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -75,6 +76,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<CompositeOpModel>("org.krita.sketch", 1, 0, "CompositeOpModel");
     qmlRegisterType<PanelConfiguration>("org.krita.sketch", 1, 0, "PanelConfiguration");
     qmlRegisterType<KeyboardModel>("org.krita.sketch", 1, 0, "KeyboardModel");
+    qmlRegisterType<Theme>("org.krita.sketch", 1, 0, "Theme");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }
@@ -85,7 +87,7 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 
     Constants *constants = new Constants( this );
-    Settings *settings = new Settings( this );
+    Settings *settings = new Settings( engine, this );
     DocumentManager::instance()->setSettingsManager( settings );
     RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
 

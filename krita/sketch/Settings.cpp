@@ -20,6 +20,11 @@
 #include "Settings.h"
 #include <QApplication>
 
+#include <kglobal.h>
+#include <kstandarddirs.h>
+
+#include "Theme.h"
+
 class Settings::Private
 {
 public:
@@ -28,11 +33,22 @@ public:
     QString currentFile;
     bool temporaryFile;
     QDeclarativeItem *focusItem;
+    Theme* theme;
 };
 
-Settings::Settings( QObject* parent )
+Settings::Settings( QDeclarativeEngine* engine, QObject* parent )
     : QObject( parent ), d( new Private )
 {
+    QDeclarativeComponent* themeComponent = new QDeclarativeComponent(engine, this);
+    themeComponent->loadUrl(KGlobal::dirs()->findResource("data", "kritasketch/themes/default/theme.qml"));
+    if(themeComponent->isError())
+    {
+        qDebug() << themeComponent->errorString();
+    }
+    d->theme = qobject_cast<Theme*>(themeComponent->create());
+    if(!d->theme)
+        qDebug() << "Failed to create theme instance!";
+    delete themeComponent;
 }
 
 Settings::~Settings()
@@ -79,6 +95,11 @@ void Settings::setFocusItem(QDeclarativeItem* item)
         d->focusItem = item;
         emit focusItemChanged();
     }
+}
+
+QObject* Settings::theme() const
+{
+    return d->theme;
 }
 
 #include "Settings.moc"

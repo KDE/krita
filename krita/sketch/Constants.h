@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QColor>
 
-class Theme : public QObject
+class OldTheme : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QColor MainColor READ mainColor CONSTANT)
@@ -37,7 +37,7 @@ class Theme : public QObject
     Q_PROPERTY(QColor NegativeColor READ negativeColor CONSTANT)
 
 public:
-    Theme(QObject* parent = 0);
+    OldTheme(QObject* parent = 0);
 
     QColor mainColor() const;
     QColor highlightColor() const;
@@ -90,7 +90,7 @@ Q_SIGNALS:
     void gridSizeChanged();
 
 private:
-    Theme* m_theme;
+    OldTheme* m_theme;
     qreal m_gridWidth;
     qreal m_gridHeight;
     qreal m_toolbarButtonSize;

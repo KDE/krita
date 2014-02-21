@@ -159,3 +159,8 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
         return QPointF();
     }
 }
+
+bool KisPanAction::isShortcutRequired(int shortcut) const
+{
+    return shortcut == PanToggleShortcut;
+}

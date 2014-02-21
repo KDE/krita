@@ -53,6 +53,8 @@ public:
     virtual void inputEvent(QEvent* event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
+    virtual bool isShortcutRequired(int shortcut) const;
+
 private:
     class Private;
     Private * const d;

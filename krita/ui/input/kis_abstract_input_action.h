@@ -144,6 +144,16 @@ public:
      */
     virtual bool canIgnoreModifiers() const;
 
+    /**
+     * Return true when the specified shortcut is required for basic
+     * user interaction. This is used by the configuration system to
+     * prevent basic actions like painting from being removed.
+     *
+     * \param shortcut The shortcut index to check.
+     * \return True if the shortcut is required, false if not.
+     */
+    virtual bool isShortcutRequired(int shortcut) const;
+
 protected:
     /**
      * The input manager this action belongs to.

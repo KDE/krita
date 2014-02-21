@@ -27,7 +27,6 @@ set(kritasketchlib_SRCS
     SketchDeclarativeView.cpp
     SketchInputContext.cpp
     VirtualKeyboardController.cpp
-    Theme.cpp
 )
 
 set(kritasketch_SRCS
@@ -180,5 +179,3 @@ install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra
 install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY fonts             DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
-
-install(DIRECTORY themes/default DESTINATION ${DATA_INSTALL_DIR}/kritasketch/themes)

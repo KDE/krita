@@ -29,6 +29,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
+#include <kfile.h>
 
 #include "kis_config.h"
 #include "kis_alternate_invocation_action.h"
@@ -309,6 +310,24 @@ void KisInputProfileManager::saveProfiles()
 
     //Force a reload of the current profile in input manager and whatever else uses the profile.
     emit currentProfileChanged();
+}
+
+void KisInputProfileManager::resetAll()
+{
+    QString kdeHome = KGlobal::mainComponent().dirs()->localkdedir();
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+
+    foreach(const QString &profile, profiles) {
+        if(profile.contains(kdeHome)) {
+            //This is a local file, remove it.
+            QFile::remove(profile);
+        }
+    }
+
+    //Load the profiles again, this should now only load those shipped with Krita.
+    loadProfiles();
+
+    emit profilesChanged();
 }
 
 KisInputProfileManager::KisInputProfileManager(QObject *parent)

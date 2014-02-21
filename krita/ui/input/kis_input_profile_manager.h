@@ -119,6 +119,13 @@ public:
     void saveProfiles();
 
     /**
+     * Reset all profiles to the default state.
+     *
+     * This will remove all custom profiles the user created and reset any changed profiles.
+     */
+    void resetAll();
+
+    /**
      * \return The singleton instance of this class.
      */
     static KisInputProfileManager *instance();

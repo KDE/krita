@@ -44,6 +44,16 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="3">
+    <widget class="KPushButton" name="resetButton">
+     <property name="text">
+      <string>Reset All</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

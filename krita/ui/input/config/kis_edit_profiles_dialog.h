@@ -38,6 +38,7 @@ private Q_SLOTS:
     void removeButtonClicked();
     void duplicateButtonClicked();
     void renameButtonClicked();
+    void resetButtonClicked();
 
 private:
     class Private;

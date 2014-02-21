@@ -22,6 +22,7 @@
 #include <QPushButton>
 #include <QStringListModel>
 #include <KLocalizedString>
+#include <kmessagebox.h>
 
 #include "KoIcon.h"
 #include "input/kis_input_profile_manager.h"
@@ -52,10 +53,12 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
     d->ui->removeButton->setIcon(koIcon("list-remove"));
     d->ui->duplicateButton->setIcon(koIcon("edit-copy"));
     d->ui->renameButton->setIcon(koIcon("edit-rename"));
+    d->ui->resetButton->setIcon(koIcon("process-stop"));
 
     connect(d->ui->removeButton, SIGNAL(clicked(bool)), SLOT(removeButtonClicked()));
     connect(d->ui->duplicateButton, SIGNAL(clicked(bool)), SLOT(duplicateButtonClicked()));
     connect(d->ui->renameButton, SIGNAL(clicked(bool)), SLOT(renameButtonClicked()));
+    connect(d->ui->resetButton, SIGNAL(clicked(bool)), SLOT(resetButtonClicked()));
 
     d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
 
@@ -85,4 +88,11 @@ void KisEditProfilesDialog::duplicateButtonClicked()
 void KisEditProfilesDialog::renameButtonClicked()
 {
     d->ui->profileList->edit(d->ui->profileList->currentIndex());
+}
+
+void KisEditProfilesDialog::resetButtonClicked()
+{
+    if(KMessageBox::questionYesNo(this, i18n("You will lose all changes to any input profiles. Do you wish to continue?"), i18n("Reset All Profiles")) == KMessageBox::Yes) {
+        KisInputProfileManager::instance()->resetAll();
+    }
 }

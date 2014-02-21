@@ -22,12 +22,12 @@
 #include <QPointer>
 #include <opengl/kis_opengl_canvas2.h>
 
-#include "krita_sketch_export.h"
+#include "image/krita_export.h"
 
 /**
  * @brief The SketchDeclarativeView class overrides QGraphicsView's drawBackground
  */
-class KRITA_SKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
+class KRITASKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
 {
     Q_OBJECT
 

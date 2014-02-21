@@ -22,9 +22,9 @@
 #include <QAbstractListModel>
 #include <QDateTime>
 
-#include "krita_sketch_export.h"
+#include "image/krita_export.h"
 
-class KRITA_SKETCH_EXPORT DocumentListModel : public QAbstractListModel
+class KRITASKETCH_EXPORT DocumentListModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_ENUMS(DocumentType)

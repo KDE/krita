@@ -21,9 +21,9 @@
 
 #include <QObject>
 
-#include "krita_sketch_export.h"
+#include "image/krita_export.h"
 
-class KRITA_SKETCH_EXPORT VirtualKeyboardController : public QObject
+class KRITASKETCH_EXPORT VirtualKeyboardController : public QObject
 {
     Q_OBJECT
 public:

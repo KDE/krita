@@ -21,9 +21,9 @@
 
 #include <QInputContext>
 
-#include "krita_sketch_export.h"
+#include "image/krita_export.h"
 
-class KRITA_SKETCH_EXPORT SketchInputContext : public QInputContext
+class KRITASKETCH_EXPORT SketchInputContext : public QInputContext
 {
 public:
     explicit SketchInputContext(QObject* parent = 0);

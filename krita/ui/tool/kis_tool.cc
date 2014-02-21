@@ -22,9 +22,11 @@
 #include <QWidget>
 #include <QPolygonF>
 #include <QTransform>
+#ifdef HAVE_OPENGL
 #include <QGLShaderProgram>
 #include <QGLFramebufferObject>
 #include <QGLContext>
+#endif
 
 #include <klocale.h>
 #include <kaction.h>
@@ -74,25 +76,31 @@ struct KisTool::Private {
         : currentPattern(0),
           currentGradient(0),
           currentGenerator(0),
+#ifdef HAVE_OPENGL
           optionWidget(0),
           cursorShader(0),
           useGLToolOutlineWorkaround(false)
+#else
+          optionWidget(0)
+#endif
     {
     }
 
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KoPattern * currentPattern;
-    KoAbstractGradient * currentGradient;
+    KoPattern* currentPattern;
+    KoAbstractGradient* currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
     KisNodeSP currentNode;
     float currentExposure;
-    KisFilterConfiguration * currentGenerator;
+    KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
 
+#ifdef HAVE_OPENGL
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+#endif
 
     bool useGLToolOutlineWorkaround;
 };
@@ -139,7 +147,9 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
 KisTool::~KisTool()
 {
+#ifdef HAVE_OPENGL
     delete d->cursorShader;
+#endif
     delete d;
 }
 
@@ -569,6 +579,7 @@ QWidget* KisTool::createOptionWidget()
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
+#ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
     if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
@@ -632,7 +643,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 
         painter->endNativePainting();
     }
-    else if (m_outlinePaintMode == XOR_MODE) {
+    else
+#endif // HAVE_OPENGL
+        if (m_outlinePaintMode == XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);

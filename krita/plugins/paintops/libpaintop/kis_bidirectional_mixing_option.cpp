@@ -83,7 +83,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 {
     Q_UNUSED(sx);
     Q_UNUSED(sy);
-    
+
     if (!m_mixingEnabled) return;
 
     KisFixedPaintDevice canvas(device->colorSpace());

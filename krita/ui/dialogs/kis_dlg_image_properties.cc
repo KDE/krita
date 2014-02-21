@@ -25,6 +25,7 @@
 #include <QSpinBox>
 #include <QSlider>
 #include <QCheckBox>
+#include <QPlainTextEdit>
 #include <QTextEdit>
 
 #include <klocale.h>
@@ -36,14 +37,14 @@
 #include "KoID.h"
 #include "kis_types.h"
 #include "kis_image.h"
-
+#include "kis_annotation.h"
 #include "kis_config.h"
 #include "kis_factory2.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent, const char *name)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -65,6 +66,24 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
 
+    vKisAnnotationSP_it beginIt = image->beginAnnotations();
+    vKisAnnotationSP_it endIt = image->endAnnotations();
+
+    vKisAnnotationSP_it it = beginIt;
+    while (it != endIt) {
+
+        if (!(*it) || (*it)->type().isEmpty()) {
+            dbgFile << "Warning: empty annotation";
+            it++;
+            continue;
+        }
+
+        m_page->cmbAnnotations->addItem((*it) -> type());
+        it++;
+    }
+    connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
+    setAnnotation(m_page->cmbAnnotations->currentText());
+
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -75,6 +94,21 @@ KisDlgImageProperties::~KisDlgImageProperties()
 const KoColorSpace * KisDlgImageProperties::colorSpace()
 {
     return m_page->colorSpaceSelector->currentColorSpace();
+}
+
+void KisDlgImageProperties::setAnnotation(const QString &type)
+{
+    KisAnnotationSP annotation = m_image->annotation(type);
+    if (annotation) {
+        m_page->lblDescription->clear();
+        m_page->txtAnnotation->clear();
+        m_page->lblDescription->setText(annotation->description());
+        m_page->txtAnnotation->appendPlainText(QString::fromUtf8(annotation->annotation()));
+    }
+    else {
+        m_page->lblDescription->clear();
+        m_page->txtAnnotation->clear();
+    }
 }
 
 #include "kis_dlg_image_properties.moc"

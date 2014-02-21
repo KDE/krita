@@ -39,7 +39,7 @@ public:
 
     bool correctPerspective() const;
     void setPerspective(bool perspective);
-    
+
     bool moveSourcePoint() const;
     void setMoveSourcePoint(bool move);
 

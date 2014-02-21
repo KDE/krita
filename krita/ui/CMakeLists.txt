@@ -242,6 +242,8 @@ set(kritaui_LIB_SRCS
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
+    kis_gui_context_command.cpp
+    kis_gui_context_command_p.cpp
     input/kis_input_profile_manager.cpp
     input/kis_input_profile.cpp
     input/kis_shortcut_configuration.cpp

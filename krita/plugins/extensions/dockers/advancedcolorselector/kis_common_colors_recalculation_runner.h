@@ -13,9 +13,9 @@ class KisCommonColorsRecalculationRunner : public QRunnable
 {
 public:
     KisCommonColorsRecalculationRunner(QImage data, int numberOfColors, KisCommonColors* parentObj)
-        : imageData(data),
-        numColors(numberOfColors),
-        parent(parentObj)
+        : m_imageData(data)
+        , m_numColors(numberOfColors)
+        , m_commonColors(parentObj)
     {}
 
     void run();
@@ -23,9 +23,9 @@ public:
     QList<QRgb> getColors();
 
 private:
-    QImage imageData;
-    int numColors;
-    KisCommonColors* parent;
+    QImage m_imageData;
+    int m_numColors;
+    KisCommonColors* m_commonColors;
 };
 
 #endif // KIS_COMMON_COLORS_RECALCULATION_RUNNER_H

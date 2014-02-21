@@ -166,9 +166,47 @@ public:
     QSplashScreen *m_splash;
 };
 
+#if defined(Q_OS_WIN) && defined(ENV32BIT)
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+BOOL isWow64()
+{
+    BOOL bIsWow64 = FALSE;
+
+    //IsWow64Process is not available on all supported versions of Windows.
+    //Use GetModuleHandle to get a handle to the DLL that contains the function
+    //and GetProcAddress to get a pointer to the function if available.
+
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    if(NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+        {
+            //handle error
+        }
+    }
+    return bIsWow64;
+}
+#endif
+
 bool KoApplication::start()
 {
 #ifdef Q_OS_WIN
+#ifdef ENV32BIT
+    if (isWow64()) {
+    	KMessageBox::information(0, 
+                                 i18n("You are running a 32 bits build on a 64 bits Windows.\n"
+                                      "This is not recommended.\n"
+                                      "Please download and install the x64 build instead."),
+                                 qApp->applicationName(), 
+                                 "calligra_32_on_64_warning");
+
+    }
+#endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -208,6 +246,13 @@ bool KoApplication::start()
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
         kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+        QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
+                                                                                    "This might be an installation issue.\n"
+                                                                                    "Try restarting, running kbuildsycoca4.exe or reinstalling."));
+#ifdef Q_OS_WIN
+        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
+#endif
         return false;
     }
 

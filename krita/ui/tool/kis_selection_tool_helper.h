@@ -40,6 +40,9 @@ public:
     void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
 
+    void cropRectIfNeeded(QRect *rect);
+    void cropPathIfNeeded(QPainterPath *path);
+
 private:
     KisCanvas2* m_canvas;
     KisImageWSP m_image;

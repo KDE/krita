@@ -38,9 +38,9 @@
 #include <kis_color_option.h>
 
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
-        , m_settings(settings)
-        , m_isPresetValid(true)
+    : KisPaintOp(painter)
+    , m_settings(settings)
+    , m_isPresetValid(true)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -49,16 +49,16 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
-    m_sizeOption.sensor()->reset();
+    m_rotationOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+    m_sizeOption.resetAllSensors();
 
     m_brushOption.readOptionSetting(settings);
 
     m_colorProperties.fillProperties(settings);
     m_properties.loadSettings(settings);
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
-    m_shapeProperties.loadSettings(settings,m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale );
+    m_shapeProperties.loadSettings(settings, m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale);
 
     // TODO: what to do with proportional sizes?
     m_shapeDynamicsProperties.loadSettings(settings);
@@ -69,15 +69,16 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
         kWarning() << "Preset is not valid. Painting is not possible. Use the preset editor to fix current brush engine preset.";
     }
 
-    m_sprayBrush.setProperties( &m_properties,&m_colorProperties,
-                                &m_shapeProperties, &m_shapeDynamicsProperties, m_brushOption.brush());
+    m_sprayBrush.setProperties(&m_properties, &m_colorProperties,
+                               &m_shapeProperties, &m_shapeDynamicsProperties, m_brushOption.brush());
 
-    m_sprayBrush.setFixedDab( cachedDab() );
+    m_sprayBrush.setFixedDab(cachedDab());
 
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_properties.diameter * 0.5 * m_properties.spacing;
-    } else {
+    }
+    else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
@@ -95,7 +96,8 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    } else {
+    }
+    else {
         m_dab->clear();
     }
 
@@ -108,13 +110,13 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     setCurrentRotation(rotation);
     setCurrentScale(scale);
 
-    m_sprayBrush.paint( m_dab,
-                        m_settings->node()->paintDevice(),
-                        info,
-                        rotation,
-                        scale,
-                        painter()->paintColor(),
-                        painter()->backgroundColor());
+    m_sprayBrush.paint(m_dab,
+                       m_settings->node()->paintDevice(),
+                       info,
+                       rotation,
+                       scale,
+                       painter()->paintColor(),
+                       painter()->backgroundColor());
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);

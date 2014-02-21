@@ -33,11 +33,16 @@ void KisTransactionBasedCommand::redo()
     if (m_firstRedo) {
         m_transactionData = paint();
     }
-    m_transactionData->redo();
+
+    if (m_transactionData) {
+        m_transactionData->redo();
+    }
 }
 
 void KisTransactionBasedCommand::undo()
 {
-    m_transactionData->undo();
+    if (m_transactionData) {
+        m_transactionData->undo();
+    }
 }
 

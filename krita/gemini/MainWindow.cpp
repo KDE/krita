@@ -53,6 +53,11 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+
 #include <kis_paintop_preset.h>
 #include <KoPattern.h>
 #include <kis_config.h>
@@ -176,11 +181,6 @@ public:
         KoGlobal::initialize();
 
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
-        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
-        }
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -216,6 +216,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     setWindowTitle(i18n("Krita Gemini"));
 
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
+
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
     // default if it's no cursor (that's most likely due to a broken config)
@@ -225,7 +229,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));

@@ -17,6 +17,7 @@
  */
 
 #include "kis_experiment_paintop_settings.h"
+#include "kis_current_outline_fetcher.h"
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
@@ -25,4 +26,22 @@ bool KisExperimentPaintOpSettings::paintIncremental()
      * WASH mode only!
      */
     return false;
+}
+
+QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, KisPaintOpSettings::OutlineMode mode) const
+{
+    QPainterPath path;
+    if (mode == CursorIsOutline) {
+
+        QRectF ellipse(0, 0, 3, 3);
+        ellipse.translate(-ellipse.center());
+        path.addEllipse(ellipse);
+
+        ellipse.setRect(0,0, 12, 12);
+        ellipse.translate(-ellipse.center());
+        path.addEllipse(ellipse);
+
+        path.translate(info.pos());
+    }
+    return path;
 }

@@ -40,12 +40,12 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     KisBrushSP brush = rServer->resourceByFilename(brushFileName);
 
     //Fallback for files that still use the old format
-    if(!brush) {
+    if (!brush) {
         QFileInfo info(brushFileName);
         brush = rServer->resourceByFilename(info.fileName());
     }
 
-    if(!brush) {
+    if (!brush) {
         brush = rServer->resources().first();
     }
 
@@ -63,6 +63,9 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     if (m_id == "gbr_brush") {
         KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
         if (gbrbrush) {
+            /**
+             * WARNING: see comment in KisGbrBrush::setUseColorAsMask()
+             */
             gbrbrush->setUseColorAsMask((bool)brushDefinition.attribute("ColorAsMask").toInt());
         }
     }

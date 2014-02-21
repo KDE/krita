@@ -38,7 +38,7 @@ public:
 };
 
 KisCurveOpOption::KisCurveOpOption()
-        : KisPaintOpOption(i18n("Lines"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Lines"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisCurveOpOptionsWidget();

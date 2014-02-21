@@ -17,11 +17,7 @@
  */
 
 #include "kis_dynamic_sensors.h"
-KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
-{
-    setMinimumLabel(QString()); // TODO use dice icon
-    setMaximumLabel(QString());
-}
+
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {
@@ -29,7 +25,8 @@ KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
     setMaximumLabel(i18n("Fast"));
 }
 
-qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
+qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
+{
     /**
      * The value of maximum speed was measured empirically. This is
      * the speed that is quite easy to get with an A6 tablet and quite
@@ -43,7 +40,8 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     if (m_speed >= 0.0) {
         m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
                              currentSpeed * blendExponent));
-    } else {
+    }
+    else {
         m_speed = currentSpeed;
     }
 

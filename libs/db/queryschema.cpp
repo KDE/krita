@@ -751,7 +751,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
     d->visibility.setBit(position, visible);
 
     //bind to table
-    if (bindToTable < -1 && bindToTable > (int)d->tables.count()) {
+    if (bindToTable < -1 || bindToTable > int(d->tables.count())) {
         KexiDBWarn << "QuerySchema::insertField(): bindToTable (" << bindToTable
         << ") out of range";
         bindToTable = -1;
@@ -1096,6 +1096,24 @@ void QuerySchema::setColumnAlias(uint position, const QByteArray& alias)
 QByteArray QuerySchema::tableAlias(uint position) const
 {
     return d->tableAliases.value(position);
+}
+
+QByteArray QuerySchema::tableAlias(const QString& tableName) const
+{
+    const int pos = tablePosition(tableName);
+    if (pos == -1) {
+        return QByteArray();
+    }
+    return d->tableAliases.value(pos);
+}
+
+QString QuerySchema::tableAliasOrName(const QString& tableName) const
+{
+    const int pos = tablePosition(tableName);
+    if (pos == -1) {
+        return QString();
+    }
+    return KexiDB::iifNotEmpty(d->tableAliases.value(pos), tableName);
 }
 
 int QuerySchema::tablePositionForAlias(const QByteArray& name) const

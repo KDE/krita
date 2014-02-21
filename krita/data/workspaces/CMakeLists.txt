@@ -2,6 +2,7 @@
 install( FILES  
     Default.kws
     PaintingHD.kws
+    PaintingHD_2Panels.kws
     PaintingSD.kws
     VectorHD.kws
     VectorSD.kws

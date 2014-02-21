@@ -37,10 +37,10 @@ public:
     void setRadius(int radius) const;
     int radius() const;
 
-    bool inkDepletion() const; 
+    bool inkDepletion() const;
     bool saturation() const;
     bool opacity() const;
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -51,18 +51,19 @@ private:
 
 };
 
-class ChalkProperties {
+class ChalkProperties
+{
 public:
     int radius;
     bool inkDepletion;
     bool useOpacity;
     bool useSaturation;
-    
-    void readOptionSetting(const KisPropertiesConfiguration* settings){
-            radius = settings->getInt(CHALK_RADIUS);
-            inkDepletion = settings->getBool(CHALK_INK_DEPLETION);
-            useOpacity = settings->getBool(CHALK_USE_OPACITY);
-            useSaturation = settings->getBool(CHALK_USE_SATURATION);
+
+    void readOptionSetting(const KisPropertiesConfiguration* settings) {
+        radius = settings->getInt(CHALK_RADIUS);
+        inkDepletion = settings->getBool(CHALK_INK_DEPLETION);
+        useOpacity = settings->getBool(CHALK_USE_OPACITY);
+        useSaturation = settings->getBool(CHALK_USE_SATURATION);
     }
 };
 

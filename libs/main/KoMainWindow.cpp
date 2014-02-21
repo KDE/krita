@@ -1300,26 +1300,29 @@ void KoMainWindow::slotFileOpen()
     //                                       KoFilterManager::Import,
     //                                       KoServiceProvider::readExtraNativeMimeTypes());
 
-    KConfigGroup group = KGlobal::config()->group("File Dialogs");
-    QString defaultDir = group.readEntry("OpenDialog");
-    if (defaultDir.isEmpty())
-        defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url;
     if (!isImporting()) {
         url = KoFileDialogHelper::getOpenFileName(this,
                                                   i18n("Open Document"),
-                                                  defaultDir,
-                                                  mimeFilter);
+                                                  (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+                                                     ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                                                     : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
+                                                  mimeFilter,
+                                                  "",
+                                                  "OpenDocument");
     } else {
         url = KoFileDialogHelper::getImportFileName(this,
                                                     i18n("Import Document"),
-                                                    defaultDir,
-                                                    mimeFilter);
+                                                    (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+                                                        ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                                                        : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
+                                                    mimeFilter,
+                                                    "",
+                                                    "OpenDocument");
     }
 
     if (url.isEmpty())
         return;
-    group.writeEntry("OpenDialog", url);
 
     (void) openDocument(KUrl(url));
 }
@@ -1752,6 +1755,7 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
+        saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();

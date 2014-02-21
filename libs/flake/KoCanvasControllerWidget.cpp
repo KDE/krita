@@ -295,7 +295,6 @@ void KoCanvasControllerWidget::changeCanvasWidget(QWidget *widget)
 
     d->viewportWidget->setCanvas(widget);
     setFocusProxy(d->canvas->canvasWidget());
-    d->viewportWidget->setFocusPolicy(Qt::NoFocus);
 
     widget->installEventFilter(this);
     widget->setMouseTracking(true);

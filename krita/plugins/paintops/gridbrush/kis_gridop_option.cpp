@@ -24,33 +24,32 @@ class KisGridOpOptionsWidget: public QWidget, public Ui::WdgGridOptions
 {
 public:
     KisGridOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisGridOpOption::KisGridOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisGridOpOptionsWidget();
 
-    connect(m_options->gridWidthSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->gridHeightSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->divisionLevelSPBox,SIGNAL(valueChanged(int)),SIGNAL(sigSettingChanged()));
-    connect(m_options->divisionPressureCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->scaleDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->vertBorderDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->horizBorderDSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->jitterBorderCHBox,SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
+    connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->divisionLevelSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->divisionPressureCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->scaleDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->vertBorderDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->horizBorderDSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
+    connect(m_options->jitterBorderCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
 
 KisGridOpOption::~KisGridOpOption()
 {
-    delete m_options; 
+    delete m_options;
 }
 
 
@@ -117,14 +116,14 @@ qreal KisGridOpOption::scale() const
 
 void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( GRID_WIDTH, gridWidth());
-    setting->setProperty( GRID_HEIGHT, gridHeight());
-    setting->setProperty( GRID_DIVISION_LEVEL, divisionLevel());
-    setting->setProperty( GRID_PRESSURE_DIVISION, pressureDivision());
-    setting->setProperty( GRID_SCALE, scale());
-    setting->setProperty( GRID_VERTICAL_BORDER, vertBorder());
-    setting->setProperty( GRID_HORIZONTAL_BORDER, horizBorder());
-    setting->setProperty( GRID_RANDOM_BORDER, randomBorder());
+    setting->setProperty(GRID_WIDTH, gridWidth());
+    setting->setProperty(GRID_HEIGHT, gridHeight());
+    setting->setProperty(GRID_DIVISION_LEVEL, divisionLevel());
+    setting->setProperty(GRID_PRESSURE_DIVISION, pressureDivision());
+    setting->setProperty(GRID_SCALE, scale());
+    setting->setProperty(GRID_VERTICAL_BORDER, vertBorder());
+    setting->setProperty(GRID_HORIZONTAL_BORDER, horizBorder());
+    setting->setProperty(GRID_RANDOM_BORDER, randomBorder());
 }
 
 void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)

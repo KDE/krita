@@ -29,7 +29,7 @@
 
 WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisView2* view)
     : KisOperationUIWidget(i18n("Feather Selection"), parent)
-    , m_radius(1)
+    , m_radius(5)
 {
     Q_ASSERT(view);
     KisImageWSP image = view->image();

@@ -214,16 +214,19 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
             setCursor(Qt::ArrowCursor);
             d->setState(ST_NORMAL);
         }
+        e->accept();
         d->setCurveModified();
     } else if (e->key() == Qt::Key_Escape && d->state() != ST_NORMAL) {
         d->m_curve.setPoint(d->m_grab_point_index, QPointF(d->m_grabOriginalX, d->m_grabOriginalY) );
         setCursor(Qt::ArrowCursor);
         d->setState(ST_NORMAL);
 
+        e->accept();
         d->setCurveModified();
     } else if ((e->key() == Qt::Key_A || e->key() == Qt::Key_Insert) && d->state() == ST_NORMAL) {
         /* FIXME: Lets user choose the hotkeys */
         addPointInTheMiddle();
+        e->accept();
     } else
         QWidget::keyPressEvent(e);
 }

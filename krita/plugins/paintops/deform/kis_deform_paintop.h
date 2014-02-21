@@ -57,8 +57,8 @@ private:
 
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
-    KisPressureRotationOption m_rotationOption;    
-    
+    KisPressureRotationOption m_rotationOption;
+
     qreal m_xSpacing;
     qreal m_ySpacing;
     qreal m_spacing;

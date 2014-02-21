@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <kis_debug.h>
 
+#include <KoStandardAction.h>
 #include <KoView.h>
 #include <KoZoomAction.h>
 #include <KoRuler.h>
@@ -39,7 +40,6 @@
 #include <KoRulerController.h>
 #include <KoUnit.h>
 #include <KoDpi.h>
-
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
@@ -79,6 +79,7 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_zoomAction(0)
         , m_zoomActionWidget(0)
         , m_100pct(0)
+        , m_showGuidesAction(0)
 {
 }
 
@@ -122,6 +123,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers.</p>"));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
+    m_showGuidesAction = KoStandardAction::showGuides(this, SLOT(showGuides()), this);
+    actionCollection->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), m_showGuidesAction);
+    m_showGuidesAction->setChecked(m_view->document()->guidesData().showGuideLines());
+
+
     m_100pct = new KAction(i18n("Reset zoom"), this);
     actionCollection->addAction("zoom_to_100pct", m_100pct);
     m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
@@ -139,11 +145,14 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
+    m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
+
     new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
+    m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
     m_showRulersAction->setChecked(show);
 
     QList<QAction*> unitActions = m_view->createChangeUnitActions();
@@ -175,13 +184,12 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
             this, SLOT(changeAspectMode(bool)));
 }
 
-void KisZoomManager::mousePositionChanged(const QPoint &pos)
+void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
 {
-    QPoint canvasShift = m_view->canvasBase()->coordinatesConverter()->flakeToWidget(QPointF(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY())).toPoint();
-    QPoint viewPos = pos - canvasShift;
+    QPoint pt = viewPos - m_rulersOffset;
 
-    m_horizontalRuler->updateMouseCoordinate(viewPos.x());
-    m_verticalRuler->updateMouseCoordinate(viewPos.y());
+    m_horizontalRuler->updateMouseCoordinate(pt.x());
+    m_verticalRuler->updateMouseCoordinate(pt.y());
 }
 
 void KisZoomManager::toggleShowRulers(bool show)
@@ -231,16 +239,22 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 void KisZoomManager::pageOffsetChanged()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    QPoint canvasShift = widgetRect.topLeft().toPoint();
+    m_rulersOffset = widgetRect.topLeft().toPoint();
 
-    m_horizontalRuler->setOffset(canvasShift.x());
-    m_verticalRuler->setOffset(canvasShift.y());
+    m_horizontalRuler->setOffset(m_rulersOffset.x());
+    m_verticalRuler->setOffset(m_rulersOffset.y());
 }
 
 void KisZoomManager::zoomTo100()
 {
     m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
     m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::showGuides()
+{
+    m_view->document()->guidesData().setShowGuideLines(m_showGuidesAction->isChecked());
+    m_view->canvas()->update();
 }
 
 

@@ -92,7 +92,7 @@ void KisPaintOpOption::setConfigurationPage(QWidget * page)
     m_d->configurationPage = page;
 }
 
-QWidget * KisPaintOpOption::configurationPage() const
+QWidget* KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }

@@ -48,7 +48,7 @@ public:
     void applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect);
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private:
     bool m_mixingEnabled;
 };

@@ -45,7 +45,7 @@ public:
     };
 
     void setBrush(KisBrushSP _brush);
-    void setBrushSize(qreal xPixels,qreal yPixels);
+    void setBrushSize(qreal xPixels, qreal yPixels);
 
 private slots:
 

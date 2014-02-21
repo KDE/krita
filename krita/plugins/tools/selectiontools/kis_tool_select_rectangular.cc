@@ -81,12 +81,14 @@ void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectRectangular::finishRect(const QRectF& rect)
 {
-    QRect rc(rect.normalized().toRect());
-    rc = rc.intersected(currentImage()->bounds());
-
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
+
+    KisSelectionToolHelper helper(kisCanvas, i18n("Rectangular Selection"));
+
+    QRect rc(rect.normalized().toRect());
+    helper.cropRectIfNeeded(&rc);
 
     // If the user just clicks on the canvas deselect
     if (rc.isEmpty()) {
@@ -94,8 +96,6 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
         QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
         return;
     }
-
-    KisSelectionToolHelper helper(kisCanvas, i18n("Rectangular Selection"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {

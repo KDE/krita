@@ -37,7 +37,7 @@
 #include "kis_offset_scale_option.h"
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     m_sketchOption =  new KisSketchOpOption();
 
@@ -53,21 +53,21 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 
     m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfiguration defaultSetting;
-    defaultSetting.setProperty("PaintOpAction",BUILDUP);
+    defaultSetting.setProperty("PaintOpAction", BUILDUP);
     m_paintActionType->readOptionSetting(&defaultSetting);
 
     addPaintOpOption(m_paintActionType);
 
     KisPropertiesConfiguration* reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer("");
-    xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition") );
+    xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
     QDomElement firstTag = xMLAnalyzer.documentElement();
     QDomElement firstTagsChild = firstTag.elementsByTagName("MaskGenerator").item(0).toElement();
 
     firstTagsChild.attributeNode("diameter").setValue("128");
 
-    reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );
+    reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString());
     setConfiguration(reconfigurationCourier);
     delete reconfigurationCourier;
 }

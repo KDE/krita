@@ -41,6 +41,8 @@
 #include "kis_shortcut_configuration.h"
 #include "kis_select_layer_action.h"
 
+#define PROFILE_VERSION 2
+
 
 class KisInputProfileManager::Private
 {
@@ -175,6 +177,13 @@ QList< KisAbstractInputAction * > KisInputProfileManager::actions()
     return d->actions;
 }
 
+
+struct ProfileEntry {
+    QString name;
+    QString fullpath;
+    int version;
+};
+
 void KisInputProfileManager::loadProfiles()
 {
     //Remove any profiles that already exist
@@ -183,17 +192,58 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::NoDuplicates | KStandardDirs::Recursive);
-    Q_FOREACH(const QString & p, profiles) {
-        //Open the file
-        KConfig config(p, KConfig::SimpleConfig);
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
-        if (!config.hasGroup("General") || !config.group("General").hasKey("name")) {
+
+    QMap<QString, QList<ProfileEntry> > profileEntries;
+
+    // Get only valid entries...
+    Q_FOREACH(const QString & p, profiles) {
+
+        ProfileEntry entry;
+        entry.fullpath = p;
+
+        KConfig config(p, KConfig::SimpleConfig);
+        if (!config.hasGroup("General") || !config.group("General").hasKey("name") || !config.group("General").hasKey("version")) {
             //Skip if we don't have the proper settings.
             continue;
         }
 
-        KisInputProfile *newProfile = addProfile(config.group("General").readEntry("name"));
+        // Only entries of exactly the right version can be considered
+        entry.version = config.group("General").readEntry("version", 0);
+        if (entry.version != PROFILE_VERSION) {
+            continue;
+        }
+
+        entry.name = config.group("General").readEntry("name");
+        if (!profileEntries.contains(entry.name)) {
+            profileEntries[entry.name] = QList<ProfileEntry>();
+        }
+
+        if (p.contains(".kde") || p.contains(".krita")) {
+            // It's the user define one, drop the others
+            profileEntries[entry.name].clear();
+            profileEntries[entry.name].append(entry);
+            break;
+        }
+        else {
+            profileEntries[entry.name].append(entry);
+        }
+    }
+
+    Q_FOREACH(const QString & profileName, profileEntries.keys()) {
+
+        if (profileEntries[profileName].isEmpty()) {
+            continue;
+        }
+
+        // we have one or more entries for this profile name. We'll take the first,
+        // because that's the most local one.
+        ProfileEntry entry = profileEntries[profileName].first();
+
+        KConfig config(entry.fullpath, KConfig::SimpleConfig);
+
+        KisInputProfile *newProfile = addProfile(entry.name);
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
             if (!config.hasGroup(action->name())) {
                 continue;
@@ -238,6 +288,7 @@ void KisInputProfileManager::saveProfiles()
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
 
         config.group("General").writeEntry("name", p->name());
+        config.group("General").writeEntry("version", PROFILE_VERSION);
 
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
             KConfigGroup grp = config.group(action->name());

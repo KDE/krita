@@ -63,6 +63,7 @@ public:
 
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
+
 protected:
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
@@ -85,6 +86,7 @@ protected:
     KisColorSelectorBase* m_popup;
     QWidget* m_parent;
     bool m_colorUpdateAllowed;
+    bool m_colorUpdateSelf;
 
 private:
     QTimer* m_hideTimer;

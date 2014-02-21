@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Mohit Goyal    <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,12 +61,15 @@ public:
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
-    bool presetIsValid() { return m_presetIsValid; }
+    bool presetIsValid() {
+        return m_presetIsValid;
+    }
 
     void writeOptionSetting(KisPropertiesConfiguration* settings) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setPrecisionEnabled(bool value);
+    bool autoPrecisionEnabled();
 
 signals:
 
@@ -75,6 +79,9 @@ signals:
 private slots:
     void buttonClicked(int id);
     void precisionChanged(int value);
+    void setAutoPrecisionEnabled(int value);
+    void setSizeToStartFrom(double value);
+    void setDeltaValue(double value);
 
 private:
     void setCurrentWidget(QWidget * widget);
@@ -82,11 +89,11 @@ private:
 
 private:
     enum Type {
-      AUTOBRUSH,
-      PREDEFINEDBRUSH,
-      CUSTOMBRUSH,
-      TEXTBRUSH,
-      CLIPBOARDBRUSH
+        AUTOBRUSH,
+        PREDEFINEDBRUSH,
+        CUSTOMBRUSH,
+        TEXTBRUSH,
+        CLIPBOARDBRUSH
     };
 
     bool m_presetIsValid;

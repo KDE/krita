@@ -83,8 +83,8 @@ public:
 
     virtual bool useColorAsMask() const;
 
-    /** 
-     * Convert the mask to inverted gray scale, so it is alpha mask. 
+    /**
+     * Convert the mask to inverted gray scale, so it is alpha mask.
      * It can be used as MASK brush type. This operates on the date of the brush,
      * so it destruct the original brush data
      */

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -33,24 +33,28 @@ class KisPainter;
 class KisSmudgeOption: public KisRateOption
 {
 public:
-    KisSmudgeOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
-    
+    KisSmudgeOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::brushCategory());
+
     enum Mode { SMEARING_MODE, DULLING_MODE };
-    
+
     /**
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0, qreal multiplicator=1.0) const;
-    
-    Mode getMode()          { return mMode;  }
-    void setMode(Mode mode) { mMode = mode; }
-    
+    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin = 0.0, qreal scaleMax = 1.0, qreal multiplicator = 1.0) const;
+
+    Mode getMode()          {
+        return m_mode;
+    }
+    void setMode(Mode mode) {
+        m_mode = mode;
+    }
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private:
-    Mode mMode;
+    Mode m_mode;
 };
 
 #endif // KIS_SMUDGE_OPTION_H

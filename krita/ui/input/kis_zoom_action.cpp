@@ -20,16 +20,18 @@
 
 #include <QApplication>
 
-#include <kis_canvas2.h>
-#include <kis_canvas_controller.h>
+#include <klocale.h>
 
-#include "kis_cursor.h"
 #include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
-#include <kis_view2.h>
-#include "kis_input_manager.h"
 
-#include <klocale.h>
+#include <kis_canvas2.h>
+#include <kis_canvas_controller.h>
+#include "kis_cursor.h"
+#include "kis_view2.h"
+#include "kis_input_manager.h"
+#include "kis_config.h"
+
 
 class KisZoomAction::Private
 {
@@ -227,7 +229,14 @@ void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
     const int stepDisc = 20;
 
     if (d->mode == ZoomToggleShortcut) {
-        float coeff = 1.0 + qreal(diff.y()) / stepCont;
+        KisConfig cfg;
+        float coeff;
+        if (cfg.readEntry<bool>("InvertMiddleClickZoom", false)) {
+            coeff = 1.0 - qreal(diff.y()) / stepCont;
+        }
+        else {
+            coeff = 1.0 + qreal(diff.y()) / stepCont;
+        }
         float zoom = coeff * inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom();
         inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
     } else if (d->mode == DiscreteZoomToggleShortcut) {

@@ -40,6 +40,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
 #include <KoStoreDevice.h>
+#include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
@@ -90,6 +91,8 @@ KoPADocument::KoPADocument(KoPart *part)
 
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
+    // this is needed so the text shape have a shape controller set when loaded, it is needed for copy and paste
+    new KoShapeController(0, this);
     QVariant variant;
     d->pageProvider = new KoPAPageProvider();
     variant.setValue<void*>(d->pageProvider);

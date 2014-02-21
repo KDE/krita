@@ -35,17 +35,13 @@ public:
     KisColorSelectorBase* createPopup() const;
 
 public slots:
-    void delayedSetColors(QList<KoColor> colors);
+    void setColors(QList<KoColor> colors);
     void updateSettings();
     void recalculate();
-
-protected slots:
-    void updateColors();
 
 private:
     QMutex m_mutex;
     QTimer m_recalculationTimer;
-    QTimer m_delayUpdateTimer;
     QPushButton* m_reloadButton;
     QList<KoColor> m_calculatedColors;
     KisImageWSP m_image;

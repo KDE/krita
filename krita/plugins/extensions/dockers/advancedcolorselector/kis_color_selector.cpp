@@ -224,7 +224,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     if(m_canvas && m_canvas->resourceManager()) {
         if (m_lastColorRole==Foreground) {
             setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
-        } else {
+        } else if (m_lastColorRole==Background) {
             setColor(m_canvas->resourceManager()->backgroundColor().toQColor());
         }
     }
@@ -263,12 +263,14 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     if(!e->isAccepted() &&
        m_lastColor != m_currentColor &&
        m_currentColor.isValid()) {
-
+   
         m_lastColor=m_currentColor;
         if(e->button() == Qt::LeftButton)
-            m_lastColorRole=Foreground;
-        else
-            m_lastColorRole=Background;
+   {
+            m_lastColorRole=Foreground;}
+        else if (e->button() == Qt::RightButton)
+   {
+            m_lastColorRole=Background;}
 
         commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
         e->accept();
@@ -298,7 +300,7 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
     if (m_grabbingComponent && (e->buttons() & Qt::LeftButton || e->buttons() & Qt::RightButton)) {
 
         m_grabbingComponent->mouseEvent(e->x(), e->y());
-
+   
         m_currentColor=m_mainComponent->currentColor();
         KoColor kocolor(m_currentColor, colorSpace());
         updateColorPreview(kocolor.toQColor());

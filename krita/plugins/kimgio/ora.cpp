@@ -44,23 +44,15 @@ bool OraHandler::canRead() const
 
 bool OraHandler::read(QImage *image)
 {
-//    qDebug() << "orahandler::read" << kBacktrace();
-//    if (QFile *f = qobject_cast<QFile*>(device())) {
-//        qDebug() << "\t" << f->fileName();
-//    }
+    KZip zip(device());
+    if (!zip.open(QIODevice::ReadOnly)) return false;
 
-    QScopedPointer<KoStore> store(KoStore::createStore(device(), KoStore::Read, "image/openraster", KoStore::Zip));
-    if (!store || store->bad()) {
-        return false;
-    }
-    store->disallowNameExpansion();
+    const KArchiveEntry *entry = zip.directory()->entry("mergedimage.png");
+    if (!entry || !entry->isFile()) return false;
 
-    OraLoadContext olc(store.data());
-    KisOpenRasterStackLoadVisitor orslv(0, &olc);
-    orslv.loadImage();
-    KisImageWSP img = orslv.image();
-    img->initialRefreshGraph();
-    *image = img->projection()->convertToQImage(0);
+    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+
+    image->loadFromData(fileZipEntry->data(), "PNG");
 
     return true;
 }

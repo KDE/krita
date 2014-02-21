@@ -35,7 +35,8 @@
 class KoCompositeOp;
 
 
-class KisHairyProperties{
+class KisHairyProperties
+{
 public:
     quint16 radius;
     quint16 inkAmount;
@@ -52,7 +53,7 @@ public:
     bool connectedPath;
     bool antialias;
     bool useCompositing;
-    
+
     quint8 pressureWeight;
     quint8 bristleLengthWeight;
     quint8 bristleInkAmountWeight;
@@ -62,7 +63,7 @@ public:
     qreal randomFactor;
     qreal scaleFactor;
     qreal threshold;
-    
+
 };
 
 class HairyBrush
@@ -74,9 +75,13 @@ public:
 
     void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation);
     /// set ink color for the whole bristle shape
-    void setInkColor(const KoColor &color){ m_color = color; }
+    void setInkColor(const KoColor &color) {
+        m_color = color;
+    }
     /// set parameters for the brush engine
-    void setProperties(KisHairyProperties * properties){ m_properties = properties; }
+    void setProperties(KisHairyProperties * properties) {
+        m_properties = properties;
+    }
     /// set the shape of the bristles according the dab
     void fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density);
 
@@ -88,8 +93,8 @@ private:
     /// check the opacity of dab pixel and if the opacity is less then color, it will copy color to dab
     void darkenPixel(int wx, int wy, const KoColor &color);
     /// paint wu particle by copying the color and setup just the opacity, weight is complementary to opacity of the color
-    void paintParticle(QPointF pos, const KoColor& color,qreal weight);
-    /// paint wu particle using composite operation 
+    void paintParticle(QPointF pos, const KoColor& color, qreal weight);
+    /// paint wu particle using composite operation
     void paintParticle(QPointF pos, const KoColor& color);
     /// similar to sample input color in spray
     void colorifyBristles(KisPaintDeviceSP source, QPointF point);
@@ -98,7 +103,7 @@ private:
     /// compute mouse pressure according distance
     double computeMousePressure(double distance);
 
-    /// simulate running out of saturation 
+    /// simulate running out of saturation
     void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
     /// simulate running out of ink through opacity decreasing
     void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
@@ -106,16 +111,16 @@ private:
     qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
 
     void initAndCache();
-    
+
 private:
     const KisHairyProperties * m_properties;
-    
+
     QVector<Bristle*> m_bristles;
     QTransform m_transform;
-  
+
     // used for interpolation the path of bristles
     Trajectory m_trajectory;
-    QHash<QString, QVariant> m_params;    
+    QHash<QString, QVariant> m_params;
     // temporary device
     KisPaintDeviceSP m_dab;
     KisRandomAccessorSP m_dabAccessor;

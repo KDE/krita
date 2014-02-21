@@ -37,12 +37,12 @@ const QString ABR_FLIP_Y = "flipY";
 const QString ABR_USE_TIP_DYNAMICS = "useTipDynamics";
 const QString ABR_TIP_DYNAMICS_MINUMUM_DIAMETER = "minimumDiameter";
 const QString ABR_TIP_DYNAMICS_MINUMUM_ROUNDNESS = "minimumRoundness";
-const QString ABR_TIP_DYNAMICS_TILT_SCALE = "tiltScale"; 
+const QString ABR_TIP_DYNAMICS_TILT_SCALE = "tiltScale";
 const QString ABR_SZVR = "szVr"; // size variance?
 const QString ABR_DYNAMICS_FADE_STEP = "fStp";
 const QString ABR_DYNAMICS_JITTER = "jitter";
 const QString ABR_ANGLE_DYNAMICS = "angleDynamics";
-const QString ABR_CONTROL = "bVTy"; // control of the attribute 
+const QString ABR_CONTROL = "bVTy"; // control of the attribute
 const QString ABR_ROUNDNESS_DYNAMICS = "roundnessDynamics";
 const QString ABR_USE_SCATTER = "useScatter";
 const QString ABR_DUAL_BRUSH = "dualBrush";
@@ -56,7 +56,7 @@ const QString ABR_WET_EDGES = "Wtdg";
 const QString ABR_NOISE = "Nose";
 const QString ABR_AIRBRUSH = "Rpt "; // repeat
 
-// TODO: if string comaprisons would be slow, convert it to enum 
+// TODO: if string comaprisons would be slow, convert it to enum
 enum enumObjectTypes {BRUSH_PRESET, BRUSH, SIZE_VARIANCE, ANGLE_DYNAMICS, ROUNDNESS_DYNAMICS, DUAL_BRUSH, COUNT_DYNAMICS, SCATTER_DYNAMICS, BRUSH_GROUP};
 const QString OBJECT_NAME_BRUSH_PRESET = "";
 const QString OBJECT_NAME_BRUSH = "Brsh";
@@ -73,13 +73,14 @@ const QString OBJECT_NAME_OPACITY_VARIANCE = "opVr";
 const QString BRUSH_TYPE_COMPUTED = "computedBrush";
 const QString BRUSH_TYPE_SAMPLED = "sampledBrush";
 
-enum enumAbrControllers{ OFF, FADE, PEN_PRESSURE, PEN_TILT, STYLUS_WHEEL, ROTATION, INITIAL_DIRECTION, DIRECTION};
+enum enumAbrControllers { OFF, FADE, PEN_PRESSURE, PEN_TILT, STYLUS_WHEEL, ROTATION, INITIAL_DIRECTION, DIRECTION};
 
 
-class AbrBrushProperties{
+class AbrBrushProperties
+{
 public:
     void toXML(QDomDocument& , QDomElement&) const;
-    void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
+    void setupProperty(const QString &attributeName, const QString &type, const  QString &value);
     void reset();
 private:
     double m_diameter;
@@ -90,14 +91,15 @@ private:
     bool m_intr;
     bool m_flipX;
     bool m_flipY;
-    
+
     QString m_brushType;
 };
 
 
-class AbrGroupProperties{
-public:    
-    void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
+class AbrGroupProperties
+{
+public:
+    void setupProperty(const QString &attributeName, const QString &type, const  QString &value);
 
     enumAbrControllers m_bVTy;
     int m_fadeStep;
@@ -106,12 +108,15 @@ public:
 
 #include <QHash>
 
-class AbrTipDynamicsProperties{
+class AbrTipDynamicsProperties
+{
 public:
     AbrTipDynamicsProperties();
     void toXML(QDomDocument& , QDomElement&) const;
-    void setupProperty(const QString &attributeName,const QString &type,const  QString &value);
-    void reset(){ m_groupType.clear(); }
+    void setupProperty(const QString &attributeName, const QString &type, const  QString &value);
+    void reset() {
+        m_groupType.clear();
+    }
 private:
     bool m_useTipDynamics;
     bool m_flipX;
@@ -119,24 +124,26 @@ private:
     double m_minumumDiameter;
     double m_minumumRoundness;
     double m_tiltScale;
-    
+
     AbrGroupProperties m_sizeVarianceProperties;
     AbrGroupProperties m_angleProperties;
     AbrGroupProperties m_RoundnessProperties;
-    
+
     QString m_groupType;
 
-    QHash<QString,AbrGroupProperties*> m_groups;
+    QHash<QString, AbrGroupProperties*> m_groups;
 };
 
 
-class AbrDualBrushProperties{
+class AbrDualBrushProperties
+{
 public:
-       bool useDualBrush; 
-       void toXML(QDomDocument& , QDomElement&) const;
+    bool useDualBrush;
+    void toXML(QDomDocument& , QDomElement&) const;
 };
 
-class AbrBrushGroupProperties{
+class AbrBrushGroupProperties
+{
 public:
     bool useBrushGroup;
     bool useTexture;
@@ -148,28 +155,29 @@ public:
     void toXML(QDomDocument& , QDomElement&) const;
 };
 
-class KisAbrTranslator{
-    public:
-        KisAbrTranslator();
-        ~KisAbrTranslator();
-        
-        
-        void addEntry(const QString &attributeName,const QString &type,const  QString &value);
-        
-        QString toString();
-        void finishPreset();
-        void clean();
+class KisAbrTranslator
+{
+public:
+    KisAbrTranslator();
+    ~KisAbrTranslator();
 
-    private:
-        void init();
-        void setupObjectType(const QString &type);
-        void setupBrush(const QString &attributeName,const QString &type,const  QString &value);
-    private:
-        QDomDocument m_doc;
-        QDomElement m_root;
-        QString m_currentObjectName;
-        AbrBrushProperties m_abrBrushProperties;
-        AbrTipDynamicsProperties m_abrTipDynamics;
+
+    void addEntry(const QString &attributeName, const QString &type, const  QString &value);
+
+    QString toString();
+    void finishPreset();
+    void clean();
+
+private:
+    void init();
+    void setupObjectType(const QString &type);
+    void setupBrush(const QString &attributeName, const QString &type, const  QString &value);
+private:
+    QDomDocument m_doc;
+    QDomElement m_root;
+    QString m_currentObjectName;
+    AbrBrushProperties m_abrBrushProperties;
+    AbrTipDynamicsProperties m_abrTipDynamics;
 };
 
 #endif

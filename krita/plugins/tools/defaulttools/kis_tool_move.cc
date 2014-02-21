@@ -200,6 +200,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
     QPoint pos = convertToPixelCoord(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
+    endStroke();
 }
 
 void KisToolMove::drag(const QPoint& newPos)
@@ -236,6 +237,12 @@ void KisToolMove::cancelStroke()
 QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
     connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),

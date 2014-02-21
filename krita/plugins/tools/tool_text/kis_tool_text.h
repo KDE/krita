@@ -48,7 +48,7 @@ private slots:
 
 protected:
     virtual void finishRect(const QRectF& rect);
-    KisTextToolOptionWidget* m_optionWidget;
+    KisTextToolOptionWidget* m_optionsWidget;
 };
 
 class KisToolTextFactory : public KoToolFactoryBase

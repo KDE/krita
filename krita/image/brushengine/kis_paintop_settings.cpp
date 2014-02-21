@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -35,6 +36,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
 #include "kis_paintop_settings_widget.h"
+#include <time.h>
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
@@ -59,7 +61,31 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers){
     Q_UNUSED(pos);
     Q_UNUSED(modifiers);
+    setRandomOffset();
     return true; // ignore the event by default
+}
+void KisPaintOpSettings::setRandomOffset()
+{
+    srand(time(0));
+    bool isRandomOffsetX = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetX");
+    bool isRandomOffsetY = KisPropertiesConfiguration::getBool("Texture/Pattern/isRandomOffsetY");
+    int offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");;
+    int offsetY = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetY");
+    if (KisPropertiesConfiguration::getBool("Texture/Pattern/Enabled")) {
+        if(isRandomOffsetX) {
+            offsetX = rand()%KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetX");
+
+            KisPropertiesConfiguration::setProperty("Texture/Pattern/OffsetX",offsetX);
+            offsetX = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetX");
+
+        }
+
+        if (isRandomOffsetY) {
+            offsetY = rand()%KisPropertiesConfiguration::getInt("Texture/Pattern/MaximumOffsetY");
+            KisPropertiesConfiguration::setProperty("Texture/Pattern/OffsetY",offsetY);
+            offsetY = KisPropertiesConfiguration::getInt("Texture/Pattern/OffsetY");
+        }
+    }
 }
 
 
@@ -94,7 +120,7 @@ KisNodeSP KisPaintOpSettings::node() const
 
 void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
 {
-    if(!d->settingsWidget.isNull()) {
+    if (!d->settingsWidget.isNull()) {
         d->settingsWidget.data()->changePaintOpSize(x, y);
         d->settingsWidget.data()->writeConfiguration(this);
     }
@@ -103,7 +129,7 @@ void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
 
 QSizeF KisPaintOpSettings::paintOpSize() const
 {
-    if(!d->settingsWidget.isNull()) {
+    if (!d->settingsWidget.isNull()) {
         return d->settingsWidget.data()->paintOpSize();
     }
     return QSizeF(1.0,1.0);
@@ -122,13 +148,13 @@ void KisPaintOpSettings::setModelName(const QString & modelName)
 
 KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
 {
-    if(d->settingsWidget.isNull())
+    if (d->settingsWidget.isNull())
         return 0;
 
     return d->settingsWidget.data();
 }
 
-bool KisPaintOpSettings::isValid()
+bool KisPaintOpSettings::isValid() const
 {
     return true;
 }
@@ -144,11 +170,9 @@ QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
 
 QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    Q_UNUSED(info);
-
     QPainterPath path;
-    if (mode == CursorIsOutline){
-        path = ellipseOutline(10,10,1.0,0).translated(info.pos());
+    if (mode == CursorIsOutline) {
+        path = ellipseOutline(10, 10, 1.0, 0).translated(info.pos());
     }
 
     return path;

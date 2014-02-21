@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal    <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,9 +35,19 @@ public:
 
     int precisionLevel() const;
     void setPrecisionLevel(int precisionLevel);
+    void setAutoPrecisionEnabled(int);
+    void setDeltaValue(double);
+    void setSizeToStartFrom(double);
+    bool autoPrecisionEnabled();
+    double deltaValue();
+    double sizeToStartFrom();
+    void setAutoPrecision(double brushSize);
 
 private:
     int m_precisionLevel;
+    bool m_autoPrecisionEnabled;
+    double m_sizeToStartFrom;
+    double m_deltaValue;
 };
 
 #endif /* __KIS_PRECISION_OPTION_H */

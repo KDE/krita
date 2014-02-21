@@ -21,10 +21,10 @@
 #include <QPainter>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
+#include <QDesktopServices>
 
 #include <kis_debug.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -34,7 +34,7 @@
 #endif
 
 #include <KoIcon.h>
-
+#include <KoFileDialogHelper.h>
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
 
@@ -489,7 +489,13 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    KUrl file = KFileDialog::getSaveUrl(KUrl(), QString("*.krassistants"));
+    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->view(),
+                                                           i18n("Save Assistant"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           QStringList("*.krassistants"),
+                                                           "",
+                                                           "OpenDocument");
+    KUrl file = KUrl::fromLocalFile(filename);
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
     connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
@@ -603,6 +609,13 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
+
+        // See https://bugs.kde.org/show_bug.cgi?id=316896
+        QWidget *specialSpacer = new QWidget(m_optionsWidget);
+        specialSpacer->setObjectName("SpecialSpacer");
+        specialSpacer->setFixedSize(0, 0);
+        m_optionsWidget->layout()->addWidget(specialSpacer);
+
         m_options.loadButton->setIcon(koIcon("document-open"));
         m_options.saveButton->setIcon(koIcon("document-save"));
         m_options.deleteButton->setIcon(koIcon("edit-delete"));

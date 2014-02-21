@@ -64,14 +64,16 @@ double gauss::gaussian(double mean, double std, int seed)
     if (u >= 0.5) {
         minus = 0;
         u = u - 0.5;
-    } else
+    }
+    else {
         minus = 1;
-
+    }
     /* interpolate gaussian random number using table */
 
     index = (int)(di = (didu * u));
-    if (index == itblmax)
+    if (index == itblmax) {
         delta = tbl[index];
+    }
     else {
         di -= index;
         delta =  tbl[index] + (tbl[index + 1] - tbl[index]) * di;

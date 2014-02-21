@@ -52,119 +52,112 @@ DeformBrush::~DeformBrush()
 
 void DeformBrush::initDeformAction()
 {
-    DeformModes mode = DeformModes(m_properties->action-1);
+    DeformModes mode = DeformModes(m_properties->action - 1);
 
-    switch(mode){
-        case GROW:
-        case SHRINK:
-        {
-            m_deformAction = new DeformScale();
-            break;
-        }
-        case SWIRL_CW:
-        case SWIRL_CCW:
-        {
-            m_deformAction = new DeformRotation();
-            break;
-        }
+    switch (mode) {
+    case GROW:
+    case SHRINK: {
+        m_deformAction = new DeformScale();
+        break;
+    }
+    case SWIRL_CW:
+    case SWIRL_CCW: {
+        m_deformAction = new DeformRotation();
+        break;
+    }
 
-        case MOVE:
-        {
-            m_deformAction = new DeformMove();
-            static_cast<DeformMove*>(m_deformAction)->setFactor(m_properties->deformAmount);
-            break;
-        }
-        case LENS_IN:
-        case LENS_OUT:
-        {
-            m_deformAction = new DeformLens();
-            static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deformAmount,0.0);
-            static_cast<DeformLens*>(m_deformAction)->setMode(mode == LENS_OUT);
-            break;
-        }
-        case DEFORM_COLOR:
-        {
-            m_deformAction = new DeformColor();
-            static_cast<DeformColor*>(m_deformAction)->setFactor(m_properties->deformAmount);
-            break;
-        }
-        default:{
-            m_deformAction = new DeformBase();
-            break;
-        }
+    case MOVE: {
+        m_deformAction = new DeformMove();
+        static_cast<DeformMove*>(m_deformAction)->setFactor(m_properties->deformAmount);
+        break;
+    }
+    case LENS_IN:
+    case LENS_OUT: {
+        m_deformAction = new DeformLens();
+        static_cast<DeformLens*>(m_deformAction)->setLensFactor(m_properties->deformAmount, 0.0);
+        static_cast<DeformLens*>(m_deformAction)->setMode(mode == LENS_OUT);
+        break;
+    }
+    case DEFORM_COLOR: {
+        m_deformAction = new DeformColor();
+        static_cast<DeformColor*>(m_deformAction)->setFactor(m_properties->deformAmount);
+        break;
+    }
+    default: {
+        m_deformAction = new DeformBase();
+        break;
+    }
     }
 }
 
-bool DeformBrush::setupAction(DeformModes mode,const QPointF& pos)
+bool DeformBrush::setupAction(DeformModes mode, const QPointF& pos)
 {
 
-    switch(mode){
-        case GROW:
-        case SHRINK:
-        {
-            // grow or shrink, the sign decide
-            qreal sign = (mode == GROW) ? 1.0 : -1.0;
-            qreal factor;
-            if (m_properties->useCounter){
-                factor = (1.0 + sign*(m_counter*m_counter / 100.0));
-            } else{
-                factor =  (1.0 + sign*(m_properties->deformAmount));
-            }
-            dynamic_cast<DeformScale*>(m_deformAction)->setFactor(factor);
-            break;
+    switch (mode) {
+    case GROW:
+    case SHRINK: {
+        // grow or shrink, the sign decide
+        qreal sign = (mode == GROW) ? 1.0 : -1.0;
+        qreal factor;
+        if (m_properties->useCounter) {
+            factor = (1.0 + sign * (m_counter * m_counter / 100.0));
         }
-        case SWIRL_CW:
-        case SWIRL_CCW:
-        {
-             // CW or CCW, the sign decide
-            qreal sign = (mode == SWIRL_CW) ? 1.0 : -1.0;
-            qreal factor;
-            if (m_properties->useCounter){
-                factor = m_counter * sign * degToRad;
-            } else{
-                factor =  (360 * m_properties->deformAmount * 0.5) * sign * degToRad;
-            }
-            dynamic_cast<DeformRotation*>(m_deformAction)->setAlpha(factor);
-            break;
+        else {
+            factor = (1.0 + sign * (m_properties->deformAmount));
         }
-        case MOVE:
-        {
-            if (m_firstPaint == false) {
-                m_prevX = pos.x();
-                m_prevY = pos.y();
-                static_cast<DeformMove*>(m_deformAction)->setDistance(0.0,0.0);
-                m_firstPaint = true;
-                return false;
-            } else {
-                static_cast<DeformMove*>(m_deformAction)->setDistance(pos.x() - m_prevX,pos.y() - m_prevY);
-                m_prevX = pos.x();
-                m_prevY = pos.y();
-            }
-            break;
+        dynamic_cast<DeformScale*>(m_deformAction)->setFactor(factor);
+        break;
+    }
+    case SWIRL_CW:
+    case SWIRL_CCW: {
+        // CW or CCW, the sign decide
+        qreal sign = (mode == SWIRL_CW) ? 1.0 : -1.0;
+        qreal factor;
+        if (m_properties->useCounter) {
+            factor = m_counter * sign * degToRad;
         }
-        case LENS_IN:
-        case LENS_OUT:
-        {
-            static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->diameter * 0.5, m_sizeProperties->diameter * 0.5);
-            break;
+        else {
+            factor = (360 * m_properties->deformAmount * 0.5) * sign * degToRad;
         }
-        case DEFORM_COLOR:
-        {
-            // no run-time setup
-            break;
+        dynamic_cast<DeformRotation*>(m_deformAction)->setAlpha(factor);
+        break;
+    }
+    case MOVE: {
+        if (m_firstPaint == false) {
+            m_prevX = pos.x();
+            m_prevY = pos.y();
+            static_cast<DeformMove*>(m_deformAction)->setDistance(0.0, 0.0);
+            m_firstPaint = true;
+            return false;
         }
-        default:{
-            break;
+        else {
+            static_cast<DeformMove*>(m_deformAction)->setDistance(pos.x() - m_prevX, pos.y() - m_prevY);
+            m_prevX = pos.x();
+            m_prevY = pos.y();
         }
+        break;
+    }
+    case LENS_IN:
+    case LENS_OUT: {
+        static_cast<DeformLens*>(m_deformAction)->setMaxDistance(m_sizeProperties->diameter * 0.5, m_sizeProperties->diameter * 0.5);
+        break;
+    }
+    case DEFORM_COLOR: {
+        // no run-time setup
+        break;
+    }
+    default: {
+        break;
+    }
     }
     return true;
 }
 
 KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
-                                             KisPaintDeviceSP layer,
-                                             qreal scale,
-                                             qreal rotation,
-                                             QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
+        KisPaintDeviceSP layer,
+        qreal scale,
+        qreal rotation,
+        QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     KisCrossDeviceColorPicker colorPicker(layer, dab);
@@ -172,14 +165,15 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal fWidth = maskWidth(scale);
     qreal fHeight = maskHeight(scale);
 
-    int dstWidth =  qRound( m_maskRect.width() );
-    int dstHeight = qRound( m_maskRect.height());
+    int dstWidth =  qRound(m_maskRect.width());
+    int dstHeight = qRound(m_maskRect.height());
 
     // clear
-    if (dab->bounds().width() != dstWidth || dab->bounds().height() != dstHeight){
+    if (dab->bounds().width() != dstWidth || dab->bounds().height() != dstHeight) {
         dab->setRect(m_maskRect.toRect());
         dab->initialize();
-    }else{
+    }
+    else {
         dab->clear(m_maskRect.toRect());
     }
 
@@ -187,9 +181,9 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     m_centerY = dstHeight * 0.5  + subPixelY;
 
     // major axis
-    m_majorAxis = 2.0/fWidth;
+    m_majorAxis = 2.0 / fWidth;
     // minor axis
-    m_minorAxis = 2.0/fHeight;
+    m_minorAxis = 2.0 / fHeight;
     // inverse square
     m_inverseScale = 1.0 / scale;
     // amount of precomputed data
@@ -200,7 +194,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal distance;
 
     // if can't paint, stop
-    if (!setupAction(DeformModes(m_properties->action-1),pos)) {
+    if (!setupAction(DeformModes(m_properties->action - 1), pos)) {
         return 0;
     }
 
@@ -219,8 +213,8 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     quint8* dabPointer = dab->data();
     int dabPixelSize = dab->colorSpace()->pixelSize();
 
-    for (int y = 0; y <  dstHeight; y++){
-        for (int x = 0; x < dstWidth; x++){
+    for (int y = 0; y <  dstHeight; y++) {
+        for (int x = 0; x < dstWidth; x++) {
             maskX = x - m_centerX;
             maskY = y - m_centerY;
             qreal rmaskX = cosa * maskX - sina * maskY;
@@ -228,7 +222,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
 
             distance = norme(rmaskX * m_majorAxis, rmaskY * m_minorAxis);
-            if (distance > 1.0){
+            if (distance > 1.0) {
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
 
                 colorPicker.pickOldColor(x + dabX, y + dabY, dabPointer);
@@ -239,8 +233,8 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                 continue;
             }
 
-            if (m_sizeProperties->density != 1.0){
-                if (m_sizeProperties->density < drand48()){
+            if (m_sizeProperties->density != 1.0) {
+                if (m_sizeProperties->density < drand48()) {
                     dabPointer += dabPixelSize;
                     *maskPointer = OPACITY_TRANSPARENT_U8;
                     maskPointer += maskPixelSize;
@@ -248,7 +242,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
                 }
             }
 
-            m_deformAction->transform( &rmaskX, &rmaskY, distance);
+            m_deformAction->transform(&rmaskX, &rmaskY, distance);
 
             maskX = bcosa * rmaskX - bsina * rmaskY;
             maskY = bsina * rmaskX + bcosa * rmaskY;
@@ -263,7 +257,8 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
             if (m_properties->useOldData) {
                 colorPicker.pickOldColor(maskX, maskY, dabPointer);
-            } else {
+            }
+            else {
                 colorPicker.pickColor(maskX, maskY, dabPointer);
             }
 
@@ -285,81 +280,11 @@ void DeformBrush::debugColor(const quint8* data, KoColorSpace * cs)
     QColor rgbcolor;
     cs->toQColor(data, &rgbcolor);
     dbgPlugins << "RGBA: ("
-    << rgbcolor.red()
-    << ", " << rgbcolor.green()
-    << ", " << rgbcolor.blue()
-    << ", " << rgbcolor.alpha() << ")";
+               << rgbcolor.red()
+               << ", " << rgbcolor.green()
+               << ", " << rgbcolor.blue()
+               << ", " << rgbcolor.alpha() << ")";
 }
-
-
-// void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst)
-// {
-//     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-//
-//     int ix = (int)floor(x);
-//     int iy = (int)floor(y);
-//
-//     const quint8 *colors[4];
-//     m_readAccessor->moveTo(ix, iy);
-//     colors[0] = m_readAccessor->rawData(); //11
-//
-//     m_readAccessor->moveTo(ix + 1, iy);
-//     colors[1] = m_readAccessor->rawData(); //12
-//
-//     m_readAccessor->moveTo(ix, iy + 1);
-//     colors[2] = m_readAccessor->rawData(); //21
-//
-//     m_readAccessor->moveTo(ix + 1, iy + 1);
-//     colors[3] = m_readAccessor->rawData();  //22
-//
-//     double x_frac = x - (double)ix;
-//     double y_frac = y - (double)iy;
-//
-//     qint16 colorWeights[4];
-//     int MAX_16BIT = 255;
-//
-//     colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
-//     colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
-//     colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
-//     colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
-//
-//     mixOp->mixColors(colors, colorWeights, 4, dst);
-// }
-
-
-// void DeformBrush::bilinear_interpolation_old(double x, double y , quint8 *dst)
-// {
-//     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-//
-//     int ix = (int)floor(x);
-//     int iy = (int)floor(y);
-//
-//     const quint8 *colors[4];
-//     m_readAccessor->moveTo(ix, iy);
-//     colors[0] = m_readAccessor->oldRawData(); //11
-//
-//     m_readAccessor->moveTo(ix + 1, iy);
-//     colors[1] = m_readAccessor->oldRawData(); //12
-//
-//     m_readAccessor->moveTo(ix, iy + 1);
-//     colors[2] = m_readAccessor->oldRawData(); //21
-//
-//     m_readAccessor->moveTo(ix + 1, iy + 1);
-//     colors[3] = m_readAccessor->oldRawData();  //22
-//
-//     double x_frac = x - (double)ix;
-//     double y_frac = y - (double)iy;
-//
-//     qint16 colorWeights[4];
-//     int MAX_16BIT = 255;
-//
-//     colorWeights[0] = static_cast<quint16>((1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT);
-//     colorWeights[1] = static_cast<quint16>((1.0 - y_frac) *  x_frac * MAX_16BIT);
-//     colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
-//     colorWeights[3] = static_cast<quint16>(y_frac * x_frac * MAX_16BIT);
-//     mixOp->mixColors(colors, colorWeights, 4, dst);
-// }
-
 
 QPointF DeformBrush::hotSpot(qreal scale, qreal rotation)
 {
@@ -370,15 +295,9 @@ QPointF DeformBrush::hotSpot(qreal scale, qreal rotation)
     m.reset();
     m.rotateRadians(rotation);
 
-    m_maskRect = QRect(0,0,fWidth,fHeight);
+    m_maskRect = QRect(0, 0, fWidth, fHeight);
     m_maskRect.translate(-m_maskRect.center());
     m_maskRect = m.mapRect(m_maskRect);
     m_maskRect.translate(-m_maskRect.topLeft());
     return m_maskRect.center();
 }
-
-
-/***
-* methods with fast prefix (like this one called fastScale) uses KisRectIterator,
-* they are faster just a little bit (according my tests 120 miliseconds faster with big radius, slower with small radius)
-**/

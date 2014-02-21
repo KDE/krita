@@ -52,10 +52,6 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 
 KisWdgColorToAlpha::~KisWdgColorToAlpha()
 {
-    if (m_view) {
-        KoToolManager::instance()->switchBackRequested();
-    }
-
     delete m_widget;
 }
 
@@ -103,17 +99,16 @@ void KisWdgColorToAlpha::hideEvent(QHideEvent *)
 {
     if (m_view) {
         disconnect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        KoToolManager::instance()->switchBackRequested();
     }
-    KoToolManager::instance()->switchBackRequested();
 }
 
 void KisWdgColorToAlpha::showEvent(QShowEvent *)
 {
     if (m_view) {
         connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
     }
-    KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
-
 }
 
 

@@ -59,6 +59,8 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
     connect(d->ui->duplicateButton, SIGNAL(clicked(bool)), SLOT(duplicateButtonClicked()));
     connect(d->ui->renameButton, SIGNAL(clicked(bool)), SLOT(renameButtonClicked()));
 
+    d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
+
     setButtons(Close | Default);
     setWindowTitle(i18n("Edit Profiles"));
 }
@@ -73,11 +75,13 @@ void KisEditProfilesDialog::addButtonClicked()
     QString newProfileName = i18n("New Profile");
     KisInputProfileManager::instance()->addProfile(newProfileName);
     d->ui->profileList->edit(d->profileModel->find(newProfileName));
+    d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
 }
 
 void KisEditProfilesDialog::removeButtonClicked()
 {
     KisInputProfileManager::instance()->removeProfile(d->profileModel->profileName(d->ui->profileList->currentIndex()));
+    d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
 }
 
 void KisEditProfilesDialog::duplicateButtonClicked()
@@ -85,6 +89,7 @@ void KisEditProfilesDialog::duplicateButtonClicked()
     QString currentName = d->profileModel->profileName(d->ui->profileList->currentIndex());
     QString newName = i18n("Copy of %1", currentName);
     KisInputProfileManager::instance()->duplicateProfile(currentName, newName);
+    d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
 }
 
 void KisEditProfilesDialog::renameButtonClicked()

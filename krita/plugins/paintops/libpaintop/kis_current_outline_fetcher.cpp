@@ -24,11 +24,9 @@
 #include "kis_paintop_settings.h"
 
 
-struct KisCurrentOutlineFetcher::Private
-{
+struct KisCurrentOutlineFetcher::Private {
     Private(Options optionsAvailable)
-        : isDirty(true)
-    {
+        : isDirty(true) {
         if (optionsAvailable & SIZE_OPTION) {
             sizeOption.reset(new KisPressureSizeOption());
         }
@@ -72,17 +70,17 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     if (d->isDirty) {
         if (d->sizeOption) {
             d->sizeOption->readOptionSetting(settings);
-            d->sizeOption->sensor()->reset();
+            d->sizeOption->resetAllSensors();
         }
 
         if (d->rotationOption) {
             d->rotationOption->readOptionSetting(settings);
-            d->rotationOption->sensor()->reset();
+            d->rotationOption->resetAllSensors();
         }
 
         if (d->mirrorOption) {
             d->mirrorOption->readOptionSetting(settings);
-            d->mirrorOption->sensor()->reset();
+            d->mirrorOption->resetAllSensors();
         }
 
         d->isDirty = false;

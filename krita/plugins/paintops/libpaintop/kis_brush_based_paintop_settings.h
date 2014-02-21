@@ -42,7 +42,7 @@ public:
     virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     ///Reimplemented
-    virtual bool isValid();
+    virtual bool isValid() const;
 
     ///Reimplemented
     virtual bool isLoadable();

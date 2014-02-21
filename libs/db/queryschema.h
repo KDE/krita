@@ -472,10 +472,10 @@ public:
      For example, for "SELECT t2.id FROM table1 t1, table2 t2" query statement,
      columnBoundToTable(0) returns 1, what means that table at position 1
      (within FROM section) is bound to column at position 0, so we can
-     now call tableAlias(1) to see if we have used alias for this column (t2.d)
-     or just a table name (table2.d).
+     now call tableAlias(1) to see if we have used alias for this column (t2.id)
+     or just a table name (table2.id).
 
-     These checkings are performed e.g. by Connection::queryStatement()
+     These checks are performed e.g. by Connection::selectStatement()
      to construct a statement string maximally identical to originally
      defined query statement.
 
@@ -491,6 +491,16 @@ public:
      or null string if there is no alias for this table
      or if there is no such table within the query defined. */
     QByteArray tableAlias(uint position) const;
+
+    /*! \return alias of a table \a tableName (within FROM section)
+     or empty value if there is no alias for this table
+     or if there is no such table within the query defined. */
+    QByteArray tableAlias(const QString& tableName) const;
+
+    /*! \return alias of a table \a tableName (within FROM section).
+     If there is no alias for this table, its name is returned.
+     Empty value is returned if there is no such table within the query defined. */
+    QString tableAliasOrName(const QString& tableName) const;
 
     /*! \return table position (within FROM section) that has attached
      alias \a name.

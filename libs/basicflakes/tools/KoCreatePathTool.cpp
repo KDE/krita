@@ -131,20 +131,34 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && event->modifiers() & Qt::ShiftModifier)) {
+    const bool isOverFirstPoint = d->shape &&
+        handleGrabRect(d->firstPoint->point()).contains(event->point);
+    const bool haveCloseModifier = event->modifiers() & Qt::ShiftModifier;
+
+    if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && haveCloseModifier && !isOverFirstPoint)) {
         endPathWithoutLastPoint();
         return;
     }
 
+    d->finishAfterThisPoint = false;
+
     if (d->shape) {
-        // the path shape gets closed by clicking on the first point
-        if (handleGrabRect(d->firstPoint->point()).contains(event->point)) {
+        if (isOverFirstPoint) {
             d->activePoint->setPoint(d->firstPoint->point());
-            d->shape->closeMerge();
-            // we are closing the path, so reset the existing start path point
-            d->existingStartPoint = 0;
-            // finish path
-            endPath();
+            canvas()->updateCanvas(d->shape->boundingRect());
+            canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
+
+            if (haveCloseModifier) {
+                d->shape->closeMerge();
+                // we are closing the path, so reset the existing start path point
+                d->existingStartPoint = 0;
+                // finish path
+                endPath();
+            } else {
+                // the path shape will get closed when the user releases
+                // the mouse button
+                d->finishAfterThisPoint = true;
+            }
         } else {
             canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 
@@ -262,7 +276,12 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     d->repaintActivePoint();
     d->pointIsDragged = false;
     KoPathPoint *lastActivePoint = d->activePoint;
-    d->activePoint = d->shape->lineTo(event->point);
+
+    if (!d->finishAfterThisPoint) {
+        d->activePoint = d->shape->lineTo(event->point);
+        canvas()->snapGuide()->setIgnoredPathPoints((QList<KoPathPoint*>()<<d->activePoint));
+    }
+
     // apply symmetric point property if applicable
     if (lastActivePoint->activeControlPoint1() && lastActivePoint->activeControlPoint2()) {
         QPointF diff1 = lastActivePoint->point() - lastActivePoint->controlPoint1();
@@ -270,7 +289,20 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         if (qFuzzyCompare(diff1.x(), diff2.x()) && qFuzzyCompare(diff1.y(), diff2.y()))
             lastActivePoint->setProperty(KoPathPoint::IsSymmetric);
     }
-    canvas()->snapGuide()->setIgnoredPathPoints((QList<KoPathPoint*>()<<d->activePoint));
+
+    if (d->finishAfterThisPoint) {
+
+        d->firstPoint->setControlPoint1(d->activePoint->controlPoint1());
+        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+        d->activePoint = d->firstPoint;
+        d->shape->closeMerge();
+
+        // we are closing the path, so reset the existing start path point
+        d->existingStartPoint = 0;
+        // finish path
+        endPath();
+    }
+
     if (d->angleSnapStrategy && lastActivePoint->activeControlPoint2()) {
         d->angleSnapStrategy->deactivate();
     }
@@ -404,7 +436,7 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     angleSnap->setChecked(false);
     angleSnap->setCheckable(true);
     layout->addWidget(angleSnap, 1, 1);
-    QWidget *specialSpacer =new QWidget();
+    QWidget *specialSpacer = new QWidget();
     specialSpacer->setObjectName("SpecialSpacer");
     layout->addWidget(specialSpacer, 2, 1);
     angleWidget->setWindowTitle(i18n("Angle Constraints"));
@@ -429,13 +461,7 @@ KoShapeStroke *KoCreatePathTool::createStroke()
 
     KoShapeStroke *stroke = 0;
     if (d->strokeWidget) {
-        stroke = new KoShapeStroke();
-        stroke->setColor(d->strokeWidget->color());
-        stroke->setLineWidth(d->strokeWidget->lineWidth());
-        stroke->setCapStyle(d->strokeWidget->capStyle());
-        stroke->setJoinStyle(d->strokeWidget->joinStyle());
-        stroke->setMiterLimit(d->strokeWidget->miterLimit());
-        stroke->setLineStyle(d->strokeWidget->lineStyle(), d->strokeWidget->lineDashes());
+        stroke = d->strokeWidget->createShapeStroke();
     }
     return stroke;
 }

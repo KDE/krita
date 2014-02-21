@@ -57,7 +57,8 @@ private:
     KisBrushSizeOptionsWidget * m_options;
 };
 
-class PAINTOP_EXPORT KisBrushSizeProperties{
+class PAINTOP_EXPORT KisBrushSizeProperties
+{
 
 public:
     quint16 shape;
@@ -72,18 +73,20 @@ public:
     bool jitterEnabled;
 
 public:
-    void readOptionSetting(const KisPropertiesConfiguration * settings){
+    void readOptionSetting(const KisPropertiesConfiguration * settings) {
         //TODO: shape
         shape = 0;
         diameter = quint16(settings->getDouble(BRUSH_DIAMETER));
         aspect = settings->getDouble(BRUSH_ASPECT);
-        rotation = settings->getDouble(BRUSH_ROTATION) * (M_PI/180.0);
+        rotation = settings->getDouble(BRUSH_ROTATION) * (M_PI / 180.0);
         scale = settings->getDouble(BRUSH_SCALE);
         density = settings->getDouble(BRUSH_DENSITY) * 0.01;
         spacing = settings->getDouble(BRUSH_SPACING);
-        if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))){
+        
+        if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))) {
             jitterMovementAmount = settings->getDouble(BRUSH_JITTER_MOVEMENT);
-        }else{
+        }
+        else {
             jitterMovementAmount = 0.0;
         }
     }

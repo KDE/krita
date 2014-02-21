@@ -62,6 +62,9 @@ public:
     bool accept(KisNodeVisitor&);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
+    KUndo2Command* crop(const QRect & rect);
+    KUndo2Command* transform(const QTransform &transform);
+
 public slots:
     void slotLoadingFinished();
 

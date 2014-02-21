@@ -28,6 +28,7 @@
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"
+#include <kis_threaded_text_rendering_workaround.h>
 
 #include <krita_export.h>
 
@@ -48,6 +49,10 @@ class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericReg
 
 public:
     virtual ~KisPaintOpRegistry();
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    void preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     /**
      * Create and return a paintop based on the given preset. A preset defines

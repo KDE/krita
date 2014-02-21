@@ -65,13 +65,12 @@ private:
     Private * const m_d;
 };
 
-class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBoundsBase
+class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
 {
 public:
-    KisSelectionEmptyBounds();
+    KisSelectionEmptyBounds(KisImageWSP image);
     virtual ~KisSelectionEmptyBounds();
     QRect bounds() const;
-    virtual bool wrapAroundMode() const { return false; }
 };
 
 #endif // KIS_DEFAULT_BOUNDS_H

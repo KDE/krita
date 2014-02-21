@@ -174,7 +174,7 @@ private:
 private:
 
     bool m_specialHoverModifier;
-    QGridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionsWidgetLayout;
 
     bool m_supportOutline;
 

@@ -111,7 +111,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setCheckable(true);
 
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setIcon(koIcon("draw-eraser"));
+    eraseAction->setIcon(koIcon("eraser-toggle"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -401,6 +401,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
+
+    /**
+     * We will get more update signals from the configuration widgets
+     * but they might be delayed by some internal deferring timers,
+     * so just call the slot directly
+     */
+    slotUpdatePreset();
 }
 
 KoID KisPaintopBox::defaultPaintOp()

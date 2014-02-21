@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QClipboard>
 
+#include <kconfiggroup.h>
 #include <kmimetype.h>
 #include <klocale.h>
 
@@ -111,8 +112,10 @@ QString KoFileDialogHelper::getOpenFileName(QWidget *parent,
                                             const QString &caption,
                                             const QString &dir,
                                             const QStringList &mimeList,
-                                            const QString &defaultMime)
+                                            const QString &defaultMime, const QString uniqueName)
 {
+
+
     QString str = getFilterString(defaultMime);
     QFileDialog::Options options = 0;
 #ifdef Q_WS_X11
@@ -122,10 +125,11 @@ QString KoFileDialogHelper::getOpenFileName(QWidget *parent,
 #endif
     QString res = QFileDialog::getOpenFileName(parent,
                                                caption,
-                                               dir,
+                                               getDefaultDir(dir, uniqueName),
                                                getFilterString(mimeList),
                                                &str,
                                                options);
+    saveDefaultDir(res, uniqueName);
     return res;
 }
 
@@ -133,8 +137,10 @@ QStringList KoFileDialogHelper::getOpenFileNames(QWidget *parent,
                                                  const QString &caption,
                                                  const QString &dir,
                                                  const QStringList &mimeList,
-                                                 const QString &defaultMime)
+                                                 const QString &defaultMime, const QString uniqueName)
 {
+
+
     QString str = getFilterString(defaultMime);
     QFileDialog::Options options = 0;
 #ifdef Q_WS_X11
@@ -144,18 +150,22 @@ QStringList KoFileDialogHelper::getOpenFileNames(QWidget *parent,
 #endif
     QStringList res = QFileDialog::getOpenFileNames(parent,
                                                     caption,
-                                                    dir,
+                                                    getDefaultDir(dir, uniqueName),
                                                     getFilterString(mimeList),
                                                     &str,
                                                     options);
+    if (res.size() > 0)
+        saveDefaultDir(res.first(), uniqueName);
     return res;
 }
 
 QString KoFileDialogHelper::getOpenDirectory(QWidget *parent,
                                              const QString &caption,
-                                             const QString &dir)
+                                             const QString &dir, const QString uniqueName)
 {
-    QString res = QFileDialog::getExistingDirectory(parent, caption, dir);
+    QString res = QFileDialog::getExistingDirectory(parent, caption, getDefaultDir(dir, uniqueName));
+
+    saveDefaultDir(res, uniqueName);
     return res;
 }
 
@@ -163,13 +173,13 @@ QString KoFileDialogHelper::getImportFileName(QWidget *parent,
                                               const QString &caption,
                                               const QString &dir,
                                               const QStringList &mimeList,
-                                              const QString &defaultMime)
+                                              const QString &defaultMime, const QString uniqueName)
 {
     QString res;
 #ifdef Q_OS_MAC
     QStringList result =  getFileNames(parent,
                                        caption,
-                                       dir,
+                                       getDefaultDir(dir, uniqueName),
                                        mimeList,
                                        defaultMime,
                                        QFileDialog::AcceptOpen,
@@ -188,11 +198,12 @@ QString KoFileDialogHelper::getImportFileName(QWidget *parent,
 #endif
     res = QFileDialog::getOpenFileName(parent,
                                        caption,
-                                       dir,
+                                       getDefaultDir(dir, uniqueName),
                                        getFilterString(mimeList),
                                        &str,
                                        options);
 #endif
+    saveDefaultDir(res, uniqueName);
     return res;
 }
 
@@ -200,12 +211,12 @@ QStringList KoFileDialogHelper::getImportFileNames(QWidget *parent,
                                                    const QString &caption,
                                                    const QString &dir,
                                                    const QStringList &mimeList,
-                                                   const QString &defaultMime)
+                                                   const QString &defaultMime, const QString uniqueName)
 {
 #ifdef Q_OS_MAC
     QStringList res = getFileNames(parent,
                                    caption,
-                                   dir,
+                                   getDefaultDir(dir, uniqueName),
                                    mimeList,
                                    defaultMime,
                                    QFileDialog::AcceptOpen,
@@ -220,23 +231,24 @@ QStringList KoFileDialogHelper::getImportFileNames(QWidget *parent,
 #endif
     QStringList res =QFileDialog::getOpenFileNames(parent,
                                                    caption,
-                                                   dir,
+                                                   getDefaultDir(dir, uniqueName),
                                                    getFilterString(mimeList),
                                                    &str,
                                                    options);
 #endif
+    saveDefaultDir(res.first(), uniqueName);
     return res;
 }
 
 QString KoFileDialogHelper::getImportDirectory(QWidget *parent,
                                                const QString &caption,
-                                               const QString &dir)
+                                               const QString &dir, const QString uniqueName)
 {
     QString res;
 #ifdef Q_OS_MAC
     QStringList result = getFileNames(parent,
                                       caption,
-                                      dir,
+                                      getDefaultDir(dir, uniqueName),
                                       QStringList(),
                                       QString(),
                                       QFileDialog::AcceptOpen,
@@ -248,6 +260,7 @@ QString KoFileDialogHelper::getImportDirectory(QWidget *parent,
 #else
     res = QFileDialog::getExistingDirectory(parent, caption, dir);
 #endif // Q_OS_MAC
+    saveDefaultDir(res, uniqueName);
     return res;
 }
 
@@ -255,13 +268,13 @@ QString KoFileDialogHelper::getSaveFileName(QWidget *parent,
                                             const QString &caption,
                                             const QString &dir,
                                             const QStringList &mimeList,
-                                            const QString &defaultMime)
+                                            const QString &defaultMime, const QString uniqueName)
 {
     QString res;
 #ifdef Q_OS_MAC
     QStringList result = getFileNames(parent,
                                       caption,
-                                      dir,
+                                      getDefaultDir(dir, uniqueName),
                                       mimeList,
                                       defaultMime,
                                       QFileDialog::AcceptSave,
@@ -280,10 +293,31 @@ QString KoFileDialogHelper::getSaveFileName(QWidget *parent,
 #endif
     res = QFileDialog::getSaveFileName(parent,
                                        caption,
-                                       dir,
+                                       getDefaultDir(dir, uniqueName),
                                        getFilterString(mimeList),
                                        &str,
                                        options);
 #endif // Q_OS_MAC
+    saveDefaultDir(res, uniqueName);
     return res;
+}
+
+const QString KoFileDialogHelper::getDefaultDir(const QString &defaultDir, const QString &dialogName)
+{
+    if (dialogName.isEmpty()) return defaultDir;
+
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    QString dir = group.readEntry(dialogName);
+    return dir.isEmpty() ? defaultDir : dir;
+
+}
+
+void KoFileDialogHelper::saveDefaultDir(const QString &fileName, const QString &dialogName)
+{
+    if (dialogName.isEmpty()) return;
+
+    QFileInfo fileInfo(fileName);
+    KConfigGroup group = KGlobal::config()->group("File Dialogs");
+    group.writeEntry(dialogName, fileInfo.absolutePath());
+
 }

@@ -39,7 +39,7 @@ private slots:
     void sourceChanged();
 private:
     struct Private;
-    Private* const d;    
+    Private* const d;
 };
 
 #endif

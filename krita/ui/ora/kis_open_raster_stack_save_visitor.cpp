@@ -83,6 +83,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+    else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
 }
@@ -114,6 +115,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         QDomElement imageElt = d->layerStack.createElement("image");
         int width = layer->image()->width();
         int height = layer->image()->height();
+        imageElt.setAttribute("version", "0.0.1");
         imageElt.setAttribute("w", width);
         imageElt.setAttribute("h", height);
         imageElt.appendChild(elt);

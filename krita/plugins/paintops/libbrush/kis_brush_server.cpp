@@ -47,8 +47,7 @@ public:
         addObserver(this, true);
     }
 
-    virtual void resourceAdded(KisBrush* brush)
-    {
+    virtual void resourceAdded(KisBrush* brush) {
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server
         brush->ref();
@@ -56,9 +55,8 @@ public:
     }
 
     ///Reimplemented
-    virtual void removingResource(KisBrush* brush)
-    {
-        if(!brush->deref()) {
+    virtual void removingResource(KisBrush* brush) {
+        if (!brush->deref()) {
             delete brush;
         }
         m_brushes.removeAll(brush);
@@ -68,30 +66,34 @@ public:
         Q_UNUSED(resource);
     }
 
-    virtual void syncTaggedResourceView(){}
+    virtual void syncTaggedResourceView() {}
 
-    virtual void syncTagAddition(const QString& tag) { Q_UNUSED(tag); }
+    virtual void syncTagAddition(const QString& tag) {
+        Q_UNUSED(tag);
+    }
 
-    virtual void syncTagRemoval(const QString& tag) { Q_UNUSED(tag); }
+    virtual void syncTagRemoval(const QString& tag) {
+        Q_UNUSED(tag);
+    }
 
     ///Reimplemented
-    virtual void importResourceFile(const QString& filename, bool fileCreation = true)
-    {
-        QFileInfo fi( filename );
-        if( fi.exists() == false )
+    virtual void importResourceFile(const QString& filename, bool fileCreation = true) {
+        QFileInfo fi(filename);
+        if (fi.exists() == false)
             return;
 
         if (fi.size() == 0) return;
 
-        if( fi.suffix().toLower() == "abr") {
-            if(fileCreation) {
+        if (fi.suffix().toLower() == "abr") {
+            if (fileCreation) {
                 QFile::copy(filename, saveLocation() + fi.fileName());
             }
-            QList<KisBrush*> collectionResources = createResources( filename );
-            foreach(KisBrush* brush, collectionResources) {
+            QList<KisBrush*> collectionResources = createResources(filename);
+            foreach(KisBrush * brush, collectionResources) {
                 addResource(brush);
             }
-        } else {
+        }
+        else {
             KoResourceServer<KisBrush>::importResourceFile(filename, fileCreation);
         }
     }
@@ -99,18 +101,18 @@ public:
 private:
 
     ///Reimplemented
-    virtual QList<KisBrush*> createResources( const QString & filename )
-    {
+    virtual QList<KisBrush*> createResources(const QString & filename) {
         QList<KisBrush*> brushes;
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
-        if(fileExtension == "abr") {
+        if (fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            foreach(KisAbrBrush* abrBrush, collection.brushes()) {
+            foreach(KisAbrBrush * abrBrush, collection.brushes()) {
                 brushes.append(abrBrush);
             }
-        } else {
+        }
+        else {
             brushes.append(createResource(filename));
         }
         return brushes;
@@ -125,11 +127,14 @@ private:
 
         if (fileExtension == "gbr") {
             brush = new KisGbrBrush(filename);
-        } else if (fileExtension == "gih") {
+        }
+        else if (fileExtension == "gih") {
             brush = new KisImagePipeBrush(filename);
-        } else if (fileExtension == "png") {
+        }
+        else if (fileExtension == "png") {
             brush = new KisPngBrush(filename);
-        } else if (fileExtension == "svg") {
+        }
+        else if (fileExtension == "svg") {
             brush = new KisSvgBrush(filename);
         }
         return brush;

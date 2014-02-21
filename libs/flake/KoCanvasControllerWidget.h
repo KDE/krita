@@ -83,7 +83,7 @@ public:
      * they are. This might be used, for example, to switch from a QWidget to a QGLWidget canvas.
      * @param widget the new canvas widget.
      */
-    void changeCanvasWidget(QWidget *widget);
+    virtual void changeCanvasWidget(QWidget *widget);
 
     virtual int visibleHeight() const;
     virtual int visibleWidth() const;

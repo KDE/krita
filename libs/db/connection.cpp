@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1267,12 +1267,19 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
 
                     QString tableName;
                     int tablePosition = querySchema.tableBoundToColumn(number);
-                    if (tablePosition >= 0)
+                    if (tablePosition >= 0) {
                         tableName = querySchema.tableAlias(tablePosition);
-                    if (tableName.isEmpty())
-                        tableName = f->table()->name();
+                    }
+                    if (options.addVisibleLookupColumns) { // try to find table/alias name harder
+                        if (tableName.isEmpty()) {
+                            tableName = querySchema.tableAlias(f->table()->name());
+                        }
+                        if (tableName.isEmpty()) {
+                            tableName = f->table()->name();
+                        }
+                    }
 
-                    if (!singleTable) {
+                    if (!singleTable && !tableName.isEmpty()) {
                         sql += (escapeIdentifier(tableName, options.identifierEscaping) + QLatin1Char('.'));
                     }
                     sql += escapeIdentifier(f->name(), options.identifierEscaping);
@@ -1306,7 +1313,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                         s_additional_joins += QString::fromLatin1("LEFT OUTER JOIN %1 AS %2 ON %3.%4=%5.%6")
                                               .arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
                                               .arg(internalUniqueTableAlias)
-                                              .arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
+                                              .arg(escapeIdentifier(querySchema.tableAliasOrName(f->table()->name()), options.identifierEscaping))
                                               .arg(escapeIdentifier(f->name(), options.identifierEscaping))
                                               .arg(internalUniqueTableAlias)
                                               .arg(escapeIdentifier(boundField->name(), options.identifierEscaping));
@@ -1407,7 +1414,7 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
         if (!sql.isEmpty())
             s = QLatin1String(", ");
         if (querySchema.masterTable())
-            s += (escapeIdentifier(querySchema.masterTable()->name()) + QLatin1Char('.'));
+            s += (escapeIdentifier(querySchema.tableAliasOrName(querySchema.masterTable()->name())) + QLatin1Char('.'));
         s += driver->behaviour()->ROW_ID_FIELD_NAME;
         sql += s;
     }

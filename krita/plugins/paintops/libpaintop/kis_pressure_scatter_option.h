@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -42,14 +42,14 @@ public:
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
     void enableAxisY(bool enable);
     void enableAxisX(bool enable);
     bool isAxisXEnabled();
     bool isAxisYEnabled();
     void setScatterAmount(qreal amount);
     qreal scatterAmount();
-    
+
 private:
     bool m_axisX;
     bool m_axisY;

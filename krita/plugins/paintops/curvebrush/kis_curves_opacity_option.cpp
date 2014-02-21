@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 KisCurvesOpacityOption::KisCurvesOpacityOption()
-        : KisCurveOption(i18n("Curves opacity"), "Curves opacity", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Curves opacity"), "Curves opacity", KisPaintOpOption::brushCategory(), false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));

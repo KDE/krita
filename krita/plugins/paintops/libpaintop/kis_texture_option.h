@@ -39,7 +39,7 @@ class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
     Q_OBJECT
 public:
 
-    explicit KisTextureOption(QObject *parent= 0);
+    explicit KisTextureOption(QObject *parent = 0);
     virtual ~KisTextureOption();
 
 public slots:

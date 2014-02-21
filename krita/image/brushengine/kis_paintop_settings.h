@@ -66,6 +66,13 @@ public:
     virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers);
 
     /**
+     * This function is called to set random offsets to the brush whenever the mouse is clicked. It is
+     * specific to when the pattern option is set.
+     *
+     */
+    virtual void setRandomOffset();
+
+    /**
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
      */
@@ -170,7 +177,7 @@ public:
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
-    virtual bool isValid();
+    virtual bool isValid() const;
 
     /// Check if the settings are loadable, that might the case if we can fallback to something
     /// Overwrite if the settings can do some kind of fallback

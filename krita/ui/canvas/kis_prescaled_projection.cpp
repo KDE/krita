@@ -238,6 +238,8 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
+    if (!m_d->image) return;
+
     m_d->prescaledQImage.fill(0);
 
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);

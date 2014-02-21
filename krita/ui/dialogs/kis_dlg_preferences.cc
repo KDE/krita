@@ -33,6 +33,7 @@
 #include <QSlider>
 #include <QToolButton>
 #include <QThread>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
@@ -45,22 +46,24 @@
 #include <KoColorProfile.h>
 #include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoFileDialogHelper.h>
 #include <KoPart.h>
+#include <KoColorSpaceEngine.h>
+#include <KoIcon.h>
+#include <KoConfig.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kfiledialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
+#include <kstandarddirs.h>
 
-#include <KoIcon.h>
-#include <KoConfig.h>
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -169,12 +172,17 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
+    connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
     m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
+
+    m_page->bnAddColorProfile->setIcon(koIcon("document-open"));
+    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
@@ -203,19 +211,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    // XXX: this needs to be available per screen!
-    const KoColorProfile *profile = KisConfig::getScreenProfile();
-    if (profile && profile->isSuitableForDisplay()) {
-        if (cfg.useSystemMonitorProfile()) {
-            // We've got an X11 profile, don't allow to override
-            m_page->cmbMonitorProfile->hide();
-            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
-        }
-    } else {
-        m_page->chkUseSystemMonitorProfile->setEnabled(false);
-        m_page->cmbMonitorProfile->show();
-        m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
-    }
+    toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
@@ -231,6 +227,64 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
 
 }
+
+void ColorSettingsTab::installProfile()
+{
+    QStringList mime;
+    mime << "*.icm" <<  "*.icc";
+    QStringList profileNames = KoFileDialogHelper::getOpenFileNames(this,
+                                                                    i18n("Install Color Profiles"),
+                                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                                    mime,
+                                                                    "*.icc",
+                                                                    "OpenDocumentICC");
+
+    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    Q_ASSERT(iccEngine);
+
+    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+
+    foreach (const QString &profileName, profileNames) {
+        KUrl file(profileName);
+        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
+            kWarning() << "Could not install profile!";
+            return;
+        }
+        iccEngine->addProfile(saveLocation + file.fileName());
+
+    }
+
+    KisConfig cfg;
+    refillMonitorProfiles(KoID("RGBA", ""));
+    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
+
+    if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
+        m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
+    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
+        m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+
+
+}
+
+void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
+{
+    // XXX: this needs to be available per screen!
+    if (useSystemProfile) {
+        const KoColorProfile *profile = KisConfig::getScreenProfile();
+        if (profile && profile->isSuitableForDisplay()) {
+            // We've got an X11 profile, don't allow to override
+            m_page->cmbMonitorProfile->hide();
+            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        }
+    }
+    else {
+        m_page->cmbMonitorProfile->show();
+        m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
+    }
+
+
+}
+
 
 void ColorSettingsTab::setDefault()
 {
@@ -299,7 +353,10 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    filename = KoFileDialogHelper::getOpenFileName(m_page,
+                                                   i18n("Select OpenColorIO Configuration"),
+                                                   QDir::cleanPath(filename),
+                                                   QStringList("*.ocio|OpenColorIO configuration (*.ocio)"));
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);
@@ -703,7 +760,8 @@ bool KisDlgPreferences::editPreferences()
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
+        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted(),
+                              dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());

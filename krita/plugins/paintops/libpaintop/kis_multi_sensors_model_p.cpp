@@ -17,174 +17,106 @@
 
 #include "kis_multi_sensors_model_p.h"
 #include "kis_dynamic_sensor.h"
-#include "sensors/kis_dynamic_sensor_list.h"
+#include "kis_curve_option.h"
 
-KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent) : QAbstractListModel(parent), m_currentSensor(0), m_listSensor(0)
+KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent)
+    : QAbstractListModel(parent)
+    , m_curveOption(0)
 {
 }
 
 KisMultiSensorsModel::~KisMultiSensorsModel()
 {
-    qDeleteAll(m_sensorCache);
+}
+
+void KisMultiSensorsModel::setCurveOption(KisCurveOption *curveOption)
+{
+    beginResetModel();
+    m_curveOption = curveOption;
+    endResetModel();
 }
 
 int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return KisDynamicSensor::sensorsIds().size();
+    return m_curveOption->sensors().size();
 }
 
 QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid()) return QVariant();
-    if(role == Qt::DisplayRole)
-    {
+    if (!index.isValid()) return QVariant();
+
+    if (role == Qt::DisplayRole) {
         return KisDynamicSensor::sensorsIds()[index.row()].name();
-    } else if(role == Qt::CheckStateRole)
-    {
-        if(m_listSensor)
-        {
-            return QVariant(m_listSensor->hasSensor(KisDynamicSensor::sensorsIds()[index.row()].id()) ? Qt::Checked : Qt::Unchecked );
-        } else if(m_currentSensor)
-        {
-            return QVariant(m_currentSensor->id() == KisDynamicSensor::sensorsIds()[index.row()].id() ? Qt::Checked : Qt::Unchecked );
-        } else {
-            return QVariant(Qt::Checked);
+    }
+    else if (role == Qt::CheckStateRole) {
+        QString selectedSensorId = KisDynamicSensor::sensorsIds()[index.row()].id();
+        KisDynamicSensor *sensor = m_curveOption->sensor(selectedSensorId, false);
+        if (sensor) {
+            //qDebug() << sensor->id() << sensor->isActive();
+            return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
+        }
+        else {
+            return QVariant(Qt::Unchecked);
         }
     }
     return QVariant();
 }
 
-bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &value, int role )
+bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == Qt::CheckStateRole)
-    {
+    if (role == Qt::CheckStateRole) {
         emit(parametersChanged());
-        bool checked = value.toInt() == Qt::Checked;
-        if(!checked && m_listSensor == 0) // It is not accepted to uncheck when there is only one sensor left
-        {
-          return false;
-        } else if(m_listSensor) {
-            if(checked)
-            {
-                m_listSensor->addSensor(takeOrCreateSensorFromCache( KisDynamicSensor::sensorsIds()[index.row()].id() ) );
-                return true;
-            } else {
-                KisDynamicSensor* sensor = m_listSensor->takeSensor(KisDynamicSensor::sensorsIds()[index.row()].id());
-                m_sensorCache[sensor->id()] = sensor;
-                
-                // If there is only one sensor left, remove it from the list sensor, and delete the list sensor
-                QList<QString> ids = m_listSensor->sensorIds();
-                Q_ASSERT(!ids.empty());
-                if(ids.size() == 1)
-                {
-                    m_currentSensor = m_listSensor->takeSensor(ids.first());
-                    m_listSensor = 0; // Don't delete the list sensor, it will be deleted as an effect of the call to sensorChanged
-                    emit(sensorChanged(m_currentSensor));
-                }
-                return true;
+        bool checked = (value.toInt() == Qt::Checked);
+
+        if (!checked && m_curveOption->activeSensors().size() == 1) { // Don't uncheck the last sensor (but why not?)
+            return false;
+        }
+        else {
+            //qDebug() << "Asking for" << KisDynamicSensor::sensorsIds()[index.row()].id();
+            KisDynamicSensor *sensor = m_curveOption->sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), false);
+            //qDebug() << "\tgot" << sensor;
+            if (!sensor) {
+                sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id());
+                m_curveOption->replaceSensor(sensor);
             }
-        } else {
-            Q_ASSERT(checked);
-            m_listSensor = new KisDynamicSensorList;
-            m_listSensor->addSensor(m_currentSensor->clone()); // Use a clone to make sure that it is owned by the KisDynamicSensorList
-            m_currentSensor = m_listSensor;
-            m_listSensor->addSensor(takeOrCreateSensorFromCache( KisDynamicSensor::sensorsIds()[index.row()].id() ) );
-            emit(sensorChanged(m_currentSensor));
+            //qDebug() << "Setting" << sensor->name() << "active:" << checked;
+            sensor->setActive(checked);
             return true;
         }
     }
     return false;
 }
 
-Qt::ItemFlags KisMultiSensorsModel::flags( const QModelIndex & /*index */) const
+Qt::ItemFlags KisMultiSensorsModel::flags(const QModelIndex & /*index */) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
 }
 
-void KisMultiSensorsModel::setCurrentSensor(KisDynamicSensor* sensor)
+KisDynamicSensor *KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
-    m_currentSensor = sensor;
-    m_listSensor    = dynamic_cast<KisDynamicSensorList*>(sensor);
-    reset();
-}
-
-KisDynamicSensor* KisMultiSensorsModel::getSensor(const QModelIndex& index)
-{
-    if(!index.isValid()) return 0;
+    if (!index.isValid()) return 0;
     QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
-    if(m_currentSensor && m_currentSensor->id() == id)
-    {
-        return m_currentSensor;
-    } else if (m_listSensor) {
-        KisDynamicSensor* sensor = m_listSensor->getSensor(id);
-        if(sensor)
-        {
-            return sensor;
-        }
-    }
-    return getOrCreateSensorFromCache(id);
+    return m_curveOption->sensor(id, false);
 }
-
-KisDynamicSensor* KisMultiSensorsModel::getOrCreateSensorFromCache(const QString& id)
-{
-    if(m_sensorCache.contains(id)) return m_sensorCache.value(id);
-    KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
-    if(!m_listSensor || !m_listSensor->hasCustomCurve())
-    {
-        sensor->setCurve(m_currentSensor->curve());
-    }
-    m_sensorCache[id] = sensor;
-    return sensor;
-}
-
-KisDynamicSensor* KisMultiSensorsModel::takeOrCreateSensorFromCache(const QString& id)
-{
-    if(m_sensorCache.contains(id)) return m_sensorCache.take(id);
-    KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
-    if(!m_listSensor || !m_listSensor->hasCustomCurve())
-    {
-        sensor->setCurve(m_currentSensor->curve());
-    }
-    return sensor;
-}
-
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
 {
-    if(useSameCurve)
-    {
-        foreach(KisDynamicSensor* sensor, m_sensorCache)
-        {
-            sensor->setCurve(curve);
-            sensor->removeCurve();
-        }
-        m_currentSensor->setCurve(curve);
-        if(m_listSensor)
-        {
-            foreach(const QString& id, m_listSensor->sensorIds())
-            {
-                KisDynamicSensor* sensor =  m_listSensor->getSensor(id);
-                if (sensor) {
-                    sensor->setCurve(curve);
-                    sensor->removeCurve();
-                }
-            }
-        }
-    } else {
-        KisDynamicSensor* sensor = getSensor(currentIndex);
-        if (sensor) {
-            sensor->setCurve(curve);
-            if (m_listSensor)
-            {
-                m_listSensor->removeCurve();
-            }
-        }
-    }
+    if (!currentIndex.isValid()) return;
+
+    QString selectedSensorId =  KisDynamicSensor::sensorsIds()[currentIndex.row()].id();
+    m_curveOption->setCurve(selectedSensorId, useSameCurve, curve);
 }
 
-QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensor* arg1)
+QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensor *arg1)
 {
     return index(KisDynamicSensor::sensorsIds().indexOf(KoID(arg1->id())));
+}
+
+void KisMultiSensorsModel::resetCurveOption()
+{
+    beginResetModel();
+    reset();
+    endResetModel();
 }
 
 #include "kis_multi_sensors_model_p.moc"

@@ -27,7 +27,6 @@ KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
       m_isActionActivated(false),
       m_lastAction(KisTool::Primary)
 {
-    connect(this, SIGNAL(toolChanged(const QString&)), SLOT(slotResetToolOutline()));
 }
 
 QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
@@ -194,6 +193,8 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
 
 void KisToolProxy::setActiveTool(KoToolBase *tool)
 {
+    if (!tool) return;
+
     if (m_isActionActivated) {
         deactivateToolAction(m_lastAction);
         KoToolProxy::setActiveTool(tool);

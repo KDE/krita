@@ -93,7 +93,7 @@ private:
     }
 
 private:
-    KisToolMeasureOptionsWidget *m_optWidget;
+    KisToolMeasureOptionsWidget *m_optionsWidget;
 
     QPointF m_startPos;
     QPointF m_endPos;

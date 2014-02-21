@@ -37,7 +37,7 @@
 #include <kis_filter_option.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("filter option widget");
     setPrecisionEnabled(true);

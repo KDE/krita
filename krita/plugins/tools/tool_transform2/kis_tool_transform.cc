@@ -92,7 +92,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
-    m_optWidget = 0;
+    m_optionsWidget = 0;
     m_scaleCursors[0] = KisCursor::sizeHorCursor();
     m_scaleCursors[1] = KisCursor::sizeBDiagCursor();
     m_scaleCursors[2] = KisCursor::sizeVerCursor();
@@ -378,8 +378,8 @@ void KisToolTransform::recalcOutline()
 
         m_imageTooBig = minmaxZ.y() >= m_currentArgs.cameraPos().z() * 0.9;
 
-        if (m_optWidget) {
-            m_optWidget->setTooBigLabelVisible(m_imageTooBig);
+        if (m_optionsWidget) {
+            m_optionsWidget->setTooBigLabelVisible(m_imageTooBig);
         }
 
         if (m_imageTooBig) return;
@@ -495,7 +495,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     } else if (m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorations()) {
+        if (m_optionsWidget && m_optionsWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -552,7 +552,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         gc.save();
 
-        if (m_optWidget && m_optWidget->showDecorations()) {
+        if (m_optionsWidget && m_optionsWidget->showDecorations()) {
             gc.setOpacity(0.3);
             gc.fillPath(m_selectionPath, Qt::black);
         }
@@ -1098,9 +1098,9 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
     ToolTransformArgs::TransformMode mode = newMode == FreeTransformMode ? ToolTransformArgs::FREE_TRANSFORM : ToolTransformArgs::WARP;
     if( mode != m_currentArgs.mode() ) {
         if( newMode == FreeTransformMode ) {
-            m_optWidget->slotSetFreeTransformModeButtonClicked( true );
+            m_optionsWidget->slotSetFreeTransformModeButtonClicked( true );
         } else {
-            m_optWidget->slotSetWrapModeButtonClicked( true );
+            m_optionsWidget->slotSetWrapModeButtonClicked( true );
         }
         emit transformModeChanged();
     }
@@ -1145,7 +1145,7 @@ void KisToolTransform::setWarpFlexibility( double flexibility )
 
 void KisToolTransform::setWarpPointDensity( int density )
 {
-    m_optWidget->slotSetWarpDensity(density);
+    m_optionsWidget->slotSetWarpDensity(density);
 }
 
 /* A sort of gradient descent method is used to find the correct scale
@@ -2040,7 +2040,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
 
             m_currentArgs.setRotationCenterOffset(t.toPointF());
 
-            m_optWidget->resetRotationCenterButtons();
+            m_optionsWidget->resetRotationCenterButtons();
             break;
         case TOPSHEAR:
             signX = -1;
@@ -2122,7 +2122,7 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
         m_refSize = QSizeF();
     } else /* if (mode == ToolTransformArgs::WARP) */ {
         m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true);
-        m_optWidget->setDefaultWarpPoints();
+        m_optionsWidget->setDefaultWarpPoints();
         m_refSize = QSizeF();
     }
 
@@ -2252,8 +2252,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
         return;
     }
 
-    if (m_optWidget) {
-        m_workRecursively = m_optWidget->workRecursively() ||
+    if (m_optionsWidget) {
+        m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
     }
 
@@ -2365,48 +2365,55 @@ void KisToolTransform::transformDevices(KisNodeSP node, bool recursive)
 }
 
 QWidget* KisToolTransform::createOptionWidget() {
-    m_optWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setObjectName(toolId() + " option widget");
+    m_optionsWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
+    Q_CHECK_PTR(m_optionsWidget);
+    m_optionsWidget->setObjectName(toolId() + " option widget");
 
-    connect(m_optWidget, SIGNAL(sigConfigChanged()),
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
+
+    connect(m_optionsWidget, SIGNAL(sigConfigChanged()),
             this, SLOT(slotUiChangedConfig()));
 
-    connect(m_optWidget, SIGNAL(sigApplyTransform()),
+    connect(m_optionsWidget, SIGNAL(sigApplyTransform()),
             this, SLOT(slotApplyTransform()));
 
-    connect(m_optWidget, SIGNAL(sigResetTransform()),
+    connect(m_optionsWidget, SIGNAL(sigResetTransform()),
             this, SLOT(slotResetTransform()));
 
-    connect(m_optWidget, SIGNAL(sigRestartTransform()),
+    connect(m_optionsWidget, SIGNAL(sigRestartTransform()),
             this, SLOT(slotRestartTransform()));
 
-    connect(m_optWidget, SIGNAL(sigEditingFinished()),
+    connect(m_optionsWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
 
     updateOptionWidget();
 
-    return m_optWidget;
+    return m_optionsWidget;
 }
 
 void KisToolTransform::updateOptionWidget()
 {
-    if (!m_optWidget) return;
+    if (!m_optionsWidget) return;
 
     if (!currentNode()) {
-        m_optWidget->setEnabled(false);
+        m_optionsWidget->setEnabled(false);
         return;
     }
     else {
-        m_optWidget->setEnabled(true);
-        m_optWidget->updateConfig(m_currentArgs);
+        m_optionsWidget->setEnabled(true);
+        m_optionsWidget->updateConfig(m_currentArgs);
     }
 }
 
 void KisToolTransform::updateApplyResetAvailability()
 {
-    if (m_optWidget) {
-        m_optWidget->setApplyResetDisabled(m_currentArgs.isIdentity());
+    if (m_optionsWidget) {
+        m_optionsWidget->setApplyResetDisabled(m_currentArgs.isIdentity());
     }
 }
 
@@ -2451,32 +2458,32 @@ void KisToolTransform::slotEditingFinished()
 
 void KisToolTransform::setShearY(double shear)
 {
-    m_optWidget->slotSetShearY(shear);
+    m_optionsWidget->slotSetShearY(shear);
 }
 
 void KisToolTransform::setShearX(double shear)
 {
-    m_optWidget->slotSetShearX(shear);
+    m_optionsWidget->slotSetShearX(shear);
 }
 
 void KisToolTransform::setScaleY(double scale)
 {
-    m_optWidget->slotSetScaleY(scale);
+    m_optionsWidget->slotSetScaleY(scale);
 }
 
 void KisToolTransform::setScaleX(double scale)
 {
-    m_optWidget->slotSetScaleX(scale);
+    m_optionsWidget->slotSetScaleX(scale);
 }
 
 void KisToolTransform::setTranslateY(double translation)
 {
-    m_optWidget->slotSetTranslateY(translation);
+    m_optionsWidget->slotSetTranslateY(translation);
 }
 
 void KisToolTransform::setTranslateX(double translation)
 {
-    m_optWidget->slotSetTranslateX(translation);
+    m_optionsWidget->slotSetTranslateX(translation);
 }
 
 #include "kis_tool_transform.moc"

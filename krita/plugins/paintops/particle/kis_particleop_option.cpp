@@ -27,20 +27,19 @@ class KisParticleOpOptionsWidget: public QWidget, public Ui::WdgParticleOptions
 {
 public:
     KisParticleOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent)
-    {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisParticleOpOption::KisParticleOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisParticleOpOptionsWidget();
 
     connect(m_options->particleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    connect(m_options->itersSPBox,SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->itersSPBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->gravSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->weightSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->dxSPBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
@@ -51,7 +50,7 @@ KisParticleOpOption::KisParticleOpOption()
 
 KisParticleOpOption::~KisParticleOpOption()
 {
-    delete m_options; 
+    delete m_options;
 }
 
 int KisParticleOpOption::particleCount() const
@@ -67,7 +66,7 @@ qreal KisParticleOpOption::weight() const
 
 QPointF KisParticleOpOption::scale() const
 {
-    return QPointF(m_options->dxSPBox->value(),m_options->dySPBox->value());
+    return QPointF(m_options->dxSPBox->value(), m_options->dySPBox->value());
 }
 
 

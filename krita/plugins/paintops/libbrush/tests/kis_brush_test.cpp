@@ -161,7 +161,8 @@ void KisBrushTest::testMaskGenerationDefaultColor()
 void KisBrushTest::testImageGeneration()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
-    brush->load();
+    bool res = brush->load();
+    Q_ASSERT(res);
     QVERIFY(!brush->image().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
@@ -303,12 +304,12 @@ void KisBrushTest::testQPainterTransformationBorder()
 
     {
         QPainter gc(&image1);
-        gc.fillRect(QRect(0,0,10,10),Qt::black);
+        gc.fillRect(QRect(0, 0, 10, 10), Qt::black);
     }
 
     {
         QPainter gc(&image2);
-        gc.fillRect(QRect(1,1,10,10),Qt::black);
+        gc.fillRect(QRect(1, 1, 10, 10), Qt::black);
     }
 
     image1.save("src1.png");
@@ -322,7 +323,7 @@ void KisBrushTest::testQPainterTransformationBorder()
         transform.rotate(15);
         gc.setTransform(transform);
         gc.setRenderHints(QPainter::SmoothPixmapTransform);
-        gc.drawImage(QPointF(50,50), image1);
+        gc.drawImage(QPointF(50, 50), image1);
         gc.end();
         canvas.save("canvas1.png");
     }
@@ -334,7 +335,7 @@ void KisBrushTest::testQPainterTransformationBorder()
         transform.rotate(15);
         gc.setTransform(transform);
         gc.setRenderHints(QPainter::SmoothPixmapTransform);
-        gc.drawImage(QPointF(50,50), image2);
+        gc.drawImage(QPointF(50, 50), image2);
         gc.end();
         canvas.save("canvas2.png");
     }

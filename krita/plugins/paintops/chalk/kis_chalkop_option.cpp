@@ -23,13 +23,13 @@ class KisChalkOpOptionsWidget: public QWidget, public Ui::WdgChalkOptions
 {
 public:
     KisChalkOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisChalkOpOption::KisChalkOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
@@ -54,7 +54,7 @@ int KisChalkOpOption::radius() const
 
 void KisChalkOpOption::setRadius(int radius) const
 {
-    m_options->radiusSpinBox->setValue( radius );
+    m_options->radiusSpinBox->setValue(radius);
 }
 
 

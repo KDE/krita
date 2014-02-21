@@ -23,15 +23,15 @@
 
 class KisHatchingPreferencesWidget: public QWidget, public Ui::WdgHatchingPreferences
 {
-    public:
-        KisHatchingPreferencesWidget(QWidget *parent = 0)
+public:
+    KisHatchingPreferencesWidget(QWidget *parent = 0)
         : QWidget(parent) {
-            setupUi(this);
-        }
+        setupUi(this);
+    }
 };
 
 KisHatchingPreferences::KisHatchingPreferences()
-: KisPaintOpOption(i18n("Hatching preferences"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Hatching preferences"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisHatchingPreferencesWidget();
@@ -40,11 +40,11 @@ KisHatchingPreferences::KisHatchingPreferences()
     connect(m_options->trigonometryAlgebraRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     connect(m_options->scratchOffRadioButton, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
     */
-    
-    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-    
+
+    connect(m_options->antialiasCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->opaqueBackgroundCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->subpixelPrecisionCheckBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
@@ -58,10 +58,10 @@ void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration* sett
     setting->setProperty("Hatching/bool_trigonometryalgebra", m_options->trigonometryAlgebraRadioButton->isChecked() );
     setting->setProperty("Hatching/bool_scratchoff", m_options->scratchOffRadioButton->isChecked() );
     */
-    
-    setting->setProperty("Hatching/bool_antialias", m_options->antialiasCheckBox->isChecked() );
-    setting->setProperty("Hatching/bool_opaquebackground", m_options->opaqueBackgroundCheckBox->isChecked() );
-    setting->setProperty("Hatching/bool_subpixelprecision", m_options->subpixelPrecisionCheckBox->isChecked() );
+
+    setting->setProperty("Hatching/bool_antialias", m_options->antialiasCheckBox->isChecked());
+    setting->setProperty("Hatching/bool_opaquebackground", m_options->opaqueBackgroundCheckBox->isChecked());
+    setting->setProperty("Hatching/bool_subpixelprecision", m_options->subpixelPrecisionCheckBox->isChecked());
 }
 
 void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -70,8 +70,8 @@ void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration*
     m_options->trigonometryAlgebraRadioButton->setChecked( setting->getBool("Hatching/bool_trigonometryalgebra") );
     m_options->scratchOffRadioButton->setChecked( setting->getBool("Hatching/bool_scratchoff") );
     */
-    
-    m_options->antialiasCheckBox->setChecked( setting->getBool("Hatching/bool_antialias") );
-    m_options->opaqueBackgroundCheckBox->setChecked( setting->getBool("Hatching/bool_opaquebackground") );
-    m_options->subpixelPrecisionCheckBox->setChecked( setting->getBool("Hatching/bool_subpixelprecision") );
+
+    m_options->antialiasCheckBox->setChecked(setting->getBool("Hatching/bool_antialias"));
+    m_options->opaqueBackgroundCheckBox->setChecked(setting->getBool("Hatching/bool_opaquebackground"));
+    m_options->subpixelPrecisionCheckBox->setChecked(setting->getBool("Hatching/bool_subpixelprecision"));
 }

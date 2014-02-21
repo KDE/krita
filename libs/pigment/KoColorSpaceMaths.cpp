@@ -47,8 +47,8 @@ const double KoColorSpaceMathsTraits<double>::halfValue = 0.5;
 const double KoColorSpaceMathsTraits<double>::max = DBL_MAX;
 const double KoColorSpaceMathsTraits<double>::min = -DBL_MAX;
 const double KoColorSpaceMathsTraits<double>::epsilon = DBL_EPSILON;
-const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<double>::channelValueType = KoChannelInfo::FLOAT64;
 
+const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<double>::channelValueType = KoChannelInfo::FLOAT64;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint8>::channelValueType = KoChannelInfo::UINT8;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<quint16>::channelValueType = KoChannelInfo::UINT16;
 const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<qint16>::channelValueType = KoChannelInfo::INT16;

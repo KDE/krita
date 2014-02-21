@@ -1023,6 +1023,7 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
     if (!url.isLocalFile()) return mimeType;
 
     if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+    if (url.toLocalFile().endsWith(".kpp")) return "image/png";
 
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"

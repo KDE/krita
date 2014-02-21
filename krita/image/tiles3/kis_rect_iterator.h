@@ -50,6 +50,9 @@ public:
     qint32 y() const;
 
 protected:
+    qint32 m_offsetX;
+    qint32 m_offsetY;
+
     qint32 m_x;
     qint32 m_y;
     qint32 m_row;

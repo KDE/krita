@@ -27,8 +27,10 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
         qint32 width, qint32 height, qint32 offsetX, qint32 offsetY,
         bool writable)
         : KisRectIteratorNG(), KisBaseIterator(dataManager, writable),
-        m_width(width),
-        m_height(height)
+          m_offsetX(offsetX),
+          m_offsetY(offsetY),
+          m_width(width),
+          m_height(height)
 {
     Q_ASSERT(width > 0); // for us, to warn us when abusing the iterators
     if (width < 1) width = 1;  // for release mode, to make sure there's always at least one pixel read.
@@ -37,8 +39,8 @@ KisRectIterator2::KisRectIterator2(KisTiledDataManager *dataManager,
     if (height < 1) height = 1;  // for release mode, to make sure there's always at least one pixel read.
 
 
-    left -= offsetX;
-    top -= offsetY;
+    left -= m_offsetX;
+    top -= m_offsetY;
     m_left = left;
     m_top = top;
 
@@ -226,10 +228,10 @@ quint8* KisRectIterator2::rawData()
 
 qint32 KisRectIterator2::x() const
 {
-    return m_x;
+    return m_x + m_offsetX;
 }
 
 qint32 KisRectIterator2::y() const
 {
-    return m_y;
+    return m_y + m_offsetY;
 }

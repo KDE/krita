@@ -49,12 +49,10 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
     d->profileModel = new KisInputProfileModel(this);
     d->ui->profileList->setModel(d->profileModel);
 
-    d->ui->addButton->setIcon(koIcon("list-add"));
     d->ui->removeButton->setIcon(koIcon("list-remove"));
     d->ui->duplicateButton->setIcon(koIcon("edit-copy"));
     d->ui->renameButton->setIcon(koIcon("edit-rename"));
 
-    connect(d->ui->addButton, SIGNAL(clicked(bool)), SLOT(addButtonClicked()));
     connect(d->ui->removeButton, SIGNAL(clicked(bool)), SLOT(removeButtonClicked()));
     connect(d->ui->duplicateButton, SIGNAL(clicked(bool)), SLOT(duplicateButtonClicked()));
     connect(d->ui->renameButton, SIGNAL(clicked(bool)), SLOT(renameButtonClicked()));
@@ -68,14 +66,6 @@ KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags fl
 KisEditProfilesDialog::~KisEditProfilesDialog()
 {
     delete d;
-}
-
-void KisEditProfilesDialog::addButtonClicked()
-{
-    QString newProfileName = i18n("New Profile");
-    KisInputProfileManager::instance()->addProfile(newProfileName);
-    d->ui->profileList->edit(d->profileModel->find(newProfileName));
-    d->ui->removeButton->setEnabled(d->profileModel->rowCount() > 1);
 }
 
 void KisEditProfilesDialog::removeButtonClicked()

@@ -35,7 +35,6 @@ public:
     ~KisEditProfilesDialog();
 
 private Q_SLOTS:
-    void addButtonClicked();
     void removeButtonClicked();
     void duplicateButtonClicked();
     void renameButtonClicked();

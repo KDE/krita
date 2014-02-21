@@ -20,10 +20,12 @@
 
 
 KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable)
-    : KisBaseIterator(dataManager, writable)
+    : KisBaseIterator(dataManager, writable),
+      m_offsetX(offsetX),
+      m_offsetY(offsetY)
 {
-    x -= offsetX;
-    y -= offsetY;
+    x -= m_offsetX;
+    y -= m_offsetY;
     Q_ASSERT(dataManager != 0);
 
     Q_ASSERT(w > 0); // for us, to warn us when abusing the iterators
@@ -222,10 +224,10 @@ void KisHLineIterator2::preallocateTiles()
 
 qint32 KisHLineIterator2::x() const
 {
-    return m_x;
+    return m_x + m_offsetX;
 }
 
 qint32 KisHLineIterator2::y() const
 {
-    return m_y;
+    return m_y + m_offsetY;
 }

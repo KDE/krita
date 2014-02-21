@@ -24,7 +24,10 @@
 #include <krita_export.h>
 class KisPropertiesConfiguration;
 
-const QString PRECISION_LEVEL = "KisPresisionOption/precisionLevel";
+const QString PRECISION_LEVEL = "KisPrecisionOption/precisionLevel";
+const QString AUTO_PRECISION_ENABLED = "KisPrecisionOption/AutoPrecisionEnabled";
+const QString STARTING_SIZE = "KisPrecisionOption/SizeToStartFrom";
+const QString DELTA_VALUE = "KisPrecisionOption/DeltaValue";
 
 
 class PAINTOP_EXPORT KisPrecisionOption

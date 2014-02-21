@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
-    colorSet: "presets";
+    panelColor: "#000000";
 
     /*actions: [
         Button {

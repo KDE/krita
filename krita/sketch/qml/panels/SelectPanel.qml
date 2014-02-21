@@ -22,7 +22,7 @@ import "../components"
 Panel {
     id: base;
     name: "Select";
-    colorSet: "selection";
+    panelColor: "#000000";
 
     actions: [
         Button {
@@ -30,7 +30,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: Settings.theme.icon("select-deselect");
+            image: "../images/svg/icon-select-deselect.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -42,7 +42,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: Settings.theme.icon("select-reselect");
+            image: "../images/svg/icon-select-reselect.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -58,7 +58,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: showSelection ? Settings.theme.icon("select-show") : Settings.theme.icon("select-hide");
+            image: showSelection ? "../images/svg/icon-select-show.svg" : "../images/svg/icon-select-hide.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -80,7 +80,7 @@ Panel {
             Button {
                 id: selectRectangle;
                 anchors.verticalCenter: parent.verticalCenter;
-                image: Settings.theme.icon("select-rectangle");
+                image: "../images/svg/icon-select-rectangle.svg"
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
@@ -94,7 +94,7 @@ Panel {
                 id: selectPolygon;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectRectangle.right;
-                image: Settings.theme.icon("select-polygon")
+                image: "../images/svg/icon-select-polygon.svg"
                 width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";

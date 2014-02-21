@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Color";
-    colorSet: "color";
+    panelColor: "#000000"
 
     actions: [
         ColorSwatch {
@@ -41,7 +41,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize;
             color: "transparent";
-            image: Settings.theme.icon("icon-colorpicker");
+            image: "../images/svg/icon-colorpicker.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -58,7 +58,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: colorSelectorPeek.visible ? Settings.theme.icon("icon-palette") : Settings.theme.icon("icon-color_wheel");
+            image: colorSelectorPeek.visible ? "../images/svg/icon-palette.svg" : "../images/svg/icon-color_wheel.svg";
             textColor: "white";
             shadow: false;
             highlight: false;

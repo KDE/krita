@@ -23,7 +23,7 @@ import org.krita.sketch 1.0
 Panel {
     id: base;
     name: "Layers";
-    colorSet: "layers";
+    panelColor: "#000000";
 
     actions: [
         Button {
@@ -198,9 +198,6 @@ Panel {
             clip: true;
             height: 0;
             opacity: 0;
-
-            color: Settings.theme.color("layers/subheader");
-
             Row {
                 anchors.centerIn: parent;
                 height: childrenRect.height;

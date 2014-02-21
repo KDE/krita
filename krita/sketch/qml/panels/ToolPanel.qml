@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Tool";
-    colorSet: "tool";
+    panelColor: "#000000";
 
     CompositeOpModel {
         id: compositeOpModel;
@@ -101,7 +101,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: Settings.theme.icon(toolName);
+            image: "../images/svg/icon-" + toolName + ".svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -117,7 +117,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: Settings.theme.icon(toolName);
+            image: "../images/svg/icon-" + toolName + ".svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -135,7 +135,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize
             color: "transparent";
-            image: Settings.theme.icon("erase");
+            image: "../images/svg/icon-erase.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -147,7 +147,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize;
             color: "transparent";
-            image: Settings.theme.icon("apply");
+            image: "../images/svg/icon-apply.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -202,7 +202,7 @@ Panel {
                 height: Constants.ToolbarButtonSize;
                 Rectangle {
                     anchors.fill: parent;
-                    color: Settings.theme.color("tool/subheader");
+                    opacity: 0.5;
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -214,7 +214,7 @@ Panel {
                             width: height;
                             height: Constants.ToolbarButtonSize
                             color: "transparent";
-                            image: Settings.theme.icon(model.name + "-black");
+                            image: "../images/svg/icon-" + model.name + "-black.svg"
                             textColor: "white";
                             shadow: false;
                             highlight: false;
@@ -234,7 +234,7 @@ Panel {
                 visible: false;
                 Rectangle {
                     anchors.fill: parent;
-                    color: Settings.theme.color("tool/subheader");
+                    opacity: 0.5;
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -246,7 +246,7 @@ Panel {
                             width: height;
                             height: Constants.ToolbarButtonSize
                             color: "transparent";
-                            image: Settings.theme.icon(model.name + "-black");
+                            image: "../images/svg/icon-" + model.name + "-black.svg"
                             textColor: "white";
                             shadow: false;
                             highlight: false;

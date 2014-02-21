@@ -25,8 +25,7 @@ Item {
     id: base;
 
     property bool roundTop: false;
-
-    property string colorSet: "base";
+    property color panelColor: Constants.Theme.MainColor;
     property color textColor: "white";
     property string name;
 
@@ -82,14 +81,13 @@ Item {
                     topMargin: Constants.DefaultMargin;
                     bottomMargin: Constants.DefaultMargin;
                 }
-                color: Settings.theme.color(base.colorSet + "/base");
-//                 Rectangle {
-//                     id: rectangle4
-//                     anchors.fill: parent;
-//                     color: "#ffffff"
-//                     opacity: 0.630
-//                     color: Settings.theme.color(base.colorSet + "/subheader")
-//                 }
+                color: base.panelColor;
+                Rectangle {
+                    id: rectangle4
+                    anchors.fill: parent;
+                    color: "#ffffff"
+                    opacity: 0.630
+                }
             }
 
             Item {
@@ -120,7 +118,7 @@ Item {
                 Rectangle {
                     id: rectangle1
                     anchors.fill: parent;
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: base.panelColor;
                     radius: Constants.DefaultMargin;
                 }
 
@@ -130,7 +128,7 @@ Item {
                     anchors.left: parent.left;
                     anchors.right: parent.right;
                     height: Constants.DefaultMargin;
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: base.panelColor;
                 }
 
                 DnD.DragArea {
@@ -184,7 +182,7 @@ Item {
 
                 Rectangle {
                     id: rectanglefoot
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: base.panelColor;
                     width: parent.width;
                     height: parent.height + Constants.DefaultMargin;
                     y: -Constants.DefaultMargin;
@@ -202,7 +200,7 @@ Item {
                         anchors.baselineOffset: -16;
 
                         text: base.name;
-                        color: Settings.theme.color(base.colorSet + "/headerText");
+                        color: base.textColor;
                     }
                 }
 
@@ -298,7 +296,7 @@ Item {
                 left: handleBackground.left;//parent.horizontalCenter;
                 //leftMargin: -handle.anchors.leftMargin;
             }
-            color: Settings.theme.color(base.colorSet + "/header");
+            color: base.panelColor;
             radius: 0
 
             width: handleBackground.width //handle.anchors.leftMargin * 2;
@@ -316,7 +314,7 @@ Item {
 
             width: handle.anchors.leftMargin * 2
             height: handle.anchors.topMargin * 2
-            color: Settings.theme.color(base.colorSet + "/header");
+            color: base.panelColor
             radius: 8
 
             Label {
@@ -325,7 +323,7 @@ Item {
                 anchors.centerIn: parent;
 
                 text: base.name;
-                color: Settings.theme.color(base.colorSet + "/headerText");
+                color: base.textColor;
 
                 font.pixelSize: Constants.DefaultFontSize;
             }

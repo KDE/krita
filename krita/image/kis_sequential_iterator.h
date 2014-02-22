@@ -84,6 +84,26 @@ private:
     const quint8 *m_oldRawData;
 };
 
+/**
+ * Sequential iterator is supposed to be used when you need to
+ * read/write a rect of the image and you don't want to think about
+ * row or column nested loops. For the sequential iterator you will
+ * need a single loop: the data will be read line-by-line using an
+ * internal hline iterator. Please note that thanks to inline
+ * optimizations inside the sequential iterator when doing
+ * pixel-by-pixel processing it is about twice faster(!)  than a usual
+ * hline iterator.
+ *
+ * Implementation:
+ *
+ * The iterator is implemented using a policy pattern. The class
+ * itself is a template which accepts a special class (policy) that
+ * defines: 1) which type of the hline iterator will be used; 2) what
+ * methods of the internal hline iterator will be called. The choice
+ * of the policy declares whether the iterator will be writable or
+ * const.
+ */
+
 template <class IteratorPolicy>
 class KisSequentialIteratorBase
 {

@@ -46,6 +46,8 @@ struct KisOpenRasterStackLoadVisitor::Private {
     vKisNodeSP activeNodes;
     KisUndoStore* undoStore;
     KisOpenRasterLoadContext* loadContext;
+    double xRes;
+    double yRes;
 };
 
 KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore* undoStore, KisOpenRasterLoadContext* orlc)
@@ -90,8 +92,17 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                 height = subelem.attribute("h").toInt();
             }
 
-            dbgFile << ppVar(width) << ppVar(height);
+            d->xRes = 75.0/72; // Setting the default value of the X Resolution = 75ppi
+            if(!subelem.attribute("xres").isNull()){
+                d->xRes = (subelem.attribute("xres").toDouble() / 72);
+            }
 
+            d->yRes = 75.0/72;
+            if(!subelem.attribute("yres").isNull()){
+                d->yRes = (subelem.attribute("yres").toDouble() / 72);
+            }
+
+            dbgFile << ppVar(width) << ppVar(height);
             d->image = new KisImage(d->undoStore, width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
@@ -198,8 +209,8 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     }
                     KisImageWSP pngImage = d->loadContext->loadDeviceData(filename);
                     if (pngImage) {
-                        // ORA doesn't save resolution info, except in the png images
-                        d->image->setResolution(pngImage->xRes(), pngImage->yRes());
+                        // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml
+                        d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
                         KisPaintDeviceSP device = pngImage->projection();
                         delete pngImage.data();

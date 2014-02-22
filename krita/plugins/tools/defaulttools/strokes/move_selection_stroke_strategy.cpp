@@ -25,7 +25,7 @@
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
 #include "kis_transaction.h"
-#include <commands/kis_deselect_global_selection_command.h>
+#include <commands_new/kis_selection_move_command2.h>
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -70,12 +70,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     indirect->setTemporaryCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
 
-    m_updatesFacade->blockUpdates();
-    runAndSaveCommand(
-        KUndo2CommandSP(new KisDeselectGlobalSelectionCommand(m_paintLayer->image())),
-        KisStrokeJobData::SEQUENTIAL,
-        KisStrokeJobData::EXCLUSIVE);
-    m_updatesFacade->unblockUpdates();
+    m_selection->setVisible(false);
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
@@ -91,6 +86,17 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
 
     indirect->setTemporaryTarget(0);
 
+    QPoint selectionOffset(m_selection->x(), m_selection->y());
+
+    m_updatesFacade->blockUpdates();
+    runAndSaveCommand(
+    KUndo2CommandSP(new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset)),
+        KisStrokeJobData::SEQUENTIAL,
+        KisStrokeJobData::EXCLUSIVE);
+    m_updatesFacade->unblockUpdates();
+
+    m_selection->setVisible(true);
+
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 
@@ -102,6 +108,8 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
     QRegion dirtyRegion = indirect->temporaryTarget()->region();
 
     indirect->setTemporaryTarget(0);
+
+    m_selection->setVisible(true);
 
     m_paintLayer->setDirty(dirtyRegion);
 
@@ -125,6 +133,7 @@ void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         movedDevice->setX(movedDevice->x() + d->offset.x());
         movedDevice->setY(movedDevice->y() + d->offset.y());
+        m_finalOffset += d->offset;
 
         m_paintLayer->setDirty(dirtyRegion);
     } else {

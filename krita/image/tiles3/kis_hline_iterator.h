@@ -54,6 +54,9 @@ public:
     virtual void resetRowPos();
 
 private:
+    qint32 m_offsetX;
+    qint32 m_offsetY;
+
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr

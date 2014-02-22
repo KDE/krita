@@ -148,3 +148,10 @@ bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
     return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();
 }
+
+bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
+{
+    //These really all are pretty important for basic user interaction.
+    Q_UNUSED(shortcut)
+    return true;
+}

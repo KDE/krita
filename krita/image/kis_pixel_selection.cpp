@@ -261,6 +261,15 @@ void KisPixelSelection::invert()
     }
 }
 
+void KisPixelSelection::move(const QPoint &pt)
+{
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache.translate(pt - QPoint(x(), y()));
+    }
+
+    KisPaintDevice::move(pt);
+}
+
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
     if (*defaultPixel() != MIN_SELECTED)

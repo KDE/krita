@@ -24,11 +24,17 @@
 void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
     settings->setProperty(PRECISION_LEVEL, m_precisionLevel);
+    settings->setProperty(AUTO_PRECISION_ENABLED,m_autoPrecisionEnabled);
+    settings->setProperty(STARTING_SIZE,m_sizeToStartFrom);
+    settings->setProperty(DELTA_VALUE,m_deltaValue);
 }
 
 void KisPrecisionOption::readOptionSetting(const KisPropertiesConfiguration* settings)
 {
     m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
+    m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED,false);
+    m_deltaValue = settings->getDouble(DELTA_VALUE,15.00);
+    m_sizeToStartFrom = settings ->getDouble(STARTING_SIZE,0);
 }
 
 int KisPrecisionOption::precisionLevel() const

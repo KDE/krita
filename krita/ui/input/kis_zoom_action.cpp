@@ -248,3 +248,9 @@ void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
         }
     }
 }
+
+bool KisZoomAction::isShortcutRequired(int shortcut) const
+{
+    return shortcut == ZoomToggleShortcut;
+}
+

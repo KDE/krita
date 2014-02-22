@@ -35,6 +35,8 @@ class KisActionShortcutsModel::Private
 public:
     Private() : action(0), profile(0), temporaryShortcut(0) { }
 
+    int shortcutModeCount(uint mode);
+
     KisAbstractInputAction *action;
     KisInputProfile *profile;
     QList<KisShortcutConfiguration *> shortcuts;
@@ -212,6 +214,11 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled;
     }
 
+    KisShortcutConfiguration* config = d->shortcuts.at(index.row());
+    if (index.column() == 2 && d->action->isShortcutRequired(config->mode()) && d->shortcutModeCount(config->mode()) < 2) {
+        return Qt::ItemIsSelectable;
+    }
+
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }
 
@@ -323,6 +330,11 @@ bool KisActionShortcutsModel::removeRows(int row, int count, const QModelIndex &
 
     for (int i = row; i < d->shortcuts.count() && count > 0; ++i, count--) {
         KisShortcutConfiguration *s = d->shortcuts.at(i);
+
+        if (!d->action->isShortcutRequired(s->mode()) && d->shortcutModeCount(s->mode()) < 2) {
+            continue;
+        }
+
         d->profile->removeShortcut(s);
         d->shortcuts.removeOne(s);
         delete s;
@@ -331,4 +343,16 @@ bool KisActionShortcutsModel::removeRows(int row, int count, const QModelIndex &
     endRemoveRows();
 
     return true;
+}
+
+int KisActionShortcutsModel::Private::shortcutModeCount(uint mode)
+{
+    int count = 0;
+    foreach(KisShortcutConfiguration* s, shortcuts) {
+        if(s->mode() == mode) {
+            count++;
+        }
+    }
+
+    return count;
 }

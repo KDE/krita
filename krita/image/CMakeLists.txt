@@ -89,7 +89,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_set_global_selection_command.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
-   commands_new/kis_node_move_command2.cpp
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
    commands_new/kis_update_command.cpp

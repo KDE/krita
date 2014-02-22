@@ -142,3 +142,9 @@ void KisAbstractInputAction::setInputManager(KisInputManager *manager)
 {
     Private::inputManager = manager;
 }
+
+bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return false;
+}

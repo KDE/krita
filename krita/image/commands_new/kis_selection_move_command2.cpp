@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Stuart Dickson <stuartmd@kogmbh.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,22 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SELECTION_MOVE_COMMAND2_H
-#define KIS_SELECTION_MOVE_COMMAND2_H
+#include "kis_selection_move_command2.h"
 
-#include "kis_move_command_common.h"
+//#include "kis_image_interfaces.h"
+#include "kis_selection.h"
+//#include "kis_node.h"
 
-/**
- * A specialized class for moving a selection without its flattening and recalculation
- * of the outline cache. See details in a comment to KisMoveCommandCommon.
- */
-class KRITAIMAGE_EXPORT KisSelectionMoveCommand2 : public KisMoveCommandCommon<KisSelectionSP>
+KisSelectionMoveCommand2::KisSelectionMoveCommand2(KisSelectionSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent)
+    : KisMoveCommandCommon<KisSelectionSP>(object, oldPos, newPos, parent)
 {
-public:
-    KisSelectionMoveCommand2(KisSelectionSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
+}
 
-    void undo();
-    void redo();
-};
+void KisSelectionMoveCommand2::redo() {
+    KisMoveCommandCommon<KisSelectionSP>::redo();
+    m_object->notifySelectionChanged();
+}
 
-#endif
+void KisSelectionMoveCommand2::undo() {
+    KisMoveCommandCommon<KisSelectionSP>::undo();
+    m_object->notifySelectionChanged();
+}

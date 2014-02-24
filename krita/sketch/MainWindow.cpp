@@ -95,6 +95,15 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 #ifdef Q_OS_WIN
     QDir appdir(qApp->applicationDirPath());
+
+    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+    wchar_t buffer[1024];
+    QString absolute = appdir.absolutePath();
+    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    rv = ::GetLongPathName(buffer, buffer, 1024);
+    QString correctedPath((QChar *)buffer);
+    appdir.setPath(correctedPath);
+
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
 

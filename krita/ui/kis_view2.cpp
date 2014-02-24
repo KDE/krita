@@ -232,6 +232,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     Q_ASSERT(doc->image());
 
     setXMLFile("krita.rc");
+    KisConfig cfg;
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -248,7 +249,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
-    KisConfig cfg;
     canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
@@ -258,7 +258,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+    }
+    if (cfg.canvasState() == "OPENGL_FAILED") {
         cfg.setUseOpenGL(false);
     }
     grp.writeEntry("CreatingCanvas", true);

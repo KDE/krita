@@ -186,7 +186,7 @@ void KisPaletteManager::slotUpdateAddButton()
 void KisPaletteManager::slotEnableRemoveButton()
 {
     KoResource *resource = m_palettePresetsView->currentResource();
-    m_removeButton->setEnabled(resource != NULL);
+    m_removeButton->setEnabled(resource != 0);
 }
 
 void KisPaletteManager::slotDeleteBrush()

@@ -828,6 +828,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
+#ifdef PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED
+    png_set_check_for_invalid_index(png_ptr, 0);
+#endif
+
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
         png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
@@ -1027,10 +1031,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());
         }
         // Save XMP
-        if (options.xmp)
-#if 1
-            // TODO enable when XMP support is finiehsed
-        {
+        if (options.xmp) {
             dbgFile << "Trying to save XMP information";
             KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);
@@ -1041,7 +1042,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             dbgFile << "XMP information size is" << buffer.data().size();
             writeRawProfile(png_ptr, info_ptr, "xmp", buffer.data());
         }
-#endif
     }
 #if 0 // Unimplemented?
     // Save resolution

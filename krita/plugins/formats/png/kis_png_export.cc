@@ -138,11 +138,18 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         cfg.fromXML(filterConfig);
 
         wdg->alpha->setChecked(cfg.getBool("alpha", isThereAlpha));
-        if (wdg->alpha->isChecked()) {
-            wdg->tryToSaveAsIndexed->setChecked(false);
+
+        if (cs->colorModelId() == RGBAColorModelID) {
+            wdg->tryToSaveAsIndexed->setVisible(true);
+            if (wdg->alpha->isChecked()) {
+                wdg->tryToSaveAsIndexed->setChecked(false);
+            }
+            else {
+                wdg->tryToSaveAsIndexed->setChecked(cfg.getBool("indexed", false));
+            }
         }
         else {
-            wdg->tryToSaveAsIndexed->setChecked(cfg.getBool("indexed", false));
+            wdg->tryToSaveAsIndexed->setVisible(false);
         }
         wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
         wdg->compressionLevel->setValue(cfg.getInt("compression", 9));

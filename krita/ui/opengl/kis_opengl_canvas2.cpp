@@ -270,7 +270,12 @@ void KisOpenGLCanvas2::drawCheckers() const
     QRectF textureRect;
     QRectF modelRect;
 
-    converter->getOpenGLCheckersInfo(&textureTransform, &modelTransform, &textureRect, &modelRect);
+    QRectF viewportRect = !d->wrapAroundMode ?
+        converter->imageRectInViewportPixels() :
+        converter->widgetToViewport(this->rect());
+
+    converter->getOpenGLCheckersInfo(viewportRect,
+                                     &textureTransform, &modelTransform, &textureRect, &modelRect);
 
     // XXX: getting a config object every time we draw the checkers is bad for performance!
     KisConfig cfg;

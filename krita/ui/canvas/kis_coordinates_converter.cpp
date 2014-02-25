@@ -340,13 +340,14 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
     }
 }
 
-void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform,
+void KisCoordinatesConverter::getOpenGLCheckersInfo(const QRectF &viewportRect,
+                                                    QTransform *textureTransform,
                                                     QTransform *modelTransform,
                                                     QRectF *textureRect,
                                                     QRectF *modelRect) const
 {
     KisConfig cfg;
-    QRectF viewportRect = imageRectInViewportPixels();
+
     if(cfg.scrollCheckers()) {
         *textureTransform = QTransform();
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());

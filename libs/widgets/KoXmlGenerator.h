@@ -46,6 +46,8 @@ public:
      */
     KoXmlGenerator(QString);
 
+    KoXmlGenerator(QByteArray,QString);
+
     /**
      * Constructor
      * Create a virtual XML file, extracting data from an existing device.
@@ -56,6 +58,9 @@ public:
 
     ///Destructor
     virtual ~KoXmlGenerator();
+
+    ///@return the data contained in the XML Document
+    QByteArray toByteArray();
 
     ///@return the name of the XML document
     QString getName();

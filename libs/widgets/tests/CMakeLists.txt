@@ -25,4 +25,9 @@ set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
 kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
 target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
+set(KoResourceBundle_test_SRCS KoResourceBundle_test.cpp )
+kde4_add_unit_test(KoResourceBundleTest TESTNAME libs-widgets-KoResourceBundleTest ${KoResourceBundle_test_SRCS})
+target_link_libraries(KoResourceBundleTest kowidgets komain ${QT_QTTEST_LIBRARY})
+
 ########### end ###############
+

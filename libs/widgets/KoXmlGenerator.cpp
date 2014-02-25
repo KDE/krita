@@ -30,6 +30,17 @@ KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
     this->device=0;
 }
 
+KoXmlGenerator::KoXmlGenerator(QByteArray data,QString xmlFileName):xmlDocument(xmlFileName)
+{
+    this->device=0;
+    if (!xmlDocument.setContent(data)) {
+        exit(1);
+    }
+    else {
+        root=xmlDocument.documentElement();
+    }
+}
+
 KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((QFile*)device)->fileName().section('.',0,0))
 {
     this->device=device;
@@ -62,6 +73,11 @@ KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((
 KoXmlGenerator::~KoXmlGenerator()
 {
 
+}
+
+QByteArray KoXmlGenerator::toByteArray()
+{
+    return xmlDocument.toByteArray();
 }
 
 QString KoXmlGenerator::getName()

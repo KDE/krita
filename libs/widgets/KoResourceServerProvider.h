@@ -32,6 +32,7 @@
 #include "KoPattern.h"
 #include "KoAbstractGradient.h"
 #include "KoColorSet.h"
+#include "KoResourceBundle.h"
 
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
@@ -81,6 +82,7 @@ public:
     KoResourceServer<KoPattern>* patternServer();
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
+    KoResourceServer<KoResourceBundle>* bundleServer();
 
 private:
     KoResourceServerProvider();

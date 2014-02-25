@@ -316,8 +316,6 @@ void KisOpenGLCanvas2::drawCheckers() const
 
     glBindTexture(GL_TEXTURE_2D, 0);
     d->checkerShader->release();
-
-    // TODO: wrap around mode for checkers!
 }
 
 void KisOpenGLCanvas2::drawImage() const

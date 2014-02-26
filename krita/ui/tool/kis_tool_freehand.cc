@@ -198,10 +198,6 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
         canvas2->view()->disableControls();
     }
 
-    const KisCoordinatesConverter *converter = static_cast<KisCanvas2*>(canvas())->coordinatesConverter();
-    currentPaintOpPreset()->settings()->setCanvasRotation(converter->rotationAngle());
-    currentPaintOpPreset()->settings()->setCanvasMirroring(converter->xAxisMirrored(),
-                                                           converter->yAxisMirrored());
     initStroke(event);
 }
 

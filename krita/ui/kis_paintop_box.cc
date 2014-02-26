@@ -322,7 +322,6 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
-    m_resourceProvider->resourceManager()->blockSignals(true);
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     if (preset) {
         if(!preset->settings()->isLoadable())
@@ -332,7 +331,6 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
-    m_resourceProvider->resourceManager()->blockSignals(false);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)

@@ -14,7 +14,5 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
-if (NOT WIN32)
 add_subdirectory( gmic )
-endif (NOT WIN32)
 

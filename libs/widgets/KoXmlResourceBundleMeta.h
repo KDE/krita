@@ -90,6 +90,9 @@ public:
      * @return the element corresponding to the created tag.
      */
     QDomElement addTag(QString tagName,QString textValue="",bool empty=false);
+
+    ///Add all the resource tags in the list if necessary
+    void addTags(QList<QString> list);
 };
 
 

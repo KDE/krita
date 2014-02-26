@@ -42,11 +42,18 @@ public:
     /**
      * Constructor
      * Create a virtual XML file.
-     * @param xmlName the name of the XML file to be created
+     * @param xmlFileName the name of the XML file to be created
      */
-    KoXmlGenerator(QString);
+    KoXmlGenerator(QString xmlFileName);
 
-    KoXmlGenerator(QByteArray,QString);
+    /**
+     * Constructor
+     * Create a virtual XML file.
+     * @param data the name of the XML file to be created
+     * @param xmlFileName the name of the XML file to be created
+     */
+
+    KoXmlGenerator(QByteArray data,QString xmlFileName);
 
     /**
      * Constructor
@@ -84,6 +91,14 @@ public:
      * @return true if a tag has been removed, false otherwise.
      */
     bool removeFirstTag(QString tagName,QString textValue="");
+
+    /**
+     * Remove the first tag having the same name, and same text value if defined.
+     * @param tagName the name of the tag to be removed.
+     * @param textValue the text linked to the tag.
+     * @return true if a tag has been removed, false otherwise.
+     */
+    bool removeFirstTag(QString tagName,QString attName,QString attValue);
 
     /**
      * Remove all the tags having the same name.

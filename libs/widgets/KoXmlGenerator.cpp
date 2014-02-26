@@ -16,7 +16,6 @@
 */
 
 #include "KoXmlGenerator.h"
-#include <QtXml/QDomElement>
 #include <QFile>
 #include <QTextStream>
 #include <cstdlib>
@@ -126,6 +125,28 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
             }
         }
     }
+}
+
+bool KoXmlGenerator::removeFirstTag(QString tagName,QString attName,QString attValue)
+{
+    QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
+
+    if (tagList.isEmpty()) {
+        return false;
+    }
+    else {
+        for(int i=0;i<tagList.size();i++){
+            QDomNode prov=tagList.at(i);
+            QDomAttr att=prov.toElement().attributeNode(attName);
+            if (!att.isNull()){
+                if(att.value()==attValue){
+                    prov.parentNode().removeChild(prov);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void KoXmlGenerator::removeTag(QString tagName)

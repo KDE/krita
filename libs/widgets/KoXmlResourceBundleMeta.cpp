@@ -16,6 +16,7 @@
 */
 
 #include "KoXmlResourceBundleMeta.h"
+#include <QList>
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -135,7 +136,7 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
 
     int tagEnumValue=getTagEnumValue(tagName);
 
-    if (tagEnumValue!=Other && textValue=="") {
+    if (tagEnumValue==Other && textValue=="") {
         return QDomElement();
     }
     else {
@@ -143,8 +144,7 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
         QDomNode node=tagList.item(0);
 
         if (emptyFile || tagEnumValue==Other || node.isNull() || (tagEnumValue==Tag &&
-             searchValue(tagList,textValue).isNull()))
-              {
+             searchValue(tagList,textValue).isNull())) {
             QDomElement child = xmlDocument.createElement(tagName);
             root.appendChild(child);
 
@@ -159,6 +159,18 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
         }
         else {
             return QDomElement();
+        }
+    }
+}
+
+void KoXmlResourceBundleMeta::addTags(QList<QString> list)
+{
+    QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
+    QString prov;
+    for (int i=0;i<list.size();i++) {
+        prov=list.at(i);
+        if (prov != "" && searchValue(tagList,prov).isNull()) {
+            root.appendChild(xmlDocument.createElement("tag").appendChild(xmlDocument.createTextNode(prov)));
         }
     }
 }

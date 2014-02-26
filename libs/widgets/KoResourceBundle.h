@@ -23,13 +23,19 @@
 #include "KoResource.h"
 #include "kowidgets_export.h"
 
+class KoXmlResourceBundleManifest;
+class KoXmlResourceBundleMeta;
+class KoResourceBundleManager;
+
 
 class KOWIDGETS_EXPORT KoResourceBundle : public KoResource
 {
 
 public:
     KoResourceBundle(QString const&);
-    
+        
+    ~KoResourceBundle();
+
     /**
      * Load this resource.
      */
@@ -49,9 +55,13 @@ public:
     /// Returns the default file extension which should be when saving the resource
     QString defaultFileExtension() const;
 
+    void addFile();
+    
 private:
     QImage thumbnail;
-
+    KoXmlResourceBundleManifest* manifest;
+    KoXmlResourceBundleMeta* meta;
+    KoResourceBundleManager* man;
 };
 
 #endif // KORESOURCEBUNDLE_H

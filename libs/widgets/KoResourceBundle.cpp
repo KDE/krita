@@ -18,28 +18,79 @@
  */
 
 #include "KoResourceBundle.h"
+#include "KoXmlResourceBundleManifest.h"
+#include "KoXmlResourceBundleMeta.h"
 
 KoResourceBundle::KoResourceBundle(QString const& file):KoResource(file)
 {
 
 }
 
+KoResourceBundle::~KoResourceBundle()
+{
+    delete man;
+    delete meta;
+    delete manifest;
+}
+
+QImage KoResourceBundle::image() const
+{
+    return thumbnail;
+}
+
 bool KoResourceBundle::load()
 {
-    setValid(true);
+    man.setReadPack(fileName());
+    if(man.bad()){
+        //Le fichier n'existe pas
+        manifest=new KoXmlResourceBundleManifest();
+        meta=new KoXmlResourceBundleManifest();
+    }
+    else{
+        //Le fichier existe
+        //TODO Tester si getfile suffit au lieu de getfiledata
+        //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
+        manifest=new KoXmlResourceBundleManifest(man->getFileData("manifest.xml"));
+        meta=new KoXmlResourceBundleManifest(man->getFileData("meta.xml"));
+        thumbnail.load(man->getFile("thumbnail.jpg");
+        setValid(true);
+    }
     return true;
 }
 
 bool KoResourceBundle::save()
 {
+    if(man.bad()){
+        //Le fichier n'existe pas
+        meta.addTags(manifest.getTags());
+    }
+    man.setWritePack(fileName());
+    man.createPack(manifest,meta);
+    setValid(true);
     return true;
 }
 
+void KoResourceBundle::addFile(QString fileType,QString filePath)
+{
+    manifest->addTag(fileType,filePath);
+    //TODO Voir s'il faut copier ou pas le fichier tout de suite
+    //TODO Cas où le paquet n'est pas installé...
+}
 
-QString KoResourceBundle::defaultFileExtension() const{
+void KoResourceBundle::removeFile(QString fileName)
+{
+    QList<QString> list=manifest->removeFile(fileName);
+    for (int i=0;i<list.size();i++) {
+        meta->removeFirstTag("tag",list.at(i));
+    }
+}
+
+QString KoResourceBundle::defaultFileExtension() const
+{
     return QString(".zip");
 }
 
-QImage KoResourceBundle::image() const{
+QImage KoResourceBundle::image() const
+{
 	return thumbnail;
 }

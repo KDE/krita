@@ -71,6 +71,7 @@ set(kowidgets_LIB_SRCS
 	KoXmlResourceBundleManifest.cpp
 	KoXmlResourceBundleMeta.cpp
     KoResourceBundle.cpp
+    KoResourceBundleManager.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -142,6 +143,7 @@ install( FILES
 	KoXmlResourceBundleManifest.h
 	KoXmlResourceBundleMeta.h
     KoResourceBundle.h
+    KoResourceBundleManager.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

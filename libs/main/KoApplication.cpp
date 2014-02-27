@@ -108,19 +108,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
         // https://bugreports.qt-project.org/browse/QTBUG-32789
         QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
     }
-/*
-    QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
-    if (styleSheetPath.isEmpty()) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
-    }
-    QFile file(styleSheetPath);
-    if (!file.open(QFile::ReadOnly)) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot open OS X UI stylesheet." << endl;
-    }
-    QString styleSheet = QLatin1String(file.readAll());
-    file.close();
-    setStyleSheet(styleSheet);
-*/
+
     setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
@@ -129,7 +117,6 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
         setStyle("Plastique");
         setStyle("Oxygen");
     }
-
 }
 
 // This gets called before entering KApplication::KApplication

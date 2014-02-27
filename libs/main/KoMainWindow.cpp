@@ -22,7 +22,7 @@
 
 #include "KoMainWindow.h"
 
-#ifdef __APPLE__
+#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
 #include "MacSupport.h"
 #endif
 
@@ -259,9 +259,13 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
-#ifdef __APPLE__
-    //setUnifiedTitleAndToolBarOnMac(true);
+#ifdef Q_OS_MAC
+    #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
+    #endif
+    #if QT_VERSION >= 0x050201
+    setUnifiedTitleAndToolBarOnMac(true);
+    #endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -1876,7 +1880,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
     dockWidget->setFont(dockWidgetFont);

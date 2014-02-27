@@ -34,7 +34,6 @@
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
-#include <KoFileDialog.h>
 
 #include <kis_view2.h>
 #include <kis_canvas2.h>

@@ -1045,6 +1045,11 @@ void KisToolTransform::applyTransform()
     slotApplyTransform();
 }
 
+bool KisToolTransform::isActive() const
+{
+    return m_isActive;
+}
+
 KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
 {
     return m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM ? FreeTransformMode : WarpTransformMode;
@@ -2227,6 +2232,7 @@ void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShap
     }
 
     m_isActive = true;
+    emit isActiveChanged();
     startStroke(ToolTransformArgs::FREE_TRANSFORM);
 }
 
@@ -2235,6 +2241,7 @@ void KisToolTransform::deactivate()
     endStroke();
     m_canvas->updateCanvas();
     m_isActive = false;
+    emit isActiveChanged();
 
     KisTool::deactivate();
 }

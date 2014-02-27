@@ -38,7 +38,7 @@ if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
 
-target_link_libraries(gmic pthread)
+target_link_libraries(gmic)
 
 set(GMIC_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/gmic)
 install(FILES

@@ -162,6 +162,18 @@ Page {
         }
     }
 
+    ToolOverlayPanel {
+        id: toolOverlay;
+        anchors {
+            left: menuPanel.left;
+            leftMargin: (Constants.IsLandscape ? Constants.GridWidth * 4: Constants.GridWidth * 2) + Constants.DefaultMargin;
+            right: menuPanel.right;
+            rightMargin: (Constants.IsLandscape ? 0 : Constants.GridWidth * 2) + Constants.DefaultMargin;
+            bottom: menuPanel.top;
+            bottomMargin: Constants.DefaultMargin;
+        }
+    }
+
     Dialog {
         id: loadingDialog;
         title: "Loading";

@@ -41,6 +41,7 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     setObjectName("tool_move");
     m_optionsWidget = 0;
     m_moveToolMode = MoveSelectedLayer;
+    m_moveInProgress = false;
 }
 
 KisToolMove::~KisToolMove()
@@ -127,6 +128,8 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     QPoint pos = convertToPixelCoord(event).toPoint();
     m_dragStart = pos;
     m_lastDragPos = m_dragStart;
+    m_moveInProgress = true;
+    emit moveInProgressChanged();
 
     KisNodeSP node;
     KisImageSP image = this->image();
@@ -221,6 +224,8 @@ void KisToolMove::endStroke()
     image->endStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNode.clear();
+    m_moveInProgress = false;
+    emit moveInProgressChanged();
 }
 
 void KisToolMove::cancelStroke()
@@ -231,6 +236,8 @@ void KisToolMove::cancelStroke()
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNode.clear();
+    m_moveInProgress = false;
+    emit moveInProgressChanged();
 }
 
 QWidget* KisToolMove::createOptionWidget()
@@ -264,6 +271,11 @@ void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
 KisToolMove::MoveToolMode KisToolMove::moveToolMode() const
 {
     return m_moveToolMode;
+}
+
+bool KisToolMove::moveInProgress() const
+{
+    return m_moveInProgress;
 }
 
 void KisToolMove::slotWidgetRadioToggled(bool checked)

@@ -38,11 +38,14 @@ class KisToolMove : public KisTool
     Q_OBJECT
     Q_ENUMS(MoveToolMode);
     Q_PROPERTY(MoveToolMode moveToolMode READ moveToolMode WRITE setMoveToolMode NOTIFY moveToolModeChanged);
+    Q_PROPERTY(bool moveInProgress READ moveInProgress NOTIFY moveInProgressChanged);
 public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
     void deactivate();
+
+public Q_SLOTS:
     void requestStrokeEnd();
     void requestStrokeCancellation();
 
@@ -70,12 +73,14 @@ public:
     virtual QWidget* createOptionWidget();
 
     MoveToolMode moveToolMode() const;
+    bool moveInProgress() const;
 public Q_SLOTS:
     void setMoveToolMode(MoveToolMode newMode);
     void slotWidgetRadioToggled(bool checked);
 
 Q_SIGNALS:
     void moveToolModeChanged();
+    void moveInProgressChanged();
 
 private:
     void drag(const QPoint& newPos);
@@ -95,6 +100,7 @@ private:
     KisStrokeId m_strokeId;
 
     MoveToolMode m_moveToolMode;
+    bool m_moveInProgress;
     KisNodeSP m_currentlyProcessingNode;
 };
 

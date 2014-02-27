@@ -15,6 +15,7 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "KoXmlResourceBundleManifest.h"
+#include <QList>
 
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -146,5 +147,65 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
         }
         return QDomElement();
     }
+}
+
+QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
+{
+    QList<QString> result;
+    QDomNode prov;
+    QDomNodeList tagList=xmlDocument.elementsByTagName("file");
+    QString tagProv;
+
+    if (tagList.isEmpty()) {
+        return result;
+    }
+    else {
+        for (int i=0;i<tagList.size();i++) {
+            prov=tagList.at(i);
+            QDomAttr att=prov.toElement().attributeNode("name");
+            if (!att.isNull()) {
+                if (att.value()==fileName) {
+                    break;
+                }
+            }
+        }
+        if (prov.isNull()) {
+            return result;
+        }
+        else {
+            tagList=prov.toElement().elementsByTagName("tag");
+            for (int i=0;i<tagList.size();i++) {
+                tagProv=tagList.at(i).firstChild().toText().data();
+                if (!result.contains(tagProv)) {
+                    result.push_front(tagProv);
+                }
+            }
+        }
+    }
+    prov.parentNode().removeChild(prov);
+    return result;
+}
+
+QList<QString> KoXmlResourceBundleManifest::getTagList(){
+    QDomNodeList liste=xmlDocument.elementsByTagName("tag");
+    QList<QString> result;
+    QString prov;
+    for(int i=0;i<liste.size();i++){
+        prov=liste.at(i).firstChild().toText().data();
+        if(!result.contains(prov)){
+            result.push_front(prov);
+        }
+    }
+    return result;
+}
+
+QString* KoXmlResourceBundleManifest::getFileList()
+{
+    QDomNodeList liste=xmlDocument.elementsByTagName("file");
+    QString* result=new QString[liste.length()];
+    for(int cpt=0;cpt<liste.size();cpt++){
+        result[cpt]=liste.at(cpt).toText().data();
+    }
+    return result;
 }
 

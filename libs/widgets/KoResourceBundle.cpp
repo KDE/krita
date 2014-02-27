@@ -20,6 +20,7 @@
 #include "KoResourceBundle.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
+#include "KoResourceBundleManager.h"
 
 KoResourceBundle::KoResourceBundle(QString const& file):KoResource(file)
 {
@@ -33,26 +34,21 @@ KoResourceBundle::~KoResourceBundle()
     delete manifest;
 }
 
-QImage KoResourceBundle::image() const
-{
-    return thumbnail;
-}
-
 bool KoResourceBundle::load()
 {
-    man.setReadPack(fileName());
-    if(man.bad()){
+    man->setReadPack("fileName()");//TODO A corriger
+    if(man->bad()){
         //Le fichier n'existe pas
         manifest=new KoXmlResourceBundleManifest();
-        meta=new KoXmlResourceBundleManifest();
+        meta=new KoXmlResourceBundleMeta();
     }
     else{
         //Le fichier existe
         //TODO Tester si getfile suffit au lieu de getfiledata
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
         manifest=new KoXmlResourceBundleManifest(man->getFileData("manifest.xml"));
-        meta=new KoXmlResourceBundleManifest(man->getFileData("meta.xml"));
-        thumbnail.load(man->getFile("thumbnail.jpg");
+        meta=new KoXmlResourceBundleMeta(man->getFileData("meta.xml"));
+        thumbnail.load(man->getFile("thumbnail.jpg"),"jpg");
         setValid(true);
     }
     return true;
@@ -60,12 +56,12 @@ bool KoResourceBundle::load()
 
 bool KoResourceBundle::save()
 {
-    if(man.bad()){
+    if(man->bad()){
         //Le fichier n'existe pas
-        meta.addTags(manifest.getTags());
+        meta->addTags(manifest->getTagList());
     }
-    man.setWritePack(fileName());
-    man.createPack(manifest,meta);
+    man->setWritePack("fileName()");//TODO A corriger
+    man->createPack(manifest,meta);
     setValid(true);
     return true;
 }

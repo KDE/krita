@@ -74,6 +74,12 @@ public:
      * @return the element corresponding to the created tag.
      */
     QDomElement addTag(QString fileType,QString fileName,bool emptyFile=false);
+
+    QList<QString> getTagList();
+
+    QString* getFileList();
+
+    QList<QString> removeFile(QString fileName);
  };
 
 

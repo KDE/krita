@@ -55,7 +55,8 @@ public:
     /// Returns the default file extension which should be when saving the resource
     QString defaultFileExtension() const;
 
-    void addFile();
+    void addFile(QString fileType,QString filePath);
+    void removeFile(QString fileName);
     
 private:
     QImage thumbnail;

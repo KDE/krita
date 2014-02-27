@@ -19,10 +19,10 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include <QString>
-#include "KoXmlResourceBundleManifest.h"
-#include "KoXmlResourceBundleMeta.h"
 #include "KoStore.h"
 
+class KoXmlResourceBundleManifest;
+class KoXmlResourceBundleMeta;
 
 class KoResourceBundleManager
 {
@@ -108,7 +108,7 @@ public:
      * @param manifest the virtual generator of manifest file
      * @param manifest the virtual generator of meta file
      */
-    void createPack(KoXmlResourceBundleManifest manifest, KoXmlResourceBundleMeta meta);
+    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
 
     /**
      * @return a QByteArray containing data of the file in the store
@@ -125,6 +125,7 @@ public:
     ///File Method shortcuts
 
     bool hasFile(const QString &name) const;
+    bool bad() const;
     bool open(const QString &name);
     bool isOpen() const;
     bool close();

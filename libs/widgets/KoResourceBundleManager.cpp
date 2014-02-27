@@ -16,6 +16,8 @@
 */
 
 #include "KoResourceBundleManager.h"
+#include "KoXmlResourceBundleManifest.h"
+#include "KoXmlResourceBundleMeta.h"
 #include <QtCore/QFile>
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
@@ -98,7 +100,6 @@ void KoResourceBundleManager::extractKFiles(QString* pathList)
 
 void KoResourceBundleManager::extractPack(QString packName)
 {
-    QFile *file;
     this->packName=packName;
     toRoot();
     //TODO extractThumbnail();
@@ -106,14 +107,14 @@ void KoResourceBundleManager::extractPack(QString packName)
     extractKFiles(manifest->getFileList()); //TODO getFileList() doit gérer le sous-dossier portant le nom du paquet
 }
 
-void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest manifest, KoXmlResourceBundleMeta meta)
+void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta)
 {
-    if (meta.getName()!="") {
-        packName=meta.getName();
+    if (meta->getName()!="") {
+        packName=meta->getName();
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
 
         if (resourcePack!=NULL) {
-            addKFiles(manifest.getFileList());
+            addKFiles(manifest->getFileList());
             //TODO addThumbnail();
             resourcePack->finalize();
         }
@@ -146,10 +147,16 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
         open(fileName);
         return resourcePack->device();
     }
+    return 0;
 }
 
 
 //File Method Shortcuts
+
+bool KoResourceBundleManager::bad() const
+{
+    return resourcePack->bad();
+}
 
 bool KoResourceBundleManager::hasFile(const QString &name) const
 {

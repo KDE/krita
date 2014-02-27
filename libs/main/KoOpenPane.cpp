@@ -199,7 +199,7 @@ KoOpenPane::~KoOpenPane()
 void KoOpenPane::openFileDialog()
 {
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Open Existing Document"),
                         (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
                           ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)

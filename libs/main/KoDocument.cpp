@@ -2609,7 +2609,7 @@ bool KoDocument::queryClose()
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
                 KoFileDialog dialog(mainWindow,
-                                    KoFileDialog::DialogSaveFile);
+                                    KoFileDialog::FileSaveDialog);
                 KUrl url = dialog.getKUrl();
                 if (url.isEmpty())
                     return false;

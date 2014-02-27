@@ -238,7 +238,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             }
             else {
                 KoFileDialog dialog(m_view,
-                                    KoFileDialog::DialogSaveFile,
+                                    KoFileDialog::FileSaveDialog,
                                     i18n("Export Layer") + '(' + ch->name() + ')',
                                     QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                     "OpenDocument");

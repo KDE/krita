@@ -99,13 +99,13 @@ QFileDialog* KoFileDialog::getDialog(KoFileDialog::ReturnType returnType)
 {
     QFileDialog* dialog = new QFileDialog(d->parent, d->caption, d->directory);
 
-    if (d->dialogType == DialogSaveFile) {
+    if (d->dialogType == FileSaveDialog) {
         dialog->setAcceptMode(QFileDialog::AcceptSave);
         dialog->setFileMode(QFileDialog::AnyFile);
     } else {
         dialog->setAcceptMode(QFileDialog::AcceptOpen);
-        if (d->dialogType == DialogImportDirectory ||
-            d->dialogType == DialogOpenDirectory) {
+        if (d->dialogType == DirectoryImportDialog ||
+            d->dialogType == DirectoryOpenDialog) {
             dialog->setFileMode(QFileDialog::Directory);
             dialog->setOption(QFileDialog::ShowDirsOnly, true);
         } else {
@@ -117,9 +117,9 @@ QFileDialog* KoFileDialog::getDialog(KoFileDialog::ReturnType returnType)
         }
     }
 
-    if (d->dialogType == DialogSaveFile ||
-        d->dialogType == DialogOpenFile ||
-        d->dialogType == DialogImportFile) {
+    if (d->dialogType == FileSaveDialog ||
+        d->dialogType == FileOpenDialog ||
+        d->dialogType == FileImportDialog) {
         // add "All Supported Formats" filter
         if (d->filterType == FilterMime) {
             d->filterType = FilterName;
@@ -144,9 +144,9 @@ QFileDialog* KoFileDialog::getDialog(KoFileDialog::ReturnType returnType)
             dialog->selectNameFilter(d->defaultFilter);
     }
 
-    if (d->dialogType == DialogImportDirectory ||
-        d->dialogType == DialogImportFile ||
-        d->dialogType == DialogSaveFile) {
+    if (d->dialogType == DirectoryImportDialog ||
+        d->dialogType == FileImportDialog ||
+        d->dialogType == FileSaveDialog) {
         dialog->setWindowModality(Qt::WindowModal);
     }
 

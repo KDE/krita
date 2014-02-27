@@ -233,7 +233,7 @@ void ColorSettingsTab::installProfile()
     QStringList mime;
     mime << "*.icm" <<  "*.icc";
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Install Color Profiles"),
                         QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                         "OpenDocumentICC");
@@ -355,7 +355,7 @@ void ColorSettingsTab::selectOcioConfigPath()
     QString filename = m_page->txtOcioConfigPath->text();
 
     KoFileDialog dialog(m_page,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Select OpenColorIO Configuration"),
                         QDir::cleanPath(filename),
                         "OpenDocument");

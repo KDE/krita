@@ -94,7 +94,7 @@ QString KisDlgFileLayer::fileName() const
 void KisDlgFileLayer::slotSelectFile()
 {
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Select file to use as dynamic file layer."),
                         m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
                         "OpenDocument");

@@ -184,7 +184,7 @@ void KoEditColorSetWidget::open()
 {
     Q_ASSERT(m_activeColorSet);
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         QString(),
                         m_activeColorSet->filename());
     dialog.setNameFilter("*.gpl");

@@ -37,11 +37,11 @@ class KOMAIN_EXPORT KoFileDialog
 {
 public:
     enum DialogType {
-        DialogOpenFile,
-        DialogOpenDirectory,
-        DialogImportFile,
-        DialogImportDirectory,
-        DialogSaveFile
+        FileOpenDialog,
+        DirectoryOpenDialog,
+        FileImportDialog,
+        DirectoryImportDialog,
+        FileSaveDialog
     };
 
     enum ReturnType {
@@ -61,7 +61,7 @@ public:
      *
      */
     KoFileDialog(QWidget *parent = 0,
-                 KoFileDialog::DialogType dialogType = DialogOpenFile,
+                 KoFileDialog::DialogType dialogType = FileOpenDialog,
                  const QString &caption = QString(),
                  const QString &defaultDir = QString(),
                  const QString uniqueName = QString());

@@ -178,7 +178,7 @@ void KisColorSpaceSelector::installProfile()
     QStringList mime;
     mime << "*.icm" <<  "*.icc";
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Install Color Profiles"),
                         QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                         "OpenDocumentICC");

@@ -130,7 +130,7 @@ void Imagesplit::slotImagesplit()
                 for(int j=0;j<(numHorizontalLines+1);j++)
                 {
                     KoFileDialog dialog(m_view,
-                                        KoFileDialog::DialogSaveFile,
+                                        KoFileDialog::FileSaveDialog,
                                         i18n("Save Image on Split"),
                                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                         "OpenDocument");

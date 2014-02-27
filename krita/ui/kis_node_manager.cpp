@@ -799,7 +799,7 @@ void KisNodeManager::saveNodeAsImage()
     }
 
     KoFileDialog dialog(m_d->view,
-                        KoFileDialog::DialogSaveFile,
+                        KoFileDialog::FileSaveDialog,
                         i18n("Export Node"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));

@@ -47,7 +47,7 @@ KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
 void KisFlipbookSelector::createImage()
 {
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Select files to add to flipbook"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                         "OpenDocument");

@@ -160,7 +160,7 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 void FlipbookDockerDock::saveFlipbook()
 {
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogSaveFile,
+                        KoFileDialog::FileSaveDialog,
                         i18n("Save flipbook"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                         "OpenDocument");
@@ -191,7 +191,7 @@ void FlipbookDockerDock::newFlipbook()
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Select files to add to flipbook"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                         "OpenDocument");
@@ -231,7 +231,7 @@ void FlipbookDockerDock::openFlipbook()
     KisImageSP oldImage = m_canvas->view()->image();
 
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Load flipbook"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                         "OpenDocument");
@@ -264,7 +264,7 @@ void FlipbookDockerDock::addImage()
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
     KoFileDialog dialog(this,
-                        KoFileDialog::DialogOpenFile,
+                        KoFileDialog::FileOpenDialog,
                         i18n("Select files to add to flipbook"),
                         QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                         "OpenDocument");

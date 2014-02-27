@@ -75,7 +75,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
 
     if (urlArg.isEmpty()) {
         KoFileDialog dialog(m_view,
-                            KoFileDialog::DialogOpenFile,
+                            KoFileDialog::FileOpenDialog,
                             i18n("Import Image"),
                             QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                             "OpenDocument");

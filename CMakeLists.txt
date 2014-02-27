@@ -102,6 +102,9 @@ endif (RELEASE_BUILD)
 ############
 
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (WIN32)
+    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)

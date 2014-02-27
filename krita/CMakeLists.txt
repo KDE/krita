@@ -24,8 +24,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:5000000") # for g'mic...
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+    if (USE_BREAKPAD)
+        include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
+    endif (USE_BREAKPAD)
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 if(NOT WIN32)
@@ -127,6 +129,11 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
+
+if (WIN32 AND USE_BREAKPAD)
+        add_subdirectory( crashreporter )
+endif (WIN32 AND USE_BREAKPAD)
+
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
@@ -137,6 +144,11 @@ target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_KDEINIT_SRCS main.cc)
+if(WIN32 AND USE_BREAKPAD)
+    set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD) 
+
 kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
@@ -146,7 +158,7 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita kritaui)
+target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
 target_link_libraries(krita kdeinit_krita)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})

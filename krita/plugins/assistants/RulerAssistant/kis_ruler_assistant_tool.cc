@@ -22,16 +22,11 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QDesktopServices>
+#include <QFile>
 
 #include <kis_debug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
-
-#ifndef QT_NO_DBUS
-#include <kio/jobuidelegate.h>
-#endif
 
 #include <KoIcon.h>
 #include <KoFileDialogHelper.h>
@@ -48,8 +43,8 @@
 #include <kis_painting_assistants_manager.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
-          m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)
+    : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
+      m_assistantDrag(0), m_newAssistant(0), m_optionsWidget(0), m_handleSize(32), m_handleHalfSize(16)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_rulerassistanttool");
@@ -377,7 +372,7 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
-    } 
+    }
 }
 
 void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
@@ -444,74 +439,19 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-#ifndef QT_NO_DBUS
-    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
-    if (file.isEmpty()) return;
-    KIO::StoredTransferJob* job = KIO::storedGet(file);
-    connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
-    job->start();
-#endif
-}
-
-void KisRulerAssistantTool::saveAssistants()
-{
-#ifndef QT_NO_DBUS
-    QByteArray data;
-    QXmlStreamWriter xml(&data);
-    xml.writeStartDocument();
-    xml.writeStartElement("paintingassistant");
-    xml.writeStartElement("handles");
-    QMap<KisPaintingAssistantHandleSP, int> handleMap;
-    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
-        int id = handleMap.size();
-        handleMap.insert(handle, id);
-        xml.writeStartElement("handle");
-        xml.writeAttribute("id", QString::number(id));
-        xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
-        xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
-        xml.writeEndElement();
-    }
-    xml.writeEndElement();
-    xml.writeStartElement("assistants");
-    foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
-        xml.writeStartElement("assistant");
-        xml.writeAttribute("type", assistant->id());
-        xml.writeStartElement("handles");
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
-            xml.writeStartElement("handle");
-            xml.writeAttribute("ref", QString::number(handleMap.value(handle)));
-            xml.writeEndElement();
-        }
-        xml.writeEndElement();
-        xml.writeEndElement();
-    }
-    xml.writeEndElement();
-    xml.writeEndElement();
-    xml.writeEndDocument();
-
-    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->view(),
-                                                           i18n("Save Assistant"),
+    QString filename = KoFileDialogHelper::getOpenFileName(0,
+                                                           i18n("Select an Assistant"),
                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           QStringList("*.krassistants"),
-                                                           "",
-                                                           "OpenDocument");
-    KUrl file = KUrl::fromLocalFile(filename);
-    if (file.isEmpty()) return;
-    KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
-    connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
-    job->start();
-#endif
-}
+                                                           QStringList("application/x-krita-assistant"),
+                                                           "*.krassistant|Krita Assistant (*.krassistant)",
+                                                           "OpenAssistant");
+    if (filename.isEmpty()) return;
+    if (!QFileInfo(filename).exists()) return;
 
-void KisRulerAssistantTool::openFinish(KJob* job)
-{
-#ifndef QT_NO_DBUS
-    job->deleteLater();
-    if (job->error()) {
-        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
-        return;
-    }
-    QByteArray data = dynamic_cast<KIO::StoredTransferJob*>(job)->data();
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+
+    QByteArray data = file.readAll();
     QXmlStreamReader xml(data);
     QMap<int, KisPaintingAssistantHandleSP> handleMap;
     KisPaintingAssistant* assistant = 0;
@@ -534,7 +474,7 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                     if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
                         int id = strId.toInt();
                         double x = strX.toDouble(),
-                               y = strY.toDouble();
+                                y = strY.toDouble();
                         if (!handleMap.contains(id)) {
                             handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
                         } else {
@@ -590,17 +530,57 @@ void KisRulerAssistantTool::openFinish(KJob* job)
     }
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();
-#endif
+
 }
 
-void KisRulerAssistantTool::saveFinish(KJob* job)
+void KisRulerAssistantTool::saveAssistants()
 {
-#ifndef QT_NO_DBUS
-    if (job->error()) {
-        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+    if (m_handles.isEmpty()) return;
+
+    QByteArray data;
+    QXmlStreamWriter xml(&data);
+    xml.writeStartDocument();
+    xml.writeStartElement("paintingassistant");
+    xml.writeStartElement("handles");
+    QMap<KisPaintingAssistantHandleSP, int> handleMap;
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+        int id = handleMap.size();
+        handleMap.insert(handle, id);
+        xml.writeStartElement("handle");
+        xml.writeAttribute("id", QString::number(id));
+        xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+        xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+        xml.writeEndElement();
     }
-    job->deleteLater();
-#endif
+    xml.writeEndElement();
+    xml.writeStartElement("assistants");
+    foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
+        xml.writeStartElement("assistant");
+        xml.writeAttribute("type", assistant->id());
+        xml.writeStartElement("handles");
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+            xml.writeStartElement("handle");
+            xml.writeAttribute("ref", QString::number(handleMap.value(handle)));
+            xml.writeEndElement();
+        }
+        xml.writeEndElement();
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
+
+    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->view(),
+                                                           i18n("Save Assistant"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           QStringList("application/x-krita-assistant"),
+                                                           "*.krassistant|Krita Assistant (*.krassistant)",
+                                                           "OpenAssistant");
+    if (filename.isEmpty()) return;
+
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    file.write(data);
 }
 
 

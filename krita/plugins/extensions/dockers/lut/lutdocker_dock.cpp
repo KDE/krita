@@ -280,7 +280,7 @@ void LutDockerDock::selectOcioConfiguration()
     filename = KoFileDialogHelper::getOpenFileName(this,
                                                    i18n("Select OpenColorIO Configuration"),
                                                    QDir::cleanPath(filename),
-                                                   QStringList("*.ocio"));
+                                                   QStringList("*.ocio|OpenColorIO configuration (*.ocio)"));
     QFile f(filename);
     if (f.exists()) {
         m_txtConfigurationPath->setText(filename);

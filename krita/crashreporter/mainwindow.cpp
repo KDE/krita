@@ -295,8 +295,6 @@ void MainWindow::startUpload()
     }
     body += "\r\n";
 
-    qDebug() << body;
-
     //    // add logfile
     //    body += boundary + "\r\n";
     //    body += "Content-Disposition: form-data; name=\"logfile\"\r\n";

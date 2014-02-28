@@ -24,10 +24,6 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
-
 #include "dlg_resourcemanager.h"
 #include "kis_action.h"
 
@@ -40,17 +36,10 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     KisAction *action = new KisAction(i18n("Resource Manager..."), this);
     addAction("resourcemanager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotResourceManager()));
-
 }
 
 ResourceManager::~ResourceManager()
 {
-}
-
-void ResourceManager::launchServer()
-{
-    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
-    bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
 }
 
 void ResourceManager::slotResourceManager()

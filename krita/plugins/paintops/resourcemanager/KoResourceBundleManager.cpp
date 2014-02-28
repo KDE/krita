@@ -15,10 +15,15 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QtCore/QFile>
 #include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include <QtCore/QFile>
+
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
+
 #include <sys/stat.h>
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
@@ -178,6 +183,11 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
     return 0;
 }
 
+void KoResourceBundleManager::launchServer()
+{
+    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
+    bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
+}
 
 //File Method Shortcuts
 

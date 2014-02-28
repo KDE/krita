@@ -1,3 +1,4 @@
+add_subdirectory( tests )
 set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
     dlg_resourcemanager.cpp

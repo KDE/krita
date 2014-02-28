@@ -19,6 +19,9 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
+#include "KoResourceServer.h"
+#include "KoResourceBundle.h"
+#include <krita_export.h> 
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -27,7 +30,7 @@ class KoXmlResourceBundleMeta;
  * @brief The KoResourceBundleManager class
  * @details Manage resource bundles structure
  */
-class KoResourceBundleManager
+class KRITAUI_EXPORT KoResourceBundleManager
 {
 public:
 
@@ -128,6 +131,11 @@ public:
      */
     QIODevice* getFile(const QString &fileName);
 
+    /**
+     * @brief launchServer : Create the resource server for bundles.
+     */
+    void launchServer();
+
     ///File Method shortcuts
 
     bool atEnd() const;
@@ -145,6 +153,7 @@ public:
     QString packName;
 
 private:
+    KoResourceServer<KoResourceBundle> *bundleServer;
     KoStore* resourcePack;
 };
 

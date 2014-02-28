@@ -22,17 +22,17 @@
 #include <qtest_kde.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <QCoreApplication>
-#include "KoResourceServerProvider.h"
 #include "KoResourceBundle_test.h"
 #include "KoResourceBundle.h"
+#include "KoResourceBundleManager.h"
 #include <iostream>
 using namespace std;
 
 void KoResourceBundle_test::testInitialization()
 {
-
-    KoResourceServer<KoResourceBundle>* serveur =  KoResourceServerProvider::instance()->bundleServer();
+    KoResourceBundleManager *rm=new KoResourceBundleManager();
+    
+    /*KoResourceServer<KoResourceBundle>* serveur = new Ko
     KoResourceBundle* bund = new KoResourceBundle("test");
     bund->load();
     serveur->addResource(bund);
@@ -41,7 +41,7 @@ void KoResourceBundle_test::testInitialization()
     QStringList fileNames=KGlobal::mainComponent().dirs()->findAllResources(serveur->type().toLatin1(),serveur->extensions(),KStandardDirs::Recursive|KStandardDirs::NoDuplicates);
     cout<<fileNames.size()<<endl;
 
-    cout<<serveur->resources().size()<<endl;
+    cout<<serveur->resources().size()<<endl;*/
 
 }
 

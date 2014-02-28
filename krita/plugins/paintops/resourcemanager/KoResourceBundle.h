@@ -21,7 +21,7 @@
 #define KORESOURCEBUNDLE_H
 
 #include "KoResource.h"
-#include "kowidgets_export.h"
+#include "krita_export.h"
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -31,7 +31,7 @@ class KoResourceBundleManager;
  * @brief The KoResourceBundle class
  * @details Describe the resource bundles as KoResources
  */
-class KOWIDGETS_EXPORT KoResourceBundle : public KoResource
+class KRITAUI_EXPORT KoResourceBundle : public KoResource
 {
 
 public:

@@ -37,7 +37,8 @@ public:
 
 
 KisRotateCanvasAction::KisRotateCanvasAction()
-    : d(new Private())
+    : KisAbstractInputAction("Rotate Canvas")
+    , d(new Private())
 {
     setName(i18n("Rotate Canvas"));
     setDescription(i18n("The <i>Rotate Canvas</i> action rotates the canvas."));

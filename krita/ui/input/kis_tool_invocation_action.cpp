@@ -39,7 +39,8 @@ public:
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
-    : d(new Private)
+    : KisAbstractInputAction("Tool Invocation")
+    , d(new Private)
 {
     setName(i18n("Tool Invocation"));
     setDescription(i18n("The <i>Tool Invocation</i> action invokes the current tool, for example, using the brush tool, it will start painting."));

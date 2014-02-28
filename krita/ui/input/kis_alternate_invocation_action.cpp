@@ -34,7 +34,8 @@ struct KisAlternateInvocationAction::Private
 };
 
 KisAlternateInvocationAction::KisAlternateInvocationAction()
-    : m_d(new Private)
+    : KisAbstractInputAction("Alternate Invocation")
+    , m_d(new Private)
 {
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));

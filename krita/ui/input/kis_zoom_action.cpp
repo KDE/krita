@@ -106,7 +106,8 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
 }
 
 KisZoomAction::KisZoomAction()
-    : d(new Private(this))
+    : KisAbstractInputAction("Zoom Canvas")
+    , d(new Private(this))
 {
     setName(i18n("Zoom Canvas"));
     setDescription(i18n("The <i>Zoom Canvas</i> action zooms the canvas."));

@@ -28,6 +28,7 @@
 #include "kis_input_manager.h"
 
 KisShowPaletteAction::KisShowPaletteAction()
+    : KisAbstractInputAction("Show Popup Palette")
 {
     setName(i18n("Show Popup Palette"));
     setDescription(i18n("The <i>Show Popup Palette</i> displays the popup palette."));

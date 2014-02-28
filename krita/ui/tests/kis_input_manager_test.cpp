@@ -72,7 +72,7 @@ void KisInputManagerTest::testStrokeShortcut()
 
 struct TestingAction : public KisAbstractInputAction
 {
-    TestingAction() : KisAbstractInputAction(), m_isHighResolution(false) { reset(); }
+    TestingAction() : KisAbstractInputAction("TestingAction"), m_isHighResolution(false) { reset(); }
     ~TestingAction() {}
 
     void begin(int shortcut, QEvent *event) { m_beginIndex = shortcut; m_beginNonNull = event;}

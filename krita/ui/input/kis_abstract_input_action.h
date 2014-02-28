@@ -59,7 +59,7 @@ public:
      *
      * \param manager The InputManager this action belongs to.
      */
-    explicit KisAbstractInputAction();
+    explicit KisAbstractInputAction(const QString &id);
     /**
      * Destructor.
      */
@@ -120,10 +120,17 @@ public:
      * The indexes of shortcut behaviours available.
      */
     virtual QHash<QString, int> shortcutIndexes() const;
+
     /**
-     * The name of this action.
+     * The id of this action.
+     */
+    virtual QString id() const;
+
+    /**
+     * The translated name of this action.
      */
     virtual QString name() const;
+
     /**
      * A short description of this action.
      */

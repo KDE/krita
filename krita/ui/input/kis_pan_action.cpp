@@ -44,7 +44,8 @@ public:
 };
 
 KisPanAction::KisPanAction()
-    : d(new Private)
+    : KisAbstractInputAction("Pan Canvas")
+    , d(new Private)
 {
     setName(i18n("Pan Canvas"));
     setDescription(i18n("The <i>Pan Canvas</i> action pans the canvas."));

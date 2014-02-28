@@ -126,6 +126,12 @@ set_tests_properties(krita-ui-KisSelectionManagerTest PROPERTIES TIMEOUT 300)
 
 ########### next target ###############
 
+set(kis_selection_decoration_test_SRCS kis_selection_decoration_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(KisSelectionDecorationTest TESTNAME krita-ui-KisSelectionDecorationTest  ${kis_selection_decoration_test_SRCS})
+target_link_libraries(KisSelectionDecorationTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_node_manager_test_SRCS kis_node_manager_test.cpp)
 kde4_add_unit_test(KisNodeManagerTest TESTNAME krita-ui-KisNodeManagerTest  ${kis_node_manager_test_SRCS})
 target_link_libraries(KisNodeManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

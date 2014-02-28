@@ -150,19 +150,14 @@ struct KoResourceServerProvider::Private
     KoResourceServer<KoPattern>* m_patternServer;
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
-    KoResourceServer<KoResourceBundle>* m_bundleServer;
 
     KoResourceLoaderThread *paletteThread;
     KoResourceLoaderThread *gradientThread;
     KoResourceLoaderThread *patternThread;
-    KoResourceLoaderThread *bundleThread;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-
-    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
-
     KGlobal::mainComponent().dirs()->addResourceType("ko_patterns", "data", "krita/patterns/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
@@ -192,10 +187,6 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
     d->paletteThread->start();
-
-    d->m_bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
-    d->bundleThread = new KoResourceLoaderThread(d->m_bundleServer);
-    d->bundleThread->start();
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -203,12 +194,10 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->patternThread;
     delete d->gradientThread;
     delete d->paletteThread;
-    delete d->bundleThread;
 
     delete d->m_patternServer;
     delete d->m_gradientServer;
     delete d->m_paletteServer;
-    delete d->m_bundleServer;
 
     delete d;
 }
@@ -237,8 +226,3 @@ KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
     return d->m_paletteServer;
 }
 
-KoResourceServer<KoResourceBundle>* KoResourceServerProvider::bundleServer()
-{
-    d->bundleThread->barrier();
-    return d->m_bundleServer;
-}

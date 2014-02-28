@@ -16,13 +16,13 @@
 */
 #include "KoXmlResourceBundleManifest.h"
 #include <QtCore/QList>
-/*#include "KoPattern.h"
+#include "KoPattern.h"
 #include "KoAbstractGradient.h"
 #include "KoResourceServerProvider.h"
 #include "kis_brush_server.h"
 #include "kis_resource_server_provider.h"
 #include "kis_paintop_preset.h"
-#include "kis_workspace_resource.h"*/
+#include "kis_workspace_resource.h"
 
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -164,7 +164,7 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
 
 void KoXmlResourceBundleManifest::importFileTags(QDomElement parent,QString fileTypeName,QString fileName)
 {
-    /*QStringList list;
+    QStringList list;
 
     if (fileTypeName=="patterns") {
         KoResourceServer<KoPattern> *serv=KoResourceServerProvider::instance()->patternServer();
@@ -194,7 +194,7 @@ void KoXmlResourceBundleManifest::importFileTags(QDomElement parent,QString file
 
     for (int i=0;i<list.size();i++) {
         addTag(parent,"Tag",list.at(i));
-    }*/
+    }
 }
 
 QDomElement KoXmlResourceBundleManifest::addTag(QDomElement parent,QString tagName,QString textValue)
@@ -319,7 +319,7 @@ QList<QString> KoXmlResourceBundleManifest::getDirList()
 
 void KoXmlResourceBundleManifest::exportTags()
 {
-    /*QString tagName;
+    QString tagName;
     QString fileName;
     QDomElement fileElem;
     QDomElement tagElem;
@@ -406,5 +406,5 @@ void KoXmlResourceBundleManifest::exportTags()
             }
         }
         typeElem=typeElem.nextSiblingElement();
-    }*/
+    }
 }

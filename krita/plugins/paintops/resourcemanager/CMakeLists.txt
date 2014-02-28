@@ -1,6 +1,11 @@
 set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
     dlg_resourcemanager.cpp
+    KoXmlGenerator.cpp
+	KoXmlResourceBundleManifest.cpp
+	KoXmlResourceBundleMeta.cpp
+    KoResourceBundle.cpp
+    KoResourceBundleManager.cpp
 )
 
 kde4_add_ui_files(kritaresourcemanager_PART_SRCS

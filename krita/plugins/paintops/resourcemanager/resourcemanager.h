@@ -21,8 +21,11 @@
 #define RESOURCEMANAGER_H
 
 #include <QVariant>
+#include "KoResourceServer.h"
+#include "KoResourceBundle.h"
 
 #include <kis_view_plugin.h>
+
 
 class ResourceManager : public KisViewPlugin
 {
@@ -31,8 +34,12 @@ public:
     ResourceManager(QObject *parent, const QVariantList &);
     virtual ~ResourceManager();
 
-private slots:
+    void launchServer();
 
+private:
+    KoResourceServer<KoResourceBundle> *bundleServer;
+
+private slots:
     void slotResourceManager();
 };
 

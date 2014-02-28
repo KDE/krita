@@ -15,8 +15,8 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KOXMLMETA_H
-#define KOXMLMETA_H
+#ifndef KOXMLRESOURCEBUNDLEMETA_H
+#define KOXMLRESOURCEBUNDLEMETA_H
 
 #include "KoXmlGenerator.h"
 
@@ -24,44 +24,46 @@ class KoXmlResourceBundleMeta: public KoXmlGenerator
 {
 private:
     /**
-     * Contains all the types of metadata.
-     * Other means all other values that are not listed before.
+     * @brief The TagEnum enum : Contains all the metadata types.
      * @description Allows to sort correctly the XML document.
+     * @details Other means all other values that are not listed before.
      */
     enum TagEnum {Name=0, Author, Created, License, Modified, Description, Tag, Other};
 
 public:
     /**
-     * Constructor
-     * Create a virtual XML file.
+     * @brief KoXmlResourceBundleMeta : Ctor
      * @param xmlName the name of the XML file to be created
      */
     KoXmlResourceBundleMeta(QString xmlName="meta");
-    
+
     /**
-     * Constructor
-     * Create a virtual XML file, extracting data from an existing file.
-     * @param file the virtual file used as data for Xml file.
+     * @brief KoXmlResourceBundleMeta : Ctor
+     * @param data the QByteArray containing Xml data
+     */
+    KoXmlResourceBundleMeta(QByteArray data);
+
+    /**
+     * @brief KoXmlResourceBundleMeta
+     * @param device the device associated to Xml data
      */
     KoXmlResourceBundleMeta(QIODevice *device);
 
     /**
-     * Constructor
-     * Create a virtual XML file, adding data from parameters.
+     * @brief KoXmlResourceBundleMeta : Ctor
      * @param name the name of the package
      * @param license the license of the package
-     * @param xmlName the name of the XML file to be created
+     * @param fileName the name of the XML file to be created
      */
     KoXmlResourceBundleMeta(QString name,QString license,QString fileName="meta");
 
     /**
-     * Constructor
-     * Create a virtual XML file, adding data from parameters.
+     * @brief KoXmlResourceBundleMeta : Ctor
      * @param resourceTagList the list of resource tags linked to the package
-     * @param name the name of the package
-     * @param license the license of the package
+     * @param name name the name of the package
+     * @param license license the license of the package
      * @param description the description of the content of the package
-     * @param author the author of the package
+     * @param author author the author of the package
      * @param created the creation date of the package
      * @param modified the last modification date of the package
      * @param xmlName the name of the XML file to be created
@@ -69,32 +71,51 @@ public:
     KoXmlResourceBundleMeta(QString *resourceTagList,QString name ,QString license,QString description="",
         QString author="",QString created="",QString modified="",QString xmlName="meta");
 
-    ///Destructor
-	~KoXmlResourceBundleMeta();
+    /**
+     * @brief ~KoXmlResourceBundleMeta : Dtor
+     */
+    virtual ~KoXmlResourceBundleMeta();
 
     /**
+     * @brief getTagEnumValue
      * @param tagName the name of the tag
      * @return the value from TagEnum corresponding to the tag.
      */
     TagEnum getTagEnumValue(QString tagName);
 
-    ///Check/sort the file to be easily comprehensible
+    /**
+     * @brief checkSort : Check/sort the file to be easily comprehensible
+     */
     void checkSort();
 
     /**
-     * Add a tag, with or without text node, as a child of the root of the document.
-     * Replace the value is the tag already exist (tagNames other/tag excepted)
-     * @param tagName the name of the tag to be added.
-     * @param textValue the text linked to the tag.
+     * @brief addTag : Add a file tag as a child of the root of the document
+     * @param tagName the name of the tag to be added
+     * @param textValue the text linked to the tag
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
     QDomElement addTag(QString tagName,QString textValue="",bool empty=false);
 
-    ///Add all the resource tags in the list if necessary
+    /**
+     * @brief addTags : Add all the resource tags in the list if necessary
+     * @param list the list of resource tags to be added
+     */
     void addTags(QList<QString> list);
+
+    /**
+     * @brief getPackName
+     * @return the name of the resource pack
+     */
+    QString getPackName();
+
+    /**
+     * @brief getShortPackName
+     * @return the short name of the resource pack
+     */
+    QString getShortPackName();
 };
 
 
-#endif // KOXMLMETA_H
+#endif // KOXMLRESOURCEBUNDLEMETA_H
 

@@ -15,9 +15,9 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include "KoXmlGenerator.h"
-#include <QFile>
-#include <QTextStream>
 #include <cstdlib>
 #include <iostream>
 using namespace std;
@@ -25,11 +25,11 @@ using namespace std;
 
 KoXmlGenerator::KoXmlGenerator(QString xmlFileName):xmlDocument(xmlFileName)
 {
-    root=xmlDocument.documentElement();
     this->device=0;
+    root=xmlDocument.documentElement();
 }
 
-KoXmlGenerator::KoXmlGenerator(QByteArray data,QString xmlFileName):xmlDocument(xmlFileName)
+KoXmlGenerator::KoXmlGenerator(QByteArray data)
 {
     this->device=0;
     if (!xmlDocument.setContent(data)) {
@@ -40,11 +40,11 @@ KoXmlGenerator::KoXmlGenerator(QByteArray data,QString xmlFileName):xmlDocument(
     }
 }
 
-KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((QFile*)device)->fileName().section('.',0,0))
+KoXmlGenerator::KoXmlGenerator(QIODevice *device)
 {
     this->device=device;
 
-    if (!device->open(QIODevice::ReadOnly)) {
+    if (!device->isOpen() && !device->open(QIODevice::ReadOnly)) {
         exit(1);
     }
 
@@ -54,18 +54,7 @@ KoXmlGenerator::KoXmlGenerator(QIODevice *device,QString rootTag):xmlDocument(((
     }
     else {
         device->close();
-        if (rootTag!="") {
-            QDomNodeList rootList=xmlDocument.elementsByTagName(rootTag);
-            if (rootList.size()!=1) {
-                exit(2);
-            }
-            else {
-                root=rootList.item(0).toElement();
-            }
-        }
-        else {
-            root=xmlDocument.documentElement();	//TODO Check that it's the right root
-        }
+        root=xmlDocument.documentElement();
     }
 }
 
@@ -131,22 +120,19 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString attName,QString attV
 {
     QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
 
-    if (tagList.isEmpty()) {
+    if (tagList.isEmpty() || attName=="" || attValue=="") {
         return false;
     }
     else {
-        for(int i=0;i<tagList.size();i++){
-            QDomNode prov=tagList.at(i);
-            QDomAttr att=prov.toElement().attributeNode(attName);
-            if (!att.isNull()){
-                if(att.value()==attValue){
-                    prov.parentNode().removeChild(prov);
-                    return true;
-                }
-            }
+        QDomNode node=searchValue(tagList,attName,attValue);
+        if (node.isNull()) {
+            return false;
+        }
+        else {
+            node.parentNode().removeChild(node);
+            return true;
         }
     }
-    return false;
 }
 
 void KoXmlGenerator::removeTag(QString tagName)
@@ -174,6 +160,19 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
         }
     }
 
+    return QDomNode();
+}
+
+QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString attName,QString attValue)
+{
+    QDomNode node;
+
+    for (int i=0;i<tagList.size();i++) {
+        node=tagList.item(i);
+        if (node.toElement().attributeNode(attName).value()==attValue) {
+            return node;
+        }
+    }
     return QDomNode();
 }
 

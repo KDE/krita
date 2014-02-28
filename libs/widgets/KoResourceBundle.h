@@ -27,42 +27,84 @@ class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
 class KoResourceBundleManager;
 
-
+/**
+ * @brief The KoResourceBundle class
+ * @details Describe the resource bundles as KoResources
+ */
 class KOWIDGETS_EXPORT KoResourceBundle : public KoResource
 {
 
 public:
-    KoResourceBundle(QString const&);
-        
-    ~KoResourceBundle();
+    /**
+     * @brief KoResourceBundle : Ctor
+     * @param bundlePath the path of the bundle
+     */
+    KoResourceBundle(QString const& bundlePath);
 
     /**
-     * Load this resource.
+     * @brief ~KoResourceBundle : Dtor
+     */
+    virtual ~KoResourceBundle();
+
+    /**
+     * @brief load : Load this resource.
+     * @return true if succeed, false otherwise.
      */
     bool load();
 
     /**
-     * Save this resource.
+     * @brief save : Save this resource.
+     * @return true if succeed, false otherwise.
      */
     bool save();
 
     /**
-     * Returns a QImage representing this resource.  This image could be null. The image can
-     * be in any valid QImage::Format.
+     * @brief image
+     * @return a QImage representing this resource.
      */
     QImage image() const;
 
-    /// Returns the default file extension which should be when saving the resource
+    /**
+     * @brief defaultFileExtension
+     * @return the default file extension which should be when saving the resource
+     */
     QString defaultFileExtension() const;
 
+    /**
+     * @brief addFile : Add a file to the bundle
+     * @param fileType type of the resource file
+     * @param filePath path of the resource file
+     */
     void addFile(QString fileType,QString filePath);
+
+    /**
+     * @brief removeFile : Remove a file from the bundle
+     * @param fileName name of the resource file
+     */
     void removeFile(QString fileName);
-    
+
+    /**
+     * @brief install : Install the resource bundle.
+     */
+    void install();
+
+    /**
+     * @brief uninstall : Uninstall the resource bundle.
+     */
+    void uninstall();
+
+    /**
+     * @brief removeDir : Remove the chosen directory
+     * @param dirName the name of the directory to be removed
+     * @return true if succeed, false otherwise.
+     */
+    bool removeDir(const QString & dirName);
+
 private:
     QImage thumbnail;
     KoXmlResourceBundleManifest* manifest;
     KoXmlResourceBundleMeta* meta;
-    KoResourceBundleManager* man;
+    KoResourceBundleManager* manager;
 };
 
 #endif // KORESOURCEBUNDLE_H

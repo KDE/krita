@@ -17,38 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QtCore/QDir>
 #include "KoResourceBundle.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
 #include "KoResourceBundleManager.h"
+#include <iostream>
+using namespace std;
 
 KoResourceBundle::KoResourceBundle(QString const& file):KoResource(file)
 {
-
+    manager=new KoResourceBundleManager("/home/metabolic/kde4/src/calligra/krita/data");
 }
 
 KoResourceBundle::~KoResourceBundle()
 {
-    delete man;
+    delete manager;
     delete meta;
     delete manifest;
 }
 
 bool KoResourceBundle::load()
 {
-    man->setReadPack("fileName()");//TODO A corriger
-    if(man->bad()){
-        //Le fichier n'existe pas
+    manager->setReadPack(filename());
+    if (manager->bad()) {
         manifest=new KoXmlResourceBundleManifest();
         meta=new KoXmlResourceBundleMeta();
+        meta->addTag("name",filename(),true);
     }
-    else{
-        //Le fichier existe
-        //TODO Tester si getfile suffit au lieu de getfiledata
+    else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
-        manifest=new KoXmlResourceBundleManifest(man->getFileData("manifest.xml"));
-        meta=new KoXmlResourceBundleMeta(man->getFileData("meta.xml"));
-        thumbnail.load(man->getFile("thumbnail.jpg"),"jpg");
+        manifest=new KoXmlResourceBundleManifest(manager->getFile("manifest.xml"));
+        meta=new KoXmlResourceBundleMeta(manager->getFile("meta.xml"));
+        thumbnail.load(manager->getFile("thumbnail.jpg"),"jpg");
         setValid(true);
     }
     return true;
@@ -56,12 +57,10 @@ bool KoResourceBundle::load()
 
 bool KoResourceBundle::save()
 {
-    if(man->bad()){
-        //Le fichier n'existe pas
+    if (manager->bad()) {
         meta->addTags(manifest->getTagList());
     }
-    man->setWritePack("fileName()");//TODO A corriger
-    man->createPack(manifest,meta);
+    manager->createPack(manifest,meta);
     setValid(true);
     return true;
 }
@@ -69,8 +68,6 @@ bool KoResourceBundle::save()
 void KoResourceBundle::addFile(QString fileType,QString filePath)
 {
     manifest->addTag(fileType,filePath);
-    //TODO Voir s'il faut copier ou pas le fichier tout de suite
-    //TODO Cas où le paquet n'est pas installé...
 }
 
 void KoResourceBundle::removeFile(QString fileName)
@@ -89,4 +86,52 @@ QString KoResourceBundle::defaultFileExtension() const
 QImage KoResourceBundle::image() const
 {
 	return thumbnail;
+}
+
+void KoResourceBundle::install()
+{
+    if (!manager->bad()) {
+        manager->extractKFiles(manifest->getFilesToExtract());
+        //manifest->exportTags();
+    }
+}
+
+void KoResourceBundle::uninstall()
+{
+    QList<QString> directoryList = manifest->getDirList();
+    QString shortPackName = meta->getShortPackName();
+    QString dirPath;
+
+    for (int i = 0; i < directoryList.size(); i++) {
+        dirPath = this->manager->kritaPath;
+        dirPath.append(directoryList.at(i)).append("/").append(shortPackName);
+
+        if (!removeDir(dirPath)) {
+            cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
+        }
+    }
+}
+
+bool KoResourceBundle::removeDir(const QString & dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System
+                    | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                result = removeDir(info.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+    return result;
 }

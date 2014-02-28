@@ -25,106 +25,136 @@
 
 class QIODevice;
 
+/**
+ * @brief The KoXmlGenerator class
+ * @details Allow to manage Xml file content
+ */
 class KoXmlGenerator
 {
-protected:
-
-    ///@description The virtual XML file.
-    QDomDocument xmlDocument;
-
-    ///@description The element considered as root of the XML tree of the document
-    QDomElement root;
-
-    ///@description The device if initialized using second constructor
-    QIODevice *device;
-
 public:
+
     /**
-     * Constructor
-     * Create a virtual XML file.
+     * @brief KoXmlGenerator : Ctor
      * @param xmlFileName the name of the XML file to be created
      */
     KoXmlGenerator(QString xmlFileName);
 
     /**
-     * Constructor
-     * Create a virtual XML file.
-     * @param data the name of the XML file to be created
-     * @param xmlFileName the name of the XML file to be created
+     * @brief KoXmlGenerator : Ctor
+     * @param data the QByteArray containing Xml data
      */
-
-    KoXmlGenerator(QByteArray data,QString xmlFileName);
+    KoXmlGenerator(QByteArray data);
 
     /**
-     * Constructor
-     * Create a virtual XML file, extracting data from an existing device.
-     * @param device the virtual device used as data for Xml file.
-     * @param rootName the name of the root tag that should be contained in the file.
+     * @brief KoXmlGenerator : Ctor
+     * @param device the device associated to Xml data
      */
-    KoXmlGenerator(QIODevice *device,QString rootName="");
+    KoXmlGenerator(QIODevice *device);
 
-    ///Destructor
+    /**
+     * @brief ~KoXmlGenerator : Dtor
+     */
     virtual ~KoXmlGenerator();
 
-    ///@return the data contained in the XML Document
+    /**
+     * @brief toByteArray
+     * @return the data contained in the XML document
+     */
     QByteArray toByteArray();
 
-    ///@return the name of the XML document
+    /**
+     * @brief getName
+     * @return the name of the XML document
+     */
     QString getName();
 
-    ///Check/sort the file to be easily comprehensible.
+    /**
+     * @brief checkSort : Check/sort the file to be easily comprehensible.
+     */
     virtual void checkSort();
 
     /**
-     * Append a tag, with or without text node, to the root of the document.
-     * @param tagName the name of the tag to be added.
-     * @param textValue the text linked to the tag.
+     * @brief addTag : Append a tag, with or without text node, to the root of the document
+     * @param tagName the name of the tag to be added
+     * @param textValue the text linked to the tag
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
     virtual QDomElement addTag(QString tagName,QString textValue="",bool emptyFile=false);
 
     /**
-     * Remove the first tag having the same name, and same text value if defined.
-     * @param tagName the name of the tag to be removed.
-     * @param textValue the text linked to the tag.
-     * @return true if a tag has been removed, false otherwise.
+     * @brief removeFirstTag : Remove the first tag having same name (and same textvalue)
+     * @param tagName the name of the tag to be removed
+     * @param textValue the text linked to the tag
+     * @return true if succeed, false otherwise.
      */
     bool removeFirstTag(QString tagName,QString textValue="");
 
     /**
-     * Remove the first tag having the same name, and same text value if defined.
+     * @brief removeFirstTag : Remove the first tag having same name and attribute
      * @param tagName the name of the tag to be removed.
-     * @param textValue the text linked to the tag.
-     * @return true if a tag has been removed, false otherwise.
+     * @param attName the name of the attribute
+     * @param attValue the value of the attribute
+     * @return true if succeed, false otherwise.
      */
     bool removeFirstTag(QString tagName,QString attName,QString attValue);
 
     /**
-     * Remove all the tags having the same name.
+     * @brief removeTag : Remove all the tags having the same name.
      * @param tagName the name of the tag to be removed.
      */
-    void removeTag(QString);
+    void removeTag(QString tagName);
 
     /**
-     * Search in the list the first tag having the right text value.
-     * @param tagList the list of the tags to be analyzed.
-     * @param textValue the text to be found in the tag.
-     * @return the first node found.
+     * @brief searchValue : Search in the list the first tag having the right textvalue
+     * @param tagList the list of the tags to be analyzed
+     * @param textValue the text to be found in the tag
+     * @return the first node found, null node otherwise.
      */
-    QDomNode searchValue(QDomNodeList tagList,QString);
+    QDomNode searchValue(QDomNodeList tagList,QString textValue);
 
-    ///Show the XML data of the document in cout.
+    /**
+     * @brief searchValue : Search in the list the first tag having the right attribute value
+     * @param tagList the list of the tags to be analyzed
+     * @param attName the name of the attribute
+     * @param attValue the value of the attribute
+     * @return the first node found, null node otherwise.
+     */
+    QDomNode searchValue(QDomNodeList tagList,QString attName,QString attValue);
+
+    /**
+     * @brief show : Show the XML data of the document in cout.
+     */
     void show();
 
-    ///@return the string containing the whole XML data of the document.
+    /**
+     * @brief toString
+     * @return the string containing the whole XML data of the document.
+     */
     QString toString();
 
     /**
-     * Print the XML data from virtual document to XML file on disk.
+     * @brief toFile : Print the XML data from virtual document to XML file on disk.
      * @return the name of the file generated
      */
     QString toFile();
+
+protected:
+
+    /**
+     * @description The virtual XML file.
+     */
+    QDomDocument xmlDocument;
+
+    /**
+     * @description The element considered as root of the XML tree of the document
+     */
+    QDomElement root;
+
+    /**
+     * @description The device if initialized using second constructor
+     */
+    QIODevice *device;
 };
 
 #endif // KOXMLGENERATOR_H

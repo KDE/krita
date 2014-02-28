@@ -15,8 +15,10 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <QtCore/QList>
 #include "KoXmlResourceBundleMeta.h"
-#include <QList>
+#include <iostream>
+using namespace std;
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -25,6 +27,11 @@ KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator
 }
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QIODevice *device):KoXmlGenerator(device)
+{
+
+}
+
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QByteArray data):KoXmlGenerator(data)
 {
 
 }
@@ -38,9 +45,9 @@ KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString name,QString license,QS
     addTag("license",license,true);
 }
 
-KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString* resourceTagList,QString name,QString license,QString description,
-                     QString author,QString created,QString modified,QString xmlName)
-                        :KoXmlGenerator(xmlName)
+KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString* resourceTagList,QString name,
+                   QString license,QString description,QString author,QString created,
+                   QString modified,QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
     xmlDocument.appendChild(root);
@@ -167,6 +174,7 @@ void KoXmlResourceBundleMeta::addTags(QList<QString> list)
 {
     QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
     QString prov;
+
     for (int i=0;i<list.size();i++) {
         prov=list.at(i);
         if (prov != "" && searchValue(tagList,prov).isNull()) {
@@ -175,3 +183,16 @@ void KoXmlResourceBundleMeta::addTags(QList<QString> list)
     }
 }
 
+QString KoXmlResourceBundleMeta::getPackName(){
+    QDomNodeList tagList=xmlDocument.elementsByTagName("name");
+    if (tagList.size() == 1) {
+        return tagList.at(0).firstChild().toText().data();
+    }
+    else {
+        return "";
+    }
+}
+
+QString KoXmlResourceBundleMeta::getShortPackName(){
+    return getPackName().section('/',getPackName().count('/')).remove(".zip");
+}

@@ -52,11 +52,6 @@ int KisAbstractShortcut::shortcutIndex() const
     return m_d->shortcutIndex;
 }
 
-void KisAbstractShortcut::setShortcutIndex(int index)
-{
-    m_d->shortcutIndex = index;
-}
-
 bool KisAbstractShortcut::compareKeys(const QList<Qt::Key> &keys1,
                                       const QList<Qt::Key> &keys2)
 {

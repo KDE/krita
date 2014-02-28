@@ -19,6 +19,8 @@
 
 #include "kis_action_shortcuts_model.h"
 
+#include <QDebug>
+
 #include <KLocalizedString>
 #include <QMetaClassInfo>
 #include <QKeySequence>
@@ -211,6 +213,10 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
     }
 
     if (index.row() == d->shortcuts.count() && index.column() != 0) {
+        return Qt::ItemIsEnabled;
+    }
+
+    if (index.row() >= d->shortcuts.count()) {
         return Qt::ItemIsEnabled;
     }
 

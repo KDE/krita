@@ -33,6 +33,10 @@
 
 #include <cstdlib>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 //#ifdef Q_WS_WIN
 //#include <cstring>
 //#include <windows.h>
@@ -265,7 +269,14 @@ void MainWindow::startUpload()
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
 #ifdef Q_WS_WIN
-    fields << Field("Platform", platformToStringWin(QSysInfo::WindowsVersion).toAscii());
+
+    QString platform = platformToStringWin(QSysInfo::WindowsVersion);
+#ifdef ENV32BIT
+    platform += "_x86";
+#else
+    platform += "_x64";
+#endif
+    fields << Field("Platform", platform.toAscii());
 #endif
 #ifdef Q_WS_X11
     fields << Field("Platform", "Linux/X11");

@@ -152,7 +152,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     m_activeSelection = selection;
 
     // sanity check: selection should be applied only once
-    if (selection) {
+    if (selection && !m_painterInfos.isEmpty()) {
         KisIndirectPaintingSupport *indirect =
             dynamic_cast<KisIndirectPaintingSupport*>(node.data());
         KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_painterInfos.first()->painter->selection());

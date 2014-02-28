@@ -30,6 +30,7 @@
 
 #include <QPoint>
 #include <QSpinBox>
+#include <QDateTime>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -58,6 +59,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
 {
     setSupportsPainting(true);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(true);
 }
 
 void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
@@ -216,8 +218,9 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 5, 1, i18n("Brush size"), "brushSize"));
     param.push_back(KisIntegerWidgetParam(10, 255, 30, i18nc("smooth out the painting strokes the filter creates", "Smooth"), "smooth"));
+    KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
     w->setConfiguration(factoryConfiguration(0));
-    return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
+    return w;
 }
 
 KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const

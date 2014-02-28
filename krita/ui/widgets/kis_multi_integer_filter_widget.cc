@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
-        : KIntNumInput(parent)
+    : KIntNumInput(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);
@@ -51,19 +51,21 @@ void KisDelayedActionIntegerInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname) :
-        min(nmin),
-        max(nmax),
-        initvalue(ninitvalue),
-        label(label),
-        name(nname)
+KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname)
+    : min(nmin)
+    , max(nmax)
+    , initvalue(ninitvalue)
+    , label(label)
+    , name(nname)
 {
 }
 
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent,
-        const QString & caption,
-        vKisIntegerWidgetParam iwparam)
-        : KisConfigWidget(parent),  m_filterid(filterid)
+                                                         const QString & caption,
+                                                         vKisIntegerWidgetParam iwparam)
+    : KisConfigWidget(parent)
+    , m_filterid(filterid)
+    , m_config(new KisFilterConfiguration(filterid, 0))
 {
     m_nbintegerWidgets = iwparam.size();
     this->setWindowTitle(caption);
@@ -90,10 +92,14 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filteri
     widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfiguration* config)
 {
     if (!config) return;
+    if (!m_config) {
+        m_config = new KisFilterConfiguration(m_filterid, 0);
+    }
 
+    m_config->fromXML(config->toXML());
     for (int i = 0; i < nbValues(); ++i) {
         KisDelayedActionIntegerInput *  w = m_integerWidgets[i];
         if (w) {
@@ -106,11 +112,10 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
 
 KisPropertiesConfiguration* KisMultiIntegerFilterWidget::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {
-        config->setProperty(m_integerWidgets[i]->objectName(), m_integerWidgets[i]->value());
+        m_config->setProperty(m_integerWidgets[i]->objectName(), m_integerWidgets[i]->value());
     }
-    return config;
+    return m_config;
 }
 
 #include "kis_multi_integer_filter_widget.moc"

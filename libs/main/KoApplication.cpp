@@ -309,8 +309,12 @@ bool KoApplication::start()
 
         QStringList filters;
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
-        QDir dir = QDir::home();
 
+#ifdef Q_OS_WIN
+        QDir dir = QDir::tempPath();
+#else
+        QDir dir = QDir::home();
+#endif
         // all autosave files for our application
         autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 

@@ -1129,5 +1129,5 @@ install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INS
 ## temporary warning
 if (WARN_ABOUT_CREATIVEONLY)
     message(STATUS "WARNING:\n   You are using a deprecated build flag,\n   switch from \"-DCREATIVEONLY=ON\" to \"-DPRODUCTSET=CREATIVE\"\n   and remove the line \"CREATIVEONLY:BOOL=ON\" from CMakeCache.txt")
-    message(STATUS "--------------------------------------------------------------------------" )
+    message(STATUS "-------------------------------------------------------------------" )
 endif (WARN_ABOUT_CREATIVEONLY)

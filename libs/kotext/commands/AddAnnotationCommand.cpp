@@ -61,5 +61,6 @@ void AddAnnotationCommand::redo()
 
 AddAnnotationCommand::~AddAnnotationCommand()
 {
-    delete m_annotation->annotationShape();
+    // We delete shape at KoShapeDeleteCommand.
+    //delete m_annotation->annotationShape();
 }

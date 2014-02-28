@@ -246,11 +246,11 @@ void KisInputProfileManager::loadProfiles()
 
         KisInputProfile *newProfile = addProfile(entry.name);
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
-            if (!config.hasGroup(action->name())) {
+            if (!config.hasGroup(action->id())) {
                 continue;
             }
 
-            KConfigGroup grp = config.group(action->name());
+            KConfigGroup grp = config.group(action->id());
             //Read the settings for the action and create the appropriate shortcuts.
             Q_FOREACH(const QString & entry, grp.entryMap()) {
                 KisShortcutConfiguration *shortcut = new KisShortcutConfiguration;
@@ -292,7 +292,7 @@ void KisInputProfileManager::saveProfiles()
         config.group("General").writeEntry("version", PROFILE_VERSION);
 
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
-            KConfigGroup grp = config.group(action->name());
+            KConfigGroup grp = config.group(action->id());
             grp.deleteGroup(); //Clear the group of any existing shortcuts.
 
             int index = 0;

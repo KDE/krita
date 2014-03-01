@@ -162,6 +162,7 @@ void KisBrushTest::testImageGeneration()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     bool res = brush->load();
+    Q_UNUSED(res);
     Q_ASSERT(res);
     QVERIFY(!brush->image().isNull());
     brush->prepareBrushPyramid();

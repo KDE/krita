@@ -58,7 +58,7 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 
 KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int shortcut)
 {
-    KisTool::ToolAction action;
+    KisTool::ToolAction action = KisTool::Alternate_NONE;
 
     switch ((Shortcut)shortcut) {
     case PickColorFgNodeToggleShortcut:

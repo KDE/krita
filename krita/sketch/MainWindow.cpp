@@ -56,7 +56,10 @@
 class MainWindow::Private
 {
 public:
-    Private(MainWindow* qq) : q(qq), allowClose(true), sketchKisView(0)
+    Private(MainWindow* qq)
+        : q(qq)
+        , allowClose(true)
+        , sketchKisView(0)
 	{
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -64,8 +67,8 @@ public:
         connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
 	}
 	MainWindow* q;
-	KisView2* sketchKisView;
     bool allowClose;
+    KisView2* sketchKisView;
     QString currentSketchPage;
 	QTimer *centerer;
 };

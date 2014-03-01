@@ -28,14 +28,14 @@ class KisConvolutionWorkerSpatial : public KisConvolutionWorker<_IteratorFactory
 {
 public:
     KisConvolutionWorkerSpatial(KisPainter *painter, KoUpdater *progress)
-        : KisConvolutionWorker<_IteratorFactory_>(painter, progress),
-          m_pixelPtrCache(0),
-          m_pixelPtrCacheCopy(0),
-          m_minClamp(0),
-          m_maxClamp(0),
-          m_absoluteOffset(0),
-          m_alphaCachePos(-1),
-          m_alphaRealPos(-1)
+        : KisConvolutionWorker<_IteratorFactory_>(painter, progress)
+        ,  m_alphaCachePos(-1)
+        ,  m_alphaRealPos(-1)
+        ,  m_pixelPtrCache(0)
+        ,  m_pixelPtrCacheCopy(0)
+        ,  m_minClamp(0)
+        ,  m_maxClamp(0)
+        ,  m_absoluteOffset(0)
     {
     }
 

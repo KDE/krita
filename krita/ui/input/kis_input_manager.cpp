@@ -445,7 +445,7 @@ void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
     lastTouchEvent = new QTouchEvent(event->type(), event->deviceType(), event->modifiers(), event->touchPointStates(), event->touchPoints());
 }
 
-void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
+void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)
 {
     /**
      * On both Windows and Linux each mouse event corresponds to a

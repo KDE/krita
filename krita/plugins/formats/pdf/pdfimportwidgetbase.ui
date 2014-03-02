@@ -165,6 +165,13 @@
             </property>
            </widget>
           </item>
+	  <item row="1" column="2">
+	    <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
+	      <property name="text" stdset="0">
+		<string/>
+	      </property>
+	    </widget>
+	  </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="intVertical">
             <property name="suffix">
@@ -330,6 +337,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>boolAllPages</tabstop>
   <tabstop>boolFirstPage</tabstop>

@@ -49,11 +49,15 @@ private slots:
     void updateHeight();
     void updateHRes();
     void updateHVer();
+    void heightAspectRatio();
+    void widthAspectRatio();
+    void slotAspectChanged(bool keep);
     void updateMaxCanvasSize();
 private:
     Poppler::Document* m_pdfDoc;
     QList<int> m_pages;
     double m_maxWidthInch, m_maxHeightInch;
+    bool m_keepAspect;
 };
 
 #endif

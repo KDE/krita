@@ -93,6 +93,8 @@
 #include <QCloseEvent>
 #include <QPointer>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "thememanager.h"
 
@@ -198,7 +200,8 @@ public:
     QWidget *m_activeWidget;
 
     QLabel * statusBarLabel;
-    QProgressBar *progress;
+    QPointer<QProgressBar> progress;
+    QMutex progressMutex;
 
     QList<QAction *> toolbarList;
 
@@ -1628,6 +1631,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
+    QMutexLocker(&d->progressMutex);
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
@@ -1660,7 +1664,9 @@ void KoMainWindow::slotProgress(int value)
         d->progress->show();
         d->firstTime = false;
     }
-    d->progress->setValue(value);
+    if (!d->progress.isNull()) {
+        d->progress->setValue(value);
+    }
     qApp->processEvents();
 }
 

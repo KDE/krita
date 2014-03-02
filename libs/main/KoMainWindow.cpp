@@ -597,6 +597,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         statusBar()->setVisible(false);
     }
     else {
+#ifdef Q_OS_MAC
+        statusBar()->setMaximumHeight(28);
+#endif
         connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 }

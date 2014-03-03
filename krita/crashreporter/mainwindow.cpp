@@ -270,19 +270,9 @@ void MainWindow::startUpload()
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+    version = QString("%1-%2").arg(calligraVersion).arg(gitVersion).toLatin1();
 #else
     version = calligraVersion;
-#endif
-
-#ifdef Q_WS_WIN
-
-#ifdef ENV32BIT
-    version += " (x86)";
-#else
-    version += " (x64)";
-#endif
-
 #endif
 
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)

@@ -114,7 +114,7 @@ QPainterPath ArtisticTextToolSelection::outline()
     QPolygonF polygon;
 
     QList<ArtisticTextRange> ranges = m_currentShape->text();
-    if (ranges.size() == 0) return;
+    if (ranges.size() == 0) return outline;
 
     int globalCharIndex = m_selectionStart;
     int remainingChars = m_selectionCount;

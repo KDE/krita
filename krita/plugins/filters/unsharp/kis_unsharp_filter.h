@@ -41,7 +41,6 @@ public:
 
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    int overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const;
 
 private:
     void processLightnessOnly(KisPaintDeviceSP device,

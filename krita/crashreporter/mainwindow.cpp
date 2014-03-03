@@ -286,9 +286,9 @@ void MainWindow::startUpload()
     QString platform = platformToStringWin(QSysInfo::WindowsVersion);
 
 #ifdef ENV32BIT
-    platform += " (x86)";
+    platform += "_x86";
 #else
-    platform += " (x64)";
+    platform += "_x64";
 #endif
 
     fields << Field("Platform", platform.toAscii());

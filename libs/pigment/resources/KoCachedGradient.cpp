@@ -35,7 +35,7 @@ struct KoCachedGradient::Private {
     const KoAbstractGradient *subject;
     const KoColorSpace *colorSpace;
     qint32 max;
-    QVector<const KoColor> colors;
+    QVector<KoColor> colors;
     KoColor black;
 };
 
@@ -58,7 +58,6 @@ KoCachedGradient::KoCachedGradient(const KoAbstractGradient *subject, qint32 ste
 
 KoCachedGradient::~KoCachedGradient()
 {
-    delete[] d->colors;
 }
 
 QGradient* KoCachedGradient::toQGradient() const
@@ -66,13 +65,13 @@ QGradient* KoCachedGradient::toQGradient() const
     return d->subject->toQGradient();
 }
 
-quint8 *KoCachedGradient::cachedAt(qreal t) const
+const quint8 *KoCachedGradient::cachedAt(qreal t) const
 {
     qint32 tInt = t * d->max + 0.5;
-    if (d->colors.size < tInt) {
+    if (d->colors.size() > tInt) {
         return d->colors[tInt].data();
     }
     else {
-        d->black.data();
+        return d->black.data();
     }
 }

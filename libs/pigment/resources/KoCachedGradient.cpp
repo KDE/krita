@@ -24,7 +24,7 @@
 #include <cfloat>
 
 #include <KoColor.h>
-
+#include <KoColorSpace.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -35,7 +35,8 @@ struct KoCachedGradient::Private {
     const KoAbstractGradient *subject;
     const KoColorSpace *colorSpace;
     qint32 max;
-    KoColor *colors;
+    QVector<const KoColor> colors;
+    KoColor black;
 };
 
 KoCachedGradient::KoCachedGradient(const KoAbstractGradient *subject, qint32 steps, const KoColorSpace *cs)
@@ -43,14 +44,15 @@ KoCachedGradient::KoCachedGradient(const KoAbstractGradient *subject, qint32 ste
         , d(new Private)
 {
     d->subject = subject;
-    d->max = steps-1;
-    d->colors = new KoColor[steps];
+    d->max = steps - 1;
     d->colorSpace = cs;
+
+    d->black = KoColor(cs);
 
     KoColor tmpColor(d->colorSpace);
     for(qint32 i = 0; i < steps; i++) {
         d->subject->colorAt(tmpColor, qreal(i) / d->max);
-        d->colors[i] = tmpColor;
+        d->colors << tmpColor;
     }
 }
 
@@ -67,5 +69,10 @@ QGradient* KoCachedGradient::toQGradient() const
 quint8 *KoCachedGradient::cachedAt(qreal t) const
 {
     qint32 tInt = t * d->max + 0.5;
-    return d->colors[tInt].data();
+    if (d->colors.size < tInt) {
+        return d->colors[tInt].data();
+    }
+    else {
+        d->black.data();
+    }
 }

@@ -18,7 +18,7 @@
  */
 
 #include "KoResourceManagerWidget.h"
-#include "ui_manager.h"
+#include "ui_KoResourceManagerWidget.h"
 #include <QCheckBox>
 #include <QWidgetAction>
 

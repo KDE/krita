@@ -217,7 +217,7 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
     }
 
     if (index.row() >= d->shortcuts.count()) {
-        return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsEditable;
     }
 
     KisShortcutConfiguration* config = d->shortcuts.at(index.row());

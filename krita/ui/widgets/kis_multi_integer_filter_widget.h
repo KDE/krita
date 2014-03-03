@@ -22,6 +22,8 @@
 #include <knuminput.h>
 #include <kis_config_widget.h>
 #include "krita_export.h"
+#include <kis_debug.h>
+#include <QVector>
 
 #include <vector>
 
@@ -47,7 +49,7 @@ private:
 
 struct KRITAUI_EXPORT KisIntegerWidgetParam {
 
-    KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname);
+    KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString& label, const QString& nname);
 
     qint32 min;
     qint32 max;
@@ -62,22 +64,18 @@ class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisIntegerWidgetParam iwparam);
+    KisMultiIntegerFilterWidget(const QString& filterid, QWidget* parent, const QString& caption, vKisIntegerWidgetParam iwparam);
+    ~KisMultiIntegerFilterWidget();
 
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     virtual KisPropertiesConfiguration* configuration() const;
 
-public:
-    inline qint32 nbValues() const {
-        return m_nbintegerWidgets;
-    }
-    inline qint32 valueAt(qint32 i) {
-        return m_integerWidgets[i]->value();
-    }
-
 private:
-    qint32 m_nbintegerWidgets;
-    KisDelayedActionIntegerInput** m_integerWidgets;
+
+    qint32 nbValues() const;
+    qint32 valueAt(qint32 i);
+
+    QVector<KisDelayedActionIntegerInput*> m_integerWidgets;
     QString m_filterid;
     KisPropertiesConfiguration* m_config;
 };

@@ -60,48 +60,55 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ni
 {
 }
 
-KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent,
-                                                         const QString & caption,
+KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid,
+                                                         QWidget* parent,
+                                                         const QString& caption,
                                                          vKisIntegerWidgetParam iwparam)
     : KisConfigWidget(parent)
     , m_filterid(filterid)
     , m_config(new KisFilterConfiguration(filterid, 0))
 {
-    m_nbintegerWidgets = iwparam.size();
     this->setWindowTitle(caption);
 
     QGridLayout *widgetLayout = new QGridLayout(this);
     widgetLayout->setColumnStretch(1, 1);
 
-    m_integerWidgets = new KisDelayedActionIntegerInput*[ m_nbintegerWidgets ];
+    for (uint i = 0; i < iwparam.size(); ++i) {
+        KisDelayedActionIntegerInput *widget = new KisDelayedActionIntegerInput(this, iwparam[i].name);
 
-    for (qint32 i = 0; i < m_nbintegerWidgets; ++i) {
-        m_integerWidgets[i] = new KisDelayedActionIntegerInput(this, iwparam[i].name);
-        m_integerWidgets[i]->setRange(iwparam[i].min, iwparam[i].max);
-        m_integerWidgets[i]->setValue(iwparam[i].initvalue);
-        m_integerWidgets[i]->cancelDelayedSignal();
+        widget->setRange(iwparam[i].min, iwparam[i].max);
+        widget->setValue(iwparam[i].initvalue);
+        widget->cancelDelayedSignal();
 
-        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed(int)), SIGNAL(sigConfigurationItemChanged()));
+        connect(widget, SIGNAL(valueChangedDelayed(int)), SIGNAL(sigConfigurationItemChanged()));
 
         QLabel* lbl = new QLabel(iwparam[i].label + ':', this);
         widgetLayout->addWidget(lbl, i , 0);
 
-        widgetLayout->addWidget(m_integerWidgets[i], i , 1);
+        widgetLayout->addWidget(widget, i , 1);
+
+        m_integerWidgets.append(widget);
     }
     QSpacerItem * sp = new QSpacerItem(1, 1);
-    widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
+    widgetLayout->addItem(sp, iwparam.size(), 0);
+}
+
+KisMultiIntegerFilterWidget::~KisMultiIntegerFilterWidget()
+{
+    delete m_config;
 }
 
 void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfiguration* config)
 {
     if (!config) return;
+
     if (!m_config) {
         m_config = new KisFilterConfiguration(m_filterid, 0);
     }
 
     m_config->fromXML(config->toXML());
     for (int i = 0; i < nbValues(); ++i) {
-        KisDelayedActionIntegerInput *  w = m_integerWidgets[i];
+        KisDelayedActionIntegerInput*  w = m_integerWidgets[i];
         if (w) {
             int val = config->getInt(m_integerWidgets[i]->objectName());
             m_integerWidgets[i]->setValue(val);
@@ -112,10 +119,33 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
 
 KisPropertiesConfiguration* KisMultiIntegerFilterWidget::configuration() const
 {
-    for (int i = 0; i < nbValues(); ++i) {
-        m_config->setProperty(m_integerWidgets[i]->objectName(), m_integerWidgets[i]->value());
+    KisFilterConfiguration *config = new KisFilterConfiguration(m_filterid, 0);
+    if (m_config) {
+        config->fromXML(m_config->toXML());
     }
-    return m_config;
+
+    for (int i = 0; i < nbValues(); ++i) {
+        KisDelayedActionIntegerInput*  w = m_integerWidgets[i];
+        if (w) {
+            config->setProperty(w->objectName(), w->value());
+        }
+    }
+    return config;
 }
+
+qint32 KisMultiIntegerFilterWidget::nbValues() const {
+    return m_integerWidgets.size();
+}
+
+qint32 KisMultiIntegerFilterWidget::valueAt(qint32 i) {
+    if (i < m_integerWidgets.size()) {
+        return m_integerWidgets[i]->value();
+    }
+    else {
+        warnKrita << "Trying to access integer widget" << i << "but there are only" << m_integerWidgets.size() << "widgets";
+        return 0;
+    }
+}
+
 
 #include "kis_multi_integer_filter_widget.moc"

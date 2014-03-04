@@ -56,6 +56,9 @@ inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const Q
 
 void KisAnimationLayerBox::onCanvasReady()
 {
+    m_dock->m_addPaintLayerAction->disconnect(this);
+    m_dock->m_addVectorLayerAction->disconnect(this);
+
     connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
     connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
 }
@@ -66,6 +69,7 @@ void KisAnimationLayerBox::updateUI()
     m_layers << newLayer;
     int y;
     int noLayers = m_layers.length();
+
     for(int i = 0; i < noLayers-1; i++) {
         y = m_layers.at(i)->geometry().y();
         m_layers.at(i)->setGeometry(QRect(0, y+20, width(), 20));

@@ -276,7 +276,6 @@ void KisTimeline::addframePressed()
 void KisTimeline::documentModified()
 {
     emit canvasModified();
-    kWarning() << "Frame modified";
 
     //Convert to keyframe here
     this->m_cells->getSelectedFrame()->setType(KisAnimationFrame::KEYFRAME);

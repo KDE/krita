@@ -39,6 +39,9 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
 
 void KisFrameBox::onCanvasReady()
 {
+    m_dock->m_addPaintLayerAction->disconnect(this);
+    m_dock->m_addVectorLayerAction->disconnect(this);
+
     connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
     connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
 }
@@ -47,7 +50,7 @@ void KisFrameBox::updateUI()
 {
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;
-    int y;
+    int y = 0;
     int noLayers = m_layerContents.length();
 
     for(int i = 0; i < noLayers - 1; i++) {

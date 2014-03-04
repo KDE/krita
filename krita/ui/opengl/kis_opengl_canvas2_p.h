@@ -20,6 +20,7 @@
 #define KIS_OPENGL_CANVAS_2_P_H
 
 #include <opengl/kis_opengl.h>
+#include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
 
@@ -320,25 +321,26 @@ namespace Sync {
     //Note: Assumes a current OpenGL context.
     void init() {
 #if defined Q_OS_WIN
-        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
-            k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
-            k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");
-            k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSync");
-        } else if(GLEW_ARB_sync) {
+#ifndef 
+        //if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
+        //    k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
+        //    k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");
+        //    k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSync");
+        //} else if(GLEW_ARB_sync) {
             k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSyncARB");
             k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSyncARB");
-        }
+       //}
 #elif defined Q_OS_LINUX
-        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
-            k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
-            k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
-            k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
-        } else if(GLEW_ARB_sync) {
+        //if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
+        //    k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
+        //    k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
+        //    k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
+        //} else if(GLEW_ARB_sync) {
             k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSyncARB");
             k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSyncARB");
-        }
+        //}
 #endif
         if(k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glGetSynciv == 0) {
             qWarning("Could not find sync functions, disabling sync notification.");

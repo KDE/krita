@@ -321,7 +321,6 @@ namespace Sync {
     //Note: Assumes a current OpenGL context.
     void init() {
 #if defined Q_OS_WIN
-#ifndef 
         //if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
         //    k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
         //    k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");

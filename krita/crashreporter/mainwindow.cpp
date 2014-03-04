@@ -82,14 +82,32 @@
 void doRestart(bool resetConfig)
 {
     if (resetConfig) {
-        QDir userDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
-        foreach(QString entry, userDir.entryList(QStringList("*.profile"))) {
-            qDebug() << "entry" << entry;
-            userDir.remove(entry);
+        {
+            QString appdata = qgetenv("APPDATA");
+            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(appdata + "/krita/share/config/");
+            configDir.remove("kritarc");
         }
-        QDir configDir(KGlobal::dirs()->saveLocation("config"));
-        qDebug() << "configDir" << configDir;
-        configDir.remove("kritarc");
+        {
+            QString appdata = qgetenv("LOCALAPPDATA");
+            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(appdata + "/krita/share/config/");
+            configDir.remove("kritarc");
+        }
+        {
+            QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(KGlobal::dirs()->saveLocation("config"));
+            configDir.remove("kritarc");
+        }
     }
 
     QString restartCommand;
@@ -299,6 +317,14 @@ void MainWindow::startUpload()
 #ifdef Q_WS_MAC
     fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toAscii());
 #endif
+
+    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    qDebug() << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+
+    if (f.exists()) {
+        f.open(QFile::ReadOnly);
+        fields << Field("OpenGL", f.readAll());
+    }
 
     QString body;
     foreach(Field const field, fields) {

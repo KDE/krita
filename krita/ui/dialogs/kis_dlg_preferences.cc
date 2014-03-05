@@ -425,11 +425,14 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
         chkUseTextureBuffer->setEnabled(false);
+        chkUseFenceSync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        chkUseFenceSync->setEnabled(cfg.useOpenGL());
+        chkUseFenceSync->setChecked(cfg.useFenceSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -462,6 +465,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
+    chkUseFenceSync->setChecked(true);
+    chkUseFenceSync->setEnabled(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
@@ -478,6 +483,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
     chkUseTextureBuffer->setEnabled(isChecked);
+    chkUseFenceSync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
@@ -798,6 +804,7 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
+        cfg.setUseFenceSync(dialog->m_displaySettings->chkUseFenceSync->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
 #endif

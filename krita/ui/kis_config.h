@@ -128,6 +128,9 @@ public:
     bool useOpenGLTextureBuffer() const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    bool useFenceSync() const;
+    void setUseFenceSync(bool useFenceSync);
+
     int numMipmapLevels() const;
     int openGLTextureSize() const;
     int textureOverlapBorder() const;

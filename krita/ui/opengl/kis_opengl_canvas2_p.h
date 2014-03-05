@@ -331,15 +331,15 @@ namespace Sync {
             k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSyncARB");
        //}
 #elif defined Q_OS_LINUX
-        //if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
-        //    k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
-        //    k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
-        //    k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
-        //} else if(GLEW_ARB_sync) {
+        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
+            k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
+            k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
+            k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
+        } else if(GLEW_ARB_sync) {
             k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSyncARB");
             k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSyncARB");
-        //}
+        }
 #endif
         if(k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glGetSynciv == 0) {
             qWarning("Could not find sync functions, disabling sync notification.");

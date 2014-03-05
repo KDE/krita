@@ -7,53 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>472</width>
-    <height>171</height>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Hyves Desktop Error Reporter</string>
+   <string>Krita Error Reporter</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Krita closed unexpectedly! Please help us make Krita better by sending us more information.</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>32</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="chkAllowUpload">
-     <property name="toolTip">
-      <string>This information includes the type of computer you use, and information about the usage of Hyves Desktop. No personal information is sent to Hyves.</string>
-     </property>
-     <property name="text">
-      <string>&amp;Send information about this problem to KO GmbH</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
+   <item row="5" column="0" colspan="2">
     <widget class="QCheckBox" name="chkRemoveSettings">
      <property name="toolTip">
-      <string>This information includes the type of computer you use, and information about the usage of Hyves Desktop. No personal information is sent to Hyves.</string>
+      <string>This information includes the type of computer you use, and information about the usage of Krita. No personal information is sent to Krita.</string>
      </property>
      <property name="text">
       <string>&amp;Remove settings before starting Krita again</string>
@@ -63,7 +27,30 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita closed unexpectedly! Please help us make Krita better by sending us more information.&lt;/p&gt;&lt;p&gt;If you'd like us to contact you, please add your email address. We will not share your email address with anyone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Email:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <spacer name="horizontalSpacer">
@@ -94,7 +81,7 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="0">
+   <item row="8" column="0" colspan="2">
     <widget class="QProgressBar" name="progressBar">
      <property name="enabled">
       <bool>true</bool>
@@ -104,6 +91,52 @@
      </property>
      <property name="textVisible">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QTextEdit" name="txtDescription"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="txtEmail">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>10</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please describe what you were doing when the crash happened or anything strange that you might have seen :&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QCheckBox" name="chkAllowUpload">
+     <property name="text">
+      <string>&amp;Send information about this problem to KO GmbH</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>The crash report will also be saved to your home directory.</string>
      </property>
     </widget>
    </item>

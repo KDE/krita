@@ -19,7 +19,6 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "opengl/kis_opengl_canvas2.h"
-#include "opengl/kis_opengl.h"
 
 #ifdef HAVE_OPENGL
 
@@ -51,7 +50,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
-#include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"

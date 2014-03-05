@@ -287,7 +287,6 @@ namespace VSyncWorkaround {
 }
 #endif // defined Q_OS_LINUX
 
-#include <GL/glew.h>
 #include <QtOpenGL/QGLFormat>
 namespace Sync {
     //For checking sync status

@@ -99,7 +99,8 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double shearX, double shearY,
                                      KisWarpTransformWorker::WarpType warpType,
                                      double alpha,
-                                     bool defaultPoints)
+                                     bool defaultPoints,
+                                     const QString &filterId)
 {
     m_mode = mode;
     m_transformedCenter = transformedCenter;
@@ -122,7 +123,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_alpha = alpha;
     m_defaultPoints = defaultPoints;
     m_keepAspectRatio = false;
-    setFilterId("Bicubic");
+    setFilterId(filterId);
 }
 
 

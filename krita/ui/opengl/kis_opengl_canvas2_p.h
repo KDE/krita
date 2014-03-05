@@ -347,7 +347,7 @@ namespace Sync {
     }
 
     //Get a fence sync object from OpenGL
-    GLsync getSync() {
+    inline GLsync getSync() {
         if(k_glFenceSync) {
             return k_glFenceSync(GL_SYNC_CPU_COMMANDS_COMPLETE, 0);
         }
@@ -355,7 +355,7 @@ namespace Sync {
     }
 
     //Check the status of a sync object
-    SyncStatus syncStatus(GLsync syncObject) {
+    inline SyncStatus syncStatus(GLsync syncObject) {
         if(syncObject && k_glGetSynciv) {
             GLint status = -1;
             k_glGetSynciv(syncObject, GL_SYNC_STATUS, 1, 0, &status);
@@ -364,7 +364,7 @@ namespace Sync {
         return Sync::Signaled;
     }
 
-    void deleteSync(GLsync syncObject) {
+    inline void deleteSync(GLsync syncObject) {
         if(syncObject && k_glDeleteSync) {
             k_glDeleteSync(syncObject);
         }

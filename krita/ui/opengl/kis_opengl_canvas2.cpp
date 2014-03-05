@@ -231,7 +231,12 @@ void KisOpenGLCanvas2::paintGL()
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    if (d->useFenceSync) {
+        return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
+    }
+    else {
+        return false;
+    }
 }
 
 inline QVector<QVector3D> rectToVertices(const QRectF &rc)

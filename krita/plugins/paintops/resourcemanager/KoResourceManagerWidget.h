@@ -17,20 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef MANAGER_H
-#define MANAGER_H
+#ifndef KORESOURCEMANAGERWIDGET_H
+#define KORESOURCEMANAGERWIDGET_H
 
 #include <QMainWindow>
 #include <QString>
 #include "KoResourceTableModel.h"
+#include "KoResourceModel.h"
+#include "KoResourceServerAdapter.h"
 #include "KoResourceManagerControl.h"
+#include <QSortFilterProxyModel>
+#include <krita_export.h>
 
 namespace Ui {
-class Manager;
+class KoResourceManagerWidget;
 }
 
 
-class KoResourceManagerWidget : public QMainWindow
+class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -38,16 +42,21 @@ public:
     ~KoResourceManagerWidget();
 
 private:
-    ManagerControl *control;
-    MyTableModel *model;
+    KoResourceManagerControl *control;
+    KoResourceTableModel *model;
     QMenu *buttonMenu;
-    Ui::Manager *ui;
+    Ui::KoResourceManagerWidget *ui;
+
+    /*QSortFilterProxyModel* m_filter;
+    MyTableModel *model2;*/
+
     void initializeModel();
     void initializeConnect();
     void createMiniature(QPixmap);
 
 private slots:
     void showHide();
+    void createPack();
     void installPack();
     void uninstallPack();
     void deletePack();
@@ -63,5 +72,4 @@ public slots:
 
 };
 
-#endif // MANAGER_H
-
+#endif // KORESOURCEMANAGERWIDGET_H

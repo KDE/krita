@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Manager</class>
- <widget class="QMainWindow" name="Manager">
+ <class>KoResourceManagerWidget</class>
+ <widget class="QMainWindow" name="KoResourceManagerWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -102,10 +102,6 @@
             <property name="text">
              <string>Create Set</string>
             </property>
-            <property name="icon">
-             <iconset resource="IHM_Res.qrc">
-              <normaloff>:/IHM/pictures/ajouter-vert-plus-icone-5215-96.png</normaloff>:/IHM/pictures/ajouter-vert-plus-icone-5215-96.png</iconset>
-            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -170,7 +166,7 @@
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="movable">
            <bool>true</bool>
@@ -521,15 +517,12 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="IHM_Res.qrc">:/IHM/pictures/logo_ups_pres.png</pixmap>
-           </property>
            <property name="scaledContents">
             <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignHCenter">
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
@@ -554,8 +547,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>292</width>
-              <height>264</height>
+              <width>298</width>
+              <height>332</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
@@ -636,7 +629,7 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
+             <item row="5" column="0" alignment="Qt::AlignHCenter">
               <widget class="QLabel" name="label_8">
                <property name="text">
                 <string>Tags</string>
@@ -666,7 +659,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="pushButton_3">
       <property name="maximumSize">
        <size>
@@ -822,8 +815,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="IHM_Res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

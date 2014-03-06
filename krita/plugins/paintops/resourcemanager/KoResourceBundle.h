@@ -39,7 +39,7 @@ public:
      * @brief KoResourceBundle : Ctor
      * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath);
+    KoResourceBundle(QString const& bundlePath,QString kritaPath="/home/metabolic/kde4/src/calligra/krita/data");
 
     /**
      * @brief ~KoResourceBundle : Dtor
@@ -57,6 +57,13 @@ public:
      * @return true if succeed, false otherwise.
      */
     bool save();
+
+    /**
+     * @brief addMeta : Add a Metadata to the resource
+     * @param type type of the metadata
+     * @param value value of the metadata
+     */
+    void addMeta(QString type,QString value);
 
     /**
      * @brief image
@@ -105,6 +112,8 @@ private:
     KoXmlResourceBundleManifest* manifest;
     KoXmlResourceBundleMeta* meta;
     KoResourceBundleManager* manager;
+    bool isInstalled;
+
 };
 
 #endif // KORESOURCEBUNDLE_H

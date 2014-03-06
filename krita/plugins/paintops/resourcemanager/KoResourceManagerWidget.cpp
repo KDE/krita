@@ -19,18 +19,33 @@
 
 #include "KoResourceManagerWidget.h"
 #include "ui_KoResourceManagerWidget.h"
+#include "KoResourceServerProvider.h"
 #include <QCheckBox>
 #include <QWidgetAction>
 
-#include <KoResourceModel.h>
-
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
-    QMainWindow(parent),ui(new Ui::Manager)
+    QMainWindow(parent),ui(new Ui::KoResourceManagerWidget)
 {
+    control=new KoResourceManagerControl();
     ui->setupUi(this);
     initializeModel();
     initializeConnect();
     ui->actionAll->setChecked(true);
+
+    /*this->model2=new MyTableModel(0);
+
+    m_filter = new QSortFilterProxyModel(this);
+    m_filter->setSourceModel(model2);
+    connect(ui->lineEdit,SIGNAL(textChanged(QString)),
+            m_filter,SLOT(setFilterFixedString(QString)));
+    m_filter->setFilterKeyColumn(1);
+    m_filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    ui->tableView->setModel(m_filter);
+    ui->tableView_2->setModel(m_filter);
+    ui->tableView_3->setModel(m_filter);
+    ui->tableView_4->setModel(m_filter);
+    ui->tableView_5->setModel(m_filter);*/
 }
 
 KoResourceManagerWidget::~KoResourceManagerWidget()
@@ -41,9 +56,6 @@ KoResourceManagerWidget::~KoResourceManagerWidget()
 
 void KoResourceManagerWidget::initializeModel()
 {
-    KoResourceModel *resourceModel = new KoResourceModel(0);
-
-
     QList<QAction*> liste;
     liste.append(ui->actionAll);
     liste.append(ui->actionName);
@@ -55,7 +67,7 @@ void KoResourceManagerWidget::initializeModel()
     buttonMenu->addActions(liste);
     ui->pushButton_10->setMenu(buttonMenu);
 
-    this->model=new MyTableModel(0);
+    this->model=new KoResourceTableModel(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
     ui->tableView->setModel(model);
     ui->tableView_2->setModel(model);
     ui->tableView_3->setModel(model);
@@ -92,13 +104,20 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->actionAuthor,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
     connect(ui->actionLicense,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
 
+    connect(ui->actionInstall,SIGNAL(triggered()),this,SLOT(installPack()));
+    connect(ui->actionUninstall,SIGNAL(triggered()),this,SLOT(uninstallPack()));
+    connect(ui->actionDelete,SIGNAL(triggered()),this,SLOT(deletePack()));
+    connect(ui->actionCreate_Resources_Set,SIGNAL(triggered()),this,SLOT(createPack()));
+
     connect(ui->actionRename,SIGNAL(triggered()),this,SLOT(rename()));
     connect(ui->actionAbout_ResManager,SIGNAL(triggered()),this,SLOT(about()));
 
-    connect(ui->actionQuit,SIGNAL(toggled(bool)),this,SLOT(close()));
+    connect(ui->actionQuit,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(close()));
 
-    createMiniature(*ui->label->pixmap());
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(createPack()));
+
+    //createMiniature(*ui->label->pixmap());
 }
 
 void KoResourceManagerWidget::showHide()
@@ -111,6 +130,12 @@ void KoResourceManagerWidget::createMiniature(QPixmap pix)
     QLabel *label = new QLabel;
     label->setPixmap(pix.scaled(50,50,Qt::KeepAspectRatio));
 }
+
+void KoResourceManagerWidget::createPack()
+{
+    control->createPack();
+}
+
 
 void KoResourceManagerWidget::installPack()
 {

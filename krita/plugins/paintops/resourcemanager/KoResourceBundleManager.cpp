@@ -19,12 +19,15 @@
 #include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
+#include "KoResourceServer.h"
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
 #include <sys/stat.h>
+#include <iostream>
+using namespace std;
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
 {
@@ -114,12 +117,12 @@ void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
             pathSize=currentPath.count('/');
             targetPath = kritaPath;
             targetPath.append(currentPath.section('/',0,0));
-
             if (!resourcePack->extractFile(currentPath,targetPath.append("/").append(name)
                         .append("/").append(currentPath.section('/',pathSize)))) {
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
                 mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
+                    //TODO Supprimer le dossier créé
                     exit(1);
                 }
             }
@@ -181,12 +184,6 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
     }
 
     return 0;
-}
-
-void KoResourceBundleManager::launchServer()
-{
-    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
-    bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
 }
 
 //File Method Shortcuts

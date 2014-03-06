@@ -20,53 +20,69 @@
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
+#include "KoResourceBundleManager.h"
+#include "KoResourceServer.h"
+#include "KoResourceBundle.h"
 #include <QtCore/QFile>
 #include <iostream>
 using namespace std;
 
 
-ManagerControl::ManagerControl():currentMeta(""),currentManifest("")
+KoResourceManagerControl::KoResourceManagerControl(QString r):root(r),currentMeta(""),currentManifest("")
 {
-    //extractor=new KoResourceBundleManager("path/vers/krita");
+    if (root.at(root.size()-1)!='/') {
+        root.append("/");
+    }
+    extractor=new KoResourceBundleManager(r.append("kde4/src/calligra/krita/data"));
+    current=new KoResourceBundle(root+"pack.zip");
+    current->load();
 }
 
-ManagerControl::~ManagerControl()
+KoResourceManagerControl::~KoResourceManagerControl()
 {
     delete meta;
     delete manifest;
-    //delete extractor;
+    delete extractor;
 }
 
-void ManagerControl::setMeta(QString packName,QString type,QString value)
+void KoResourceManagerControl::setMeta(QString packName,QString type,QString value)
 {
-    Q_UNUSED(value);
-    if (packName!=currentMeta) {
-        //meta=new KoXmlResourceBundleMeta(getDevice(packName.append("-meta.xml")));
-        currentMeta=packName;
-        //meta->addTag(type,value);
+    Q_UNUSED(packName);
+    //if (packName!=currentMeta) {
+        //currentMeta=packName; //TODO Vérifier Utilité!!!!!
+        current->addMeta(type,value);
         cout<<qPrintable(type)<<endl;
-    }
 }
 
-QIODevice* ManagerControl::getDevice(QString deviceName){
+QIODevice* KoResourceManagerControl::getDevice(QString deviceName){
     //TODO Renvoie le fichier associé au nom passé en paramètre
+    //TODO Vérifier l'utilité !!!
     Q_UNUSED(deviceName);
     return new QFile();
 }
 
-void ManagerControl::installPack(QString packName)
+void KoResourceManagerControl::createPack()
+{
+    current->addFile("brushes",root+"kde4/src/calligra/krita/data/brushes/A_flowers.gih");
+    current->addFile("brushes",root+"kde4/src/calligra/krita/data/brushes/A_Angular_church.gbr");
+    current->save();
+    current->load();
+}
+
+void KoResourceManagerControl::installPack(QString packName)
 {
     Q_UNUSED(packName);
-    cout<<"Install"<<endl;
+    current->install();
     //extractor.setReadPack(packName);
     //extractor.extractPack();
     //TODO Exporter les XML si ce n'est pas fait dans l'extract
 }
 
-void ManagerControl::uninstallPack(QString packName)
+void KoResourceManagerControl::uninstallPack(QString packName)
 {
     cout<<"Uninstall"<<endl;
     Q_UNUSED(packName);
+    current->uninstall();
     /*if (packName!=currentMeta) {
         meta=new KoXmlResourceBundleMeta(getDevice(packName.append("-meta.xml")));
 
@@ -82,10 +98,11 @@ void ManagerControl::uninstallPack(QString packName)
     //TODO Supprimer les fichiers Xml*/
 }
 
-void ManagerControl::deletePack(QString packName)
+void KoResourceManagerControl::deletePack(QString packName)
 {
-    cout<<"Delete"<<endl;
     Q_UNUSED(packName);
+    cout<<"Delete"<<endl;
+    QFile::remove(root+"pack.zip");
     //TODO Vérifier si le paquet est installé
     //TODO Si oui, supprimer les dossiers et fichiers Xml
     //TODO Supprimer l'archive
@@ -93,13 +110,13 @@ void ManagerControl::deletePack(QString packName)
 
 
 //TODO Rajouter des paramètres si besoin est (exemple : valeur comboBox etc...)
-void ManagerControl::refreshCurrentTable()
+void KoResourceManagerControl::refreshCurrentTable()
 {
     cout<<"Refresh"<<endl;
     //TODO Rafraichir l'affichage du tableau contenu dans l'onglet courant
 }
 
-void ManagerControl::rename(QString old_name,QString new_name)
+void KoResourceManagerControl::rename(QString old_name,QString new_name)
 {
     Q_UNUSED(old_name);
     Q_UNUSED(new_name);
@@ -113,9 +130,20 @@ void ManagerControl::rename(QString old_name,QString new_name)
 
 }
 
-void ManagerControl::about()
+void KoResourceManagerControl::about()
 {
     cout<<"About"<<endl;
     //TODO Afficher la fenêtre "à propos"
 }
 
+void KoResourceManagerControl::launchServer()
+{
+    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
+    bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
+    bundleServer->addResource(current);
+}
+
+KoResourceServer<KoResourceBundle>* KoResourceManagerControl::getServer()
+{
+    return bundleServer;
+}

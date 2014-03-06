@@ -17,21 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef MYTABLEMODEL_H
-#define MYTABLEMODEL_H
+#ifndef KORESOURCETABLEMODEL_H
+#define KORESOURCETABLEMODEL_H
 
-#include <QAbstractTableModel>
+#include "KoResourceModel.h"
 
-class MyTableModel : public QAbstractTableModel
+class KoResourceTableModel : public KoResourceModel
 {
     Q_OBJECT
     public:
-        MyTableModel(QObject *parent);
+        KoResourceTableModel(KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
         int rowCount(const QModelIndex &parent = QModelIndex()) const ;
         int columnCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        QModelIndex index ( int row, int column, const QModelIndex & ) const;
 };
 
-#endif // MYTABLEMODEL_H
+#endif // KORESOURCETABLEMODEL_H
 

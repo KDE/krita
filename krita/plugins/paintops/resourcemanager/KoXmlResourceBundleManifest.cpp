@@ -24,6 +24,9 @@
 #include "kis_paintop_preset.h"
 #include "kis_workspace_resource.h"
 
+#include <iostream>
+using namespace std;
+
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
@@ -149,7 +152,7 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
         QDomElement result=addTag(node.toElement(),"file","");
         result.setAttribute("name",fileName);
 
-        //getFileTags(result,fileTypeName,fileName);
+        importFileTags(result,fileTypeName,fileName);
 
         return result;
     }
@@ -165,30 +168,56 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
 void KoXmlResourceBundleManifest::importFileTags(QDomElement parent,QString fileTypeName,QString fileName)
 {
     QStringList list;
+    fileName=fileName.section('/',fileName.count('/'));
+    KoResource *res;
 
     if (fileTypeName=="patterns") {
         KoResourceServer<KoPattern> *serv=KoResourceServerProvider::instance()->patternServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else if (fileTypeName=="gradients") {
         KoResourceServer<KoAbstractGradient> *serv=KoResourceServerProvider::instance()->gradientServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else if (fileTypeName=="brushes") {
         KoResourceServer<KisBrush> *serv=KisBrushServer::instance()->brushServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else if (fileTypeName=="workspaces") {
         KoResourceServer<KisWorkspaceResource> *serv=KisResourceServerProvider::instance()->workspaceServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else if (fileTypeName=="palettes") {
         KoResourceServer<KoColorSet> *serv=KoResourceServerProvider::instance()->paletteServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else if (fileTypeName=="paintoppresets") {
         KoResourceServer<KisPaintOpPreset> *serv=KisResourceServerProvider::instance()->paintOpPresetServer();
-        list=serv->assignedTagsList(serv->resourceByName(fileName));
+        res=serv->resourceByName(fileName);
+        if (!res) {
+            return;
+        }
+        list=serv->assignedTagsList(res);
     }
     else return;
 
@@ -332,6 +361,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());
@@ -345,6 +375,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());
@@ -358,6 +389,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());
@@ -371,6 +403,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());
@@ -384,6 +417,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());
@@ -397,6 +431,7 @@ void KoXmlResourceBundleManifest::exportTags()
             fileElem=typeElem.firstChildElement();
             while (!fileElem.isNull()) {
                 fileName=fileElem.attributeNode("name").value();
+                fileName=fileName.section('/',fileName.count('/'));
                 tagElem=fileElem.firstChildElement();
                 while (!tagElem.isNull()) {
                     serv->addTag(serv->resourceByName(fileName),tagElem.firstChild().toText().data());

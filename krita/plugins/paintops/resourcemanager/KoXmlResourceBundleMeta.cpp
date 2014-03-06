@@ -137,6 +137,7 @@ void KoXmlResourceBundleMeta::checkSort()
     }
 }
 
+//TODO Vérifier si on peut pas simplifier cette méthode
 QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bool emptyFile)
 {
     tagName=tagName.toLower();
@@ -152,16 +153,23 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
 
         if (emptyFile || tagEnumValue==Other || node.isNull() || (tagEnumValue==Tag &&
              searchValue(tagList,textValue).isNull())) {
-            QDomElement child = xmlDocument.createElement(tagName);
-            root.appendChild(child);
-
             if (textValue!="") {
+                QDomElement child = xmlDocument.createElement(tagName);
+                root.appendChild(child);
                 child.appendChild(xmlDocument.createTextNode(textValue));
+                return child;
             }
-            return child;
+            else {
+                return QDomElement();
+            }
         }
         else if (tagEnumValue!=Tag) {
-            node.firstChild().setNodeValue(textValue);
+            if (textValue=="") {
+                root.removeChild(node);
+            }
+            else {
+                node.firstChild().setNodeValue(textValue);
+            }
             return node.toElement();
         }
         else {

@@ -20,63 +20,102 @@
 #include "KoResourceTableModel.h"
 #include <QPixmap>
 #include <QColor>
+#include "KoResource.h"
+#include "KoResourceServerAdapter.h"
+#include <klocale.h>
 
-MyTableModel::MyTableModel(QObject *parent)
-     :QAbstractTableModel(parent)
- {
 
- }
+KoResourceTableModel::KoResourceTableModel(KoAbstractResourceServerAdapter *resourceAdapter,QObject *parent)
+    :KoResourceModel(resourceAdapter,parent)
+{
 
- int MyTableModel::rowCount(const QModelIndex & /*parent*/) const
- {
-    return 2;
- }
+}
 
- int MyTableModel::columnCount(const QModelIndex & /*parent*/) const
- {
-     return 3;
- }
+int KoResourceTableModel::rowCount(const QModelIndex & /*parent*/) const
+{
+    return resourcesCount();
+}
 
- QVariant MyTableModel::data(const QModelIndex &index, int role) const
- {
-     if (role == Qt::DecorationRole && index.column() == 0) {
-         QPixmap pixmap(20,20);
-         QColor black(0,0,0);
-         pixmap.fill(black);
-         return pixmap;
-     }
+int KoResourceTableModel::columnCount(const QModelIndex & /*parent*/) const
+{
+    return 3;
+}
 
-     if (role == Qt::DisplayRole)
-     {
-         switch(index.column())
-         {
-         case 0:
-             return QString("Resource Example %1").arg(index.row()+1);
-         case 1:
-             return QString("Boudewijn Rempt");
-         case 2:
-             return QString("None");
-         }
-     }
-     return QVariant();
- }
+QVariant KoResourceTableModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::DecorationRole && index.column() == 1) {
+        KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+        if( ! resource )
+            return QVariant();
 
- QVariant MyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
-  {
-      if (role == Qt::DisplayRole)
-      {
-          if (orientation == Qt::Horizontal) {
-              switch (section)
-              {
-              case 0:
-                  return QString("Name");
-              case 1:
-                  return QString("Author");
-              case 2:
-                  return QString("Tags");
-              }
-          }
-      }
-      return QVariant();
-  }
+        return QVariant( resource->image().scaledToWidth(50));
+
+        /*QPixmap pixmap(20,20);
+        QColor black(0,0,0);
+        pixmap.fill(black);
+        return pixmap;*/
+    }
+    else if (role == Qt::DisplayRole)
+    {
+        KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+        if (!resource) {
+            return QVariant();
+        }
+        else {
+            switch (index.column()) {
+            case 1:
+                return i18n( resource->name().toUtf8().data());
+            case 2:
+                if (assignedTagsList(resource).count()) {
+                    QString taglist = assignedTagsList(resource).join("] , [");
+                    return QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
+                }
+                else {
+                    return QVariant();
+                }
+            default:
+                return QVariant();
+            }
+        }
+    }
+    else if (role == Qt::CheckStateRole && index.column()==0) {
+        return Qt::Unchecked;
+    }
+
+    return QVariant();
+}
+
+QVariant KoResourceTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        if (orientation == Qt::Horizontal) {
+            switch (section)
+            {
+            case 0:
+                return QString();
+            case 1:
+                return QString("Name");
+            case 2:
+                return QString("Tags");
+            }
+        }
+    }
+    return QVariant();
+}
+
+QModelIndex KoResourceTableModel::index ( int row, int column, const QModelIndex & ) const
+{
+    const QList<KoResource*> resources = currentlyVisibleResources();
+    if ( row >= resources.count() || row < 0) {
+        return QModelIndex();
+    }
+    else {
+        return createIndex( row, column, resources[row] );
+    }
+
+}
+
+
+
 

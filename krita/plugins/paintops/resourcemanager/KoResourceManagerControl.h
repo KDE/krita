@@ -17,35 +17,55 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef MANAGERCONTROL_H
-#define MANAGERCONTROL_H
+#ifndef KORESOURCEMANAGERCONTROL_H
+#define KORESOURCEMANAGERCONTROL_H
 
+#include "KoResourceBundle.h"
 #include <QString>
 
 class QIODevice;
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
+class KoResourceBundleManager;
+template <class T> class KoResourceServer;
 
-class ManagerControl
+class KoResourceManagerControl
 {
     KoXmlResourceBundleMeta *meta;
     KoXmlResourceBundleManifest *manifest;
-    //KoResourceBundleManager *extractor;
+    KoResourceBundleManager *extractor;
+    QString root;
     QString currentMeta;
     QString currentManifest;
+    KoResourceServer<KoResourceBundle> *bundleServer;
+    KoResourceBundle *current;
 
 public:
-    ManagerControl();
-    ~ManagerControl();
+    KoResourceManagerControl(QString="/home/metabolic");
+    ~KoResourceManagerControl();
+
     void setMeta(QString,QString,QString);
     QIODevice* getDevice(QString);
+    void createPack();
     void installPack(QString);
     void uninstallPack(QString);
     void deletePack(QString);
     void refreshCurrentTable();
     void rename(QString,QString);
     void about();
+
+    /**
+     * @brief launchServer : Create the resource server for bundles.
+     */
+    void launchServer();
+
+    /**
+     * @brief getServer
+     * @return the ResourceBundle server
+     */
+    KoResourceServer<KoResourceBundle>* getServer();
+
 };
 
-#endif // MANAGERCONTROL_H
+#endif // KORESOURCEMANAGERCONTROL_H
 

@@ -24,7 +24,8 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include "dlg_resourcemanager.h"
+//#include "dlg_resourcemanager.h"
+#include "KoResourceManagerWidget.h"
 #include "kis_action.h"
 
 K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
@@ -44,15 +45,12 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::slotResourceManager()
 {
-    DlgResourceManager * dlgResourceManager = new DlgResourceManager();
-    Q_CHECK_PTR(dlgResourceManager);
-    dlgResourceManager->setObjectName("ResourceManager");
+    KoResourceManagerWidget * resourceManager = new KoResourceManagerWidget();
+    Q_CHECK_PTR(resourceManager);
+    resourceManager->setObjectName("ResourceManager");
 
-    if (dlgResourceManager->exec() == QDialog::Accepted) {
-        // ...
-    }
+    resourceManager->show();
 
-    delete dlgResourceManager;
 }
 
 #include "resourcemanager.moc"

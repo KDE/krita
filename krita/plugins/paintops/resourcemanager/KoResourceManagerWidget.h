@@ -30,12 +30,12 @@ class Manager;
 }
 
 
-class Manager : public QMainWindow
+class KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit Manager(QWidget *parent = 0);
-    ~Manager();
+    explicit KoResourceManagerWidget(QWidget *parent = 0);
+    ~KoResourceManagerWidget();
 
 private:
     ManagerControl *control;

@@ -82,8 +82,6 @@ public:
         , checkerShader(0)
         , displayFilter(0)
         , glSyncObject(0)
-        , useFenceSync(false)
-        , checkSize(32)
         , wrapAroundMode(false)
     {
     }
@@ -102,10 +100,8 @@ public:
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject;
-    bool useFenceSync;
-    qint32 checkSize;
-    bool wrapAroundMode;
 
+    bool wrapAroundMode;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -156,7 +152,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(d->checkSize));
+    KisConfig cfg;
+    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
 
@@ -219,22 +216,16 @@ void KisOpenGLCanvas2::paintGL()
     renderDecorations(&gc);
     gc.end();
 
-    if (d->useFenceSync) {
-        if (d->glSyncObject) {
-            Sync::deleteSync(d->glSyncObject);
-        }
-        d->glSyncObject = Sync::getSync();
+    if (d->glSyncObject) {
+        Sync::deleteSync(d->glSyncObject);
     }
+
+    d->glSyncObject = Sync::getSync();
 }
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    if (d->useFenceSync) {
-        return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
-    }
-    else {
-        return false;
-    }
+    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
 }
 
 inline QVector<QVector3D> rectToVertices(const QRectF &rc)
@@ -281,8 +272,9 @@ void KisOpenGLCanvas2::drawCheckers() const
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect);
 
-;
-    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(d->checkSize);
+    // XXX: getting a config object every time we draw the checkers is bad for performance!
+    KisConfig cfg;
+    GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
 
     textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                                               checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
@@ -538,8 +530,6 @@ void KisOpenGLCanvas2::slotConfigChanged()
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
-    d->useFenceSync = cfg.useFenceSync();
-    d->checkSize = cfg.checkSize();
 
     notifyConfigChanged();
 }

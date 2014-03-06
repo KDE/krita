@@ -403,16 +403,6 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
     m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
-bool KisConfig::useFenceSync() const
-{
-    return m_cfg.readEntry("useOpenGLFenceSync", true);
-}
-
-void KisConfig::setUseFenceSync(bool useFenceSync)
-{
-    m_cfg.writeEntry("useOpenGLFenceSync", useFenceSync);
-}
-
 int KisConfig::openGLTextureSize() const
 {
     return m_cfg.readEntry("textureSize", 256);

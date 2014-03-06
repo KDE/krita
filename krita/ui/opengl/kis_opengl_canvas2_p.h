@@ -20,7 +20,6 @@
 #define KIS_OPENGL_CANVAS_2_P_H
 
 #include <opengl/kis_opengl.h>
-#include <KoConfig.h>
 
 #ifdef HAVE_OPENGL
 
@@ -320,15 +319,15 @@ namespace Sync {
     //Note: Assumes a current OpenGL context.
     void init() {
 #if defined Q_OS_WIN
-        //if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
-        //    k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
-        //    k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");
-        //    k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSync");
-        //} else if(GLEW_ARB_sync) {
+        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
+            k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
+            k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");
+            k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSync");
+        } else if(GLEW_ARB_sync) {
             k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSyncARB");
             k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSyncARB");
-       //}
+        }
 #elif defined Q_OS_LINUX
         if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
             k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
@@ -346,7 +345,7 @@ namespace Sync {
     }
 
     //Get a fence sync object from OpenGL
-    inline GLsync getSync() {
+    GLsync getSync() {
         if(k_glFenceSync) {
             return k_glFenceSync(GL_SYNC_CPU_COMMANDS_COMPLETE, 0);
         }
@@ -354,7 +353,7 @@ namespace Sync {
     }
 
     //Check the status of a sync object
-    inline SyncStatus syncStatus(GLsync syncObject) {
+    SyncStatus syncStatus(GLsync syncObject) {
         if(syncObject && k_glGetSynciv) {
             GLint status = -1;
             k_glGetSynciv(syncObject, GL_SYNC_STATUS, 1, 0, &status);
@@ -363,7 +362,7 @@ namespace Sync {
         return Sync::Signaled;
     }
 
-    inline void deleteSync(GLsync syncObject) {
+    void deleteSync(GLsync syncObject) {
         if(syncObject && k_glDeleteSync) {
             k_glDeleteSync(syncObject);
         }

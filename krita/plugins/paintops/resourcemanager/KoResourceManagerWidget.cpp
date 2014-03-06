@@ -22,6 +22,8 @@
 #include <QCheckBox>
 #include <QWidgetAction>
 
+#include <KoResourceModel.h>
+
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::Manager)
 {
@@ -39,6 +41,9 @@ KoResourceManagerWidget::~KoResourceManagerWidget()
 
 void KoResourceManagerWidget::initializeModel()
 {
+    KoResourceModel *resourceModel = new KoResourceModel(0);
+
+
     QList<QAction*> liste;
     liste.append(ui->actionAll);
     liste.append(ui->actionName);

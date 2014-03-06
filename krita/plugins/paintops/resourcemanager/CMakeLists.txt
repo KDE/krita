@@ -19,7 +19,7 @@ kde4_add_ui_files(kritaresourcemanager_PART_SRCS
 
 kde4_add_plugin(kritaresourcemanager ${kritaresourcemanager_PART_SRCS})
 
-target_link_libraries(kritaresourcemanager kritaui kritalibpaintop)
+target_link_libraries(kritaresourcemanager kowidgets kritaui kritalibpaintop)
 
 install(TARGETS kritaresourcemanager  DESTINATION ${PLUGIN_INSTALL_DIR})
 

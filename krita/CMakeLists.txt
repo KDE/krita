@@ -28,6 +28,7 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if (USE_BREAKPAD)
         include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
     endif (USE_BREAKPAD)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 if(NOT WIN32)

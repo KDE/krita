@@ -294,8 +294,8 @@ namespace Sync {
         Unsignaled
     };
 
-#ifndef GL_SYNC_CPU_COMMANDS_COMPLETE
-    #define GL_SYNC_CPU_COMMANDS_COMPLETE 0x9117
+#ifndef GL_SYNC_GPU_COMMANDS_COMPLETE
+    #define GL_SYNC_GPU_COMMANDS_COMPLETE 0x9117
 #endif
 #ifndef GL_UNSIGNALED
     #define GL_UNSIGNALED 0x9118
@@ -319,24 +319,20 @@ namespace Sync {
     //Note: Assumes a current OpenGL context.
     void init() {
 #if defined Q_OS_WIN
-        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
-            k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSync");
-            k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSynciv");
-            k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSync");
-        } else if(GLEW_ARB_sync) {
+        if((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) ||
+           GLEW_ARB_sync) {
+
             k_glFenceSync = (kis_glFenceSync)wglGetProcAddress("glFenceSyncARB");
             k_glGetSynciv = (kis_glGetSynciv)wglGetProcAddress("glGetSyncivARB");
             k_glDeleteSync = (kis_glDeleteSync)wglGetProcAddress("glDeleteSyncARB");
         }
 #elif defined Q_OS_LINUX
-        if(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
+        if((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) ||
+           GLEW_ARB_sync) {
+
             k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSync");
             k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSynciv");
             k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSync");
-        } else if(GLEW_ARB_sync) {
-            k_glFenceSync = (kis_glFenceSync)VSyncWorkaround::qglx_getProcAddress("glFenceSyncARB");
-            k_glGetSynciv = (kis_glGetSynciv)VSyncWorkaround::qglx_getProcAddress("glGetSyncivARB");
-            k_glDeleteSync = (kis_glDeleteSync)VSyncWorkaround::qglx_getProcAddress("glDeleteSyncARB");
         }
 #endif
         if(k_glFenceSync == 0 || k_glGetSynciv == 0 || k_glGetSynciv == 0) {
@@ -347,7 +343,7 @@ namespace Sync {
     //Get a fence sync object from OpenGL
     GLsync getSync() {
         if(k_glFenceSync) {
-            return k_glFenceSync(GL_SYNC_CPU_COMMANDS_COMPLETE, 0);
+            return k_glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
         }
         return 0;
     }

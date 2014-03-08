@@ -25,13 +25,28 @@
 #include "KoResourceBundle_test.h"
 #include "KoResourceBundle.h"
 #include "KoResourceBundleManager.h"
+#include "KoResourceServerProvider.h"
+#include "KoResourceManagerWidget.h"
 #include <iostream>
 using namespace std;
 
 void KoResourceBundle_test::testInitialization()
 {
-    KoResourceBundleManager *rm=new KoResourceBundleManager();
+    /*KoResourceBundleManager *rm=new KoResourceBundleManager();*/
     
+    /*KoResourceServer<KoAbstractGradient> *serv=KoResourceServerProvider::instance()->gradientServer();
+    KoResourceBundle *test=new KoResourceBundle("/home/metabolic/pack.zip");
+    test->load();
+    //test->addFile("patterns","/home/metabolic/kde4/src/calligra/krita/data/patterns/01_canvas.png");
+    test->addFile("gradients","/home/metabolic/kde4/src/calligra/krita/data/gradients/BG-Krita2.ggr");
+    test->save();
+    test->load();
+    cout<<serv->fileNames().size()<<endl;
+    test->install();
+    cout<<qPrintable(serv->fileNames().at(0))<<endl;
+    QStringList fileNames=KGlobal::mainComponent().dirs()->findAllResources(serv->type().toLatin1(),serv->extensions(),KStandardDirs::Recursive|KStandardDirs::NoDuplicates);
+    cout<<fileNames.size()<<endl;*/
+
     /*KoResourceServer<KoResourceBundle>* serveur = new Ko
     KoResourceBundle* bund = new KoResourceBundle("test");
     bund->load();
@@ -43,6 +58,8 @@ void KoResourceBundle_test::testInitialization()
 
     cout<<serveur->resources().size()<<endl;*/
 
+    KoResourceManagerWidget w;
+    w.show();
 }
 
 

@@ -41,6 +41,7 @@
 #include <kis_base_node.h>
 #include <kis_clone_layer.h>
 #include <kis_debug.h>
+#include <kis_assert.h>
 #include <kis_external_layer_iface.h>
 #include <kis_filter_mask.h>
 #include <kis_group_layer.h>
@@ -404,7 +405,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         dbgFile << "found colorspace" << colorSpace;
     }
-    Q_ASSERT(colorSpace);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(colorSpace, 0);
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;

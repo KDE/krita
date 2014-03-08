@@ -2115,13 +2115,18 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
+    // NOTE: we are requesting an old value of m_currentArgs variable
+    //       here, which is global, don't forget about this on higher
+    //       levels.
+    QString filterId = m_currentArgs.filterId();
+
     if (mode == ToolTransformArgs::FREE_TRANSFORM) {
-        m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(),0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true);
+        m_currentArgs = ToolTransformArgs(ToolTransformArgs::FREE_TRANSFORM, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(),0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
         m_scaleX_wOutModifier = m_currentArgs.scaleX();
         m_scaleY_wOutModifier = m_currentArgs.scaleY();
         m_refSize = QSizeF();
     } else /* if (mode == ToolTransformArgs::WARP) */ {
-        m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true);
+        m_currentArgs = ToolTransformArgs(ToolTransformArgs::WARP, m_transaction.originalCenter(), m_transaction.originalCenter(), QPointF(0, 0), 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, KisWarpTransformWorker::RIGID_TRANSFORM, 1.0, true, filterId);
         m_optionsWidget->setDefaultWarpPoints();
         m_refSize = QSizeF();
     }

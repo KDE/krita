@@ -180,8 +180,6 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         if (setting->getBool("Custom" + prefix, false)) {
             foreach(KisDynamicSensor *s, m_sensorMap.values()) {
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
-                s->setActive(false);
-                replaceSensor(s);
             }
         }
     }

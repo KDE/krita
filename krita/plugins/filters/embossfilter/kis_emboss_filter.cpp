@@ -58,6 +58,7 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Em
 {
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_RGBA8);
+    setSupportsThreading(false);
 }
 
 KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const

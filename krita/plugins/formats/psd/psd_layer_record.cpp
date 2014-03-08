@@ -637,11 +637,12 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;
     foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+        qDebug() << ">>>\t" << ch->name() << ch->displayPosition() << ch->channelType();
         if (ch->channelType() == KoChannelInfo::ALPHA) {
-            planes.insert(0, tmp[ch->pos()]);
+            planes.insert(0, tmp[ch->displayPosition()]);
         }
         else {
-            planes.append(tmp[ch->pos()]);
+            planes.append(tmp[ch->displayPosition()]);
         }
     }
 

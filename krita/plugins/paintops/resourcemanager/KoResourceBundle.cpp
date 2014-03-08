@@ -25,9 +25,10 @@
 #include <iostream>
 using namespace std;
 
-KoResourceBundle::KoResourceBundle(QString const& file):KoResource(file)
+KoResourceBundle::KoResourceBundle(QString const& bundlePath, QString kritaPath):KoResource(bundlePath)
 {
-    manager=new KoResourceBundleManager("/home/metabolic/kde4/src/calligra/krita/data");
+    manager=new KoResourceBundleManager(kritaPath);
+    isInstalled=false; //TODO A vérifier
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -50,6 +51,7 @@ bool KoResourceBundle::load()
         manifest=new KoXmlResourceBundleManifest(manager->getFile("manifest.xml"));
         meta=new KoXmlResourceBundleMeta(manager->getFile("meta.xml"));
         thumbnail.load(manager->getFile("thumbnail.jpg"),"jpg");
+        manager->close();
         setValid(true);
     }
     return true;
@@ -62,7 +64,13 @@ bool KoResourceBundle::save()
     }
     manager->createPack(manifest,meta);
     setValid(true);
+    load();
     return true;
+}
+
+void KoResourceBundle::addMeta(QString type,QString value){
+    meta->addTag(type,value);
+    meta->show();
 }
 
 void KoResourceBundle::addFile(QString fileType,QString filePath)
@@ -90,14 +98,22 @@ QImage KoResourceBundle::image() const
 
 void KoResourceBundle::install()
 {
+    load();
     if (!manager->bad()) {
         manager->extractKFiles(manifest->getFilesToExtract());
-        //manifest->exportTags();
+        manifest->exportTags();
+        //TODO Vérifier que l'export est validé et copié dans les fichiers
+        //TODO Sinon, déterminer pourquoi et comment faire
+        isInstalled=true;
+        //Modifier les chemins des fichiers si c'est la première installation
     }
 }
 
 void KoResourceBundle::uninstall()
 {
+    if(!isInstalled)
+        return;
+
     QList<QString> directoryList = manifest->getDirList();
     QString shortPackName = meta->getShortPackName();
     QString dirPath;
@@ -109,7 +125,8 @@ void KoResourceBundle::uninstall()
         if (!removeDir(dirPath)) {
             cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
         }
-    }
+    }    
+    isInstalled=false;
 }
 
 bool KoResourceBundle::removeDir(const QString & dirName)

@@ -64,20 +64,19 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArti
 
 void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect& applyRect,
-                                    const KisFilterConfiguration* configuration,
+                                    const KisFilterConfiguration* config,
                                     KoUpdater* progressUpdater
                                     ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
-    Q_ASSERT(configuration);
 
     qint32 width = applyRect.width();
     qint32 height = applyRect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 pixelWidth = configuration->getInt("pixelWidth", 10);
-    quint32 pixelHeight = configuration->getInt("pixelHeight", 10);
+    quint32 pixelWidth = config ? config->getInt("pixelWidth", 10) : 10;
+    quint32 pixelHeight = config ? config->getInt("pixelHeight", 10) : 10;
     if (pixelWidth == 0) pixelWidth = 1;
     if (pixelHeight == 0) pixelHeight = 1;
 

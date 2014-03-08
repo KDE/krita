@@ -33,6 +33,8 @@
 
 #include <cstdlib>
 
+#include <KoConfig.h>
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
@@ -80,14 +82,32 @@
 void doRestart(bool resetConfig)
 {
     if (resetConfig) {
-        QDir userDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
-        foreach(QString entry, userDir.entryList(QStringList("*.profile"))) {
-            qDebug() << "entry" << entry;
-            userDir.remove(entry);
+        {
+            QString appdata = qgetenv("APPDATA");
+            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(appdata + "/krita/share/config/");
+            configDir.remove("kritarc");
         }
-        QDir configDir(KGlobal::dirs()->saveLocation("config"));
-        qDebug() << "configDir" << configDir;
-        configDir.remove("kritarc");
+        {
+            QString appdata = qgetenv("LOCALAPPDATA");
+            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(appdata + "/krita/share/config/");
+            configDir.remove("kritarc");
+        }
+        {
+            QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+                inputDir.remove(entry);
+            }
+            QDir configDir(KGlobal::dirs()->saveLocation("config"));
+            configDir.remove("kritarc");
+        }
     }
 
     QString restartCommand;
@@ -262,20 +282,33 @@ void MainWindow::startUpload()
     typedef QPair<QByteArray, QByteArray> Field;
     QList<Field> fields;
 
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1-%2").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
+
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)
            << Field("ProductName", "krita")
-           << Field("Version", CALLIGRA_VERSION_STRING)
+           << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
 #ifdef Q_WS_WIN
 
     QString platform = platformToStringWin(QSysInfo::WindowsVersion);
+
 #ifdef ENV32BIT
     platform += "_x86";
 #else
     platform += "_x64";
 #endif
+
     fields << Field("Platform", platform.toAscii());
 #endif
 #ifdef Q_WS_X11
@@ -284,6 +317,14 @@ void MainWindow::startUpload()
 #ifdef Q_WS_MAC
     fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toAscii());
 #endif
+
+    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    qDebug() << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+
+    if (f.exists()) {
+        f.open(QFile::ReadOnly);
+        fields << Field("OpenGL", f.readAll());
+    }
 
     QString body;
     foreach(Field const field, fields) {

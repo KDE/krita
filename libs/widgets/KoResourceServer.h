@@ -246,7 +246,7 @@ public:
         return true;
     }
 
-    /// Remove a resource from resourceserver and hard disk
+    /// Remove a resource from the resourceserver and blacklist it
     bool removeResource(T* resource) {
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;

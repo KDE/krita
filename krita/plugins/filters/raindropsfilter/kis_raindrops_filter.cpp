@@ -56,10 +56,12 @@
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
-KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
+KisRainDropsFilter::KisRainDropsFilter()
+    : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(true);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -88,13 +90,13 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                                      KoUpdater* progressUpdater ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
-    Q_UNUSED(config);
     Q_ASSERT(device);
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = config->getInt("dropSize", 80);
     quint32 number = config->getInt("number", 80);
     quint32 fishEyes = config->getInt("fishEyes", 30);
+    srand(config->getInt("seed"));
 
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.width() * applyRect.height());
@@ -129,15 +131,6 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     bool      FindAnother = false;              // To search for good coordinates
 
     const KoColorSpace * cs = device->colorSpace();
-
-
-    // XXX: move the seed to the config, so the filter can be used as
-    // and adjustment filter (boud).
-    // And use a thread-safe random number generator
-    QDateTime dt = QDateTime::currentDateTime();
-    QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
-
-    srand((uint) dt.secsTo(Y2000));
 
     // Init booleen Matrix.
 
@@ -395,14 +388,21 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
     param.push_back(KisIntegerWidgetParam(1, 200, 80, i18n("Drop size"), "dropsize"));
     param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
-    return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
+    KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
+    w->setConfiguration(factoryConfiguration(0));
+    return w;
 }
 
 KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("raindrops", 1);
+    KisFilterConfiguration* config = new KisFilterConfiguration("raindrops", 2);
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);
+    QDateTime dt = QDateTime::currentDateTime();
+    QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
+    config->setProperty("seed", dt.secsTo(Y2000));
+
+
     return config;
 }

@@ -66,11 +66,6 @@ void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
 
 }
 
-int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const
-{
-    return qMax(m_matrix->width() / 2, m_matrix->height() / 2);
-}
-
 void KisConvolutionFilter::setIgnoreAlpha(bool v)
 {
     m_ignoreAlpha = v;

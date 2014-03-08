@@ -19,7 +19,6 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "opengl/kis_opengl_canvas2.h"
-#include "opengl/kis_opengl.h"
 
 #ifdef HAVE_OPENGL
 
@@ -51,7 +50,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"
-#include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_image_textures.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
@@ -200,6 +198,8 @@ void KisOpenGLCanvas2::initializeGL()
 
     initializeCheckerShader();
     initializeDisplayShader();
+
+    Sync::init();
 }
 
 void KisOpenGLCanvas2::resizeGL(int width, int height)
@@ -217,20 +217,15 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 
     if (d->glSyncObject) {
-        glDeleteSync(d->glSyncObject);
+        Sync::deleteSync(d->glSyncObject);
     }
 
-    d->glSyncObject = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    d->glSyncObject = Sync::getSync();
 }
 
 bool KisOpenGLCanvas2::isBusy() const
 {
-    if (!d->glSyncObject) return false;
-
-    GLint status = -1;
-    glGetSynciv(d->glSyncObject, GL_SYNC_STATUS, 1, 0, &status);
-
-    return status == GL_UNSIGNALED;
+    return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
 }
 
 inline QVector<QVector3D> rectToVertices(const QRectF &rc)

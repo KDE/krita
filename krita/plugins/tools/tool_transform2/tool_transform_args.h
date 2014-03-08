@@ -63,7 +63,8 @@ public:
                       double shearX, double shearY,
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
-                      bool defaultPoints);
+                      bool defaultPoints,
+                      const QString &filterId);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 

@@ -192,9 +192,11 @@ void KisPaletteManager::slotEnableRemoveButton()
 void KisPaletteManager::slotDeleteBrush()
 {
     KoResource * resource = m_palettePresetsView->currentResource();
-    m_resourceManager->removeFavoritePreset(resource->name());
-    m_removeButton->setEnabled(false);
-    updatePaletteView();
+    if (resource) {
+        m_resourceManager->removeFavoritePreset(resource->name());
+        slotEnableRemoveButton();
+        updatePaletteView();
+    }
 }
 
 void KisPaletteManager::showEvent(QShowEvent* e)

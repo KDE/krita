@@ -35,7 +35,6 @@ public:
 protected:
     virtual KUndo2Command* paint() = 0;
 private:
-    bool m_firstRedo;
     KUndo2Command *m_transactionData;
 };
 #endif // KIS_TRANSACTION_BASED_COMMAND_H

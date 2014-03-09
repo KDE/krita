@@ -19,7 +19,7 @@
 #include "kis_transaction_based_command.h"
 
 KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
-    : KUndo2Command(text, parent), m_firstRedo(true), m_transactionData(0)
+    : KUndo2Command(text, parent), m_transactionData(0)
 {
 }
 
@@ -30,7 +30,7 @@ KisTransactionBasedCommand::~KisTransactionBasedCommand()
 
 void KisTransactionBasedCommand::redo()
 {
-    if (m_firstRedo) {
+    if (!m_transactionData) {
         m_transactionData = paint();
     }
 

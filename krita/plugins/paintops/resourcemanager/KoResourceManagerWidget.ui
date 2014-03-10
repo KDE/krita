@@ -522,7 +522,7 @@
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter">
+         <item>
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
@@ -629,7 +629,7 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0" alignment="Qt::AlignHCenter">
+             <item row="5" column="0">
               <widget class="QLabel" name="label_8">
                <property name="text">
                 <string>Tags</string>
@@ -659,7 +659,7 @@
       </item>
      </layout>
     </item>
-    <item alignment="Qt::AlignHCenter">
+    <item>
      <widget class="QPushButton" name="pushButton_3">
       <property name="maximumSize">
        <size>

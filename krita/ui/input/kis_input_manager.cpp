@@ -587,8 +587,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::ShortcutOverride: {
-        if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyPress" << keyEvent->key();
+
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
         if (!keyEvent->isAutoRepeat()) {
@@ -609,8 +610,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
-        if (d->logTabletEvents) qDebug() << "KeyRelease";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyRelease" << keyEvent->key();
+
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);

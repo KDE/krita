@@ -295,26 +295,45 @@ KisNodeSP KisNode::lastChild() const
     return !m_d->nodes.isEmpty() ? m_d->nodes.last() : 0;
 }
 
-KisNodeSP KisNode::prevSibling() const
+KisNodeSP KisNode::prevChildImpl(KisNodeSP child)
 {
+    /**
+     * Warning: mind locking policy!
+     *
+     * The graph locks must be *always* taken in descending
+     * order. That is if you want to (or it implicitly happens that
+     * you) take a lock of a parent and a chil, you must first take
+     * the lock of a parent, and only after that ask a child to do the
+     * same.  Otherwise you'll get a deadlock.
+     */
+
     QReadLocker l(&m_d->nodeSubgraphLock);
 
-    KisNodeSP parentNode = parent();
+    int i = m_d->nodes.indexOf(child) - 1;
+    return i >= 0 ? m_d->nodes.at(i) : 0;
+}
 
-    if (!parentNode) return 0;
-    int i = parentNode->index(const_cast<KisNode*>(this));
-    return parentNode->at(i - 1);
+KisNodeSP KisNode::nextChildImpl(KisNodeSP child)
+{
+    /**
+     * See a comment in KisNode::prevChildImpl()
+     */
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
+    int i = m_d->nodes.indexOf(child) + 1;
+    return i > 0 && i < m_d->nodes.size() ? m_d->nodes.at(i) : 0;
+}
+
+KisNodeSP KisNode::prevSibling() const
+{
+    KisNodeSP parentNode = parent();
+    return parentNode ? parentNode->prevChildImpl(const_cast<KisNode*>(this)) : 0;
 }
 
 KisNodeSP KisNode::nextSibling() const
 {
-    QReadLocker l(&m_d->nodeSubgraphLock);
-
     KisNodeSP parentNode = parent();
-
-    if (!parentNode) return 0;
-    int i = parentNode->index(const_cast<KisNode*>(this));
-    return parentNode->at(i + 1);
+    return parentNode ? parentNode->nextChildImpl(const_cast<KisNode*>(this)) : 0;
 }
 
 quint32 KisNode::childCount() const
@@ -339,11 +358,7 @@ int KisNode::index(const KisNodeSP node) const
 {
     QReadLocker l(&m_d->nodeSubgraphLock);
 
-    if (m_d->nodes.contains(node)) {
-        return m_d->nodes.indexOf(node);
-    }
-
-    return -1;
+    return m_d->nodes.indexOf(node);
 }
 
 QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProperties & properties) const

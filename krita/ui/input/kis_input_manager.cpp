@@ -182,8 +182,23 @@ void KisInputManager::Private::debugTabletEvent(QEvent *event)
         .arg(tevent->xTilt())
         .arg(tevent->yTilt());
 
+    QString msg7 =
+        tevent->device() == QTabletEvent::NoDevice ? "NoDevice" :
+        tevent->device() == QTabletEvent::Puck ? "Puck" :
+        tevent->device() == QTabletEvent::Stylus ? "Stylus" :
+        tevent->device() == QTabletEvent::Airbrush ? "Airbrush" :
+        tevent->device() == QTabletEvent::FourDMouse ? "FourDMouse" :
+        tevent->device() == QTabletEvent::RotationStylus ? "RotationStylus" :
+        "unknown";
 
-    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6;
+    QString msg8 =
+        tevent->pointerType() == QTabletEvent::UnknownPointer ? "UnknownPointer" :
+        tevent->pointerType() == QTabletEvent::Pen ? "Pen" :
+        tevent->pointerType() == QTabletEvent::Cursor ? "Cursor" :
+        tevent->pointerType() == QTabletEvent::Eraser ? "Eraser" :
+        "unknown";
+
+    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6 << msg7 << msg8;
 }
 
 #define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
@@ -587,8 +602,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::ShortcutOverride: {
-        if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyPress" << keyEvent->key();
+
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
         if (!keyEvent->isAutoRepeat()) {
@@ -609,8 +625,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
-        if (d->logTabletEvents) qDebug() << "KeyRelease";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyRelease" << keyEvent->key();
+
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);

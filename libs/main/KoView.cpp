@@ -447,9 +447,9 @@ void KoView::slotUpdateAuthorProfileActions()
     }
 }
 
-QList<QAction*> KoView::createChangeUnitActions()
+QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
 {
-    UnitActionGroup* unitActions = new UnitActionGroup(d->document, this);
+    UnitActionGroup* unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
     return unitActions->actions();
 }
 

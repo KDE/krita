@@ -207,7 +207,7 @@ public:
     virtual KoZoomController *zoomController() const = 0;
 
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions();
+    QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
 
     /**
      * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.

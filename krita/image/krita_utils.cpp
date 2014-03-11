@@ -22,6 +22,7 @@
 #include <QRegion>
 #include <QPainterPath>
 #include <QPolygonF>
+#include <QPen>
 
 #include "kis_image_config.h"
 
@@ -149,6 +150,22 @@ namespace KritaUtils
         }
 
         return dirtyRegion;
+    }
+
+    void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
+                                       int antLength, int antSpace)
+    {
+        QVector<qreal> antDashPattern;
+        antDashPattern << antLength << antSpace;
+
+        *antsPen = QPen(Qt::CustomDashLine);
+        antsPen->setDashPattern(antDashPattern);
+        antsPen->setCosmetic(true);
+        antsPen->setColor(Qt::black);
+
+        *outlinePen = QPen(Qt::SolidLine);
+        outlinePen->setCosmetic(true);
+        outlinePen->setColor(Qt::white);
     }
 
 }

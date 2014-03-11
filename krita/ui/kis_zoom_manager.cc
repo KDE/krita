@@ -141,27 +141,25 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     bool show = cfg.showRulers();
 
+    m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
+
     m_horizontalRuler = new KoRuler(m_view, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
-    m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
     m_horizontalRuler->createGuideToolConnection(m_view->canvasBase());
 
     new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceManager());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
-    m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
     m_verticalRuler->createGuideToolConnection(m_view->canvasBase());
     m_showRulersAction->setChecked(show);
 
-    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    QList<QAction*> unitActions = m_view->createChangeUnitActions(true);
     m_horizontalRuler->setPopupActionList(unitActions);
     m_verticalRuler->setPopupActionList(unitActions);
 
-    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_horizontalRuler, SLOT(setUnit(const KoUnit&)));
-    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_verticalRuler, SLOT(setUnit(const KoUnit&)));
-
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), SLOT(applyRulersUnit(const KoUnit&)));
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
@@ -198,6 +196,12 @@ void KisZoomManager::toggleShowRulers(bool show)
     m_verticalRuler->setVisible(show);
 }
 
+void KisZoomManager::applyRulersUnit(const KoUnit &baseUnit)
+{
+    m_horizontalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->xRes()));
+    m_verticalRuler->setUnit(KoUnit(baseUnit.type(), m_view->image()->yRes()));
+}
+
 void KisZoomManager::updateGUI()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
@@ -205,6 +209,9 @@ void KisZoomManager::updateGUI()
 
     m_horizontalRuler->setRulerLength(documentSize.width());
     m_verticalRuler->setRulerLength(documentSize.height());
+
+    KIS_ASSERT_RECOVER_NOOP(m_horizontalRuler->unit() == m_verticalRuler->unit());
+    applyRulersUnit(m_horizontalRuler->unit());
 }
 
 void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)

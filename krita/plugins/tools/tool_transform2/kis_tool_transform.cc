@@ -71,6 +71,7 @@
 #include <kis_shape_selection.h>
 #include <kis_selection_manager.h>
 #include <kis_system_locker.h>
+#include <krita_utils.h>
 
 #include <KoShapeTransformCommand.h>
 
@@ -566,48 +567,73 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
         // Draw handles
 
-        qreal d = m_handleRadius / scaleFromAffineMatrix(m_handlesTransform);
-
-        QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
-        QRectF smallHandleRect(-0.25 * d, -0.25 * d, 0.5 * d, 0.5 * d);
         int numPoints = m_currentArgs.origPoints().size();
-
-        pen[0].setWidth(2);
 
         gc.save();
         gc.setTransform(m_handlesTransform, true);
 
-        pen[1].setWidth(2);
-        gc.setPen(pen[1]);
-        for (int i = 0; i < numPoints; ++i) {
-            gc.drawLine(m_currentArgs.transfPoints()[i], m_currentArgs.origPoints()[i]);
-        }
+        // draw connecting lines
+        {
+            QPen antsPen;
+            QPen outlinePen;
 
-        pen[0].setStyle(Qt::DashLine);
-        gc.setPen(pen[0]);
-        for (int i = 0; i < numPoints; ++i) {
-            gc.drawLine(m_currentArgs.transfPoints()[i], m_currentArgs.origPoints()[i]);
-        }
+            KritaUtils::initAntsPen(&antsPen, &outlinePen);
 
-        pen[1].setWidth(3);
-        for (int j = 1; j >= 0; --j) {
-            gc.setPen(pen[j]);
+            gc.setOpacity(0.5);
+
             for (int i = 0; i < numPoints; ++i) {
-                gc.drawEllipse(handleRect.translated(m_currentArgs.transfPoints()[i]));
+                gc.setPen(outlinePen);
+                gc.drawLine(m_currentArgs.transfPoints()[i], m_currentArgs.origPoints()[i]);
+                gc.setPen(antsPen);
+                gc.drawLine(m_currentArgs.transfPoints()[i], m_currentArgs.origPoints()[i]);
             }
         }
 
-        gc.setPen(pen[1]);
-        for (int i = 0; i < numPoints; ++i) {
-            gc.drawEllipse(smallHandleRect.translated(m_currentArgs.origPoints()[i]));
-        }
+        // draw handles themselves
+        {
+            QPen mainPen(Qt::black);
+            QPen outlinePen(Qt::white);
 
-        gc.setPen(pen[0]);
-        gc.setBrush(Qt::SolidPattern);
-        for (int i = 0; i < numPoints; ++i) {
-            gc.drawEllipse(smallHandleRect.translated(m_currentArgs.origPoints()[i]));
-        }
+            qreal dstIn = 8 / scaleFromAffineMatrix(m_handlesTransform);
+            qreal dstOut = 10 / scaleFromAffineMatrix(m_handlesTransform);
+            qreal srcIn = 6 / scaleFromAffineMatrix(m_handlesTransform);
+            qreal srcOut = 6 / scaleFromAffineMatrix(m_handlesTransform);
 
+            QRectF handleRect1(-0.5 * dstIn, -0.5 * dstIn, dstIn, dstIn);
+            QRectF handleRect2(-0.5 * dstOut, -0.5 * dstOut, dstOut, dstOut);
+
+            gc.setOpacity(1.0);
+
+            for (int i = 0; i < numPoints; ++i) {
+                gc.setPen(outlinePen);
+                gc.drawEllipse(handleRect2.translated(m_currentArgs.transfPoints()[i]));
+                gc.setPen(mainPen);
+                gc.drawEllipse(handleRect1.translated(m_currentArgs.transfPoints()[i]));
+            }
+
+            QPainterPath inLine;
+            inLine.moveTo(-0.5 * srcIn,            0);
+            inLine.lineTo( 0.5 * srcIn,            0);
+            inLine.moveTo(           0, -0.5 * srcIn);
+            inLine.lineTo(           0,  0.5 * srcIn);
+
+            QPainterPath outLine;
+            outLine.moveTo(-0.5 * srcOut, -0.5 * srcOut);
+            outLine.lineTo( 0.5 * srcOut, -0.5 * srcOut);
+            outLine.lineTo( 0.5 * srcOut,  0.5 * srcOut);
+            outLine.lineTo(-0.5 * srcOut,  0.5 * srcOut);
+            outLine.lineTo(-0.5 * srcOut, -0.5 * srcOut);
+
+            gc.setOpacity(0.5);
+
+            for (int i = 0; i < numPoints; ++i) {
+                gc.setPen(outlinePen);
+                gc.drawPath(outLine.translated(m_currentArgs.origPoints()[i]));
+                gc.setPen(mainPen);
+                gc.drawPath(inLine.translated(m_currentArgs.origPoints()[i]));
+            }
+
+        }
         gc.restore();
     }
 }

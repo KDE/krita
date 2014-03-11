@@ -108,14 +108,6 @@ public:
     void setDocumentDeleted();
 
     /**
-     * Overload this function if the content will be displayed
-     * on some child widget instead of the view directly.
-     *
-     * By default this function returns a pointer to the view.
-     */
-    virtual QWidget *canvas() const;
-
-    /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.

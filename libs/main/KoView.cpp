@@ -284,13 +284,6 @@ void KoView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-QWidget *KoView::canvas() const
-{
-    //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
-    // but not the view", it's just coincidence that the view is the canvas by default ;)
-    return const_cast<KoView *>(this);
-}
-
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
     KoViewPrivate::StatusBarItem item(widget, stretch, permanent);

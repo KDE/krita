@@ -346,11 +346,11 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         {
         case IconRole:
             if (dynamic_cast<const KisGroupLayer*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_group-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_group-black.svg");
             else if (dynamic_cast<const KisFilterMask*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
             else if (dynamic_cast<const KisAdjustmentLayer*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
             else
                 // We add the currentMSecsSinceEpoch to ensure we force an update (even with cache turned
                 // off, we still apparently get some caching behaviour on delegates in QML)

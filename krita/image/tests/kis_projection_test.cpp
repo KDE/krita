@@ -48,12 +48,12 @@ void KisProjectionTest::testDirty()
     QTest::qSleep(250);
 
     // Check that the projection is totally redistribute
-    KisRectConstIteratorSP it = image->projection()->createRectConstIteratorNG(QRect(0, 0, 1000, 1000));
+    KisSequentialConstIterator it(image->projection(), QRect(0, 0, 1000, 1000));
     do {
         QColor c;
-        image->colorSpace()->toQColor(it->oldRawData(), &c, image->profile());
+        image->colorSpace()->toQColor(it.oldRawData(), &c, image->profile());
         QVERIFY(c == Qt::red);
-    } while (it->nextPixel());
+    } while (it.nextPixel());
 }
 
 QTEST_KDEMAIN(KisProjectionTest, NoGUI)

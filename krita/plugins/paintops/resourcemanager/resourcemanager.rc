@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaresourcemanager" version="7">
+<MenuBar>
+     <Menu name="Edit"><text>&amp;Edit</text>
+         <Menu name="Resources"><text>&amp;Resources</text>
+            <Action name="resourcemanager"/>
+        </Menu>
+ </Menu>
+
+</MenuBar>
+</kpartgui>

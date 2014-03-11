@@ -121,6 +121,14 @@ private slots:
     void testDirtyRegion();
 
     void propertiesStressTest();
+    void graphStressTest();
+
+private:
+    class VisibilityKiller;
+    class GraphKiller;
+
+    template <class KillerClass>
+        void propertiesStressTestImpl();
 };
 
 #endif

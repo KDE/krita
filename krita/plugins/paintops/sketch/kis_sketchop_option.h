@@ -53,7 +53,8 @@ private:
 
 };
 
-class SketchProperties{
+class SketchProperties
+{
 public:
     qreal offset; // perc
     qreal probability; // perc
@@ -65,8 +66,8 @@ public:
     bool distanceOpacity;
     bool distanceDensity;
     int lineWidth; // px
-    
-    void readOptionSetting(const KisPropertiesConfiguration* settings){
+
+    void readOptionSetting(const KisPropertiesConfiguration* settings) {
         probability = settings->getDouble(SKETCH_PROBABILITY);
         offset = settings->getDouble(SKETCH_OFFSET) * 0.01;
         lineWidth = settings->getInt(SKETCH_LINE_WIDTH);

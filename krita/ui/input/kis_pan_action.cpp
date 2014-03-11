@@ -44,7 +44,8 @@ public:
 };
 
 KisPanAction::KisPanAction()
-    : d(new Private)
+    : KisAbstractInputAction("Pan Canvas")
+    , d(new Private)
 {
     setName(i18n("Pan Canvas"));
     setDescription(i18n("The <i>Pan Canvas</i> action pans the canvas."));
@@ -158,4 +159,9 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
     } else {
         return QPointF();
     }
+}
+
+bool KisPanAction::isShortcutRequired(int shortcut) const
+{
+    return shortcut == PanToggleShortcut;
 }

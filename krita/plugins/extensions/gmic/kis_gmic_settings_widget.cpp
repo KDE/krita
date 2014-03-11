@@ -453,6 +453,7 @@ void KisGmicSettingsWidget::createSettingsWidget(ROLE role)
     {
         setLayout(gridLayout);
     }
+    setMinimumSize(sizeHint());
 }
 
 Command* KisGmicSettingsWidget::currentCommandSettings()

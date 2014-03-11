@@ -189,7 +189,13 @@ void KisSelection::updateProjection()
 
 void KisSelection::setVisible(bool visible)
 {
+    bool needsNotification = visible != m_d->isVisible;
+
     m_d->isVisible = visible;
+
+    if (needsNotification) {
+        notifySelectionChanged();
+    }
 }
 
 bool KisSelection::isVisible()

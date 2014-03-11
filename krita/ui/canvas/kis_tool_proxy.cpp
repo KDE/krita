@@ -193,6 +193,8 @@ bool KisToolProxy::primaryActionSupportsHiResEvents() const
 
 void KisToolProxy::setActiveTool(KoToolBase *tool)
 {
+    if (!tool) return;
+
     if (m_isActionActivated) {
         deactivateToolAction(m_lastAction);
         KoToolProxy::setActiveTool(tool);

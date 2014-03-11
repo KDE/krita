@@ -55,11 +55,6 @@ public:
      */
     int shortcutIndex() const;
 
-    /**
-     * Set the index of the shortcut.
-     */
-    void setShortcutIndex(int index);
-
 protected:
     bool compareKeys(const QList<Qt::Key> &keys1,
                      const QList<Qt::Key> &keys2);

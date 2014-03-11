@@ -7,7 +7,7 @@ arrowupblr.png
 broken-preset.png
 deletelayer.png
 delete.png
-draw-eraser.png
+eraser-toggle.png
 duplicatelayer.png
 folder.png
 height_icon.png

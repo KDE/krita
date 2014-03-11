@@ -20,6 +20,8 @@
 
 #include "kis_gmic_plugin.h"
 
+#include <QApplication>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -43,7 +45,6 @@
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-
 
 #include "gmic.h"
 #include "kis_gmic_parser.h"
@@ -103,6 +104,11 @@ void KisGmicPlugin::slotGmic()
 
     m_gmicWidget = new KisGmicWidget(model);
     m_gmicApplicator = new KisGmicApplicator();
+#ifdef Q_WS_WIN
+    // On windows, gmic needs a humongous stack for its parser
+    m_gmicApplicator->setStackSize(20 * 1024 * 1024);
+#endif
+
 
     // apply
     connect(m_gmicWidget, SIGNAL(sigApplyCommand(KisGmicFilterSetting*)),this, SLOT(slotApplyGmicCommand(KisGmicFilterSetting*)));
@@ -146,8 +152,13 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 
     QTime myTimer;
     myTimer.start();
-    m_gmicApplicator->apply(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand());
+    qApp->setOverrideCursor(Qt::WaitCursor);
+
+    m_gmicApplicator->setProperties(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand());
+    m_gmicApplicator->start();
+    m_gmicApplicator->wait();
     m_view->image()->waitForDone();
+    qApp->restoreOverrideCursor();
 
     double seconds = myTimer.elapsed() * 0.001;
     // temporary feedback

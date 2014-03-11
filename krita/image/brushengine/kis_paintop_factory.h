@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <kis_threaded_text_rendering_workaround.h>
 
 class KoColorSpace;
 class KisPainter;
@@ -57,6 +58,10 @@ public:
 
     static QString categoryStable();
     static QString categoryExperimental();
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    virtual void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     /**
      * Create a KisPaintOp with the given settings and painter.

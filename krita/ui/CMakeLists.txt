@@ -29,6 +29,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
@@ -251,6 +252,8 @@ set(kritaui_LIB_SRCS
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
+    kis_gui_context_command.cpp
+    kis_gui_context_command_p.cpp
     input/kis_input_profile_manager.cpp
     input/kis_input_profile.cpp
     input/kis_shortcut_configuration.cpp

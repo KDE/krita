@@ -167,7 +167,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration(d->paintDevice));
+        d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }

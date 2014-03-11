@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
+    <width>525</width>
     <height>205</height>
    </rect>
   </property>
@@ -21,6 +21,47 @@
        <string>Basic</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="4" column="0">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="progressive">
+         <property name="text">
+          <string comment="A progressive jpeg file can be displayed while loading.">Progressive</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Transparent pixel fill color:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KColorButton" name="bnTransparencyFillColor">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Background color to replace transparent pixels with.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
@@ -76,46 +117,12 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="progressive">
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="chkForceSRGB">
          <property name="text">
-          <string comment="A progressive jpeg file can be displayed while loading.">Progressive</string>
+          <string>Force convert to sRGB</string>
          </property>
         </widget>
-       </item>
-       <item row="2" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Transparent pixel fill color:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KColorButton" name="bnTransparencyFillColor">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Background color to replace transparent pixels with.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

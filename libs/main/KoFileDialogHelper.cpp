@@ -154,7 +154,8 @@ QStringList KoFileDialogHelper::getOpenFileNames(QWidget *parent,
                                                     getFilterString(mimeList),
                                                     &str,
                                                     options);
-    saveDefaultDir(res.first(), uniqueName);
+    if (res.size() > 0)
+        saveDefaultDir(res.first(), uniqueName);
     return res;
 }
 

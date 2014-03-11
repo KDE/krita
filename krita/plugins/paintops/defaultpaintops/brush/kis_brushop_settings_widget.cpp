@@ -41,7 +41,7 @@
 
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);

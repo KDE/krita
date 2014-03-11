@@ -177,7 +177,7 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
 
         outline.moveTo(center.x() - hairOffset, center.y());
         outline.lineTo(center.x() + hairOffset, center.y());
-    } else if (sum < minThresholdSize) {
+    } else if (sum < minThresholdSize && !outline.isEmpty()) {
         outline = QPainterPath();
         outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
     }
@@ -495,6 +495,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         (mode() == KisTool::GESTURE_MODE ||
          ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
+           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
           ((mode() == HOVER_MODE) ||

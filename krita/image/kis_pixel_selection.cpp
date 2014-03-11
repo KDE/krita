@@ -41,6 +41,7 @@
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
 
+
 struct KisPixelSelection::Private {
     KisSelectionWSP parentSelection;
 
@@ -244,10 +245,10 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-        KisRectIteratorSP it = createRectIteratorNG(rc);
+        KisSequentialIterator it(this, rc);
         do {
-            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-        } while (it->nextPixel());
+            *(it.rawData()) = MAX_SELECTED - *(it.rawData());
+        } while (it.nextPixel());
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
@@ -258,6 +259,15 @@ void KisPixelSelection::invert()
 
         m_d->outlineCache = path - m_d->outlineCache;
     }
+}
+
+void KisPixelSelection::move(const QPoint &pt)
+{
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache.translate(pt - QPoint(x(), y()));
+    }
+
+    KisPaintDevice::move(pt);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const

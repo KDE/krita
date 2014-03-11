@@ -225,6 +225,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
+    const KoColorSpace *dstCS = tilesColorSpace();
+
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
@@ -239,6 +241,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
             // Don't update empty tiles
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
+                tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+
                 info->tileList.append(tileInfo);
             }
             else {
@@ -272,6 +276,8 @@ const KoColorSpace* KisOpenGLImageTextures::tilesColorSpace() const
         qFatal("Unknown m_imageTextureType");
     }
 
+    //qDebug() << "monitor colorspace" << dstCS;
+
     return dstCS;
 }
 
@@ -283,11 +289,8 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
 
-    const KoColorSpace *dstCS = tilesColorSpace();
-
     KisTextureTileUpdateInfoSP tileInfo;
     foreach(tileInfo, glInfo->tileList) {
-        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
@@ -336,15 +339,10 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    Q_ASSERT(renderingIntent < 4);
-    if (monitorProfile != m_monitorProfile ||
-            renderingIntent != m_renderingIntent ||
-            conversionFlags != m_conversionFlags) {
-
-        m_monitorProfile = monitorProfile;
-        m_renderingIntent = renderingIntent;
-        m_conversionFlags = conversionFlags;
-    }
+    //qDebug() << "Setting monitor profile to" << monitorProfile->name() << renderingIntent << conversionFlags;
+    m_monitorProfile = monitorProfile;
+    m_renderingIntent = renderingIntent;
+    m_conversionFlags = conversionFlags;
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)

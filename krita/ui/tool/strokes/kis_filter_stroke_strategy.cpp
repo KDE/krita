@@ -74,7 +74,10 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
         m_d->secondaryTransaction = new KisTransaction("", m_d->filterDevice);
-        m_d->filterDeviceBounds &= activeSelection()->selectedRect();
+
+        if (activeSelection()) {
+            m_d->filterDeviceBounds &= activeSelection()->selectedRect();
+        }
     } else {
         m_d->filterDevice = dev;
     }

@@ -52,6 +52,8 @@ public:
 
     bool supportsHiResInputEvents() const;
 
+    virtual bool isShortcutRequired(int shortcut) const;
+
 private:
     class Private;
     Private * const d;

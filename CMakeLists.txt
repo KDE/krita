@@ -101,6 +101,7 @@ endif (RELEASE_BUILD)
 #############
 ############
 
+option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -239,7 +240,7 @@ calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  NEEDS CALLIGRA_LI
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDS_IMPORT "All Words import filter"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
+calligra_define_product(FILTER_WORDS_IMPORT "All Words import filter"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_APPLIXWORD_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
 calligra_define_product(FILTER_WORDS_EXPORT "All Words export filter"  WANTS FILTER_ODT_TO_ASCII FILTER_ODT_TO_MOBI FILTER_ODT_TO_EPUB2 FILTER_ODT_TO_HTML)
 calligra_define_product(FILTER_WORDS "All Words filter"  WANTS FILTER_WORDS_IMPORT FILTER_WORDS_EXPORT)
 # Plan filters
@@ -293,10 +294,15 @@ set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
 if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus Qt3Support)
 else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus)
 endif (QT3SUPPORT)
+
+if (USEOPENGL)
+    find_package(Qt4 4.6.0 REQUIRED QtOpenGL)
+endif (USEOPENGL)
+
 
 include (KDE4Defaults)
 include (MacroLibrary)
@@ -418,21 +424,23 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-macro_optional_find_package(OpenGL)
+if (USEOPENGL)
+    macro_optional_find_package(OpenGL)
 
-if(OPENGL_FOUND)
-    message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
-    if(QT_QTOPENGL_FOUND)
-        message(STATUS "Found Qt OpenGL support")
-        set(HAVE_OPENGL 1)
-    else(QT_QTOPENGL_FOUND)
-        message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
-    endif(QT_QTOPENGL_FOUND)
-else(OPENGL_FOUND)
-    message(STATUS "Did NOT find OpenGL libraries")
-endif(OPENGL_FOUND)
+    if(OPENGL_FOUND)
+        message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
+        if(QT_QTOPENGL_FOUND)
+            message(STATUS "Found Qt OpenGL support")
+            set(HAVE_OPENGL 1)
+        else(QT_QTOPENGL_FOUND)
+            message(STATUS "Did NOT find Qt OpenGL support. Check your Qt configuration")
+        endif(QT_QTOPENGL_FOUND)
+    else(OPENGL_FOUND)
+        message(STATUS "Did NOT find OpenGL libraries")
+    endif(OPENGL_FOUND)
+    macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
+endif(USEOPENGL)
 
-macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
 ## Test for kdepimlibs
@@ -1121,5 +1129,5 @@ install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h DESTINATION ${INCLUDE_INS
 ## temporary warning
 if (WARN_ABOUT_CREATIVEONLY)
     message(STATUS "WARNING:\n   You are using a deprecated build flag,\n   switch from \"-DCREATIVEONLY=ON\" to \"-DPRODUCTSET=CREATIVE\"\n   and remove the line \"CREATIVEONLY:BOOL=ON\" from CMakeCache.txt")
-    message(STATUS "--------------------------------------------------------------------------" )
+    message(STATUS "-------------------------------------------------------------------" )
 endif (WARN_ABOUT_CREATIVEONLY)

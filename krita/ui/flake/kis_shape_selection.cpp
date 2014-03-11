@@ -383,11 +383,10 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIteratorSP rectIt = projection->createRectIteratorNG(QRect(x, y, rectWidth, rectHeight));
-
+            KisSequentialIterator it(projection, QRect(x, y, rectWidth, rectHeight));
             do {
-                (*rectIt->rawData()) = qRed(polygonMaskImage.pixel(rectIt->x() - x, rectIt->y() - y));
-            } while (rectIt->nextPixel());
+                (*it.rawData()) = qRed(polygonMaskImage.pixel(it.x() - x, it.y() - y));
+            } while (it.nextPixel());
         }
     }
 }

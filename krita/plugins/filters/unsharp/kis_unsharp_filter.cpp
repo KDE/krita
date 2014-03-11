@@ -197,9 +197,3 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
         dstIt->nextRow();
     }
 }
-
-int KisUnsharpFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const
-{
-    QVariant value;
-    return (_config->getProperty("halfSize", value)) ? value.toUInt() : 5;
-}

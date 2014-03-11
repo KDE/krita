@@ -123,6 +123,7 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
 
 void KoResourceTagStore::writeXMLFile(bool serverIdentity)
 {
+    Q_UNUSED(serverIdentity);
     QFile f(m_tagsXMLFile);
     //bool fileExists = f.exists();
 

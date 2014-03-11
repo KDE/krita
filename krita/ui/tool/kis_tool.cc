@@ -89,13 +89,13 @@ struct KisTool::Private {
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KoPattern * currentPattern;
-    KoAbstractGradient * currentGradient;
+    KoPattern* currentPattern;
+    KoAbstractGradient* currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
     KisNodeSP currentNode;
     float currentExposure;
-    KisFilterConfiguration * currentGenerator;
+    KisFilterConfiguration* currentGenerator;
     QWidget* optionWidget;
 
 #ifdef HAVE_OPENGL

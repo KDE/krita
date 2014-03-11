@@ -39,11 +39,12 @@ class KisGbrBrush;
 class KisClipboard;
 class KoResource;
 
-class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush{
+class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush
+{
     Q_OBJECT
 
 public:
-    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent){
+    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent) {
         setupUi(this);
     }
 };

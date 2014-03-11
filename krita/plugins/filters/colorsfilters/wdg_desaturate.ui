@@ -16,7 +16,7 @@
      <property name="title">
       <string>Desaturation method:</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout1">
       <item row="5" column="0">
        <widget class="QRadioButton" name="radioMin">
         <property name="text">

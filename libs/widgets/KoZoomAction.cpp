@@ -299,7 +299,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
 
     QWidget *group = new QWidget(parent);
     QHBoxLayout *layout = new QHBoxLayout(group);
-    layout->setSizeConstraint(QLayout::SetFixedSize);
+    //layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->setMargin(0);
     layout->setSpacing(0);
 

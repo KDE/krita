@@ -38,7 +38,7 @@ class KisDynaOpOptionsWidget;
 class KisDynaOpOption : public KisPaintOpOption
 {
     Q_OBJECT
-    
+
 public:
     KisDynaOpOption();
     ~KisDynaOpOption();
@@ -62,7 +62,7 @@ public:
 private:
     KisDynaOpOptionsWidget * m_options;
 
-    
+
 };
 
 #endif

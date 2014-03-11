@@ -35,6 +35,9 @@
 #include "KoStopGradient.h"
 #include "KoColorSpaceRegistry.h"
 
+#include <iostream>
+using namespace std;
+
 class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
 public:
@@ -184,7 +187,6 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
     d->paletteThread->start();
-
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -223,3 +225,4 @@ KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
     d->patternThread->barrier();
     return d->m_paletteServer;
 }
+

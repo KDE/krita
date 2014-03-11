@@ -89,7 +89,7 @@
  || defined(linux)       || defined(__linux)     || defined(__linux__) \
  || defined(sun)         || defined(__sun) \
  || defined(BSD)         || defined(__OpenBSD__) || defined(__NetBSD__) \
- || defined(__FreeBSD__) || defined __DragonFly__ \
+ || defined(__FreeBSD__) || defined (__DragonFly__) \
  || defined(sgi)         || defined(__sgi) \
  || defined(__MACOSX__)  || defined(__APPLE__) \
  || defined(__CYGWIN__)
@@ -4774,6 +4774,31 @@ namespace cimg_library_suffixed {
       else { const float nsize = size/(1024*1024*1024.0f); cimg_snprintf(res,sizeof(res),"%.1f Gio",nsize); }
       cimg::mutex(5,0);
       return res;
+    }
+
+    // Return string that identifies the running OS.
+    inline const char *stros() {
+#if defined(linux) || defined(__linux) || defined(__linux__)
+      const char *const str = "Linux";
+#elif defined(sun) || defined(__sun)
+      const char *const str = "Sun OS";
+#elif defined(BSD) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined (__DragonFly__)
+      const char *const str = "BSD";
+#elif defined(sgi) || defined(__sgi)
+      const char *const str = "Irix";
+#elif defined(__MACOSX__) || defined(__APPLE__)
+      const char *const str = "Mac OS";
+#elif defined(unix) || defined(__unix) || defined(__unix__)
+      const char *const str = "Generic Unix";
+#elif defined(_MSC_VER) || defined(WIN32)  || defined(_WIN32) || defined(__WIN32__) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+      const char *const str = "Windows";
+#else
+      const char
+        *const _str1 = std::getenv("OSTYPE"),
+        *const _str2 = _str1?_str1:std::getenv("OS"),
+        *const str = _str2?_str2:"Unknown OS";
+#endif
+      return str;
     }
 
     //! Return the basename of a filename.
@@ -14584,7 +14609,7 @@ namespace cimg_library_suffixed {
       }
       double mp_joff() {
         const double x = mem[9], y = mem[10], z = mem[11], c = mem[12];
-        const unsigned long off = (unsigned long)(reference.offset(x,y,z,c) + mem[opcode(2)]);
+        const unsigned long off = reference.offset(x,y,z,c) + (unsigned long)(mem[opcode(2)]);
         if (off>=reference.size()) return 0;
         return (double)reference[off];
       }
@@ -22695,10 +22720,10 @@ namespace cimg_library_suffixed {
           if (xi>=ref.width()) xi = ref.width()-1; if (nxi>=ref.width()) nxi = ref.width()-1;
           if (yi<0) yi = 0; if (nyi<0) nyi = 0;
           if (yi>=ref.height()) yi = ref.height()-1; if (nyi>=ref.height()) nyi = ref.height()-1;
-          I(0,0,0) = (float)ref(xi,yi,zi,0); I(0,0,1) = (float)ref(xi,yi,zi,1);
-          I(1,0,0) = (float)ref(nxi,yi,zi,0); I(1,0,1) = (float)ref(nxi,yi,zi,1);
+          I(0,0,0) = (float)ref(xi,yi,zi,0);   I(0,0,1) = (float)ref(xi,yi,zi,1);
+          I(1,0,0) = (float)ref(nxi,yi,zi,0);  I(1,0,1) = (float)ref(nxi,yi,zi,1);
           I(1,1,0) = (float)ref(nxi,nyi,zi,0); I(1,1,1) = (float)ref(nxi,nyi,zi,1);
-          I(0,1,0) = (float)ref(xi,nyi,zi,0); I(0,1,1) = (float)ref(xi,nyi,zi,1);
+          I(0,1,0) = (float)ref(xi,nyi,zi,0);  I(0,1,1) = (float)ref(xi,nyi,zi,1);
           _cimg_vecalign2d(1,0); _cimg_vecalign2d(1,1); _cimg_vecalign2d(0,1);
         }
         return c<2?(float)pI->_linear_atXY(dx,dy,0,c):0;
@@ -22729,14 +22754,14 @@ namespace cimg_library_suffixed {
           if (yi>=ref.height()) yi = ref.height()-1; if (nyi>=ref.height()) nyi = ref.height()-1;
           if (zi<0) zi = 0; if (nzi<0) nzi = 0;
           if (zi>=ref.depth()) zi = ref.depth()-1; if (nzi>=ref.depth()) nzi = ref.depth()-1;
-          I(0,0,0,0) = (float)ref(xi,yi,zi,0); I(0,0,0,1) = (float)ref(xi,yi,zi,1); I(0,0,0,2) = (float)ref(xi,yi,zi,2);
-          I(1,0,0,0) = (float)ref(nxi,yi,zi,0); I(1,0,0,1) = (float)ref(nxi,yi,zi,1); I(1,0,0,2) = (float)ref(nxi,yi,zi,2);
+          I(0,0,0,0) = (float)ref(xi,yi,zi,0);   I(0,0,0,1) = (float)ref(xi,yi,zi,1);   I(0,0,0,2) = (float)ref(xi,yi,zi,2);
+          I(1,0,0,0) = (float)ref(nxi,yi,zi,0);  I(1,0,0,1) = (float)ref(nxi,yi,zi,1);  I(1,0,0,2) = (float)ref(nxi,yi,zi,2);
           I(1,1,0,0) = (float)ref(nxi,nyi,zi,0); I(1,1,0,1) = (float)ref(nxi,nyi,zi,1); I(1,1,0,2) = (float)ref(nxi,nyi,zi,2);
-          I(0,1,0,0) = (float)ref(xi,nyi,zi,0); I(0,1,0,1) = (float)ref(xi,nyi,zi,1); I(0,1,0,2) = (float)ref(xi,yi,zi,2);
-          I(0,0,0,1) = (float)ref(xi,yi,nzi,0); I(0,0,0,1) = (float)ref(xi,yi,nzi,1); I(0,0,0,2) = (float)ref(xi,yi,nzi,2);
-          I(1,0,0,1) = (float)ref(nxi,yi,nzi,0); I(1,0,0,1) = (float)ref(nxi,yi,nzi,1); I(1,0,0,2) = (float)ref(nxi,yi,nzi,2);
-          I(1,1,0,1) = (float)ref(nxi,nyi,nzi,0); I(1,1,0,1) = (float)ref(nxi,nyi,nzi,1); I(1,1,0,2) = (float)ref(nxi,nyi,nzi,2);
-          I(0,1,0,1) = (float)ref(xi,nyi,nzi,0); I(0,1,0,1) = (float)ref(xi,nyi,nzi,1); I(0,1,0,2) = (float)ref(xi,yi,nzi,2);
+          I(0,1,0,0) = (float)ref(xi,nyi,zi,0);  I(0,1,0,1) = (float)ref(xi,nyi,zi,1);  I(0,1,0,2) = (float)ref(xi,nyi,zi,2);
+          I(0,0,1,0) = (float)ref(xi,yi,nzi,0);   I(0,0,1,1) = (float)ref(xi,yi,nzi,1);   I(0,0,1,2) = (float)ref(xi,yi,nzi,2);
+          I(1,0,1,0) = (float)ref(nxi,yi,nzi,0);  I(1,0,1,1) = (float)ref(nxi,yi,nzi,1);  I(1,0,1,2) = (float)ref(nxi,yi,nzi,2);
+          I(1,1,1,0) = (float)ref(nxi,nyi,nzi,0); I(1,1,1,1) = (float)ref(nxi,nyi,nzi,1); I(1,1,1,2) = (float)ref(nxi,nyi,nzi,2);
+          I(0,1,1,0) = (float)ref(xi,nyi,nzi,0);  I(0,1,1,1) = (float)ref(xi,nyi,nzi,1);  I(0,1,1,2) = (float)ref(xi,nyi,nzi,2);
           _cimg_vecalign3d(1,0,0); _cimg_vecalign3d(1,1,0); _cimg_vecalign3d(0,1,0);
           _cimg_vecalign3d(0,0,1); _cimg_vecalign3d(1,0,1); _cimg_vecalign3d(1,1,1); _cimg_vecalign3d(0,1,1);
         }
@@ -43986,7 +44011,7 @@ namespace cimg_library_suffixed {
           if (axis=='x') for (unsigned int x = 0; x<visu0._width; ) {
               const unsigned int x0 = x;
               ind = indices[x];
-              while (x<indices._width && indices[++x]==ind) {}
+              while (x<indices._width && indices[x++]==ind) {}
               const CImg<T>
                 onexone(1,1,1,1,0),
                 &src = _data[ind]?_data[ind]:onexone;

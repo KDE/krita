@@ -22,7 +22,7 @@
 
 #include "KoMainWindow.h"
 
-#ifdef __APPLE__
+#if defined (Q_OS_MAC) && QT_VERSION < 0x050000
 #include "MacSupport.h"
 #endif
 
@@ -93,6 +93,8 @@
 #include <QCloseEvent>
 #include <QPointer>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "thememanager.h"
 
@@ -198,7 +200,8 @@ public:
     QWidget *m_activeWidget;
 
     QLabel * statusBarLabel;
-    QProgressBar *progress;
+    QPointer<QProgressBar> progress;
+    QMutex progressMutex;
 
     QList<QAction *> toolbarList;
 
@@ -259,9 +262,13 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
-#ifdef __APPLE__
-    //setUnifiedTitleAndToolBarOnMac(true);
+#ifdef Q_OS_MAC
+    #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
+    #endif
+    #if QT_VERSION >= 0x050201
+    setUnifiedTitleAndToolBarOnMac(true);
+    #endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -590,6 +597,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         statusBar()->setVisible(false);
     }
     else {
+#ifdef Q_OS_MAC
+        statusBar()->setMaximumHeight(28);
+#endif
         connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 }
@@ -1624,6 +1634,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
+    QMutexLocker(&d->progressMutex);
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
@@ -1656,7 +1667,9 @@ void KoMainWindow::slotProgress(int value)
         d->progress->show();
         d->firstTime = false;
     }
-    d->progress->setValue(value);
+    if (!d->progress.isNull()) {
+        d->progress->setValue(value);
+    }
     qApp->processEvents();
 }
 
@@ -1755,6 +1768,7 @@ void KoMainWindow::slotReloadFile()
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
+        saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
         if(d->rootDocument)
             d->rootDocument->clearUndoHistory();
@@ -1875,7 +1889,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
     qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
     dockWidget->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
     dockWidget->setFont(dockWidgetFont);

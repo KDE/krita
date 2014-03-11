@@ -41,13 +41,12 @@ const int KoFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 #endif
 
 KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
-        :m_favoriteBrushManager(0)
-        ,m_popupPalette(0)
-        ,m_paintopBox(paintopBox)
-        ,m_colorList(0)
-        ,m_blockUpdates(false)
+    : m_favoriteBrushManager(0)
+    , m_popupPalette(0)
+    , m_paintopBox(paintopBox)
+    , m_colorList(0)
+    , m_blockUpdates(false)
 {
-
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
     m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
@@ -214,9 +213,9 @@ void KoFavoriteResourceManager::saveFavoritePresets()
 //Recent Colors
 void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
-//    qDebug() << "[KoFavoriteResourceManager] selected color: " << recentColorAt(pos)
-//            << "(r)" << recentColorAt(pos).red() << "(g)" << recentColorAt(pos).green()
-//            << "(b)" << recentColorAt(pos).blue();
+    //    qDebug() << "[KoFavoriteResourceManager] selected color: " << recentColorAt(pos)
+    //            << "(r)" << recentColorAt(pos).red() << "(g)" << recentColorAt(pos).green()
+    //            << "(b)" << recentColorAt(pos).blue();
 
     addRecentColorUpdate(pos);
 

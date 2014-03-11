@@ -838,4 +838,10 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 
+KoGuidesData *KisCanvas2::guidesData()
+{
+    return &m_d->view->document()->guidesData();
+}
+
+
 #include "kis_canvas2.moc"

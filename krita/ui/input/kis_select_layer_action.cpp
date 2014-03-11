@@ -40,7 +40,8 @@ public:
 };
 
 KisSelectLayerAction::KisSelectLayerAction()
-    : d(new Private)
+    : KisAbstractInputAction("Select Layer")
+    , d(new Private)
 {
     setName(i18n("Select Layer"));
     setDescription(i18n("Selects a layer under cursor position"));

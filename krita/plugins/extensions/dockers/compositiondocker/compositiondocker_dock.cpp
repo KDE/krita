@@ -142,26 +142,32 @@ void CompositionDockerDock::updateModel()
 void CompositionDockerDock::exportClicked()
 {
 	QString path;
+
+
 #ifdef Q_OS_WIN
 	path = QFileDialog::getExistingDirectory(this,
 										     i18n("Select a Directory"),
 											 QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-	if (!path.endsWith('/')) {
+    if (path.isNull()) return;
+
+    if (!path.endsWith('/')) {
 		path.append('/');
 	}
 #else
     KDirSelectDialog dialog(KUrl(), true);
-    if(dialog.exec() != KDialog::Accepted) {
+    if (dialog.exec() != KDialog::Accepted) {
         return;
     }
     path = dialog.url().path(KUrl::AddTrailingSlash);
 #endif
+
     KisImageWSP image = m_canvas->view()->image();
     QString filename = m_canvas->view()->document()->localFilePath();
     if (!filename.isEmpty()) {
         QFileInfo info(filename);
         path += info.baseName() + '_';
     }
+
     foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
         composition->apply();
         image->refreshGraph();

@@ -105,6 +105,12 @@ public:
      */
     QVector<QPolygon> outline() const;
 
+    /**
+     * Overridden from KisPaintDevice to handle outline cache moves
+     */
+    void move(const QPoint& pt);
+    using KisPaintDevice::move;
+
     bool isEmpty() const;
     QPainterPath outlineCache() const;
     bool outlineCacheValid() const;

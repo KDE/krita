@@ -36,11 +36,11 @@ K_EXPORT_PLUGIN(ExperimentPaintOpPluginFactory("krita"))
 
 
 ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp, KisExperimentPaintOpSettings, KisExperimentPaintOpSettingsWidget>("experimentbrush", i18n("Experiment brush"), 
-                                                                                                                               KisPaintOpFactory::categoryExperimental(), "krita-experiment.png"));
+    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp, KisExperimentPaintOpSettings, KisExperimentPaintOpSettingsWidget>("experimentbrush", i18n("Experiment brush"),
+            KisPaintOpFactory::categoryExperimental(), "krita-experiment.png"));
 }
 
 ExperimentPaintOpPlugin::~ExperimentPaintOpPlugin()

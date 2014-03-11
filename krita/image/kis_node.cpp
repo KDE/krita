@@ -19,8 +19,9 @@
 #include "kis_node.h"
 
 #include <QList>
-#include <QMutex>
-#include <QMutexLocker>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 #include <QPainterPath>
 #include <QRect>
 
@@ -53,6 +54,26 @@ struct KisNodeSPStaticRegistrar {
 static KisNodeSPStaticRegistrar __registrar;
 
 
+/**
+ * Note about "thread safety" of KisNode
+ *
+ * 1) One can *read* any information about node and node graph in any
+ *    number of threads concurrently. This operation is safe because
+ *    of the usage of KisSafeReadNodeList and will run concurrently
+ *    (lock-free).
+ *
+ * 2) One can *write* any information into the node or node graph in a
+ *    single thread only! Changing the graph concurrently is *not*
+ *    sane and therefore not supported.
+ *
+ * 3) One can *read and write* information about the node graph
+ *    concurrently, given that there is only *one* writer thread and
+ *    any number of reader threads. Please note that in this case the
+ *    node's code is just guaranteed *not to crash*, which is ensured
+ *    by nodeSubgraphLock. You need to ensure the sanity of the data
+ *    read by the reader threads yourself!
+ */
+
 struct KisNode::Private
 {
 public:
@@ -65,6 +86,8 @@ public:
     KisNodeGraphListener *graphListener;
     KisSafeReadNodeList nodes;
     KisNodeProgressProxy *nodeProgressProxy;
+    QReadWriteLock nodeSubgraphLock;
+
 
     const KisNode* findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
@@ -149,6 +172,9 @@ KisNode::KisNode(const KisNode & rhs)
     m_d->parent = 0;
     m_d->graphListener = 0;
 
+    // NOTE: the nodes are not supposed to be added/removed while
+    // creation of another node, so we do *no* locking here!
+
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
         KisNodeSP child = (*iter)->clone();
@@ -163,7 +189,12 @@ KisNode::KisNode(const KisNode & rhs)
 KisNode::~KisNode()
 {
     m_d->nodeProgressProxy->deleteLater();
-    m_d->nodes.clear();
+
+    {
+        QWriteLocker l(&m_d->nodeSubgraphLock);
+        m_d->nodes.clear();
+    }
+
     delete m_d;
 }
 
@@ -209,6 +240,7 @@ void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
 
+    QReadLocker l(&m_d->nodeSubgraphLock);
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, m_d->nodes) {
         KisNodeSP child = (*iter);
@@ -216,14 +248,16 @@ void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
     }
 }
 
+void KisNode::setParent(KisNodeWSP parent)
+{
+    QWriteLocker l(&m_d->nodeSubgraphLock);
+    m_d->parent = parent;
+}
+
 KisNodeSP KisNode::parent() const
 {
-    if (m_d->parent.isValid()) {
-        return m_d->parent;
-    }
-    else {
-        return 0;
-    }
+    QReadLocker l(&m_d->nodeSubgraphLock);
+    return m_d->parent.isValid() ? KisNodeSP(m_d->parent) : 0;
 }
 
 KisBaseNodeSP KisNode::parentCallback() const
@@ -233,6 +267,8 @@ KisBaseNodeSP KisNode::parentCallback() const
 
 void KisNode::notifyParentVisibilityChanged(bool value)
 {
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, m_d->nodes) {
         KisNodeSP child = (*iter);
@@ -247,50 +283,70 @@ void KisNode::baseNodeChangedCallback()
     }
 }
 
-void KisNode::setParent(KisNodeWSP parent)
-{
-    m_d->parent = parent;
-}
-
 KisNodeSP KisNode::firstChild() const
 {
-    if (!m_d->nodes.isEmpty())
-        return m_d->nodes.first();
-    else
-        return 0;
+    QReadLocker l(&m_d->nodeSubgraphLock);
+    return !m_d->nodes.isEmpty() ? m_d->nodes.first() : 0;
 }
 
 KisNodeSP KisNode::lastChild() const
 {
-    if (!m_d->nodes.isEmpty())
-        return m_d->nodes.last();
-    else
-        return 0;
+    QReadLocker l(&m_d->nodeSubgraphLock);
+    return !m_d->nodes.isEmpty() ? m_d->nodes.last() : 0;
+}
+
+KisNodeSP KisNode::prevChildImpl(KisNodeSP child)
+{
+    /**
+     * Warning: mind locking policy!
+     *
+     * The graph locks must be *always* taken in descending
+     * order. That is if you want to (or it implicitly happens that
+     * you) take a lock of a parent and a chil, you must first take
+     * the lock of a parent, and only after that ask a child to do the
+     * same.  Otherwise you'll get a deadlock.
+     */
+
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
+    int i = m_d->nodes.indexOf(child) - 1;
+    return i >= 0 ? m_d->nodes.at(i) : 0;
+}
+
+KisNodeSP KisNode::nextChildImpl(KisNodeSP child)
+{
+    /**
+     * See a comment in KisNode::prevChildImpl()
+     */
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
+    int i = m_d->nodes.indexOf(child) + 1;
+    return i > 0 && i < m_d->nodes.size() ? m_d->nodes.at(i) : 0;
 }
 
 KisNodeSP KisNode::prevSibling() const
 {
-    if (!parent()) return 0;
-    int i = parent()->index(const_cast<KisNode*>(this));
-    return parent()->at(i - 1);
-
+    KisNodeSP parentNode = parent();
+    return parentNode ? parentNode->prevChildImpl(const_cast<KisNode*>(this)) : 0;
 }
 
 KisNodeSP KisNode::nextSibling() const
 {
-    if (!parent()) return 0;
-
-    return parent()->at(parent()->index(const_cast<KisNode*>(this)) + 1);
+    KisNodeSP parentNode = parent();
+    return parentNode ? parentNode->nextChildImpl(const_cast<KisNode*>(this)) : 0;
 }
 
 quint32 KisNode::childCount() const
 {
+    QReadLocker l(&m_d->nodeSubgraphLock);
     return m_d->nodes.size();
 }
 
 
 KisNodeSP KisNode::at(quint32 index) const
 {
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
     if (!m_d->nodes.isEmpty() && index < (quint32)m_d->nodes.size()) {
         return m_d->nodes.at(index);
     }
@@ -300,15 +356,15 @@ KisNodeSP KisNode::at(quint32 index) const
 
 int KisNode::index(const KisNodeSP node) const
 {
-    if (m_d->nodes.contains(node)) {
-        return m_d->nodes.indexOf(node);
-    }
+    QReadLocker l(&m_d->nodeSubgraphLock);
 
-    return -1;
+    return m_d->nodes.indexOf(node);
 }
 
 QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProperties & properties) const
 {
+    QReadLocker l(&m_d->nodeSubgraphLock);
+
     QList<KisNodeSP> nodes;
 
     KisSafeReadNodeList::const_iterator iter;
@@ -343,34 +399,35 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     if (aboveThis && aboveThis->parent().data() != this) return false;
     if (!allowAsChild(newNode)) return false;
     if (newNode->parent()) return false;
-    if (m_d->nodes.contains(newNode)) return false;
+    if (index(newNode) >= 0) return false;
 
-    newNode->prepareForAddition();
-    newNode->createNodeProgressProxy();
+    int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
-    int idx = 0;
+    // threoretical race condition may happen here ('idx' may become
+    // deprecated until the write lock will be held). But we ignore
+    // it, because it is not supported to add/remove nodes from two
+    // concurrent threads simultaneously
 
-    if (aboveThis != 0) {
-
-        idx = this->index(aboveThis) + 1;
-
-        if (m_d->graphListener)
-            m_d->graphListener->aboutToAddANode(this, idx);
-
-        m_d->nodes.insert(idx, newNode);
-    } else {
-        if (m_d->graphListener)
-            m_d->graphListener->aboutToAddANode(this, idx);
-
-        m_d->nodes.prepend(newNode);
+    if (m_d->graphListener) {
+        m_d->graphListener->aboutToAddANode(this, idx);
     }
 
-    newNode->setParent(this);
-    newNode->setGraphListener(m_d->graphListener);
-    newNode->initAfterAddition();
+    {
+        QWriteLocker l(&m_d->nodeSubgraphLock);
 
-    if (m_d->graphListener)
+        newNode->prepareForAddition();
+        newNode->createNodeProgressProxy();
+
+        m_d->nodes.insert(idx, newNode);
+
+        newNode->setParent(this);
+        newNode->setGraphListener(m_d->graphListener);
+        newNode->initAfterAddition();
+    }
+
+    if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
+    }
 
 
     return true;
@@ -380,17 +437,25 @@ bool KisNode::remove(quint32 index)
 {
     if (index < childCount()) {
         KisNodeSP removedNode = at(index);
-        removedNode->prepareForRemoval();
-        removedNode->setGraphListener(0);
 
-        if (m_d->graphListener)
+        if (m_d->graphListener) {
             m_d->graphListener->aboutToRemoveANode(this, index);
+        }
 
-        removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
+        {
+            QWriteLocker l(&m_d->nodeSubgraphLock);
 
-        m_d->nodes.removeAt(index);
+            removedNode->prepareForRemoval();
+            removedNode->setGraphListener(0);
 
-        if (m_d->graphListener) m_d->graphListener->nodeHasBeenRemoved(this, index);
+            removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
+
+            m_d->nodes.removeAt(index);
+        }
+
+        if (m_d->graphListener) {
+            m_d->graphListener->nodeHasBeenRemoved(this, index);
+        }
 
         return true;
     }

@@ -23,7 +23,6 @@
 #include "ui_SensorFadeConfiguration.h"
 
 #include "kis_paint_information.h"
-#include "kis_sensor_selector.h"
 
 static const int DEFAULT_LENGTH = 1000;
 
@@ -36,17 +35,18 @@ KisDynamicSensorFade::KisDynamicSensorFade() : KisDynamicSensor(FadeId), m_count
 qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
 {
     Q_UNUSED(pi);
-    if (m_counter > m_length){
-        if (m_periodic){
+    if (m_counter > m_length) {
+        if (m_periodic) {
             reset();
-        }else{
+        }
+        else {
             m_counter = m_length;
         }
     }
-    
+
     qreal result =  1.0 - (m_counter / qreal(m_length));
     m_counter++;
-    
+
     return result;
 }
 

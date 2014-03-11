@@ -66,8 +66,8 @@
 #include "kis_duplicateop_option.h"
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
+    : KisBrushBasedPaintOp(settings, painter)
+    , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -87,23 +87,23 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 {
     int rowstride = 3 * w;
     qreal err = 0;
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     m += rowstride;
     sol += rowstride;
     for (int i = 1; i < h - 1; i++) {
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
         for (int j = 3; j < rowstride - 3; j++) {
             qreal tmp = *sol;
-            *sol = ((*(m - 3) + *(m + 3) + *(m - rowstride) + *(m + rowstride)) + 2 * *m) / 6;
+            *sol = ((*(m - 3) + * (m + 3) + * (m - rowstride) + * (m + rowstride)) + 2 * *m) / 6;
             qreal diff = *sol - tmp;
             err += diff * diff;
             m ++; sol ++;
         }
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
     }
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     return err;
 }
 
@@ -148,7 +148,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     QPoint srcPoint;
 
-    if(m_moveSourcePoint) {
+    if (m_moveSourcePoint) {
         srcPoint = (dstRect.topLeft() - settings->offset()).toPoint();
     } else {
         QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
@@ -194,17 +194,18 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
 
-        KisRectIteratorSP dstIt = m_srcdev->createRectIteratorNG(QRect(0, 0, sw, sh));
+        KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
         KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
         do {
-            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt->x() + dstRect.x(), dstIt->y() + dstRect.y())) + translat);
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
             srcAcc->moveTo(p);
-            srcAcc->sampledOldRawData(dstIt->rawData());
-        } while (dstIt->nextPixel());
+            srcAcc->sampledOldRawData(dstIt.rawData());
+        } while (dstIt.nextPixel());
 
 
-    } else {
+    }
+    else {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);
         copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);

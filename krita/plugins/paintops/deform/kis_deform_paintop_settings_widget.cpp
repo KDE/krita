@@ -30,7 +30,7 @@
 #include <kis_compositeop_option.h>
 
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
-        : KisPaintOpOptionsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     m_deformOption = new KisDeformOption();
     m_brushSizeOption = new KisBrushSizeOption();
@@ -53,11 +53,10 @@ KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()
 void KisDeformPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     // if the movement is more left<->right then up<->down
-    if (qAbs(x) > qAbs(y)){
-        m_brushSizeOption->setDiameter( m_brushSizeOption->diameter() + qRound(x) );
+    if (qAbs(x) > qAbs(y)) {
+        m_brushSizeOption->setDiameter(m_brushSizeOption->diameter() + qRound(x));
     }
-    else // vice-versa
-    {
+    else { // vice-versa
         // we can do something different, e.g. change deform mode or ...
     }
 }
@@ -74,7 +73,7 @@ KisPropertiesConfiguration* KisDeformPaintOpSettingsWidget::configuration() cons
 {
     KisDeformPaintOpSettings* config = new KisDeformPaintOpSettings();
     config->setOptionsWidget(const_cast<KisDeformPaintOpSettingsWidget*>(this));
-    config->setProperty("paintop","deformBrush");
+    config->setProperty("paintop", "deformBrush");
     writeConfiguration(config);
     return config;
 }

@@ -31,6 +31,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <kis_annotation.h>
 #include <kis_image.h>
@@ -147,6 +148,16 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
                 store->close();
             }
         }
+    }
+
+     if (store->open("mergedimage.png")) {
+        QImage mergedimage = image->projection()->convertToQImage(0);
+        KoStoreDevice io(store);
+        if (io.open(QIODevice::WriteOnly)) {
+            mergedimage.save(&io, "PNG");
+        }
+        io.close();
+        store->close();
     }
 
     saveAssistants(store, uri,external);

@@ -162,12 +162,6 @@ typedef KisSharedPtr<KisVLineIteratorNG> KisVLineIteratorSP;
 class KisVLineConstIteratorNG;
 typedef KisSharedPtr<KisVLineConstIteratorNG> KisVLineConstIteratorSP;
 
-class KisRectIteratorNG;
-typedef KisSharedPtr<KisRectIteratorNG> KisRectIteratorSP;
-
-class KisRectConstIteratorNG;
-typedef KisSharedPtr<KisRectConstIteratorNG> KisRectConstIteratorSP;
-
 class KisRandomConstAccessorNG;
 typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;
 

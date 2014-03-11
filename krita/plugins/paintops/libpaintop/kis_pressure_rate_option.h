@@ -48,9 +48,9 @@ public:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setRate(int rate);
-    
+
     int rate() const;
-    
+
 private:
     int m_rate;
 };

@@ -32,7 +32,7 @@ struct KisEmbeddedPatternManager::Private {
         KoPattern *pattern = 0;
 
         if (!md5.isEmpty()) {
-            foreach(KoResource *res, KoResourceServerProvider::instance()->patternServer()->resources()) {
+            foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
                 KoPattern *pat = dynamic_cast<KoPattern *>(res);
                 if (pat && pat->valid() && pat->md5() == md5) {
                     pattern = pat;
@@ -80,7 +80,7 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* 
     QString existingPatternBase64 = setting->getString("Texture/Pattern/PatternMD5").toLatin1();
 
     if (patternMD5 == existingMD5 &&
-        !existingPatternBase64.isEmpty()) {
+            !existingPatternBase64.isEmpty()) {
 
         return;
     }
@@ -111,7 +111,8 @@ KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCon
             if (existingPattern) {
                 delete pattern;
                 pattern = existingPattern;
-            } else {
+            }
+            else {
                 KoResourceServerProvider::instance()->patternServer()->addResource(pattern, true);
             }
         }

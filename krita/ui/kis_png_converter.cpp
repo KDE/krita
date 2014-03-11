@@ -816,11 +816,21 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         device = tmp;
     }
 
+    if (options.forceSRGB) {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        device = new KisPaintDevice(*device);
+        device->convertTo(cs);
+    }
+
     // Initialize structures
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
         return (KisImageBuilder_RESULT_FAILURE);
     }
+
+#ifdef PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED
+    png_set_check_for_invalid_index(png_ptr, 0);
+#endif
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
@@ -865,11 +875,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
 
-        KisRectConstIteratorSP it = device->createRectConstIteratorNG(image->bounds());
+        KisSequentialIterator it(device, image->bounds());
 
         bool toomuchcolor = false;
         do {
-            const quint8* c = it->oldRawData();
+            const quint8* c = it.oldRawData();
             bool findit = false;
             for (int i = 0; i < num_palette; i++) {
                 if (palette[i].red == c[2] &&
@@ -889,7 +899,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                 palette[num_palette].blue = c[0];
                 num_palette++;
             }
-        }  while (it->nextPixel());
+        }  while (it.nextPixel());
 
         if (!toomuchcolor) {
             dbgFile << "Found a palette of " << num_palette << " colors";
@@ -1021,10 +1031,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());
         }
         // Save XMP
-        if (options.xmp)
-#if 1
-            // TODO enable when XMP support is finiehsed
-        {
+        if (options.xmp) {
             dbgFile << "Trying to save XMP information";
             KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);
@@ -1035,7 +1042,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             dbgFile << "XMP information size is" << buffer.data().size();
             writeRawProfile(png_ptr, info_ptr, "xmp", buffer.data());
         }
-#endif
     }
 #if 0 // Unimplemented?
     // Save resolution

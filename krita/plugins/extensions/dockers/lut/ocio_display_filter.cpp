@@ -232,7 +232,7 @@ void OcioDisplayFilter::updateProcessor()
     // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
     if (m_program.isEmpty() || shaderCacheID != m_shadercacheid) {
-        qDebug() << "Computing Shader " << m_shadercacheid;
+        //qDebug() << "Computing Shader " << m_shadercacheid;
 
         m_shadercacheid = shaderCacheID;
 

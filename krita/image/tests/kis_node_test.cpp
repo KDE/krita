@@ -325,9 +325,9 @@ void KisNodeTest::testDirtyRegion()
 #define NUM_CYCLES 100000
 #define NUM_THREADS 30
 
-class VisibilityKiller : public QRunnable {
+class KisNodeTest::VisibilityKiller : public QRunnable {
 public:
-    VisibilityKiller(KisNodeSP victimNode, KisNodeSP nastyChild)
+    VisibilityKiller(KisNodeSP victimNode, KisNodeSP nastyChild, bool /*isWriter*/)
         : m_victimNode(victimNode),
           m_nastyChild(nastyChild)
     {}
@@ -369,7 +369,8 @@ private:
 };
 
 
-void KisNodeTest::propertiesStressTest() {
+template <class KillerClass>
+void KisNodeTest::propertiesStressTestImpl() {
     KisNodeSP root = new TestNodeA();
 
     KisNodeSP a = new TestNodeA();
@@ -381,7 +382,7 @@ void KisNodeTest::propertiesStressTest() {
     a->setVisible(true);
     b->setVisible(true);
     c->setVisible(true);
-    a->setUserLocked(true); 
+    a->setUserLocked(true);
     b->setUserLocked(true);
     c->setUserLocked(true);
 
@@ -389,12 +390,67 @@ void KisNodeTest::propertiesStressTest() {
     threadPool.setMaxThreadCount(NUM_THREADS);
 
     for(int i = 0; i< NUM_THREADS; i++) {
-        VisibilityKiller *killer = new VisibilityKiller(root, b);
+        KillerClass *killer = new KillerClass(root, b, i == 0);
 
         threadPool.start(killer);
     }
 
     threadPool.waitForDone();
+}
+
+void KisNodeTest::propertiesStressTest() {
+    propertiesStressTestImpl<VisibilityKiller>();
+}
+
+class KisNodeTest::GraphKiller : public QRunnable {
+public:
+    GraphKiller(KisNodeSP parentNode, KisNodeSP childNode, bool isWriter)
+        : m_parentNode(parentNode),
+          m_childNode(childNode),
+          m_isWriter(isWriter)
+    {}
+
+    void run() {
+        int numCycles = qMax(10000, NUM_CYCLES / 100);
+
+        for(int i = 0; i < numCycles; i++) {
+            if (m_isWriter) {
+                m_parentNode->remove(m_childNode);
+                m_parentNode->add(m_childNode, 0);
+            } else {
+                KisNodeSP a = m_parentNode->firstChild();
+                KisNodeSP b = m_parentNode->lastChild();
+
+                if (a) {
+                    a->parent();
+                    a->nextSibling();
+                    a->prevSibling();
+                }
+
+                if (b) {
+                    b->parent();
+                    b->nextSibling();
+                    b->prevSibling();
+                }
+
+                m_parentNode->at(0);
+                m_parentNode->index(m_childNode);
+            }
+
+            if (i % 1000 == 0) {
+                //qDebug() << "Alive";
+            }
+        }
+    }
+
+private:
+    KisNodeSP m_parentNode;
+    KisNodeSP m_childNode;
+    bool m_isWriter;
+};
+
+void KisNodeTest::graphStressTest() {
+    propertiesStressTestImpl<GraphKiller>();
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)

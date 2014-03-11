@@ -58,6 +58,7 @@ add_subdirectory(psd)
 add_subdirectory(odg)
 add_subdirectory(flipbook)
 add_subdirectory(qml)
+add_subdirectory(tga)
 
 #if(OIIO_FOUND)
 #    add_subdirectory(oiio)

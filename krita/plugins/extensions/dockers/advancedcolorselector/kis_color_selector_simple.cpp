@@ -219,11 +219,6 @@ void KisColorSelectorSimple::paint(QPainter* painter)
 
 const QColor& KisColorSelectorSimple::colorAt(int x, int y)
 {
-    if (x < 0) x = 0;
-    if (x > width()) x = width();
-    if (y < 0) y = 0;
-    if (y > width()) y = height();
-
     qreal xRel = x/qreal(width());
     qreal yRel = 1.-y/qreal(height());
     qreal relPos;

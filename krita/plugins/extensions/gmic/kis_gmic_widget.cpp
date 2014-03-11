@@ -86,7 +86,6 @@ void KisGmicWidget::createMainLayout()
     QAbstractButton *applyButton = controlButtonBox->button(QDialogButtonBox::Apply);
     connect(applyButton, SIGNAL(clicked(bool)), this, SLOT(applyFilterSlot()));
 
-
     controlButtonBox->addButton(QDialogButtonBox::Cancel);
     QAbstractButton *cancelButton = controlButtonBox->button(QDialogButtonBox::Cancel);
     connect(cancelButton, SIGNAL(clicked(bool)), this, SLOT(cancelFilterSlot()));
@@ -137,7 +136,6 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
     m_filterConfigLayout->addWidget(m_filterOptions,m_filterOptionsRow,m_filterOptionsColumn);
     m_filterConfigLayout->update();
 
-
      //find out the hierarchy level of the selected item
      int hierarchyLevel=1;
      QModelIndex seekRoot = index;
@@ -149,6 +147,8 @@ void KisGmicWidget::selectionChangedSlot(const QItemSelection & /*newSelection*/
      QString showString = QString("%1, Level %2").arg(selectedText)
                           .arg(hierarchyLevel);
      setWindowTitle(showString);
+
+     resize(sizeHint());
  }
 
 void KisGmicWidget::applyFilterSlot()
@@ -214,6 +214,7 @@ void KisGmicWidget::resetFilterSlot()
     {
         currentSettingsWidget->reload();
     }
+    resize(sizeHint());
 }
 
 void KisGmicWidget::maximizeSlot()

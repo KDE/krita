@@ -41,13 +41,13 @@ class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
 {
 public:
     KisFilterOptionWidget(QWidget* parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisFilterOption::KisFilterOption()
-        : KisPaintOpOption(i18n("Filter"), i18n("Filter"), true)
+    : KisPaintOpOption(i18n("Filter"), i18n("Filter"), true)
 {
     m_checkable = false;
     m_currentFilterConfigWidget = 0;
@@ -101,12 +101,11 @@ void KisFilterOption::setNode(KisNodeSP node)
         // The "not m_currentFilterConfigWidget" is a corner case
         // which happens because the first configuration settings is
         // created before any layer is selected in the view
-        if (   !m_currentFilterConfigWidget
-            || (    m_currentFilterConfigWidget
-                 && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
-                )
-            )
-        {
+        if (!m_currentFilterConfigWidget
+                || (m_currentFilterConfigWidget
+                    && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
+                   )
+           ) {
             if (m_currentFilter) {
                 KisPropertiesConfiguration* configuration = 0;
                 if (m_currentFilterConfigWidget)
@@ -118,19 +117,21 @@ void KisFilterOption::setNode(KisNodeSP node)
                 delete configuration;
             }
         }
-    } else
+    }
+    else {
         m_paintDevice = 0;
+    }
 }
 
-void KisFilterOption::setImage( KisImageWSP image )
+void KisFilterOption::setImage(KisImageWSP image)
 {
     m_image = image;
-    if(!m_currentFilterConfigWidget) {
+    if (!m_currentFilterConfigWidget) {
         updateFilterConfigWidget();
     }
 }
 
-void KisFilterOption::setCurrentFilter( const KoID& id)
+void KisFilterOption::setCurrentFilter(const KoID& id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     m_options->filtersList->setCurrent(id);
@@ -169,7 +170,7 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
     setting->setProperty(FILTER_ID, m_currentFilter->id());
     setting->setProperty(FILTER_SMUDGE_MODE, smudgeMode());
-    if(filterConfig()) {
+    if (filterConfig()) {
         setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toXML());
     }
 }
@@ -180,7 +181,7 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
     setCurrentFilter(id);
     m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
     KisFilterConfiguration* configuration = filterConfig();
-    if(configuration) {
+    if (configuration) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
         m_currentFilterConfigWidget->setConfiguration(configuration);
     }

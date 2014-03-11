@@ -44,7 +44,8 @@ private:
 
 };
 
-class CurveProperties{
+class CurveProperties
+{
 public:
     int lineWidth;
     int historySize;

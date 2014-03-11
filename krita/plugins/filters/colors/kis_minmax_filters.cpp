@@ -99,13 +99,13 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
     } else {
         return;
     }
-    
-    KisRectIteratorSP it = device->createRectIteratorNG(rect);
+
+    KisSequentialIterator it(device, rect);
 
     do {
-        F(it->oldRawData(), it->rawData(), nC);
+        F(it.oldRawData(), it.rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it->nextPixel());
+    } while(it.nextPixel());
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
@@ -142,11 +142,11 @@ void KisFilterMin::processImpl(KisPaintDeviceSP device,
     } else {
         return;
     }
-    KisRectIteratorSP it = device->createRectIteratorNG(rect);
 
+    KisSequentialIterator it(device, rect);
     do {
-        F(it->oldRawData(), it->rawData(), nC);
+        F(it.oldRawData(), it.rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it->nextPixel());
+    } while(it.nextPixel());
 }
 

@@ -121,7 +121,9 @@ public:
     virtual ~KoResourceServer()
     {
         if (m_deleteResource) {
-            qDeleteAll(m_resources);
+            foreach(T* res, m_resources) {
+                delete res;
+            }
         }
         m_resources.clear();
         delete m_tagStore;
@@ -244,7 +246,7 @@ public:
         return true;
     }
 
-    /// Remove a resource from resourceserver and hard disk
+    /// Remove a resource from the resourceserver and blacklist it
     bool removeResource(T* resource) {
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;

@@ -171,7 +171,8 @@ public:
         AlternateSecondary,
         AlternateThird,
         AlternateFourth,
-        AlternateFifth
+        AlternateFifth,
+        Alternate_NONE = 10000
     };
 
     enum AlternateAction {
@@ -183,7 +184,8 @@ public:
         Secondary = AlternateSecondary,
         Third = AlternateThird,
         Fourth = AlternateFourth,
-        Fifth = AlternateFifth
+        Fifth = AlternateFifth,
+        NONE = 10000
     };
 
     static AlternateAction actionToAlternateAction(ToolAction action);

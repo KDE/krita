@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */ 
+ */
 
 #include "kis_hatching_pressure_crosshatching_option.h"
 #include <kis_pressure_opacity_option.h>
@@ -25,7 +25,7 @@
 
 
 KisHatchingPressureCrosshatchingOption::KisHatchingPressureCrosshatchingOption()
-        : KisCurveOption(i18n("Crosshatching"), "Crosshatching", KisPaintOpOption::brushCategory(), false )
+    : KisCurveOption(i18n("Crosshatching"), "Crosshatching", KisPaintOpOption::brushCategory(), false)
 {
 }
 

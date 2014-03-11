@@ -23,36 +23,50 @@
 class KisCubicCurve;
 class KisDynamicSensorList;
 class KisDynamicSensor;
+class KisCurveOption;
 
-class KisMultiSensorsModel : public QAbstractListModel {
+class KisMultiSensorsModel : public QAbstractListModel
+{
     Q_OBJECT
 public:
+
     explicit KisMultiSensorsModel(QObject* parent = 0);
+
     virtual ~KisMultiSensorsModel();
+
+    void setCurveOption(KisCurveOption *curveOption);
+
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    void setCurrentSensor(KisDynamicSensor* sensor);
-    KisDynamicSensor* getSensor(const QModelIndex& index);
+
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+
+    KisDynamicSensor *getSensor(const QModelIndex& index);
+
     void setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve);
+
     /**
      * Create an index that correspond to the sensor given in argument.
      */
-    QModelIndex sensorIndex(KisDynamicSensor* arg1);
+    QModelIndex sensorIndex(KisDynamicSensor *arg1);
+
+    void resetCurveOption();
+
 signals:
-    void sensorChanged(KisDynamicSensor* sensor);
+
+    void sensorChanged(KisDynamicSensor *sensor);
+
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
     void parametersChanged();
+
 private:
-    KisDynamicSensor* getOrCreateSensorFromCache(const QString& id);
-    KisDynamicSensor* takeOrCreateSensorFromCache(const QString& id);
-private:
-    KisDynamicSensor* m_currentSensor;
-    KisDynamicSensorList* m_listSensor;
-    QMap<QString, KisDynamicSensor*> m_sensorCache;
+
+    KisCurveOption *m_curveOption;
 };
 
 #endif

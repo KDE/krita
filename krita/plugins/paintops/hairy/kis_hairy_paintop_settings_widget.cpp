@@ -31,7 +31,7 @@
 #include <kis_compositeop_option.h>
 
 KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     //m_hairyShapeOption = new KisHairyShapeOption();
 

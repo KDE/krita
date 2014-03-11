@@ -121,7 +121,8 @@ public:
                                  QPointF *brushOrigin,
                                  QPolygonF *poligon) const;
 
-    void getOpenGLCheckersInfo(QTransform *textureTransform,
+    void getOpenGLCheckersInfo(const QRectF &viewportRect,
+                               QTransform *textureTransform,
                                QTransform *modelTransform,
                                QRectF *textureRect,
                                QRectF *modelRect) const;

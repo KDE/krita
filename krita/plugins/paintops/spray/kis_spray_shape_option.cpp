@@ -26,19 +26,19 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-        : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::brushCategory(), true)
+    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::brushCategory(), true)
 {
     m_checkable = true;
     // save this to be able to restore it back
     m_maxSize = 1000;
-    
+
     m_options = new KisShapeOptionsWidget();
     m_useAspect = m_options->aspectButton->keepAspectRatio();
     computeAspect();
@@ -46,11 +46,11 @@ KisSprayShapeOption::KisSprayShapeOption()
     // UI signals
     connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(changeSizeUI(bool)));
     connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectToggled(bool)));
-    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),this,SLOT(prepareImage()));
+    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), this, SLOT(prepareImage()));
 
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
-    
+
     setupBrushPreviewSignals();
     setConfigurationPage(m_options);
 }
@@ -59,14 +59,14 @@ KisSprayShapeOption::KisSprayShapeOption()
 void KisSprayShapeOption::setupBrushPreviewSignals()
 {
     connect(m_options->proportionalBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->proportionalBox, SIGNAL(clicked(bool)),SIGNAL(sigSettingChanged()));
-   
+    connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+
     connect(m_options->shapeBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->widthSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->heightSpin, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
 
-    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)),SIGNAL(sigSettingChanged()));
-    connect(m_options->imageUrl,SIGNAL(textChanged(QString)),SIGNAL(sigSettingChanged()));
+    connect(m_options->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SIGNAL(sigSettingChanged()));
 }
 
 
@@ -83,20 +83,20 @@ int KisSprayShapeOption::shape() const
 
 void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(SPRAYSHAPE_ENABLED,isChecked());
-    setting->setProperty(SPRAYSHAPE_SHAPE,shape());
+    setting->setProperty(SPRAYSHAPE_ENABLED, isChecked());
+    setting->setProperty(SPRAYSHAPE_SHAPE, shape());
     setting->setProperty(SPRAYSHAPE_USE_ASPECT, m_useAspect);
-    setting->setProperty(SPRAYSHAPE_PROPORTIONAL,m_options->proportionalBox->isChecked());
+    setting->setProperty(SPRAYSHAPE_PROPORTIONAL, m_options->proportionalBox->isChecked());
     setting->setProperty(SPRAYSHAPE_WIDTH, m_options->widthSpin->value());
     setting->setProperty(SPRAYSHAPE_HEIGHT, m_options->heightSpin->value());
-    setting->setProperty(SPRAYSHAPE_IMAGE_URL,m_options->imageUrl->url().toLocalFile());
+    setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->url().toLocalFile());
 }
 
 
 void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     // in 2.2 there is not shape enabled so true by default
-    setChecked(setting->getBool(SPRAYSHAPE_ENABLED,true));
+    setChecked(setting->getBool(SPRAYSHAPE_ENABLED, true));
     m_options->shapeBox->setCurrentIndex(setting->getInt(SPRAYSHAPE_SHAPE));
     m_options->proportionalBox->setChecked(setting->getBool(SPRAYSHAPE_PROPORTIONAL));
     m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
@@ -109,14 +109,13 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
 void KisSprayShapeOption::prepareImage()
 {
     QString path = m_options->imageUrl->url().toLocalFile();
-    if (QFile::exists(path)){
+    if (QFile::exists(path)) {
         QImage image(path);
-        if (!image.isNull())
-        {
+        if (!image.isNull()) {
             m_options->heightSpin->blockSignals(true);
             m_options->widthSpin->blockSignals(true);
-            m_options->widthSpin->setValue( image.width() );
-            m_options->heightSpin->setValue( image.height() );
+            m_options->widthSpin->setValue(image.width());
+            m_options->heightSpin->setValue(image.height());
             computeAspect();
             m_options->heightSpin->blockSignals(false);
             m_options->widthSpin->blockSignals(false);
@@ -133,13 +132,14 @@ void KisSprayShapeOption::aspectToggled(bool toggled)
 
 void KisSprayShapeOption::updateHeight(int value)
 {
-    if (m_useAspect){
-        int newHeight = qRound(value * 1.0/m_aspect);
+    if (m_useAspect) {
+        int newHeight = qRound(value * 1.0 / m_aspect);
         m_options->heightSpin->blockSignals(true);
         m_options->heightSpin->setValue(newHeight);
         m_options->heightSlider->setValue(newHeight);
         m_options->heightSpin->blockSignals(false);
-    }else{
+    }
+    else {
         computeAspect();
     }
 }
@@ -147,13 +147,14 @@ void KisSprayShapeOption::updateHeight(int value)
 
 void KisSprayShapeOption::updateWidth(int value)
 {
-    if (m_useAspect){
+    if (m_useAspect) {
         int newWidth = qRound(value * m_aspect);
         m_options->widthSpin->blockSignals(true);
-        m_options->widthSpin->setValue( newWidth );
-        m_options->widthSlider->setValue( newWidth );
+        m_options->widthSpin->setValue(newWidth);
+        m_options->widthSlider->setValue(newWidth);
         m_options->widthSpin->blockSignals(false);
-    }else{
+    }
+    else {
         computeAspect();
     }
 }
@@ -170,22 +171,23 @@ void KisSprayShapeOption::computeAspect()
 void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
 {
     // if proportionalSize is false, pixel size is used
-    if (!proportionalSize){
-        m_options->widthSlider->setMaximum( m_maxSize );
-        m_options->widthSpin->setMaximum( m_maxSize );
+    if (!proportionalSize) {
+        m_options->widthSlider->setMaximum(m_maxSize);
+        m_options->widthSpin->setMaximum(m_maxSize);
         m_options->widthSpin->setSuffix("");
-        m_options->heightSlider->setMaximum( m_maxSize );
-        m_options->heightSpin->setMaximum( m_maxSize );
+        m_options->heightSlider->setMaximum(m_maxSize);
+        m_options->heightSpin->setMaximum(m_maxSize);
         m_options->heightSpin->setSuffix("");
-    }else{
-        m_options->widthSlider->setMaximum( 100 );
-        m_options->widthSpin->setMaximum( 100 );
+    }
+    else {
+        m_options->widthSlider->setMaximum(100);
+        m_options->widthSpin->setMaximum(100);
         m_options->widthSpin->setSuffix("%");
-        m_options->heightSlider->setMaximum( 100 );
-        m_options->heightSpin->setMaximum( 100 );
+        m_options->heightSlider->setMaximum(100);
+        m_options->heightSpin->setMaximum(100);
         m_options->heightSpin->setSuffix("%");
     }
-    
-    m_options->widthSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
-    m_options->heightSlider->setPageStep( m_options->widthSlider->maximum() / 10 );
+
+    m_options->widthSlider->setPageStep(m_options->widthSlider->maximum() / 10);
+    m_options->heightSlider->setPageStep(m_options->widthSlider->maximum() / 10);
 }

@@ -36,10 +36,10 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     m_horizontalMirror->setChecked(false);
     m_verticalMirror = new QCheckBox(i18n("Vertically"));
     m_verticalMirror->setChecked(false);
-    
-    connect(m_horizontalMirror, SIGNAL(toggled(bool)),SLOT(horizontalMirrorChanged(bool)));
-    connect(m_verticalMirror, SIGNAL(toggled(bool)),SLOT(verticalMirrorChanged(bool)));
-    
+
+    connect(m_horizontalMirror, SIGNAL(toggled(bool)), SLOT(horizontalMirrorChanged(bool)));
+    connect(m_verticalMirror, SIGNAL(toggled(bool)), SLOT(verticalMirrorChanged(bool)));
+
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(m_horizontalMirror);
     hl->addWidget(m_verticalMirror);

@@ -53,6 +53,11 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+
 #include <kis_paintop_preset.h>
 #include <KoPattern.h>
 #include <kis_config.h>
@@ -137,6 +142,15 @@ public:
 
 #ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
+
+        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+        wchar_t buffer[1024];
+        QString absolute = appdir.absolutePath();
+        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        rv = ::GetLongPathName(buffer, buffer, 1024);
+        QString correctedPath((QChar *)buffer);
+        appdir.setPath(correctedPath);
+
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
@@ -211,6 +225,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     setWindowTitle(i18n("Krita Gemini"));
 
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
+
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
     // default if it's no cursor (that's most likely due to a broken config)
@@ -220,7 +238,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));

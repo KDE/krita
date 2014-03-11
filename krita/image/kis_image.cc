@@ -71,6 +71,7 @@
 #include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "processing/kis_crop_selections_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
@@ -950,6 +951,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
+
         gc.setChannelFlags(prevLayer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
         gc.setOpacity(prevLayer->opacity());
@@ -960,7 +962,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
         //Paint the pixels of the current layer, using their actual alpha value
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
@@ -978,7 +982,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Paint layer on the copy
         KisPainter gc(mergedDevice);
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
@@ -1581,9 +1587,47 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
+bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+{
+    KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
+    if (mask &&
+        (!bounds.contains(mask->paintDevice()->exactBounds()) ||
+         mask->selection()->hasShapeSelection())) {
+
+        return true;
+    }
+
+    KisNodeSP node = root->firstChild();
+
+    while (node) {
+        if (checkMasksNeedConersion(node, bounds)) {
+            return true;
+        }
+
+        node = node->nextSibling();
+    }
+
+    return false;
+}
+
 void KisImage::setWrapAroundModePermitted(bool value)
 {
     m_d->wrapAroundModePermitted = value;
+
+    if (m_d->wrapAroundModePermitted &&
+        checkMasksNeedConersion(root(), bounds())) {
+
+        KisProcessingApplicator applicator(this, root(),
+                                           KisProcessingApplicator::RECURSIVE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           i18n("Crop Selections"));
+
+        KisProcessingVisitorSP visitor =
+            new KisCropSelectionsProcessingVisitor(bounds());
+
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+        applicator.end();
+    }
 }
 
 bool KisImage::wrapAroundModePermitted() const

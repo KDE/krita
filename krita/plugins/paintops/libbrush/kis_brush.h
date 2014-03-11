@@ -173,7 +173,7 @@ public:
     /**
      * @return the angle of the mask adding the given angle
      */
-    double maskAngle(double angle=0) const;
+    double maskAngle(double angle = 0) const;
 
     /**
      * @return the index of the brush
@@ -208,9 +208,9 @@ public:
      * Return a fixed paint device that contains a correctly scaled image dab.
      */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-                                              double scale, double angle,
-                                              const KisPaintInformation& info,
-                                              double subPixelX = 0, double subPixelY = 0) const;
+            double scale, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0) const;
 
     /**
      * Apply the brush mask to the pixels in dst. Dst should be big enough!
@@ -262,10 +262,10 @@ public:
      * pixels in the brush.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                                                     ColoringInformation* coloringInfo,
-                                                     double scaleX, double scaleY, double angle,
-                                                     const KisPaintInformation& info,
-                                                     double subPixelX = 0, double subPixelY = 0,qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            ColoringInformation* coloringInfo,
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**

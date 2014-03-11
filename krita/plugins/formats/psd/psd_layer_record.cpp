@@ -636,12 +636,16 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
 
     // then reorder the planes to fit the psd model -- alpha first, then display order
     QVector<quint8* > planes;
-    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+    QList<KoChannelInfo*> origChannels = dev->colorSpace()->channels();
+
+    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
+        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
+        //qDebug() << ppVar(ch->name()) << ppVar(ch->pos()) << ppVar(ch->displayPosition()) << ppVar(channelIndex);
+
         if (ch->channelType() == KoChannelInfo::ALPHA) {
-            planes.insert(0, tmp[ch->pos()]);
-        }
-        else {
-            planes.append(tmp[ch->pos()]);
+            planes.insert(0, tmp[channelIndex]);
+        } else {
+            planes.append(tmp[channelIndex]);
         }
     }
 
@@ -790,6 +794,45 @@ bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
     return false;
 }
 
+template <class Traits>
+typename Traits::channels_type convertByteOrder(typename Traits::channels_type value);
+// default implementation is undefined for every color space should be added manually
+
+template <>
+inline quint8 convertByteOrder<KoBgrU8Traits>(quint8 value) {
+    return value;
+}
+
+template <>
+inline quint16 convertByteOrder<KoBgrU16Traits>(quint16 value) {
+    return ntohs(value);
+}
+
+
+template <class Traits>
+void readRGBPixel(const QMap<quint16, QByteArray> &channelBytes,
+               int col, quint8 *dstPtr)
+{
+    typedef typename Traits::Pixel Pixel;
+    typedef typename Traits::channels_type channels_type;
+
+    quint16 opacity = KoColorSpaceMathsTraits<channels_type>::unitValue;
+    if (channelBytes.contains(-1)) {
+        opacity = channelBytes[-1].constData()[col];
+    }
+
+    Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
+
+    channels_type blue = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[2].constData())[col]);
+    channels_type green = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[1].constData())[col]);
+    channels_type red = convertByteOrder<Traits>(reinterpret_cast<const channels_type *>(channelBytes[0].constData())[col]);
+
+    pixelPtr->blue = blue;
+    pixelPtr->green = green;
+    pixelPtr->red = red;
+    pixelPtr->alpha = opacity;
+}
+
 bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 {
     quint64 oldPosition = io->pos();
@@ -839,41 +882,11 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         for (qint64 col = 0; col < width; col++){
 
             if (channelSize == 1) {
-                quint8 opacity = OPACITY_OPAQUE_U8;
-                if (channelBytes.contains(-1)) {
-                    opacity = channelBytes[-1].constData()[col];
-                }
-                KoBgrU8Traits::setOpacity(it->rawData(), opacity, 1);
-
-                quint8 red = channelBytes[0].constData()[col];
-                KoBgrU8Traits::setRed(it->rawData(), red);
-
-                quint8 green = channelBytes[1].constData()[col];
-                KoBgrU8Traits::setGreen(it->rawData(), green);
-
-                quint8 blue = channelBytes[2].constData()[col];
-                KoBgrU8Traits::setBlue(it->rawData(), blue);
-
+                readRGBPixel<KoBgrU8Traits>(channelBytes, col, it->rawData());
             }
 
             else if (channelSize == 2) {
-
-                quint16 opacity = quint16_MAX;
-                if (channelBytes.contains(-1)) {
-                    opacity = channelBytes[-1].constData()[col];
-                }
-                // We don't have a convenient setOpacity function :-(
-                memcpy(it->rawData() + KoBgrU16Traits::alpha_pos, &opacity, sizeof(quint16));
-
-                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoBgrU16Traits::setRed(it->rawData(), red);
-
-                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoBgrU16Traits::setGreen(it->rawData(), green);
-
-                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoBgrU16Traits::setBlue(it->rawData(), blue);
-
+                readRGBPixel<KoBgrU16Traits>(channelBytes, col, it->rawData());
             }
             else {
                 // Unsupported channel sizes for now
@@ -882,15 +895,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
             /*
             // XXX see implementation Openexr
             else if (channelSize == 4) {
-
-                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setRed(it->rawData(), red);
-
-                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setGreen(it->rawData(), green);
-
-                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
-                KoBgrU16Traits::setBlue(it->rawData(), blue);
+                // NOT IMPLEMENTED!
             }
 */
             it->nextPixel();

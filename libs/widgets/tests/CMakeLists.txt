@@ -26,3 +26,4 @@ kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-widgets-KoProgressUpdater
 target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
 ########### end ###############
+

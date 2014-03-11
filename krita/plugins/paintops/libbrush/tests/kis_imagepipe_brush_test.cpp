@@ -219,8 +219,8 @@ void KisImagePipeBrushTest::testColoredDabWash()
     const QVector<KisGbrBrush*> gbrs = brush->testingGetBrushes();
 
     KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
-    painter.bltFixed(0,0, dab, 0,0,dab->bounds().width(), dab->bounds().height());
-    painter.bltFixed(80,60, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(80, 60, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
 
     painter.end();
 

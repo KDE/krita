@@ -20,14 +20,22 @@
 #define _KIS_GMIC_APPLICATOR
 
 #include <kis_types.h>
+#include <QThread>
 
-class KisGmicApplicator
+class KisGmicApplicator : public QThread
 {
 public:
     KisGmicApplicator();
     ~KisGmicApplicator();
-
-    void apply(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand);
+    void setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand);
+protected:
+    virtual void run();
+private:
+    KisImageWSP m_image;
+    KisNodeSP m_node;
+    QString m_actionName;
+    KisNodeListSP m_kritaNodes;
+    QString m_gmicCommand;
 };
 
 #endif

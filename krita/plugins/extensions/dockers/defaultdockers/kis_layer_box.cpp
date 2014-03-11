@@ -365,7 +365,8 @@ void KisLayerBox::notifyImageDeleted()
 
 void KisLayerBox::updateUI()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
+    if (!m_nodeManager) return;
 
     KisNodeSP activeNode = m_nodeManager->activeNode();
 

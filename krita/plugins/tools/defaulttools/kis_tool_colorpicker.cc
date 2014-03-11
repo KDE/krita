@@ -227,6 +227,7 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             delete[] data;
         }
 
+        m_pickedColor.setOpacity(OPACITY_OPAQUE_U8);
         if (m_config.updateColor) {
             if (m_config.toForegroundColor)
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);

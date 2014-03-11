@@ -23,7 +23,7 @@
 #include <KoColor.h>
 
 KisPressureSizeOption::KisPressureSizeOption()
-        : KisCurveOption(i18n("Size"), "Size", KisPaintOpOption::brushCategory(), true )
+    : KisCurveOption(i18n("Size"), "Size", KisPaintOpOption::brushCategory(), true)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));

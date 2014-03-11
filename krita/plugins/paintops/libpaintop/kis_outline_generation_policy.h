@@ -32,8 +32,7 @@ class KisOutlineGenerationPolicy : public ParentClass
 {
 public:
     KisOutlineGenerationPolicy(KisCurrentOutlineFetcher::Options options)
-        : m_outlineFetcher(options)
-    {
+        : m_outlineFetcher(options) {
     }
 
     virtual ~KisOutlineGenerationPolicy() {

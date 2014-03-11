@@ -42,9 +42,9 @@ public:
     KisBoundary(KisFixedPaintDeviceSP dev);
     ~KisBoundary();
     void generateBoundary();
-    
+
     void paint(QPainter& painter) const;
-    
+
     /// returns the outline saved in QPainterPath
     QPainterPath path() const;
 

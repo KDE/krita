@@ -30,6 +30,7 @@
 
 #include <QPoint>
 #include <QSpinBox>
+#include <QDateTime>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -43,7 +44,7 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include "kis_iterator_ng.h"
+#include <kis_iterator_ng.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -58,6 +59,7 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
 {
     setSupportsPainting(true);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(true);
 }
 
 void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
@@ -68,18 +70,24 @@ void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
-#if 1
 
     qint32 width = applyRect.width();
     qint32 height = applyRect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 brushSize = config->getInt("brushSize", 1);
-    quint32 smooth = config->getInt("smooth", 30);
+    quint32 brushSize = config ? config->getInt("brushSize", 1) : 1;
+    quint32 smooth = config ? config->getInt("smooth", 30) : 30;
+    if (config) {
+        srand(config->getInt("seed"));
+    }
+    else {
+        QDateTime dt = QDateTime::currentDateTime();
+        QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
+        srand(dt.secsTo(Y2000));
+    }
 
 
     OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth, progressUpdater);
-#endif
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -161,12 +169,12 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     int height = (2 * Radius) + 1;
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
-    KisRectIteratorSP it = src->createRectIteratorNG(QRect(startx, starty, width, height));
+    KisSequentialConstIterator srcIt(src, QRect(startx, starty, width, height));
     do {
 
-        cs->normalisedChannelsValue(it->rawData(), channel);
+        cs->normalisedChannelsValue(srcIt.rawDataConst(), channel);
 
-        I = (uint)(cs->intensity8(it->rawData()) * Scale);
+        I = (uint)(cs->intensity8(srcIt.rawDataConst()) * Scale);
         IntensityCount[I]++;
 
         if (IntensityCount[I] == 1) {
@@ -176,7 +184,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
                 AverageChannels[I][i] += channel[i];
             }
         }
-    } while (it->nextPixel());
+    } while (srcIt.nextPixel());
 
     I = 0;
     int MaxInstance = 0;
@@ -210,7 +218,9 @@ KisConfigWidget * KisOilPaintFilter::createConfigurationWidget(QWidget* parent, 
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 5, 1, i18n("Brush size"), "brushSize"));
     param.push_back(KisIntegerWidgetParam(10, 255, 30, i18nc("smooth out the painting strokes the filter creates", "Smooth"), "smooth"));
-    return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
+    KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
+    w->setConfiguration(factoryConfiguration(0));
+    return w;
 }
 
 KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDeviceSP) const
@@ -218,5 +228,8 @@ KisFilterConfiguration* KisOilPaintFilter::factoryConfiguration(const KisPaintDe
     KisFilterConfiguration* config = new KisFilterConfiguration("oilpaint", 1);
     config->setProperty("brushSize", 1);
     config->setProperty("smooth", 30);
+    QDateTime dt = QDateTime::currentDateTime();
+    QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
+    config->setProperty("seed", dt.secsTo(Y2000));
     return config;
 }

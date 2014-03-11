@@ -24,13 +24,13 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisHairyShapeOption::KisHairyShapeOption()
-        : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
@@ -66,7 +66,8 @@ void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfiguration* co
     m_options->sigmaSpinBox->setValue(config->getDouble(HAIRY_SIGMA));
     if (config->getBool(HAIRY_IS_DIMENSION_1D)) {
         m_options->oneDimBrushBtn->setChecked(true);
-    } else {
+    }
+    else {
         m_options->twoDimBrushBtn->setChecked(true);
     }
 }
@@ -74,8 +75,8 @@ void KisHairyShapeOption::readOptionSetting(const KisPropertiesConfiguration* co
 
 void KisHairyShapeOption::writeOptionSetting(KisPropertiesConfiguration* config) const
 {
-    config->setProperty(HAIRY_RADIUS,radius());
-    config->setProperty(HAIRY_SIGMA,m_options->sigmaSpinBox->value());
-    config->setProperty(HAIRY_IS_DIMENSION_1D,m_options->oneDimBrushBtn->isChecked()); 
+    config->setProperty(HAIRY_RADIUS, radius());
+    config->setProperty(HAIRY_SIGMA, m_options->sigmaSpinBox->value());
+    config->setProperty(HAIRY_IS_DIMENSION_1D, m_options->oneDimBrushBtn->isChecked());
 }
 

@@ -43,7 +43,7 @@ public:
     virtual QGradient* toQGradient() const;
 
     /// gets the color data at position 0 <= t <= 1
-    quint8 *cachedAt(qreal t) const;
+    const quint8 *cachedAt(qreal t) const;
 
     void setColorSpace(KoColorSpace* colorSpace);
     const KoColorSpace * colorSpace() const;

@@ -158,7 +158,7 @@ KisUniformRandomColorSource::~KisUniformRandomColorSource()
 void KisUniformRandomColorSource::selectColor(double mix)
 {
     Q_UNUSED(mix);
-    m_color->fromQColor(QColor((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX)));
+    m_color->fromQColor(QColor((int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX)));
 }
 
 
@@ -195,7 +195,7 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
     KisHLineIteratorSP it = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     for (int y = 0; y < rect.height(); y++) {
         do {
-            qc.setRgb((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX));
+            qc.setRgb((int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX), (int)((255.0 * rand()) / RAND_MAX));
             kc.fromQColor(qc);
             memcpy(it->rawData(), kc.data(), pixelSize);
         } while (it->nextPixel());
@@ -249,7 +249,7 @@ void KoPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, 
     else {
         int x = offset.x() % m_bounds.width();
         int y = offset.y() % m_bounds.height();
-        
+
         // Change the position, because the pattern is always applied starting
         // from (0,0) in the paint device reference
         device->setX(x);
@@ -262,13 +262,13 @@ void KoPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, 
 
 void KoPatternColorSource::rotate(double r)
 {
-  Q_UNUSED(r);
+    Q_UNUSED(r);
 }
 
 void KoPatternColorSource::resize(double xs, double ys)
 {
-  Q_UNUSED(xs);
-  Q_UNUSED(ys);
+    Q_UNUSED(xs);
+    Q_UNUSED(ys);
 }
 
 bool KoPatternColorSource::isUniformColor() const

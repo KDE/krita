@@ -44,7 +44,7 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(thresholdLbl);
     hl->addWidget(m_threshold, 1);
-    
+
     QVBoxLayout* vl = new QVBoxLayout;
     vl->setMargin(0);
     vl->addLayout(hl);
@@ -52,10 +52,10 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 
     QWidget* w = new QWidget;
     w->setLayout(vl);
-    
+
     KisCurveOptionWidget::setConfigurationPage(w);
-    
-    connect(m_threshold,SIGNAL(valueChanged(int)),this, SLOT(setThreshold(int)));
+
+    connect(m_threshold, SIGNAL(valueChanged(int)), this, SLOT(setThreshold(int)));
     setThreshold(m_threshold->value());
 }
 

@@ -94,6 +94,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
+    m_colorUpdateSelf(false),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -265,7 +266,7 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
     Q_UNUSED(e);
 
     if (m_colorPreviewPopup->isVisible()) {
-   m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
+        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
         m_colorPreviewPopup->hide();
     }
 

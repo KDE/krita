@@ -32,9 +32,9 @@ const QString VLLS = "VlLs";
 const QString TEXT = "TEXT";
 const QString OBJC = "Objc";
 const QString UNTF = "UntF";
-const QString BOOL = "bool"; 
-const QString LONG = "long"; 
-const QString DOUB = "doub"; 
+const QString BOOL = "bool";
+const QString LONG = "long";
+const QString DOUB = "doub";
 const QString ENUM = "enum";
 
 enum enumFuncNames  {
@@ -44,19 +44,20 @@ enum enumFuncNames  {
     P_TEXT,
     P_OBJC,
     P_UNTF,
-    P_BOOL, 
-    P_LONG, 
-    P_DOUB, 
+    P_BOOL,
+    P_LONG,
+    P_DOUB,
     P_ENUM,
     P_TDTA
 };
 
-class AbrStructParser{
+class AbrStructParser
+{
 
 public:
     AbrStructParser();
     ~AbrStructParser();
-    
+
     void parse(QString fileName);
 
 private:
@@ -72,10 +73,10 @@ private:
     QString p_bool(QDataStream &buf);
     QString p_doub(QDataStream &buf);
     QString p_enum(QDataStream &buf);
-    
+
     quint32 parseEntry(QDataStream &buf);
-    
-        
+
+
 private:
     QHash<QString, enumFuncNames> m_types;
     QDomDocument m_doc;

@@ -55,6 +55,9 @@ public:
     virtual qint32 y() const;
 
 private:
+    qint32 m_offsetX;
+    qint32 m_offsetY;
+
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_column;    // current column in tilemgr

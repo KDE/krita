@@ -41,11 +41,3 @@ KisVLineConstIteratorNG::~KisVLineConstIteratorNG()
 KisVLineIteratorNG::~KisVLineIteratorNG()
 {
 }
-
-KisRectConstIteratorNG::~KisRectConstIteratorNG()
-{
-}
-
-KisRectIteratorNG::~KisRectIteratorNG()
-{
-}

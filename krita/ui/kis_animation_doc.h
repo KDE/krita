@@ -34,8 +34,12 @@ public:
     KisAnimationDoc();
     virtual ~KisAnimationDoc();
     void frameSelectionChanged(QRect frame);
+
     void addKeyFrame(QRect frame);
     void addBlankFrame(QRect frame);
+
+    void addPaintLayer();
+
     KisAnimationStore* getStore();
     KisAnimation* getAnimation();
 

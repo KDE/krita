@@ -30,6 +30,7 @@
 #include "kis_animation_layer.h"
 #include <kis_debug.h>
 #include <QLabel>
+#include <kis_animation_doc.h>
 
 KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
 {
@@ -76,6 +77,8 @@ void KisAnimationLayerBox::updateUI()
     }
     newLayer->setGeometry(QRect(0, 20, width(), 20));
     newLayer->show();
+
+    dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addPaintLayer();
 }
 
 void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)

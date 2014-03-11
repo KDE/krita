@@ -59,6 +59,7 @@ public:
     KisAnimationPlayer* player;
     KisImageWSP image;
     QDomElement frameElement;
+    int noLayers;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -69,6 +70,7 @@ KisAnimationDoc::KisAnimationDoc()
     d->kranimLoader = 0;
     d->saved = false;
     d->player = new KisAnimationPlayer(this);
+    d->noLayers = 1;
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -87,7 +89,7 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
     d->currentFramePosition = QRect(0, 0, 10, 20);
     d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-    d->currentFrame->setName("testFrame");
+    d->currentFrame->setName("Layer " + QString::number(d->noLayers));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
@@ -125,7 +127,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
         d->currentFramePosition = frame;
         d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-        d->currentFrame->setName("testFrame");
+        d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
         d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
         d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
@@ -206,7 +208,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     d->currentFramePosition = frame;
     d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-    d->currentFrame->setName("testFrame");
+    d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
@@ -214,6 +216,24 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     this->updateXML();
 
     setCurrentImage(d->image);
+}
+
+void KisAnimationDoc::addPaintLayer()
+{
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
+    int layer = d->currentFramePosition.y() + 20;
+    int frame = 0;
+
+    d->noLayers++;
+
+    d->currentFramePosition = QRect(frame, layer, 10, 20);
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame->setName("Layer " + QString::number(d->noLayers));
+    d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    this->updateXML();
 }
 
 void KisAnimationDoc::slotFrameModified()

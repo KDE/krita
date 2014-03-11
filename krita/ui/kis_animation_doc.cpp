@@ -115,28 +115,34 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         return;
     }
 
-    QString location = this->getFrameFile(frame.x(), frame.y());
+    QString location = "";
+    bool hasFile = false;
 
-    bool hasFile = d->store->hasFile(location);
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
 
-    if(hasFile) {
+    for(int i = 0 ; i < d->noLayers ; i++) {
+        location = this->getFrameFile(frame.x(), i * 20);
+        hasFile = d->store->hasFile(location);
 
-        d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-        connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-        d->image->setResolution(animation->resolution(), animation->resolution());
+        if(hasFile) {
 
-        d->currentFramePosition = frame;
-        d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-        d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
-        d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
-        d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
-
-        //Load all the layers here
-
-        d->kranimLoader->loadFrame(d->currentFrame, d->store, location);
-
-        setCurrentImage(d->image);
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1;
+            // Current frame
+            if(frame.y() == i * 20) {
+                d->currentFramePosition = frame;
+                d->currentFrame = newLayer;
+            }
+        }
     }
+
+    setCurrentImage(d->image);
 }
 
 QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)

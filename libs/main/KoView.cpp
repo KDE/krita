@@ -284,32 +284,6 @@ void KoView::setDocumentDeleted()
     d->documentDeleted = true;
 }
 
-
-QAction *KoView::action(const QDomElement &element) const
-{
-    static const QString &attrName = KGlobal::staticQString("name");
-    QString name = element.attribute(attrName);
-
-    QAction *act = KXMLGUIClient::action(name.toUtf8());
-
-    // last resort, try to get action from the main window if there is one
-    if (!act && mainWindow())
-        act = mainWindow()->actionCollection()->action(name);
-
-    return act;
-}
-
-QAction *KoView::action(const char* name) const
-{
-    QAction *act = KXMLGUIClient::action(name);
-
-    // last resort, try to get action from the main window if there is one
-    if (!act && mainWindow())
-        act = mainWindow()->actionCollection()->action(name);
-
-    return act;
-}
-
 QWidget *KoView::canvas() const
 {
     //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas

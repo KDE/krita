@@ -260,6 +260,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
     painter()->setCompositeOp(COMPOSITE_COPY);
     painter()->bitBltWithFixedSelection(m_dstDabRect.x(), m_dstDabRect.y(), m_tempDev, m_maskDab, m_dstDabRect.width(), m_dstDabRect.height());
+    painter()->renderMirrorMaskSafe(m_dstDabRect, m_tempDev, 0, 0, m_maskDab,
+                                    !m_dabCache->needSeparateOriginal());
 
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);

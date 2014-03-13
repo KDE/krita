@@ -100,6 +100,7 @@ struct KisTool::Private {
 
 #ifdef HAVE_OPENGL
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+    int cursorShaderModelViewProjectionUniform;
 #endif
 
     bool useGLToolOutlineWorkaround;
@@ -590,12 +591,12 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
             d->cursorShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
             d->cursorShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
             d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
-
             if (! d->cursorShader->link()) {
                 qDebug() << "OpenGL error" << glGetError();
                 qFatal("Failed linking cursor shader");
             }
             Q_ASSERT(d->cursorShader->isLinked());
+            d->cursorShaderModelViewProjectionUniform = d->cursorShader->uniformLocation("modelViewProjection");
         }
 
         d->cursorShader->bind();
@@ -613,7 +614,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
         modelMatrix.optimize();
         modelMatrix = projectionMatrix * modelMatrix;
-        d->cursorShader->setUniformValue("modelViewProjection", modelMatrix);
+        d->cursorShader->setUniformValue(d->cursorShaderModelViewProjectionUniform, modelMatrix);
 
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear

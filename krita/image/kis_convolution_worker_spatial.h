@@ -285,11 +285,22 @@ public:
     inline void convolveCache(quint8* dstPtr) {
         if (m_alphaCachePos >= 0) {
             qreal alphaValue = convolveOneChannelFromCache<false>(dstPtr, m_alphaCachePos);
-            qreal alphaValueInv = 1.0 / alphaValue;
 
-            for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-                if (k == m_alphaCachePos) continue;
-                convolveOneChannelFromCache<true>(dstPtr, k, alphaValueInv);
+            if (alphaValue != 0.0) {
+                qreal alphaValueInv = 1.0 / alphaValue;
+
+                for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
+                    if (k == m_alphaCachePos) continue;
+                    convolveOneChannelFromCache<true>(dstPtr, k, alphaValueInv);
+                }
+            } else {
+                for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
+                    if (k == m_alphaCachePos) continue;
+
+                    const qreal zeroValue = 0.0;
+                    const quint32 channelPos = m_convChannelList[k]->pos();
+                    m_fromDoubleFuncPtr[k](dstPtr, channelPos, zeroValue);
+                }
             }
         } else {
             for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {

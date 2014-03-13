@@ -42,7 +42,13 @@ KisGaussianKernel::createHorizontalMatrix(qreal radius)
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
     const qreal exponentMultiplicand = 1 / (2 * sigma * sigma);
-    const qreal center = 0.5 * kernelSize;
+
+    /**
+     * The kernel size should always be odd, then the position of the
+     * central pixel can be easily calculated
+     */
+    KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
+    const int center = kernelSize / 2;
 
     for (int x = 0; x < kernelSize; x++) {
         qreal xDistance = center - x;
@@ -61,7 +67,13 @@ KisGaussianKernel::createVerticalMatrix(qreal radius)
     const qreal sigma = sigmaFromRadius(radius);
     const qreal multiplicand = 1 / (sqrt(2 * M_PI * sigma * sigma));
     const qreal exponentMultiplicand = 1 / (2 * sigma * sigma);
-    const qreal center = 0.5 * kernelSize;
+
+    /**
+     * The kernel size should always be odd, then the position of the
+     * central pixel can be easily calculated
+     */
+    KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
+    const int center = kernelSize / 2;
 
     for (int y = 0; y < kernelSize; y++) {
         qreal yDistance = center - y;

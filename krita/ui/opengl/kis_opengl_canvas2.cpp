@@ -89,6 +89,7 @@ public:
     ~Private() {
         delete displayShader;
         delete checkerShader;
+        Sync::deleteSync(glSyncObject);
     }
 
     KisOpenGLImageTexturesSP openGLImageTextures;

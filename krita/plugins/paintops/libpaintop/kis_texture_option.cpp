@@ -316,6 +316,11 @@ void KisTextureProperties::recalculateMask()
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
+    if (!setting->hasProperty("Texture/Pattern/PatternMD5")) {
+        enabled = false;
+        return;
+    }
+
     pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!pattern) {

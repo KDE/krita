@@ -34,7 +34,7 @@ class KoResourceManagerWidget;
 }
 
 
-class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
+class KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 public:

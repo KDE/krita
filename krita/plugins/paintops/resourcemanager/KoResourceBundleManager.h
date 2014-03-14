@@ -33,7 +33,7 @@ class KoXmlResourceBundleMeta;
  * @brief The KoResourceBundleManager class
  * @details Manage resource bundles structure
  */
-class KRITAUI_EXPORT KoResourceBundleManager
+class KoResourceBundleManager
 {
 public:
 

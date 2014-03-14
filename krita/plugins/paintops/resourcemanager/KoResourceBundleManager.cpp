@@ -110,6 +110,7 @@ void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
     int pathSize;
     QString name = packName.section('/',packName.count('/')).remove(".zip");
 
+    QDir resourceRootDir(kritaPath);
     if (isPathSet()) {
         for (int i=0;i<pathList.size();i++) {
             toRoot();
@@ -120,7 +121,7 @@ void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
             if (!resourcePack->extractFile(currentPath,targetPath.append("/").append(name)
                         .append("/").append(currentPath.section('/',pathSize)))) {
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
-                mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
+                resourceRootDir.mkpath(dirPath);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
                     //TODO Supprimer le dossier créé
                     exit(1);

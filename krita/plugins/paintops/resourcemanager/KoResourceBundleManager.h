@@ -21,6 +21,11 @@
 #include "KoStore.h"
 #include <krita_export.h> 
 
+// Disable export in windows, to allow Linux tests to work
+#if WIN32
+#undef KRITAUI_EXPORT
+#endif
+
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
 

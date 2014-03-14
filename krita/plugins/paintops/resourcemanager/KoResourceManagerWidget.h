@@ -30,16 +30,16 @@
 #include <krita_export.h>
 
 // Disable export in windows, to allow Linux tests to work
-#if WIN32
+#ifdef WIN32
 #undef KRITAUI_EXPORT
-#endif
+#endif /* WIN32 */
 
 namespace Ui {
 class KoResourceManagerWidget;
 }
 
 
-class KoResourceManagerWidget : public QMainWindow
+class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 public:

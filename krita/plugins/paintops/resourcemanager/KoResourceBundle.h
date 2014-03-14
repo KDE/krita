@@ -24,9 +24,9 @@
 #include "krita_export.h"
 
 // Disable export in windows, to allow Linux tests to work
-#if WIN32
+#ifdef WIN32
 #undef KRITAUI_EXPORT
-#endif
+#endif /* WIN32 */
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -36,7 +36,7 @@ class KoResourceBundleManager;
  * @brief The KoResourceBundle class
  * @details Describe the resource bundles as KoResources
  */
-class KoResourceBundle : public KoResource
+class KRITAUI_EXPORT KoResourceBundle : public KoResource
 {
 
 public:

@@ -291,6 +291,12 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
+    KisAction * action = new KisAction(i18n("Rename current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionCollection->addAction("RenameCurrentLayer", action);
+    action->setShortcut(KShortcut(Qt::Key_F2));
+    connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
+
     m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);

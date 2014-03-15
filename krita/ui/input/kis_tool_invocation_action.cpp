@@ -60,12 +60,14 @@ KisToolInvocationAction::~KisToolInvocationAction()
 void KisToolInvocationAction::activate(int shortcut)
 {
     Q_UNUSED(shortcut);
+    if (!inputManager()) return;
     inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
 }
 
 void KisToolInvocationAction::deactivate(int shortcut)
 {
     Q_UNUSED(shortcut);
+    if (!inputManager()) return;
     inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 }
 

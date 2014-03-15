@@ -69,7 +69,7 @@ KisAnimationDoc::KisAnimationDoc()
     setMimeType(APP_MIMETYPE);
     d->kranimLoader = 0;
     d->saved = false;
-    d->player = new KisAnimationPlayer(this);
+    //d->player = new KisAnimationPlayer(this);
     d->noLayers = 1;
 }
 

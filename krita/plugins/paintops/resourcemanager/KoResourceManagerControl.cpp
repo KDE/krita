@@ -35,8 +35,8 @@ KoResourceManagerControl::KoResourceManagerControl():currentMeta(""),currentMani
     if (root.at(root.size()-1)!='/') {
         root.append("/");
     }
-    extractor=new KoResourceBundleManager(root+"/share/apps/krita/");
-    current=new KoResourceBundle(root+"/share/apps/krita/bundles/pack.zip");
+    extractor=new KoResourceBundleManager(root+"share/apps/krita/");
+    current=new KoResourceBundle(root+"share/apps/krita/bundles/pack.zip");
     current->load();
 }
 
@@ -64,19 +64,17 @@ QIODevice* KoResourceManagerControl::getDevice(QString deviceName){
 
 void KoResourceManagerControl::createPack(QList<QString> resources)
 {
-
     for (int i = 0; i < resources.size(); i++) {
         current->addFile(resources.at(i).section('/',resources.count("/")-2,resources.count("/")-2),resources.at(i));
     }
     current->save();
-    current->load();
 }
 
 void KoResourceManagerControl::installPack(QString packName)
 {
     Q_UNUSED(packName);
     current->install();
-    current->addDirs();
+    current->addResourceDirs();
     //extractor.setReadPack(packName);
     //extractor.extractPack();
     //TODO Exporter les XML si ce n'est pas fait dans l'extract

@@ -23,11 +23,6 @@
 #include "KoResource.h"
 #include "krita_export.h"
 
-// Disable export in windows, to allow Linux tests to work
-#ifdef WIN32
-#undef KRITAUI_EXPORT
-#endif /* WIN32 */
-
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
 class KoResourceBundleManager;
@@ -52,6 +47,18 @@ public:
     virtual ~KoResourceBundle();
 
     /**
+     * @brief image
+     * @return a QImage representing this resource.
+     */
+    QImage image() const;
+
+    /**
+     * @brief defaultFileExtension
+     * @return the default file extension which should be when saving the resource
+     */
+    QString defaultFileExtension() const;
+
+    /**
      * @brief load : Load this resource.
      * @return true if succeed, false otherwise.
      */
@@ -64,23 +71,21 @@ public:
     bool save();
 
     /**
+     * @brief install : Install the resource bundle.
+     */
+    void install();
+
+    /**
+     * @brief uninstall : Uninstall the resource bundle.
+     */
+    void uninstall();
+
+    /**
      * @brief addMeta : Add a Metadata to the resource
      * @param type type of the metadata
      * @param value value of the metadata
      */
     void addMeta(QString type,QString value);
-
-    /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
-
-    /**
-     * @brief defaultFileExtension
-     * @return the default file extension which should be when saving the resource
-     */
-    QString defaultFileExtension() const;
 
     /**
      * @brief addFile : Add a file to the bundle
@@ -96,27 +101,51 @@ public:
     void removeFile(QString fileName);
 
     /**
-     * @brief install : Install the resource bundle.
-     */
-    void install();
-
-    /**
-     * @brief uninstall : Uninstall the resource bundle.
-     */
-    void uninstall();
-
-    /**
      * @brief removeDir : Remove the chosen directory
      * @param dirName the name of the directory to be removed
      * @return true if succeed, false otherwise.
      */
     bool removeDir(const QString & dirName);
-    void addDirs();
+
+    /**
+     * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
+     */
+    void addResourceDirs();
+
+    /**
+     * @brief getAuthor
+     * @return the metadata associated to the field "author" or QString() if it doesn't exist
+     */
     QString getAuthor();
+
+    /**
+     * @brief getLicense
+     * @return the metadata associated to the field "license" or QString() if it doesn't exist
+     */
     QString getLicense();
+
+    /**
+     * @brief getWebSite
+     * @return the metadata associated to the field "website" or QString() if it doesn't exist
+     */
     QString getWebSite();
+
+    /**
+     * @brief getCreated
+     * @return the metadata associated to the field "created" or QString() if it doesn't exist
+     */
     QString getCreated();
+
+    /**
+     * @brief getUpdated
+     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
+     */
     QString getUpdated();
+
+    /**
+     * @brief isInstalled
+     * @return true if the bundle is installed, false otherwise.
+     */
     bool isInstalled();
 
 private:

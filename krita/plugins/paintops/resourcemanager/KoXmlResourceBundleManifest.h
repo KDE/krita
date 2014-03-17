@@ -139,10 +139,20 @@ public:
      */
     void exportTags();
 
+    /**
+     * @brief install : add "installed" tag in the XML file if necessary
+     */
     void install();
 
+    /**
+     * @brief uninstall : remove "installed" tag in the XML file if necessary
+     */
     void uninstall();
 
+    /**
+     * @brief isInstalled
+     * @return true if the "installed" tag is in the XML file, false otherwise
+     */
     bool isInstalled();
  };
 

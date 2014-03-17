@@ -190,6 +190,7 @@ QDomElement KoXmlResourceBundleManifest::addTag(QDomElement parent,QString tagNa
     return currentElem;
 }
 
+//TODO Se renseigner autour du lambda pour la généralisation des KoResourceServer
 void KoXmlResourceBundleManifest::importFileTags(QDomElement parent,QString fileTypeName,QString fileName)
 {
     QStringList resourceTagslist;
@@ -291,29 +292,6 @@ QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
 
     currentNode.parentNode().removeChild(currentNode);
     return result;
-}
-
-bool KoXmlResourceBundleManifest::isInstalled()
-{
-    return xmlDocument.elementsByTagName("installed").size()!=0;
-}
-
-void KoXmlResourceBundleManifest::install()
-{
-    if (xmlDocument.elementsByTagName("installed").isEmpty()) {
-        root.appendChild(xmlDocument.createElement("installed"));
-    }
-}
-
-void KoXmlResourceBundleManifest::uninstall()
-{
-    QDomNodeList instList=xmlDocument.elementsByTagName("installed");
-
-    if (!instList.isEmpty()) {
-        for (int i=0;i<instList.size();i++) {
-            root.removeChild(instList.at(i));
-        }
-    }
 }
 
 QList<QString> KoXmlResourceBundleManifest::getTagList()
@@ -475,4 +453,28 @@ void KoXmlResourceBundleManifest::exportTags()
         }
         typeElem=typeElem.nextSiblingElement();
     }
+}
+
+
+void KoXmlResourceBundleManifest::install()
+{
+    if (xmlDocument.elementsByTagName("installed").isEmpty()) {
+        root.appendChild(xmlDocument.createElement("installed"));
+    }
+}
+
+void KoXmlResourceBundleManifest::uninstall()
+{
+    QDomNodeList instList=xmlDocument.elementsByTagName("installed");
+
+    if (!instList.isEmpty()) {
+        for (int i=0;i<instList.size();i++) {
+            root.removeChild(instList.at(i));
+        }
+    }
+}
+
+bool KoXmlResourceBundleManifest::isInstalled()
+{
+    return xmlDocument.elementsByTagName("installed").size()!=0;
 }

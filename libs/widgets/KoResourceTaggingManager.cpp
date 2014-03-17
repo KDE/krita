@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 #include "KoResourceTaggingManager.h"
-#include "KoResourceModel.h"
+#include "KoResourceModelBase.h"
 #include "KoResource.h"
 #include "KoResourceItemChooserContextMenu.h"
 
@@ -64,7 +64,7 @@ public:
 
     QCompleter* tagCompleter;
 
-    KoResourceModel* model;
+    KoResourceModelBase* model;
 };
 
 void KoResourceTaggingManager::showTaggingBar(bool showSearchBar, bool showOpBar)
@@ -313,10 +313,9 @@ KoTagFilterWidget* KoResourceTaggingManager::tagFilterWidget()
     return d->tagFilter;
 }
 
-KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel* model, QWidget* parent)
+KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModelBase* model, QWidget* parent)
     : d(new Private())
 {
-
     d->model = model;
     d->unfilteredView = i18n("All Presets");
 

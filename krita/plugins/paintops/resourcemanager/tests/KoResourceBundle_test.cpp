@@ -58,8 +58,6 @@ void KoResourceBundle_test::testInitialization()
 
     cout<<serveur->resources().size()<<endl;*/
 
-    KoResourceManagerWidget w;
-    w.show();
 }
 
 

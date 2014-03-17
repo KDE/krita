@@ -19,10 +19,11 @@
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
 #include "KoXmlGenerator.h"
+#include "krita_export.h"
 
 class KoResource;
 
-class KoXmlResourceBundleManifest: public KoXmlGenerator
+class KRITAUI_EXPORT KoXmlResourceBundleManifest: public KoXmlGenerator
 {
 private:
     /**
@@ -137,6 +138,12 @@ public:
      * @brief exportTags : export file tags to the right Krita xml files
      */
     void exportTags();
+
+    void install();
+
+    void uninstall();
+
+    bool isInstalled();
  };
 
 

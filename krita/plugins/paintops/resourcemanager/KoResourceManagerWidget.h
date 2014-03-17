@@ -38,6 +38,7 @@ namespace Ui {
 class KoResourceManagerWidget;
 }
 
+class QItemSelectionModel;
 
 class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
 {
@@ -57,9 +58,12 @@ private:
 
     void initializeModel();
     void initializeConnect();
+    void connectTables();
     void createMiniature(QPixmap);
 
 private slots:
+    void resourceTable(int index);
+    void refresh(QModelIndex newIndex);
     void showHide();
     void createPack();
     void installPack();
@@ -70,8 +74,10 @@ private slots:
     void filterFieldSelected(bool);
     void rename();
     void about();
+    void resourceClicked(QModelIndex targetIndex);
 
 signals:
+    void resourceWasSelected(QString);
 
 public slots:
 

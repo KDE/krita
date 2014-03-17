@@ -17,18 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QProcessEnvironment>
 #include <QtCore/QDir>
 #include "KoResourceBundle.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
 #include "KoResourceBundleManager.h"
+#include <QImage>
 #include <iostream>
+#include <kglobal.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
 using namespace std;
 
-KoResourceBundle::KoResourceBundle(QString const& bundlePath, QString kritaPath):KoResource(bundlePath)
+KoResourceBundle::KoResourceBundle(QString const& bundlePath):KoResource(bundlePath)
 {
-    manager=new KoResourceBundleManager(kritaPath);
-    isInstalled=false; //TODO A vérifier
+    manager=new KoResourceBundleManager(QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0).append("/share/apps/krita/"));
+    //isInstalled=false; //TODO A vérifier
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -45,13 +50,16 @@ bool KoResourceBundle::load()
         manifest=new KoXmlResourceBundleManifest();
         meta=new KoXmlResourceBundleMeta();
         meta->addTag("name",filename(),true);
+        installed=false;
     }
     else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
+        //A optimiser si possible
         manifest=new KoXmlResourceBundleManifest(manager->getFile("manifest.xml"));
         meta=new KoXmlResourceBundleMeta(manager->getFile("meta.xml"));
-        thumbnail.load(manager->getFile("thumbnail.jpg"),"jpg");
+        thumbnail.load(manager->getFile("thumbnail.jpg"),"JPG");
         manager->close();
+        installed=manifest->isInstalled();
         setValid(true);
     }
     return true;
@@ -68,7 +76,13 @@ bool KoResourceBundle::save()
     return true;
 }
 
-void KoResourceBundle::addMeta(QString type,QString value){
+bool KoResourceBundle::isInstalled()
+{
+    return installed;
+}
+
+void KoResourceBundle::addMeta(QString type,QString value)
+{
     meta->addTag(type,value);
     meta->show();
 }
@@ -81,6 +95,7 @@ void KoResourceBundle::addFile(QString fileType,QString filePath)
 void KoResourceBundle::removeFile(QString fileName)
 {
     QList<QString> list=manifest->removeFile(fileName);
+
     for (int i=0;i<list.size();i++) {
         meta->removeFirstTag("tag",list.at(i));
     }
@@ -104,14 +119,15 @@ void KoResourceBundle::install()
         manifest->exportTags();
         //TODO Vérifier que l'export est validé et copié dans les fichiers
         //TODO Sinon, déterminer pourquoi et comment faire
-        isInstalled=true;
-        //Modifier les chemins des fichiers si c'est la première installation
+        installed=true;
+        manifest->install();
+        //TODO Modifier les chemins des fichiers si c'est la première installation
     }
 }
 
 void KoResourceBundle::uninstall()
 {
-    if(!isInstalled)
+    if(!installed)
         return;
 
     QList<QString> directoryList = manifest->getDirList();
@@ -126,7 +142,9 @@ void KoResourceBundle::uninstall()
             cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
         }
     }    
-    isInstalled=false;
+
+    installed=false;
+    manifest->uninstall();
 }
 
 bool KoResourceBundle::removeDir(const QString & dirName)
@@ -151,4 +169,37 @@ bool KoResourceBundle::removeDir(const QString & dirName)
         result = dir.rmdir(dirName);
     }
     return result;
+}
+
+void KoResourceBundle::addDirs(){
+    QList<QString> listeType = manifest->getDirList();
+    for(int i = 0; i < listeType.size(); i++)
+    {
+        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->manager->kritaPath+listeType.at(i)+"/"+this->name());
+    }
+}
+
+QString KoResourceBundle::getAuthor()
+{
+    return meta->getValue("author");
+}
+
+QString KoResourceBundle::getLicense()
+{
+    return meta->getValue("license");
+}
+
+QString KoResourceBundle::getWebSite()
+{
+    return meta->getValue("website");
+}
+
+QString KoResourceBundle::getCreated()
+{
+    return meta->getValue("created");
+}
+
+QString KoResourceBundle::getUpdated()
+{
+    return meta->getValue("modified");
 }

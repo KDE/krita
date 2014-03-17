@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QProcessEnvironment>
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
@@ -28,13 +29,14 @@
 using namespace std;
 
 
-KoResourceManagerControl::KoResourceManagerControl(QString r):root(r),currentMeta(""),currentManifest("")
+KoResourceManagerControl::KoResourceManagerControl():currentMeta(""),currentManifest("")
 {
+    root=QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0);
     if (root.at(root.size()-1)!='/') {
         root.append("/");
     }
-    extractor=new KoResourceBundleManager(r.append("kde4/src/calligra/krita/data"));
-    current=new KoResourceBundle(root+"pack.zip");
+    extractor=new KoResourceBundleManager(root+"/share/apps/krita/");
+    current=new KoResourceBundle(root+"/share/apps/krita/bundles/pack.zip");
     current->load();
 }
 
@@ -49,9 +51,8 @@ void KoResourceManagerControl::setMeta(QString packName,QString type,QString val
 {
     Q_UNUSED(packName);
     //if (packName!=currentMeta) {
-        //currentMeta=packName; //TODO Vérifier Utilité!!!!!
-        current->addMeta(type,value);
-        cout<<qPrintable(type)<<endl;
+    //currentMeta=packName; //TODO Vérifier Utilité!!!!!
+    current->addMeta(type,value);
 }
 
 QIODevice* KoResourceManagerControl::getDevice(QString deviceName){
@@ -61,10 +62,12 @@ QIODevice* KoResourceManagerControl::getDevice(QString deviceName){
     return new QFile();
 }
 
-void KoResourceManagerControl::createPack()
+void KoResourceManagerControl::createPack(QList<QString> resources)
 {
-    current->addFile("brushes",root+"kde4/src/calligra/krita/data/brushes/A_flowers.gih");
-    current->addFile("brushes",root+"kde4/src/calligra/krita/data/brushes/A_Angular_church.gbr");
+
+    for (int i = 0; i < resources.size(); i++) {
+        current->addFile(resources.at(i).section('/',resources.count("/")-2,resources.count("/")-2),resources.at(i));
+    }
     current->save();
     current->load();
 }
@@ -73,6 +76,7 @@ void KoResourceManagerControl::installPack(QString packName)
 {
     Q_UNUSED(packName);
     current->install();
+    current->addDirs();
     //extractor.setReadPack(packName);
     //extractor.extractPack();
     //TODO Exporter les XML si ce n'est pas fait dans l'extract
@@ -102,12 +106,14 @@ void KoResourceManagerControl::deletePack(QString packName)
 {
     Q_UNUSED(packName);
     cout<<"Delete"<<endl;
+    if(current->isInstalled()) {
+        uninstallPack("");
+    }
     QFile::remove(root+"pack.zip");
     //TODO Vérifier si le paquet est installé
     //TODO Si oui, supprimer les dossiers et fichiers Xml
     //TODO Supprimer l'archive
 }
-
 
 //TODO Rajouter des paramètres si besoin est (exemple : valeur comboBox etc...)
 void KoResourceManagerControl::refreshCurrentTable()

@@ -44,7 +44,7 @@ public:
      * @brief KoResourceBundle : Ctor
      * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath,QString kritaPath="/home/metabolic/kde4/src/calligra/krita/data");
+    KoResourceBundle(QString const& bundlePath);
 
     /**
      * @brief ~KoResourceBundle : Dtor
@@ -111,14 +111,20 @@ public:
      * @return true if succeed, false otherwise.
      */
     bool removeDir(const QString & dirName);
+    void addDirs();
+    QString getAuthor();
+    QString getLicense();
+    QString getWebSite();
+    QString getCreated();
+    QString getUpdated();
+    bool isInstalled();
 
 private:
     QImage thumbnail;
     KoXmlResourceBundleManifest* manifest;
     KoXmlResourceBundleMeta* meta;
     KoResourceBundleManager* manager;
-    bool isInstalled;
-
+    bool installed;
 };
 
 #endif // KORESOURCEBUNDLE_H

@@ -37,6 +37,7 @@
 #include <kis_image.h>
 #include <KoPattern.h>
 #include <recorder/kis_play_info.h>
+#include <recorder/kis_macro.h>
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_recorded_action_factory_registry.h>
 #include <recorder/kis_recorded_action_load_context.h>
@@ -91,11 +92,6 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         addAction("Macro_Open_Edit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
 
-        // Save recorded action
-        action  = new KisAction(i18n("Save all actions"), this);
-        addAction("Recording_Global_Save", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
-
         // Start recording action
         m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
         addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
@@ -113,11 +109,6 @@ BigBrotherPlugin::~BigBrotherPlugin()
 {
     m_view = 0;
     delete m_recorder;
-}
-
-void BigBrotherPlugin::slotSave()
-{
-    saveMacro(m_view->image()->actionRecorder(), KUrl());
 }
 
 void BigBrotherPlugin::slotOpenPlay()

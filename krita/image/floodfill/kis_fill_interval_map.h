@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FILL_PAINTER_TEST_H
-#define KIS_FILL_PAINTER_TEST_H
+#ifndef __KIS_FILL_INTERVAL_MAP_H
+#define __KIS_FILL_INTERVAL_MAP_H
 
-#include <QtTest>
+#include <QMap>
+#include <QStack>
+#include <QScopedPointer>
+#include "krita_export.h"
+#include "kis_fill_interval.h"
 
-class KisFillPainterTest : public QObject
+
+class KRITAIMAGE_EXPORT KisFillIntervalMap
 {
-    Q_OBJECT
-private slots:
+public:
 
-    void testCreation();
-    void benchmarkFillingLegacy();
-    void benchmarkFillingScanline();
+public:
+    KisFillIntervalMap();
+    ~KisFillIntervalMap();
 
+    void insertInterval(const KisFillInterval &interval);
+    void cropInterval(KisFillInterval *interval);
+
+    QStack<KisFillInterval> fetchAllIntervals(int rowCorrection = 0) const;
+    void clear();
+
+private:
+    friend class KisFillIntervalMapTest;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif
+#endif /* __KIS_FILL_INTERVAL_MAP_H */

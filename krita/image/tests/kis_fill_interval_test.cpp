@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FILL_PAINTER_TEST_H
-#define KIS_FILL_PAINTER_TEST_H
+#include "kis_fill_interval_test.h"
 
-#include <QtTest>
+#include <qtest_kde.h>
 
-class KisFillPainterTest : public QObject
+#include <floodfill/kis_fill_interval.h>
+
+void KisFillIntervalTest::testIsValid()
 {
-    Q_OBJECT
-private slots:
+    KisFillInterval i1;
+    QVERIFY(!i1.isValid());
 
-    void testCreation();
-    void benchmarkFillingLegacy();
-    void benchmarkFillingScanline();
+    KisFillInterval i2(0,1,0);
+    QVERIFY(i2.isValid());
 
-};
+    i2.invalidate();
+    QVERIFY(!i2.isValid());
+}
 
-#endif
+QTEST_KDEMAIN(KisFillIntervalTest, GUI)

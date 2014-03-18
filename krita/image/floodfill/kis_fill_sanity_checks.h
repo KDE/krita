@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FILL_PAINTER_TEST_H
-#define KIS_FILL_PAINTER_TEST_H
+#ifndef __KIS_FILL_SANITY_CHECKS_H
+#define __KIS_FILL_SANITY_CHECKS_H
 
-#include <QtTest>
+#define ENABLE_FILL_SANITY_CHECKS
 
-class KisFillPainterTest : public QObject
-{
-    Q_OBJECT
-private slots:
+#ifdef ENABLE_FILL_SANITY_CHECKS
 
-    void testCreation();
-    void benchmarkFillingLegacy();
-    void benchmarkFillingScanline();
+#include <stdexcept>
+#define SANITY_ASSERT_MSG(cond, msg) ((!(cond)) ? throw std::invalid_argument(msg) : qt_noop())
 
-};
+#else
 
-#endif
+#define SANITY_ASSERT_MSG(cond, msg)
+
+#endif /* ENABLE_FILL_SANITY_CHECKS */
+
+
+#endif /* __KIS_FILL_SANITY_CHECKS_H */

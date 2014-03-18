@@ -450,6 +450,7 @@ QString BinaryExpr::tokenToString()
     case LESS_OR_EQUAL: return "<=";
     case GREATER_OR_EQUAL: return ">=";
     case LIKE: return "LIKE";
+    case NOT_LIKE: return "NOT LIKE";
     case SQL_IN: return "IN";
         // other logical operations: OR (or ||) AND (or &&) XOR
     case SIMILAR_TO: return "SIMILAR TO";

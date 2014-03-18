@@ -183,7 +183,7 @@ public:
 
 /*! A base class for binary operation
  - arithmetic operations: + - / * % << >> & | ||
- - relational operations: = (or ==) < > <= >= <> (or !=) LIKE IN 'SIMILAR TO' 'NOT SIMILAR TO'
+ - relational operations: = (or ==) < > <= >= <> (or !=) LIKE 'NOT LIKE' IN 'SIMILAR TO' 'NOT SIMILAR TO'
  - logical operations: OR (or ||) AND (or &&) XOR
  - SpecialBinary "pseudo operators":
     * e.g. "f1 f2" : token == 0

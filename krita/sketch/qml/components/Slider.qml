@@ -28,6 +28,10 @@ Item {
     property bool useExponentialValue: false;
     onValueChanged: handle.resetHandle();
     onExponentialValueChanged: handle.resetHandle(true);
+
+    property alias border: fill.border;
+    property alias background: fill.color;
+
     Rectangle {
         id: fill;
         anchors.fill: parent;

@@ -25,6 +25,7 @@ set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test release
 set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
+set(CALLIGRA_YEAR 2014) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -102,6 +103,9 @@ endif (RELEASE_BUILD)
 ############
 
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (WIN32)
+    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -396,7 +400,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.2)
+set(SQLITE_RECOMMENDED_VERSION 3.8.4)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -634,19 +638,19 @@ endif(WIN32)
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Fontconfig)
     macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 ##
 ## Test for Freetype
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Freetype)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")

@@ -41,6 +41,5 @@ void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, 
 
     qreal  rate    = scaleMin + (scaleMax - scaleMin) * multiplicator * computeValue(info); // scale m_rate into the range scaleMin - scaleMax
     quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * 255.0), OPACITY_OPAQUE_U8);
-
     painter.setOpacity(opacity);
 }

@@ -45,7 +45,7 @@ KAboutData * newKritaAboutData()
                                             version.toLatin1(),
                                             ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
-                                            ki18n("(c) 1999-2013 The Krita team.\n"),
+                                            ki18n("© 1999-%1, The Krita Team").subs(CALLIGRA_YEAR),
                                             KLocalizedString(),
                                             "http://www.krita.org",
                                             "submit@bugs.kde.org");

@@ -21,14 +21,14 @@
 #ifndef KORESOURCEMODEL_H
 #define KORESOURCEMODEL_H
 
-#include <QAbstractTableModel>
+#include "KoResourceModelBase.h"
 #include "kowidgets_export.h"
 
 class KoAbstractResourceServerAdapter;
 class KoResource;
 
 /// The resource model managing the resource data
-class KOWIDGETS_EXPORT KoResourceModel : public QAbstractTableModel
+class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:

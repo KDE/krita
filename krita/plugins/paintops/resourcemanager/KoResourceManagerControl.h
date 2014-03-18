@@ -41,12 +41,12 @@ class KoResourceManagerControl
     KoResourceBundle *current;
 
 public:
-    KoResourceManagerControl(QString="/home/metabolic");
+    KoResourceManagerControl();
     ~KoResourceManagerControl();
 
     void setMeta(QString,QString,QString);
     QIODevice* getDevice(QString);
-    void createPack();
+    void createPack(QList<QString>);
     void installPack(QString);
     void uninstallPack(QString);
     void deletePack(QString);

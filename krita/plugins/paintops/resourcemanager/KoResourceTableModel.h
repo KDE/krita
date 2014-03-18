@@ -20,18 +20,63 @@
 #ifndef KORESOURCETABLEMODEL_H
 #define KORESOURCETABLEMODEL_H
 
-#include "KoResourceModel.h"
+#include "KoResourceServerAdapter.h"
+#include "KoResourceModelBase.h"
+#include <QModelIndex>
 
-class KoResourceTableModel : public KoResourceModel
+class KoResource;
+
+class KoResourceTableModel : public KoResourceModelBase
 {
     Q_OBJECT
     public:
-        KoResourceTableModel(KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
+        KoResourceTableModel(QList<KoAbstractResourceServerAdapter*> resourceAdapterList, QObject * parent = 0 );
         int rowCount(const QModelIndex &parent = QModelIndex()) const ;
         int columnCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        QModelIndex index ( int row, int column, const QModelIndex & ) const;
+        QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
+
+        KoAbstractResourceServerAdapter* getResourceAdapter(KoResource *resource) const;
+        QModelIndex indexFromResource(KoResource* resource) const;
+        QStringList assignedTagsList(KoResource *resource) const;
+        bool removeResource(KoResource* resource);
+        void addTag(KoResource* resource, const QString& tag);
+        void deleteTag(KoResource *resource, const QString &tag);
+        int resourcesCount() const;
+        QList<KoResource *> currentlyVisibleResources() const;
+        void updateServer();
+        void enableResourceFiltering(bool enable);
+        void searchTextChanged(const QString& searchString);
+        void clearSelected();
+        QList<QString> getSelectedResource();
+
+        QStringList tagNamesList() const;
+        void setCurrentTag(const QString& currentTag);
+        QList<KoResource *> serverResources() const;
+        void tagCategoryMembersChanged();
+        void tagCategoryAdded(const QString& tag);
+        void tagCategoryRemoved(const QString& tag);
+
+    signals:
+        void tagBoxEntryModified();
+        void tagBoxEntryAdded(const QString& tag);
+        void tagBoxEntryRemoved(const QString& tag);
+
+    private slots:
+        void tagBoxEntryWasModified();
+        void tagBoxEntryWasAdded(const QString& tag);
+        void tagBoxEntryWasRemoved(const QString& tag);
+        void resourceAdded(KoResource *resource);
+        void resourceRemoved(KoResource *resource);
+        void resourceChanged(KoResource* resource);
+        void resourceSelected(QString fileName);
+        void allSelected(int index);
+
+    private:
+        QList<QString> m_resourceSelected;
+        QList<KoAbstractResourceServerAdapter*> m_resourceAdapterList;
+        QList<KoResource*> m_resources;
 };
 
 #endif // KORESOURCETABLEMODEL_H

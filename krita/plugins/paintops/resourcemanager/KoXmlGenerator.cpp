@@ -78,6 +78,19 @@ void KoXmlGenerator::checkSort()
 
 }
 
+QString KoXmlGenerator::getValue(QString tagName)
+{
+    QDomText currentTextValue;
+    QDomNodeList list=xmlDocument.elementsByTagName(tagName);
+
+    if (list.isEmpty() || (currentTextValue=list.at(0).firstChild().toText()).isNull()) {
+        return QString();
+    }
+    else {
+        return currentTextValue.data();
+    }
+}
+
 QDomElement KoXmlGenerator::addTag(QString tagName,QString textValue,bool emptyFile)
 {
     Q_UNUSED(emptyFile);
@@ -104,12 +117,12 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
             return true;
         }
         else {
-            QDomNode node=searchValue(tagList,textValue);
-            if (node.isNull()) {
+            QDomNode currentNode=searchValue(tagList,textValue);
+            if (currentNode.isNull()) {
                 return false;
             }
             else {
-                root.removeChild(node);
+                root.removeChild(currentNode);
                 return true;
             }
         }
@@ -124,12 +137,12 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString attName,QString attV
         return false;
     }
     else {
-        QDomNode node=searchValue(tagList,attName,attValue);
-        if (node.isNull()) {
+        QDomNode currentNode=searchValue(tagList,attName,attValue);
+        if (currentNode.isNull()) {
             return false;
         }
         else {
-            node.parentNode().removeChild(node);
+            currentNode.parentNode().removeChild(currentNode);
             return true;
         }
     }
@@ -151,12 +164,12 @@ void KoXmlGenerator::removeTag(QString tagName)
 
 QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
 {
-    QDomNode node;
+    QDomNode currentNode;
 
     for (int i=0;i<tagList.size();i++) {
-        node=tagList.item(i);
-        if (node.firstChild().toText().data()==textValue) {
-            return node;
+        currentNode=tagList.item(i);
+        if (currentNode.firstChild().toText().data()==textValue) {
+            return currentNode;
         }
     }
 
@@ -165,12 +178,12 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
 
 QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString attName,QString attValue)
 {
-    QDomNode node;
+    QDomNode currentNode;
 
     for (int i=0;i<tagList.size();i++) {
-        node=tagList.item(i);
-        if (node.toElement().attributeNode(attName).value()==attValue) {
-            return node;
+        currentNode=tagList.item(i);
+        if (currentNode.toElement().attributeNode(attName).value()==attValue) {
+            return currentNode;
         }
     }
     return QDomNode();

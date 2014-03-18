@@ -99,41 +99,41 @@ KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QStrin
 
 void KoXmlResourceBundleMeta::checkSort()
 {
-    QDomNode prev;
-    QDomNode current = root.firstChild();
-    QDomNode next = current.nextSibling();
+    QDomNode prevNode;
+    QDomNode currentNode = root.firstChild();
+    QDomNode nextNode = currentNode.nextSibling();
 
-    TagEnum name;
-    TagEnum lastOk=getTagEnumValue(current.toElement().tagName());
+    TagEnum currentName;
+    TagEnum lastOk=getTagEnumValue(currentNode.toElement().tagName());
 
-    while (!next.isNull()) {
-        name=getTagEnumValue(next.toElement().tagName());
+    while (!nextNode.isNull()) {
+        currentName=getTagEnumValue(nextNode.toElement().tagName());
 
-        if (lastOk>name) {
-            prev=current.previousSibling();
-            while (getTagEnumValue(prev.toElement().tagName())>name && !prev.isNull()) {
-                  prev=prev.previousSibling();
+        if (lastOk>currentName) {
+            prevNode=currentNode.previousSibling();
+            while (getTagEnumValue(prevNode.toElement().tagName())>currentName && !prevNode.isNull()) {
+                  prevNode=prevNode.previousSibling();
             }
 
-            if (name!=Tag && name!=Other && getTagEnumValue(prev.toElement().tagName())==name) {
-                root.removeChild(next);
+            if (currentName!=Tag && currentName!=Other && getTagEnumValue(prevNode.toElement().tagName())==currentName) {
+                root.removeChild(nextNode);
             }
-            else if (prev.isNull()){
-                root.insertBefore(next,prev);
+            else if (prevNode.isNull()){
+                root.insertBefore(nextNode,prevNode);
             }
             else {
-                root.insertAfter(next,prev);
+                root.insertAfter(nextNode,prevNode);
             }
         }
-        else if (lastOk==name && name!=Tag && name!=Other) {
-            root.removeChild(next);
+        else if (lastOk==currentName && currentName!=Tag && currentName!=Other) {
+            root.removeChild(nextNode);
         }
         else {
-            lastOk=name;
-            current=next;
+            lastOk=currentName;
+            currentNode=nextNode;
         }
 
-        next=current.nextSibling();
+        nextNode=currentNode.nextSibling();
     }
 }
 
@@ -149,9 +149,9 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
     }
     else {
         QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
-        QDomNode node=tagList.item(0);
+        QDomNode currentNode=tagList.item(0);
 
-        if (emptyFile || tagEnumValue==Other || node.isNull() || (tagEnumValue==Tag &&
+        if (emptyFile || tagEnumValue==Other || currentNode.isNull() || (tagEnumValue==Tag &&
              searchValue(tagList,textValue).isNull())) {
             if (textValue!="") {
                 QDomElement child = xmlDocument.createElement(tagName);
@@ -165,12 +165,12 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
         }
         else if (tagEnumValue!=Tag) {
             if (textValue=="") {
-                root.removeChild(node);
+                root.removeChild(currentNode);
             }
             else {
-                node.firstChild().setNodeValue(textValue);
+                currentNode.firstChild().setNodeValue(textValue);
             }
-            return node.toElement();
+            return currentNode.toElement();
         }
         else {
             return QDomElement();
@@ -180,19 +180,21 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
 
 void KoXmlResourceBundleMeta::addTags(QList<QString> list)
 {
+    QString currentTag;
     QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
-    QString prov;
 
     for (int i=0;i<list.size();i++) {
-        prov=list.at(i);
-        if (prov != "" && searchValue(tagList,prov).isNull()) {
-            root.appendChild(xmlDocument.createElement("tag").appendChild(xmlDocument.createTextNode(prov)));
+        currentTag=list.at(i);
+        if (currentTag != "" && searchValue(tagList,currentTag).isNull()) {
+            root.appendChild(xmlDocument.createElement("tag").appendChild(xmlDocument.createTextNode(currentTag)));
         }
     }
 }
 
-QString KoXmlResourceBundleMeta::getPackName(){
+QString KoXmlResourceBundleMeta::getPackName()
+{
     QDomNodeList tagList=xmlDocument.elementsByTagName("name");
+
     if (tagList.size() == 1) {
         return tagList.at(0).firstChild().toText().data();
     }
@@ -201,6 +203,7 @@ QString KoXmlResourceBundleMeta::getPackName(){
     }
 }
 
-QString KoXmlResourceBundleMeta::getShortPackName(){
+QString KoXmlResourceBundleMeta::getShortPackName()
+{
     return getPackName().section('/',getPackName().count('/')).remove(".zip");
 }

@@ -441,6 +441,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_d->image->undoAdapter()->addCommand(cmd);
             }
             else {
+                m_d->image->setModified();
                 cmd->redo();
                 delete cmd;
             }

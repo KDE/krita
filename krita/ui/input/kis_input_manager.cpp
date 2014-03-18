@@ -497,8 +497,10 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
+#ifndef Q_OS_MAC
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
+#endif
 }
 
 KisInputManager::~KisInputManager()

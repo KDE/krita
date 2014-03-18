@@ -25,7 +25,7 @@
 #include "krita_export.h"
 
 /// Resource for storing of workspaces
-class KRITAIMAGE_EXPORT KisWorkspaceResource : public KoResource , public KisPropertiesConfiguration
+class KRITAUI_EXPORT KisWorkspaceResource : public KoResource , public KisPropertiesConfiguration
 {
 
 public:

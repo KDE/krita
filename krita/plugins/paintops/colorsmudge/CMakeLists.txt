@@ -6,6 +6,8 @@ set(kritacolorsmudgepaintop_PART_SRCS
     kis_rate_option_widget.cpp
     kis_smudge_option.cpp
     kis_smudge_option_widget.cpp
+    kis_smudge_radius_option.cpp
+    kis_smudge_radius_option_widget.cpp
 )
 
 kde4_add_plugin(kritacolorsmudgepaintop ${kritacolorsmudgepaintop_PART_SRCS})

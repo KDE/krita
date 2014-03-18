@@ -150,6 +150,15 @@
 #define CALLIGRA_IS_VERSION(a,b,c) ( CALLIGRA_VERSION >= CALLIGRA_MAKE_VERSION(a,b,c) )
 
 /**
+ * @def CALLIGRA_YEAR
+ * @ingroup CalligraMacros
+ * @brief Year of the Calligra release, set at compile time
+ *
+ * This macro is used in "About application" dialog for strings such as "© 2012-..., The Author Team".
+*/
+#define CALLIGRA_YEAR "@CALLIGRA_YEAR@"
+
+/**
  * Namespace for general Calligra functions.
  */
 namespace Calligra

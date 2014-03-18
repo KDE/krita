@@ -243,6 +243,13 @@ void KisPixelSelection::invert()
     // Region is needed here (not exactBounds or extent), because
     // unselected but existing pixels need to be inverted too
     QRect rc = region().boundingRect();
+    QRect imageBounds = defaultBounds()->bounds();
+
+    // check if rc have biger size than the whole image and set the rc size to the whole image one if yes.
+    if (rc.width() > imageBounds.width())
+      rc.setWidth(imageBounds.intersect(rc).width());
+    if (rc.height() > imageBounds.height())
+      rc.setHeight(imageBounds.intersect(rc).height());
 
     if (!rc.isEmpty()) {
         KisSequentialIterator it(this, rc);

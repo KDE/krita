@@ -66,6 +66,8 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
+    
+    KoResourceModelBase.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -132,6 +134,8 @@ install( FILES
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
+
+    KoResourceModelBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

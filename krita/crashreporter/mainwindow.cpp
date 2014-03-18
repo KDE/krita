@@ -250,8 +250,8 @@ void MainWindow::restart()
     }
     else {
         doRestart(chkRemoveSettings->isChecked());
+        qApp->quit();
     }
-    qApp->quit();
 }
 
 void MainWindow::close()
@@ -297,6 +297,7 @@ void MainWindow::startUpload()
            << Field("ProductName", "krita")
            << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
+           << Field("Email", txtEmail->text().toLatin1())
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
 #ifdef Q_WS_WIN
@@ -336,35 +337,32 @@ void MainWindow::startUpload()
 
     // add minidump file
     QString dumpfile = m_d->dumpPath + "/" + m_d->id + ".dmp";
+    qDebug() << "dumpfile" << dumpfile;
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
             + QFileInfo(dumpfile).fileName().toAscii() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n\r\n";
     QFile file(dumpfile);
     if (file.exists()) {
         file.open(QFile::ReadOnly);
-        body += file.readAll();
+        QByteArray ba = file.readAll();
+        body += ba.toBase64();
         file.remove();
     }
     body += "\r\n";
 
-    //    // add logfile
-    //    body += boundary + "\r\n";
-    //    body += "Content-Disposition: form-data; name=\"logfile\"\r\n";
-    //    body += "\r\n";
-    //    QString dataLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-    //    QString logFileLocation = dataLocation + "/log/session.txt";
-    //    QFile logFile(logFileLocation);
-    //    if (logFile.exists() && logFile.open(QFile::ReadOnly)) {
-    //        // truncate logfile if necessary, only submit whole lines
-    //        if (logFile.size() > MAX_LOGUPLOAD_SIZE) {
-    //            logFile.seek(logFile.size() - (MAX_LOGUPLOAD_SIZE + 1));
-    //            logFile.readLine();
-    //        }
-    //        body +=	logFile.read(MAX_LOGUPLOAD_SIZE);
-    //        logFile.close();
-    //    }
-    //    body += "\r\n";
+    // add description
+    body += boundary + "\r\n";
+    body += "Content-Disposition: form-data; name=\"description\"\r\n";
+    body += "\r\n";
+    body +=	txtDescription->toPlainText();
+
+    body += "\r\n";
     body += boundary + "--" + "\r\n";
+
+    QFile report(QDir::homePath() + "/krita-" + m_d->id + ".report");
+    report.open(QFile::WriteOnly);
+    report.write(body.toLatin1());
+    report.close();
 
     QNetworkReply *reply = m_d->networkAccessManager->post(request, body.toLatin1());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(uploadError(QNetworkReply::NetworkError)));
@@ -373,7 +371,7 @@ void MainWindow::startUpload()
 
 void MainWindow::uploadDone(QNetworkReply *reply)
 {
-    qDebug() << "updloadDone" << reply->errorString();
+    qDebug() << "updloadDone";
     if (reply && reply->error() != QNetworkReply::NoError) {
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
@@ -386,13 +384,14 @@ void MainWindow::uploadDone(QNetworkReply *reply)
 
 void MainWindow::uploadProgress(qint64 received, qint64 total)
 {
+    qDebug() << "updloadProgress";
     progressBar->setMaximum(total);
     progressBar->setValue(received);
-
 }
 
 void MainWindow::uploadError(QNetworkReply::NetworkError error)
 {
+    qDebug() << "updloadError" << error;
     // Fake success...
     progressBar->setRange(0, 100);
     progressBar->setValue(100);

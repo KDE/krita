@@ -29,7 +29,7 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 
-class KoResourceModel;
+class KoResourceModelBase;
 class KoResource;
 
 class KoResourceTaggingManager : public QObject
@@ -37,7 +37,7 @@ class KoResourceTaggingManager : public QObject
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModel*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;
     QString currentTag();

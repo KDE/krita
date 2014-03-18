@@ -73,6 +73,8 @@ public:
      */
     virtual void checkSort();
 
+    QString getValue(QString tagName);
+
     /**
      * @brief addTag : Append a tag, with or without text node, to the root of the document
      * @param tagName the name of the tag to be added

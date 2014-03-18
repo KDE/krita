@@ -9,3 +9,8 @@ endif (SHOULD_BUILD_LIB_KDGANTT)
 if (SHOULD_BUILD_LIB_KDCHART)
     add_subdirectory(kdchart)
 endif (SHOULD_BUILD_LIB_KDCHART)
+
+if (WIN32 AND USE_BREAKPAD)
+    add_subdirectory(google-breakpad)
+endif (WIN32 AND USE_BREAKPAD)
+

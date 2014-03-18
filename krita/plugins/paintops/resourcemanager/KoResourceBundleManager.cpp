@@ -33,7 +33,6 @@ KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoS
 {
     if (packName!="") {
         resourcePack=KoStore::createStore(packName,mode,"",KoStore::Zip);
-
     }
 
     if (kritaPath!="" && kritaPath.at(kritaPath.size()-1)!='/') {
@@ -184,6 +183,16 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
     }
 
     return 0;
+}
+
+QString KoResourceBundleManager::getKritaPath()
+{
+    return kritaPath;
+}
+
+QString KoResourceBundleManager::getPackName()
+{
+    return packName;
 }
 
 //File Method Shortcuts

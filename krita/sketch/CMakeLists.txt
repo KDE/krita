@@ -65,6 +65,9 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/RecentImagesModel.cpp
     models/MultiFeedRSSModel.cpp
     models/FileSystemModel.cpp
+    models/ColorModelModel.cpp
+    models/ColorDepthModel.cpp
+    models/ColorProfileModel.cpp
 )
 
 

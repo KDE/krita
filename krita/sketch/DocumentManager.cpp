@@ -21,6 +21,7 @@
 #include "ProgressProxy.h"
 #include "Settings.h"
 #include "RecentFileManager.h"
+#include <libs/pigment/KoColor.h>
 
 #include <KoColorSpaceRegistry.h>
 
@@ -51,6 +52,7 @@ public:
     QString openDocumentFilename;
     int newDocWidth, newDocHeight; float newDocResolution;
     bool importingDocument;
+    QVariantMap newDocOptions;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -97,14 +99,44 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
 }
 
+void DocumentManager::newDocument(const QVariantMap& options)
+{
+    closeDocument();
+    d->newDocOptions = options;
+    QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
+}
+
 void DocumentManager::delayedNewDocument()
 {
     d->document = new KisDoc2(part());
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     part()->setDocument(d->document);
-    d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
-    d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+
+    if(d->newDocOptions.isEmpty())
+    {
+        d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
+        d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+    }
+    else
+    {
+        QString name = d->newDocOptions.value("name", "New Image").toString();
+        int width = d->newDocOptions.value("width").toInt();
+        int height = d->newDocOptions.value("height").toInt();
+        float res = d->newDocOptions.value("resolution", 72.0f).toFloat();
+
+        QString colorModelId = d->newDocOptions.value("colorModelId").toString();
+        QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
+        QString colorProfileId = d->newDocOptions.value("colorProfileId").toString();
+
+        const KoColorSpace* profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
+
+        QColor background = d->newDocOptions.value("backgroundColor").value<QColor>();
+        background.setAlphaF(d->newDocOptions.value("backgroundOpacity", 1.0f).toFloat());
+        KoColor bg(background, profile);
+
+        d->document->newImage(name, width, height, profile, bg, QString(), res);
+    }
 
     emit documentChanged();
 }

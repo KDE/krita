@@ -48,6 +48,12 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
     return QString("temp://%1x%2").arg(width).arg(height);
 }
 
+QString ImageBuilder::createBlankImage(const QVariantMap& options)
+{
+    DocumentManager::instance()->newDocument(options);
+    return QString("temp://custom");
+}
+
 QString ImageBuilder::createImageFromClipboard()
 {
     QSize sz = KisClipboard::instance()->clipSize();

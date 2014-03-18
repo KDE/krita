@@ -20,6 +20,7 @@
 #define DOCUMENTMANAGER_H
 
 #include <QObject>
+#include <QtCore/QVariantMap>
 
 #include "image/krita_export.h"
 
@@ -41,6 +42,7 @@ public:
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
+    void newDocument(const QVariantMap& options);
     void openDocument(const QString& document, bool import = false);
     void closeDocument();
     bool save();

@@ -177,6 +177,7 @@ install(FILES
                   qml/SaveImagePage.qml
                   qml/SettingsPage.qml
                   qml/WelcomePage.qml
+                  qml/CustomImagePage.qml
                                     DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
 install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)

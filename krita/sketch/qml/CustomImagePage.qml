@@ -78,7 +78,7 @@ Page {
             leftMargin: Constants.GridWidth * 0.25;
             rightMargin: Constants.GridWidth * 0.25;
         }
-        spacing: Constants.GridHeight * 0.25;
+        spacing: Constants.DefaultMargin;
 
         TextField {
             id: nameField;
@@ -99,7 +99,7 @@ Page {
             radius: Constants.DefaultMargin;
 
             Column {
-                spacing: Constants.GridHeight * 0.1;
+                spacing: Constants.DefaultMargin;
                 width: parent.width;
 
                 Label {
@@ -110,37 +110,44 @@ Page {
                     text: "Image Size"
                 }
 
-                TextField {
-                    id: widthField;
-
+                Row {
                     height: Constants.GridHeight * 0.75;
+                    width: parent.width;
 
-                    placeholder: "Width";
-                    validator: IntValidator{bottom: 0; top: 10000;}
-                    numeric: true;
-                    nextFocus: heightField;
+                    TextField {
+                        id: widthField;
 
-                    background: "#63ffffff";
-                    border.color: "white";
-                    border.width: 1;
+                        width: parent.width / 2;  // 2 - Constants.GridWidth * 0.5;
+                        height: parent.height;
 
-                    Component.onCompleted: text = Krita.Window.width;
-                }
-                TextField {
-                    id: heightField;
+                        placeholder: "Width";
+                        validator: IntValidator{bottom: 0; top: 10000;}
+                        numeric: true;
+                        nextFocus: heightField;
 
-                    height: Constants.GridHeight * 0.75;
+                        background: "#63ffffff";
+                        border.color: "white";
+                        border.width: 1;
 
-                    placeholder: "Height"
-                    validator: IntValidator{bottom: 0; top: 10000;}
-                    numeric: true;
-                    nextFocus: resolutionField;
+                        Component.onCompleted: text = Krita.Window.width;
+                    }
+                    TextField {
+                        id: heightField;
 
-                    background: "#63ffffff";
-                    border.color: "white";
-                    border.width: 1;
+                        width: parent.width / 2; // 2 - Constants.GridWidth * 0.5;
+                        height: parent.height;
 
-                    Component.onCompleted: text = Krita.Window.height;
+                        placeholder: "Height"
+                        validator: IntValidator{bottom: 0; top: 10000;}
+                        numeric: true;
+                        nextFocus: resolutionField;
+
+                        background: "#63ffffff";
+                        border.color: "white";
+                        border.width: 1;
+
+                        Component.onCompleted: text = Krita.Window.height;
+                    }
                 }
                 TextField {
                     id: resolutionField;
@@ -237,7 +244,7 @@ Page {
                     height: Constants.GridHeight * 0.75;
                     width: parent.width;
 
-                    expandedHeight: Constants.GridHeight * 3;
+                    expandedHeight: Constants.GridHeight * 2;
 
                     model: ListModel {
                         ListElement { text: "White"; r: 1.0; g: 1.0; b: 1.0; }

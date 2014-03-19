@@ -50,13 +50,13 @@
 
 int main( int argc, char** argv )
 {
-    KAboutData aboutData("krita",
-                         0,
+    KAboutData aboutData("kritagemini",
+                         "krita",
                          ki18n("Krita Gemini"),
                          "0.1",
                          ki18n("Krita Gemini: Painting at Home and on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-2012 The Krita team and KO GmbH.\n"),
+                         ki18n("(c) 1999-2014 The Krita team and KO GmbH.\n"),
                          KLocalizedString(),
                          "http://www.krita.org",
                          "submit@bugs.kde.org");

@@ -74,9 +74,9 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         pixels[0] = new quint8[pixelSize];
 
         int loop_increment = 1;
-        if(smudgeRadius >= 10)
+        if(smudgeRadius >= 16)
         {
-            loop_increment = smudgeRadius/16;
+            loop_increment = (2*smudgeRadius)/16;
         }
         int i = 0;
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);

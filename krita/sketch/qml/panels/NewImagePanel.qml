@@ -25,6 +25,8 @@ Item {
 
     enabled: !collapsed;
 
+    signal customImageClicked();
+
     Rectangle {
         id: panel;
         width: parent.width;
@@ -82,6 +84,8 @@ Item {
             anchors.top: header.bottom;
             width: parent.width;
             height: Constants.GridHeight * 9;
+
+            onCustomImageClicked: base.customImageClicked();
         }
     }
 

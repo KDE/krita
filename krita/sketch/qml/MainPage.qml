@@ -77,6 +77,8 @@ Page {
         anchors.left: parent.left;
         width: Constants.GridWidth * 4;
         height: parent.height;
+
+        onCustomImageClicked: pageStack.push(customImagePage);
     }
 
     OpenImagePanel {
@@ -290,6 +292,7 @@ Page {
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
     Component { id: saveAsPage; SaveImagePage { } }
+    Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); menuPanel.collapsed = true; } } }
 
     QtObject {
         id: d;

@@ -28,28 +28,31 @@
 
 #include <KoIcon.h>
 #include <KoUpdater.h>
+#include <KoResourceServerProvider.h>
+#include <KoFileDialogHelper.h>
 
-#include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <KoPattern.h>
-#include <recorder/kis_play_info.h>
-#include <recorder/kis_macro.h>
-#include <recorder/kis_recorded_action.h>
-#include <recorder/kis_recorded_action_factory_registry.h>
-#include <recorder/kis_recorded_action_load_context.h>
-#include <recorder/kis_recorded_action_save_context.h>
+#include <kis_resource_server_provider.h>
 #include <kis_types.h>
 #include <kis_view2.h>
+#include <KoPattern.h>
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_macro.h>
+#include <recorder/kis_macro_player.h>
+#include <recorder/kis_play_info.h>
+#include <recorder/kis_recorded_action_factory_registry.h>
+#include <recorder/kis_recorded_action.h>
+#include <recorder/kis_recorded_action_load_context.h>
+#include <recorder/kis_recorded_action_save_context.h>
 
 #include "actionseditor/kis_actions_editor.h"
 #include "actionseditor/kis_actions_editor_dialog.h"
-#include <kis_resource_server_provider.h>
-#include <KoResourceServerProvider.h>
-#include <recorder/kis_macro_player.h>
+
+#include <QDesktopServices>
 #include <QApplication>
 #include <QFileDialog>
 
@@ -114,6 +117,7 @@ BigBrotherPlugin::~BigBrotherPlugin()
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
+    qDebug() << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
@@ -177,12 +181,17 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 {
 
     Q_UNUSED(url);
+    QStringList mimeFilter;
+    mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    //QString filename = QFileDialog::getOpenFileName(m_view, i18n("Open Macro"), "*.krarec|Recorded actions (*.krarec)");
-    QString filename;
-    QFileDialog* dia = new QFileDialog();
-    dia->open();
+    QString filename = KoFileDialogHelper::getOpenFileName(m_view,
+                                                           i18n("Open Macro"),
+                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                                                           mimeFilter,
+                                                           "",
+                                                           "OpenDocument");
     RecordedActionLoadContext loadContext;
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QFile f(filename);

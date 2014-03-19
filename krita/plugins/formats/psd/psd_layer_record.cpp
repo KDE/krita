@@ -679,8 +679,6 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         }
         quint32 len = 0;
 
-
-
         // where this block starts, for the total size calculation
         quint64 startChannelBlockPos = io->pos();
 

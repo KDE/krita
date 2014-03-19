@@ -226,7 +226,43 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
     QRect rc(0, 0, m_header->width, m_header->height);
-    QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+    QVector<quint8* > tmp = dev->readPlanarBytes(0, 0, rc.width(), rc.height());
+    // then reorder the planes to fit the psd model -- alpha first, then display order
+    QVector<quint8* > planes;
+    QList<KoChannelInfo*> origChannels = dev->colorSpace()->channels();
+
+    quint8* alphaPlane = 0;
+    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
+        int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
+        //qDebug() << ppVar(ch->name()) << ppVar(ch->pos()) << ppVar(ch->displayPosition()) << ppVar(channelIndex);
+        if (ch->channelType() == KoChannelInfo::ALPHA) {
+            alphaPlane = tmp[channelIndex];
+        } else {
+            planes.append(tmp[channelIndex]);
+        }
+    }
+    planes.append(alphaPlane); // alpha is last, in contrast with layers, where it's first.
+    // now planes are holding pointers to quint8 arrays
+    tmp.clear();
+
+    // Now fix up the cmyk channels, we need to invert them
+    if (m_header->colormode == CMYK || m_header->colormode == CMYK64) {
+        for (int i = 0; i < 4; ++i) {
+            if (m_header->channelDepth == 8) {
+                for (int j = 0; j < rc.width() * rc.height(); ++j) {
+                    planes[i][j] = 255 - planes[i][j];
+                }
+            }
+            else if (m_header->channelDepth == 16) {
+                quint16 val;
+                for (int j = 0; j < rc.width() * rc.height(); ++j) {
+                    val = reinterpret_cast<quint16*>(planes[i])[j];
+                    val = quint16_MAX - ntohs(val);
+                    reinterpret_cast<quint16*>(planes[i])[j] = val;
+                }
+            }
+        }
+    }
 
     quint64 channelLengthPos = io->pos();
     // write zero's for the channel lengths section
@@ -236,24 +272,22 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
     // here the actual channel data starts
     quint64 channelStartPos = io->pos();
 
-    foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+    for (int channelInfoIndex = 0; channelInfoIndex  < planes.size(); ++channelInfoIndex) {
+        quint8 *plane = planes[channelInfoIndex];
 
-        dbgFile << "Writing channel" << channelInfo->name() << "to image section, Display position" << channelInfo->displayPosition() << "channel index" << KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels());
-
-        quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
-        quint32 stride = channelInfo->size() * rc.width();
+        quint32 stride = (m_header->channelDepth / 8) * rc.width();
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
-            if (channelInfo->size() == 1) {
-            } else if (channelInfo->size() == 2) {
+            if (m_header->channelDepth == 8) {
+            } else if (m_header->channelDepth == 16) {
                 quint16 *dataPtr = reinterpret_cast<quint16 *>(uncompressed.data());
                 for (int i = 0; i < rc.width(); i++) {
                     quint16 val = htons(*dataPtr);
                     *dataPtr = val;
                     ++dataPtr;
                 }
-            } else if (channelInfo->size() == 4) {
+            } else if (m_header->channelDepth == 32) {
                 quint32 *dataPtr = reinterpret_cast<quint32 *>(uncompressed.data());
                 for (int i = 0; i < rc.width(); i++) {
                     quint32 val = htonl(*dataPtr);

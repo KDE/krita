@@ -968,6 +968,8 @@ bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
                 memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
                 //dbgFile << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
                 memcpy(it->rawData(), pixel, 5);
+
+                delete[] pixel;
             }
 
             else if (channelSize == 2) {

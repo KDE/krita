@@ -21,7 +21,7 @@ set(kritagemini_SRCS
 
 
 if (WIN32)
-    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGemini.rc)
+    set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
 else (WIN32)
     kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
 endif (WIN32)
@@ -46,3 +46,4 @@ install(TARGETS   kritagemini ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritageminirc kritageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritagemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritagemini)
+install(FILES     kritagemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritagemini)

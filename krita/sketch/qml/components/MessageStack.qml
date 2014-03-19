@@ -51,7 +51,7 @@ Item {
                 radius: height / 2;
                 opacity: 0.5;
             }
-            Text {
+            Label {
                 id: label;
                 x: Constants.GridHeight / 4;
                 anchors.verticalCenter: parent.verticalCenter;

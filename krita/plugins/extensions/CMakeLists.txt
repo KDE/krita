@@ -14,5 +14,11 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
-add_subdirectory( gmic )
-
+# Allow to skip building GMIC plugin
+if(NOT DEFINED WITH_GMIC)
+    add_subdirectory( gmic )
+else(NOT DEFINED WITH_GMIC)
+    if(WITH_GMIC)
+        add_subdirectory( gmic )
+    endif(WITH_GMIC)
+endif(NOT DEFINED WITH_GMIC)

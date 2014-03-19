@@ -316,9 +316,8 @@ Panel {
                                 right: parent.right;
                                 rightMargin: Constants.DefaultMargin;
                                 left: modeButtons.right;
-                                leftMargin: Constants.DefaultMargin;
                             }
-                            text: "Mode: " + model.compositeDetails;
+                            text: "M: " + model.compositeDetails;
                             font: Settings.theme.font("small");
                             horizontalAlignment: Text.AlignRight;
                         }
@@ -328,9 +327,8 @@ Panel {
                                 right: parent.right;
                                 rightMargin: Constants.DefaultMargin;
                                 left: modeButtons.right;
-                                leftMargin: Constants.DefaultMargin;
                             }
-                            text: "Opacity: " + model.percentOpacity + "%";
+                            text: "O: " + model.percentOpacity + "%";
                             font: Settings.theme.font("small");
                             horizontalAlignment: Text.AlignRight;
                         }

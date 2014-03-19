@@ -407,7 +407,7 @@ void Theme::Private::rebuildFontCache()
             qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
         float lineHeight = qApp->activeWindow()->height() / lineCount;
-        font.setPixelSize(lineHeight * map.value("size", 1).toInt());
+        font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
 
         fontMap.insert(itr.key(), font);
     }

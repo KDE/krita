@@ -206,8 +206,9 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type, KoShape */*shape*/)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
 {
+    Q_UNUSED(shape);
     Q_D(KoShapeContainer);
     if (d->model == 0)
         return;

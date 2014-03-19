@@ -98,8 +98,9 @@ QStringList KraPlugin::keys() const
     return QStringList() << "kra" << "KRA";
 }
 
-QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice */*device*/, const QByteArray &format) const
+QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
+    Q_UNUSED(device);
     if (format == "kra" || format == "KRA")
         return Capabilities(CanRead);
     else

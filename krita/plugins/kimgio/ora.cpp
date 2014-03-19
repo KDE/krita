@@ -100,8 +100,9 @@ QStringList OraPlugin::keys() const
     return QStringList() << "ora" << "ORA";
 }
 
-QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice */*device*/, const QByteArray &format) const
+QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
+    Q_UNUSED(device);
     if (format == "ora" || format == "ORA")
         return Capabilities(CanRead);
     else

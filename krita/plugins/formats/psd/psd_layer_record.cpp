@@ -787,8 +787,10 @@ bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
     return false;
 }
 
-bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
+bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP dev, QIODevice *io)
 {
+    Q_UNUSED(dev);
+    Q_UNUSED(io);
     return false;
 }
 

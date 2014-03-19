@@ -279,10 +279,10 @@ public:
     MockPart()
     : KoPart( 0 )
     {}
-    KoView *createViewInstance(KoDocument */*document*/, QWidget * /* parent */ ) { return 0; }
+    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
     virtual KoMainWindow *createMainWindow() { return 0; }
 protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument */*document*/) { return 0; }
+    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
 };
 
 #endif

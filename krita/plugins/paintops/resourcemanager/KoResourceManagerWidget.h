@@ -27,7 +27,6 @@
 #include "KoResourceServerAdapter.h"
 #include "KoResourceManagerControl.h"
 #include <QSortFilterProxyModel>
-#include <krita_export.h>
 
 namespace Ui {
 class KoResourceManagerWidget;
@@ -35,7 +34,7 @@ class KoResourceManagerWidget;
 
 class QItemSelectionModel;
 
-class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
+class KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 public:

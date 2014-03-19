@@ -23,7 +23,7 @@
 
 class KoResource;
 
-class KRITAUI_EXPORT KoXmlResourceBundleManifest: public KoXmlGenerator
+class KoXmlResourceBundleManifest: public KoXmlGenerator
 {
 private:
     /**

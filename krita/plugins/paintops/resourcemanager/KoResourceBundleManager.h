@@ -19,7 +19,6 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
-#include <krita_export.h> 
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -28,7 +27,7 @@ class KoXmlResourceBundleMeta;
  * @brief The KoResourceBundleManager class
  * @details Manage resource bundles structure
  */
-class KRITAUI_EXPORT KoResourceBundleManager
+class KoResourceBundleManager
 {
 public:
 

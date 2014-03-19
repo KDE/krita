@@ -50,7 +50,7 @@ public:
         , imagePath("images/")
         , fontPath("fonts/")
         , fontsAdded(false)
-        , lineCount(60)
+        , lineCount(40)
     { }
 
     void rebuildFontCache();

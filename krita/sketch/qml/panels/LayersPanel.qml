@@ -296,7 +296,7 @@ Panel {
                                 checkable: true;
                                 checked: model.visible;
                                 checkedColor: Settings.theme.color("panels/layers/layer/visible");
-                                image: checked ? Settings.theme.icon("visible_on_small") : Settings.theme.icon("visible_off_small");
+                                image: checked ? Settings.theme.icon("visible_on-small") : Settings.theme.icon("visible_off-small");
                                 onCheckedChanged: layerModel.setVisible(model.index, checked);
                             }
                             Button {
@@ -305,7 +305,7 @@ Panel {
                                 checkable: true;
                                 checked: model.locked;
                                 checkedColor: Settings.theme.color("panels/layers/layer/locked");
-                                image: checked ? Settings.theme.icon("locked_on_small") : Settings.theme.icon("locked_off_small");
+                                image: checked ? Settings.theme.icon("locked_on-small") : Settings.theme.icon("locked_off-small");
                                 onCheckedChanged: layerModel.setLocked(model.index, checked);
                             }
                         }
@@ -317,7 +317,7 @@ Panel {
                                 rightMargin: Constants.DefaultMargin;
                                 left: modeButtons.right;
                             }
-                            text: "M: " + model.compositeDetails;
+                            text: model.compositeDetails;
                             font: Settings.theme.font("small");
                             horizontalAlignment: Text.AlignRight;
                         }
@@ -328,7 +328,7 @@ Panel {
                                 rightMargin: Constants.DefaultMargin;
                                 left: modeButtons.right;
                             }
-                            text: "O: " + model.percentOpacity + "%";
+                            text: model.percentOpacity + "%";
                             font: Settings.theme.font("small");
                             horizontalAlignment: Text.AlignRight;
                         }

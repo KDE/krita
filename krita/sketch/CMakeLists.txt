@@ -96,7 +96,7 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 
 
 if (WIN32)
-    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketch.rc)
+    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else (WIN32)
     kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
 endif (WIN32)
@@ -148,6 +148,7 @@ install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+#install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 # Sketch Qt Quick components
 # =============================================================================

@@ -129,7 +129,7 @@ Panel {
                         fillMode: Image.PreserveAspectFit;
                     }
                 }
-                Text {
+                Label {
                     id: layerNameLbl
                     anchors {
                         top: parent.top;
@@ -267,7 +267,7 @@ Panel {
                                 fillMode: Image.PreserveAspectFit;
                             }
                         }
-                        Text {
+                        Label {
                             id: layerNameLbl
                             anchors {
                                 top: parent.top;
@@ -276,23 +276,14 @@ Panel {
                             }
                             text: model.name;
                             color: Settings.theme.color("panels/layers/layer/text");
-                            font.pixelSize: Constants.DefaultFontSize;
                             elide: Text.ElideRight;
-                        }
-                        Text {
-                            anchors {
-                                top: layerNameLbl.bottom;
-                                right: parent.right;
-                                rightMargin: Constants.DefaultMargin;
-                            }
-                            text: "Mode: " + model.compositeDetails + ", " + model.percentOpacity + "%";
-                            font.pixelSize: Constants.SmallFontSize;
                         }
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.setActive(model.index);
                         }
                         Row {
+                            id: modeButtons;
                             anchors {
                                 left: layerThumbContainer.right;
                                 bottom: parent.bottom;
@@ -317,6 +308,31 @@ Panel {
                                 image: checked ? Settings.theme.icon("locked_on_small") : Settings.theme.icon("locked_off_small");
                                 onCheckedChanged: layerModel.setLocked(model.index, checked);
                             }
+                        }
+                        Label {
+                            id: modeLabel;
+                            anchors {
+                                top: layerNameLbl.bottom;
+                                right: parent.right;
+                                rightMargin: Constants.DefaultMargin;
+                                left: modeButtons.right;
+                                leftMargin: Constants.DefaultMargin;
+                            }
+                            text: "Mode: " + model.compositeDetails;
+                            font: Settings.theme.font("small");
+                            horizontalAlignment: Text.AlignRight;
+                        }
+                        Label {
+                            anchors {
+                                top: modeLabel.bottom;
+                                right: parent.right;
+                                rightMargin: Constants.DefaultMargin;
+                                left: modeButtons.right;
+                                leftMargin: Constants.DefaultMargin;
+                            }
+                            text: "Opacity: " + model.percentOpacity + "%";
+                            font: Settings.theme.font("small");
+                            horizontalAlignment: Text.AlignRight;
                         }
                     }
                     Image {

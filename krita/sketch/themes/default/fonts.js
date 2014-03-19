@@ -19,7 +19,7 @@
 var values = {
     application: {
         family: "Source Sans Pro",
-        style: "Light",
+        style: "Regular",
         size: 1,
     },
     small: {

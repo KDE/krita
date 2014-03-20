@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>834</width>
-    <height>457</height>
+    <width>841</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -160,7 +160,7 @@
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
-            <string>Installed</string>
+            <string>Available</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <property name="leftMargin">
@@ -201,7 +201,7 @@
           </widget>
           <widget class="QWidget" name="tab_2">
            <attribute name="title">
-            <string>Available</string>
+            <string>Installed</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <property name="leftMargin">
@@ -609,20 +609,12 @@
            </item>
           </layout>
          </item>
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="label_2">
-           <property name="font">
-            <font>
-             <family>Arial Black</family>
-             <pointsize>14</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Resource Example</string>
-           </property>
-          </widget>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item alignment="Qt::AlignHCenter">
+            <widget class="QLineEdit" name="lineEdit_5"/>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QScrollArea" name="scrollArea">
@@ -634,8 +626,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>320</width>
-              <height>268</height>
+              <width>324</width>
+              <height>267</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
@@ -665,6 +657,16 @@
                </property>
                <property name="specialValueText">
                 <string/>
+               </property>
+               <property name="dateTime">
+                <datetime>
+                 <hour>0</hour>
+                 <minute>0</minute>
+                 <second>0</second>
+                 <year>2000</year>
+                 <month>1</month>
+                 <day>1</day>
+                </datetime>
                </property>
               </widget>
              </item>
@@ -829,7 +831,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>834</width>
+     <width>841</width>
      <height>20</height>
     </rect>
    </property>

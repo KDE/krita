@@ -18,13 +18,10 @@
  */
 
 #include "KoResourceTableModel.h"
-#include "KoResource.h"
-#include <QPixmap>
-#include <QColor>
 #include <klocale.h>
+
 #include <iostream>
 using namespace std;
-
 
 KoResourceTableModel::KoResourceTableModel(QList<KoAbstractResourceServerAdapter*> resourceAdapterList,QObject *parent)
     : KoResourceModelBase( parent ), m_resourceAdapterList(resourceAdapterList)
@@ -87,7 +84,7 @@ QVariant KoResourceTableModel::data(const QModelIndex &index, int role) const
             case 2:
                 if (assignedTagsList(resource).count()) {
                     QString taglist = assignedTagsList(resource).join("] , [");
-                    return QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
+                    return QString("[%1]").arg(taglist);
                 }
                 else {
                     return QVariant();
@@ -140,6 +137,7 @@ KoAbstractResourceServerAdapter* KoResourceTableModel::getResourceAdapter
     (KoResource *resource) const
 {
     KoAbstractResourceServerAdapter* res;
+
     for (int i=0;i<m_resourceAdapterList.size();i++) {
         res=m_resourceAdapterList.at(i);
         if (res->resources().indexOf(resource)!=-1) {
@@ -213,15 +211,19 @@ void KoResourceTableModel::resourceChanged(KoResource* resource)
     emit dataChanged(modelIndex, modelIndex);
 }
 
-void KoResourceTableModel::resourceSelected(QString filename)
+void KoResourceTableModel::resourceSelected(QModelIndex targetIndex)
 {
-    if (m_resourceSelected.contains(filename)) {
-        m_resourceSelected.removeOne(filename);
+    if (targetIndex.column()==0) {
+        QString filename = currentlyVisibleResources().at(targetIndex.row())->filename();
+
+        if (m_resourceSelected.contains(filename)) {
+            m_resourceSelected.removeOne(filename);
+        }
+        else {
+            m_resourceSelected.append(filename);
+        }
+        reset();
     }
-    else {
-        m_resourceSelected.append(filename);
-    }
-    reset();
 }
 
 void KoResourceTableModel::tagBoxEntryWasModified()
@@ -323,6 +325,31 @@ void KoResourceTableModel::tagCategoryAdded(const QString& tag)
 void KoResourceTableModel::tagCategoryRemoved(const QString& tag)
 {
     Q_UNUSED(tag);
+}
+
+KoResource* KoResourceTableModel::getResourceFromFilename(const QString& filename)
+{
+    KoResource* res;
+
+    for (int i=0;i<m_resources.size();i++) {
+        res=m_resources.at(i);
+        if (res->filename()==filename) {
+            return res;
+        }
+    }
+
+    return 0;
+}
+
+KoResource* KoResourceTableModel::getResourceFromIndex(const QModelIndex &index)
+{
+    KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+    if (!resource) {
+        return 0;
+    }
+    else {
+        return resource;
+    }
 }
 
 //TODO Penser à un syst d'identification du serveur concerné

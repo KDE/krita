@@ -17,8 +17,6 @@
 
 #include <QtCore/QList>
 #include "KoXmlResourceBundleMeta.h"
-#include <iostream>
-using namespace std;
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
@@ -56,7 +54,7 @@ KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString* resourceTagList,QStrin
     addTag("author",author,true);
     addTag("created",created,true);
     addTag("license",license,true);
-    addTag("modified",modified,true);
+    addTag("updated",modified,true);
     addTag("description",description,true);
 
     for (int i=0;i<resourceTagList->length();i++) {
@@ -83,8 +81,8 @@ KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QStrin
     else if (tagName=="license") {
         return License;
     }
-    else if (tagName=="last-modified") {
-        return Modified;
+    else if (tagName=="updated") {
+        return Updated;
     }
     else if (tagName=="description") {
         return Description;

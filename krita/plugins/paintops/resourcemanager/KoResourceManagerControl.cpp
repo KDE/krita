@@ -17,27 +17,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QProcessEnvironment>
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
 #include "KoResourceBundleManager.h"
-#include "KoResourceServer.h"
-#include "KoResourceBundle.h"
-#include <QtCore/QFile>
+#include "KoResourceTableModel.h"
+
+#include "KoResourceServerProvider.h"
+#include "kis_resource_server_provider.h"
+#include "kis_workspace_resource.h"
+#include "kis_paintop_preset.h"
+#include "kis_brush_server.h"
+
+#include <QtCore/QProcessEnvironment>
 #include <iostream>
 using namespace std;
 
 
-KoResourceManagerControl::KoResourceManagerControl():currentMeta(""),currentManifest("")
+KoResourceManagerControl::KoResourceManagerControl()
 {
-    root=QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0);
+    QString env=QProcessEnvironment::systemEnvironment().value("KDEDIRS");
+
+    if (env.isEmpty()) {
+        exit(1);
+    }
+
+    root=env.section(':',0,0);
+
     if (root.at(root.size()-1)!='/') {
-        root.append("/");
+        root.append('/');
     }
     extractor=new KoResourceBundleManager(root+"share/apps/krita/");
-    current=new KoResourceBundle(root+"share/apps/krita/bundles/pack.zip");
-    current->load();
+
+    model=0;
+
+    filterResourceTypes(0);
 }
 
 KoResourceManagerControl::~KoResourceManagerControl()
@@ -45,93 +59,124 @@ KoResourceManagerControl::~KoResourceManagerControl()
     delete meta;
     delete manifest;
     delete extractor;
+    delete model;
+    delete bundleServer;
 }
 
-void KoResourceManagerControl::setMeta(QString packName,QString type,QString value)
+void KoResourceManagerControl::setMeta(QModelIndex index,QString type,QString value)
 {
-    Q_UNUSED(packName);
-    //if (packName!=currentMeta) {
-    //currentMeta=packName; //TODO Vérifier Utilité!!!!!
-    current->addMeta(type,value);
-}
+    KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(model->getResourceFromIndex(index));
 
-QIODevice* KoResourceManagerControl::getDevice(QString deviceName){
-    //TODO Renvoie le fichier associé au nom passé en paramètre
-    //TODO Vérifier l'utilité !!!
-    Q_UNUSED(deviceName);
-    return new QFile();
-}
-
-void KoResourceManagerControl::createPack(QList<QString> resources)
-{
-    for (int i = 0; i < resources.size(); i++) {
-        current->addFile(resources.at(i).section('/',resources.count("/")-2,resources.count("/")-2),resources.at(i));
+    if (currentBundle) {
+        currentBundle->addMeta(type,value);
     }
-    current->save();
 }
 
-void KoResourceManagerControl::installPack(QString packName)
+void KoResourceManagerControl::createPack()
 {
-    Q_UNUSED(packName);
-    current->install();
-    current->addResourceDirs();
-    //extractor.setReadPack(packName);
-    //extractor.extractPack();
-    //TODO Exporter les XML si ce n'est pas fait dans l'extract
-}
+    QList<QString> selected = model->getSelectedResource();
 
-void KoResourceManagerControl::uninstallPack(QString packName)
-{
-    cout<<"Uninstall"<<endl;
-    Q_UNUSED(packName);
-    current->uninstall();
-    /*if (packName!=currentMeta) {
-        meta=new KoXmlResourceBundleMeta(getDevice(packName.append("-meta.xml")));
+    if (!selected.empty()) {
+        KoResourceBundle* newBundle=new KoResourceBundle(root+"share/apps/krita/bundles/newBundle.zip");
+        newBundle->load();
+        newBundle->setName("newBundle");
 
+        for (int i=0; i<selected.size(); i++) {
+            newBundle->addFile(selected.at(i).section('/',selected.count("/")-2,selected.count("/")-2),selected.at(i));
+        }
+
+        newBundle->addMeta("created",QDate::currentDate().toString("dd/MM/yyyy"));
+
+        bundleServer->addResource(newBundle);
     }
-    if (packName!=currentManifest) {
-        manifest=new KoXmlResourceBundleManifest(getDevice(packName.append("-manifest.xml")));
+}
+
+//TODO Définir les règles en matière de sélection multiple
+void KoResourceManagerControl::modifySelected(int mode)
+{
+    KoResourceBundle *currentBundle;
+    KoResource *currentResource;
+    QString currentFileName;
+    QList<QString> selected=model->getSelectedResource();
+
+    for (int i=0;i<selected.size();i++) {
+        currentFileName=selected.at(i);
+        currentResource=model->getResourceFromFilename(currentFileName);
+        currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
+
+        switch (mode) {
+        case Install:
+            if (currentBundle) {
+                currentBundle->install();
+                currentBundle->addResourceDirs();
+            }
+            break;
+        case Uninstall:
+            if (currentBundle) {
+                currentBundle->uninstall();
+            }
+            break;
+        case Delete:
+            if (!currentBundle) {
+                model->getResourceAdapter(currentResource)->removeResourceFile(currentFileName);
+            }
+            else {
+                if (currentBundle->isInstalled()) {
+                    currentBundle->uninstall();
+                }
+                model->getResourceAdapter(currentBundle)->removeResourceFile(currentFileName);
+            }
+            model->clearSelected();
+            //TODO Décommenter pour supprimer ou rajouter déplacement vers autre dossier pour retour en arrière
+            //QFile::remove(currentFileName);
+            break;
+        }
     }
-    currentMeta=packName;
-    currentManifest=packName;
-    //TODO Renommer l'ancien paquet avec _old dans le dossier contenant les archives
-    extractor.createPack(manifest,meta);
-    //TODO Supprimer les dossiers
-    //TODO Supprimer les fichiers Xml*/
 }
 
-void KoResourceManagerControl::deletePack(QString packName)
+//TODO Bug Foreground to Background
+//TODO A tester pr tous les cas possibles
+bool KoResourceManagerControl::rename(QModelIndex index,QString newName)
 {
-    Q_UNUSED(packName);
-    cout<<"Delete"<<endl;
-    if(current->isInstalled()) {
-        uninstallPack("");
-    }
-    QFile::remove(root+"pack.zip");
-    //TODO Vérifier si le paquet est installé
-    //TODO Si oui, supprimer les dossiers et fichiers Xml
-    //TODO Supprimer l'archive
-}
-
-//TODO Rajouter des paramètres si besoin est (exemple : valeur comboBox etc...)
-void KoResourceManagerControl::refreshCurrentTable()
-{
-    cout<<"Refresh"<<endl;
-    //TODO Rafraichir l'affichage du tableau contenu dans l'onglet courant
-}
-
-void KoResourceManagerControl::rename(QString old_name,QString new_name)
-{
-    Q_UNUSED(old_name);
-    Q_UNUSED(new_name);
+    //TODO Résoudre le problème d'appels multiples du rename
     cout<<"Rename"<<endl;
-    //TODO Vérifier si c'est une ressource
-    //TODO Si oui, rennomer la ressource et appliquer changement sur manifest si elle appartient à un paquet
-    //TODO Si non (<=> c'est un paquet), rennomer le paquet, chacun des dossiers contenant les ressources qui lui corresponde,
-    //l'archive stockée et sa mémoire si elle existe, le meta
-    //On finit par un refresh de la table
-    refreshCurrentTable();
+    KoResource* currentResource=model->getResourceFromIndex(index);
+    if (currentResource!=0 && currentResource->valid()) {
+        KoResourceBundle* currentBundle= dynamic_cast<KoResourceBundle*>(currentResource);
 
+        QString newFilename=currentResource->filename();
+        newFilename=newFilename.section('/',0,newFilename.count('/')-1).append("/").append(newName);
+        QFile::rename(currentResource->filename(),newFilename);
+
+        if (currentBundle) {//TODO A vérifier si param nécessaire
+            currentBundle->rename(newFilename);
+        }
+        else if (newFilename.count('/')==root.count()+5) {
+            QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
+            QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
+            currentBundle= dynamic_cast<KoResourceBundle*>
+                    (model->getResourceFromFilename(bundleName.append(".zip")));
+            if (currentBundle) {
+                currentBundle->removeFile(currentResource->filename());
+                currentBundle->addFile(fileType,newFilename);
+            }
+        }
+
+        currentResource->setFilename(newFilename);
+        currentResource->setName(newName);
+        model->getResourceAdapter(currentResource)->updateServer();
+    }
+    return true;
+    //TODO Poser question différence entre filename et name
+    //TODO Si besoin rajouter un currentResource->setFilename(newName);
+
+    //cout<<qPrintable(newFilename)<<endl;
+    /*currentResource->setName(newName);*/
+    //currentResource->save();
+
+    //TODO Rajouter le cas où c'est une ressource appartenant à un paquet
+    //model->refresh();
+    //TODO Définir dans quels cas le renommage échoue
 }
 
 void KoResourceManagerControl::about()
@@ -140,14 +185,65 @@ void KoResourceManagerControl::about()
     //TODO Afficher la fenêtre "à propos"
 }
 
+KoResourceTableModel* KoResourceManagerControl::getModel()
+{
+    return model;
+}
+
 void KoResourceManagerControl::launchServer()
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
     bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
-    bundleServer->addResource(current);
+    bundleServer->loadResources(bundleServer->fileNames());
 }
 
-KoResourceServer<KoResourceBundle>* KoResourceManagerControl::getServer()
+void KoResourceManagerControl::filterResourceTypes(int index)
 {
-    return bundleServer;
+    QList<KoAbstractResourceServerAdapter*> list;
+
+    if(model!=0)
+        delete model;
+
+    switch (index) {
+    case 0:
+        launchServer();
+        list.append(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer()));
+        list.append(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
+        list.append(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer()));
+        list.append(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()));
+        list.append(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer()));
+        list.append(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer()));
+        list.append(new KoResourceServerAdapter<KoResourceBundle>(bundleServer));
+        model=new KoResourceTableModel(list);
+        break;
+    case 1:
+        launchServer();
+        list.append(new KoResourceServerAdapter<KoResourceBundle>(bundleServer));
+        model=new KoResourceTableModel(list);
+        break;
+    case 2:
+        list.append(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    case 3:
+        list.append(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    case 4:
+        list.append(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    case 5:
+        list.append(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    case 6:
+        list.append(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    case 7:
+        list.append(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer()));
+        model=new KoResourceTableModel(list);
+        break;
+    }
 }

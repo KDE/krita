@@ -191,7 +191,7 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString attName,QStrin
 
 void KoXmlGenerator::show()
 {
-    cout<<qPrintable(toString());
+    cout<<qPrintable(toString())<<endl;
 }
 
 QString KoXmlGenerator::toString()

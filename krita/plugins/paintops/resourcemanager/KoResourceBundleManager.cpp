@@ -15,19 +15,15 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QFile>
 #include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include "KoResourceServer.h"
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 #include <sys/stat.h>
+
 #include <iostream>
 using namespace std;
+
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
 {
@@ -134,8 +130,7 @@ void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, 
     if (meta->getPackName()!="") {
         packName=meta->getPackName();
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
-
-        if (resourcePack!=NULL) {
+        if (resourcePack!=NULL && !resourcePack->bad()) {
             addKFiles(manifest->getFileList());
             addManiMeta(manifest,meta);
             resourcePack->finalize();

@@ -24,9 +24,6 @@
 #include "kis_paintop_preset.h"
 #include "kis_workspace_resource.h"
 
-#include <iostream>
-using namespace std;
-
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");

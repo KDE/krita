@@ -17,27 +17,59 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoResourceManagerWidget.h"
 #include "ui_KoResourceManagerWidget.h"
-#include "KoResourceServerProvider.h"
-#include <QCheckBox>
-#include <QWidgetAction>
-#include <QSignalMapper>
-#include "kis_brush_server.h"
-#include "kis_resource_server_provider.h"
-#include "kis_workspace_resource.h"
-#include "kis_paintop_preset.h"
+#include "KoResourceManagerWidget.h"
+#include "KoResourceManagerControl.h"
+#include "KoResourceTableModel.h"
+
 #include <iostream>
 using namespace std;
 
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
-    QMainWindow(parent),ui(new Ui::KoResourceManagerWidget)
+    QMainWindow(parent),control(new KoResourceManagerControl()),ui(new Ui::KoResourceManagerWidget)
 {
-    control=new KoResourceManagerControl();
     ui->setupUi(this);
+
+    QFont labelFont("Arial Black",20,QFont::Bold);
+    labelFont.setWeight(75);
+    labelFont.setLetterSpacing(QFont::AbsoluteSpacing,2);
+
+    resourceNameLabel=new ClickLabel();
+    resourceNameLabel->setText("Welcome\n to the\n Resource Manager !\n");
+    resourceNameLabel->setFont(labelFont);
+    resourceNameLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+    ui->horizontalLayout_4->addWidget(resourceNameLabel);
+    ui->lineEdit_5->setVisible(false);
+    ui->scrollArea->setVisible(false);
+    ui->label->setVisible(false);
+
     initializeModel();
     initializeConnect();
+
+    QList<QAction*> liste;
+    liste.append(ui->actionAll);
+    liste.append(ui->actionName);
+    liste.append(ui->actionTag);
+    liste.append(ui->actionAuthor);
+    liste.append(ui->actionLicense);
+
+    QMenu *buttonMenu=new QMenu();
+    buttonMenu->addActions(liste);
+    ui->pushButton_10->setMenu(buttonMenu);
     ui->actionAll->setChecked(true);
+
+    ui->tableView->resizeColumnsToContents();
+    ui->tableView_2->resizeColumnsToContents();
+    ui->tableView_3->resizeColumnsToContents();
+    ui->tableView_4->resizeColumnsToContents();
+    ui->tableView_5->resizeColumnsToContents();
+
+    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(1);
+
+    firstRefresh=true;
 
     /*this->model2=new MyTableModel(0);
 
@@ -58,53 +90,26 @@ KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
 KoResourceManagerWidget::~KoResourceManagerWidget()
 {
     delete ui;
-    delete model;
+    delete control;
 }
 
 void KoResourceManagerWidget::initializeModel()
-{
-    QList<QAction*> liste;
-    liste.append(ui->actionAll);
-    liste.append(ui->actionName);
-    liste.append(ui->actionTag);
-    liste.append(ui->actionAuthor);
-    liste.append(ui->actionLicense);
+{   
+    KoResourceTableModel *model=control->getModel();
 
-    buttonMenu=new QMenu();
-    buttonMenu->addActions(liste);
-    ui->pushButton_10->setMenu(buttonMenu);
-
-    QList<KoAbstractResourceServerAdapter*> list2;
-    list2.append(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer()));
-    list2.append(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
-    list2.append(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer()));
-    list2.append(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()));
-    list2.append(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer()));
-    list2.append(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer()));
-
-    KGlobal::mainComponent().dirs()->addResourceType("bundles", "data", "krita/bundles/");
-    KoResourceServer<KoResourceBundle> *serv=new KoResourceServer<KoResourceBundle>("bundles","*.zip");
-    serv->loadResources(serv->fileNames());
-    list2.append(new KoResourceServerAdapter<KoResourceBundle>(serv));
-
-    this->model=new KoResourceTableModel(list2);
     ui->tableView->setModel(model);
     ui->tableView_2->setModel(model);
     ui->tableView_3->setModel(model);
     ui->tableView_4->setModel(model);
     ui->tableView_5->setModel(model);
-    ui->tableView->resizeColumnsToContents();
-    ui->tableView_2->resizeColumnsToContents();
-    ui->tableView_3->resizeColumnsToContents();
-    ui->tableView_4->resizeColumnsToContents();
-    ui->tableView_5->resizeColumnsToContents();
 }
 
+//TODO Résoudre le problème des editingFinished
 void KoResourceManagerWidget::initializeConnect()
 {
     connect(ui->pushButton_6,SIGNAL(clicked()),this,SLOT(showHide()));
 
-    connect(ui->lineEdit_2,SIGNAL(editingFinished()),this,SLOT(setMeta()));
+    connect(ui->lineEdit_2,SIGNAL(editingFinished()),this,SLOT(setMeta()),Qt::DirectConnection);
     connect(ui->lineEdit_3,SIGNAL(editingFinished()),this,SLOT(setMeta()));
     connect(ui->lineEdit_4,SIGNAL(editingFinished()),this,SLOT(setMeta()));
     connect(ui->dateEdit_2,SIGNAL(editingFinished()),this,SLOT(setMeta()));
@@ -128,7 +133,7 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->actionDelete,SIGNAL(triggered()),this,SLOT(deletePack()));
     connect(ui->actionCreate_Resources_Set,SIGNAL(triggered()),this,SLOT(createPack()));
 
-    connect(ui->actionRename,SIGNAL(triggered()),this,SLOT(rename()));
+    connect(ui->actionRename,SIGNAL(triggered()),this,SLOT(startRenaming()));
     connect(ui->actionAbout_ResManager,SIGNAL(triggered()),this,SLOT(about()));
 
     connect(ui->actionQuit,SIGNAL(triggered()),this,SLOT(close()));
@@ -136,240 +141,65 @@ void KoResourceManagerWidget::initializeConnect()
 
     connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(createPack()));
 
-    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(resourceTable(int)));
+    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(filterResourceTypes(int)));
+    connect(ui->lineEdit_5,SIGNAL(editingFinished()),this,SLOT(endRenaming()));
 
     connectTables();
-    //createMiniature(*ui->label->pixmap());
 }
 
 void KoResourceManagerWidget::connectTables()
 {
-    connect(ui->tableView->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refresh(QModelIndex)));
-    connect(ui->tableView_2->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refresh(QModelIndex)));
-    connect(ui->tableView_3->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refresh(QModelIndex)));
-    connect(ui->tableView_4->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refresh(QModelIndex)));
-    connect(ui->tableView_5->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refresh(QModelIndex)));
+    connect(ui->tableView->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
+    connect(ui->tableView_2->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
+    connect(ui->tableView_3->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
+    connect(ui->tableView_4->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
+    connect(ui->tableView_5->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
 
-    connect(ui->tableView,SIGNAL(pressed(QModelIndex)),this,SLOT(resourceClicked(QModelIndex)),Qt::DirectConnection);
-    connect(ui->tableView_2,SIGNAL(pressed(QModelIndex)),this,SLOT(resourceClicked(QModelIndex)),Qt::DirectConnection);
-    connect(ui->tableView_3,SIGNAL(pressed(QModelIndex)),this,SLOT(resourceClicked(QModelIndex)),Qt::DirectConnection);
-    connect(ui->tableView_4,SIGNAL(pressed(QModelIndex)),this,SLOT(resourceClicked(QModelIndex)),Qt::DirectConnection);
-    connect(ui->tableView_5,SIGNAL(pressed(QModelIndex)),this,SLOT(resourceClicked(QModelIndex)),Qt::DirectConnection);
+    connect(ui->tableView,SIGNAL(pressed(QModelIndex)),control->getModel(),SLOT(resourceSelected(QModelIndex)),Qt::DirectConnection);
+    connect(ui->tableView_2,SIGNAL(pressed(QModelIndex)),control->getModel(),SLOT(resourceSelected(QModelIndex)),Qt::DirectConnection);
+    connect(ui->tableView_3,SIGNAL(pressed(QModelIndex)),control->getModel(),SLOT(resourceSelected(QModelIndex)),Qt::DirectConnection);
+    connect(ui->tableView_4,SIGNAL(pressed(QModelIndex)),control->getModel(),SLOT(resourceSelected(QModelIndex)),Qt::DirectConnection);
+    connect(ui->tableView_5,SIGNAL(pressed(QModelIndex)),control->getModel(),SLOT(resourceSelected(QModelIndex)),Qt::DirectConnection);
 
-    connect(ui->tableView->horizontalHeader(),SIGNAL(sectionPressed(int)),model,SLOT(allSelected(int)));
-    connect(ui->tableView_2->horizontalHeader(),SIGNAL(sectionPressed(int)),model,SLOT(allSelected(int)));
-    connect(ui->tableView_3->horizontalHeader(),SIGNAL(sectionPressed(int)),model,SLOT(allSelected(int)));
-    connect(ui->tableView_4->horizontalHeader(),SIGNAL(sectionPressed(int)),model,SLOT(allSelected(int)));
-    connect(ui->tableView_5->horizontalHeader(),SIGNAL(sectionPressed(int)),model,SLOT(allSelected(int)));
-
-    connect(this,SIGNAL(resourceWasSelected(QString)),model,SLOT(resourceSelected(QString)),Qt::DirectConnection);
+    connect(ui->tableView->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(),SLOT(allSelected(int)));
+    connect(ui->tableView_2->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(),SLOT(allSelected(int)));
+    connect(ui->tableView_3->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(),SLOT(allSelected(int)));
+    connect(ui->tableView_4->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(),SLOT(allSelected(int)));
+    connect(ui->tableView_5->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(),SLOT(allSelected(int)));
 }
 
-void KoResourceManagerWidget::resourceTable(int index)
+/*Slots*/
+
+void KoResourceManagerWidget::about()
 {
-    KoResourceServer<KoResourceBundle> *serv;
-    QList<KoAbstractResourceServerAdapter*> liste;
-
-    switch (index) {
-    case 0:
-        liste.append(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer()));
-        liste.append(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
-        liste.append(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer()));
-        liste.append(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()));
-        liste.append(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer()));
-        liste.append(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer()));
-        serv=new KoResourceServer<KoResourceBundle>("bundles","*.zip");
-        serv->loadResources(serv->fileNames());
-        liste.append(new KoResourceServerAdapter<KoResourceBundle>(serv));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 1:
-        serv=new KoResourceServer<KoResourceBundle>("bundles","*.zip");
-        serv->loadResources(serv->fileNames());
-        liste.append(new KoResourceServerAdapter<KoResourceBundle>(serv));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 2:
-        //TODO A Vérifier et Corriger
-        liste.append(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 3:
-        liste.append(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 4:
-        liste.append(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 5:
-        liste.append(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 6:
-        liste.append(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    case 7:
-        liste.append(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer()));
-        this->model=new KoResourceTableModel(liste);
-        ui->tableView->setModel(model);
-        ui->tableView_2->setModel(model);
-        ui->tableView_3->setModel(model);
-        ui->tableView_4->setModel(model);
-        ui->tableView_5->setModel(model);
-        break;
-    }
-    model->clearSelected();
-    connectTables();
-}
-
-void KoResourceManagerWidget::resourceClicked(QModelIndex targetIndex)
-{
-    if (targetIndex.column()==0) {
-        emit resourceWasSelected(model->currentlyVisibleResources().at(targetIndex.row())->filename());
-    }
-}
-
-void KoResourceManagerWidget::refresh(QModelIndex newIndex)
-{
-    KoResource* current=model->currentlyVisibleResources().at(newIndex.row());
-    KoResourceBundle* prov=dynamic_cast<KoResourceBundle*>(current);
-
-    //Name
-
-    ui->label_2->setText(current->shortFilename());
-
-    //Tags
-
-    ui->listWidget->clear();
-    ui->listWidget->addItems(model->assignedTagsList(current));
-
-    //Overview
-
-    if (current->image().isNull()) {
-        ui->label->clear();
-    }
-    else {
-        ui->label->setPixmap(QPixmap::fromImage(current->image()).scaled(1000,150,Qt::KeepAspectRatio));
-    }
-
-    if (prov!=0) {
-        ui->label_3->setVisible(true);
-        ui->label_4->setVisible(true);
-        ui->label_5->setVisible(true);
-        ui->label_6->setVisible(true);
-        ui->label_7->setVisible(true);
-        ui->lineEdit_2->setText(prov->getAuthor());
-        ui->lineEdit_2->setVisible(true);
-        ui->lineEdit_3->setText(prov->getLicense());
-        ui->lineEdit_3->setVisible(true);
-        ui->lineEdit_4->setText(prov->getWebSite());
-        ui->lineEdit_4->setVisible(true);
-        ui->dateEdit->setDate(QDate::fromString(prov->getCreated(),"dd/MM/yyyy"));
-        ui->dateEdit->setVisible(true);
-        ui->dateEdit_2->setDate(QDate::fromString(prov->getUpdated(),"dd/MM/yyyy"));
-        ui->dateEdit_2->setVisible(true);
-        //TODO Trouver pkoi ne s'affichent que les deux derniers chiffres de l'année
-    }
-    else {
-        ui->lineEdit_2->setVisible(false);
-        ui->lineEdit_3->setVisible(false);
-        ui->lineEdit_4->setVisible(false);
-        ui->dateEdit->setVisible(false);
-        ui->dateEdit_2->setVisible(false);
-        ui->label_3->setVisible(false);
-        ui->label_4->setVisible(false);
-        ui->label_5->setVisible(false);
-        ui->label_6->setVisible(false);
-        ui->label_7->setVisible(false);
-    }
-}
-
-void KoResourceManagerWidget::showHide()
-{
-    ui->widget_2->setVisible(!ui->widget_2->isVisible());
-}
-
-void KoResourceManagerWidget::createMiniature(QPixmap pix)
-{
-    QLabel *label = new QLabel;
-    label->setPixmap(pix.scaled(50,50,Qt::KeepAspectRatio));
+    control->about();
 }
 
 void KoResourceManagerWidget::createPack()
 {
-    QList<QString> liste = model->getSelectedResource();
-    if(!liste.empty()) control->createPack(liste);
-}
-
-void KoResourceManagerWidget::installPack()
-{
-    control->installPack(ui->label_2->text());
-
-}
-
-void KoResourceManagerWidget::uninstallPack()
-{
-    control->uninstallPack(ui->label_2->text());
+    control->createPack();
 }
 
 void KoResourceManagerWidget::deletePack()
 {
-    control->deletePack(ui->label_2->text());
+    control->modifySelected(2);
 }
 
-void KoResourceManagerWidget::refreshCurrentTable()
+void KoResourceManagerWidget::endRenaming()
 {
-    control->refreshCurrentTable();
-}
+    ui->lineEdit_5->blockSignals(true);
 
-//TODO Décider comment renommer un paquet (Fenetre, tableau ...)
-void KoResourceManagerWidget::rename()
-{
-    //TODO Récupérer les/la valeur(s) correspondante(s)
-    control->rename(ui->label->text(),"New_Value");
-}
+    QString newFileName=ui->lineEdit_5->text()+"."+resourceNameLabel->text().section('.',1);
 
-void KoResourceManagerWidget::about()
-{
-    //TODO Vérifier si control doit intervenir
-    control->about();
+    if (control->rename(ui->tableView->currentIndex(),newFileName)) {
+        resourceNameLabel->setText(newFileName);
+        ui->tableView->reset();
+    }
+    else {
+        ui->lineEdit_5->setText(resourceNameLabel->text().section('.',0,0));
+    }
+    resourceNameLabel->setVisible(true);
+    ui->lineEdit_5->setVisible(false);
 }
 
 void KoResourceManagerWidget::filterFieldSelected(bool value)
@@ -397,24 +227,149 @@ void KoResourceManagerWidget::filterFieldSelected(bool value)
     }
 }
 
+void KoResourceManagerWidget::filterResourceTypes(int index)
+{
+    control->filterResourceTypes(index);
+    ui->tableView->setModel(control->getModel());
+    ui->tableView_2->setModel(control->getModel());
+    ui->tableView_3->setModel(control->getModel());
+    ui->tableView_4->setModel(control->getModel());
+    ui->tableView_5->setModel(control->getModel());
+    connectTables();
+}
+
+void KoResourceManagerWidget::installPack()
+{
+    control->modifySelected(0);
+}
+
+void KoResourceManagerWidget::refreshCurrentTable()
+{
+
+}
+
+void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
+{
+    KoResource* currentResource= control->getModel()->currentlyVisibleResources().at(newIndex.row());
+    KoResourceBundle* currentBundle=dynamic_cast<KoResourceBundle*>(currentResource);
+    QString currentDate;
+
+    if (firstRefresh) {
+        ui->scrollArea->setVisible(true);
+        ui->label->setVisible(true);
+
+        QFont labelFont("Arial Black",14,QFont::Bold);
+        labelFont.setWeight(75);
+        resourceNameLabel->setFont(labelFont);
+
+        connect(resourceNameLabel,SIGNAL(clicked()),this,SLOT(startRenaming()));
+        firstRefresh=false;
+    }
+
+    //Name
+
+    resourceNameLabel->setText(currentResource->shortFilename());
+    ui->lineEdit_5->setText(currentResource->shortFilename().section('.',0,0));
+
+    resourceNameLabel->setVisible(true);
+    ui->lineEdit_5->setVisible(false);
+
+    //Tags
+
+    ui->listWidget->clear();
+    ui->listWidget->addItems(control->getModel()->assignedTagsList(currentResource));
+
+    //Overview
+
+    if (currentResource->image().isNull()) {
+        ui->label->clear();
+    }
+    else {
+        ui->label->setPixmap(QPixmap::fromImage(currentResource->image()).scaled(1000,150,Qt::KeepAspectRatio));
+    }
+
+    if (currentBundle!=0) {
+        ui->label_3->setVisible(true);
+        ui->label_4->setVisible(true);
+        ui->label_5->setVisible(true);
+
+        ui->lineEdit_2->setText(currentBundle->getAuthor());
+        ui->lineEdit_2->setVisible(true);
+        ui->lineEdit_3->setText(currentBundle->getLicense());
+        ui->lineEdit_3->setVisible(true);
+        ui->lineEdit_4->setText(currentBundle->getWebSite());
+        ui->lineEdit_4->setVisible(true);
+
+        currentDate=currentBundle->getCreated();
+        if (currentDate.isEmpty()) {
+            ui->label_6->setVisible(false);
+            ui->dateEdit->setVisible(false);
+        }
+        else {
+            ui->label_6->setVisible(true);
+            ui->dateEdit->setVisible(true);
+            ui->dateEdit->setDate(QDate::fromString(currentDate,"dd/MM/yyyy"));
+        }
+
+        currentDate=currentBundle->getUpdated();
+        if (currentDate.isEmpty()) {
+            ui->label_7->setVisible(false);
+            ui->dateEdit_2->setVisible(false);
+        }
+        else {
+            ui->label_7->setVisible(true);
+            ui->dateEdit_2->setVisible(true);
+            ui->dateEdit_2->setDate(QDate::fromString(currentDate,"dd/MM/yyyy"));
+        }
+        //TODO Trouver pkoi ne s'affichent que les deux derniers chiffres de l'année
+    }
+    else {
+        ui->lineEdit_2->setVisible(false);
+        ui->lineEdit_3->setVisible(false);
+        ui->lineEdit_4->setVisible(false);
+        ui->dateEdit->setVisible(false);
+        ui->dateEdit_2->setVisible(false);
+        ui->label_3->setVisible(false);
+        ui->label_4->setVisible(false);
+        ui->label_5->setVisible(false);
+        ui->label_6->setVisible(false);
+        ui->label_7->setVisible(false);
+    }
+}
+
 void KoResourceManagerWidget::setMeta()
 {
     QObject *emetteur = sender();
-    if(emetteur->inherits("QLineEdit")){
-        QLineEdit* test=(QLineEdit*)emetteur;
-        if(emetteur==ui->lineEdit_2)
-            return control->setMeta(ui->label_2->text(),"Author",test->text());
-        else if (emetteur==ui->lineEdit_3)
-            return control->setMeta(ui->label_2->text(),"License",test->text());
-        else if (emetteur==ui->lineEdit_4)
-            return control->setMeta(ui->label_2->text(),"Website",test->text());
-    }
-    else if(emetteur->inherits("QDateEdit")){
-        QDateEdit* test=(QDateEdit*)emetteur;
-        if(emetteur==ui->dateEdit_2 && test->text()!=QString("01/01/00"))
-            return control->setMeta(ui->label_2->text(),"Updated",test->text());
-        else if (emetteur==ui->dateEdit && test->text()!=QString("01/01/00"))
-            return control->setMeta(ui->label_2->text(),"Created",test->text());
+
+    if (emetteur->inherits("QLineEdit")) {
+        QLineEdit* sender=(QLineEdit*)emetteur;
+        if (emetteur==ui->lineEdit_2) {
+            return control->setMeta(ui->tableView->currentIndex(),"Author",sender->text());
+        }
+        else if (emetteur==ui->lineEdit_3) {
+            return control->setMeta(ui->tableView->currentIndex(),"License",sender->text());
+        }
+        else if (emetteur==ui->lineEdit_4) {
+            return control->setMeta(ui->tableView->currentIndex(),"Website",sender->text());
+        }
     }
 }
+
+void KoResourceManagerWidget::showHide()
+{
+    ui->widget_2->setVisible(!ui->widget_2->isVisible());
+}
+
+void KoResourceManagerWidget::startRenaming()
+{
+    ui->lineEdit_5->blockSignals(false);
+    resourceNameLabel->setVisible(false);
+    ui->lineEdit_5->setVisible(true);
+}
+
+void KoResourceManagerWidget::uninstallPack()
+{
+    control->modifySelected(1);
+}
+
 

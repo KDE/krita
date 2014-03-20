@@ -112,6 +112,11 @@ public:
     void addResourceDirs();
 
     /**
+     * @brief rename : Rename the bundle
+     */
+    void rename(QString);
+
+    /**
      * @brief getAuthor
      * @return the metadata associated to the field "author" or QString() if it doesn't exist
      */

@@ -50,6 +50,13 @@ class KoResourceTableModel : public KoResourceModelBase
         void searchTextChanged(const QString& searchString);
         void clearSelected();
         QList<QString> getSelectedResource();
+        KoResource* getResourceFromFilename(const QString& filename);
+        KoResource* getResourceFromIndex(const QModelIndex &index);
+
+        //TODO A Suivre
+        void refresh(){
+            reset();
+        }
 
         QStringList tagNamesList() const;
         void setCurrentTag(const QString& currentTag);
@@ -70,8 +77,10 @@ class KoResourceTableModel : public KoResourceModelBase
         void resourceAdded(KoResource *resource);
         void resourceRemoved(KoResource *resource);
         void resourceChanged(KoResource* resource);
-        void resourceSelected(QString fileName);
+
+        void resourceSelected(QModelIndex targetIndex);
         void allSelected(int index);
+
 
     private:
         QList<QString> m_resourceSelected;

@@ -17,17 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QProcessEnvironment>
-#include <QtCore/QDir>
 #include "KoResourceBundle.h"
+#include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include "KoResourceBundleManager.h"
-#include <QImage>
-#include <iostream>
+
 #include <kglobal.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+
+#include <QtCore/QProcessEnvironment>
+#include <QtCore/QDate>
+#include <QtCore/QDir>
+
+#include <iostream>
 using namespace std;
 
 KoResourceBundle::KoResourceBundle(QString const& bundlePath):KoResource(bundlePath)
@@ -75,15 +78,19 @@ bool KoResourceBundle::load()
     return true;
 }
 
+//TODO Vérifier que l'updated est bien placé
 bool KoResourceBundle::save()
 {
     if (manager->bad()) {
         meta->addTags(manifest->getTagList());
     }
+    addMeta("updated",QDate::currentDate().toString("dd/MM/yyyy"));
+
     manager->createPack(manifest,meta);
+
     setValid(true);
-    load();
-    return true;
+
+    return load();
 }
 
 void KoResourceBundle::install()
@@ -124,6 +131,9 @@ void KoResourceBundle::uninstall()
 
 void KoResourceBundle::addMeta(QString type,QString value)
 {
+    if (type=="created") {
+        setValid(true);
+    }
     meta->addTag(type,value);
     meta->show();
 }
@@ -179,6 +189,21 @@ bool KoResourceBundle::isInstalled()
     return installed;
 }
 
+void KoResourceBundle::rename(QString filename)
+{
+    addMeta("name",filename);
+    if (isInstalled()) {
+        QList<QString> directoryList = manifest->getDirList();
+        QString dirPath;
+        QDir dir;
+        for (int i = 0; i < directoryList.size(); i++) {
+            dirPath = this->manager->getKritaPath();
+            dirPath.append(directoryList.at(i)).append("/").append(filename);
+            dir.rename(dirPath,dirPath.section('/',0,dirPath.count('/')-1).append("/").append(filename));
+        }
+    }
+}
+
 QString KoResourceBundle::getAuthor()
 {
     return meta->getValue("author");
@@ -201,5 +226,5 @@ QString KoResourceBundle::getCreated()
 
 QString KoResourceBundle::getUpdated()
 {
-    return meta->getValue("modified");
+    return meta->getValue("updated");
 }

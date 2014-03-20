@@ -101,15 +101,16 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         fillPainter.setSizemod(m_sizemod);
         fillPainter.setFeather(m_feather);
         fillPainter.setFillThreshold(m_fillThreshold);
-        fillPainter.setSampleMerged(!m_unmerged);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
 
+        KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
+
         if (m_usePattern) {
-            fillPainter.fillPattern(m_startPoint.x(), m_startPoint.y(), m_resources->image()->projection());
+            fillPainter.fillPattern(m_startPoint.x(), m_startPoint.y(), sourceDevice);
         } else {
-            fillPainter.fillColor(m_startPoint.x(), m_startPoint.y(), m_resources->image()->projection());
+            fillPainter.fillColor(m_startPoint.x(), m_startPoint.y(), sourceDevice);
         }
 
         fillPainter.endTransaction(undoAdapter);

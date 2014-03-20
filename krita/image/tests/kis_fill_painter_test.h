@@ -28,8 +28,10 @@ private slots:
 
     void testCreation();
     void benchmarkFillingLegacy();
-    void benchmarkFillingScanline();
-
+    void benchmarkFillingLegacyCompositioningOn();
+    void benchmarkFillingLegacyCompositioningOnNotCorner();
+    void benchmarkFillingScanlineColor();
+    void benchmarkFillingScanlineSelection();
 };
 
 #endif

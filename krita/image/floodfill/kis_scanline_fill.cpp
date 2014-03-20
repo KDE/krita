@@ -18,12 +18,156 @@
 
 #include "kis_scanline_fill.h"
 
+#include <KoAlwaysInline.h>
+
 #include <QStack>
+#include <KoColor.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_fill_interval_map.h"
 #include "kis_paint_device.h"
+#include "kis_pixel_selection.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_fill_sanity_checks.h"
 
+
+template <class BaseClass>
+class CopyToSelection : public BaseClass
+{
+public:
+    typedef KisRandomConstAccessorSP SourceAccessorType;
+
+    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
+        return device->createRandomConstAccessorNG(0, 0);
+    }
+
+public:
+    void setDestinationSelection(KisPaintDeviceSP pixelSelection) {
+        m_pixelSelection = pixelSelection;
+        m_it = m_pixelSelection->createRandomAccessorNG(0,0);
+    }
+
+    ALWAYS_INLINE void fillPixel(quint8 *dstPtr, quint8 opacity, int x, int y) {
+        Q_UNUSED(dstPtr);
+        m_it->moveTo(x, y);
+        *m_it->rawData() = opacity;
+    }
+
+private:
+    KisPaintDeviceSP m_pixelSelection;
+    KisRandomAccessorSP m_it;
+};
+
+template <class BaseClass>
+class FillWithColor : public BaseClass
+{
+public:
+    typedef KisRandomAccessorSP SourceAccessorType;
+
+    SourceAccessorType createSourceDeviceAccessor(KisPaintDeviceSP device) {
+        return device->createRandomAccessorNG(0, 0);
+    }
+
+public:
+    FillWithColor() : m_pixelSize(0) {}
+
+    void setFillColor(const KoColor &sourceColor) {
+        m_sourceColor = sourceColor;
+        m_pixelSize = sourceColor.colorSpace()->pixelSize();
+        m_data = m_sourceColor.data();
+    }
+
+    ALWAYS_INLINE void fillPixel(quint8 *dstPtr, quint8 opacity, int x, int y) {
+        Q_UNUSED(x);
+        Q_UNUSED(y);
+
+        if (opacity == MAX_SELECTED) {
+            memcpy(dstPtr, m_data, m_pixelSize);
+        }
+    }
+
+private:
+    KoColor m_sourceColor;
+    const quint8 *m_data;
+    int m_pixelSize;
+};
+
+template <typename SrcPixelType>
+class DifferencePolicyOptimized
+{
+    typedef SrcPixelType HashKeyType;
+    typedef QHash<HashKeyType, quint8> HashType;
+
+public:
+    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+        m_colorSpace = device->colorSpace();
+        m_srcPixel = srcPixel;
+        m_srcPixelPtr = m_srcPixel.data();
+    }
+
+    ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
+        HashKeyType key = *reinterpret_cast<quint32*>(pixelPtr);
+
+        quint8 result;
+
+        typename HashType::iterator it = m_differences.find(key);
+
+        if (it != m_differences.end()) {
+            result = *it;
+        } else {
+            result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            m_differences.insert(key, result);
+        }
+
+        return result;
+    }
+
+private:
+    HashType m_differences;
+
+    const KoColorSpace *m_colorSpace;
+    KoColor m_srcPixel;
+    const quint8 *m_srcPixelPtr;
+};
+
+template <bool useSmoothSelection,
+          class DifferencePolicy,
+          template <class> class PixelFiller>
+class SelectionPolicyOptimized : public PixelFiller<DifferencePolicy>
+{
+public:
+    typename PixelFiller<DifferencePolicy>::SourceAccessorType m_srcIt;
+
+public:
+    SelectionPolicyOptimized(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
+        : m_threshold(threshold)
+    {
+        this->initDifferencies(device, srcPixel);
+        m_srcIt = this->createSourceDeviceAccessor(device);
+    }
+
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
+        quint8 diff = this->calculateDifference(pixelPtr);
+
+        if (!useSmoothSelection) {
+            return diff <= m_threshold ? MAX_SELECTED : MIN_SELECTED;
+        } else {
+            quint8 selectionValue = qMax(0, m_threshold - diff);
+
+            quint8 result = MIN_SELECTED;
+
+            if (selectionValue > 0) {
+                qreal selectionNorm = qreal(selectionValue) / m_threshold;
+                result = MAX_SELECTED * selectionNorm;
+            }
+
+            return result;
+        }
+    }
+
+private:
+    int m_threshold;
+};
 
 struct KisScanlineFill::Private
 {
@@ -31,13 +175,14 @@ struct KisScanlineFill::Private
     KisRandomAccessorSP it;
     QPoint startPoint;
     QRect boundingRect;
+    int threshold;
 
     int rowIncrement;
     KisFillIntervalMap backwardMap;
     QStack<KisFillInterval> forwardStack;
 
 
-    void swapDirection() {
+    inline void swapDirection() {
         rowIncrement *= -1;
         SANITY_ASSERT_MSG(forwardStack.isEmpty(),
                           "FATAL: the forward stack must be empty "
@@ -58,32 +203,21 @@ KisScanlineFill::KisScanlineFill(KisPaintDeviceSP device, const QPoint &startPoi
     m_d->boundingRect = boundingRect;
 
     m_d->rowIncrement = 1;
+
+    m_d->threshold = 0;
 }
 
 KisScanlineFill::~KisScanlineFill()
 {
 }
 
-inline quint8 selectionValue(quint8 *srcPtr)
+void KisScanlineFill::setThreshold(int threshold)
 {
-    if (srcPtr[0] < 128 &&
-        srcPtr[1] < 128 &&
-        srcPtr[2] < 128) return 255;
-
-    return 0;
+    m_d->threshold = threshold;
 }
 
-inline void fillPixel(quint8 *dstPtr, quint8 opacity)
-{
-    Q_UNUSED(opacity);
-
-    dstPtr[0] = 200;
-    dstPtr[1] = 200;
-    dstPtr[2] = 200;
-    dstPtr[3] = 200;
-}
-
-void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight)
+template <class T>
+void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy)
 {
     int x;
     int endX;
@@ -115,14 +249,14 @@ void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow,
     do {
         x += columnIncrement;
 
-        m_d->it->moveTo(x, srcRow);
-        quint8 *pixelPtr = m_d->it->rawData();
-        quint8 opacity = selectionValue(pixelPtr);
+        pixelPolicy.m_srcIt->moveTo(x, srcRow);
+        quint8 *pixelPtr = const_cast<quint8*>(pixelPolicy.m_srcIt->rawDataConst());
+        quint8 opacity = pixelPolicy.calculateOpacity(pixelPtr);
 
         if (opacity) {
             *intervalBorder = x;
             *backwardIntervalBorder = x;
-            fillPixel(pixelPtr, opacity);
+            pixelPolicy.fillPixel(pixelPtr, opacity, x, srcRow);
         } else {
             break;
         }
@@ -133,7 +267,8 @@ void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow,
     }
 }
 
-void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncrement)
+template <class T>
+void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy)
 {
     m_d->backwardMap.cropInterval(&interval);
 
@@ -147,10 +282,24 @@ void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncreme
 
     KisFillInterval currentForwardInterval;
 
+    int numPixelsLeft = 0;
+    quint8 *dataPtr = 0;
+    const int pixelSize = m_d->device->pixelSize();
+
     while(x <= lastX) {
-        m_d->it->moveTo(x, row);
-        quint8 *pixelPtr = m_d->it->rawData();
-        quint8 opacity = selectionValue(pixelPtr);
+        // a bit of optimzation for not calling slow random accessor
+        // methods too often
+        if (numPixelsLeft <= 0) {
+            pixelPolicy.m_srcIt->moveTo(x, row);
+            numPixelsLeft = pixelPolicy.m_srcIt->numContiguousColumns(x) - 1;
+            dataPtr = const_cast<quint8*>(pixelPolicy.m_srcIt->rawDataConst());
+        } else {
+            numPixelsLeft--;
+            dataPtr += pixelSize;
+        }
+
+        quint8 *pixelPtr = dataPtr;
+        quint8 opacity = pixelPolicy.calculateOpacity(pixelPtr);
 
         if (opacity) {
             if (!currentForwardInterval.isValid()) {
@@ -161,14 +310,14 @@ void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncreme
                 currentForwardInterval.end = x;
             }
 
-            fillPixel(pixelPtr, opacity);
+            pixelPolicy.fillPixel(pixelPtr, opacity, x, row);
 
             if (x == firstX) {
-                extendedPass(&currentForwardInterval, row, false);
+                extendedPass(&currentForwardInterval, row, false, pixelPolicy);
             }
 
             if (x == lastX) {
-                extendedPass(&currentForwardInterval, row, true);
+                extendedPass(&currentForwardInterval, row, true, pixelPolicy);
             }
 
         } else {
@@ -186,10 +335,21 @@ void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncreme
     }
 }
 
-void KisScanlineFill::run()
+template <class T>
+void KisScanlineFill::runImpl(T &pixelPolicy)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->forwardStack.isEmpty());
-    m_d->forwardStack.push(KisFillInterval(m_d->startPoint.x(), m_d->startPoint.x(), m_d->startPoint.y()));
+
+    KisFillInterval startInterval(m_d->startPoint.x(), m_d->startPoint.x(), m_d->startPoint.y());
+    m_d->forwardStack.push(startInterval);
+
+    /**
+     * In the end of the first pass we should add an interval
+     * containing the starting pixel, but directed into the opposite
+     * direction. We cannot do it in the very beginning because the
+     * intervals are offset by 1 pixel during every swap operation.
+     */
+    bool firstPass = true;
 
     while (!m_d->forwardStack.isEmpty()) {
         while (!m_d->forwardStack.isEmpty()) {
@@ -201,9 +361,81 @@ void KisScanlineFill::run()
                 continue;
             }
 
-            processLine(interval, m_d->rowIncrement);
+            processLine(interval, m_d->rowIncrement, pixelPolicy);
         }
         m_d->swapDirection();
+
+        if (firstPass) {
+            startInterval.row--;
+            m_d->forwardStack.push(startInterval);
+            firstPass = false;
+        }
+    }
+}
+
+void KisScanlineFill::fillColor(const KoColor &fillColor)
+{
+    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
+    KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+
+    if (pixelSize == 1) {
+        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint8>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 2) {
+        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint16>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 4) {
+        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint32>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 8) {
+        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint64>, FillWithColor>
+              policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else {
+        bool pixel_size_not_implemented = false;
+        KIS_ASSERT_RECOVER_NOOP(pixel_size_not_implemented);
+    }
+}
+
+void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
+{
+    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
+    KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+
+    if (pixelSize == 1) {
+        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint8>, CopyToSelection>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection);
+        runImpl(policy);
+    } else if (pixelSize == 2) {
+        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint16>, CopyToSelection>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection);
+        runImpl(policy);
+    } else if (pixelSize == 4) {
+        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint32>, CopyToSelection>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection);
+        runImpl(policy);
+    } else if (pixelSize == 8) {
+        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint64>, CopyToSelection>
+              policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection);
+        runImpl(policy);
+    } else {
+        bool pixel_size_not_implemented = false;
+        KIS_ASSERT_RECOVER_NOOP(pixel_size_not_implemented);
     }
 }
 

@@ -56,7 +56,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     }
 
     KisFillInterval processInterval(0,10,0);
-    gc.processLine(processInterval, 1);
+    //gc.processLine(processInterval, 1);
 
     Q_ASSERT(expectedResult.size() == processInterval.width());
 
@@ -258,8 +258,9 @@ void KisScanlineFillTest::testFillForwardPass()
     dev->convertFromQImage(srcImage, 0, 0, 0);
 
 
-    KisScanlineFill gc(dev, QPoint(), imageRect);
-    gc.run();
+    KisScanlineFill gc(dev, QPoint(20,10), imageRect);
+    gc.setThreshold(10);
+    gc.fillColor(KoColor(Qt::red, cs));
 
     QImage resultImage =
         dev->convertToQImage(0,

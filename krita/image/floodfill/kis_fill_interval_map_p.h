@@ -21,7 +21,7 @@
 
 struct KRITAIMAGE_EXPORT KisFillIntervalMap::Private {
     typedef QMap<int, KisFillInterval> LineIntervalMap;
-    typedef QMap<int, LineIntervalMap> GlobalMap;
+    typedef QHash<int, LineIntervalMap> GlobalMap;
 
     struct IteratorRange {
         IteratorRange()

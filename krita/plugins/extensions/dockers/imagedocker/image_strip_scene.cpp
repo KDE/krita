@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_strip_scene.h"
+#include "image_strip_scene.h"
 
 #include <KoIcon.h>
 
@@ -28,11 +28,11 @@
 #include <QMutexLocker>
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// ------------- KisImageLoader ---------------------------------------------------------- //
+// ------------- ImageLoader ---------------------------------------------------------- //
 
-void KisImageLoader::run()
+void ImageLoader::run()
 {
-    typedef QHash<KisImageItem*,Data>::iterator Iterator;
+    typedef QHash<ImageItem*,Data>::iterator Iterator;
     
     QImageReader reader;
 
@@ -73,9 +73,9 @@ void KisImageLoader::run()
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// ------------- KisImageItem ------------------------------------------------------------ //
+// ------------- ImageItem ------------------------------------------------------------ //
 
-void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -110,19 +110,19 @@ void KisImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->drawRect(boundingRect());
 }
 
-QSizeF KisImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
+QSizeF ImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
 {
     return QSizeF(m_size, m_size);
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// ------------- KisImageStripScene ------------------------------------------------------ //
+// ------------- ImageStripScene ------------------------------------------------------ //
 
-KisImageStripScene::KisImageStripScene():
+ImageStripScene::ImageStripScene():
     m_imgSize(80), m_loader(0) { }
 
-bool KisImageStripScene::setCurrentDirectory(const QString& path)
+bool ImageStripScene::setCurrentDirectory(const QString& path)
 {
     QMutexLocker locker(&m_mutex);
     QDir         directory(path);
@@ -144,8 +144,8 @@ bool KisImageStripScene::setCurrentDirectory(const QString& path)
         delete m_loader;
         
         m_numItems = 0;
-        m_loader   = new KisImageLoader(m_imgSize);
-        connect(m_loader, SIGNAL(sigItemContentChanged(KisImageItem*)), SLOT(slotItemContentChanged(KisImageItem*)));
+        m_loader   = new ImageLoader(m_imgSize);
+        connect(m_loader, SIGNAL(sigItemContentChanged(ImageItem*)), SLOT(slotItemContentChanged(ImageItem*)));
         
         QStringList            files  = directory.entryList(QDir::Files);
         QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
@@ -155,7 +155,7 @@ bool KisImageStripScene::setCurrentDirectory(const QString& path)
             reader.setFileName(path);
             
             if(reader.canRead()) {
-                KisImageItem* item = new KisImageItem(m_imgSize, path, m_loader);
+                ImageItem* item = new ImageItem(m_imgSize, path, m_loader);
                 m_loader->addPath(item, path);
                 layout->addItem(item);
                 ++m_numItems;
@@ -176,15 +176,15 @@ bool KisImageStripScene::setCurrentDirectory(const QString& path)
     return false;
 }
 
-void KisImageStripScene::slotItemContentChanged(KisImageItem* item)
+void ImageStripScene::slotItemContentChanged(ImageItem* item)
 {
     QMutexLocker locker(&m_mutex);
     item->update();
 }
 
-void KisImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 {
-    KisImageItem* item = static_cast<KisImageItem*>(itemAt(event->scenePos()));
+    ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos()));
     
     if(item)
         emit sigImageActivated(item->path());

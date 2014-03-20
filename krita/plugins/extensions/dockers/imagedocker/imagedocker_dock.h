@@ -29,7 +29,7 @@ class QFileSystemModel;
 class QButtonGroup;
 class KoCanvasBase;
 class ImageFilter;
-class KisImageStripScene;
+class ImageStripScene;
 class ImageListModel;
 class QTemporaryFile;
 struct ImageDockerUI;
@@ -94,7 +94,7 @@ private:
     ImageFilter*           m_proxyModel;
     ImageListModel*        m_imgListModel;
     QStringList            m_history;
-    KisImageStripScene*    m_thumbModel;
+    ImageStripScene*    m_thumbModel;
     ImageDockerUI*         m_ui;
     PopupWidgetUI*         m_popupUi;
     QMap<qint64,ImageInfo> m_imgInfoMap;

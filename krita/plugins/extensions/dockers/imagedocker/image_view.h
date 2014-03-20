@@ -22,12 +22,12 @@
 #include <QPixmap>
 #include <QRubberBand>
 
-class KisImageViewport: public QWidget
+class ImageViewport: public QWidget
 {
     Q_OBJECT
     
 public:
-    KisImageViewport();
+    ImageViewport();
     
     QRect  imageRect() const;
     QColor imageColor(const QPoint& pos) const;
@@ -55,14 +55,14 @@ signals:
     void sigRegionSelected(const QRect& rect);
 };
 
-class KisImageView: public QScrollArea
+class ImageView: public QScrollArea
 {
     Q_OBJECT
     
 public:
     enum { VIEW_MODE_FREE=0, VIEW_MODE_ADJUST=1, VIEW_MODE_FIT=2 };
     
-    KisImageView(QWidget* parent=0);
+    ImageView(QWidget* parent=0);
     
     void setPixmap(const QPixmap& pixmap, int viewMode=VIEW_MODE_FIT, qreal scale=1.0);
     void setViewMode(int viewMode, qreal scale=1.0);
@@ -88,7 +88,7 @@ private:
     int               m_viewMode;
     qreal             m_minScale;
     qreal             m_maxScale;
-    KisImageViewport* m_imgViewport;
+    ImageViewport* m_imgViewport;
 };
 
 #endif // H_KIS_IMAGE_VIEW_H

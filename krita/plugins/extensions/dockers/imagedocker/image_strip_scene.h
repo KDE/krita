@@ -25,9 +25,9 @@
 #include <QAtomicInt>
 #include <QMutex>
 
-class KisImageItem;
+class ImageItem;
 
-class KisImageLoader: public QThread
+class ImageLoader: public QThread
 {
     Q_OBJECT
     
@@ -45,20 +45,20 @@ class KisImageLoader: public QThread
     };
     
 signals:
-    void sigItemContentChanged(KisImageItem* item);
+    void sigItemContentChanged(ImageItem* item);
     
 public:
-    KisImageLoader(float size): m_size(size), m_run(true) { }
+    ImageLoader(float size): m_size(size), m_run(true) { }
     
-    void addPath(KisImageItem* item, const QString& path) {
+    void addPath(ImageItem* item, const QString& path) {
         m_data[item] = Data(path);
     }
     
-    bool isImageLoaded(KisImageItem* item) const {
+    bool isImageLoaded(ImageItem* item) const {
         return m_data[item].isLoaded != 0;
     }
     
-    QImage getImage(KisImageItem* item) const {
+    QImage getImage(ImageItem* item) const {
         return m_data[item].image;
     }
     
@@ -70,14 +70,14 @@ public:
     
 private:
     float                     m_size;
-    QHash<KisImageItem*,Data> m_data;
+    QHash<ImageItem*,Data> m_data;
     QAtomicInt                m_run;
 };
 
-class KisImageItem: public QGraphicsWidget
+class ImageItem: public QGraphicsWidget
 {
 public:
-    KisImageItem(float size, const QString& path, KisImageLoader* loader):
+    ImageItem(float size, const QString& path, ImageLoader* loader):
         m_size(size), m_loader(loader), m_path(path)
     {
         setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -90,16 +90,16 @@ public:
     
 private:
     float           m_size;
-    KisImageLoader* m_loader;
+    ImageLoader* m_loader;
     QString         m_path;
 };
 
-class KisImageStripScene: public QGraphicsScene
+class ImageStripScene: public QGraphicsScene
 {
     Q_OBJECT
     
 public:
-    KisImageStripScene();
+    ImageStripScene();
     bool setCurrentDirectory(const QString& path);
     
 signals:
@@ -109,12 +109,12 @@ private:
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
     
 private slots:
-    void slotItemContentChanged(KisImageItem* item);
+    void slotItemContentChanged(ImageItem* item);
     
 private:
     float           m_imgSize;
     quint32         m_numItems;
-    KisImageLoader* m_loader;
+    ImageLoader* m_loader;
     QMutex          m_mutex;
 };
 

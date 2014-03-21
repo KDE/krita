@@ -48,8 +48,8 @@ Item {
             anchors.fill: parent;
 
             border.width: 2;
-            border.color: input.acceptableInput ? "silver" : "red";
-            color: "#bdffffff";
+            border.color: Settings.theme.color("components/textField/border/normal");
+            color: Settings.theme.color("components/textField/background");
 
             radius: height / 2;
 
@@ -61,7 +61,7 @@ Item {
                     rightMargin: base.height / 4;
                     verticalCenter: parent.verticalCenter;
                 }
-                color: Constants.Theme.SecondaryTextColor;
+                color: Settings.theme.color("components/textField/placeholder");
             }
 
             TextInput {
@@ -79,7 +79,7 @@ Item {
                     rightMargin: base.height / 4;
                     verticalCenter: parent.verticalCenter;
                 }
-                font.pixelSize: Constants.DefaultFontSize;
+                font: Settings.theme.font("application");
                 onFocusChanged: {
                     if (focus === false) {
                         closeSoftwareInputPanel();
@@ -91,6 +91,19 @@ Item {
                 }
                 onAccepted: base.accepted();
             }
+
+            states: [
+                State {
+                    name: "error";
+                    when: !input.acceptableInput
+                    PropertyChanges { target: fill; border.color: Settings.theme.color("components/textField/border/error"); }
+                },
+                State {
+                    name: "focus";
+                    when: input.focus;
+                    PropertyChanges { target: fill; border.color: Settings.theme.color("components/textField/border/focus"); }
+                }
+            ]
         }
     }
 
@@ -103,7 +116,7 @@ Item {
         name: "input";
         when: input.focus || input.text != "";
 
-        PropertyChanges { target: placeholder; opacity: 0.5; }
+        PropertyChanges { target: placeholder; opacity: 0.75; }
         AnchorChanges { target: placeholder; anchors.left: undefined; anchors.right: parent.right }
     }
 

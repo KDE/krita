@@ -52,6 +52,7 @@
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
 
 class MainWindow::Private
 {
@@ -94,6 +95,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 
     QDeclarativeView* view = new SketchDeclarativeView();
+    QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
 #ifdef Q_OS_WIN

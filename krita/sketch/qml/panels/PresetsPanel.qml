@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
-    panelColor: "#000000";
+    colorSet: "presets";
 
     /*actions: [
         Button {
@@ -117,14 +117,11 @@ Panel {
             height: Constants.GridHeight;
 
             checked: GridView.isCurrentItem;
+            checkedColor: Settings.theme.color("panels/presets/preset/active");
 
-            color: (model.name === presetsModel.currentPreset) ? "#D7D7D7" : "transparent";
-            shadow: false
-            //textSize: 10;
-            //image: model.image;
-            //text: model.text;
+            color: Settings.theme.color("panels/presets/preset/inactive")
 
-            highlightColor: Constants.Theme.HighlightColor;
+            highlightColor: Settings.theme.color("panels/presets/preset/active")
 
             Image {
                 anchors {
@@ -177,7 +174,9 @@ Panel {
                 width: contentArea.width;
                 Rectangle {
                     anchors.fill: parent;
-                    color: (model.name === presetsModel.currentPreset) ? "#D7D7D7" : "transparent";
+                    color: (model.name === presetsModel.currentPreset) ?
+                        Settings.theme.color("panels/presets/preset/active") :
+                        Settings.theme.color("panels/presets/preset/inactive");
                 }
                 Rectangle {
                     id: presetThumbContainer;

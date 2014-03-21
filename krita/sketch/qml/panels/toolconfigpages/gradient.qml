@@ -33,6 +33,7 @@ Item {
             margins: Constants.DefaultMargin;
         }
         text: "Blending mode:"
+        font: Settings.theme.font("panelSection");
     }
     ExpandingListView {
         id: compositeModeList

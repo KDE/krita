@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Color";
-    panelColor: "#000000"
+    colorSet: "color";
 
     actions: [
         ColorSwatch {
@@ -40,12 +40,7 @@ Panel {
             id: colorPicker;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
-            image: "../images/svg/icon-colorpicker.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
+            image: Settings.theme.icon("colorpicker");
             onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
         },
         Item {
@@ -57,12 +52,7 @@ Panel {
             visible: base.state === "peek";
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: colorSelectorPeek.visible ? "../images/svg/icon-palette.svg" : "../images/svg/icon-color_wheel.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
+            image: colorSelectorPeek.visible ? Settings.theme.icon("palette") : Settings.theme.icon("color_wheel");
             onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]

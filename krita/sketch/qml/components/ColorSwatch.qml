@@ -26,11 +26,11 @@ Item {
     property alias bgColor: bgColor.color;
     Image {
         anchors.fill: bgColor;
-        source: "../images/svg/checker-small.svg";
+        source: Settings.theme.icon("checker-small");
     }
     Image {
         anchors.fill: fgColor;
-        source: "../images/svg/checker-small.svg";
+        source: Settings.theme.icon("checker-small");
     }
     Rectangle {
         id: bgColor;
@@ -78,7 +78,7 @@ Item {
         }
         border {
             width: 3;
-            color: "silver";
+            color: Settings.theme.color("components/colorSwatch/border");
         }
         color: "transparent";
         opacity: 0;
@@ -98,7 +98,7 @@ Item {
         }
         border {
             width: 3;
-            color: "silver";
+            color: Settings.theme.color("components/colorSwatch/border");
         }
         color: "transparent";
         opacity: 0.5;

@@ -20,6 +20,13 @@
 #include "Settings.h"
 #include <QApplication>
 
+#include <kglobal.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
+
+#include "Theme.h"
+
 class Settings::Private
 {
 public:
@@ -28,11 +35,15 @@ public:
     QString currentFile;
     bool temporaryFile;
     QDeclarativeItem *focusItem;
+    Theme* theme;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
+    QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
+    d->theme = Theme::load(theme, this);
+    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
 }
 
 Settings::~Settings()
@@ -78,6 +89,34 @@ void Settings::setFocusItem(QDeclarativeItem* item)
     if (item != d->focusItem) {
         d->focusItem = item;
         emit focusItemChanged();
+    }
+}
+
+QObject* Settings::theme() const
+{
+    return d->theme;
+}
+
+QString Settings::themeID() const
+{
+    if(d->theme)
+        return d->theme->id();
+
+    return QString();
+}
+
+void Settings::setThemeID(const QString& id)
+{
+    if(!d->theme || id != d->theme->id()) {
+        if(d->theme) {
+            delete d->theme;
+            d->theme = 0;
+        }
+
+        d->theme = Theme::load(id, this);
+        KGlobal::config()->group("General").writeEntry<QString>("theme", id);
+
+        emit themeChanged();
     }
 }
 

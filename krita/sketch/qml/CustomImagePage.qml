@@ -26,6 +26,7 @@ Page {
 
     Rectangle {
         anchors.fill: parent;
+        color: Settings.theme.color("pages/customImagePage/background");
     }
 
     Header {
@@ -41,14 +42,14 @@ Page {
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-back.svg";
+            image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-apply.svg";
+            image: Settings.theme.icon("apply");
             onClicked: {
                 var options = {
                     name: nameField.text,
@@ -92,7 +93,7 @@ Page {
         }
 
         Rectangle {
-            color: "lightGray"
+            color: Settings.theme.color("pages/customImagePage/groupBox");
 
             height: childrenRect.height;
             width: parent.width;
@@ -117,7 +118,7 @@ Page {
                     TextField {
                         id: widthField;
 
-                        width: parent.width / 2;  // 2 - Constants.GridWidth * 0.5;
+                        width: parent.width / 2;
                         height: parent.height;
 
                         placeholder: "Width";
@@ -125,8 +126,8 @@ Page {
                         numeric: true;
                         nextFocus: heightField;
 
-                        background: "#63ffffff";
-                        border.color: "white";
+                        background: Settings.theme.color("pages/customImagePage/controls/background");
+                        border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
                         Component.onCompleted: text = Krita.Window.width;
@@ -134,7 +135,7 @@ Page {
                     TextField {
                         id: heightField;
 
-                        width: parent.width / 2; // 2 - Constants.GridWidth * 0.5;
+                        width: parent.width / 2;
                         height: parent.height;
 
                         placeholder: "Height"
@@ -142,8 +143,8 @@ Page {
                         numeric: true;
                         nextFocus: resolutionField;
 
-                        background: "#63ffffff";
-                        border.color: "white";
+                        background: Settings.theme.color("pages/customImagePage/controls/background");
+                        border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
                         Component.onCompleted: text = Krita.Window.height;
@@ -154,8 +155,8 @@ Page {
 
                     height: Constants.GridHeight * 0.75;
 
-                    background: "#63ffffff";
-                    border.color: "white";
+                    background: Settings.theme.color("pages/customImagePage/controls/background");
+                    border.color: Settings.theme.color("pages/customImagePage/controls/border");
                     border.width: 1;
 
                     placeholder: "Resolution"
@@ -166,7 +167,7 @@ Page {
             }
         }
         Rectangle {
-            color: "lightGray"
+            color: Settings.theme.color("pages/customImagePage/groupBox");
 
             height: childrenRect.height;
             width: parent.width;
@@ -223,7 +224,7 @@ Page {
         }
 
         Rectangle {
-            color: "lightGray"
+            color: Settings.theme.color("pages/customImagePage/groupBox");
 
             height: childrenRect.height;
             width: parent.width;
@@ -273,8 +274,8 @@ Page {
                     x: -Constants.DefaultMargin;
                     height: Constants.GridHeight * 1.5;
 
-                    background: "#63ffffff";
-                    border.color: "white";
+                    background: Settings.theme.color("pages/customImagePage/controls/background");
+                    border.color: Settings.theme.color("pages/customImagePage/controls/border");
                     border.width: 1;
 
                     min: 0;

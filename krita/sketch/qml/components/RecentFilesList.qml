@@ -44,11 +44,16 @@ Item {
 
             title: model.text;
             description: model.url;
-            image: model.image;
+
+            image.source: model.image;
+            image.smooth: true;
+            image.fillMode: Image.PreserveAspectCrop;
             imageShadow: true;
-            imageSmooth: false;
-            imageFillMode: Image.PreserveAspectCrop;
-            imageCache: false;
+
+            gradient: Gradient {
+                GradientStop { position: 0; color: Settings.theme.color("components/recentFilesList/start") }
+                GradientStop { position: 0.4; color: Settings.theme.color("components/recentFilesList/stop"); }
+            }
 
             onClicked: {
                 base.itemClicked();
@@ -65,7 +70,13 @@ Item {
         anchors.top: view.bottom;
 
         title: "Open Image";
-        image: "../images/svg/icon-fileopen-black.svg";
+        image.source: Settings.theme.icon("fileopen-black");
+        image.asynchronous: false;
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: Settings.theme.color("components/recentFilesList/start") }
+            GradientStop { position: 0.4; color: Settings.theme.color("components/recentFilesList/stop"); }
+        }
 
         onClicked: base.openClicked();
     }

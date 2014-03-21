@@ -30,7 +30,7 @@ Image {
     height: Constants.GridHeight * 2;
     width: parent.width;
 
-    source: "../images/header_krita_sketch.png"
+    source: Settings.theme.image("header_krita_sketch.png");
     smooth: true;
 
     Row {
@@ -50,9 +50,8 @@ Image {
         id: title;
         anchors.centerIn: parent;
 
-        font.pixelSize: Constants.HugeFontSize;
-        font.bold: true;
-        color: "white";
+        font: Settings.theme.font("pageHeader");
+        color: Settings.theme.color("components/header");
     }
 
     Row {

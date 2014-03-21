@@ -20,5 +20,5 @@ import QtQuick 1.1
 
 Image {
     width: 8;
-    source: "../images/divider2.png"
+    source: Settings.theme.image("divider.png");
 }

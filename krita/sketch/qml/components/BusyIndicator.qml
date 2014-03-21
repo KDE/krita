@@ -72,7 +72,7 @@ Item {
 
     Image {
         id: widget
-        source: "../images/busyindicator.png"
+        source: Settings.theme.image("busyindicator.png");
         anchors.centerIn: parent
         width: Math.min(busy.width, busy.height)
         height: width

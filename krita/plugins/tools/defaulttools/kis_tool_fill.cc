@@ -158,6 +158,7 @@ QWidget* KisToolFill::createOptionWidget()
     QLabel *lbl_fillMode = new QLabel(i18n("Fill Mode: "), widget);
     m_fillMode = new QComboBox(widget);
     m_fillMode->addItems(QStringList() << i18n("Fast") << i18n("Advanced"));
+    m_fillMode->setCurrentIndex(1);
 
     QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);

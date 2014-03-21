@@ -92,6 +92,25 @@ private:
     int m_pixelSize;
 };
 
+class DifferencePolicySlow
+{
+public:
+    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+        m_colorSpace = device->colorSpace();
+        m_srcPixel = srcPixel;
+        m_srcPixelPtr = m_srcPixel.data();
+    }
+
+    ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
+        return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+    }
+
+private:
+    const KoColorSpace *m_colorSpace;
+    KoColor m_srcPixel;
+    const quint8 *m_srcPixelPtr;
+};
+
 template <typename SrcPixelType>
 class DifferencePolicyOptimized
 {
@@ -133,13 +152,13 @@ private:
 template <bool useSmoothSelection,
           class DifferencePolicy,
           template <class> class PixelFiller>
-class SelectionPolicyOptimized : public PixelFiller<DifferencePolicy>
+class SelectionPolicy : public PixelFiller<DifferencePolicy>
 {
 public:
     typename PixelFiller<DifferencePolicy>::SourceAccessorType m_srcIt;
 
 public:
-    SelectionPolicyOptimized(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
+    SelectionPolicy(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
         : m_threshold(threshold)
     {
         this->initDifferencies(device, srcPixel);
@@ -381,28 +400,30 @@ void KisScanlineFill::fillColor(const KoColor &fillColor)
     const int pixelSize = m_d->device->pixelSize();
 
     if (pixelSize == 1) {
-        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint8>, FillWithColor>
+        SelectionPolicy<false, DifferencePolicyOptimized<quint8>, FillWithColor>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 2) {
-        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint16>, FillWithColor>
+        SelectionPolicy<false, DifferencePolicyOptimized<quint16>, FillWithColor>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 4) {
-        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint32>, FillWithColor>
+        SelectionPolicy<false, DifferencePolicyOptimized<quint32>, FillWithColor>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else if (pixelSize == 8) {
-        SelectionPolicyOptimized<false, DifferencePolicyOptimized<quint64>, FillWithColor>
+        SelectionPolicy<false, DifferencePolicyOptimized<quint64>, FillWithColor>
               policy(m_d->device, srcColor, m_d->threshold);
         policy.setFillColor(fillColor);
         runImpl(policy);
     } else {
-        bool pixel_size_not_implemented = false;
-        KIS_ASSERT_RECOVER_NOOP(pixel_size_not_implemented);
+        SelectionPolicy<false, DifferencePolicySlow, FillWithColor>
+              policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
     }
 }
 
@@ -414,28 +435,30 @@ void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
     const int pixelSize = m_d->device->pixelSize();
 
     if (pixelSize == 1) {
-        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint8>, CopyToSelection>
+        SelectionPolicy<true, DifferencePolicyOptimized<quint8>, CopyToSelection>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setDestinationSelection(pixelSelection);
         runImpl(policy);
     } else if (pixelSize == 2) {
-        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint16>, CopyToSelection>
+        SelectionPolicy<true, DifferencePolicyOptimized<quint16>, CopyToSelection>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setDestinationSelection(pixelSelection);
         runImpl(policy);
     } else if (pixelSize == 4) {
-        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint32>, CopyToSelection>
+        SelectionPolicy<true, DifferencePolicyOptimized<quint32>, CopyToSelection>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setDestinationSelection(pixelSelection);
         runImpl(policy);
     } else if (pixelSize == 8) {
-        SelectionPolicyOptimized<true, DifferencePolicyOptimized<quint64>, CopyToSelection>
+        SelectionPolicy<true, DifferencePolicyOptimized<quint64>, CopyToSelection>
               policy(m_d->device, srcColor, m_d->threshold);
         policy.setDestinationSelection(pixelSelection);
         runImpl(policy);
     } else {
-        bool pixel_size_not_implemented = false;
-        KIS_ASSERT_RECOVER_NOOP(pixel_size_not_implemented);
+        SelectionPolicy<true, DifferencePolicySlow, CopyToSelection>
+              policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationSelection(pixelSelection);
+        runImpl(policy);
     }
 }
 

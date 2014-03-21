@@ -257,26 +257,25 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
 //  want that, since we want a transparent layer to be completely filled
 //     QRect rc = m_fillSelection->selectedExactRect();
 
-    KisSelectionSP tmpSelection = selection();
+
+    /**
+     * Apply the real selection to a filled one
+     */
+    KisSelectionSP realSelection = selection();
+
+    if (realSelection) {
+        m_fillSelection->pixelSelection()->applySelection(
+            realSelection->projection(), SELECTION_INTERSECT);
+    }
+
     setSelection(m_fillSelection);
     bitBlt(0, 0, filled, 0, 0, m_width, m_height);
-    setSelection(tmpSelection);
+    setSelection(realSelection);
 
     if (progressUpdater()) progressUpdater()->setProgress(100);
 
     m_width = m_height = -1;
 }
-
-struct FillSegment {
-    FillSegment(int x, int y/*, FillSegment* parent*/) : x(x), y(y)/*, parent(parent)*/ {}
-    int x;
-    int y;
-//    FillSegment* parent;
-};
-
-static const quint8 None = 0;
-static const quint8 Added = 1;
-static const quint8 Checked = 2;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice)
 {

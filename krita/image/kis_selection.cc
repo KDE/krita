@@ -165,7 +165,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
     m_d->shapeSelection = shapeSelection;
 }
 
-KisPaintDeviceSP KisSelection::projection() const
+KisPixelSelectionSP KisSelection::projection() const
 {
     return m_d->pixelSelection;
 }

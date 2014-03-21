@@ -122,7 +122,7 @@ public:
      * as pixel selection. You must read selection data from this
      * paint device only
      */
-    KisPaintDeviceSP projection() const;
+    KisPixelSelectionSP projection() const;
 
     /**
      * Updates the projection of the selection. You should call this

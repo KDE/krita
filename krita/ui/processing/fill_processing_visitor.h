@@ -32,6 +32,7 @@ public:
     FillProcessingVisitor(const QPoint &startPoint,
                    KisSelectionSP selection,
                    KisResourcesSnapshotSP resources,
+                   bool useFastMode,
                    bool usePattern,
                    bool selectionOnly,
                    int feather,
@@ -47,6 +48,7 @@ private:
 private:
     QPoint m_startPoint;
     KisSelectionSP m_selection;
+    bool m_useFastMode;
     bool m_selectionOnly;
     bool m_usePattern;
     KisResourcesSnapshotSP m_resources;

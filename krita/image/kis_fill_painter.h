@@ -121,12 +121,10 @@ public:
      *
      * @param startX the X position where the floodfill starts
      * @param startY the Y position where the floodfill starts
-     * @param projection the projection that determines the area that
-     * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the projection param and deprecated the
-     * sampleMerged setting)
+     * @param sourceDevice the sourceDevice that determines the area that
+     * is floodfilled if sampleMerged is on
      */
-    void fillColor(int startX, int startY, KisPaintDeviceSP projection);
+    void fillColor(int startX, int startY, KisPaintDeviceSP sourceDevice);
 
     /**
      * Fills the enclosed area around the point with the set pattern.
@@ -136,24 +134,20 @@ public:
      *
      * @param startX the X position where the floodfill starts
      * @param startY the Y position where the floodfill starts
-     * @param projection the projection that determines the area that
-     * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the projection param and deprecated the
-     * sampleMerged setting)
+     * @param sourceDevice the sourceDevice that determines the area that
+     * is floodfilled if sampleMerged is on
      */
-    void fillPattern(int startX, int startY, KisPaintDeviceSP projection);
+    void fillPattern(int startX, int startY, KisPaintDeviceSP sourceDevice);
 
     /**
      * Returns a selection mask for the floodfill starting at the specified position.
      *
      * @param startX the X position where the floodfill starts
      * @param startY the Y position where the floodfill starts
-     * @param projection the projection that determines the area that
-     * is floodfilled if sampleMerged is on (XXX: fix this API to
-     * always use the projection param and deprecated the
-     * sampleMerged setting)
+     * @param sourceDevice the sourceDevice that determines the area that
+     * is floodfilled if sampleMerged is on
      */
-    KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP projection);
+    KisSelectionSP createFloodSelection(int startX, int startY, KisPaintDeviceSP sourceDevice);
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
@@ -166,6 +160,14 @@ public:
         return m_threshold;
     }
 
+    bool useCompositioning() const {
+        return m_useCompositioning;
+    }
+
+    void setUseCompositioning(bool useCompositioning) {
+        m_useCompositioning = useCompositioning;
+    }
+
     /** Sets the width of the paint device */
     void setWidth(int w) {
         m_width = w;
@@ -174,17 +176,6 @@ public:
     /** Sets the height of the paint device */
     void setHeight(int h) {
         m_height = h;
-    }
-
-    /** If sample merged is set to true, the paint device will get the bounds of the
-     * floodfill from the complete image instead of the layer */
-    bool sampleMerged() const {
-        return m_sampleMerged;
-    }
-
-    /** Set sample merged. See sampleMerged() for details */
-    void setSampleMerged(bool set) {
-        m_sampleMerged = set;
     }
 
     /** If true, floodfill doesn't fill outside the selected area of a layer */
@@ -197,20 +188,6 @@ public:
         m_careForSelection = set;
     }
 
-    /**
-     * If true, the floodfill will be fuzzy. This means that the 'value' of selectedness
-     * will depend on the difference between the sampled color and the color at the current
-     * position.
-     */
-    bool fuzzyFill() const {
-        return m_fuzzy;
-    }
-
-    /** Sets the fuzzyfill parameter. See fuzzyFill for details */
-    void setFuzzyFill(bool set) {
-        m_fuzzy = set;
-    }
-        
     /** Sets the auto growth/shrinking radius */
     void setSizemod(int sizemod) {
         m_sizemod = sizemod;
@@ -235,23 +212,18 @@ public:
 
 private:
     // for floodfill
-    void genericFillStart(int startX, int startY, KisPaintDeviceSP projection);
+    void genericFillStart(int startX, int startY, KisPaintDeviceSP sourceDevice);
     void genericFillEnd(KisPaintDeviceSP filled);
-
-    KisSelectionSP createFloodSelectionFast(int startX, int startY, KisPaintDeviceSP projection, quint8 *map);
-    KisSelectionSP createFloodSelectionFrugal(int startX, int startY, KisPaintDeviceSP projection);
 
     KisSelectionSP m_fillSelection;
 
     int m_feather;
     int m_sizemod;
     int m_threshold;
-    int m_size;
     int m_width, m_height;
     QRect m_rect;
-    bool m_sampleMerged;
     bool m_careForSelection;
-    bool m_fuzzy;
+    bool m_useCompositioning;
 };
 
 

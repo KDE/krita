@@ -90,7 +90,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
         // default
         fillPainter.setFillThreshold(15);
         fillPainter.setCompositeOp(COMPOSITE_OVER);
-        fillPainter.setSampleMerged(false);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(GMP_IMAGE_WIDTH);
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);

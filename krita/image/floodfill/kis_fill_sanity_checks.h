@@ -20,11 +20,16 @@
 #define __KIS_FILL_SANITY_CHECKS_H
 
 #define ENABLE_FILL_SANITY_CHECKS
+//#define ENABLE_CHECKS_FOR_TESTING
 
 #ifdef ENABLE_FILL_SANITY_CHECKS
 
+#ifdef ENABLE_CHECKS_FOR_TESTING
 #include <stdexcept>
 #define SANITY_ASSERT_MSG(cond, msg) ((!(cond)) ? throw std::invalid_argument(msg) : qt_noop())
+#else
+#define SANITY_ASSERT_MSG(cond, msg) Q_ASSERT((cond))
+#endif /* ENABLE_CHECKS_FOR_TESTING */
 
 #else
 

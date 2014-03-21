@@ -54,6 +54,7 @@ private:
     void runImpl(T &pixelPolicy);
 
 private:
+    void testingProcessLine(const KisFillInterval &processInterval);
     QVector<KisFillInterval> testingGetForwardIntervals() const;
     KisFillIntervalMap* testingGetBackwardIntervals() const;
 private:

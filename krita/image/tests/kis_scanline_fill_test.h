@@ -36,8 +36,6 @@ private slots:
     void testFillBackwardCollisionFull();
     void testFillBackwardCollisionSanityCheck();
 
-    void testFillForwardPass();
-
 private:
     void testFillGeneral(const QVector<KisFillInterval> &initialBackwardIntervals,
                          const QVector<QColor> &expectedResult,

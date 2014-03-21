@@ -56,7 +56,7 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     }
 
     KisFillInterval processInterval(0,10,0);
-    //gc.processLine(processInterval, 1);
+    gc.testingProcessLine(processInterval);
 
     Q_ASSERT(expectedResult.size() == processInterval.width());
 
@@ -223,6 +223,7 @@ void KisScanlineFillTest::testFillBackwardCollisionFull()
 
 void KisScanlineFillTest::testFillBackwardCollisionSanityCheck()
 {
+#if defined ENABLE_FILL_SANITY_CHECKS && defined ENABLE_CHECKS_FOR_TESTING
     QVector<KisFillInterval> initialBackwardIntervals;
     initialBackwardIntervals << KisFillInterval(0, 10, 0);
 
@@ -243,34 +244,7 @@ void KisScanlineFillTest::testFillBackwardCollisionSanityCheck()
     }
 
     QVERIFY(gotException);
-}
-
-void KisScanlineFillTest::testFillForwardPass()
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-
-    QImage srcImage(TestUtil::fetchDataFileLazy("simple_labyrinth.png"));
-    QVERIFY(!srcImage.isNull());
-
-    QRect imageRect = srcImage.rect();
-
-    dev->convertFromQImage(srcImage, 0, 0, 0);
-
-
-    KisScanlineFill gc(dev, QPoint(20,10), imageRect);
-    gc.setThreshold(10);
-    gc.fillColor(KoColor(Qt::red, cs));
-
-    QImage resultImage =
-        dev->convertToQImage(0,
-                             imageRect.x(), imageRect.y(),
-                             imageRect.width(), imageRect.height());
-
-    TestUtil::checkQImage(resultImage,
-                          "scanline_fill",
-                          "simple_labyrinth_",
-                          "simple_labyrinth_top_left");
+#endif /* ENABLE_FILL_SANITY_CHECKS */
 }
 
 QTEST_KDEMAIN(KisScanlineFillTest, GUI)

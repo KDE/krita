@@ -462,6 +462,19 @@ void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
     }
 }
 
+void KisScanlineFill::testingProcessLine(const KisFillInterval &processInterval)
+{
+    KoColor srcColor(QColor(0,0,0,0), m_d->device->colorSpace());
+    KoColor fillColor(QColor(200,200,200,200), m_d->device->colorSpace());
+
+    SelectionPolicy<false, DifferencePolicyOptimized<quint32>, FillWithColor>
+        policy(m_d->device, srcColor, m_d->threshold);
+
+    policy.setFillColor(fillColor);
+
+    processLine(processInterval, 1, policy);
+}
+
 QVector<KisFillInterval> KisScanlineFill::testingGetForwardIntervals() const
 {
     return QVector<KisFillInterval>(m_d->forwardStack);

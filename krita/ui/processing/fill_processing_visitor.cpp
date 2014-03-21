@@ -26,6 +26,7 @@
 FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                KisSelectionSP selection,
                                KisResourcesSnapshotSP resources,
+                               bool useFastMode,
                                bool usePattern,
                                bool selectionOnly,
                                int feather,
@@ -35,6 +36,7 @@ FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
                                bool useBgColor)
     : m_startPoint(startPoint),
       m_selection(selection),
+      m_useFastMode(useFastMode),
       m_selectionOnly(selectionOnly),
       m_usePattern(usePattern),
       m_resources(resources),
@@ -104,6 +106,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(fillRect.width());
         fillPainter.setHeight(fillRect.height());
+        fillPainter.setUseCompositioning(!m_useFastMode);
 
         KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_resources->image()->projection();
 

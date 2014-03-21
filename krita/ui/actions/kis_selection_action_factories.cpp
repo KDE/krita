@@ -178,6 +178,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
         new FillProcessingVisitor(QPoint(0, 0), // start position
                                   selection,
                                   resources,
+                                  false, // fast mode
                                   usePattern,
                                   true, // fill only selection,
                                   0, // feathering radius

@@ -31,6 +31,7 @@ class KisFillPainter;
 class QWidget;
 class QLabel;
 class QCheckBox;
+class QComboBox;
 class KisSliderSpinBox;
 class KoCanvasBase;
 
@@ -50,12 +51,16 @@ public:
     virtual QWidget * createOptionWidget();
 
 public slots:
-    virtual void slotSetThreshold(int);
-    virtual void slotSetUsePattern(bool);
-    virtual void slotSetSampleMerged(bool);
-    virtual void slotSetFillSelection(bool);
-    virtual void slotSetSizemod(int);
-    virtual void slotSetFeather(int);
+    void slotFillModeChanged(int);
+    void slotSetThreshold(int);
+    void slotSetUsePattern(bool);
+    void slotSetSampleMerged(bool);
+    void slotSetFillSelection(bool);
+    void slotSetSizemod(int);
+    void slotSetFeather(int);
+
+private:
+    void updateGUI();
 
 private:
     int m_feather;
@@ -66,7 +71,10 @@ private:
     bool m_usePattern;
     bool m_fillOnlySelection;
 
+    QComboBox *m_fillMode;
     KisSliderSpinBox *m_slThreshold;
+    KisSliderSpinBox *m_sizemodWidget;
+    KisSliderSpinBox *m_featherWidget;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkSampleMerged;
     QCheckBox *m_checkFillSelection;

@@ -32,7 +32,7 @@ void KisFillPainterTest::testCreation()
     KisFillPainter test;
 }
 
-void KisFillPainterTest::benchmarkFillingLegacy()
+void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -51,7 +51,8 @@ void KisFillPainterTest::benchmarkFillingLegacy()
         gc.setWidth(imageRect.width());
         gc.setHeight(imageRect.height());
         gc.setPaintColor(KoColor(Qt::red, dev->colorSpace()));
-        gc.fillColor(0,0, dev);
+        gc.setUseCompositioning(useCompositioning);
+        gc.fillColor(startPoint.x(), startPoint.y(), dev);
     }
 
     QImage resultImage =
@@ -59,78 +60,31 @@ void KisFillPainterTest::benchmarkFillingLegacy()
                              imageRect.x(), imageRect.y(),
                              imageRect.width(), imageRect.height());
 
-    TestUtil::checkQImage(resultImage,
-                          "fill_painter",
-                          "legacy_",
-                          "heavy_labyrinth_top_left");
+    QString testName = QString("heavy_labyrinth_%1_%2_%3")
+        .arg(startPoint.x())
+        .arg(startPoint.y())
+        .arg(useCompositioning ? "composed" : "direct");
+
+
+    QVERIFY(TestUtil::checkQImage(resultImage,
+                                  "fill_painter",
+                                  "general_",
+                                  testName));
 }
 
-void KisFillPainterTest::benchmarkFillingLegacyCompositioningOn()
+void KisFillPainterTest::benchmarkFillPainter()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-
-    QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
-    QVERIFY(!srcImage.isNull());
-
-    QRect imageRect = srcImage.rect();
-
-    dev->convertFromQImage(srcImage, 0, 0, 0);
-
-
-    QBENCHMARK_ONCE {
-        KisFillPainter gc(dev);
-        gc.setFillThreshold(THRESHOLD);
-        gc.setWidth(imageRect.width());
-        gc.setHeight(imageRect.height());
-        gc.setPaintColor(KoColor(Qt::red, dev->colorSpace()));
-        gc.setUseCompositioning(true);
-        gc.fillColor(0,0, dev);
-    }
-
-    QImage resultImage =
-        dev->convertToQImage(0,
-                             imageRect.x(), imageRect.y(),
-                             imageRect.width(), imageRect.height());
-
-    TestUtil::checkQImage(resultImage,
-                          "fill_painter",
-                          "legacy_",
-                          "heavy_labyrinth_top_left");
+    benchmarkFillPainter(QPoint(), false);
 }
 
-void KisFillPainterTest::benchmarkFillingLegacyCompositioningOnNotCorner()
+void KisFillPainterTest::benchmarkFillPainterOffset()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    benchmarkFillPainter(QPoint(5,5), false);
+}
 
-    QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
-    QVERIFY(!srcImage.isNull());
-
-    QRect imageRect = srcImage.rect();
-
-    dev->convertFromQImage(srcImage, 0, 0, 0);
-
-
-    QBENCHMARK_ONCE {
-        KisFillPainter gc(dev);
-        gc.setFillThreshold(THRESHOLD);
-        gc.setWidth(imageRect.width());
-        gc.setHeight(imageRect.height());
-        gc.setPaintColor(KoColor(Qt::red, dev->colorSpace()));
-        gc.setUseCompositioning(true);
-        gc.fillColor(5,5, dev);
-    }
-
-    QImage resultImage =
-        dev->convertToQImage(0,
-                             imageRect.x(), imageRect.y(),
-                             imageRect.width(), imageRect.height());
-
-    TestUtil::checkQImage(resultImage,
-                          "fill_painter",
-                          "legacy_",
-                          "heavy_labyrinth_top_left");
+void KisFillPainterTest::benchmarkFillPainterOffsetCompositioning()
+{
+    benchmarkFillPainter(QPoint(5,5), true);
 }
 
 void KisFillPainterTest::benchmarkFillingScanlineColor()
@@ -157,10 +111,10 @@ void KisFillPainterTest::benchmarkFillingScanlineColor()
                              imageRect.x(), imageRect.y(),
                              imageRect.width(), imageRect.height());
 
-    TestUtil::checkQImage(resultImage,
-                          "fill_painter",
-                          "scanline_",
-                          "heavy_labyrinth_top_left");
+    QVERIFY(TestUtil::checkQImage(resultImage,
+                                  "fill_painter",
+                                  "scanline_",
+                                  "heavy_labyrinth_top_left"));
 }
 
 void KisFillPainterTest::benchmarkFillingScanlineSelection()
@@ -189,10 +143,10 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
                                         imageRect.x(), imageRect.y(),
                                         imageRect.width(), imageRect.height());
 
-    TestUtil::checkQImage(resultImage,
-                          "fill_painter",
-                          "scanline_",
-                          "heavy_labyrinth_top_left_selection");
+    QVERIFY(TestUtil::checkQImage(resultImage,
+                                  "fill_painter",
+                                  "scanline_",
+                                  "heavy_labyrinth_top_left_selection"));
 }
 
 

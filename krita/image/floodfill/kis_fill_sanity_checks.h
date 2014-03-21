@@ -24,7 +24,8 @@
 #ifdef ENABLE_FILL_SANITY_CHECKS
 
 #include <stdexcept>
-#define SANITY_ASSERT_MSG(cond, msg) ((!(cond)) ? throw std::invalid_argument(msg) : qt_noop())
+//#define SANITY_ASSERT_MSG(cond, msg) ((!(cond)) ? throw std::invalid_argument(msg) : qt_noop())
+#define SANITY_ASSERT_MSG(cond, msg) Q_ASSERT((cond))
 
 #else
 

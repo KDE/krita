@@ -993,13 +993,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this,
-                            KoFileDialog::FileSaveDialog,
-                            i18n("untitled"),
-                            (isExporting() && !d->lastExportUrl.isEmpty()) ?
+        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        dialog.setCaption(i18n("untitled"));
+        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
-        KUrl newURL = dialog.getKUrl();
+        KUrl newURL = dialog.url();
 
         QByteArray outputFormat = _native_format;
         if (!specialOutputFlag) {
@@ -1307,25 +1306,21 @@ void KoMainWindow::slotFileOpen()
 {
     KUrl url;
     if (!isImporting()) {
-        KoFileDialog dialog(this,
-                            KoFileDialog::FileOpenDialog,
-                            i18n("Open Document"),
-                            (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+        KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setCaption(i18n("Open Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                            "OpenDocument");
+                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-        url = dialog.getKUrl();
+        url = dialog.url();
     } else {
-        KoFileDialog dialog(this,
-                            KoFileDialog::FileImportDialog,
-                            i18n("Import Document"),
-                            (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+        KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                            "OpenDocument");
+                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-        url = dialog.getKUrl();
+        url = dialog.url();
     }
 
     if (url.isEmpty())
@@ -1481,12 +1476,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this,
-                            KoFileDialog::FileSaveDialog,
-                            i18n("Export as PDF"),
-                            startUrl.toLocalFile());
+        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        dialog.setCaption(i18n("Export as PDF"));
+        dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
-        KUrl url = dialog.getKUrl();
+        KUrl url = dialog.url();
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())

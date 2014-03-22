@@ -198,15 +198,13 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Open Existing Document"),
-                        (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Existing Document"));
+    dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
                           ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                        "OpenDocument");
+                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
-    KUrl url = dialog.getKUrl();
+    KUrl url = dialog.url();
     emit openExistingFile(url);
 }
 

@@ -93,13 +93,11 @@ QString KisDlgFileLayer::fileName() const
 
 void KisDlgFileLayer::slotSelectFile()
 {
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Select file to use as dynamic file layer."),
-                        m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
-                        "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select file to use as dynamic file layer."));
+    dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
     dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-    QString url = dialog.getQString();
+    QString url = dialog.url();
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);
     }

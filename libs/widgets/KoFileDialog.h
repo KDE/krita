@@ -37,16 +37,16 @@ class KOMAIN_EXPORT KoFileDialog
 {
 public:
     enum DialogType {
-        FileOpenDialog,
-        DirectoryOpenDialog,
-        FileImportDialog,
-        DirectoryImportDialog,
-        FileSaveDialog
-    };
-
-    enum ReturnType {
-        ReturnOne,
-        ReturnList
+        OpenFile,
+        OpenFiles,
+        OpenDirectory,
+        OpenDirectories,
+        ImportFile,
+        ImportFiles,
+        ImportDirectory,
+        ImportDirectories,
+        SaveFile,
+        SaveFiles
     };
 
     /**
@@ -61,12 +61,13 @@ public:
      *
      */
     KoFileDialog(QWidget *parent = 0,
-                 KoFileDialog::DialogType dialogType = FileOpenDialog,
-                 const QString &caption = QString(),
-                 const QString &defaultDir = QString(),
+                 KoFileDialog::DialogType type = OpenFile,
                  const QString uniqueName = QString());
+
     ~KoFileDialog();
 
+    void setCaption(const QString &caption);
+    void setDefaultDir(const QString &defaultDir);
     void setNameFilter(const QString &filter);
     void setNameFilters(const QStringList &filterList,
                         const QString &defaultFilter = QString());
@@ -79,24 +80,22 @@ public:
      *
      * @return the qfiledialog pointer, remember to delete it after no longer used!
      */
-    QFileDialog* getDialog(KoFileDialog::ReturnType returnType);
+    QFileDialog* ptr();
 
-    QString getQString();
-    QStringList getQStringList();
-    QUrl getQUrl();
-    QList<QUrl> getQUrlList();
-    KUrl getKUrl();
+    QStringList urls();
+    QString url();
 
 private:
     enum FilterType {
-        FilterMime,
-        FilterName
+        MimeFilter,
+        NameFilter
     };
 
-    const QString getDefaultDir(const QString &defaultDir, const QString &dialogName);
-    void saveDefaultDir(const QString &fileName, const QString &dialogName);
+    const QString getUsedDir(const QString &dialogName);
+    void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterString(const QStringList &mimeList, bool withAllSupported = true);
+    const QStringList getFilterString(const QStringList &mimeList,
+                                      bool withAllSupportedEntry = true);
     const QString getFilterString(const QString &defaultMime);
 
     class Private;

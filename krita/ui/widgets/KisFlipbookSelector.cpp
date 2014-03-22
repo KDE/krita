@@ -46,13 +46,11 @@ KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
 
 void KisFlipbookSelector::createImage()
 {
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Select files to add to flipbook"),
-                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                        "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setCaption(i18n("Select files to add to flipbook"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-    QStringList urls = dialog.getQStringList();
+    QStringList urls = dialog.urls();
 
     if (urls.size() < 1) return;
     QApplication::setOverrideCursor(Qt::WaitCursor);

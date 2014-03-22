@@ -74,13 +74,11 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
-        KoFileDialog dialog(m_view,
-                            KoFileDialog::FileOpenDialog,
-                            i18n("Import Image"),
-                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                            "OpenDocument");
+        KoFileDialog dialog(m_view, KoFileDialog::OpenFiles, "OpenDocument");
+        dialog.setCaption(i18n("Import Image"));
+        dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
         dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
-        QStringList fileNames = dialog.getQStringList();
+        QStringList fileNames = dialog.urls();
         foreach(const QString &fileName, fileNames) {
             urls << KUrl::fromLocalFile(fileName);
         }

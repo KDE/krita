@@ -177,13 +177,11 @@ void KisColorSpaceSelector::installProfile()
 {
     QStringList mime;
     mime << "*.icm" <<  "*.icc";
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Install Color Profiles"),
-                        QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                        "OpenDocumentICC");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
+    dialog.setCaption(i18n("Install Color Profiles"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.getQStringList();
+    QStringList profileNames = dialog.urls();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);

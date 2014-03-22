@@ -29,7 +29,7 @@
 #include <KoIcon.h>
 #include <KoUpdater.h>
 #include <KoResourceServerProvider.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <kis_config.h>
 #include <kis_cursor.h>
@@ -184,12 +184,11 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    QString filename = KoFileDialogHelper::getOpenFileName(m_view,
-                                                           i18n("Open Macro"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           mimeFilter,
-                                                           "",
-                                                           "OpenDocument");
+    KoFileDialog dialog(m_view, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Macro"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter("Recorded actions (*.krarec)");
+    QString filename = dialog.url();
     RecordedActionLoadContext loadContext;
 
     if (!filename.isNull()) {

@@ -183,12 +183,10 @@ void KoEditColorSetWidget::removeColor()
 void KoEditColorSetWidget::open()
 {
     Q_ASSERT(m_activeColorSet);
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        QString(),
-                        m_activeColorSet->filename());
+    KoFileDialog dialog(this, KoFileDialog::OpenFile);
+    dialog.setDefaultDir(m_activeColorSet->filename());
     dialog.setNameFilter("*.gpl");
-    QString fileName = dialog.getQString();
+    QString fileName = dialog.url();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
     m_colorSets.append(colorSet);

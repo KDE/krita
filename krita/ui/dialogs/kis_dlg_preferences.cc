@@ -232,13 +232,11 @@ void ColorSettingsTab::installProfile()
 {
     QStringList mime;
     mime << "*.icm" <<  "*.icc";
-    KoFileDialog dialog(this,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Install Color Profiles"),
-                        QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                        "OpenDocumentICC");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
+    dialog.setCaption(i18n("Install Color Profiles"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     dialog.setNameFilters(mime);
-    QStringList profileNames = dialog.getQStringList();
+    QStringList profileNames = dialog.urls();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
@@ -354,13 +352,11 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    KoFileDialog dialog(m_page,
-                        KoFileDialog::FileOpenDialog,
-                        i18n("Select OpenColorIO Configuration"),
-                        QDir::cleanPath(filename),
-                        "OpenDocument");
-    dialog.setNameFilter("*.ocio|OpenColorIO configuration (*.ocio)");
-    filename = dialog.getQString();
+    KoFileDialog dialog(m_page, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select OpenColorIO Configuration"));
+    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
+    filename = dialog.url();
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);

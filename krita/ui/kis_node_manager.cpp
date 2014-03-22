@@ -798,12 +798,11 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    KoFileDialog dialog(m_d->view,
-                        KoFileDialog::FileSaveDialog,
-                        i18n("Export Node"),
-                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
+    dialog.setCaption(i18n("Export Node"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
-    QString filename = dialog.getQString();
+    QString filename = dialog.url();
 
     if (filename.isEmpty()) return;
 

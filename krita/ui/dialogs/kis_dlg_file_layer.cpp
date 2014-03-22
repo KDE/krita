@@ -31,7 +31,7 @@
 #include <kfiledialog.h>
 #include <kurl.h>
 
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoApplication.h>
 #include <KoFilterManager.h>
 
@@ -93,14 +93,13 @@ QString KisDlgFileLayer::fileName() const
 
 void KisDlgFileLayer::slotSelectFile()
 {
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
-
-    QString url = KoFileDialogHelper::getOpenFileName(this,
-                                                      i18n("Select file to use as dynamic file layer."),
-                                                      m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
-                                                      mimeFilter,
-                                                      "",
-                                                      "OpenDocument");
+    KoFileDialog dialog(this,
+                        KoFileDialog::DialogOpenFile,
+                        i18n("Select file to use as dynamic file layer."),
+                        m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath,
+                        "OpenDocument");
+    dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+    QString url = dialog.getQString();
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);
     }

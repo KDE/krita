@@ -35,7 +35,7 @@
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoDocumentEntry.h>
 
 #include "MainWindow.h"
@@ -112,12 +112,13 @@ void DesktopViewProxy::fileOpen()
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
 
-    QString filename = KoFileDialogHelper::getOpenFileName(d->desktopView,
-                                                           i18n("Open Document"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           mimeFilter,
-                                                           "",
-                                                           "OpenDocument");
+    KoFileDialog dialog(d->desktopView,
+                        KoFileDialog::DialogOpenFile,
+                        i18n("Open Document"),
+                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                        "OpenDocument");
+    dialog.setMimeTypeFilters(mimeFilter);
+    QString filename = dialog.getQString();
     if (filename.isEmpty()) return;
 
     DocumentManager::instance()->openDocument(filename, d->isImporting);

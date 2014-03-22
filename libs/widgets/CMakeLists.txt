@@ -29,6 +29,7 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
 
+    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -110,6 +111,7 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
 
+    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h

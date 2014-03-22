@@ -28,7 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -798,10 +798,12 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QString filename = KoFileDialogHelper::getSaveFileName(m_d->view,
-                                                           i18n("Export Node"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    KoFileDialog dialog(m_d->view,
+                        KoFileDialog::DialogSaveFile,
+                        i18n("Export Node"),
+                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    QString filename = dialog.getQString();
 
     if (filename.isEmpty()) return;
 

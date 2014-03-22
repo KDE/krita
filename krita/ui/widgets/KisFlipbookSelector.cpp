@@ -25,7 +25,7 @@
 #include <KoApplication.h>
 #include <KoIcon.h>
 #include <KoFilterManager.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -46,12 +46,13 @@ KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
 
 void KisFlipbookSelector::createImage()
 {
-    QStringList urls = KoFileDialogHelper::getOpenFileNames(this,
-                                                            i18n("Select files to add to flipbook"),
-                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                            koApp->mimeFilter(KoFilterManager::Import),
-                                                            "",
-                                                            "OpenDocument");
+    KoFileDialog dialog(this,
+                        KoFileDialog::DialogOpenFile,
+                        i18n("Select files to add to flipbook"),
+                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
+                        "OpenDocument");
+    dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+    QStringList urls = dialog.getQStringList();
 
     if (urls.size() < 1) return;
     QApplication::setOverrideCursor(Qt::WaitCursor);

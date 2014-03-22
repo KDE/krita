@@ -40,7 +40,7 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoIcon.h>
 #include "KoTemplateTree.h"
 #include "KoTemplateGroup.h"
@@ -198,15 +198,16 @@ KoOpenPane::~KoOpenPane()
 
 void KoOpenPane::openFileDialog()
 {
-    QString url = KoFileDialogHelper::getOpenFileName(this,
-                                                      i18n("Open Existing Document"),
-                                                      (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
-                                                        ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                                        : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                                                      m_mimeFilter,
-                                                      "",
-                                                      "OpenDocument");
-    emit openExistingFile(KUrl(url));
+    KoFileDialog dialog(this,
+                        KoFileDialog::DialogOpenFile,
+                        i18n("Open Existing Document"),
+                        (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
+                          ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                          : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
+                        "OpenDocument");
+    dialog.setMimeTypeFilters(m_mimeFilter);
+    KUrl url = dialog.getKUrl();
+    emit openExistingFile(url);
 }
 
 void KoOpenPane::initRecentDocs()

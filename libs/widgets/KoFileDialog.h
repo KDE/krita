@@ -53,9 +53,8 @@ public:
      * @brief constructor
      * @param parent The parent of the file dialog
      * @param dialogType usage of the file dialog
-     * @param caption Caption of the file dialog
-     * @param defaultDir the default directory the file dialog shows. If uniqueName is provided, this will be replaced by the last open directory.
-     * @param uniqueName the name for the file dialog. This will be used to open the filedialog in the last open location, instead the specified directory.
+     * @param uniqueName the name for the file dialog. This will be used to open
+     * the filedialog in the last open location, instead the specified directory.
      *
      * @return The name of the entry user selected in the file dialog
      *
@@ -75,10 +74,12 @@ public:
                             const QString &defaultFilter = QString());
 
     /**
-     * @brief this function is for cases where detailed control is needed, e.g. evaulate dialog.exec()
-     * @param returnType setup the dialog for selecting single file or multiple files
+     * @brief in case custom control needed on QFileDialog object, use this
+     * to get a pointer to the QFileDialog object. Use this only after all the
+     * setXXX methods, otherwise the QFileDialog object will be created before
+     * those options are set. the object is managed by KoFileDialog.
      *
-     * @return the qfiledialog pointer, remember to delete it after no longer used!
+     * @return the qfiledialog pointer
      */
     QFileDialog* ptr();
 
@@ -95,7 +96,7 @@ private:
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
     const QStringList getFilterString(const QStringList &mimeList,
-                                      bool withAllSupportedEntry = true);
+                                      bool withAllSupportedEntry = false);
     const QString getFilterString(const QString &defaultMime);
 
     class Private;

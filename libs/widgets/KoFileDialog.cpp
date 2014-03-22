@@ -142,7 +142,7 @@ QFileDialog* KoFileDialog::ptr()
         }
     }
 
-    if (d->filterType = MimeFilter) {
+    if (d->filterType == MimeFilter) {
 #if QT_VERSION >= 0x050200
         d->ptr->setMimeTypeFilters(d->filterList);
         if (!d->defaultFilter.isEmpty())
@@ -228,7 +228,7 @@ const QStringList KoFileDialog::getFilterString(const QStringList &mimeList,
     if (withAllSupportedEntry) {
         ret[0].append(")");
     }
-
+    //qDebug() << ret;
     return ret;
 }
 

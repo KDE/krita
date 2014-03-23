@@ -22,18 +22,24 @@
 class KoCanvasObserverBasePrivate
 {
 public:
-    KoCanvasObserverBasePrivate() : canvas(0) {}
-    ~KoCanvasObserverBasePrivate() {}
+    KoCanvasObserverBasePrivate()
+        : canvas(0)
+    {}
+
+    ~KoCanvasObserverBasePrivate()
+    {}
 
     KoCanvasBase* canvas;
 };
 
-KoCanvasObserverBase::KoCanvasObserverBase() : d(new KoCanvasObserverBasePrivate)
+KoCanvasObserverBase::KoCanvasObserverBase()
+    : d(new KoCanvasObserverBasePrivate)
 {
 }
 
 KoCanvasObserverBase::~KoCanvasObserverBase()
 {
+    delete d;
 }
 
 void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase* canvas)

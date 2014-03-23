@@ -112,13 +112,11 @@ void DesktopViewProxy::fileOpen()
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
 
-    KoFileDialog dialog(d->desktopView,
-                        KoFileDialog::DialogOpenFile,
-                        i18n("Open Document"),
-                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                        "OpenDocument");
+    KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(mimeFilter);
-    QString filename = dialog.getQString();
+    QString filename = dialog.url();
     if (filename.isEmpty()) return;
 
     DocumentManager::instance()->openDocument(filename, d->isImporting);

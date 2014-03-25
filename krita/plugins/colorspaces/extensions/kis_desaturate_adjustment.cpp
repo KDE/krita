@@ -149,7 +149,7 @@ private:
 
 
 KisDesaturateAdjustmentFactory::KisDesaturateAdjustmentFactory()
-    : KoColorTransformationFactory("desaturate_adjustment", i18n("Desaturate Adjustment"))
+    : KoColorTransformationFactory("desaturate_adjustment")
 {
 }
 

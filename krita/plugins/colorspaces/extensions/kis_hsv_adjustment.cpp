@@ -228,7 +228,7 @@ private:
 
 
 KisHSVAdjustmentFactory::KisHSVAdjustmentFactory()
-    : KoColorTransformationFactory("hsv_adjustment", i18n("HSV/HSL Adjustment"))
+    : KoColorTransformationFactory("hsv_adjustment")
 {
 }
 

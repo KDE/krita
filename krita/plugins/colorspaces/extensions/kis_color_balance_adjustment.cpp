@@ -165,7 +165,7 @@ private:
 };
 
  KisColorBalanceAdjustmentFactory::KisColorBalanceAdjustmentFactory()
-    : KoColorTransformationFactory("ColorBalance", i18n("ColorBalanceMidtones Adjustment"))
+    : KoColorTransformationFactory("ColorBalance")
 {
 }
 

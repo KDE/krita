@@ -37,11 +37,10 @@ class KoID;
 class PIGMENTCMS_EXPORT KoColorTransformationFactory
 {
 public:
-    KoColorTransformationFactory(const QString &id, const QString &name);
+    KoColorTransformationFactory(const QString &id);
     virtual ~KoColorTransformationFactory();
 public:
     QString id() const;
-    QString name() const;
 public:
     /**
      * @return an empty list if the factory support all type of colorspaces models.

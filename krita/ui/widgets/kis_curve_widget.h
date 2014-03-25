@@ -51,9 +51,10 @@ class KisCubicCurve;
 class KRITAUI_EXPORT KisCurveWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool pointSelected READ pointSelected NOTIFY pointSelectedChanged);
 
 public:
-
+    friend class CurveEditorItem;
     /**
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
@@ -88,12 +89,22 @@ public:
     void setBasePixmap(const QPixmap & pix);
     QPixmap getBasePixmap();
 
+    /**
+     * Whether or not there is a point selected
+     * This does NOT include the first and last points
+     */
+    bool pointSelected() const;
+
 signals:
 
     /**
      * Emitted whenever a control point has changed position.
      */
     void modified(void);
+    /**
+     * Emitted whenever the status of whether a control point is selected or not changes
+     */
+    void pointSelectedChanged();
 
 protected slots:
     void inOutChanged(int);

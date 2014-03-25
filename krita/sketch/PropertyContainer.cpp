@@ -38,6 +38,57 @@ QVariant PropertyContainer::readProperty(QString name)
     return property(name.toAscii());
 }
 
+const KisCubicCurve& PropertyContainer::curve() const
+{
+    return m_curve;
+}
+
+void PropertyContainer::setCurve(const KisCubicCurve& curve)
+{
+    m_curve = curve;
+}
+
+QList< KisCubicCurve >& PropertyContainer::curves() const
+{
+    return m_curves;
+}
+
+void PropertyContainer::setCurves(const QList< KisCubicCurve >& curves)
+{
+    m_curves.clear();
+    m_curves = curves;
+}
+
+int PropertyContainer::curveCount() const
+{
+    return m_curves.count();
+}
+#include <QDebug>
+#include <QPointF>
+KisCubicCurve PropertyContainer::specificCurve(int index) const
+{
+    if(index > -1 && index < m_curves.count())
+    {
+        return KisCubicCurve(m_curves[index]);
+    }
+    return KisCubicCurve();
+}
+
+QString PropertyContainer::specificCurveName(int index) const
+{
+    if(index > -1 && index < m_curves.count())
+    {
+        return m_curves[index].name();
+    }
+    return QString();
+}
+
+void PropertyContainer::setSpecificCurve(int index, const KisCubicCurve& curve) const
+{
+    qDebug() << Q_FUNC_INFO << curve.name() << curve.points();
+    m_curves[index] = curve;
+}
+
 QString PropertyContainer::name()
 {
     return m_name;

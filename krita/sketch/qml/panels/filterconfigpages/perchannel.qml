@@ -86,7 +86,6 @@ Item {
                             left: parent.left;
                         }
                         text: "-"
-                        color: "silver";
                         onClicked: parent.deleteSelectedPoint();
                         opacity: parent.pointSelected ? 1 : 0;
                         Behavior on opacity { PropertyAnimation { duration: 150; } }

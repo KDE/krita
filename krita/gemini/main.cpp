@@ -34,6 +34,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
@@ -81,6 +82,7 @@ int main( int argc, char** argv )
 
     KApplication app;
     app.setApplicationName("kritagemini");
+    KIconLoader::global()->addAppDir("krita");
 
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());

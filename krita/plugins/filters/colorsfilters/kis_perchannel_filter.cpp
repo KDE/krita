@@ -78,6 +78,9 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
         QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
                                                                          KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
         m_page->cmbChannel->addItem(channel->name(), pixelIndex);
+        KisCubicCurve curve = m_curves[m_page->cmbChannel->count() - 1];
+        curve.setName(channel->name());
+        m_curves[m_page->cmbChannel->count() - 1] = curve;
     }
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
@@ -100,6 +103,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
     m_page->curveWidget->blockSignals(true);
+    m_page->curveWidget->setCurve(m_curves[0]);
     setActiveChannel(0);
     m_page->curveWidget->blockSignals(false);
 }
@@ -246,6 +250,23 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
                 m_dev->colorSpace()->channelCount());
+
+        // Getting the names of the color channels {
+        QList<KoChannelInfo *> colorChannels;
+        foreach(KoChannelInfo *channel, m_dev->colorSpace()->channels()) {
+            if (channel->channelType() == KoChannelInfo::COLOR || channel->channelType() == KoChannelInfo::ALPHA) {
+                colorChannels.append(channel);
+            }
+        }
+        // Get the channel information, but listed in display order
+        QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
+        int i = 0;
+        foreach(KoChannelInfo *channel, sortedChannels) {
+            KisCubicCurve curve = m_curves[i];
+            curve.setName(channel->name());
+            m_curves[i++] = curve;
+        }
+        // } Getting the names of the color channels
     } else if (cfg->curves().size() != int(m_dev->colorSpace()->channelCount())) {
         return;
     } else {

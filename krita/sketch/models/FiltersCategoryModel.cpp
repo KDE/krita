@@ -25,6 +25,7 @@
 #include <kis_filter_mask.h>
 #include <kis_layer.h>
 #include <kis_selection.h>
+#include <kis_config_widget.h>
 #include <kis_view2.h>
 #include <kis_node_manager.h>
 #include <kis_selection_manager.h>
@@ -45,7 +46,12 @@ public:
         , view(0)
         , previewEnabled(false)
         , previewFilterID(-1)
-    {}
+        , previewTimer(new QTimer())
+    {
+        previewTimer->setInterval(150);
+        previewTimer->setSingleShot(true);
+        connect(previewTimer, SIGNAL(timeout()), q, SLOT(updatePreview()));
+    }
 
     FiltersCategoryModel* q;
     int currentCategory;
@@ -98,6 +104,7 @@ public:
     KisNodeSP node;
     int previewFilterID;
     KisSafeFilterConfigurationSP newConfig;
+    QTimer* previewTimer;
 };
 
 FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
@@ -205,14 +212,24 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
         if (!model) {
             return;
         }
-        KisSafeFilterConfigurationSP config(KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original())));
+        KisSafeFilterConfigurationSP config;
+        if(model->filter(index)->showConfigurationWidget()) {
+            KisConfigWidget* wdg = model->filter(index)->createConfigurationWidget(0, d->view->activeNode()->original());
+            wdg->deleteLater();
+            config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(static_cast<KisFilterConfiguration*>(wdg->configuration())));
+        }
+        else {
+            config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original())));
+        }
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
         foreach(const QByteArray& propName, configuration->dynamicPropertyNames()) {
             config->setProperty(QString(propName), configuration->property(propName));
         }
+        config->setCurve(qobject_cast<PropertyContainer*>(configuration)->curve());
+        config->setCurves(qobject_cast<PropertyContainer*>(configuration)->curves());
         configuration->deleteLater();
         d->newConfig = config;
-        QTimer::singleShot(0, this, SLOT(updatePreview()));
+        d->previewTimer->start();
     }
 }
 

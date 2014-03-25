@@ -19,22 +19,39 @@
 #define KIS_SMOOTHING_OPTIONS_H
 
 #include <qglobal.h>
+#include <krita_export.h>
 
-struct KisSmoothingOptions
+class KRITAUI_EXPORT KisSmoothingOptions
 {
-
+public:
     enum SmoothingType {
         NO_SMOOTHING = 0,
         SIMPLE_SMOOTHING,
         WEIGHTED_SMOOTHING
     };
 
+public:
+
     KisSmoothingOptions();
 
-    SmoothingType smoothingType;
-    qreal smoothnessDistance;
-    qreal tailAggressiveness;
-    bool smoothPressure;
+    SmoothingType smoothingType() const;
+    void setSmoothingType(SmoothingType value);
+
+    qreal smoothnessDistance() const;
+    void setSmoothnessDistance(qreal value);
+
+    qreal tailAggressiveness() const;
+    void setTailAggressiveness(qreal value);
+
+    bool smoothPressure() const;
+    void setSmoothPressure(bool value);
+
+
+private:
+    SmoothingType m_smoothingType;
+    qreal m_smoothnessDistance;
+    qreal m_tailAggressiveness;
+    bool m_smoothPressure;
 };
 
 #endif // KIS_SMOOTHING_OPTIONS_H

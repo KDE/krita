@@ -1035,3 +1035,43 @@ void KisConfig::setNumDefaultLayers(int num)
 {
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
 }
+
+int KisConfig::lineSmoothingType() const
+{
+    return m_cfg.readEntry("LineSmoothingType", 1);
+}
+
+void KisConfig::setLineSmoothingType(int value)
+{
+    m_cfg.writeEntry("LineSmoothingType", value);
+}
+
+qreal KisConfig::lineSmoothingDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDistance", value);
+}
+
+qreal KisConfig::lineSmoothingTailAggressiveness() const
+{
+    return m_cfg.readEntry("LineSmoothingTailAggressiveness", 0.15);
+}
+
+void KisConfig::setLineSmoothingTailAggressiveness(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingTailAggressiveness", value);
+}
+
+bool KisConfig::lineSmoothingSmoothPressure() const
+{
+    return m_cfg.readEntry("LineSmoothingSmoothPressure", false);
+}
+
+void KisConfig::setLineSmoothingSmoothPressure(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
+}

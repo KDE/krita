@@ -23,6 +23,7 @@
 #include "kritasketchplugin.h"
 
 #include "ColorSelectorItem.h"
+#include "CurveEditorItem.h"
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
@@ -65,6 +66,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
+    qmlRegisterType<CurveEditorItem>("org.krita.sketch", 1, 0, "CurveEditorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
     qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");

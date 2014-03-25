@@ -63,8 +63,7 @@ int PropertyContainer::curveCount() const
 {
     return m_curves.count();
 }
-#include <QDebug>
-#include <QPointF>
+
 KisCubicCurve PropertyContainer::specificCurve(int index) const
 {
     if(index > -1 && index < m_curves.count())
@@ -85,7 +84,7 @@ QString PropertyContainer::specificCurveName(int index) const
 
 void PropertyContainer::setSpecificCurve(int index, const KisCubicCurve& curve) const
 {
-    qDebug() << Q_FUNC_INFO << curve.name() << curve.points();
+
     m_curves[index] = curve;
 }
 

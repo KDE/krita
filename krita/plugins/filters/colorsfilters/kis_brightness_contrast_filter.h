@@ -62,10 +62,10 @@ public:
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
 
-    void setCurve(const KisCubicCurve &curve);
+    virtual void setCurve(const KisCubicCurve &curve);
 
     const QVector<quint16>& transfer() const;
-    const KisCubicCurve& curve() const;
+    virtual const KisCubicCurve& curve() const;
 
 private:
     void updateTransfer();

@@ -169,18 +169,24 @@ Panel {
             }
         }
         Item {
-            id: configNeeded;
             width: parent.width;
-            height: childrenRect.height > 0 ? childrenRect.height : 1;
-            MouseArea {
+            height: parent.height - Constants.DefaultMargin - fullCategoryList.height - fullFilters.height;
+            clip: true;
+            Flickable {
+                id: configNeeded;
                 anchors.fill: parent;
-                hoverEnabled: true;
-                onContainsMouseChanged: configLoader.focus = containsMouse;
-            }
-            Loader {
-                id: configLoader;
-                width: parent.width;
-                height: item ? item.height : 1;
+                contentWidth: width;
+                contentHeight: configLoader.height > 0 ? configLoader.height : 1;
+                MouseArea {
+                    anchors.fill: parent;
+                    hoverEnabled: true;
+                    onContainsMouseChanged: configLoader.focus = containsMouse;
+                }
+                Loader {
+                    id: configLoader;
+                    width: parent.width;
+                    height: item ? item.height : 1;
+                }
             }
         }
     }

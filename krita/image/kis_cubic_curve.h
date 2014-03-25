@@ -53,6 +53,14 @@ public:
      */
     int addPoint(const QPointF& point);
     void removePoint(int idx);
+
+    /**
+     * This allows us to carry around a display name for the curve internally. It is used
+     * currently in Sketch for perchannel, but would potentially be useful anywhere
+     * curves are used in the UI
+     */
+    void setName(const QString& name);
+    const QString& name() const;
 public:
     const QVector<quint16> uint16Transfer(int size = 256) const;
     const QVector<qreal> floatTransfer(int size = 256) const;

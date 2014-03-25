@@ -21,10 +21,12 @@ import QtQuick 1.1
 Text {
     verticalAlignment: Text.AlignVCenter;
 
-    font.pixelSize: Constants.DefaultFontSize;
+//     font.pixelSize: Constants.DefaultFontSize;
 
-    color: Constants.Theme.TextColor;
-    font.family: "Source Sans Pro"
+    color: Settings.theme.color("components/label");
+//     font.family: "Source Sans Pro"
+
+    font: Settings.theme.font("application");
 
     elide: Text.ElideRight;
 }

@@ -22,14 +22,14 @@
 #include <QObject>
 #include <QtCore/QVariantMap>
 
-#include "image/krita_export.h"
+#include "krita_sketch_export.h"
 
 class RecentFileManager;
 class Settings;
 class ProgressProxy;
 class KisDoc2;
 class KisSketchPart;
-class KRITASKETCH_EXPORT DocumentManager : public QObject
+class KRITA_SKETCH_EXPORT DocumentManager : public QObject
 {
     Q_OBJECT
 public:

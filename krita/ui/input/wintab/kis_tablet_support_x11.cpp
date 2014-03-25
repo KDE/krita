@@ -95,6 +95,8 @@ struct KisX11Data
 
         XInputTablet,
 
+        XInputKeyboard,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -114,6 +116,9 @@ static const char * kis_x11_atomnames = {
 
     // XInput tablet device
     "TABLET\0"
+
+    // Really "nice" Aiptek devices reporting they are a keyboard
+    "KEYBOARD\0"
 };
 
 KisX11Data *kis_x11Data = 0;
@@ -188,6 +193,9 @@ void kis_x11_init_tablet()
         XAxisInfoPtr a;
         XDevice *dev = 0;
 
+        bool needCheckIfItIsReallyATablet;
+        bool swapPressureAxis;
+
         if (KIS_X11->ptrXListInputDevices) {
             devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
             if (!devices)
@@ -202,13 +210,17 @@ void kis_x11_init_tablet()
             deviceType = QTabletEvent::NoDevice;
             gotStylus = false;
             gotEraser = false;
+            needCheckIfItIsReallyATablet = false;
+            swapPressureAxis = false;
 
 #if defined(Q_OS_IRIX)
 #else
 
 
                 if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) ||devs->type == KIS_ATOM(XInputTablet)) {
-                    kis_haveEvdevTablets = devs->type == KIS_ATOM(XInputTablet);
+                    if (devs->type == KIS_ATOM(XInputTablet)) {
+                        kis_haveEvdevTablets = true;
+                    }
                     deviceType = QTabletEvent::Stylus;
                     if (wacomDeviceName()->isEmpty())
                         wacomDeviceName()->append(devs->name);
@@ -216,8 +228,21 @@ void kis_x11_init_tablet()
                 } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
                     deviceType = QTabletEvent::XFreeEraser;
                     gotEraser = true;
+                } else if (devs->type == KIS_ATOM(XInputKeyboard) && QString(devs->name) == "Aiptek") {
+                    /**
+                     * Some really "nice" tablets (more precisely,
+                     * Genius G-Pen 510 (aiptek driver)) report that
+                     * they are a "keyboard". Well, we cannot convince
+                     * them that they are not, so just check if this
+                     * "keyboard" has motion and proximity events. If
+                     * it looks like a duck... :)
+                     */
+                    kis_haveEvdevTablets = true;
+                    deviceType = QTabletEvent::Stylus;
+                    gotStylus = true;
+                    needCheckIfItIsReallyATablet = true;
+                    swapPressureAxis = true;
                 }
-
 
 #endif
             if (deviceType == QTabletEvent::NoDevice)
@@ -242,6 +267,7 @@ void kis_x11_init_tablet()
                 device_data.xinput_proximity_in = -1;
                 device_data.xinput_proximity_out = -1;
                 //device_data.widgetToGetPress = 0;
+                device_data.savedAxesData.setSwapPresureAxis(swapPressureAxis);
 
                 if (dev->num_classes > 0) {
                     for (ip = dev->classes, j = 0; j < dev->num_classes;
@@ -286,6 +312,13 @@ void kis_x11_init_tablet()
                     }
                 }
 
+                if (needCheckIfItIsReallyATablet &&
+                    (device_data.xinput_motion == -1 ||
+                     device_data.xinput_proximity_in == -1 ||
+                     device_data.xinput_proximity_out == -1)) {
+                    continue;
+                }
+
                 // get the min/max value for pressure!
                 any = (XAnyClassPtr) (devs->inputclassinfo);
                 for (j = 0; j < devs->num_classes; j++) {
@@ -313,6 +346,7 @@ void kis_x11_init_tablet()
                     any = (XAnyClassPtr) ((char *) any + any->length);
                 } // end of for loop
 
+                qDebug() << "Recognized a tablet device:" << devs->name;
                 qt_tablet_devices()->append(device_data);
             } // if (gotStylus || gotEraser)
         }
@@ -494,21 +528,37 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 
     QRect screenArea = qApp->desktop()->rect();
     if (motion) {
-        xTilt = (short) motion->axis_data[3];
-        yTilt = (short) motion->axis_data[4];
-        rotation = ((short) motion->axis_data[5]) / 64.0;
-        pressure = (short) motion->axis_data[2];
-        hiRes = tablet->scaleCoord(motion->axis_data[0], motion->axis_data[1],
-                                    screenArea.x(), screenArea.width(),
-                                    screenArea.y(), screenArea.height());
+        /**
+         * Some 'nice' tablet drivers (evdev) do not return the value
+         * of all the axes each time. Instead they tell about the
+         * recenty changed axes only, so we have to keep the state of
+         * all the axes internally and update the relevant part only.
+         */
+        bool hasSaneData =
+            tablet->savedAxesData.updateAxesData(motion->first_axis,
+                                                 motion->axes_count,
+                                                 motion->axis_data);
+        if (!hasSaneData) return false;
+
+        hiRes = tablet->savedAxesData.position(tablet, screenArea);
+        pressure = tablet->savedAxesData.pressure();
+        xTilt = tablet->savedAxesData.xTilt();
+        yTilt = tablet->savedAxesData.yTilt();
+        rotation = tablet->savedAxesData.rotation();
+
     } else if (button) {
-        xTilt = (short) button->axis_data[3];
-        yTilt = (short) button->axis_data[4];
-        rotation = ((short) button->axis_data[5]) / 64.0;
-        pressure = (short) button->axis_data[2];
-        hiRes = tablet->scaleCoord(button->axis_data[0], button->axis_data[1],
-                                    screenArea.x(), screenArea.width(),
-                                    screenArea.y(), screenArea.height());
+        // see the comment in 'motion' branch
+        bool hasSaneData =
+            tablet->savedAxesData.updateAxesData(button->first_axis,
+                                                 button->axes_count,
+                                                 button->axis_data);
+        if (!hasSaneData) return false;
+
+        hiRes = tablet->savedAxesData.position(tablet, screenArea);
+        pressure = tablet->savedAxesData.pressure();
+        xTilt = tablet->savedAxesData.xTilt();
+        yTilt = tablet->savedAxesData.yTilt();
+        rotation = tablet->savedAxesData.rotation();
     }
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;

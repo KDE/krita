@@ -22,62 +22,9 @@
 #include <QApplication>
 #include <QWidget>
 
-Theme::Theme(QObject* parent)
-    : QObject(parent)
-{
-
-}
-
-QColor Theme::mainColor() const
-{
-    return QColor( 0, 0, 64 );
-}
-
-QColor Theme::highlightColor() const
-{
-    return QColor( 220, 220, 220 );
-}
-
-QColor Theme::secondaryColor() const
-{
-    return QColor( 128, 0, 0 );
-}
-
-QColor Theme::tertiaryColor() const
-{
-    return QColor( 219, 160, 0 );
-}
-
-QColor Theme::quaternaryColor() const
-{
-    return QColor( 0, 130, 30 );
-}
-
-QColor Theme::textColor() const
-{
-    return QColor( 50, 50, 50 );
-}
-
-QColor Theme::secondaryTextColor() const
-{
-    return QColor( 90, 90, 90 );
-}
-
-QColor Theme::positiveColor() const
-{
-    return QColor( 0, 128, 0 );
-}
-
-QColor Theme::negativeColor() const
-{
-    return QColor( 128, 0, 0 );
-}
-
 Constants::Constants(QObject* parent)
     : QObject(parent)
 {
-    m_theme = new Theme( this );
-
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
     m_gridHeight = qApp->activeWindow()->height() / gridHeight();
     m_toolbarButtonSize = m_gridHeight;
@@ -122,12 +69,6 @@ int Constants::gridRows() const
 int Constants::gridColumns() const
 {
     return 12;
-}
-
-
-QObject* Constants::theme() const
-{
-    return m_theme;
 }
 
 qreal Constants::defaultMargin() const

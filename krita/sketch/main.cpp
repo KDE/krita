@@ -128,14 +128,6 @@ int main( int argc, char** argv )
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 
-    QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
-    foreach( const QString &font, fonts ) {
-        QFontDatabase::addApplicationFont( font );
-    }
-
-    QFontDatabase db;
-    QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
-
     MainWindow window(fileNames);
 
     if (args->isSet("vkb")) {

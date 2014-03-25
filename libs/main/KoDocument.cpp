@@ -30,7 +30,7 @@
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
-#include "KoFileDialogHelper.h"
+#include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
 #include "KoView.h"
@@ -2608,7 +2608,8 @@ bool KoDocument::queryClose()
                 if (d->parentPart->mainWindows().count() > 0) {
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
-                KUrl url(KoFileDialogHelper::getSaveFileName(mainWindow));
+                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile);
+                KUrl url = dialog.url();
                 if (url.isEmpty())
                     return false;
 

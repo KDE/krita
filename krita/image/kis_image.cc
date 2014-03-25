@@ -141,7 +141,46 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     setObjectName(name);
     dbgImage << "creating" << name;
     m_d->startProjection = startProjection;
-    init(undoStore, width, height, colorSpace);
+
+    if (colorSpace == 0) {
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    }
+
+    m_d->lockCount = 0;
+    m_d->perspectiveGrid = 0;
+    m_d->scheduler = 0;
+    m_d->wrapAroundModePermitted = false;
+
+    m_d->signalRouter = new KisImageSignalRouter(this);
+
+    if (!undoStore) {
+        undoStore = new KisDumbUndoStore();
+    }
+
+    m_d->undoStore = undoStore;
+    m_d->legacyUndoAdapter = new KisLegacyUndoAdapter(m_d->undoStore, this);
+    m_d->postExecutionUndoAdapter = new KisPostExecutionUndoAdapter(m_d->undoStore, this);
+
+    m_d->nserver = new KisNameServer(1);
+
+    m_d->colorSpace = colorSpace;
+
+    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
+
+    m_d->xres = 1.0;
+    m_d->yres = 1.0;
+    m_d->width = width;
+    m_d->height = height;
+
+    m_d->recorder = new KisActionRecorder(this);
+
+    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
+
+    if (m_d->startProjection) {
+        m_d->scheduler = new KisUpdateScheduler(this);
+        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+    }
+
 }
 
 KisImage::~KisImage()
@@ -289,48 +328,6 @@ QString KisImage::nextLayerName() const
 void KisImage::rollBackLayerName()
 {
     m_d->nserver->rollback();
-}
-
-void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace)
-{
-    if (colorSpace == 0) {
-        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    }
-
-    m_d->lockCount = 0;
-    m_d->perspectiveGrid = 0;
-    m_d->scheduler = 0;
-    m_d->wrapAroundModePermitted = false;
-
-    m_d->signalRouter = new KisImageSignalRouter(this);
-
-    if (!undoStore) {
-        undoStore = new KisDumbUndoStore();
-    }
-
-    m_d->undoStore = undoStore;
-    m_d->legacyUndoAdapter = new KisLegacyUndoAdapter(m_d->undoStore, this);
-    m_d->postExecutionUndoAdapter = new KisPostExecutionUndoAdapter(m_d->undoStore, this);
-
-    m_d->nserver = new KisNameServer(1);
-
-    m_d->colorSpace = colorSpace;
-
-    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
-
-    m_d->xres = 1.0;
-    m_d->yres = 1.0;
-    m_d->width = width;
-    m_d->height = height;
-
-    m_d->recorder = new KisActionRecorder(this);
-
-    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
-
-    if (m_d->startProjection) {
-        m_d->scheduler = new KisUpdateScheduler(this);
-        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
-    }
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()

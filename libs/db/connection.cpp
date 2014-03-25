@@ -1268,7 +1268,8 @@ QString KexiDB::selectStatement(const KexiDB::Driver *driver,
                     QString tableName;
                     int tablePosition = querySchema.tableBoundToColumn(number);
                     if (tablePosition >= 0) {
-                        tableName = querySchema.tableAlias(tablePosition);
+                        tableName = KexiDB::iifNotEmpty(querySchema.tableAlias(tablePosition),
+                                                        f->table()->name());
                     }
                     if (options.addVisibleLookupColumns) { // try to find table/alias name harder
                         if (tableName.isEmpty()) {

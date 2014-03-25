@@ -23,40 +23,11 @@
 #include <QObject>
 #include <QColor>
 
-class Theme : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QColor MainColor READ mainColor CONSTANT)
-    Q_PROPERTY(QColor HighlightColor READ highlightColor CONSTANT)
-    Q_PROPERTY(QColor SecondaryColor READ secondaryColor CONSTANT)
-    Q_PROPERTY(QColor TertiaryColor READ tertiaryColor CONSTANT)
-    Q_PROPERTY(QColor QuaternaryColor READ quaternaryColor CONSTANT)
-    Q_PROPERTY(QColor TextColor READ textColor CONSTANT)
-    Q_PROPERTY(QColor SecondaryTextColor READ secondaryTextColor CONSTANT)
-    Q_PROPERTY(QColor PositiveColor READ positiveColor CONSTANT)
-    Q_PROPERTY(QColor NegativeColor READ negativeColor CONSTANT)
-
-public:
-    Theme(QObject* parent = 0);
-
-    QColor mainColor() const;
-    QColor highlightColor() const;
-    QColor secondaryColor() const;
-    QColor tertiaryColor() const;
-    QColor quaternaryColor() const;
-    QColor textColor() const;
-    QColor secondaryTextColor() const;
-    QColor positiveColor() const;
-    QColor negativeColor() const;
-};
-
 class Constants : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int GridRows READ gridRows NOTIFY gridSizeChanged)
     Q_PROPERTY(int GridColumns READ gridColumns CONSTANT)
-    Q_PROPERTY(QObject* Theme READ theme CONSTANT)
-
     Q_PROPERTY(bool IsLandscape READ isLandscape NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal DefaultMargin READ defaultMargin NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal GridHeight READ gridHeight NOTIFY gridSizeChanged)
@@ -76,7 +47,6 @@ public:
     int gridRows() const;
     int gridColumns() const;
     qreal defaultMargin() const;
-    QObject* theme() const;
     qreal smallFontSize() const;
     qreal defaultFontSize() const;
     qreal largeFontSize() const;
@@ -90,7 +60,6 @@ Q_SIGNALS:
     void gridSizeChanged();
 
 private:
-    Theme* m_theme;
     qreal m_gridWidth;
     qreal m_gridHeight;
     qreal m_toolbarButtonSize;

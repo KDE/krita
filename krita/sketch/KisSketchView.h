@@ -21,12 +21,13 @@
 
 #include <QDeclarativeItem>
 
-#include "image/krita_export.h"
+#include "krita_sketch_export.h"
 
-class KRITASKETCH_EXPORT KisSketchView : public QDeclarativeItem
+class KRITA_SKETCH_EXPORT KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)
+    Q_PROPERTY(QObject* selectionExtras READ selectionExtras NOTIFY viewChanged)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
     Q_PROPERTY(QString fileTitle READ fileTitle NOTIFY fileChanged);
@@ -43,7 +44,7 @@ public:
     virtual ~KisSketchView();
 
     QObject* selectionManager() const;
-    Q_INVOKABLE QObject* selectionExtras() const;
+    QObject* selectionExtras() const;
     QObject* doc() const;
     QObject* view() const;
     QString file() const;

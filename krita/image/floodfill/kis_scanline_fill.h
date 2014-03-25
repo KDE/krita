@@ -34,16 +34,27 @@ public:
     KisScanlineFill(KisPaintDeviceSP device, const QPoint &startPoint, const QRect &boundingRect);
     ~KisScanlineFill();
 
-    void run();
+    void fillColor(const KoColor &fillColor);
+    void fillSelection(KisPixelSelectionSP pixelSelection);
+
+    void setThreshold(int threshold);
 
 private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill);
 
-    void processLine(KisFillInterval interval, const int rowIncrement);
-    void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight);
+    template <class T>
+    void processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy);
+
+
+    template <class T>
+        void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy);
+
+    template <class T>
+    void runImpl(T &pixelPolicy);
 
 private:
+    void testingProcessLine(const KisFillInterval &processInterval);
     QVector<KisFillInterval> testingGetForwardIntervals() const;
     KisFillIntervalMap* testingGetBackwardIntervals() const;
 private:

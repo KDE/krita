@@ -73,6 +73,7 @@ public:
             new FillProcessingVisitor(QPoint(100,100),
                                       image->globalSelection(),
                                       resources,
+                                      false, // useFastMode
                                       usePattern,
                                       selectionOnly,
                                       10, 10, 10, true, false);

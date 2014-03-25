@@ -53,6 +53,7 @@ Item {
         Label {
             anchors.leftMargin: Constants.DefaultMargin;
             text: "Mode:"
+            font: Settings.theme.font("panelSection");
         }
         ExpandingListView {
             id: modeChoice

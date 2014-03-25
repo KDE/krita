@@ -29,7 +29,7 @@
 #include <kactioncollection.h>
 #include <kurl.h>
 
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoZoomController.h>
@@ -159,12 +159,11 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 
 void FlipbookDockerDock::saveFlipbook()
 {
-    QString filename = KoFileDialogHelper::getSaveFileName(this,
-                                                           i18n("Save flipbook"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           QStringList("*.flipbook"),
-                                                           "",
-                                                           "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::SaveFile, "OpenDocument");
+    dialog.setCaption(i18n("Save flipbook"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter("*.flipbook");
+    QString filename = dialog.url();
     if (!filename.isEmpty()) {
         m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);
@@ -189,12 +188,11 @@ void FlipbookDockerDock::newFlipbook()
 
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    QStringList urls = KoFileDialogHelper::getOpenFileNames(this,
-                                                            i18n("Select files to add to flipbook"),
-                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                            mimeFilter,
-                                                            "",
-                                                            "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setCaption(i18n("Select files to add to flipbook"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(mimeFilter);
+    QStringList urls = dialog.urls();
 
     if (urls.size() < 1) return;
 
@@ -228,12 +226,11 @@ void FlipbookDockerDock::openFlipbook()
 
     KisImageSP oldImage = m_canvas->view()->image();
 
-    QString filename = KoFileDialogHelper::getOpenFileName(this,
-                                                           i18n("Load flipbook"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           QStringList("*.flipbook"),
-                                                           "",
-                                                           "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Load flipbook"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter("*.flipbook");
+    QString filename = dialog.url();
 
     if (!QFile::exists(filename)) return;
 
@@ -260,12 +257,11 @@ void FlipbookDockerDock::addImage()
 {
     const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    QStringList urls = KoFileDialogHelper::getOpenFileNames(this,
-                                                            i18n("Select files to add to flipbook"),
-                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                            mimeFilter,
-                                                            "",
-                                                            "OpenDocument");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setCaption(i18n("Select files to add to flipbook"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(mimeFilter);
+    QStringList urls = dialog.urls();
 
     if (urls.size() < 1) return;
 

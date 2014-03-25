@@ -39,7 +39,7 @@
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -237,16 +237,11 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 adapter.addNode(l.data(), image->rootLayer(), 0);
             }
             else {
-
-
-                QString fileName = KoFileDialogHelper::getSaveFileName(m_view,
-                                                                       i18n("Export Layer") + '(' + ch->name() + ')',
-                                                                       QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                                       KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export),
-                                                                       "",
-                                                                       "OpenDocument");
-
-                KUrl url = KUrl::fromLocalFile(fileName);
+                KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
+                dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+                KUrl url = dialog.url();
 
                 if (url.isEmpty())
                     return;

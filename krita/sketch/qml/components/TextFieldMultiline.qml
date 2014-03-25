@@ -45,8 +45,8 @@ Item {
             anchors.fill: parent;
 
             border.width: 2;
-            border.color: "silver";
-            color: "#bdffffff";
+            border.color: Settings.theme.color("components/textFieldMultiline/border");
+            color: Settings.theme.color("components/textFieldMultiline/background");
 
             radius: Constants.GridHeight / 2;
 
@@ -92,7 +92,7 @@ Item {
                         property Item nextFocus: null;
                         onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
 
-                        font.pixelSize: Constants.DefaultFontSize;
+                        font: Settings.theme.font("application");
                         onFocusChanged: {
                             if (focus === false) {
                                 closeSoftwareInputPanel();

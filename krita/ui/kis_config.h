@@ -308,6 +308,18 @@ public:
     int numDefaultLayers() const;
     void setNumDefaultLayers(int num);
 
+    int lineSmoothingType() const;
+    void setLineSmoothingType(int value);
+
+    qreal lineSmoothingDistance() const;
+    void setLineSmoothingDistance(qreal value);
+
+    qreal lineSmoothingTailAggressiveness() const;
+    void setLineSmoothingTailAggressiveness(qreal value);
+
+    bool lineSmoothingSmoothPressure() const;
+    void setLineSmoothingSmoothPressure(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

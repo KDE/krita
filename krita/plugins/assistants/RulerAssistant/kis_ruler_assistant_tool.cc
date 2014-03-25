@@ -29,7 +29,7 @@
 #include <kmessagebox.h>
 
 #include <KoIcon.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
 
@@ -439,12 +439,11 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-    QString filename = KoFileDialogHelper::getOpenFileName(0,
-                                                           i18n("Select an Assistant"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           QStringList("application/x-krita-assistant"),
-                                                           "*.krassistant|Krita Assistant (*.krassistant)",
-                                                           "OpenAssistant");
+    KoFileDialog dialog(m_canvas->view(), KoFileDialog::OpenFile, "OpenAssistant");
+    dialog.setCaption(i18n("Select an Assistant"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter("*.krassistant|Krita Assistant (*.krassistant)");
+    QString filename = dialog.url();
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
 
@@ -570,12 +569,11 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->view(),
-                                                           i18n("Save Assistant"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           QStringList("application/x-krita-assistant"),
-                                                           "*.krassistant|Krita Assistant (*.krassistant)",
-                                                           "OpenAssistant");
+    KoFileDialog dialog(m_canvas->view(), KoFileDialog::OpenFile, "OpenAssistant");
+    dialog.setCaption(i18n("Save Assistant"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter("*.krassistant|Krita Assistant (*.krassistant)");
+    QString filename = dialog.url();
     if (filename.isEmpty()) return;
 
     QFile file(filename);

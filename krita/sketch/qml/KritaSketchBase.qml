@@ -39,6 +39,8 @@ Item {
         contentHeight: base.height;
 
         PageStack {
+            id: mainPageStack;
+
             width: base.width;
             height: base.height;
 
@@ -93,5 +95,13 @@ Item {
         target: Settings;
 
         onFocusItemChanged: if (keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+    }
+
+    function openFile(file)
+    {
+        if(mainPageStack.currentPage.pageName == "WelcomePage") {
+            baseLoadingDialog.visible = true;
+            Settings.currentFile = file;
+        }
     }
 }

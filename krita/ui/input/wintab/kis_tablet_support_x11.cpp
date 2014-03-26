@@ -97,6 +97,15 @@ struct KisX11Data
 
         XInputKeyboard,
 
+        AxisLabels,
+        ATOM,
+
+        AbsX,
+        AbsY,
+        AbsPressure,
+        AbsTiltX,
+        AbsTiltY,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -119,6 +128,18 @@ static const char * kis_x11_atomnames = {
 
     // Really "nice" Aiptek devices reporting they are a keyboard
     "KEYBOARD\0"
+
+    // Evdev property that report the assignment of axes
+    "Axis Labels\0"
+    "ATOM\0"
+
+    // Types of axes reported by evdev
+    "Abs X\0"
+    "Abs Y\0"
+    "Abs Pressure\0"
+    "Abs Tilt X\0"
+    "Abs Tilt Y\0"
+
 };
 
 KisX11Data *kis_x11Data = 0;
@@ -148,6 +169,54 @@ static void kis_x11_create_intern_atoms()
     for (i = 0; i < KisX11Data::NAtoms; ++i)
         KIS_X11->atoms[i] = XInternAtom(KIS_X11->display, (char *)names[i], False);
 #endif
+}
+
+void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
+{
+    Atom propertyType;
+    int propertyFormat;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    unsigned char *prop;
+
+    int result = XGetDeviceProperty(KIS_X11->display, dev,
+                                    KIS_ATOM(AxisLabels),
+                                    0, 16, false,
+                                    AnyPropertyType,
+                                    &propertyType,
+                                    &propertyFormat,
+                                    &nitems,
+                                    &bytes_after,
+                                    &prop);
+
+    if (result == Success && propertyType > 0) {
+        QVector<AxesIndexes> axesMap(NAxes, Unused);
+
+        for (unsigned int axisIndex = 0; axisIndex < nitems; axisIndex++) {
+            Atom currentAxisName = ((Atom*)prop)[axisIndex];
+
+            AxesIndexes mappedIndex =
+                Unused;
+
+            if (currentAxisName == KIS_ATOM(AbsX)) {
+                mappedIndex = XCoord;
+            } else if (currentAxisName == KIS_ATOM(AbsY)) {
+                mappedIndex = YCoord;
+            } else if (currentAxisName == KIS_ATOM(AbsPressure)) {
+                mappedIndex = Pressure;
+            } else if (currentAxisName == KIS_ATOM(AbsTiltX)) {
+                mappedIndex = XTilt;
+            } else if (currentAxisName == KIS_ATOM(AbsTiltY)) {
+                mappedIndex = YTilt;
+            }
+
+            axesMap[axisIndex] = mappedIndex;
+            qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
+                     << axisIndex << "->" << mappedIndex;
+        }
+
+        this->setAxesMap(axesMap);
+    }
 }
 
 void kis_x11_init_tablet()
@@ -194,7 +263,6 @@ void kis_x11_init_tablet()
         XDevice *dev = 0;
 
         bool needCheckIfItIsReallyATablet;
-        bool swapPressureAxis;
 
         if (KIS_X11->ptrXListInputDevices) {
             devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
@@ -211,7 +279,6 @@ void kis_x11_init_tablet()
             gotStylus = false;
             gotEraser = false;
             needCheckIfItIsReallyATablet = false;
-            swapPressureAxis = false;
 
 #if defined(Q_OS_IRIX)
 #else
@@ -241,7 +308,6 @@ void kis_x11_init_tablet()
                     deviceType = QTabletEvent::Stylus;
                     gotStylus = true;
                     needCheckIfItIsReallyATablet = true;
-                    swapPressureAxis = true;
                 }
 
 #endif
@@ -267,7 +333,6 @@ void kis_x11_init_tablet()
                 device_data.xinput_proximity_in = -1;
                 device_data.xinput_proximity_out = -1;
                 //device_data.widgetToGetPress = 0;
-                device_data.savedAxesData.setSwapPresureAxis(swapPressureAxis);
 
                 if (dev->num_classes > 0) {
                     for (ip = dev->classes, j = 0; j < dev->num_classes;
@@ -318,6 +383,8 @@ void kis_x11_init_tablet()
                      device_data.xinput_proximity_out == -1)) {
                     continue;
                 }
+
+                device_data.savedAxesData.tryFetchAxesMapping(dev);
 
                 // get the min/max value for pressure!
                 any = (XAnyClassPtr) (devs->inputclassinfo);

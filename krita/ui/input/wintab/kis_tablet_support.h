@@ -23,12 +23,15 @@
 #include <QLibrary>
 #include <QPointer>
 #include <QPointF>
+#include <QVector>
 #include <QList>
 #include <QMap>
 #include <QTabletEvent>
 
 #ifdef Q_WS_X11
 #include <algorithm>
+#include <X11/extensions/XInput.h>
+#include <kis_global.h>
 #endif
 
 
@@ -97,6 +100,7 @@ struct QTabletDeviceData
             XTilt,
             YTilt,
             Rotation,
+            Unused,
 
             NAxes
         };
@@ -109,15 +113,13 @@ struct QTabletDeviceData
             }
         }
 
-        void setSwapPresureAxis(bool value) {
-            if (value) {
-                m_x11_to_local_axis_mapping[Pressure] = XTilt;
-                m_x11_to_local_axis_mapping[XTilt] = Pressure;
-                m_lastSaneAxis = XTilt;
-            } else {
-                m_x11_to_local_axis_mapping[Pressure] = Pressure;
-                m_x11_to_local_axis_mapping[XTilt] = XTilt;
-                m_lastSaneAxis = Rotation;
+        void tryFetchAxesMapping(XDevice *dev);
+
+        void setAxesMap(const QVector<AxesIndexes> &axesMap) {
+            KIS_ASSERT_RECOVER_RETURN(axesMap.size() == NAxes);
+
+            for (int i = 0; i < NAxes; i++) {
+                m_x11_to_local_axis_mapping[i] = axesMap[i];
             }
         }
 

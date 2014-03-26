@@ -27,18 +27,21 @@ using namespace std;
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
 {
-    if (packName!="") {
+    if (!packName.isEmpty()) {
         resourcePack=KoStore::createStore(packName,mode,"",KoStore::Zip);
     }
+    else {
+        resourcePack=0;
+    }
 
-    if (kritaPath!="" && kritaPath.at(kritaPath.size()-1)!='/') {
+    if (!kritaPath.isEmpty() && kritaPath.at(kritaPath.size()-1)!='/') {
         this->kritaPath.append("/");
     }
 }
 
 void KoResourceBundleManager::setReadPack(QString packName)
 {
-    if (packName!="") {
+    if (!packName.isEmpty()) {
         resourcePack=KoStore::createStore(packName,KoStore::Read,"",KoStore::Zip);
         this->packName=packName;
     }
@@ -46,7 +49,7 @@ void KoResourceBundleManager::setReadPack(QString packName)
 
 void KoResourceBundleManager::setWritePack(QString packName)
 {
-    if (packName!="") {
+    if (!packName.isEmpty()) {
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
         this->packName=packName;
     }
@@ -56,16 +59,17 @@ void KoResourceBundleManager::setKritaPath(QString kritaPath)
 {
     this->kritaPath=kritaPath;
 
-    if (kritaPath!="" && kritaPath.at(kritaPath.size()-1)!='/') {
+    if (!kritaPath.isEmpty() && kritaPath.at(kritaPath.size()-1)!='/') {
         this->kritaPath.append("/");
     }
 }
 
 bool KoResourceBundleManager::isPathSet()
 {
-    return kritaPath!="";
+    return !kritaPath.isEmpty();
 }
 
+//TODO Résoudre le bug dû au false renvoyé par leaveDirectory
 void KoResourceBundleManager::toRoot()
 {
     while(resourcePack->leaveDirectory());

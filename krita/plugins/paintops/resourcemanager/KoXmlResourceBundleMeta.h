@@ -19,8 +19,9 @@
 #define KOXMLRESOURCEBUNDLEMETA_H
 
 #include "KoXmlGenerator.h"
+#include "krita_export.h"
 
-class KoXmlResourceBundleMeta: public KoXmlGenerator
+class KRITAUI_EXPORT KoXmlResourceBundleMeta: public KoXmlGenerator
 {
 private:
     /**

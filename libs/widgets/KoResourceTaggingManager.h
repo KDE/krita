@@ -29,10 +29,12 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 
+#include "kowidgets_export.h"
+
 class KoResourceModelBase;
 class KoResource;
 
-class KoResourceTaggingManager : public QObject
+class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
 {
     Q_OBJECT
 

@@ -17,23 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KORESOURCEBUNDLE_TEST_H
-#define KORESOURCEBUNDLE_TEST_H
+#ifndef KORESOURCEBUNDLEMANAGER_TEST_H
+#define KORESOURCEBUNDLEMANAGER_TEST_H
 
-#include <QtTest>
+#include <QtTest/QTest>
 #include <KoConfig.h>
 
-class KoResourceBundle_test : public QObject
+class KoResourceBundleManager;
+
+class KoResourceBundleManager_test : public QObject
 {
     Q_OBJECT
 
 private slots:
 
-    // tests
-    void testInitialization();
+    void initTestCase();
+    void cleanupTestCase();
+
+    void ctorTest();
+    void setReadPackTest();
+    void setWritePackTest();
+    void setKritaPathTest();
+    void isPathSetTest();
+    void toRootTest();
+    void addKFileTest();
+    void addKFileBundleTest();
+    void addKFilesTest();
+    void addManiMetaTest();
+    void getFileDataTest();
+    void getFileTest();
 
 private:
-
+    KoResourceBundleManager *man;
+    QString env;
 };
 
-#endif
+#endif // KORESOURCEBUNDLEMANAGER_TEST_H

@@ -157,7 +157,6 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
     }
     else {
         if (newNode) {
-
             root.removeChild(currentNode);
         }
         return QDomElement();

@@ -22,6 +22,7 @@
 #include <QtXml/QDomElement>
 #include <QtXml/QDomNode>
 #include <QtXml/QDomNodeList>
+#include "krita_export.h"
 
 class QIODevice;
 
@@ -29,7 +30,7 @@ class QIODevice;
  * @brief The KoXmlGenerator class
  * @details Allow to manage Xml file content
  */
-class KoXmlGenerator
+class KRITAUI_EXPORT KoXmlGenerator
 {
 public:
 

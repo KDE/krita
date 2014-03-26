@@ -450,8 +450,20 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
 
-        e.ignore();
-        sendEvent = qApp->sendEvent(w, &e);
+        if (button == Qt::NoButton &&
+            (t == KisTabletEvent::TabletPressEx ||
+             t == KisTabletEvent::TabletReleaseEx)) {
+
+            /**
+             * Eat events which do not correcpond to any mouse
+             * button. This can happen when the user assinged a stylus
+             * key to e.g. some keyboard key
+             */
+            e.accept();
+        } else {
+            e.ignore();
+            sendEvent = qApp->sendEvent(w, &e);
+        }
 
         if (e.isAccepted()) {
             globalEventEater->pleaseEatNextEvent(e.getMouseEventType());

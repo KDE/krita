@@ -62,6 +62,7 @@ protected:
 private Q_SLOTS:
     void fgColorChanged(const KoColor& newColor);
     void bgColorChanged(const KoColor& newColor);
+    void repaint();
 
 private:
     class Private;

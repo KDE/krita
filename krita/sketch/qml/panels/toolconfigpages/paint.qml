@@ -172,7 +172,7 @@ Item {
             Connections {
                 target: toolManager;
                 onCurrentToolChanged: {
-                    if (toolManager.currentTool.smoothnessQuality === undefined)
+                    if (toolManager.currentTool === null || toolManager.currentTool.smoothnessQuality === undefined)
                         return;
                     smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                     smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;

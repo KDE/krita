@@ -47,6 +47,13 @@ Item {
     }
     Connections {
         target: toolManager;
-        onCurrentToolChanged: toolOverlayContainer.source = "tooloverlays/" + toolIDToName(toolManager.currentTool.toolId()) + ".qml"
+        onCurrentToolChanged: {
+            if(toolManager.currentTool !== null) {
+                toolOverlayContainer.source = "tooloverlays/" + toolIDToName(toolManager.currentTool.toolId()) + ".qml";
+            }
+            else {
+                toolOverlayContainer.source = "tooloverlays/none.qml";
+            }
+        }
     }
 }

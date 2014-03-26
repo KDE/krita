@@ -1,4 +1,5 @@
 add_subdirectory( tests )
+
 set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
     dlg_resourcemanager.cpp
@@ -38,6 +39,11 @@ set(testHMISources
     KoResourceManagerControl.cpp
     KoResourceTableModel.cpp
     main.cpp
+)
+
+kde4_add_ui_files(testHMISources
+    wdg_resourcemanager.ui
+    KoResourceManagerWidget.ui
 )
 
 kde4_add_executable(resourceManagerHMI ${testHMISources})

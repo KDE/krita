@@ -119,7 +119,11 @@ void DesktopViewProxy::fileOpen()
     QString filename = dialog.url();
     if (filename.isEmpty()) return;
 
-    DocumentManager::instance()->openDocument(filename, d->isImporting);
+    if(!d->mainWindow->slateMode()) {
+        QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
+    } else {
+        DocumentManager::instance()->openDocument(filename, d->isImporting);
+    }
 }
 
 void DesktopViewProxy::fileSave()

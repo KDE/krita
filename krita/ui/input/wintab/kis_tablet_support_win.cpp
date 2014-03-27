@@ -239,6 +239,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
         tdd.currentDevice = QTabletEvent::Stylus;
+    } else if (csr_type == 0x4020) { // Surface Pro 2 tablet device
+        tdd.currentDevice = QTabletEvent::Stylus;
     } else {
         switch (csr_type & cursorTypeBitMask) {
             case 0x0802:

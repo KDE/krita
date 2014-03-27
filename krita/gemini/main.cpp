@@ -80,7 +80,7 @@ int main( int argc, char** argv )
 
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
+    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();

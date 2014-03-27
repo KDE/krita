@@ -67,7 +67,7 @@ int main( int argc, char** argv )
 
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
+    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
     options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 

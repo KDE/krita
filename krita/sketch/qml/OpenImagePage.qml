@@ -22,7 +22,7 @@ import "components"
 
 Page {
     id: base;
-    signal itemClicked();
+    signal finished(string file);
 
     Rectangle {
         anchors.fill: parent;
@@ -132,10 +132,7 @@ Page {
                 if ( model.fileType === "inode/directory" ) {
                     view.startNavigation(model.path);
                 } else {
-                    base.itemClicked();
-                    pageStack.pop();
-
-                    Settings.currentFile = model.path;
+                    base.finished(model.path);
                 }
             }
         }

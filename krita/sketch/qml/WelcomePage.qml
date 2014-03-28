@@ -186,8 +186,7 @@ Page {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * (Constants.GridRows - 3);
 
-            onOpenClicked: pageStack.push( openImage );
-            onItemClicked: baseLoadingDialog.visible = true;
+            onClicked: d.openImage(file);
         }
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
@@ -195,8 +194,7 @@ Page {
         NewImageList {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * (Constants.GridRows - 3);
-            onClicked: baseLoadingDialog.visible = true;
-            onCustomImageClicked: pageStack.push( customImagePage );
+            onClicked: d.createNewImage(options);
         }
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
@@ -211,6 +209,30 @@ Page {
         id: d;
 
         property bool mainPageActive: false;
+
+        function createNewImage(options) {
+            if(options !== undefined) {
+                baseLoadingDialog.visible = true;
+                if(options.source === undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
+                    Settings.temporaryFile = true;
+                } else if(options.source == "clipboard") {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
+                    Settings.temporaryFile = true;
+                }
+            } else {
+                pageStack.push(customImagePage);
+            }
+        }
+
+        function openImage(file) {
+            if(file !== "") {
+                baseLoadingDialog.visible = true;
+                Settings.currentFile = file;
+            } else {
+                pageStack.push(openImagePage);
+            }
+        }
     }
 
     Connections {
@@ -225,6 +247,6 @@ Page {
 
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
-    Component { id: openImage; OpenImagePage { onItemClicked: baseLoadingDialog.visible = true; } }
-    Component { id: customImagePage; CustomImagePage { onFinished: baseLoadingDialog.visible = true; } }
+    Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.openImage(file); } } }
+    Component { id: customImagePage; CustomImagePage { onFinished: d.createNewImage(options); } }
 }

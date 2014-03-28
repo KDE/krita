@@ -25,7 +25,7 @@ Item {
 
     enabled: !collapsed;
 
-    signal customImageClicked();
+    signal clicked(variant options);
 
     Rectangle {
         id: panel;
@@ -85,7 +85,7 @@ Item {
             width: parent.width;
             height: Constants.GridHeight * 9;
 
-            onCustomImageClicked: base.customImageClicked();
+            onClicked: base.clicked(options);
         }
     }
 

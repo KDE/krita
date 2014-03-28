@@ -25,7 +25,7 @@ Item {
 
     enabled: !collapsed;
 
-    signal openClicked();
+    signal clicked(string file);
 
     Rectangle {
         id: panel;
@@ -83,7 +83,7 @@ Item {
             width: parent.width;
             height: Constants.GridHeight * 10.5 + 8;
 
-            onOpenClicked: base.openClicked();
+            onClicked: base.clicked(file);
         }
     }
 

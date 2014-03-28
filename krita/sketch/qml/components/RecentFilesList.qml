@@ -21,8 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
-    signal itemClicked();
-    signal openClicked();
+    signal clicked(string file);
 
     RecentImagesModel {
         id: recentImagesModel;
@@ -56,8 +55,7 @@ Item {
             }
 
             onClicked: {
-                base.itemClicked();
-                Settings.currentFile = model.url;
+                base.clicked(model.url);
             }
         }
 
@@ -78,6 +76,6 @@ Item {
             GradientStop { position: 0.4; color: Settings.theme.color("components/recentFilesList/stop"); }
         }
 
-        onClicked: base.openClicked();
+        onClicked: base.clicked("");
     }
 }

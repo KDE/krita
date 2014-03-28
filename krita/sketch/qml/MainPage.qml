@@ -28,6 +28,8 @@ Page {
         width: parent.width;
         height: parent.height;
 
+        file: parent.initialFile;
+
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
         onLoadingFinished: {
             loadingDialog.hide("Done!");
@@ -78,7 +80,7 @@ Page {
         width: Constants.GridWidth * 4;
         height: parent.height;
 
-        onCustomImageClicked: pageStack.push(customImagePage);
+        onClicked: d.beginCreateNewFile(options);
     }
 
     OpenImagePanel {
@@ -87,7 +89,7 @@ Page {
         width: Constants.GridWidth * 4;
         height: parent.height;
 
-        onOpenClicked: pageStack.push(openImagePage);
+        onClicked: d.beginOpenFile(file);
     }
 
     MenuPanel {
@@ -209,6 +211,7 @@ Page {
             switch(button) {
                 case 0: {
                     if (Settings.temporaryFile) {
+                        d.saveRequested = true;
                         pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
                     } else {
                         savingDialog.show("Please wait...");
@@ -254,15 +257,6 @@ Page {
 
     Connections {
         target: Settings;
-
-        onCurrentFileChanged: {
-            if (sketchView.modified) {
-                d.saveRequested = true;
-                modifiedDialog.show();
-            } else {
-                d.loadNewFile();
-            }
-        }
         onTemporaryFileChanged: if (window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
     }
 
@@ -270,15 +264,11 @@ Page {
         if (status == 0) {
             if (d.saveRequested) {
                 d.loadNewFile();
-                return;
             }
 
             if (d.closeRequested) {
                 d.closeWindow();
-                return;
             }
-
-            sketchView.file = Settings.currentFile;
         }
     }
 
@@ -298,13 +288,17 @@ Page {
     Component.onCompleted: {
         Krita.Window.allowClose = false;
         loadingDialog.show("Please wait...");
+
+        if(Settings.currentFile.indexOf("temp") == -1) {
+            sketchView.file = Settings.currentFile;
+        }
     }
 
     Component { id: openImagePage; OpenImagePage { } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
     Component { id: saveAsPage; SaveImagePage { } }
-    Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); menuPanel.collapsed = true; } } }
+    Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); d.beginCreateNewFile(options); } } }
 
     QtObject {
         id: d;
@@ -313,13 +307,56 @@ Page {
         property bool closeRequested;
         property bool saveRequested;
 
+        property variant newFileOptions;
+        property string fileToOpen;
+
+        function beginCreateNewFile(options) {
+            if(options !== undefined) {
+                newFileOptions = options;
+                if (sketchView.modified) {
+                    modifiedDialog.show();
+                } else {
+                    d.loadNewFile();
+                }
+            } else {
+                pageStack.push(customImagePage);
+            }
+        }
+
+        function beginOpenFile(file) {
+            if(file !== "") {
+                fileToOpen = file;
+                if(sketchView.modified) {
+                    modifiedDialog.show();
+                } else {
+                    d.loadNewFile();
+                }
+            } else {
+                pageStack.push(openImagePage);
+            }
+        }
+
         function loadNewFile() {
             d.saveRequested = false;
-            loadingDialog.show("Loading " + Settings.currentFile);
             loadingDialog.progress = 0;
 
-            sketchView.file = Settings.currentFile;
+            if(newFileOptions !== undefined) {
+                loadingDialog.show("Creating new image...");
+                if(newFileOptions.source === undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(newFileOptions);
+                    Settings.temporaryFile = true;
+                } else if(newFileOptions.source == "clipboard") {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
+                    Settings.temporaryFile = true;
+                }
+            } else {
+                loadingDialog.show("Loading " + fileToOpen);
+                Settings.currentFile = fileToOpen;
+                sketchView.file = Settings.currentFile;
+            }
             menuPanel.collapsed = true;
+            d.fileToOpen = "";
+            d.newFileOptions = null;
         }
 
         function closeWindow() {

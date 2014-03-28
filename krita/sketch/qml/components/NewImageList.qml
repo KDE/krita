@@ -22,8 +22,7 @@ ListView {
     id: base;
     clip: true;
 
-    signal clicked();
-    signal customImageClicked();
+    signal clicked(variant options);
 
     delegate: ListItem {
         width: ListView.view.width;
@@ -41,42 +40,48 @@ ListView {
         onClicked: {
             switch(model.bnrole) {
                 case "a5p": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(600, 875, 150);
-                    Settings.temporaryFile = true;
+                    base.clicked({
+                        width: 600,
+                        height: 875,
+                        resolution: 150,
+                    });
                 }
                 case "a5l": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(875, 600, 150);
-                    Settings.temporaryFile = true;
+                    base.clicked({
+                        width: 875,
+                        height: 600,
+                        resolution: 150,
+                    });
                 }
                 case "a4p": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(1200, 1750, 150);
-                    Settings.temporaryFile = true;
+                    base.clicked({
+                        width: 1200,
+                        height: 1750,
+                        resolution: 150,
+                    });
                 }
                 case "a4l": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(1750, 1200, 150);
-                    Settings.temporaryFile = true;
+                    base.clicked({
+                        width: 1750,
+                        height: 1200,
+                        resolution: 150,
+                    });
                 }
                 case "screen": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(Krita.Window.width, Krita.Window.height, 72);
-                    Settings.temporaryFile = true;
+                    base.clicked({
+                        width: Krita.Window.width,
+                        height: Krita.Window.height,
+                        resolution: 72.0
+                    });
                 }
                 case "custom": {
-                    base.customImageClicked();
+                    base.clicked(null);
                 }
                 case "clip": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
-                    Settings.temporaryFile = true;
+                    base.clicked({ source: "clipboard" });
                 }
                 case "webcam": {
-                    base.clicked();
-                    Settings.currentFile = Krita.ImageBuilder.createImageFromWebcam();
-                    Settings.temporaryFile = true;
+                    base.clicked({ source: "webcam" });
                 }
             }
         }

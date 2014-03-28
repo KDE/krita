@@ -22,7 +22,7 @@ import "components"
 Page {
     id:base;
 
-    signal finished();
+    signal finished(variant options);
 
     Rectangle {
         anchors.fill: parent;
@@ -62,9 +62,7 @@ Page {
                     "backgroundColor": backgroundColor.value,
                     "backgroundOpacity": backgroundOpacity.value / 100,
                 }
-                Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
-                Settings.temporaryFile = true;
-                base.finished();
+                base.finished(options);
             }
         }
     }

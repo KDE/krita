@@ -42,6 +42,7 @@ public:
         , newDocResolution(0)
         , importingDocument(false)
     { }
+
     ProgressProxy* proxy;
     QPointer<KisDoc2> document;
     QPointer<KisSketchPart> part;
@@ -129,9 +130,17 @@ void DocumentManager::delayedNewDocument()
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
         QString colorProfileId = d->newDocOptions.value("colorProfileId").toString();
 
-        const KoColorSpace* profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
+        const KoColorSpace* profile;
+        if(colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty())
+        {
+            profile = KoColorSpaceRegistry::instance()->rgb8();
+        }
+        else
+        {
+            profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
+        }
 
-        QColor background = d->newDocOptions.value("backgroundColor").value<QColor>();
+        QColor background = d->newDocOptions.value("backgroundColor", QColor("white")).value<QColor>();
         background.setAlphaF(d->newDocOptions.value("backgroundOpacity", 1.0f).toFloat());
         KoColor bg(background, profile);
 

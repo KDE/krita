@@ -101,6 +101,8 @@ Panel {
         target: sketchView;
         onLoadingFinished: {
 //            if (window.applicationName === undefined) {
+                if(toolManager.currentTool === null)
+                    toolManager.requestToolChange("KritaShape/KisToolBrush");
                 presetsModel.currentPreset = "Basic circle";
 //            }
         }

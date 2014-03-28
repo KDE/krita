@@ -555,7 +555,7 @@ void LayerModel::setVisible(int index, bool newVisible)
         KoDocumentSectionModel::Property prop = props[0];
         props[0] = KoDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
         d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KoDocumentSectionModel::PropertyList>(props), KoDocumentSectionModel::PropertiesRole );
-        d->layers[index]->setDirty(d->activeNode->extent());
+        d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
     }

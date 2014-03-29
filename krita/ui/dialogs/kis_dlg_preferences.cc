@@ -425,11 +425,19 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
         chkUseTextureBuffer->setEnabled(false);
+        chkDisableDoubleBuffering->setEnabled(false);
+        chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableDoubleBuffering->setEnabled(cfg.useOpenGL());
+        chkDisableDoubleBuffering->setChecked(cfg.disableDoubleBuffering());
+        chkDisableVsync->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableVsync->setEnabled(cfg.useOpenGL());
+        chkDisableVsync->setChecked(cfg.disableVSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -462,6 +470,10 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
+    chkDisableDoubleBuffering->setEnabled(true);
+    chkDisableDoubleBuffering->setChecked(true);
+    chkDisableVsync->setEnabled(true);
+    chkDisableVsync->setChecked(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
@@ -478,6 +490,8 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
     chkUseTextureBuffer->setEnabled(isChecked);
+    chkDisableDoubleBuffering->setEnabled(isChecked);
+    chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
@@ -800,6 +814,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
+        cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());
+        cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());

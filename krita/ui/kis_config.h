@@ -128,6 +128,14 @@ public:
     bool useOpenGLTextureBuffer() const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    bool disableDoubleBuffering() const;
+    void setDisableDoubleBuffering(bool disableDoubleBuffering);
+
+    bool disableVSync() const;
+    void setDisableVSync(bool disableVSync);
+
+    bool showAdvancedOpenGLSettings() const;
+
     int numMipmapLevels() const;
     int openGLTextureSize() const;
     int textureOverlapBorder() const;

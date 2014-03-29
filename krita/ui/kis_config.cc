@@ -408,6 +408,32 @@ int KisConfig::openGLTextureSize() const
     return m_cfg.readEntry("textureSize", 256);
 }
 
+
+bool KisConfig::disableDoubleBuffering() const
+{
+    return m_cfg.readEntry("disableDoubleBuffering", true);
+}
+
+void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
+{
+    m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
+}
+
+bool KisConfig::disableVSync() const
+{
+    return m_cfg.readEntry("disableVSync", true);
+}
+
+void KisConfig::setDisableVSync(bool disableVSync)
+{
+    m_cfg.writeEntry("disableVSync", disableVSync);
+}
+
+bool KisConfig::showAdvancedOpenGLSettings() const
+{
+    return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
+}
+
 int KisConfig::numMipmapLevels() const
 {
     return m_cfg.readEntry("numMipmapLevels", 4);

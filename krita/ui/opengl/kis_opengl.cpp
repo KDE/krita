@@ -102,7 +102,11 @@ void KisOpenGL::createContext()
         qDebug() << "Using the compatibility profile";
 #endif
 */
-    format.setDoubleBuffer(false);
+
+    KisConfig cfg;
+    if (cfg.disableDoubleBuffering()) {
+        format.setDoubleBuffer(false);
+    }
 
     SharedContextWidget = new QGLWidget(format);
     SharedContextWidget->setObjectName("Krita OpenGL Shared Context Widget");

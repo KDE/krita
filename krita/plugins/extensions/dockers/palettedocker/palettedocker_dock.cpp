@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QTableView>
 #include <QHeaderView>
+#include <QWheelEvent>
 #include <klocale.h>
 #include <kcolordialog.h>
 
@@ -85,6 +86,31 @@ void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & opt
     painter->restore();
 }
 
+bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == m_wdgPaletteDock->paletteView->viewport() && event->type() == QEvent::Wheel) {
+        QWheelEvent* qwheel = dynamic_cast<QWheelEvent* >(event);
+        if (qwheel->modifiers() & Qt::ControlModifier) {
+
+            int numDegrees = qwheel->delta() / 8;
+            int numSteps = numDegrees / 7;
+            int curSize = m_wdgPaletteDock->paletteView->horizontalHeader()->sectionSize(0);
+            int setSize = numSteps + curSize;
+
+            if ( setSize >= 12 ) {
+                m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(setSize);
+                m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(setSize);
+                KisConfig cfg;
+                cfg.setPaletteDockerPaletteViewSectionSize(setSize);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return QWidget::eventFilter(object, event);
+    }
+}
 
 PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     , m_canvas(0)
@@ -113,8 +139,6 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->horizontalHeader()->setVisible(false);
     m_wdgPaletteDock->paletteView->verticalHeader()->setVisible(false);
     m_wdgPaletteDock->paletteView->setItemDelegate(new PaletteDelegate());
-    m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(12);
-    m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(12);
 
     QPalette pal(palette());
     pal.setColor(QPalette::Base, pal.dark().color());
@@ -122,6 +146,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->setPalette(pal);
  
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
+    m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
@@ -135,6 +160,11 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
 
     KisConfig cfg;
+
+    int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
+    m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
+    m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(defaultSectionSize);
+
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {

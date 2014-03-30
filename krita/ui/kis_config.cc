@@ -1101,3 +1101,13 @@ void KisConfig::setLineSmoothingSmoothPressure(bool value)
 {
     m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
 }
+
+int KisConfig::paletteDockerPaletteViewSectionSize() const
+{
+    return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
+}
+
+void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
+{
+    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
+}

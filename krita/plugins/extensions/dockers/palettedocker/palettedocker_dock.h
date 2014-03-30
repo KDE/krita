@@ -49,6 +49,9 @@ private slots:
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
+
+    virtual bool eventFilter(QObject*, QEvent*);
+
 private:    
     KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;

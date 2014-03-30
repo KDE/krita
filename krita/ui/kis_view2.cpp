@@ -464,6 +464,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     if (preset) {
         paintOpBox()->resourceSelected(preset);
     }
+    connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
 }
 
@@ -1531,16 +1532,6 @@ void KisView2::openResourcesDirectory()
 
 void KisView2::updateIcons()
 {
-//     QStringList icons = KIconLoader::global()->queryIcons(KIconLoader::NoGroup, KIconLoader::Action);
-//     kDebug() << icons;
-//     foreach(const QString& string, icons) {
-//         QFileInfo info(string);
-//         QString name = info.fileName();
-//         if (name.startsWith("dark_")) {
-//             kDebug() << "name " << name;
-//         }
-//     }
-//     kDebug() << icons;
     QColor background = palette().background().color();
     bool useDarkIcons = background.value() > 100;
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
@@ -1562,8 +1553,9 @@ void KisView2::updateIcons()
 
             QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
             if (button && !button->icon().name().isEmpty()) {
-                kDebug() << button->icon().name();
-                QString iconName = prefix + button->icon().name();
+                QString name = button->icon().name();
+                name = name.remove("dark_").remove("light_");
+                QString iconName = prefix + name;
 
                 KIcon icon = koIcon(iconName.toLatin1());
                 button->setIcon(icon);

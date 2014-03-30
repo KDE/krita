@@ -192,6 +192,9 @@ signals:
     /// and the document anymore.
     void loadCompleted();
 
+    /// This signal is emitted when the color theme changes
+    void themeChanged();
+
 public slots:
 
     /**

@@ -64,6 +64,16 @@ white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png
+
+dark_select.png
+dark_pattern.png
+dark_calligraphy.png
+dark_format-fill-color.png
+
+light_select.png
+light_pattern.png
+light_calligraphy.png
+light_format-fill-color.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 add_subdirectory(app)

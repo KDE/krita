@@ -120,6 +120,7 @@
 #include "widgets/kis_floating_message.h"
 
 #include <QPoint>
+#include <kapplication.h>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
@@ -463,7 +464,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     if (preset) {
         paintOpBox()->resourceSelected(preset);
     }
-
+    updateIcons();
 }
 
 
@@ -1526,6 +1527,49 @@ void KisView2::openResourcesDirectory()
 {
     QString dir = KStandardDirs::locateLocal("data", "krita");
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+}
+
+void KisView2::updateIcons()
+{
+//     QStringList icons = KIconLoader::global()->queryIcons(KIconLoader::NoGroup, KIconLoader::Action);
+//     kDebug() << icons;
+//     foreach(const QString& string, icons) {
+//         QFileInfo info(string);
+//         QString name = info.fileName();
+//         if (name.startsWith("dark_")) {
+//             kDebug() << "name " << name;
+//         }
+//     }
+//     kDebug() << icons;
+    QColor background = palette().background().color();
+    bool useDarkIcons = background.value() > 100;
+    QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
+
+    QStringList whitelist;
+    whitelist << "ToolBox";
+
+    QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
+    foreach(QDockWidget* dock, dockers) {
+        if (!whitelist.contains(dock->objectName())) {
+            continue;
+        }
+
+        QObjectList objects;
+        objects.append(dock);
+        while (!objects.isEmpty()) {
+            QObject* object = objects.takeFirst();
+            objects.append(object->children());
+
+            QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
+            if (button && !button->icon().name().isEmpty()) {
+                kDebug() << button->icon().name();
+                QString iconName = prefix + button->icon().name();
+
+                KIcon icon = koIcon(iconName.toLatin1());
+                button->setIcon(icon);
+            }
+        }
+    }
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

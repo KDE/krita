@@ -134,6 +134,7 @@ void KisPopupPalette::setSelectedColor(int x) { m_selectedColor = x; }
 void KisPopupPalette::slotChangefGColor(const QColor& /*newColor*/)
 {
     m_colorChangeTimer->start();
+    update();
 }
 
 void KisPopupPalette::slotColorChangeTimeout()
@@ -224,7 +225,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     //painting foreground color
     QPainterPath path2;
-    painter.setPen(QPen(palette().color(QPalette::Highlight), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
     path2.addEllipse(QPoint(-width()/2+33,-height()/2+33),30,30);
     painter.fillPath(path2, m_triangleColorSelector->color());
     painter.drawPath(path2);

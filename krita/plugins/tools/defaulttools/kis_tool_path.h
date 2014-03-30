@@ -34,6 +34,7 @@ class KisToolPath;
 class __KisToolPathLocalTool : public KoCreatePathTool {
 public:
     __KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool);
+
     virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
     virtual void addPathShape(KoPathShape* pathShape);
 
@@ -55,6 +56,8 @@ class KisToolPath : public DelegatedPathTool
 public:
     KisToolPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
+
+    virtual QList< QWidget* > createOptionWidgets();
 
 protected:
     void requestStrokeCancellation();

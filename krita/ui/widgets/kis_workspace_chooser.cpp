@@ -76,7 +76,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWidget(parent), m_view(view)
 {
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisWorkspaceResource>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     m_itemChooser->setFixedSize(250, 250);

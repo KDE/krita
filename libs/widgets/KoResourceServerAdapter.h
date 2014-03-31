@@ -102,6 +102,11 @@ public:
             m_resourceServer->removeObserver(this);
     }
 
+    virtual void unsetResourceServer()
+    {
+        m_resourceServer = 0;
+    }
+
     void connectToResourceServer()
     {
         if (m_resourceServer)

@@ -47,7 +47,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     spacingSlider->setValue(0.25);
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(rServer));
 
     m_brush = 0;
     m_brushCreated = false;
@@ -62,7 +62,6 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
 
 KisClipboardBrushWidget::~KisClipboardBrushWidget()
 {
-    delete m_rServerAdapter;
 }
 
 KisBrushSP KisClipboardBrushWidget::brush()

@@ -51,7 +51,7 @@ public:
     KoCheckerBoardPainter checkerPainter;
 };
 
-KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *resourceAdapter, QObject *parent)
+KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter, QObject *parent)
 :  KAction(parent)
 , d(new Private())
 {

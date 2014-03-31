@@ -31,6 +31,8 @@ template <class T> class KoResourceServerObserver {
 public:
     virtual ~KoResourceServerObserver() {}
 
+    virtual void unsetResourceServer() = 0;
+
     /**
      * Will be called by the resource server after a resource is added
      * @param resource the added resource

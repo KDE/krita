@@ -78,7 +78,7 @@ private:
     KoResourceItemChooser *m_chooser;
     KisPresetDelegate* m_delegate;
     ViewMode m_mode;
-    KoAbstractResourceServerAdapter * m_adapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

@@ -57,7 +57,7 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     m_lbName = new QLabel();
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritagradients.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);

@@ -60,7 +60,7 @@ private:
     void createPattern();
     KisView2* m_view;
     KoPattern* m_pattern;
-    KoResourceServerAdapter<KoPattern>* m_rServerAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
 
 

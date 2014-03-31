@@ -46,6 +46,8 @@ public:
     KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
     ~KoFavoriteResourceManager();
 
+    virtual void unsetResourceServer();
+
     static const int MAX_FAVORITE_PRESETS = 10;
 //    static const int MAX_RECENT_COLORS = 3;
 

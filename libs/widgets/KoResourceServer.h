@@ -121,6 +121,11 @@ public:
     virtual ~KoResourceServer()
     {
         if (m_deleteResource) {
+
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+                observer->unsetResourceServer();
+            }
+
             foreach(T* res, m_resources) {
                 delete res;
             }

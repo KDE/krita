@@ -149,7 +149,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
+    m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
 
     m_colorSetChooser = new ColorSetChooser();

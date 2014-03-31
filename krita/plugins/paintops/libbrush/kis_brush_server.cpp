@@ -59,6 +59,11 @@ public:
         }
     }
 
+    virtual void unsetResourceServer()
+    {
+        //...
+    }
+
     virtual void resourceAdded(KisBrush* brush) {
         // Hack: This prevents the deletion of brushes in the resource server
         // Brushes outside the server use shared pointer, but not inside the server

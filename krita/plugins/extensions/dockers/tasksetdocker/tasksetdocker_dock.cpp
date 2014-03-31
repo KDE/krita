@@ -100,7 +100,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_taskset", "data", "krita/taskset/");
     m_rserver = new KoResourceServer<TasksetResource>("kis_taskset", "*.kts");
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<TasksetResource>(m_rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
     m_taskThread = new KoResourceLoaderThread(m_rserver);
     m_taskThread->start();
 

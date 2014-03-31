@@ -163,7 +163,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     layout->setMargin(0);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
-    m_adapter = new KisPresetProxyAdapter(rserver);
+    m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
     m_chooser = new KoResourceItemChooser(m_adapter, this);
     QString knsrcFile = "kritapresets.knsrc";
@@ -258,7 +258,7 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-    static_cast<KisPresetProxyAdapter*>(m_adapter)->setPresetFilter(paintOpId);
+    static_cast<KisPresetProxyAdapter*>(m_adapter.data())->setPresetFilter(paintOpId);
     updateViewSettings();
 }
 

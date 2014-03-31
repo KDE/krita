@@ -30,14 +30,14 @@ class KoResourceTableModel : public KoResourceModelBase
 {
     Q_OBJECT
     public:
-        KoResourceTableModel(QList<KoAbstractResourceServerAdapter*> resourceAdapterList, QObject * parent = 0 );
+        KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter>> resourceAdapterList, QObject * parent = 0 );
         int rowCount(const QModelIndex &parent = QModelIndex()) const ;
         int columnCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
 
-        KoAbstractResourceServerAdapter* getResourceAdapter(KoResource *resource) const;
+        QSharedPointer<KoAbstractResourceServerAdapter> getResourceAdapter(KoResource *resource) const;
         QModelIndex indexFromResource(KoResource* resource) const;
         QStringList assignedTagsList(KoResource *resource) const;
         bool removeResource(KoResource* resource);
@@ -84,7 +84,7 @@ class KoResourceTableModel : public KoResourceModelBase
 
     private:
         QList<QString> m_resourceSelected;
-        QList<KoAbstractResourceServerAdapter*> m_resourceAdapterList;
+        QList<QSharedPointer<KoAbstractResourceServerAdapter>> m_resourceAdapterList;
         QList<KoResource*> m_resources;
 };
 

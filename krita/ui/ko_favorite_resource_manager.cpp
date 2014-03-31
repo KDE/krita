@@ -67,6 +67,11 @@ KoFavoriteResourceManager::~KoFavoriteResourceManager()
     delete m_colorList;
 }
 
+void KoFavoriteResourceManager::unsetResourceServer()
+{
+    // ...
+}
+
 QStringList KoFavoriteResourceManager::favoritePresetList()
 {
     return m_favoritePresetsList;

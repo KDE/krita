@@ -55,8 +55,8 @@ KisPaletteDocker::KisPaletteDocker()
     m_defaultPalette = cfg.defaultPalette();
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    m_serverAdapter = new KoResourceServerAdapter<KoColorSet>(rServer, this);
-    connect(m_serverAdapter, SIGNAL(resourceAdded(KoResource*)), this, SLOT(resourceAddedToServer(KoResource*)));
+    m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
+    connect(m_serverAdapter.data(), SIGNAL(resourceAdded(KoResource*)), this, SLOT(resourceAddedToServer(KoResource*)));
     m_serverAdapter->connectToResourceServer();
     checkForDefaultResource();
 }

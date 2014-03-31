@@ -21,6 +21,8 @@
 #ifndef KORESOURCEMODEL_H
 #define KORESOURCEMODEL_H
 
+#include <QSharedPointer>
+
 #include "KoResourceModelBase.h"
 #include "kowidgets_export.h"
 
@@ -32,8 +34,8 @@ class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:
-    explicit KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
-    virtual ~KoResourceModel() {}
+    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
+    virtual ~KoResourceModel();
 
     /// reimplemented
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -92,7 +94,7 @@ private slots:
     void tagBoxEntryWasRemoved(const QString& tag);
 
 private:
-    KoAbstractResourceServerAdapter *m_resourceAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;
     int m_columnCount;
 };
 

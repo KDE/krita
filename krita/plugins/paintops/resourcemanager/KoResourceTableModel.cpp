@@ -23,30 +23,30 @@
 #include <iostream>
 using namespace std;
 
-KoResourceTableModel::KoResourceTableModel(QList<KoAbstractResourceServerAdapter*> resourceAdapterList,QObject *parent)
+KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter>> resourceAdapterList,QObject *parent)
     : KoResourceModelBase( parent ), m_resourceAdapterList(resourceAdapterList)
 {
     m_resources.clear();
     m_resourceSelected.clear();
 
     for (int i=0;i<m_resourceAdapterList.size();i++) {
-        KoAbstractResourceServerAdapter* resourceAdapter=m_resourceAdapterList.at(i);
+        QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter=m_resourceAdapterList.at(i);
         Q_ASSERT( resourceAdapter );
         resourceAdapter->connectToResourceServer();
 
         m_resources.append(resourceAdapter->resources());
 
-        connect(resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
+        connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
                 this, SLOT(resourceAdded(KoResource*)));
-        connect(resourceAdapter, SIGNAL(removingResource(KoResource*)),
+        connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
                 this, SLOT(resourceRemoved(KoResource*)));
-        connect(resourceAdapter, SIGNAL(resourceChanged(KoResource*)),
+        connect(resourceAdapter.data(), SIGNAL(resourceChanged(KoResource*)),
                 this, SLOT(resourceChanged(KoResource*)));
-        connect(resourceAdapter, SIGNAL(tagsWereChanged()),
+        connect(resourceAdapter.data(), SIGNAL(tagsWereChanged()),
                 this, SLOT(tagBoxEntryWasModified()));
-        connect(resourceAdapter, SIGNAL(tagCategoryWasAdded(QString)),
+        connect(resourceAdapter.data(), SIGNAL(tagCategoryWasAdded(QString)),
                 this, SLOT(tagBoxEntryWasAdded(QString)));
-        connect(resourceAdapter, SIGNAL(tagCategoryWasRemoved(QString)),
+        connect(resourceAdapter.data(), SIGNAL(tagCategoryWasRemoved(QString)),
                 this, SLOT(tagBoxEntryWasRemoved(QString)));
     }
 }
@@ -133,10 +133,10 @@ QModelIndex KoResourceTableModel::index ( int row, int column, const QModelIndex
 
 }
 
-KoAbstractResourceServerAdapter* KoResourceTableModel::getResourceAdapter
+QSharedPointer<KoAbstractResourceServerAdapter> KoResourceTableModel::getResourceAdapter
     (KoResource *resource) const
 {
-    KoAbstractResourceServerAdapter* res;
+    QSharedPointer<KoAbstractResourceServerAdapter> res;
 
     for (int i=0;i<m_resourceAdapterList.size();i++) {
         res=m_resourceAdapterList.at(i);
@@ -144,7 +144,7 @@ KoAbstractResourceServerAdapter* KoResourceTableModel::getResourceAdapter
             return res;
         }
     }
-    return 0;
+    return res;
 }
 
 QModelIndex KoResourceTableModel::indexFromResource(KoResource* resource) const

@@ -97,6 +97,7 @@ int main( int argc, char** argv )
     KApplication app;
     app.setApplicationName("kritagemini");
     KIconLoader::global()->addAppDir("krita");
+    KIconLoader::global()->addAppDir("kritasketch");
 
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());

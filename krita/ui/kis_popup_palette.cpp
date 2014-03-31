@@ -30,7 +30,7 @@
 #include <math.h>
 
 #define maxPresetCount 10
-#define brushInnerRadius 120.0
+#define brushInnerRadius 100.0
 #define brushOuterRadius 140.0
 #define colorInnerRadius 75.0
 #define colorOuterRadius 95.0
@@ -84,7 +84,7 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     , m_timer(0)
 {
     m_triangleColorSelector  = new PopupColorTriangle(this);
-    m_triangleColorSelector->move(90, 90);
+    m_triangleColorSelector->move(70, 70);
     m_triangleColorSelector->resize(140, 140);
     m_triangleColorSelector->setVisible(true);
 
@@ -202,7 +202,7 @@ void KisPopupPalette::setVisible(bool b)
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(320,320);
+    return QSize(280,280);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
@@ -254,17 +254,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     QColor currColor;
-    //painting currently used color as color selector background
-    if (selectedColor() > -1)
-    {
-        m_resourceManager->recentColorAt(selectedColor()).toQColor(&currColor);
-        painter.setPen(Qt::NoPen);
-        QPainterPath path;
-        path.addEllipse(QPoint(0,0), colorInnerRadius-5, colorInnerRadius-5);
-        painter.fillPath(path, currColor);
-        painter.drawPath(path);
-
-    }
 
     //painting recent colors
     painter.setPen(Qt::NoPen);
@@ -484,7 +473,7 @@ QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
 {
     QRect outerRect(-width()/2, -height()/2, width(), height());
     outerRect.adjust(3, 3, -3, -3);
-    int ringSize = brushOuterRadius - colorOuterRadius;
+    int ringSize = brushOuterRadius - colorOuterRadius-8;
     QRect innerRect = outerRect.adjusted(ringSize, ringSize, -ringSize, -ringSize);
 
     qreal angleLength = 360/10;

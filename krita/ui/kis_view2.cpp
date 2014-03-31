@@ -1542,27 +1542,29 @@ void KisView2::updateIcons()
     QStringList blacklistedIcons;
     blacklistedIcons << "editpath" << "artistictext-tool";
 
-    QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
-    foreach(QDockWidget* dock, dockers) {
-        if (!whitelist.contains(dock->objectName())) {
-            continue;
-        }
+    if (mainWindow()) {
+        QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
+        foreach(QDockWidget* dock, dockers) {
+            if (!whitelist.contains(dock->objectName())) {
+                continue;
+            }
 
-        QObjectList objects;
-        objects.append(dock);
-        while (!objects.isEmpty()) {
-            QObject* object = objects.takeFirst();
-            objects.append(object->children());
+            QObjectList objects;
+            objects.append(dock);
+            while (!objects.isEmpty()) {
+                QObject* object = objects.takeFirst();
+                objects.append(object->children());
 
-            QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
-            if (button && !button->icon().name().isEmpty()) {
-                QString name = button->icon().name();
-                name = name.remove("dark_").remove("light_");
+                QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
+                if (button && !button->icon().name().isEmpty()) {
+                    QString name = button->icon().name();
+                    name = name.remove("dark_").remove("light_");
 
-                if (!blacklistedIcons.contains(name)) {
-                    QString iconName = prefix + name;
-                    KIcon icon = koIcon(iconName.toLatin1());
-                    button->setIcon(icon);
+                    if (!blacklistedIcons.contains(name)) {
+                        QString iconName = prefix + name;
+                        KIcon icon = koIcon(iconName.toLatin1());
+                        button->setIcon(icon);
+                    }
                 }
             }
         }

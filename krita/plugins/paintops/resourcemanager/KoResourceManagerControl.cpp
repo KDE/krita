@@ -199,7 +199,7 @@ void KoResourceManagerControl::launchServer()
 
 void KoResourceManagerControl::filterResourceTypes(int index)
 {
-    QList<QSharedPointer<KoAbstractResourceServerAdapter>> list;
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > list;
 
     if(model!=0)
         delete model;

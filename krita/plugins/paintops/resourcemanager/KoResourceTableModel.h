@@ -30,7 +30,7 @@ class KoResourceTableModel : public KoResourceModelBase
 {
     Q_OBJECT
     public:
-        KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter>> resourceAdapterList, QObject * parent = 0 );
+        KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList, QObject * parent = 0 );
         int rowCount(const QModelIndex &parent = QModelIndex()) const ;
         int columnCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -84,7 +84,7 @@ class KoResourceTableModel : public KoResourceModelBase
 
     private:
         QList<QString> m_resourceSelected;
-        QList<QSharedPointer<KoAbstractResourceServerAdapter>> m_resourceAdapterList;
+        QList<QSharedPointer<KoAbstractResourceServerAdapter> > m_resourceAdapterList;
         QList<KoResource*> m_resources;
 };
 

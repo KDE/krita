@@ -23,7 +23,7 @@
 #include <iostream>
 using namespace std;
 
-KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter>> resourceAdapterList,QObject *parent)
+KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList,QObject *parent)
     : KoResourceModelBase( parent ), m_resourceAdapterList(resourceAdapterList)
 {
     m_resources.clear();

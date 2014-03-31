@@ -139,7 +139,7 @@ void KisImageFromClipboard::createClipboardPreview()
         doubleHeight->setValue(clipboardImage->height());
     } else {
         createButton->setEnabled(false);
-        clipPreview->setScene(new QGraphicsScene());
+        clipPreview->setScene(new QGraphicsScene(this));
     }
     
     

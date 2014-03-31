@@ -43,8 +43,20 @@ class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResource
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg", false) {
+    BrushResourceServer()
+        : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg", false)
+    {
         addObserver(this, true);
+    }
+
+    virtual ~BrushResourceServer()
+    {
+        foreach(KisBrush* brush, m_brushes) {
+            if (!brush->deref()) {
+                delete brush;
+            }
+            m_brushes.removeAll(brush);
+        }
     }
 
     virtual void resourceAdded(KisBrush* brush) {

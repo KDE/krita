@@ -26,6 +26,8 @@
 #include "sensors/kis_dynamic_sensor_fade.h"
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 
+static int sensorcount = 0;
+
 KisDynamicSensor::KisDynamicSensor(const KoID& id)
     : m_id(id)
     , m_customCurve(false)
@@ -35,11 +37,8 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id)
     setMaximumLabel(i18n("1.0"));
 }
 
-KisDynamicSensor::~KisDynamicSensor() { }
-
-KisDynamicSensor *KisDynamicSensor::clone() const
+KisDynamicSensor::~KisDynamicSensor()
 {
-    return createFromXML(toXML());
 }
 
 QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)

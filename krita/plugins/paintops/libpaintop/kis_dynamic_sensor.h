@@ -71,8 +71,6 @@ public:
 
     virtual ~KisDynamicSensor();
 
-    KisDynamicSensor *clone() const;
-
     /**
      * @return the value of this sensor for the given KisPaintInformation
      */

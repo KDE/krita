@@ -47,3 +47,5 @@ install(PROGRAMS  kritagemini.desktop               DESTINATION ${XDG_APPS_INSTA
 install(FILES     kritageminirc kritageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritagemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritagemini)
 install(FILES     kritagemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritagemini)
+
+add_subdirectory(icon)

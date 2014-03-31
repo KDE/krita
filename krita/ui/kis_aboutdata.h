@@ -27,7 +27,7 @@
 #include <calligragitversion.h>
 #include <KoIcon.h>
 
-KAboutData * newKritaAboutData()
+KAboutData *newKritaAboutData()
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;

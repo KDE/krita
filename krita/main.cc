@@ -42,6 +42,7 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_factory2.h"
 #include "ui/kis_doc2.h"
 
 #if defined Q_OS_WIN
@@ -69,7 +70,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 
     int state;
-    KAboutData *aboutData = newKritaAboutData();
+    KAboutData *aboutData = KisFactory2::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -108,8 +109,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     delete splash;
 
     state = app.exec();
-
-    delete aboutData;
 
     return state;
 }

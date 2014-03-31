@@ -96,10 +96,7 @@ KAboutData* KisFactory2::aboutData()
 const KComponentData &KisFactory2::componentData()
 {
     if (!s_instance) {
-        if (s_aboutData)
-            s_instance = new KComponentData(s_aboutData);
-        else
-            s_instance = new KComponentData(newKritaAboutData());
+        s_instance = new KComponentData(aboutData());
         Q_CHECK_PTR(s_instance);
 
         // XXX_EXIV: make the exiv io backends real plugins

@@ -168,9 +168,8 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        if (m_deleteResource) {
-                            delete resource;
-                        }
+                        kWarning() << "Loading resource " << fname << "failed";
+                        delete resource;
                     }
                 }
                 m_loadLock.unlock();

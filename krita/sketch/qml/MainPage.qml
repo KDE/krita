@@ -324,6 +324,9 @@ Page {
         }
 
         function beginOpenFile(file) {
+            if(file === sketchView.file)
+                return;
+
             if(file !== "") {
                 fileToOpen = file;
                 if(sketchView.modified) {

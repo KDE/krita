@@ -294,7 +294,7 @@ Page {
         }
     }
 
-    Component { id: openImagePage; OpenImagePage { } }
+    Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.beginOpenFile(file); } } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
     Component { id: saveAsPage; SaveImagePage { } }
@@ -337,7 +337,7 @@ Page {
         }
 
         function loadNewFile() {
-            d.saveRequested = false;
+            saveRequested = false;
             loadingDialog.progress = 0;
 
             if(newFileOptions !== undefined) {
@@ -355,8 +355,8 @@ Page {
                 sketchView.file = Settings.currentFile;
             }
             menuPanel.collapsed = true;
-            d.fileToOpen = "";
-            d.newFileOptions = null;
+            fileToOpen = "";
+            newFileOptions = null;
         }
 
         function closeWindow() {

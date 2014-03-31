@@ -18,15 +18,16 @@
  */
 
 #include "KoResourceTableModel.h"
+#include "KoResourceBundle.h"
+#include <QAbstractItemModel>
 #include <klocale.h>
 
 #include <iostream>
 using namespace std;
 
-KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList,QObject *parent)
-    : KoResourceModelBase( parent ), m_resourceAdapterList(resourceAdapterList)
+KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList, int t, QObject *parent)
+    : KoResourceModelBase( parent ), m_resourceAdapterList(resourceAdapterList), m_dataType(t)
 {
-    m_resources.clear();
     m_resourceSelected.clear();
 
     for (int i=0;i<m_resourceAdapterList.size();i++) {
@@ -34,7 +35,13 @@ KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResour
         Q_ASSERT( resourceAdapter );
         resourceAdapter->connectToResourceServer();
 
-        m_resources.append(resourceAdapter->resources());
+        //Bundle server must be at the end of the list
+        if (i==m_resourceAdapterList.size()-1 && t!=Undefined) {
+            refreshBundles(true);
+        }
+        else {
+            m_resources.append(resourceAdapter->resources());
+        }
 
         connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
                 this, SLOT(resourceAdded(KoResource*)));
@@ -93,6 +100,15 @@ QVariant KoResourceTableModel::data(const QModelIndex &index, int role) const
                 return QVariant();
             }
         }
+        else if (role == Qt::EditRole) {
+            if (index.column()==1) {
+                QString newVal=resource->name().section('.',0,0);
+                return i18n( newVal.toUtf8().data());
+            }
+            else {
+                return QVariant();
+            }
+        }
         else if (role == Qt::CheckStateRole && index.column()==0) {
             return m_resourceSelected.contains(resource->filename()) ? Qt::Checked : Qt::Unchecked;
         }
@@ -133,84 +149,82 @@ QModelIndex KoResourceTableModel::index ( int row, int column, const QModelIndex
 
 }
 
+Qt::ItemFlags KoResourceTableModel::flags ( const QModelIndex & index ) const
+{
+    Qt::ItemFlags res=QAbstractItemModel::flags(index);
+    if (index.column()==1) {
+        res |= Qt::ItemIsEditable;
+    }
+    return res;
+}
+
+KoResource* KoResourceTableModel::getResourceFromFilename(const QString& filename)
+{
+    KoResource* res;
+
+    for (int i=0;i<m_resources.size();i++) {
+        res=m_resources.at(i);
+        if (res->filename()==filename) {
+            return res;
+        }
+    }
+
+    return 0;
+}
+
+KoResource* KoResourceTableModel::getResourceFromIndex(const QModelIndex &index)
+{
+    KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+    if (!resource) {
+        return 0;
+    }
+    else {
+        return resource;
+    }
+}
+
 QSharedPointer<KoAbstractResourceServerAdapter> KoResourceTableModel::getResourceAdapter
     (KoResource *resource) const
 {
     QSharedPointer<KoAbstractResourceServerAdapter> res;
 
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
-        res=m_resourceAdapterList.at(i);
-        if (res->resources().indexOf(resource)!=-1) {
-            return res;
+    if (resource!=0) {
+        for (int i=0;i<m_resourceAdapterList.size();i++) {
+            res=m_resourceAdapterList.at(i);
+            if (res->resources().indexOf(resource)!=-1) {
+                return res;
+            }
         }
     }
     return res;
 }
 
-QModelIndex KoResourceTableModel::indexFromResource(KoResource* resource) const
+QSharedPointer<KoAbstractResourceServerAdapter> KoResourceTableModel::getResourceAdapter
+    (QString resourceName)
 {
-    return index(m_resources.indexOf(resource), 1);
+    return getResourceAdapter(getResourceFromFilename(resourceName));
 }
 
-QStringList KoResourceTableModel::assignedTagsList(KoResource *resource) const
+QList<QSharedPointer<KoAbstractResourceServerAdapter> > KoResourceTableModel::getSelectedAdapters()
 {
-    return getResourceAdapter(resource)->assignedTagsList(resource);
-}
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > res;
+    QSharedPointer<KoAbstractResourceServerAdapter> currentAdapter;
 
-bool KoResourceTableModel::removeResource(KoResource* resource)
-{
-    return getResourceAdapter(resource)->removeResource(resource);
-}
-
-void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
-{
-    getResourceAdapter(resource)->addTag(resource, tag);
-    emit tagBoxEntryAdded(tag);
-}
-
-void KoResourceTableModel::deleteTag(KoResource *resource, const QString &tag)
-{
-    getResourceAdapter(resource)->deleteTag(resource, tag);
-}
-
-int KoResourceTableModel::resourcesCount() const
-{
-    return m_resources.count();
-}
-
-QList<KoResource *> KoResourceTableModel::currentlyVisibleResources() const
-{
-  return m_resources;
-}
-
-//TODO Vérifier la validité de toutes les méthodes ci-dessous
-
-
-void KoResourceTableModel::resourceAdded(KoResource *resource)
-{
-    m_resources.append(resource);
-    reset();
-}
-
-void KoResourceTableModel::resourceRemoved(KoResource *resource)
-{
-    int index=m_resources.indexOf(resource);
-    if (index!=-1) {
-        m_resources.removeAt(index);
-    }
-    reset();
-}
-
-void KoResourceTableModel::resourceChanged(KoResource* resource)
-{
-    QModelIndex modelIndex = index(m_resources.indexOf(resource),1);
-    if (!modelIndex.isValid()) {
-        return;
+    if (newSelection) {
+        for (int i=0;i<m_resourceSelected.size();i++) {
+            currentAdapter=getResourceAdapter(m_resourceSelected.at(i));
+            if (!res.contains(currentAdapter)){
+                res.append(currentAdapter);
+            }
+        }
+        m_selectedAdapterList=res;
+        newSelection=false;
     }
 
-    emit dataChanged(modelIndex, modelIndex);
+    return m_selectedAdapterList;
 }
 
+//TODO Vérifier s'il faut persister la sélection entre les modèles
 void KoResourceTableModel::resourceSelected(QModelIndex targetIndex)
 {
     if (targetIndex.column()==0) {
@@ -223,43 +237,7 @@ void KoResourceTableModel::resourceSelected(QModelIndex targetIndex)
             m_resourceSelected.append(filename);
         }
         reset();
-    }
-}
-
-void KoResourceTableModel::tagBoxEntryWasModified()
-{
-    updateServer();
-    emit tagBoxEntryModified();
-}
-
-void KoResourceTableModel::tagBoxEntryWasAdded(const QString& tag)
-{
-    emit tagBoxEntryAdded(tag);
-}
-
-void KoResourceTableModel::tagBoxEntryWasRemoved(const QString& tag)
-{
-    emit tagBoxEntryRemoved(tag);
-}
-
-void KoResourceTableModel::updateServer()
-{
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
-        m_resourceAdapterList.at(i)->updateServer();
-    }
-}
-
-void KoResourceTableModel::enableResourceFiltering(bool enable)
-{
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
-        m_resourceAdapterList.at(i)->enableResourceFiltering(enable);
-    }
-}
-
-void KoResourceTableModel::searchTextChanged(const QString& searchString)
-{
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
-        m_resourceAdapterList.at(i)->searchTextChanged(searchString);
+        newSelection=true;
     }
 }
 
@@ -289,6 +267,180 @@ QList<QString> KoResourceTableModel::getSelectedResource()
     return m_resourceSelected;
 }
 
+//TODO Rajouter le traitement de la liste de sélection si besoin
+void KoResourceTableModel::refreshResources()
+{
+    m_resources.clear();
+
+    for (int i=0;i<m_resourceAdapterList.size()-1;i++) {
+        m_resources.append(m_resourceAdapterList.at(i)->resources());
+    }
+
+    refreshBundles(true);
+}
+
+void KoResourceTableModel::refreshBundles(bool isResourcesEmpty)
+{
+    KoResource* currentResource;
+    KoResourceBundle* currentBundle;
+
+    if (m_dataType!=Undefined) {
+        QList<KoResource*> resourcesList=m_resourceAdapterList.at(m_resourceAdapterList.size()-1)->resources();
+        for (int j=0;j<resourcesList.size();j++) {
+            currentResource=resourcesList.at(j);
+            currentBundle=dynamic_cast<KoResourceBundle*>(currentResource);
+            if (currentBundle &&
+                    ((m_dataType==Installed && currentBundle->isInstalled()) ||
+                    (m_dataType==Available && !currentBundle->isInstalled())) &&
+                        (isResourcesEmpty || !m_resources.contains(currentResource))) {
+                m_resources.append(resourcesList.at(j));
+            }
+        }
+        reset();
+    }
+}
+
+void KoResourceTableModel::removeResourceFile(KoResource* resource,const QString &filename)
+{
+    m_resourceSelected.removeOne(filename);
+    getResourceAdapter(resource)->removeResourceFile(filename);
+}
+
+void KoResourceTableModel::hideResource(KoResource* resource)
+{
+    m_resourceSelected.removeOne(resource->filename());
+    m_resources.removeOne(resource);
+}
+
+void KoResourceTableModel::removeOneSelected(const QString &filename)
+{
+    m_resourceSelected.removeOne(filename);
+}
+
+int KoResourceTableModel::getDataType()
+{
+    return m_dataType;
+}
+
+/*A tester : Implémentation des fonctions virtuelles de KoResourceModelBase*/
+
+QModelIndex KoResourceTableModel::indexFromResource(KoResource* resource) const
+{
+    return index(m_resources.indexOf(resource), 1);
+}
+
+//TODO Supprimer le cout une fois tous les pbs réglés.
+QStringList KoResourceTableModel::assignedTagsList(KoResource *resource) const
+{
+    if(!getResourceAdapter(resource))
+        cout<<qPrintable(resource->filename())<<endl;
+    return getResourceAdapter(resource)->assignedTagsList(resource);
+}
+
+bool KoResourceTableModel::removeResource(KoResource* resource)
+{
+    m_resources.removeOne(resource);
+    m_resourceSelected.removeOne(resource->filename());
+    return getResourceAdapter(resource)->removeResource(resource);
+}
+
+void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
+{
+    getResourceAdapter(resource)->addTag(resource, tag);
+    emit tagBoxEntryAdded(tag);
+}
+
+void KoResourceTableModel::deleteTag(KoResource *resource, const QString &tag)
+{
+    getResourceAdapter(resource)->deleteTag(resource, tag);
+}
+
+int KoResourceTableModel::resourcesCount() const
+{
+    return m_resources.count();
+}
+
+QList<KoResource *> KoResourceTableModel::currentlyVisibleResources() const
+{
+    return m_resources;
+}
+
+void KoResourceTableModel::tagCategoryAdded(const QString& tag)
+{
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
+
+    for (int i=0;i<currentAdapters.size();i++) {
+        currentAdapters.at(i)->tagCategoryAdded(tag);
+    }
+}
+
+void KoResourceTableModel::tagCategoryRemoved(const QString& tag)
+{
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
+    for (int i=0;i<currentAdapters.size();i++) {
+        currentAdapters.at(i)->tagCategoryRemoved(tag);
+    }
+}
+
+void KoResourceTableModel::tagCategoryMembersChanged()
+{
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
+    for (int i=0;i<currentAdapters.size();i++) {
+        currentAdapters.at(i)->tagCategoryMembersChanged();
+    }
+}
+
+void KoResourceTableModel::setCurrentTag(const QString& currentTag)
+{
+    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
+    for (int i=0;i<currentAdapters.size();i++) {
+        currentAdapters.at(i)->setCurrentTag(currentTag);
+    }
+}
+
+void KoResourceTableModel::updateServer()
+{
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->updateServer();
+    }
+    refreshResources();
+}
+
+void KoResourceTableModel::enableResourceFiltering(bool enable)
+{
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->enableResourceFiltering(enable);
+    }
+}
+
+//TODO Vérifier que le refreshResources est indispensable
+//TODO Bug au niveau des lettres qui ne sont pas contenues dans les deux ressources de type gradient
+void KoResourceTableModel::searchTextChanged(const QString& searchString)
+{    
+    if(!searchString.isEmpty()){
+        for (int i=0;i<m_resourceAdapterList.size();i++) {
+            m_resourceAdapterList.at(i)->searchTextChanged(searchString);
+        }
+        refreshResources();
+    }
+}
+
+void KoResourceTableModel::tagBoxEntryWasModified()
+{
+    updateServer();
+    emit tagBoxEntryModified();
+}
+
+void KoResourceTableModel::tagBoxEntryWasAdded(const QString& tag)
+{
+    emit tagBoxEntryAdded(tag);
+}
+
+void KoResourceTableModel::tagBoxEntryWasRemoved(const QString& tag)
+{
+    emit tagBoxEntryRemoved(tag);
+}
+
 QStringList KoResourceTableModel::tagNamesList() const
 {
     QStringList res=m_resourceAdapterList.at(0)->tagNamesList();
@@ -296,11 +448,6 @@ QStringList KoResourceTableModel::tagNamesList() const
         res.append(m_resourceAdapterList.at(i)->tagNamesList());
     }
     return res;
-}
-
-void KoResourceTableModel::setCurrentTag(const QString& currentTag)
-{
-    Q_UNUSED(currentTag);
 }
 
 QList< KoResource* > KoResourceTableModel::serverResources() const
@@ -312,49 +459,31 @@ QList< KoResource* > KoResourceTableModel::serverResources() const
     return res;
 }
 
-void KoResourceTableModel::tagCategoryMembersChanged()
+//TODO Voir si on peut optimiser
+void KoResourceTableModel::resourceAdded(KoResource *resource)
 {
-
+    Q_UNUSED(resource);
+    refreshResources();
 }
 
-void KoResourceTableModel::tagCategoryAdded(const QString& tag)
+void KoResourceTableModel::resourceRemoved(KoResource *resource)
 {
-    Q_UNUSED(tag);
+    if (resource) {
+        m_resourceSelected.removeOne(resource->filename());
+        m_resources.removeOne(resource);
+    }
+    reset();
 }
 
-void KoResourceTableModel::tagCategoryRemoved(const QString& tag)
+void KoResourceTableModel::resourceChanged(KoResource* resource)
 {
-    Q_UNUSED(tag);
-}
-
-KoResource* KoResourceTableModel::getResourceFromFilename(const QString& filename)
-{
-    KoResource* res;
-
-    for (int i=0;i<m_resources.size();i++) {
-        res=m_resources.at(i);
-        if (res->filename()==filename) {
-            return res;
-        }
+    QModelIndex modelIndex = index(m_resources.indexOf(resource),1);
+    if (!modelIndex.isValid()) {
+        return;
     }
 
-    return 0;
+    emit dataChanged(modelIndex, modelIndex);
 }
-
-KoResource* KoResourceTableModel::getResourceFromIndex(const QModelIndex &index)
-{
-    KoResource * resource = static_cast<KoResource*>(index.internalPointer());
-    if (!resource) {
-        return 0;
-    }
-    else {
-        return resource;
-    }
-}
-
-//TODO Penser à un syst d'identification du serveur concerné
-//Pour les fonctions suivantes si nécessaires
-//(Exemple : string en paramètre, conversion vers indice dans la liste des serveurs...)
 
 /*void KoResourceModel::importResourceFile(const QString &filename)
 {
@@ -366,24 +495,9 @@ void KoResourceModel::importResourceFile(const QString & filename, bool fileCrea
     m_resourceAdapter->importResourceFile(filename, fileCreation);
 }
 
-void KoResourceModel::removeResourceFile(const QString &filename)
-{
-    m_resourceAdapter->removeResourceFile(filename);
-}
-
 QStringList KoResourceModel::searchTag(const QString& lineEditText)
 {
     return m_resourceAdapter->searchTag(lineEditText);
-}
-
-void KoResourceModel::searchTextChanged(const QString& searchString)
-{
-    m_resourceAdapter->searchTextChanged(searchString);
-}
-
-void KoResourceModel::enableResourceFiltering(bool enable)
-{
-    m_resourceAdapter->enableResourceFiltering(enable);
 }
 
 QString KoResourceTableModel::extensions() const

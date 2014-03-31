@@ -24,6 +24,9 @@
 #include "kis_paintop_preset.h"
 #include "kis_workspace_resource.h"
 
+#include <iostream>
+using namespace std;
+
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
@@ -452,10 +455,15 @@ void KoXmlResourceBundleManifest::exportTags()
 }
 
 
-void KoXmlResourceBundleManifest::install()
+void KoXmlResourceBundleManifest::install(QString kritaPath,QString bundleName)
 {
+    bundleName=bundleName.section('/',bundleName.count('/'));
     if (xmlDocument.elementsByTagName("installed").isEmpty()) {
         root.appendChild(xmlDocument.createElement("installed"));
+        QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+        for (int i=0;i<fileList.size();i++) {
+            QString newValue=kritaPath+fileList.at(i).parentNode().toElement().tagName()+"/"+bundleName.section('.',0,0)+"/";
+        }
     }
 }
 

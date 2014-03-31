@@ -34,7 +34,8 @@
 using namespace std;
 
 
-KoResourceManagerControl::KoResourceManagerControl()
+KoResourceManagerControl::KoResourceManagerControl(int nb):
+    nbModels(nb)
 {
     QString env=QProcessEnvironment::systemEnvironment().value("KDEDIRS");
 
@@ -47,9 +48,12 @@ KoResourceManagerControl::KoResourceManagerControl()
     if (root.at(root.size()-1)!='/') {
         root.append('/');
     }
+
     extractor=new KoResourceBundleManager(root+"share/apps/krita/");
 
-    model=0;
+    for(int i=0;i<nbModels;i++) {
+        modelList.append(0);
+    }
 
     filterResourceTypes(0);
 }
@@ -59,27 +63,54 @@ KoResourceManagerControl::~KoResourceManagerControl()
     delete meta;
     delete manifest;
     delete extractor;
-    delete model;
     delete bundleServer;
-}
 
-void KoResourceManagerControl::setMeta(QModelIndex index,QString type,QString value)
-{
-    KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(model->getResourceFromIndex(index));
-
-    if (currentBundle) {
-        currentBundle->addMeta(type,value);
+    for (int i=0;i<nbModels;i++) {
+        delete modelList.at(i);
     }
 }
 
-void KoResourceManagerControl::createPack()
+void KoResourceManagerControl::setMeta(QModelIndex index,QString metaType,QString metaValue,int type)
 {
-    QList<QString> selected = model->getSelectedResource();
+    KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(getModel(type)->getResourceFromIndex(index));
+
+    if (currentBundle) {
+        currentBundle->addMeta(metaType,metaValue);
+    }
+}
+
+void KoResourceManagerControl::saveMeta(QModelIndex index,int type)
+{
+    KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(getModel(type)->getResourceFromIndex(index));
+
+    if (currentBundle) {
+        currentBundle->save();
+    }
+}
+
+//Réutilisation d'un bout de code de addResource
+//et execution double de ce code
+void KoResourceManagerControl::createPack(int type)
+{
+    KoResourceTableModel *currentModel=getModel(type);
+    QList<QString> selected = currentModel->getSelectedResource();
 
     if (!selected.empty()) {
-        KoResourceBundle* newBundle=new KoResourceBundle(root+"share/apps/krita/bundles/newBundle.zip");
+        QString bundlePath=root+"share/apps/krita/bundles/newBundle.zip";
+        QFileInfo fileInfo(bundlePath);
+
+        if (fileInfo.exists()) {
+            QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+            QTemporaryFile file(filename);
+            if (file.open()) {
+                kDebug() << "File already exists ; now " << file.fileName();
+                bundlePath=file.fileName();
+            }
+        }
+
+        KoResourceBundle* newBundle=new KoResourceBundle(bundlePath);
         newBundle->load();
-        newBundle->setName("newBundle");
+        newBundle->setName(bundlePath.section('/',bundlePath.count('/')));
 
         for (int i=0; i<selected.size(); i++) {
             newBundle->addFile(selected.at(i).section('/',selected.count("/")-2,selected.count("/")-2),selected.at(i));
@@ -88,84 +119,99 @@ void KoResourceManagerControl::createPack()
         newBundle->addMeta("created",QDate::currentDate().toString("dd/MM/yyyy"));
 
         bundleServer->addResource(newBundle);
+        currentModel->clearSelected(); //TODO Voir s'il est nécessaire ou pas
     }
 }
 
 //TODO Définir les règles en matière de sélection multiple
-void KoResourceManagerControl::modifySelected(int mode)
+void KoResourceManagerControl::modifySelected(int mode,int type)
 {
     KoResourceBundle *currentBundle;
     KoResource *currentResource;
     QString currentFileName;
-    QList<QString> selected=model->getSelectedResource();
+    KoResourceTableModel* currentModel=getModel(type);
+    QList<QString> selected=currentModel->getSelectedResource();
+    bool modified=false;
 
     for (int i=0;i<selected.size();i++) {
         currentFileName=selected.at(i);
-        currentResource=model->getResourceFromFilename(currentFileName);
+        currentResource=currentModel->getResourceFromFilename(currentFileName);
         currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
 
         switch (mode) {
         case Install:
-            if (currentBundle) {
+            if (currentBundle && type==KoResourceTableModel::Available) {
                 currentBundle->install();
                 currentBundle->addResourceDirs();
+                currentModel->hideResource(currentResource);
+                modified=true;
             }
             break;
         case Uninstall:
-            if (currentBundle) {
+            if (currentBundle && type==KoResourceTableModel::Installed) {
                 currentBundle->uninstall();
+                currentModel->hideResource(currentResource);
+                modified=true;
             }
             break;
         case Delete:
-            if (!currentBundle) {
-                model->getResourceAdapter(currentResource)->removeResourceFile(currentFileName);
+            if (currentBundle && currentBundle->isInstalled()) {
+                currentBundle->uninstall();
             }
-            else {
-                if (currentBundle->isInstalled()) {
-                    currentBundle->uninstall();
-                }
-                model->getResourceAdapter(currentBundle)->removeResourceFile(currentFileName);
-            }
-            model->clearSelected();
+            currentModel->removeResourceFile(currentResource,currentFileName);
+            modified=true;
             //TODO Décommenter pour supprimer ou rajouter déplacement vers autre dossier pour retour en arrière
             //QFile::remove(currentFileName);
             break;
+        }
+    }
+
+    if (modified) {
+        //TODO Voir s'il faut rajouter une condition (cas où les bundles ne sont pas affectés)
+        for (int i=0;i<nbModels;i++) {
+            modelList.at(i)->refreshBundles();
         }
     }
 }
 
 //TODO Bug Foreground to Background
 //TODO A tester pr tous les cas possibles
-bool KoResourceManagerControl::rename(QModelIndex index,QString newName)
+//TODO Rajouter le cas où le nom est déjà utilisé
+bool KoResourceManagerControl::rename(QModelIndex index,QString newName,int type)
 {
-    //TODO Résoudre le problème d'appels multiples du rename
-    cout<<"Rename"<<endl;
-    KoResource* currentResource=model->getResourceFromIndex(index);
+    KoResourceTableModel* currentModel=getModel(type);
+    KoResource* currentResource=currentModel->getResourceFromIndex(index);
     if (currentResource!=0 && currentResource->valid()) {
         KoResourceBundle* currentBundle= dynamic_cast<KoResourceBundle*>(currentResource);
 
-        QString newFilename=currentResource->filename();
-        newFilename=newFilename.section('/',0,newFilename.count('/')-1).append("/").append(newName);
-        QFile::rename(currentResource->filename(),newFilename);
+        QString oldFilename=currentResource->filename();
+        QString newFilename=oldFilename.section('/',0,oldFilename.count('/')-1).append("/").append(newName);
+        if (oldFilename!=newFilename) {
 
-        if (currentBundle) {//TODO A vérifier si param nécessaire
-            currentBundle->rename(newFilename);
-        }
-        else if (newFilename.count('/')==root.count()+5) {
-            QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
-            QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
-            currentBundle= dynamic_cast<KoResourceBundle*>
-                    (model->getResourceFromFilename(bundleName.append(".zip")));
-            if (currentBundle) {
-                currentBundle->removeFile(currentResource->filename());
-                currentBundle->addFile(fileType,newFilename);
+            cout<<"Rename"<<endl;
+
+            QFile::rename(currentResource->filename(),newFilename);
+
+            if (currentBundle) {//TODO A vérifier si param nécessaire
+                currentBundle->rename(newFilename);
             }
+            else if (newFilename.count('/')==root.count()+5) {
+                QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
+                QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
+                currentBundle= dynamic_cast<KoResourceBundle*>
+                        (currentModel->getResourceFromFilename(bundleName.append(".zip")));
+                if (currentBundle) {
+                    currentBundle->removeFile(currentResource->filename());
+                    currentBundle->addFile(fileType,newFilename);
+                }
+            }
+            currentResource->setFilename(newFilename);
+            currentResource->setName(newName);
+            currentModel->removeOneSelected(oldFilename);
+            //currentModel->getResourceAdapter(currentResource)->updateServer(); //TODO A Rajouter si utile
         }
-
-        currentResource->setFilename(newFilename);
-        currentResource->setName(newName);
-        model->getResourceAdapter(currentResource)->updateServer();
     }
+
     return true;
     //TODO Poser question différence entre filename et name
     //TODO Si besoin rajouter un currentResource->setFilename(newName);
@@ -185,9 +231,14 @@ void KoResourceManagerControl::about()
     //TODO Afficher la fenêtre "à propos"
 }
 
-KoResourceTableModel* KoResourceManagerControl::getModel()
+KoResourceTableModel* KoResourceManagerControl::getModel(int type)
 {
-    return model;
+    if (type==KoResourceTableModel::Undefined) {
+        return modelList.at(0);
+    }
+    else {
+        return modelList.at(type);
+    }
 }
 
 void KoResourceManagerControl::launchServer()
@@ -197,12 +248,18 @@ void KoResourceManagerControl::launchServer()
     bundleServer->loadResources(bundleServer->fileNames());
 }
 
+//TODO Voir s'il est intéressant de garder la sélection
 void KoResourceManagerControl::filterResourceTypes(int index)
 {
     QList<QSharedPointer<KoAbstractResourceServerAdapter> > list;
 
-    if(model!=0)
-        delete model;
+    for (int i=0;i<nbModels;i++) {
+        KoResourceTableModel* currentModel=modelList.at(i);
+        if (currentModel!=0 && currentModel->getDataType()!=KoResourceTableModel::Undefined && i!=1) {
+            delete modelList.at(i);
+        }
+    }
+    modelList.clear();
 
     switch (index) {
     case 0:
@@ -214,36 +271,49 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(bundleServer)));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
         break;
     case 1:
         launchServer();
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(bundleServer)));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
         break;
     case 2:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 3:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 4:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 5:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 6:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 7:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
-        model=new KoResourceTableModel(list);
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     }
+}
+
+int KoResourceManagerControl::getNbModels()
+{
+    return nbModels;
 }

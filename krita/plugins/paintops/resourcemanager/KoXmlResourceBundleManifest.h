@@ -142,7 +142,7 @@ public:
     /**
      * @brief install : add "installed" tag in the XML file if necessary
      */
-    void install();
+    void install(QString,QString);
 
     /**
      * @brief uninstall : remove "installed" tag in the XML file if necessary

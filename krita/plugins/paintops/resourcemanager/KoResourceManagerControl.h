@@ -33,27 +33,30 @@ class KoResourceManagerControl
 {
 
 public:
-    KoResourceManagerControl();
+    KoResourceManagerControl(int nb);
     ~KoResourceManagerControl();
 
-    KoResourceTableModel* getModel();
+    KoResourceTableModel* getModel(int type);
     void launchServer();
 
+    int getNbModels();
+
     void about();
-    void createPack();
+    void createPack(int type);
     void filterResourceTypes(int index);
-    void modifySelected(int mode);
-    void refreshCurrentTable();
-    bool rename(QModelIndex index,QString);
-    void setMeta(QModelIndex index,QString,QString);
+    void modifySelected(int mode,int type);
+    bool rename(QModelIndex index,QString,int type);
+    void setMeta(QModelIndex index,QString metaType,QString metaValue, int type);
+    void saveMeta(QModelIndex index,int type);
 
 private:
     KoXmlResourceBundleMeta *meta;
     KoXmlResourceBundleManifest *manifest;
     KoResourceBundleManager *extractor;
     KoResourceServer<KoResourceBundle> *bundleServer;
-    KoResourceTableModel *model;
+    QList<KoResourceTableModel*> modelList;
     QString root;
+    int nbModels;
 
     enum {
         Install=0,

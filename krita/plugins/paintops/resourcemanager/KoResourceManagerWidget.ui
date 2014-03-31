@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>841</width>
-    <height>458</height>
+    <width>945</width>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,73 @@
         </property>
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="4">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="comboBox">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <property name="modelColumn">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bundles</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Brushes</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gradients</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Pt. Presets</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Palettes</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Patterns</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Workspaces</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>13</width>
+              <height>22</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
            <widget class="QWidget" name="widget" native="true">
             <property name="minimumSize">
              <size>
@@ -77,76 +143,6 @@
              </property>
             </widget>
            </widget>
-          </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>13</width>
-              <height>22</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="text">
-             <string>Create Set</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="comboBox">
-            <item>
-             <property name="text">
-              <string>All</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Sets</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Brushes</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Gradients</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Pt. Presets</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Palettes</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Patterns</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Workspaces</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEdit"/>
           </item>
          </layout>
         </item>
@@ -388,24 +384,34 @@
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="topMargin">
+         <number>2</number>
+        </property>
         <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="text">
+           <string>Create Set</string>
           </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item>
            <spacer name="verticalSpacer_3">
             <property name="orientation">
@@ -611,7 +617,7 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
+           <item alignment="Qt::AlignHCenter">
             <widget class="QLineEdit" name="lineEdit_5"/>
            </item>
           </layout>
@@ -626,8 +632,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>324</width>
-              <height>267</height>
+              <width>391</width>
+              <height>258</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
@@ -646,12 +652,15 @@
              <item row="2" column="0">
               <widget class="QLabel" name="label_5">
                <property name="text">
-                <string>Web Site</string>
+                <string>Website</string>
                </property>
               </widget>
              </item>
              <item row="4" column="1">
               <widget class="QDateEdit" name="dateEdit_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
@@ -667,6 +676,9 @@
                  <month>1</month>
                  <day>1</day>
                 </datetime>
+               </property>
+               <property name="calendarPopup">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
@@ -691,6 +703,13 @@
                </property>
               </widget>
              </item>
+             <item row="5" column="0" alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Tags</string>
+               </property>
+              </widget>
+             </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_7">
                <property name="text">
@@ -698,12 +717,8 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_8">
-               <property name="text">
-                <string>Tags</string>
-               </property>
-              </widget>
+             <item row="5" column="1">
+              <widget class="QListWidget" name="listWidget"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_3">
@@ -720,13 +735,13 @@
              </item>
              <item row="3" column="1">
               <widget class="QDateEdit" name="dateEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="buttonSymbols">
                 <enum>QAbstractSpinBox::NoButtons</enum>
                </property>
               </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QListWidget" name="listWidget"/>
              </item>
              <item row="2" column="1">
               <widget class="QLineEdit" name="lineEdit_4">
@@ -806,12 +821,19 @@
            </widget>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_12">
+           <property name="text">
+            <string>Save</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
      </layout>
     </item>
-    <item>
+    <item alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="pushButton_3">
       <property name="maximumSize">
        <size>
@@ -831,7 +853,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>841</width>
+     <width>945</width>
      <height>20</height>
     </rect>
    </property>

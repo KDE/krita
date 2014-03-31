@@ -23,21 +23,86 @@
 #include "KoResourceServerAdapter.h"
 #include "KoResourceModelBase.h"
 #include <QModelIndex>
+#include <QItemDelegate>
+#include <QLineEdit>
+
+#include <iostream>
+using namespace std;
 
 class KoResource;
+
+class KoResourceTableDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+signals:
+    void renameEnded(QString) const;
+
+public:
+    KoResourceTableDelegate(QObject *parent = 0) : QItemDelegate(parent){}
+
+    //TODO Essayer de changer la taille/position de la lineEdit
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const
+    {
+        Q_UNUSED(option);
+        Q_UNUSED(index);
+        QLineEdit *editor=new QLineEdit(parent);
+        return editor;
+    }
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const
+    {
+        QLineEdit *currentEditor = static_cast<QLineEdit*>(editor);
+        currentEditor->setText(index.model()->data(index, Qt::EditRole).toString());
+    }
+
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const
+    {
+        Q_UNUSED(model);
+        Q_UNUSED(index);
+        QLineEdit *currentEditor = static_cast<QLineEdit*>(editor);
+        emit renameEnded(currentEditor->text());
+    }
+};
+
 
 class KoResourceTableModel : public KoResourceModelBase
 {
     Q_OBJECT
+
     public:
-        KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList, QObject * parent = 0 );
+
+        enum {
+            Undefined=-1,
+            Available,
+            Installed,
+            Blacklist
+        };
+
+        KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> >resourceAdapterList, int type=Available, QObject * parent = 0 );
         int rowCount(const QModelIndex &parent = QModelIndex()) const ;
         int columnCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
+        Qt::ItemFlags flags ( const QModelIndex & index ) const;
 
+        KoResource* getResourceFromFilename(const QString& filename);
+        KoResource* getResourceFromIndex(const QModelIndex &index);
         QSharedPointer<KoAbstractResourceServerAdapter> getResourceAdapter(KoResource *resource) const;
+        QSharedPointer<KoAbstractResourceServerAdapter> getResourceAdapter(QString resourceName);
+        QList<QSharedPointer<KoAbstractResourceServerAdapter> > getSelectedAdapters();
+        void clearSelected();
+        QList<QString> getSelectedResource();
+        void refreshResources();
+        void refreshBundles(bool isResourcesEmpty=false);
+        void removeResourceFile(KoResource* resource,const QString &filename);
+        void hideResource(KoResource* resource);
+        void removeOneSelected(const QString& filename);
+        int getDataType();
+
         QModelIndex indexFromResource(KoResource* resource) const;
         QStringList assignedTagsList(KoResource *resource) const;
         bool removeResource(KoResource* resource);
@@ -48,16 +113,6 @@ class KoResourceTableModel : public KoResourceModelBase
         void updateServer();
         void enableResourceFiltering(bool enable);
         void searchTextChanged(const QString& searchString);
-        void clearSelected();
-        QList<QString> getSelectedResource();
-        KoResource* getResourceFromFilename(const QString& filename);
-        KoResource* getResourceFromIndex(const QModelIndex &index);
-
-        //TODO A Suivre
-        void refresh(){
-            reset();
-        }
-
         QStringList tagNamesList() const;
         void setCurrentTag(const QString& currentTag);
         QList<KoResource *> serverResources() const;
@@ -71,6 +126,9 @@ class KoResourceTableModel : public KoResourceModelBase
         void tagBoxEntryRemoved(const QString& tag);
 
     private slots:
+        void resourceSelected(QModelIndex targetIndex);
+        void allSelected(int index);
+
         void tagBoxEntryWasModified();
         void tagBoxEntryWasAdded(const QString& tag);
         void tagBoxEntryWasRemoved(const QString& tag);
@@ -78,14 +136,13 @@ class KoResourceTableModel : public KoResourceModelBase
         void resourceRemoved(KoResource *resource);
         void resourceChanged(KoResource* resource);
 
-        void resourceSelected(QModelIndex targetIndex);
-        void allSelected(int index);
-
-
     private:
         QList<QString> m_resourceSelected;
         QList<QSharedPointer<KoAbstractResourceServerAdapter> > m_resourceAdapterList;
         QList<KoResource*> m_resources;
+        QList<QSharedPointer<KoAbstractResourceServerAdapter> > m_selectedAdapterList;
+        bool newSelection;
+        int m_dataType;
 };
 
 #endif // KORESOURCETABLEMODEL_H

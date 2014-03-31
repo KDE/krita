@@ -53,8 +53,10 @@ private:
 };
 
 class KoResourceManagerControl;
+class KoResourceTaggingManager;
+class QTableView;
 
-class KoResourceManagerWidget : public QMainWindow
+class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
 
@@ -62,28 +64,41 @@ public:
     explicit KoResourceManagerWidget(QWidget *parent = 0);
     ~KoResourceManagerWidget();
 
-    void initializeModel();
     void initializeConnect();
+    void initializeFilterMenu();
+    void initializeModel();
+    void initializeTitle();
+
     void connectTables();
+    QTableView* tableView(int index);
 
 private slots:
     void about();
+
     void createPack();
     void deletePack();
-    void endRenaming();
-    void filterFieldSelected(bool);
-    void filterResourceTypes(int index);
     void installPack();
-    void refreshCurrentTable();
-    void refreshDetails(QModelIndex newIndex);
-    void setMeta();
-    void showHide();
-    void startRenaming();
     void uninstallPack();
 
+    void setMeta();
+
+    void startRenaming();
+    void endRenaming();
+    void rename(QString newName);
+
+    void filterFieldSelected(bool);
+    void filterResourceTypes(int index);
+
+    void showHide();
+    void refreshDetails(QModelIndex newIndex);
+    void saveMeta();
+    void refreshTaggingManager(int index=0);
+    void tableViewChanged(int index);
+
 private:
-    KoResourceManagerControl *control;
     Ui::KoResourceManagerWidget *ui;
+    KoResourceManagerControl *control;
+    KoResourceTaggingManager *tagMan;
     ClickLabel *resourceNameLabel;
     bool firstRefresh;
 

@@ -297,7 +297,7 @@ Page {
     Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.beginOpenFile(file); } } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
-    Component { id: saveAsPage; SaveImagePage { } }
+    Component { id: saveAsPage; SaveImagePage { onFinished: { pageStack.pop(); d.saveFileAs(file, type); } } }
     Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); d.beginCreateNewFile(options); } } }
 
     QtObject {
@@ -360,6 +360,14 @@ Page {
             menuPanel.collapsed = true;
             fileToOpen = "";
             newFileOptions = null;
+        }
+
+        function saveFileAs(file, type) {
+            savingDialog.show("Saving image to " + file);
+
+            sketchView.saveAs( file, type );
+
+            Settings.temporaryFile = false;
         }
 
         function closeWindow() {

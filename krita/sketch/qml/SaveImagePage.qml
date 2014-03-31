@@ -26,6 +26,8 @@ Page {
     property Item view;
     property bool updateCurrentFile: true;
 
+    signal finished(string file, string type);
+
     Rectangle {
         anchors.fill: parent;
         color: Settings.theme.color("pages/save/background");
@@ -176,14 +178,7 @@ Page {
                 onClicked: {
                     if ( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
-                        base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
-
-                        if (base.updateCurrentFile) {
-                            // The current file is updated by the saveAs call above
-                            Settings.temporaryFile = false;
-                        }
-                        pageStack.pop();
-                        savingDialog.show("Saving image to " + filePath);
+                        base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
                     }
                 }
             }

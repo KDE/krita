@@ -19,11 +19,11 @@
 #define KISMULTISENSORSMODEL_H_
 
 #include <QAbstractListModel>
+#include <kis_dynamic_sensor.h>
 
 class KisCubicCurve;
-class KisDynamicSensorList;
-class KisDynamicSensor;
 class KisCurveOption;
+
 
 class KisMultiSensorsModel : public QAbstractListModel
 {
@@ -44,20 +44,20 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex & index) const;
 
-    KisDynamicSensor *getSensor(const QModelIndex& index);
+    KisDynamicSensorSP getSensor(const QModelIndex& index);
 
     void setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve);
 
     /**
      * Create an index that correspond to the sensor given in argument.
      */
-    QModelIndex sensorIndex(KisDynamicSensor *arg1);
+    QModelIndex sensorIndex(KisDynamicSensorSP arg1);
 
     void resetCurveOption();
 
 signals:
 
-    void sensorChanged(KisDynamicSensor *sensor);
+    void sensorChanged(KisDynamicSensorSP sensor);
 
     /**
      * This signal is emitted when the parameters of sensor are changed.

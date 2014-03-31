@@ -53,8 +53,8 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
 
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor *)), SLOT(updateSensorCurveLabels(KisDynamicSensor *)));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor *)), SLOT(updateCurve(KisDynamicSensor *)));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
 
     m_curveOptionWidget->label_ymin->setText(curveOption->minimumLabel());
@@ -137,7 +137,7 @@ void KisCurveOptionWidget::transferCurve()
     emit sigSettingChanged();
 }
 
-void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensor *sensor)
+void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(sensor->minimumLabel());
@@ -145,7 +145,7 @@ void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensor *sensor)
     }
 }
 
-void KisCurveOptionWidget::updateCurve(KisDynamicSensor *sensor)
+void KisCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);

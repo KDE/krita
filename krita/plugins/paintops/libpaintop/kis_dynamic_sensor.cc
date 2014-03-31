@@ -26,8 +26,6 @@
 #include "sensors/kis_dynamic_sensor_fade.h"
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 
-static int sensorcount = 0;
-
 KisDynamicSensor::KisDynamicSensor(const KoID& id)
     : m_id(id)
     , m_customCurve(false)
@@ -51,7 +49,7 @@ void KisDynamicSensor::reset()
 {
 }
 
-KisDynamicSensor *KisDynamicSensor::id2Sensor(const KoID& id)
+KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
 {
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
@@ -100,7 +98,7 @@ KisDynamicSensor *KisDynamicSensor::id2Sensor(const KoID& id)
 }
 
 
-KisDynamicSensor *KisDynamicSensor::createFromXML(const QString& s)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s)
 {
     QDomDocument doc;
     doc.setContent(s);
@@ -108,10 +106,10 @@ KisDynamicSensor *KisDynamicSensor::createFromXML(const QString& s)
     return createFromXML(e);
 }
 
-KisDynamicSensor *KisDynamicSensor::createFromXML(const QDomElement& e)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e)
 {
     QString id = e.attribute("id", "");
-    KisDynamicSensor *sensor = id2Sensor(id);
+    KisDynamicSensorSP sensor = id2Sensor(id);
     if (sensor) {
         sensor->fromXML(e);
     }

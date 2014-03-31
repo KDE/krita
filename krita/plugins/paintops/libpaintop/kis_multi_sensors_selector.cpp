@@ -36,7 +36,7 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
     d->model = new KisMultiSensorsModel(this);
-    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensor *)), SIGNAL(sensorChanged(KisDynamicSensor *)));
+    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP )), SIGNAL(sensorChanged(KisDynamicSensorSP )));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
     connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
     connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
@@ -52,24 +52,24 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
 void KisMultiSensorsSelector::setCurveOption(KisCurveOption *curveOption)
 {
     d->model->setCurveOption(curveOption);
-    KisDynamicSensor *s = curveOption->activeSensors().first();
+    KisDynamicSensorSP s = curveOption->activeSensors().first();
     if (!s) {
         s = curveOption->sensors().first();
     }
     setCurrent(s);
 }
 
-void KisMultiSensorsSelector::setCurrent(KisDynamicSensor *_sensor)
+void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
 {
     d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
-    KisDynamicSensor *sensor = currentHighlighted();
+    KisDynamicSensorSP sensor = currentHighlighted();
     if (!sensor) {
         sensor = d->model->getSensor(d->model->index(0, 0));
     }
     emit(highlightedSensorChanged(sensor));
 }
 
-KisDynamicSensor *KisMultiSensorsSelector::currentHighlighted()
+KisDynamicSensorSP KisMultiSensorsSelector::currentHighlighted()
 {
     return d->model->getSensor(d->form.sensorsList->currentIndex());
 }
@@ -77,7 +77,7 @@ KisDynamicSensor *KisMultiSensorsSelector::currentHighlighted()
 void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;
-    KisDynamicSensor *sensor = d->model->getSensor(index);
+    KisDynamicSensorSP sensor = d->model->getSensor(index);
     if (sensor) {
         d->currentConfigWidget = sensor->createConfigurationWidget(d->form.widgetConfiguration, this);
         if (d->currentConfigWidget) {

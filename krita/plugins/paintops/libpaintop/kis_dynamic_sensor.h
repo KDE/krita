@@ -30,6 +30,9 @@
 #include "kis_serializable_configuration.h"
 #include "kis_curve_label.h"
 #include <kis_cubic_curve.h>
+#include <kis_shared_ptr.h>
+#include <kis_shared.h>
+
 
 class QWidget;
 class KisPaintInformation;
@@ -50,12 +53,16 @@ const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depen
 const KoID TangentialPressureId("tangentialpressure", ki18n("Tangential pressure")); ///< the wheel on an airbrush device
 const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< this a non user-visible sensor that can store a list of other sensors, and multiply their output
 
+class KisDynamicSensor;
+typedef KisSharedPtr<KisDynamicSensor> KisDynamicSensorSP;
+
+
 /**
  * Sensors are used to extract from KisPaintInformation a single
  * double value which can be used to control the parameters of
  * a brush.
  */
-class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration
+class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration, public KisShared
 {
 public:
     enum ParameterSign {
@@ -90,13 +97,13 @@ public:
     /**
      * Creates a sensor from its identifiant.
      */
-    static KisDynamicSensor *id2Sensor(const KoID&);
-    static KisDynamicSensor *id2Sensor(const QString& s) {
+    static KisDynamicSensorSP id2Sensor(const KoID&);
+    static KisDynamicSensorSP id2Sensor(const QString& s) {
         return id2Sensor(KoID(s));
     }
 
-    static KisDynamicSensor *createFromXML(const QString&);
-    static KisDynamicSensor *createFromXML(const QDomElement&);
+    static KisDynamicSensorSP createFromXML(const QString&);
+    static KisDynamicSensorSP createFromXML(const QDomElement&);
 
     /**
      * @return the list of sensors
@@ -141,6 +148,8 @@ protected:
     void setMaximumLabel(const QString &_label);
 
 private:
+
+    Q_DISABLE_COPY(KisDynamicSensor)
 
     const KoID& m_id;
     QString m_minimumLabel;

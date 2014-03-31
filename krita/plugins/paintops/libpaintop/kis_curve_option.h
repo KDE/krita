@@ -65,10 +65,10 @@ public:
     qreal value() const;
 
     void resetAllSensors();
-    KisDynamicSensor *sensor(const QString &sensorId, bool active) const;
-    void replaceSensor(KisDynamicSensor *sensor);
-    QList<KisDynamicSensor*> sensors();
-    QList<KisDynamicSensor*> activeSensors() const;
+    KisDynamicSensorSP sensor(const QString &sensorId, bool active) const;
+    void replaceSensor(KisDynamicSensorSP sensor);
+    QList<KisDynamicSensorSP> sensors();
+    QList<KisDynamicSensorSP> activeSensors() const;
 
     bool isCheckable();
     bool isChecked() const;
@@ -112,7 +112,7 @@ protected:
     bool m_useSameCurve;
     bool m_separateCurveValue;
 
-    QMap<QString, KisDynamicSensor*> m_sensorMap;
+    QMap<QString, KisDynamicSensorSP> m_sensorMap;
     QMap<QString, KisCubicCurve> m_curveCache;
 
 private:

@@ -35,11 +35,11 @@ KisSensorsTest::KisSensorsTest()
 
 void KisSensorsTest::testDrawingAngle()
 {
-    KisDynamicSensor *sensor = KisDynamicSensor::id2Sensor(DrawingAngleId);
+    KisDynamicSensorSP sensor = KisDynamicSensor::id2Sensor(DrawingAngleId);
     testBound(sensor);
 }
 
-void KisSensorsTest::testBound(KisDynamicSensor *sensor)
+void KisSensorsTest::testBound(KisDynamicSensorSP sensor)
 {
     foreach(const KisPaintInformation & pi, paintInformations) {
         double v = sensor->parameter(pi);

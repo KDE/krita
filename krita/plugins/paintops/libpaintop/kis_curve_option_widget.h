@@ -26,7 +26,8 @@
 
 class Ui_WdgCurveOption;
 class KisCurveOption;
-class KisDynamicSensor;
+
+#include <kis_dynamic_sensor.h>
 
 /**
  * XXX; Add a reset button!
@@ -53,8 +54,8 @@ protected:
 private slots:
 
     void transferCurve();
-    void updateSensorCurveLabels(KisDynamicSensor *sensor);
-    void updateCurve(KisDynamicSensor *sensor);
+    void updateSensorCurveLabels(KisDynamicSensorSP sensor);
+    void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
     void disableWidgets(bool disable);
 

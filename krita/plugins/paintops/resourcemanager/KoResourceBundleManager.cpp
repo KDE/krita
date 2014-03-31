@@ -101,26 +101,23 @@ void KoResourceBundleManager::addKFiles(QList<QString> pathList)
     }
 }
 
-void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
+void KoResourceBundleManager::extractKFiles(QMap<QString,QString> pathList)
 {
     QString currentPath;
     QString targetPath;
     QString dirPath;
-    int pathSize;
-    QString name = packName.section('/',packName.count('/')).remove(".zip");
 
     if (isPathSet()) {
         for (int i=0;i<pathList.size();i++) {
             toRoot();
-            currentPath=pathList.at(i);
-            pathSize=currentPath.count('/');
-            targetPath = kritaPath;
-            targetPath.append(currentPath.section('/',0,0));
-            if (!resourcePack->extractFile(currentPath,targetPath.append("/").append(name)
-                        .append("/").append(currentPath.section('/',pathSize)))) {
+            currentPath=pathList.keys().at(i);
+            targetPath=pathList.values().at(i);
+            if (!resourcePack->extractFile(currentPath,targetPath)) {
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
                 mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
+                    cout<<qPrintable(currentPath)<<endl;
+                    cout<<qPrintable(targetPath)<<endl;
                     //TODO Supprimer le dossier créé
                     exit(1);
                 }
@@ -136,6 +133,7 @@ void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, 
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
         if (resourcePack!=NULL && !resourcePack->bad()) {
             addKFiles(manifest->getFileList());
+            manifest->updateFilePaths(kritaPath,packName);
             addManiMeta(manifest,meta);
             resourcePack->finalize();
         }

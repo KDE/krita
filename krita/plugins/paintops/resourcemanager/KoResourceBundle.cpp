@@ -102,7 +102,7 @@ void KoResourceBundle::install()
         //TODO Vérifier que l'export est validé et copié dans les fichiers
         //TODO Sinon, déterminer pourquoi et comment faire
         installed=true;
-        manifest->install(manager->getKritaPath(),this->filename());
+        manifest->install();
         save();
         //TODO Modifier les chemins des fichiers si c'est la première installation
     }
@@ -204,6 +204,7 @@ void KoResourceBundle::rename(QString filename)
             dir.rename(dirPath,dirPath.section('/',0,dirPath.count('/')-1).append("/").append(filename));
         }
     }
+    save();
 }
 
 QString KoResourceBundle::getAuthor()

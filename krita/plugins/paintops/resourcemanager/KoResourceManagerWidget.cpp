@@ -406,6 +406,7 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
     }
 }
 
+//TODO Ajouter une méta donnée pour le site web ou corriger le non remplacement de la nouvelle valeur
 void KoResourceManagerWidget::saveMeta()
 {
     int currentIndex=ui->tabWidget->currentIndex();
@@ -430,4 +431,5 @@ void KoResourceManagerWidget::refreshTaggingManager(int index)
 void KoResourceManagerWidget::tableViewChanged(int index)
 {
     refreshTaggingManager(index);
+    refreshDetails(tableView(ui->tabWidget->currentIndex())->currentIndex());
 }

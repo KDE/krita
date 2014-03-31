@@ -18,6 +18,7 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QMap>
 #include "KoXmlGenerator.h"
 #include "krita_export.h"
 
@@ -96,7 +97,7 @@ public:
      * @brief getFilesToExtract
      * @return the list of the files to be extracted
      */
-    QList<QString> getFilesToExtract();
+    QMap<QString,QString> getFilesToExtract();
 
     /**
      * @brief getDirList
@@ -142,7 +143,7 @@ public:
     /**
      * @brief install : add "installed" tag in the XML file if necessary
      */
-    void install(QString,QString);
+    void install();
 
     /**
      * @brief uninstall : remove "installed" tag in the XML file if necessary
@@ -154,6 +155,8 @@ public:
      * @return true if the "installed" tag is in the XML file, false otherwise
      */
     bool isInstalled();
+
+    void updateFilePaths(QString kritaPath,QString bundleName);
  };
 
 

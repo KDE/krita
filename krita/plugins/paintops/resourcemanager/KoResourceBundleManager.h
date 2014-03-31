@@ -96,7 +96,7 @@ public:
      * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
      * @param pathList the list containing all the paths of the files to be extracted.
      */
-    void extractKFiles(QList<QString> pathList);
+    void extractKFiles(QMap<QString,QString> pathList);
 
     /**
      * @brief createPack : Create a full resource package.

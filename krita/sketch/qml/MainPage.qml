@@ -38,6 +38,14 @@ Page {
         onSavingFinished: {
             loadingDialog.hide("Done!");
             savingDialog.hide("Done!");
+
+            if (d.saveRequested) {
+                d.loadNewFile();
+            }
+
+            if (d.closeRequested) {
+                d.closeWindow();
+            }
         }
         onProgress: {
             if (value === -1 || value === 100) {
@@ -258,18 +266,6 @@ Page {
     Connections {
         target: Settings;
         onTemporaryFileChanged: if (window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
-    }
-
-    onStatusChanged: {
-        if (status == 0) {
-            if (d.saveRequested) {
-                d.loadNewFile();
-            }
-
-            if (d.closeRequested) {
-                d.closeWindow();
-            }
-        }
     }
 
     Connections {

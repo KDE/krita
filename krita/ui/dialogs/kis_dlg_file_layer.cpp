@@ -96,7 +96,7 @@ void KisDlgFileLayer::slotSelectFile()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Select file to use as dynamic file layer."));
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
-    dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
     QString url = dialog.url();
     if (m_basePath.isEmpty()) {
         dlgWidget.txtFileName->setText(url);

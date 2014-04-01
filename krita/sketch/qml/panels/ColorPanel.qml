@@ -81,6 +81,7 @@ Panel {
         id: paletteModel;
     }
 
+    property bool settingAlpha: false
     peekContents: Item {
         anchors.fill: parent;
         Item {
@@ -103,7 +104,8 @@ Panel {
                     else {
                         swatch.fgColor = newColor;
                     }
-                    fullPaletteAlphaSlider.value = newAlpha * 100;
+                    if(!settingAlpha)
+                        fullPaletteAlphaSlider.value = newAlpha * 100;
                 }
             }
         }
@@ -147,7 +149,8 @@ Panel {
                     else {
                         swatch.fgColor = newColor;
                     }
-                    fullPaletteAlphaSlider.value = newAlpha * 100;
+                    if(!settingAlpha)
+                        fullPaletteAlphaSlider.value = newAlpha * 100;
                 }
             }
         }
@@ -162,8 +165,9 @@ Panel {
             }
             value: 100;
             onValueChanged: {
+                settingAlpha = true;
                 colorSelectorActual.setAlpha(value);
-                colorSelectorActualPeek.setAlpha(value);
+                settingAlpha = false;
             }
         }
         ExpandingListView {

@@ -320,7 +320,7 @@ Page {
         }
 
         function beginOpenFile(file) {
-            if(file === sketchView.file)
+            if(!Settings.temporaryFile && file === sketchView.file)
                 return;
 
             if(file !== "") {

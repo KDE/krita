@@ -105,8 +105,8 @@ public:
         , switcher(0)
     {
 #ifdef Q_OS_WIN
-        slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-        docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+//         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+//         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);

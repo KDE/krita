@@ -216,6 +216,7 @@ private slots:
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
+    void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();

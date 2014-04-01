@@ -458,6 +458,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     colorChecks1->setColor(cfg.checkersColor1());
     colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
+    hideScrollbars->setChecked(cfg.hideScrollbars());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
@@ -481,6 +482,7 @@ void DisplaySettingsTab::setDefault()
     colorChecks1->setColor(QColor(220, 220, 220));
     colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
+    hideScrollbars->setChecked(false);
     chkCurveAntialiasing->setChecked(true);
     chkSelectionOutlineAntialiasing->setChecked(false);
     chkChannelsAsColor->setChecked(false);
@@ -823,6 +825,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
+        cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

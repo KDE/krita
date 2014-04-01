@@ -246,8 +246,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KisCanvasController *canvasController = new KisCanvasController(this, actionCollection());
-    canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
     canvasController->setVastScrolling(cfg.vastScrolling());
@@ -369,6 +367,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
+
+    //Check to draw scrollbars after "Canvas only mode" toggle is created.
+    this->showHideScrollbars();
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
@@ -1005,6 +1006,9 @@ void KisView2::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+
+        showHideScrollbars();
+
         // Update the settings for all nodes -- they don't query
         // KisConfig directly because they need the settings during
         // compositing, and they don't connect to the confignotifier
@@ -1500,16 +1504,7 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideScrollbarsFullscreen()) {
-        if (toggled) {
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        }
-        else {
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        }
-    }
+    showHideScrollbars();
 
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
@@ -1583,6 +1578,20 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());
 #endif
+}
+
+void KisView2::showHideScrollbars()
+{
+    KisConfig cfg;
+    bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
+
+    if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    } else {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
 }
 
 #include "kis_view2.moc"

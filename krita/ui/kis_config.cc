@@ -619,6 +619,16 @@ void KisConfig::setCanvasBorderColor(const QColor& color) const
     m_cfg.writeEntry("canvasBorderColor", color);
 }
 
+bool KisConfig::hideScrollbars() const
+{
+    return m_cfg.readEntry("hideScrollbars", false);
+}
+
+void KisConfig::setHideScrollbars(bool value) const
+{
+    m_cfg.writeEntry("hideScrollbars", value);
+}
+
 
 QColor KisConfig::checkersColor1() const
 {

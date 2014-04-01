@@ -45,7 +45,7 @@ Item {
         onClicked: {
             var position = mouse.x - base.height / 2;
             handle.x = position < 0 ? 0 : position > base.width - handle.width ? base.width - handle.width : position;
-            handle.resetHandle();
+            handle.resetHandle(useExponentialValue);
         }
     }
     Rectangle {
@@ -61,7 +61,7 @@ Item {
                 if (base.width === 0)
                     return;
                 var newX = 0;
-                if (resetExponential) {
+                if (settingExp) {
                     var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
                 }
                 else {
@@ -86,7 +86,7 @@ Item {
             return Math.min(100, Math.max(0, v));
         }
         onXChanged: {
-             if (settingExp)
+            if (settingExp || settingSelf)
                  return;
             settingSelf = true;
             if (highPrecision) {

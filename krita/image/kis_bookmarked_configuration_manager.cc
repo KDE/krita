@@ -31,12 +31,15 @@
 #include "kis_debug.h"
 #include "kis_serializable_configuration.h"
 
-const KoID KisBookmarkedConfigurationManager::ConfigDefault = KoID("Default", ki18n("Default"));
-const KoID KisBookmarkedConfigurationManager::ConfigLastUsed = KoID("Last Used", ki18n("Last used"));
+
+const char* KisBookmarkedConfigurationManager::ConfigDefault = "Default";
+const char* KisBookmarkedConfigurationManager::ConfigLastUsed = "Last Used";
 
 struct KisBookmarkedConfigurationManager::Private {
+
     QString configEntryGroup;
     KisSerializableConfigurationFactory* configFactory;
+
 };
 
 KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory* configFactory)
@@ -55,7 +58,7 @@ KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
 KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QString & configname) const
 {
     if (!exists(configname)) {
-        if (configname == ConfigDefault.id())
+        if (configname == KisBookmarkedConfigurationManager::ConfigDefault)
             return d->configFactory->createDefault();
         else
             return 0;
@@ -92,7 +95,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     QList<QString> keys = m.keys();
     QList<QString> configsKey;
     foreach(const QString & key, keys) {
-        if (key != ConfigDefault.id() && key != ConfigLastUsed.id()) {
+        if (key != KisBookmarkedConfigurationManager::ConfigDefault && key != KisBookmarkedConfigurationManager::ConfigLastUsed) {
             configsKey << key;
         }
     }
@@ -101,11 +104,11 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
 
 KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration() const
 {
-    if (exists(KisBookmarkedConfigurationManager::ConfigDefault.id())) {
-        return load(KisBookmarkedConfigurationManager::ConfigDefault.id());
+    if (exists(KisBookmarkedConfigurationManager::ConfigDefault)) {
+        return load(KisBookmarkedConfigurationManager::ConfigDefault);
     }
-    if (exists(KisBookmarkedConfigurationManager::ConfigLastUsed.id())) {
-        return load(KisBookmarkedConfigurationManager::ConfigLastUsed.id());
+    if (exists(KisBookmarkedConfigurationManager::ConfigLastUsed)) {
+        return load(KisBookmarkedConfigurationManager::ConfigLastUsed);
     }
     return 0;
 }

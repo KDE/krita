@@ -1532,14 +1532,15 @@ void KisView2::updateIcons()
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
 
     QStringList whitelist;
-    whitelist << "ToolBox";
+    whitelist << "ToolBox" << "KisLayerBox";
 
     QStringList blacklistedIcons;
-    blacklistedIcons << "editpath" << "artistictext-tool";
+    blacklistedIcons << "editpath" << "artistictext-tool" << "view-choose";
 
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
+            kDebug() << "name " << dock->objectName();
             if (!whitelist.contains(dock->objectName())) {
                 continue;
             }

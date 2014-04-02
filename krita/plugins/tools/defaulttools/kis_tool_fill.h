@@ -51,7 +51,7 @@ public:
     virtual QWidget * createOptionWidget();
 
 public slots:
-    void slotFillModeChanged(int);
+    void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
     void slotSetSampleMerged(bool);
@@ -71,7 +71,7 @@ private:
     bool m_usePattern;
     bool m_fillOnlySelection;
 
-    QComboBox *m_fillMode;
+    QCheckBox *m_useFastMode;
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;

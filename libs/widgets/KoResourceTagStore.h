@@ -55,6 +55,8 @@ public:
     /// Remove the given tag for the given resource.
     void delTag(KoResource* resource, const QString& tag);
 
+    void delTag(const QString& tag);
+
     QStringList tagNamesList() const;
 
     QStringList searchTag(const QString& tag);

@@ -92,6 +92,11 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
     }
 }
 
+void KoResourceTagStore::delTag(const QString& tag)
+{
+    m_tagList.remove(tag);
+}
+
 QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
 {
     QStringList tagsList = lineEditText.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
@@ -207,6 +212,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
         root.appendChild(resourceEl);
     }
 
+
     // Now write empty tags
     foreach(const QString &tag, m_tagList.uniqueKeys())  {
         if (m_tagList[tag] == 0) {
@@ -270,7 +276,11 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
                 for (int j = 0; j < tagNodesList.count() ; j++) {
                     QDomElement tagEl = tagNodesList.at(j).toElement();
-                    addTag(resourceName, tagEl.text());
+                    if (resourceName != "dummy") {
+                        addTag(resourceName, tagEl.text());
+                    } else {
+                        addTag(0, tagEl.text());
+                    }
                 }
             }
         }

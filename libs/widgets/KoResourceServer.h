@@ -451,6 +451,7 @@ public:
 
     void tagCategoryRemoved(const QString& tag)
     {
+        m_tagStore->delTag(tag);
         m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTagRemoval(tag);

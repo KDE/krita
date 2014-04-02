@@ -30,7 +30,6 @@
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <ksplashscreen.h>
 #include <ksycoca.h>
 #include <kstandarddirs.h>
 #include <kcrash.h>
@@ -44,6 +43,7 @@
 #include "ui/kis_aboutdata.h"
 #include "ui/kis_factory2.h"
 #include "ui/kis_doc2.h"
+#include "kis_splash_screen.h"
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -97,7 +97,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
+    QWidget *splash = new KisSplashScreen();
     app.setSplashScreen(splash);
 
     if (!app.start()) {

@@ -52,7 +52,7 @@
 #endif
 
 #include <QFile>
-#include <QSplashScreen>
+#include <QWidget>
 #include <QSysInfo>
 #include <QStringList>
 #include <QDesktopServices>
@@ -79,8 +79,27 @@ public:
         : splashScreen(0)
     {}
     QByteArray nativeMimeType;
-    QSplashScreen *splashScreen;
+    QWidget *splashScreen;
     QList<KoPart *> partList;
+};
+
+class KoApplication::ResetStarting
+{
+public:
+    ResetStarting(QWidget *splash = 0)
+        : m_splash(splash)
+    {
+    }
+
+    ~ResetStarting()  {
+        if (m_splash) {
+            m_splash->hide();
+            delete m_splash;
+            m_splash = 0;
+        }
+    }
+
+    QWidget *m_splash;
 };
 
 KoApplication::KoApplication(const QByteArray &nativeMimeType)
@@ -135,23 +154,6 @@ bool KoApplication::initHack()
     KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
     return true;
 }
-
-class KoApplication::ResetStarting
-{
-public:
-    ResetStarting(QSplashScreen *splash = 0)
-        : m_splash(splash)
-    {
-    }
-
-    ~ResetStarting()  {
-        if (m_splash) {
-            m_splash->hide();
-        }
-    }
-
-    QSplashScreen *m_splash;
-};
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
 typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
@@ -221,7 +223,7 @@ bool KoApplication::start()
 
     if (d->splashScreen) {
         d->splashScreen->show();
-        d->splashScreen->showMessage(".");
+        //d->splashScreen->showMessage(".");
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -569,7 +571,7 @@ KoApplication::~KoApplication()
     delete d;
 }
 
-void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
+void KoApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
 }

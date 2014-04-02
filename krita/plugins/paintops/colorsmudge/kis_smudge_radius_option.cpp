@@ -45,23 +45,21 @@
 KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisRateOption(name, label, checked, category)
 {
-    setValueRange(0,100);
+    setValueRange(0.0,3.0);
 
 }
 
-void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy) const
+void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
 {
-    int sliderValue = computeValue(info);
-    int smudgeRadius = sliderValue;
+    double sliderValue = computeValue(info);
+    int smudgeRadius = (sliderValue * scale);
 
-    KisPaintDeviceSP dev =  painter.device();
+
     KoColor color = painter.paintColor();
     if (smudgeRadius == 1) {
         dev->pixel(posx, posy, &color);
         painter.setPaintColor(color);
     } else {
-        // radius 2 ==> 9 pixels, 3 => 9 pixels, etc
-        static int counts[] = { 0, 1, 9, 25, 45, 69, 109, 145, 193, 249 };
 
         const KoColorSpace* cs = dev->colorSpace();
         int pixelSize = cs->pixelSize();
@@ -74,50 +72,70 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         pixels[0] = new quint8[pixelSize];
 
         int loop_increment = 1;
-        if(smudgeRadius >= 16)
+        if(smudgeRadius >= 8)
         {
             loop_increment = (2*smudgeRadius)/16;
         }
         int i = 0;
+        int k = 0;
+        int j = 0;
         KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
 
-        for (int y = -smudgeRadius; y <= smudgeRadius; y = y + loop_increment) {
-            for (int x = -smudgeRadius; x <= smudgeRadius; x = x + loop_increment) {
-                if (((x * x) + (y * y)) < smudgeRadius * smudgeRadius) {
+        for (int y = 0; y <= smudgeRadius; y = y + loop_increment) {
+            for (int x = 0; x <= smudgeRadius; x = x + loop_increment) {
 
-                    accessor->moveTo(posx + x, posy + y);
-                    memcpy(pixels[1], accessor->oldRawData(), pixelSize);
-                    if(i == 0)
+                for(j = 0;j < 2;j++)
+                {
+                    if(j == 1)
                     {
-                        memcpy(pixels[0],accessor->oldRawData(),pixelSize);
+                        y = y*(-1);
                     }
-                    if (x == 0 && y == 0) {
-                        // Because the sum of the weights must be 255,
-                        // we cheat a bit, and weigh the center pixel differently in order
-                        // to sum to 255 in total
-                        // It's -(counts -1), because we'll add the center one implicitly
-                        // through that calculation
-                        weights[1] = (255 - (i + 1) * (255 /(i+2)));
-                    } else {
-                        weights[1] = 255 /(i+2);
-                    }
-                    i++;
-                    weights[0] = 255 - weights[1];
-                    const quint8** cpixels = const_cast<const quint8**>(pixels);
-                    cs->mixColorsOp()->mixColors(cpixels, weights,2, data);
-                    memcpy(pixels[0],data,pixelSize);
+                    for(k = 0;k < 2;k++)
+                    {
+                        if(k == 1)
+                        {
+                            x = x*(-1);
+                        }
+                        accessor->moveTo(posx + x, posy + y);
+                        memcpy(pixels[1], accessor->oldRawData(), pixelSize);
+                        if(i == 0)
+                        {
+                            memcpy(pixels[0],accessor->oldRawData(),pixelSize);
+                        }
+                        if (x == 0 && y == 0) {
+                            // Because the sum of the weights must be 255,
+                            // we cheat a bit, and weigh the center pixel differently in order
+                            // to sum to 255 in total
+                            // It's -(counts -1), because we'll add the center one implicitly
+                            // through that calculation
+                            weights[1] = (255 - (i + 1) * (255 /(i+2)));
+                        } else {
+                            weights[1] = 255 /(i+2);
+                        }
+
+
+                        i++;
+                        weights[0] = 255 - weights[1];
+                        const quint8** cpixels = const_cast<const quint8**>(pixels);
+                        cs->mixColorsOp()->mixColors(cpixels, weights,2, data);
+                        memcpy(pixels[0],data,pixelSize);
+
+
+                   }
+                   x = x*(-1);
                 }
+                y = y*(-1);
+            }
 
             }
-        }
-        // Weird, I can't do that directly :/
 
-        painter.setPaintColor(KoColor(data, cs));
+        KoColor color = KoColor(pixels[0],cs);
+        painter.setPaintColor(color);
 
         for (i = 0; i < 2; i++){
             delete[] pixels[i];
         }
-        //delete[] pixels;
+       // delete[] pixels;
         delete[] data;
     }
 

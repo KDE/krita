@@ -187,11 +187,6 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal                fpOpacity  = (qreal(oldOpacity) / 255.0) * m_opacityOption.getOpacityf(info);
 
     KoColor color = painter()->paintColor();
-    if(m_smudgeRadiusOption.isChecked())
-    {
-        m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),m_dstDabRect.center().x(),m_dstDabRect.center().y());
-        color = painter()->paintColor();
-    }
 
     if (m_image && m_overlayModeOption.isChecked()) {
         m_image->blockUpdates();
@@ -207,6 +202,12 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     if (m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
         // cut out the area from the canvas under the brush
         // and blit it to the temporary painting device
+        if(m_smudgeRadiusOption.isChecked())
+        {
+            m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),m_dstDabRect.center().x(),m_dstDabRect.center().y(),painter()->device());
+            color = m_smudgePainter->paintColor();
+
+        }
         m_smudgePainter->bitBlt(QPoint(), painter()->device(), srcDabRect);
     }
     else {
@@ -216,10 +217,26 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 
         KoColor color = painter()->paintColor();
 
-        KisCrossDeviceColorPickerInt colorPicker(painter()->device(), color);
-        colorPicker.pickColor(pt.x(), pt.y(), color.data());
 
-        m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
+
+        if(m_smudgeRadiusOption.isChecked())
+        {
+            m_smudgeRadiusOption.apply(*m_smudgePainter,info,m_brush->width(),pt.x(),pt.y(),painter()->device());
+            KoColor color2 =  m_smudgePainter->paintColor();
+            m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(),color2);
+
+        }
+
+        else
+        {
+            KisCrossDeviceColorPickerInt colorPicker(painter()->device(), color);
+             colorPicker.pickColor(pt.x(), pt.y(), color.data());
+
+             m_smudgePainter->fill(0, 0, m_dstDabRect.width(), m_dstDabRect.height(), color);
+
+        }
+
+
     }
 
     // if the user selected the color smudge option
@@ -253,6 +270,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_image->unblockUpdates();
     }
 
+
     // set opacity calculated by the rate option
     m_smudgeRateOption.apply(*painter(), info, 0.0, 1.0, fpOpacity);
 
@@ -266,6 +284,8 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldModeId);
+
+
 
     return spacingInfo;
 }

@@ -599,7 +599,17 @@ void KisSketchView::Private::zoomChanged()
 
 void KisSketchView::activate()
 {
+    if (d->canvasWidget != d->canvas->canvasWidget()) {
+        d->canvasWidget = d->canvas->canvasWidget();
+		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+		if (v) {
+			v->setCanvasWidget(d->canvasWidget);
+			v->setDrawCanvas(true);
+		}
+    }
     d->canvasWidget->setFocus();
+	Q_ASSERT(d->view);
+	Q_ASSERT(d->view->canvasControllerWidget());
     d->view->canvasControllerWidget()->activate();
 }
 

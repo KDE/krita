@@ -225,7 +225,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
 //        kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
 //    }
     QTextStream metastream(&f);
-    metastream << doc.toByteArray();
+    metastream << doc.toString();
 
     f.close();
 

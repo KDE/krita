@@ -102,7 +102,6 @@ public:
 
             KConfigGroup cfg(KGlobal::config(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-
             if (hideSplash) {
                 m_splash->hide();
             }
@@ -112,13 +111,15 @@ public:
                 m_splash->setParent(qApp->activeWindow());
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
-                m_splash->show();
+
                 foreach(QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);
                     if (w && w->isHidden()) {
                         w->setVisible(true);
                     }
                 }
+
+                m_splash->show();
             }
         }
     }
@@ -603,13 +604,6 @@ void KoApplication::setSplashScreen(QWidget *splashScreen)
 QList<KoPart*> KoApplication::partList() const
 {
     return d->partList;
-}
-
-void KoApplication::removeSplash()
-{
-    d->splashScreen->hide();
-    delete d->splashScreen;
-    d->splashScreen = 0;
 }
 
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const

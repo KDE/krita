@@ -46,6 +46,9 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
@@ -65,6 +68,9 @@
 #include <windows.h>
 #include <tchar.h>
 #endif
+
+
+#include <QDesktopWidget>
 
 KoApplication* KoApplication::KoApp = 0;
 
@@ -93,9 +99,27 @@ public:
 
     ~ResetStarting()  {
         if (m_splash) {
-            m_splash->hide();
-            delete m_splash;
-            m_splash = 0;
+
+            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
+
+            if (hideSplash) {
+                m_splash->hide();
+            }
+            else {
+                m_splash->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+                m_splash->setWindowModality(Qt::ApplicationModal);
+                m_splash->setParent(qApp->activeWindow());
+                QRect r(QPoint(), m_splash->size());
+                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->show();
+                foreach(QObject *o, m_splash->children()) {
+                    QWidget *w = qobject_cast<QWidget*>(o);
+                    if (w && w->isHidden()) {
+                        w->setVisible(true);
+                    }
+                }
+            }
         }
     }
 
@@ -223,7 +247,7 @@ bool KoApplication::start()
 
     if (d->splashScreen) {
         d->splashScreen->show();
-        //d->splashScreen->showMessage(".");
+        d->splashScreen->repaint();
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -579,6 +603,13 @@ void KoApplication::setSplashScreen(QWidget *splashScreen)
 QList<KoPart*> KoApplication::partList() const
 {
     return d->partList;
+}
+
+void KoApplication::removeSplash()
+{
+    d->splashScreen->hide();
+    delete d->splashScreen;
+    d->splashScreen = 0;
 }
 
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const

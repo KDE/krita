@@ -88,6 +88,11 @@ public:
     QList<KoPart*> partList() const;
 
     /**
+     * Remove the splash dialog
+     */
+    void removeSplash();
+
+    /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KoFilterManager::Direction direction) const;

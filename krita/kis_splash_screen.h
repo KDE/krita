@@ -21,16 +21,25 @@
 #include <QWidget>
 #include "ui_wdgsplash.h"
 
+class QPixmap;
+
 class KisSplashScreen : public QWidget, public Ui::WdgSplash
 {
     Q_OBJECT
 public:
-    explicit KisSplashScreen(QWidget *parent = 0);
+    explicit KisSplashScreen(const QString &version, const QPixmap &pixmap, QWidget *parent = 0, Qt::WindowFlags f = 0);
 
-signals:
+    void repaint();
 
-public slots:
+    void show();
 
+private slots:
+
+    void toggleShowAtStartup(bool toggle);
+
+private:
+    QString version;
+    QPixmap pixmap;
 };
 
 #endif // KIS_SPLASH_SCREEN_H

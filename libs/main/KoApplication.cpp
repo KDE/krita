@@ -303,6 +303,7 @@ bool KoApplication::start()
 #endif
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
+        d->partList << part;
 
         if (!part) {
             if (!errorMsg.isEmpty())
@@ -415,6 +416,7 @@ bool KoApplication::start()
                 // For now create an empty document
                 QString errorMsg;
                 KoPart *part = entry.createKoPart(&errorMsg);
+                d->partList << part;
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
 
@@ -469,6 +471,7 @@ bool KoApplication::start()
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
+            d->partList << part;
             if (part) {
                 KoDocument *doc = part->document();
                 // show a mainWindow asap
@@ -573,7 +576,6 @@ bool KoApplication::start()
                                   <<"\t100" << endl;
                 }
 
-                d->partList << part;
             }
         }
         if (benchmarkLoading) {

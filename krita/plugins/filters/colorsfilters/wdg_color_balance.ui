@@ -248,7 +248,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>     Cyan</string>
+        <string>Cyan</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -265,7 +265,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_14">
        <property name="text">
-        <string>    Yellow</string>
+        <string>Yellow</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

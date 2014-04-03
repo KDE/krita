@@ -75,7 +75,7 @@ ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
     addUIFactory(new KisOperationUIWidgetFactory<WdgFeatherSelection>("featherselection"));
     addOperation(new FeatherSelectionOperation);
 
-    action = new KisAction(i18n("Smooth"), this);
+    action = new KisAction(i18nc("Verb for a selection modification action", "Smooth"), this);
     action->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     action->setOperationID("smoothselection");

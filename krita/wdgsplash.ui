@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>440</width>
-    <height>579</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -356,7 +356,7 @@
       <number>10</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>2</number>
      </property>
      <item>
       <widget class="QLabel" name="lblLinks">
@@ -395,11 +395,21 @@
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
        <property name="openExternalLinks">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -407,7 +417,7 @@
       <number>4</number>
      </property>
      <property name="topMargin">
-      <number>2</number>
+      <number>4</number>
      </property>
      <property name="rightMargin">
       <number>4</number>
@@ -445,10 +455,6 @@
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>bnClose</tabstop>
-  <tabstop>chkShowAtStartup</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

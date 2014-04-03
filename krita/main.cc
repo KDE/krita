@@ -104,10 +104,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
         return 1;
     }
 
-    // now save some memory.
-    app.setSplashScreen(0);
-    delete splash;
-
     state = app.exec();
 
     return state;

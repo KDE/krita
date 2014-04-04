@@ -809,17 +809,6 @@ KisFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
     return m_d->favoriteResourceManager;
 }
 
-bool KisCanvas2::handlePopupPaletteIsVisible()
-{
-    if (favoriteResourceManager()
-            && favoriteResourceManager()->isPopupPaletteVisible()) {
-
-        favoriteResourceManager()->slotShowPopupPalette();
-        return true;
-    }
-    return false;
-}
-
 void KisCanvas2::setCursor(const QCursor &cursor)
 {
     canvasWidget()->setCursor(cursor);

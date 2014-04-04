@@ -228,7 +228,6 @@ public:
 
     void createFavoriteResourceManager(KisPaintopBox*);
     KisFavoriteResourceManager* favoriteResourceManager();
-    bool handlePopupPaletteIsVisible();
 
 private:
     Q_DISABLE_COPY(KisCanvas2)

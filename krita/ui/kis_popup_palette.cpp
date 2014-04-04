@@ -20,7 +20,7 @@
 
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoResource.h"
 #include <kis_types.h>

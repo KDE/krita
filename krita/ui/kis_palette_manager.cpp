@@ -45,7 +45,7 @@
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
 #include "kis_shared_ptr.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "KoResourceModel.h"
 #include "KoResourceItemView.h"
 #include "kis_resource_server_provider.h"

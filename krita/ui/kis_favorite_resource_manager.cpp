@@ -28,7 +28,7 @@
 #include <KoID.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
 #include "kis_palette_manager.h"
@@ -297,4 +297,4 @@ void KoFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
 
 void KoFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
 
-#include "ko_favorite_resource_manager.moc"
+#include "kis_favorite_resource_manager.moc"

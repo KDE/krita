@@ -32,7 +32,7 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_canvas_resource_provider.h>
-#include <ko_favorite_resource_manager.h>
+#include <kis_favorite_resource_manager.h>
 
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"

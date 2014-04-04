@@ -58,7 +58,7 @@
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include <kis_canvas2.h>
 
 

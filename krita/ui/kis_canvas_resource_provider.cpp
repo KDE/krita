@@ -37,7 +37,7 @@
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 
 #include "kis_config.h"
 #include "kis_view2.h"

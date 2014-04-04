@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KO_FAVORITE_RESOURCE_MANAGER_H
-#define KO_FAVORITE_RESOURCE_MANAGER_H
+#ifndef KIS_FAVORITE_RESOURCE_MANAGER_H
+#define KIS_FAVORITE_RESOURCE_MANAGER_H
 
 #include <QObject>
 #include <kis_types.h>
@@ -136,4 +136,4 @@ private:
 
 };
 
-#endif // KIS_FAVORITE_BRUSH_DATA_H
+#endif 

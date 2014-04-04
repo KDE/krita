@@ -66,7 +66,7 @@
 #endif
 
 //Favorite resource Manager
-#include <ko_favorite_resource_manager.h>
+#include <kis_favorite_resource_manager.h>
 #include <kis_paintop_box.h>
 
 #include "input/kis_input_manager.h"

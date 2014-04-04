@@ -46,7 +46,7 @@
 #include "KoShapeManager.h"
 
 #include "kis_types.h"
-#include <ko_favorite_resource_manager.h>
+#include <kis_favorite_resource_manager.h>
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
 #include "kis_image.h"

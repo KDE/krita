@@ -267,13 +267,14 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
     // Layer data
     if (m_store->open(location)) {
         if (!device->read(m_store->device())) {
+            m_errorMessages << i18n("Could not read pixel data: %1.", location);
             device->disconnect();
             m_store->close();
             return false;
         }
         m_store->close();
     } else {
-        kError() << "No image data: that's an error! " << device << ", " << location;
+        m_errorMessages << i18n("Could not load pixel data: %1.", location);
         return false;
     }
     if (m_store->open(location + ".defaultpixel")) {
@@ -311,6 +312,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
             return true;
         }
     }
+    m_errorMessages << i18n("Could not load profile %1.", location);
     return false;
 }
 
@@ -334,6 +336,7 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfiguration* kfc, con
             return true;
         }
     }
+    m_errorMessages << i18n("Could not filter configuration %1.", location);
     return false;
 }
 
@@ -367,7 +370,6 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
         }
 
     }
-
     return result;
 }
 
@@ -379,6 +381,10 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
     if (m_store->hasFile(pixelSelectionLocation)) {
         KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
         result = loadPaintDevice(pixelSelection, pixelSelectionLocation);
+        if (!result) {
+            m_errorMessages << i18n("Could not load raster selection %1.", location);
+        }
+
     }
 
     // Shape selection
@@ -391,6 +397,10 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         dstSelection->setShapeSelection(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
+        if (!result) {
+            m_errorMessages << i18n("Could not vector selection %1.", location);
+        }
+
     }
     return result;
 }

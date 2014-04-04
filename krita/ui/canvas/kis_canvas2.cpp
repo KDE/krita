@@ -106,7 +106,7 @@ public:
     int openGLFilterMode;
 #endif
     KisToolProxy *toolProxy;
-    KoFavoriteResourceManager *favoriteResourceManager;
+    KisFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
@@ -792,7 +792,7 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
-    m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
+    m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox, canvasWidget());
     connect(this, SIGNAL(favoritePaletteCalled(QPoint)), favoriteResourceManager(), SLOT(slotShowPopupPalette(QPoint)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
@@ -800,7 +800,7 @@ void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
     connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
 }
 
-KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
+KisFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
 {
     return m_d->favoriteResourceManager;
 }

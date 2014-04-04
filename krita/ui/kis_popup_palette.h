@@ -25,7 +25,7 @@
 #include <KoTriangleColorSelector.h>
 
 class KisFavoriteBrushData;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class QWidget;
 class KisTriangleColorSelector;
 class KoColor;
@@ -38,7 +38,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KoFavoriteResourceManager* , QWidget *parent=0);
+    KisPopupPalette(KisFavoriteResourceManager* , QWidget *parent=0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
@@ -86,7 +86,7 @@ private:
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
-    KoFavoriteResourceManager* m_resourceManager;
+    KisFavoriteResourceManager* m_resourceManager;
     KoTriangleColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;

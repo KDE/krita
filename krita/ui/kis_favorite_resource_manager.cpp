@@ -36,11 +36,11 @@
 #include "kis_resource_server_provider.h"
 
 #ifndef _MSC_EXTENSIONS
-const int KoFavoriteResourceManager::MAX_FAVORITE_PRESETS;
-//const int KoFavoriteResourceManager::MAX_RECENT_COLORS;
+const int KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
+//const int KisFavoriteResourceManager::MAX_RECENT_COLORS;
 #endif
 
-KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
+KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
     : m_favoriteBrushManager(0)
     , m_popupPalette(0)
     , m_paintopBox(paintopBox)
@@ -59,7 +59,7 @@ KoFavoriteResourceManager::KoFavoriteResourceManager(KisPaintopBox *paintopBox, 
     rServer->addObserver(this);
 }
 
-KoFavoriteResourceManager::~KoFavoriteResourceManager()
+KisFavoriteResourceManager::~KisFavoriteResourceManager()
 {
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
@@ -67,24 +67,24 @@ KoFavoriteResourceManager::~KoFavoriteResourceManager()
     delete m_colorList;
 }
 
-void KoFavoriteResourceManager::unsetResourceServer()
+void KisFavoriteResourceManager::unsetResourceServer()
 {
     // ...
 }
 
-QStringList KoFavoriteResourceManager::favoritePresetList()
+QStringList KisFavoriteResourceManager::favoritePresetList()
 {
     return m_favoritePresetsList;
 }
 
 //Popup Palette
-void KoFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
+void KisFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
     if (!m_popupPalette) return;
     else m_popupPalette->showPopupPalette(p);
 }
 
-void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
+void KisFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
 {
     if (m_popupPalette)
     {
@@ -92,7 +92,7 @@ void KoFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
     }
 }
 
-QList<QImage> KoFavoriteResourceManager::favoritePresetImages()
+QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -108,7 +108,7 @@ QList<QImage> KoFavoriteResourceManager::favoritePresetImages()
     return images;
 }
 
-void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
+void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
@@ -121,14 +121,14 @@ void KoFavoriteResourceManager::slotChangeActivePaintop(int pos)
     }
 }
 
-bool KoFavoriteResourceManager::isPopupPaletteVisible()
+bool KisFavoriteResourceManager::isPopupPaletteVisible()
 {
     if (!m_popupPalette) return false;
     else return m_popupPalette->isVisible();
 }
 
 //Palette Manager
-void KoFavoriteResourceManager::showPaletteManager()
+void KisFavoriteResourceManager::showPaletteManager()
 {
 
     if (!m_favoriteBrushManager)
@@ -140,7 +140,7 @@ void KoFavoriteResourceManager::showPaletteManager()
 }
 
 //Favorite Brushes
-int KoFavoriteResourceManager::addFavoritePreset(const QString& name)
+int KisFavoriteResourceManager::addFavoritePreset(const QString& name)
 {
 
     int pos = isFavoriteBrushSaved(name);
@@ -165,12 +165,12 @@ int KoFavoriteResourceManager::addFavoritePreset(const QString& name)
     }
 }
 
-int KoFavoriteResourceManager::isFavoriteBrushSaved(const QString& name)
+int KisFavoriteResourceManager::isFavoriteBrushSaved(const QString& name)
 {
     return m_favoritePresetsList.indexOf(name);
 }
 
-void KoFavoriteResourceManager::removeFavoritePreset(int pos)
+void KisFavoriteResourceManager::removeFavoritePreset(int pos)
 {
     if (pos < 0 || pos > m_favoritePresetsList.size())
     {
@@ -183,23 +183,23 @@ void KoFavoriteResourceManager::removeFavoritePreset(int pos)
     }
 }
 
-void KoFavoriteResourceManager::removeFavoritePreset(const QString& name)
+void KisFavoriteResourceManager::removeFavoritePreset(const QString& name)
 {
     int pos = isFavoriteBrushSaved(name);
     if (pos > -1) removeFavoritePreset(pos);
 }
 
-bool KoFavoriteResourceManager::isFavoritePresetsFull()
+bool KisFavoriteResourceManager::isFavoritePresetsFull()
 {
-    return m_favoritePresetsList.size() == KoFavoriteResourceManager::MAX_FAVORITE_PRESETS;
+    return m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 }
 
-int KoFavoriteResourceManager::numFavoritePresets()
+int KisFavoriteResourceManager::numFavoritePresets()
 {
     return m_favoritePresetsList.size();
 }
 
-void KoFavoriteResourceManager::saveFavoritePresets()
+void KisFavoriteResourceManager::saveFavoritePresets()
 {
 
     QString favoriteList;
@@ -216,9 +216,9 @@ void KoFavoriteResourceManager::saveFavoritePresets()
 }
 
 //Recent Colors
-void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
+void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
-    //    qDebug() << "[KoFavoriteResourceManager] selected color: " << recentColorAt(pos)
+    //    qDebug() << "[KisFavoriteResourceManager] selected color: " << recentColorAt(pos)
     //            << "(r)" << recentColorAt(pos).red() << "(g)" << recentColorAt(pos).green()
     //            << "(b)" << recentColorAt(pos).blue();
 
@@ -228,21 +228,21 @@ void KoFavoriteResourceManager::slotUpdateRecentColor(int pos)
         m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
 }
 
-void KoFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
+void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
     addRecentColor(color);
 }
 
-void KoFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
+void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
     QColor color;
     color = c.toQColor();
 
-    //qDebug() << "[KoFavoriteResourceManager] slotChangeFGColorSelector | color " << color ;
+    //qDebug() << "[KisFavoriteResourceManager] slotChangeFGColorSelector | color " << color ;
     emit sigChangeFGColorSelector(color);
 }
 
-void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)
+void KisFavoriteResourceManager::addRecentColorUpdate(int guipos)
 {
     // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
     // to update the colour priority when we select it.
@@ -257,7 +257,7 @@ void KoFavoriteResourceManager::addRecentColorUpdate(int guipos)
     printColors();
 }
 
-void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
+void KisFavoriteResourceManager::addRecentColor(const KoColor& color)
 {
     m_colorList->append(color);
     int pos = m_colorList->findPos(color);
@@ -270,7 +270,7 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
     printColors();
 }
 
-void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
+void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
 {
     if(m_blockUpdates) {
         return;
@@ -278,23 +278,23 @@ void KoFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
     removeFavoritePreset(resource->name());
 }
 
-void KoFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
+void KisFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
 {
 }
 
-void KoFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
+void KisFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
 {
 }
 
-void KoFavoriteResourceManager::setBlockUpdates(bool block)
+void KisFavoriteResourceManager::setBlockUpdates(bool block)
 {
     m_blockUpdates = block;
 }
 
-void KoFavoriteResourceManager::syncTaggedResourceView(){}
+void KisFavoriteResourceManager::syncTaggedResourceView(){}
 
-void KoFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
+void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
 
-void KoFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
+void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
 
 #include "kis_favorite_resource_manager.moc"

@@ -77,7 +77,7 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager (manager)
     , m_triangleColorSelector (0)

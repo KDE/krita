@@ -37,14 +37,14 @@ class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
 
-class KoFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
     Q_OBJECT
 
 public:
 
-    KoFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
-    ~KoFavoriteResourceManager();
+    KisFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
+    ~KisFavoriteResourceManager();
 
     virtual void unsetResourceServer();
 

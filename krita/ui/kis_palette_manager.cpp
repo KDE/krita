@@ -54,7 +54,7 @@
 #include "kis_preset_chooser.h"
 #include <kconfiggroup.h>
 
-KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
+KisPaletteManager::KisPaletteManager(KisFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
     : KDialog(paintOpBox)
     , m_saveButton(0)
     , m_removeButton(0)

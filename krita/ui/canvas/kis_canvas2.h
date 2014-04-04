@@ -40,7 +40,7 @@ class KoColorProfile;
 class KisCanvasDecoration;
 class KisView2;
 class KisPaintopBox;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
 
@@ -229,7 +229,7 @@ public:
     void resetCanvas(bool useOpenGL);
 
     void createFavoriteResourceManager(KisPaintopBox*);
-    KoFavoriteResourceManager* favoriteResourceManager();
+    KisFavoriteResourceManager* favoriteResourceManager();
     bool handlePopupPaletteIsVisible();
 
 private:

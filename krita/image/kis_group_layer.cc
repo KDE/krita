@@ -187,16 +187,22 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
     const KisLayer *child = onlyMeaningfulChild();
 
     if (child &&
-            child->channelFlags().isEmpty() &&
-            child->projection() &&
-            child->visible() &&
-            (child->compositeOpId() == COMPOSITE_OVER ||
-             child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-             child->compositeOpId() == COMPOSITE_COPY) &&
-            child->opacity() == OPACITY_OPAQUE_U8 &&
-            *child->projection()->colorSpace() == *colorSpace()) {
+        child->channelFlags().isEmpty() &&
+        child->projection() &&
+        child->visible() &&
+        (child->compositeOpId() == COMPOSITE_OVER ||
+         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+         child->compositeOpId() == COMPOSITE_COPY) &&
+        child->opacity() == OPACITY_OPAQUE_U8 &&
+        *child->projection()->colorSpace() == *colorSpace()) {
 
-        return child->projection();
+        quint8 defaultOpacity =
+            m_d->paintDevice->colorSpace()->opacityU8(
+                m_d->paintDevice->defaultPixel());
+
+        if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
+            return child->projection();
+        }
     }
 
     return 0;

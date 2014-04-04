@@ -430,6 +430,17 @@ public:
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
 
+    /**
+     * Sets the default color of the root layer projection. All the layers
+     * will be merged on top of this very color
+     */
+    void setDefaultProjectionColor(KoColor color);
+
+    /**
+     * \see setDefaultProjectionColor()
+     */
+    KoColor defaultProjectionColor() const;
+
     void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**

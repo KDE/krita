@@ -98,6 +98,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
 
     m_d->nodeFileNames = visitor.nodeFileNames();
 
+    saveBackgroundColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc,imageElement);
     return imageElement;
@@ -176,6 +177,15 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
 QStringList KisKraSaver::errorMessages() const
 {
     return m_d->errorMessages;
+}
+
+void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    QDomElement e = doc.createElement("ProjectionBackgroundColor");
+    KoColor color = image->defaultProjectionColor();
+    QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
+    e.setAttribute("ColorData", QString(colorData.toBase64()));
+    element.appendChild(e);
 }
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)

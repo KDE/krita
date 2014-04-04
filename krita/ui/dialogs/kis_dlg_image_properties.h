@@ -25,6 +25,8 @@
 
 class KoID;
 class KoColorSpace;
+class KoColor;
+class KoColorPopupAction;
 
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {
@@ -52,10 +54,12 @@ public:
 private slots:
 
     void setAnnotation(const QString& type);
+    void setCurrentColor();
 private:
 
     WdgImageProperties * m_page;
     KisImageWSP m_image;
+    KoColorPopupAction *m_defaultColorAction;
 };
 
 

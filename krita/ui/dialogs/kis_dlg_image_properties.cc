@@ -34,12 +34,16 @@
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpace.h>
 #include "KoColorProfile.h"
+#include "KoColor.h"
+#include "KoColorPopupAction.h"
+#include "KoIcon.h"
 #include "KoID.h"
 #include "kis_types.h"
 #include "kis_image.h"
 #include "kis_annotation.h"
 #include "kis_config.h"
 #include "kis_factory2.h"
+#include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
@@ -63,6 +67,18 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
     m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
+
+    m_defaultColorAction = new KoColorPopupAction(this);
+    m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
+    m_defaultColorAction->setIcon(koIcon("format-stroke-color"));
+    m_defaultColorAction->setToolTip(i18n("Change the background color of the image"));
+    m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
+
+    KisSignalCompressor *compressor = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
+    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), compressor, SLOT(start()));
+    connect(compressor, SIGNAL(timeout()), this, SLOT(setCurrentColor()));
+
+    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), this, SLOT(setCurrentColor()));
 
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
 
@@ -94,6 +110,13 @@ KisDlgImageProperties::~KisDlgImageProperties()
 const KoColorSpace * KisDlgImageProperties::colorSpace()
 {
     return m_page->colorSpaceSelector->currentColorSpace();
+}
+
+void KisDlgImageProperties::setCurrentColor()
+{
+    qDebug() << "Update current color";
+    m_image->setDefaultProjectionColor(m_defaultColorAction->currentKoColor());
+    m_image->refreshGraph();
 }
 
 void KisDlgImageProperties::setAnnotation(const QString &type)

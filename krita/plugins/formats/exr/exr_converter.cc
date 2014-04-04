@@ -36,6 +36,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColor.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -556,6 +557,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     if (!m_d->image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
+
+    m_d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
 
     // Create group layers
     for (int i = 0; i < groups.size(); ++i) {

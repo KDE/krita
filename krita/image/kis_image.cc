@@ -1266,18 +1266,48 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
+void KisImage::setDefaultProjectionColor(KoColor color)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
+
+    KisPaintDeviceSP original = m_d->rootLayer->original();
+    color.convertTo(original->colorSpace());
+    original->setDefaultPixel(color.data());
+}
+
+KoColor KisImage::defaultProjectionColor() const
+{
+    KIS_ASSERT_RECOVER(m_d->rootLayer) {
+        return KoColor(Qt::transparent, m_d->colorSpace);
+    }
+
+    KisPaintDeviceSP original = m_d->rootLayer->original();
+    KoColor color(original->defaultPixel(), original->colorSpace());
+    return color;
+}
+
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     stopIsolatedMode();
 
+    KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
+
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);
         m_d->rootLayer->disconnect();
+
+        KisPaintDeviceSP original = m_d->rootLayer->original();
+        defaultProjectionColor.setColor(original->defaultPixel(), original->colorSpace());
     }
 
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);
+
+    KisPaintDeviceSP newOriginal = m_d->rootLayer->original();
+    defaultProjectionColor.convertTo(newOriginal->colorSpace());
+    newOriginal->setDefaultPixel(defaultProjectionColor.data());
+
     setRoot(m_d->rootLayer.data());
 }
 

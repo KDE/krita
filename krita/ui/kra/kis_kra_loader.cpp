@@ -255,6 +255,17 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         KoXmlNode child;
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
+            if(e.tagName() == "ProjectionBackgroundColor") {
+                if (e.hasAttribute("ColorData")) {
+                    QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
+                    KoColor color((const quint8*)colorData.data(), image->colorSpace());
+                    image->setDefaultProjectionColor(color);
+                }
+            }
+        }
+
+        for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+            KoXmlElement e = child.toElement();
             if(e.tagName() == "compositions") {
                 loadCompositions(e, image);
             }

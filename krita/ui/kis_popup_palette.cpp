@@ -160,22 +160,21 @@ void KisPopupPalette::slotEnableChangeFGColor()
 
 void KisPopupPalette::showPopupPalette (const QPoint &p)
 {
-    if (!isVisible())
-    {
+    if (!isVisible() && parentWidget())  {
         QSize parentSize(parentWidget()->size());
         QPoint pointPalette(p.x() - width()/2, p.y() - height()/2);
 
         //setting offset point in case the widget is shown outside of canvas region
         int offsetX = 0, offsetY=0;
 
-        if ((offsetX = pointPalette.x() + width() - parentSize.width()) > 0 || (offsetX = pointPalette.x()) < 0)
-        {
+        if ((offsetX = pointPalette.x() + width() - parentSize.width()) > 0 || (offsetX = pointPalette.x()) < 0) {
             pointPalette.setX(pointPalette.x() - offsetX);
         }
-        if ((offsetY = pointPalette.y() + height() - parentSize.height()) > 0 || (offsetY = pointPalette.y()) < 0)
-        {
+
+        if ((offsetY = pointPalette.y() + height() - parentSize.height()) > 0 || (offsetY = pointPalette.y()) < 0) {
             pointPalette.setY(pointPalette.y() - offsetY);
         }
+
         move(pointPalette);
 
     }
@@ -185,17 +184,14 @@ void KisPopupPalette::showPopupPalette (const QPoint &p)
 
 void KisPopupPalette::showPopupPalette(bool show)
 {
-    if (show)
-    {
+    if (show){
         emit sigEnableChangeFGColor(!show);
         QApplication::setOverrideCursor(Qt::ArrowCursor);
     }
-    else
-    {
+    else {
         emit sigTriggerTimer();
         QApplication::restoreOverrideCursor();
     }
-
     setVisible(show);
 }
 

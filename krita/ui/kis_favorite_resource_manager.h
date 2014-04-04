@@ -43,7 +43,7 @@ class KisFavoriteResourceManager : public QObject, public KoResourceServerObserv
 
 public:
 
-    KisFavoriteResourceManager(KisPaintopBox*, QWidget* = 0);
+    KisFavoriteResourceManager(KisPaintopBox *paintopBox);
     ~KisFavoriteResourceManager();
 
     virtual void unsetResourceServer();

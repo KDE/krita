@@ -51,8 +51,7 @@ class KisPaintOpSettingsWidget;
 class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
-
-
+class KisFavoriteResourceManager;
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -150,6 +149,7 @@ private:
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    KisFavoriteResourceManager*          m_favoriteResourceManager;
 
 //    KisPaintOpPresetSP  m_activePreset;
 //    KisPaintOpPresetSP  m_previousPreset;
@@ -192,6 +192,8 @@ private:
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
+
+
 };
 
 #endif //KIS_PAINTOP_BOX_H_

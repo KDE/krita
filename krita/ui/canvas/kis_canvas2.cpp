@@ -386,6 +386,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 #endif
         createQPainterCanvas();
     }
+    if (m_d->favoriteResourceManager) {
+        m_d->favoriteResourceManager->resetPopupPaletteParent(m_d->canvasWidget->widget());
+    }
+
 }
 
 void KisCanvas2::initializeImage()
@@ -790,11 +794,14 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
-    m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox, canvasWidget());
+    m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox);
+
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
+
+    m_d->favoriteResourceManager->resetPopupPaletteParent(m_d->canvasWidget->widget());
 }
 
 KisFavoriteResourceManager* KisCanvas2::favoriteResourceManager()

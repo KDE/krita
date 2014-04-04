@@ -40,7 +40,7 @@ const int KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 //const int KisFavoriteResourceManager::MAX_RECENT_COLORS;
 #endif
 
-KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
+KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_favoriteBrushManager(0)
     , m_popupPalette(0)
     , m_paintopBox(paintopBox)
@@ -50,9 +50,9 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
     m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
+    m_popupPalette = new KisPopupPalette(this);
+    //m_popupPalette->showPopupPalette(false);
 
-    m_popupPalette = new KisPopupPalette(this, popupParent);
-    m_popupPalette->showPopupPalette(false);
     m_colorList = new KisColorDataList();
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -80,14 +80,17 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
 //Popup Palette
 void KisFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
 {
-    if (!m_popupPalette) return;
-    else m_popupPalette->showPopupPalette(p);
+    if (!m_popupPalette) {
+        return;
+    }
+    else {
+        m_popupPalette->showPopupPalette(p);
+    }
 }
 
 void KisFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
 {
-    if (m_popupPalette)
-    {
+    if (m_popupPalette) {
         m_popupPalette->setParent(w);
     }
 }

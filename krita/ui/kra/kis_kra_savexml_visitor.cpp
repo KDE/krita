@@ -143,6 +143,11 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     m_count++;
     bool success = visitor.visitAllInverse(layer);
 
+    m_errorMessages.append(visitor.errorMessages());
+    if (!m_errorMessages.isEmpty()) {
+        return false;
+    }
+
     QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
     while (i.hasNext()) {
         i.next();
@@ -292,7 +297,11 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
         visitor.setSelectedNodes(m_selectedNodes);
-        bool success =  visitor.visitAllInverse(node);
+        bool success = visitor.visitAllInverse(node);
+        m_errorMessages.append(visitor.errorMessages());
+        if (!m_errorMessages.isEmpty()) {
+            return false;
+        }
 
         QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
         while (i.hasNext()) {

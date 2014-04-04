@@ -26,6 +26,7 @@ class KisExrTest : public QObject
     Q_OBJECT
 private slots:
     void testFiles();
+    void testRoundTrip();
 };
 
 #endif

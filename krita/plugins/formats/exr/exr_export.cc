@@ -103,7 +103,7 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     KUrl url;
     url.setPath(filename);
 
-    exrConverter kpc(input);
+    exrConverter kpc(input, !m_chain->manager()->getBatchMode());
 
     if (widget.flatten->isChecked()) {
         image->refreshGraph();

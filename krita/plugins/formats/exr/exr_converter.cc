@@ -28,9 +28,9 @@
 #include <ImfOutputFile.h>
 
 #include <kapplication.h>
+#include <kmessagebox.h>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
@@ -51,16 +51,29 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_value.h>
 
-exrConverter::exrConverter(KisDoc2 *doc)
-{
-    m_doc = doc;
-    m_job = 0;
-    m_stop = false;
-}
 
-exrConverter::~exrConverter()
-{
-}
+template<typename _T_>
+struct Rgba {
+    _T_ r;
+    _T_ g;
+    _T_ b;
+    _T_ a;
+};
+
+struct ExrGroupLayerInfo;
+
+struct ExrLayerInfoBase {
+    ExrLayerInfoBase() : colorSpace(0), parent(0) {
+    }
+    const KoColorSpace* colorSpace;
+    QString name;
+    const ExrGroupLayerInfo* parent;
+};
+
+struct ExrGroupLayerInfo : public ExrLayerInfoBase {
+    ExrGroupLayerInfo() : groupLayer(0) {}
+    KisGroupLayerSP groupLayer;
+};
 
 enum ImageType {
     IT_UNKNOWN,
@@ -68,6 +81,60 @@ enum ImageType {
     IT_FLOAT32,
     IT_UNSUPPORTED
 };
+
+struct ExrPaintLayerInfo : public ExrLayerInfoBase {
+    ExrPaintLayerInfo() : imageType(IT_UNKNOWN) {
+    }
+    ImageType imageType;
+    QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
+    struct Remap {
+        Remap(const QString& _original, const QString& _current) : original(_original), current(_current) {
+        }
+        QString original;
+        QString current;
+    };
+    QList< Remap > remappedChannels; ///< this is used to store in the metadata the mapping between exr channel name, and channels used in Krita
+    void updateImageType(ImageType channelType);
+};
+
+void ExrPaintLayerInfo::updateImageType(ImageType channelType)
+{
+    if (imageType == IT_UNKNOWN) {
+        imageType = channelType;
+    } else if (imageType != channelType) {
+        imageType = IT_UNSUPPORTED;
+    }
+}
+
+
+struct exrConverter::Private {
+    Private() : doc(0), warnedAboutZeroedAlpha(false),
+                showNotifications(false) {}
+
+    KisImageSP image;
+    KisDoc2 *doc;
+
+    bool warnedAboutZeroedAlpha;
+    bool showNotifications;
+
+
+    template <typename T>
+    void unmultiplyAlpha(Rgba<T> *pixel);
+
+    template<typename _T_>
+    void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype);
+};
+
+exrConverter::exrConverter(KisDoc2 *doc, bool showNotifications)
+    : m_d(new Private)
+{
+    m_d->doc = doc;
+    m_d->showNotifications = showNotifications;
+}
+
+exrConverter::~exrConverter()
+{
+}
 
 ImageType imfTypeToKisType(Imf::PixelType type)
 {
@@ -102,53 +169,6 @@ const KoColorSpace* kisTypeToColorSpace(QString model, ImageType imageType)
 }
 
 template<typename _T_>
-struct Rgba {
-    _T_ r;
-    _T_ g;
-    _T_ b;
-    _T_ a;
-};
-
-struct ExrGroupLayerInfo;
-
-struct ExrLayerInfoBase {
-    ExrLayerInfoBase() : colorSpace(0), parent(0) {
-    }
-    const KoColorSpace* colorSpace;
-    QString name;
-    const ExrGroupLayerInfo* parent;
-};
-
-struct ExrGroupLayerInfo : public ExrLayerInfoBase {
-    ExrGroupLayerInfo() : groupLayer(0) {}
-    KisGroupLayerSP groupLayer;
-};
-
-struct ExrPaintLayerInfo : public ExrLayerInfoBase {
-    ExrPaintLayerInfo() : imageType(IT_UNKNOWN) {
-    }
-    ImageType imageType;
-    QMap< QString, QString> channelMap; ///< first is either R, G, B or A second is the EXR channel name
-    struct Remap {
-        Remap(const QString& _original, const QString& _current) : original(_original), current(_current) {
-        }
-        QString original;
-        QString current;
-    };
-    QList< Remap > remappedChannels; ///< this is used to store in the metadata the mapping between exr channel name, and channels used in Krita
-    void updateImageType(ImageType channelType);
-};
-
-void ExrPaintLayerInfo::updateImageType(ImageType channelType)
-{
-    if (imageType == IT_UNKNOWN) {
-        imageType = channelType;
-    } else if (imageType != channelType) {
-        imageType = IT_UNSUPPORTED;
-    }
-}
-
-template<typename _T_>
 void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     QVector<_T_> pixels(width*height);
@@ -170,8 +190,6 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
         do {
 
-            // XXX: For now unmultiply the alpha, though compositing will be faster if we
-            // keep it premultiplied.
             _T_ unmultipliedRed = *rgba;
 
             _T_* dst = reinterpret_cast<_T_*>(it->rawData());
@@ -185,8 +203,106 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 
 }
 
+template <typename T>
+static inline T alphaNoiseThreshold()
+{
+    return static_cast<T>(0.01); // 1%
+}
+
+template <typename T>
+void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
+{
+    if (pixel->a < HALF_EPSILON &&
+        (pixel->r > HALF_EPSILON ||
+         pixel->g > HALF_EPSILON ||
+         pixel->b > HALF_EPSILON)) {
+
+        T newAlpha = 0.0;
+
+        T r;
+        T g;
+        T b;
+
+        do {
+            newAlpha += HALF_EPSILON;
+
+            r = pixel->r / newAlpha;
+            g = pixel->g / newAlpha;
+            b = pixel->b / newAlpha;
+
+        } while (newAlpha < alphaNoiseThreshold<T>() &&
+                 (r * newAlpha != pixel->r ||
+                  g * newAlpha != pixel->g ||
+                  b * newAlpha != pixel->b));
+
+        pixel->r = r;
+        pixel->g = g;
+        pixel->b = b;
+        pixel->a = newAlpha;
+
+    } else if (pixel->a > HALF_EPSILON) {
+
+        if (!this->warnedAboutZeroedAlpha &&
+            pixel->a < alphaNoiseThreshold<T>()) {
+
+            QString msg =
+                i18nc("@info",
+                      "The image contains pixels with small Alpha value."
+                      "<nl/><nl/>"
+                      "Due to technical reasons, when saving this "
+                      "image back to EXR, the alpha channel of these pixels will be "
+                      "reset to zero (the color channels will stay untouched)."
+                      "<nl/><nl/>"
+                      "This will hardly make any visual difference just keep it in mind."
+                      "<nl/><nl/>"
+                      "<note>Range from <numid>%1</numid> to <numid>%2</numid></note>", HALF_EPSILON, alphaNoiseThreshold<T>());
+
+            if (this->showNotifications) {
+                KMessageBox::information(0, msg, i18nc("@title:window", "EXR image will be modified"), "dontNotifyEXRChangedAgain");
+            } else {
+                qWarning() << "WARNING:" << msg;
+            }
+
+            this->warnedAboutZeroedAlpha = true;
+        }
+
+        pixel->r /= pixel->a;
+        pixel->g /= pixel->a;
+        pixel->b /= pixel->a;
+    }
+}
+
+template <typename T, typename Pixel, int size, int alphaPos>
+void multiplyAlpha(Pixel *pixel)
+{
+    bool hasNonZeroColorData = false;
+
+    T alpha = pixel->data[alphaPos];
+
+
+    if (alpha > HALF_EPSILON) {
+        for (int i = 0; i < size; ++i) {
+            if (i != alphaPos) {
+                pixel->data[i] *= alpha;
+
+                if (pixel->data[i] > HALF_EPSILON) {
+                    hasNonZeroColorData = true;
+                }
+            }
+        }
+
+        if (alpha < alphaNoiseThreshold<T>() &&
+            hasNonZeroColorData) {
+
+            alpha = 0.0;
+        }
+
+        pixel->data[alphaPos] = alpha;
+    }
+}
+
 template<typename _T_>
-void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
+void exrConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype)
 {
     typedef Rgba<_T_> Rgba;
 
@@ -222,22 +338,15 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
         do {
 
-            // XXX: For now unmultiply the alpha, though compositing will be faster if we
-            // keep it premultiplied.
-            _T_ unmultipliedRed = rgba->r;
-            _T_ unmultipliedGreen = rgba->g;
-            _T_ unmultipliedBlue = rgba->b;
-
-            if (hasAlpha && rgba -> a >= HALF_EPSILON) {
-                unmultipliedRed /= rgba->a;
-                unmultipliedGreen /= rgba->a;
-                unmultipliedBlue /= rgba->a;
+            if (hasAlpha) {
+                unmultiplyAlpha(rgba);
             }
+
             typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
 
-            dst->red = unmultipliedRed;
-            dst->green = unmultipliedGreen;
-            dst->blue = unmultipliedBlue;
+            dst->red = rgba->r;
+            dst->green = rgba->g;
+            dst->blue = rgba->b;
             if (hasAlpha) {
                 dst->alpha = rgba->a;
             } else {
@@ -442,9 +551,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
 
     // Create the image
-    m_image = new KisImage(m_doc->createUndoStore(), width, height, colorSpace, "");
+    m_d->image = new KisImage(m_d->doc->createUndoStore(), width, height, colorSpace, "");
 
-    if (!m_image) {
+    if (!m_d->image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -452,9 +561,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     for (int i = 0; i < groups.size(); ++i) {
         ExrGroupLayerInfo& info = groups[i];
         Q_ASSERT(info.parent == 0 || info.parent->groupLayer);
-        KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
-        info.groupLayer = new KisGroupLayer(m_image, info.name, OPACITY_OPAQUE_U8);
-        m_image->addNode(info.groupLayer, groupLayerParent);
+        KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_d->image->rootLayer();
+        info.groupLayer = new KisGroupLayer(m_d->image, info.name, OPACITY_OPAQUE_U8);
+        m_d->image->addNode(info.groupLayer, groupLayerParent);
     }
 
     // Load the layers
@@ -462,7 +571,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         ExrPaintLayerInfo& info = informationObjects[i];
         if (info.colorSpace) {
             dbgFile << "Decoding " << info.name << " with " << info.channelMap.size() << " channels, and color space " << info.colorSpace->id();
-            KisPaintLayerSP layer = new KisPaintLayer(m_image, info.name, OPACITY_OPAQUE_U8, info.colorSpace);
+            KisPaintLayerSP layer = new KisPaintLayer(m_d->image, info.name, OPACITY_OPAQUE_U8, info.colorSpace);
             KisTransaction("", layer->paintDevice());
 
             layer->setCompositeOp(COMPOSITE_OVER);
@@ -491,10 +600,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 // Decode the data
                 switch (imageType) {
                 case IT_FLOAT16:
-                    decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
+                    m_d->decodeData4<half>(file, info, layer, width, dx, dy, height, Imf::HALF);
                     break;
                 case IT_FLOAT32:
-                    decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
+                    m_d->decodeData4<float>(file, info, layer, width, dx, dy, height, Imf::FLOAT);
                     break;
                 case IT_UNKNOWN:
                 case IT_UNSUPPORTED:
@@ -516,8 +625,8 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                 layer->metaData()->addEntry(KisMetaData::Entry(KisMetaData::SchemaRegistry::instance()->create("http://krita.org/exrchannels/1.0/" , "exrchannels"), "channelsmap", values));
             }
             // Add the layer
-            KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
-            m_image->addNode(layer, groupLayerParent);
+            KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_d->image->rootLayer();
+            m_d->image->addNode(layer, groupLayerParent);
         } else {
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
         }
@@ -551,7 +660,7 @@ KisImageBuilder_Result exrConverter::buildImage(const KUrl& uri)
 
 KisImageWSP exrConverter::image()
 {
-    return m_image;
+    return m_d->image;
 }
 
 struct ExrPaintLayerSaveInfo {
@@ -613,19 +722,14 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
     do {
         const _T_* dst = reinterpret_cast < const _T_* >(it->oldRawData());
 
-        if (alphaPos == -1) {
-            for (int i = 0; i < size; ++i) {
-                rgba->data[i] = dst[i];
-            }
-        } else {
-            _T_ alpha = dst[alphaPos];
-            for (int i = 0; i < size; ++i) {
-                if (i != alphaPos) {
-                    rgba->data[i] = dst[i] * alpha;
-                }
-            }
-            rgba->data[alphaPos] = alpha;
+        for (int i = 0; i < size; ++i) {
+            rgba->data[i] = dst[i];
         }
+
+        if (alphaPos != -1) {
+            multiplyAlpha<_T_, ExrPixel, size, alphaPos>(rgba);
+        }
+
         ++rgba;
     } while (it->nextPixel());
 }
@@ -861,7 +965,7 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
 void exrConverter::cancel()
 {
-    m_stop = true;
+    qWarning() << "WARNING: Cancelling of an EXR loading is not supported!";
 }
 
 #include "exr_converter.moc"

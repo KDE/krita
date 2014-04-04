@@ -157,6 +157,11 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
     return true;
 }
 
+QStringList KisKraSaveVisitor::errorMessages() const
+{
+    return m_errorMessages;
+}
+
 
 bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)

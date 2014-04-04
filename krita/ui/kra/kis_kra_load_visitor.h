@@ -21,6 +21,7 @@
 #define KIS_KRA_LOAD_VISITOR_H_
 
 #include <QRect>
+#include <QStringList>
 
 // kritaimage
 #include "kis_types.h"
@@ -56,6 +57,8 @@ public:
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
 
+    QStringList errorMessages() const;
+
 private:
 
     bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
@@ -74,6 +77,7 @@ private:
     QMap<KisNode *, QString> m_layerFilenames;
     QString m_name;
     int m_syntaxVersion;
+    QStringList m_errorMessages;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

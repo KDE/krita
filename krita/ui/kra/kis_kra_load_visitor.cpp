@@ -257,6 +257,11 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
     return true;
 }
 
+QStringList KisKraLoadVisitor::errorMessages() const
+{
+    return m_errorMessages;
+}
+
 bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& location)
 {
     // Layer data

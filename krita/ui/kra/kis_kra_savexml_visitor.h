@@ -21,6 +21,7 @@
 
 #include <QDomDocument>
 #include <QDomElement>
+#include <QStringList>
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
@@ -34,6 +35,8 @@ public:
     void setSelectedNodes(vKisNodeSP selectedNodes);
 
     using KisNodeVisitor::visit;
+
+    QStringList errorMessages() const;
 
 public:
 
@@ -69,6 +72,7 @@ private:
     quint32 &m_count;
     QString m_url;
     bool m_root;
+    QStringList m_errorMessages;
 };
 
 #endif

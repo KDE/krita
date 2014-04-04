@@ -21,9 +21,12 @@
 #define KIS_KRA_SAVE_VISITOR_H_
 
 #include <QRect>
+#include <QStringList>
+
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
+
 
 class KisPaintDeviceWriter;
 class KoStore;
@@ -60,6 +63,9 @@ public:
 
     bool visit(KisSelectionMask *mask);
 
+    /// @return a list with everything that went wrong while saving
+    QStringList errorMessages() const;
+
 private:
 
     bool savePaintDevice(KisPaintDeviceSP device, QString location);
@@ -78,7 +84,7 @@ private:
     QString m_name;
     QMap<const KisNode*, QString> m_nodeFileNames;
     KisPaintDeviceWriter *m_writer;
-
+    QStringList m_errorMessages;
 };
 
 #endif // KIS_KRA_SAVE_VISITOR_H_

@@ -25,7 +25,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
-#include <QMessageBox>
+#include <QStringList>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -53,6 +53,7 @@ public:
     KisDoc2* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
+    QStringList errorMessages;
 };
 
 KisKraSaver::KisKraSaver(KisDoc2* document)
@@ -162,6 +163,11 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
 
     saveAssistants(store, uri,external);
     return true;
+}
+
+QStringList KisKraSaver::errorMessages() const
+{
+    return m_d->errorMessages;
 }
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)

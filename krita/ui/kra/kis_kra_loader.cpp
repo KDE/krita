@@ -19,17 +19,12 @@
 
 #include "kra/kis_kra_loader.h"
 
-#include "kis_kra_tags.h"
-#include "kis_kra_utils.h"
-#include "kis_kra_load_visitor.h"
+#include <QStringList>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
-
-#include "kis_doc2.h"
-#include "kis_config.h"
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -55,6 +50,13 @@
 #include <kis_transparency_mask.h>
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
+
+#include "kis_doc2.h"
+#include "kis_config.h"
+#include "kis_kra_tags.h"
+#include "kis_kra_utils.h"
+#include "kis_kra_load_visitor.h"
+
 
 /*
 
@@ -105,6 +107,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistant*> assistants;
+    QStringList errorMessages;
 };
 
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
@@ -321,6 +324,11 @@ QList<KisPaintingAssistant *> KisKraLoader::assistants() const
     return m_d->assistants;
 }
 
+QStringList KisKraLoader::errorMessages() const
+{
+    return m_d->errorMessages;
+}
+
 void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
 {
     QString file_path;
@@ -404,8 +412,11 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         dbgFile << "found colorspace" << colorSpace;
+        if (!colorSpace) {
+            warnFile << "Could not create a colorspace for" << colorspacename;
+            return 0;
+        }
     }
-    KIS_ASSERT_RECOVER_RETURN_VALUE(colorSpace, 0);
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;

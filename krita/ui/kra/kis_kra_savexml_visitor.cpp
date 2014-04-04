@@ -61,6 +61,11 @@ void KisSaveXmlVisitor::setSelectedNodes(vKisNodeSP selectedNodes)
     m_selectedNodes = selectedNodes;
 }
 
+QStringList KisSaveXmlVisitor::errorMessages() const
+{
+    return m_errorMessages;
+}
+
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (layer->inherits("KisShapeLayer")) {

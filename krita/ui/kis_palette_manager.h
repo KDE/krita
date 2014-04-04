@@ -38,7 +38,7 @@ class KisPaletteManager : public KDialog
     Q_OBJECT
 
 public:
-    KisPaletteManager(KisFavoriteResourceManager*, KisPaintopBox*);
+    KisPaletteManager(KisFavoriteResourceManager*, QWidget *parent = 0);
     ~KisPaletteManager();
 
     virtual void showEvent(QShowEvent* );

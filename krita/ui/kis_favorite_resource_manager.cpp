@@ -130,10 +130,8 @@ bool KisFavoriteResourceManager::isPopupPaletteVisible()
 //Palette Manager
 void KisFavoriteResourceManager::showPaletteManager()
 {
-
-    if (!m_favoriteBrushManager)
-    {
-        m_favoriteBrushManager = new KisPaletteManager (this, m_paintopBox);
+    if (!m_favoriteBrushManager) {
+        m_favoriteBrushManager = new KisPaletteManager(this);
     }
     m_favoriteBrushManager->show();
 

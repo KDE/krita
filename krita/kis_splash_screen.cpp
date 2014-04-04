@@ -83,7 +83,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                           "<p align=\"center\"><b>Recent Files</b></p>");
 
     QString path;
-
+    QStringList recentfiles;
 
     do {
         path = cfg2.readPathEntry(QString("File%1").arg(i), QString());
@@ -94,13 +94,14 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                 name = url.fileName();
 
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
-                recent += QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name);
+                recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name));
             }
         }
 
         i++;
     } while (!path.isEmpty() || i <= 8);
 
+    recent += recentfiles.join("\n");
     recent += "</body>"
             "</html>";
     lblRecent->setText(recent);

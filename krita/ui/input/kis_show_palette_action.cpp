@@ -55,5 +55,5 @@ void KisShowPaletteAction::begin(int, QEvent *event)
         pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
     }
 
-    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(pos);
+    inputManager()->canvas()->slotShowPopupPalette(pos);
 }

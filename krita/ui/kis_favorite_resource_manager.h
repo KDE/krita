@@ -104,7 +104,6 @@ signals:
     void sigChangeFGColorSelector(const QColor&);
 
 public slots:
-    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
     void slotChangeActivePaintop(int);
 
     /*update the priority of a colour in m_colorList, used only by m_popupPalette*/

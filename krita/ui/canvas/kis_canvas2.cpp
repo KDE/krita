@@ -852,5 +852,14 @@ KoGuidesData *KisCanvas2::guidesData()
     return &m_d->view->document()->guidesData();
 }
 
+void KisCanvas2::slotShowPopupPalette(const QPoint &p)
+{
+    if (!m_d->popupPalette) {
+        return;
+    }
+
+    m_d->popupPalette->showPopupPalette(p);
+}
+
 
 #include "kis_canvas2.moc"

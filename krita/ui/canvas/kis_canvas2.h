@@ -221,6 +221,7 @@ private slots:
 public:
 
     bool isPopupPaletteVisible();
+    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
 
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);

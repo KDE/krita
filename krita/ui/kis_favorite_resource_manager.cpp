@@ -81,17 +81,6 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
     return m_favoritePresetsList;
 }
 
-//Popup Palette
-void KisFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
-{
-    if (!m_popupPalette) {
-        return;
-    }
-    else {
-        m_popupPalette->showPopupPalette(p);
-    }
-}
-
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;

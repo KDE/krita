@@ -65,7 +65,6 @@
 #include <QGLFormat>
 #endif
 
-//Favorite resource Manager
 #include <kis_favorite_resource_manager.h>
 #include <kis_popup_palette.h>
 
@@ -796,24 +795,13 @@ QPoint KisCanvas2::documentOffset() const
     return m_d->coordinatesConverter->documentOffset();
 }
 
-void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
+void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
 {
 
-    m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox);
-
-    connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
-    connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
-
+    m_d->favoriteResourceManager = favoriteResourceManager;
     m_d->popupPalette = new KisPopupPalette(m_d->favoriteResourceManager, m_d->canvasWidget->widget());
     m_d->favoriteResourceManager->setPopupPalette(m_d->popupPalette);
 
-}
-
-KisFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
-{
-    return m_d->favoriteResourceManager;
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)

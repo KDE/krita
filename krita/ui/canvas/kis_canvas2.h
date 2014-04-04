@@ -229,8 +229,7 @@ public:
     // interface for KisView2 only
     void resetCanvas(bool useOpenGL);
 
-    void createFavoriteResourceManager(KisPaintopBox*);
-    KisFavoriteResourceManager* favoriteResourceManager();
+    void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 
 private:
     Q_DISABLE_COPY(KisCanvas2)

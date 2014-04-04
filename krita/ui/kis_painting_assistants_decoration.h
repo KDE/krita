@@ -31,11 +31,11 @@ class KActionCollection;
 /**
  * This class hold a list of painting assistants.
  */
-class KRITAUI_EXPORT KisPaintingAssistantsManager : public KisCanvasDecoration
+class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {
 public:
-    KisPaintingAssistantsManager(KisView2* parent);
-    ~KisPaintingAssistantsManager();
+    KisPaintingAssistantsDecoration(KisView2* parent);
+    ~KisPaintingAssistantsDecoration();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);
     void removeAll();

@@ -87,8 +87,6 @@ public:
     KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
     ~KisPaintopBox();
 
-private:
-
 public slots:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);

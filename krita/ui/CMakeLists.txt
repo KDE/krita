@@ -107,7 +107,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc
-    kis_painting_assistants_manager.cc
+    kis_painting_assistants_decoration.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp

@@ -45,14 +45,13 @@ class KisGridManager;
 class KisImage;
 class KisImageManager;
 class KisNodeManager;
-class KisPaintingAssistantsManager;
+class KisPaintingAssistantsDecoration;
 class KisPaintopBox;
 class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KisFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
@@ -176,7 +175,7 @@ public:
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
-    KisPaintingAssistantsManager* paintingAssistantManager();
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();

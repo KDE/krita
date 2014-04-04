@@ -84,7 +84,7 @@
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
 #include <kis_document_undo_store.h>
-#include <kis_painting_assistants_manager.h>
+#include <kis_painting_assistants_decoration.h>
 
 // Local
 #include "kis_factory2.h"
@@ -525,8 +525,8 @@ QList<KisPaintingAssistant*> KisDoc2::assistants()
     foreach(KoView *v, documentPart()->views()) {
         KisView2 *view = qobject_cast<KisView2*>(v);
         if (view) {
-            KisPaintingAssistantsManager* assistantsmanager = view->paintingAssistantManager();
-            assistants.append(assistantsmanager->assistants());
+            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
+            assistants.append(assistantsDecoration->assistants());
         }
     }
     return assistants;

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_painting_assistants_manager.h"
+#include "kis_painting_assistants_decoration.h"
 
 #include <cfloat>
 
@@ -29,7 +29,7 @@
 #include "kis_painting_assistant.h"
 #include <QPainter>
 
-struct KisPaintingAssistantsManager::Private {
+struct KisPaintingAssistantsDecoration::Private {
     QList<KisPaintingAssistant*> assistants;
     KToggleAction* toggleAssistant;
     void updateAction() {
@@ -37,33 +37,33 @@ struct KisPaintingAssistantsManager::Private {
     }
 };
 
-KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisView2* parent) :
-        KisCanvasDecoration("paintingAssistantsManager", i18n("Painting assistants"), parent),
+KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisView2* parent) :
+        KisCanvasDecoration("paintingAssistantsDecoration", i18n("Painting assistants"), parent),
         d(new Private)
 {
 }
 
-KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
+KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
 {
     qDeleteAll(d->assistants.begin(), d->assistants.end());
     delete d;
 }
 
-void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistant* assistant)
 {
     if (d->assistants.contains(assistant)) return;
     d->assistants.push_back(assistant);
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assistant)
 {
     delete assistant;
     d->assistants.removeAll(assistant);
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::removeAll()
+void KisPaintingAssistantsDecoration::removeAll()
 {
     foreach (KisPaintingAssistant* assistant, d->assistants) {
         delete assistant;
@@ -72,7 +72,7 @@ void KisPaintingAssistantsManager::removeAll()
     d->updateAction();
 }
 
-QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
+QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (d->assistants.empty()) return point;
     if (d->assistants.count() == 1) {
@@ -95,14 +95,14 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const
     return best;
 }
 
-void KisPaintingAssistantsManager::endStroke()
+void KisPaintingAssistantsDecoration::endStroke()
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         assistant->endStroke();
     }
 }
 
-void KisPaintingAssistantsManager::setup(KActionCollection * collection)
+void KisPaintingAssistantsDecoration::setup(KActionCollection * collection)
 {
     d->toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
     collection->addAction("view_toggle_painting_assistants", d->toggleAssistant);
@@ -113,14 +113,14 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
     d->updateAction();
 }
 
-void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
+void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
 {
     foreach(KisPaintingAssistant* assistant, d->assistants) {
         assistant->drawAssistant(gc, updateRect, converter,canvas);
     }
 }
 
-QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
     QList<KisPaintingAssistantHandleSP> hs;
     foreach(KisPaintingAssistant* assistant, d->assistants) {
@@ -138,7 +138,7 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
     return hs;
 }
 
-QList<KisPaintingAssistant*> KisPaintingAssistantsManager::assistants()
+QList<KisPaintingAssistant*> KisPaintingAssistantsDecoration::assistants()
 {
     return d->assistants;
 }

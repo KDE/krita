@@ -39,7 +39,7 @@
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
-#include <kis_painting_assistants_manager.h>
+#include <kis_painting_assistants_decoration.h>
 
 #include "kis_doc2.h"
 #include <string>

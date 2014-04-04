@@ -158,8 +158,6 @@ public: // KisCanvas2 methods
 signals:
     void imageChanged(KisImageWSP image);
 
-    void favoritePaletteCalled(const QPoint&);
-
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
 

@@ -38,7 +38,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager* , QWidget *parent=0);
+    KisPopupPalette(KisFavoriteResourceManager*, QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 

@@ -187,7 +187,6 @@ private:
     bool m_isOutlineEnabled;
 
 signals:
-    void sigFavoritePaletteCalled(const QPoint&);
     void sigPaintingFinished();
 };
 

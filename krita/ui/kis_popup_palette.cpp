@@ -39,7 +39,12 @@
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
-    PopupColorTriangle(QWidget* parent) : KoTriangleColorSelector(parent), m_dragging(false) {}
+    PopupColorTriangle(QWidget* parent)
+        : KoTriangleColorSelector(parent)
+        , m_dragging(false)
+    {
+    }
+
     virtual ~PopupColorTriangle() {}
 
     void tabletEvent(QTabletEvent* event)
@@ -79,8 +84,8 @@ private:
 
 KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
-    , m_resourceManager (manager)
-    , m_triangleColorSelector (0)
+    , m_resourceManager(manager)
+    , m_triangleColorSelector(0)
     , m_timer(0)
 {
     m_triangleColorSelector  = new PopupColorTriangle(this);
@@ -230,7 +235,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.drawPath(path2);
 
     //painting favorite brushes
-    QList<QImage> images (m_resourceManager->favoritePresetImages());
+    QList<QImage> images(m_resourceManager->favoritePresetImages());
 
     //painting favorite brushes pixmap/icon
     QPainterPath path;
@@ -465,8 +470,6 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 KisPopupPalette::~KisPopupPalette()
 {
     delete m_triangleColorSelector;
-    m_triangleColorSelector = 0;
-    m_resourceManager = 0;
 }
 
 QPainterPath KisPopupPalette::pathFromPresetIndex(int index)

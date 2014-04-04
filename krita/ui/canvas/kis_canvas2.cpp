@@ -67,7 +67,7 @@
 
 //Favorite resource Manager
 #include <kis_favorite_resource_manager.h>
-#include <kis_paintop_box.h>
+#include <kis_popup_palette.h>
 
 #include "input/kis_input_manager.h"
 
@@ -121,12 +121,10 @@ public:
     QBitArray channelFlags;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
-
-
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
@@ -793,7 +791,6 @@ QPoint KisCanvas2::documentOffset() const
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
     m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox, canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(QPoint)), favoriteResourceManager(), SLOT(slotShowPopupPalette(QPoint)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
     connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));

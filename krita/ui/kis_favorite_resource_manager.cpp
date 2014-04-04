@@ -50,8 +50,6 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     //take favorite brushes from a file then append to QList
     KConfigGroup group(KGlobal::config(), "favoriteList");
     m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
-    m_popupPalette = new KisPopupPalette(this);
-    //m_popupPalette->showPopupPalette(false);
 
     m_colorList = new KisColorDataList();
 
@@ -65,6 +63,12 @@ KisFavoriteResourceManager::~KisFavoriteResourceManager()
     rServer->removeObserver(this);
     delete m_favoriteBrushManager;
     delete m_colorList;
+}
+
+void KisFavoriteResourceManager::setPopupPalette(QWidget *palette)
+{
+    m_popupPalette = qobject_cast<KisPopupPalette*>(palette);
+    m_popupPalette->showPopupPalette(false);
 }
 
 void KisFavoriteResourceManager::unsetResourceServer()
@@ -124,11 +128,6 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
     }
 }
 
-bool KisFavoriteResourceManager::isPopupPaletteVisible()
-{
-    if (!m_popupPalette) return false;
-    else return m_popupPalette->isVisible();
-}
 
 //Palette Manager
 void KisFavoriteResourceManager::showPaletteManager()

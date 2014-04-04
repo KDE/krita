@@ -46,6 +46,8 @@ public:
     KisFavoriteResourceManager(KisPaintopBox *paintopBox);
     ~KisFavoriteResourceManager();
 
+    void setPopupPalette(QWidget *palette);
+
     virtual void unsetResourceServer();
 
     static const int MAX_FAVORITE_PRESETS = 10;
@@ -56,7 +58,7 @@ public:
     void showPaletteManager();
     void resetPopupPaletteParent(QWidget * = 0);
     QList<QImage> favoritePresetImages();
-    bool isPopupPaletteVisible();
+
 
     /**********************************Favorite Brushes***********************************/
 

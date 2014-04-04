@@ -85,7 +85,9 @@ public:
         , currentCanvasIsOpenGL(false)
         , toolProxy(new KisToolProxy(parent))
         , favoriteResourceManager(0)
-        , vastScrolling(true) {
+        , vastScrolling(true)
+        , popupPalette(0)
+    {
     }
 
     ~KisCanvas2Private() {
@@ -119,6 +121,8 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
+
+    KisPopupPalette *popupPalette;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, KoShapeBasedDocumentBase *sc)
@@ -794,6 +798,7 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
 {
+
     m_d->favoriteResourceManager = new KisFavoriteResourceManager(paintopbox);
 
     connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
@@ -801,7 +806,9 @@ void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
     connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
     connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
 
-    m_d->favoriteResourceManager->resetPopupPaletteParent(m_d->canvasWidget->widget());
+    m_d->popupPalette = new KisPopupPalette(m_d->favoriteResourceManager, m_d->canvasWidget->widget());
+    m_d->favoriteResourceManager->setPopupPalette(m_d->popupPalette);
+
 }
 
 KisFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
@@ -825,6 +832,15 @@ void KisCanvas2::slotSelectionChanged()
         m_d->shapeManager->selection()->select(shape);
     }
 }
+
+bool KisCanvas2::isPopupPaletteVisible()
+{
+    if (!m_d->popupPalette) {
+        return false;
+    }
+    return m_d->popupPalette->isVisible();
+}
+
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {

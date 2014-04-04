@@ -385,7 +385,7 @@ Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *ke
 
 bool KisInputManager::Private::tryHidePopupPalette()
 {
-    if (canvas->favoriteResourceManager()->isPopupPaletteVisible()) {
+    if (canvas->isPopupPaletteVisible()) {
         canvas->favoriteResourceManager()->slotShowPopupPalette();
         return true;
     }

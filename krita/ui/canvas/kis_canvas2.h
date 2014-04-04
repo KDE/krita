@@ -220,6 +220,8 @@ private slots:
 
 public:
 
+    bool isPopupPaletteVisible();
+
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     void initializeImage();

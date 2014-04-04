@@ -195,7 +195,7 @@ void KisDoc2::slotLoadingFinished() {
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
-bool KisDoc2::init()
+void KisDoc2::init()
 {
     delete m_d->nserver;
     m_d->nserver = 0;
@@ -207,8 +207,6 @@ bool KisDoc2::init()
 
     m_d->kraSaver = 0;
     m_d->kraLoader = 0;
-
-    return true;
 }
 
 bool KisDoc2::saveNativeFormat(const QString &file)
@@ -280,8 +278,8 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     KoXmlNode node;
     KisImageWSP image;
 
-    if (!init())
-        return false;
+    init();
+
     if (doc.doctype().name() != "DOC")
         return false;
     root = doc.documentElement();
@@ -384,8 +382,7 @@ bool KisDoc2::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    if (!init())
-        return false;
+    init();
 
     KisConfig cfg;
 
@@ -514,8 +511,9 @@ KisNodeSP KisDoc2::preActivatedNode() const
 
 void KisDoc2::prepareForImport()
 {
-    if (m_d->nserver == 0)
+    if (m_d->nserver == 0) {
         init();
+    }
 }
 
 KisImageWSP KisDoc2::image() const

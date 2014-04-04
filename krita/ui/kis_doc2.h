@@ -193,7 +193,7 @@ protected slots:
 
 private:
 
-    bool init();
+    void init();
 
 private:
     class UndoStack;

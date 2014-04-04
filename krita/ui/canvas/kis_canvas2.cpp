@@ -83,14 +83,12 @@ public:
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
         , toolProxy(new KisToolProxy(parent))
-        , favoriteResourceManager(0)
         , vastScrolling(true)
         , popupPalette(0)
     {
     }
 
     ~KisCanvas2Private() {
-        delete favoriteResourceManager;
         delete shapeManager;
         delete toolProxy;
     }
@@ -107,7 +105,6 @@ public:
     int openGLFilterMode;
 #endif
     KisToolProxy *toolProxy;
-    KisFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
@@ -797,11 +794,7 @@ QPoint KisCanvas2::documentOffset() const
 
 void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
 {
-
-    m_d->favoriteResourceManager = favoriteResourceManager;
-    m_d->popupPalette = new KisPopupPalette(m_d->favoriteResourceManager, m_d->canvasWidget->widget());
-    m_d->favoriteResourceManager->setPopupPalette(m_d->popupPalette);
-
+    m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, m_d->canvasWidget->widget());
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)

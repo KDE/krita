@@ -308,6 +308,7 @@ KisPaintopBox::~KisPaintopBox()
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
+    delete m_favoriteResourceManager;
 }
 
 void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)

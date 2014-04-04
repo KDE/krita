@@ -175,8 +175,8 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
-    if (m_d->favoriteResourceManager != 0) {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(widget);
+    if (m_d->popupPalette) {
+        m_d->popupPalette->setParent(widget);
     }
 
     if(m_d->canvasWidget!=0)
@@ -390,8 +390,8 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 #endif
         createQPainterCanvas();
     }
-    if (m_d->favoriteResourceManager) {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(m_d->canvasWidget->widget());
+    if (m_d->popupPalette) {
+        m_d->popupPalette->setParent(m_d->canvasWidget->widget());
     }
 
 }

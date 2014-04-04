@@ -92,13 +92,6 @@ void KisFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
     }
 }
 
-void KisFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
-{
-    if (m_popupPalette) {
-        m_popupPalette->setParent(w);
-    }
-}
-
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;

@@ -56,7 +56,6 @@ public:
     /************************************Popup Palette************************************/
 
     void showPaletteManager();
-    void resetPopupPaletteParent(QWidget * = 0);
     QList<QImage> favoritePresetImages();
 
 

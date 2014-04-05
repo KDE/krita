@@ -21,10 +21,11 @@
 
 #include <QObject>
 #include <kis_types.h>
-#include "kis_color_data_list.h"
 #include <QQueue>
 #include <QList>
 #include "KoResourceServerObserver.h"
+
+#include <KoColor.h>
 
 class QString;
 class QColor;
@@ -51,32 +52,27 @@ public:
     virtual void unsetResourceServer();
 
     static const int MAX_FAVORITE_PRESETS = 10;
-//    static const int MAX_RECENT_COLORS = 3;
-
-    /************************************Popup Palette************************************/
 
     void showPaletteManager();
     QList<QImage> favoritePresetImages();
 
-
-    /**********************************Favorite Brushes***********************************/
-
-    /**Checks if newBrush is saved as a favorite brush.
-    Returns -1 if the newBrush is not yet saved, then newBrush will be appended
-    Returns the position of the brush on the list otherwise**/
+    /**
+     * Checks if newBrush is saved as a favorite brush.
+     * @returns -1 if the newBrush is not yet saved, then newBrush will be appended
+     *         or the position of the brush on the list otherwise
+     */
     int addFavoritePreset(const QString& name);
     void removeFavoritePreset(int);
     void removeFavoritePreset(const QString& name);
-    //returns -1 if paintop is not in the list, returns the paintop position otherwise
+
+    /// @return -1 if paintop is not in the list, returns the paintop position otherwise
     int isFavoriteBrushSaved(const QString& name);
     int numFavoritePresets();
 
     QStringList favoritePresetList();
 
-
-    /***********************************Recent Colors************************************/
-    inline int recentColorsTotal() { return m_colorList->size(); } ;
-    inline const KoColor& recentColorAt(int pos) { return m_colorList->guiColor(pos); };
+    int recentColorsTotal();
+    const KoColor& recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
     virtual void removingResource(KisPaintOpPreset* resource);
@@ -85,13 +81,15 @@ public:
     virtual void syncTaggedResourceView();
     virtual void syncTagAddition(const QString& tag);
     virtual void syncTagRemoval(const QString& tag);
+
     /**
-     Set palette to block updates, paintops won't be deleted when they are deleted from server
-     Used when overwriting a resource
-     **/
+     * Set palette to block updates, paintops won't be deleted when they are deleted from server
+     * Used when overwriting a resource
+     */
     void setBlockUpdates(bool block);
 
 signals:
+
     void sigSetFGColor(const KoColor& c);
 
     // This is a flag to handle a bug:
@@ -104,6 +102,7 @@ signals:
     void sigChangeFGColorSelector(const QColor&);
 
 public slots:
+
     void slotChangeActivePaintop(int);
 
     /*update the priority of a colour in m_colorList, used only by m_popupPalette*/
@@ -115,25 +114,21 @@ public slots:
     void slotChangeFGColorSelector(KoColor c);
 
 private:
-    KisPaletteManager* m_favoriteBrushManager;
-    KisPopupPalette* m_popupPalette;
-    KisPaintopBox* m_paintopBox;
+
+    KisPaletteManager *m_favoriteBrushManager;
+    KisPopupPalette *m_popupPalette;
+    KisPaintopBox *m_paintopBox;
 
     QStringList m_favoritePresetsList;
 
-    /**The list of recently used colors**/
-    KisColorDataList * m_colorList;
+    class ColorDataList;
+    ColorDataList *m_colorList;
 
     bool m_blockUpdates;
 
     bool isFavoritePresetsFull();
     void saveFavoritePresets();
 
-    void printColors() { m_colorList->printGuiList(); /*m_colorList->printPriorityList();*/ };
-
-    void addRecentColorUpdate(int guipos);
-    void addRecentColor(const KoColor& color);
-
 };
 
-#endif 
+#endif

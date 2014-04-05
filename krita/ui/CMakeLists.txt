@@ -78,7 +78,6 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc
     kis_config.cc
     kis_config_notifier.cpp
-    kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp

@@ -245,7 +245,7 @@ signals:
      * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
-    void toolCodesSelected(const KoCanvasController *canvas, const QList<QString> &types);
+    void toolCodesSelected(const QList<QString> &types);
 
     /**
      * Emitted after the current layer changed either its properties or to a new layer.

@@ -617,7 +617,7 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
         }
     }
 
-    emit q->toolCodesSelected(canvasData->canvas, types);
+    emit q->toolCodesSelected(types);
 }
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)

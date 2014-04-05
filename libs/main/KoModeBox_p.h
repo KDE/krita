@@ -101,10 +101,9 @@ public slots:
      * The modebox allows buttons to be optionally registered with a visibilityCode. This code
      * can be passed here and all buttons that have that code are shown. All buttons that
      * have another visibility code registered are hidden.
-     * @param canvas the currently active canvas.
      * @param codes a list of all the codes to show.
      */
-    void updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes);
+    void updateShownTools(const QList<QString> &codes);
 
     void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
 

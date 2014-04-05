@@ -121,7 +121,6 @@ public:
         saveActionAs = 0;
         printAction = 0;
         printActionPreview = 0;
-        statusBarLabel = 0;
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
@@ -199,7 +198,6 @@ public:
     KoView *activeView;
     QWidget *m_activeWidget;
 
-    QLabel * statusBarLabel;
     QPointer<QProgressBar> progress;
     QMutex progressMutex;
 
@@ -1668,15 +1666,6 @@ void KoMainWindow::slotProgress(int value)
         d->progress->setValue(value);
     }
     qApp->processEvents();
-}
-
-QLabel * KoMainWindow::statusBarLabel()
-{
-    if (!d->statusBarLabel) {
-        d->statusBarLabel = new QLabel(statusBar());
-        statusBar()->addPermanentWidget(d->statusBarLabel, 1);
-    }
-    return d->statusBarLabel;
 }
 
 void KoMainWindow::setMaxRecentItems(uint _number)

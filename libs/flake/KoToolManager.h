@@ -123,7 +123,7 @@ public:
      * @param ac the actionCollection that will be the parent of the actions.
      * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerTools(KActionCollection *ac, KoCanvasController *controller = 0);
+    void registerTools(KActionCollection *ac, KoCanvasController *controller);
 
     /**
      * Register a new canvas controller

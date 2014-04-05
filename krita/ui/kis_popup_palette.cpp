@@ -254,8 +254,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.drawPath(path);                   
     }
 
-    QColor currColor;
-
     //painting recent colors
     painter.setPen(Qt::NoPen);
     rotationAngle = -360.0/m_resourceManager->recentColorsTotal();

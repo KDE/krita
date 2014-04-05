@@ -237,7 +237,6 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             // try once more without the profile
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
             if (cs == 0) {
-                qDebug() << "!!!!!!!!!!!!!!!!!";
                 m_d->errorMessages << i18n("Image specifies an unsupported color model: %1.", colorspacename);
                 return KisImageWSP(0);
             }

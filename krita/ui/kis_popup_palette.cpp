@@ -99,6 +99,9 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *p
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
     connect(this, SIGNAL(sigChangefGColor(KoColor)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
     connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(QColor)), m_triangleColorSelector, SLOT(setQColor(QColor)));
+    connect(m_resourceManager, SIGNAL(setSelectedColor(int)), SLOT(slotSetSelectedColor(int)));
+    connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
+    connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
 
     // This is used to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour

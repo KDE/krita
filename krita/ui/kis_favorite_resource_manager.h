@@ -33,7 +33,6 @@ class QStringList;
 class QToolButton;
 class QPoint;
 class KoID;
-class KisPopupPalette;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
@@ -101,6 +100,12 @@ signals:
 
     void sigChangeFGColorSelector(const QColor&);
 
+    void setSelectedColor(int);
+
+    void updatePalettes();
+
+    void hidePalettes();
+
 public slots:
 
     void slotChangeActivePaintop(int);
@@ -116,7 +121,6 @@ public slots:
 private:
 
     KisPaletteManager *m_favoriteBrushManager;
-    KisPopupPalette *m_popupPalette;
     KisPaintopBox *m_paintopBox;
 
     QStringList m_favoritePresetsList;

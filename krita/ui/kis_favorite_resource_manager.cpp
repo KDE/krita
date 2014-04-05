@@ -168,7 +168,6 @@ private:
 
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_favoriteBrushManager(0)
-    , m_popupPalette(0)
     , m_paintopBox(paintopBox)
     , m_colorList(0)
     , m_blockUpdates(false)
@@ -189,12 +188,6 @@ KisFavoriteResourceManager::~KisFavoriteResourceManager()
     rServer->removeObserver(this);
     delete m_favoriteBrushManager;
     delete m_colorList;
-}
-
-void KisFavoriteResourceManager::setPopupPalette(QWidget *palette)
-{
-    m_popupPalette = qobject_cast<KisPopupPalette*>(palette);
-    m_popupPalette->showPopupPalette(false);
 }
 
 void KisFavoriteResourceManager::unsetResourceServer()
@@ -229,10 +222,7 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
     m_paintopBox->resourceSelected(resource);
-
-    if (m_popupPalette) {
-        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
-    }
+    emit hidePalettes();
 }
 
 
@@ -263,7 +253,7 @@ int KisFavoriteResourceManager::addFavoritePreset(const QString& name)
         } else {
             m_favoritePresetsList.append(name);
             saveFavoritePresets();
-            m_popupPalette->update();
+            emit updatePalettes();
             return -1;
         }
     }
@@ -281,7 +271,7 @@ void KisFavoriteResourceManager::removeFavoritePreset(int pos)
     } else {
         m_favoritePresetsList.removeAt(pos);
         saveFavoritePresets();
-        m_popupPalette->update();
+        emit updatePalettes();
     }
 }
 
@@ -318,27 +308,16 @@ void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
     // to update the colour priority when we select it.
     m_colorList->updateKey(pos);
 
-    if (m_popupPalette)   {
-        m_popupPalette->setSelectedColor(pos);
-        m_popupPalette->update();
-    }
-
+    emit setSelectedColor(pos);
     emit sigSetFGColor(m_colorList->guiColor(pos));
-
-    if (m_popupPalette) {
-        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
-    }
+    emit hidePalettes();
 }
 
 void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
     m_colorList->append(color);
     int pos = m_colorList->findPos(color);
-    if (m_popupPalette)  {
-        m_popupPalette->setSelectedColor(pos);
-        m_popupPalette->update();
-    }
-
+    emit setSelectedColor(pos);
 }
 
 void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)

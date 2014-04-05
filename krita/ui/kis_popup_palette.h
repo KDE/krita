@@ -33,6 +33,7 @@ class KoColor;
 class KisPopupPalette : public QWidget
 {
     Q_OBJECT
+
     Q_PROPERTY(int hoveredPreset READ hoveredPreset WRITE setHoveredPreset)
     Q_PROPERTY(int hoveredColor READ hoveredColor WRITE setHoveredColor)
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
@@ -53,6 +54,7 @@ public:
     int selectedColor() const;
 
 protected:
+
     void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent*);
     void mouseReleaseEvent(QMouseEvent*);
@@ -83,6 +85,7 @@ private:
     QPainterPath pathFromPresetIndex(int index);
 
 private:
+
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
@@ -106,11 +109,14 @@ signals:
     void sigTriggerTimer();
 
 private slots:
+
     void slotChangefGColor(const QColor& newColor);
     void slotColorChangeTimeout();
-
+    void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotTriggerTimer();
     void slotEnableChangeFGColor();
+    void slotUpdate() { update(); }
+    void slotHide() { showPopupPalette(false); }
 };
 
 #endif // KIS_POPUP_PALETTE_H

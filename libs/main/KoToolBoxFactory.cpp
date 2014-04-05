@@ -23,14 +23,14 @@
 
 class KoToolBoxFactory::Private {
 public:
-    KoCanvasController *canvas;
+    KoCanvasController *canvasController;
 };
 
 
-KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas)
+KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvasController)
     : d( new Private())
 {
-    d->canvas = canvas;
+    d->canvasController = canvasController;
 }
 
 KoToolBoxFactory::~KoToolBoxFactory() {
@@ -49,7 +49,7 @@ KoDockFactoryBase::DockPosition KoToolBoxFactory::defaultDockPosition() const
 
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
-    KoToolBox *box = new KoToolBox(d->canvas);
+    KoToolBox *box = new KoToolBox(d->canvasController);
     KoToolBoxDocker *docker = new KoToolBoxDocker(box);
     docker->setObjectName(QLatin1String("ToolBox"));
 

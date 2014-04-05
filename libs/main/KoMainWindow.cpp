@@ -1959,11 +1959,6 @@ KoView* KoMainWindow::currentView() const
     return 0;
 }
 
-void KoMainWindow::slotSetStatusBarText( const QString & text )
-{
-    statusBar()->showMessage( text );
-}
-
 void KoMainWindow::newView()
 {
     Q_ASSERT((d != 0 && d->activeView && d->activePart && d->activeView->koDocument()));

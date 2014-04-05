@@ -30,8 +30,6 @@ public:
     ~ReferencesToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);
-
-    virtual bool canCreateTool(KoCanvasBase* canvas) const;
 };
 
 #endif

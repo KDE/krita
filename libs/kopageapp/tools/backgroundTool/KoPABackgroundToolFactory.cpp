@@ -50,9 +50,3 @@ KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
     setToolTip(toolTip);
     return new KoPABackgroundTool(canvas);
 }
-
-bool KoPABackgroundToolFactory::canCreateTool(KoCanvasBase *canvas) const
-{
-    KoPACanvas *paCanvas = dynamic_cast<KoPACanvas *>(canvas);
-    return paCanvas != 0; // we only work in KoPACanvas
-}

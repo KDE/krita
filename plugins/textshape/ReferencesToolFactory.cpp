@@ -44,9 +44,3 @@ KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ReferencesTool(canvas);
 }
-
-bool ReferencesToolFactory::canCreateTool(KoCanvasBase* canvas) const
-{
-    Q_UNUSED(canvas);
-    return true;
-}

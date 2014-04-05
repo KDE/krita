@@ -387,7 +387,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController);
+        KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),

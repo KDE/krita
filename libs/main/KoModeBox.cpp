@@ -149,7 +149,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->layout->setContentsMargins(0,0,0,0);
     setLayout(d->layout);
 
-    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList(canvas->canvas())) {
+    foreach(const KoToolButton &button, KoToolManager::instance()->createToolList()) {
         addButton(button);
     }
 

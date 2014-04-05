@@ -65,8 +65,6 @@ QString ToolHelper::toolTip() const
 
 KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 {
-    if (! canCreateTool(canvas))
-        return 0;
     KoToolBase *tool = m_toolFactory->createTool(canvas);
     tool->setToolId(id());
     return tool;
@@ -85,11 +83,6 @@ int ToolHelper::priority() const
 KShortcut ToolHelper::shortcut() const
 {
     return m_toolFactory->shortcut();
-}
-
-bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
-{
-    return m_toolFactory->canCreateTool(canvas);
 }
 
 //   ************ Connector **********

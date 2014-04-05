@@ -398,7 +398,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
         if (!result) {
-            m_errorMessages << i18n("Could not vector selection %1.", location);
+            m_errorMessages << i18n("Could not load vector selection %1.", location);
         }
 
     }

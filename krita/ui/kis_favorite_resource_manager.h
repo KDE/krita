@@ -126,7 +126,6 @@ private:
 
     bool m_blockUpdates;
 
-    bool isFavoritePresetsFull();
     void saveFavoritePresets();
 
 };

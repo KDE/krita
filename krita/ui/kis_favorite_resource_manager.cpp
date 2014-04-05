@@ -258,7 +258,7 @@ int KisFavoriteResourceManager::addFavoritePreset(const QString& name)
 
     else { //brush hasn't been saved yet
 
-        if (isFavoritePresetsFull())  {
+        if (m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS)  {
             return -2; //list is full!
         } else {
             m_favoritePresetsList.append(name);
@@ -291,11 +291,6 @@ void KisFavoriteResourceManager::removeFavoritePreset(const QString& name)
     if (pos > -1) removeFavoritePreset(pos);
 }
 
-bool KisFavoriteResourceManager::isFavoritePresetsFull()
-{
-    return m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
-}
-
 int KisFavoriteResourceManager::numFavoritePresets()
 {
     return m_favoritePresetsList.size();
@@ -322,6 +317,7 @@ void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
     // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
     // to update the colour priority when we select it.
     m_colorList->updateKey(pos);
+
     if (m_popupPalette)   {
         m_popupPalette->setSelectedColor(pos);
         m_popupPalette->update();

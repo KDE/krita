@@ -107,6 +107,17 @@ void ExrPaintLayerInfo::updateImageType(ImageType channelType)
     }
 }
 
+struct ExrPaintLayerSaveInfo {
+    QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
+    KisPaintLayerSP layer;
+    QList<QString> channels;
+    Imf::PixelType pixelType;
+};
+
+template <class T>
+uint qHash(KisSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
 
 struct exrConverter::Private {
     Private() : doc(0), warnedAboutZeroedAlpha(false),
@@ -124,6 +135,11 @@ struct exrConverter::Private {
 
     template<typename _T_>
     void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype);
+
+
+    void makeLayerNamesUnique(QList<ExrPaintLayerSaveInfo>& informationObjects);
+    void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects, const QString& name, KisGroupLayerSP parent);
+    void reportLayersNotSaved(const QSet<KisNodeSP> &layersNotSaved);
 };
 
 exrConverter::exrConverter(KisDoc2 *doc, bool showNotifications)
@@ -558,6 +574,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    /**
+     * EXR semi-transparent images are expected to be rendered on
+     * black to ensure correctness of the light model
+     */
     m_d->image->setDefaultProjectionColor(KoColor(Qt::black, colorSpace));
 
     // Create group layers
@@ -665,13 +685,6 @@ KisImageWSP exrConverter::image()
 {
     return m_d->image;
 }
-
-struct ExrPaintLayerSaveInfo {
-    QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
-    KisPaintLayerSP layer;
-    QList<QString> channels;
-    Imf::PixelType pixelType;
-};
 
 template<typename _T_, int size>
 struct ExrPixel_ {
@@ -865,8 +878,53 @@ QString remap(const QMap<QString, QString>& current2original, const QString& cur
     return current;
 }
 
-void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects, const QString& name, KisGroupLayerSP parent)
+void exrConverter::Private::makeLayerNamesUnique(QList<ExrPaintLayerSaveInfo>& informationObjects)
 {
+    typedef QMultiMap<QString, QList<ExrPaintLayerSaveInfo>::iterator> NamesMap;
+    NamesMap namesMap;
+
+    {
+        QList<ExrPaintLayerSaveInfo>::iterator it = informationObjects.begin();
+        QList<ExrPaintLayerSaveInfo>::iterator end = informationObjects.end();
+
+        for (; it != end; ++it) {
+            namesMap.insert(it->name, it);
+        }
+    }
+
+    foreach (const QString &key, namesMap.keys()) {
+        if (namesMap.count(key) > 1) {
+            KIS_ASSERT_RECOVER(key.endsWith(".")) { continue; }
+            QString strippedName = key.left(key.size() - 1); // trim the ending dot
+            int nameCounter = 0;
+
+            NamesMap::iterator it = namesMap.find(key);
+            NamesMap::iterator end = namesMap.end();
+
+            for (; it != end; ++it) {
+                QString newName =
+                    QString("%1_%2.")
+                    .arg(strippedName)
+                    .arg(nameCounter++);
+
+                it.value()->name = newName;
+
+                QList<QString>::iterator channelsIt = it.value()->channels.begin();
+                QList<QString>::iterator channelsEnd = it.value()->channels.end();
+
+                for  (; channelsIt != channelsEnd; ++channelsIt) {
+                    channelsIt->replace(key, newName);
+                }
+            }
+        }
+    }
+
+}
+
+void exrConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects, const QString& name, KisGroupLayerSP parent)
+{
+    QSet<KisNodeSP> layersNotSaved;
+
     for (uint i = 0; i < parent->childCount(); ++i) {
         KisNodeSP node = parent->at(i);
         if (KisPaintLayerSP paintLayer = dynamic_cast<KisPaintLayer*>(node.data())) {
@@ -907,7 +965,7 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             } else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
-            
+
             if(info.pixelType < Imf::NUM_PIXELTYPES)
             {
                 informationObjects.push_back(info);
@@ -917,8 +975,42 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
 
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
+        } else {
+            /**
+             * The EXR can store paint and group layers only. The rest will
+             * go to /dev/null :(
+             */
+            layersNotSaved.insert(node);
         }
     }
+
+    if (!layersNotSaved.isEmpty()) {
+        reportLayersNotSaved(layersNotSaved);
+    }
+}
+
+void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNotSaved)
+{
+    QString layersList;
+    QTextStream textStream(&layersList);
+
+
+    foreach(KisNodeSP node, layersNotSaved) {
+        textStream << "<item>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</item>";
+    }
+
+    QString msg =
+        i18nc("@info",
+              "<para>The following layers have a type that is not supported by EXR format:</para>"
+              "<para><list>%1</list></para>"
+              "<para><warning>these layers will NOT be saved to the final EXR file</warning></para>", layersList);
+
+    if (this->showNotifications) {
+        KMessageBox::information(0, msg, i18nc("@title:window", "Layers will be lost"), "dontNotifyEXRDropsLayers");
+    } else {
+        qWarning() << "WARNING:" << msg;
+    }
+
 }
 
 KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP layer)
@@ -941,8 +1033,9 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
     Imf::Header header(width, height);
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
-    recBuildPaintLayerSaveInfo(informationObjects, "", layer);
-    
+    m_d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
+    m_d->makeLayerNamesUnique(informationObjects);
+
     if(informationObjects.isEmpty())
     {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;

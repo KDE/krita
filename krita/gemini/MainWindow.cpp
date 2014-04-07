@@ -252,6 +252,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     d->initSketchView(this);
 
@@ -265,6 +267,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
         //This saves a lot of hassle required to change state for loading dialogs etc.
         QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
     }
+}
+
+void MainWindow::resetWindowTitle()
+{
+    setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Gemini")));
 }
 
 void MainWindow::switchDesktopForced()

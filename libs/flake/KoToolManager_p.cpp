@@ -66,7 +66,9 @@ QString ToolHelper::toolTip() const
 KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 {
     KoToolBase *tool = m_toolFactory->createTool(canvas);
-    tool->setToolId(id());
+    if (tool) {
+        tool->setToolId(id());
+    }
     return tool;
 }
 

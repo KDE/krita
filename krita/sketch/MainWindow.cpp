@@ -48,6 +48,7 @@
 #include "kis_view2.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
+#include <kis_doc2.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"

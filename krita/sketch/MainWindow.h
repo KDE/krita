@@ -49,6 +49,7 @@ public Q_SLOTS:
     void minimize();
     void closeWindow();
 	void adjustZoomOnDocumentChangedAndStuff();
+    void resetWindowTitle();
 
 Q_SIGNALS:
     void closeRequested();

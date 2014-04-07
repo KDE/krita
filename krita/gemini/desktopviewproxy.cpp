@@ -124,7 +124,11 @@ void DesktopViewProxy::fileOpen()
 
 void DesktopViewProxy::fileSave()
 {
-    DocumentManager::instance()->save();
+    if(DocumentManager::instance()->isTemporaryFile()) {
+        d->desktopView->saveDocument(true);
+    } else {
+        DocumentManager::instance()->save();
+    }
 }
 
 bool DesktopViewProxy::fileSaveAs()

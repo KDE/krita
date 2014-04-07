@@ -39,6 +39,7 @@ public:
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);
     RecentFileManager* recentFileManager() const;
+    bool isTemporaryFile() const;
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);

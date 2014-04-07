@@ -41,6 +41,7 @@ public:
         , newDocHeight(0)
         , newDocResolution(0)
         , importingDocument(false)
+        , temporaryFile(false)
     { }
 
     ProgressProxy* proxy;
@@ -54,6 +55,7 @@ public:
     int newDocWidth, newDocHeight; float newDocResolution;
     bool importingDocument;
     QVariantMap newDocOptions;
+    bool temporaryFile;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -90,6 +92,11 @@ RecentFileManager* DocumentManager::recentFileManager() const
     return d->recentFileManager;
 }
 
+bool DocumentManager::isTemporaryFile() const
+{
+    return d->temporaryFile;
+}
+
 void DocumentManager::newDocument(int width, int height, float resolution)
 {
     closeDocument();
@@ -103,6 +110,7 @@ void DocumentManager::newDocument(int width, int height, float resolution)
 void DocumentManager::newDocument(const QVariantMap& options)
 {
     closeDocument();
+
     d->newDocOptions = options;
     QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
 }
@@ -147,6 +155,8 @@ void DocumentManager::delayedNewDocument()
         d->document->newImage(name, width, height, profile, bg, QString(), res);
     }
 
+    d->temporaryFile = true;
+
     emit documentChanged();
 }
 
@@ -171,6 +181,9 @@ void DocumentManager::delayedOpenDocument()
     else
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     d->recentFileManager->addRecent(d->openDocumentFilename);
+
+    d->temporaryFile = false;
+
     emit documentChanged();
 }
 

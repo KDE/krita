@@ -139,6 +139,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
     m_histlog = false;
+    m_page.histview->resize(288,100);
     slotDrawHistogram();
 
 }
@@ -150,9 +151,9 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
 
 void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 {
-    int wHeight = height();
+    int wHeight = m_page.histview->height();
     int wHeightMinusOne = wHeight - 1;
-    int wWidth = width();
+    int wWidth = m_page.histview->width();
 
     if (m_histlog != logarithmic) {
         // Update the histogram
@@ -163,7 +164,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
-    QPixmap pix(wWidth, wHeight);
+    QPixmap pix(wWidth-100, wHeight);
     pix.fill();
     QPainter p(&pix);
 

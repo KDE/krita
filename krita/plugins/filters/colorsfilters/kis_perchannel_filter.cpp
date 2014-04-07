@@ -58,6 +58,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     QHBoxLayout * layout = new QHBoxLayout(this);
     Q_CHECK_PTR(layout);
+    layout->setContentsMargins(0,0,0,0);
     layout->addWidget(m_page);
 
     m_dev = dev;

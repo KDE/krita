@@ -87,7 +87,7 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
     QPainter p1(this);
     p1.fillRect(rect(), palette().background());
     p1.setPen(Qt::black);
-    p1.drawRect(MARGIN, MARGIN, width() - 2 * MARGIN, height() - 2 * MARGIN - HANDLE_SIZE);
+    p1.drawRect(MARGIN, MARGIN, wWidth, height() - 2 * MARGIN - HANDLE_SIZE);
 
     // Draw first gradient
     QLinearGradient grayGradient(MARGIN, 0, wWidth, gradientHeight);
@@ -100,8 +100,9 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
     p1.fillRect(MARGIN, y, wWidth, gradientHeight, Qt::white);
 
     if (m_blackCursor > 0) {
-        p1.fillRect(MARGIN, y, m_blackCursor + MARGIN, gradientHeight, Qt::black);
+        p1.fillRect(MARGIN, y, m_blackCursor, gradientHeight, Qt::black);
     }
+
     for (x = (int)m_blackCursor + MARGIN; x < (int)m_whiteCursor - MARGIN; ++x) {
         double inten = (double)(x - (m_blackCursor + MARGIN)) / (double)((m_whiteCursor - MARGIN) - (m_blackCursor + MARGIN));
         inten = pow(inten, (1.0 / m_gamma));
@@ -113,7 +114,7 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
     // Draw cursors
     y += gradientHeight;
     QPoint a[3];
-    p1.setPen(Qt::black);
+    p1.setPen(Qt::darkGray);
     p1.setRenderHint(QPainter::Antialiasing, true);
 
     const int cursorHalfBase = (int)(gradientHeight / 1.5);
@@ -124,6 +125,7 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
     p1.setBrush(Qt::black);
     p1.drawPolygon(a, 3);
 
+    p1.setPen(Qt::black);
     if (m_gammaEnabled) {
         a[0] = QPoint(m_gammaCursor, y);
         a[1] = QPoint(m_gammaCursor + cursorHalfBase, wHeight - 1);
@@ -155,24 +157,25 @@ void KisGradientSlider::mousePressEvent(QMouseEvent * e)
         return;
 
     unsigned int x = e->pos().x();
+    int xPlusMargin = x + MARGIN;
 
     distance = width() + 1; // just a big number
 
-    if (abs((int)(x - m_blackCursor)) < distance) {
-        distance = abs((int)(x - m_blackCursor));
+    if (abs((int)(xPlusMargin - m_blackCursor)) < distance) {
+        distance = abs((int)(xPlusMargin - m_blackCursor));
         closest_cursor = BlackCursor;
     }
 
-    if (abs((int)(x - m_whiteCursor)) < distance) {
-        distance = abs((int)(x - m_whiteCursor));
+    if (abs((int)(xPlusMargin - m_whiteCursor)) < distance) {
+        distance = abs((int)(xPlusMargin - m_whiteCursor));
         closest_cursor = WhiteCursor;
     }
 
     if (m_gammaEnabled) {
-        int gammaDistance = (int)x - m_gammaCursor;
+        int gammaDistance = (int)xPlusMargin - m_gammaCursor;
 
         if (abs(gammaDistance) < distance) {
-            distance = abs((int)x - m_gammaCursor);
+            distance = abs((int)xPlusMargin - m_gammaCursor);
             closest_cursor = GammaCursor;
         } else if (abs(gammaDistance) == distance) {
             if ((closest_cursor == BlackCursor) && (gammaDistance > 0)) {
@@ -194,29 +197,29 @@ void KisGradientSlider::mousePressEvent(QMouseEvent * e)
 
     switch (closest_cursor) {
     case BlackCursor:
-        m_blackCursor = x;
+        m_blackCursor = x - MARGIN;
         m_grabCursor = closest_cursor;
         m_leftmost = 0;
-        m_rightmost = m_whiteCursor - 1;
+        m_rightmost = m_whiteCursor - ((MARGIN + 1) * m_scalingFactor);
         if (m_gammaEnabled)
             m_gammaCursor = calculateGammaCursor();
         break;
     case WhiteCursor:
-        m_whiteCursor = x;
+        m_whiteCursor = x + MARGIN;
         m_grabCursor = closest_cursor;
-        m_leftmost = m_blackCursor + 1;
-        m_rightmost = width();
+        m_leftmost = m_blackCursor + (MARGIN * m_scalingFactor);
+        m_rightmost = width() - MARGIN ;
         if (m_gammaEnabled)
             m_gammaCursor = calculateGammaCursor();
         break;
     case GammaCursor:
         m_gammaCursor = x;
         m_grabCursor = closest_cursor;
-        m_leftmost = m_blackCursor;
-        m_rightmost = m_whiteCursor;
+        m_leftmost = m_blackCursor + (MARGIN * m_scalingFactor);
+        m_rightmost = m_whiteCursor - (MARGIN * m_scalingFactor);
     {
         double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
-        double mid = (double)m_blackCursor + delta;
+        double mid = (double)m_blackCursor + delta + MARGIN;
         double tmp = (x - mid) / delta;
         m_gamma = 1.0 / pow(10, tmp);
     }
@@ -236,12 +239,12 @@ void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 
     switch (m_grabCursor) {
     case BlackCursor:
-        m_black = qRound(m_blackCursor / m_scalingFactor);
+        m_black = qRound( m_blackCursor / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedBlack(m_black);
         break;
     case WhiteCursor:
-        m_white = qRound(m_whiteCursor / m_scalingFactor);
+        m_white = qRound( (m_whiteCursor - MARGIN) / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedWhite(m_white);
         break;
@@ -261,7 +264,7 @@ void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
     int x = e->pos().x();
 
     if (m_grabCursor != None) { // Else, drag the selected point
-        if (x <= m_leftmost)
+        if (x + MARGIN <= m_leftmost)
             x = m_leftmost;
 
         if (x >= m_rightmost)
@@ -278,7 +281,7 @@ void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
             break;
         case WhiteCursor:
             if (m_whiteCursor != x) {
-                m_whiteCursor = x;
+                m_whiteCursor = x + MARGIN;
                 if (m_gammaEnabled) {
                     m_gammaCursor = calculateGammaCursor();
                 }
@@ -304,7 +307,7 @@ void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
 void KisGradientSlider::calculateCursorPositions()
 {
     m_blackCursor = qRound(m_black * m_scalingFactor);
-    m_whiteCursor = qRound(m_white * m_scalingFactor) + MARGIN;
+    m_whiteCursor = qRound(m_white * m_scalingFactor + MARGIN);
 
     m_gammaCursor = calculateGammaCursor();
 }
@@ -342,7 +345,7 @@ void KisGradientSlider::slotModifyWhite(int v)
 {
     if (v >= (int)m_black && v <= width() && !m_feedback) {
         m_white = v;
-        m_whiteCursor = qRound(m_white * m_scalingFactor);
+        m_whiteCursor = qRound(m_white * m_scalingFactor + MARGIN);
         m_gammaCursor = calculateGammaCursor();
         update();
     }

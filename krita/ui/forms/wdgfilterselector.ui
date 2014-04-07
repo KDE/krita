@@ -31,7 +31,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout">
        <item>
         <widget class="QLabel" name="label_2">
@@ -55,10 +55,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout">
        <property name="leftMargin">
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -69,9 +69,19 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <property name="spacing">
-        <number>6</number>
+       <property name="horizontalSpacing">
+        <number>0</number>
        </property>
+       <property name="verticalSpacing">
+        <number>3</number>
+       </property>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButtonEditPressets">
+         <property name="text">
+          <string>Edit Presets</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -82,7 +92,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="0" colspan="3">
         <widget class="QComboBox" name="comboBoxPresets">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -104,26 +114,44 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButtonEditPressets">
-         <property name="text">
-          <string>Edit Presets</string>
+       <item row="3" column="0" colspan="3">
+        <widget class="QWidget" name="centralWidgetHolder" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
-        <layout class="QGridLayout">
-         <item row="0" column="0">
-          <widget class="QWidget" name="centralWidgetHolder" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>6</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

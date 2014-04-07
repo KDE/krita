@@ -192,6 +192,12 @@ public:
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
+        // The default theme is not what we want for Gemini
+        KConfigGroup group(KGlobal::config(), "theme");
+        if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
+            group.writeEntry("Theme", "Krita-dark");
+        }
+
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
 
         toSketch = new KAction(desktopView);

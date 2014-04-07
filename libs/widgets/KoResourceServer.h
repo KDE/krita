@@ -173,7 +173,7 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        kWarning() << "Loading resource " << fname << "failed";
+                        kWarning() << "Loading resource " << front << "failed";
                         delete resource;
                     }
                 }

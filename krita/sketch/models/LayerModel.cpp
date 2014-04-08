@@ -69,6 +69,7 @@ public:
         , declarativeEngine(0)
         , thumbProvider(0)
         , updateActiveLayerWithNewFilterConfigTimer(new QTimer(qq))
+        , imageChangedTimer(new QTimer(qq))
     {
         QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
         foreach(const KisFilterSP& filter, tmpFilters)
@@ -78,6 +79,10 @@ public:
         updateActiveLayerWithNewFilterConfigTimer->setInterval(0);
         updateActiveLayerWithNewFilterConfigTimer->setSingleShot(true);
         connect(updateActiveLayerWithNewFilterConfigTimer, SIGNAL(timeout()), qq, SLOT(updateActiveLayerWithNewFilterConfig()));
+
+        imageChangedTimer->setInterval(250);
+        imageChangedTimer->setSingleShot(true);
+        connect(imageChangedTimer, SIGNAL(timeout()), qq, SLOT(imageHasChanged()));
     }
 
     LayerModel* q;
@@ -97,6 +102,7 @@ public:
     KisFilterConfiguration* newConfig;
     QTimer* updateActiveLayerWithNewFilterConfigTimer;
 
+    QTimer* imageChangedTimer;
     static int counter()
     {
         static int count = 0;
@@ -669,8 +675,7 @@ void LayerModel::nodeChanged(KisNodeSP node)
 
 void LayerModel::imageChanged()
 {
-    // This is needed to avoid an off-by-one timing issue
-    QTimer::singleShot(0, this, SLOT(imageHasChanged()));
+    d->imageChangedTimer->start();
 }
 
 void LayerModel::imageHasChanged()

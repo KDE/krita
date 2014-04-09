@@ -204,8 +204,7 @@ void KoOpenPane::openFileDialog()
                           ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                           : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
-    QFileDialog* dlg = dialog.ptr();
-    dlg->setOption(QFileDialog::HideNameFilterDetails);
+    dialog.setHideNameFilterDetailsOption();
     KUrl url = dialog.url();
     emit openExistingFile(url);
 }

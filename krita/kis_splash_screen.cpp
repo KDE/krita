@@ -47,7 +47,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     chkShowAtStartup->hide();
     connect(chkShowAtStartup, SIGNAL(toggled(bool)), this, SLOT(toggleShowAtStartup(bool)));
 
-    KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+    KConfigGroup cfg(KisFactory2::componentData().config(), "SplashScreen");
     bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
     chkShowAtStartup->setChecked(hideSplash);
 

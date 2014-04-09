@@ -21,11 +21,13 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QApplication>
-#include <QClipboard>
+#include <QMessageBox>
+#include <QRegExp>
 
 #include <kconfiggroup.h>
 #include <kmimetype.h>
 #include <klocale.h>
+
 
 class KoFileDialog::Private
 {
@@ -177,6 +179,8 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setOption(QFileDialog::DontUseNativeDialog);
     }
 #endif
+
+    connect(d->fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 
 QString KoFileDialog::url()
@@ -194,6 +198,13 @@ QString KoFileDialog::url()
 
 void KoFileDialog::filterSelected(const QString &filter)
 {
+    "Windows BMP image ( *.bmp )";
+    int start = filter.lastIndexOf("*.") + 2;
+    int end = filter.lastIndexOf(" )");
+    int n = end - start;
+    QString extension = filter.mid(start, n);
+
+    d->fileDialog->setDefaultSuffix(extension);
 }
 
 QStringList KoFileDialog::urls()

@@ -94,8 +94,12 @@ private:
     const QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterString(const QStringList &mimeList,
+    const QStringList getFilterStringList(const QStringList &mimeList,
                                       bool withAllSupportedEntry = false);
+
+    const QString getFilterString(const QStringList &mimeList,
+                                  bool withAllSupportedEntry = false);
+
     const QString getFilterString(const QString &defaultMime);
 
     class Private;

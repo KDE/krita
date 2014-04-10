@@ -27,6 +27,9 @@
 #include <ImfInputFile.h>
 #include <ImfOutputFile.h>
 
+#include <ImfStringAttribute.h>
+#include "exr_extra_tags.h"
+
 #include <kapplication.h>
 #include <kmessagebox.h>
 
@@ -45,6 +48,8 @@
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include "kis_iterator_ng.h"
+#include "kra/kis_kra_savexml_visitor.h"
+#include <kis_exr_layers_sorter.h>
 
 #include <metadata/kis_meta_data_entry.h>
 #include <metadata/kis_meta_data_schema.h>
@@ -114,11 +119,6 @@ struct ExrPaintLayerSaveInfo {
     Imf::PixelType pixelType;
 };
 
-template <class T>
-uint qHash(KisSharedPtr<T> ptr) {
-    return qHash(ptr.data());
-}
-
 struct exrConverter::Private {
     Private() : doc(0), warnedAboutZeroedAlpha(false),
                 showNotifications(false) {}
@@ -137,9 +137,12 @@ struct exrConverter::Private {
     void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP layer, int width, int xstart, int ystart, int height, Imf::PixelType ptype);
 
 
+    QDomDocument loadExtraLayersInfo(const Imf::Header &header);
+    bool checkExtraLayersInfoConsistent(const QDomDocument &doc, std::set<std::string> exrLayerNames);
     void makeLayerNamesUnique(QList<ExrPaintLayerSaveInfo>& informationObjects);
     void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects, const QString& name, KisGroupLayerSP parent);
     void reportLayersNotSaved(const QSet<KisNodeSP> &layersNotSaved);
+    QString fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>& informationObjects);
 };
 
 exrConverter::exrConverter(KisDoc2 *doc, bool showNotifications)
@@ -405,6 +408,58 @@ ExrGroupLayerInfo* searchGroup(QList<ExrGroupLayerInfo>* groups, QStringList lis
     return &groups->last();
 }
 
+QDomDocument exrConverter::Private::loadExtraLayersInfo(const Imf::Header &header)
+{
+    const Imf::StringAttribute *layersInfoAttribute =
+        header.findTypedAttribute<Imf::StringAttribute>(EXR_KRITA_LAYERS);
+
+    if (!layersInfoAttribute) return QDomDocument();
+
+    QString layersInfoString = QString::fromUtf8(layersInfoAttribute->value().c_str());
+
+    QDomDocument doc;
+    doc.setContent(layersInfoString);
+
+    return doc;
+}
+
+bool exrConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &doc, std::set<std::string> exrLayerNames)
+{
+    std::set<std::string> extraInfoLayers;
+
+    QDomElement root = doc.documentElement();
+
+    KIS_ASSERT_RECOVER(!root.isNull() && root.hasChildNodes()) { return false; };
+
+    QDomElement el = root.firstChildElement();
+
+    while(!el.isNull()) {
+        KIS_ASSERT_RECOVER(el.hasAttribute(EXR_NAME)) { return false; };
+        extraInfoLayers.insert(el.attribute(EXR_NAME).toUtf8().constData());
+        el = el.nextSiblingElement();
+    }
+
+    bool result = extraInfoLayers == exrLayerNames;
+
+    if (!result) {
+        qDebug() << "WARINING: Krita EXR extra layers info is inconsistent!";
+        qDebug() << ppVar(extraInfoLayers.size()) << ppVar(exrLayerNames.size());
+
+        std::set<std::string>::const_iterator it1 = extraInfoLayers.begin();
+        std::set<std::string>::const_iterator it2 = exrLayerNames.begin();
+
+        std::set<std::string>::const_iterator end1 = extraInfoLayers.end();
+        std::set<std::string>::const_iterator end2 = exrLayerNames.end();
+
+        for (; it1 != end1; ++it1, ++it2) {
+            qDebug() << it1->c_str() << it2->c_str();
+        }
+
+    }
+
+    return result;
+}
+
 KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
 {
     dbgFile << "Load exr: " << uri << " " << QFile::encodeName(uri.toLocalFile());
@@ -422,6 +477,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         dbgFile << "Attribute: " << it.name() << " type: " << it.attribute().typeName();
     }
 
+    // fetch Krita's extra layer info, which might have been stored previously
+    QDomDocument extraLayersInfo = m_d->loadExtraLayersInfo(file.header());
+
     // Constuct the list of LayerInfo
 
     QList<ExrPaintLayerInfo> informationObjects;
@@ -432,6 +490,13 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     const Imf::ChannelList &channels = file.header().channels();
     std::set<std::string> layerNames;
     channels.layers(layerNames);
+
+    if (!extraLayersInfo.isNull() &&
+        !m_d->checkExtraLayersInfoConsistent(extraLayersInfo, layerNames)) {
+
+        // it is inconsistent anyway
+        extraLayersInfo = QDomDocument();
+    }
 
     // Test if it is a multilayer EXR or singlelayer
     if (layerNames.empty()) {
@@ -489,6 +554,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             }
         }
     }
+
     dbgFile << "File has " << informationObjects.size() << " layers";
     // Set the colorspaces
     for (int i = 0; i < informationObjects.size(); ++i) {
@@ -654,6 +720,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
         }
     }
+
+    KisExrLayersSorter sorter(extraLayersInfo, m_d->image);
+
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -1013,6 +1082,32 @@ void exrConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
 
 }
 
+QString exrConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>& informationObjects)
+{
+    KIS_ASSERT_RECOVER_NOOP(!informationObjects.isEmpty());
+
+    QDomDocument doc("krita-extra-layers-info");
+    doc.appendChild(doc.createElement("root"));
+    QDomElement rootElement = doc.documentElement();
+
+    for (int i = 0; i < informationObjects.size(); i++) {
+        ExrPaintLayerSaveInfo &info = informationObjects[i];
+
+        quint32 unused;
+        KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
+        QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
+
+        // cut the ending '.'
+        QString strippedName = info.name.left(info.name.size() - 1);
+
+        el.setAttribute(EXR_NAME, strippedName);
+
+        rootElement.appendChild(el);
+    }
+
+    return doc.toString();
+}
+
 KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP layer)
 {
     if (!layer)
@@ -1034,12 +1129,16 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
     m_d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
-    m_d->makeLayerNamesUnique(informationObjects);
 
-    if(informationObjects.isEmpty())
-    {
+    if(informationObjects.isEmpty()) {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
+
+    m_d->makeLayerNamesUnique(informationObjects);
+
+    QByteArray extraLayersInfo = m_d->fetchExtraLayersInfo(informationObjects).toUtf8();
+    header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
+
 
     dbgFile << informationObjects.size() << " layers to save";
 

@@ -57,6 +57,13 @@ public:
         return m_nodeFileNames;
     }
 
+public:
+    QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
+    static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer);
+
+private:
+    static void loadLayerAttributes(const QDomElement &el, KisLayer *layer);
+
 private:
 
     void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);

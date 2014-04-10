@@ -49,6 +49,7 @@ public Q_SLOTS:
     bool save();
     void saveAs(const QString &filename, const QString &mimetype);
     void reload();
+    void setTemporaryFile(bool temp);
 
     static DocumentManager* instance();
 

@@ -234,6 +234,11 @@ void DocumentManager::reload()
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));
 }
 
+void DocumentManager::setTemporaryFile(bool temp)
+{
+    d->temporaryFile = temp;
+}
+
 DocumentManager* DocumentManager::instance()
 {
     if (!sm_instance) {

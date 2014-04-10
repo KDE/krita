@@ -125,7 +125,9 @@ void DesktopViewProxy::fileOpen()
 void DesktopViewProxy::fileSave()
 {
     if(DocumentManager::instance()->isTemporaryFile()) {
-        d->desktopView->saveDocument(true);
+        if(d->desktopView->saveDocument(true)) {
+            DocumentManager::instance()->setTemporaryFile(false);
+        }
     } else {
         DocumentManager::instance()->save();
     }
@@ -133,7 +135,12 @@ void DesktopViewProxy::fileSave()
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    return d->desktopView->saveDocument(true);
+    if(d->desktopView->saveDocument(true)) {
+        DocumentManager::instance()->setTemporaryFile(false);
+        return true;
+    }
+
+    return false;
 }
 
 void DesktopViewProxy::reload()

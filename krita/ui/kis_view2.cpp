@@ -636,6 +636,8 @@ bool KisView2::event( QEvent* event )
 
             syncObject->activeToolId = KoToolManager::instance()->activeToolId();
 
+            syncObject->gridData = &document()->gridData();
+
             syncObject->initialized = true;
 
             QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
@@ -680,6 +682,12 @@ bool KisView2::event( QEvent* event )
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
                 provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
+                document()->gridData().setGridColor(syncObject->gridData->gridColor());
+                document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
+                document()->gridData().setShowGrid(syncObject->gridData->showGrid());
+                document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();

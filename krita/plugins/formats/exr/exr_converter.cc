@@ -120,13 +120,13 @@ struct ExrPaintLayerSaveInfo {
 };
 
 struct exrConverter::Private {
-    Private() : doc(0), warnedAboutZeroedAlpha(false),
+    Private() : doc(0), warnedAboutChangedAlpha(false),
                 showNotifications(false) {}
 
     KisImageSP image;
     KisDoc2 *doc;
 
-    bool warnedAboutZeroedAlpha;
+    bool warnedAboutChangedAlpha;
     bool showNotifications;
 
 
@@ -224,6 +224,12 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
 }
 
 template <typename T>
+static inline T alphaEpsilon()
+{
+    return static_cast<T>(HALF_EPSILON);
+}
+
+template <typename T>
 static inline T alphaNoiseThreshold()
 {
     return static_cast<T>(0.01); // 1%
@@ -232,50 +238,57 @@ static inline T alphaNoiseThreshold()
 template <typename T>
 void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
 {
-    if (pixel->a < HALF_EPSILON &&
-        (pixel->r > HALF_EPSILON ||
-         pixel->g > HALF_EPSILON ||
-         pixel->b > HALF_EPSILON)) {
+    if (pixel->a < alphaEpsilon<T>() &&
+        (pixel->r > 0.0 ||
+         pixel->g > 0.0 ||
+         pixel->b > 0.0)) {
 
+        bool alphaWasModified = false;
         T newAlpha = 0.0;
 
         T r;
         T g;
         T b;
 
-        do {
-            newAlpha += HALF_EPSILON;
-
+        /**
+         * Division by a tiny alpha may result in an overflow of half
+         * value. That is why we use safe iterational approach.
+         */
+        while (1) {
             r = pixel->r / newAlpha;
             g = pixel->g / newAlpha;
             b = pixel->b / newAlpha;
 
-        } while (newAlpha < alphaNoiseThreshold<T>() &&
-                 (r * newAlpha != pixel->r ||
-                  g * newAlpha != pixel->g ||
-                  b * newAlpha != pixel->b));
+            if (newAlpha >= alphaNoiseThreshold<T>() ||
+                (r * newAlpha == pixel->r &&
+                 g * newAlpha == pixel->g &&
+                 b * newAlpha == pixel->b)) {
+
+                break;
+            }
+
+            newAlpha += alphaEpsilon<T>();
+            alphaWasModified = true;
+        }
 
         pixel->r = r;
         pixel->g = g;
         pixel->b = b;
         pixel->a = newAlpha;
 
-    } else if (pixel->a > HALF_EPSILON) {
-
-        if (!this->warnedAboutZeroedAlpha &&
-            pixel->a < alphaNoiseThreshold<T>()) {
+        if (alphaWasModified &&
+            !this->warnedAboutChangedAlpha) {
 
             QString msg =
                 i18nc("@info",
-                      "The image contains pixels with small Alpha value."
-                      "<nl/><nl/>"
-                      "Due to technical reasons, when saving this "
-                      "image back to EXR, the alpha channel of these pixels will be "
-                      "reset to zero (the color channels will stay untouched)."
+                      "The image contains pixels with zero alpha channel and non-zero "
+                      "color channels. Krita will have to modify those pixels to have "
+                      "at least some alpha. The initial values will <emphasis>not</emphasis> "
+                      "be reverted on saving the image back."
                       "<nl/><nl/>"
                       "This will hardly make any visual difference just keep it in mind."
                       "<nl/><nl/>"
-                      "<note>Range from <numid>%1</numid> to <numid>%2</numid></note>", HALF_EPSILON, alphaNoiseThreshold<T>());
+                      "<note>Modified alpha will have a range from <numid>%1</numid> to <numid>%2</numid></note>", alphaEpsilon<T>(), alphaNoiseThreshold<T>());
 
             if (this->showNotifications) {
                 KMessageBox::information(0, msg, i18nc("@title:window", "EXR image will be modified"), "dontNotifyEXRChangedAgain");
@@ -283,9 +296,10 @@ void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
                 qWarning() << "WARNING:" << msg;
             }
 
-            this->warnedAboutZeroedAlpha = true;
+            this->warnedAboutChangedAlpha = true;
         }
 
+    } else if (pixel->a > 0.0) {
         pixel->r /= pixel->a;
         pixel->g /= pixel->a;
         pixel->b /= pixel->a;
@@ -295,26 +309,13 @@ void exrConverter::Private::unmultiplyAlpha(Rgba<T> *pixel)
 template <typename T, typename Pixel, int size, int alphaPos>
 void multiplyAlpha(Pixel *pixel)
 {
-    bool hasNonZeroColorData = false;
-
     T alpha = pixel->data[alphaPos];
 
-
-    if (alpha > HALF_EPSILON) {
+    if (alpha > 0.0) {
         for (int i = 0; i < size; ++i) {
             if (i != alphaPos) {
                 pixel->data[i] *= alpha;
-
-                if (pixel->data[i] > HALF_EPSILON) {
-                    hasNonZeroColorData = true;
-                }
             }
-        }
-
-        if (alpha < alphaNoiseThreshold<T>() &&
-            hasNonZeroColorData) {
-
-            alpha = 0.0;
         }
 
         pixel->data[alphaPos] = alpha;

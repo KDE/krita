@@ -722,7 +722,9 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
         }
     }
 
-    KisExrLayersSorter sorter(extraLayersInfo, m_d->image);
+    if (!extraLayersInfo.isNull()) {
+        KisExrLayersSorter sorter(extraLayersInfo, m_d->image);
+    }
 
     return KisImageBuilder_RESULT_OK;
 }

@@ -85,20 +85,6 @@ KisFactory2::KisFactory2(QObject* parent)
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                          QString::fromLatin1("[X-Krita-Version] == 28"));
 
-        s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
-
-        // for cursors
-        s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
-
-        // for images in the paintop box
-        s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
-
-        s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
-
-        s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
-
-        // Tell the iconloader about share/apps/calligra/icons
-        KIconLoader::global()->addAppDir("calligra");
     }
     factoryCount++;
 }
@@ -140,6 +126,21 @@ const KComponentData &KisFactory2::componentData()
     if (!s_instance) {
         s_instance = new KComponentData(aboutData());
         Q_CHECK_PTR(s_instance);
+        s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
+
+        // for cursors
+        s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+
+        // for images in the paintop box
+        s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
+
+        s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
+
+        s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
+
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
+
 
     }
 

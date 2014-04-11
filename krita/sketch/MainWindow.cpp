@@ -54,6 +54,7 @@
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
 #include "QmlGlobalEngine.h"
+#include "Settings.h"
 
 class MainWindow::Private
 {
@@ -143,7 +144,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Sketch")));
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
 }
 
 bool MainWindow::allowClose() const

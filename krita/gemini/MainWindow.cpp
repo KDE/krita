@@ -73,6 +73,7 @@
 #include "sketch/DocumentManager.h"
 #include "sketch/KisSketchPart.h"
 #include "sketch/QmlGlobalEngine.h"
+#include "sketch/Settings.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -271,7 +272,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Gemini")));
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
 }
 
 void MainWindow::switchDesktopForced()

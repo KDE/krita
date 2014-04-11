@@ -240,7 +240,7 @@ void KisPainter::endTransaction(KisUndoAdapter *undoAdapter)
                "No transaction is in progress");
 
     d->transaction->commit(undoAdapter);
-    delete d->transaction;
+    ->transaction;
     d->transaction = 0;
 }
 

@@ -128,7 +128,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->view = view;
     m_d->doc = doc;

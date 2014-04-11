@@ -42,7 +42,7 @@ KritaNamespace::KritaNamespace(QObject* parent)
 
 KritaNamespace::~KritaNamespace()
 {
-
+    delete d;
 }
 
 QObject* KritaNamespace::imageBuilder() const

@@ -37,6 +37,7 @@ class FLAKE_EXPORT SvgStyleParser
 {
 public:
     explicit SvgStyleParser(SvgLoadingContext &context);
+    ~SvgStyleParser();
 
     /// Parses specified style attributes
     void parseStyle(const SvgStyles &styles);

@@ -152,8 +152,9 @@ KUndo2View::KUndo2View(KUndo2Group *group, QWidget *parent) : QListView(parent),
     Destroys this view.
 */
 
-KUndo2View::~KUndo2View() {
-
+KUndo2View::~KUndo2View()
+{
+    delete d;
 }
 
 /*!

@@ -223,6 +223,7 @@ void DocumentManager::delayedSaveAs()
 {
     d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
+    d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();
 }
 

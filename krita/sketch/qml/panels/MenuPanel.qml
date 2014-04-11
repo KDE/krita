@@ -81,13 +81,6 @@ Item {
             anchors.right: parent.right;
 
             Button {
-                id: pasteButton;
-                image: Settings.theme.icon("fileclip")
-                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
-                enabled: KisClipBoard.clip;
-                onClicked: base.buttonClicked( "paste" );
-            }
-            Button {
                 id: undoButton;
                 image: Settings.theme.icon("undo")
                 highlightColor: Settings.theme.color("panels/menu/buttonHighlight");

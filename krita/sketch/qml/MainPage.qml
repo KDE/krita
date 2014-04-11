@@ -141,8 +141,6 @@ Page {
                     pageStack.push( settingsPage );
                 case "help":
                     pageStack.push( helpPage );
-                case "paste":
-                    sketchView.selectionManager.paste();
                 case "undo":
                     sketchView.undo();
                 case "redo":

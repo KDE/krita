@@ -202,6 +202,7 @@ bool DocumentManager::save()
     if (d->document->save())
     {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
+        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
         return true;
     }
@@ -238,6 +239,7 @@ void DocumentManager::reload()
 void DocumentManager::setTemporaryFile(bool temp)
 {
     d->temporaryFile = temp;
+    emit documentSaved();
 }
 
 DocumentManager* DocumentManager::instance()

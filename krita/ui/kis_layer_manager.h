@@ -80,7 +80,6 @@ private slots:
     
     void imageResizeToActiveLayer();
 
-    void actLayerVisChanged(int show);
     void layerProperties();
 
     void layerDuplicate();
@@ -127,7 +126,6 @@ private:
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
     KAction *m_groupLayersSave;
-    bool m_actLayerVis;
     KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;

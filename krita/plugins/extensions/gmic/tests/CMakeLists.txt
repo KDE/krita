@@ -13,6 +13,11 @@ set(kritagmic_parser_PART_SRCS
 ../kis_gmic_filter_settings.cpp
 ../kis_gmic_simple_convertor.cpp
 ../kis_input_output_mapper.cpp
+../kis_gmic_applicator.cpp
+../kis_export_gmic_processing_visitor.cpp
+../kis_gmic_command.cpp
+../kis_gmic_synchronize_layers_command.cpp
+../kis_import_gmic_processing_visitor.cpp
 )
 
 

@@ -39,7 +39,6 @@ private:
 
     QString filePathify(const QString &filterName);
     bool isAlreadyThere(QString fileName);
-    QString toPlainText(const QString &htmlText);
 
 private:
     Component * m_root;
@@ -73,6 +72,8 @@ private slots:
     void testConvertGrayScaleAlphaGmic();
     void testConvertRGBgmic();
     void testConvertRGBAgmic();
+
+    void testFilterOnlySelection();
 
 
 };

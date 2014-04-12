@@ -79,6 +79,8 @@ void KisGmicTests::initTestCase()
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, m_gmicImage);;
 
     m_images.assign(1);
+
+
 }
 
 void KisGmicTests::cleanupTestCase()
@@ -194,7 +196,7 @@ void KisGmicTests::testAllFilters()
     q.enqueue(m_root);
 
     KisGmicFilterSetting filterSettings;
-    int filters = 0;
+    int filterCount = 0;
 
     int failed = 0;
     int success = 0;
@@ -211,7 +213,7 @@ void KisGmicTests::testAllFilters()
             //qDebug() << "Filter: " << c->name() << filterSettings.gmicCommand();
             if (!filterSettings.gmicCommand().startsWith("-_none_"))
             {
-                filters++;
+                filterCount++;
 
 #ifdef RUN_FILTERS
                 QString filterName = KisGmicBlacklister::toPlainText(cmd->name());
@@ -273,8 +275,37 @@ void KisGmicTests::testAllFilters()
 #endif
 
 
+#ifndef gmic_version
+#error gmic_version has to be defined in gmic.h
+#endif
 
-    QCOMPARE(filters,260);
+    int GMIC_FILTER_COUNT;
+    int gmicVersion = gmic_version;
+    switch (gmicVersion)
+    {
+        case 1570:
+        {
+            GMIC_FILTER_COUNT = 260;
+            break;
+        }
+        case 1584:
+        {
+            GMIC_FILTER_COUNT = 288;
+            break;
+        }
+        default:
+        {
+            GMIC_FILTER_COUNT = 260;
+            break;
+        }
+    }
+
+    // If this fails:
+    // gmic version changed and gmic was updated, right? Then please update GMIC_FILTER_COUNT. Or you caused regression in gmic def parser..
+    // For now run test KisGmicTests::testAllFilters to find correct value for GMIC_FILTER_COUNT
+    // If it is suspicious value (e.g. smaller then previous releases), the gmic_def.gmic file maybe changed format and should not be updated
+    // without updating Krita's gmic parser
+    QCOMPARE(filterCount,GMIC_FILTER_COUNT);
 }
 
 

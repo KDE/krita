@@ -56,6 +56,15 @@ private slots:
 #ifdef RUN_FILTERS
     void testColorizeFilter();
 #endif
+    /**
+     * This test case takes all filters parsed from gmic definition @file gmic_def.gmic
+     * and counts them. The count is compared to GMIC_FILTER_COUNT
+     *
+     * If you define RUN_FILTERS in compilation, it will also try to run all filters on specified image.
+     * This is off by default, because it takes longer time and it is important to run it like this only sometimes (e.g. when gmic is updated).
+     * It is used for finding filters that might crash Krita due to unsupported feature required from gmic
+     *
+     */
     void testAllFilters();
     void testBlacklister();
     void testGatherLayers();

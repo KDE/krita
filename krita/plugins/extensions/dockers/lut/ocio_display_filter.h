@@ -41,7 +41,7 @@ class OcioDisplayFilter : public KisDisplayFilter
 public:
     explicit OcioDisplayFilter(QObject *parent = 0);
 
-    void filter(quint8 *src, quint8 *dst, quint32 numPixels);
+    void filter(quint8 *pixels, quint32 numPixels);
 
 #ifdef HAVE_OPENGL
     virtual QString program() const;
@@ -56,6 +56,8 @@ public:
     const char *displayDevice;
     const char *view;
     OCIO_CHANNEL_SWIZZLE swizzle;
+    float exposure;
+    float gamma;
 
 private:
 

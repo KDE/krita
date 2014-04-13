@@ -250,7 +250,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             delete[] originalBytes;
             originalBytes = reinterpret_cast<quint8*>(dst);
         }
-        m_displayFilter->filter(originalBytes, originalBytes, numPixels);
+        m_displayFilter->filter(originalBytes, numPixels);
 #endif
     }
     else {

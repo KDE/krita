@@ -36,6 +36,8 @@ public:
 protected:
     virtual QColor selectColor(int x, int y);
     virtual void paint(QPainter*);
+
+private:
     const QColor& colorAt(int x, int y, bool forceValid = false);
 
 private:

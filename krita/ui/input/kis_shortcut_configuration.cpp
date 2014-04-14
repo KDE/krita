@@ -231,6 +231,7 @@ void KisShortcutConfiguration::setGesture(KisShortcutConfiguration::GestureActio
 QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 {
     QString text;
+    QString sep = i18nc("Separator in the list of mouse buttons for shortcut", " + ");
 
     int buttonCount = 0;
 
@@ -241,7 +242,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 
     if (buttons & Qt::RightButton) {
         if (buttonCount++ > 0) {
-            text.append(" + ");
+            text.append(sep);
         }
 
         text.append(i18nc("Right Mouse Button", "Right"));
@@ -249,7 +250,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 
     if (buttons & Qt::MidButton) {
         if (buttonCount++ > 0) {
-            text.append(" + ");
+            text.append(sep);
         }
 
         text.append(i18nc("Middle Mouse Button", "Middle"));
@@ -257,7 +258,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 
     if (buttons & Qt::XButton1) {
         if (buttonCount++ > 0) {
-            text.append(" + ");
+            text.append(sep);
         }
 
         text.append(i18nc("Mouse Back Button", "Back"));
@@ -265,7 +266,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 
     if (buttons & Qt::XButton1) {
         if (buttonCount++ > 0) {
-            text.append(" + ");
+            text.append(sep);
         }
 
         text.append(i18nc("Mouse Forward Button", "Forward"));
@@ -275,8 +276,10 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
         text.append(i18nc("No mouse buttons for shortcut", "None"));
     }
     else {
-        text.append(' ');
-        text.append(i18ncp("Mouse Buttons", "Button", "Buttons", buttonCount));
+        text = i18ncp(
+            "%1 = List of mouse buttons for shortcut. "
+            "Plural form is chosen upon the number of buttons in that list.",
+            "%1 Button", "%1 Buttons", text, buttonCount);
     }
 
     return text;
@@ -288,7 +291,7 @@ QString KisShortcutConfiguration::keysToText(const QList<Qt::Key> &keys)
 
     foreach (Qt::Key key, keys) {
         if (output.size() > 0) {
-            output.append(" + ");
+            output.append(i18nc("Separator in the list of keys for shortcut", " + "));
         }
 
         switch (key) { //Because QKeySequence fails for Ctrl, Alt, Shift and Meta

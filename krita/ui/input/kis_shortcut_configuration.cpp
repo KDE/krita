@@ -353,28 +353,32 @@ QString KisShortcutConfiguration::wheelToText(KisShortcutConfiguration::MouseWhe
 
 QString KisShortcutConfiguration::buttonsInputToText(const QList<Qt::Key> &keys, Qt::MouseButtons buttons)
 {
-    QString text;
+    QString buttonsText = KisShortcutConfiguration::buttonsToText(buttons);
 
     if (keys.size() > 0) {
-        text.append(KisShortcutConfiguration::keysToText(keys));
-        text.append(" + ");
+        return i18nc(
+            "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut",
+            "%1 + %2",
+            KisShortcutConfiguration::keysToText(keys),
+            buttonsText);
     }
-
-    text.append(KisShortcutConfiguration::buttonsToText(buttons));
-
-    return text;
+    else {
+        return buttonsText;
+    }
 }
 
 QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, KisShortcutConfiguration::MouseWheelMovement wheel)
 {
-    QString text;
+    QString wheelText = KisShortcutConfiguration::wheelToText(wheel);
 
     if (keys.size() > 0) {
-        text.append(KisShortcutConfiguration::keysToText(keys));
-        text.append(" + ");
+        return i18nc(
+            "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut",
+            "%1 + %2",
+            KisShortcutConfiguration::keysToText(keys),
+            wheelText);
     }
-
-    text.append(KisShortcutConfiguration::wheelToText(wheel));
-
-    return text;
+    else {
+        return wheelText;
+    }
 }

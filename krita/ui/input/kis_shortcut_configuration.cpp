@@ -272,7 +272,7 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
     }
 
     if (buttonCount == 0) {
-        text.append(i18nc("No input", "None"));
+        text.append(i18nc("No mouse buttons for shortcut", "None"));
     }
     else {
         text.append(' ');
@@ -317,7 +317,7 @@ QString KisShortcutConfiguration::keysToText(const QList<Qt::Key> &keys)
     }
 
     if (output.size() == 0) {
-        output = i18nc("No input", "None");
+        output = i18nc("No keys for shortcut", "None");
     }
 
     return output;
@@ -343,7 +343,7 @@ QString KisShortcutConfiguration::wheelToText(KisShortcutConfiguration::MouseWhe
         break;
 
     default:
-        return i18nc("No input", "None");
+        return i18nc("No mouse wheel buttons for shortcut", "None");
         break;
     }
 }

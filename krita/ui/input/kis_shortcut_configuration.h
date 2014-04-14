@@ -201,7 +201,6 @@ public:
      * \note Only applicable when type is GestureType.
      */
     void setGesture(GestureAction type);
-
     /**
      * Convert a set of mouse buttons into a user-readable
      * string.
@@ -216,7 +215,7 @@ public:
      * \return A string representing the buttons that can be shown
      * to a user.
      *
-     * \note An empty set will produce the string "No Input".
+     * \note An empty set will produce the string "None".
      */
     static QString buttonsToText(Qt::MouseButtons buttons);
     /**
@@ -232,7 +231,7 @@ public:
      * \return A string representing the keys that can be shown
      * to a user.
      *
-     * \note An empty list will produce the string "No Input".
+     * \note An empty list will produce the string "None".
      */
     static QString keysToText(const QList<Qt::Key> &keys);
     /**
@@ -247,9 +246,46 @@ public:
      * \return A string representing the mouse wheel movement
      * that can be shown to a user.
      *
-     * \note NoMovement will produce the string "No Input".
+     * \note NoMovement will produce the string "None".
      */
     static QString wheelToText(MouseWheelMovement wheel);
+    /**
+     * Convert a shortcut build of a set of keys and a set of mouse
+     * buttons into a user-readable string.
+     *
+     * This will convert the given mouse buttons-based shortcut into a
+     * string that can be shown to a user. For example, the combination
+     * of Qt::Key_Control and Qt::LeftButton + Qt::RightButton will
+     * produce the string "Ctrl + Left + Right Button".
+     *
+     * \param keys The keys to convert.
+     * \param buttons The mouse buttons to convert.
+     *
+     * \return A string representing the shortcut that can be shown
+     * to a user.
+     *
+     * \note An empty set of buttons will appear as the string "None".
+     */
+    static QString buttonsInputToText(const QList<Qt::Key> &keys, Qt::MouseButtons buttons);
+    /**
+     * Convert a shortcut build of a set of keys and a set of mouse
+     * wheel buttons into a user-readable string.
+     *
+     * This will convert the given mouse wheel-based shortcut into a
+     * string that can be shown to a user. For example, the combination
+     * of Qt::Key_Control and WheelUp will produce the string
+     * "Ctrl + Mouse Wheel Up".
+     *
+     * \param keys The keys to convert.
+     * \param wheel The mouse wheel buttons to convert.
+     *
+     * \return A string representing the shortcut that can be shown
+     * to a user.
+     *
+     * \note An empty set of wheel buttons will appear as
+     * the string "None".
+     */
+    static QString wheelInputToText(const QList<Qt::Key> &keys, MouseWheelMovement wheel);
 
 private:
     class Private;

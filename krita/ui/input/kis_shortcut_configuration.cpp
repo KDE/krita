@@ -347,3 +347,31 @@ QString KisShortcutConfiguration::wheelToText(KisShortcutConfiguration::MouseWhe
         break;
     }
 }
+
+QString KisShortcutConfiguration::buttonsInputToText(const QList<Qt::Key> &keys, Qt::MouseButtons buttons)
+{
+    QString text;
+
+    if (keys.size() > 0) {
+        text.append(KisShortcutConfiguration::keysToText(keys));
+        text.append(" + ");
+    }
+
+    text.append(KisShortcutConfiguration::buttonsToText(buttons));
+
+    return text;
+}
+
+QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, KisShortcutConfiguration::MouseWheelMovement wheel)
+{
+    QString text;
+
+    if (keys.size() > 0) {
+        text.append(KisShortcutConfiguration::keysToText(keys));
+        text.append(" + ");
+    }
+
+    text.append(KisShortcutConfiguration::wheelToText(wheel));
+
+    return text;
+}

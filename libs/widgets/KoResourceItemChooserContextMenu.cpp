@@ -88,6 +88,18 @@ void KoLineEditAction::setText(const QString& text)
     m_editBox->setText(text);
 }
 
+void KoLineEditAction::setVisible(bool showAction)
+{
+    QLayout* currentLayout = defaultWidget()->layout();
+
+    this->QAction::setVisible(showAction);
+
+    for(int i=0;i<currentLayout->count();i++) {
+        currentLayout->itemAt(i)->widget()->setVisible(showAction);
+    }
+    defaultWidget()->setVisible(showAction);
+}
+
 ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
     : QAction(parent)
     , m_resource(resource)

@@ -348,7 +348,13 @@ bool KoResourceTableModel::removeResource(KoResource* resource)
 
 void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
 {
-    getResourceAdapter(resource)->addTag(resource, tag);
+    if (resource==0) {
+        m_resourceAdapterList.at(0)->addTag(0,tag);
+    }
+    else {
+        getResourceAdapter(resource)->addTag(resource, tag);
+    }
+
     emit tagBoxEntryAdded(tag);
 }
 
@@ -369,34 +375,29 @@ QList<KoResource *> KoResourceTableModel::currentlyVisibleResources() const
 
 void KoResourceTableModel::tagCategoryAdded(const QString& tag)
 {
-    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
-
-    for (int i=0;i<currentAdapters.size();i++) {
-        currentAdapters.at(i)->tagCategoryAdded(tag);
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->tagCategoryAdded(tag);
     }
 }
 
 void KoResourceTableModel::tagCategoryRemoved(const QString& tag)
 {
-    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
-    for (int i=0;i<currentAdapters.size();i++) {
-        currentAdapters.at(i)->tagCategoryRemoved(tag);
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->tagCategoryRemoved(tag);
     }
 }
 
 void KoResourceTableModel::tagCategoryMembersChanged()
 {
-    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
-    for (int i=0;i<currentAdapters.size();i++) {
-        currentAdapters.at(i)->tagCategoryMembersChanged();
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->tagCategoryMembersChanged();
     }
 }
 
 void KoResourceTableModel::setCurrentTag(const QString& currentTag)
 {
-    QList<QSharedPointer<KoAbstractResourceServerAdapter> > currentAdapters=getSelectedAdapters();
-    for (int i=0;i<currentAdapters.size();i++) {
-        currentAdapters.at(i)->setCurrentTag(currentTag);
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->setCurrentTag(currentTag);
     }
 }
 
@@ -416,15 +417,12 @@ void KoResourceTableModel::enableResourceFiltering(bool enable)
 }
 
 //TODO Vérifier que le refreshResources est indispensable
-//TODO Bug au niveau des lettres qui ne sont pas contenues dans les deux ressources de type gradient
 void KoResourceTableModel::searchTextChanged(const QString& searchString)
-{    
-    if(!searchString.isEmpty()){
-        for (int i=0;i<m_resourceAdapterList.size();i++) {
-            m_resourceAdapterList.at(i)->searchTextChanged(searchString);
-        }
-        refreshResources();
+{
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->searchTextChanged(searchString);
     }
+    refreshResources();
 }
 
 void KoResourceTableModel::tagBoxEntryWasModified()
@@ -445,18 +443,20 @@ void KoResourceTableModel::tagBoxEntryWasRemoved(const QString& tag)
 
 QStringList KoResourceTableModel::tagNamesList() const
 {
-    QStringList res=m_resourceAdapterList.at(0)->tagNamesList();
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
-        res.append(m_resourceAdapterList.at(i)->tagNamesList());
+    QStringList tagNamesList=m_resourceAdapterList.at(0)->tagNamesList();
+
+    for (int i=1;i<m_resourceAdapterList.size();i++) {
+        tagNamesList.append(m_resourceAdapterList.at(i)->tagNamesList());
     }
-    res.removeDuplicates();
-    return res;
+    tagNamesList.removeDuplicates();
+
+    return tagNamesList;
 }
 
 QList< KoResource* > KoResourceTableModel::serverResources() const
 {
     QList< KoResource* > res=m_resourceAdapterList.at(0)->serverResources();
-    for (int i=0;i<m_resourceAdapterList.size();i++) {
+    for (int i=1;i<m_resourceAdapterList.size();i++) {
         res.append(m_resourceAdapterList.at(i)->serverResources());
     }
     return res;

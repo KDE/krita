@@ -95,6 +95,8 @@ private slots:
     void refreshTaggingManager(int index=0);
     void tableViewChanged(int index);
 
+    void removeTag();
+
     void status(QString text,int timeout);
 
 private:

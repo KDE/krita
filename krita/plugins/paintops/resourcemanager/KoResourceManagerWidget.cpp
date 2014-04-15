@@ -30,7 +30,6 @@
 #include <iostream>
 using namespace std;
 
-//TODO Penser à enlever les balises d'alignement pour compatibilité Qt 4.7
 //TODO Paramètre de ManagerControl à modifier si on veut rajouter des onglets
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::KoResourceManagerWidget),control(new KoResourceManagerControl(2)),tagMan(0),firstRefresh(true)
@@ -175,6 +174,8 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->toolButton,SIGNAL(clicked()),this,SLOT(startRenaming()));
     connect(ui->toolButton_2,SIGNAL(clicked()),this,SLOT(thumbnail()));
 
+    connect(ui->pushButton_11,SIGNAL(clicked()),this,SLOT(removeTag()));
+
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tableViewChanged(int)));
 }
 
@@ -193,7 +194,7 @@ QTableView* KoResourceManagerWidget::tableView(int index)
     return dynamic_cast<QTableView*>(ui->tabWidget->widget(index)->layout()->itemAt(0)->widget());
 }
 
-
+//TODO Régler le pb de chgt de taille de la thumbnail
 /*Slots*/
 
 void KoResourceManagerWidget::about()
@@ -326,6 +327,32 @@ void KoResourceManagerWidget::rename(QString newName)
     }
 }
 
+void KoResourceManagerWidget::removeTag(){
+    if (ui->listWidget->selectedItems().size()!=1) {
+        ui->statusbar->showMessage("No tag selected in the above list...Tag removing aborted.",3000);
+    }
+    else {
+        ui->statusbar->showMessage("Removing tag from resource...");
+        QString tagName=ui->listWidget->selectedItems().at(0)->data(Qt::DisplayRole).toString();
+        KoResourceTableModel *currentModel=control->getModel(ui->tabWidget->currentIndex());
+        QTableView *currentTableView = tableView(ui->tabWidget->currentIndex());
+        KoResource* currentResource = currentModel->getResourceFromIndex(currentTableView->currentIndex());
+
+        currentModel->deleteTag(currentResource,tagName);
+
+        if (tagMan->currentTag()==tagName) {
+            currentModel->hideResource(currentResource);
+            refreshDetails(currentModel->index(-1));
+        }
+        else {
+            refreshDetails(currentTableView->currentIndex());
+        }
+
+        currentTableView->reset();
+        ui->statusbar->showMessage("Tag removed successfully",3000);
+    }
+}
+
 void KoResourceManagerWidget::filterFieldSelected(bool value)
 {
     QAction *emetteur = (QAction*)sender();
@@ -424,6 +451,7 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
 
     ui->listWidget->clear();
     ui->listWidget->addItems(control->getModel(ui->tabWidget->currentIndex())->assignedTagsList(currentResource));
+    ui->pushButton_11->setEnabled(!ui->listWidget->count()==0);
 
     //Overview
 
@@ -502,18 +530,25 @@ void KoResourceManagerWidget::refreshTaggingManager(int index)
         tagMan->showTaggingBar(true,false);
         delete tagMan;
     }
-    tagMan=new KoResourceTaggingManager(control->getModel(index),ui->widget_2);
+    KoResourceTableModel *currentModel = control->getModel(index);
+    tagMan=new KoResourceTaggingManager(currentModel,ui->widget_2);
     tagMan->showTaggingBar(true,!firstRefresh);
+
+    currentModel->enableResourceFiltering(false);
+    currentModel->setCurrentTag(QString());
+    currentModel->refreshResources();
+
     ui->gridLayout->addWidget(tagMan->tagFilterWidget(),0,1);
     ui->gridLayout->addWidget(ui->widget,0,2);
     ui->widget_2->layout()->addWidget(tagMan->tagChooserWidget());
 }
 
-//TODO Régler le problème lié à la sélection, le changement de types et le changement d'onglet
+//TODO Régler le problème de l'ajout consécutif de tags
 void KoResourceManagerWidget::tableViewChanged(int index)
 {
-    refreshTaggingManager(index);
     QTableView *newView=tableView(ui->tabWidget->currentIndex());
+
+    refreshTaggingManager(index);
     newView->setFocus();
     refreshDetails(newView->currentIndex());
 

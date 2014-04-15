@@ -66,10 +66,9 @@ public:
 
     void initializeConnect();
     void initializeFilterMenu();
-    void initializeModel();
+    void initializeModels(bool first=false);
     void initializeTitle();
 
-    void connectTables();
     QTableView* tableView(int index);
 
 private slots:
@@ -81,6 +80,7 @@ private slots:
     void uninstallPack();
 
     void setMeta();
+    void thumbnail();
 
     void startRenaming();
     void endRenaming();
@@ -94,6 +94,8 @@ private slots:
     void saveMeta();
     void refreshTaggingManager(int index=0);
     void tableViewChanged(int index);
+
+    void status(QString text,int timeout);
 
 private:
     Ui::KoResourceManagerWidget *ui;

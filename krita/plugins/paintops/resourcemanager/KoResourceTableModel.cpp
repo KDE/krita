@@ -302,19 +302,21 @@ void KoResourceTableModel::refreshBundles(bool isResourcesEmpty)
 
 void KoResourceTableModel::removeResourceFile(KoResource* resource,const QString &filename)
 {
-    m_resourceSelected.removeOne(filename);
+    removeOneSelected(filename);
     getResourceAdapter(resource)->removeResourceFile(filename);
 }
 
 void KoResourceTableModel::hideResource(KoResource* resource)
 {
-    m_resourceSelected.removeOne(resource->filename());
+    removeOneSelected(resource->filename());
     m_resources.removeOne(resource);
 }
 
 void KoResourceTableModel::removeOneSelected(const QString &filename)
 {
-    m_resourceSelected.removeOne(filename);
+    if (!m_resourceSelected.isEmpty()) {
+        m_resourceSelected.removeOne(filename);
+    }
 }
 
 int KoResourceTableModel::getDataType()
@@ -447,6 +449,7 @@ QStringList KoResourceTableModel::tagNamesList() const
     for (int i=0;i<m_resourceAdapterList.size();i++) {
         res.append(m_resourceAdapterList.at(i)->tagNamesList());
     }
+    res.removeDuplicates();
     return res;
 }
 

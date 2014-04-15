@@ -22,21 +22,34 @@
 #include "KoResourceManagerControl.h"
 #include "KoResourceTableModel.h"
 #include "KoResourceTaggingManager.h"
+#include <QFileDialog>
+#include "KoBundleCreationWidget.h"
+#include <QtCore/QProcessEnvironment>
+#include <QtGui/QMessageBox>
 
 #include <iostream>
 using namespace std;
 
+//TODO Penser à enlever les balises d'alignement pour compatibilité Qt 4.7
 //TODO Paramètre de ManagerControl à modifier si on veut rajouter des onglets
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::KoResourceManagerWidget),control(new KoResourceManagerControl(2)),tagMan(0),firstRefresh(true)
 {
     ui->setupUi(this);
 
-    initializeModel();
+    initializeModels(true);
     initializeConnect();
     initializeTitle();
     initializeFilterMenu();
     refreshTaggingManager();
+
+    QString kritaPath=QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0);
+
+    ui->pushButton_2->setIcon(QIcon(kritaPath+"/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-add.svg"));
+    ui->pushButton_9->setIcon(QIcon(kritaPath+"/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-delete.svg"));
+    ui->toolButton->setIcon(QIcon(kritaPath+"/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-edit.svg"));
+    ui->toolButton_2->setIcon(QIcon(kritaPath+"/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-paint.svg"));
+    ui->pushButton_12->setIcon(QIcon(kritaPath+"/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-apply.svg"));
 
     ui->tabWidget->removeTab(2);
     ui->tabWidget->removeTab(2);
@@ -91,25 +104,38 @@ void KoResourceManagerWidget::initializeTitle()
     resourceNameLabel->setText("Welcome\n to the\n Resource Manager !\n");
     resourceNameLabel->setFont(labelFont);
     resourceNameLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
-    ui->horizontalLayout_4->addWidget(resourceNameLabel);
+    ui->horizontalLayout_4->insertWidget(2,resourceNameLabel);
     ui->lineEdit_5->setVisible(false);
     ui->scrollArea->setVisible(false);
     ui->label->setVisible(false);
+    ui->toolButton->setVisible(false);
+    ui->toolButton_2->setVisible(false);
     ui->pushButton_12->setVisible(false);
 }
 
-void KoResourceManagerWidget::initializeModel()
+void KoResourceManagerWidget::initializeModels(bool first)
 {   
     for (int i=0;i<control->getNbModels();i++) {
         QTableView* currentTableView=tableView(i);
         currentTableView->setModel(control->getModel(i));
         currentTableView->resizeColumnsToContents();
+
+        connect(currentTableView,SIGNAL(pressed(QModelIndex)),control->getModel(i),SLOT(resourceSelected(QModelIndex)));
+        connect(currentTableView->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(i),SLOT(allSelected(int)));
+        connect(currentTableView->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
+
+        if (first) {
+            KoResourceTableDelegate *delegate=new KoResourceTableDelegate();
+            connect(delegate,SIGNAL(renameEnded(QString)),this,SLOT(rename(QString)));
+            currentTableView->setItemDelegate(delegate);
+        }
     }
 }
 
-//TODO Lors de l'appui sur entrée changer le focus ou autre
 void KoResourceManagerWidget::initializeConnect()
 {
+    connect(control,SIGNAL(status(QString,int)),this,SLOT(status(QString,int)));
+
     connect(ui->pushButton_6,SIGNAL(clicked()),this,SLOT(showHide()));
 
     connect(ui->lineEdit_2,SIGNAL(editingFinished()),this,SLOT(setMeta()));
@@ -146,23 +172,20 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->actionQuit,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(close()));
 
-    connectTables();
-}
-
-void KoResourceManagerWidget::connectTables()
-{
-    for (int i=0;i<control->getNbModels();i++) {
-        QTableView* currentTableView=tableView(i);
-        connect(currentTableView->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
-        connect(currentTableView,SIGNAL(pressed(QModelIndex)),control->getModel(i),SLOT(resourceSelected(QModelIndex)));
-        connect(currentTableView->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(i),SLOT(allSelected(int)));
-        KoResourceTableDelegate *delegate=new KoResourceTableDelegate();
-        connect(delegate,SIGNAL(renameEnded(QString)),this,SLOT(rename(QString)));
-        currentTableView->setItemDelegate(delegate);
-
-    }
+    connect(ui->toolButton,SIGNAL(clicked()),this,SLOT(startRenaming()));
+    connect(ui->toolButton_2,SIGNAL(clicked()),this,SLOT(thumbnail()));
 
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tableViewChanged(int)));
+}
+
+void KoResourceManagerWidget::showHide()
+{
+    ui->widget_2->setVisible(!ui->widget_2->isVisible());
+}
+
+void KoResourceManagerWidget::status(QString text,int timeout)
+{
+    ui->statusbar->showMessage(text,timeout);
 }
 
 QTableView* KoResourceManagerWidget::tableView(int index)
@@ -170,11 +193,14 @@ QTableView* KoResourceManagerWidget::tableView(int index)
     return dynamic_cast<QTableView*>(ui->tabWidget->widget(index)->layout()->itemAt(0)->widget());
 }
 
+
 /*Slots*/
 
 void KoResourceManagerWidget::about()
 {
-    control->about();
+    QMessageBox msgBox;
+    msgBox.about(this,"About Krita Resource Manager",
+                 "This software has been designed by Reload Team and KDE developers :)");
 }
 
 void KoResourceManagerWidget::createPack()
@@ -182,20 +208,36 @@ void KoResourceManagerWidget::createPack()
     control->createPack(ui->tabWidget->currentIndex());
 }
 
-void KoResourceManagerWidget::deletePack()
-{
-    control->modifySelected(2,ui->tabWidget->currentIndex());
-}
-
 void KoResourceManagerWidget::installPack()
 {
-    control->modifySelected(0,ui->tabWidget->currentIndex());
+    control->install(ui->tabWidget->currentIndex());
+}
+
+void KoResourceManagerWidget::deletePack()
+{
+    control->remove(ui->tabWidget->currentIndex());
 }
 
 void KoResourceManagerWidget::uninstallPack()
 {
-    control->modifySelected(1,ui->tabWidget->currentIndex());
+    control->uninstall(ui->tabWidget->currentIndex());
 }
+
+
+
+
+void KoResourceManagerWidget::thumbnail()
+{
+    QTableView* currentTableView = tableView(ui->tabWidget->currentIndex());
+    QModelIndex currentIndex = currentTableView->currentIndex();
+    QString fileName = QFileDialog::getOpenFileName(0,
+         tr("Import Thumbnail"), QProcessEnvironment::systemEnvironment().value("HOME").section(':',0,0), tr("Image Files (*.jpg)"));
+
+    control->thumbnail(currentIndex,fileName,ui->tabWidget->currentIndex());
+    currentTableView->reset();
+    currentTableView->setCurrentIndex(currentIndex);
+}
+
 
 void KoResourceManagerWidget::setMeta()
 {
@@ -207,23 +249,36 @@ void KoResourceManagerWidget::setMeta()
         QLineEdit* sender=(QLineEdit*)emetteur;
         if (emetteur==ui->lineEdit_2) {
             control->setMeta(currentTableView->currentIndex(),"Author",sender->text(),currentIndex);
+            ui->lineEdit_2->blockSignals(true);
             ui->lineEdit_2->clearFocus();
+            ui->lineEdit_2->blockSignals(false);
         }
         else if (emetteur==ui->lineEdit_3) {
             control->setMeta(currentTableView->currentIndex(),"License",sender->text(),currentIndex);
+            ui->lineEdit_3->blockSignals(true);
             ui->lineEdit_3->clearFocus();
+            ui->lineEdit_3->blockSignals(false);
         }
         else if (emetteur==ui->lineEdit_4) {
             control->setMeta(currentTableView->currentIndex(),"Website",sender->text(),currentIndex);
+            ui->lineEdit_4->blockSignals(true);
             ui->lineEdit_4->clearFocus();
+            ui->lineEdit_4->blockSignals(false);
         }
     }
 }
 
 void KoResourceManagerWidget::startRenaming()
 {
+    ui->statusbar->showMessage("Renaming...",3000);
     ui->lineEdit_5->blockSignals(false);
     resourceNameLabel->setVisible(false);
+    ui->toolButton->setVisible(false);
+
+    if (ui->toolButton_2->isVisible()) {
+        ui->toolButton_2->setVisible(false);
+    }
+
     ui->lineEdit_5->setVisible(true);
     ui->lineEdit_5->setFocus();
 }
@@ -234,7 +289,11 @@ void KoResourceManagerWidget::endRenaming()
     QModelIndex currentIndex=currentTableView->currentIndex();
     ui->lineEdit_5->blockSignals(true);
 
-    QString newFileName=ui->lineEdit_5->text()+"."+resourceNameLabel->text().section('.',1);
+    QString newFileName=ui->lineEdit_5->text();
+    QString extension=resourceNameLabel->text().section('.',1);
+    if (!extension.isEmpty()) {
+         newFileName+="."+extension;
+    }
 
     if (control->rename(currentIndex,newFileName,ui->tabWidget->currentIndex())) {
         resourceNameLabel->setText(newFileName);
@@ -246,11 +305,15 @@ void KoResourceManagerWidget::endRenaming()
 
     currentTableView->setCurrentIndex(currentIndex);
     resourceNameLabel->setVisible(true);
+    ui->toolButton->setVisible(true);
     ui->lineEdit_5->setVisible(false);
+    ui->statusbar->showMessage("Resource renamed successfully...",3000);
 }
 
 void KoResourceManagerWidget::rename(QString newName)
 {
+    ui->statusbar->showMessage("Renaming...",3000);
+
     QTableView* currentTableView=tableView(ui->tabWidget->currentIndex());
     QModelIndex currentIndex=currentTableView->currentIndex();
 
@@ -259,6 +322,7 @@ void KoResourceManagerWidget::rename(QString newName)
     if (control->rename(currentIndex,newFileName,ui->tabWidget->currentIndex())) {
         resourceNameLabel->setText(newFileName);
         currentTableView->reset();
+        ui->statusbar->showMessage("Resource renamed successfully...",3000);
     }
 }
 
@@ -289,31 +353,44 @@ void KoResourceManagerWidget::filterFieldSelected(bool value)
     }
 }
 
-//TODO Modifier pour les modèles à partir de 2
 void KoResourceManagerWidget::filterResourceTypes(int index)
 {
-    control->filterResourceTypes(index);
+    int currentTab=ui->tabWidget->currentIndex();
+    KoResourceTableModel* model;
 
-    for (int i=0;i<ui->tabWidget->count();i++){
-        QTableView *currentTableView = tableView(i);
-        if (i==1) {
-            currentTableView->setModel(control->getModel(KoResourceTableModel::Installed));
-        }
-        else {
-            currentTableView->setModel(control->getModel(KoResourceTableModel::Available));
-        }
+    ui->statusbar->showMessage("Filtering...",3000);
+
+    control->filterResourceTypes(index);
+    initializeModels();
+
+    model=control->getModel(currentTab);
+
+    if (model->resourcesCount()==0) {
+        ui->widget_2->setEnabled(false);
+    }
+    else {
+        QModelIndex index=model->index(0);
+
+        ui->widget_2->setEnabled(true);
+        tableView(currentTab)->setCurrentIndex(index);
+        refreshDetails(index);
     }
 
-    connectTables();
+    ui->statusbar->showMessage("Resource lists updated",3000);
 }
 
-void KoResourceManagerWidget::showHide()
-{
-    ui->widget_2->setVisible(!ui->widget_2->isVisible());
-}
+
 
 void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
 {
+    if (newIndex.row()==-1) {
+        ui->widget_2->setEnabled(false);
+        return;
+    }
+    else {
+        ui->widget_2->setEnabled(true);
+    }
+
     KoResource* currentResource= control->getModel(ui->tabWidget->currentIndex())->currentlyVisibleResources().at(newIndex.row());
     KoResourceBundle* currentBundle=dynamic_cast<KoResourceBundle*>(currentResource);
     QString currentDate;
@@ -321,12 +398,13 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
     if (firstRefresh) {
         ui->scrollArea->setVisible(true);
         ui->label->setVisible(true);
+        ui->toolButton->setVisible(true);
 
         QFont labelFont("Arial Black",14,QFont::Bold);
         labelFont.setWeight(75);
         resourceNameLabel->setFont(labelFont);
-
         connect(resourceNameLabel,SIGNAL(clicked()),this,SLOT(startRenaming()));
+
         firstRefresh=false;
         tagMan->showTaggingBar(true,true);
         ui->widget_2->layout()->addWidget(tagMan->tagChooserWidget());
@@ -355,8 +433,11 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
     else {
         ui->label->setPixmap(QPixmap::fromImage(currentResource->image()).scaled(1000,150,Qt::KeepAspectRatio));
     }
+    ui->toolButton_2->setVisible(false);
 
     if (currentBundle!=0) {
+        ui->toolButton_2->setVisible(true);
+
         ui->label_3->setVisible(true);
         ui->label_4->setVisible(true);
         ui->label_5->setVisible(true);
@@ -406,11 +487,12 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
     }
 }
 
-//TODO Ajouter une méta donnée pour le site web ou corriger le non remplacement de la nouvelle valeur
 void KoResourceManagerWidget::saveMeta()
 {
-    int currentIndex=ui->tabWidget->currentIndex();
-    control->saveMeta(tableView(currentIndex)->currentIndex(),currentIndex);
+    ui->statusbar->showMessage("Saving metadata...",3000);
+    int currentTabIndex=ui->tabWidget->currentIndex();
+    control->saveMeta(tableView(currentTabIndex)->currentIndex(),currentTabIndex);
+    ui->statusbar->showMessage("Metadata saved successfully...",3000);
 }
 
 void KoResourceManagerWidget::refreshTaggingManager(int index)
@@ -431,5 +513,16 @@ void KoResourceManagerWidget::refreshTaggingManager(int index)
 void KoResourceManagerWidget::tableViewChanged(int index)
 {
     refreshTaggingManager(index);
-    refreshDetails(tableView(ui->tabWidget->currentIndex())->currentIndex());
+    QTableView *newView=tableView(ui->tabWidget->currentIndex());
+    newView->setFocus();
+    refreshDetails(newView->currentIndex());
+
+    if (index==KoResourceTableModel::Available){
+        ui->pushButton_7->setEnabled(true);
+        ui->pushButton_8->setEnabled(false);
+    }
+    else if (index==KoResourceTableModel::Installed){
+        ui->pushButton_7->setEnabled(false);
+        ui->pushButton_8->setEnabled(true);
+    }
 }

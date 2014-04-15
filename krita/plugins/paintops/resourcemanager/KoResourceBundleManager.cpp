@@ -18,6 +18,9 @@
 #include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
+#include <QImage>
+#include <QBuffer>
+#include <QDir>
 
 #include <sys/stat.h>
 
@@ -69,7 +72,6 @@ bool KoResourceBundleManager::isPathSet()
     return !kritaPath.isEmpty();
 }
 
-//TODO Résoudre le bug dû au false renvoyé par leaveDirectory
 void KoResourceBundleManager::toRoot()
 {
     while(resourcePack->leaveDirectory());
@@ -94,9 +96,18 @@ bool KoResourceBundleManager::addKFileBundle(QString path)
 
 void KoResourceBundleManager::addKFiles(QList<QString> pathList)
 {
+    QString bundleName=packName.section('/',packName.count('/')).section('.',0,0);
     for (int i=0;i<pathList.size();i++) {
-        if (!addKFile(pathList.at(i))) {
-            exit(1);
+        QString currentFile=pathList.at(i);
+        if(currentFile.contains("/"+bundleName+"/")) {
+            if (!addKFileBundle(pathList.at(i))) {
+                exit(2);
+            }
+        }
+        else {
+            if (!addKFile(pathList.at(i))) {
+                exit(3);
+            }
         }
     }
 }
@@ -116,8 +127,6 @@ void KoResourceBundleManager::extractKFiles(QMap<QString,QString> pathList)
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
                 mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
-                    cout<<qPrintable(currentPath)<<endl;
-                    cout<<qPrintable(targetPath)<<endl;
                     //TODO Supprimer le dossier créé
                     exit(1);
                 }
@@ -126,16 +135,57 @@ void KoResourceBundleManager::extractKFiles(QMap<QString,QString> pathList)
     }
 }
 
-void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta)
+void KoResourceBundleManager::extractTempFiles(QList<QString> pathList)
 {
-    if (meta->getPackName()!="") {
-        packName=meta->getPackName();
+    QString currentPath;
+    QString targetPath;
+
+    for (int i=0;i<pathList.size();i++) {
+        toRoot();
+        targetPath=pathList.at(i);
+        if (targetPath.contains("temp")) {
+            currentPath=targetPath.section('/',targetPath.count('/')-1);
+            if (!resourcePack->extractFile(currentPath,targetPath)) {
+                QString dirPath = targetPath.section('/',0,targetPath.count('/')-1);
+                mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
+                if(!resourcePack->extractFile(currentPath,targetPath)){
+                    exit(5);
+                }
+            }
+        }
+    }
+}
+
+void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild)
+{
+    packName=meta->getPackFileName();
+    if (!packName.isEmpty()) {
+        QList<QString> fileList = manifest->getFileList(kritaPath,firstBuild);
+
+        if (!firstBuild && !manifest->isInstalled()) {
+            resourcePack=KoStore::createStore(packName,KoStore::Read,"",KoStore::Zip);
+            if (resourcePack==NULL || resourcePack->bad()) {
+                exit(4);
+            }
+            else {
+                extractTempFiles(fileList);
+            }
+        }
+
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
         if (resourcePack!=NULL && !resourcePack->bad()) {
-            addKFiles(manifest->getFileList());
+            addKFiles(fileList);
             manifest->updateFilePaths(kritaPath,packName);
+            addThumbnail(thumbnail);
             addManiMeta(manifest,meta);
             resourcePack->finalize();
+        }
+
+        if (!firstBuild && !manifest->isInstalled()) {
+            QList<QString> dirList=manifest->getDirList();
+            for (int i=0;i<dirList.size();i++) {
+                removeDir(kritaPath+"temp/"+dirList.at(i));
+            }
         }
     }
 }
@@ -150,6 +200,21 @@ void KoResourceBundleManager::addManiMeta(KoXmlResourceBundleManifest* manifest,
     write(meta->toByteArray());
     close();
 }
+
+//TODO Voir pour importer d'autres types d'images
+void KoResourceBundleManager::addThumbnail(QImage thumbnail)
+{
+    if(!thumbnail.isNull()) {
+        toRoot();
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        thumbnail.save(&buffer,"JPG");
+        open("thumbnail.jpg");
+        write(byteArray);
+        close();
+    }
+}
+
 
 QByteArray KoResourceBundleManager::getFileData(const QString &fileName)
 {
@@ -181,6 +246,31 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
 
     return 0;
 }
+
+bool KoResourceBundleManager::removeDir(const QString & dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System
+                    | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                result = removeDir(info.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+    return result;
+}
+
 
 QString KoResourceBundleManager::getKritaPath()
 {

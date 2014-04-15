@@ -244,16 +244,18 @@ QString KoResourceTaggingManager::currentTag()
 
 void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineEditText)
 {
-    d->model->searchTextChanged(lineEditText);
-    d->model->updateServer();
-    ///FIXME: fix completer
-    //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
-    //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
     if (d->tagChooser->selectedTagIsReadOnly()) {
         d->model->enableResourceFiltering(!lineEditText.isEmpty());
     } else {
         d->model->enableResourceFiltering(true);
     }
+
+    d->model->searchTextChanged(lineEditText);
+    d->model->updateServer();
+
+    ///FIXME: fix completer
+    //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
+    //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 }
 
 void KoResourceTaggingManager::tagSaveButtonPressed()

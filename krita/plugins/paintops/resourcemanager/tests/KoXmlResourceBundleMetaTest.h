@@ -18,24 +18,25 @@
  */
 
 
-#ifndef KOXMLGENERATORTEST_H
-#define KOXMLGENERATORTEST_H
+#ifndef KOXMLRESOURCEBUNDLEMETATEST_H
+#define KOXMLRESOURCEBUNDLEMETATEST_H
 #include <QtTest/QTest>
 #include <KoConfig.h>
 
-class KoXmlGeneratorTest: public QObject
+class KoXmlResourceBundleMetaTest : public QObject
 {
     Q_OBJECT
 private slots:
     void ctorTest();
-    void getValueTest();
+    void getTagEnumValueTest();
+    void checkSortTest();
     void addTagTest();
-    void removeFirstTagTest();
-    void removeTagTest();	
-    void searchValueTest();
-    void toFileTest();
+    void addTagsTest();
+    void getPackNameTest();
+    void getShortPackNameTest();
+
 private:
- QString env;
+    QString env;
 
 };
-#endif // KOXMLGENERATORTEST_H
+#endif // KOXMLRESOURCEBUNDLEMETATEST_H

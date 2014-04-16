@@ -52,7 +52,8 @@ void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
     QVERIFY(memoryIsFilled(defaultPixel, tile11->data(), TILESIZE));
     tile11 = 0;
 
-    compressor->readTile(fakeStore.device(), &dm);
+    bool res = compressor->readTile(fakeStore.device(), &dm);
+    Q_ASSERT(res);
     tile11 = dm.getTile(1, 1, false);
     QVERIFY(memoryIsFilled(oddPixel1, tile11->data(), TILESIZE));
     tile11 = 0;

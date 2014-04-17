@@ -31,10 +31,13 @@
 
 #include "kis_shade_selector_line.h"
 
+#include "kis_color_selector_base_proxy.h"
+
 
 KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent)
     : KisColorSelectorBase(parent)
     , m_canvas(0)
+    , m_proxy(new KisColorSelectorBaseProxyObject(this))
 {
     setAcceptDrops(true);
 
@@ -45,6 +48,10 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent)
     updateSettings();
 
     setMouseTracking(true);
+}
+
+KisMinimalShadeSelector::~KisMinimalShadeSelector()
+{
 }
 
 void KisMinimalShadeSelector::unsetCanvas()
@@ -61,9 +68,17 @@ void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 
 void KisMinimalShadeSelector::setColor(const QColor& color)
 {
-    m_lastColor = color;
-    for(int i=0; i<m_shadingLines.size(); i++)
+    Q_UNUSED(color);
+    qFatal("Must not be used");
+}
+
+void KisMinimalShadeSelector::setKoColor(const KoColor& color)
+{
+    m_lastRealColor = color;
+
+    for(int i=0; i<m_shadingLines.size(); i++) {
         m_shadingLines.at(i)->setColor(color);
+    }
 }
 
 void KisMinimalShadeSelector::updateSettings()
@@ -76,7 +91,7 @@ void KisMinimalShadeSelector::updateSettings()
 
     int lineCount = strili.size();
     while(lineCount-m_shadingLines.size() > 0) {
-        m_shadingLines.append(new KisShadeSelectorLine(this));
+        m_shadingLines.append(new KisShadeSelectorLine(m_proxy.data(), this));
         m_shadingLines.last()->setLineNumber(m_shadingLines.size()-1);
         layout()->addWidget(m_shadingLines.last());
     }
@@ -154,7 +169,8 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 
     if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
         || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
-        setColor(findGeneratingColor(v.value<KoColor>()));
+
+        setKoColor(v.value<KoColor>());
     }
 }
 
@@ -167,6 +183,6 @@ void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
 KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const
 {
     KisMinimalShadeSelector* popup = new KisMinimalShadeSelector(0);
-    popup->setColor(m_lastColor);
+    popup->setKoColor(m_lastRealColor);
     return popup;
 }

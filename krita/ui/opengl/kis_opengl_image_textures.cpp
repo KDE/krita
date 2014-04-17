@@ -61,7 +61,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
-                                               KoColorProfile *monitorProfile,
+                                               const KoColorProfile *monitorProfile,
                                                KoColorConversionTransformation::Intent renderingIntent,
                                                KoColorConversionTransformation::ConversionFlags conversionFlags)
     : m_image(image)
@@ -107,7 +107,7 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
-                                                                  KoColorProfile *monitorProfile,
+                                                                  const KoColorProfile *monitorProfile,
                                                                   KoColorConversionTransformation::Intent renderingIntent,
                                                                   KoColorConversionTransformation::ConversionFlags conversionFlags)
 {

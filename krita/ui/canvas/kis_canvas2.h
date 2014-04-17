@@ -129,7 +129,7 @@ public: // KoCanvasBase implementation
 
     virtual KoToolProxy* toolProxy() const;
 
-    KoColorProfile* monitorProfile();
+    const KoColorProfile* monitorProfile();
 
     /**
      * Prescale the canvas represention of the image (if necessary, it
@@ -189,10 +189,6 @@ private slots:
     void updateCanvasProjection(KisUpdateInfoSP info);
 
     void startUpdateInPatches(QRect imageRect);
-
-    void setMonitorProfile(KoColorProfile* monitorProfile,
-                           KoColorConversionTransformation::Intent renderingIntent,
-                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Called whenever the view widget needs to show a different part of

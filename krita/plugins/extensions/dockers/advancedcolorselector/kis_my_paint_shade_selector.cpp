@@ -200,7 +200,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
     if(rect().contains(e->pos()))
-        updateColorPreview(m_pixelCache.pixel(e->x(), e->y()));
+        updateColorPreview(KoColor(m_pixelCache.pixel(e->x(), e->y()), colorSpace()));
     KisColorSelectorBase::mouseMoveEvent(e);
 }
 
@@ -213,9 +213,7 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
         QColor color = QColor(m_pixelCache.pixel(e->x(), e->y()));
         color = findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
 
-        ColorRole role=Foreground;
-        if(e->button()&Qt::RightButton)
-            role=Background;
+        Acs::ColorRole role = Acs::buttonToRole(e->button());
 
         KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
         bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);

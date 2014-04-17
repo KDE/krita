@@ -221,13 +221,10 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
             }
         }
     }
-    if(m_canvas && m_canvas->resourceManager()) {
-        if (m_lastColorRole==Foreground) {
-            setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
-        } else if (m_lastColorRole==Background) {
-            setColor(m_canvas->resourceManager()->backgroundColor().toQColor());
-        }
-    }
+
+    // reset the currect color after resizing the widget
+    setColor(m_lastColor);
+
     KisColorSelectorBase::resizeEvent(e);
 }
 
@@ -263,14 +260,9 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     if(!e->isAccepted() &&
        m_lastColor != m_currentColor &&
        m_currentColor.isValid()) {
-   
+
         m_lastColor=m_currentColor;
-        if(e->button() == Qt::LeftButton)
-   {
-            m_lastColorRole=Foreground;}
-        else if (e->button() == Qt::RightButton)
-   {
-            m_lastColorRole=Background;}
+        m_lastColorRole = Acs::buttonToRole(e->button());
 
         commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
         e->accept();
@@ -303,15 +295,10 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
    
         m_currentColor=m_mainComponent->currentColor();
         KoColor kocolor(m_currentColor, colorSpace());
-        updateColorPreview(kocolor.toQColor());
+        updateColorPreview(kocolor);
 
-        if (e->buttons() & Qt::LeftButton) {
-            commitColor(kocolor, Foreground);
-        }
-        else if (e->buttons() & Qt::RightButton) {
-            commitColor(kocolor, Background);
-        }
-
+        Acs::ColorRole role = Acs::buttonToRole(e->button());
+        commitColor(kocolor, role);
     }
 }
 
@@ -319,7 +306,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
-    m_lastColorRole = Foreground;
+    m_lastColorRole = Acs::Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);

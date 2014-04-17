@@ -22,12 +22,14 @@
 
 class KisShadeSelectorLineComboBoxPopup;
 class KisShadeSelectorLine;
+class KisColorSelectorBaseProxy;
 
 class KisShadeSelectorLineComboBox : public QComboBox
 {
     Q_OBJECT
 public:
     explicit KisShadeSelectorLineComboBox(QWidget *parent = 0);
+    ~KisShadeSelectorLineComboBox();
     void hidePopup();
     void showPopup();
     QString configuration() const;
@@ -46,6 +48,7 @@ public slots:
 
 private:
     KisShadeSelectorLineComboBoxPopup* m_popup;
+    QScopedPointer<KisColorSelectorBaseProxy> m_parentProxy;
     KisShadeSelectorLine* m_currentLine;
 
 };

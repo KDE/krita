@@ -168,7 +168,7 @@ void KisColorPatches::mousePressEvent(QMouseEvent *event)
     if(event->isAccepted())
         return;
 
-    updateColorPreview(koColor.toQColor());
+    updateColorPreview(koColor);
 
     if (event->button() == Qt::LeftButton)
         m_dragStartPos = event->pos();

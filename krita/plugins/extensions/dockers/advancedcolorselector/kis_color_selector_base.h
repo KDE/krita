@@ -22,6 +22,7 @@
 #include <QRgb>
 #include <QPointer>
 #include <kis_canvas2.h>
+#include "kis_acs_types.h"
 
 class QColor;
 class KoColor;
@@ -29,6 +30,8 @@ class QTimer;
 class KoColorSpace;
 class KisCanvas2;
 class KisColorPreviewPopup;
+class KisDisplayColorConverter;
+
 
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
@@ -44,20 +47,30 @@ public:
     virtual void setCanvas(KisCanvas2* canvas);
     virtual void unsetCanvas();
     const KoColorSpace* colorSpace() const;
-    enum ColorRole {Foreground, Background};
+
+    KisDisplayColorConverter* converter() const;
+
+public:
+    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
+    void updateColorPreview(const KoColor &color);
+    void showColorPreview();
+
+    // FIXME: make private and use updateColor instead
+    virtual void setColor(const QColor& color);
+    virtual void setKoColor(const KoColor& color);
+
+    // FIXME: deprecate
+    QColor findGeneratingColor(const KoColor& ref) const;
 
 public slots:
     virtual void updateSettings();
-    virtual void setColor(const QColor& color);
     virtual void showPopup(Move move=MoveToMousePosition);
+
+    //FIXME: make private and use updateColor instead
     /// commits a color to the resource manager
-    void commitColor(const KoColor& koColor, ColorRole role);
-    void updateColorPreview(const QColor& color);
+    void commitColor(const KoColor& koColor, Acs::ColorRole role);
 
 public:
-    /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
-    QColor findGeneratingColor(const KoColor& ref) const;
-
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
 
@@ -80,6 +93,7 @@ protected slots:
 
 private:
     void lazyCreatePopup();
+    const KoColorSpace* fetchCorrectColorSpace() const;
 
 protected:
     QPointer<KisCanvas2> m_canvas;
@@ -95,6 +109,8 @@ private:
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
     KisColorPreviewPopup* m_colorPreviewPopup;
+
+    QScopedPointer<KisDisplayColorConverter> m_colorConverter;
 };
 
 #endif

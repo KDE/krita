@@ -53,7 +53,7 @@ public:
      * @param monitorProfile The profile of the display device
      */
     static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
-                                                     KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
+                                                     const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
                                                      KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
@@ -128,7 +128,7 @@ public slots:
 
 protected:
 
-    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
+    KisOpenGLImageTextures(KisImageWSP image, const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 

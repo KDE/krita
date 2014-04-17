@@ -132,7 +132,7 @@ private:
     QColor m_lastColor;
     QColor m_currentColor;
     bool m_blipDisplay;
-    ColorRole m_lastColorRole;
+    Acs::ColorRole m_lastColorRole;
 
 
 public:

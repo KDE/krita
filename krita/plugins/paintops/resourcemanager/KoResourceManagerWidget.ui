@@ -429,16 +429,15 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string>Configure</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="pushButton_6">
             <property name="text">
              <string>Details</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -583,6 +582,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
            <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
@@ -687,7 +689,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>361</width>
+              <width>310</width>
               <height>258</height>
              </rect>
             </property>

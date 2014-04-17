@@ -272,11 +272,14 @@ void KoResourceTableModel::refreshResources()
 {
     m_resources.clear();
 
-    for (int i=0;i<m_resourceAdapterList.size()-1;i++) {
-        m_resources.append(m_resourceAdapterList.at(i)->resources());
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        if (i==m_resourceAdapterList.size()-1 && m_dataType!=Undefined) {
+            refreshBundles(true);
+        }
+        else {
+            m_resources.append(m_resourceAdapterList.at(i)->resources());
+        }
     }
-
-    refreshBundles(true);
 }
 
 void KoResourceTableModel::refreshBundles(bool isResourcesEmpty)

@@ -58,6 +58,9 @@ public:
     void setMeta(KoResourceBundle *bundle, QString metaType,QString metaValue);
     void saveMeta(QModelIndex index,int type);
     void thumbnail(QModelIndex index,QString fileName,int type);
+    void exportBundle(int type);
+    bool importBundle();
+    void refreshTaggingManager();
 
 signals:
     void status(QString text,int timeout=0);

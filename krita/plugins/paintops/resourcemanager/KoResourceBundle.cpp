@@ -92,7 +92,6 @@ bool KoResourceBundle::save()
     }
 
     if (!valid()) {
-        cout<<"Valid"<<endl;
         setValid(true);
     }
 

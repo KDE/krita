@@ -32,6 +32,7 @@
 
 #include <sys/stat.h>
 
+#include <QFileDialog>
 #include <QtCore/QProcessEnvironment>
 #include <iostream>
 using namespace std;
@@ -456,5 +457,77 @@ void KoResourceManagerControl::addFiles(QString bundleName,int type)
                         +currentSelect.section('/',currentSelect.count("/")));
         }
         currentBundle->save();
+    }
+}
+
+void KoResourceManagerControl::exportBundle(int type)
+{
+    KoResourceTableModel* currentModel=getModel(type);
+    QList<QString> selected=currentModel->getSelectedResource();
+
+    if (selected.isEmpty()) {
+        emit status("No bundle selected to be exported...",3000);
+        return;
+    }
+    else {
+        QString dirPath;
+        KoResourceBundle *currentBundle;
+        bool modified=false;
+
+        for (int i=0;i<selected.size();i++) {
+            currentBundle = dynamic_cast<KoResourceBundle*>(currentModel->getResourceFromFilename(selected.at(i)));
+
+            if (currentBundle) {
+                if(!modified) {
+                    emit status("Exporting bundle(s)...");
+                    dirPath= QFileDialog::getExistingDirectory (0, tr("Directory"),QProcessEnvironment::systemEnvironment().value("HOME").section(':',0,0),QFileDialog::ShowDirsOnly);
+                    dirPath.append("/");
+                    modified=true;
+                }
+                currentBundle->save();
+                QString fileName = currentBundle->filename();
+                QFile::copy(fileName,dirPath+fileName.section('/',fileName.count('/')));
+            }
+        }
+
+        if(!modified) {
+            emit status("No bundle found in current selection : Export failed...",3000);
+        }
+        else {
+            emit status("Bundle(s) exported successfully",3000);
+
+            currentModel->clearSelected();
+            for (int i=0;i<nbModels;i++) {
+                modelList.at(i)->refreshBundles();
+            }
+        }
+    }
+}
+
+bool KoResourceManagerControl::importBundle()
+{
+    emit status("Importing...");
+    QString filePath = QFileDialog::getOpenFileName(0,
+         tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':',0,0), tr("Archive Files (*.zip)"));
+
+    if (!filePath.isEmpty()) {
+        QFile::copy(filePath,root+"share/apps/krita/bundles/"+filePath.section('/',filePath.count('/')));
+        emit status("Bundle imported successfully",3000);
+        return true;
+    }
+    else {
+        emit status("Import aborted ! ",3000);
+        return false;
+    }
+}
+
+//TODO Problème nb de valeurs affichées sur le précédent onglet
+void KoResourceManagerControl::refreshTaggingManager()
+{
+    for(int i=0;i<nbModels;i++){
+        KoResourceTableModel *currentModel = modelList.at(i);
+        currentModel->enableResourceFiltering(false);
+        currentModel->setCurrentTag(QString());
+        currentModel->refreshResources();
     }
 }

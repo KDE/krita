@@ -81,6 +81,8 @@ private slots:
 
     void setMeta();
     void thumbnail();
+    void exportBundle();
+    void importBundle();
 
     void startRenaming();
     void endRenaming();
@@ -95,6 +97,7 @@ private slots:
     void refreshTaggingManager(int index=0);
     void tableViewChanged(int index);
 
+    void refresh();
     void removeTag();
 
     void status(QString text,int timeout);

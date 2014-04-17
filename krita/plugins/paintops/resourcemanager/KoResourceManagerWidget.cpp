@@ -26,6 +26,7 @@
 #include "KoBundleCreationWidget.h"
 #include <QtCore/QProcessEnvironment>
 #include <QtGui/QMessageBox>
+#include "KoTagChooserWidget.h"
 
 #include <iostream>
 using namespace std;
@@ -113,7 +114,7 @@ void KoResourceManagerWidget::initializeTitle()
 }
 
 void KoResourceManagerWidget::initializeModels(bool first)
-{   
+{
     for (int i=0;i<control->getNbModels();i++) {
         QTableView* currentTableView=tableView(i);
         currentTableView->setModel(control->getModel(i));
@@ -152,6 +153,8 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->actionInstall,SIGNAL(triggered()),this,SLOT(installPack()));
     connect(ui->actionUninstall,SIGNAL(triggered()),this,SLOT(uninstallPack()));
     connect(ui->actionDelete,SIGNAL(triggered()),this,SLOT(deletePack()));
+    connect(ui->actionExport,SIGNAL(triggered()),this,SLOT(exportBundle()));
+    connect(ui->actionImport,SIGNAL(triggered()),this,SLOT(importBundle()));
 
     connect(ui->actionAll,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
     connect(ui->actionName,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
@@ -175,6 +178,8 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->toolButton_2,SIGNAL(clicked()),this,SLOT(thumbnail()));
 
     connect(ui->pushButton_11,SIGNAL(clicked()),this,SLOT(removeTag()));
+
+    connect(ui->pushButton,SIGNAL(clicked()),this,SLOT(refresh()));
 
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tableViewChanged(int)));
 }
@@ -402,6 +407,7 @@ void KoResourceManagerWidget::filterResourceTypes(int index)
         tableView(currentTab)->setCurrentIndex(index);
         refreshDetails(index);
     }
+    refreshTaggingManager();
 
     ui->statusbar->showMessage("Resource lists updated",3000);
 }
@@ -526,30 +532,30 @@ void KoResourceManagerWidget::saveMeta()
 void KoResourceManagerWidget::refreshTaggingManager(int index)
 {
     if (tagMan) {
+        if (!tagMan->tagChooserWidget()->selectedTagIsReadOnly()) {
+            control->refreshTaggingManager();
+            tableView(index)->reset();
+        }
         ui->widget_2->layout()->removeWidget(tagMan->tagChooserWidget());
         tagMan->showTaggingBar(true,false);
         delete tagMan;
     }
-    KoResourceTableModel *currentModel = control->getModel(index);
-    tagMan=new KoResourceTaggingManager(currentModel,ui->widget_2);
-    tagMan->showTaggingBar(true,!firstRefresh);
 
-    currentModel->enableResourceFiltering(false);
-    currentModel->setCurrentTag(QString());
-    currentModel->refreshResources();
+    tagMan=new KoResourceTaggingManager(control->getModel(index),ui->widget_2);
+    tagMan->showTaggingBar(true,!firstRefresh);
 
     ui->gridLayout->addWidget(tagMan->tagFilterWidget(),0,1);
     ui->gridLayout->addWidget(ui->widget,0,2);
     ui->widget_2->layout()->addWidget(tagMan->tagChooserWidget());
 }
 
-//TODO Régler le problème de l'ajout consécutif de tags
 void KoResourceManagerWidget::tableViewChanged(int index)
 {
-    QTableView *newView=tableView(ui->tabWidget->currentIndex());
-
     refreshTaggingManager(index);
+
+    QTableView *newView=tableView(index);
     newView->setFocus();
+    newView->setCurrentIndex(newView->currentIndex());
     refreshDetails(newView->currentIndex());
 
     if (index==KoResourceTableModel::Available){
@@ -560,4 +566,27 @@ void KoResourceManagerWidget::tableViewChanged(int index)
         ui->pushButton_7->setEnabled(false);
         ui->pushButton_8->setEnabled(true);
     }
+}
+
+void KoResourceManagerWidget::exportBundle()
+{
+    control->exportBundle(ui->tabWidget->currentIndex());
+}
+
+//TODO Penser à une fonction toBundleView pour aller direct sur la vue bundle
+//qd une modif est effectuée dessus
+void KoResourceManagerWidget::importBundle()
+{
+    if(control->importBundle()) {
+        if(ui->tabWidget->currentIndex()!=0) {
+            ui->tabWidget->setCurrentIndex(0);
+        }
+
+        ui->comboBox->setCurrentIndex(1);
+    }
+}
+
+void KoResourceManagerWidget::refresh()
+{
+    filterResourceTypes(ui->comboBox->currentIndex());
 }

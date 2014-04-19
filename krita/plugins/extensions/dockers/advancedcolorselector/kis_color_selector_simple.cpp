@@ -29,7 +29,7 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
 {
 }
 
-KoColor KisColorSelectorSimple::selectKoColor(int x, int y)
+KoColor KisColorSelectorSimple::selectColor(int x, int y)
 {
     m_lastClickPos.setX(x/qreal(width()));
     m_lastClickPos.setY(y/qreal(height()));
@@ -83,7 +83,7 @@ KoColor KisColorSelectorSimple::selectKoColor(int x, int y)
     return colorAt(x, y);
 }
 
-void KisColorSelectorSimple::setKoColor(const KoColor &color)
+void KisColorSelectorSimple::setColor(const KoColor &color)
 {
     qreal hsvH, hsvS, hsvV;
     qreal hslH, hslS, hslL;

@@ -66,7 +66,7 @@ void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
     m_canvas = canvas;
 }
 
-void KisMinimalShadeSelector::setKoColor(const KoColor& color)
+void KisMinimalShadeSelector::setColor(const KoColor& color)
 {
     m_lastRealColor = color;
 
@@ -164,7 +164,7 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
         || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
 
-        setKoColor(v.value<KoColor>());
+        setColor(v.value<KoColor>());
     }
 }
 
@@ -177,6 +177,6 @@ void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
 KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const
 {
     KisMinimalShadeSelector* popup = new KisMinimalShadeSelector(0);
-    popup->setKoColor(m_lastRealColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }

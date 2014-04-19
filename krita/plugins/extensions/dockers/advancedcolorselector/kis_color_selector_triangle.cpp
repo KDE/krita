@@ -90,7 +90,7 @@ void KisColorSelectorTriangle::updatePixelCache()
     }
 }
 
-KoColor KisColorSelectorTriangle::selectKoColor(int x, int y)
+KoColor KisColorSelectorTriangle::selectColor(int x, int y)
 {
     emit update();
 
@@ -112,7 +112,7 @@ KoColor KisColorSelectorTriangle::selectKoColor(int x, int y)
     return colorAt(triangleCoords.x(), triangleCoords.y());
 }
 
-void KisColorSelectorTriangle::setKoColor(const KoColor &color)
+void KisColorSelectorTriangle::setColor(const KoColor &color)
 {
     qreal h, s, v;
     m_parent->converter()->getHsvF(color, &h, &s, &v);

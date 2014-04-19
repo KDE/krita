@@ -41,7 +41,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *);
 
 public:
-    void setKoColor(const KoColor &color);
+    void setColor(const KoColor &color);
 
 protected slots:
     void canvasResourceChanged(int key, const QVariant& v);

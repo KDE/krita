@@ -69,7 +69,7 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newX=qBound(0, (x-m_x), width());
     int newY=qBound(0, (y-m_y), height());
 
-    selectKoColor(newX, newY);
+    selectColor(newX, newY);
     m_lastX=newX;
     m_lastY=newY;
 }
@@ -96,7 +96,7 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
 
 KoColor KisColorSelectorComponent::currentColor()
 {
-    return selectKoColor(m_lastX, m_lastY);
+    return selectColor(m_lastX, m_lastY);
 }
 
 void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness)

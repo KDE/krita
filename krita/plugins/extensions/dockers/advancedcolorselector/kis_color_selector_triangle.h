@@ -28,11 +28,11 @@ class KisColorSelectorTriangle : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorTriangle(KisColorSelector* parent);
-    void setKoColor(const KoColor &color);
+    void setColor(const KoColor &color);
 
 protected:
     void paint(QPainter*);
-    KoColor selectKoColor(int x, int y);
+    KoColor selectColor(int x, int y);
     bool containsPointInComponentCoords(int x, int y) const;
 
 private:

@@ -31,10 +31,10 @@ class KisColorSelectorWheel : public KisColorSelectorComponent
     Q_OBJECT
 public:
     explicit KisColorSelectorWheel(KisColorSelector *parent);
-    void setKoColor(const KoColor &color);
+    void setColor(const KoColor &color);
 
 protected:
-    KoColor selectKoColor(int x, int y);
+    KoColor selectColor(int x, int y);
     void paint(QPainter*);
 
 private:

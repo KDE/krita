@@ -61,7 +61,7 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
     updateSettings();
 
     setMinimumSize(80, 80);
-    setKoColor(KoColor(Qt::red, colorSpace()));
+    setColor(KoColor(Qt::red, colorSpace()));
 
     m_updateTimer->setInterval(1);
     m_updateTimer->setSingleShot(true);
@@ -228,11 +228,11 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
-    popup->setKoColor(m_lastRealColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }
 
-void KisMyPaintShadeSelector::setKoColor(const KoColor &color) {
+void KisMyPaintShadeSelector::setColor(const KoColor &color) {
     this->converter()->getHsvF(color, &m_colorH, &m_colorS, &m_colorV);
     m_lastRealColor = color;
 
@@ -252,7 +252,7 @@ void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     if ((key == KoCanvasResourceManager::ForegroundColor && onForeground) ||
         (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
 
-        setKoColor(v.value<KoColor>());
+        setColor(v.value<KoColor>());
     }
 }
 

@@ -53,7 +53,7 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setKoColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor& color) = 0;
 
     /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
@@ -73,7 +73,7 @@ protected:
     bool isDirty() const;
 
     /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
-    virtual KoColor selectKoColor(int x, int y) = 0;
+    virtual KoColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't

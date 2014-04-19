@@ -102,7 +102,7 @@ void KisColorSelectorRing::paint(QPainter* painter)
     }
 }
 
-KoColor KisColorSelectorRing::selectKoColor(int x, int y)
+KoColor KisColorSelectorRing::selectColor(int x, int y)
 {
     QPoint ringMiddle(width()/2, height()/2);
     QPoint ringCoord = QPoint(x, y)-ringMiddle;
@@ -115,7 +115,7 @@ KoColor KisColorSelectorRing::selectKoColor(int x, int y)
     return KoColor();
 }
 
-void KisColorSelectorRing::setKoColor(const KoColor &color)
+void KisColorSelectorRing::setColor(const KoColor &color)
 {
     qreal h, s, v;
     m_parent->converter()->getHsvF(color, &h, &s, &v);

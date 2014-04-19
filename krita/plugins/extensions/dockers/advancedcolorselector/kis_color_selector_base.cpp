@@ -315,11 +315,11 @@ void KisColorSelectorBase::updateColor(const KoColor &color, Acs::ColorRole role
     commitColor(color, role);
 
     if (needsExplicitColorReset) {
-        setKoColor(color);
+        setColor(color);
     }
 }
 
-void KisColorSelectorBase::setKoColor(const KoColor& color)
+void KisColorSelectorBase::setColor(const KoColor& color)
 {
     Q_UNUSED(color);
 }
@@ -405,7 +405,7 @@ void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
         KoColor realColor(v.value<KoColor>());
         updateColorPreview(realColor);
         if (m_colorUpdateAllowed && !m_colorUpdateSelf) {
-            setKoColor(realColor);
+            setColor(realColor);
         }
     }
 }

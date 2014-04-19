@@ -79,7 +79,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
-    popup->setKoColor(m_lastRealColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }
 
@@ -224,7 +224,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     }
 
     // reset the currect color after resizing the widget
-    setKoColor(m_lastRealColor);
+    setColor(m_lastRealColor);
 
     KisColorSelectorBase::resizeEvent(e);
 }
@@ -276,10 +276,10 @@ bool KisColorSelector::displaySettingsButton()
     return dynamic_cast<KisColorSelectorContainer*>(parent());
 }
 
-void KisColorSelector::setKoColor(const KoColor &color)
+void KisColorSelector::setColor(const KoColor &color)
 {
-    m_mainComponent->setKoColor(color);
-    m_subComponent->setKoColor(color);
+    m_mainComponent->setColor(color);
+    m_subComponent->setColor(color);
     m_lastRealColor = color;
     update();
 }

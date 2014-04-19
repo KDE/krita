@@ -198,7 +198,7 @@ void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF&
     }
 
     if (d->view) {
-        d->selector->setKoColor(Acs::currentColor(d->view->resourceProvider(), d->colorRole));
+        d->selector->setColor(Acs::currentColor(d->view->resourceProvider(), d->colorRole));
     }
 
     d->repaintTimer->start();
@@ -279,8 +279,8 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
 
     d->currentColor = Acs::currentColor(d->view->resourceProvider(), d->colorRole);
 
-    d->main->setKoColor(d->currentColor);
-    d->sub->setKoColor(d->currentColor);
+    d->main->setColor(d->currentColor);
+    d->sub->setColor(d->currentColor);
     d->repaintTimer->start();
 }
 
@@ -312,8 +312,8 @@ void ColorSelectorItem::Private::colorChangedImpl(const KoColor &newColor, Acs::
     if(newColor == currentColor) return;
 
     currentColor = newColor;
-    main->setKoColor(newColor);
-    sub->setKoColor(newColor);
+    main->setColor(newColor);
+    sub->setColor(newColor);
     commitColor(currentColor, colorRole);
     QColor qcolor = selector->converter()->toQColor(currentColor);
     emit q->colorChanged(qcolor, currentColor.opacityF(), false);

@@ -55,7 +55,7 @@ public:
     void updateColorPreview(const KoColor &color);
     void showColorPreview();
 
-    virtual void setKoColor(const KoColor& color);
+    virtual void setColor(const KoColor& color);
 
 public slots:
     virtual void updateSettings();

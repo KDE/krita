@@ -93,7 +93,7 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
-    void setKoColor(const KoColor &color);
+    void setColor(const KoColor &color);
 
 public slots:
     void updateSettings();

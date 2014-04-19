@@ -30,7 +30,7 @@ KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
 {
 }
 
-KoColor KisColorSelectorWheel::selectKoColor(int x, int y)
+KoColor KisColorSelectorWheel::selectColor(int x, int y)
 {
     int xWheel = x-width()/2;
     int yWheel = y-height()/2;
@@ -75,7 +75,7 @@ KoColor KisColorSelectorWheel::selectKoColor(int x, int y)
     return colorAt(x, y, true);
 }
 
-void KisColorSelectorWheel::setKoColor(const KoColor &color)
+void KisColorSelectorWheel::setColor(const KoColor &color)
 {
     qreal hsvH, hsvS, hsvV;
     qreal hslH, hslS, hslL;

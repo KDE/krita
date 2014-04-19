@@ -58,6 +58,7 @@ public:
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
     void getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a = 0);
+    void getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a = 0);
 
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();

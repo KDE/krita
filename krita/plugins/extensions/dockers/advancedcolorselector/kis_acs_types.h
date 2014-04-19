@@ -30,6 +30,10 @@ namespace Acs {
         return button == Qt::LeftButton ? Acs::Foreground : Acs::Background;
     }
 
+    inline ColorRole buttonsToRole(Qt::MouseButton button, Qt::MouseButtons buttons) {
+        return button == Qt::LeftButton || buttons & Qt::LeftButton ? Acs::Foreground : Acs::Background;
+    }
+
     template <class ResourceProvider>
     void setCurrentColor(ResourceProvider *provider, ColorRole role, const KoColor &color) {
         if (role == Acs::Foreground) {
@@ -53,7 +57,7 @@ namespace Acs {
 
     template <class PaintDeviceSP>
     void setColor(PaintDeviceSP device, const QPoint &pt, const KoColor &color) {
-        (void) device->setPixel(pt.x(), pt.y(), &color);
+        (void) device->setPixel(pt.x(), pt.y(), color);
     }
 
 }

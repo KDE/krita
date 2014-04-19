@@ -25,6 +25,8 @@
 #include "kis_color_selector_base.h"
 #include <QColor>
 #include <QImage>
+#include <KoColor.h>
+
 
 class QTimer;
 
@@ -37,8 +39,9 @@ public:
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-public slots:
-    void setColor(const QColor& c);
+
+public:
+    void setKoColor(const KoColor &color);
 
 protected slots:
     void canvasResourceChanged(int key, const QVariant& v);
@@ -48,11 +51,11 @@ protected:
     KisColorSelectorBase* createPopup() const;
 
 private:
-    float m_colorH, m_colorS, m_colorV;
+    qreal m_colorH, m_colorS, m_colorV;
 
-    QImage m_pixelCache;
     QTimer* m_updateTimer;
-    QColor m_lastColor;
+    KoColor m_lastRealColor;
+    KisPaintDeviceSP m_realPixelCache;
 };
 
 #endif // KIS_MY_PAINT_SHADE_SELECTOR_H

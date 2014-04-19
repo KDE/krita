@@ -31,17 +31,17 @@ class KisColorSelectorSimple : public KisColorSelectorComponent
 Q_OBJECT
 public:
     explicit KisColorSelectorSimple(KisColorSelector *parent);
-    void setColor(const QColor& c);
+    void setKoColor(const KoColor &color);
 
 protected:
-    virtual QColor selectColor(int x, int y);
-    virtual void paint(QPainter*);
-    const QColor& colorAt(int x, int y);
+    void paint(QPainter*);
+    KoColor selectKoColor(int x, int y);
+
+private:
+    KoColor colorAt(int x, int y);
 
 private:
     QPointF m_lastClickPos;
-    KoColor m_kocolor;
-    QColor m_qcolor;
     QImage m_pixelCache;
 };
 

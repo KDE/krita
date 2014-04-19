@@ -66,12 +66,6 @@ void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
     m_canvas = canvas;
 }
 
-void KisMinimalShadeSelector::setColor(const QColor& color)
-{
-    Q_UNUSED(color);
-    qFatal("Must not be used");
-}
-
 void KisMinimalShadeSelector::setKoColor(const KoColor& color)
 {
     m_lastRealColor = color;

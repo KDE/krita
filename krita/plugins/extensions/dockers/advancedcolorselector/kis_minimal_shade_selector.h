@@ -37,7 +37,6 @@ public:
     void setCanvas(KisCanvas2* canvas);
 
 protected:
-    void setColor(const QColor& color);
     void setKoColor(const KoColor& color);
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);

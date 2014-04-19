@@ -115,23 +115,32 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
 
 KoColor KisDisplayColorConverter::fromHsvF(qreal h, qreal s, qreal v, qreal a)
 {
-    // generate HSV from sRGB!
+    // generate HSV from Lab!
     KoColor color;
     color.fromQColor(QColor::fromHsvF(h, s, v, a));
+    color.convertTo(m_d->imageColorSpace);
     return color;
 }
 
 void KisDisplayColorConverter::getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a)
 {
-    // we are going through sRGB here!
+    // we are going through Lab here!
     QColor color = srcColor.toQColor();
     color.getHsvF(h, s, v, a);
 }
 
 KoColor KisDisplayColorConverter::fromHslF(qreal h, qreal s, qreal l, qreal a)
 {
-    // generate HSL from sRGB!
+    // generate HSL from Lab!
     KoColor color;
     color.fromQColor(QColor::fromHslF(h, s, l, a));
+    color.convertTo(m_d->imageColorSpace);
     return color;
+}
+
+void KisDisplayColorConverter::getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a)
+{
+    // we are going through Lab here!
+    QColor color = srcColor.toQColor();
+    color.getHslF(h, s, l, a);
 }

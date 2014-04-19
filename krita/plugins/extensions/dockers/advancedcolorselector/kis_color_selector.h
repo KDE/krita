@@ -20,7 +20,6 @@
 
 #include "kis_color_selector_base.h"
 
-#include <QColor>
 class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
@@ -94,7 +93,7 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
-    void setColor(const QColor& color);
+    void setKoColor(const KoColor &color);
 
 public slots:
     void updateSettings();
@@ -129,8 +128,8 @@ private:
 
     Configuration m_configuration;
 
-    QColor m_lastColor;
-    QColor m_currentColor;
+    KoColor m_lastRealColor;
+    KoColor m_currentRealColor;
     bool m_blipDisplay;
     Acs::ColorRole m_lastColorRole;
 

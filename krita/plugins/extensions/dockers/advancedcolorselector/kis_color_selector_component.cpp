@@ -69,7 +69,7 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newX=qBound(0, (x-m_x), width());
     int newY=qBound(0, (y-m_y), height());
 
-    selectColor(newX, newY);
+    selectKoColor(newX, newY);
     m_lastX=newX;
     m_lastY=newY;
 }
@@ -94,10 +94,9 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return false;
 }
 
-QColor KisColorSelectorComponent::currentColor()
+KoColor KisColorSelectorComponent::currentColor()
 {
-
-    return selectColor(m_lastX, m_lastY);
+    return selectKoColor(m_lastX, m_lastY);
 }
 
 void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness)

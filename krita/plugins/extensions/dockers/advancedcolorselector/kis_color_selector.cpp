@@ -55,6 +55,7 @@ KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
       m_blipDisplay(true)
 {
     init();
+    updateSettings();
     setConfiguration(conf);
 }
 
@@ -78,7 +79,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
-    popup->setColor(m_lastColor);
+    popup->setKoColor(m_lastRealColor);
     return popup;
 }
 
@@ -223,7 +224,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     }
 
     // reset the currect color after resizing the widget
-    setColor(m_lastColor);
+    setKoColor(m_lastRealColor);
 
     KisColorSelectorBase::resizeEvent(e);
 }
@@ -258,13 +259,12 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
     KisColorSelectorBase::mousePressEvent(e);
 
     if(!e->isAccepted() &&
-       m_lastColor != m_currentColor &&
-       m_currentColor.isValid()) {
+       !(m_lastRealColor == m_currentRealColor)) {
 
-        m_lastColor=m_currentColor;
+        m_lastRealColor = m_currentRealColor;
         m_lastColorRole = Acs::buttonToRole(e->button());
 
-        commitColor(KoColor(m_currentColor, colorSpace()), m_lastColorRole);
+        updateColor(m_lastRealColor, m_lastColorRole, false);
         e->accept();
     }
 
@@ -273,17 +273,14 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 
 bool KisColorSelector::displaySettingsButton()
 {
-    if(dynamic_cast<KisColorSelectorContainer*>(parent())!=0)
-        return true;
-    else
-        return false;
+    return dynamic_cast<KisColorSelectorContainer*>(parent());
 }
 
-void KisColorSelector::setColor(const QColor &color)
+void KisColorSelector::setKoColor(const KoColor &color)
 {
-    m_mainComponent->setColor(color);
-    m_subComponent->setColor(color);
-    m_lastColor=color;
+    m_mainComponent->setKoColor(color);
+    m_subComponent->setKoColor(color);
+    m_lastRealColor = color;
     update();
 }
 
@@ -292,13 +289,13 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
     if (m_grabbingComponent && (e->buttons() & Qt::LeftButton || e->buttons() & Qt::RightButton)) {
 
         m_grabbingComponent->mouseEvent(e->x(), e->y());
-   
-        m_currentColor=m_mainComponent->currentColor();
-        KoColor kocolor(m_currentColor, colorSpace());
-        updateColorPreview(kocolor);
 
-        Acs::ColorRole role = Acs::buttonToRole(e->button());
-        commitColor(kocolor, role);
+        KoColor color = m_mainComponent->currentColor();
+        m_currentRealColor = color;
+        updateColorPreview(color);
+
+        Acs::ColorRole role = Acs::buttonsToRole(e->button(), e->buttons());
+        updateColor(color, role, false);
     }
 }
 

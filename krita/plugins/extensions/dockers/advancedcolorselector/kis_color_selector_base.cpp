@@ -286,17 +286,6 @@ void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
     }
 }
 
-QColor KisColorSelectorBase::findGeneratingColor(const KoColor& ref) const
-{
-    KoColor color(ref);
-    QColor result;
-
-    color.convertTo(colorSpace());
-    color.toQColor(&result);
-
-    return result;
-}
-
 void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
 {
     if(e->mimeData()->hasColor())
@@ -330,14 +319,9 @@ void KisColorSelectorBase::updateColor(const KoColor &color, Acs::ColorRole role
     }
 }
 
-void KisColorSelectorBase::setColor(const QColor& color)
-{
-    Q_UNUSED(color);
-}
-
 void KisColorSelectorBase::setKoColor(const KoColor& color)
 {
-    setColor(color.toQColor());
+    Q_UNUSED(color);
 }
 
 void KisColorSelectorBase::setHidingTime(int time)
@@ -346,7 +330,6 @@ void KisColorSelectorBase::setHidingTime(int time)
 
     m_hideTimer->setInterval(time);
 }
-
 
 void KisColorSelectorBase::lazyCreatePopup()
 {

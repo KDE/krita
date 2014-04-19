@@ -55,20 +55,11 @@ public:
     void updateColorPreview(const KoColor &color);
     void showColorPreview();
 
-    // FIXME: make private and use updateColor instead
-    virtual void setColor(const QColor& color);
     virtual void setKoColor(const KoColor& color);
-
-    // FIXME: deprecate
-    QColor findGeneratingColor(const KoColor& ref) const;
 
 public slots:
     virtual void updateSettings();
     virtual void showPopup(Move move=MoveToMousePosition);
-
-    //FIXME: make private and use updateColor instead
-    /// commits a color to the resource manager
-    void commitColor(const KoColor& koColor, Acs::ColorRole role);
 
 public:
     void enterEvent(QEvent *e);
@@ -84,6 +75,10 @@ protected:
     void dropEvent(QDropEvent *);
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
+
+private:
+    void commitColor(const KoColor& koColor, Acs::ColorRole role);
+
 
 protected slots:
     void hidePopup();

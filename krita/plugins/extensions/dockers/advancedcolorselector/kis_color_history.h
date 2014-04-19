@@ -35,7 +35,7 @@ protected:
     KisColorSelectorBase* createPopup() const;
 
 public slots:
-    void commitColor(const KoColor& color);
+    void addColorToHistory(const KoColor& color);
 
 private:
     QList<KoColor> m_colorHistory;

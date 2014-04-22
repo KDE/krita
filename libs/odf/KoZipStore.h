@@ -30,13 +30,16 @@ class KUrl;
 class KoZipStore : public KoStore
 {
 public:
-    KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification);
-    KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification);
+    KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+               bool writeMimetype = true);
+    KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+               bool writeMimetype = true);
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoZipStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification);
+    KoZipStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode,
+               const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoZipStore();
 
     virtual void setCompressionEnabled(bool e);

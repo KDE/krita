@@ -55,7 +55,6 @@
 LutDockerDock::LutDockerDock()
     : QDockWidget(i18n("LUT Management"))
     , m_canvas(0)
-    , m_displayFilter(0)
     , m_draggingSlider(false)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -126,14 +125,13 @@ LutDockerDock::LutDockerDock()
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotImageColorSpaceChanged()));
 
-    m_displayFilter = new OcioDisplayFilter;
+    m_displayFilter = OcioDisplayFilterSP(new OcioDisplayFilter);
 
     resetOcioConfiguration();
 }
 
 LutDockerDock::~LutDockerDock()
 {
-    delete m_displayFilter;
 }
 
 void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
@@ -245,7 +243,7 @@ void LutDockerDock::updateDisplaySettings()
         m_canvas->setDisplayFilter(m_displayFilter);
     }
     else {
-        m_canvas->setDisplayFilter(0);
+        m_canvas->setDisplayFilter(KisDisplayFilterSP());
     }
     m_canvas->updateCanvas();
 }

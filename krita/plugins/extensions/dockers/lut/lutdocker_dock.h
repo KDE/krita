@@ -95,7 +95,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilter *m_displayFilter;
+    OcioDisplayFilterSP m_displayFilter;
 
     bool m_draggingSlider;
 };

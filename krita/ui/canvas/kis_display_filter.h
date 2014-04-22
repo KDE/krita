@@ -25,9 +25,6 @@
 #include <opengl/kis_opengl.h>
 #include <krita_export.h>
 
-class KisDisplayFilter;
-typedef QSharedPointer<KisDisplayFilter> KisDisplayFilterSP;
-
 
 /**
  * @brief The KisDisplayFilter class is the base class for filters that

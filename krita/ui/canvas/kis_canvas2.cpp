@@ -120,6 +120,7 @@ public:
     QBitArray channelFlags;
 
     KisPopupPalette *popupPalette;
+    KisDisplayFilterSP displayFilter;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, KoShapeBasedDocumentBase *sc)
@@ -475,8 +476,10 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
     }
 }
 
-void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
+    m_d->displayFilter = displayFilter;
+
     KisImageWSP image = this->image();
     image->barrierLock();
 
@@ -494,6 +497,11 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
     image->unlock();
 
+}
+
+KisDisplayFilterSP KisCanvas2::displayFilter() const
+{
+    return m_d->displayFilter;
 }
 
 void KisCanvas2::startResizingImage()

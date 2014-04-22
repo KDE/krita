@@ -155,6 +155,9 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    KisDisplayFilterSP displayFilter() const;
+
 signals:
     void imageChanged(KisImageWSP image);
 
@@ -170,8 +173,6 @@ public slots:
 
     /// Update the entire canvas area
     void updateCanvas();
-
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     void startResizingImage();
     void finishResizingImage(qint32 w, qint32 h);

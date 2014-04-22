@@ -80,7 +80,6 @@ public:
     Private()
         : displayShader(0)
         , checkerShader(0)
-        , displayFilter(0)
         , glSyncObject(0)
         , wrapAroundMode(false)
     {
@@ -106,7 +105,7 @@ public:
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
-    KisDisplayFilter *displayFilter;
+    KisDisplayFilterSP displayFilter;
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject;
@@ -172,7 +171,7 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     delete d;
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
     d->displayFilter = displayFilter;
     initializeDisplayShader();

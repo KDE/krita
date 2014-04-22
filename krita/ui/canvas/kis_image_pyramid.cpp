@@ -103,7 +103,6 @@ inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
 KisImagePyramid::KisImagePyramid(qint32 pyramidHeight)
         : m_monitorProfile(0)
         , m_monitorColorSpace(0)
-        , m_displayFilter(0)
         , m_pyramidHeight(pyramidHeight)
 {
     configChanged();
@@ -152,7 +151,7 @@ void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
     m_onlyOneChannelSelected = (selectedChannels == 1);
 }
 
-void KisImagePyramid::setDisplayFilter(KisDisplayFilter *displayFilter)
+void KisImagePyramid::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
     m_displayFilter = displayFilter;
 }

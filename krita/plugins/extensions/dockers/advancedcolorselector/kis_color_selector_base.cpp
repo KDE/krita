@@ -473,7 +473,13 @@ void KisColorSelectorBase::updateSettings()
     const KoColorProfile *monitorProfile = m_canvas ?
         m_canvas->view()->resourceProvider()->currentDisplayProfile() : 0;
 
-    m_colorConverter.reset(new KisDisplayColorConverter(m_colorSpace, monitorProfile, KisDisplayFilterSP()));
+    KisDisplayFilterSP displayFilter;
+
+    if (m_canvas) {
+        displayFilter = m_canvas->displayFilter();
+    }
+
+    m_colorConverter.reset(new KisDisplayColorConverter(m_colorSpace, monitorProfile, displayFilter));
 
     if(m_isPopup) {
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));

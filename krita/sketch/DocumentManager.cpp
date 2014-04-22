@@ -132,7 +132,8 @@ void DocumentManager::delayedNewDocument()
         QString name = d->newDocOptions.value("name", "New Image").toString();
         int width = d->newDocOptions.value("width").toInt();
         int height = d->newDocOptions.value("height").toInt();
-        float res = d->newDocOptions.value("resolution", 72.0f).toFloat();
+        // internal resolution is pixels per point, not ppi
+        float res = d->newDocOptions.value("resolution", 72.0f).toFloat() / 72.0f;
 
         QString colorModelId = d->newDocOptions.value("colorModelId").toString();
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();

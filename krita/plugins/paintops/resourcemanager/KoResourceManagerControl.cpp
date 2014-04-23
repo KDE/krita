@@ -344,10 +344,12 @@ bool KoResourceManagerControl::rename(QModelIndex index,QString newName,int type
         KoResourceBundle* currentBundle= dynamic_cast<KoResourceBundle*>(currentResource);
 
         QString oldFilename=currentResource->filename();
-        QString newFilename=oldFilename.section('/',0,oldFilename.count('/')-1).append("/").append(newName);
+        QString newFilename=oldFilename.section('/',0,oldFilename.count('/')-1)+"/"+newName;
         if (oldFilename!=newFilename) {
 
-            QFile::rename(currentResource->filename(),newFilename);
+            QFile::rename(oldFilename,newFilename);
+            currentResource->setFilename(newFilename);
+            currentResource->setName(newName);
 
             if (currentBundle) {
                 currentBundle->rename(newFilename,newName);
@@ -358,15 +360,12 @@ bool KoResourceManagerControl::rename(QModelIndex index,QString newName,int type
                 currentBundle= dynamic_cast<KoResourceBundle*>
                         (currentModel->getResourceFromFilename(bundleName.append(".zip")));
                 if (currentBundle) {
-                    currentBundle->removeFile(currentResource->filename());
+                    currentBundle->removeFile(oldFilename);
                     currentBundle->addFile(fileType,newFilename);
                 }
-                currentResource->setFilename(newFilename);
-                currentResource->setName(newName);
             }
 
             currentModel->removeOneSelected(oldFilename);
-            //currentModel->getResourceAdapter(currentResource)->updateServer(); //TODO A Rajouter si utile
         }
     }
 

@@ -274,7 +274,7 @@ void KoResourceManagerWidget::setMeta()
 
 void KoResourceManagerWidget::startRenaming()
 {
-    ui->statusbar->showMessage("Renaming...",3000);
+    ui->statusbar->showMessage("Renaming...");
     ui->lineEdit_5->blockSignals(false);
     resourceNameLabel->setVisible(false);
     ui->toolButton->setVisible(false);
@@ -316,7 +316,7 @@ void KoResourceManagerWidget::endRenaming()
 
 void KoResourceManagerWidget::rename(QString newName)
 {
-    ui->statusbar->showMessage("Renaming...",3000);
+    ui->statusbar->showMessage("Renaming...");
 
     QTableView* currentTableView=tableView(ui->tabWidget->currentIndex());
     QModelIndex currentIndex=currentTableView->currentIndex();

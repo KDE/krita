@@ -91,6 +91,7 @@ private slots:
     void filterFieldSelected(bool);
     void filterResourceTypes(int index);
 
+    void toBundleView(int installTab);
     void showHide();
     void refreshDetails(QModelIndex newIndex);
     void saveMeta();

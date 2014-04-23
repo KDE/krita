@@ -97,13 +97,14 @@ void KoResourceManagerControl::toStatus(QString text,int timeout)
     emit status(text,timeout);
 }
 
-void KoResourceManagerControl::createPack(int type)
+bool KoResourceManagerControl::createPack(int type)
 {
     KoResourceTableModel *currentModel=getModel(type);
     QList<QString> selected = currentModel->getSelectedResource();
 
     if (selected.isEmpty()) {
         emit status("No resource selected for bundle creation...",3000);
+        return false;
     }
     else {
         emit status("Creating new bundle...");
@@ -114,7 +115,7 @@ void KoResourceManagerControl::createPack(int type)
 
         if (bundleCreationWidget->exec()==0 || newMeta==0) {
             emit status("Creation cancelled",3000);
-            return;
+            return false;
         }
         else {
             QString bundlePath=root+"share/apps/krita/bundles/"+newMeta->getPackName()+".zip";
@@ -133,18 +134,19 @@ void KoResourceManagerControl::createPack(int type)
             bundleServer->addResource(newBundle);
             currentModel->clearSelected();
             emit status("New bundle created successfully");
+            return true;
         }
     }
 }
 
-void KoResourceManagerControl::install(int type)
+bool KoResourceManagerControl::install(int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
     QList<QString> selected=currentModel->getSelectedResource();
 
     if (selected.isEmpty()) {
         emit status("No bundle selected to be installed...",3000);
-        return;
+        return false;
     }
     else {
         KoResourceBundle *currentBundle;
@@ -166,6 +168,7 @@ void KoResourceManagerControl::install(int type)
 
         if(!modified) {
             emit status("No bundle found in current selection : Installation failed...",3000);
+            return false;
         }
         else {
             emit status("Bundle(s) installed successfully",3000);
@@ -174,18 +177,19 @@ void KoResourceManagerControl::install(int type)
             for (int i=0;i<nbModels;i++) {
                 modelList.at(i)->refreshBundles();
             }
+            return true;
         }
     }
 }
 
-void KoResourceManagerControl::uninstall(int type)
+bool KoResourceManagerControl::uninstall(int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
     QList<QString> selected=currentModel->getSelectedResource();
 
     if (selected.isEmpty()) {
         emit status("No bundle selected to be uninstalled...",3000);
-        return;
+        return false;
     }
     else {
         KoResourceBundle *currentBundle;
@@ -206,14 +210,17 @@ void KoResourceManagerControl::uninstall(int type)
 
         if(!modified) {
             emit status("No bundle found in current selection : Uninstallation failed...",3000);
+            return false;
         }
         else {
+            emit status("Bundle(s) uninstalled successfully",3000);
+
             currentModel->clearSelected();
             for (int i=0;i<nbModels;i++) {
                 modelList.at(i)->refreshBundles();
             }
 
-            emit status("Bundle(s) uninstalled successfully",3000);
+            return true;
         }
     }
 }

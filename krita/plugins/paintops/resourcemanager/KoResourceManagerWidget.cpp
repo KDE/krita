@@ -118,8 +118,8 @@ void KoResourceManagerWidget::initializeModels(bool first)
     for (int i=0;i<control->getNbModels();i++) {
         QTableView* currentTableView=tableView(i);
         currentTableView->setModel(control->getModel(i));
-        currentTableView->resizeColumnsToContents();
-
+        currentTableView->resizeColumnToContents(1);
+        currentTableView->resizeColumnToContents(0);
         connect(currentTableView,SIGNAL(pressed(QModelIndex)),control->getModel(i),SLOT(resourceSelected(QModelIndex)));
         connect(currentTableView->horizontalHeader(),SIGNAL(sectionPressed(int)),control->getModel(i),SLOT(allSelected(int)));
         connect(currentTableView->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(refreshDetails(QModelIndex)));
@@ -209,12 +209,16 @@ void KoResourceManagerWidget::about()
 
 void KoResourceManagerWidget::createPack()
 {
-    control->createPack(ui->tabWidget->currentIndex());
+    if (control->createPack(ui->tabWidget->currentIndex())) {
+        toBundleView(0);
+    }
 }
 
 void KoResourceManagerWidget::installPack()
 {
-    control->install(ui->tabWidget->currentIndex());
+    if (control->install(ui->tabWidget->currentIndex())) {
+        toBundleView(1);
+    }
 }
 
 void KoResourceManagerWidget::deletePack()
@@ -224,11 +228,23 @@ void KoResourceManagerWidget::deletePack()
 
 void KoResourceManagerWidget::uninstallPack()
 {
-    control->uninstall(ui->tabWidget->currentIndex());
+    if (control->uninstall(ui->tabWidget->currentIndex())) {
+        toBundleView(0);
+    }
 }
 
+void KoResourceManagerWidget::toBundleView(int installTab) {
+    if(ui->tabWidget->currentIndex()!=installTab) {
+        ui->tabWidget->setCurrentIndex(installTab);
+    }
 
-
+    if (ui->comboBox->currentIndex()!=1) {
+        ui->comboBox->setCurrentIndex(1);
+    }
+    else {
+        refresh();
+    }
+}
 
 void KoResourceManagerWidget::thumbnail()
 {
@@ -576,6 +592,8 @@ void KoResourceManagerWidget::tableViewChanged(int index)
     QTableView *newView=tableView(index);
     newView->setFocus();
     newView->setCurrentIndex(newView->currentIndex());
+    newView->resizeColumnToContents(0);
+    newView->resizeColumnToContents(1);
     refreshDetails(newView->currentIndex());
 
     if (index==KoResourceTableModel::Available){
@@ -598,11 +616,7 @@ void KoResourceManagerWidget::exportBundle()
 void KoResourceManagerWidget::importBundle()
 {
     if(control->importBundle()) {
-        if(ui->tabWidget->currentIndex()!=0) {
-            ui->tabWidget->setCurrentIndex(0);
-        }
-
-        ui->comboBox->setCurrentIndex(1);
+        toBundleView(0);
     }
 }
 

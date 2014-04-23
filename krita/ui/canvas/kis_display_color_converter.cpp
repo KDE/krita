@@ -74,6 +74,7 @@ struct KisDisplayColorConverter::Private
     void setCurrentNode(KisNodeSP node);
 
     void selectPaintingColorSpace();
+    bool useOcio() const;
 };
 
 KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
@@ -110,12 +111,17 @@ KisDisplayColorConverter* KisDisplayColorConverter::dumbConverterInstance()
     return s_instance;
 }
 
+bool KisDisplayColorConverter::Private::useOcio() const
+{
+    return displayFilter && paintingColorSpace->colorModelId() == RGBAColorModelID;
+}
+
 void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KisCanvasResourceProvider::CurrentKritaNode) {
         KisNodeSP currentNode = v.value<KisNodeSP>();
         setCurrentNode(currentNode);
-    } else if (displayFilter && key == KoCanvasResourceManager::ForegroundColor) {
+    } else if (useOcio() && key == KoCanvasResourceManager::ForegroundColor) {
         KoColor color = v.value<KoColor>();
         color.convertTo(intermediateColorSpace);
         displayFilter->approximateForwardTransformation(color.data(), 1);
@@ -228,7 +234,7 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor)
     KoColor c(srcColor);
     c.convertTo(m_d->paintingColorSpace);
 
-    if (!m_d->displayFilter) {
+    if (!m_d->useOcio()) {
         QByteArray pixel(m_d->monitorColorSpace->pixelSize(), 0);
         c.colorSpace()->convertPixelsTo(c.data(), (quint8*)pixel.data(),
                                         m_d->monitorColorSpace, 1,
@@ -264,7 +270,7 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
         delete cmd;
     }
 
-    if (!m_d->displayFilter) {
+    if (!m_d->useOcio()) {
         return device->convertToQImage(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     } else {
         QRect bounds = device->exactBounds();
@@ -300,7 +306,7 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
 KoColor
 KisDisplayColorConverter::Private::approximateFromQColor(const QColor &qcolor)
 {
-    if (!displayFilter) {
+    if (!useOcio()) {
         return KoColor(qcolor, paintingColorSpace);
     } else {
         KoColor color(qcolor, intermediateColorSpace);
@@ -317,7 +323,7 @@ QColor KisDisplayColorConverter::Private::approximateToQColor(const KoColor &src
 {
     KoColor color(srcColor);
 
-    if (displayFilter) {
+    if (useOcio()) {
         color.convertTo(intermediateColorSpace);
         displayFilter->approximateForwardTransformation(color.data(), 1);
     }

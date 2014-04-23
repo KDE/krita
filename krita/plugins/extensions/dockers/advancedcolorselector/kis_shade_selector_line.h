@@ -74,7 +74,6 @@ private:
     qreal m_valueShift;
 
     KoColor m_realColor;
-    KoColor m_realBackgroundColor;
     KisPaintDeviceSP m_realPixelCache;
 
     bool m_gradient;

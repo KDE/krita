@@ -34,9 +34,6 @@ KisColorSelectorBaseProxy::~KisColorSelectorBaseProxy()
 /************* KisColorSelectorBaseProxyNoop ***************************/
 
 KisColorSelectorBaseProxyNoop::KisColorSelectorBaseProxyNoop()
-    : m_converter(
-          new KisDisplayColorConverter(
-              KoColorSpaceRegistry::instance()->rgb8(), 0, KisDisplayFilterSP(0)))
 {
 }
 
@@ -51,7 +48,7 @@ const KoColorSpace* KisColorSelectorBaseProxyNoop::colorSpace() const
 
 KisDisplayColorConverter* KisColorSelectorBaseProxyNoop::converter() const
 {
-    return m_converter.data();
+    return KisDisplayColorConverter::dumbConverterInstance();
 }
 
 

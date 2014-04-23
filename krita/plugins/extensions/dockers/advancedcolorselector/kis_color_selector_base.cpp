@@ -140,7 +140,10 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     m_canvas = canvas;
     if (m_canvas) {
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+                SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+
+        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
+                SLOT(update()));
     }
     if (m_popup) {
         m_popup->setCanvas(canvas);
@@ -410,38 +413,9 @@ void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
     }
 }
 
-const KoColorSpace* KisColorSelectorBase::fetchCorrectColorSpace() const
-{
-    const KoColorSpace* cs = 0;
-
-    if (m_canvas && m_canvas->resourceManager()) {
-        KisNodeSP currentNode = m_canvas->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-
-        if (currentNode) {
-            cs = currentNode->paintDevice() ?
-                currentNode->paintDevice()->compositionSourceColorSpace() :
-                currentNode->colorSpace();
-        } else {
-            cs = m_canvas->view()->image()->colorSpace();
-        }
-    }
-
-    if (!cs) {
-        cs = KoColorSpaceRegistry::instance()->rgb8();
-    }
-
-    return cs;
-}
-
 const KoColorSpace* KisColorSelectorBase::colorSpace() const
 {
-    KIS_ASSERT_RECOVER(m_colorSpace) {
-        return KoColorSpaceRegistry::instance()->rgb8();
-    }
-
-    KIS_ASSERT_RECOVER_NOOP(*fetchCorrectColorSpace() == *m_colorSpace);
-    return m_colorSpace;
+    return converter()->paintingColorSpace();
 }
 
 void KisColorSelectorBase::updateSettings()
@@ -456,31 +430,6 @@ void KisColorSelectorBase::updateSettings()
     bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
     setPopupBehaviour(onMouseOver, onMouseClick);
 
-    if(cfg.readEntry("useCustomColorSpace", true)) {
-        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
-        m_colorSpace = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
-                                                         cfg.readEntry("customColorSpaceDepthID", "U8"),
-                                                         cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
-    }
-    else {
-        m_colorSpace = fetchCorrectColorSpace();
-    }
-
-    /**
-     * During initialization phase the canvas may not exist yet,
-     * just initialize the display profile into the default value
-     */
-    const KoColorProfile *monitorProfile = m_canvas ?
-        m_canvas->view()->resourceProvider()->currentDisplayProfile() : 0;
-
-    KisDisplayFilterSP displayFilter;
-
-    if (m_canvas) {
-        displayFilter = m_canvas->displayFilter();
-    }
-
-    m_colorConverter.reset(new KisDisplayColorConverter(m_colorSpace, monitorProfile, displayFilter));
-
     if(m_isPopup) {
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
@@ -488,6 +437,7 @@ void KisColorSelectorBase::updateSettings()
 
 KisDisplayColorConverter* KisColorSelectorBase::converter() const
 {
-    KIS_ASSERT_RECOVER_NOOP(m_colorConverter);
-    return m_colorConverter.data();
+    return m_canvas ?
+        m_canvas->displayColorConverter() :
+        KisDisplayColorConverter::dumbConverterInstance();
 }

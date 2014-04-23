@@ -31,6 +31,7 @@
 #include "krita_export.h"
 
 class KoColorProfile;
+class KoColorSpace;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -333,6 +334,10 @@ public:
 
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
+
+    const KoColorSpace* customColorSelectorColorSpace() const;
+    void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

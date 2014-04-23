@@ -28,6 +28,7 @@
 
 class KoColor;
 class KoColorProfile;
+class KisCanvas2;
 
 
 /**
@@ -42,14 +43,19 @@ class KoColorProfile;
  * KoColor may be in any of these color spaces. QColor should always
  * be in the display color space only.
  */
-class KRITAUI_EXPORT KisDisplayColorConverter
+class KRITAUI_EXPORT KisDisplayColorConverter : public QObject
 {
-public:
-    KisDisplayColorConverter(const KoColorSpace *imageColorSpace,
-                             const KoColorProfile *monitorProfile,
-                             KisDisplayFilterSP displayFilter);
+    Q_OBJECT
 
+public:
+    KisDisplayColorConverter(KisCanvas2 *parentCanvas);
     virtual ~KisDisplayColorConverter();
+
+    static KisDisplayColorConverter* dumbConverterInstance();
+
+    const KoColorSpace* paintingColorSpace() const;
+    void setMonitorProfile(const KoColorProfile *monitorProfile);
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
 
     QColor toQColor(const KoColor &c);
     QImage toQImage(KisPaintDeviceSP srcDevice);
@@ -63,9 +69,19 @@ public:
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
+signals:
+    void displayConfigurationChanged();
+
 private:
     // is not possible to implement!
     KoColor toKoColor(const QColor &c);
+
+private:
+    // hidden from the outer observer
+    KisDisplayColorConverter();
+
+private:
+    Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v))
 
 private:
     struct Private;

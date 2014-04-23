@@ -76,7 +76,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase * parent, KisCoordinatesConverter* coordConverter, KisView2 * view)
+    KisCanvas2Private(KisCanvas2 *parent, KisCoordinatesConverter* coordConverter, KisView2 * view)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -86,6 +86,7 @@ public:
         , toolProxy(new KisToolProxy(parent))
         , vastScrolling(true)
         , popupPalette(0)
+        , displayColorConverter(new KisDisplayColorConverter(parent))
     {
     }
 
@@ -120,7 +121,7 @@ public:
     QBitArray channelFlags;
 
     KisPopupPalette *popupPalette;
-    KisDisplayFilterSP displayFilter;
+    KisDisplayColorConverter *displayColorConverter;
 };
 
 KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, KoShapeBasedDocumentBase *sc)
@@ -133,7 +134,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, 
 
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
-    m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
@@ -478,30 +478,29 @@ void KisCanvas2::startUpdateInPatches(QRect imageRect)
 
 void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 {
-    m_d->displayFilter = displayFilter;
-
-    KisImageWSP image = this->image();
-    image->barrierLock();
+    m_d->displayColorConverter->setDisplayFilter(displayFilter);
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         m_d->canvasWidget->setDisplayFilter(displayFilter);
+        updateCanvas();
 #endif
     }
     else {
+        KisImageWSP image = this->image();
+        image->barrierLock();
+
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setDisplayFilter(displayFilter);
+        startUpdateInPatches(image->bounds());
+
+        image->unlock();
     }
-
-    startUpdateInPatches(image->bounds());
-
-    image->unlock();
-
 }
 
-KisDisplayFilterSP KisCanvas2::displayFilter() const
+KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 {
-    return m_d->displayFilter;
+    return m_d->displayColorConverter;
 }
 
 void KisCanvas2::startResizingImage()
@@ -731,14 +730,11 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
 {
-    KisConfig cfg;
+    m_d->displayColorConverter->setMonitorProfile(monitorProfile);
 
     m_d->monitorProfile = monitorProfile;
-    m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
-    m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
-
-    if (cfg.useBlackPointCompensation()) m_d->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    if (!cfg.allowLCMSOptimization()) m_d->conversionFlags |= KoColorConversionTransformation::NoOptimization;
+    m_d->conversionFlags = KisDisplayColorConverter::conversionFlags();
+    m_d->renderingIntent = KisDisplayColorConverter::renderingIntent();
 
     KisImageWSP image = this->image();
 

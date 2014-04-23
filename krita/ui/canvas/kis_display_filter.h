@@ -41,6 +41,8 @@ public:
     virtual GLuint lutTexture() const = 0;
 #endif
     virtual void filter(quint8 *pixels, quint32 numPixels) = 0;
+    virtual void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) = 0;
+    virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;
 };
 
 

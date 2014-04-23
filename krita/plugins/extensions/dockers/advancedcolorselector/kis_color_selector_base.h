@@ -88,7 +88,6 @@ protected slots:
 
 private:
     void lazyCreatePopup();
-    const KoColorSpace* fetchCorrectColorSpace() const;
 
 protected:
     QPointer<KisCanvas2> m_canvas;
@@ -104,8 +103,6 @@ private:
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
     KisColorPreviewPopup* m_colorPreviewPopup;
-
-    QScopedPointer<KisDisplayColorConverter> m_colorConverter;
 };
 
 #endif

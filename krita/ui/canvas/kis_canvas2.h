@@ -43,6 +43,8 @@ class KisPaintopBox;
 class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
+class KisDisplayColorConverter;
+
 
 enum KisCanvasType {
     QPAINTER,
@@ -156,7 +158,7 @@ public: // KisCanvas2 methods
     KisCanvasDecoration* decoration(const QString& id);
 
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
-    KisDisplayFilterSP displayFilter() const;
+    KisDisplayColorConverter* displayColorConverter() const;
 
 signals:
     void imageChanged(KisImageWSP image);

@@ -58,6 +58,9 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
 {
 }
 
+OcioDisplayFilter::~OcioDisplayFilter()
+{
+}
 
 void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 {
@@ -65,6 +68,24 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
     if (m_processor) {
         OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
         m_processor->apply(img);
+    }
+}
+
+void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32 numPixels)
+{
+    // processes that data _in_ place
+    if (m_revereseApproximationProcessor) {
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        m_revereseApproximationProcessor->apply(img);
+    }
+}
+
+void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32 numPixels)
+{
+    // processes that data _in_ place
+    if (m_forwardApproximationProcessor) {
+        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        m_forwardApproximationProcessor->apply(img);
     }
 }
 
@@ -104,6 +125,8 @@ void OcioDisplayFilter::updateProcessor()
     transform->setDisplay(displayDevice);
     transform->setView(view);
 
+    OCIO::GroupTransformRcPtr approximateTransform = OCIO::GroupTransform::Create();
+
     // fstop exposure control -- not sure how that translates to our exposure
     {
         float gain = powf(2.0f, exposure);
@@ -114,6 +137,9 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::MatrixTransformRcPtr mtx =  OCIO::MatrixTransform::Create();
         mtx->setValue(m44, offset4);
         transform->setLinearCC(mtx);
+
+        // approximation (no color correction);
+        approximateTransform->push_back(mtx);
     }
 
     // channel swizzle
@@ -166,6 +192,9 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::MatrixTransformRcPtr swizzle = OCIO::MatrixTransform::Create();
         swizzle->setValue(m44, offset);
         transform->setChannelView(swizzle);
+
+        // approximation (no color correction);
+        approximateTransform->push_back(swizzle);
     }
 
     // Post-display transform gamma
@@ -175,9 +204,21 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::ExponentTransformRcPtr expTransform =  OCIO::ExponentTransform::Create();
         expTransform->setValue(exponent4f);
         transform->setDisplayCC(expTransform);
+
+        // approximation (no color correction);
+        approximateTransform->push_back(expTransform);
     }
 
     m_processor = config->getProcessor(transform);
+
+    m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
+
+    try {
+        m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+    } catch (...) {
+        qWarning() << "OCIO inverted matrix does not exist!";
+        //m_revereseApproximationProcessor;
+    }
 
 #ifdef HAVE_OPENGL
 

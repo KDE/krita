@@ -233,7 +233,6 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 {
-
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);

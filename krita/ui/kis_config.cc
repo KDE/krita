@@ -1121,3 +1121,29 @@ void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
 {
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }
+
+const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
+{
+    const KoColorSpace *cs = 0;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    if(cfg.readEntry("useCustomColorSpace", true)) {
+        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
+        cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
+                             cfg.readEntry("customColorSpaceDepthID", "U8"),
+                             cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+    }
+
+    return cs;
+}
+
+void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
+{
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    cfg.writeEntry("useCustomColorSpace", bool(cs));
+    if(cs) {
+        cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());
+        cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
+        cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
+    }
+}

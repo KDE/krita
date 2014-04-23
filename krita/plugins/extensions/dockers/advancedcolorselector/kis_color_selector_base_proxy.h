@@ -65,8 +65,6 @@ public:
     }
 
     KisDisplayColorConverter* converter() const;
-private:
-    QScopedPointer<KisDisplayColorConverter> m_converter;
 };
 
 

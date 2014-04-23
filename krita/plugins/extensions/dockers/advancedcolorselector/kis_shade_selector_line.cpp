@@ -85,9 +85,6 @@ void KisShadeSelectorLine::updateSettings()
     m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
     m_lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
 
-    m_realBackgroundColor = m_parentProxy->converter()->fromHsvF(0, 0, 1.0);
-    m_realBackgroundColor.convertTo(m_parentProxy->colorSpace());
-
     setMaximumHeight(m_lineHeight);
     setMinimumHeight(m_lineHeight);
 }
@@ -113,7 +110,6 @@ void KisShadeSelectorLine::fromString(const QString& string)
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
     m_realPixelCache = new KisPaintDevice(m_parentProxy->colorSpace());
-    m_realPixelCache->fill(this->rect(), m_realBackgroundColor);
 
     int patchCount;
     int patchSpacing;
@@ -200,9 +196,6 @@ void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
     }
 
     KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
-
-    KIS_ASSERT_RECOVER_NOOP(*color.colorSpace() == *m_realBackgroundColor.colorSpace());
-    if (color == m_realBackgroundColor) return;
 
     Acs::ColorRole role = Acs::buttonToRole(e->button());
 

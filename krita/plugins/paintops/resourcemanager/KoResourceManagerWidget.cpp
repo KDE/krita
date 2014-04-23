@@ -55,6 +55,8 @@ KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     ui->tabWidget->removeTab(2);
     ui->tabWidget->removeTab(2);
 
+    ui->statusbar->showMessage("Welcome back ! Resource Manager is ready to use...",1500);
+
     /*this->model2=new MyTableModel(0);
 
     m_filter = new QSortFilterProxyModel(this);
@@ -84,9 +86,7 @@ void KoResourceManagerWidget::initializeFilterMenu()
     QList<QAction*> liste;
     liste.append(ui->actionAll);
     liste.append(ui->actionName);
-    liste.append(ui->actionTag);
-    liste.append(ui->actionAuthor);
-    liste.append(ui->actionLicense);
+    liste.append(ui->actionFile);
 
     QMenu *buttonMenu=new QMenu();
     buttonMenu->addActions(liste);
@@ -158,9 +158,7 @@ void KoResourceManagerWidget::initializeConnect()
 
     connect(ui->actionAll,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
     connect(ui->actionName,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
-    connect(ui->actionTag,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
-    connect(ui->actionAuthor,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
-    connect(ui->actionLicense,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
+    connect(ui->actionFile,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
 
     connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(filterResourceTypes(int)));
 
@@ -360,27 +358,49 @@ void KoResourceManagerWidget::removeTag(){
 
 void KoResourceManagerWidget::filterFieldSelected(bool value)
 {
+    ui->statusbar->showMessage("Configuring filtering tool...");
+
     QAction *emetteur = (QAction*)sender();
 
     if (emetteur==ui->actionAll) {
         if (value) {
             ui->actionAll->setChecked(true);
             ui->actionName->setChecked(true);
-            ui->actionTag->setChecked(true);
-            ui->actionAuthor->setChecked(true);
-            ui->actionLicense->setChecked(true);
+            ui->actionFile->setChecked(true);
+            control->configureFilters(0,true);
         }
         else {
             ui->actionAll->setChecked(false);
-            ui->actionName->setChecked(false);
-            ui->actionTag->setChecked(false);
-            ui->actionAuthor->setChecked(false);
-            ui->actionLicense->setChecked(false);
+            ui->actionName->setChecked(true);
+            ui->actionFile->setChecked(false);
+            control->configureFilters(0,false);
         }
+        ui->statusbar->showMessage("Filters updated...",3000);
     }
-    else if (!value) {
+    else {
+        if (emetteur==ui->actionName){
+            if (!ui->actionFile->isChecked()) {
+                ui->actionName->setChecked(true);
+                ui->statusbar->showMessage("Error : must have at least one filter criterium...",3000);
+            }
+            else {
+                control->configureFilters(1,value);
+                ui->statusbar->showMessage("Filters updated...",3000);
+            }
+        }
+        else if (emetteur==ui->actionFile) {
+            if (!ui->actionName->isChecked()) {
+                ui->actionFile->setChecked(true);
+                ui->statusbar->showMessage("Error : must have at least one filter criterium...",3000);
+            }
+            else {
+                control->configureFilters(2,value);
+                ui->statusbar->showMessage("Filters updated...",3000);
+            }
+        }
+
         ui->actionAll->blockSignals(true);
-        ui->actionAll->setChecked(false);
+        ui->actionAll->setChecked(ui->actionName->isChecked() && ui->actionFile->isChecked());
         ui->actionAll->blockSignals(false);
     }
 }

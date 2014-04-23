@@ -86,6 +86,12 @@ KoResourceManagerControl::~KoResourceManagerControl()
 //Puis on construit l'archive a partir de ses fichiers qui sont obligatoirement les plus récents
 
 
+void KoResourceManagerControl::configureFilters(int filterType, bool enable) {
+    if (!modelList.isEmpty()) {
+        modelList.at(0)->configureFilters(filterType,enable);
+    }
+}
+
 void KoResourceManagerControl::toStatus(QString text,int timeout)
 {
     emit status(text,timeout);

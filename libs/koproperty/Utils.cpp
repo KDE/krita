@@ -126,7 +126,7 @@ static void paintListViewExpander(QPainter* p, QWidget* w, int height, const QPa
                 p.drawPixmap(24, (r.height() - m_miniicon.height()) / 2, m_miniicon);
             }
 
-            if (!m_titleStr.isNull()) {
+            if (!m_titleStr.isEmpty()) {
                 int indent = 16 + (m_miniicon.isNull() ? 0 : (m_miniicon.width() + 4));
                 p.setPen(palette().color(QPalette::Text));
                 QFont f = p.font();

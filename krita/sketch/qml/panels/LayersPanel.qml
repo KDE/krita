@@ -188,6 +188,15 @@ Panel {
                 width: childrenRect.width;
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
+                    image: Settings.theme.icon("fileclip-black")
+                    visible: KisClipBoard.clip;
+                    onClicked: {
+                        sketchView.selectionManager.paste();
+                        addLayerButtons.state = "";
+                    }
+                }
+                Button {
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
                     image: Settings.theme.icon("layer_paint-black")
                     onClicked: {
                         layerModel.addLayer(0);

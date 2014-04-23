@@ -63,7 +63,7 @@ KeyboardModel::KeyboardModel(QObject* parent)
 
 KeyboardModel::~KeyboardModel()
 {
-
+    delete d;
 }
 
 void KeyboardModel::classBegin()

@@ -73,6 +73,7 @@ KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
 
 KoTextBlockData::~KoTextBlockData()
 {
+    delete d;
 }
 
 

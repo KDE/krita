@@ -180,12 +180,15 @@ bool KisTiledDataManager::read(QIODevice *stream)
     KisAbstractTileCompressorSP compressor =
         KisTileCompressorFactory::create(tilesVersion);
 
+    bool readSuccess = true;
     for (quint32 i = 0; i < numTiles; i++) {
-        compressor->readTile(stream, this);
+        if (!compressor->readTile(stream, this)) {
+            readSuccess = false;
+        }
     }
 
     m_mementoManager->commit();
-    return true;
+    return readSuccess;
 }
 
 bool KisTiledDataManager::writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles)

@@ -40,6 +40,8 @@
 
 #include "MainWindow.h"
 #include <sketch/DocumentManager.h>
+#include <sketch/RecentFileManager.h>
+#include <sketch/Settings.h>
 #include <kis_doc2.h>
 
 class DesktopViewProxy::Private
@@ -119,6 +121,8 @@ void DesktopViewProxy::fileOpen()
     QString filename = dialog.url();
     if (filename.isEmpty()) return;
 
+    DocumentManager::instance()->recentFileManager()->addRecent(filename);
+
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
 }
 
@@ -126,6 +130,8 @@ void DesktopViewProxy::fileSave()
 {
     if(DocumentManager::instance()->isTemporaryFile()) {
         if(d->desktopView->saveDocument(true)) {
+            DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+            DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->setTemporaryFile(false);
         }
     } else {
@@ -136,10 +142,13 @@ void DesktopViewProxy::fileSave()
 bool DesktopViewProxy::fileSaveAs()
 {
     if(d->desktopView->saveDocument(true)) {
+        DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
         return true;
     }
 
+    DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
     return false;
 }
 

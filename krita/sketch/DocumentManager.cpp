@@ -132,7 +132,8 @@ void DocumentManager::delayedNewDocument()
         QString name = d->newDocOptions.value("name", "New Image").toString();
         int width = d->newDocOptions.value("width").toInt();
         int height = d->newDocOptions.value("height").toInt();
-        float res = d->newDocOptions.value("resolution", 72.0f).toFloat();
+        // internal resolution is pixels per point, not ppi
+        float res = d->newDocOptions.value("resolution", 72.0f).toFloat() / 72.0f;
 
         QString colorModelId = d->newDocOptions.value("colorModelId").toString();
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
@@ -202,6 +203,7 @@ bool DocumentManager::save()
     if (d->document->save())
     {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
+        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
         return true;
     }
@@ -223,6 +225,7 @@ void DocumentManager::delayedSaveAs()
 {
     d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
+    d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();
 }
 
@@ -237,6 +240,7 @@ void DocumentManager::reload()
 void DocumentManager::setTemporaryFile(bool temp)
 {
     d->temporaryFile = temp;
+    emit documentSaved();
 }
 
 DocumentManager* DocumentManager::instance()

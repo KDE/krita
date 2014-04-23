@@ -19,7 +19,7 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
-#include "tests/KoResourceBundleManager_test.h"
+
 #include "krita_export.h"
 
 class KoXmlResourceBundleManifest;
@@ -103,7 +103,7 @@ public:
      * @param manifest the virtual generator of manifest file
      * @param meta the virtual generator of meta file
      */
-    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
+    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta,QImage thumbnail,bool firstBuild=false);
 
     /**
      * @brief addManiMeta : Add manifest and meta Xml Files to the store
@@ -111,6 +111,8 @@ public:
      * @param meta the virtual generator of meta file
      */
     void addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
+
+    void addThumbnail(QImage thumbnail);
 
     /**
      * @brief getFileData
@@ -137,6 +139,15 @@ public:
      * @return the name of the current bundle
      */
     QString getPackName();
+
+    /**
+     * @brief removeDir : Remove the chosen directory
+     * @param dirName the name of the directory to be removed
+     * @return true if succeed, false otherwise.
+     */
+    static bool removeDir(const QString & dirName);
+
+    void extractTempFiles(QList<QString> pathList);
 
     ///File Method shortcuts
 

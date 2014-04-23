@@ -42,11 +42,13 @@ Item {
     }
     MouseArea {
         anchors.fill: parent;
-        onClicked: {
-            var position = mouse.x - base.height / 2;
+        function handlePos(mouse) {
+            var position = mouse.x - (handle.height / 2);
             handle.x = position < 0 ? 0 : position > base.width - handle.width ? base.width - handle.width : position;
             handle.resetHandle(useExponentialValue);
         }
+        onClicked: handlePos(mouse);
+        onPositionChanged: handlePos(mouse);
     }
     Rectangle {
         id: handle;
@@ -62,10 +64,10 @@ Item {
                     return;
                 var newX = 0;
                 if (settingExp) {
-                    var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
+                    var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (handle.maximumX - handle.minimumX) + handle.minimumX);
                 }
                 else {
-                    var newX = Math.round(base.value / 100 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
+                    var newX = Math.round(base.value / 100 * (handle.maximumX - handle.minimumX) + handle.minimumX);
                 }
                 if (newX !== handle.x)
                     handle.x = newX;
@@ -90,14 +92,14 @@ Item {
                  return;
             settingSelf = true;
             if (highPrecision) {
-                var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
+                var newValue = ((handle.x - handle.minimumX) * 100) / (handle.maximumX - handle.minimumX);
                 if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
                 }
             }
             else {
-                var newValue = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+                var newValue = Math.round( ((handle.x - handle.minimumX) * 100) / (handle.maximumX - handle.minimumX) );
                 if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
@@ -111,17 +113,7 @@ Item {
         color: Settings.theme.color("components/slider/handle/fill");
         border.width: 1;
         border.color: Settings.theme.color("components/slider/handle/border");
-        MouseArea {
-            id: mouseArea;
-            anchors.fill: parent;
-            anchors.margins: -4;
-            drag {
-                target: parent;
-                axis: "XAxis";
-                minimumX: 2;
-                maximumX: base.width - handle.width - 2;
-                onMaximumXChanged: handle.resetHandle(useExponentialValue);
-            }
-        }
+        property int minimumX: 2;
+        property int maximumX: base.width - handle.width - 2;
     }
 }

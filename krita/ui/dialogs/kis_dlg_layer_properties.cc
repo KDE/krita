@@ -136,6 +136,8 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
         m_doc->setModified(true);
         m_layer->setDirty();
     }
+
+    delete d;
 }
 
 bool KisDlgLayerProperties::haveChanges() const

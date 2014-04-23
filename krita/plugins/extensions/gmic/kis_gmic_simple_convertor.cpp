@@ -403,12 +403,14 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
 
     if (rc.isEmpty())
     {
+        dbgPlugins << "Image rectangle is empty! Using supplied gmic layer dimension";
         rc = QRect(0,0,gmicImage._width, gmicImage._height);
+
     }
 
 
-    qint32 x = 0;
-    qint32 y = 0;
+    qint32 x = rc.x();
+    qint32 y = rc.y();
     qint32 width = rc.width();
     qint32 height = rc.height();
 

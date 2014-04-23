@@ -167,7 +167,7 @@ Item {
             from: ""
             to: "expanded"
             reversible: true;
-            PropertyAnimation { properties: "height,opacity"; duration: 200; easing.type: Easing.InOutCubic }
+            PropertyAnimation { properties: "height,opacity"; duration: Constants.AnimationDuration; easing.type: Easing.InOutCubic }
         }
     ]
 }

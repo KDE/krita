@@ -62,7 +62,7 @@ public:
         CurrentCompositeOp,
         MirrorHorizontal,
         MirrorVertical,
-        MirrorAxesCenter,
+        MirrorAxisCenter,
         Opacity,
         HdrGamma,
         GlobalAlphaLock,

@@ -33,10 +33,6 @@ public:
     explicit KisColorPatches(QString configPrefix, QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
 
-
-    virtual void setCanvas(KisCanvas2 *canvas) { m_canvas = canvas; }
-    virtual void unsetCanvas() { KisColorSelectorBase::unsetCanvas(); m_canvas = 0;}
-
 public slots:
     void updateSettings();
 

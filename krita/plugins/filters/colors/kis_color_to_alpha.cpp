@@ -41,7 +41,7 @@
 KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
 {
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(false);
+    setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 

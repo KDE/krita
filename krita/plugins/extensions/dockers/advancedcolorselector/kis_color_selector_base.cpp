@@ -144,6 +144,9 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(update()));
+
+        connect(m_canvas->view()->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+                SLOT(update()));
     }
     if (m_popup) {
         m_popup->setCanvas(canvas);

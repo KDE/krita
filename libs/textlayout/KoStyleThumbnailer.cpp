@@ -137,10 +137,13 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
         cursor.insertText(d->thumbnailText, format);
     }
     layoutThumbnail(size, im, flags);
-
+    // Make a copy of the image before inserting in the cache
+    QImage res = QImage(*im);
+    // Because on inserting, QCache can decide to delete the object immediately
     d->thumbnailCache.insert(imageKey, im);
+
     delete clone;
-    return QImage(*im);
+    return res;
 }
 
 QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, QSize size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)

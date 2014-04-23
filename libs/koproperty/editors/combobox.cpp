@@ -166,25 +166,6 @@ void ComboBox::setValue(const QVariant &value)
 //??        emit valueChanged(this);
 }
 
-/*
-void ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    QString txt;
-    if (property()->listData()) {
-        const int idx = property()->listData()->keys.indexOf(value);
-        if (idx >= 0)
-            txt = property()->listData()->names[ idx ];
-        else if (m_edit->isEditable())
-            txt = m_edit->currentText();
-    } else if (m_edit->isEditable()) {
-        txt = m_edit->currentText();
-    }
-
-//    Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, keyForValue(value));
-}*/
-
 void ComboBox::fillValues()
 {
     clear();

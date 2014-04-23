@@ -86,9 +86,6 @@ public:
     QVariant value() const;
     void setValue(const QVariant &value);
 
-//    virtual void setProperty(Property *property);
-//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-//    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 signals:
     void commitData( QWidget * editor );
 };

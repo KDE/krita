@@ -200,10 +200,10 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
     }
 
     layoutThumbnail(size, im, flags);
-
+    QImage res = QImage(*im);
     d->thumbnailCache.insert(imageKey, im);
     delete characterStyleClone;
-    return QImage(*im);
+    return res;
 }
 
 void KoStyleThumbnailer::setThumbnailSize(QSize size)

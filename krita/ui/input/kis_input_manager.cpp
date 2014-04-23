@@ -395,7 +395,7 @@ bool KisInputManager::Private::tryHidePopupPalette()
 bool KisInputManager::Private::trySetMirrorMode(const QPointF &mousePosition)
 {
     if (setMirrorMode) {
-        canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, canvas->image()->documentToPixel(mousePosition));
+        canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, canvas->image()->documentToPixel(mousePosition));
         QApplication::restoreOverrideCursor();
         setMirrorMode = false;
         return true;
@@ -481,16 +481,16 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     d->setupActions();
 
     /*
-     * Temporary solution so we can still set the mirror axis.
+     * Temporary solution so we can still set the mirror axes.
      *
      * TODO: Create a proper interface for this.
      * There really should be a better way to handle this, one that neither
      * relies on "hidden" mouse interaction or shortcuts.
      */
-    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
-    d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
-    setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
-    connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
+    KAction *setMirrorAxes = new KAction(i18n("Set Mirror Axes"), this);
+    d->canvas->view()->actionCollection()->addAction("set_mirror_axes", setMirrorAxes);
+    setMirrorAxes->setShortcut(QKeySequence("Shift+r"));
+    connect(setMirrorAxes, SIGNAL(triggered(bool)), SLOT(setMirrorAxes()));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
@@ -832,7 +832,7 @@ QTouchEvent *KisInputManager::lastTouchEvent() const
     return d->lastTouchEvent;
 }
 
-void KisInputManager::setMirrorAxis()
+void KisInputManager::setMirrorAxes()
 {
     d->setMirrorMode = true;
     QApplication::setOverrideCursor(Qt::CrossCursor);

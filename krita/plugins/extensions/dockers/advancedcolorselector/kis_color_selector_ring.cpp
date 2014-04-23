@@ -190,12 +190,12 @@ void KisColorSelectorRing::colorCache()
 {
     Q_ASSERT(m_cachedColorSpace);
     m_cachedColors.clear();
-    KoColor koColor(m_cachedColorSpace);
+    KoColor koColor;
     QColor qColor;
     for(int i=0; i<360; i++) {
-        qColor.setHsv(i, 255, 255);
-        koColor.fromQColor(qColor);
-        m_cachedColors.append(koColor.toQColor().rgb());
+        koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        qColor = m_parent->converter()->toQColor(koColor);
+        m_cachedColors.append(qColor.rgb());
     }
 }
 

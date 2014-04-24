@@ -133,9 +133,11 @@ void DesktopViewProxy::fileSave()
             DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->setTemporaryFile(false);
+            emit documentSaved();
         }
     } else {
         DocumentManager::instance()->save();
+        emit documentSaved();
     }
 }
 
@@ -145,6 +147,7 @@ bool DesktopViewProxy::fileSaveAs()
         DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
+        emit documentSaved();
         return true;
     }
 

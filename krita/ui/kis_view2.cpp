@@ -296,7 +296,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
-    connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    connect(qtMainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
 
     if (m_d->doc->localFilePath().isNull()) {
@@ -1166,6 +1166,12 @@ QMainWindow* KisView2::qtMainWindow()
 {
     if(m_d->mainWindow)
         return m_d->mainWindow;
+
+    //Fallback for when we have not yet set the main window.
+    QMainWindow* w = qobject_cast<QMainWindow*>(qApp->activeWindow());
+    if(w)
+        return w;
+
     return mainWindow();
 }
 

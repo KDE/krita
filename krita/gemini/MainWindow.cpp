@@ -221,6 +221,8 @@ public:
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle());
     }
 
     void notifySlateModeChange();

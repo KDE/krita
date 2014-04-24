@@ -222,7 +222,7 @@ public:
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
-        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle());
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
     }
 
     void notifySlateModeChange();

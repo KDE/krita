@@ -266,11 +266,11 @@ const KoColorSpace* KisOpenGLImageTextures::tilesColorSpace() const
         break;
 #if defined(HAVE_OPENEXR)
     case GL_HALF_FLOAT_ARB:
-        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
+        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", m_monitorProfile);
         break;
 #endif
     case GL_FLOAT:
-        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
+        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", m_monitorProfile);
         break;
     default:
         qFatal("Unknown m_imageTextureType");

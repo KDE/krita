@@ -192,9 +192,6 @@ void OcioDisplayFilter::updateProcessor()
         OCIO::MatrixTransformRcPtr swizzle = OCIO::MatrixTransform::Create();
         swizzle->setValue(m44, offset);
         transform->setChannelView(swizzle);
-
-        // approximation (no color correction);
-        approximateTransform->push_back(swizzle);
     }
 
     // Post-display transform gamma

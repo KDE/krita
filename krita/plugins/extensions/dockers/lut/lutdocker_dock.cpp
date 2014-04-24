@@ -48,6 +48,7 @@
 #include <widgets/kis_double_widget.h>
 #include <kis_image.h>
 #include "widgets/squeezedcombobox.h"
+#include "kis_signals_blocker.h"
 
 
 #include "ocio_display_filter.h"
@@ -151,14 +152,16 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
 void LutDockerDock::slotImageColorSpaceChanged()
 {
-    //qDebug() << "slotImageColorSpaceChanged();";
-
     if (m_canvas && m_canvas->view() && m_canvas->view()->image()) {
         const KoColorSpace *cs = m_canvas->view()->image()->colorSpace();
 
         m_page->setEnabled(cs->colorModelId() == RGBAColorModelID);
 
         refillComboboxes();
+
+        KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
+        KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
+        KisSignalsBlocker componentsBlocker(m_cmbComponents);
 
         m_exposureDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRExposure());
         m_gammaDoubleWidget->setValue(m_canvas->view()->resourceProvider()->HDRGamma());
@@ -170,6 +173,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
             m_cmbComponents->addSqueezedItem(channel->name());
         }
         m_cmbComponents->setCurrentIndex(1); // All Channels...
+
     }
     updateDisplaySettings();
 }
@@ -319,49 +323,35 @@ void LutDockerDock::resetOcioConfiguration()
 
 void LutDockerDock::refillComboboxes()
 {
-    //qDebug() << "refillComboboxes();";
-    m_cmbInputColorSpace->blockSignals(true);
+    {
+        KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
+        m_cmbInputColorSpace->clear();
 
-    m_cmbInputColorSpace->clear();
+        if (!m_ocioConfig) return;
 
-    if (!m_ocioConfig) return;
-
-    int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
-    for(int i = 0; i < numOcioColorSpaces; ++i) {
-        const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
-        OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
-        m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
+        int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
+        for(int i = 0; i < numOcioColorSpaces; ++i) {
+            const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
+            OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
+            m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
+        }
     }
-    m_cmbInputColorSpace->blockSignals(false);
 
-    //    int numRoles = m_ocioConfig->getNumRoles();
-    //    for (int i = 0; i < numRoles; ++i) {
-    //        //qDebug() << "role" << m_ocioConfig->getRoleName(i);
-    //    }
-
-    m_cmbDisplayDevice->blockSignals(true);
-    m_cmbDisplayDevice->clear();
-    int numDisplays = m_ocioConfig->getNumDisplays();
-    for (int i = 0; i < numDisplays; ++i) {
-        m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
-
+    {
+        KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
+        m_cmbDisplayDevice->clear();
+        int numDisplays = m_ocioConfig->getNumDisplays();
+        for (int i = 0; i < numDisplays; ++i) {
+            m_cmbDisplayDevice->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getDisplay(i)));
+        }
     }
-    m_cmbDisplayDevice->blockSignals(false);
+
     refillViewCombobox();
-
-    //    int numLooks = m_ocioConfig->getNumLooks();
-    //    //qDebug() << "number of looks" << numLooks;
-    //    for (int i = 0; i < numLooks; ++i) {
-    //        //qDebug() << "look" << m_ocioConfig->getLookNameByIndex(i);
-    //    }
-
-
 }
 
 void LutDockerDock::refillViewCombobox()
 {
-    //    qDebug() << "refillViewCombobox();";
-    m_cmbView->blockSignals(true);
+    KisSignalsBlocker viewComboLocker(m_cmbView);
     m_cmbView->clear();
     if (!m_ocioConfig) return;
 
@@ -369,15 +359,12 @@ void LutDockerDock::refillViewCombobox()
     int numViews = m_ocioConfig->getNumViews(display);
 
     for (int j = 0; j < numViews; ++j) {
-        //        qDebug() << "\tview" << m_ocioConfig->getView(display, j);
         m_cmbView->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getView(display, j)));
     }
-    m_cmbView->blockSignals(false);
 }
 
 void LutDockerDock::selectLut()
 {
-    //qDebug() << "selectLut();";
     QString filename = m_txtLut->text();
 
     filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.*", this);
@@ -392,7 +379,6 @@ void LutDockerDock::selectLut()
 
 void LutDockerDock::clearLut()
 {
-    //qDebug() << "clearLut();";
     m_txtLut->clear();
     updateDisplaySettings();
 }

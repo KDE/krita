@@ -47,6 +47,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
+#include "kis_config_notifier.h"
 
 #include <config-ocio.h>
 
@@ -1146,4 +1147,6 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
         cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
         cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
     }
+
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }

@@ -81,7 +81,9 @@ private:
     KisDisplayColorConverter();
 
 private:
-    Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v))
+    Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));
+    Q_PRIVATE_SLOT(m_d, void selectPaintingColorSpace());
+    Q_PRIVATE_SLOT(m_d, void slotUpdateCurrentNodeColorSpace());
 
 private:
     struct Private;

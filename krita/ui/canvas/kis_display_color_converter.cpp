@@ -24,6 +24,7 @@
 #include <KoColorModelStandardIds.h>
 
 #include <KoCanvasResourceManager.h>
+#include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
@@ -66,14 +67,16 @@ struct KisDisplayColorConverter::Private
     const KoColorSpace *intermediateColorSpace;
 
     KoColor intermediateFgColor;
+    KisNodeSP connectedNode;
 
     inline KoColor approximateFromQColor(const QColor &qcolor);
     inline QColor approximateToQColor(const KoColor &color);
 
     void slotCanvasResourceChanged(int key, const QVariant &v);
-    void setCurrentNode(KisNodeSP node);
-
+    void slotUpdateCurrentNodeColorSpace();
     void selectPaintingColorSpace();
+
+    void setCurrentNode(KisNodeSP node);
     bool useOcio() const;
 };
 
@@ -84,7 +87,10 @@ KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
     m_d->parentCanvas = parentCanvas;
 
     connect(m_d->parentCanvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(slotCanvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+            SLOT(selectPaintingColorSpace()));
+
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
@@ -129,17 +135,46 @@ void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const
     }
 }
 
+void KisDisplayColorConverter::Private::slotUpdateCurrentNodeColorSpace()
+{
+    setCurrentNode(connectedNode);
+}
+
+inline KisPaintDeviceSP findValidDevice(KisNodeSP node) {
+    return node->paintDevice() ? node->paintDevice() : node->original();
+}
+
 void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
 {
+    if (connectedNode) {
+        KisPaintDeviceSP device = findValidDevice(connectedNode);
+
+        if (device) {
+            q->disconnect(device, 0);
+        }
+    }
+
     if (node) {
-        nodeColorSpace =
-            node->paintDevice() ?
-            node->paintDevice()->compositionSourceColorSpace() :
+        KisPaintDeviceSP device = findValidDevice(node);
+
+        nodeColorSpace = device ?
+            device->compositionSourceColorSpace() :
             node->colorSpace();
+
+        KIS_ASSERT_RECOVER_NOOP(nodeColorSpace);
+
+        if (device) {
+            q->connect(device, SIGNAL(profileChanged(const KoColorProfile*)),
+                       SLOT(slotUpdateCurrentNodeColorSpace()), Qt::UniqueConnection);
+            q->connect(device, SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                       SLOT(slotUpdateCurrentNodeColorSpace()), Qt::UniqueConnection);
+        }
+
     } else {
         nodeColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
 
+    connectedNode = node;
     selectPaintingColorSpace();
 }
 
@@ -203,7 +238,6 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
         //KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
     }
 
-    emit displayConfigurationChanged();
     m_d->selectPaintingColorSpace();
 }
 

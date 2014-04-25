@@ -351,10 +351,12 @@ void KisSketchView::documentChanged()
     connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
     connect(d->doc->image()->signalRouter(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SIGNAL(imageSizeChanged()));
 
-    SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
-    if (v) {
-        v->setCanvasWidget(d->canvasWidget);
-        v->setDrawCanvas(true);
+    if(scene()) {
+        SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+        if (v) {
+            v->setCanvasWidget(d->canvasWidget);
+            v->setDrawCanvas(true);
+        }
     }
 
     d->imageUpdated(d->canvas->image()->bounds());

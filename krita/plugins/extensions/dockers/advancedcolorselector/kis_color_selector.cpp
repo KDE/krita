@@ -41,6 +41,8 @@
 #include "kis_color_selector_wheel.h"
 #include "kis_color_selector_container.h"
 #include "kis_canvas2.h"
+#include "kis_signal_compressor.h"
+
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
     : KisColorSelectorBase(parent),
@@ -126,8 +128,8 @@ void KisColorSelector::setConfiguration(Configuration conf)
     connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
             m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal)), Qt::UniqueConnection);
 
-    connect(m_mainComponent, SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
-    connect(m_subComponent,  SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
+    connect(m_mainComponent, SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
+    connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
     
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
     m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
@@ -281,7 +283,8 @@ void KisColorSelector::setColor(const KoColor &color)
     m_mainComponent->setColor(color);
     m_subComponent->setColor(color);
     m_lastRealColor = color;
-    update();
+
+    m_signalCompressor->start();
 }
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
@@ -318,12 +321,8 @@ void KisColorSelector::init()
 
     // a tablet can send many more signals, than a mouse
     // this causes many repaints, if updating after every signal.
-    // a workaround with a timer can fix that.
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->setInterval(1);
-    m_updateTimer->setSingleShot(true);
-
-    connect(m_updateTimer,      SIGNAL(timeout()), this,  SLOT(update()));
+    m_signalCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_INACTIVE, this);
+    connect(m_signalCompressor, SIGNAL(timeout()), SLOT(update()));
 
     setMinimumSize(40, 40);
 }

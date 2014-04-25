@@ -26,6 +26,7 @@ class KisColorSelectorComponent;
 class KisColorSelectorSimple;
 class KisColorSelectorWheel;
 class QPushButton;
+class KisSignalCompressor;
 
 class KisColorSelector : public KisColorSelectorBase
 {
@@ -124,7 +125,7 @@ private:
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;
 
-    QTimer* m_updateTimer;
+    KisSignalCompressor *m_signalCompressor;
 
     Configuration m_configuration;
 

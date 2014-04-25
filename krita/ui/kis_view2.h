@@ -195,10 +195,12 @@ public:
 public slots:
 
     void slotLoadingFinished();
+    void slotSavingFinished();
 
 signals:
 
     void sigLoadingFinished();
+    void sigSavingFinished();
     void floatingMessageRequested(QString message, QString iconName);
 
 private slots:

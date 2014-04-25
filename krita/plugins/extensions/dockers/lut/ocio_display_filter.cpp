@@ -224,6 +224,8 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
 
+    KisOpenGL::initialMakeContextCurrent();
+
     if (m_lut3d.size() == 0) {
         //qDebug() << "generating lut";
         glGenTextures(1, &m_lut3dTexID);

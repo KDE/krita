@@ -43,6 +43,7 @@
 #include <sketch/RecentFileManager.h>
 #include <sketch/Settings.h>
 #include <kis_doc2.h>
+#include <kis_view2.h>
 
 class DesktopViewProxy::Private
 {
@@ -93,6 +94,8 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
+
+    connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()

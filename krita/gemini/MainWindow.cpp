@@ -455,6 +455,7 @@ void MainWindow::documentChanged()
     KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
     view->setQtMainWindow(d->desktopView);
     connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    connect(view, SIGNAL(sigSavingFinished()), this, SIGNAL(resetWindowTitle()));
     if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)

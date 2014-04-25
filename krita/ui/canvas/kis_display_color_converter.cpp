@@ -78,6 +78,14 @@ struct KisDisplayColorConverter::Private
 
     void setCurrentNode(KisNodeSP node);
     bool useOcio() const;
+
+    bool finalIsRgba() const;
+
+    template <bool flipToBgra>
+    QColor floatArrayToQColor(const float *p);
+
+    template <bool flipToBgra>
+    QImage convertToQImageDirect(KisPaintDeviceSP device);
 };
 
 KisDisplayColorConverter::KisDisplayColorConverter(KisCanvas2 *parentCanvas)
@@ -263,6 +271,31 @@ KisDisplayColorConverter::conversionFlags()
     return conversionFlags;
 }
 
+bool KisDisplayColorConverter::Private::finalIsRgba() const
+{
+    /**
+     * In Krita RGB color spaces differ: 8/16bit are BGRA, 16f/32f-bit RGBA
+     */
+    KoID colorDepthId = paintingColorSpace->colorDepthId();
+    return colorDepthId == Float16BitsColorDepthID ||
+        colorDepthId == Float32BitsColorDepthID;
+}
+
+template <bool flipToBgra>
+QColor KisDisplayColorConverter::Private::floatArrayToQColor(const float *p) {
+    if (flipToBgra) {
+        return QColor(KoColorSpaceMaths<float, quint8>::scaleToA(p[0]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[1]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[2]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[3]));
+    } else {
+        return QColor(KoColorSpaceMaths<float, quint8>::scaleToA(p[2]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[1]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[0]),
+                      KoColorSpaceMaths<float, quint8>::scaleToA(p[3]));
+    }
+}
+
 QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor)
 {
     KoColor c(srcColor);
@@ -287,11 +320,50 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor)
         m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
         const float *p = (const float *)normalizedChannels.constData();
-        return QColor(KoColorSpaceMaths<float, quint8>::scaleToA(p[0]),
-                      KoColorSpaceMaths<float, quint8>::scaleToA(p[1]),
-                      KoColorSpaceMaths<float, quint8>::scaleToA(p[2]),
-                      KoColorSpaceMaths<float, quint8>::scaleToA(p[3]));
+
+        return m_d->finalIsRgba() ?
+            m_d->floatArrayToQColor<true>(p) :
+            m_d->floatArrayToQColor<false>(p);
     }
+}
+
+template <bool flipToBgra>
+QImage
+KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device)
+{
+    QRect bounds = device->exactBounds();
+    if (bounds.isEmpty()) return QImage();
+
+    QImage image(bounds.size(), QImage::Format_ARGB32);
+
+    KisSequentialConstIterator it(device, bounds);
+    quint8 *dstPtr = image.bits();
+
+    int numChannels = paintingColorSpace->channelCount();
+    QVector<float> normalizedChannels(numChannels);
+
+    do {
+        paintingColorSpace->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
+        displayFilter->filter((quint8*)normalizedChannels.data(), 1);
+
+        const float *p = normalizedChannels.constData();
+
+        if (flipToBgra) {
+            dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
+            dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
+            dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
+            dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
+        } else {
+            dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
+            dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
+            dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
+            dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
+        }
+
+        dstPtr += 4;
+    } while (it.nextPixel());
+
+    return image;
 }
 
 QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
@@ -307,31 +379,9 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
     if (!m_d->useOcio()) {
         return device->convertToQImage(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     } else {
-        QRect bounds = device->exactBounds();
-        if (bounds.isEmpty()) return QImage();
-
-        QImage image(bounds.size(), QImage::Format_ARGB32);
-
-        KisSequentialConstIterator it(device, bounds);
-        quint8 *dstPtr = image.bits();
-
-        int numChannels = m_d->paintingColorSpace->channelCount();
-        QVector<float> normalizedChannels(numChannels);
-
-        do {
-            m_d->paintingColorSpace->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
-            m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
-
-            const float *p = normalizedChannels.constData();
-            dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
-            dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
-            dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
-            dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
-
-            dstPtr += 4;
-        } while (it.nextPixel());
-
-        return image;
+        return m_d->finalIsRgba() ?
+            m_d->convertToQImageDirect<true>(device) :
+            m_d->convertToQImageDirect<false>(device);
     }
 
     return QImage();

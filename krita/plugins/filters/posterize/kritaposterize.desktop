@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Posterize Filter
+Name[en_GB]=Posterize Filter
+Name[x-test]=xxPosterize Filterxx
+Comment=Reduce the amount of colors in the picture to a fixed interval
+Comment[en_GB]=Reduce the amount of colours in the picture to a fixed interval
+X-KDE-ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaposterize
+X-Krita-Version=28

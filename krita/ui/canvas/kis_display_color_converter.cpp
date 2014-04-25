@@ -76,6 +76,7 @@ struct KisDisplayColorConverter::Private
     void slotUpdateCurrentNodeColorSpace();
     void selectPaintingColorSpace();
 
+    void updateIntermediateFgColor(const KoColor &color);
     void setCurrentNode(KisNodeSP node);
     bool useOcio() const;
 
@@ -130,16 +131,23 @@ bool KisDisplayColorConverter::Private::useOcio() const
     return displayFilter && paintingColorSpace->colorModelId() == RGBAColorModelID;
 }
 
+void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor &srcColor)
+{
+    KIS_ASSERT_RECOVER_RETURN(displayFilter);
+
+    KoColor color = srcColor;
+    color.convertTo(intermediateColorSpace);
+    displayFilter->approximateForwardTransformation(color.data(), 1);
+    intermediateFgColor = color;
+}
+
 void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KisCanvasResourceProvider::CurrentKritaNode) {
         KisNodeSP currentNode = v.value<KisNodeSP>();
         setCurrentNode(currentNode);
     } else if (useOcio() && key == KoCanvasResourceManager::ForegroundColor) {
-        KoColor color = v.value<KoColor>();
-        color.convertTo(intermediateColorSpace);
-        displayFilter->approximateForwardTransformation(color.data(), 1);
-        intermediateFgColor = color;
+        updateIntermediateFgColor(v.value<KoColor>());
     }
 }
 
@@ -235,9 +243,12 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
             KoColorSpaceRegistry::instance()->
             colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
 
-        KIS_ASSERT_RECOVER(m_d->displayFilter) {
+        KIS_ASSERT_RECOVER(m_d->intermediateColorSpace) {
             m_d->intermediateColorSpace = m_d->monitorColorSpace;
         }
+
+        m_d->updateIntermediateFgColor(
+            m_d->parentCanvas->resourceManager()->foregroundColor());
     }
 
 

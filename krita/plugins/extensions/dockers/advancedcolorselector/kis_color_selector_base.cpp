@@ -144,6 +144,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(update()));
+
+        setColor(Acs::currentColor(m_canvas->view()->resourceProvider(), Acs::Foreground));
     }
     if (m_popup) {
         m_popup->setCanvas(canvas);

@@ -81,7 +81,6 @@ public:
         , view(view)
         , canvasWidget(0)
         , shapeManager(new KoShapeManager(parent))
-        , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
         , toolProxy(new KisToolProxy(parent))
         , vastScrolling(true)
@@ -99,9 +98,6 @@ public:
     KisView2 *view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
-    const KoColorProfile *monitorProfile;
-    KoColorConversionTransformation::Intent renderingIntent;
-    KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
 #ifdef HAVE_OPENGL
     int openGLFilterMode;
@@ -334,7 +330,10 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
-    m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+    m_d->prescaledProjection->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
+                                                m_d->displayColorConverter->renderingIntent(),
+                                                m_d->displayColorConverter->conversionFlags());
+    m_d->prescaledProjection->setDisplayFilter(m_d->displayColorConverter->displayFilter());
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvasWidget);
 }
@@ -347,8 +346,14 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->currentCanvasIsOpenGL = true;
 
     KisOpenGL::initialMakeContextCurrent();
-    m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+    m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
+                                                                        m_d->displayColorConverter->monitorProfile(),
+                                                                        m_d->displayColorConverter->renderingIntent(),
+                                                                        m_d->displayColorConverter->conversionFlags());
+
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
+    canvasWidget->setDisplayFilter(m_d->displayColorConverter->displayFilter());
+
     setCanvasWidget(canvasWidget);
 
 #else
@@ -358,14 +363,8 @@ void KisCanvas2::createOpenGLCanvas()
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
-    KisConfig cfg;
     const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
-    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
-
-    m_d->conversionFlags = KisDisplayColorConverter::conversionFlags();
-    m_d->renderingIntent = KisDisplayColorConverter::renderingIntent();
-
-    Q_ASSERT(m_d->renderingIntent < 4);
+    m_d->displayColorConverter->setMonitorProfile(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
@@ -672,7 +671,7 @@ void KisCanvas2::preScale()
 
 const KoColorProfile *  KisCanvas2::monitorProfile()
 {
-    return m_d->monitorProfile;
+    return m_d->displayColorConverter->monitorProfile();
 }
 
 KisView2* KisCanvas2::view()
@@ -732,10 +731,6 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
 {
     m_d->displayColorConverter->setMonitorProfile(monitorProfile);
 
-    m_d->monitorProfile = monitorProfile;
-    m_d->conversionFlags = KisDisplayColorConverter::conversionFlags();
-    m_d->renderingIntent = KisDisplayColorConverter::renderingIntent();
-
     KisImageWSP image = this->image();
 
     image->barrierLock();
@@ -743,13 +738,17 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+        m_d->openGLImageTextures->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
+                                                    m_d->displayColorConverter->renderingIntent(),
+                                                    m_d->displayColorConverter->conversionFlags());
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);
-        m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+        m_d->prescaledProjection->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
+                                                    m_d->displayColorConverter->renderingIntent(),
+                                                    m_d->displayColorConverter->conversionFlags());
     }
 
     startUpdateInPatches(image->bounds());

@@ -69,6 +69,9 @@ public:
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
+    KisDisplayFilterSP displayFilter() const;
+    const KoColorProfile* monitorProfile() const;
+
 signals:
     void displayConfigurationChanged();
 

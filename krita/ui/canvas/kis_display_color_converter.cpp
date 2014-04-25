@@ -282,6 +282,16 @@ KisDisplayColorConverter::conversionFlags()
     return conversionFlags;
 }
 
+KisDisplayFilterSP KisDisplayColorConverter::displayFilter() const
+{
+    return m_d->displayFilter;
+}
+
+const KoColorProfile* KisDisplayColorConverter::monitorProfile() const
+{
+    return m_d->monitorProfile;
+}
+
 bool KisDisplayColorConverter::Private::finalIsRgba() const
 {
     /**

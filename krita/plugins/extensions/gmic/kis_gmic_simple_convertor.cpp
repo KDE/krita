@@ -305,9 +305,9 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
 
     const qint32 floatPixelSize = rgbaFloat32bitcolorSpace->pixelSize();
 
-    KisRandomAccessorSP it = dst->createRandomAccessorNG(x, imageY); // 0,0
-    int tileWidth = it->numContiguousColumns(0);
-    int tileHeight = it->numContiguousRows(0);
+    KisRandomAccessorSP it = dst->createRandomAccessorNG(dst->x(), dst->y()); // 0,0
+    int tileWidth = it->numContiguousColumns(dst->x());
+    int tileHeight = it->numContiguousRows(dst->y());
     Q_ASSERT(tileWidth == 64);
     Q_ASSERT(tileHeight == 64);
     quint8 * convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
@@ -400,20 +400,16 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
         return;
     }
 
-
     if (rc.isEmpty())
     {
         dbgPlugins << "Image rectangle is empty! Using supplied gmic layer dimension";
         rc = QRect(0,0,gmicImage._width, gmicImage._height);
-
     }
-
 
     qint32 x = rc.x();
     qint32 y = rc.y();
     qint32 width = rc.width();
     qint32 height = rc.height();
-
 
     width  = width < 0  ? 0 : width;
     height = height < 0 ? 0 : height;
@@ -430,46 +426,72 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
     planes.append(gmicImage._data + blueOffset);
     planes.append(gmicImage._data + alphaOffset);
 
-    qint32 dataY = 0;
-    qint32 imageY = y;
-    qint32 rowsRemaining = height;
+    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(dev->x(), dev->y());
+    int tileWidth = it->numContiguousColumns(dev->x());
+    int tileHeight = it->numContiguousRows(dev->y());
 
-    KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(x, imageY);
+    Q_ASSERT(tileWidth == 64);
+    Q_ASSERT(tileHeight == 64);
 
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
     Q_CHECK_PTR(rgbaFloat32bitcolorSpace);
-    const qint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
+    const qint32 dstPixelSize = rgbaFloat32bitcolorSpace->pixelSize();
+    const qint32 srcPixelSize = dev->pixelSize();
 
-    int tileWidth = it->numContiguousColumns(0);
-    int tileHeight = it->numContiguousRows(0);
-    Q_ASSERT(tileWidth == 64);
-    Q_ASSERT(tileHeight == 64);
-    quint8 * convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
+    quint8 * dstTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
+
+    qint32 dataY = 0;
+    qint32 imageX = x;
+    qint32 imageY = y;
+    it->moveTo(imageX, imageY);
+    qint32 rowsRemaining = height;
 
     while (rowsRemaining > 0) {
 
         qint32 dataX = 0;
-        qint32 imageX = x;
+        imageX = x;
         qint32 columnsRemaining = width;
         qint32 numContiguousImageRows = it->numContiguousRows(imageY);
 
         qint32 rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
+        qint32 convertedTileY = tileHeight - rowsToWork;
+        Q_ASSERT(convertedTileY >= 0);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousImageColumns = it->numContiguousColumns(imageX);
             qint32 columnsToWork = qMin(numContiguousImageColumns, columnsRemaining);
+            qint32 convertedTileX = tileWidth - columnsToWork;
+            Q_ASSERT(convertedTileX >= 0);
 
             const qint32 dataIdx = dataX + dataY * width;
-            const qint32 tileRowStride = (tileWidth - columnsToWork) * pixelSize;
+            const qint32 dstTileIndex = convertedTileX + convertedTileY * tileWidth;
+            const qint32 tileRowStride = (tileWidth - columnsToWork) * dstPixelSize;
+            const qint32 srcTileRowStride = (tileWidth - columnsToWork) * srcPixelSize;
 
             it->moveTo(imageX, imageY);
-            pixelToGmicPixelFormat->transform(it->rawDataConst(), convertedTile, tileWidth * tileHeight);
+            quint8 *tileItStart = dstTile + dstTileIndex * dstPixelSize;
 
-            quint8 *tileItStart = convertedTile;
-            // here we want to copy floats so tileItStart has to point to converted buffer
+            // transform tile row by row
+            quint8 *dstTileIt = tileItStart;
+            quint8 *srcTileIt = const_cast<quint8*>(it->rawDataConst());
+
+            qint32 row = rowsToWork;
+            while (row > 0)
+            {
+                pixelToGmicPixelFormat->transform(srcTileIt, dstTileIt , columnsToWork);
+                srcTileIt += columnsToWork * srcPixelSize;
+                srcTileIt += srcTileRowStride;
+
+                dstTileIt += columnsToWork * dstPixelSize;
+                dstTileIt += tileRowStride;
+
+                row--;
+            }
+
+            // here we want to copy floats to dstTile, so tileItStart has to point to float buffer
             qint32 channelSize = sizeof(float);
             for(qint32 i=0; i<numChannels;i++)
             {
@@ -480,7 +502,7 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
                 for (qint32 row = 0; row < rowsToWork; row++) {
                     for (int col = 0; col < columnsToWork; col++) {
                         memcpy(planeIt, tileIt, channelSize);
-                        tileIt += pixelSize;
+                        tileIt += dstPixelSize;
                         planeIt += 1;
                     }
 
@@ -496,13 +518,12 @@ void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< 
             columnsRemaining -= columnsToWork;
         }
 
-
         imageY += rowsToWork;
         dataY += rowsToWork;
         rowsRemaining -= rowsToWork;
     }
 
-    delete [] convertedTile;
+    delete [] dstTile;
 
 }
 

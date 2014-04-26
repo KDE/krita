@@ -45,14 +45,13 @@ class KisGridManager;
 class KisImage;
 class KisImageManager;
 class KisNodeManager;
-class KisPaintingAssistantsManager;
+class KisPaintingAssistantsDecoration;
 class KisPaintopBox;
 class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KoFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
@@ -176,7 +175,7 @@ public:
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
-    KisPaintingAssistantsManager* paintingAssistantManager();
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();
@@ -196,10 +195,12 @@ public:
 public slots:
 
     void slotLoadingFinished();
+    void slotSavingFinished();
 
 signals:
 
     void sigLoadingFinished();
+    void sigSavingFinished();
     void floatingMessageRequested(QString message, QString iconName);
 
 private slots:
@@ -216,8 +217,10 @@ private slots:
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
+    void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();
+    void updateIcons();
 
 private:
     void createActions();

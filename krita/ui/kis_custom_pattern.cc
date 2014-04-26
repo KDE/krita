@@ -54,7 +54,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
     preview->setScaledContents(true);
 
     KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KoPattern>(rServer);
+    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
@@ -65,7 +65,6 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 KisCustomPattern::~KisCustomPattern()
 {
     delete m_pattern;
-    delete m_rServerAdapter;
 }
 
 void KisCustomPattern::slotUpdateCurrentPattern()

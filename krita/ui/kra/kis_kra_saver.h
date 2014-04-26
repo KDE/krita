@@ -26,6 +26,7 @@ class QDomElement;
 class QDomDocument;
 class KoStore;
 class QString;
+class QStringList;
 
 class KisKraSaver
 {
@@ -39,7 +40,11 @@ public:
 
     bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
+    /// @return a list with everthing that went wrong while saving
+    QStringList errorMessages() const;
+
 private:
+    void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
     bool saveAssistants(KoStore *store,QString uri, bool external);
     bool saveAssistantsList(QDomDocument& doc, QDomElement& element);

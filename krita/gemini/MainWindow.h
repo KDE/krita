@@ -66,6 +66,7 @@ public Q_SLOTS:
     void switchToSketch();
     void switchToDesktop(bool justLoaded = false);
     void documentChanged();
+    void resetWindowTitle();
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
@@ -73,6 +74,7 @@ Q_SIGNALS:
     void currentSketchPageChanged();
     void temporaryFileChanged();
     void sketchKisViewChanged();
+    void documentSaved();
 
 private Q_SLOTS:
     void switchDesktopForced();

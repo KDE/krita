@@ -31,6 +31,9 @@ Item {
 
     height: textField.height + valueSlider.height;
 
+    property alias border: valueSlider.border;
+    property alias background: valueSlider.background;
+
     onMinChanged: d.fixHandle();
     onMaxChanged: d.fixHandle();
     onValueChanged: {
@@ -78,6 +81,10 @@ Item {
         onFocusLost: value = text;
         onAccepted: value = text;
         numeric: true;
+
+        border.width: valueSlider.border.width;
+        border.color: valueSlider.border.color;
+        background: valueSlider.background;
     }
     Slider {
         id: valueSlider;

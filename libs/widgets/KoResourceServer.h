@@ -121,6 +121,11 @@ public:
     virtual ~KoResourceServer()
     {
         if (m_deleteResource) {
+
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+                observer->unsetResourceServer();
+            }
+
             foreach(T* res, m_resources) {
                 delete res;
             }
@@ -168,9 +173,8 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        if (m_deleteResource) {
-                            delete resource;
-                        }
+                        kWarning() << "Loading resource " << front << "failed";
+                        delete resource;
                     }
                 }
                 m_loadLock.unlock();
@@ -447,6 +451,7 @@ public:
 
     void tagCategoryRemoved(const QString& tag)
     {
+        m_tagStore->delTag(tag);
         m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTagRemoval(tag);

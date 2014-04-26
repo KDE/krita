@@ -48,10 +48,13 @@
 #include "kis_view2.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
+#include <kis_doc2.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
+#include "Settings.h"
 
 class MainWindow::Private
 {
@@ -79,6 +82,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
+    setWindowIcon(KIcon("kritasketch"));
 
     // Load filters and other plugins in the gui thread
     Q_UNUSED(KisFilterRegistry::instance());
@@ -91,9 +95,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
     }
-
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     QDeclarativeView* view = new SketchDeclarativeView();
+    QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
 #ifdef Q_OS_WIN
@@ -134,6 +140,15 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     setCentralWidget(view);
+}
+
+void MainWindow::resetWindowTitle()
+{
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Sketch")));
 }
 
 bool MainWindow::allowClose() const

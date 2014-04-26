@@ -123,7 +123,7 @@ public:
      * @param ac the actionCollection that will be the parent of the actions.
      * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerTools(KActionCollection *ac, KoCanvasController *controller = 0);
+    void registerTools(KActionCollection *ac, KoCanvasController *controller);
 
     /**
      * Register a new canvas controller
@@ -182,7 +182,7 @@ public:
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<KoToolButton> createToolList(KoCanvasBase *canvas) const;
+    QList<KoToolButton> createToolList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
@@ -245,7 +245,7 @@ signals:
      * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
-    void toolCodesSelected(const KoCanvasController *canvas, const QList<QString> &types);
+    void toolCodesSelected(const QList<QString> &types);
 
     /**
      * Emitted after the current layer changed either its properties or to a new layer.

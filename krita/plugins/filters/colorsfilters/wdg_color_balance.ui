@@ -6,28 +6,75 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>364</width>
-    <height>456</height>
+    <width>381</width>
+    <height>458</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="topMargin">
+      <number>0</number>
      </property>
-     <property name="text">
-      <string>Shadows</string>
-     </property>
-    </widget>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Shadows</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>1</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushResetShadows">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Reset Shadows  </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="verticalSpacing">
+      <number>3</number>
+     </property>
      <item row="0" column="2">
       <widget class="QLabel" name="label_6">
        <property name="text">
@@ -86,13 +133,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
-      <widget class="QPushButton" name="pushResetShadows">
-       <property name="text">
-        <string>Reset Shadows  </string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
@@ -119,29 +159,84 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="topMargin">
+      <number>18</number>
      </property>
-     <property name="text">
-      <string>Midtones</string>
-     </property>
-    </widget>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Midtones</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushResetMidtones">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Reset Midtones  </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_19">
-       <property name="text">
-        <string>Magenta</string>
+     <property name="verticalSpacing">
+      <number>3</number>
+     </property>
+     <item row="0" column="3">
+      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="cyanRedMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>Green</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSlider" name="yellowBlueMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -155,10 +250,27 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_20">
+     <item row="1" column="1">
+      <widget class="QSlider" name="magentaGreenMidtonesSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_18">
        <property name="text">
-        <string>Green</string>
+        <string>Red    </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_19">
+       <property name="text">
+        <string>Magenta</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -172,13 +284,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QSlider" name="yellowBlueMidtonesSlider">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="2">
       <widget class="QLabel" name="label_22">
        <property name="text">
@@ -186,106 +291,100 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_18">
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="topMargin">
+      <number>18</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_16">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string>Red    </string>
+        <string>Highlights</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="4">
-      <widget class="QPushButton" name="pushResetMidtones">
-       <property name="text">
-        <string>Reset Midtones  </string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSlider" name="cyanRedMidtonesSlider">
+     <item>
+      <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
-     <item row="1" column="1">
-      <widget class="QSlider" name="magentaGreenMidtonesSlider">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <item>
+      <widget class="QPushButton" name="pushResetHighlights">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Reset Highlights</string>
        </property>
       </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="QSpinBox" name="yellowBlueMidtonesSpinbox"/>
-     </item>
-     <item row="1" column="4">
-      <widget class="QSpinBox" name="magentaGreenMidtonesSpinbox"/>
-     </item>
-     <item row="0" column="4">
-      <widget class="QSpinBox" name="cyanRedMidtonesSpinbox"/>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_16">
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-       <weight>75</weight>
-       <italic>true</italic>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Highlights</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="1" column="3" colspan="2">
+     <property name="verticalSpacing">
+      <number>3</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>Blue</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QSpinBox" name="cyanRedHighlightsSpinbox"/>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QCheckBox" name="chkPreserveLuminosity">
+       <property name="text">
+        <string>Preserve Luminosity</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
       <widget class="QSpinBox" name="magentaGreenHighlightsSpinbox"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>     Cyan</string>
+        <string>Cyan</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3" colspan="2">
-      <widget class="QPushButton" name="pushResetHighlights">
-       <property name="text">
-        <string>Reset Highlights</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_14">
        <property name="text">
-        <string>    Yellow</string>
+        <string>Yellow</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>Magenta</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_15">
-       <property name="text">
-        <string>Blue  </string>
        </property>
       </widget>
      </item>
@@ -310,7 +409,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3" colspan="2">
+     <item row="2" column="3">
       <widget class="QSpinBox" name="yellowBlueHighlightsSpinbox"/>
      </item>
      <item row="0" column="1">
@@ -327,41 +426,56 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3" colspan="2">
-      <widget class="QSpinBox" name="cyanRedHighlightsSpinbox"/>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QCheckBox" name="chkPreserveLuminosity">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_12">
        <property name="text">
-        <string>Preserve Luminosity</string>
+        <string>Magenta</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
     </layout>
    </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>pushResetHighlights</tabstop>
   <tabstop>cyanRedShadowsSpinbox</tabstop>
   <tabstop>magentaGreenShadowsSpinbox</tabstop>
   <tabstop>yellowBlueShadowsSpinbox</tabstop>
-  <tabstop>magentaGreenShadowsSlider</tabstop>
-  <tabstop>pushResetMidtones</tabstop>
-  <tabstop>chkPreserveLuminosity</tabstop>
-  <tabstop>magentaGreenHighlightsSlider</tabstop>
-  <tabstop>cyanRedHighlightsSlider</tabstop>
-  <tabstop>yellowBlueShadowsSlider</tabstop>
-  <tabstop>magentaGreenHighlightsSpinbox</tabstop>
-  <tabstop>cyanRedShadowsSlider</tabstop>
-  <tabstop>yellowBlueHighlightsSlider</tabstop>
-  <tabstop>yellowBlueHighlightsSpinbox</tabstop>
-  <tabstop>cyanRedMidtonesSlider</tabstop>
   <tabstop>cyanRedMidtonesSpinbox</tabstop>
-  <tabstop>magentaGreenMidtonesSlider</tabstop>
   <tabstop>magentaGreenMidtonesSpinbox</tabstop>
-  <tabstop>yellowBlueMidtonesSlider</tabstop>
   <tabstop>yellowBlueMidtonesSpinbox</tabstop>
+  <tabstop>cyanRedHighlightsSpinbox</tabstop>
+  <tabstop>magentaGreenHighlightsSpinbox</tabstop>
+  <tabstop>yellowBlueHighlightsSpinbox</tabstop>
+  <tabstop>chkPreserveLuminosity</tabstop>
+  <tabstop>cyanRedShadowsSlider</tabstop>
+  <tabstop>magentaGreenShadowsSlider</tabstop>
+  <tabstop>yellowBlueShadowsSlider</tabstop>
+  <tabstop>cyanRedMidtonesSlider</tabstop>
+  <tabstop>magentaGreenMidtonesSlider</tabstop>
+  <tabstop>yellowBlueMidtonesSlider</tabstop>
+  <tabstop>cyanRedHighlightsSlider</tabstop>
+  <tabstop>magentaGreenHighlightsSlider</tabstop>
+  <tabstop>yellowBlueHighlightsSlider</tabstop>
+  <tabstop>pushResetShadows</tabstop>
+  <tabstop>pushResetMidtones</tabstop>
+  <tabstop>pushResetHighlights</tabstop>
  </tabstops>
  <resources/>
  <connections>

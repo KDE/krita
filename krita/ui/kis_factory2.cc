@@ -55,10 +55,38 @@
 KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
 
+static int factoryCount = 0;
+
 KisFactory2::KisFactory2(QObject* parent)
     : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
+
+    if (factoryCount == 0) {
+
+        // XXX_EXIV: make the exiv io backends real plugins
+        KisExiv2::initialize();
+
+        KoShapeRegistry* r = KoShapeRegistry::instance();
+        r->add(new KisShapeSelectionFactory());
+
+        KisFilterRegistry::instance();
+        KisGeneratorRegistry::instance();
+        KisPaintOpRegistry::instance();
+
+        // Load the krita-specific tools
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
+        // Load dockers
+        KoPluginLoader::PluginsConfig config;
+        config.blacklist = "DockerPluginsDisabled";
+        config.group = "krita";
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
+    }
+    factoryCount++;
 }
 
 KisFactory2::~KisFactory2()
@@ -96,33 +124,8 @@ KAboutData* KisFactory2::aboutData()
 const KComponentData &KisFactory2::componentData()
 {
     if (!s_instance) {
-        if (s_aboutData)
-            s_instance = new KComponentData(s_aboutData);
-        else
-            s_instance = new KComponentData(newKritaAboutData());
+        s_instance = new KComponentData(aboutData());
         Q_CHECK_PTR(s_instance);
-
-        // XXX_EXIV: make the exiv io backends real plugins
-        KisExiv2::initialize();
-
-        KoShapeRegistry* r = KoShapeRegistry::instance();
-        r->add(new KisShapeSelectionFactory());
-
-        KisFilterRegistry::instance();
-        KisGeneratorRegistry::instance();
-        KisPaintOpRegistry::instance();
-
-        // Load the krita-specific tools
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
-        // Load dockers
-        KoPluginLoader::PluginsConfig config;
-        config.blacklist = "DockerPluginsDisabled";
-        config.group = "krita";
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
         // for cursors
@@ -137,6 +140,8 @@ const KComponentData &KisFactory2::componentData()
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
+
+
     }
 
     return *s_instance;

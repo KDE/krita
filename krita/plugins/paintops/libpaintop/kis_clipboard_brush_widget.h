@@ -75,7 +75,7 @@ private:
     KisImageWSP m_image;
     KisBrushSP m_brush;
     bool m_brushCreated;
-    KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
 
 #endif // KIS_CLIPBOARD_BRUSH_WIDGET_H

@@ -86,7 +86,9 @@
 #include <time.h>
 
 #ifdef Q_WS_WIN
+#ifndef UNICODE
 #define UNICODE
+#endif
 typedef wchar_t HD_CHAR;
 // sort of arbitrary, but MAX_PATH is kinda small
 #define HD_MAX_PATH 4096

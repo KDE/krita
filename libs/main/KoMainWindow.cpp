@@ -31,7 +31,7 @@
 #include "KoFilterManager.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
-#include "KoFileDialogHelper.h"
+#include "KoFileDialog.h"
 #include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
@@ -121,7 +121,6 @@ public:
         saveActionAs = 0;
         printAction = 0;
         printActionPreview = 0;
-        statusBarLabel = 0;
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
@@ -199,7 +198,6 @@ public:
     KoView *activeView;
     QWidget *m_activeWidget;
 
-    QLabel * statusBarLabel;
     QPointer<QProgressBar> progress;
     QMutex progressMutex;
 
@@ -374,6 +372,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->themeManager->registerThemeActions(actionCollection());
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
 
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
@@ -993,12 +992,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KUrl newURL(KoFileDialogHelper::getSaveFileName(
-                        this,
-                        i18n("untitled"),
-                        (isExporting() && !d->lastExportUrl.isEmpty()) ?
-                            d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile(),
-                        mimeFilter));
+        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        dialog.setCaption(i18n("untitled"));
+        dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
+                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+        dialog.setMimeTypeFilters(mimeFilter);
+        KUrl newURL = dialog.url();
 
         QByteArray outputFormat = _native_format;
         if (!specialOutputFlag) {
@@ -1304,37 +1303,31 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
-    //KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
-    //                                       KoFilterManager::Import,
-    //                                       KoServiceProvider::readExtraNativeMimeTypes());
-
-    QString url;
+    KUrl url;
     if (!isImporting()) {
-        url = KoFileDialogHelper::getOpenFileName(this,
-                                                  i18n("Open Document"),
-                                                  (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
-                                                     ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                                     : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                                                  mimeFilter,
-                                                  "",
-                                                  "OpenDocument");
+        KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setCaption(i18n("Open Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+                               ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
+        url = dialog.url();
     } else {
-        url = KoFileDialogHelper::getImportFileName(this,
-                                                    i18n("Import Document"),
-                                                    (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
-                                                        ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                                        : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation),
-                                                    mimeFilter,
-                                                    "",
-                                                    "OpenDocument");
+        KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import Document"));
+        dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
+                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+        dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
+        url = dialog.url();
     }
 
     if (url.isEmpty())
         return;
 
-    (void) openDocument(KUrl(url));
+    (void) openDocument(url);
 }
 
 void KoMainWindow::slotFileOpenRecent(const KUrl & url)
@@ -1484,11 +1477,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KUrl url(KoFileDialogHelper::getSaveFileName(
-                     this,
-                     i18n("Export as PDF"),
-                     startUrl.toLocalFile(),
-                     QStringList() << "application/pdf"));
+        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        dialog.setCaption(i18n("Export as PDF"));
+        dialog.setDefaultDir(startUrl.toLocalFile());
+        dialog.setMimeTypeFilters(QStringList() << "application/pdf");
+        KUrl url = dialog.url();
 
         pdfFileName = url.toLocalFile();
         if (pdfFileName.isEmpty())
@@ -1671,15 +1664,6 @@ void KoMainWindow::slotProgress(int value)
         d->progress->setValue(value);
     }
     qApp->processEvents();
-}
-
-QLabel * KoMainWindow::statusBarLabel()
-{
-    if (!d->statusBarLabel) {
-        d->statusBarLabel = new QLabel(statusBar());
-        statusBar()->addPermanentWidget(d->statusBarLabel, 1);
-    }
-    return d->statusBarLabel;
 }
 
 void KoMainWindow::setMaxRecentItems(uint _number)
@@ -1971,11 +1955,6 @@ KoView* KoMainWindow::currentView() const
         return d->rootViews.first();
     }
     return 0;
-}
-
-void KoMainWindow::slotSetStatusBarText( const QString & text )
-{
-    statusBar()->showMessage( text );
 }
 
 void KoMainWindow::newView()

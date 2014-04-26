@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48"
+   height="48"
+   id="svg5923"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="icon-delete-orange.svg">
+  <defs
+     id="defs5925">
+    <linearGradient
+       y2="56.055851"
+       x2="65.687874"
+       y1="55.998959"
+       x1="80.010139"
+       gradientTransform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-16.166522,72.970553)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4193"
+       xlink:href="#linearGradient4214"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient4214">
+      <stop
+         id="stop4216"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.47058824;"
+         offset="0.79447055"
+         id="stop4218" />
+      <stop
+         id="stop4220"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       y2="56.055851"
+       x2="65.687874"
+       y1="55.998959"
+       x1="80.010139"
+       gradientTransform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-16.166522,72.970553)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5957"
+       xlink:href="#linearGradient4214"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="-25.551484"
+     inkscape:cy="20.112039"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     inkscape:window-x="-3"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid5998"
+       empspacing="8"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5928">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1004.3622)">
+    <g
+       id="layer1-0-2"
+       transform="matrix(1.5,0,0,1.4999992,7.1999997e-7,-526.1803)"
+       style="fill:#ffffff;fill-opacity:1;display:inline">
+      <g
+         style="fill:#ffffff;fill-opacity:1;display:inline"
+         id="g4182-3-3"
+         transform="matrix(0.50000001,0,0,0.50000001,-76.000002,928.3622)">
+        <path
+           style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="path3850-7-5"
+           d="m 184,184 c -17.67311,0 -32,14.32689 -32,32 0,17.67311 14.32689,32 32,32 17.67311,0 32,-14.32689 32,-32 0,-17.67311 -14.32689,-32 -32,-32 z m 0,5.33333 c 14.72759,0 26.66666,11.93907 26.66666,26.66667 0,14.72759 -11.93907,26.66666 -26.66666,26.66666 -14.7276,0 -26.66667,-11.93907 -26.66667,-26.66666 0,-14.7276 11.93907,-26.66667 26.66667,-26.66667 z"
+           inkscape:connector-curvature="0" />
+        <rect
+           style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="rect3907-2"
+           y="212"
+           x="168"
+           ry="3.9993489"
+           rx="4"
+           height="7.9999957"
+           width="32" />
+      </g>
+    </g>
+  </g>
+</svg>

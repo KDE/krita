@@ -28,7 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -128,7 +128,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->view = view;
     m_d->doc = doc;
@@ -649,6 +649,9 @@ void KisNodeManager::removeNode()
     if (scanForLastLayer(m_d->view->image(), node)) {
         m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
         m_d->commandsAdapter->removeNode(node);
+        // An oddity, but this is required as for some reason, we can end up in a situation
+        // where our active node is still set to one of the layers removed above.
+        m_d->activeNode.clear();
         createNode("KisPaintLayer");
         m_d->commandsAdapter->endMacro();
     } else {
@@ -798,10 +801,11 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QString filename = KoFileDialogHelper::getSaveFileName(m_d->view,
-                                                           i18n("Export Node"),
-                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                           KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
+    dialog.setCaption(i18n("Export Node"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    QString filename = dialog.url();
 
     if (filename.isEmpty()) return;
 

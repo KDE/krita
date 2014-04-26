@@ -45,7 +45,7 @@
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
 #include "kis_shared_ptr.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "KoResourceModel.h"
 #include "KoResourceItemView.h"
 #include "kis_resource_server_provider.h"
@@ -54,8 +54,8 @@
 #include "kis_preset_chooser.h"
 #include <kconfiggroup.h>
 
-KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
-    : KDialog(paintOpBox)
+KisPaletteManager::KisPaletteManager(KisFavoriteResourceManager *manager, QWidget *parent)
+    : KDialog(parent)
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)

@@ -36,17 +36,13 @@ class KoCanvasController;
 class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoToolBoxFactory(KoCanvasController *canvas);
+    explicit KoToolBoxFactory();
     ~KoToolBoxFactory();
 
     virtual QString id() const;
     KoDockFactoryBase::DockPosition defaultDockPosition() const;
     QDockWidget* createDockWidget();
     virtual bool isCollapsable() const { return false; }
-
-private:
-    class Private;
-    Private * const d;
 };
 
 #endif

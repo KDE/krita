@@ -35,11 +35,8 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id)
     setMaximumLabel(i18n("1.0"));
 }
 
-KisDynamicSensor::~KisDynamicSensor() { }
-
-KisDynamicSensor *KisDynamicSensor::clone() const
+KisDynamicSensor::~KisDynamicSensor()
 {
-    return createFromXML(toXML());
 }
 
 QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)
@@ -52,7 +49,7 @@ void KisDynamicSensor::reset()
 {
 }
 
-KisDynamicSensor *KisDynamicSensor::id2Sensor(const KoID& id)
+KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
 {
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
@@ -101,7 +98,7 @@ KisDynamicSensor *KisDynamicSensor::id2Sensor(const KoID& id)
 }
 
 
-KisDynamicSensor *KisDynamicSensor::createFromXML(const QString& s)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s)
 {
     QDomDocument doc;
     doc.setContent(s);
@@ -109,10 +106,10 @@ KisDynamicSensor *KisDynamicSensor::createFromXML(const QString& s)
     return createFromXML(e);
 }
 
-KisDynamicSensor *KisDynamicSensor::createFromXML(const QDomElement& e)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e)
 {
     QString id = e.attribute("id", "");
-    KisDynamicSensor *sensor = id2Sensor(id);
+    KisDynamicSensorSP sensor = id2Sensor(id);
     if (sensor) {
         sensor->fromXML(e);
     }

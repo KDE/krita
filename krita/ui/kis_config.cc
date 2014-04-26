@@ -408,6 +408,32 @@ int KisConfig::openGLTextureSize() const
     return m_cfg.readEntry("textureSize", 256);
 }
 
+
+bool KisConfig::disableDoubleBuffering() const
+{
+    return m_cfg.readEntry("disableDoubleBuffering", true);
+}
+
+void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
+{
+    m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
+}
+
+bool KisConfig::disableVSync() const
+{
+    return m_cfg.readEntry("disableVSync", true);
+}
+
+void KisConfig::setDisableVSync(bool disableVSync)
+{
+    m_cfg.writeEntry("disableVSync", disableVSync);
+}
+
+bool KisConfig::showAdvancedOpenGLSettings() const
+{
+    return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
+}
+
 int KisConfig::numMipmapLevels() const
 {
     return m_cfg.readEntry("numMipmapLevels", 4);
@@ -591,6 +617,16 @@ QColor KisConfig::canvasBorderColor() const
 void KisConfig::setCanvasBorderColor(const QColor& color) const
 {
     m_cfg.writeEntry("canvasBorderColor", color);
+}
+
+bool KisConfig::hideScrollbars() const
+{
+    return m_cfg.readEntry("hideScrollbars", false);
+}
+
+void KisConfig::setHideScrollbars(bool value) const
+{
+    m_cfg.writeEntry("hideScrollbars", value);
 }
 
 
@@ -1034,4 +1070,54 @@ int KisConfig::numDefaultLayers() const
 void KisConfig::setNumDefaultLayers(int num)
 {
     m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}
+
+int KisConfig::lineSmoothingType() const
+{
+    return m_cfg.readEntry("LineSmoothingType", 1);
+}
+
+void KisConfig::setLineSmoothingType(int value)
+{
+    m_cfg.writeEntry("LineSmoothingType", value);
+}
+
+qreal KisConfig::lineSmoothingDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDistance", value);
+}
+
+qreal KisConfig::lineSmoothingTailAggressiveness() const
+{
+    return m_cfg.readEntry("LineSmoothingTailAggressiveness", 0.15);
+}
+
+void KisConfig::setLineSmoothingTailAggressiveness(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingTailAggressiveness", value);
+}
+
+bool KisConfig::lineSmoothingSmoothPressure() const
+{
+    return m_cfg.readEntry("LineSmoothingSmoothPressure", false);
+}
+
+void KisConfig::setLineSmoothingSmoothPressure(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
+}
+
+int KisConfig::paletteDockerPaletteViewSectionSize() const
+{
+    return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
+}
+
+void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
+{
+    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }

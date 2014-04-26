@@ -1,4 +1,4 @@
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 include_directories( ${OPENEXR_INCLUDE_DIR} )
 
@@ -6,6 +6,8 @@ add_definitions(${OPENEXR_DEFINITIONS})
 
 set(libkritaconverter_LIB_SRCS
     exr_converter.cc
+    kis_exr_layers_sorter.cpp
+    exr_extra_tags.cpp
     )
 
 set(kritaexrimport_PART_SRCS

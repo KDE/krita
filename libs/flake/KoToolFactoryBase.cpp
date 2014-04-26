@@ -116,8 +116,3 @@ void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
 {
     d->shortcut = shortcut;
 }
-
-bool KoToolFactoryBase::canCreateTool(KoCanvasBase *) const
-{
-    return true;
-}

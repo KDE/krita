@@ -40,7 +40,7 @@ uint32 KisBufferStreamContigBelow16::nextValue()
 {
     register uint8 remain;
     register uint32 value;
-    remain = m_depth;
+    remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
         register uint8 toread;
@@ -61,7 +61,7 @@ uint32 KisBufferStreamContigBelow32::nextValue()
 {
     register uint8 remain;
     register uint32 value;
-    remain = m_depth;
+    remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
         register uint8 toread;
@@ -82,7 +82,7 @@ uint32 KisBufferStreamContigAbove32::nextValue()
 {
     register uint8 remain;
     register uint32 value;
-    remain = m_depth;
+    remain = (uint8) m_depth;
     value = 0;
     while (remain > 0) {
         register uint8 toread;

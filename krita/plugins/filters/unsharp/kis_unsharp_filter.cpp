@@ -58,9 +58,9 @@ KisConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, c
 KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("halfSize", 5);
-    config->setProperty("amount", 0.5);
-    config->setProperty("threshold", 10);
+    config->setProperty("halfSize", 1);
+    config->setProperty("amount", 50);
+    config->setProperty("threshold", 0);
     config->setProperty("lightnessOnly", true);
     return config;
 }
@@ -87,9 +87,9 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
-    const qreal halfSize = (config->getProperty("halfSize", value)) ? value.toDouble() : 5.0;
-    const qreal amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
-    const uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 10;
+    const qreal halfSize = (config->getProperty("halfSize", value)) ? value.toDouble() : 1.0;
+    const qreal amount = (config->getProperty("amount", value)) ? value.toDouble() : 25;
+    const uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 0;
     const uint lightnessOnly = (config->getProperty("lightnessOnly", value)) ? value.toBool() : true;
 
     QBitArray channelFlags = config->channelFlags();

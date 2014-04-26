@@ -204,7 +204,7 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PNG&lt;/span&gt; files have &lt;span style=&quot; font-style:italic;&quot;&gt;two&lt;/span&gt; options to save &lt;span style=&quot; font-weight:600;&quot;&gt;sRGB&lt;/span&gt; information: as a tag or as an explicit profile. For use with in websites, &lt;span style=&quot; font-style:italic;&quot;&gt;disable&lt;/span&gt; this option. For interchange with other applications, &lt;span style=&quot; font-style:italic;&quot;&gt;enable&lt;/span&gt; this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>save sRGB profile</string>
+      <string>Embed sRGB profile</string>
      </property>
     </widget>
    </item>

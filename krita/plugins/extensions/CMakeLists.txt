@@ -17,4 +17,3 @@ add_subdirectory( layergroupswitcher )
 #if (NOT WIN32)
 #add_subdirectory( gmic )
 #endif (NOT WIN32)
-

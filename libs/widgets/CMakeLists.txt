@@ -29,6 +29,7 @@ set(kowidgets_LIB_SRCS
     KoZoomMode.cpp
     KoDpi.cpp
 
+    KoFileDialog.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -66,6 +67,8 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
+    
+    KoResourceModelBase.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -108,6 +111,7 @@ install( FILES
     KoZoomHandler.h
     KoZoomMode.h
 
+    KoFileDialog.h
     KoColorPatch.h
     KoStrokeConfigWidget.h
     KoFillConfigWidget.h
@@ -132,6 +136,8 @@ install( FILES
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h
+
+    KoResourceModelBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra

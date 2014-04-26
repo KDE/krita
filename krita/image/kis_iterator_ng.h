@@ -42,13 +42,13 @@ public:
     virtual qint32 nConseqPixels() const = 0;
 };
 
-class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor
-{
-    Q_DISABLE_COPY(KisBaseIteratorNG)
-public:
-    KisBaseIteratorNG() {}
-    virtual ~KisBaseIteratorNG();
-};
+//class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor
+//{
+//    Q_DISABLE_COPY(KisBaseIteratorNG)
+//public:
+//    KisBaseIteratorNG() {}
+//    virtual ~KisBaseIteratorNG();
+//};
 
 /**
  * Iterates over the line of a paint device.
@@ -71,7 +71,7 @@ public:
 /**
  * Also support writing.
  */
-class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseIteratorNG
+class KRITAIMAGE_EXPORT KisHLineIteratorNG : public KisHLineConstIteratorNG, public KisBaseAccessor
 {
     Q_DISABLE_COPY(KisHLineIteratorNG)
 public:
@@ -100,7 +100,7 @@ public:
 /**
  * Also support writing.
  */
-class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseIteratorNG
+class KRITAIMAGE_EXPORT KisVLineIteratorNG : public KisVLineConstIteratorNG, public KisBaseAccessor
 {
     Q_DISABLE_COPY(KisVLineIteratorNG)
 public:

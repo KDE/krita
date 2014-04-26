@@ -52,7 +52,7 @@ class KoToolBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoToolBox(KoCanvasController *canvas);
+    explicit KoToolBox();
     ~KoToolBox();
 
     /**
@@ -87,7 +87,7 @@ public slots:
      * @param canvas the currently active canvas.
      * @param codes a list of all the codes to show.
      */
-    void setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes);
+    void setButtonsVisible(const QList<QString> &codes);
 
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);

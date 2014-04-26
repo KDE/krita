@@ -23,18 +23,14 @@ import org.krita.sketch 1.0
 Panel {
     id: base;
     name: "Layers";
-    panelColor: "#000000";
+    colorSet: "layers";
 
     actions: [
         Button {
             id: backFromEditButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-back.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("back")
             onClicked: {
                 fullViewStack.pop();
                 backFromEditButton.visible = false;
@@ -47,11 +43,7 @@ Panel {
             id: addButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-add.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("add")
             onClicked: {
                 if (base.state === "full") {
                     addLayerButtons.toggle();
@@ -69,11 +61,7 @@ Panel {
             id: editButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-edit.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("edit")
             enabled: layerModel.count > 0;
             visible: (base.state === "full" && backFromEditButton.visible === false);
             onClicked: {
@@ -91,11 +79,7 @@ Panel {
             id: removeButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-delete.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("delete")
             enabled: layerModel.count > 0;
             onClicked: layerModel.deleteCurrentLayer();
         }
@@ -107,10 +91,9 @@ Panel {
         delegate: Item {
             width: parent.width - Constants.DefaultMargin;
             height: childrenRect.height;
-            Rectangle {
+            Item {
                 id: topSpacer;
                 height: model.childCount == 0 ? 0 : Constants.DefaultMargin;
-                color: "transparent";
             }
             Rectangle {
                 id: layerBgRect
@@ -122,8 +105,7 @@ Panel {
                 }
                 height: Constants.DefaultFontSize + 2*Constants.DefaultMargin;
                 radius: 8
-                opacity: model.activeLayer ? 0.5 : 0.2;
-                color: "white";
+                color: model.activeLayer ? Settings.theme.color("panels/layers/layer/active") : Settings.theme.color("panels/layers/layer/inactive");
             }
             Rectangle {
                 anchors.fill: layerBgRect
@@ -147,7 +129,7 @@ Panel {
                         fillMode: Image.PreserveAspectFit;
                     }
                 }
-                Text {
+                Label {
                     id: layerNameLbl
                     anchors {
                         top: parent.top;
@@ -155,8 +137,7 @@ Panel {
                         right: parent.right;
                     }
                     text: model.name;
-                    color: "black";
-                    font.pixelSize: Constants.DefaultFontSize;
+                    color: Settings.theme.color("panels/layers/layer/text");
                     elide: Text.ElideRight;
                 }
                 MouseArea {
@@ -193,19 +174,30 @@ Panel {
                     PropertyChanges { target: addLayerButtons; height: Constants.GridHeight; opacity: 1; }
                 }
             ]
-            Behavior on height { PropertyAnimation { duration: 150;  } }
-            Behavior on opacity { PropertyAnimation { duration: 150;  } }
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration;  } }
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration;  } }
             clip: true;
             height: 0;
             opacity: 0;
+
+            color: Settings.theme.color("panels/layers/subheader");
+
             Row {
                 anchors.centerIn: parent;
                 height: childrenRect.height;
                 width: childrenRect.width;
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
-                    color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_paint-black.svg"
+                    image: Settings.theme.icon("fileclip-black")
+                    visible: KisClipBoard.clip;
+                    onClicked: {
+                        sketchView.selectionManager.paste();
+                        addLayerButtons.state = "";
+                    }
+                }
+                Button {
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
+                    image: Settings.theme.icon("layer_paint-black")
                     onClicked: {
                         layerModel.addLayer(0);
                         addLayerButtons.state = "";
@@ -213,8 +205,7 @@ Panel {
                 }
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
-                    color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_group-black.svg"
+                    image: Settings.theme.icon("layer_group-black")
                     onClicked: {
                         layerModel.addLayer(1);
                         addLayerButtons.state = "";
@@ -222,8 +213,7 @@ Panel {
                 }
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
-                    color: "transparent"; textColor: "white"; shadow: false; highlight: false;
-                    image: "../images/svg/icon-layer_filter-black.svg"
+                    image: Settings.theme.icon("layer_filter-black")
                     onClicked: {
                         layerModel.addLayer(2);
                         addLayerButtons.state = "";
@@ -262,8 +252,7 @@ Panel {
                         }
                         height: Constants.GridHeight;
                         radius: 8
-                        opacity: model.activeLayer ? 0.5 : 0.2;
-                        color: "white";
+                        color: model.activeLayer ? Settings.theme.color("panels/layers/layer/active") : Settings.theme.color("panels/layers/layer/inactive");
                     }
                     Rectangle {
                         anchors.fill: layerBgRect
@@ -287,7 +276,7 @@ Panel {
                                 fillMode: Image.PreserveAspectFit;
                             }
                         }
-                        Text {
+                        Label {
                             id: layerNameLbl
                             anchors {
                                 top: parent.top;
@@ -295,59 +284,62 @@ Panel {
                                 right: parent.right;
                             }
                             text: model.name;
-                            color: "black";
-                            font.pixelSize: Constants.DefaultFontSize;
+                            color: Settings.theme.color("panels/layers/layer/text");
                             elide: Text.ElideRight;
-                        }
-                        Text {
-                            anchors {
-                                top: layerNameLbl.bottom;
-                                right: parent.right;
-                                rightMargin: Constants.DefaultMargin;
-                            }
-                            text: "Mode: " + model.compositeDetails + ", " + model.percentOpacity + "%";
-                            font.pixelSize: Constants.SmallFontSize;
                         }
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.setActive(model.index);
                         }
                         Row {
+                            id: modeButtons;
                             anchors {
                                 left: layerThumbContainer.right;
                                 bottom: parent.bottom;
                             }
                             height: childrenRect.height;
-                            Rectangle {
-                                width: Constants.DefaultFontSize;
-                                height: width;
-                                color: model.visible ? "silver" : "gray";
-                                Text {
-                                    anchors.centerIn: parent;
-                                    font.pixelSize: Constants.SmallFontSize;
-                                    color: model.visible ? "black" : "white";
-                                    text: "V"
-                                }
-                                MouseArea {
-                                    anchors.fill: parent;
-                                    onClicked: layerModel.setVisible(model.index, !model.visible);
-                                }
+
+                            Button {
+                                width: height;
+                                height: Constants.GridHeight / 2;
+                                checkable: true;
+                                checked: model.visible;
+                                checkedColor: Settings.theme.color("panels/layers/layer/visible");
+                                image: checked ? Settings.theme.icon("visible_on-small") : Settings.theme.icon("visible_off-small");
+                                onCheckedChanged: layerModel.setVisible(model.index, checked);
                             }
-                            Rectangle {
-                                width: Constants.DefaultFontSize;
-                                height: width;
-                                color: model.locked ? "silver" : "gray";
-                                Text {
-                                    anchors.centerIn: parent;
-                                    font.pixelSize: Constants.SmallFontSize;
-                                    color: model.locked ? "black" : "white";
-                                    text: "L"
-                                }
-                                MouseArea {
-                                    anchors.fill: parent;
-                                    onClicked: layerModel.setLocked(model.index, !model.locked);
-                                }
+                            Button {
+                                width: height;
+                                height: Constants.GridHeight / 2;
+                                checkable: true;
+                                checked: model.locked;
+                                checkedColor: Settings.theme.color("panels/layers/layer/locked");
+                                image: checked ? Settings.theme.icon("locked_on-small") : Settings.theme.icon("locked_off-small");
+                                onCheckedChanged: layerModel.setLocked(model.index, checked);
                             }
+                        }
+                        Label {
+                            id: modeLabel;
+                            anchors {
+                                top: layerNameLbl.bottom;
+                                right: parent.right;
+                                rightMargin: Constants.DefaultMargin;
+                                left: modeButtons.right;
+                            }
+                            text: model.compositeDetails;
+                            font: Settings.theme.font("small");
+                            horizontalAlignment: Text.AlignRight;
+                        }
+                        Label {
+                            anchors {
+                                top: modeLabel.bottom;
+                                right: parent.right;
+                                rightMargin: Constants.DefaultMargin;
+                                left: modeButtons.right;
+                            }
+                            text: model.percentOpacity + "%";
+                            font: Settings.theme.font("small");
+                            horizontalAlignment: Text.AlignRight;
                         }
                     }
                     Image {
@@ -361,7 +353,7 @@ Panel {
                         visible: model.canMoveUp;
                         fillMode: Image.PreserveAspectFit;
                         smooth: true;
-                        source: "../images/svg/icon-up.svg";
+                        source: Settings.theme.icon("up");
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.moveUp();
@@ -378,7 +370,7 @@ Panel {
                         visible: model.canMoveDown;
                         fillMode: Image.PreserveAspectFit;
                         smooth: true;
-                        source: "../images/svg/icon-down.svg";
+                        source: Settings.theme.icon("down");
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.moveDown();
@@ -395,7 +387,7 @@ Panel {
                         visible: model.canMoveLeft;
                         fillMode: Image.PreserveAspectFit;
                         smooth: true;
-                        source: "../images/svg/icon-back.svg";
+                        source: Settings.theme.icon("back");
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.moveLeft();
@@ -412,7 +404,7 @@ Panel {
                         visible: model.canMoveRight;
                         fillMode: Image.PreserveAspectFit;
                         smooth: true;
-                        source: "../images/svg/icon-forward.svg";
+                        source: Settings.theme.icon("forward");
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: layerModel.moveRight();

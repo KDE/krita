@@ -33,6 +33,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 #include "MainWindow.h"
 
@@ -52,12 +53,12 @@
 int main( int argc, char** argv )
 {
     KAboutData aboutData("kritasketch",
-                         0,
+                         "krita",
                          ki18n("Krita Sketch"),
                          "0.1",
                          ki18n("Krita Sketch: Painting on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-2012 The Krita team and KO GmbH.\n"),
+                         ki18n("(c) 1999-2014 The Krita team and KO GmbH.\n"),
                          KLocalizedString(),
                          "http://www.krita.org",
                          "submit@bugs.kde.org");
@@ -66,7 +67,7 @@ int main( int argc, char** argv )
 
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
+    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
     options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
@@ -83,6 +84,7 @@ int main( int argc, char** argv )
 
     KApplication app;
     app.setApplicationName("kritasketch");
+    KIconLoader::global()->addAppDir("krita");
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
@@ -127,14 +129,6 @@ int main( int argc, char** argv )
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
-
-    QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
-    foreach( const QString &font, fonts ) {
-        QFontDatabase::addApplicationFont( font );
-    }
-
-    QFontDatabase db;
-    QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
 
     MainWindow window(fileNames);
 

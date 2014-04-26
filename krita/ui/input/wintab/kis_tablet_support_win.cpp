@@ -239,6 +239,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
         tdd.currentDevice = QTabletEvent::Stylus;
+    } else if (csr_type == 0x4020) { // Surface Pro 2 tablet device
+        tdd.currentDevice = QTabletEvent::Stylus;
     } else {
         switch (csr_type & cursorTypeBitMask) {
             case 0x0802:
@@ -450,8 +452,20 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
 
-        e.ignore();
-        sendEvent = qApp->sendEvent(w, &e);
+        if (button == Qt::NoButton &&
+            (t == KisTabletEvent::TabletPressEx ||
+             t == KisTabletEvent::TabletReleaseEx)) {
+
+            /**
+             * Eat events which do not correcpond to any mouse
+             * button. This can happen when the user assinged a stylus
+             * key to e.g. some keyboard key
+             */
+            e.accept();
+        } else {
+            e.ignore();
+            sendEvent = qApp->sendEvent(w, &e);
+        }
 
         if (e.isAccepted()) {
             globalEventEater->pleaseEatNextEvent(e.getMouseEventType());

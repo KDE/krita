@@ -25,6 +25,7 @@ set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test release
 set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
+set(CALLIGRA_YEAR 2014) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -102,6 +103,9 @@ endif (RELEASE_BUILD)
 ############
 
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (WIN32)
+    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -211,26 +215,27 @@ calligra_define_product(FILTER_QUATTROPRO_TO_SHEETS "Sheets Quattro Pro import f
 calligra_define_product(FILTER_HTML_TO_ODS "HTML to ODS filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_SHEETS_TO_HTML "Sheets HTML export filter"  NEEDS SHEETS_PART)
 calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(FILTER_SHEETS_IMPORT "All Sheets import filter"  WANTS FILTER_XLSX_TO_ODS FILTER_XLS_TO_SHEETS FILTER_CSV_TO_SHEETS FILTER_APPLIXSPREAD_TO_KSPREAD FILTER_DBASE_TO_KSPREAD FILTER_GNUMERIC_TO_SHEETS FILTER_OPENCALC_TO_SHEETS FILTER_QUATTROPRO_TO_SHEETS FILTER_HTML_TO_ODS)
-calligra_define_product(FILTER_SHEETS_EXPORT "All Sheets export filter"  WANTS FILTER_SHEETS_TO_XLS FILTER_SHEETS_TO_CSV FILTER_SHEETS_TO_GNUMERIC FILTER_SHEETS_TO_OPENCALC FILTER_SHEETS_TO_HTML FILTER_KSPREAD_TO_LATEX)
-calligra_define_product(FILTER_SHEETS "All Sheets filter"  WANTS FILTER_SHEETS_IMPORT FILTER_SHEETS_EXPORT)
+calligra_define_product(FILTER_SHEETS_IMPORT "All Sheets import filters"  WANTS FILTER_XLSX_TO_ODS FILTER_XLS_TO_SHEETS FILTER_CSV_TO_SHEETS FILTER_APPLIXSPREAD_TO_KSPREAD FILTER_DBASE_TO_KSPREAD FILTER_GNUMERIC_TO_SHEETS FILTER_OPENCALC_TO_SHEETS FILTER_QUATTROPRO_TO_SHEETS FILTER_HTML_TO_ODS)
+calligra_define_product(FILTER_SHEETS_EXPORT "All Sheets export filters"  WANTS FILTER_SHEETS_TO_XLS FILTER_SHEETS_TO_CSV FILTER_SHEETS_TO_GNUMERIC FILTER_SHEETS_TO_OPENCALC FILTER_SHEETS_TO_HTML FILTER_KSPREAD_TO_LATEX)
+calligra_define_product(FILTER_SHEETS "All Sheets filters"  WANTS FILTER_SHEETS_IMPORT FILTER_SHEETS_EXPORT)
 # Flow filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filter"  WANTS FILTER_VISIO_TO_ODG FILTER_WPG_TO_ODG)
-calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filter"  WANTS )
-calligra_define_product(FILTER_FLOW "All Flow filter"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
+calligra_define_product(FILTER_FLOW_IMPORT "All Flow import filters"  WANTS FILTER_VISIO_TO_ODG FILTER_WPG_TO_ODG)
+calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filters"  WANTS )
+calligra_define_product(FILTER_FLOW "All Flow filters"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
 calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_KPR_TO_OPD "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter" NEEDS LIB_MSO CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filter"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
-calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filter"  WANTS )
-calligra_define_product(FILTER_STAGE "All Stage filter"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
+calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filters"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
+calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filters"  WANTS )
+calligra_define_product(FILTER_STAGE "All Stage filters"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
 # Words filters
 calligra_define_product(FILTER_DOC_TO_ODT "DOC to ODT filter" NEEDS LIB_MSO LIB_KOMSOOXML CALLIGRA_LIBS)
 calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
+calligra_define_product(FILTER_ODT_TO_DOCX "ODT to DOCX filter" NEEDS LIB_KOODFREADER LIB_KOODF2 CALLIGRA_LIBS)
 calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
@@ -240,12 +245,12 @@ calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  NEEDS CALLIGRA_LI
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_EPUB2 "ODT Epub2 export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_HTML "ODT HTML export filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
-calligra_define_product(FILTER_WORDS_IMPORT "All Words import filter"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_APPLIXWORD_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
-calligra_define_product(FILTER_WORDS_EXPORT "All Words export filter"  WANTS FILTER_ODT_TO_ASCII FILTER_ODT_TO_MOBI FILTER_ODT_TO_EPUB2 FILTER_ODT_TO_HTML)
-calligra_define_product(FILTER_WORDS "All Words filter"  WANTS FILTER_WORDS_IMPORT FILTER_WORDS_EXPORT)
+calligra_define_product(FILTER_WORDS_IMPORT "All Words import filters"  WANTS FILTER_DOC_TO_ODT FILTER_DOCX_TO_ODT FILTER_WORDPERFECT_TO_ODT FILTER_WORKS_TO_ODT FILTER_APPLIXWORD_TO_ODT FILTER_ASCII_TO_WORDS FILTER_RTF_TO_ODT)
+calligra_define_product(FILTER_WORDS_EXPORT "All Words export filters"  WANTS FILTER_ODT_TO_ASCII FILTER_ODT_TO_MOBI FILTER_ODT_TO_EPUB2 FILTER_ODT_TO_HTML FILTER_ODT_TO_DOCX)
+calligra_define_product(FILTER_WORDS "All Words filters"  WANTS FILTER_WORDS_IMPORT FILTER_WORDS_EXPORT)
 # Plan filters
 calligra_define_product(FILTER_MPXJ_IMPORT "MS Project import filter"  NEEDS PLAN_APP)
-calligra_define_product(FILTER_PLAN "All Plan filter" WANTS FILTER_MPXJ_IMPORT)
+calligra_define_product(FILTER_PLAN "All Plan filters" WANTS FILTER_MPXJ_IMPORT)
 # Karbon filters
 calligra_define_product(FILTER_EPS_TO_SVG_AI "EPS to SVG/AI filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_XFIG_TO_ODG "XFig to ODG filter"  NEEDS CALLIGRA_LIBS)
@@ -257,9 +262,9 @@ calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter"  NEEDS K
 calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter"  NEEDS KARBON_APP)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  NEEDS KARBON_APP)
-calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS FILTER_EPS_TO_SVG_AI FILTER_XFIG_TO_ODG FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
-calligra_define_product(FILTER_KARBON_EXPORT "All Karbon export filter"  WANTS FILTER_KARBON_TO_IMAGE FILTER_KARBON_TO_SVG FILTER_KARBON_TO_WMF)
-calligra_define_product(FILTER_KARBON "All Karbon filter"  WANTS FILTER_KARBON_IMPORT FILTER_KARBON_EXPORT)
+calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filters"  WANTS FILTER_EPS_TO_SVG_AI FILTER_XFIG_TO_ODG FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
+calligra_define_product(FILTER_KARBON_EXPORT "All Karbon export filters"  WANTS FILTER_KARBON_TO_IMAGE FILTER_KARBON_TO_SVG FILTER_KARBON_TO_WMF)
+calligra_define_product(FILTER_KARBON "All Karbon filters"  WANTS FILTER_KARBON_IMPORT FILTER_KARBON_EXPORT)
 # meta apps
 calligra_define_product(WORDS "Full Words (for Desktop)"  NEEDS WORDS_APP  WANTS FILTER_WORDS PLUGIN_SEMANTICITEMS)
 calligra_define_product(STAGE "Full Stage (for Desktop)"  NEEDS STAGE_APP  WANTS FILTER_STAGE)
@@ -396,7 +401,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.2)
+set(SQLITE_RECOMMENDED_VERSION 3.8.4)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -634,19 +639,19 @@ endif(WIN32)
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Fontconfig)
     macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 ##
 ## Test for Freetype
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Freetype)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")

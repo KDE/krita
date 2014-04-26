@@ -450,6 +450,7 @@ QString BinaryExpr::tokenToString()
     case LESS_OR_EQUAL: return "<=";
     case GREATER_OR_EQUAL: return ">=";
     case LIKE: return "LIKE";
+    case NOT_LIKE: return "NOT LIKE";
     case SQL_IN: return "IN";
         // other logical operations: OR (or ||) AND (or &&) XOR
     case SIMILAR_TO: return "SIMILAR TO";
@@ -751,8 +752,8 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
     }
 
     //table.fieldname or tableAlias.fieldname
-    tableName = tableName;
     TableSchema *ts = parseInfo.querySchema->table(tableName);
+    int tablePosition = -1;
     if (ts) {//table.fieldname
         //check if "table" is covered by an alias
         const QList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
@@ -772,10 +773,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
                                       "you can write \"%3\"", tableName, tableName + "." + fieldName, tableAlias + "." + QString(fieldName));
             return false;
         }
+        if (!tPositions.isEmpty()) {
+            tablePosition = tPositions.first();
+        }
     }
-
-    int tablePosition = -1;
-    if (!ts) {//try to find tableAlias
+    else {//try to find tableAlias
         tablePosition = parseInfo.querySchema->tablePositionForAlias(tableName.toLatin1());
         if (tablePosition >= 0) {
             ts = parseInfo.querySchema->tables()->at(tablePosition);

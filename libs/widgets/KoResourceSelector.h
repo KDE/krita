@@ -50,13 +50,13 @@ public:
      * @param resourceAdapter the resource adapter providing the resources to display
      * @param parent the parent widget
      */
-    explicit KoResourceSelector( KoAbstractResourceServerAdapter * resourceAdapter, QWidget * parent = 0 );
+    explicit KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent = 0 );
 
     /// Destroys the resource selector
     virtual ~KoResourceSelector();
 
     /// Sets the resource adaptor to get resources from
-    void setResourceAdapter(KoAbstractResourceServerAdapter *resourceAdapter);
+    void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter);
 
     /// Sets the display mode
     void setDisplayMode(DisplayMode mode);

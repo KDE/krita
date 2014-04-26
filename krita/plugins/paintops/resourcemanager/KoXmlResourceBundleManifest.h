@@ -18,11 +18,13 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QMap>
 #include "KoXmlGenerator.h"
+#include "krita_export.h"
 
 class KoResource;
 
-class KoXmlResourceBundleManifest: public KoXmlGenerator
+class KRITAUI_EXPORT KoXmlResourceBundleManifest: public KoXmlGenerator
 {
 private:
     /**
@@ -62,7 +64,7 @@ public:
      * @param tagName the name of the tag
      * @return the value from TagEnum corresponding to the tag.
      */
-    TagEnum getTagEnumValue(QString tagName);
+    static TagEnum getTagEnumValue(QString tagName);
 
     /**
      * @brief checkSort : Check/sort the file to be easily comprehensible
@@ -89,13 +91,13 @@ public:
      * @brief getFileList
      * @return the list of the files enumerared in the XML
      */
-    QList<QString> getFileList();
+    QList<QString> getFileList(QString kritaPath,bool firstBuild);
 
     /**
      * @brief getFilesToExtract
      * @return the list of the files to be extracted
      */
-    QList<QString> getFilesToExtract();
+    QMap<QString,QString> getFilesToExtract();
 
     /**
      * @brief getDirList
@@ -137,6 +139,32 @@ public:
      * @brief exportTags : export file tags to the right Krita xml files
      */
     void exportTags();
+
+    /**
+     * @brief install : add "installed" tag in the XML file if necessary
+     */
+    void install();
+
+    /**
+     * @brief uninstall : remove "installed" tag in the XML file if necessary
+     */
+    void uninstall();
+
+    /**
+     * @brief isInstalled
+     * @return true if the "installed" tag is in the XML file, false otherwise
+     */
+    bool isInstalled();
+
+    /**
+     * @brief getXmlDocument
+     * @return xmlDocument
+     */
+    QDomDocument getXmlDocument();
+
+    void rename(QString newName);
+
+    void updateFilePaths(QString kritaPath,QString bundleName);
  };
 
 

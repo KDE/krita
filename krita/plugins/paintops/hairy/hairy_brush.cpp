@@ -320,8 +320,9 @@ void HairyBrush::repositionBristles(double angle, double slope)
     }
 }
 
-inline void HairyBrush::addBristleInk(Bristle */*bristle*/, QPointF pos, const KoColor &color)
+inline void HairyBrush::addBristleInk(Bristle *bristle, QPointF pos, const KoColor &color)
 {
+    Q_UNUSED(bristle);
     if (m_properties->antialias) {
         if (m_properties->useCompositing) {
             paintParticle(pos, color);

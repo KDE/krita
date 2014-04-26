@@ -91,14 +91,7 @@ void KisWheelInputEditor::setWheel(KisShortcutConfiguration::MouseWheelMovement 
 
 void KisWheelInputEditor::updateLabel()
 {
-    QString text;
-
-    if (d->ui->modifiersButton->keys().size() > 0) {
-        text.append(KisShortcutConfiguration::keysToText(d->ui->modifiersButton->keys()));
-        text.append(" + ");
-    }
-
-    text.append(KisShortcutConfiguration::wheelToText(d->ui->wheelButton->wheel()));
-
-    setText(text);
+    setText(KisShortcutConfiguration::wheelInputToText(
+        d->ui->modifiersButton->keys(),
+        d->ui->wheelButton->wheel()));
 }

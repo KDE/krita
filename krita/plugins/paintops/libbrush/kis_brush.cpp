@@ -152,7 +152,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     d->scale = rhs.d->scale;
     setFilename(rhs.filename());
     clearBrushPyramid();
-    // don't copy the boundery, it will be regenerated -- see bug 291910
+    // don't copy the boundary, it will be regenerated -- see bug 291910
 }
 
 KisBrush::~KisBrush()

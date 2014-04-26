@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Color";
-    panelColor: "#000000"
+    colorSet: "color";
 
     actions: [
         ColorSwatch {
@@ -31,7 +31,7 @@ Panel {
             height: parent.height;
             width: height;
             onChooseBGChanged: {
-                if (toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
                     toolManager.currentTool.toForeground = !swatch.chooseBG;
                 }
             }
@@ -40,12 +40,7 @@ Panel {
             id: colorPicker;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
-            image: "../images/svg/icon-colorpicker.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
+            image: Settings.theme.icon("colorpicker");
             onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
         },
         Item {
@@ -57,19 +52,14 @@ Panel {
             visible: base.state === "peek";
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: colorSelectorPeek.visible ? "../images/svg/icon-palette.svg" : "../images/svg/icon-color_wheel.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
+            image: colorSelectorPeek.visible ? Settings.theme.icon("palette") : Settings.theme.icon("color_wheel");
             onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]
     Connections {
         target: toolManager;
         onCurrentToolChanged: {
-            if (toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+            if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
                 toolManager.currentTool.toForeground = !swatch.chooseBG;
             }
         }
@@ -91,6 +81,7 @@ Panel {
         id: paletteModel;
     }
 
+    property bool settingAlpha: false
     peekContents: Item {
         anchors.fill: parent;
         Item {
@@ -113,7 +104,8 @@ Panel {
                     else {
                         swatch.fgColor = newColor;
                     }
-                    fullPaletteAlphaSlider.value = newAlpha * 100;
+                    if(!settingAlpha)
+                        fullPaletteAlphaSlider.value = newAlpha * 100;
                 }
             }
         }
@@ -157,7 +149,8 @@ Panel {
                     else {
                         swatch.fgColor = newColor;
                     }
-                    fullPaletteAlphaSlider.value = newAlpha * 100;
+                    if(!settingAlpha)
+                        fullPaletteAlphaSlider.value = newAlpha * 100;
                 }
             }
         }
@@ -172,8 +165,9 @@ Panel {
             }
             value: 100;
             onValueChanged: {
+                settingAlpha = true;
                 colorSelectorActual.setAlpha(value);
-                colorSelectorActualPeek.setAlpha(value);
+                settingAlpha = false;
             }
         }
         ExpandingListView {

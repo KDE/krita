@@ -107,40 +107,6 @@ public:
      */
     void setDocumentDeleted();
 
-
-    /**
-     * Returns the action described action object. In fact only the "name" attribute
-     * of @p element is of interest here. The method searches in the
-     * KActionCollection of this view.
-     *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoDocument::action
-     */
-    virtual QAction *action(const QDomElement &element) const;
-
-    /**
-     * Returns the action with the given name. The method searches in the
-     * KActionCollection of this view.
-     *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoDocument::action
-     */
-    virtual QAction *action(const char* name) const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * on some child widget instead of the view directly.
-     *
-     * By default this function returns a pointer to the view.
-     */
-    virtual QWidget *canvas() const;
-
     /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
@@ -207,7 +173,7 @@ public:
     virtual KoZoomController *zoomController() const = 0;
 
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions();
+    QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
 
     /**
      * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.

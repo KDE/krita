@@ -46,13 +46,16 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
 #endif
 
 #include <QFile>
-#include <QSplashScreen>
+#include <QWidget>
 #include <QSysInfo>
 #include <QStringList>
 #include <QDesktopServices>
@@ -65,6 +68,9 @@
 #include <windows.h>
 #include <tchar.h>
 #endif
+
+
+#include <QDesktopWidget>
 
 KoApplication* KoApplication::KoApp = 0;
 
@@ -79,8 +85,44 @@ public:
         : splashScreen(0)
     {}
     QByteArray nativeMimeType;
-    QSplashScreen *splashScreen;
+    QWidget *splashScreen;
     QList<KoPart *> partList;
+};
+
+class KoApplication::ResetStarting
+{
+public:
+    ResetStarting(QWidget *splash = 0)
+        : m_splash(splash)
+    {
+    }
+
+    ~ResetStarting()  {
+        if (m_splash) {
+
+            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
+            if (hideSplash) {
+                m_splash->hide();
+            }
+            else {
+                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
+                QRect r(QPoint(), m_splash->size());
+                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->setWindowTitle(qAppName());
+                foreach(QObject *o, m_splash->children()) {
+                    QWidget *w = qobject_cast<QWidget*>(o);
+                    if (w && w->isHidden()) {
+                        w->setVisible(true);
+                    }
+                }
+
+                m_splash->show();
+            }
+        }
+    }
+
+    QWidget *m_splash;
 };
 
 KoApplication::KoApplication(const QByteArray &nativeMimeType)
@@ -135,23 +177,6 @@ bool KoApplication::initHack()
     KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
     return true;
 }
-
-class KoApplication::ResetStarting
-{
-public:
-    ResetStarting(QSplashScreen *splash = 0)
-        : m_splash(splash)
-    {
-    }
-
-    ~ResetStarting()  {
-        if (m_splash) {
-            m_splash->hide();
-        }
-    }
-
-    QSplashScreen *m_splash;
-};
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
 typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
@@ -221,7 +246,7 @@ bool KoApplication::start()
 
     if (d->splashScreen) {
         d->splashScreen->show();
-        d->splashScreen->showMessage(".");
+        d->splashScreen->repaint();
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -277,6 +302,7 @@ bool KoApplication::start()
 #endif
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
+        d->partList << part;
 
         if (!part) {
             if (!errorMsg.isEmpty())
@@ -389,6 +415,7 @@ bool KoApplication::start()
                 // For now create an empty document
                 QString errorMsg;
                 KoPart *part = entry.createKoPart(&errorMsg);
+                d->partList << part;
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
 
@@ -443,6 +470,7 @@ bool KoApplication::start()
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
+            d->partList << part;
             if (part) {
                 KoDocument *doc = part->document();
                 // show a mainWindow asap
@@ -547,7 +575,6 @@ bool KoApplication::start()
                                   <<"\t100" << endl;
                 }
 
-                d->partList << part;
             }
         }
         if (benchmarkLoading) {
@@ -569,7 +596,7 @@ KoApplication::~KoApplication()
     delete d;
 }
 
-void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
+void KoApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
 }

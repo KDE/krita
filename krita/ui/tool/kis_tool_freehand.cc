@@ -53,7 +53,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include <kis_view2.h>
-#include <kis_painting_assistants_manager.h>
+#include <kis_painting_assistants_decoration.h>
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
 #include "kis_recording_adapter.h"
@@ -221,7 +221,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     endStroke();
 
     if (m_assistant) {
-        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
+        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->endStroke();
     }
 
     notifyModified();
@@ -352,7 +352,7 @@ void KisToolFreehand::setAssistant(bool assistant)
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point, strokeBegin);
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;

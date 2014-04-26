@@ -138,6 +138,7 @@ void KisCurveWidget::inOutChanged(int)
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
         d->m_curve.setPoint(d->m_grab_point_index, pt);
         d->m_grab_point_index = d->m_curve.points().indexOf(pt);
+        emit pointSelectedChanged();
     } else
         pt = d->m_curve.points()[d->m_grab_point_index];
 
@@ -158,6 +159,7 @@ void KisCurveWidget::inOutChanged(int)
 void KisCurveWidget::reset(void)
 {
     d->m_grab_point_index = -1;
+    emit pointSelectedChanged();
     d->m_guideVisible = false;
 
     d->setCurveModified();
@@ -192,6 +194,11 @@ QPixmap KisCurveWidget::getBasePixmap()
     return d->m_pixmapBase;
 }
 
+bool KisCurveWidget::pointSelected() const
+{
+    return d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.points().count() - 1;
+}
+
 void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace) {
@@ -211,6 +218,7 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
             }
             d->m_curve.removePoint(d->m_grab_point_index);
             d->m_grab_point_index = new_grab_point_index;
+            emit pointSelectedChanged();
             setCursor(Qt::ArrowCursor);
             d->setState(ST_NORMAL);
         }
@@ -239,6 +247,7 @@ void KisCurveWidget::addPointInTheMiddle()
         return;
 
     d->m_grab_point_index = d->m_curve.addPoint(pt);
+    emit pointSelectedChanged();
 
     if (d->m_intIn)
         d->m_intIn->setFocus(Qt::TabFocusReason);
@@ -347,8 +356,10 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
         if (!d->jumpOverExistingPoints(newPoint, -1))
             return;
         d->m_grab_point_index = d->m_curve.addPoint(newPoint);
+        emit pointSelectedChanged();
     } else {
         d->m_grab_point_index = closest_point_index;
+        emit pointSelectedChanged();
     }
 
     d->m_grabOriginalX = d->m_curve.points()[d->m_grab_point_index].x();
@@ -447,6 +458,7 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
             d->m_draggedAwayPointIndex = d->m_grab_point_index;
             d->m_curve.removePoint(d->m_grab_point_index);
             d->m_grab_point_index = bounds(d->m_grab_point_index, 0, d->m_curve.points().count() - 1);
+            emit pointSelectedChanged();
         }
 
         d->setCurveModified();
@@ -462,6 +474,7 @@ void KisCurveWidget::setCurve(KisCubicCurve inlist)
 {
     d->m_curve = inlist;
     d->m_grab_point_index = qBound(0, d->m_grab_point_index, d->m_curve.points().count() - 1);
+    emit pointSelectedChanged();
     d->setCurveModified();
 }
 

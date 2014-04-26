@@ -37,7 +37,7 @@
 #include <kis_group_layer.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 
 #include "kis_config.h"
 #include "kis_view2.h"
@@ -309,7 +309,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(resource);
         if(stopGradient) {
             QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
+            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
             stopGradient->setStops(stops);
             KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
         }
@@ -317,7 +317,7 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
         stopGradient = dynamic_cast<KoStopGradient*>(resource);
         if(stopGradient) {
             QList<KoGradientStop> stops;
-            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0,  KoColor(QColor(0, 0, 0, 0), fgColor().colorSpace()));
+            stops << KoGradientStop(0.0, fgColor()) << KoGradientStop(1.0, bgColor());
             stopGradient->setStops(stops);
             KoResourceServerProvider::instance()->gradientServer()->updateResource(resource);
         }

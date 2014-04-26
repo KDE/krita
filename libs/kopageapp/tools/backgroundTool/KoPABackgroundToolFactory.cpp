@@ -44,15 +44,13 @@ KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
 KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {
     // We need the canvas to know in which app we are to turn the tooltip to page or slide design
-    KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
-    const QString toolTip =
-        (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
-    setToolTip(toolTip);
-    return new KoPABackgroundTool(canvas);
-}
+    if (dynamic_cast<KoPACanvasBase *>(canvas)) {
+        KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 
-bool KoPABackgroundToolFactory::canCreateTool(KoCanvasBase *canvas) const
-{
-    KoPACanvas *paCanvas = dynamic_cast<KoPACanvas *>(canvas);
-    return paCanvas != 0; // we only work in KoPACanvas
+        const QString toolTip =
+                (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
+        setToolTip(toolTip);
+        return new KoPABackgroundTool(canvas);
+    }
+    return 0;
 }

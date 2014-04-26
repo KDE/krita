@@ -19,7 +19,8 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
-#include <krita_export.h> 
+
+#include "krita_export.h"
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -31,6 +32,8 @@ class KoXmlResourceBundleMeta;
 class KRITAUI_EXPORT KoResourceBundleManager
 {
 public:
+
+    friend class KoResourceBundleManager_test;
 
     /**
      * @brief KoResourceBundleManager : Ctor
@@ -70,12 +73,6 @@ public:
     void toRoot();
 
     /**
-     * Add a Krita resource file to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
-
-    /**
      * @brief addKFile : Add a Krita resource file to the store.
      * @param path the path containing the Krita resource File.
      * @return true if succeed, false otherwise.
@@ -99,14 +96,14 @@ public:
      * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
      * @param pathList the list containing all the paths of the files to be extracted.
      */
-    void extractKFiles(QList<QString> pathList);
+    void extractKFiles(QMap<QString,QString> pathList);
 
     /**
      * @brief createPack : Create a full resource package.
      * @param manifest the virtual generator of manifest file
      * @param meta the virtual generator of meta file
      */
-    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
+    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta,QImage thumbnail,bool firstBuild=false);
 
     /**
      * @brief addManiMeta : Add manifest and meta Xml Files to the store
@@ -114,6 +111,8 @@ public:
      * @param meta the virtual generator of meta file
      */
     void addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
+
+    void addThumbnail(QImage thumbnail);
 
     /**
      * @brief getFileData
@@ -129,6 +128,27 @@ public:
      */
     QIODevice* getFile(const QString &fileName);
 
+    /**
+     * @brief getKritaPath
+     * @return the path of Krita used when initialized
+     */
+    QString getKritaPath();
+
+    /**
+     * @brief getPackName
+     * @return the name of the current bundle
+     */
+    QString getPackName();
+
+    /**
+     * @brief removeDir : Remove the chosen directory
+     * @param dirName the name of the directory to be removed
+     * @return true if succeed, false otherwise.
+     */
+    static bool removeDir(const QString & dirName);
+
+    void extractTempFiles(QList<QString> pathList);
+
     ///File Method shortcuts
 
     bool atEnd() const;
@@ -142,10 +162,9 @@ public:
     qint64 size() const;
     qint64 write(const QByteArray &_data);
 
+private:
     QString kritaPath;
     QString packName;
-
-private:
     KoStore* resourcePack;
 };
 

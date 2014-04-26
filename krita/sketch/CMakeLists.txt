@@ -27,6 +27,8 @@ set(kritasketchlib_SRCS
     SketchDeclarativeView.cpp
     SketchInputContext.cpp
     VirtualKeyboardController.cpp
+    Theme.cpp
+    QmlGlobalEngine.cpp
 )
 
 set(kritasketch_SRCS
@@ -37,6 +39,7 @@ set(kritasketch_SRCS
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
     ColorSelectorItem.cpp
+    CurveEditorItem.cpp
     Constants.cpp
     ToolManager.cpp
     SimpleTouchArea.cpp
@@ -65,6 +68,9 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/RecentImagesModel.cpp
     models/MultiFeedRSSModel.cpp
     models/FileSystemModel.cpp
+    models/ColorModelModel.cpp
+    models/ColorDepthModel.cpp
+    models/ColorProfileModel.cpp
 )
 
 
@@ -93,7 +99,7 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 
 
 if (WIN32)
-    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketch.rc)
+    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else (WIN32)
     kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
 endif (WIN32)
@@ -103,7 +109,7 @@ endif (WIN32)
 
 kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
 set_target_properties(kritasketchlib
-    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} DEFINE_SYMBOL MAKE_KRITA_SKETCH_LIB
 )
 
 
@@ -145,6 +151,7 @@ install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 # Sketch Qt Quick components
 # =============================================================================
@@ -174,8 +181,12 @@ install(FILES
                   qml/SaveImagePage.qml
                   qml/SettingsPage.qml
                   qml/WelcomePage.qml
+                  qml/CustomImagePage.qml
                                     DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch)
 install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY fonts             DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+
+install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+
+add_subdirectory(icon)

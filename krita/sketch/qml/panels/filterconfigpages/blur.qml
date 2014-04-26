@@ -105,6 +105,7 @@ Item {
         Label {
             anchors.leftMargin: Constants.DefaultMargin;
             text: "Shape:"
+            font: Settings.theme.font("panelSection");
         }
         ExpandingListView {
             id: blurShape

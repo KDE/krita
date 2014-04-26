@@ -21,7 +21,6 @@
 #define KORESOURCEBUNDLE_H
 
 #include "KoResource.h"
-#include "krita_export.h"
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -31,7 +30,7 @@ class KoResourceBundleManager;
  * @brief The KoResourceBundle class
  * @details Describe the resource bundles as KoResources
  */
-class KRITAUI_EXPORT KoResourceBundle : public KoResource
+class KoResourceBundle : public KoResource
 {
 
 public:
@@ -39,31 +38,12 @@ public:
      * @brief KoResourceBundle : Ctor
      * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath,QString kritaPath="/home/metabolic/kde4/src/calligra/krita/data");
+    KoResourceBundle(QString const& bundlePath);
 
     /**
      * @brief ~KoResourceBundle : Dtor
      */
     virtual ~KoResourceBundle();
-
-    /**
-     * @brief load : Load this resource.
-     * @return true if succeed, false otherwise.
-     */
-    bool load();
-
-    /**
-     * @brief save : Save this resource.
-     * @return true if succeed, false otherwise.
-     */
-    bool save();
-
-    /**
-     * @brief addMeta : Add a Metadata to the resource
-     * @param type type of the metadata
-     * @param value value of the metadata
-     */
-    void addMeta(QString type,QString value);
 
     /**
      * @brief image
@@ -78,17 +58,16 @@ public:
     QString defaultFileExtension() const;
 
     /**
-     * @brief addFile : Add a file to the bundle
-     * @param fileType type of the resource file
-     * @param filePath path of the resource file
+     * @brief load : Load this resource.
+     * @return true if succeed, false otherwise.
      */
-    void addFile(QString fileType,QString filePath);
+    bool load();
 
     /**
-     * @brief removeFile : Remove a file from the bundle
-     * @param fileName name of the resource file
+     * @brief save : Save this resource.
+     * @return true if succeed, false otherwise.
      */
-    void removeFile(QString fileName);
+    bool save();
 
     /**
      * @brief install : Install the resource bundle.
@@ -101,19 +80,88 @@ public:
     void uninstall();
 
     /**
-     * @brief removeDir : Remove the chosen directory
-     * @param dirName the name of the directory to be removed
-     * @return true if succeed, false otherwise.
+     * @brief addMeta : Add a Metadata to the resource
+     * @param type type of the metadata
+     * @param value value of the metadata
      */
-    bool removeDir(const QString & dirName);
+    void addMeta(QString type,QString value);
+
+    /**
+     * @brief addMeta : Add a Metadata to the resource
+     * @param type type of the metadata
+     * @param value value of the metadata
+     */
+    void setMeta(KoXmlResourceBundleMeta* newMeta);
+
+    /**
+     * @brief addFile : Add a file to the bundle
+     * @param fileType type of the resource file
+     * @param filePath path of the resource file
+     */
+    void addFile(QString fileType,QString filePath);
+
+    /**
+     * @brief removeFile : Remove a file from the bundle
+     * @param fileName name of the resource file
+     */
+    void removeFile(QString fileName);
+
+
+    /**
+     * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
+     */
+    void addResourceDirs();
+
+    /**
+     * @brief rename : Rename the bundle
+     */
+    void rename(QString,QString);
+
+    /**
+     * @brief getAuthor
+     * @return the metadata associated to the field "author" or QString() if it doesn't exist
+     */
+    QString getAuthor();
+
+    /**
+     * @brief getLicense
+     * @return the metadata associated to the field "license" or QString() if it doesn't exist
+     */
+    QString getLicense();
+
+    /**
+     * @brief getWebSite
+     * @return the metadata associated to the field "website" or QString() if it doesn't exist
+     */
+    QString getWebSite();
+
+    /**
+     * @brief getCreated
+     * @return the metadata associated to the field "created" or QString() if it doesn't exist
+     */
+    QString getCreated();
+
+    /**
+     * @brief getUpdated
+     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
+     */
+    QString getUpdated();
+
+    /**
+     * @brief isInstalled
+     * @return true if the bundle is installed, false otherwise.
+     */
+    bool isInstalled();
+
+    void setThumbnail(QString);
 
 private:
     QImage thumbnail;
     KoXmlResourceBundleManifest* manifest;
-    KoXmlResourceBundleMeta* meta;
     KoResourceBundleManager* manager;
-    bool isInstalled;
+    KoXmlResourceBundleMeta* meta;
 
+    bool installed;
 };
 
 #endif // KORESOURCEBUNDLE_H

@@ -22,7 +22,7 @@
 
 #include <klocalizedstring.h>
 
-#include <ko_favorite_resource_manager.h>
+#include <kis_favorite_resource_manager.h>
 #include <kis_canvas2.h>
 
 #include "kis_input_manager.h"
@@ -55,5 +55,5 @@ void KisShowPaletteAction::begin(int, QEvent *event)
         pos = inputManager()->canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
     }
 
-    inputManager()->canvas()->favoriteResourceManager()->slotShowPopupPalette(pos);
+    inputManager()->canvas()->slotShowPopupPalette(pos);
 }

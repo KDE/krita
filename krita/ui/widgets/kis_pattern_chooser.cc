@@ -42,7 +42,7 @@ KoPatternChooser::KoPatternChooser(QWidget *parent)
     m_lbName = new QLabel(this);
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoPattern>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->showPreview(true);
     m_itemChooser->setPreviewTiled(true);

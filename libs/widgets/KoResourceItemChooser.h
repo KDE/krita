@@ -52,7 +52,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
+    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly

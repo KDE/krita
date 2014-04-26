@@ -21,6 +21,7 @@
 
 #include <QDomDocument>
 #include <QDomElement>
+#include <QStringList>
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
@@ -34,6 +35,8 @@ public:
     void setSelectedNodes(vKisNodeSP selectedNodes);
 
     using KisNodeVisitor::visit;
+
+    QStringList errorMessages() const;
 
 public:
 
@@ -54,6 +57,13 @@ public:
         return m_nodeFileNames;
     }
 
+public:
+    QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
+    static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer);
+
+private:
+    static void loadLayerAttributes(const QDomElement &el, KisLayer *layer);
+
 private:
 
     void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
@@ -69,6 +79,7 @@ private:
     quint32 &m_count;
     QString m_url;
     bool m_root;
+    QStringList m_errorMessages;
 };
 
 #endif

@@ -45,8 +45,6 @@ public:
 
 //    virtual void setProperty(const Property *prop);
     
-//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
 signals:
     void commitData(QWidget* editor);
 
@@ -64,31 +62,7 @@ private:
     bool m_unsigned;
 };
 
-/*class KOPROPERTY_EXPORT IntEdit : public Widget
-{
-    Q_OBJECT
-
-public:
-    IntEdit(Property *property, QWidget *parent = 0);
-    virtual ~IntEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    void updateSpinWidgets();
-
-protected slots:
-    void slotValueChanged(int value);
-
-private:
-    IntSpinBox  *m_edit;
-};*/
-
-// Double editor
-
+//! Double editor
 class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleNumInput
 {
     Q_OBJECT
@@ -121,30 +95,6 @@ protected:
 
     QString m_unit;
 };
-
-/*
-class KOPROPERTY_EXPORT DoubleEdit : public Widget
-{
-    Q_OBJECT
-
-public:
-    DoubleEdit(Property *property, QWidget *parent = 0);
-    virtual ~DoubleEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    void updateSpinWidgets();
-
-protected slots:
-    void slotValueChanged(double value);
-
-private:
-    DoubleSpinBox  *m_edit;
-};*/
 
 //! A delegate supporting Int, UInt, LongLong and ULongLong types
 class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface, 

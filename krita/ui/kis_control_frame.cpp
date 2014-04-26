@@ -58,7 +58,7 @@
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include <kis_canvas2.h>
 
 
@@ -92,7 +92,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action->setDefaultWidget(m_gradientWidget);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);

@@ -20,6 +20,7 @@
 #define KIS_KRA_LOADER_H
 
 class QString;
+class QStringList;
 
 #include "KoXmlReaderForward.h"
 class KoStore;
@@ -57,6 +58,9 @@ public:
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
     QList<KisPaintingAssistant*> assistants() const;
+
+    /// if empty, loading didn't fail...
+    QStringList errorMessages() const;
 
 private:
 

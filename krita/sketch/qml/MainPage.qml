@@ -28,6 +28,8 @@ Page {
         width: parent.width;
         height: parent.height;
 
+        file: parent.initialFile;
+
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
         onLoadingFinished: {
             loadingDialog.hide("Done!");
@@ -36,6 +38,14 @@ Page {
         onSavingFinished: {
             loadingDialog.hide("Done!");
             savingDialog.hide("Done!");
+
+            if (d.saveRequested) {
+                d.loadNewFile();
+            }
+
+            if (d.closeRequested) {
+                d.closeWindow();
+            }
         }
         onProgress: {
             if (value === -1 || value === 100) {
@@ -77,6 +87,8 @@ Page {
         anchors.left: parent.left;
         width: Constants.GridWidth * 4;
         height: parent.height;
+
+        onClicked: d.beginCreateNewFile(options);
     }
 
     OpenImagePanel {
@@ -85,7 +97,7 @@ Page {
         width: Constants.GridWidth * 4;
         height: parent.height;
 
-        onOpenClicked: pageStack.push(openImagePage);
+        onClicked: d.beginOpenFile(file);
     }
 
     MenuPanel {
@@ -160,6 +172,18 @@ Page {
         }
     }
 
+    ToolOverlayPanel {
+        id: toolOverlay;
+        anchors {
+            left: menuPanel.left;
+            leftMargin: (Constants.IsLandscape ? Constants.GridWidth * 4: Constants.GridWidth * 2) + Constants.DefaultMargin;
+            right: menuPanel.right;
+            rightMargin: (Constants.IsLandscape ? 0 : Constants.GridWidth * 2) + Constants.DefaultMargin;
+            bottom: menuPanel.top;
+            bottomMargin: Constants.DefaultMargin;
+        }
+    }
+
     Dialog {
         id: loadingDialog;
         title: "Loading";
@@ -195,6 +219,7 @@ Page {
             switch(button) {
                 case 0: {
                     if (Settings.temporaryFile) {
+                        d.saveRequested = true;
                         pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
                     } else {
                         savingDialog.show("Please wait...");
@@ -240,32 +265,7 @@ Page {
 
     Connections {
         target: Settings;
-
-        onCurrentFileChanged: {
-            if (sketchView.modified) {
-                d.saveRequested = true;
-                modifiedDialog.show();
-            } else {
-                d.loadNewFile();
-            }
-        }
         onTemporaryFileChanged: if (window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
-    }
-
-    onStatusChanged: {
-        if (status == 0) {
-            if (d.saveRequested) {
-                d.loadNewFile();
-                return;
-            }
-
-            if (d.closeRequested) {
-                d.closeWindow();
-                return;
-            }
-
-            sketchView.file = Settings.currentFile;
-        }
     }
 
     Connections {
@@ -284,12 +284,17 @@ Page {
     Component.onCompleted: {
         Krita.Window.allowClose = false;
         loadingDialog.show("Please wait...");
+
+        if(Settings.currentFile.indexOf("temp") == -1) {
+            sketchView.file = Settings.currentFile;
+        }
     }
 
-    Component { id: openImagePage; OpenImagePage { } }
+    Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.beginOpenFile(file); } } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
-    Component { id: saveAsPage; SaveImagePage { } }
+    Component { id: saveAsPage; SaveImagePage { onFinished: { pageStack.pop(); d.saveFileAs(file, type); } } }
+    Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); d.beginCreateNewFile(options); } } }
 
     QtObject {
         id: d;
@@ -298,13 +303,67 @@ Page {
         property bool closeRequested;
         property bool saveRequested;
 
+        property variant newFileOptions;
+        property string fileToOpen;
+
+        function beginCreateNewFile(options) {
+            if(options !== undefined) {
+                newFileOptions = options;
+                if (sketchView.modified) {
+                    modifiedDialog.show();
+                } else {
+                    d.loadNewFile();
+                }
+            } else {
+                pageStack.push(customImagePage);
+            }
+        }
+
+        function beginOpenFile(file) {
+            if(!Settings.temporaryFile && file === sketchView.file)
+                return;
+
+            if(file !== "") {
+                fileToOpen = file;
+                if(sketchView.modified) {
+                    modifiedDialog.show();
+                } else {
+                    d.loadNewFile();
+                }
+            } else {
+                pageStack.push(openImagePage);
+            }
+        }
+
         function loadNewFile() {
-            d.saveRequested = false;
-            loadingDialog.show("Loading " + Settings.currentFile);
+            saveRequested = false;
             loadingDialog.progress = 0;
 
-            sketchView.file = Settings.currentFile;
+            if(newFileOptions !== undefined) {
+                loadingDialog.show("Creating new image...");
+                if(newFileOptions.source === undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createBlankImage(newFileOptions);
+                    Settings.temporaryFile = true;
+                } else if(newFileOptions.source == "clipboard") {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
+                    Settings.temporaryFile = true;
+                }
+            } else {
+                loadingDialog.show("Loading " + fileToOpen);
+                Settings.currentFile = fileToOpen;
+                sketchView.file = Settings.currentFile;
+            }
             menuPanel.collapsed = true;
+            fileToOpen = "";
+            newFileOptions = null;
+        }
+
+        function saveFileAs(file, type) {
+            savingDialog.show("Saving image to " + file);
+
+            sketchView.saveAs( file, type );
+
+            Settings.temporaryFile = false;
         }
 
         function closeWindow() {

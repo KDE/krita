@@ -23,18 +23,14 @@ import "../components"
 Panel {
     id: base;
     name: "Filter";
-    panelColor: "#000000";
+    colorSet: "filter";
 
     actions: [
         Button {
             id: applyButton;
             width: height;
-            height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            height: Constants.ToolbarButtonSize;
+            image: Settings.theme.icon("apply")
             onClicked: {
                 if (base.state === "full") {
                     fullFilters.model.activateFilter(fullFilters.currentIndex);
@@ -52,11 +48,7 @@ Panel {
             id: toggleShowPreviewButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: filtersCategoryModel.previewEnabled ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: filtersCategoryModel.previewEnabled ? Settings.theme.icon("visible_on") : Settings.theme.icon("visible_off");
             onClicked: filtersCategoryModel.previewEnabled = !filtersCategoryModel.previewEnabled;
         }
     ]
@@ -118,69 +110,36 @@ Panel {
             onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
                 if (model.filterRequiresConfiguration(currentIndex)) {
-                    noConfigNeeded.visible = false;
-                    configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
                     if (typeof(configLoader.item.configuration) !== 'undefined') {
                         configLoader.item.configuration = model.configuration(currentIndex);
                     }
                 }
                 else {
-                    noConfigNeeded.visible = true;
-                    configNeeded.visible = false;
+                    configLoader.source = "filterconfigpages/nothing-to-configure.qml";
                 }
                 filtersCategoryModel.filterSelected(currentIndex);
             }
         }
         Item {
-            id: noConfigNeeded;
             width: parent.width;
-            height: parent.width;
-            Column {
+            height: parent.height - Constants.DefaultMargin - fullCategoryList.height - fullFilters.height;
+            clip: true;
+            Flickable {
+                id: configNeeded;
                 anchors.fill: parent;
-                Item {
+                contentWidth: width;
+                contentHeight: configLoader.height > 0 ? configLoader.height : 1;
+                MouseArea {
+                    anchors.fill: parent;
+                    hoverEnabled: true;
+                    onContainsMouseChanged: configLoader.focus = containsMouse;
+                }
+                Loader {
+                    id: configLoader;
                     width: parent.width;
-                    height: Constants.GridHeight;
+                    height: item ? item.height : 1;
                 }
-                Text {
-                    width: parent.width;
-                    font.pixelSize: Constants.DefaultFontSize;
-                    color: Constants.Theme.TextColor;
-                    font.family: "Source Sans Pro"
-                    wrapMode: Text.WordWrap;
-                    horizontalAlignment: Text.AlignHCenter;
-                    text: "This filter requires no configuration. Click below to apply it.";
-                }
-                Item {
-                    width: parent.width;
-                    height: Constants.GridHeight / 2;
-                }
-                Button {
-                    width: height;
-                    height: Constants.GridHeight
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    color: "transparent";
-                    image: "../images/svg/icon-apply.svg"
-                    textColor: "white";
-                    shadow: false;
-                    highlight: false;
-                    onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
-                }
-            }
-        }
-        Item {
-            id: configNeeded;
-            width: parent.width;
-            height: childrenRect.height > 0 ? childrenRect.height : 1;
-            MouseArea {
-                anchors.fill: parent;
-                hoverEnabled: true;
-                onContainsMouseChanged: configLoader.focus = containsMouse;
-            }
-            Loader {
-                id: configLoader;
-                width: parent.width;
-                height: item ? item.height : 1;
             }
         }
     }

@@ -23,7 +23,7 @@
 #include <QCoreApplication>
 
 #include <qtest_kde.h>
-
+#include <half.h>
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -35,6 +35,62 @@ void KisExrTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
+
+void KisExrTest::testRoundTrip()
+{
+    QString inputFileName(TestUtil::fetchDataFileLazy("CandleGlass.exr"));
+
+    KisDoc2 doc1;
+
+    KoFilterManager manager(&doc1);
+    manager.setBatchMode(true);
+
+    KoFilter::ConversionStatus status;
+    QString s = manager.importDocument(inputFileName, QString(),
+                                       status);
+
+    QCOMPARE(status, KoFilter::OK);
+    QVERIFY(doc1.image());
+
+
+    KTemporaryFile savedFile;
+    savedFile.setAutoRemove(false);
+    savedFile.setSuffix(".exr");
+    savedFile.open();
+
+    KUrl savedFileURL("file://" + savedFile.fileName());
+    QString savedFileName(savedFileURL.toLocalFile());
+
+    QString typeName;
+    KMimeType::Ptr t = KMimeType::findByUrl(savedFileURL, 0, true);
+    Q_ASSERT(t);
+    typeName = t->name();
+
+    QByteArray mimeType(typeName.toLatin1());
+    status = manager.exportDocument(savedFileName, mimeType);
+    QVERIFY(QFileInfo(savedFileName).exists());
+
+    {
+        KisDoc2 doc2;
+
+        KoFilterManager manager(&doc2);
+        manager.setBatchMode(true);
+
+        s = manager.importDocument(savedFileName, QString(), status);
+
+        QCOMPARE(status, KoFilter::OK);
+        QVERIFY(doc2.image());
+
+        QVERIFY(TestUtil::comparePaintDevicesClever<half>(
+                    doc1.image()->root()->firstChild()->paintDevice(),
+                    doc2.image()->root()->firstChild()->paintDevice(),
+                    0.01 /* meaningless alpha */));
+    }
+
+    savedFile.close();
+
+}
+
 QTEST_KDEMAIN(KisExrTest, GUI)
 
 #include "kis_exr_test.moc"

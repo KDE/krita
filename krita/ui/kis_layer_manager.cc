@@ -237,7 +237,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
     , m_groupLayersSave(0)
-    , m_actLayerVis(false)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
@@ -291,6 +290,12 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
+    KisAction * action = new KisAction(i18n("Rename current layer"), this);
+    action->setActivationFlags(KisAction::ACTIVE_LAYER);
+    actionCollection->addAction("RenameCurrentLayer", action);
+    action->setShortcut(KShortcut(Qt::Key_F2));
+    connect(action, SIGNAL(triggered()), this, SLOT(layerProperties()));
+
     m_rasterizeLayer  = new KisAction(i18n("Rasterize Layer"), this);
     m_rasterizeLayer->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     m_rasterizeLayer->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
@@ -337,11 +342,6 @@ void KisLayerManager::imageResizeToActiveLayer()
     if (image && (layer = activeLayer())) {
         image->cropImage(layer->exactBounds());
     }
-}
-
-void KisLayerManager::actLayerVisChanged(int show)
-{
-    m_actLayerVis = (show != 0);
 }
 
 void KisLayerManager::layerProperties()

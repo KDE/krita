@@ -263,7 +263,7 @@ void KisFilterManager::finish()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedConfiguration->name());
     if (filter->bookmarkManager()) {
-        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
+        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed,
                                        d->currentlyAppliedConfiguration.data());
     }
 

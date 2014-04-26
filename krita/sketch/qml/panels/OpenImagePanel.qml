@@ -25,13 +25,13 @@ Item {
 
     enabled: !collapsed;
 
-    signal openClicked();
+    signal clicked(string file);
 
     Rectangle {
         id: panel;
         width: parent.width;
         height: parent.height;
-        color: "white";
+        color: Settings.theme.color("panels/openImage/background");
         clip: true;
         radius: Constants.DefaultMargin;
 
@@ -45,13 +45,13 @@ Item {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("panels/openImage/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("panels/openImage/header/stop");
                 }
             }
 
@@ -60,10 +60,10 @@ Item {
                 anchors.left: parent.left;
                 anchors.right: parent.right;
                 height: Constants.DefaultMargin;
-                color: "#000000";
+                color: Settings.theme.color("panels/openImage/header/stop");
             }
 
-            Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             Label {
                 anchors {
@@ -73,7 +73,7 @@ Item {
                 }
                 text: "Open Image";
                 font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                color: Settings.theme.color("panels/openImage/header/text");
             }
         }
 
@@ -83,7 +83,7 @@ Item {
             width: parent.width;
             height: Constants.GridHeight * 10.5 + 8;
 
-            onOpenClicked: base.openClicked();
+            onClicked: base.clicked(file);
         }
     }
 

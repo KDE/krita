@@ -95,6 +95,17 @@ public:
      */
     void setChannelFlags(QBitArray channelFlags);
 
+    /**
+     * These functions exist solely to allow plugins to reimplement them as
+     * needed, while allowing consumers to implement support for them without
+     * linking directly to the plugin. In particular, the filter management
+     * in Sketch requires this.
+     */
+    virtual void setCurve(const KisCubicCurve &curve);
+    virtual const KisCubicCurve& curve() const;
+    virtual void setCurves(QList<KisCubicCurve> &curves);
+    virtual const QList<KisCubicCurve>& curves() const;
+
 protected:
     void setVersion(qint32 version);
 private:

@@ -32,6 +32,7 @@ class KRITAIMAGE_EXPORT SchemaRegistry
 {
     struct Private;
     SchemaRegistry();
+    ~SchemaRegistry();
 public:
     /**
      * Creates a new schema.

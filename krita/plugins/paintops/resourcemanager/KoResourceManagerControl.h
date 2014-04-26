@@ -21,50 +21,68 @@
 #define KORESOURCEMANAGERCONTROL_H
 
 #include "KoResourceBundle.h"
-#include <QString>
+#include <QtCore/QModelIndex>
 
-class QIODevice;
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
 class KoResourceBundleManager;
+class KoResourceTableModel;
 template <class T> class KoResourceServer;
 
-class KoResourceManagerControl
+class KoResourceManagerControl : public QObject
 {
+    Q_OBJECT
+
+public:
+    explicit KoResourceManagerControl(int nb);
+    ~KoResourceManagerControl();
+
+    KoResourceTableModel* getModel(int type);
+    void launchServer();
+
+    int getNbModels();
+
+    void addFiles(QString,int type);
+
+    void filterResourceTypes(int index);
+
+
+    bool createPack(int type);
+    bool install(int type);
+    bool uninstall(int type);
+    void remove(int type);
+
+    void configureFilters(int filterType, bool enable);
+
+    bool rename(QModelIndex index,QString,int type);
+    void setMeta(QModelIndex index,QString metaType,QString metaValue, int type);
+    void setMeta(KoResourceBundle *bundle, QString metaType,QString metaValue);
+    void saveMeta(QModelIndex index,int type);
+    void thumbnail(QModelIndex index,QString fileName,int type);
+    void exportBundle(int type);
+    bool importBundle();
+    void refreshTaggingManager();
+
+signals:
+    void status(QString text,int timeout=0);
+
+private slots:
+    void toStatus(QString text,int timeout=0);
+
+private:
     KoXmlResourceBundleMeta *meta;
     KoXmlResourceBundleManifest *manifest;
     KoResourceBundleManager *extractor;
-    QString root;
-    QString currentMeta;
-    QString currentManifest;
     KoResourceServer<KoResourceBundle> *bundleServer;
-    KoResourceBundle *current;
+    QList<KoResourceTableModel*> modelList;
+    QString root;
+    int nbModels;
 
-public:
-    KoResourceManagerControl(QString="/home/metabolic");
-    ~KoResourceManagerControl();
-
-    void setMeta(QString,QString,QString);
-    QIODevice* getDevice(QString);
-    void createPack();
-    void installPack(QString);
-    void uninstallPack(QString);
-    void deletePack(QString);
-    void refreshCurrentTable();
-    void rename(QString,QString);
-    void about();
-
-    /**
-     * @brief launchServer : Create the resource server for bundles.
-     */
-    void launchServer();
-
-    /**
-     * @brief getServer
-     * @return the ResourceBundle server
-     */
-    KoResourceServer<KoResourceBundle>* getServer();
-
+    enum {
+        Install=0,
+        Uninstall,
+        Delete
+    };
 };
 
 #endif // KORESOURCEMANAGERCONTROL_H

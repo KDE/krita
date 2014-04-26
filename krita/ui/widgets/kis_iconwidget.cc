@@ -55,11 +55,11 @@ void KisIconWidget::paintEvent(QPaintEvent *)
     paintPopupArrow();
 }
 
-void KisIconWidget::setResourceAdapter(KoAbstractResourceServerAdapter* adapter)
+void KisIconWidget::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter)
 {
-    adapter->setParent(this);
+    Q_ASSERT(adapter);
     adapter->connectToResourceServer();
-    connect(adapter, SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
+    connect(adapter.data(), SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
 }
 
 void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)

@@ -35,7 +35,7 @@ Item {
         }
         width: height;
         smooth: true;
-        source: "../images/svg/icon-cancel-black.svg";
+        source: Settings.theme.icon("cancel-black");
     }
     Image {
         id: checkedImg;
@@ -48,7 +48,7 @@ Item {
         width: height;
         smooth: true;
         opacity: 0;
-        source: "../images/svg/icon-apply-black.svg";
+        source: Settings.theme.icon("apply-black");
     }
     Label {
         id: txt;
@@ -76,7 +76,7 @@ Item {
             from: "";
             to: "checked";
             reversible: true;
-            PropertyAnimation { targets: [notCheckedImg, checkedImg]; properties: "opacity"; duration: 150; }
+            PropertyAnimation { targets: [notCheckedImg, checkedImg]; properties: "opacity"; duration: Constants.AnimationDuration; }
         }
     ]
 }

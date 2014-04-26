@@ -28,21 +28,27 @@ Item {
     property bool useExponentialValue: false;
     onValueChanged: handle.resetHandle();
     onExponentialValueChanged: handle.resetHandle(true);
+
+    property alias border: fill.border;
+    property alias background: fill.color;
+
     Rectangle {
         id: fill;
         anchors.fill: parent;
         border.width: 1;
-        border.color: "silver";
-        color: "#bdffffff";
+        border.color: Settings.theme.color("components/slider/background/border");
+        color: Settings.theme.color("components/slider/background/fill");
         radius: height / 2;
     }
     MouseArea {
         anchors.fill: parent;
-        onClicked: {
-            var position = mouse.x - base.height / 2;
+        function handlePos(mouse) {
+            var position = mouse.x - (handle.height / 2);
             handle.x = position < 0 ? 0 : position > base.width - handle.width ? base.width - handle.width : position;
-            handle.resetHandle();
+            handle.resetHandle(useExponentialValue);
         }
+        onClicked: handlePos(mouse);
+        onPositionChanged: handlePos(mouse);
     }
     Rectangle {
         id: handle;
@@ -57,11 +63,11 @@ Item {
                 if (base.width === 0)
                     return;
                 var newX = 0;
-                if (resetExponential) {
-                    var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
+                if (settingExp) {
+                    var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (handle.maximumX - handle.minimumX) + handle.minimumX);
                 }
                 else {
-                    var newX = Math.round(base.value / 100 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
+                    var newX = Math.round(base.value / 100 * (handle.maximumX - handle.minimumX) + handle.minimumX);
                 }
                 if (newX !== handle.x)
                     handle.x = newX;
@@ -82,18 +88,18 @@ Item {
             return Math.min(100, Math.max(0, v));
         }
         onXChanged: {
-             if (settingExp)
+            if (settingExp || settingSelf)
                  return;
             settingSelf = true;
             if (highPrecision) {
-                var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
+                var newValue = ((handle.x - handle.minimumX) * 100) / (handle.maximumX - handle.minimumX);
                 if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
                 }
             }
             else {
-                var newValue = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+                var newValue = Math.round( ((handle.x - handle.minimumX) * 100) / (handle.maximumX - handle.minimumX) );
                 if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
@@ -104,18 +110,10 @@ Item {
         height: parent.height - 4;
         width: height;
         radius: (height / 2) + 1;
-        color: "silver"
-        MouseArea {
-            id: mouseArea;
-            anchors.fill: parent;
-            anchors.margins: -4;
-            drag {
-                target: parent;
-                axis: "XAxis";
-                minimumX: 2;
-                maximumX: base.width - handle.width - 2;
-                onMaximumXChanged: handle.resetHandle(useExponentialValue);
-            }
-        }
+        color: Settings.theme.color("components/slider/handle/fill");
+        border.width: 1;
+        border.color: Settings.theme.color("components/slider/handle/border");
+        property int minimumX: 2;
+        property int maximumX: base.width - handle.width - 2;
     }
 }

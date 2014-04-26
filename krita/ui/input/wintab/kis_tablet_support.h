@@ -23,9 +23,16 @@
 #include <QLibrary>
 #include <QPointer>
 #include <QPointF>
+#include <QVector>
 #include <QList>
 #include <QMap>
 #include <QTabletEvent>
+
+#ifdef Q_WS_X11
+#include <algorithm>
+#include <X11/extensions/XInput.h>
+#include <kis_global.h>
+#endif
 
 
 struct QTabletDeviceData
@@ -75,6 +82,87 @@ struct QTabletDeviceData
 #ifdef Q_WS_WIN
     QMap<quint8, quint8> buttonsMap;
 #endif
+
+#ifdef Q_WS_X11
+    /**
+     * Different tablets have different assignment of axes reported by
+     * the XInput subsystem. More than that some of the drivers demand
+     * local storage of the tablet axes' state, because in the events
+     * they report only recently changed axes.  SavedAxesData was
+     * created to handle all these complexities.
+     */
+    class SavedAxesData {
+    public:
+        enum AxesIndexes {
+            XCoord = 0,
+            YCoord,
+            Pressure,
+            XTilt,
+            YTilt,
+            Rotation,
+            Unused,
+
+            NAxes
+        };
+
+    public:
+        SavedAxesData()
+        {
+            for (int i = 0; i < NAxes; i++) {
+                m_x11_to_local_axis_mapping[i] = i;
+            }
+        }
+
+        void tryFetchAxesMapping(XDevice *dev);
+
+        void setAxesMap(const QVector<AxesIndexes> &axesMap) {
+            KIS_ASSERT_RECOVER_RETURN(axesMap.size() == NAxes);
+
+            for (int i = 0; i < NAxes; i++) {
+                m_x11_to_local_axis_mapping[i] = axesMap[i];
+            }
+        }
+
+        inline QPointF position(const QTabletDeviceData *tablet, const QRect &screenArea) const {
+            return tablet->scaleCoord(m_axis_data[XCoord], m_axis_data[YCoord],
+                              screenArea.x(), screenArea.width(),
+                              screenArea.y(), screenArea.height());
+        }
+
+        inline int pressure() const {
+            return m_axis_data[Pressure];
+        }
+
+        inline int xTilt() const {
+            return m_axis_data[XTilt];
+        }
+
+        inline int yTilt() const {
+            return m_axis_data[YTilt];
+        }
+
+        inline int rotation() const {
+            return m_axis_data[Rotation] / 64;
+        }
+
+        bool updateAxesData(int firstAxis, int axesCount, const int axes[NAxes]) {
+            for (int srcIt = 0, dstIt = firstAxis;
+                 srcIt < axesCount;
+                 srcIt++, dstIt++) {
+
+                m_axis_data[m_x11_to_local_axis_mapping[dstIt]] = axes[srcIt];
+            }
+
+            return firstAxis <= m_lastSaneAxis;
+        }
+    private:
+        int m_axis_data[NAxes];
+        int m_x11_to_local_axis_mapping[NAxes];
+        int m_lastSaneAxis;
+    };
+
+    SavedAxesData savedAxesData;
+#endif /* Q_WS_X11 */
 };
 
 static inline int sign(int x)

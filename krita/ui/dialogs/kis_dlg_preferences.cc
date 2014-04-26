@@ -46,7 +46,7 @@
 #include <KoColorProfile.h>
 #include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoPart.h>
 #include <KoColorSpaceEngine.h>
 #include <KoIcon.h>
@@ -232,12 +232,11 @@ void ColorSettingsTab::installProfile()
 {
     QStringList mime;
     mime << "*.icm" <<  "*.icc";
-    QStringList profileNames = KoFileDialogHelper::getOpenFileNames(this,
-                                                                    i18n("Install Color Profiles"),
-                                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                                    mime,
-                                                                    "*.icc",
-                                                                    "OpenDocumentICC");
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
+    dialog.setCaption(i18n("Install Color Profiles"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setNameFilters(mime);
+    QStringList profileNames = dialog.urls();
 
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
     Q_ASSERT(iccEngine);
@@ -353,10 +352,11 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    filename = KoFileDialogHelper::getOpenFileName(m_page,
-                                                   i18n("Select OpenColorIO Configuration"),
-                                                   QDir::cleanPath(filename),
-                                                   QStringList("*.ocio|OpenColorIO configuration (*.ocio)"));
+    KoFileDialog dialog(m_page, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select OpenColorIO Configuration"));
+    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
+    filename = dialog.url();
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);
@@ -425,11 +425,19 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
         chkUseTextureBuffer->setEnabled(false);
+        chkDisableDoubleBuffering->setEnabled(false);
+        chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableDoubleBuffering->setEnabled(cfg.useOpenGL());
+        chkDisableDoubleBuffering->setChecked(cfg.disableDoubleBuffering());
+        chkDisableVsync->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableVsync->setEnabled(cfg.useOpenGL());
+        chkDisableVsync->setChecked(cfg.disableVSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -450,6 +458,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     colorChecks1->setColor(cfg.checkersColor1());
     colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
+    hideScrollbars->setChecked(cfg.hideScrollbars());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
     chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
     chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
@@ -462,6 +471,10 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGL->setChecked(true);
     chkUseTextureBuffer->setChecked(false);
     chkUseTextureBuffer->setEnabled(true);
+    chkDisableDoubleBuffering->setEnabled(true);
+    chkDisableDoubleBuffering->setChecked(true);
+    chkDisableVsync->setEnabled(true);
+    chkDisableVsync->setChecked(true);
     cmbFilterMode->setEnabled(true);
     cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
@@ -469,6 +482,7 @@ void DisplaySettingsTab::setDefault()
     colorChecks1->setColor(QColor(220, 220, 220));
     colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
+    hideScrollbars->setChecked(false);
     chkCurveAntialiasing->setChecked(true);
     chkSelectionOutlineAntialiasing->setChecked(false);
     chkChannelsAsColor->setChecked(false);
@@ -478,6 +492,8 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
     chkUseTextureBuffer->setEnabled(isChecked);
+    chkDisableDoubleBuffering->setEnabled(isChecked);
+    chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
@@ -800,6 +816,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
+        cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());
+        cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
@@ -807,6 +825,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
+        cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

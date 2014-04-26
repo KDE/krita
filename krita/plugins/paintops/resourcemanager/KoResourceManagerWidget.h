@@ -20,56 +20,98 @@
 #ifndef KORESOURCEMANAGERWIDGET_H
 #define KORESOURCEMANAGERWIDGET_H
 
-#include <QMainWindow>
-#include <QString>
-#include "KoResourceTableModel.h"
-#include "KoResourceModel.h"
-#include "KoResourceServerAdapter.h"
-#include "KoResourceManagerControl.h"
-#include <QSortFilterProxyModel>
+#include <QtGui/QMainWindow>
+#include <QtCore/QModelIndex>
 #include <krita_export.h>
+#include <QtGui/QLabel>
 
-namespace Ui {
-class KoResourceManagerWidget;
+namespace Ui
+{
+    class KoResourceManagerWidget;
 }
 
+class ClickLabel : public QLabel
+{
+    Q_OBJECT
+
+public:
+    ClickLabel(QWidget * parent = 0)
+        :QLabel(parent)
+    {
+
+    }
+
+signals:
+    void clicked();
+
+private:
+    void mousePressEvent ( QMouseEvent * event )
+    {
+        Q_UNUSED(event);
+        emit clicked();
+    }
+};
+
+class KoResourceManagerControl;
+class KoResourceTaggingManager;
+class QTableView;
 
 class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
 {
     Q_OBJECT
+
 public:
     explicit KoResourceManagerWidget(QWidget *parent = 0);
     ~KoResourceManagerWidget();
 
+    void initializeConnect();
+    void initializeFilterMenu();
+    void initializeModels(bool first=false);
+    void initializeTitle();
+
+    QTableView* tableView(int index);
+
+private slots:
+    void about();
+
+    void createPack();
+    void deletePack();
+    void installPack();
+    void uninstallPack();
+
+    void setMeta();
+    void thumbnail();
+    void exportBundle();
+    void importBundle();
+
+    void startRenaming();
+    void endRenaming();
+    void rename(QString newName);
+
+    void filterFieldSelected(bool);
+    void filterResourceTypes(int index);
+
+    void toBundleView(int installTab);
+    void showHide();
+    void refreshDetails(QModelIndex newIndex);
+    void saveMeta();
+    void refreshTaggingManager(int index=0);
+    void tableViewChanged(int index);
+
+    void refresh();
+    void removeTag();
+
+    void status(QString text,int timeout);
+
 private:
-    KoResourceManagerControl *control;
-    KoResourceTableModel *model;
-    QMenu *buttonMenu;
     Ui::KoResourceManagerWidget *ui;
+    KoResourceManagerControl *control;
+    KoResourceTaggingManager *tagMan;
+    ClickLabel *resourceNameLabel;
+    bool firstRefresh;
 
     /*QSortFilterProxyModel* m_filter;
     MyTableModel *model2;*/
-
-    void initializeModel();
-    void initializeConnect();
-    void createMiniature(QPixmap);
-
-private slots:
-    void showHide();
-    void createPack();
-    void installPack();
-    void uninstallPack();
-    void deletePack();
-    void setMeta();
-    void refreshCurrentTable();
-    void filterFieldSelected(bool);
-    void rename();
-    void about();
-
-signals:
-
-public slots:
-
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

@@ -19,6 +19,7 @@
 #include "kis_open_raster_stack_save_visitor.h"
 
 #include <math.h>
+
 #include <QDomElement>
 #include <QImage>
 
@@ -116,8 +117,8 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         QDomElement imageElt = d->layerStack.createElement("image");
         int width = layer->image()->width();
         int height = layer->image()->height();
-        int xRes = (int)(round(layer->image()->xRes() * 72));
-        int yRes = (int)(round(layer->image()->yRes() * 72));
+        int xRes = (int)(qRound(layer->image()->xRes() * 72));
+        int yRes = (int)(qRound(layer->image()->yRes() * 72));
 
         imageElt.setAttribute("version", "0.0.1");
         imageElt.setAttribute("w", width);

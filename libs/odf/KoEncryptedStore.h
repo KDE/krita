@@ -37,9 +37,12 @@ struct KoEncryptedStore_EncryptionData;
 class KoEncryptedStore : public KoStore
 {
 public:
-    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification);
-    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification);
-    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode, const QByteArray &appIdentification);
+    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification,
+                     bool writeMimetype);
+    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
+                     bool writeMimetype);
+    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode,
+                     const QByteArray &appIdentification, bool writeMimetype);
     ~KoEncryptedStore();
 
     /*

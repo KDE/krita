@@ -23,6 +23,7 @@
 #include "kritasketchplugin.h"
 
 #include "ColorSelectorItem.h"
+#include "CurveEditorItem.h"
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
@@ -40,6 +41,10 @@
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
 #include "KeyboardModel.h"
+#include "ColorModelModel.h"
+#include "ColorDepthModel.h"
+#include "ColorProfileModel.h"
+#include "Theme.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -62,6 +67,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
+    qmlRegisterType<CurveEditorItem>("org.krita.sketch", 1, 0, "CurveEditorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
     qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
@@ -75,6 +81,10 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<CompositeOpModel>("org.krita.sketch", 1, 0, "CompositeOpModel");
     qmlRegisterType<PanelConfiguration>("org.krita.sketch", 1, 0, "PanelConfiguration");
     qmlRegisterType<KeyboardModel>("org.krita.sketch", 1, 0, "KeyboardModel");
+    qmlRegisterType<ColorModelModel>("org.krita.sketch", 1, 0, "ColorModelModel");
+    qmlRegisterType<ColorDepthModel>("org.krita.sketch", 1, 0, "ColorDepthModel");
+    qmlRegisterType<ColorProfileModel>("org.krita.sketch", 1, 0, "ColorProfileModel");
+    qmlRegisterType<Theme>("org.krita.sketch", 1, 0, "Theme");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }

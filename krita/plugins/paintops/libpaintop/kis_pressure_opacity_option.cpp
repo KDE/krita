@@ -41,7 +41,7 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {
-        KisDynamicSensor *pressureSensor = sensor(PressureId.id(), true);
+        KisDynamicSensorSP pressureSensor = sensor(PressureId.id(), true);
         if (pressureSensor) {
             QList<QPointF> points = pressureSensor->curve().points();
             QList<QPointF> points_new;

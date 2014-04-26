@@ -98,7 +98,7 @@ private:
 };
 
  KisDodgeMidtonesAdjustmentFactory::KisDodgeMidtonesAdjustmentFactory()
-    : KoColorTransformationFactory("DodgeMidtones", i18n("DodgeMidtones Adjustment"))
+    : KoColorTransformationFactory("DodgeMidtones")
 {
 }
 

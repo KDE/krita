@@ -617,7 +617,7 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
         }
     }
 
-    emit q->toolCodesSelected(canvasData->canvas, types);
+    emit q->toolCodesSelected(types);
 }
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
@@ -725,14 +725,12 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolButton> KoToolManager::createToolList(KoCanvasBase *canvas) const
+QList<KoToolButton> KoToolManager::createToolList() const
 {
     QList<KoToolButton> answer;
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
-        if (!tool->canCreateTool(canvas))
-            continue;
         KoToolButton button;
         button.button = tool->createButton();
         button.section = tool->toolType();
@@ -974,7 +972,7 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
         }
 
         // Then create a button for the toolbox for this canvas
-        if (tool->id() == KoCreateShapesTool_ID || !tool->canCreateTool(controller->canvas())) {
+        if (tool->id() == KoCreateShapesTool_ID) {
             continue;
         }
 
@@ -1004,21 +1002,18 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
     }
 
-    if (!tool->canCreateTool(controller->canvas())) {
-        kDebug(30006) << "Skipping the creation of tool" << tool->id();
-        return  QPair<QString, KoToolBase*>(QString(), 0);
-    }
-
     kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
 
     KoToolBase *tl = tool->createTool(controller->canvas());
-    Q_ASSERT(tl);
-    d->uniqueToolIds.insert(tl, tool->uniqueId());
+    if (tl) {
+        d->uniqueToolIds.insert(tl, tool->uniqueId());
 
-    tl->setObjectName(tool->id());
+        tl->setObjectName(tool->id());
 
-    foreach(KAction *action, tl->actions()) {
-        action->setEnabled(false);
+        foreach(KAction *action, tl->actions()) {
+            action->setEnabled(false);
+        }
+
     }
 
     KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);

@@ -216,6 +216,45 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
     return true;
 }
 
+template <typename channel_type>
+inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2, channel_type alphaThreshold = 0)
+{
+    QRect rc1 = dev1->exactBounds();
+    QRect rc2 = dev2->exactBounds();
+
+    if (rc1 != rc2) {
+        qDebug() << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
+        return false;
+    }
+
+    KisHLineConstIteratorSP iter1 = dev1->createHLineConstIteratorNG(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter2 = dev2->createHLineConstIteratorNG(0, 0, rc1.width());
+
+    int pixelSize = dev1->pixelSize();
+
+    for (int y = 0; y < rc1.height(); ++y) {
+
+        do {
+            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0) {
+                const channel_type* p1 = reinterpret_cast<const channel_type*>(iter1->oldRawData());
+                const channel_type* p2 = reinterpret_cast<const channel_type*>(iter2->oldRawData());
+
+                if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) continue;
+
+                qDebug() << "Failed compare paint devices:" << iter1->x() << iter1->y();
+                qDebug() << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
+                qDebug() << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
+                return false;
+            }
+        } while (iter1->nextPixel() && iter2->nextPixel());
+
+        iter1->nextRow();
+        iter2->nextRow();
+    }
+
+    return true;
+}
+
 #ifdef FILES_OUTPUT_DIR
 
 inline bool checkQImage(const QImage &image, const QString &testName,

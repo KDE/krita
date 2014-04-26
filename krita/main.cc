@@ -30,23 +30,27 @@
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <ksplashscreen.h>
 #include <ksycoca.h>
 #include <kstandarddirs.h>
 #include <kcrash.h>
 
 #include <KoApplication.h>
+#include <KoConfig.h>
 
 #include <krita_export.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_factory2.h"
 #include "ui/kis_doc2.h"
+#include "kis_splash_screen.h"
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
-
+#ifdef USE_BREAKPAD
+    #include "kis_crash_handler.h"
+#endif
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 
@@ -60,14 +64,13 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     }
 #endif
 #ifdef USE_BREAKPAD
-    qDebug() << "Enabling breakpad";
     qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
     Q_UNUSED(crashHandler);
 #endif
 
     int state;
-    KAboutData *aboutData = newKritaAboutData();
+    KAboutData *aboutData = KisFactory2::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -94,20 +97,14 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    QSplashScreen *splash = new KSplashScreen(QPixmap(splash_screen_xpm));
+    QWidget *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
 
     if (!app.start()) {
         return 1;
     }
 
-    // now save some memory.
-    app.setSplashScreen(0);
-    delete splash;
-
     state = app.exec();
-
-    delete aboutData;
 
     return state;
 }

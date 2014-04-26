@@ -17,10 +17,67 @@
  */
 #include "kis_smoothing_options.h"
 
+#include "kis_config.h"
+
 KisSmoothingOptions::KisSmoothingOptions()
-    : smoothingType(WEIGHTED_SMOOTHING)
-    , smoothnessDistance(50.0)
-    , tailAggressiveness(0.15)
-    , smoothPressure(false)
+    : m_smoothingType(WEIGHTED_SMOOTHING)
+    , m_smoothnessDistance(55.0)
+    , m_tailAggressiveness(0.15)
+    , m_smoothPressure(false)
 {
+    KisConfig cfg;
+    m_smoothingType = (SmoothingType)cfg.lineSmoothingType();
+    m_smoothnessDistance = cfg.lineSmoothingDistance();
+    m_tailAggressiveness = cfg.lineSmoothingTailAggressiveness();
+    m_smoothPressure = cfg.lineSmoothingSmoothPressure();
 }
+
+KisSmoothingOptions::SmoothingType KisSmoothingOptions::smoothingType() const
+{
+    return m_smoothingType;
+}
+
+void KisSmoothingOptions::setSmoothingType(KisSmoothingOptions::SmoothingType value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingType(value);
+    m_smoothingType = value;
+}
+
+qreal KisSmoothingOptions::smoothnessDistance() const
+{
+    return m_smoothnessDistance;
+}
+
+void KisSmoothingOptions::setSmoothnessDistance(qreal value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingDistance(value);
+    m_smoothnessDistance = value;
+}
+
+qreal KisSmoothingOptions::tailAggressiveness() const
+{
+    return m_tailAggressiveness;
+}
+
+void KisSmoothingOptions::setTailAggressiveness(qreal value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingTailAggressiveness(value);
+    m_tailAggressiveness = value;
+}
+
+bool KisSmoothingOptions::smoothPressure() const
+{
+    return m_smoothPressure;
+}
+
+void KisSmoothingOptions::setSmoothPressure(bool value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingSmoothPressure(value);
+    m_smoothPressure = value;
+}
+
+

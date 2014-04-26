@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <kis_cubic_curve.h>
 
 /**
  * The only purpose of this class is to expose the dynamic property
@@ -40,9 +41,26 @@ public:
     Q_INVOKABLE void writeProperty(QString name, QVariant value);
     Q_INVOKABLE QVariant readProperty(QString name);
 
+    // This set of functions makes sure we can also handle curve options
+    // It goes beyond the originally intended simplistic approach to
+    // property handling, but given the API elsewhere, while this could
+    // be introduced as a magic option based on string matching in the
+    // two functions above, this makes for more explicit handling,
+    // which, while it does expand the API, makes it clearer in use.
+    Q_INVOKABLE void setCurve(const KisCubicCurve &curve);
+    Q_INVOKABLE const KisCubicCurve& curve() const;
+    Q_INVOKABLE void setCurves(const QList<KisCubicCurve>& curves);
+    Q_INVOKABLE QList<KisCubicCurve>& curves() const;
+    Q_INVOKABLE int curveCount() const;
+    Q_INVOKABLE KisCubicCurve specificCurve(int index) const;
+    Q_INVOKABLE QString specificCurveName(int index) const;
+    Q_INVOKABLE void setSpecificCurve(int index, const KisCubicCurve& curve) const;
+
     Q_INVOKABLE QString name();
 private:
     QString m_name;
+    KisCubicCurve m_curve;
+    mutable QList<KisCubicCurve> m_curves;
 };
 
 #endif // PROPERTYCONTAINER_H

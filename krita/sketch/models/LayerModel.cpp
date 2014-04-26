@@ -69,6 +69,7 @@ public:
         , declarativeEngine(0)
         , thumbProvider(0)
         , updateActiveLayerWithNewFilterConfigTimer(new QTimer(qq))
+        , imageChangedTimer(new QTimer(qq))
     {
         QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
         foreach(const KisFilterSP& filter, tmpFilters)
@@ -78,6 +79,10 @@ public:
         updateActiveLayerWithNewFilterConfigTimer->setInterval(0);
         updateActiveLayerWithNewFilterConfigTimer->setSingleShot(true);
         connect(updateActiveLayerWithNewFilterConfigTimer, SIGNAL(timeout()), qq, SLOT(updateActiveLayerWithNewFilterConfig()));
+
+        imageChangedTimer->setInterval(250);
+        imageChangedTimer->setSingleShot(true);
+        connect(imageChangedTimer, SIGNAL(timeout()), qq, SLOT(imageHasChanged()));
     }
 
     LayerModel* q;
@@ -97,6 +102,7 @@ public:
     KisFilterConfiguration* newConfig;
     QTimer* updateActiveLayerWithNewFilterConfigTimer;
 
+    QTimer* imageChangedTimer;
     static int counter()
     {
         static int count = 0;
@@ -532,6 +538,8 @@ void LayerModel::moveRight()
 void LayerModel::setLocked(int index, bool newLocked)
 {
     if (index > -1 && index < d->layers.count()) {
+        if(d->layers[index]->userLocked() == newLocked)
+            return;
         d->layers[index]->setUserLocked(newLocked);
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
@@ -541,6 +549,8 @@ void LayerModel::setLocked(int index, bool newLocked)
 void LayerModel::setOpacity(int index, float newOpacity)
 {
     if (index > -1 && index < d->layers.count()) {
+        if(qFuzzyCompare(d->layers[index]->opacity() + 1, newOpacity + 1))
+            return;
         d->layers[index]->setOpacity(newOpacity);
         d->layers[index]->setDirty();
         QModelIndex idx = createIndex(index, 0);
@@ -553,9 +563,11 @@ void LayerModel::setVisible(int index, bool newVisible)
     if (index > -1 && index < d->layers.count()) {
         KoDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
         KoDocumentSectionModel::Property prop = props[0];
+        if(props[0].state == newVisible)
+            return;
         props[0] = KoDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
         d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KoDocumentSectionModel::PropertyList>(props), KoDocumentSectionModel::PropertiesRole );
-        d->layers[index]->setDirty(d->activeNode->extent());
+        d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
     }
@@ -577,10 +589,8 @@ QImage LayerModel::layerThumbnail(QString layerID) const
 
 void LayerModel::deleteCurrentLayer()
 {
-    d->nodeManager->removeNode();
     d->activeNode.clear();
-    d->rebuildLayerList();
-    reset();
+    d->nodeManager->removeNode();
 }
 
 void LayerModel::deleteLayer(int index)
@@ -669,8 +679,7 @@ void LayerModel::nodeChanged(KisNodeSP node)
 
 void LayerModel::imageChanged()
 {
-    // This is needed to avoid an off-by-one timing issue
-    QTimer::singleShot(0, this, SLOT(imageHasChanged()));
+    d->imageChangedTimer->start();
 }
 
 void LayerModel::imageHasChanged()

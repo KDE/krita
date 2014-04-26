@@ -156,8 +156,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea1.x; y: centerTopArea1.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -174,8 +174,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea2.x; y: centerTopArea2.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -191,8 +191,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea3.x; y: centerTopArea3.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -209,8 +209,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea4.x; y: centerTopArea4.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -226,8 +226,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea5.x; y: centerTopArea5.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -244,8 +244,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea6.x; y: centerTopArea6.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -261,8 +261,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea7.x; y: centerTopArea7.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
 
         PanelDropArea {
@@ -279,8 +279,8 @@ Item {
             opacity: dropOverlay.opacity; Behavior on opacity { NumberAnimation { } }
             x: centerTopArea8.x; y: centerTopArea8.y
             width: Constants.GridWidth; height: Constants.GridHeight / 2;
-            color: "transparent";
-            border.color: "white"; border.width: 2;
+            color: Settings.theme.color("panels/dropArea/fill");
+            border.color: Settings.theme.color("panels/dropArea/border"); border.width: 2;
         }
     //}
 
@@ -297,9 +297,9 @@ Item {
             width: leftArea.width;
             height: leftArea.height
 
-            color: "transparent";
+            color: Settings.theme.color("panels/dropArea/fill");
 
-            border.color: "white";
+            border.color: Settings.theme.color("panels/dropArea/border");
             border.width: 2;
         }
 
@@ -321,9 +321,9 @@ Item {
             width: rightArea.width;
             height: rightArea.height;
 
-            color: "transparent";
+            color: Settings.theme.color("panels/dropArea/fill");
 
-            border.color: "white";
+            border.color: Settings.theme.color("panels/dropArea/border");
             border.width: 2;
         }
     }

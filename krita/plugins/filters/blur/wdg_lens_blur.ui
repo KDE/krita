@@ -6,11 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
+    <width>232</width>
     <height>263</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -31,40 +34,6 @@
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="irisShapeCombo">
-        <item>
-         <property name="text">
-          <string>Triangle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Quadrilateral (4)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pentagon (5)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Hexagon (6)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Heptagon (7)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Octagon (8)</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="2" column="0" colspan="3">
@@ -102,6 +71,40 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="irisShapeCombo">
+        <item>
+         <property name="text">
+          <string>Triangle</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Quadrilateral (4)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Pentagon (5)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Hexagon (6)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Heptagon (7)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Octagon (8)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -113,7 +116,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>18</height>
       </size>
      </property>
     </spacer>
@@ -127,6 +130,11 @@
    <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>irisShapeCombo</tabstop>
+  <tabstop>irisRadiusSlider</tabstop>
+  <tabstop>irisRotationSlider</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

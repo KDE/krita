@@ -24,7 +24,6 @@
 
 #include <kis_view_plugin.h>
 
-
 class ResourceManager : public KisViewPlugin
 {
     Q_OBJECT

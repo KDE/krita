@@ -299,11 +299,11 @@ private:
     }
 
     inline KisFixedPoint l_to_c(KisFixedPoint pixel_l) const {
-        return pixel_l + qreal(0.5);
+        return pixel_l + KisFixedPoint(qreal(0.5));
     }
 
     inline KisFixedPoint c_to_l(KisFixedPoint pixel_c) const {
-        return pixel_c - qreal(0.5);
+        return pixel_c - KisFixedPoint(qreal(0.5));
     }
 
     inline qreal srcToDst(qreal src, int line) const {

@@ -38,8 +38,17 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="bottomMargin">
+      <number>4</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
@@ -1086,6 +1095,12 @@ big!</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="topMargin">
+      <number>6</number>
+     </property>
      <item>
       <widget class="QPushButton" name="showDecorationsBox">
        <property name="sizePolicy">
@@ -1158,7 +1173,7 @@ big!</string>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
+        <enum>Qt::LeftToRight</enum>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

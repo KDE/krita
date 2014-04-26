@@ -22,6 +22,7 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -62,7 +63,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        exrConverter ib(doc);
+        exrConverter ib(doc, !m_chain->manager()->getBatchMode());
 
 
         switch (ib.buildImage(url)) {

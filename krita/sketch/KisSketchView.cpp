@@ -44,6 +44,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
+#include <KoGridData.h>
 
 #include <kundo2stack.h>
 
@@ -350,10 +351,12 @@ void KisSketchView::documentChanged()
     connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
     connect(d->doc->image()->signalRouter(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SIGNAL(imageSizeChanged()));
 
-    SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
-    if (v) {
-        v->setCanvasWidget(d->canvasWidget);
-        v->setDrawCanvas(true);
+    if(scene()) {
+        SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+        if (v) {
+            v->setCanvasWidget(d->canvasWidget);
+            v->setDrawCanvas(true);
+        }
     }
 
     d->imageUpdated(d->canvas->image()->bounds());
@@ -400,6 +403,8 @@ bool KisSketchView::event( QEvent* event )
 
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
 
+                syncObject->gridData = &d->view->document()->gridData();
+
                 syncObject->initialized = true;
             }
 
@@ -430,6 +435,12 @@ bool KisSketchView::event( QEvent* event )
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
                 provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                d->view->document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
+                d->view->document()->gridData().setGridColor(syncObject->gridData->gridColor());
+                d->view->document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
+                d->view->document()->gridData().setShowGrid(syncObject->gridData->showGrid());
+                d->view->document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
                 zoomIn();
                 qApp->processEvents();
@@ -599,7 +610,17 @@ void KisSketchView::Private::zoomChanged()
 
 void KisSketchView::activate()
 {
+    if (d->canvasWidget != d->canvas->canvasWidget()) {
+        d->canvasWidget = d->canvas->canvasWidget();
+		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+		if (v) {
+			v->setCanvasWidget(d->canvasWidget);
+			v->setDrawCanvas(true);
+		}
+    }
     d->canvasWidget->setFocus();
+	Q_ASSERT(d->view);
+	Q_ASSERT(d->view->canvasControllerWidget());
     d->view->canvasControllerWidget()->activate();
 }
 

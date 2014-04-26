@@ -68,7 +68,7 @@ protected:
     KoColorSet* m_currentPalette;
     KoCanvasBase* m_canvas;
     KoColorSetWidget* m_chooser;
-    KoResourceServerAdapter<KoColorSet>* m_serverAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     QString m_defaultPalette;
 };
 

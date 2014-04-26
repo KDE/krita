@@ -128,6 +128,14 @@ public:
     bool useOpenGLTextureBuffer() const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    bool disableDoubleBuffering() const;
+    void setDisableDoubleBuffering(bool disableDoubleBuffering);
+
+    bool disableVSync() const;
+    void setDisableVSync(bool disableVSync);
+
+    bool showAdvancedOpenGLSettings() const;
+
     int numMipmapLevels() const;
     int openGLTextureSize() const;
     int textureOverlapBorder() const;
@@ -186,6 +194,9 @@ public:
 
     QColor canvasBorderColor() const;
     void setCanvasBorderColor(const QColor &color) const;
+
+    bool hideScrollbars() const;
+    void setHideScrollbars(bool value) const;
 
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
@@ -307,6 +318,21 @@ public:
 
     int numDefaultLayers() const;
     void setNumDefaultLayers(int num);
+
+    int lineSmoothingType() const;
+    void setLineSmoothingType(int value);
+
+    qreal lineSmoothingDistance() const;
+    void setLineSmoothingDistance(qreal value);
+
+    qreal lineSmoothingTailAggressiveness() const;
+    void setLineSmoothingTailAggressiveness(qreal value);
+
+    bool lineSmoothingSmoothPressure() const;
+    void setLineSmoothingSmoothPressure(bool value);
+
+    int paletteDockerPaletteViewSectionSize() const;
+    void setPaletteDockerPaletteViewSectionSize(int value) const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

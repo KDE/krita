@@ -21,15 +21,15 @@ import QtQuick 1.1
 TextField {
     property bool enabled: true;
     height: Constants.DefaultFontSize + Constants.DefaultMargin * 4;
-    //shadow: false;
-    /*border.width: 1;
-    border.color: "silver";
-    background: "#63ffffff";
-    radius: height / 2;*/
+
+    border.color: Settings.theme.color("components/panelTextField/border");
+    background: Settings.theme.color("components/panelTextField/background");
+
     Rectangle {
         id: enabledVisualiser;
-        opacity: enabled ? 0 : 0.7;
         anchors.fill: parent;
-        color: "black";
+        color: enabled ?
+            Settings.theme.color("components/panelTextField/enabled") :
+            Settings.theme.color("components/panelTextField/disabled");
     }
 }

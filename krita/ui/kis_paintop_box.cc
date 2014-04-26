@@ -60,7 +60,7 @@
 #include "kis_factory2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_resource_server_provider.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
 
 #include "widgets/kis_popup_button.h"
@@ -73,7 +73,7 @@
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
 
-KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
+KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     : QWidget(parent)
     , m_resourceProvider(view->resourceProvider())
     , m_optionWidget(0)
@@ -292,9 +292,15 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
-    m_view->canvasBase()->createFavoriteResourceManager(this);
-    connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
+    m_favoriteResourceManager = new KisFavoriteResourceManager(this);
+    connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
+    connect(m_favoriteResourceManager, SIGNAL(sigSetFGColor(KoColor)), m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
+    connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
+    m_view->canvasBase()->setFavoriteResourceManager(m_favoriteResourceManager);
+
+    connect(m_resourceProvider, SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -302,6 +308,7 @@ KisPaintopBox::~KisPaintopBox()
     // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
     qDeleteAll(m_paintopOptionWidgets);
+    delete m_favoriteResourceManager;
 }
 
 void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
@@ -568,7 +575,7 @@ void KisPaintopBox::slotSaveActivePreset()
     if (!curPreset)
         return;
 
-    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(true);
+    m_favoriteResourceManager->setBlockUpdates(true);
 
     KisPaintOpPreset* newPreset = curPreset->clone();
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -592,7 +599,7 @@ void KisPaintopBox::slotSaveActivePreset()
     foreach(const QString& tag, tags) {
         rServer->addTag(newPreset, tag);
     }
-    m_view->canvasBase()->favoriteResourceManager()->setBlockUpdates(false);
+    m_favoriteResourceManager->setBlockUpdates(false);
 }
 
 void KisPaintopBox::slotUpdatePreset()
@@ -690,10 +697,9 @@ void KisPaintopBox::slotSetCompositeMode(int index)
 
 void KisPaintopBox::slotSaveToFavouriteBrushes()
 {
-    if(!m_view->canvasBase()->favoriteResourceManager())
-        m_view->canvasBase()->createFavoriteResourceManager(this);
-    else
-        m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
+    if (m_favoriteResourceManager) {
+        m_favoriteResourceManager->showPaletteManager();
+    }
 }
 
 void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
@@ -804,18 +810,16 @@ void KisPaintopBox::slotOpacityChanged(qreal opacity)
 
 void KisPaintopBox::slotPreviousFavoritePreset()
 {
-    if (!m_view->canvasBase()->favoriteResourceManager()) {
-        m_view->canvasBase()->createFavoriteResourceManager(this);
-    }
-    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    if (!m_favoriteResourceManager) return;
+
     int i = 0;
-    foreach (const QString &preset, mgr->favoritePresetList()) {
+    foreach (const QString &preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset) {
             if (i > 0) {
-                mgr->slotChangeActivePaintop(i - 1);
+                m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             }
             else {
-                mgr->slotChangeActivePaintop(mgr->numFavoritePresets() - 1);
+                m_favoriteResourceManager->slotChangeActivePaintop(m_favoriteResourceManager->numFavoritePresets() - 1);
             }
             return;
         }
@@ -826,18 +830,16 @@ void KisPaintopBox::slotPreviousFavoritePreset()
 
 void KisPaintopBox::slotNextFavoritePreset()
 {
-    if (!m_view->canvasBase()->favoriteResourceManager()) {
-        m_view->canvasBase()->createFavoriteResourceManager(this);
-    }
-    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    if (!m_favoriteResourceManager) return;
+
     int i = 0;
-    foreach (const QString &preset, mgr->favoritePresetList()) {
+    foreach (const QString &preset, m_favoriteResourceManager->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset) {
-            if (i < mgr->numFavoritePresets() - 1) {
-                mgr->slotChangeActivePaintop(i + 1);
+            if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
+                m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             }
             else {
-                mgr->slotChangeActivePaintop(0);
+                m_favoriteResourceManager->slotChangeActivePaintop(0);
             }
             return;
         }

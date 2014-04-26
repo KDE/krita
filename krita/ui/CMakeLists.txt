@@ -78,7 +78,6 @@ set(kritaui_LIB_SRCS
     kis_clipboard.cc
     kis_config.cc
     kis_config_notifier.cpp
-    kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
@@ -108,7 +107,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc
-    kis_painting_assistants_manager.cc
+    kis_painting_assistants_decoration.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
@@ -124,7 +123,7 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp
     kis_zoom_manager.cc
-    ko_favorite_resource_manager.cpp
+    kis_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_action.cpp
     kis_action_manager.cpp

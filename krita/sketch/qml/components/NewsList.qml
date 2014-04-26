@@ -32,6 +32,11 @@ PageStack {
                 title: model.title;
                 description: model.pubDate;
 
+                gradient: Gradient {
+                    GradientStop { position: 0; color: Settings.theme.color("components/newsList/listItem/start") }
+                    GradientStop { position: 0.4; color: Settings.theme.color("components/newsList/listItem/stop"); }
+                }
+
                 onClicked: {
                     base.push( detailsPage,
                               { title: model.title,
@@ -45,7 +50,7 @@ PageStack {
                     anchors.verticalCenter: parent.verticalCenter;
 
                     text: "More >";
-                    color: Constants.Theme.SecondaryTextColor;
+                    color: Settings.theme.color("components/newsList/listItem/moreLink")
 
                     font.italic: true;
                 }
@@ -108,6 +113,7 @@ PageStack {
 
                             text: title
                             verticalAlignment: Text.AlignTop;
+                            color: Settings.theme.color("components/newsList/title")
                         }
 
                         Label {
@@ -118,7 +124,7 @@ PageStack {
 
                             text: pubDate;
                             font.pixelSize: Constants.SmallFontSize;
-                            color: Constants.Theme.SecondaryTextColor;
+                            color: Settings.theme.color("components/newsList/date")
                             verticalAlignment: Text.AlignBottom;
                         }
 
@@ -134,12 +140,13 @@ PageStack {
                         horizontalAlignment: Text.AlignJustify;
 
                         text: description;
+                        color: Settings.theme.color("components/newsList/description")
                     }
 
                     Label {
                         text: "< Back";
                         font.pixelSize: Constants.SmallFontSize;
-                        color: Constants.Theme.SecondaryTextColor;
+                        color: Settings.theme.color("components/newsList/backLink")
                     }
                 }
 

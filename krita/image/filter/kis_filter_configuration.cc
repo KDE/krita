@@ -37,6 +37,8 @@ struct KisFilterConfiguration::Private {
     QString name;
     qint32 version;
     QBitArray channelFlags;
+    KisCubicCurve curve;
+    QList< KisCubicCurve > curves;
 };
 
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
@@ -115,6 +117,26 @@ qint32 KisFilterConfiguration::version() const
 void KisFilterConfiguration::setVersion(qint32 version)
 {
     d->version = version;
+}
+
+const KisCubicCurve& KisFilterConfiguration::curve() const
+{
+    return d->curve;
+}
+
+void KisFilterConfiguration::setCurve(const KisCubicCurve& curve)
+{
+    d->curve = curve;
+}
+
+const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
+{
+    return d->curves;
+}
+
+void KisFilterConfiguration::setCurves(QList< KisCubicCurve >& curves)
+{
+    d->curves = curves;
 }
 
 bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const

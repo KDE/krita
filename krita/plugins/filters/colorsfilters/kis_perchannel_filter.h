@@ -56,12 +56,12 @@ public:
     virtual void fromXML(const QDomElement& e);
     virtual void toXML(QDomDocument& doc, QDomElement& root) const;
 
-    void setCurves(QList<KisCubicCurve> &curves);
+    virtual void setCurves(QList<KisCubicCurve> &curves);
     static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
     bool isCompatible(const KisPaintDeviceSP) const;
 
     const QVector<QVector<quint16> >& transfers() const;
-    const QList<KisCubicCurve>& curves() const;
+    virtual const QList<KisCubicCurve>& curves() const;
 private:
     QList<KisCubicCurve> m_curves;
 

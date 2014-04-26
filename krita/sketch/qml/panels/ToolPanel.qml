@@ -23,7 +23,7 @@ import "../components"
 Panel {
     id: base;
     name: "Tool";
-    panelColor: "#000000";
+    colorSet: "tool";
 
     CompositeOpModel {
         id: compositeOpModel;
@@ -100,11 +100,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-" + toolName + ".svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon(toolName);
             onClicked: {
                 fullContentsItem.state = "";
                 changeTool(toolName);
@@ -116,11 +112,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-" + toolName + ".svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon(toolName);
             onClicked: {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
@@ -134,11 +126,7 @@ Panel {
             id: eraserButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-erase.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("erase");
             checked: compositeOpModel.eraserMode;
             onClicked: compositeOpModel.eraserMode = !compositeOpModel.eraserMode;
         },
@@ -146,11 +134,7 @@ Panel {
             id: topApplyButton;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
-            image: "../images/svg/icon-apply.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: Settings.theme.icon("apply");
             visible: false;
             onClicked: state === "peek" ? toolOptionsPeek.item.apply() : toolOptionsFull.item.apply();
         }
@@ -202,7 +186,7 @@ Panel {
                 height: Constants.ToolbarButtonSize;
                 Rectangle {
                     anchors.fill: parent;
-                    opacity: 0.5;
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -213,11 +197,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-black.svg"
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
+                            image: Settings.theme.icon(model.name + "-black");
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 firstTool.toolName = model.name;
@@ -234,7 +214,7 @@ Panel {
                 visible: false;
                 Rectangle {
                     anchors.fill: parent;
-                    opacity: 0.5;
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -245,11 +225,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
-                            image: "../images/svg/icon-" + model.name + "-black.svg"
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
+                            image: Settings.theme.icon(model.name + "-black");
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 secondTool.toolName = model.name;

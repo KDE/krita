@@ -31,9 +31,11 @@
 #include <kis_paint_layer.h>
 #include <KoCompositeOpRegistry.h>
 
-KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<gmic_list<float> > images)
+KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<gmic_list<float> > images, const QRect &dstRect, KisSelectionSP selection)
     : m_nodes(nodes),
-      m_images(images)
+      m_images(images),
+      m_dstRect(dstRect),
+      m_selection(selection)
 {
 }
 
@@ -45,11 +47,21 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         gmic_image<float> &gimg = m_images->_data[index];
         dbgPlugins << "Importing layer index" << index << "Size: "<< gimg._width << "x" << gimg._height << "colorchannels: " << gimg._spectrum;
 
-        KisPaintDeviceSP src = node->paintDevice();
-        KisTransaction transaction("", src);
+        // has selection
+        KisPaintDeviceSP dst = node->paintDevice();
+        KisTransaction transaction("", dst);
+        if (m_selection)
+        {
+            KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());
+            KisGmicSimpleConvertor::convertFromGmicFast(m_images->_data[index], src, 255.0f);
 
-        KisGmicSimpleConvertor::convertFromGmicFast(m_images->_data[index], src, 255.0f);
-
+            KisPainter painter(dst, m_selection);
+            painter.bitBlt(m_dstRect.topLeft(), src, QRect(QPoint(0,0),m_dstRect.size()));
+        }
+        else
+        {
+            KisGmicSimpleConvertor::convertFromGmicFast(m_images->_data[index], dst, 255.0f);
+        }
         transaction.commit(undoAdapter);
     }
 }

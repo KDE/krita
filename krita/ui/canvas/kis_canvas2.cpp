@@ -65,9 +65,8 @@
 #include <QGLFormat>
 #endif
 
-//Favorite resource Manager
-#include <ko_favorite_resource_manager.h>
-#include <kis_paintop_box.h>
+#include <kis_favorite_resource_manager.h>
+#include <kis_popup_palette.h>
 
 #include "input/kis_input_manager.h"
 
@@ -84,12 +83,12 @@ public:
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
         , toolProxy(new KisToolProxy(parent))
-        , favoriteResourceManager(0)
-        , vastScrolling(true) {
+        , vastScrolling(true)
+        , popupPalette(0)
+    {
     }
 
     ~KisCanvas2Private() {
-        delete favoriteResourceManager;
         delete shapeManager;
         delete toolProxy;
     }
@@ -106,7 +105,6 @@ public:
     int openGLFilterMode;
 #endif
     KisToolProxy *toolProxy;
-    KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
@@ -119,14 +117,14 @@ public:
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
+
+    KisPopupPalette *popupPalette;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisView2 *view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
-
-
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
@@ -173,8 +171,8 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
-    if (m_d->favoriteResourceManager != 0) {
-        m_d->favoriteResourceManager->resetPopupPaletteParent(widget);
+    if (m_d->popupPalette) {
+        m_d->popupPalette->setParent(widget);
     }
 
     if(m_d->canvasWidget!=0)
@@ -388,6 +386,10 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 #endif
         createQPainterCanvas();
     }
+    if (m_d->popupPalette) {
+        m_d->popupPalette->setParent(m_d->canvasWidget->widget());
+    }
+
 }
 
 void KisCanvas2::initializeImage()
@@ -790,30 +792,10 @@ QPoint KisCanvas2::documentOffset() const
     return m_d->coordinatesConverter->documentOffset();
 }
 
-void KisCanvas2::createFavoriteResourceManager(KisPaintopBox* paintopbox)
+void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
 {
-    m_d->favoriteResourceManager = new KoFavoriteResourceManager(paintopbox, canvasWidget());
-    connect(this, SIGNAL(favoritePaletteCalled(QPoint)), favoriteResourceManager(), SLOT(slotShowPopupPalette(QPoint)));
-    connect(view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)), favoriteResourceManager(), SLOT(slotAddRecentColor(KoColor)));
-    connect(view()->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), favoriteResourceManager(), SLOT(slotChangeFGColorSelector(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigSetFGColor(KoColor)), view()->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(favoriteResourceManager(), SIGNAL(sigEnableChangeColor(bool)), view()->resourceProvider(), SLOT(slotResetEnableFGChange(bool)));
-}
-
-KoFavoriteResourceManager* KisCanvas2::favoriteResourceManager()
-{
-    return m_d->favoriteResourceManager;
-}
-
-bool KisCanvas2::handlePopupPaletteIsVisible()
-{
-    if (favoriteResourceManager()
-            && favoriteResourceManager()->isPopupPaletteVisible()) {
-
-        favoriteResourceManager()->slotShowPopupPalette();
-        return true;
-    }
-    return false;
+    m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, m_d->canvasWidget->widget());
+    m_d->popupPalette->showPopupPalette(false);
 }
 
 void KisCanvas2::setCursor(const QCursor &cursor)
@@ -833,6 +815,15 @@ void KisCanvas2::slotSelectionChanged()
     }
 }
 
+bool KisCanvas2::isPopupPaletteVisible()
+{
+    if (!m_d->popupPalette) {
+        return false;
+    }
+    return m_d->popupPalette->isVisible();
+}
+
+
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
     m_d->canvasWidget->setWrapAroundViewingMode(value);
@@ -841,6 +832,15 @@ void KisCanvas2::setWrapAroundViewingMode(bool value)
 KoGuidesData *KisCanvas2::guidesData()
 {
     return &m_d->view->document()->guidesData();
+}
+
+void KisCanvas2::slotShowPopupPalette(const QPoint &p)
+{
+    if (!m_d->popupPalette) {
+        return;
+    }
+
+    m_d->popupPalette->showPopupPalette(p);
 }
 
 

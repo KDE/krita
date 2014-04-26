@@ -26,8 +26,8 @@
 
 // HMMM... I used QFile and QDir.... but maybe this should be made network transparent?
 
-KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
-        : m_basePath(path)
+KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype)
+    : m_basePath(path)
 {
     Q_D(KoStore);
     //kDebug(30002) << "path:" << path
@@ -35,6 +35,7 @@ KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
 
     //kDebug(30002) << "base path:" << m_basePath;
 
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode);
 }
 

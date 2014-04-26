@@ -2,7 +2,7 @@ project(krita)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# To avoid the confusion of an endless stream of Eigen warnings. 
+# To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs)
 endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
@@ -24,8 +24,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:5000000") # for g'mic...
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+    if (USE_BREAKPAD)
+        include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
+    endif (USE_BREAKPAD)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 if(NOT WIN32)
@@ -96,7 +99,7 @@ set(KRITA_INCLUDES
 
     # For generated files from .ui
     ${CMAKE_BINARY_DIR}/krita/ui
-    
+
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -127,6 +130,11 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
+
+if (WIN32 AND USE_BREAKPAD)
+        add_subdirectory( crashreporter )
+endif (WIN32 AND USE_BREAKPAD)
+
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
@@ -137,7 +145,16 @@ kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(krita_KDEINIT_SRCS main.cc)
+set(krita_KDEINIT_SRCS main.cc kis_splash_screen.cpp)
+kde4_add_ui_files(krita_KDEINIT_SRCS
+    wdgsplash.ui
+)
+
+if(WIN32 AND USE_BREAKPAD)
+    set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
+
 kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
@@ -147,7 +164,7 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita kritaui)
+target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
 target_link_libraries(krita kdeinit_krita)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})

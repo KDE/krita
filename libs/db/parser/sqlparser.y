@@ -59,6 +59,7 @@
 %token VARCHAR
 %token WHERE
 %token SCAN_ERROR
+%token NOT_LIKE
 
 //%token UMINUS
 //%token SQL_ABS
@@ -543,7 +544,7 @@ using namespace KexiDB;
 //LESS_THAN GREATER_THAN 
 %nonassoc LESS_OR_EQUAL GREATER_OR_EQUAL 
 %nonassoc NOT_EQUAL NOT_EQUAL2
-%nonassoc SQL_IN LIKE ILIKE SIMILAR_TO NOT_SIMILAR_TO
+%nonassoc SQL_IN LIKE NOT_LIKE ILIKE SIMILAR_TO NOT_SIMILAR_TO
 //%nonassoc	LIKE ILIKE SIMILAR
 //%nonassoc	ESCAPE
 //%nonassoc	OVERLAPS
@@ -918,6 +919,10 @@ aExpr5 NOT_EQUAL2 aExpr4
 | aExpr5 LIKE aExpr4
 {
 	$$ = new BinaryExpr(KexiDBExpr_Relational, $1, LIKE, $3);
+}
+| aExpr5 NOT_LIKE aExpr4
+{
+    $$ = new BinaryExpr(KexiDBExpr_Relational, $1, NOT_LIKE, $3);
 }
 | aExpr5 SQL_IN aExpr4
 {

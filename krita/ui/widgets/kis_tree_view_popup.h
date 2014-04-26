@@ -38,6 +38,7 @@ class KisTreeViewPopup : public KisPopupButton
     Q_OBJECT
 public:
     KisTreeViewPopup(QWidget* parent);
+    ~KisTreeViewPopup();
     void setModel(QAbstractItemModel* model);
     void setCurrentFilterId(const QString& id);
 signals:

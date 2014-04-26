@@ -33,6 +33,7 @@ class KisView2;
 class KAction;
 class KoZoomAction;
 class KoRuler;
+class KoUnit;
 class KoCanvasController;
 class QPoint;
 
@@ -67,6 +68,7 @@ private slots:
     void pageOffsetChanged();
     void zoomTo100();
     void showGuides();
+    void applyRulersUnit(const KoUnit &baseUnit);
 
 private:
 

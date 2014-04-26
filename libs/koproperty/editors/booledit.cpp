@@ -206,29 +206,6 @@ void BoolEdit::paintEvent( QPaintEvent * event )
         v.toBool() ? m_yesText : m_noText, false /*2state*/);
 }
 
-/*void
-BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, "");
-}*/
-
-/*
-void BoolEdit::setState(bool state)
-{
-    if (state) {
-        setIcon(koIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
-        setText(i18n("Yes"));
-    } else {
-        setIcon(koIcon("button_no")); //QIcon(g_boolEdit->noIcon));
-        setText(i18n("No"));
-    }
-}
-*/
-/*void BoolEdit::resizeEvent(QResizeEvent *ev)
-{
-    m_toggle->resize(ev->size());
-}*/
-
 bool BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {
     if (e->type() == QEvent::KeyPress) {

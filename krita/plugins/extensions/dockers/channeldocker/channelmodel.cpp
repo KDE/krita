@@ -129,8 +129,9 @@ void ChannelModel::slotLayerActivated(KisLayerSP layer)
     endResetModel();
 }
 
-void ChannelModel::slotColorSpaceChanged(const KoColorSpace */*colorSpace*/)
+void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
 {
+    Q_UNUSED(colorSpace);
     slotLayerActivated(m_currentLayer);
 }
 

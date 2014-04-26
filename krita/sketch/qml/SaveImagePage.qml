@@ -26,8 +26,11 @@ Page {
     property Item view;
     property bool updateCurrentFile: true;
 
+    signal finished(string file, string type);
+
     Rectangle {
         anchors.fill: parent;
+        color: Settings.theme.color("pages/save/background");
     }
 
     Header {
@@ -45,15 +48,14 @@ Page {
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            highlightColor: Constants.Theme.HighlightColor;
-            image: "images/svg/icon-back.svg";
+            image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-up.svg";
+            image: Settings.theme.icon("up");
             onClicked: view.model.path = view.model.parentFolder;
         }
 
@@ -63,16 +65,17 @@ Page {
             anchors.bottom: parent.bottom;
             anchors.horizontalCenter: parent.horizontalCenter;
 
-            color: "white";
+            color: Settings.theme.color("pages/save/location");
             text: view.model.path;
         }
     }
 
-    Image {
-        anchors.top: header.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        source: "images/shadow-smooth.png";
+    Shadow {
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+        }
         z: 5;
     }
 
@@ -111,7 +114,7 @@ Page {
         }
 
         height: Constants.GridHeight;
-        color: "#000000"
+        color: Settings.theme.color("pages/save/footer")
 
         Row {
             anchors {
@@ -140,7 +143,7 @@ Page {
 
                 radius: Constants.GridHeight * 0.25;
 
-                color: "#000000"
+                color: Settings.theme.color("pages/save/footer");
 
                 ExpandingListView {
                     id: fileType;
@@ -170,19 +173,12 @@ Page {
                 height: Constants.GridHeight * 0.75;
                 width: Constants.GridWidth * 0.5;
 
-                image: "images/svg/icon-filesave.svg";
+                image: Settings.theme.icon("filesave");
 
                 onClicked: {
                     if ( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
-                        base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
-
-                        if (base.updateCurrentFile) {
-                            // The current file is updated by the saveAs call above
-                            Settings.temporaryFile = false;
-                        }
-                        pageStack.pop();
-                        savingDialog.show("Saving image to " + filePath);
+                        base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
                     }
                 }
             }
@@ -198,10 +194,12 @@ Page {
             width: GridView.view.cellWidth;
             z: 10;
 
-            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
-            imageShadow: model.fileType != "inode/directory" ? true : false;
-            imageFillMode: model.fileType != "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
-            imageSmooth: model.fileType != "inode/directory" ? false : true;
+            property bool directory: model.fileType === "inode/directory";
+
+            imageShadow: directory ? false : true;
+            image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
+            image.fillMode: directory ? Image.PreserveAspectFit : Image.PreserveAspectCrop;
+            image.smooth: true;
 
             title: model.fileName;
             description: model.fileType != "inode/directory" ? model.date : "";

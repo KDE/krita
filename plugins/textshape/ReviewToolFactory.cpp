@@ -49,12 +49,3 @@ KoToolBase *ReviewToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ReviewTool(canvas);
 }
-
-bool ReviewToolFactory::canCreateTool(KoCanvasBase* canvas) const
-{
-    Q_UNUSED(canvas);
-    //if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
-    //    return true;
-    //return false;
-    return true;
-}

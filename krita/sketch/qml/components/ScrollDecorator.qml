@@ -31,12 +31,14 @@ Item {
             rightMargin: Constants.DefaultMargin;
         }
         visible: (flickableItem.contentHeight > flickableItem.height);
-        color: "silver";
+        color: Settings.theme.color("components/scrollDecorator/base");
+        border.width: 1;
+        border.color: Settings.theme.color("components/scrollDecorator/border");
         radius: Constants.DefaultMargin / 2;
         width: Constants.DefaultMargin;
         height: (flickableItem.height * (flickableItem.height / flickableItem.contentHeight)) - Constants.DefaultMargin * 2;
         opacity: flickableItem.moving ? 0.5 : 0.2;
-        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         y: (flickableItem.contentY * (flickableItem.height / flickableItem.contentHeight)) + Constants.DefaultMargin;
     }
     Rectangle {
@@ -46,12 +48,14 @@ Item {
             bottomMargin: Constants.DefaultMargin;
         }
         visible: (flickableItem.contentWidth > flickableItem.width);
-        color: "silver";
+        color: Settings.theme.color("components/scrollDecorator/base");
+        border.width: 1;
+        border.color: Settings.theme.color("components/scrollDecorator/border");
         radius: Constants.DefaultMargin / 2;
         height: Constants.DefaultMargin;
         width: (flickableItem.width * (flickableItem.width / flickableItem.contentWidth)) - Constants.DefaultMargin * 2;
         opacity: flickableItem.moving ? 0.5 : 0.2;
-        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         x: (flickableItem.contentX * (flickableItem.width / flickableItem.contentWidth)) + Constants.DefaultMargin;
     }
 }

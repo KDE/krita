@@ -50,7 +50,7 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::CheckStateRole) {
         QString selectedSensorId = KisDynamicSensor::sensorsIds()[index.row()].id();
-        KisDynamicSensor *sensor = m_curveOption->sensor(selectedSensorId, false);
+        KisDynamicSensorSP sensor = m_curveOption->sensor(selectedSensorId, false);
         if (sensor) {
             //qDebug() << sensor->id() << sensor->isActive();
             return QVariant(sensor->isActive() ? Qt::Checked : Qt::Unchecked);
@@ -73,7 +73,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         }
         else {
             //qDebug() << "Asking for" << KisDynamicSensor::sensorsIds()[index.row()].id();
-            KisDynamicSensor *sensor = m_curveOption->sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), false);
+            KisDynamicSensorSP sensor = m_curveOption->sensor(KisDynamicSensor::sensorsIds()[index.row()].id(), false);
             //qDebug() << "\tgot" << sensor;
             if (!sensor) {
                 sensor = KisDynamicSensor::id2Sensor(KisDynamicSensor::sensorsIds()[index.row()].id());
@@ -92,7 +92,7 @@ Qt::ItemFlags KisMultiSensorsModel::flags(const QModelIndex & /*index */) const
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
 }
 
-KisDynamicSensor *KisMultiSensorsModel::getSensor(const QModelIndex& index)
+KisDynamicSensorSP KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
     if (!index.isValid()) return 0;
     QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
@@ -107,7 +107,7 @@ void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, cons
     m_curveOption->setCurve(selectedSensorId, useSameCurve, curve);
 }
 
-QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensor *arg1)
+QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensorSP arg1)
 {
     return index(KisDynamicSensor::sensorsIds().indexOf(KoID(arg1->id())));
 }

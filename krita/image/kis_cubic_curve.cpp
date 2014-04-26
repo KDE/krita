@@ -242,6 +242,7 @@ struct KisCubicCurve::Data : public QSharedData {
     Data(const Data& data) : QSharedData() {
         init();
         points = data.points;
+        name = data.name;
     }
     void init() {
         validSpline = false;
@@ -251,6 +252,7 @@ struct KisCubicCurve::Data : public QSharedData {
     ~Data() {
     }
 
+    mutable QString name;
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
     mutable bool validSpline;
@@ -400,6 +402,16 @@ void KisCubicCurve::removePoint(int idx)
     d->data.detach();
     d->data->points.removeAt(idx);
     d->data->invalidate();
+}
+
+const QString& KisCubicCurve::name() const
+{
+    return d->data->name;
+}
+
+void KisCubicCurve::setName(const QString& name)
+{
+    d->data->name = name;
 }
 
 QString KisCubicCurve::toString() const

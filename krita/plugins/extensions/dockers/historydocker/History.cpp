@@ -19,7 +19,6 @@
 #include "History.h"
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

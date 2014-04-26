@@ -562,3 +562,22 @@ target_link_libraries(KisFilterWeightsBufferTest  ${KDE4_KDEUI_LIBS} kritaimage 
 set(kis_filter_weights_applicator_test_SRCS kis_filter_weights_applicator_test.cpp )
 kde4_add_unit_test(KisFilterWeightsApplicatorTest TESTNAME krita-image-KisFilterWeightsApplicatorTest ${kis_filter_weights_applicator_test_SRCS})
 target_link_libraries(KisFilterWeightsApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_fill_interval_test_SRCS kis_fill_interval_test.cpp )
+kde4_add_unit_test(KisFillIntervalTest TESTNAME krita-image-FillInterval-Test ${kis_fill_interval_test_SRCS})
+target_link_libraries(KisFillIntervalTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
+set(kis_fill_interval_map_test_SRCS kis_fill_interval_map_test.cpp )
+kde4_add_unit_test(KisFillIntervalMapTest TESTNAME krita-image-FillIntervalMap-Test ${kis_fill_interval_map_test_SRCS})
+target_link_libraries(KisFillIntervalMapTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_scanline_fill_test_SRCS kis_scanline_fill_test.cpp )
+kde4_add_unit_test(KisScanlineFillTest TESTNAME krita-image-ScanlineFill-Test ${kis_scanline_fill_test_SRCS})
+target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

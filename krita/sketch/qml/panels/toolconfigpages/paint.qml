@@ -34,6 +34,7 @@ Item {
             margins: Constants.DefaultMargin;
         }
         text: "Blending mode:"
+        font: Settings.theme.font("panelSection");
     }
     ExpandingListView {
         id: compositeModeList
@@ -111,8 +112,7 @@ Item {
             Label {
                 id: smoothingLabel
                 horizontalAlignment: Text.AlignLeft;
-                font.pixelSize: Constants.DefaultFontSize;
-                font.bold: true;
+                font: Settings.theme.font("panelSection");
                 height: visible ? Constants.GridHeight / 2 : 0;
                 text: "Smoothing:";
             }
@@ -132,7 +132,7 @@ Item {
                 id: smoothnessQualitySlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 placeholder: "Distance";
                 min: 3; max: 1000; decimals: 1;
@@ -144,7 +144,7 @@ Item {
                 id: smoothnessFactorSlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 placeholder: "Stroke Ending"
                 useExponentialValue: true;
@@ -156,7 +156,7 @@ Item {
                 id: smoothPressureCheck;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? Constants.DefaultFontSize + Constants.DefaultMargin * 4 : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 text: "Smooth Pressure";
                 checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
@@ -172,7 +172,7 @@ Item {
             Connections {
                 target: toolManager;
                 onCurrentToolChanged: {
-                    if (toolManager.currentTool.smoothnessQuality === undefined)
+                    if (toolManager.currentTool === null || toolManager.currentTool.smoothnessQuality === undefined)
                         return;
                     smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                     smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
@@ -194,8 +194,7 @@ Item {
             visible: fullView;
             width: parent.width;
             horizontalAlignment: Text.AlignLeft;
-            font.pixelSize: Constants.LargeFontSize;
-            font.bold: true;
+            font: Settings.theme.font("panelSection");
             height: Constants.GridHeight / 2;
             text: "Mirror:";
         }
@@ -206,8 +205,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter;
             Button {
                 id: mirrorVertical;
-                image: "../../images/svg/icon-mirror_v-black.svg"
-                width: Constants.GridWidth * 2 / 5;
+                image: Settings.theme.icon("mirror_v-black");
+                width: Constants.GridWidth * 2 / 3;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -218,8 +217,8 @@ Item {
             Button {
                 id: mirrorHorizontal;
                 anchors.left: mirrorVertical.right;
-                image: "../../images/svg/icon-mirror_h-black.svg"
-                width: Constants.GridWidth * 2 / 5;
+                image: Settings.theme.icon("mirror_h-black")
+                width: Constants.GridWidth * 2 / 3;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -230,8 +229,8 @@ Item {
             Button {
                 id: mirrorCenter;
                 anchors.left: mirrorHorizontal.right;
-                image: "../../images/svg/icon-mirror_c-black.svg"
-                width: Constants.GridWidth * 2 / 5;
+                image: Settings.theme.icon("mirror_c-black")
+                width: Constants.GridWidth * 2 / 3;
                 height: width;
                 color: "transparent";
                 shadow: false;

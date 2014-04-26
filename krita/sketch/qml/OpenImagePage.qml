@@ -22,10 +22,11 @@ import "components"
 
 Page {
     id: base;
-    signal itemClicked();
+    signal finished(string file);
 
     Rectangle {
         anchors.fill: parent;
+        color: Settings.theme.color("pages/open/background");
     }
 
     Header {
@@ -44,15 +45,14 @@ Page {
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            highlightColor: Constants.Theme.HighlightColor;
-            image: "images/svg/icon-back.svg";
+            image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-up.svg";
+            image: Settings.theme.icon("up");
             onClicked: view.model.path = view.model.parentFolder;
         }
 
@@ -62,16 +62,17 @@ Page {
             anchors.bottom: parent.bottom;
             anchors.horizontalCenter: parent.horizontalCenter;
 
-            color: "white";
+            color: Settings.theme.color("pages/open/location");
             text: view.model.path;
         }
     }
 
-    Image {
-        anchors.top: header.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        source: "images/shadow-smooth.png";
+    Shadow {
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+        }
         z: 5;
     }
 
@@ -114,11 +115,12 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            image: model.fileType !== "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
-            imageShadow: model.fileType !== "inode/directory" ? true : false;
-            imageFillMode: model.fileType !== "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
-            imageSmooth: model.fileType !== "inode/directory" ? false : true;
-            imageCache: model.fileType !== "inode/directory" ? true : false;
+            property bool directory: model.fileType === "inode/directory";
+
+            imageShadow: directory ? false : true;
+            image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
+            image.fillMode: directory ? Image.PreserveAspectFit : Image.PreserveAspectCrop;
+            image.smooth: true;
 
             title: model.fileName;
             description: model.fileType !== "inode/directory" ? model.date : "";
@@ -130,10 +132,7 @@ Page {
                 if ( model.fileType === "inode/directory" ) {
                     view.startNavigation(model.path);
                 } else {
-                    base.itemClicked();
-                    pageStack.pop();
-
-                    Settings.currentFile = model.path;
+                    base.finished(model.path);
                 }
             }
         }

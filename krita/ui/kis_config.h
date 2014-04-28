@@ -287,8 +287,15 @@ public:
     bool useOcio() const;
     void setUseOcio(bool useOCIO) const;
 
-    bool useOcioEnvironmentVariable() const;
-    void setUseOcioEnvironmentVariable(bool useOCIO) const;
+
+    enum OcioColorManagementMode {
+        INTERNAL = 0,
+        OCIO_CONFIG,
+        OCIO_ENVIRONMENT
+    };
+
+    OcioColorManagementMode ocioColorManagementMode() const;
+    void setOcioColorManagementMode(OcioColorManagementMode mode) const;
 
     QString ocioConfigurationPath() const;
     void setOcioConfigurationPath(const QString &path) const;

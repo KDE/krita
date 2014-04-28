@@ -81,13 +81,19 @@ private slots:
 
     void updateDisplaySettings();
 
-    void updateWidgets();
+    void slotColorManagementModeChanged();
+
+    void writeControls();
     void selectOcioConfiguration();
     void resetOcioConfiguration();
-    void refillComboboxes();
     void refillViewCombobox();
     void selectLut();
     void clearLut();
+
+private:
+    void enableControls();
+    void refillControls();
+
 
 private:
 

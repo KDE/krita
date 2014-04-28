@@ -955,14 +955,15 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
-bool KisConfig::useOcioEnvironmentVariable() const
+KisConfig::OcioColorManagementMode
+KisConfig::ocioColorManagementMode() const
 {
-    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", false);
+    return (OcioColorManagementMode) m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL);
 }
 
-void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO) const
+void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
 {
-    m_cfg.writeEntry("Krita/Ocio/UseEnvironment", useOCIO);
+    m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) mode);
 }
 
 QString KisConfig::ocioConfigurationPath() const

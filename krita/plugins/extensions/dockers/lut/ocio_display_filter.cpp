@@ -89,6 +89,11 @@ void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32
     }
 }
 
+bool OcioDisplayFilter::useInternalColorManagement() const
+{
+    return false;
+}
+
 #ifdef HAVE_OPENGL
 
 QString OcioDisplayFilter::program() const

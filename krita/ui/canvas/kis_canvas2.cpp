@@ -481,8 +481,25 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
+        KisImageWSP image = this->image();
+        image->barrierLock();
+
+        bool needsInternalColorManagement =
+            !displayFilter || displayFilter->useInternalColorManagement();
+
+        bool needsFullRefresh =
+            m_d->openGLImageTextures->
+            setInternalColorManagementActive(needsInternalColorManagement);
+
         m_d->canvasWidget->setDisplayFilter(displayFilter);
-        updateCanvas();
+
+        if (needsFullRefresh) {
+            startUpdateInPatches(image->bounds());
+        } else {
+            updateCanvas();
+        }
+
+        image->unlock();
 #endif
     }
     else {

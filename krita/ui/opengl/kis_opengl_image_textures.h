@@ -76,6 +76,9 @@ public:
 
     void setChannelFlags(const QBitArray &channelFlags);
 
+    bool internalColorManagementActive() const;
+    bool setInternalColorManagementActive(bool value);
+
     /**
      * The background checkers texture.
      */
@@ -145,7 +148,6 @@ private:
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
-    const KoColorSpace* tilesColorSpace() const;
 
 private:
     KisImageWSP m_image;
@@ -153,6 +155,22 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+
+    /**
+     * If the destination color space coincides with the one of the image,
+     * then effectively, there is no conversion happens. That is used
+     * for working with OCIO.
+     */
+    const KoColorSpace* m_tilesDestinationColorSpace;
+
+    /**
+     * Shows whether the internal color management should be enabled or not.
+     * Please note that if you disable color management, *but* your image color
+     * space will not be supported (non-RGB), then it will be enabled anyway.
+     * And this valiable will hold the real state of affairs!
+     */
+    bool m_internalColorManagementActive;
+
     GLuint m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;

@@ -21,6 +21,8 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
+#include <kmessagebox.h>
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
@@ -46,6 +48,8 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
+    , m_tilesDestinationColorSpace(0)
+    , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_allChannelsSelected(true)
     , m_useOcio(false)
@@ -156,7 +160,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
-    const int pixelSize = tilesColorSpace()->pixelSize();
+    const int pixelSize = m_tilesDestinationColorSpace->pixelSize();
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config;
@@ -225,7 +229,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
 
-    const KoColorSpace *dstCS = tilesColorSpace();
+    const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
 
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
@@ -251,34 +255,6 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
         }
     }
     return info;
-}
-
-const KoColorSpace* KisOpenGLImageTextures::tilesColorSpace() const
-{
-    const KoColorSpace *dstCS = 0;
-
-    switch(m_texturesInfo.type) {
-    case GL_UNSIGNED_BYTE:
-        dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
-        break;
-    case GL_UNSIGNED_SHORT:
-        dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
-        break;
-#if defined(HAVE_OPENEXR)
-    case GL_HALF_FLOAT_ARB:
-        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", m_monitorProfile);
-        break;
-#endif
-    case GL_FLOAT:
-        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", m_monitorProfile);
-        break;
-    default:
-        qFatal("Unknown m_imageTextureType");
-    }
-
-    //qDebug() << "monitor colorspace" << dstCS;
-
-    return dstCS;
 }
 
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
@@ -343,6 +319,8 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_monitorProfile = monitorProfile;
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
+
+    createImageTextureTiles();
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
@@ -384,6 +362,27 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;
 }
 
+bool KisOpenGLImageTextures::internalColorManagementActive() const
+{
+    return m_internalColorManagementActive;
+}
+
+bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
+{
+    bool needsFinalRegeneration = m_internalColorManagementActive != value;
+
+
+    if (needsFinalRegeneration) {
+        m_internalColorManagementActive = value;
+        createImageTextureTiles();
+
+        // at this point the value of m_internalColorManagementActive might
+        // have been forcely reverted to 'false' in case of some problems
+    }
+
+    return needsFinalRegeneration;
+}
+
 void KisOpenGLImageTextures::updateTextureFormat()
 {
     m_texturesInfo.internalFormat = GL_RGBA8;
@@ -393,6 +392,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     KoID colorModelId = m_image->colorSpace()->colorModelId();
     KoID colorDepthId = m_image->colorSpace()->colorDepthId();
+
+    KoID destinationColorModelId = RGBAColorModelID;
+    KoID destinationColorDepthId = Integer8BitsColorDepthID;
 
     dbgUI << "Choosing texture format:";
 
@@ -408,44 +410,93 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 dbgUI << "Using ATI half";
             }
 
-            if (GLEW_ARB_half_float_pixel) {
-                dbgUI << "Pixel type half";
+            bool haveBuiltInOpenExr = false;
+#ifdef HAVE_OPENEXR
+            haveBuiltInOpenExr = true;
+#endif
+
+            if (haveBuiltInOpenExr && GLEW_ARB_half_float_pixel) {
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
+                destinationColorDepthId = Float16BitsColorDepthID;
+                dbgUI << "Pixel type half";
             } else {
-                dbgUI << "Pixel type float";
                 m_texturesInfo.type = GL_FLOAT;
+                destinationColorDepthId = Float32BitsColorDepthID;
+                dbgUI << "Pixel type float";
             }
             m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
-
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
-                m_texturesInfo.type = GL_FLOAT;
-            }
-            else if (GLEW_ATI_texture_float) {
+            } else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
-                m_texturesInfo.type = GL_FLOAT;
             }
+
+            m_texturesInfo.type = GL_FLOAT;
             m_texturesInfo.format = GL_RGBA;
+            destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
-            dbgUI << "Using 16 bits rgba";
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
+            m_texturesInfo.format = GL_BGRA;
+            destinationColorDepthId = Integer16BitsColorDepthID;
+            dbgUI << "Using 16 bits rgba";
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID) {
-            dbgUI << "Using conversion to 16 bits rgba";
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
+            m_texturesInfo.format = GL_BGRA;
+            destinationColorDepthId = Integer16BitsColorDepthID;
+            dbgUI << "Using conversion to 16 bits rgba";
         }
     }
 #endif
+
+    if (!m_internalColorManagementActive &&
+        colorModelId != destinationColorModelId) {
+
+        KMessageBox::information(0,
+                                 "It was requested to disable final color "
+                                 "conversion for a image that has non-RGB "
+                                 "color space. This is a bug in Krita. "
+                                 "Please report us how you managed to get "
+                                 "this message.\n\n"
+                                 "Right now the internal color conversion "
+                                 "into the monitor profile will be activated. "
+                                 "Please take it into account if you use OCIO "
+                                 "or activated it for some other reason.",
+                                 "Internal color management was activated",
+                                 "messagebox_InternalColorManagementWasActivated");
+
+        qWarning() << "WARNING: Internal color management was forcely enabled";
+        qWarning() << ppVar(m_image->colorSpace());
+        qWarning() << ppVar(destinationColorModelId);
+        qWarning() << ppVar(destinationColorDepthId);
+
+        m_internalColorManagementActive = false;
+    }
+
+    const KoColorProfile *profile =
+        m_internalColorManagementActive ||
+        colorModelId != destinationColorModelId ?
+        m_monitorProfile : m_image->colorSpace()->profile();
+
+    /**
+     * TODO: add an optimization so that the tile->convertTo() method
+     *       would not be called when not needed (DK)
+     */
+
+    m_tilesDestinationColorSpace =
+        KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
+                                                     destinationColorDepthId.id(),
+                                                     profile);
 }
 
 #include "kis_opengl_image_textures.moc"

@@ -49,6 +49,7 @@ public:
     void filter(quint8 *pixels, quint32 numPixels);
     void approximateInverseTransformation(quint8 *pixels, quint32 numPixels);
     void approximateForwardTransformation(quint8 *pixels, quint32 numPixels);
+    bool useInternalColorManagement() const;
 
 #ifdef HAVE_OPENGL
     virtual QString program() const;
@@ -65,6 +66,7 @@ public:
     OCIO_CHANNEL_SWIZZLE swizzle;
     float exposure;
     float gamma;
+    bool forceInternalColorManagement;
 
 private:
 

@@ -79,7 +79,6 @@
 
 // for the performance update
 #include <kis_cubic_curve.h>
-#include <config-ocio.h>
 
 #include "input/config/kis_input_configuration_page.h"
 
@@ -215,17 +214,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
-
-#ifndef HAVE_OCIO
-    m_page->grpOcio->hide();
-#endif
-    m_page->grpOcio->setChecked(cfg.useOcio());
-    m_page->chkOcioUseEnvironment->setChecked(cfg.useOcioEnvironmentVariable());
-    enableOcioConfigPath(cfg.useOcioEnvironmentVariable());
-    m_page->txtOcioConfigPath->setText(cfg.ocioConfigurationPath());
-    connect(m_page->bnSelectOcioConfigPath, SIGNAL(clicked()), this, SLOT(selectOcioConfigPath()));
-    connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
-
 }
 
 void ColorSettingsTab::installProfile()
@@ -298,9 +286,6 @@ void ColorSettingsTab::setDefault()
     m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
 
-    m_page->chkOcioUseEnvironment->setChecked(true);
-    m_page->txtOcioConfigPath->setText(QString());
-
     QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
     Q_ASSERT(button);
 
@@ -346,28 +331,6 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
-}
-
-void ColorSettingsTab::selectOcioConfigPath()
-{
-    QString filename = m_page->txtOcioConfigPath->text();
-
-    KoFileDialog dialog(m_page, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Select OpenColorIO Configuration"));
-    dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
-    filename = dialog.url();
-    QFile f(filename);
-    if (f.exists()) {
-        m_page->txtOcioConfigPath->setText(filename);
-    }
-}
-
-void ColorSettingsTab::enableOcioConfigPath(bool enable)
-{
-    m_page->lblOcioConfig->setEnabled(!enable);
-    m_page->txtOcioConfigPath->setEnabled(!enable);
-    m_page->bnSelectOcioConfigPath->setEnabled(!enable);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -786,10 +749,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
-
-        cfg.setUseOcio(dialog->m_colorSettings->m_page->grpOcio->isChecked());
-        cfg.setUseOcioEnvironmentVariable(dialog->m_colorSettings->m_page->chkOcioUseEnvironment->isChecked());
-        cfg.setOcioConfigurationPath(dialog->m_colorSettings->m_page->txtOcioConfigPath->text());
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );

@@ -39,6 +39,7 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+    FontFamilyAction.cpp
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp

@@ -38,7 +38,7 @@ Item {
         width: Constants.DefaultMargin;
         height: (flickableItem.height * (flickableItem.height / flickableItem.contentHeight)) - Constants.DefaultMargin * 2;
         opacity: flickableItem.moving ? 0.5 : 0.2;
-        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         y: (flickableItem.contentY * (flickableItem.height / flickableItem.contentHeight)) + Constants.DefaultMargin;
     }
     Rectangle {
@@ -55,7 +55,7 @@ Item {
         height: Constants.DefaultMargin;
         width: (flickableItem.width * (flickableItem.width / flickableItem.contentWidth)) - Constants.DefaultMargin * 2;
         opacity: flickableItem.moving ? 0.5 : 0.2;
-        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         x: (flickableItem.contentX * (flickableItem.width / flickableItem.contentWidth)) + Constants.DefaultMargin;
     }
 }

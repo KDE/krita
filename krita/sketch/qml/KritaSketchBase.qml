@@ -47,7 +47,7 @@ Item {
             onCurrentPageChanged: window.currentSketchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
             initialPage: welcomePage;
 
-            transitionDuration: 500;
+            transitionDuration: Constants.AnimationDuration;
 
             Component { id: welcomePage; WelcomePage { } }
 

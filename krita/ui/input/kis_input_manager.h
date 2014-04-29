@@ -113,7 +113,7 @@ public:
     QPointF widgetToDocument(const QPointF &position);
 
 public Q_SLOTS:
-    void setMirrorAxis();
+    void setMirrorAxes();
 	void stopIgnoringEvents();
 
 private Q_SLOTS:

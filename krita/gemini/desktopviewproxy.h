@@ -44,6 +44,9 @@ public Q_SLOTS:
     void loadExistingAsNew();
     void slotFileOpenRecent(const KUrl &url);
 
+Q_SIGNALS:
+    void documentSaved();
+
 private:
     class Private;
     Private* d;

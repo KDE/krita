@@ -132,7 +132,7 @@ Item {
                 id: smoothnessQualitySlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 placeholder: "Distance";
                 min: 3; max: 1000; decimals: 1;
@@ -144,7 +144,7 @@ Item {
                 id: smoothnessFactorSlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 placeholder: "Stroke Ending"
                 useExponentialValue: true;
@@ -156,7 +156,7 @@ Item {
                 id: smoothPressureCheck;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? Constants.DefaultFontSize + Constants.DefaultMargin * 4 : 0;
-                Behavior on height { NumberAnimation { duration: 150; } }
+                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
                 width: parent.width;
                 text: "Smooth Pressure";
                 checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;

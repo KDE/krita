@@ -53,7 +53,7 @@ public:
     }
 
 private:
-    TextBrushInitializationWorkaround() {}
+    TextBrushInitializationWorkaround() : m_settings(0) {}
 
 private:
     KisBrushSP m_brush;

@@ -74,6 +74,7 @@ Q_SIGNALS:
     void currentSketchPageChanged();
     void temporaryFileChanged();
     void sketchKisViewChanged();
+    void documentSaved();
 
 private Q_SLOTS:
     void switchDesktopForced();

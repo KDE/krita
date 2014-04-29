@@ -102,6 +102,7 @@ class KoResourceTableModel : public KoResourceModelBase
         void hideResource(KoResource* resource);
         void removeOneSelected(const QString& filename);
         int getDataType();
+        void configureFilters(int filterType, bool enable);
 
         QModelIndex indexFromResource(KoResource* resource) const;
         QStringList assignedTagsList(KoResource *resource) const;

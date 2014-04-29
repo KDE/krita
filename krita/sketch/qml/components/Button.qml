@@ -72,7 +72,7 @@ Item {
         Rectangle {
             id: checkedVisualiser;
             opacity: base.checked ? 1 : 0;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors.fill: parent;
             anchors.margins: 2;
             color: base.checkedColor;
@@ -86,7 +86,7 @@ Item {
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             opacity: base.enabled ? 1 : 0.7;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;

@@ -174,8 +174,8 @@ Panel {
                     PropertyChanges { target: addLayerButtons; height: Constants.GridHeight; opacity: 1; }
                 }
             ]
-            Behavior on height { PropertyAnimation { duration: 150;  } }
-            Behavior on opacity { PropertyAnimation { duration: 150;  } }
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration;  } }
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration;  } }
             clip: true;
             height: 0;
             opacity: 0;

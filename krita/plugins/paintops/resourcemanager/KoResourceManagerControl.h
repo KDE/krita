@@ -47,11 +47,12 @@ public:
     void filterResourceTypes(int index);
 
 
-    void createPack(int type);
-    void install(int type);
-    void uninstall(int type);
+    bool createPack(int type);
+    bool install(int type);
+    bool uninstall(int type);
     void remove(int type);
 
+    void configureFilters(int filterType, bool enable);
 
     bool rename(QModelIndex index,QString,int type);
     void setMeta(QModelIndex index,QString metaType,QString metaValue, int type);

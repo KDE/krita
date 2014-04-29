@@ -53,7 +53,7 @@ Item {
     anchors.fill: parent;
     z: 99; //Just to make sure we're always on top.
     opacity: 0;
-    Behavior on opacity { NumberAnimation { duration: 500; } }
+    Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
     MouseArea {
         anchors.fill: parent;
@@ -170,7 +170,7 @@ Item {
         Rectangle {
             id: progressBase;
             opacity: (progress > 0 && progressBar.width > 0) ? 1 : 0;
-            Behavior on opacity { NumberAnimation { duration: 500; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors {
                 top: dialogText.bottom;
                 horizontalCenter: parent.horizontalCenter;

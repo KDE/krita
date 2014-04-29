@@ -92,6 +92,7 @@ void KisFillPainter::initFillPainter()
     m_sizemod = 0;
     m_feather = 0;
     m_useCompositioning = false;
+    m_threshold = 0;
 }
 
 // 'regular' filling

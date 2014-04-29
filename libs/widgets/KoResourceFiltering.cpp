@@ -28,12 +28,15 @@ public:
     , isExactMatch("\"([\\w\\s]+)\"")
     , searchTokenizer("\\s*,+\\s*")
     , hasNewFilters(false)
+    , name(true)
+    , filename(true)
     , tagObject(0)
     {}
     QRegExp isTag;
     QRegExp isExactMatch;
     QRegExp searchTokenizer;
     bool hasNewFilters;
+    bool name,filename;
     KoResourceTagStore *tagObject;
     QStringList tagSetFilenames;
     QStringList includedNames;
@@ -48,6 +51,22 @@ KoResourceFiltering::~KoResourceFiltering()
 {
     delete d;
 }
+
+void KoResourceFiltering::configure(int filterType, bool enable) {
+    switch (filterType) {
+    case 0:
+        d->name=true;
+        d->filename=enable;
+        break;
+    case 1:
+        d->name=enable;
+        break;
+    case 2:
+        d->filename=enable;
+        break;
+    }
+}
+
 void KoResourceFiltering::setChanged()
 {
     d->hasNewFilters = true;
@@ -61,17 +80,20 @@ void KoResourceFiltering::setTagSetFilenames(const QStringList& filenames)
     setChanged();
 }
 
-bool KoResourceFiltering::matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const
+bool KoResourceFiltering::matchesResource(const QStringList &filteredList,const QStringList &filterList) const
 {
     Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
     foreach (QString filter, filterList) {
         if (!filter.startsWith('"')) {
-            if (resourceName.contains(filter,sensitivity) || resourceFileName.contains(filter,sensitivity))
-                return true;
+            foreach (QString filtered, filteredList) {
+                if (filtered.contains(filter,sensitivity)) {
+                    return true;
+                }
+            }
         }
-        else {
+        else if (d->name) {
             filter.remove('"');
-            if (!resourceName.compare(filter)) {
+            if (!filteredList.at(0).compare(filter)) {
                 return true;
             }
         }
@@ -148,17 +170,33 @@ void KoResourceFiltering::setFilters(const QString &searchString)
 
 bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
 {
+    QList<QString> filteredList;
 
-    QString resourceName = resource->name();
     QString resourceFileName = resource->filename();
-    if (matchesResource(resourceName,resourceFileName,d->excludedNames))
-        return false;
-    if (matchesResource(resourceName,resourceFileName,d->includedNames))
-        return true;
-    foreach (const QString &filter, d->tagSetFilenames) {
-        if (!resourceFileName.compare(filter) || !resourceName.compare(filter))
-            return true;
+    QString resourceName = resource->name();
+
+    if (d->name) {
+        filteredList.push_front(resourceName);
     }
+
+    if (d->filename) {
+        filteredList.push_back(resourceFileName);
+    }
+    
+    if (matchesResource(filteredList,d->excludedNames)) {
+        return false;
+    }
+
+    if (matchesResource(filteredList,d->includedNames)) {
+        return true;
+    }
+
+    foreach (const QString &filter, d->tagSetFilenames) {
+        if (!resourceFileName.compare(filter) || !resourceName.compare(filter)) {
+            return true;
+        }
+    }
+
     return false;
 }
 

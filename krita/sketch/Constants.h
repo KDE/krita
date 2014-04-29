@@ -26,6 +26,7 @@
 class Constants : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int AnimationDuration READ animationDuration CONSTANT)
     Q_PROPERTY(int GridRows READ gridRows NOTIFY gridSizeChanged)
     Q_PROPERTY(int GridColumns READ gridColumns CONSTANT)
     Q_PROPERTY(bool IsLandscape READ isLandscape NOTIFY gridSizeChanged)
@@ -41,6 +42,7 @@ class Constants : public QObject
 public:
     Constants(QObject* parent = 0);
 
+    int animationDuration() const;
     qreal gridHeight() const;
     qreal gridWidth() const;
     qreal toolbarButtonSize() const;

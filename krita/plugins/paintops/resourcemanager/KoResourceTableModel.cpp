@@ -158,6 +158,12 @@ Qt::ItemFlags KoResourceTableModel::flags ( const QModelIndex & index ) const
     return res;
 }
 
+void KoResourceTableModel::configureFilters(int filterType, bool enable) {
+    for (int i=0;i<m_resourceAdapterList.size();i++) {
+        m_resourceAdapterList.at(i)->configureFilters(filterType,enable);
+    }
+}
+
 KoResource* KoResourceTableModel::getResourceFromFilename(const QString& filename)
 {
     KoResource* res;

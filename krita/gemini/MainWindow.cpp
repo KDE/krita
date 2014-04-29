@@ -221,6 +221,8 @@ public:
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
     }
 
     void notifySlateModeChange();
@@ -420,15 +422,12 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-        qApp->processEvents();
-        view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
-        qApp->processEvents();
-        QPoint center = view->rect().center();
-        view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
-        qApp->processEvents();
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
         d->desktopView->rootView()->setFocus();
+        QPoint center = view->rect().center();
+        view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
     }
@@ -456,6 +455,7 @@ void MainWindow::documentChanged()
     KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
     view->setQtMainWindow(d->desktopView);
     connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    connect(view, SIGNAL(sigSavingFinished()), this, SIGNAL(resetWindowTitle()));
     if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)

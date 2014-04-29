@@ -43,6 +43,7 @@
 #include <sketch/RecentFileManager.h>
 #include <sketch/Settings.h>
 #include <kis_doc2.h>
+#include <kis_view2.h>
 
 class DesktopViewProxy::Private
 {
@@ -93,6 +94,8 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
     recent->clear();
     recent->loadEntries(KGlobal::config()->group("RecentFiles"));
+
+    connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
 }
 
 DesktopViewProxy::~DesktopViewProxy()
@@ -133,9 +136,11 @@ void DesktopViewProxy::fileSave()
             DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->setTemporaryFile(false);
+            emit documentSaved();
         }
     } else {
         DocumentManager::instance()->save();
+        emit documentSaved();
     }
 }
 
@@ -145,6 +150,7 @@ bool DesktopViewProxy::fileSaveAs()
         DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
+        emit documentSaved();
         return true;
     }
 

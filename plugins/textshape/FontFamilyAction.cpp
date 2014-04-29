@@ -39,7 +39,7 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kfontchooser.h>
-#include <kofontcombobox.h>
+#include <KoFontComboBox.h>
 
 class KoFontFamilyAction::KoFontFamilyActionPrivate
 {

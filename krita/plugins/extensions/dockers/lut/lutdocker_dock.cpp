@@ -55,27 +55,34 @@
 
 #include "ocio_display_filter.h"
 
-/**
- * Copied from OCIO, just a noop profile
- */
-const char * INTERNAL_RAW_PROFILE = 
-    "ocio_profile_version: 1\n"
-    "strictparsing: false\n"
-    "roles:\n"
-    "  default: raw\n"
-    "displays:\n"
-    "  sRGB:\n"
-    "  - !<View> {name: Raw, colorspace: raw}\n"
-    "colorspaces:\n"
-    "  - !<ColorSpace>\n"
-    "      name: raw\n"
-    "      family: raw\n"
-    "      equalitygroup:\n"
-    "      bitdepth: 32f\n"
-    "      isdata: true\n"
-    "      allocation: uniform\n"
-    "      description: 'A raw color space. Conversions to and from this space are no-ops.'\n";
+OCIO::ConstConfigRcPtr defaultRawProfile()
+{
+    /**
+     * Copied from OCIO, just a noop profile
+     */
+    const char * INTERNAL_RAW_PROFILE = 
+        "ocio_profile_version: 1\n"
+        "strictparsing: false\n"
+        "roles:\n"
+        "  default: raw\n"
+        "displays:\n"
+        "  sRGB:\n"
+        "  - !<View> {name: Raw, colorspace: raw}\n"
+        "colorspaces:\n"
+        "  - !<ColorSpace>\n"
+        "      name: raw\n"
+        "      family: raw\n"
+        "      equalitygroup:\n"
+        "      bitdepth: 32f\n"
+        "      isdata: true\n"
+        "      allocation: uniform\n"
+        "      description: 'A raw color space. Conversions to and from this space are no-ops.'\n";
 
+
+    std::istringstream istream;
+    istream.str(INTERNAL_RAW_PROFILE);
+    return OCIO::Config::CreateFromStream(istream);
+}
 
 LutDockerDock::LutDockerDock()
     : QDockWidget(i18n("LUT Management"))
@@ -164,10 +171,8 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
             connect(m_canvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()), Qt::UniqueConnection);
             canvas->setDisplayFilter(m_displayFilter);
         }
-        slotImageColorSpaceChanged();
-
     }
-    updateDisplaySettings();
+    resetOcioConfiguration();
 }
 
 void LutDockerDock::slotImageColorSpaceChanged()
@@ -231,8 +236,17 @@ void LutDockerDock::enableControls()
     }
 
     bool ocioEnabled = m_chkUseOcio->isChecked();
-
     m_colorManagement->setEnabled(ocioEnabled && canDoExternalColorCorrection);
+
+    bool externalColorManagementEnabled =
+        m_colorManagement->currentIndex() != (int)KisConfig::INTERNAL;
+
+    m_lblInputColorSpace->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_cmbInputColorSpace->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_lblDisplayDevice->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_cmbDisplayDevice->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_lblView->setEnabled(ocioEnabled && externalColorManagementEnabled);
+    m_cmbView->setEnabled(ocioEnabled && externalColorManagementEnabled);
 
     bool enableConfigPath = m_colorManagement->currentIndex() == (int) KisConfig::OCIO_CONFIG;
 
@@ -309,9 +323,7 @@ void LutDockerDock::resetOcioConfiguration()
     KisConfig cfg;
     try {
         if (cfg.ocioColorManagementMode() == KisConfig::INTERNAL) {
-            std::istringstream istream;
-            istream.str(INTERNAL_RAW_PROFILE);
-            m_ocioConfig = OCIO::Config::CreateFromStream(istream);
+            m_ocioConfig = defaultRawProfile();
         } else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_ENVIRONMENT) {
             m_ocioConfig = OCIO::Config::CreateFromEnv();
         }
@@ -320,6 +332,8 @@ void LutDockerDock::resetOcioConfiguration()
 
             if (QFile::exists(configFile)) {
                 m_ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
+            } else {
+                m_ocioConfig = defaultRawProfile();
             }
         }
         if (m_ocioConfig) {
@@ -337,6 +351,12 @@ void LutDockerDock::refillControls()
 {
     if (!m_canvas) return;
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
+
+    { // Color Management Mode
+        KisConfig cfg;
+        KisSignalsBlocker modeBlocker(m_colorManagement);
+        m_colorManagement->setCurrentIndex((int) cfg.ocioColorManagementMode());
+    }
 
     { // Exposure
         KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);

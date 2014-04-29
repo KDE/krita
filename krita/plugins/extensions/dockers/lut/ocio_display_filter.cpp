@@ -29,22 +29,11 @@
 
 #ifdef HAVE_OPENGL
 #include <opengl/kis_opengl.h>
+#include <QGLContext>
+#endif
+
 
 static const int LUT3D_EDGE_SIZE = 32;
-
-const char * m_fragShaderText = ""
-        "\n"
-        "uniform sampler2D texture0;\n"
-        "uniform sampler3D texture1;\n"
-        "varying mediump vec4 v_textureCoordinate;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "    vec4 col = texture2D(texture0, v_textureCoordinate.st);\n"
-        "    gl_FragColor = OCIODisplay(col, texture1);\n"
-        "}\n";
-
-#endif
 
 OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
     : KisDisplayFilter(parent)
@@ -229,7 +218,14 @@ void OcioDisplayFilter::updateProcessor()
     KisConfig cfg;
     if (!cfg.useOpenGL()) return;
 
-    KisOpenGL::initialMakeContextCurrent();
+    if (!QGLContext::currentContext()) {
+        /**
+         * Force initialization of GL context when the filter is
+         * created before the openGL canvas. This might happen when
+         * switching from QPainter to openGL canvas for the first time.
+         */
+        KisOpenGL::initialMakeContextCurrent();
+    }
 
     if (m_lut3d.size() == 0) {
         //qDebug() << "generating lut";
@@ -253,7 +249,12 @@ void OcioDisplayFilter::updateProcessor()
 
     // Step 1: Create a GPU Shader Description
     OCIO::GpuShaderDesc shaderDesc;
-    shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
+
+    if (KisOpenGL::supportsGLSL13()) {
+        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_3);
+    } else {
+        shaderDesc.setLanguage(OCIO::GPU_LANGUAGE_GLSL_1_0);
+    }
     shaderDesc.setFunctionName("OCIODisplay");
     shaderDesc.setLut3DEdgeLen(LUT3D_EDGE_SIZE);
 
@@ -283,7 +284,6 @@ void OcioDisplayFilter::updateProcessor()
 
         std::ostringstream os;
         os << m_processor->getGpuShaderText(shaderDesc) << "\n";
-        os << m_fragShaderText;
 
         m_program = QString::fromLatin1(os.str().c_str());
     }

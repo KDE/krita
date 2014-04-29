@@ -103,6 +103,7 @@ private:
 
     void drawImage() const;
     void drawCheckers() const;
+    QByteArray buildFragmentShader() const;
 
 };
 

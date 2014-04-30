@@ -21,6 +21,7 @@
 #include <QColor>
 #include <cmath>
 #include "kis_display_color_converter.h"
+#include "kis_acs_pixel_cache_renderer.h"
 
 
 KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
@@ -165,17 +166,16 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
 void KisColorSelectorSimple::paint(QPainter* painter)
 {
     if(isDirty()) {
-        KoColor color;
+        KisPaintDeviceSP realPixelCache;
+        QPoint pixelCacheOffset;
+        Acs::PixelCacheRenderer::render(this,
+                                        m_parent->converter(),
+                                        QRect(0, 0, width(), height()),
+                                        realPixelCache,
+                                        m_pixelCache,
+                                        pixelCacheOffset);
 
-        m_pixelCache=QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
-
-        for(int x=0; x<width(); x++) {
-            for(int y=0; y<height(); y++) {
-                color = colorAt(x, y);
-                QColor c = m_parent->converter()->toQColor(color);
-                m_pixelCache.setPixel(x, y, c.rgba());
-            }
-        }
+        KIS_ASSERT_RECOVER_NOOP(pixelCacheOffset.isNull());
     }
 
     painter->drawImage(0,0, m_pixelCache);

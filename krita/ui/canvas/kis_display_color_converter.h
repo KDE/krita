@@ -57,8 +57,15 @@ public:
     void setMonitorProfile(const KoColorProfile *monitorProfile);
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
 
-    QColor toQColor(const KoColor &c);
-    QImage toQImage(KisPaintDeviceSP srcDevice);
+    QColor toQColor(const KoColor &c) const;
+
+    /**
+     * Converts the exactBounds() (!) of the \p srcDevice into QImage
+     * properly rendered into display RGB space. Please note that the
+     * offset of the image in QImage is always zero for efficience
+     * reasons.
+     */
+    QImage toQImage(KisPaintDeviceSP srcDevice) const;
 
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);

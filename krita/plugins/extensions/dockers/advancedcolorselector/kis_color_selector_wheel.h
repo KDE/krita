@@ -26,6 +26,10 @@ typedef unsigned int QRgb;
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
 
+namespace Acs {
+    class PixelCacheRenderer;
+}
+
 class KisColorSelectorWheel : public KisColorSelectorComponent
 {
     Q_OBJECT
@@ -38,11 +42,13 @@ protected:
     void paint(QPainter*);
 
 private:
+    friend class Acs::PixelCacheRenderer;
     KoColor colorAt(int x, int y, bool forceValid = false);
 
 private:
     QPointF m_lastClickPos;
     QImage m_pixelCache;
+    QPoint m_pixelCacheOffset;
 };
 
 #endif // KIS_COLOR_SELECTOR_WHEEL_H

@@ -26,6 +26,11 @@ typedef unsigned int QRgb;
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
 
+namespace Acs {
+    class PixelCacheRenderer;
+}
+
+
 class KisColorSelectorSimple : public KisColorSelectorComponent
 {
 Q_OBJECT
@@ -38,6 +43,7 @@ protected:
     KoColor selectColor(int x, int y);
 
 private:
+    friend class Acs::PixelCacheRenderer;
     KoColor colorAt(int x, int y);
 
 private:

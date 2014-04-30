@@ -317,7 +317,7 @@ QColor KisDisplayColorConverter::Private::floatArrayToQColor(const float *p) {
     }
 }
 
-QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor)
+QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
 {
     KoColor c(srcColor);
     c.convertTo(m_d->paintingColorSpace);
@@ -387,7 +387,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
     return image;
 }
 
-QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice)
+QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
 {
     KisPaintDeviceSP device = srcDevice;
     if (!(*device->colorSpace() == *m_d->paintingColorSpace)) {

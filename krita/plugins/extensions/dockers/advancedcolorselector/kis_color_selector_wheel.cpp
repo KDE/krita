@@ -22,6 +22,7 @@
 #include <QColor>
 #include <cmath>
 #include "kis_display_color_converter.h"
+#include "kis_acs_pixel_cache_renderer.h"
 
 
 KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
@@ -131,17 +132,8 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 {
 
     if(isDirty()) {
-        KoColor color;
-
-        m_pixelCache=QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
-
-        for(int x=0; x<width(); x++) {
-            for(int y=0; y<height(); y++) {
-                color = colorAt(x, y);
-                QColor c = m_parent->converter()->toQColor(color);
-                m_pixelCache.setPixel(x, y, c.rgba());
-            }
-        }
+        KisPaintDeviceSP realPixelCache;
+        Acs::PixelCacheRenderer::render(this, m_parent->converter(), QRect(0, 0, width(), height()), realPixelCache, m_pixelCache, m_pixelCacheOffset);
 
         //antialiasing for wheel
         QPainter tmpPainter(&m_pixelCache);
@@ -149,10 +141,14 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         tmpPainter.setPen(QPen(QColor(0,0,0,0), 2.5));
         tmpPainter.setCompositionMode(QPainter::CompositionMode_Clear);
         int size=qMin(width(), height());
-        tmpPainter.drawEllipse(width()/2-size/2, height()/2-size/2, size, size);
+
+        QPoint ellipseCenter(width() / 2 - size / 2, height() / 2 - size / 2);
+        ellipseCenter -= m_pixelCacheOffset;
+
+        tmpPainter.drawEllipse(ellipseCenter.x(), ellipseCenter.y(), size, size);
     }
 
-    painter->drawImage(0,0, m_pixelCache);
+    painter->drawImage(m_pixelCacheOffset.x(),m_pixelCacheOffset.y(), m_pixelCache);
 
     // draw blips
    

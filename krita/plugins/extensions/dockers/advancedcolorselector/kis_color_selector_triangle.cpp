@@ -24,8 +24,8 @@
 
 #include "KoColorSpace.h"
 
-#include "kis_paint_device.h"
 #include "kis_display_color_converter.h"
+#include "kis_acs_pixel_cache_renderer.h"
 
 
 KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
@@ -50,19 +50,9 @@ void KisColorSelectorTriangle::paint(QPainter* painter)
     }
 
 
-    QImage renderedImage = m_parent->converter()->toQImage(m_realPixelCache);
-
-    // antialiased border
-    QPainter gc(&renderedImage);
-    gc.setRenderHint(QPainter::Antialiasing);
-    gc.setPen(QPen(QColor(0,0,0,128), 2.5));
-    gc.setCompositionMode(QPainter::CompositionMode_Clear);
-    gc.drawLine(QPointF(0, triangleHeight()), QPointF((triangleWidth()) / 2.0, 0));
-    gc.drawLine(QPointF(triangleWidth() / 2.0 + 1.0, 0), QPointF(triangleWidth() + 1, triangleHeight()));
-
     painter->drawImage(width()/2-triangleWidth()/2,
                       height()/2-triangleHeight()*(2/3.),
-                      renderedImage);
+                      m_renderedPixelCache);
 
 
     if(m_lastClickPos.x()>-0.1 && m_parent->displayBlip()) {
@@ -75,19 +65,27 @@ void KisColorSelectorTriangle::paint(QPainter* painter)
 
 void KisColorSelectorTriangle::updatePixelCache()
 {
-    m_realPixelCache = new KisPaintDevice(colorSpace());
-
-    KoColor color;
-
     int width = triangleWidth() + 1;
     int height = triangleHeight();
 
-    for(int x = 0; x < width; x++) {
-        for(int y = 0; y < height; y++) {
-            color = colorAt(x, y);
-            Acs::setColor(m_realPixelCache, QPoint(x, y), color);
-        }
-    }
+    QPoint pixelCacheOffset;
+
+    Acs::PixelCacheRenderer::render(this,
+                                    m_parent->converter(),
+                                    QRect(0, 0, width, height),
+                                    m_realPixelCache,
+                                    m_renderedPixelCache,
+                                    pixelCacheOffset);
+
+    KIS_ASSERT_RECOVER_NOOP(pixelCacheOffset.isNull());
+
+    // antialiased border
+    QPainter gc(&m_renderedPixelCache);
+    gc.setRenderHint(QPainter::Antialiasing);
+    gc.setPen(QPen(QColor(0,0,0,128), 2.5));
+    gc.setCompositionMode(QPainter::CompositionMode_Clear);
+    gc.drawLine(QPointF(0, triangleHeight()), QPointF((triangleWidth()) / 2.0, 0));
+    gc.drawLine(QPointF(triangleWidth() / 2.0 + 1.0, 0), QPointF(triangleWidth() + 1, triangleHeight()));
 }
 
 KoColor KisColorSelectorTriangle::selectColor(int x, int y)

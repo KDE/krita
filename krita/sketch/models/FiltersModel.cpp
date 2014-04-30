@@ -159,7 +159,7 @@ QObject* FiltersModel::configuration(int index)
     PropertyContainer* config = new PropertyContainer(d->filters[index]->id(), this);
     if (!d->configurations[index]) {
         // if we have a config widget to show, reinitialise the configuration, just in case
-        if(d->filters[index]->showConfigurationWidget()) {
+        if(d->filters[index]->showConfigurationWidget() && d->filters[index]->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = d->filters[index]->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             d->configurations[index] = KisSafeFilterConfigurationSP(static_cast<KisFilterConfiguration*>(wdg->configuration()));

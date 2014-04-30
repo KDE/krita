@@ -23,6 +23,7 @@ set(kritasketchlib_SRCS
     KisSketchPart.cpp
     RecentFileManager.cpp
     ProgressProxy.cpp
+    PropertyContainer.cpp
     Settings.cpp
     SketchDeclarativeView.cpp
     SketchInputContext.cpp

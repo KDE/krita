@@ -453,8 +453,12 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     }
 #endif
 
+    QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
+    KisPaintOpPreset *preset = rserver->resourceByName(lastPreset);
+    if (!preset) {
+        preset = rserver->resourceByName("Basic_tip_default");
+    }
     if (!preset) {
         if (rserver->resources().isEmpty()) {
             KMessageBox::error(this, i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
@@ -472,6 +476,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    KisConfig cfg;
+    cfg.writeEntry("LastPreset", m_d->resourceProvider->currentPreset()->name());
+
     if (m_d->filterManager->isStrokeRunning()) {
         m_d->filterManager->cancel();
     }

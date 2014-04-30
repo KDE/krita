@@ -175,7 +175,9 @@ void KisColorSelectorSimple::paint(QPainter* painter)
                                         m_pixelCache,
                                         pixelCacheOffset);
 
-        KIS_ASSERT_RECOVER_NOOP(pixelCacheOffset.isNull());
+        if (!pixelCacheOffset.isNull()) {
+            qWarning() << "WARNING: offset of the rectangle selector is not null!";
+        }
     }
 
     painter->drawImage(0,0, m_pixelCache);

@@ -77,7 +77,9 @@ void KisColorSelectorTriangle::updatePixelCache()
                                     m_renderedPixelCache,
                                     pixelCacheOffset);
 
-    KIS_ASSERT_RECOVER_NOOP(pixelCacheOffset.isNull());
+    if (!pixelCacheOffset.isNull()) {
+        qWarning() << "WARNING: offset of the triangle selector is not null!";
+    }
 
     // antialiased border
     QPainter gc(&m_renderedPixelCache);

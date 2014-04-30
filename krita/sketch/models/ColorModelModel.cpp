@@ -69,3 +69,8 @@ QString ColorModelModel::id(int index)
 
     return d->colorModels.at(index).id();
 }
+
+int ColorModelModel::indexOf(const QString& id)
+{
+    return d->colorModels.indexOf(KoID(id));
+}

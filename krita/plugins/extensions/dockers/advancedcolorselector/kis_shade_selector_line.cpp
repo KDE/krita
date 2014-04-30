@@ -190,8 +190,13 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 
 void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
 {
-    if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
-        e->setAccepted(false);
+    if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton) {
+        e->ignore();
+        return;
+    }
+
+    if (!rect().contains(e->pos())) {
+        e->accept();
         return;
     }
 

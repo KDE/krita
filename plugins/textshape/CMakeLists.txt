@@ -16,8 +16,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver/)
+    ${KOMAIN_INCLUDES})
 
 ########### Flake Plugin library ###############
 

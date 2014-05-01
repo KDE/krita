@@ -95,6 +95,7 @@ public:
         , slateMode(false)
         , docked(false)
         , sketchKisView(0)
+        , desktopKisView(0)
         , desktopViewProxy(0)
         , forceDesktop(false)
         , forceSketch(false)
@@ -125,6 +126,7 @@ public:
     bool docked;
     QString currentSketchPage;
     KisView2* sketchKisView;
+    KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
     bool forceDesktop;
@@ -452,10 +454,12 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-    view->setQtMainWindow(d->desktopView);
-    connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-    connect(view, SIGNAL(sigSavingFinished()), this, SIGNAL(resetWindowTitle()));
+    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    d->desktopKisView->setQtMainWindow(d->desktopView);
+    connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
+    connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChanged(int, const QVariant&)));
     if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
@@ -511,6 +515,30 @@ void MainWindow::setTemporaryFile(bool newValue)
     emit temporaryFileChanged();
 }
 
+void MainWindow::resourceChanged(int key, const QVariant& v)
+{
+    if(centralWidget() == d->sketchView)
+        return;
+    KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
+    if(preset) {
+        KisPaintOpPresetSP clone = preset->clone();
+        clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
+        d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
+    }
+}
+
+void MainWindow::resourceChangedSketch(int key, const QVariant& v)
+{
+    if(centralWidget() == d->desktopView)
+        return;
+    KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
+    if(preset) {
+        KisPaintOpPresetSP clone = preset->clone();
+        clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
+        d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
+    }
+}
+
 QObject* MainWindow::sketchKisView() const
 {
     return d->sketchKisView;
@@ -518,13 +546,19 @@ QObject* MainWindow::sketchKisView() const
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
-    if (d->sketchKisView)
+    if (d->sketchKisView) {
         d->sketchKisView->disconnect(this);
+        d->sketchKisView->canvasBase()->resourceManager()->disconnect(this);
+    }
     if (d->sketchKisView != newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
-        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-        d->centerer->start();
+        if(d->sketchKisView) {
+            connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+            connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChangedSketch(int, const QVariant&)));
+            d->centerer->start();
+        }
         emit sketchKisViewChanged();
     }
 }
@@ -585,7 +619,6 @@ bool MainWindow::Private::queryClose()
             return false;
         }
     }
-
     return true;
 }
 

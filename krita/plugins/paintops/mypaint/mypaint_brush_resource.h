@@ -56,8 +56,6 @@ public:
 
     bool save();
 
-    QImage image() const;
-
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush
 
     BrushSetting* setting_by_cname(const QString& cname);
@@ -77,7 +75,8 @@ public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Bru
 
 
     bool is_eraser();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
 
     QImage m_icon;

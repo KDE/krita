@@ -24,6 +24,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
+#include <QCryptographicHash>
+#include <QBuffer>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -31,7 +34,7 @@
 #include "KoColorSpaceRegistry.h"
 
 KoColorSet::KoColorSet(const QString& filename)
-        : KoResource(filename)
+    : KoResource(filename)
 {
     // Implemented in KoResource class
     m_columns = 0; // Set the default value that the GIMP uses...
@@ -67,6 +70,11 @@ bool KoColorSet::load()
     if (file.size() == 0) return false;
     file.open(QIODevice::ReadOnly);
     m_data = file.readAll();
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(m_data);
+    setMD5(md5.result());
+
     file.close();
     return init();
 }
@@ -78,8 +86,29 @@ bool KoColorSet::save()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
+    save(&file);
+    file.close();
+    return true;
+}
 
-    QTextStream stream(&file);
+qint32 KoColorSet::nColors()
+{
+    return m_colors.count();
+}
+
+QByteArray KoColorSet::generateMD5() const
+{
+    if (!m_data.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(m_data);
+        return md5.result();
+    }
+    return QByteArray();
+}
+
+void KoColorSet::save(QIODevice *io) const
+{
+    QTextStream stream(io);
     // Header: Magic\nName: <name>\nColumns: <no idea what this means, but default = 0>
     // In any case, we don't use Columns...
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
@@ -94,13 +123,6 @@ bool KoColorSet::save()
             stream << entry.name << "\n";
     }
 
-    file.close();
-    return true;
-}
-
-qint32 KoColorSet::nColors()
-{
-    return m_colors.count();
 }
 
 bool KoColorSet::init()

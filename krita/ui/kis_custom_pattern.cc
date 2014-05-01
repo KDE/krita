@@ -90,10 +90,10 @@ void KisCustomPattern::slotUpdateCurrentPattern()
                 if (scaledWidth == 0) scaledWidth++;
                 if (scaledHeight == 0) scaledHeight++;
 
-                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->image());
+                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->pattern());
                 preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
             } else {
-                preview->setPixmap(QPixmap::fromImage(m_pattern->image()));
+                preview->setPixmap(QPixmap::fromImage(m_pattern->pattern()));
             }
         }
     }

@@ -155,6 +155,10 @@ public:
 
     void setThumbnail(QString);
 
+protected:
+
+    virtual QByteArray generateMD5() const;
+
 private:
     QImage thumbnail;
     KoXmlResourceBundleManifest* manifest;

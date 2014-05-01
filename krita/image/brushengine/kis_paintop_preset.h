@@ -77,7 +77,13 @@ public:
         return ".kpp";
     }
 
+protected:
+
+    virtual QByteArray generateMD5() const;
+
 private:
+
+    bool save(QIODevice *io) const;
 
     struct Private;
     Private * const m_d;

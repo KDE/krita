@@ -42,7 +42,7 @@ public:
     void setTagSetFilenames(const QStringList& filenames);
     void setCurrentTag(const QString& tagSet);
     void rebuildCurrentTagFilenames();
-    void setTagObject(KoResourceTagStore* tagObject);
+    void setTagStore(KoResourceTagStore* tagObject);
     void setFilters(const QString& searchString);
     QList<KoResource*> filterResources(QList< KoResource* > resources);
     void setInclusions(const QStringList &inclusions);

@@ -21,6 +21,9 @@
 #include <QDomElement>
 #include <QFileInfo>
 #include <QImageReader>
+#include <QByteArray>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 KisPngBrush::KisPngBrush(const QString& filename)
     : KisBrush(filename)
@@ -50,10 +53,10 @@ bool KisPngBrush::load()
         setName(info.baseName());
     }
 
-    setImage(reader.read());
-    setValid(!image().isNull());
+    setBrushTipImage(reader.read());
+    setValid(!brushTipImage().isNull());
 
-    if (image().isGrayscale()) {
+    if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
     }
@@ -62,9 +65,9 @@ bool KisPngBrush::load()
         setHasColor(true);
     }
 
-    setWidth(image().width());
-    setHeight(image().height());
-    return !image().isNull();
+    setWidth(brushTipImage().width());
+    setHeight(brushTipImage().height());
+    return !brushTipImage().isNull();
 }
 
 QString KisPngBrush::defaultFileExtension() const

@@ -22,7 +22,6 @@
 
 #include <KoColorSpace.h>
 #include <KoAbstractGradient.h>
-#include <KoCachedGradient.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -34,6 +33,64 @@
 #include "kis_iterator_ng.h"
 #include "kis_random_accessor_ng.h"
 #include "kis_progress_update_helper.h"
+
+
+class PIGMENTCMS_EXPORT CachedGradient : public KoAbstractGradient
+{
+
+public:
+    explicit CachedGradient(const KoAbstractGradient *gradient, qint32 steps, const KoColorSpace *cs)
+        : KoAbstractGradient(gradient->filename())
+    {
+        m_subject = gradient;
+        m_max = steps - 1;
+        m_colorSpace = cs;
+
+        m_black = KoColor(cs);
+
+        KoColor tmpColor(m_colorSpace);
+        for(qint32 i = 0; i < steps; i++) {
+            m_subject->colorAt(tmpColor, qreal(i) / m_max);
+            m_colors << tmpColor;
+        }
+    }
+
+    virtual ~CachedGradient() {}
+
+    /**
+    * Creates a QGradient from the gradient.
+    * The resulting QGradient might differ from original gradient
+    */
+    virtual QGradient* toQGradient() const
+    {
+        return m_subject->toQGradient();
+    }
+
+
+    /// gets the color data at position 0 <= t <= 1
+    const quint8 *cachedAt(qreal t) const
+    {
+        qint32 tInt = t * m_max + 0.5;
+        if (m_colors.size() > tInt) {
+            return m_colors[tInt].data();
+        }
+        else {
+            return m_black.data();
+        }
+    }
+
+    void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
+    const KoColorSpace * colorSpace() const { return m_colorSpace; }
+
+    virtual QByteArray generateMD5() const { return QByteArray(); }
+
+private:
+    const KoAbstractGradient *m_subject;
+    const KoColorSpace *m_colorSpace;
+    qint32 m_max;
+    QVector<KoColor> m_colors;
+    KoColor m_black;
+};
 
 namespace
 {
@@ -550,7 +607,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     KisHLineIteratorSP hit = dev->createHLineIteratorNG(startx, starty, width);
 
     KisProgressUpdateHelper progressHelper(progressUpdater(), 100, height);
-    KoCachedGradient cachedGradient(gradient(), qMax(endy-starty, endx - startx), colorSpace);
+    CachedGradient cachedGradient(gradient(), qMax(endy-starty, endx - startx), colorSpace);
     for (int y = starty; y <= endy; y++) {
 
         for (int x = startx; x <= endx; x++) {

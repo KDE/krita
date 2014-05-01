@@ -538,7 +538,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
             qint32 columnsRemaining = srcWidth;
             qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
             qint32 numContiguousSrcRows = srcIt->numContiguousRows(srcY_);
-            qint32 numContiguousSelRows = maskIt->numContiguousRows(srcY_);
+            qint32 numContiguousSelRows = maskIt->numContiguousRows(dstY_);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -548,7 +548,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
                 qint32 numContiguousDstColumns = dstIt->numContiguousColumns(dstX_);
                 qint32 numContiguousSrcColumns = srcIt->numContiguousColumns(srcX_);
-                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(srcX_);
+                qint32 numContiguousSelColumns = maskIt->numContiguousColumns(dstX_);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);

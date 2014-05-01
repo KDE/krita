@@ -89,3 +89,8 @@ QString ColorDepthModel::id(int index)
 
     return d->colorDepths.at(index).id();
 }
+
+int ColorDepthModel::indexOf(const QString& id)
+{
+    return d->colorDepths.indexOf(KoID(id));
+}

@@ -40,6 +40,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -189,6 +190,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
     KisView2* view = m_canvas->view();
     connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
@@ -217,6 +219,12 @@ void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
         QColor color;
+        /**
+         * WARNING: we don't use displaying color conversions here,
+         *          because KColorDialog doesn't support KoColor and
+         *          the KoColor->QColor transformation is not
+         *          reversible!
+         */
         int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;

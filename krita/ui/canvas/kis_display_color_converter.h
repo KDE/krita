@@ -21,6 +21,7 @@
 
 #include <QScopedPointer>
 
+#include <KoColorDisplayRendererInterface.h>
 #include <KoColorConversionTransformation.h>
 
 #include "kis_types.h"
@@ -52,6 +53,8 @@ public:
     virtual ~KisDisplayColorConverter();
 
     static KisDisplayColorConverter* dumbConverterInstance();
+
+    KoColorDisplayRendererInterface* displayRendererInterface() const;
 
     const KoColorSpace* paintingColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);

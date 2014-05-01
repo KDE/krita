@@ -103,7 +103,7 @@ Panel {
 //            if (window.applicationName === undefined) {
                 if(toolManager.currentTool === null)
                     toolManager.requestToolChange("KritaShape/KisToolBrush");
-                presetsModel.currentPreset = "Basic circle";
+                presetsModel.currentPreset = Settings.lastPreset;
 //            }
         }
     }

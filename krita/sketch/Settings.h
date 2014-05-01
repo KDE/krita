@@ -36,6 +36,7 @@ class KRITA_SKETCH_EXPORT Settings : public QObject
     Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
     Q_PROPERTY(QObject* customImageSettings READ customImageSettings NOTIFY customImageSettingsChanged)
+    Q_PROPERTY(QString lastPreset READ lastPreset NOTIFY lastPresetChanged)
 
 public:
     explicit Settings( QObject* parent = 0);
@@ -59,6 +60,7 @@ public Q_SLOTS:
     void setThemeID(const QString& id);
 
     QObject* customImageSettings() const;
+    QString lastPreset() const;
 
 Q_SIGNALS:
     void currentFileChanged();
@@ -66,6 +68,7 @@ Q_SIGNALS:
     void focusItemChanged();
     void themeChanged();
     void customImageSettingsChanged();
+    void lastPresetChanged();
 
 private:
     class Private;

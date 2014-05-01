@@ -98,7 +98,7 @@ signals:
     // is not visible
     void sigEnableChangeColor(bool b);
 
-    void sigChangeFGColorSelector(const QColor&);
+    void sigChangeFGColorSelector(const KoColor&);
 
     void setSelectedColor(int);
 

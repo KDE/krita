@@ -39,8 +39,8 @@
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
-    PopupColorTriangle(QWidget* parent)
-        : KoTriangleColorSelector(parent)
+    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+        : KoTriangleColorSelector(displayRenderer, parent)
         , m_dragging(false) {
     }
 
@@ -79,13 +79,14 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
     , m_timer(0)
+    , m_displayRenderer(displayRenderer)
 {
-    m_triangleColorSelector  = new PopupColorTriangle(this);
+    m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
     m_triangleColorSelector->move(70, 70);
     m_triangleColorSelector->resize(140, 140);
     m_triangleColorSelector->setVisible(true);
@@ -94,11 +95,11 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *p
     setAttribute(Qt::WA_ContentsPropagated, true);
     //    setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(colorChanged(QColor)), SLOT(slotChangefGColor(QColor)));
+    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)), SLOT(slotChangefGColor(KoColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
     connect(this, SIGNAL(sigChangefGColor(KoColor)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(QColor)), m_triangleColorSelector, SLOT(setQColor(QColor)));
+    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)), m_triangleColorSelector, SLOT(setRealColor(KoColor)));
     connect(m_resourceManager, SIGNAL(setSelectedColor(int)), SLOT(slotSetSelectedColor(int)));
     connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
     connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
@@ -159,7 +160,7 @@ void KisPopupPalette::setSelectedColor(int x)
     m_selectedColor = x;
 }
 
-void KisPopupPalette::slotChangefGColor(const QColor& /*newColor*/)
+void KisPopupPalette::slotChangefGColor(const KoColor& /*newColor*/)
 {
     m_colorChangeTimer->start();
     update();
@@ -167,8 +168,7 @@ void KisPopupPalette::slotChangefGColor(const QColor& /*newColor*/)
 
 void KisPopupPalette::slotColorChangeTimeout()
 {
-    KoColor color(m_triangleColorSelector->color(), KoColorSpaceRegistry::instance()->rgb16(0));
-    emit sigChangefGColor(color);
+    emit sigChangefGColor(m_triangleColorSelector->realColor());
 }
 
 void KisPopupPalette::slotTriggerTimer()
@@ -249,7 +249,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     //painting foreground color
     QPainterPath path2;
     path2.addEllipse(QPoint(-width() / 2 + 33, -height() / 2 + 33), 30, 30);
-    painter.fillPath(path2, m_triangleColorSelector->color());
+    painter.fillPath(path2, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
     painter.drawPath(path2);
 
     //painting favorite brushes
@@ -279,16 +279,14 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setPen(Qt::NoPen);
     rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
-    QColor qcolor;
-    KoColor kcolor;
+    KoColor kocolor;
 
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
         QPainterPath path(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
 
         //accessing recent color of index pos
-        kcolor = m_resourceManager->recentColorAt(pos);
-        kcolor.toQColor(&qcolor);
-        painter.fillPath(path, qcolor);
+        kocolor = m_resourceManager->recentColorAt(pos);
+        painter.fillPath(path, m_displayRenderer->toQColor(kocolor));
 
         painter.drawPath(path);
         painter.rotate(rotationAngle);
@@ -461,7 +459,6 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 
 KisPopupPalette::~KisPopupPalette()
 {
-    delete m_triangleColorSelector;
 }
 
 QPainterPath KisPopupPalette::pathFromPresetIndex(int index)

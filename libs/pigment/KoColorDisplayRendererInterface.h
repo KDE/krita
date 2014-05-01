@@ -50,6 +50,10 @@ public:
      */
     virtual QColor toQColor(const KoColor &c) const = 0;
 
+    virtual KoColor fromHsv(int h, int s, int v, int a = 255) const = 0;
+    virtual void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const = 0;
+
+
     /**
      * \return the minimum value of a floating point channel that can
      *         be seen on screen
@@ -83,6 +87,9 @@ class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRender
 {
 public:
     QColor toQColor(const KoColor &c) const;
+    KoColor fromHsv(int h, int s, int v, int a = 255) const;
+    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
+
     qreal minVisibleFloatValue() const;
     qreal maxVisibleFloatValue() const;
 

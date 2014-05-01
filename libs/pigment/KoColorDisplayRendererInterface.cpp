@@ -19,6 +19,7 @@
 #include "KoColorDisplayRendererInterface.h"
 
 #include "kglobal.h"
+#include <KoColorSpaceRegistry.h>
 
 
 KoColorDisplayRendererInterface::KoColorDisplayRendererInterface()
@@ -32,6 +33,18 @@ KoColorDisplayRendererInterface::~KoColorDisplayRendererInterface()
 QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c) const
 {
     return c.toQColor();
+}
+
+KoColor KoDumbColorDisplayRenderer::fromHsv(int h, int s, int v, int a) const
+{
+    QColor qcolor(QColor::fromHsvF(h, s, v, a));
+    return KoColor(qcolor, KoColorSpaceRegistry::instance()->rgb8());
+}
+
+void KoDumbColorDisplayRenderer::getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const
+{
+    QColor qcolor = toQColor(srcColor);
+    qcolor.getHsv(h, s, v, a);
 }
 
 KoColorDisplayRendererInterface* KoDumbColorDisplayRenderer::instance()

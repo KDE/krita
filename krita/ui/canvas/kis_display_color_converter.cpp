@@ -104,6 +104,14 @@ struct KisDisplayColorConverter::Private
             return m_parent->toQColor(c);
         }
 
+        KoColor fromHsv(int h, int s, int v, int a) const {
+            return m_parent->fromHsv(h, s, v, a);
+        }
+
+        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const {
+            m_parent->getHsv(srcColor, h, s, v, a);
+        }
+
         qreal minVisibleFloatValue() const {
             return 0.0;
         }
@@ -476,6 +484,21 @@ QColor KisDisplayColorConverter::Private::approximateToQColor(const KoColor &src
     }
 
     return color.toQColor();
+}
+
+
+KoColor KisDisplayColorConverter::fromHsv(int h, int s, int v, int a) const
+{
+    // generate HSV from sRGB!
+    QColor qcolor(QColor::fromHsv(h, s, v, a));
+    return m_d->approximateFromQColor(qcolor);
+}
+
+void KisDisplayColorConverter::getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const
+{
+    // we are going through sRGB here!
+    QColor color = m_d->approximateToQColor(srcColor);
+    color.getHsv(h, s, v, a);
 }
 
 KoColor KisDisplayColorConverter::fromHsvF(qreal h, qreal s, qreal v, qreal a)

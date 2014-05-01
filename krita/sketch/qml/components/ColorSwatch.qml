@@ -129,7 +129,7 @@ Item {
             from: "";
             to: "bgChoice";
             reversible: true;
-            PropertyAnimation { properties: "opacity"; duration: 150; easing.type: Easing.InOutQuad; }
+            PropertyAnimation { properties: "opacity"; duration: Constants.AnimationDuration; easing.type: Easing.InOutQuad; }
         }
     ]
 }

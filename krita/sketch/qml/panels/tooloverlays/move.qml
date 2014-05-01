@@ -28,7 +28,7 @@ Item {
             right: parent.right;
         }
         opacity: toolManager.currentTool.moveInProgress ? 1 : 0;
-        Behavior on opacity { PropertyAnimation { duration: 200; } }
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         width: Constants.GridWidth * 2 + Constants.DefaultMargin * 3;
         color: "#63ffffff";
         border.width: 1;

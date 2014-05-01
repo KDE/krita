@@ -54,7 +54,7 @@ class UndoTextCommand;
 
 class KAction;
 class KActionMenu;
-class KFontAction;
+class KoFontFamilyAction;
 class FontSizeAction;
 
 class KUndo2Command;
@@ -364,7 +364,7 @@ private:
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;
-    KFontAction *m_actionFormatFontFamily;
+    KoFontFamilyAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;
 

@@ -53,7 +53,7 @@ public:
      *
      * \see decompressTile()
      */
-    virtual void readTile(QIODevice *stream, KisTiledDataManager *dm) = 0;
+    virtual bool readTile(QIODevice *stream, KisTiledDataManager *dm) = 0;
 
     /**
      * Compresses a \a tileData and writes it into the \a buffer.
@@ -77,7 +77,7 @@ public:
      * by the caller.
      *
      */
-    virtual void decompressTileData(quint8 *buffer, qint32 bufferSize,
+    virtual bool decompressTileData(quint8 *buffer, qint32 bufferSize,
                                     KisTileData *tileData) = 0;
 
     /**

@@ -59,7 +59,7 @@ KoFindStyle::KoFindStyle(QObject* parent)
 
 KoFindStyle::~KoFindStyle()
 {
-
+    delete d;
 }
 
 QList< QTextDocument* > KoFindStyle::documents()

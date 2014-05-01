@@ -63,8 +63,6 @@ public:
 //    virtual void setProperty(const Property *property);
     void setListData(const Property::ListData & listData);
 
-//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
 signals:
     void commitData( QWidget * editor );
 

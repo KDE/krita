@@ -27,11 +27,12 @@
 #include <KoZoomMode.h>
 #include <kis_node.h>
 #include <KoPattern.h>
+#include <KoGridData.h>
 #include <kis_paintop_preset.h>
 
 class KisView2;
 struct ViewModeSynchronisationObject {
-    ViewModeSynchronisationObject() : initialized(false) { }
+    ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 
     bool initialized;
 
@@ -51,6 +52,8 @@ struct ViewModeSynchronisationObject {
     float opacity;
     bool globalAlphaLock;
     QString activeToolId;
+
+    KoGridData* gridData;
 };
 
 class ViewModeSwitchEvent : public QEvent

@@ -120,7 +120,7 @@ Item {
     property Item toolBar
     property variant initialPage
 
-    property int transitionDuration: 250
+    property int transitionDuration: Constants.AnimationDuration
 
     // Indicates whether there is an ongoing page transition.
     property bool busy: internal.ongoingTransitionCount > 0

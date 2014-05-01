@@ -26,6 +26,7 @@
 #include <QImageReader>
 #include <QDomDocument>
 #include <QBuffer>
+#include <QCryptographicHash>
 
 #include <KoInputDevice.h>
 
@@ -166,29 +167,14 @@ bool KisPaintOpPreset::save()
         return false;
 
     QString paintopid = m_d->settings->getString("paintop", "");
+
     if (paintopid.isEmpty())
         return false;
 
-    QImageWriter writer(filename(), "PNG");
+    QFile f(filename());
+    f.open(QFile::WriteOnly);
 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("Preset");
-    toXML(doc, root);
-    doc.appendChild(root);
-
-    writer.setText("version", "2.2");
-    writer.setText("preset", doc.toString());
-
-    QImage img;
-
-    if(m_d->image.isNull())
-    {
-        img = QImage(1,1, QImage::Format_RGB32);
-    } else {
-        img = m_d->image;
-    }
-
-    return writer.write(img);
+    return save(&f);
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
@@ -241,5 +227,45 @@ QImage KisPaintOpPreset::image() const
 void KisPaintOpPreset::setImage(QImage image)
 {
     m_d->image = image;
+}
+
+QByteArray KisPaintOpPreset::generateMD5() const
+{
+    QByteArray ba;
+    QBuffer buf(&ba);
+    save(&buf);
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
+}
+
+bool KisPaintOpPreset::save(QIODevice *io) const
+{
+    QImageWriter writer(io, "PNG");
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("Preset");
+    toXML(doc, root);
+    doc.appendChild(root);
+
+    writer.setText("version", "2.2");
+    writer.setText("preset", doc.toString());
+
+    QImage img;
+
+    if (m_d->image.isNull()) {
+        img = QImage(1,1, QImage::Format_RGB32);
+    }
+    else {
+        img = m_d->image;
+    }
+
+    return writer.write(img);
+
 }
 

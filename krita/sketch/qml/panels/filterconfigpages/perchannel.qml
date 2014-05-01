@@ -88,7 +88,7 @@ Item {
                         text: "-"
                         onClicked: parent.deleteSelectedPoint();
                         opacity: parent.pointSelected ? 1 : 0;
-                        Behavior on opacity { PropertyAnimation { duration: 150; } }
+                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                     }
                 }
                 Item {

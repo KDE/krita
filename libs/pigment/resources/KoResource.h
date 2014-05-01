@@ -21,6 +21,8 @@
 
 #include <QImage>
 #include <QString>
+#include <QHash>
+
 #include <pigment_export.h>
 
 class QDomDocument;
@@ -32,7 +34,6 @@ class QDomElement;
  */
 class PIGMENTCMS_EXPORT KoResource
 {
-
 public:
 
     /**
@@ -44,56 +45,84 @@ public:
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
 
+    bool operator ==(const KoResource &other) const
+    {
+        return other.md5() == md5();
+    }
+
 public:
     /**
      * Load this resource.
+     * @return true if loading the resource succeeded.
      */
     virtual bool load() = 0;
 
     /**
      * Save this resource.
+     *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
 
     /**
-     * Returns a QImage representing this resource.  This image could be null. The image can
-     * be in any valid QImage::Format.
+     * @returns a QImage thumbnail image representing this resource.
+     *
+     * This image could be null. The image can be in any valid format.
      */
-    virtual QImage image() const {
-        return QImage();
-    }
+    QImage image() const;
+    void setImage(const QImage &image);
 
-private:
-    /// XXX: doc?
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    /// @return the md5sum calculated over the contents of the resource.
+    QByteArray md5() const;
 
-public:
-
-    /// Returns if resource can be removed by the user
+    /// @returns true if resource can be removed by the user
     bool removable() const;
 
-    /// Returns the default file extension which should be when saving the resource
-    virtual QString defaultFileExtension() const;
-
-public:
+    /// @return the full path to this resource
     QString filename() const;
     void setFilename(const QString& filename);
 
-    /// Name of the file without the path
+    /// @return the name of the file without the path
     QString shortFilename() const;
+
+    /// @return the user-visible name of the resource
     QString name() const;
     void setName(const QString& name);
+
+    /// @return true if the resource is ready for use
     bool valid() const;
     void setValid(bool valid);
 
+    /// @return the default file extension which should be used when saving the resource
+    virtual QString defaultFileExtension() const;
+
+protected:
+
+    /// override generateMD5 and in your resource subclass
+    virtual QByteArray generateMD5() const = 0;
+
+    /// call this when the contents of the resource change so the md5 needs to be recalculated
+    void setMD5(const QByteArray &md5);
+
 private:
-    KoResource(const KoResource&);
-    KoResource& operator=(const KoResource&);
+    /// save the resource as XML to the given document with the given element as root
+    virtual void toXML(QDomDocument& doc, QDomElement& element) const;
+
+    Q_DISABLE_COPY(KoResource)
 
 private:
     struct Private;
     Private* const d;
 };
+
+static inline bool operator==(const KoResource &resource1, const KoResource &resource2)
+{
+    return (resource1.md5() == resource2.md5());
+}
+
+static inline uint qHash(const KoResource &resource)
+{
+    return qHash(resource.md5());
+}
 
 #endif // KORESOURCE_H_
 

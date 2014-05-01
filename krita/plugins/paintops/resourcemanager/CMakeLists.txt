@@ -11,11 +11,13 @@ set(kritaresourcemanager_PART_SRCS
     KoResourceManagerWidget.cpp
     KoResourceManagerControl.cpp
     KoResourceTableModel.cpp
+    KoBundleCreationWidget.cpp
 )
 
 kde4_add_ui_files(kritaresourcemanager_PART_SRCS
     wdg_resourcemanager.ui
     KoResourceManagerWidget.ui
+    KoBundleCreationWidget.ui
 )
 
 kde4_add_plugin(kritaresourcemanager ${kritaresourcemanager_PART_SRCS})
@@ -38,12 +40,14 @@ set(testHMISources
     KoResourceManagerWidget.cpp
     KoResourceManagerControl.cpp
     KoResourceTableModel.cpp
+    KoBundleCreationWidget.cpp
     main.cpp
 )
 
 kde4_add_ui_files(testHMISources
     wdg_resourcemanager.ui
     KoResourceManagerWidget.ui
+    KoBundleCreationWidget.ui
 )
 
 kde4_add_executable(resourceManagerHMI ${testHMISources})

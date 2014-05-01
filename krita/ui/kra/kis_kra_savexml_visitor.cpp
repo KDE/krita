@@ -103,15 +103,27 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     return false;
 }
 
+QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc)
+{
+    QDomElement element = doc.createElement(LAYER);
+    saveLayer(element, PAINT_LAYER, layer);
+    element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
+    element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
+    return element;
+}
+
+void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer)
+{
+    loadLayerAttributes(el, layer);
+
+    if (el.hasAttribute(CHANNEL_LOCK_FLAGS)) {
+        layer->setChannelLockFlags(stringToFlags(el.attribute(CHANNEL_LOCK_FLAGS)));
+    }
+}
+
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
-    QDomElement layerElement = m_doc.createElement(LAYER);
-    
-    saveLayer(layerElement, PAINT_LAYER, layer);
-    
-    layerElement.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
-    layerElement.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
-    
+    QDomElement layerElement = savePaintLayerAttributes(layer, m_doc);
     m_elem.appendChild(layerElement);
 
     /*    if(layer->paintDevice()->hasExifInfo())
@@ -235,6 +247,50 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
     return true;
 }
 
+
+void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *layer)
+{
+    if (el.hasAttribute(NAME)) {
+        QString layerName = el.attribute(NAME);
+        KIS_ASSERT_RECOVER_RETURN(layerName == layer->name());
+    }
+
+    if (el.hasAttribute(CHANNEL_FLAGS)) {
+        layer->setChannelFlags(stringToFlags(el.attribute(CHANNEL_FLAGS)));
+    }
+
+    if (el.hasAttribute(OPACITY)) {
+        layer->setOpacity(el.attribute(OPACITY).toInt());
+    }
+
+    if (el.hasAttribute(COMPOSITE_OP)) {
+        layer->setCompositeOp(el.attribute(COMPOSITE_OP));
+    }
+
+    if (el.hasAttribute(VISIBLE)) {
+        layer->setVisible(el.attribute(VISIBLE).toInt());
+    }
+
+    if (el.hasAttribute(LOCKED)) {
+        layer->setUserLocked(el.attribute(LOCKED).toInt());
+    }
+
+    if (el.hasAttribute(X)) {
+        layer->setX(el.attribute(X).toInt());
+    }
+
+    if (el.hasAttribute(Y)) {
+        layer->setY(el.attribute(Y).toInt());
+    }
+
+    if (el.hasAttribute(UUID)) {
+        layer->setUuid(el.attribute(UUID));
+    }
+
+    if (el.hasAttribute(COLLAPSED)) {
+        layer->setCollapsed(el.attribute(COLLAPSED).toInt());
+    }
+}
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {

@@ -27,7 +27,7 @@ class QFile;
 class KoDirectoryStore : public KoStore
 {
 public:
-    KoDirectoryStore(const QString& path, Mode _mode);
+    KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype);
     ~KoDirectoryStore();
 protected:
     virtual bool init(Mode _mode);

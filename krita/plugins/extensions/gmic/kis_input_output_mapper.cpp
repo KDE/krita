@@ -19,6 +19,7 @@
 #include <kis_input_output_mapper.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
+#include <kis_paint_layer.h>
 
 KisInputOutputMapper::KisInputOutputMapper(KisImageWSP image, KisNodeSP activeNode):m_image(image),m_activeNode(activeNode)
 {
@@ -90,12 +91,15 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
 void KisInputOutputMapper::allLayers(KisNodeListSP result)
 {
     //TODO: hack ignores hierarchy introduced by group layers
-    //TODO: append only paint layers
     KisNodeSP root = m_image->rootLayer();
     KisNodeSP item = root->lastChild();
     while (item)
     {
-        result->append(item);
+        KisPaintLayer * paintLayer = dynamic_cast<KisPaintLayer*>(item.data());
+        if (paintLayer)
+        {
+            result->append(item);
+        }
         item = item->prevSibling();
     }
 }

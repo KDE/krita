@@ -90,7 +90,7 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* 
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
-    pattern->image().save(&buffer, "PNG");
+    pattern->pattern().save(&buffer, "PNG");
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
 
     setting->setProperty("Texture/Pattern/PatternFileName", pattern->filename());

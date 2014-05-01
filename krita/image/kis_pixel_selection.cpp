@@ -243,13 +243,6 @@ void KisPixelSelection::invert()
     // Region is needed here (not exactBounds or extent), because
     // unselected but existing pixels need to be inverted too
     QRect rc = region().boundingRect();
-    QRect imageBounds = defaultBounds()->bounds();
-
-    // check if rc have biger size than the whole image and set the rc size to the whole image one if yes.
-    if (rc.width() > imageBounds.width())
-      rc.setWidth(imageBounds.intersect(rc).width());
-    if (rc.height() > imageBounds.height())
-      rc.setHeight(imageBounds.intersect(rc).height());
 
     if (!rc.isEmpty()) {
         KisSequentialIterator it(this, rc);
@@ -298,6 +291,17 @@ QRect KisPixelSelection::selectedExactRect() const
 QVector<QPolygon> KisPixelSelection::outline() const
 {
     QRect selectionExtent = selectedExactRect();
+
+    /**
+     * When the default pixel is not fully transarent, the
+     * exactBounds() return extent of the device instead. To make this
+     * value sane we should limit the calculated area by the bounds of
+     * the image.
+     */
+    if (*defaultPixel() != MIN_SELECTED) {
+        selectionExtent &= defaultBounds()->bounds();
+    }
+
     qint32 xOffset = selectionExtent.x();
     qint32 yOffset = selectionExtent.y();
     qint32 width = selectionExtent.width();

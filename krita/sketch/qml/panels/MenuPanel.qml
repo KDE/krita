@@ -205,6 +205,6 @@ Item {
     }
 
     transitions: Transition {
-        NumberAnimation { duration: 200; properties: "height,opacity"; easing.type: Easing.InOutQuad }
+        NumberAnimation { duration: Constants.AnimationDuration; properties: "height,opacity"; easing.type: Easing.InOutQuad }
     }
 }

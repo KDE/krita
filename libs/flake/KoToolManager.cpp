@@ -1005,13 +1005,15 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
     kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
 
     KoToolBase *tl = tool->createTool(controller->canvas());
-    Q_ASSERT(tl);
-    d->uniqueToolIds.insert(tl, tool->uniqueId());
+    if (tl) {
+        d->uniqueToolIds.insert(tl, tool->uniqueId());
 
-    tl->setObjectName(tool->id());
+        tl->setObjectName(tool->id());
 
-    foreach(KAction *action, tl->actions()) {
-        action->setEnabled(false);
+        foreach(KAction *action, tl->actions()) {
+            action->setEnabled(false);
+        }
+
     }
 
     KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);

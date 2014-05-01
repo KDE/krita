@@ -21,6 +21,9 @@
 #include <qtest_kde.h>
 #include "KoPattern.h"
 
+#include <QCryptographicHash>
+#include <QByteArray>
+
 void KoPatternTest::testCreation()
 {
     KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
@@ -46,10 +49,21 @@ void KoPatternTest::testRoundTripMd5()
     qDebug() << "PAT Name:" << patPattern.name();
     qDebug() << "PAT Filename:" << patPattern.filename();
 
-    qDebug() << pngPattern.image().format();
-    qDebug() << patPattern.image().format();
+    qDebug() << pngPattern.pattern().format();
+    qDebug() << patPattern.pattern().format();
 
-    QCOMPARE(pngPattern.image().convertToFormat(QImage::Format_ARGB32), patPattern.image().convertToFormat(QImage::Format_ARGB32));
+    QCOMPARE(pngPattern.pattern().convertToFormat(QImage::Format_ARGB32), patPattern.pattern().convertToFormat(QImage::Format_ARGB32));
+    QImage im1 = pngPattern.pattern().convertToFormat(QImage::Format_ARGB32);
+    QImage im2 = patPattern.pattern().convertToFormat(QImage::Format_ARGB32);
+
+    QCryptographicHash h1(QCryptographicHash::Md5);
+    h1.addData(QByteArray::fromRawData((const char*)im1.constBits(), im1.byteCount()));
+
+    QCryptographicHash h2(QCryptographicHash::Md5);
+    h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.byteCount()));
+
+    QCOMPARE(h1.result(), h2.result());
+    QCOMPARE(im1, im2);
     QCOMPARE(pngPattern.md5(), patPattern.md5());
 }
 

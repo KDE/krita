@@ -60,6 +60,7 @@ public:
     bool closeParentOnTrigger();
     void setClickMessage(const QString& clickMessage);
     void setText(const QString& text);
+    void setVisible(bool showAction);
 
     signals:
     void triggered(const QString &tag);

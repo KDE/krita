@@ -1311,8 +1311,7 @@ void KoMainWindow::slotFileOpen()
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-        QFileDialog* dlg = dialog.ptr();
-        dlg->setOption(QFileDialog::HideNameFilterDetails);
+        dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
     } else {
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
@@ -1321,8 +1320,7 @@ void KoMainWindow::slotFileOpen()
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                 : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
-        QFileDialog* dlg = dialog.ptr();
-        dlg->setOption(QFileDialog::HideNameFilterDetails);
+        dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
     }
 

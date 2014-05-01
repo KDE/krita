@@ -29,7 +29,7 @@ private:
      * @description Allows to sort correctly the XML document.
      * @details Other means all other values that are not listed before.
      */
-    enum TagEnum {Name=0, Author, Created, License, Updated, Description, Tag, Other};
+    enum TagEnum {Name=0, Filename, Author, Created, License, Updated, Description, Website, Tag, Other};
 
 public:
     /**
@@ -51,28 +51,6 @@ public:
     KoXmlResourceBundleMeta(QIODevice *device);
 
     /**
-     * @brief KoXmlResourceBundleMeta : Ctor
-     * @param name the name of the package
-     * @param license the license of the package
-     * @param fileName the name of the XML file to be created
-     */
-    KoXmlResourceBundleMeta(QString name,QString license,QString fileName="meta");
-
-    /**
-     * @brief KoXmlResourceBundleMeta : Ctor
-     * @param resourceTagList the list of resource tags linked to the package
-     * @param name name the name of the package
-     * @param license license the license of the package
-     * @param description the description of the content of the package
-     * @param author author the author of the package
-     * @param created the creation date of the package
-     * @param modified the last modification date of the package
-     * @param xmlName the name of the XML file to be created
-     */
-    KoXmlResourceBundleMeta(QString *resourceTagList,QString name ,QString license,QString description="",
-        QString author="",QString created="",QString modified="",QString xmlName="meta");
-
-    /**
      * @brief ~KoXmlResourceBundleMeta : Dtor
      */
     virtual ~KoXmlResourceBundleMeta();
@@ -82,7 +60,7 @@ public:
      * @param tagName the name of the tag
      * @return the value from TagEnum corresponding to the tag.
      */
-    TagEnum getTagEnumValue(QString tagName);
+    static TagEnum getTagEnumValue(QString tagName);
 
     /**
      * @brief checkSort : Check/sort the file to be easily comprehensible
@@ -110,11 +88,9 @@ public:
      */
     QString getPackName();
 
-    /**
-     * @brief getShortPackName
-     * @return the short name of the resource pack
-     */
-    QString getShortPackName();
+    QString getPackFileName();
+
+    void setMeta(QString name="", QString author="", QString license="", QString website="", QString description="");
 };
 
 

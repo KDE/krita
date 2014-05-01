@@ -72,6 +72,8 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid
 
     QGridLayout *widgetLayout = new QGridLayout(this);
     widgetLayout->setColumnStretch(1, 1);
+    widgetLayout->setContentsMargins(0,0,0,0);
+    widgetLayout->setHorizontalSpacing(0);
 
     for (uint i = 0; i < iwparam.size(); ++i) {
         KisDelayedActionIntegerInput *widget = new KisDelayedActionIntegerInput(this, iwparam[i].name);
@@ -89,6 +91,8 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid
 
         m_integerWidgets.append(widget);
     }
+    widgetLayout->setRowStretch(iwparam.size(),1);
+
     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout->addItem(sp, iwparam.size(), 0);
 }

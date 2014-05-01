@@ -579,8 +579,7 @@ bool OrderByColumnList::appendField(QuerySchema& querySchema,
         append(new OrderByColumn(*field, ascending));
         return true;
     }
-    KexiDBWarn << "OrderByColumnList::addColumn(QuerySchema& querySchema, "
-    "const QString& column, bool ascending): no such field \"" << fieldName << "\"";
+    KexiDBWarn << "no such field" << fieldName;
     return false;
 }
 
@@ -632,7 +631,7 @@ QuerySchema::QuerySchema(TableSchema& tableSchema)
     d->masterTable = &tableSchema;
     init();
     /*if (!d->masterTable) {
-      KexiDBWarn << "QuerySchema(TableSchema*): !d->masterTable";
+      KexiDBWarn << "!d->masterTable";
       m_name.clear();
       return;
     }*/
@@ -709,17 +708,16 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
                                     int bindToTable, bool visible)
 {
     if (!field) {
-        KexiDBWarn << "QuerySchema::insertField(): !field";
+        KexiDBWarn << "!field";
         return *this;
     }
 
     if (position > (uint)m_fields.count()) {
-        KexiDBWarn << "QuerySchema::insertField(): position (" << position << ") out of range";
+        KexiDBWarn << "position" << position << "out of range";
         return *this;
     }
     if (!field->isQueryAsterisk() && !field->isExpression() && !field->table()) {
-        KexiDBWarn << "QuerySchema::insertField(): WARNING: field '" << field->name()
-        << "' must contain table information!";
+        KexiDBWarn << "field" << field->name() << "must contain table information!";
         return *this;
     }
     if ((int)fieldCount() >= d->visibility.size()) {
@@ -752,8 +750,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 
     //bind to table
     if (bindToTable < -1 || bindToTable > int(d->tables.count())) {
-        KexiDBWarn << "QuerySchema::insertField(): bindToTable (" << bindToTable
-        << ") out of range";
+        KexiDBWarn << "bindToTable" << bindToTable << "out of range";
         bindToTable = -1;
     }
     //--move items to make a place for a new one
@@ -761,16 +758,17 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
         d->tablesBoundToColumns[i] = d->tablesBoundToColumns[i-1];
     d->tablesBoundToColumns[ position ] = bindToTable;
 
-    KexiDBDbg << "QuerySchema::insertField(): bound to table (" << bindToTable << "): ";
+    /* debug:
+    KexiDBDbg << "bound to table" << bindToTable << ":";
     if (bindToTable == -1)
         KexiDBDbg << " <NOT SPECIFIED>";
     else
         KexiDBDbg << " name=" << d->tables.at(bindToTable)->name()
-        << " alias=" << tableAlias(bindToTable);
+            << " alias=" << tableAlias(bindToTable);
     QString s;
     for (uint i = 0; i < fieldCount();i++)
         s += (QString::number(d->tablesBoundToColumns[i]) + " ");
-    KexiDBDbg << "tablesBoundToColumns == [" << s << "]";
+    KexiDBDbg << "tablesBoundToColumns == [" << s << "]";*/
 
     if (field->isExpression())
         d->regenerateExprAliases = true;
@@ -782,8 +780,7 @@ int QuerySchema::tableBoundToColumn(uint columnPosition) const
 {
     int res = d->tablesBoundToColumns.value(columnPosition, -99);
     if (res == -99) {
-        KexiDBWarn << "QuerySchema::tableBoundToColumn(): columnPosition (" << columnPosition
-        << ") out of range";
+        KexiDBWarn << "columnPosition" << columnPosition << "out of range";
         return -1;
     }
     return res;
@@ -990,8 +987,7 @@ TableSchema::List* QuerySchema::tables() const
 
 void QuerySchema::addTable(TableSchema *table, const QByteArray& alias)
 {
-    KexiDBDbg << "QuerySchema::addTable() " << (void *)table
-    << " alias=" << alias;
+    KexiDBDbg << (void *)table << "alias=" << alias;
     if (!table)
         return;
 
@@ -1007,8 +1003,7 @@ void QuerySchema::addTable(TableSchema *table, const QByteArray& alias)
             if (table->name().toLower() == tableNameLower) {
                 const QString& tAlias = tableAlias(num);
                 if (tAlias == aliasLower) {
-                    KexiDBWarn << "QuerySchema::addTable(): table with \""
-                    << tAlias << "\" alias already added!";
+                    KexiDBWarn << "table with" << tAlias << "alias already added!";
                     return;
                 }
             }
@@ -1079,15 +1074,14 @@ bool QuerySchema::hasColumnAlias(uint position) const
 void QuerySchema::setColumnAlias(uint position, const QByteArray& alias)
 {
     if (position >= (uint)m_fields.count()) {
-        KexiDBWarn << "QuerySchema::setColumnAlias(): position ("  << position
-        << ") out of range!";
+        KexiDBWarn << "position" << position << "out of range!";
         return;
     }
     QByteArray fixedAlias(alias.trimmed());
     Field *f = FieldList::field(position);
     if (f->captionOrName().isEmpty() && fixedAlias.isEmpty()) {
-        KexiDBWarn << "QuerySchema::setColumnAlias(): position ("  << position
-        << ") could not remove alias when no name is specified for expression column!";
+        KexiDBWarn << "position" << position
+                   << "could not remove alias when no name is specified for expression column!";
         return;
     }
     d->setColumnAlias(position, fixedAlias);
@@ -1160,8 +1154,7 @@ int QuerySchema::columnPositionForAlias(const QByteArray& name) const
 void QuerySchema::setTableAlias(uint position, const QByteArray& alias)
 {
     if (position >= (uint)d->tables.count()) {
-        KexiDBWarn << "QuerySchema::setTableAlias(): position ("  << position
-        << ") out of range!";
+        KexiDBWarn << "position" << position << "out of range!";
         return;
     }
     QByteArray fixedAlias(alias.trimmed());
@@ -1316,8 +1309,8 @@ void QuerySchema::computeFieldsExpanded()
                     QueryColumnInfo *ci = new QueryColumnInfo(ast_f, QByteArray()/*no field for asterisk!*/,
                             isColumnVisible(fieldPosition));
                     list.append(ci);
-                    KexiDBDbg << "QuerySchema::computeFieldsExpanded(): caching (unexpanded) columns order: "
-                    << ci->debugString() << " at position " << fieldPosition;
+                    //KexiDBDbg << "caching (unexpanded) columns order: "
+                    //          << ci->debugString() << " at position " << fieldPosition;
                     d->columnsOrder->insert(ci, fieldPosition);
 //     list.append(ast_f);
                 }
@@ -1332,8 +1325,8 @@ void QuerySchema::computeFieldsExpanded()
                         QueryColumnInfo *ci = new QueryColumnInfo(tab_f, QByteArray()/*no field for asterisk!*/,
                                 isColumnVisible(fieldPosition));
                         list.append(ci);
-                        KexiDBDbg << "QuerySchema::computeFieldsExpanded(): caching (unexpanded) columns order: "
-                        << ci->debugString() << " at position " << fieldPosition;
+                        //KexiDBDbg << "caching (unexpanded) columns order: "
+                        //          << ci->debugString() << " at position " << fieldPosition;
                         d->columnsOrder->insert(ci, fieldPosition);
                     }
                 }
@@ -1344,8 +1337,8 @@ void QuerySchema::computeFieldsExpanded()
             QueryColumnInfo *ci = new QueryColumnInfo(f, columnAlias(fieldPosition), isColumnVisible(fieldPosition));
             list.append(ci);
             columnInfosOutsideAsterisks.insert(ci, true);
-            KexiDBDbg << "QuerySchema::computeFieldsExpanded(): caching (unexpanded) column's order: "
-            << ci->debugString() << " at position " << fieldPosition;
+            //KexiDBDbg << "caching (unexpanded) column's order: "
+            //          << ci->debugString() << " at position " << fieldPosition;
             d->columnsOrder->insert(ci, fieldPosition);
             d->columnsOrderWithoutAsterisks->insert(ci, fieldPosition);
 
@@ -1625,8 +1618,7 @@ void QuerySchema::computeFieldsExpanded()
                     ci->setIndexForVisibleLookupValue(d->fieldsExpanded->size() + index);
             }
         } else {
-            KexiDBWarn << "QuerySchema::computeFieldsExpanded(): unsupported record source type "
-            << rowSource.typeName();
+            KexiDBWarn << "unsupported record source type" << rowSource.typeName();
         }
     }
 }
@@ -1664,16 +1656,16 @@ QVector<int> QuerySchema::pkeyFieldsOrder()
         const int fieldIndex = fi->field->table() == tbl ? pkey->indexOf(fi->field) : -1;
         if (fieldIndex != -1/* field found in PK */
                 && d->pkeyFieldsOrder->at(fieldIndex) == -1 /* first time */) {
-            KexiDBDbg << "QuerySchema::pkeyFieldsOrder(): FIELD " << fi->field->name()
-            << " IS IN PKEY AT POSITION #" << fieldIndex;
+            //KexiDBDbg << "FIELD" << fi->field->name()
+            //          << "IS IN PKEY AT POSITION #" << fieldIndex;
 //   (*d->pkeyFieldsOrder)[j]=i;
             (*d->pkeyFieldsOrder)[fieldIndex] = i;
             d->pkeyFieldsCount++;
 //   j++;
         }
     }
-    KexiDBDbg << "QuerySchema::pkeyFieldsOrder(): " << d->pkeyFieldsCount
-    << " OUT OF " << pkey->fieldCount() << " PKEY'S FIELDS FOUND IN QUERY " << name();
+    //KexiDBDbg << d->pkeyFieldsCount
+    //<< " OUT OF " << pkey->fieldCount() << " PKEY'S FIELDS FOUND IN QUERY " << name();
     return *d->pkeyFieldsOrder;
 }
 
@@ -1703,7 +1695,7 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
     }
     TableSchema *mt = masterTable();
     if (!mt) {
-        KexiDBWarn << "QuerySchema::autoIncrementFields(): no master table!";
+        KexiDBWarn << "no master table!";
         return d->autoincFields;
     }
     if (d->autoincFields->isEmpty()) {//no cache
@@ -1828,19 +1820,19 @@ QuerySchemaParameterList QuerySchema::parameters()
 /*
   new field1, Field *field2
   if (!field1 || !field2) {
-    KexiDBWarn << "QuerySchema::addRelationship(): !masterField || !detailsField";
+    KexiDBWarn << "!masterField || !detailsField";
     return;
   }
   if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
-    KexiDBWarn << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks";
+    KexiDBWarn << "relationship's fields cannot be asterisks";
     return;
   }
   if (!hasField(field1) && !hasField(field2)) {
-    KexiDBWarn << "QuerySchema::addRelationship(): fields do not belong to this query";
+    KexiDBWarn << "fields do not belong to this query";
     return;
   }
   if (field1->table() == field2->table()) {
-    KexiDBWarn << "QuerySchema::addRelationship(): fields cannot belong to the same table";
+    KexiDBWarn << "fields cannot belong to the same table";
     return;
   }
 //@todo: check more things: -types
@@ -1909,7 +1901,7 @@ Field* QueryAsterisk::copy() const
 
 void QueryAsterisk::setTable(TableSchema *table)
 {
-    KexiDBDbg << "QueryAsterisk::setTable()";
+    //KexiDBDbg;
     m_table = table;
 }
 

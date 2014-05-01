@@ -26,6 +26,9 @@
 #include <QRect>
 #include <QDomElement>
 #include <QtConcurrentMap>
+#include <QByteArray>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -68,6 +71,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     setAngle(angle);
     QImage image = createBrushPreview();
     setImage(image);
+    setBrushTipImage(image);
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -307,15 +311,32 @@ qreal KisAutoBrush::density() const
     return d->density;
 }
 
+QByteArray KisAutoBrush::generateMD5() const
+{
+    QByteArray ba;
+    if (!brushTipImage().isNull()) {
+#if QT_VERSION >= 0x040700
+        ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
+#else
+        ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
+#endif
+    }
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("autobrush");
+    toXML(doc, root);
+    doc.appendChild(root);
+    md5.addData(doc.toByteArray());
+
+    return md5.result();
+
+}
+
 qreal KisAutoBrush::randomness() const
 {
     return d->randomness;
-}
-
-void KisAutoBrush::setImage(const QImage& image)
-{
-    m_image = image;
-    clearBrushPyramid();
 }
 
 QPainterPath KisAutoBrush::outline() const

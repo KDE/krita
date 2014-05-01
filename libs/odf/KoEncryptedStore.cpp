@@ -69,7 +69,8 @@ const char* META_FILE = "meta.xml";
 const char* THUMBNAIL_FILE = "Thumbnails/thumbnail.png";
 }
 
-KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode,
+                                   const QByteArray & appIdentification, bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(filename)), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
@@ -78,10 +79,12 @@ KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QB
     d->good = true;
     d->localFileName = filename;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+                                   bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString()), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
@@ -89,10 +92,13 @@ KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &
     m_pZip = new KZip(dev);
     d->good = true;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename,
+                                   Mode mode,
+                                   const QByteArray & appIdentification, bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(url.url())), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
@@ -116,6 +122,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
     }
     d->url = url;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
@@ -137,10 +144,15 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 d->good = false;
                 return false;
             }
-            m_pZip->setCompression(KZip::NoCompression);
             m_pZip->setExtraField(KZip::NoExtraField);
             // Write identification
-            (void)m_pZip->writeFile("mimetype", "", "", appIdentification.data(), appIdentification.length());
+            if (d->writeMimetype) {
+                m_pZip->setCompression(KZip::NoCompression);
+                (void)m_pZip->writeFile("mimetype", "", "",
+                                        appIdentification.data(), appIdentification.length());
+            }
+            // FIXME: Hmm, seems to be a bug here since this is
+            //        inconsistent with the code in openWrite():
             m_pZip->setCompression(KZip::DeflateCompression);
             // We don't need the extra field in Calligra - so we leave it as "no extra field".
         }

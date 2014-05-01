@@ -33,8 +33,6 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
 class QPoint;
-class QIODevice;
-
 class KoColor;
 class KoColorSpace;
 
@@ -89,7 +87,6 @@ public:
 
 protected:
 
-
     class PlainColoringInformation : public ColoringInformation
     {
     public:
@@ -134,9 +131,11 @@ public:
     }
 
     /**
-     * @return a preview of the brush
+     * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
+     * image.
+     * @return a valid QImage.
      */
-    virtual QImage image() const;
+    virtual QImage brushTipImage() const;
 
     /**
      * Change the spacing of the brush.
@@ -300,7 +299,7 @@ protected:
      * The image is used to represent the brush in the gui, and may also, depending on the brush type
      * be used to define the actual brush instance.
      */
-    virtual void setImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage& image);
 
     /**
      * XXX
@@ -311,13 +310,12 @@ protected:
 
     virtual void setHasColor(bool hasColor);
 
-protected:
 
-    QImage m_image;
+protected:
+    virtual QByteArray generateMD5() const;
 
     void resetBoundary();
 
-protected:
     void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:

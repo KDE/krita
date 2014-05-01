@@ -128,7 +128,7 @@ Page {
                         border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
-                        Component.onCompleted: text = Krita.Window.width;
+                        Component.onCompleted: text = Settings.customImageSettings.readProperty("Width"); //Krita.Window.width;
                     }
                     TextField {
                         id: heightField;
@@ -145,7 +145,7 @@ Page {
                         border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
-                        Component.onCompleted: text = Krita.Window.height;
+                        Component.onCompleted: text = Settings.customImageSettings.readProperty("Height"); //Krita.Window.height;
                     }
                 }
                 TextField {
@@ -161,6 +161,7 @@ Page {
                     text: "72";
                     validator: IntValidator{bottom: 0; top: 600;}
                     numeric: true;
+                    Component.onCompleted: text = Settings.customImageSettings.readProperty("Resolution");
                 }
             }
         }
@@ -189,6 +190,7 @@ Page {
                     expandedHeight: Constants.GridHeight * 3;
 
                     model: ColorModelModel { id: colorModelModel; }
+                    Component.onCompleted: currentIndex = colorModelModel.indexOf(Settings.customImageSettings.readProperty("ColorModel"));
                 }
 
                 ExpandingListView {
@@ -200,6 +202,7 @@ Page {
                     expandedHeight: Constants.GridHeight * 3;
 
                     model: ColorDepthModel { id: colorDepthModel; colorModelId: colorModelModel.id(colorModel.currentIndex); }
+                    Component.onCompleted: currentIndex = colorDepthModel.indexOf(Settings.customImageSettings.readProperty("ColorDepth"));
                 }
 
                 ExpandingListView {
@@ -278,8 +281,8 @@ Page {
 
                     min: 0;
                     max: 100;
-                    value: 100;
                     decimals: 0;
+                    value: 100;
                     placeholder: "Opacity";
                 }
             }

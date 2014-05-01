@@ -123,10 +123,11 @@ void KoXmlResourceBundleManifest::checkSort()
 void KoXmlResourceBundleManifest::merge(QDomNode dest,QDomNode src)
 {
     QDomNode currentNode=src.firstChild();
-
+    QString attribut;
     while (!currentNode.isNull()) {
-        addTag(dest.toElement().nodeName(),currentNode.firstChild().toText().data());
+        attribut = currentNode.toElement().attribute("name");
         src.removeChild(currentNode);
+        addTag(dest.toElement().tagName(),attribut);
         currentNode=src.firstChild();
     }
 
@@ -308,15 +309,32 @@ QList<QString> KoXmlResourceBundleManifest::getTagList()
     return result;
 }
 
-QList<QString> KoXmlResourceBundleManifest::getFileList()
+//TODO Résoudre le pb du src et le fait ke le fichier courant puisse etre différent du fichier qui était auparavant dans l'archive
+QList<QString> KoXmlResourceBundleManifest::getFileList(QString kritaPath,bool firstBuild)
 {
     QList<QString> result;
     QDomNodeList fileList=xmlDocument.elementsByTagName("file");
 
-    for (int i=0;i<fileList.size();i++) {
-        result.push_front(fileList.at(i).toElement().attributeNode("name").value());
+    if (firstBuild || isInstalled()) {
+        for (int i=0;i<fileList.size();i++) {
+            result.push_front(fileList.at(i).toElement().attributeNode("name").value());
+        }
     }
-
+    else {
+        QDomElement currentElement;
+        for (int i=0;i<fileList.size();i++) {
+            currentElement = fileList.at(i).toElement();
+            if(currentElement.attribute("src","")==QString("")) {
+                result.push_front(currentElement.attributeNode("name").value());
+            }
+            else {
+                QString currentFileName=currentElement.attributeNode("name").value();
+                currentFileName=kritaPath+QString("temp/")+currentFileName.section('/',currentFileName.count('/')-2,currentFileName.count('/')-2)
+                                    +QString("/")+currentFileName.section('/',currentFileName.count('/'));
+                result.push_front(currentFileName);
+            }
+        }
+    }
     return result;
 }
 
@@ -347,7 +365,7 @@ QList<QString> KoXmlResourceBundleManifest::getDirList()
     QDomElement currentElement = root.firstChildElement();
 
     while (!currentElement.isNull()) {
-        if (!result.contains(currentElement.tagName())) {
+        if (!result.contains(currentElement.tagName()) && currentElement.tagName()!="installed") {
             result.push_back(currentElement.tagName());
         }
         currentElement = currentElement.nextSiblingElement();
@@ -473,11 +491,23 @@ void KoXmlResourceBundleManifest::updateFilePaths(QString kritaPath,QString bund
         QDomNode currentNode=fileList.at(i);
         if(!currentNode.attributes().contains("src")) {
             QString oldValue=currentNode.toElement().attribute("name");
-            QString newValue=kritaPath+currentNode.parentNode().toElement().tagName()+"/"+bundleName.section('.',0,0)+"/"
+            QString newValue=kritaPath+currentNode.parentNode().toElement().tagName()+"/"+bundleName+"/"
                     +oldValue.section('/',oldValue.count('/'));
             currentNode.toElement().setAttribute("name",newValue);
             currentNode.toElement().setAttribute("src",oldValue);
         }
+    }
+}
+
+void KoXmlResourceBundleManifest::rename(QString newName)
+{
+    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    for (int i=0;i<fileList.size();i++) {
+        QDomElement currentElement=fileList.at(i).toElement();
+        QString oldValue=currentElement.attribute("name");
+        QString newValue=oldValue.section('/',0,oldValue.count('/')-2)+QString("/")+newName
+                +QString("/")+oldValue.section('/',oldValue.count('/'));
+        currentElement.setAttribute("name",newValue);
     }
 }
 
@@ -496,4 +526,9 @@ void KoXmlResourceBundleManifest::uninstall()
 bool KoXmlResourceBundleManifest::isInstalled()
 {
     return xmlDocument.elementsByTagName("installed").size()!=0;
+}
+
+QDomDocument KoXmlResourceBundleManifest::getXmlDocument()
+{
+    return this->xmlDocument;
 }

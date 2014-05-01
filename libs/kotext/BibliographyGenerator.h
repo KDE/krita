@@ -28,7 +28,6 @@
 
 class KoInlineTextObjectManager;
 class KoTextDocumentLayout;
-class QTextFrame;
 class KoInlineCite;
 class KoOdfBibliographyConfiguration;
 

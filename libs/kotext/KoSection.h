@@ -19,6 +19,8 @@
 #ifndef KOSECTION_H
 #define KOSECTION_H
 
+#include "kotext_export.h"
+
 #include <QMetaType>
 #include <QString>
 
@@ -43,7 +45,7 @@ class KoTextSharedLoadingData;
  * </ul>
  * (odf spec v.12)
  */
-class KoSection
+class KOTEXT_EXPORT KoSection
 {
 public:
 
@@ -64,7 +66,7 @@ private:
 /**
  * Marks the end of the given section
  */
-struct KoSectionEnd {
+struct KOTEXT_EXPORT KoSectionEnd {
     QString name; //< the name of the section we are closing
 
     void saveOdf(KoShapeSavingContext &context);

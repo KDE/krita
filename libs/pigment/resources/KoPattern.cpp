@@ -354,10 +354,11 @@ QImage KoPattern::pattern() const
 QByteArray KoPattern::generateMD5() const
 {
     if (!pattern().isNull()) {
+        QImage im = m_pattern.convertToFormat(QImage::Format_ARGB32);
 #if QT_VERSION >= 0x040700
-        QByteArray ba = QByteArray::fromRawData((const char*)m_pattern.constBits(), m_pattern.byteCount());
+        QByteArray ba = QByteArray::fromRawData((const char*)im.constBits(), im.byteCount());
 #else
-        QByteArray ba = QByteArray::fromRawData((const char*)m_pattern.bits(), m_pattern.byteCount());
+        QByteArray ba = QByteArray::fromRawData((const char*)im.bits(), im.byteCount());
 #endif
 
         QCryptographicHash md5(QCryptographicHash::Md5);

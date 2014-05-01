@@ -126,6 +126,7 @@ void DocumentManager::delayedNewDocument()
     {
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+        d->document->setUrl(KUrl("New Image.kra"));
     }
     else
     {
@@ -154,6 +155,7 @@ void DocumentManager::delayedNewDocument()
         KoColor bg(background, profile);
 
         d->document->newImage(name, width, height, profile, bg, QString(), res);
+        d->document->setUrl(KUrl("New Image.kra"));
     }
 
     d->temporaryFile = true;

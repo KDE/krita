@@ -115,11 +115,11 @@ void KisHSVConfigWidget::switchType(int index)
     emit sigConfigurationItemChanged();
     switch(index) {
     case 0:
-        m_page->label_3->setText(i18n("Value"));
+        m_page->label_3->setText(i18n("Value:"));
         return;
     case 1:
     default:
-        m_page->label_3->setText(i18n("Lightness"));
+        m_page->label_3->setText(i18n("Lightness:"));
     }
 
 }

@@ -39,7 +39,7 @@
       <item row="2" column="0" colspan="3">
        <widget class="KIntNumInput" name="irisRadiusSlider">
         <property name="label">
-         <string>Radius</string>
+         <string>Radius:</string>
         </property>
         <property name="minimum">
          <number>0</number>
@@ -55,7 +55,7 @@
       <item row="3" column="0" colspan="3">
        <widget class="KIntNumInput" name="irisRotationSlider">
         <property name="label">
-         <string>Rotation</string>
+         <string>Rotation:</string>
         </property>
         <property name="minimum">
          <number>0</number>

@@ -92,6 +92,7 @@ void KisFillPainter::initFillPainter()
     m_sizemod = 0;
     m_feather = 0;
     m_useCompositioning = false;
+    m_threshold = 0;
 }
 
 // 'regular' filling
@@ -122,7 +123,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     if (h < 1) return;
 
     KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
-    patternLayer->convertFromQImage(pattern->image(), 0);
+    patternLayer->convertFromQImage(pattern->pattern(), 0);
 
     fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
 }

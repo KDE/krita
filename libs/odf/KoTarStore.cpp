@@ -31,7 +31,8 @@
 
 #include <kio/netaccess.h>
 
-KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification)
+KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+                       bool writeMimetype)
 {
     kDebug(30002) << "KoTarStore Constructor filename =" << _filename
     << " mode = " << int(_mode) << endl;
@@ -41,24 +42,28 @@ KoTarStore::KoTarStore(const QString & _filename, Mode _mode, const QByteArray &
 
     m_pTar = new KTar(_filename, "application/x-gzip");
 
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode);   // open the targz file and init some vars
     kDebug(30002) << "appIdentification :" << appIdentification;
     if (d->good && _mode == Write)
         m_pTar->setOrigFileName(completeMagic(appIdentification));
 }
 
-KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification)
+KoTarStore::KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+                       bool writeMimetype)
 {
     Q_D(KoStore);
     m_pTar = new KTar(dev);
 
+    d->writeMimetype = writeMimetype;
     d->good = init(mode);
 
     if (d->good && mode == Write)
         m_pTar->setOrigFileName(completeMagic(appIdentification));
 }
 
-KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification)
+KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode,
+                       const QByteArray & appIdentification, bool writeMimetype)
 {
     kDebug(30002) << "KoTarStore Constructor url=" << _url.pathOrUrl()
     << " filename = " << _filename
@@ -79,6 +84,7 @@ KoTarStore::KoTarStore(QWidget* window, const KUrl& _url, const QString & _filen
 
     m_pTar = new KTar(d->localFileName, "application/x-gzip");
 
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode);   // open the targz file and init some vars
 
     if (d->good && _mode == Write)

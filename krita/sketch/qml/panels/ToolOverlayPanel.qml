@@ -24,12 +24,16 @@ Item {
 
     function toolIDToName(toolID) {
         var names = {
-            "KritaShape/KisToolBrush" : "paint",
-            "KritaFill/KisToolFill" : "fill",
-            "KritaFill/KisToolGradient" : "gradient",
+            "KritaShape/KisToolBrush" : "none", // "paint",
+            "KritaFill/KisToolFill" : "none", // "fill",
+            "KritaFill/KisToolGradient" : "none", // "gradient",
             "KritaTransform/KisToolMove" : "move",
             "KisToolTransform" : "transform",
-            "KisToolCrop" : "crop"
+            "KisToolCrop" : "none", // "crop",
+            "KisToolSelectRectangular" : "select",
+            "KisToolSelectPolygonal" : "select",
+            "KisToolSelectContiguous" : "select",
+            "KisToolSelectSimilar" : "select"
         };
         return names[toolID];
     }

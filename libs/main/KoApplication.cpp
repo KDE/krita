@@ -107,7 +107,6 @@ public:
             }
             else {
                 m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
-                m_splash->setParent(qApp->activeWindow());
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());

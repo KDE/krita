@@ -391,7 +391,7 @@ Item {
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 PropertyAction { targets: [ base ]; properties: "width"; }
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
             }
         },
         Transition {
@@ -399,7 +399,7 @@ Item {
             to: "collapsed";
 
             SequentialAnimation {
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ base ]; properties: "width"; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
@@ -433,7 +433,7 @@ Item {
             to: "edit"
             reversible: true;
 
-            NumberAnimation { properties: "width"; duration: 250; }
+            NumberAnimation { properties: "width"; duration: Constants.AnimationDuration; }
         }
     ]
 }

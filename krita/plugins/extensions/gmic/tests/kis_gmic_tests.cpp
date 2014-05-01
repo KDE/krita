@@ -41,12 +41,16 @@
 #include <kis_gmic_simple_convertor.h>
 #include <kis_gmic_blacklister.h>
 #include <kis_input_output_mapper.h>
+#include <kis_gmic_applicator.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
 #include <kis_group_layer.h>
 #include <kis_painter.h>
+#include <kis_selection.h>
+#include <commands/kis_set_global_selection_command.h>
+#include <kis_processing_applicator.h>
 #include <testutil.h>
 
 #ifndef FILES_DATA_DIR
@@ -79,6 +83,8 @@ void KisGmicTests::initTestCase()
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, m_gmicImage);;
 
     m_images.assign(1);
+
+
 }
 
 void KisGmicTests::cleanupTestCase()
@@ -194,7 +200,7 @@ void KisGmicTests::testAllFilters()
     q.enqueue(m_root);
 
     KisGmicFilterSetting filterSettings;
-    int filters = 0;
+    int filterCount = 0;
 
     int failed = 0;
     int success = 0;
@@ -211,7 +217,7 @@ void KisGmicTests::testAllFilters()
             //qDebug() << "Filter: " << c->name() << filterSettings.gmicCommand();
             if (!filterSettings.gmicCommand().startsWith("-_none_"))
             {
-                filters++;
+                filterCount++;
 
 #ifdef RUN_FILTERS
                 QString filterName = KisGmicBlacklister::toPlainText(cmd->name());
@@ -273,8 +279,37 @@ void KisGmicTests::testAllFilters()
 #endif
 
 
+#ifndef gmic_version
+#error gmic_version has to be defined in gmic.h
+#endif
 
-    QCOMPARE(filters,260);
+    int GMIC_FILTER_COUNT;
+    int gmicVersion = gmic_version;
+    switch (gmicVersion)
+    {
+        case 1570:
+        {
+            GMIC_FILTER_COUNT = 260;
+            break;
+        }
+        case 1584:
+        {
+            GMIC_FILTER_COUNT = 288;
+            break;
+        }
+        default:
+        {
+            GMIC_FILTER_COUNT = 260;
+            break;
+        }
+    }
+
+    // If this fails:
+    // gmic version changed and gmic was updated, right? Then please update GMIC_FILTER_COUNT. Or you caused regression in gmic def parser..
+    // For now run test KisGmicTests::testAllFilters to find correct value for GMIC_FILTER_COUNT
+    // If it is suspicious value (e.g. smaller then previous releases), the gmic_def.gmic file maybe changed format and should not be updated
+    // without updating Krita's gmic parser
+    QCOMPARE(filterCount,GMIC_FILTER_COUNT);
 }
 
 
@@ -482,6 +517,75 @@ void KisGmicTests::testConvertRGBAgmic()
         QFAIL(QString("Fast method failed to convert gmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         fastQImage.save("RGBA_fast.bmp");
     }
+}
+
+
+void KisGmicTests::testFilterOnlySelection()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+    int width = 3840;
+    int height = 2400;
+    KisImageSP image = new KisImage(undoStore, width, height, colorSpace, "filter selection test");
+
+    QImage simpleImage(QString(FILES_DATA_DIR) + QDir::separator() + "poster_rodents_bunnysize.jpg");
+    KisPaintDeviceSP device = new KisPaintDevice(colorSpace);
+    device->convertFromQImage(simpleImage, 0, 0, 0);
+
+    KisLayerSP paintLayer = new KisPaintLayer(image, "background", OPACITY_OPAQUE_U8, device);
+    image->addNode(paintLayer, image->rootLayer());
+
+    // add global selection
+
+    QPoint topLeft(0.25 * width, 0.25 * height);
+    QPoint bottomRight(0.75 * width, 0.75 * height);
+
+    QRect selectionRect(topLeft, bottomRight);
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
+    KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+    pixelSelection->select(selectionRect);
+
+    KUndo2Command *cmd = new KisSetGlobalSelectionCommand(image, selection);
+    image->undoAdapter()->addCommand(cmd);
+
+    QRect selected = image->globalSelection()->selectedExactRect();
+    QCOMPARE(selectionRect, selected);
+
+    // filter kis image with gmic
+
+    KisNodeListSP kritaNodes(new QList< KisNodeSP >());
+    kritaNodes->append(static_cast<KisNodeSP>(paintLayer));
+
+    // select some simple filter
+    QString filterName = "Sepia";
+    QString filterCategory = "Colors";
+
+    Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
+
+    KisGmicFilterSetting filterSettings;
+    if (c == 0)
+    {
+            qDebug() << "Filter not found!";
+    }
+    else
+    {
+        Command * cmd = static_cast<Command *>(c);
+        cmd->writeConfiguration(&filterSettings);
+    }
+
+    QVERIFY(!filterSettings.gmicCommand().isEmpty());
+
+    QString gmicCommand = filterSettings.gmicCommand();
+
+    KisGmicApplicator applicator;
+    applicator.setProperties(image, image->root(), "Gmic filter", kritaNodes, gmicCommand);
+    applicator.start();
+    applicator.wait();
+    image->waitForDone();
+
+    //image->convertToQImage(image->bounds(), 0).save("filteredSelection.png");
+    //TODO: check with expected image!
+
 }
 
 

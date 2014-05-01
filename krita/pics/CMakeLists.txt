@@ -2,6 +2,8 @@ install(FILES
 AboutKrita.png
 addlayer.png
 addtofolder.png
+arrow-down.png
+arrow-right.png
 arrowdown.png
 arrowupblr.png
 broken-preset.png

@@ -42,7 +42,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 {
 
     Q_OBJECT
-    Q_PROPERTY(bool clip READ hasClip NOTIFY clipCreated)
+    Q_PROPERTY(bool clip READ hasClip NOTIFY clipChanged)
 
 public:
 

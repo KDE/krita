@@ -139,20 +139,18 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    for (int row = 0; row < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        do {
-            if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
-                // XXX: Added static_cast to get rid of warnings
-                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
-                                static_cast<int>((double)randg.doubleRandomAt(it.x(), it.y()) * 255),
-                                static_cast<int>((double)randb.doubleRandomAt(it.x(), it.y()) * 255));
-                cs->fromQColor(c, interm, 0);
-                pixels[1] = it.oldRawData();
-                mixOp->mixColors(pixels, weights, 2, it.rawData());
-            }
-            if (progressUpdater) progressUpdater->setValue(++count);
-        } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-    }
+    do {
+        if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
+            // XXX: Added static_cast to get rid of warnings
+            QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randg.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randb.doubleRandomAt(it.x(), it.y()) * 255));
+            cs->fromQColor(c, interm, 0);
+            pixels[1] = it.oldRawData();
+            mixOp->mixColors(pixels, weights, 2, it.rawData());
+        }
+        if (progressUpdater) progressUpdater->setValue(++count);
+    } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
 
     delete [] interm;
 }

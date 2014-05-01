@@ -174,8 +174,8 @@ Panel {
                     PropertyChanges { target: addLayerButtons; height: Constants.GridHeight; opacity: 1; }
                 }
             ]
-            Behavior on height { PropertyAnimation { duration: 150;  } }
-            Behavior on opacity { PropertyAnimation { duration: 150;  } }
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration;  } }
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration;  } }
             clip: true;
             height: 0;
             opacity: 0;
@@ -186,6 +186,15 @@ Panel {
                 anchors.centerIn: parent;
                 height: childrenRect.height;
                 width: childrenRect.width;
+                Button {
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
+                    image: Settings.theme.icon("fileclip-black")
+                    visible: KisClipBoard.clip;
+                    onClicked: {
+                        sketchView.selectionManager.paste();
+                        addLayerButtons.state = "";
+                    }
+                }
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     image: Settings.theme.icon("layer_paint-black")

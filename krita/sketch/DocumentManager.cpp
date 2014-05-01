@@ -41,6 +41,7 @@ public:
         , newDocHeight(0)
         , newDocResolution(0)
         , importingDocument(false)
+        , temporaryFile(false)
     { }
 
     ProgressProxy* proxy;
@@ -54,6 +55,7 @@ public:
     int newDocWidth, newDocHeight; float newDocResolution;
     bool importingDocument;
     QVariantMap newDocOptions;
+    bool temporaryFile;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -90,6 +92,11 @@ RecentFileManager* DocumentManager::recentFileManager() const
     return d->recentFileManager;
 }
 
+bool DocumentManager::isTemporaryFile() const
+{
+    return d->temporaryFile;
+}
+
 void DocumentManager::newDocument(int width, int height, float resolution)
 {
     closeDocument();
@@ -97,14 +104,15 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     d->newDocWidth = width;
     d->newDocHeight = height;
     d->newDocResolution = resolution;
-    QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
+    QTimer::singleShot(300, this, SLOT(delayedNewDocument()));
 }
 
 void DocumentManager::newDocument(const QVariantMap& options)
 {
     closeDocument();
+
     d->newDocOptions = options;
-    QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
+    QTimer::singleShot(300, this, SLOT(delayedNewDocument()));
 }
 
 void DocumentManager::delayedNewDocument()
@@ -118,13 +126,15 @@ void DocumentManager::delayedNewDocument()
     {
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+        d->document->setUrl(KUrl("New Image.kra"));
     }
     else
     {
         QString name = d->newDocOptions.value("name", "New Image").toString();
         int width = d->newDocOptions.value("width").toInt();
         int height = d->newDocOptions.value("height").toInt();
-        float res = d->newDocOptions.value("resolution", 72.0f).toFloat();
+        // internal resolution is pixels per point, not ppi
+        float res = d->newDocOptions.value("resolution", 72.0f).toFloat() / 72.0f;
 
         QString colorModelId = d->newDocOptions.value("colorModelId").toString();
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
@@ -145,7 +155,10 @@ void DocumentManager::delayedNewDocument()
         KoColor bg(background, profile);
 
         d->document->newImage(name, width, height, profile, bg, QString(), res);
+        d->document->setUrl(KUrl("New Image.kra"));
     }
+
+    d->temporaryFile = true;
 
     emit documentChanged();
 }
@@ -155,7 +168,7 @@ void DocumentManager::openDocument(const QString& document, bool import)
     closeDocument();
     d->openDocumentFilename = document;
     d->importingDocument = import;
-    QTimer::singleShot(1000, this, SLOT(delayedOpenDocument()));
+    QTimer::singleShot(300, this, SLOT(delayedOpenDocument()));
 }
 
 void DocumentManager::delayedOpenDocument()
@@ -171,6 +184,9 @@ void DocumentManager::delayedOpenDocument()
     else
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     d->recentFileManager->addRecent(d->openDocumentFilename);
+
+    d->temporaryFile = false;
+
     emit documentChanged();
 }
 
@@ -189,6 +205,7 @@ bool DocumentManager::save()
     if (d->document->save())
     {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
+        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
         return true;
     }
@@ -203,13 +220,14 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
     // the save call happens late enough for a variety of UI things to happen first.
     // A second seems like a long time, but well, we do have file system interaction here,
     // so for now, we can get away with it.
-    QTimer::singleShot(1000, this, SLOT(delayedSaveAs()));
+    QTimer::singleShot(300, this, SLOT(delayedSaveAs()));
 }
 
 void DocumentManager::delayedSaveAs()
 {
     d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
+    d->recentFileManager->addRecent(d->saveAsFilename);
     emit documentSaved();
 }
 
@@ -219,6 +237,12 @@ void DocumentManager::reload()
     closeDocument();
     d->openDocumentFilename = url.toLocalFile();
     QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));
+}
+
+void DocumentManager::setTemporaryFile(bool temp)
+{
+    d->temporaryFile = temp;
+    emit documentSaved();
 }
 
 DocumentManager* DocumentManager::instance()

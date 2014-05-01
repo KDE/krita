@@ -30,6 +30,11 @@ Constants::Constants(QObject* parent)
     m_toolbarButtonSize = m_gridHeight;
 }
 
+int Constants::animationDuration() const
+{
+    return 150;
+}
+
 qreal Constants::gridHeight() const
 {
     return m_gridHeight;

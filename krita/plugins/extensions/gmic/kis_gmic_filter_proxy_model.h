@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KORESOURCETAGGING_TEST_H
-#define KORESOURCETAGGING_TEST_H
+#include <QSortFilterProxyModel>
 
-#include <QtTest>
-#include <KoConfig.h>
-#include "KoResourceTagStore.h"
-
-class KoResourceTagStore_test : public QObject
+class KisGmicFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
-private slots:
+public:
+    KisGmicFilterProxyModel (QObject *parent = 0);
 
-    // tests
-    void testIntialization();
-    void testAddingDeletingTag();
-    void testSearchingTag();
-    void testReadWriteXML();
-private:
-    void addData();
-    KoResourceTagStore* m_tagObject;
-    QStringList m_resourceNames, m_tags;
+protected:
+    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
 };
-
-#endif

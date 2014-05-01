@@ -272,7 +272,7 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
     return false;
 }
 
-bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *store)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);

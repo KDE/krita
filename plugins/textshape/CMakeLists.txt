@@ -16,8 +16,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver/)
+    ${KOMAIN_INCLUDES})
 
 ########### Flake Plugin library ###############
 
@@ -39,6 +38,7 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+    FontFamilyAction.cpp
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp

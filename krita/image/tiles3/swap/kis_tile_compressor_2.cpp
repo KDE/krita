@@ -52,7 +52,7 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     store.write(m_streamingBuffer.data(), bytesWritten);
 }
 
-void KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
+bool KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
     prepareStreamingBuffer(tileDataSize);
@@ -60,24 +60,28 @@ void KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
     QByteArray header = stream->readLine(maxHeaderLength());
 
     QList<QByteArray> headerItems = header.trimmed().split(',');
-    qint32 x = headerItems.takeFirst().toInt();
-    qint32 y = headerItems.takeFirst().toInt();
-    QString compressionName = headerItems.takeFirst();
-    qint32 dataSize = headerItems.takeFirst().toInt();
+    if (headerItems.size() == 4) {
+        qint32 x = headerItems.takeFirst().toInt();
+        qint32 y = headerItems.takeFirst().toInt();
+        QString compressionName = headerItems.takeFirst();
+        qint32 dataSize = headerItems.takeFirst().toInt();
 
-    Q_ASSERT(headerItems.isEmpty());
-    Q_ASSERT(compressionName == m_compressionName);
+        Q_ASSERT(headerItems.isEmpty());
+        Q_ASSERT(compressionName == m_compressionName);
 
-    qint32 row = yToRow(dm, y);
-    qint32 col = xToCol(dm, x);
+        qint32 row = yToRow(dm, y);
+        qint32 col = xToCol(dm, x);
 
-    KisTileSP tile = dm->getTile(col, row, true);
+        KisTileSP tile = dm->getTile(col, row, true);
 
-    stream->read(m_streamingBuffer.data(), dataSize);
+        stream->read(m_streamingBuffer.data(), dataSize);
 
-    tile->lockForWrite();
-    decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData());
-    tile->unlock();
+        tile->lockForWrite();
+        bool res = decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData());
+        tile->unlock();
+        return res;
+    }
+    return false;
 }
 
 void KisTileCompressor2::prepareStreamingBuffer(qint32 tileDataSize)
@@ -132,7 +136,7 @@ void KisTileCompressor2::compressTileData(KisTileData *tileData,
     }
 }
 
-void KisTileCompressor2::decompressTileData(quint8 *buffer,
+bool KisTileCompressor2::decompressTileData(quint8 *buffer,
                                             qint32 bufferSize,
                                             KisTileData *tileData)
 {
@@ -145,17 +149,19 @@ void KisTileCompressor2::decompressTileData(quint8 *buffer,
         qint32 bytesWritten;
         bytesWritten = m_compression->decompress(buffer + 1, bufferSize - 1,
                                                  (quint8*)m_linearizationBuffer.data(), tileDataSize);
-
-        Q_ASSERT(bytesWritten == tileDataSize);
-        Q_UNUSED(bytesWritten); // unused-but-set-variable
-
-        KisAbstractCompression::delinearizeColors((quint8*)m_linearizationBuffer.data(),
-                                                  tileData->data(),
-                                                  tileDataSize, pixelSize);
+        if (bytesWritten == tileDataSize) {
+            KisAbstractCompression::delinearizeColors((quint8*)m_linearizationBuffer.data(),
+                                                      tileData->data(),
+                                                      tileDataSize, pixelSize);
+            return true;
+        }
+        return false;
     }
     else {
         memcpy(tileData->data(), buffer + 1, tileDataSize);
+        return true;
     }
+    return false;
 
 }
 

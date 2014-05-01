@@ -50,16 +50,16 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_handsCount(6),
       m_mirrorVertically(true),
       m_mirrorHorizontally(true),
-      m_showAxis(false),
+      m_showAxes(false),
       m_translateRadius(100),
-      m_setupAxisFlag(false)
+      m_setupAxesFlag(false)
 {
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
                                    recordingAdapter());
     resetHelper(m_helper);
 
-    m_axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
+    m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
 }
 
 KisToolMultihand::~KisToolMultihand()
@@ -68,9 +68,9 @@ KisToolMultihand::~KisToolMultihand()
 
 void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(m_setupAxisFlag) {
+    if(m_setupAxesFlag) {
         setMode(KisTool::OTHER);
-        m_axisPoint = convertToPixelCoord(event->point);
+        m_axesPoint = convertToPixelCoord(event->point);
         requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
@@ -83,7 +83,7 @@ void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
 void KisToolMultihand::continuePrimaryAction(KoPointerEvent *event)
 {
     if(mode() == KisTool::OTHER) {
-        m_axisPoint = convertToPixelCoord(event->point);
+        m_axesPoint = convertToPixelCoord(event->point);
         requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
@@ -97,7 +97,7 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
     if(mode() == KisTool::OTHER) {
         setMode(KisTool::HOVER_MODE);
         requestUpdateOutline(event->point, 0);
-        finishAxisSetup();
+        finishAxesSetup();
     }
     else {
         KisToolFreehand::endPrimaryAction(event);
@@ -106,26 +106,26 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    if(m_setupAxisFlag) {
+    if(m_setupAxesFlag) {
         int diagonal = (currentImage()->height() + currentImage()->width());
 
         QPainterPath path;
-        path.moveTo(m_axisPoint.x()-diagonal*cos(m_angle), m_axisPoint.y()-diagonal*sin(m_angle));
-        path.lineTo(m_axisPoint.x()+diagonal*cos(m_angle), m_axisPoint.y()+diagonal*sin(m_angle));
-        path.moveTo(m_axisPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axisPoint.y()-diagonal*sin(m_angle+M_PI_2));
-        path.lineTo(m_axisPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axisPoint.y()+diagonal*sin(m_angle+M_PI_2));
+        path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
+        path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
+        path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
+        path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
         paintToolOutline(&gc, pixelToView(path));
     }
     else {
         KisToolFreehand::paint(gc, converter);
-        if(m_showAxis){
+        if(m_showAxes){
             int diagonal = (currentImage()->height() + currentImage()->width());
 
             QPainterPath path;
-            path.moveTo(m_axisPoint.x()-diagonal*cos(m_angle), m_axisPoint.y()-diagonal*sin(m_angle));
-            path.lineTo(m_axisPoint.x()+diagonal*cos(m_angle), m_axisPoint.y()+diagonal*sin(m_angle));
-            path.moveTo(m_axisPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axisPoint.y()-diagonal*sin(m_angle+M_PI_2));
-            path.lineTo(m_axisPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axisPoint.y()+diagonal*sin(m_angle+M_PI_2));
+            path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
+            path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
+            path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
+            path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
             paintToolOutline(&gc, pixelToView(path));
         }
     }
@@ -141,9 +141,9 @@ void KisToolMultihand::initTransformations()
         qreal angleStep = (2 * M_PI) / m_handsCount;
 
         for(int i = 0; i < m_handsCount; i++) {
-            m.translate(m_axisPoint.x(), m_axisPoint.y());
+            m.translate(m_axesPoint.x(), m_axesPoint.y());
             m.rotateRadians(angle);
-            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
+            m.translate(-m_axesPoint.x(), -m_axesPoint.y());
 
             transformations << m;
             m.reset();
@@ -154,31 +154,31 @@ void KisToolMultihand::initTransformations()
         transformations << m;
 
         if (m_mirrorHorizontally) {
-            m.translate(m_axisPoint.x(),m_axisPoint.y());
+            m.translate(m_axesPoint.x(),m_axesPoint.y());
             m.rotateRadians(m_angle);
             m.scale(-1,1);
             m.rotateRadians(-m_angle);
-            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
+            m.translate(-m_axesPoint.x(), -m_axesPoint.y());
             transformations << m;
             m.reset();
         }
 
         if (m_mirrorVertically) {
-            m.translate(m_axisPoint.x(),m_axisPoint.y());
+            m.translate(m_axesPoint.x(),m_axesPoint.y());
             m.rotateRadians(m_angle);
             m.scale(1,-1);
             m.rotateRadians(-m_angle);
-            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
+            m.translate(-m_axesPoint.x(), -m_axesPoint.y());
             transformations << m;
             m.reset();
         }
 
         if (m_mirrorVertically && m_mirrorHorizontally){
-            m.translate(m_axisPoint.x(),m_axisPoint.y());
+            m.translate(m_axesPoint.x(),m_axesPoint.y());
             m.rotateRadians(m_angle);
             m.scale(-1,-1);
             m.rotateRadians(-m_angle);
-            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
+            m.translate(-m_axesPoint.x(), -m_axesPoint.y());
             transformations << m;
             m.reset();
         }
@@ -202,11 +202,11 @@ void KisToolMultihand::initTransformations()
             qreal nx = (m_translateRadius * cos(angle) * length);
             qreal ny = (m_translateRadius * sin(angle) * length);
 
-            m.translate(m_axisPoint.x(),m_axisPoint.y());
+            m.translate(m_axesPoint.x(),m_axesPoint.y());
             m.rotateRadians(m_angle);
             m.translate(nx,ny);
             m.rotateRadians(-m_angle);
-            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
+            m.translate(-m_axesPoint.x(), -m_axesPoint.y());
 
             transformations << m;
             m.reset();
@@ -220,22 +220,22 @@ QWidget* KisToolMultihand::createOptionWidget()
 {
     QWidget *widget = KisToolBrush::createOptionWidget();
 
-    m_axisChCkBox = new QCheckBox(i18n("Show Axis"));
-    m_axisChCkBox->setChecked(m_showAxis);
-    connect(m_axisChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetAxisVisable(bool)));
+    m_axesChCkBox = new QCheckBox(i18n("Show Axes"));
+    m_axesChCkBox->setChecked(m_showAxes);
+    connect(m_axesChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetAxesVisible(bool)));
 
-    m_axisPointBtn = new QPushButton(i18n("Axis point"), widget);
-    m_axisPointBtn->setCheckable(true);
-    connect(m_axisPointBtn, SIGNAL(clicked(bool)),this, SLOT(activateAxisPointModeSetup()));
-    addOptionWidgetOption(m_axisPointBtn, m_axisChCkBox);
+    m_axesPointBtn = new QPushButton(i18n("Axes point"), widget);
+    m_axesPointBtn->setCheckable(true);
+    connect(m_axesPointBtn, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));
+    addOptionWidgetOption(m_axesPointBtn, m_axesChCkBox);
 
-    m_axisAngleSlider = new KisDoubleSliderSpinBox(widget);
-    m_axisAngleSlider->setToolTip(i18n("Set axis angle (degrees)"));
-    m_axisAngleSlider->setRange(0.0, 90.0,1);
-    m_axisAngleSlider->setValue(0.0);
-    m_axisAngleSlider->setEnabled(true);
-    connect(m_axisAngleSlider, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxisAngle(qreal)));
-    addOptionWidgetOption(m_axisAngleSlider, new QLabel(i18n("Axis Angle:")));
+    m_axesAngleSlider = new KisDoubleSliderSpinBox(widget);
+    m_axesAngleSlider->setToolTip(i18n("Set axes angle (degrees)"));
+    m_axesAngleSlider->setRange(0.0, 90.0,1);
+    m_axesAngleSlider->setValue(0.0);
+    m_axesAngleSlider->setEnabled(true);
+    connect(m_axesAngleSlider, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
+    addOptionWidgetOption(m_axesAngleSlider, new QLabel(i18n("Axes Angle:")));
 
     m_transformModesComboBox = new QComboBox(widget);
     m_transformModesComboBox->addItem(i18n("Symmetry"),int(SYMMETRY));
@@ -292,21 +292,21 @@ QWidget* KisToolMultihand::createOptionWidget()
     return widget;
 }
 
-void KisToolMultihand::activateAxisPointModeSetup()
+void KisToolMultihand::activateAxesPointModeSetup()
 {
-    if (m_axisPointBtn->isChecked()){
-        m_setupAxisFlag = true;
+    if (m_axesPointBtn->isChecked()){
+        m_setupAxesFlag = true;
         useCursor(KisCursor::crossCursor());
         updateCanvas();
     } else {
-        finishAxisSetup();
+        finishAxesSetup();
     }
 }
 
-void KisToolMultihand::finishAxisSetup()
+void KisToolMultihand::finishAxesSetup()
 {
-    m_setupAxisFlag = false;
-    m_axisPointBtn->setChecked(false);
+    m_setupAxesFlag = false;
+    m_axesPointBtn->setChecked(false);
     resetCursorStyle();
     updateCanvas();
 }
@@ -323,9 +323,9 @@ void KisToolMultihand::slotSetHandsCount(int count)
     m_handsCount = count;
 }
 
-void KisToolMultihand::slotSetAxisAngle(qreal angle)
+void KisToolMultihand::slotSetAxesAngle(qreal angle)
 {
-    //negative so axis rotates counter clockwise
+    //negative so axes rotates counter clockwise
     m_angle = -angle*M_PI/180;
     updateCanvas();
 }
@@ -337,9 +337,9 @@ void KisToolMultihand::slotSetTransformMode(int index)
     m_handsCountSlider->setVisible(m_transformMode != MIRROR);
 }
 
-void KisToolMultihand::slotSetAxisVisable(bool vis)
+void KisToolMultihand::slotSetAxesVisible(bool vis)
 {
-    m_showAxis = vis;
+    m_showAxes = vis;
     updateCanvas();
 }
 

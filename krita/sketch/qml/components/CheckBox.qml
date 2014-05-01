@@ -76,7 +76,7 @@ Item {
             from: "";
             to: "checked";
             reversible: true;
-            PropertyAnimation { targets: [notCheckedImg, checkedImg]; properties: "opacity"; duration: 150; }
+            PropertyAnimation { targets: [notCheckedImg, checkedImg]; properties: "opacity"; duration: Constants.AnimationDuration; }
         }
     ]
 }

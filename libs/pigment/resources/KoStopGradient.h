@@ -41,7 +41,6 @@ public:
     virtual ~KoStopGradient();
 
     virtual bool load();
-    /// Not implemented
     virtual bool save();
 
     /// reimplemented
@@ -60,17 +59,26 @@ public:
     QString defaultFileExtension() const;
 
 protected:
+
+    virtual QByteArray generateMD5() const;
+
     QList<KoGradientStop> m_stops;
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
+
 private:
+
     mutable KoColor buffer;
+
 private:
-    void loadKarbonGradient(QFile* file);
+
+    bool save(QIODevice *io) const;
+
+    void loadKarbonGradient(QIODevice *file);
     void parseKarbonGradient(const QDomElement& element);
 
-    void loadSvgGradient(QFile* file);
+    void loadSvgGradient(QIODevice *file);
     void parseSvgGradient(const QDomElement& element);
     void parseSvgColor(QColor &color, const QString &s);
 };

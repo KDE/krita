@@ -90,12 +90,12 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
         return new KisTotalRandomColorSource();
     case PATTERN: {
         KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
-        dev->convertFromQImage(_painter->pattern()->image(), 0);
+        dev->convertFromQImage(_painter->pattern()->pattern(), 0);
         return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
     }
     case PATTERN_LOCKED: {
         KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
-        dev->convertFromQImage(_painter->pattern()->image(), 0);
+        dev->convertFromQImage(_painter->pattern()->pattern(), 0);
         return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);
 
     }

@@ -74,6 +74,7 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 
 KisSafeDocumentLoader::~KisSafeDocumentLoader()
 {
+    delete m_d;
 }
 
 KisImageWSP KisSafeDocumentLoader::image() const

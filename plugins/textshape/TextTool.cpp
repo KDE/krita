@@ -37,6 +37,7 @@
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
+#include "FontFamilyAction.h"
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
@@ -72,7 +73,6 @@
 #include <krun.h>
 #include <kstandardshortcut.h>
 #include <kfontchooser.h>
-#include <kfontaction.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
@@ -322,7 +322,7 @@ void TextTool::createActions()
     addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
 
-    m_actionFormatFontFamily = new KFontAction(KFontChooser::SmoothScalableFonts, this);
+    m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),

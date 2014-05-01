@@ -75,7 +75,7 @@ void KisEmbeddedPatternManagerTest::testRoundTrip()
 
     KoPattern *newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(&config);
 
-    QCOMPARE(newPattern->image(), pattern->image());
+    QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
     QCOMPARE(QFileInfo(newPattern->filename()).fileName(),
              QFileInfo(pattern->filename()).fileName());
@@ -122,7 +122,7 @@ KisPropertiesConfiguration createXML(NameStatus nameStatus,
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
-        pattern->image().save(&buffer, "PNG");
+        pattern->pattern().save(&buffer, "PNG");
         setting.setProperty("Texture/Pattern/Pattern", ba.toBase64());
         delete pattern;
     }
@@ -162,7 +162,7 @@ void checkOneConfig(NameStatus nameStatus, bool hasMd5,
     KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(&setting);
 
     QVERIFY(pattern);
-    QCOMPARE(pattern->image(), basePattern->image());
+    QCOMPARE(pattern->pattern(), basePattern->pattern());
     QCOMPARE(pattern->name(), QString(expectedName));
 
     QFileInfo info(pattern->filename());

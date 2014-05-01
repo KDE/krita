@@ -41,7 +41,7 @@
 StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags f)
         : QFrame(parent, f),
         m_styleManager(0),
-          m_styleThumbnailer(0),
+        m_styleThumbnailer(0),
         m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
         m_stylesDelegate(new StylesDelegate()),
         m_blockSignals(false),
@@ -70,7 +70,8 @@ StylesWidget::~StylesWidget()
 
 QSize StylesWidget::sizeHint() const
 {
-    return QSize(widget.stylesView->sizeHint().width() + 2*widget.stylesView->verticalScrollBar()->width(), widget.stylesView->sizeHint().height());
+    return QSize(widget.stylesView->sizeHint().width() + 2 * widget.stylesView->verticalScrollBar()->width(),
+                 widget.stylesView->sizeHint().height());
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm)

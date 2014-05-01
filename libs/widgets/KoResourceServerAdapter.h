@@ -61,6 +61,7 @@ public:
 
     virtual void setFilterIncludes(const QStringList& filteredNames) = 0;
     virtual QStringList searchTag(const QString& lineEditText) = 0;
+    virtual void configureFilters(int filterType, bool enable) = 0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -93,7 +94,7 @@ public:
         m_changeCounter = 0;
         m_oldChangeCounter = 0;
         m_enableFiltering = false;
-        m_resourceFilter.setTagObject(m_resourceServer->tagObject());
+        m_resourceFilter.setTagStore(m_resourceServer->tagObject());
     }
 
     virtual ~KoResourceServerAdapter()
@@ -268,6 +269,10 @@ public:
 
     virtual QList<KoResource*> serverResources() {
         return m_serverResources;
+    }
+
+    void configureFilters(int filterType, bool enable){
+        m_resourceFilter.configure(filterType,enable);
     }
 
 protected:

@@ -132,7 +132,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
-    setImage(image);
+    setBrushTipImage(image);
     setName(name);
 }
 
@@ -234,9 +234,9 @@ bool KisGbrBrush::init()
         imageFormat = QImage::Format_ARGB32;
     }
 
-    setImage(QImage(bh.width, bh.height, imageFormat));
+    QImage image(QImage(bh.width, bh.height, imageFormat));
 
-    if (m_image.isNull()) {
+    if (image.isNull()) {
         return false;
     }
 
@@ -245,7 +245,7 @@ bool KisGbrBrush::init()
     if (bh.bytes == 1) {
         QVector<QRgb> table;
         for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
-        m_image.setColorTable(table);
+        image.setColorTable(table);
         // Grayscale
 
         if (static_cast<qint32>(k + bh.width * bh.height) > d->data.size()) {
@@ -255,7 +255,7 @@ bool KisGbrBrush::init()
         setHasColor(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
-            uchar *pixel = reinterpret_cast<uchar *>(m_image.scanLine(y));
+            uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k++) {
                 qint32 val = 255 - static_cast<uchar>(d->data[k]);
                 *pixel = val;
@@ -272,7 +272,7 @@ bool KisGbrBrush::init()
         setHasColor(true);
 
         for (quint32 y = 0; y < bh.height; y++) {
-            QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
+            QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k += 4) {
                 *pixel = qRgba(d->data[k], d->data[k + 1], d->data[k + 2], d->data[k + 3]);
                 ++pixel;
@@ -283,13 +283,13 @@ bool KisGbrBrush::init()
         return false;
     }
 
-    setWidth(m_image.width());
-    setHeight(m_image.height());
+    setWidth(image.width());
+    setHeight(image.height());
     if (d->ownData) {
         d->data.resize(0); // Save some memory, we're using enough of it as it is.
     }
-    setValid(m_image.width() != 0 && m_image.height() != 0);
-
+    setValid(image.width() != 0 && image.height() != 0);
+    setBrushTipImage(image);
     return true;
 }
 
@@ -297,7 +297,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
+    setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
     setName(image->objectName());
 
     setHasColor(true);
@@ -353,11 +353,13 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 
     int k = 0;
 
+    QImage image = brushTipImage();
+
     if (!hasColor()) {
         bytes.resize(width() * height());
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
-                QRgb c = m_image.pixel(x, y);
+                QRgb c = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
             }
         }
@@ -366,7 +368,7 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
         for (qint32 y = 0; y < height(); y++) {
             for (qint32 x = 0; x < width(); x++) {
                 // order for gimp brushes, v2 is: RGBA
-                QRgb pixel = m_image.pixel(x, y);
+                QRgb pixel = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(qRed(pixel));
                 bytes[k++] = static_cast<char>(qGreen(pixel));
                 bytes[k++] = static_cast<char>(qBlue(pixel));
@@ -383,10 +385,10 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     return true;
 }
 
-QImage KisGbrBrush::image() const
+QImage KisGbrBrush::brushTipImage() const
 {
+    QImage image = KisBrush::brushTipImage();
     if (hasColor() && useColorAsMask()) {
-        QImage image = m_image;
         for (int y = 0; y < image.height(); y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
@@ -395,11 +397,8 @@ QImage KisGbrBrush::image() const
                 pixel[x] = qRgba(a, a, a, qAlpha(c));
             }
         }
-        return image;
     }
-    else {
-        return m_image;
-    }
+    return image;
 }
 
 
@@ -414,9 +413,9 @@ void KisGbrBrush::setBrushType(enumBrushType type)
     qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
 }
 
-void KisGbrBrush::setImage(const QImage& image)
+void KisGbrBrush::setBrushTipImage(const QImage& image)
 {
-    KisBrush::setImage(image);
+    KisBrush::setBrushTipImage(image);
     setValid(true);
 }
 
@@ -439,8 +438,9 @@ void KisGbrBrush::makeMaskImage()
     if (!hasColor()) {
         return;
     }
+    QImage brushTip = brushTipImage();
 
-    if (m_image.width() == width() && m_image.height() == height()) {
+    if (brushTip.width() == width() && brushTip.height() == height()) {
         int imageWidth = width();
         int imageHeight = height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
@@ -451,7 +451,7 @@ void KisGbrBrush::makeMaskImage()
         image.setColorTable(table);
 
         for (int y = 0; y < imageHeight; y++) {
-            QRgb *pixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
+            QRgb *pixel = reinterpret_cast<QRgb *>(brushTip.scanLine(y));
             uchar * dstPixel = image.scanLine(y);
             for (int x = 0; x < imageWidth; x++) {
                 QRgb c = pixel[x];
@@ -463,7 +463,7 @@ void KisGbrBrush::makeMaskImage()
                 dstPixel[x] = (uchar)a;
             }
         }
-        setImage(image);
+        setBrushTipImage(image);
     }
 
     setHasColor(false);

@@ -137,7 +137,7 @@ void KisInputButton::mouseReleaseEvent(QMouseEvent *)
     }
     else {
         setChecked(true);
-        setText(i18nc("Waiting for user input", "Input ..."));
+        setText(i18nc("Waiting for user input", "Input..."));
         d->resetTimer->start();
         d->newInput = true;
     }
@@ -199,7 +199,7 @@ void KisInputButton::keyReleaseEvent(QKeyEvent *event)
     }
     else if (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         setChecked(true);
-        setText(i18nc("Waiting for user input", "Input ..."));
+        setText(i18nc("Waiting for user input", "Input..."));
         d->resetTimer->start();
         d->newInput = true;
     }

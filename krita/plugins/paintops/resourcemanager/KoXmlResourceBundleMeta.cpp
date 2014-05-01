@@ -34,43 +34,27 @@ KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QByteArray data):KoXmlGenerator
 
 }
 
-KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString name,QString license,QString xmlName):KoXmlGenerator(xmlName)
-{
-    root=xmlDocument.createElement("package");
-    xmlDocument.appendChild(root);
-
-    addTag("name",name,true);
-    addTag("license",license,true);
-}
-
-KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString* resourceTagList,QString name,
-                   QString license,QString description,QString author,QString created,
-                   QString modified,QString xmlName):KoXmlGenerator(xmlName)
-{
-    root=xmlDocument.createElement("package");
-    xmlDocument.appendChild(root);
-
-    addTag("name",name,true);
-    addTag("author",author,true);
-    addTag("created",created,true);
-    addTag("license",license,true);
-    addTag("updated",modified,true);
-    addTag("description",description,true);
-
-    for (int i=0;i<resourceTagList->length();i++) {
-        addTag("tag",resourceTagList[i],true);
-    }
-}
-
 KoXmlResourceBundleMeta::~KoXmlResourceBundleMeta()
 {
 
 }
 
+void KoXmlResourceBundleMeta::setMeta(QString name, QString author, QString license, QString website ,QString description)
+{
+    addTag("name",name,true);
+    addTag("author",author,true);
+    addTag("license",license,true);
+    addTag("website",website,true);
+    addTag("description",description,true);
+}
+
 KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QString tagName)
 {
     if (tagName=="name") {
-            return Name;
+        return Name;
+    }
+    else if (tagName=="filename") {
+        return Filename;
     }
     else if (tagName=="author") {
         return Author;
@@ -86,6 +70,9 @@ KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QStrin
     }
     else if (tagName=="description") {
         return Description;
+    }
+    else if (tagName=="website") {
+        return Website;
     }
     else if (tagName=="tag") {
         return Tag;
@@ -138,6 +125,7 @@ void KoXmlResourceBundleMeta::checkSort()
 //TODO Vérifier si on peut pas simplifier cette méthode
 QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bool emptyFile)
 {
+    textValue.remove(" ");
     tagName=tagName.toLower();
 
     int tagEnumValue=getTagEnumValue(tagName);
@@ -183,8 +171,8 @@ void KoXmlResourceBundleMeta::addTags(QList<QString> list)
 
     for (int i=0;i<list.size();i++) {
         currentTag=list.at(i);
-        if (currentTag != "" && searchValue(tagList,currentTag).isNull()) {
-            root.appendChild(xmlDocument.createElement("tag").appendChild(xmlDocument.createTextNode(currentTag)));
+        if (currentTag != "" && currentTag.remove(" ") != "" && searchValue(tagList,currentTag).isNull()) {
+            addTag("tag",list.at(i));
         }
     }
 }
@@ -201,7 +189,14 @@ QString KoXmlResourceBundleMeta::getPackName()
     }
 }
 
-QString KoXmlResourceBundleMeta::getShortPackName()
+QString KoXmlResourceBundleMeta::getPackFileName()
 {
-    return getPackName().section('/',getPackName().count('/')).remove(".zip");
+    QDomNodeList tagList=xmlDocument.elementsByTagName("filename");
+
+    if (tagList.size() == 1) {
+        return tagList.at(0).firstChild().toText().data();
+    }
+    else {
+        return "";
+    }
 }

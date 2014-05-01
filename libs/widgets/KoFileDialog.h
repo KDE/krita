@@ -20,7 +20,7 @@
 #ifndef KOFILEDIALOG_H
 #define KOFILEDIALOG_H
 
-#include "komain_export.h"
+#include "kowidgets_export.h"
 
 #include <KUrl>
 #include <QFileDialog>
@@ -33,8 +33,10 @@
  * Wrapper around QFileDialog providing native file dialogs
  * on KDE/Gnome/Windows/OSX/etc.
  */
-class KOMAIN_EXPORT KoFileDialog
+class KOWIDGETS_EXPORT KoFileDialog : public QObject
 {
+    Q_OBJECT
+
 public:
     enum DialogType {
         OpenFile,
@@ -72,19 +74,14 @@ public:
                         const QString &defaultFilter = QString());
     void setMimeTypeFilters(const QStringList &filterList,
                             const QString &defaultFilter = QString());
-
-    /**
-     * @brief in case custom control needed on QFileDialog object, use this
-     * to get a pointer to the QFileDialog object. Use this only after all the
-     * setXXX methods, otherwise the QFileDialog object will be created before
-     * those options are set. the object is managed by KoFileDialog.
-     *
-     * @return the qfiledialog pointer
-     */
-    QFileDialog* ptr();
+    void setHideNameFilterDetailsOption();
 
     QStringList urls();
     QString url();
+
+private slots:
+
+    void filterSelected(const QString &filter);
 
 private:
     enum FilterType {
@@ -92,11 +89,17 @@ private:
         NameFilter
     };
 
+    void createFileDialog();
+
     const QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterString(const QStringList &mimeList,
+    const QStringList getFilterStringList(const QStringList &mimeList,
                                       bool withAllSupportedEntry = false);
+
+    const QString getFilterString(const QStringList &mimeList,
+                                  bool withAllSupportedEntry = false);
+
     const QString getFilterString(const QString &defaultMime);
 
     class Private;

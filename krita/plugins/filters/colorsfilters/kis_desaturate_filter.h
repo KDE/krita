@@ -22,7 +22,6 @@
 
 #include <QObject>
 #include <QVariant>
-#include <Q3ButtonGroup>
 
 #include <kis_config_widget.h>
 #include <filter/kis_color_transformation_filter.h>

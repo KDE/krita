@@ -43,6 +43,7 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
+    m_widget->textLabel1->hide();
     connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SLOT(slotColorSelectorChanged(const QColor&)));
     connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->btnCustomColor, SIGNAL(changed(const QColor&)), SLOT(slotCustomColorSelected(const QColor&)));

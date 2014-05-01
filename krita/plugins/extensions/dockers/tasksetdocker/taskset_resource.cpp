@@ -20,6 +20,9 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QBuffer>
+#include <QByteArray>
+#include <QCryptographicHash>
 
 #define TASKSET_VERSION 1
 
@@ -38,20 +41,7 @@ bool TasksetResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("Taskset");
-    root.setAttribute("name", name() );
-    root.setAttribute("version", TASKSET_VERSION);
-    foreach(const QString& action, m_actions) {
-        QDomElement element = doc.createElement("action");
-        element.appendChild(doc.createTextNode(action));
-        root.appendChild(element);
-    }
-    doc.appendChild(root);
-     
-    QTextStream textStream(&file);
-    doc.save(textStream, 4);
+    save(&file);
     file.close();
     return true;
 }
@@ -87,11 +77,6 @@ bool TasksetResource::load()
     return true;
 }
 
-QImage TasksetResource::image() const
-{
-    return KoResource::image();
-}
-
 QString TasksetResource::defaultFileExtension() const
 {
     return QString(".kts");
@@ -105,6 +90,40 @@ void TasksetResource::setActionList(const QStringList actions)
 QStringList TasksetResource::actionList()
 {
     return m_actions;
+}
+
+QByteArray TasksetResource::generateMD5() const
+{
+    QByteArray ba;
+    QBuffer buf(&ba);
+    save(&buf);
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
+
+}
+
+void TasksetResource::save(QIODevice *io) const
+{
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("Taskset");
+    root.setAttribute("name", name() );
+    root.setAttribute("version", TASKSET_VERSION);
+    foreach(const QString& action, m_actions) {
+        QDomElement element = doc.createElement("action");
+        element.appendChild(doc.createTextNode(action));
+        root.appendChild(element);
+    }
+    doc.appendChild(root);
+
+    QTextStream textStream(io);
+    doc.save(textStream, 4);
 }
 
 

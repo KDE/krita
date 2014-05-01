@@ -53,8 +53,21 @@ class ImageFilter: public QSortFilterProxyModel
         if(model->isDir(index))
             return true;
 
-        m_reader.setFileName(model->filePath(index));
-        return m_reader.canRead();
+        QString ext = model->fileInfo(index).suffix().toLower();
+
+        if(s_supportedImageFormats.isEmpty()) {
+            s_supportedImageFormats = QImageReader::supportedImageFormats();
+        }
+
+        //QImageReader::supportedImageFormats return a list with mixed-case ByteArrays so
+        //iterate over it manually to make it possible to do toLower().
+        foreach(const QByteArray& format, s_supportedImageFormats) {
+            if(format.toLower() == ext.toUtf8()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     virtual bool filterAcceptsColumn(int source_column, const QModelIndex& source_parent) const {
@@ -62,9 +75,10 @@ class ImageFilter: public QSortFilterProxyModel
         return source_column == 0;
     }
 
-    mutable QImageReader m_reader;
+    static QList<QByteArray> s_supportedImageFormats;
 };
 
+QList<QByteArray> ImageFilter::s_supportedImageFormats;
 
 ///////////////////////////////////////////////////////////////////////////////
 // --------- ImageListModel ------------------------------------------------ //

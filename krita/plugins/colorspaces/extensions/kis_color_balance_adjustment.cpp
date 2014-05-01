@@ -50,7 +50,7 @@ public:
 
 void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 {
-    KisColorBalanceMath *bal = new KisColorBalanceMath();
+    KisColorBalanceMath bal;
     const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
     RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
     float value_red, value_green, value_blue, hue, saturation, lightness;
@@ -62,9 +62,9 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         float blue = SCALE_TO_FLOAT(src->blue);
         RGBToHSL(red, green, blue, &hue, &saturation, &lightness);
 
-        value_red = bal->colorBalanceTransform(red, lightness, m_cyan_shadows, m_cyan_midtones, m_cyan_highlights);
-        value_green = bal->colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
-        value_blue = bal->colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
+        value_red = bal.colorBalanceTransform(red, lightness, m_cyan_shadows, m_cyan_midtones, m_cyan_highlights);
+        value_green = bal.colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
+        value_blue = bal.colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
 
         if(m_preserve_luminosity)
         {

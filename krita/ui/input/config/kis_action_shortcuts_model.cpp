@@ -103,21 +103,13 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
                 break;
 
             case KisShortcutConfiguration::MouseButtonType:
-                if (s->keys().size() > 0) {
-                    output.append(KisShortcutConfiguration::keysToText(s->keys()));
-                    output.append(" + ");
-                }
-
-                output.append(KisShortcutConfiguration::buttonsToText(s->buttons()));
+                output = KisShortcutConfiguration::buttonsInputToText(
+                    s->keys(), s->buttons());
                 break;
 
             case KisShortcutConfiguration::MouseWheelType:
-                if (s->keys().size() > 0) {
-                    output.append(KisShortcutConfiguration::keysToText(s->keys()));
-                    output.append(" + ");
-                }
-
-                output.append(KisShortcutConfiguration::wheelToText(s->wheel()));
+                output = KisShortcutConfiguration::wheelInputToText(
+                    s->keys(), s->wheel());
                 break;
 
             default:

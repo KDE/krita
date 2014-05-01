@@ -72,6 +72,8 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
     QGridLayout *widgetLayout = new QGridLayout(this);
     widgetLayout->setColumnStretch(1, 1);
+    widgetLayout->setContentsMargins(0,0,0,0);
+    widgetLayout->setHorizontalSpacing(0);
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
 
@@ -88,6 +90,8 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
         widgetLayout->addWidget(m_doubleWidgets[i], i , 1);
     }
+    widgetLayout->setRowStretch(m_nbdoubleWidgets,1);
+
     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout->addItem(sp, m_nbdoubleWidgets, 0);
 

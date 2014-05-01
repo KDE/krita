@@ -288,13 +288,16 @@ public:
     QString defaultFileExtension() const;
 
 protected:
+
+    virtual QByteArray generateMD5() const;
+
     inline void pushSegment(KoGradientSegment* segment) {
         m_segments.push_back(segment);
     }
 
     QList<KoGradientSegment *> m_segments;
 
-private:
+    private:
     bool init();
 };
 

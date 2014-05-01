@@ -26,6 +26,9 @@
 #include <QDomElement>
 #include <QFile>
 #include <QPoint>
+#include <QFileInfo>
+#include <QCryptographicHash>
+#include <QBuffer>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -122,6 +125,8 @@ struct KisBrush::Private {
     QPointF hotSpot;
 
     mutable KisQImagePyramid *brushPyramid;
+
+    QImage brushTipImage;
 };
 
 KisBrush::KisBrush()
@@ -141,7 +146,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     , KisShared()
     , d(new Private)
 {
-    m_image = rhs.m_image;
+    setBrushTipImage(rhs.brushTipImage());
     d->brushType = rhs.d->brushType;
     d->width = rhs.d->width;
     d->height = rhs.d->height;
@@ -161,9 +166,9 @@ KisBrush::~KisBrush()
     delete d;
 }
 
-QImage KisBrush::image() const
+QImage KisBrush::brushTipImage() const
 {
-    return m_image;
+    return d->brushTipImage;
 }
 
 qint32 KisBrush::width() const
@@ -244,10 +249,11 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
     return true;
 }
 
-void KisBrush::setImage(const QImage& image)
+void KisBrush::setBrushTipImage(const QImage& image)
 {
     Q_ASSERT(!image.isNull());
-    m_image = image;
+    setImage(image);
+    d->brushTipImage = image;
 
     setWidth(image.width());
     setHeight(image.height());
@@ -273,6 +279,18 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
+}
+
+QByteArray KisBrush::generateMD5() const
+{
+    if (!filename().isNull() && QFileInfo(filename()).exists()) {
+        QFile f(filename());
+        f.open(QFile::ReadOnly);
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(f.readAll());
+        return md5.result();
+    }
+    return QByteArray();
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
@@ -360,7 +378,7 @@ void KisBrush::notifyCachedDabPainted()
 void KisBrush::prepareBrushPyramid() const
 {
     if (!d->brushPyramid) {
-        d->brushPyramid = new KisQImagePyramid(image());
+        d->brushPyramid = new KisQImagePyramid(brushTipImage());
     }
 }
 

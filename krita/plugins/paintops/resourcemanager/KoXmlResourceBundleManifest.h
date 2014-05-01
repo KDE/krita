@@ -64,7 +64,7 @@ public:
      * @param tagName the name of the tag
      * @return the value from TagEnum corresponding to the tag.
      */
-    TagEnum getTagEnumValue(QString tagName);
+    static TagEnum getTagEnumValue(QString tagName);
 
     /**
      * @brief checkSort : Check/sort the file to be easily comprehensible
@@ -91,7 +91,7 @@ public:
      * @brief getFileList
      * @return the list of the files enumerared in the XML
      */
-    QList<QString> getFileList();
+    QList<QString> getFileList(QString kritaPath,bool firstBuild);
 
     /**
      * @brief getFilesToExtract
@@ -155,6 +155,14 @@ public:
      * @return true if the "installed" tag is in the XML file, false otherwise
      */
     bool isInstalled();
+
+    /**
+     * @brief getXmlDocument
+     * @return xmlDocument
+     */
+    QDomDocument getXmlDocument();
+
+    void rename(QString newName);
 
     void updateFilePaths(QString kritaPath,QString bundleName);
  };

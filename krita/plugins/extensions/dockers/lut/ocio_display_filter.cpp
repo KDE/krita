@@ -80,7 +80,7 @@ void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32
 
 bool OcioDisplayFilter::useInternalColorManagement() const
 {
-    return false;
+    return forceInternalColorManagement;
 }
 
 #ifdef HAVE_OPENGL

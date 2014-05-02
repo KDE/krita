@@ -82,7 +82,7 @@ struct KisDisplayColorConverter::Private
     void setCurrentNode(KisNodeSP node);
     bool useOcio() const;
 
-    bool finalIsRgba() const;
+    bool finalIsRgba(const KoColorSpace *cs) const;
 
     template <bool flipToBgra>
     QColor floatArrayToQColor(const float *p);
@@ -293,9 +293,13 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
     m_d->intermediateColorSpace = 0;
 
     if (m_d->displayFilter) {
+        const KoColorProfile *intermediateProfile =
+            m_d->displayFilter->useInternalColorManagement() ?
+            m_d->monitorProfile : 0;
+
         m_d->intermediateColorSpace =
             KoColorSpaceRegistry::instance()->
-            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), intermediateProfile);
 
         KIS_ASSERT_RECOVER(m_d->intermediateColorSpace) {
             m_d->intermediateColorSpace = m_d->monitorColorSpace;
@@ -346,12 +350,12 @@ const KoColorProfile* KisDisplayColorConverter::monitorProfile() const
     return m_d->monitorProfile;
 }
 
-bool KisDisplayColorConverter::Private::finalIsRgba() const
+bool KisDisplayColorConverter::Private::finalIsRgba(const KoColorSpace *cs) const
 {
     /**
      * In Krita RGB color spaces differ: 8/16bit are BGRA, 16f/32f-bit RGBA
      */
-    KoID colorDepthId = paintingColorSpace->colorDepthId();
+    KoID colorDepthId = cs->colorDepthId();
     return colorDepthId == Float16BitsColorDepthID ||
         colorDepthId == Float32BitsColorDepthID;
 }
@@ -377,26 +381,29 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
     c.convertTo(m_d->paintingColorSpace);
 
     if (!m_d->useOcio()) {
-        QByteArray pixel(m_d->monitorColorSpace->pixelSize(), 0);
-        c.colorSpace()->convertPixelsTo(c.data(), (quint8*)pixel.data(),
-                                        m_d->monitorColorSpace, 1,
-                                        m_d->renderingIntent, m_d->conversionFlags);
-
-
         // we expect the display profile is rgb8, which is BGRA here
         KIS_ASSERT_RECOVER(m_d->monitorColorSpace->pixelSize() == 4) { return Qt::red; };
 
-        const quint8 *p = (const quint8 *)pixel.constData();
+        c.convertTo(m_d->monitorColorSpace, m_d->renderingIntent, m_d->conversionFlags);
+
+        const quint8 *p = c.data();
         return QColor(p[2], p[1], p[0], p[3]);
     } else {
-        int numChannels = m_d->paintingColorSpace->channelCount();
+        const KoColorSpace *srcCS = c.colorSpace();
+
+        if (m_d->displayFilter->useInternalColorManagement()) {
+            srcCS = m_d->monitorColorSpace;
+            c.convertTo(srcCS, m_d->renderingIntent, m_d->conversionFlags);
+        }
+
+        int numChannels = srcCS->channelCount();
         QVector<float> normalizedChannels(numChannels);
-        m_d->paintingColorSpace->normalisedChannelsValue(c.data(), normalizedChannels);
+        srcCS->normalisedChannels1Value(c.data(), normalizedChannels);
         m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
         const float *p = (const float *)normalizedChannels.constData();
 
-        return m_d->finalIsRgba() ?
+        return m_d->finalIsRgba(srcCS) ?
             m_d->floatArrayToQColor<true>(p) :
             m_d->floatArrayToQColor<false>(p);
     }
@@ -419,11 +426,12 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
     KisSequentialConstIterator it(device, bounds);
     quint8 *dstPtr = image.bits();
 
-    int numChannels = paintingColorSpace->channelCount();
+    const KoColorSpace *cs = device->colorSpace();
+    int numChannels = cs->channelCount();
     QVector<float> normalizedChannels(numChannels);
 
     do {
-        paintingColorSpace->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
+        cs->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
         displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
         const float *p = normalizedChannels.constData();
@@ -459,7 +467,16 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
     if (!m_d->useOcio()) {
         return device->convertToQImage(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     } else {
-        return m_d->finalIsRgba() ?
+        if (m_d->displayFilter->useInternalColorManagement()) {
+            if (device == srcDevice) {
+                device = new KisPaintDevice(*srcDevice);
+            }
+
+            KUndo2Command *cmd = device->convertTo(m_d->monitorColorSpace, m_d->renderingIntent, m_d->conversionFlags);
+            delete cmd;
+        }
+
+        return m_d->finalIsRgba(device->colorSpace()) ?
             m_d->convertToQImageDirect<true>(device) :
             m_d->convertToQImageDirect<false>(device);
     }

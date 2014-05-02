@@ -23,6 +23,8 @@
 #include <QColor>
 #include <QMetaType>
 #include "pigment_export.h"
+#include "KoColorConversionTransformation.h"
+
 
 class QDomDocument;
 class QDomElement;
@@ -75,7 +77,12 @@ public:
 
     /// Convert this KoColor to the specified colorspace. If the specified colorspace is the
     /// same as the original colorspace, do nothing. Returns the converted KoColor.
+    void convertTo(const KoColorSpace * cs,
+                   KoColorConversionTransformation::Intent renderingIntent,
+                   KoColorConversionTransformation::ConversionFlags conversionFlags);
+
     void convertTo(const KoColorSpace * cs);
+
 
     /// Replace the existing color data, and colorspace with the specified data.
     /// The data pointer remains of the responsibility of the caller, and this function

@@ -45,6 +45,8 @@ Item {
 
     property bool hasFocus: false;
 
+    property string tooltip: "";
+
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
@@ -124,6 +126,7 @@ Item {
     MouseArea {
         id: mouse;
         anchors.fill: parent;
+        hoverEnabled: true;
         onClicked: {
             if (base.enabled) {
                 base.clicked();
@@ -132,6 +135,37 @@ Item {
                 }
             }
         }
+        onPressAndHold: {
+            if(base.tooltip !== "") {
+                tooltip.show(base.width / 2, 0);
+            }
+        }
+        onReleased: {
+            tooltip.hide();
+        }
+        onEntered: {
+            hoverDelayTimer.start();
+        }
+        onPositionChanged: {
+            if(hoverDelayTimer.running) {
+                hoverDelayTimer.restart();
+            }
+        }
+        onExited: {
+            hoverDelayTimer.stop();
+            tooltip.hide();
+        }
+    }
+
+    Timer {
+        id: hoverDelayTimer;
+        interval: 1000;
+        onTriggered: tooltip.show(base.width / 2, 0);
+    }
+
+    Tooltip {
+        id: tooltip;
+        text: base.tooltip;
     }
 
     states: State {

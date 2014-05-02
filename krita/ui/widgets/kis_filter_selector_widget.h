@@ -50,7 +50,7 @@ public:
     KisFilterConfiguration* configuration();
     void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
-    const QString currentFilterName() const;
+    KisFilterSP currentFilter() const;
 protected slots:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);

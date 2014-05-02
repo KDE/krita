@@ -103,7 +103,7 @@ void KisDlgAdjustmentLayer::slotConfigChanged()
         m_nodeFilterInterface->setFilter(m_currentFilter);
         if (!m_customName) {
             wdgFilterNodeCreation.layerName->blockSignals(true);
-            wdgFilterNodeCreation.layerName->setText(m_layerName + " (" + wdgFilterNodeCreation.filterSelector->currentFilterName() + ")");
+            wdgFilterNodeCreation.layerName->setText(m_layerName + " (" + wdgFilterNodeCreation.filterSelector->currentFilter()->name() + ")");
             wdgFilterNodeCreation.layerName->blockSignals(false);
         }
     }

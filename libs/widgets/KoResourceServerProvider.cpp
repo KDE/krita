@@ -184,7 +184,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);
     d->gradientThread->start();
 
-    d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
+    d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
     d->paletteThread->start();
 }

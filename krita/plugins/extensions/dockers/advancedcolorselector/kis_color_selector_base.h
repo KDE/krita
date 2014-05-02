@@ -58,6 +58,11 @@ public:
     virtual void setColor(const KoColor& color);
 
 public slots:
+    /**
+     * Flushes caches and redraws the selectors
+     */
+    virtual void reset();
+
     virtual void updateSettings();
     virtual void showPopup(Move move=MoveToMousePosition);
 

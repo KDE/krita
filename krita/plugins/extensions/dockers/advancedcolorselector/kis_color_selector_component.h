@@ -55,6 +55,9 @@ public:
     /// set the color, blibs etc
     virtual void setColor(const KoColor& color) = 0;
 
+    /// force subsequent redraw of the component
+    void setDirty();
+
     /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
 

@@ -97,6 +97,7 @@ public:
     void setColor(const KoColor &color);
 
 public slots:
+    void reset();
     void updateSettings();
 
 signals:

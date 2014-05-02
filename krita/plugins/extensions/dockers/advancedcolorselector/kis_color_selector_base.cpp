@@ -143,7 +143,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
                 SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
-                SLOT(update()));
+                SLOT(reset()));
 
         setColor(Acs::currentColor(m_canvas->view()->resourceProvider(), Acs::Foreground));
     }
@@ -151,7 +151,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         m_popup->setCanvas(canvas);
     }
 
-    update();
+    reset();
 }
 
 void KisColorSelectorBase::unsetCanvas()
@@ -436,6 +436,11 @@ void KisColorSelectorBase::updateSettings()
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
 
+    reset();
+}
+
+void KisColorSelectorBase::reset()
+{
     update();
 }
 

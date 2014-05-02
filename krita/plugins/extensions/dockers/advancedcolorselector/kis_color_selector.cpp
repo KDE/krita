@@ -150,6 +150,19 @@ void KisColorSelector::updateSettings()
     setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
 }
 
+void KisColorSelector::reset()
+{
+    KisColorSelectorBase::reset();
+
+    if (m_mainComponent) {
+        m_mainComponent->setDirty();
+    }
+
+    if (m_subComponent) {
+        m_subComponent->setDirty();
+    }
+}
+
 void KisColorSelector::paintEvent(QPaintEvent* e)
 {
     Q_UNUSED(e);

@@ -81,6 +81,11 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
     return cs;
 }
 
+void KisColorSelectorComponent::setDirty()
+{
+    m_dirty = true;
+}
+
 bool KisColorSelectorComponent::isDirty() const
 {
     return m_dirty || m_lastColorSpace!=colorSpace();

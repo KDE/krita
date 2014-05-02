@@ -56,6 +56,8 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
+                tooltip: "Mininize";
+
                 image: Settings.theme.icon("minimize");
                 onClicked: Krita.Window.minimize();
             },
@@ -65,6 +67,8 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter;
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
+
+                tooltip: "Close";
 
                 image: Settings.theme.icon("close");
                 onClicked: Krita.Window.close();

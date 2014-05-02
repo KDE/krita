@@ -35,7 +35,7 @@
 #include "kis_progress_update_helper.h"
 
 
-class PIGMENTCMS_EXPORT CachedGradient : public KoAbstractGradient
+class CachedGradient : public KoAbstractGradient
 {
 
 public:

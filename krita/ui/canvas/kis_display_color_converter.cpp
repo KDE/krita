@@ -398,7 +398,7 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
 
         int numChannels = srcCS->channelCount();
         QVector<float> normalizedChannels(numChannels);
-        srcCS->normalisedChannels1Value(c.data(), normalizedChannels);
+        srcCS->normalisedChannelsValue(c.data(), normalizedChannels);
         m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
         const float *p = (const float *)normalizedChannels.constData();

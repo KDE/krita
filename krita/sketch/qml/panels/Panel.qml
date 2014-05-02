@@ -51,6 +51,7 @@ Item {
 
         width: parent.width;
         height: parent.height;
+        z: 2;
 
         Rectangle {
             id: rectangle3
@@ -229,16 +230,11 @@ Item {
     Item {
         id: handle;
 
-        anchors.top: fill.bottom;
-        anchors.topMargin: Constants.GridHeight / 4;
-        anchors.left: fill.left;
-        anchors.leftMargin: Constants.GridWidth / 2;
-
         Behavior on y { id: yHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
         Behavior on x { id: xHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
 
-        width: 0;
-        height: 0;
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
         opacity: 0;
 
         property bool dragging: false;
@@ -248,18 +244,15 @@ Item {
                 xHandleAnim.enabled = false;
                 yHandleAnim.enabled = false;
                 handle.parent = base;
-                handle.anchors.top = fill.bottom;
-                handle.anchors.left = fill.left;
+                handle.x = 0;
+                handle.y = 0;
             }
         }
 
         function dragStarted() {
             base.dragStarted();
-
-            handle.anchors.top = undefined;
-            handle.anchors.left = undefined;
             handle.parent = base.page;
-            Krita.MouseTracker.addItem(handle);
+            Krita.MouseTracker.addItem(handle, Qt.point(-handle.width / 2, -handle.height / 2));
             handle.dragging = true;
         }
 
@@ -273,35 +266,29 @@ Item {
             dragging = false;
 
             var handlePos = base.mapToItem(base.page, 0, 0);
-            handle.x = handlePos.x + Constants.GridWidth / 2;
-            handle.y = handlePos.y + Constants.GridHeight / 4;
+            handle.x = handlePos.x;
+            handle.y = handlePos.y;
         }
 
         Rectangle {
             visible: (base.state === "collapsed") ? !base.roundTop : true;
             anchors {
-                bottom: parent.top;
-                left: handleBackground.left;//parent.horizontalCenter;
-                //leftMargin: -handle.anchors.leftMargin;
+                top: parent.top;
+                left: handleBackground.left;
+                right: handleBackground.right;
             }
             color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 0
 
-            width: handleBackground.width //handle.anchors.leftMargin * 2;
-            height: handle.anchors.topMargin + 1
+            height: (base.state === "peek") ? Constants.GridHeight / 2 : Constants.GridHeight / 4 + 1
         }
 
         Rectangle {
             id: handleBackground
-            anchors {
-                top: parent.top;
-                topMargin: -handle.anchors.topMargin;
-                left: parent.horizontalCenter;
-                leftMargin: -handle.anchors.leftMargin;
-            }
 
-            width: handle.anchors.leftMargin * 2
-            height: handle.anchors.topMargin * 2
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
             color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 8
 
@@ -318,12 +305,8 @@ Item {
 
         DnD.DragArea {
             id: handleDragArea;
-            anchors.horizontalCenter: parent.horizontalCenter;
-            anchors.top: parent.top;
-            anchors.topMargin: -Constants.GridHeight * 0.25;
 
-            width: Constants.GridWidth - 8;
-            height: Constants.GridHeight * 0.75;
+            anchors.fill: parent;
 
             source: base;
 
@@ -359,19 +342,21 @@ Item {
             name: "peek";
 
             PropertyChanges { target: base; width: Constants.IsLandscape ? Constants.GridWidth * 4 : Constants.GridWidth * 2; }
-            PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; }
-            PropertyChanges { target: handle; opacity: 1; anchors.leftMargin: Constants.GridWidth / 2 - 4; }
+            PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; y: handle.height; }
+            PropertyChanges { target: handle; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
             AnchorChanges { target: header; anchors.bottom: rectangle3.bottom }
             PropertyChanges { target: footer; opacity: 0; }
             PropertyChanges { target: background; anchors.topMargin: 0; }
-            PropertyChanges { target: headerCornerFill; height: Constants.GridHeight; }
+            PropertyChanges { target: headerCornerFill; height: Constants.DefaultMargin; }
+            AnchorChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: header.top; }
         },
         State {
             name: "full";
             PropertyChanges { target: peek; opacity: 0; }
             PropertyChanges { target: full; opacity: 1; }
+            PropertyChanges { target: handle; height: 0; }
         },
         State {
             name: "edit";
@@ -391,6 +376,7 @@ Item {
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 PropertyAction { targets: [ base ]; properties: "width"; }
+                PropertyAction { targets: [ fill ]; properties: "y"; }
                 NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
             }
         },
@@ -401,6 +387,7 @@ Item {
             SequentialAnimation {
                 NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: Constants.AnimationDuration; }
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
+                PropertyAction { targets: [ fill ]; properties: "y"; }
                 PropertyAction { targets: [ base ]; properties: "width"; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 ScriptAction { script: base.collapsed(); }

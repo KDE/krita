@@ -44,11 +44,21 @@ public:
     /**
      * Convert the color \p c to a custom QColor that will be
      * displayed by the widget on screen. Please note, that the
-     * reverse conversion may simply not exist, so the backward
-     * transformation is not (and will never be) provided by this
-     * interface.
+     * reverse conversion may simply not exist.
      */
     virtual QColor toQColor(const KoColor &c) const = 0;
+
+    /**
+     * This tries to approximate a rendered QColor into the KoColor
+     * of the painting color space. Please note, that in most of the
+     * cases the exact reverse transformation does not exist, so the
+     * resulting color will be only a rough approximation. Never try
+     * to do a round trip like that:
+     *
+     * // r will never be equal to c!
+     * r = approximateFromRenderedQColor(toQColor(c));
+     */
+    virtual KoColor approximateFromRenderedQColor(const QColor &c) const = 0;
 
     virtual KoColor fromHsv(int h, int s, int v, int a = 255) const = 0;
     virtual void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const = 0;
@@ -87,6 +97,7 @@ class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRender
 {
 public:
     QColor toQColor(const KoColor &c) const;
+    KoColor approximateFromRenderedQColor(const QColor &c) const;
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
 

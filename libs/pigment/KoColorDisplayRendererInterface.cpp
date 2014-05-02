@@ -35,6 +35,13 @@ QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c) const
     return c.toQColor();
 }
 
+KoColor KoDumbColorDisplayRenderer::approximateFromRenderedQColor(const QColor &c) const
+{
+    KoColor color;
+    color.fromQColor(c);
+    return color;
+}
+
 KoColor KoDumbColorDisplayRenderer::fromHsv(int h, int s, int v, int a) const
 {
     QColor qcolor(QColor::fromHsvF(h, s, v, a));

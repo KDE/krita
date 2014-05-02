@@ -61,6 +61,7 @@ public:
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
 
     QColor toQColor(const KoColor &c) const;
+    KoColor approximateFromRenderedQColor(const QColor &c) const;
 
     /**
      * Converts the exactBounds() (!) of the \p srcDevice into QImage

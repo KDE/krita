@@ -218,17 +218,16 @@ void PaletteDockerDock::addColorForeground()
 void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
+
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
         QColor color;
-        /**
-         * WARNING: we don't use displaying color conversions here,
-         *          because KColorDialog doesn't support KoColor and
-         *          the KoColor->QColor transformation is not
-         *          reversible!
-         */
-        int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
+
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
-            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);
             m_currentColorSet->save();
             setColorSet(m_currentColorSet); // update model

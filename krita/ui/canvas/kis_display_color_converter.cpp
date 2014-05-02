@@ -104,6 +104,10 @@ struct KisDisplayColorConverter::Private
             return m_parent->toQColor(c);
         }
 
+        KoColor approximateFromRenderedQColor(const QColor &c) const {
+            return m_parent->approximateFromRenderedQColor(c);
+        }
+
         KoColor fromHsv(int h, int s, int v, int a) const {
             return m_parent->fromHsv(h, s, v, a);
         }
@@ -396,6 +400,11 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
             m_d->floatArrayToQColor<true>(p) :
             m_d->floatArrayToQColor<false>(p);
     }
+}
+
+KoColor KisDisplayColorConverter::approximateFromRenderedQColor(const QColor &c) const
+{
+    return m_d->approximateFromQColor(c);
 }
 
 template <bool flipToBgra>

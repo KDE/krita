@@ -42,10 +42,6 @@ public:
 
     void setFilter(KisFilterSP f);
 
-public slots:
-
-    void updatePreview();
-
 protected slots:
 
     void apply();
@@ -56,10 +52,14 @@ protected slots:
 
     void previewCheckBoxChange(int state);
 
+    void filterSelectionChanged();
+
     virtual void resizeEvent(QResizeEvent* );
 
 private:
     void startApplyingFilter(KisSafeFilterConfigurationSP config);
+    void setDialogTitle(KisFilterSP f);
+    void updatePreview();
 
 private:
     struct Private;

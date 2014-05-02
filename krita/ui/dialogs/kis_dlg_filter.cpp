@@ -78,7 +78,7 @@ KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *fil
     connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
     connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
-    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
     connect(this, SIGNAL(finished(int)), SLOT(close()));
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
@@ -93,10 +93,15 @@ KisDlgFilter::~KisDlgFilter()
 void KisDlgFilter::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
-    setWindowTitle(f->name());
+    setDialogTitle(f);
     d->uiFilterDialog.filterSelection->setFilter(f);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     updatePreview();
+}
+
+void KisDlgFilter::setDialogTitle(KisFilterSP filter)
+{
+    setWindowTitle(filter.isNull() ? i18n("Filter") : i18n("Filter: %1", filter->name()));
 }
 
 void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)
@@ -174,6 +179,15 @@ void KisDlgFilter::previewCheckBoxChange(int state)
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
     group.config()->sync();
 }
+
+void KisDlgFilter::filterSelectionChanged()
+{
+    KisFilterSP filter = d->uiFilterDialog.filterSelection->currentFilter();
+    setDialogTitle(filter);
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : filter->supportsAdjustmentLayers());
+    updatePreview();
+}
+
 
 void KisDlgFilter::resizeEvent(QResizeEvent* event)
 {

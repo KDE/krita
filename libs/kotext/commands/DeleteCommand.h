@@ -65,6 +65,7 @@ private:
     KoShapeController *m_shapeController;
 
     QSet<KoInlineObject *> m_invalidInlineObjects;
+    QList<QTextCursor> m_cursorsToWholeDeleteBlocks;
     QHash<int, KoTextRange *> m_rangesToRemove;
     bool m_first;
     bool m_undone;
@@ -78,6 +79,9 @@ private:
     void deleteAnchorInlineObject(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
+    bool getNextBlock(QTextCursor &cur);
+    bool getPreviousBlock(QTextCursor &cur);
+    void deleteSingleSections(QTextCursor &cur);
 };
 
 #endif // DELETECOMMAND_H

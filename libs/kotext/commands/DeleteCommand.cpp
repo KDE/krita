@@ -33,6 +33,7 @@
 #include <KoAnchorInlineObject.h>
 #include <KoAnchorTextRange.h>
 #include <KoAnnotation.h>
+#include <KoSection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 
@@ -111,7 +112,6 @@ public:
 
         KoTextDocument textDocument(fragmentSelection.document());
         KoInlineTextObjectManager *manager = textDocument.inlineTextObjectManager();
-        KoInlineObject *object;
 
         QString selected = fragmentSelection.selectedText();
         fragmentSelection.setPosition(fragmentSelection.selectionStart() + 1);
@@ -120,7 +120,7 @@ public:
         for (int i = 0; i < selected.length(); i++) {
             if (data->unicode() == QChar::ObjectReplacementCharacter) {
                 fragmentSelection.setPosition(position + i);
-                object = manager->inlineTextObject(fragmentSelection);
+                KoInlineObject *object = manager->inlineTextObject(fragmentSelection);
                 m_command->m_invalidInlineObjects.insert(object);
             }
             data++;
@@ -132,6 +132,86 @@ public:
     DeleteCommand *m_command;
     QTextCharFormat m_firstFormat;
 };
+
+bool DeleteCommand::getPreviousBlock(QTextCursor &cur)
+{
+    QTextCursor prev = cur;
+    bool ok = prev.movePosition(QTextCursor::PreviousBlock);
+    qDebug() << "going to previous block " << prev.position() << ' ' << ok << ' ' << prev.block().blockNumber();
+
+    while (ok && prev.currentFrame() != cur.currentFrame()) {
+        ok = prev.movePosition(QTextCursor::PreviousBlock);
+        qDebug() << "going to previous block " << prev.position() << ' ' << ok << ' ' << prev.block().blockNumber();
+    }
+
+    if (!ok || prev.currentFrame() != cur.currentFrame()) {
+        // there is no previous block
+        qDebug() << "Cannot find previous block";
+        return false;
+    }
+
+    cur = prev;
+    return true;
+}
+
+bool DeleteCommand::getNextBlock(QTextCursor &cur)
+{
+    QTextCursor next = cur;
+    bool ok = next.movePosition(QTextCursor::NextBlock);
+    qDebug() << "going to next block " << next.position() << ' ' << ok << ' ' << next.block().blockNumber();
+
+    while (ok && next.currentFrame() != cur.currentFrame()) {
+        ok = next.movePosition(QTextCursor::PreviousBlock);
+        qDebug() << "going to next block " << next.position() << ' ' << ok << ' ' << next.block().blockNumber();
+    }
+
+    if (!ok || next.currentFrame() != next.currentFrame()) {
+        // there is no previous block
+        qDebug() << "Cannot find next block";
+        return false;
+    }
+    cur = next;
+    return true;
+}
+
+void DeleteCommand::deleteSingleSections(QTextCursor &cur)
+{
+    QTextBlockFormat format = cur.blockFormat();
+    QVariant var = format.property(KoParagraphStyle::SectionStartings);
+    QList<QVariant> open_list = var.value< QList<QVariant> >();
+
+    var = format.property(KoParagraphStyle::SectionEndings);
+    QList<QVariant> close_list = var.value< QList<QVariant> >();
+
+    for (QList<QVariant>::iterator open_it = open_list.begin();
+         open_it != open_list.end(); ) {
+        KoSection *sec = static_cast<KoSection *>(open_it->value<void *>());
+
+        bool found = false;
+        QList<QVariant>::iterator close_it = close_list.begin();
+        for (; close_it != close_list.end(); close_it++) {
+            KoSectionEnd *sec_end = static_cast<KoSectionEnd *>(close_it->value<void *>());
+
+            if (sec_end->name == sec->name()) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            open_it = open_list.erase(open_it);
+            close_list.erase(close_it);
+        } else {
+            open_it++;
+        }
+    }
+
+    var.setValue< QList<QVariant> >(close_list);
+    format.setProperty(KoParagraphStyle::SectionEndings, var);
+    var.setValue< QList<QVariant> >(open_list);
+    format.setProperty(KoParagraphStyle::SectionStartings, var);
+    cur.setBlockFormat(format);
+}
 
 void DeleteCommand::doDelete()
 {
@@ -155,6 +235,106 @@ void DeleteCommand::doDelete()
 
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
         deleteAnchorInlineObject(object);
+    }
+
+    //FIXME: can we have a deal with complex selection there??
+
+    // we are going from the end of the selection,
+    // find all the paragraph delimiters,
+    // and push ends of section backwards
+    QTextCursor cur = *caret;
+    cur.setPosition(caret->selectionEnd());
+    cur.movePosition(QTextCursor::PreviousCharacter);
+    while (cur.block().position() + cur.block().length() > caret->selectionStart()) {
+
+        if (cur.block().position() + cur.block().length() > caret->selectionEnd()) {
+            if (getPreviousBlock(cur)) {
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        QTextCursor next = cur;
+        if (getNextBlock(next)) {
+            QTextBlockFormat cur_format = cur.blockFormat();
+            QTextBlockFormat next_format = next.blockFormat();
+
+            if (next_format.hasProperty(KoParagraphStyle::SectionEndings)) {
+                deleteSingleSections(next);
+                next_format = next.blockFormat();
+
+                QVariant var = next_format.property(KoParagraphStyle::SectionEndings);
+                QList<QVariant> close_list_next = var.value< QList<QVariant> >();
+
+                QList<QVariant> close_list_cur;
+                if (cur_format.hasProperty(KoParagraphStyle::SectionEndings)) {
+                    var = cur_format.property(KoParagraphStyle::SectionEndings);
+                    close_list_cur = var.value< QList<QVariant> >();
+                }
+
+                if (!close_list_next.empty()) {
+                    close_list_cur.append(close_list_next);
+
+                    var.setValue< QList<QVariant> >(close_list_cur);
+                    cur_format.setProperty(KoParagraphStyle::SectionEndings, var);
+                    cur.setBlockFormat(cur_format);
+
+//                  next_format.clearProperty(KoParagraphStyle::SectionEndings);
+//                  next.setBlockFormat(next_format);
+                }
+            }
+        }
+
+        if (!getPreviousBlock(cur))
+            break;
+    }
+
+    // We are going from the start of the selection,
+    // find all the paragraph delimiters
+    // and push starts of the sections forward.
+    // If start has met the end, we don't push it forward,
+    // but deleting the end and the start
+    cur = *caret;
+    cur.setPosition(caret->selectionStart());
+    while (cur.block().position() + cur.block().length() <= caret->selectionEnd()) {
+        QTextCursor next = cur;
+        if (getNextBlock(next)) {
+            QTextCursor nextnext = next;
+            if (getNextBlock(nextnext)) {
+                QTextBlockFormat nextnext_format = nextnext.blockFormat();
+                QTextBlockFormat next_format = next.blockFormat();
+
+                if (next_format.hasProperty(KoParagraphStyle::SectionStartings)) {
+                    deleteSingleSections(next);
+                    next_format = next.blockFormat();
+
+                    QVariant var = next_format.property(KoParagraphStyle::SectionStartings);
+                    QList<QVariant> open_list_next = var.value< QList<QVariant> >();
+
+                    QList<QVariant> open_list_nextnext;
+                    if (nextnext_format.hasProperty(KoParagraphStyle::SectionStartings)) {
+                        var = nextnext_format.property(KoParagraphStyle::SectionStartings);
+                        open_list_nextnext = var.value< QList<QVariant> >();
+                    }
+
+
+                    if (!open_list_next.empty()) {
+                        open_list_next.append(open_list_nextnext);
+
+                        var.setValue< QList<QVariant> >(open_list_next);
+                        nextnext_format.setProperty(KoParagraphStyle::SectionStartings, var);
+                        nextnext.setBlockFormat(nextnext_format);
+
+                        next_format.clearProperty(KoParagraphStyle::SectionEndings);
+                        next.setBlockFormat(next_format);
+                    }
+                }
+            }
+        }
+
+        if (!getNextBlock(cur))
+            break;
     }
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
@@ -191,7 +371,7 @@ void DeleteCommand::doDelete()
 
     if (m_mergePossible) {
         // Store various info needed for checkMerge
-        m_format = textEditor->charFormat();;
+        m_format = textEditor->charFormat();
         m_position = textEditor->selectionStart();
         m_length = textEditor->selectionEnd() - textEditor->selectionStart();
     }

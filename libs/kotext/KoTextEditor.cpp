@@ -173,6 +173,14 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     bf.clearProperty(KoParagraphStyle::MasterPageName);
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
     bf.clearProperty(KoParagraphStyle::HiddenByTable);
+
+    // We should stay in the same section so we cant start new one
+    bf.clearProperty(KoParagraphStyle::SectionStartings);
+    // But we move all the current endings to the next paragraph
+    QTextBlockFormat origin = caret.blockFormat();
+    origin.clearProperty(KoParagraphStyle::SectionEndings);
+    caret.setBlockFormat(origin);
+
     // Build the block char format which is just a copy
     QTextCharFormat bcf = caret.blockCharFormat();
 

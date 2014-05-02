@@ -202,6 +202,8 @@ QSharedPointer<KoAbstractResourceServerAdapter> KoResourceTableModel::getResourc
             }
         }
     }
+    cout<<"erreur"<<endl;
+    cout<<"--------"<<endl;
     return res;
 }
 
@@ -361,7 +363,12 @@ void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
         m_resourceAdapterList.at(0)->addTag(0,tag);
     }
     else {
+        KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(resource);
         getResourceAdapter(resource)->addTag(resource, tag);
+        if(currentBundle) {
+            currentBundle->addMeta("tag",tag);
+            currentBundle->save();
+        }
     }
 
     emit tagBoxEntryAdded(tag);
@@ -369,7 +376,13 @@ void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
 
 void KoResourceTableModel::deleteTag(KoResource *resource, const QString &tag)
 {
+    KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(resource);
+
     getResourceAdapter(resource)->deleteTag(resource, tag);
+    if(currentBundle) {
+        currentBundle->removeTag(tag);
+        currentBundle->save();
+    }
 }
 
 int KoResourceTableModel::resourcesCount() const

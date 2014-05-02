@@ -97,6 +97,7 @@ void KoResourceManagerControl::toStatus(QString text,int timeout)
     emit status(text,timeout);
 }
 
+//TODO Design Decision : Un paquet peut il contenir un paquet
 bool KoResourceManagerControl::createPack(int type)
 {
     KoResourceTableModel *currentModel=getModel(type);
@@ -120,25 +121,48 @@ bool KoResourceManagerControl::createPack(int type)
         else {
             QString bundlePath=root+"share/apps/krita/bundles/"+newMeta->getPackName()+".zip";
             KoResourceBundle* newBundle=new KoResourceBundle(bundlePath);
+            bool isEmpty = true;
 
             newBundle->load();
             newBundle->setMeta(newMeta);
 
             for (int i=0; i<selected.size(); i++) {
-                newBundle->addFile(selected.at(i).section('/',selected.count("/")-2,selected.count("/")-2),selected.at(i));
+                QString currentFileName = selected.at(i);
+                KoResource* currentResource = currentModel->getResourceFromFilename(selected.at(i));
+                KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
+
+                if (currentFileName.contains('/') && !currentBundle) {
+                    isEmpty=false;
+                    newBundle->addFile(currentFileName.section('/',currentFileName.count("/")-1,currentFileName.count("/")-1),currentFileName,
+                                   currentModel->assignedTagsList(currentResource));
+                }
+            }
+
+            if (isEmpty) {
+                delete newBundle;
+                emit status("No valid content to be added to a new bundle...Creation Cancelled",3000);
+                return false;
             }
 
             newBundle->addMeta("fileName",bundlePath);
-            newBundle->addMeta("created",QDate::currentDate().toString("dd/MM/yyyy"));
+            newBundle->addMeta("created",QDate::currentDate().toString("dd/MM/yyyy")); 
 
             bundleServer->addResource(newBundle);
+
+            QStringList tagsList = newBundle->getTagsList();
+
+            for (int i=0;i<tagsList.size();i++) {
+                bundleServer->addTag(newBundle,tagsList.at(i));
+            }
+
+            currentModel->tagCategoryMembersChanged();
             currentModel->clearSelected();
-            emit status("New bundle created successfully");
             return true;
         }
     }
 }
 
+//TODO Trouver une solution pour que les ressources installées soient visibles
 bool KoResourceManagerControl::install(int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
@@ -171,8 +195,6 @@ bool KoResourceManagerControl::install(int type)
             return false;
         }
         else {
-            emit status("Bundle(s) installed successfully",3000);
-
             currentModel->clearSelected();
             for (int i=0;i<nbModels;i++) {
                 modelList.at(i)->refreshBundles();
@@ -213,8 +235,6 @@ bool KoResourceManagerControl::uninstall(int type)
             return false;
         }
         else {
-            emit status("Bundle(s) uninstalled successfully",3000);
-
             currentModel->clearSelected();
             for (int i=0;i<nbModels;i++) {
                 modelList.at(i)->refreshBundles();
@@ -225,45 +245,61 @@ bool KoResourceManagerControl::uninstall(int type)
     }
 }
 
-void KoResourceManagerControl::remove(int type)
+bool KoResourceManagerControl::remove(int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
     QList<QString> selected=currentModel->getSelectedResource();
 
     if (selected.isEmpty()) {
         emit status("No resource selected to be removed...",3000);
-        return;
+        return false;
     }
     else {
         QString currentFileName;
         KoResource* currentResource;
         KoResourceBundle* currentBundle;
         bool modified=false;
+        bool bundleModified=false;
 
         for (int i=0;i<selected.size();i++) {
             currentFileName=selected.at(i);
             currentResource=currentModel->getResourceFromFilename(currentFileName);
             currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
 
-            if (currentBundle) {
+            if (currentResource) {
                 modified=true;
-                if (currentBundle->isInstalled()) {
-                    currentBundle->uninstall();
-                }
-            }
-            currentModel->removeResourceFile(currentResource,currentFileName);
-            QString delFilename = root+"share/apps/krita/temp/"+currentFileName.section('/',currentFileName.count('/'));
+                QStringList tagsList = currentModel->assignedTagsList(currentResource);
 
-            QFileInfo fileInfo(delFilename);
-            if (fileInfo.exists()) {
-                QTemporaryFile file(fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix());
-                if (file.open()) {
-                    delFilename=file.fileName();
-                    file.close();
+                for (int j=0;j<tagsList.size();j++) {
+                    currentModel->deleteTag(currentResource,tagsList.at(j));
                 }
-            }
 
-            QFile::rename(currentFileName,delFilename);
+                if (currentBundle) {
+                    bundleModified=true;
+                    if (currentBundle->isInstalled()) {
+                        currentBundle->uninstall();
+                    }
+                }
+
+                currentModel->removeResourceFile(currentResource,currentFileName);
+                QString delFilename = root+"share/apps/krita/temp/"+currentFileName.section('/',currentFileName.count('/'));
+
+                QFileInfo fileInfo(delFilename);
+                if (fileInfo.exists()) {
+                    QTemporaryFile file(fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix());
+                    if (file.open()) {
+                        delFilename=file.fileName();
+                        file.close();
+                    }
+                }
+
+                QFile::rename(currentFileName,delFilename);
+            }
+        }
+
+        if (!modified) {
+            emit status("No target available to be removed...",3000);
+            return false;
         }
 
         currentModel->clearSelected();
@@ -272,11 +308,11 @@ void KoResourceManagerControl::remove(int type)
             for (int j=0;j<selected.size();j++) {
                 modelList.at(i)->removeOneSelected(selected.at(j));
             }
-            if (modified) {
+            if (bundleModified) {
                 modelList.at(i)->refreshBundles();
             }
         }
-        emit status("Resource(s) removed successfully",3000);
+        return true;
     }
 }
 
@@ -310,24 +346,12 @@ void KoResourceManagerControl::thumbnail(QModelIndex index,QString fileName,int 
     }
 }
 
-
-
-
-
-
 void KoResourceManagerControl::setMeta(QModelIndex index,QString metaType,QString metaValue,int type)
 {
     KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(getModel(type)->getResourceFromIndex(index));
 
     if (currentBundle) {
         currentBundle->addMeta(metaType,metaValue);
-    }
-}
-
-void KoResourceManagerControl::setMeta(KoResourceBundle *bundle, QString metaType,QString metaValue)
-{
-    if (bundle) {
-        bundle->addMeta(metaType,metaValue);
     }
 }
 
@@ -341,44 +365,68 @@ void KoResourceManagerControl::saveMeta(QModelIndex index,int type)
 }
 
 //TODO Bug Foreground to Background
+//TODO Bug rename bouton/label
+//TODO Rafraichir réellement un bundle renommé
+//TODO Trouver pourquoi les tags sont préservés pour les fichiers mais pas pour les paquets
+//TODO Trouver un moyen pour bien différencier et renommer fichier et nom de ressource
+//TODO Bug pour les noms qui n'ont pas l'extension du fichier de base
 //TODO A tester pr tous les cas possibles
 //TODO Rajouter le cas où le nom est déjà utilisé
+//TODO Vérifier comment on supprime un tag d'un bundle <=> est ce qu'on supprime la méta donnée dans le xml
+//<=>est-ce qu'on vérifie avant de modif le xml si un fichier qu'il contient n'a pas ce tag...
 bool KoResourceManagerControl::rename(QModelIndex index,QString newName,int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
     KoResource* currentResource=currentModel->getResourceFromIndex(index);
-    if (currentResource!=0 && currentResource->valid()) {
-        KoResourceBundle* currentBundle= dynamic_cast<KoResourceBundle*>(currentResource);
 
+    if (currentResource) {
         QString oldFilename=currentResource->filename();
         QString newFilename=oldFilename.section('/',0,oldFilename.count('/')-1)+"/"+newName;
+
         if (oldFilename!=newFilename) {
+            KoResourceBundle* currentBundle;
+            QStringList tagList = currentModel->assignedTagsList(currentResource);
+
+            if (!currentResource->name().contains('.')) {
+                newName=newName.section('.',0,0);
+            }
+
+            for (int i=0;i<tagList.size();i++) {
+                currentModel->deleteTag(currentResource,tagList.at(i));
+            }
 
             QFile::rename(oldFilename,newFilename);
             currentResource->setFilename(newFilename);
             currentResource->setName(newName);
+            currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
 
             if (currentBundle) {
                 currentBundle->rename(newFilename,newName);
             }
-            else if (newFilename.count('/')==root.count()+5) {
-                QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
-                QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
-                currentBundle= dynamic_cast<KoResourceBundle*>
-                        (currentModel->getResourceFromFilename(bundleName.append(".zip")));
-                if (currentBundle) {
-                    currentBundle->removeFile(oldFilename);
-                    currentBundle->addFile(fileType,newFilename);
+            else {
+                if (newFilename.count('/')==root.count()+5) {
+                    QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
+                    QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
+
+                    currentBundle= dynamic_cast<KoResourceBundle*>
+                            (currentModel->getResourceFromFilename(bundleName.append(".zip")));
+
+                    if (currentBundle) {
+                        currentBundle->removeFile(oldFilename);
+                        currentBundle->addFile(fileType,newFilename,tagList);
+                    }
                 }
             }
 
+            for (int i=0;i<tagList.size();i++) {
+                currentModel->addTag(currentResource,tagList.at(i));
+            }
+
             currentModel->removeOneSelected(oldFilename);
+            return true;
         }
     }
-
-    return true;
-    //model->refresh();
-    //TODO Définir dans quels cas le renommage échoue
+    return false;
 }
 
 //TODO Voir s'il est intéressant de garder la sélection
@@ -449,7 +497,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
 
 //TODO Rajouter la mise a jour des tags
 //TODO Voir si ce traitement ne peut pas etre généraliser ou fait ailleurs
-
+//TODO Lors de l'ajout d'un tag à un paquet, rajouter le tag aussi dans le meta
 void KoResourceManagerControl::addFiles(QString bundleName,int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
@@ -464,7 +512,7 @@ void KoResourceManagerControl::addFiles(QString bundleName,int type)
             QString currentSelect=selected.at(i);
             QString resourceType=currentSelect.section('/',currentSelect.count("/")-2,currentSelect.count("/")-2);
 
-            currentBundle->addFile(resourceType,currentSelect);
+            currentBundle->addFile(resourceType,currentSelect,currentModel->assignedTagsList(currentModel->getResourceFromFilename(currentSelect)));
             QFile::copy(currentSelect,path+resourceType+QString("/")+bundleName+QString("/")
                         +currentSelect.section('/',currentSelect.count("/")));
         }

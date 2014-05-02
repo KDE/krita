@@ -109,9 +109,6 @@ private:
     KoResourceTaggingManager *tagMan;
     ClickLabel *resourceNameLabel;
     bool firstRefresh;
-
-    /*QSortFilterProxyModel* m_filter;
-    MyTableModel *model2;*/
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

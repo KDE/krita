@@ -31,7 +31,7 @@
 #include <iostream>
 using namespace std;
 
-//TODO Paramètre de ManagerControl à modifier si on veut rajouter des onglets
+//TODO KoResourceManagerControl constructor parameter is the number of tabs of the Resource Manager
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::KoResourceManagerWidget),control(new KoResourceManagerControl(2)),tagMan(0),firstRefresh(true)
 {
@@ -56,21 +56,6 @@ KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
     ui->tabWidget->removeTab(2);
 
     ui->statusbar->showMessage("Welcome back ! Resource Manager is ready to use...",1500);
-
-    /*this->model2=new MyTableModel(0);
-
-    m_filter = new QSortFilterProxyModel(this);
-    m_filter->setSourceModel(model2);
-    connect(ui->lineEdit,SIGNAL(textChanged(QString)),
-            m_filter,SLOT(setFilterFixedString(QString)));
-    m_filter->setFilterKeyColumn(1);
-    m_filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-    ui->tableView->setModel(m_filter);
-    ui->tableView_2->setModel(m_filter);
-    ui->tableView_3->setModel(m_filter);
-    ui->tableView_4->setModel(m_filter);
-    ui->tableView_5->setModel(m_filter);*/
 }
 
 KoResourceManagerWidget::~KoResourceManagerWidget()
@@ -80,6 +65,8 @@ KoResourceManagerWidget::~KoResourceManagerWidget()
     delete resourceNameLabel;
     delete tagMan;
 }
+
+/*Initialize*/
 
 void KoResourceManagerWidget::initializeFilterMenu()
 {
@@ -182,6 +169,8 @@ void KoResourceManagerWidget::initializeConnect()
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tableViewChanged(int)));
 }
 
+/*Tools*/
+
 void KoResourceManagerWidget::showHide()
 {
     ui->widget_2->setVisible(!ui->widget_2->isVisible());
@@ -197,42 +186,6 @@ QTableView* KoResourceManagerWidget::tableView(int index)
     return dynamic_cast<QTableView*>(ui->tabWidget->widget(index)->layout()->itemAt(0)->widget());
 }
 
-//TODO Régler le pb de chgt de taille de la thumbnail
-/*Slots*/
-
-void KoResourceManagerWidget::about()
-{
-    QMessageBox msgBox;
-    msgBox.about(this,"About Krita Resource Manager",
-                 "This software has been designed by Reload Team and KDE developers :)");
-}
-
-void KoResourceManagerWidget::createPack()
-{
-    if (control->createPack(ui->tabWidget->currentIndex())) {
-        toBundleView(0);
-    }
-}
-
-void KoResourceManagerWidget::installPack()
-{
-    if (control->install(ui->tabWidget->currentIndex())) {
-        toBundleView(1);
-    }
-}
-
-void KoResourceManagerWidget::deletePack()
-{
-    control->remove(ui->tabWidget->currentIndex());
-}
-
-void KoResourceManagerWidget::uninstallPack()
-{
-    if (control->uninstall(ui->tabWidget->currentIndex())) {
-        toBundleView(0);
-    }
-}
-
 void KoResourceManagerWidget::toBundleView(int installTab) {
     if(ui->tabWidget->currentIndex()!=installTab) {
         ui->tabWidget->setCurrentIndex(installTab);
@@ -246,6 +199,48 @@ void KoResourceManagerWidget::toBundleView(int installTab) {
     }
 }
 
+/*Functionalities*/
+
+void KoResourceManagerWidget::about()
+{
+    QMessageBox msgBox;
+    msgBox.about(this,"About Krita Resource Manager",
+                 "This software has been designed by Reload Team and KDE developers :)");
+}
+
+void KoResourceManagerWidget::createPack()
+{
+    if (control->createPack(ui->tabWidget->currentIndex())) {
+        toBundleView(0);
+        status("New bundle created successfully",3000);
+    }
+}
+
+void KoResourceManagerWidget::installPack()
+{
+    if (control->install(ui->tabWidget->currentIndex())) {
+        toBundleView(1);
+        status("Bundle(s) installed successfully",3000);
+    }
+}
+
+void KoResourceManagerWidget::deletePack()
+{
+    if(control->remove(ui->tabWidget->currentIndex())) {
+        refreshDetails(tableView(ui->tabWidget->currentIndex())->currentIndex());
+        emit status("Resource(s) removed successfully",3000);
+    }
+}
+
+void KoResourceManagerWidget::uninstallPack()
+{
+    if (control->uninstall(ui->tabWidget->currentIndex())) {
+        toBundleView(0);
+        status("Bundle(s) uninstalled successfully",3000);
+    }
+}
+
+//TODO Régler le pb de chgt de taille de la thumbnail
 void KoResourceManagerWidget::thumbnail()
 {
     QTableView* currentTableView = tableView(ui->tabWidget->currentIndex());
@@ -258,7 +253,6 @@ void KoResourceManagerWidget::thumbnail()
     currentTableView->setCurrentIndex(currentIndex);
 }
 
-
 void KoResourceManagerWidget::setMeta()
 {
     QObject *emetteur = sender();
@@ -267,6 +261,7 @@ void KoResourceManagerWidget::setMeta()
         int currentIndex=ui->tabWidget->currentIndex();
         QTableView* currentTableView=tableView(currentIndex);
         QLineEdit* sender=(QLineEdit*)emetteur;
+
         if (emetteur==ui->lineEdit_2) {
             control->setMeta(currentTableView->currentIndex(),"Author",sender->text(),currentIndex);
             ui->lineEdit_2->blockSignals(true);
@@ -318,16 +313,17 @@ void KoResourceManagerWidget::endRenaming()
     if (control->rename(currentIndex,newFileName,ui->tabWidget->currentIndex())) {
         resourceNameLabel->setText(newFileName);
         currentTableView->reset();
+        ui->statusbar->showMessage("Resource renamed successfully...",3000);
     }
     else {
         ui->lineEdit_5->setText(resourceNameLabel->text().section('.',0,0));
+        ui->statusbar->showMessage("Rename cancelled...",3000);
     }
 
     currentTableView->setCurrentIndex(currentIndex);
     resourceNameLabel->setVisible(true);
     ui->toolButton->setVisible(true);
     ui->lineEdit_5->setVisible(false);
-    ui->statusbar->showMessage("Resource renamed successfully...",3000);
 }
 
 void KoResourceManagerWidget::rename(QString newName)
@@ -343,6 +339,9 @@ void KoResourceManagerWidget::rename(QString newName)
         resourceNameLabel->setText(newFileName);
         currentTableView->reset();
         ui->statusbar->showMessage("Resource renamed successfully...",3000);
+    }
+    else {
+        ui->statusbar->showMessage("Rename cancelled...",3000);
     }
 }
 
@@ -447,8 +446,6 @@ void KoResourceManagerWidget::filterResourceTypes(int index)
 
     ui->statusbar->showMessage("Resource lists updated",3000);
 }
-
-
 
 void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
 {
@@ -559,8 +556,9 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
 
 void KoResourceManagerWidget::saveMeta()
 {
-    ui->statusbar->showMessage("Saving metadata...",3000);
     int currentTabIndex=ui->tabWidget->currentIndex();
+
+    ui->statusbar->showMessage("Saving metadata...",3000);
     control->saveMeta(tableView(currentTabIndex)->currentIndex(),currentTabIndex);
     ui->statusbar->showMessage("Metadata saved successfully...",3000);
 }
@@ -611,8 +609,6 @@ void KoResourceManagerWidget::exportBundle()
     control->exportBundle(ui->tabWidget->currentIndex());
 }
 
-//TODO Penser à une fonction toBundleView pour aller direct sur la vue bundle
-//qd une modif est effectuée dessus
 void KoResourceManagerWidget::importBundle()
 {
     if(control->importBundle()) {

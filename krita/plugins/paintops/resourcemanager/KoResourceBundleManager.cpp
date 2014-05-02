@@ -127,6 +127,8 @@ void KoResourceBundleManager::extractKFiles(QMap<QString,QString> pathList)
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
                 mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
+                    cout<<qPrintable(currentPath)<<endl;
+                    cout<<qPrintable(targetPath)<<endl;
                     //TODO Supprimer le dossier créé
                     exit(1);
                 }

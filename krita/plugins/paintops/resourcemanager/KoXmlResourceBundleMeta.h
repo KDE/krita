@@ -82,6 +82,8 @@ public:
      */
     void addTags(QList<QString> list);
 
+    QList<QString> getTagsList();
+
     /**
      * @brief getPackName
      * @return the name of the resource pack

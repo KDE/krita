@@ -33,6 +33,8 @@
 #include <iostream>
 using namespace std;
 
+
+//TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& bundlePath):KoResource(bundlePath)
 {
     manager=new KoResourceBundleManager(bundlePath.section('/',0,bundlePath.count('/')-2));
@@ -84,7 +86,7 @@ bool KoResourceBundle::save()
     meta->checkSort();
 
     if (manager->bad()) {
-        meta->addTags(manifest->getTagList());
+        //meta->addTags(manifest->getTagsList());
         manager->createPack(manifest,meta,thumbnail,true);
     }
     else {
@@ -145,10 +147,20 @@ void KoResourceBundle::setMeta(KoXmlResourceBundleMeta* newMeta)
     meta=newMeta;
 }
 
-void KoResourceBundle::addFile(QString fileType,QString filePath)
+//TODO Voir s'il faut aussi rajouter les tags dans le meta
+void KoResourceBundle::addFile(QString fileType,QString filePath, QStringList fileTagList)
 {
-    manifest->addTag(fileType,filePath);
+    manifest->addManiTag(fileType,filePath,fileTagList);
+    meta->addTags(fileTagList);
 }
+
+//On rappelle que les tags d'un bundle ne sont stockés que dans le meta
+//Les tags du manifest sont ajoutés au fur et à mesure de l'ajout des fichiers
+QList<QString> KoResourceBundle::getTagsList()
+{
+    return meta->getTagsList();
+}
+
 
 void KoResourceBundle::removeFile(QString fileName)
 {
@@ -177,22 +189,26 @@ void KoResourceBundle::rename(QString filename,QString name)
     QString oldName=meta->getPackName();
     QString shortName=name.section('.',0,0);
 
-    setFilename(filename);
-    setName(name);
     addMeta("filename",filename);
     addMeta("name",shortName);
     manifest->rename(shortName);
+
     if (isInstalled()) {
         QList<QString> directoryList = manifest->getDirList();
         QString dirPath;
         QDir dir;
         for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = this->manager->getKritaPath();
+            dirPath = manager->getKritaPath();
             dirPath.append(directoryList.at(i)).append("/");
             dir.rename(dirPath+oldName,dirPath+shortName);
         }
     }
     save();
+}
+
+void KoResourceBundle::removeTag(QString tagName)
+{
+    meta->removeFirstTag("tag",tagName);
 }
 
 void KoResourceBundle::setThumbnail(QString filename)

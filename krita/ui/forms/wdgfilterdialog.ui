@@ -20,9 +20,6 @@
    <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>4</number>
-   </property>
    <item>
     <widget class="KisFilterSelectorWidget" name="filterSelection" native="true">
      <property name="sizePolicy">
@@ -36,7 +33,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <property name="topMargin">
-      <number>18</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="pushButtonCreateMaskEffect">
@@ -73,29 +70,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="KPushButton" name="pushButtonCancel">
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="KPushButton" name="pushButtonOk">
-       <property name="default">
-        <bool>true</bool>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -105,11 +82,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisFilterSelectorWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_filter_selector_widget.h</header>
@@ -118,9 +90,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>checkBoxPreview</tabstop>
-  <tabstop>pushButtonOk</tabstop>
   <tabstop>pushButtonCreateMaskEffect</tabstop>
-  <tabstop>pushButtonCancel</tabstop>
  </tabstops>
  <resources/>
  <connections/>

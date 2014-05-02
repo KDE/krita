@@ -46,6 +46,17 @@ class PIGMENTCMS_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
+
+    enum PaletteType {
+        UNKNOWN = 0,
+        GPL,                // GIMP
+        RIFF_PAL,           // RIFF
+        ACT,                // Photoshop binary
+        PSP_PAL,            // PaintShop Pro
+        ACO                 // Photoshop Swatches
+    };
+
+
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
@@ -83,7 +94,11 @@ private:
     void save(QIODevice *io) const;
     bool init();
 
-private:
+    bool loadGpl();
+    bool loadAct();
+    bool loadRiff();
+    bool loadPsp();
+    bool loadAco();
 
     QByteArray m_data;
     bool m_ownData;

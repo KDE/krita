@@ -99,7 +99,6 @@ public:
         , desktopViewProxy(0)
         , forceDesktop(false)
         , forceSketch(false)
-        , wasMaximized(true)
         , temporaryFile(false)
         , syncObject(0)
         , toDesktop(0)
@@ -131,7 +130,6 @@ public:
 
     bool forceDesktop;
     bool forceSketch;
-    bool wasMaximized;
     bool temporaryFile;
     ViewModeSynchronisationObject* syncObject;
     QTimer* centerer;
@@ -265,7 +263,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Set the initial view to sketch... because reasons.
     // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
-    d->wasMaximized = true;
 
     if(!fileNames.isEmpty()) {
         //It feels a little hacky, but call a QML function to open files.
@@ -322,14 +319,13 @@ void MainWindow::switchToSketch()
         QApplication::sendEvent(view, &aboutToSwitchEvent);
 
         d->desktopView->setParent(0);
-        d->wasMaximized = isMaximized();
     }
 
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
 
     if (d->slateMode) {
-        showFullScreen();
+        setWindowState(windowState() | Qt::WindowFullScreen);
         if (d->syncObject->initialized)
             QTimer::singleShot(50, this, SLOT(sketchChange()));
     }
@@ -396,10 +392,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
-    if (d->wasMaximized)
-        showMaximized();
-    else
-        showNormal();
+    setWindowState(windowState() & ~Qt::WindowFullScreen);
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object

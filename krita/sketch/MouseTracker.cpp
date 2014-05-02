@@ -24,57 +24,78 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTouchEvent>
 
+struct TrackedItem {
+    TrackedItem(QDeclarativeItem* i, const QPointF& o) : item(i), offset(o) { }
+
+    QDeclarativeItem* item;
+    QPointF offset;
+};
+
+class MouseTracker::Private
+{
+public:
+    Private()
+    { }
+
+    QList<TrackedItem> trackedItems;
+};
+
 MouseTracker::MouseTracker(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), d(new Private)
 {
     QCoreApplication::instance()->installEventFilter(this);
 }
 
 MouseTracker::~MouseTracker()
 {
-
+    delete d;
 }
 
-void MouseTracker::addItem(QDeclarativeItem* item)
+void MouseTracker::addItem(QDeclarativeItem* item, const QPointF& offset)
 {
-    m_trackedItems.append(item);
+    d->trackedItems.append(TrackedItem(item, offset));
 }
 
 void MouseTracker::removeItem(QDeclarativeItem* item)
 {
-    m_trackedItems.removeOne(item);
+    for(int i = 0; i < d->trackedItems.length(); ++i) {
+        if(d->trackedItems.at(i).item == item) {
+            d->trackedItems.removeAt(i);
+            break;
+        }
+    }
 }
 
 bool MouseTracker::eventFilter(QObject* target, QEvent* event)
 {
     Q_UNUSED(target)
-    if (m_trackedItems.count() > 0) {
+    if (d->trackedItems.count() > 0) {
         switch(event->type()) {
             case QEvent::GraphicsSceneMouseMove: {
                 QGraphicsSceneMouseEvent* mevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-                foreach(QDeclarativeItem* item, m_trackedItems) {
-                    item->setPos(mevent->scenePos());
+                Q_FOREACH(const TrackedItem& item, d->trackedItems) {
+                    item.item->setPos(mevent->scenePos() + item.offset);
                 }
                 return false;
             }
             case QEvent::TouchUpdate: {
                 QTouchEvent* tevent = static_cast<QTouchEvent*>(event);
                 QTouchEvent::TouchPoint primary;
-                foreach(const QTouchEvent::TouchPoint& point, tevent->touchPoints()) {
+                Q_FOREACH(const QTouchEvent::TouchPoint& point, tevent->touchPoints()) {
                     if (point.isPrimary()) {
                         primary = point;
                         break;
                     }
                 }
-                foreach(QDeclarativeItem* item, m_trackedItems) {
-                    item->setPos(primary.scenePos());
+                Q_FOREACH(const TrackedItem& item, d->trackedItems) {
+                    item.item->setPos(primary.scenePos() + item.offset);
                 }
                 return false;
             }
             case QEvent::DragMove: {
                 QDragMoveEvent* mevent = static_cast<QDragMoveEvent*>(event);
-                foreach(QDeclarativeItem* item, m_trackedItems) {
-                    item->setPos(mevent->pos());
+                Q_FOREACH(const TrackedItem& item, d->trackedItems) {
+                    item.item->setPos(mevent->pos() + item.offset);
                 }
                 return false;
             }

@@ -124,17 +124,20 @@ void KoXmlResourceBundleManifest::merge(QDomNode dest,QDomNode src)
 {
     QDomNode currentNode=src.firstChild();
     QString attribut;
+    QStringList tagList;
+
     while (!currentNode.isNull()) {
         attribut = currentNode.toElement().attribute("name");
         src.removeChild(currentNode);
-        addTag(dest.toElement().tagName(),attribut);
+        addManiTag(dest.toElement().tagName(),attribut,tagList);
         currentNode=src.firstChild();
     }
 
     root.removeChild(src);
 }
 
-QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fileName,bool emptyFile)
+//TODO A Revoir vu que c'était censé redéfinir le addTag de generator
+QDomElement KoXmlResourceBundleManifest::addManiTag(QString fileTypeName,QString fileName,QStringList fileTagList,bool emptyFile)
 {
     QDomNode currentNode;
     bool newNode=false;
@@ -152,10 +155,14 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
     }
 
     if (emptyFile || searchValue(xmlDocument.elementsByTagName("file"),"name",fileName).isNull()) {
-        QDomElement result=addTag(currentNode.toElement(),"file","");
+        QDomElement result=addManiTag(currentNode.toElement(),"file","");
         result.setAttribute("name",fileName);
 
-        importFileTags(result,fileTypeName,fileName);
+        if (!fileTagList.isEmpty()) {
+            for (int i=0;i<fileTagList.size();i++) {
+                addManiTag(result,"tag",fileTagList.at(i));
+            }
+        }
 
         return result;
     }
@@ -167,7 +174,7 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
     }
 }
 
-QDomElement KoXmlResourceBundleManifest::addTag(QDomElement parent,QString tagName,QString textValue)
+QDomElement KoXmlResourceBundleManifest::addManiTag(QDomElement parent,QString tagName,QString textValue)
 {
     QDomElement currentElem;
 
@@ -188,69 +195,6 @@ QDomElement KoXmlResourceBundleManifest::addTag(QDomElement parent,QString tagNa
     }
 
     return currentElem;
-}
-
-//TODO Se renseigner autour du lambda pour la généralisation des KoResourceServer
-void KoXmlResourceBundleManifest::importFileTags(QDomElement parent,QString fileTypeName,QString fileName)
-{
-    QStringList resourceTagslist;
-    KoResource *currentResource;
-
-    fileName=fileName.section('/',fileName.count('/'));
-
-    if (fileTypeName=="patterns") {
-        KoResourceServer<KoPattern> *serv=KoResourceServerProvider::instance()->patternServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else if (fileTypeName=="gradients") {
-        KoResourceServer<KoAbstractGradient> *serv=KoResourceServerProvider::instance()->gradientServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else if (fileTypeName=="brushes") {
-        KoResourceServer<KisBrush> *serv=KisBrushServer::instance()->brushServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else if (fileTypeName=="workspaces") {
-        KoResourceServer<KisWorkspaceResource> *serv=KisResourceServerProvider::instance()->workspaceServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else if (fileTypeName=="palettes") {
-        KoResourceServer<KoColorSet> *serv=KoResourceServerProvider::instance()->paletteServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else if (fileTypeName=="paintoppresets") {
-        KoResourceServer<KisPaintOpPreset> *serv=KisResourceServerProvider::instance()->paintOpPresetServer();
-        currentResource=serv->resourceByName(fileName);
-        if (!currentResource) {
-            return;
-        }
-        resourceTagslist=serv->assignedTagsList(currentResource);
-    }
-    else return;
-
-    for (int i=0;i<resourceTagslist.size();i++) {
-        addTag(parent,"Tag",resourceTagslist.at(i));
-    }
 }
 
 QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
@@ -294,7 +238,7 @@ QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
     return result;
 }
 
-QList<QString> KoXmlResourceBundleManifest::getTagList()
+QList<QString> KoXmlResourceBundleManifest::getTagsList()
 {
     QString currentTextValue;
     QList<QString> result;

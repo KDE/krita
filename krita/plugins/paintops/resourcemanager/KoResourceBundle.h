@@ -98,14 +98,15 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType,QString filePath);
+    void addFile(QString fileType,QString filePath,QStringList fileTagList);
+
+    QList<QString> getTagsList();
 
     /**
      * @brief removeFile : Remove a file from the bundle
      * @param fileName name of the resource file
      */
     void removeFile(QString fileName);
-
 
     /**
      * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
@@ -154,6 +155,7 @@ public:
     bool isInstalled();
 
     void setThumbnail(QString);
+    void removeTag(QString tagName);
 
 protected:
 

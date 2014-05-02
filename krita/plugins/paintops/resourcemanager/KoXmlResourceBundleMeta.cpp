@@ -200,3 +200,18 @@ QString KoXmlResourceBundleMeta::getPackFileName()
         return "";
     }
 }
+
+QList<QString> KoXmlResourceBundleMeta::getTagsList()
+{
+    QString currentTextValue;
+    QList<QString> result;
+    QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
+
+    for (int i=0;i<tagList.size();i++) {
+        currentTextValue=tagList.at(i).firstChild().toText().data();
+        if (!result.contains(currentTextValue)) {
+            result.push_front(currentTextValue);
+        }
+    }
+    return result;
+}

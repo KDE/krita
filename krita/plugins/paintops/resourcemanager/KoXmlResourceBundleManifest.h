@@ -85,7 +85,7 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    QDomElement addTag(QString fileType,QString fileName,bool emptyFile=false);
+    QDomElement addManiTag(QString fileType,QString fileName,QStringList tagFileList,bool emptyFile=false);
 
     /**
      * @brief getFileList
@@ -112,7 +112,7 @@ public:
      * @param textValue the text value associated to the tag
      * @return the child as a QDomElement
      */
-    QDomElement addTag(QDomElement parent,QString tagName,QString textValue);
+    QDomElement addManiTag(QDomElement parent,QString tagName,QString textValue);
 
     /**
      * @brief importFileTags : import the resource tags associated to the file to the manifest
@@ -126,7 +126,7 @@ public:
      * @brief getTagList
      * @return the list of all resource tags contained in the manifest
      */
-    QList<QString> getTagList();
+    QList<QString> getTagsList();
 
     /**
      * @brief removeFile : remove a file from the manifest

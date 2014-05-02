@@ -20,6 +20,7 @@
 #define MOUSETRACKER_H
 
 #include <QObject>
+#include <QPointF>
 
 class QDeclarativeItem;
 
@@ -34,15 +35,16 @@ public:
     virtual ~MouseTracker();
 
 public Q_SLOTS:
-    void addItem(QDeclarativeItem* item);
+    void addItem(QDeclarativeItem* item, const QPointF& offset = QPointF());
     void removeItem(QDeclarativeItem* item);
 
 protected:
     virtual bool eventFilter(QObject* target, QEvent* event);
 
 private:
-    QList<QDeclarativeItem*> m_trackedItems;
-
+private:
+    class Private;
+    Private* const d;
 };
 
 #endif // MOUSETRACKER_H

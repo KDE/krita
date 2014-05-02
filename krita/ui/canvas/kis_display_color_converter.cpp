@@ -293,10 +293,8 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilterSP displayFilter
     m_d->intermediateColorSpace = 0;
 
     if (m_d->displayFilter) {
-        const KoColorProfile *intermediateProfile =
-            m_d->displayFilter->useInternalColorManagement() ?
-            m_d->monitorProfile : 0;
-
+        // choosing default profile, which is scRGB
+        const KoColorProfile *intermediateProfile = 0;
         m_d->intermediateColorSpace =
             KoColorSpaceRegistry::instance()->
             colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), intermediateProfile);
@@ -392,7 +390,10 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
         const KoColorSpace *srcCS = c.colorSpace();
 
         if (m_d->displayFilter->useInternalColorManagement()) {
-            srcCS = m_d->monitorColorSpace;
+            srcCS = KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Float32BitsColorDepthID.id(),
+                m_d->monitorProfile);
             c.convertTo(srcCS, m_d->renderingIntent, m_d->conversionFlags);
         }
 
@@ -472,7 +473,13 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
                 device = new KisPaintDevice(*srcDevice);
             }
 
-            KUndo2Command *cmd = device->convertTo(m_d->monitorColorSpace, m_d->renderingIntent, m_d->conversionFlags);
+            const KoColorSpace *srcCS =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    RGBAColorModelID.id(),
+                    Float32BitsColorDepthID.id(),
+                    m_d->monitorProfile);
+
+            KUndo2Command *cmd = device->convertTo(srcCS, m_d->renderingIntent, m_d->conversionFlags);
             delete cmd;
         }
 

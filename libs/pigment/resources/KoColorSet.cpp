@@ -412,6 +412,8 @@ bool KoColorSet::loadAco()
     setName(info.baseName());
 
     QBuffer buf(&m_data);
+    buf.open(QBuffer::ReadOnly);
+
     quint16 version = readShort(&buf);
     quint16 numColors = readShort(&buf);
     KoColorSetEntry e;
@@ -419,17 +421,19 @@ bool KoColorSet::loadAco()
     const quint16 quint16_MAX = 65535;
 
     for (int i = 0; i < numColors && !buf.atEnd(); ++i) {
+
         quint16 colorSpace = readShort(&buf);
         quint16 ch1 = readShort(&buf);
         quint16 ch2 = readShort(&buf);
         quint16 ch3 = readShort(&buf);
         quint16 ch4 = readShort(&buf);
+
         bool skip = false;
         if (colorSpace == 0) { // RGB
             e.color = KoColor(KoColorSpaceRegistry::instance()->rgb16());
-            e.color.data()[0] = ch3;
-            e.color.data()[1] = ch2;
-            e.color.data()[2] = ch1;
+            reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
+            reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
+            reinterpret_cast<quint16*>(e.color.data())[2] = ch1;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 1) { // HSB
@@ -441,22 +445,22 @@ bool KoColorSet::loadAco()
         }
         else if (colorSpace == 2) { //
             e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
-            e.color.data()[0] = quint16_MAX - ch1;
-            e.color.data()[1] = quint16_MAX - ch2;
-            e.color.data()[2] = quint16_MAX - ch3;
-            e.color.data()[4] = quint16_MAX - ch4;
+            reinterpret_cast<quint16*>(e.color.data())[0] = quint16_MAX - ch1;
+            reinterpret_cast<quint16*>(e.color.data())[1] = quint16_MAX - ch2;
+            reinterpret_cast<quint16*>(e.color.data())[2] = quint16_MAX - ch3;
+            reinterpret_cast<quint16*>(e.color.data())[4] = quint16_MAX - ch4;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 7) { // LAB
             e.color = KoColor(KoColorSpaceRegistry::instance()->lab16());
-            e.color.data()[0] = ch3;
-            e.color.data()[1] = ch2;
-            e.color.data()[2] = ch1;
+            reinterpret_cast<quint16*>(e.color.data())[0] = ch3;
+            reinterpret_cast<quint16*>(e.color.data())[1] = ch2;
+            reinterpret_cast<quint16*>(e.color.data())[2] = ch1;
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else if (colorSpace == 8) { // GRAY
             e.color = KoColor(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), ""));
-            e.color.data()[0] = ch1 * (quint16_MAX / 10000);
+            reinterpret_cast<quint16*>(e.color.data())[0] = ch1 * (quint16_MAX / 10000);
             e.color.setOpacity(OPACITY_OPAQUE_U8);
         }
         else {

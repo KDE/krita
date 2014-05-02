@@ -55,6 +55,7 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 
 #include <kdebug.h>
+#include <KoSection.h>
 
 #include <QTextTable>
 #include <QTextList>
@@ -104,6 +105,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
     }
 
+    int section_level = -1;
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
@@ -120,6 +122,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 lastBorder = 0;
             }
         }
+
+        QVariant var = block.blockFormat().property(KoParagraphStyle::SectionStartings);
+        QList<QVariant> open_list = var.value< QList<QVariant> >();
+
+        section_level += open_list.count();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -247,7 +254,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     selections.append(fr);
                 }
             }
-            // this is a workaround to fix text getting cut of when format ranges are used. There 
+            // this is a workaround to fix text getting cut of when format ranges are used. There
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
             // is used for formating it can clip the lines above/below as Qt creates a clip rect for
             // the places it already painted for the format range which results in clippling. So use
@@ -298,7 +305,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                         // see http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
                         int luma = ((5036060/2) * backbrush.color().red()
                                     + (9886846/2) * backbrush.color().green()
-                                    + (1920103/2) * backbrush.color().blue()) >> 23; 
+                                    + (1920103/2) * backbrush.color().blue()) >> 23;
                         if (luma > 60) {
                             frontBrush.setColor(QColor(Qt::black));
                         } else {
@@ -362,7 +369,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
+            decorateParagraphSections(painter, block, section_level);
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
+
+            var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
+            QList<QVariant> close_list = var.value< QList<QVariant> >();
+
+            section_level -= close_list.count();
 
             painter->restore();
         } else {
@@ -587,6 +600,17 @@ static void drawDecorationText(QPainter *painter, const QTextLine &line, const Q
     painter->setPen(oldPen);
 }
 
+static void drawDecorationTextOnce(QPainter *painter, const QTextLine &line, const QColor &color, const QString& decorText, qreal x1, qreal x2)
+{
+    qreal y = line.position().y();
+    QPen oldPen = painter->pen();
+    painter->setPen(QPen(color));
+    QRectF br;
+    painter->drawText(QRectF(QPointF(x1, y), QPointF(x2, y + line.height())), Qt::AlignLeft | Qt::AlignVCenter, decorText, &br);
+    x1 = br.right();
+    painter->setPen(oldPen);
+}
+
 static void drawDecorationWords(QPainter *painter, const QTextLine &line, const QString &text, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const QString& decorText, qreal width, const qreal y, const int fragmentToLineOffset, const int startOfFragmentInBlock)
 {
     qreal wordBeginX = -1;
@@ -633,6 +657,73 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
     }
     Q_ASSERT(0); // illegal weight passed
     return 0;
+}
+
+void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block, int section_level)
+{
+    QTextLayout *layout = block.layout();
+    QTextBlockFormat bf = block.blockFormat();
+
+    if (bf.hasProperty(KoParagraphStyle::SectionStartings)) {
+        QVariant var = bf.property(KoParagraphStyle::SectionStartings);
+        QList<QVariant> open_list = var.value< QList<QVariant> >();
+
+        drawDecorationLine(painter,
+                           Qt::green,
+                           KoCharacterStyle::SingleLine,
+                           KoCharacterStyle::SolidLine,
+                           1 * open_list.count(),
+                           section_level * 50,
+                           width(),
+                           layout->lineForTextPosition(0).y()
+        );
+
+        QString sectionsDebug = "Starts :";
+        foreach (const QVariant &sv, open_list)
+        {
+            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+            sectionsDebug += sec->name() + " ";
+        }
+
+        drawDecorationTextOnce(painter,
+                               layout->lineForTextPosition(0),
+                               Qt::gray,
+                               sectionsDebug,
+                               0,
+                               width()
+        );
+    }
+
+    if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
+        QVariant var = bf.property(KoParagraphStyle::SectionEndings);
+        QList<QVariant> close_list = var.value< QList<QVariant> >();
+        drawDecorationLine(painter,
+                           Qt::red,
+                           KoCharacterStyle::SingleLine,
+                           KoCharacterStyle::SolidLine,
+                           1 * close_list.count(),
+                           section_level * 50,
+                           width(),
+                           layout->lineForTextPosition(block.length() - 1).y()
+                           + layout->lineForTextPosition(block.length() - 1).height()
+        );
+
+        QString sectionsDebug = "Ends :";
+        foreach (const QVariant &sv, close_list)
+        {
+            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+            sectionsDebug += sec->name + " ";
+        }
+
+        QFontMetricsF fm(painter->font());
+        drawDecorationTextOnce(painter,
+                               layout->lineForTextPosition(block.length() - 1),
+                               Qt::gray,
+                               sectionsDebug,
+                               width() - fm.width(sectionsDebug),
+                               width()
+        );
+    }
 }
 
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacters, bool showSpellChecking)

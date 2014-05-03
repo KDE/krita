@@ -63,11 +63,6 @@ public:
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
-
-
-    QImage image() const;
-
-    void setImage(QImage image);
     
     bool removable() const {
         return true;

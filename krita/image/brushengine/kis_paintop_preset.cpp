@@ -44,7 +44,6 @@ struct KisPaintOpPreset::Private {
     {}
 
     KisPaintOpSettingsSP settings;
-    QImage image;
 };
 
 
@@ -137,7 +136,8 @@ bool KisPaintOpPreset::load()
         return false;
     }
 
-    if (!reader.read(&m_d->image))
+    QImage img;
+    if (!reader.read(&img))
     {
         dbgImage << "Fail to decode PNG";
         return false;
@@ -157,6 +157,7 @@ bool KisPaintOpPreset::load()
         return false;
     }
     setValid(true);
+    setImage(img);
     return true;
 }
 
@@ -219,16 +220,6 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     setSettings(settings);
 }
 
-QImage KisPaintOpPreset::image() const
-{
-    return m_d->image;
-}
-
-void KisPaintOpPreset::setImage(QImage image)
-{
-    m_d->image = image;
-}
-
 QByteArray KisPaintOpPreset::generateMD5() const
 {
     QByteArray ba;
@@ -258,11 +249,11 @@ bool KisPaintOpPreset::save(QIODevice *io) const
 
     QImage img;
 
-    if (m_d->image.isNull()) {
+    if (image().isNull()) {
         img = QImage(1,1, QImage::Format_RGB32);
     }
     else {
-        img = m_d->image;
+        img = image();
     }
 
     return writer.write(img);

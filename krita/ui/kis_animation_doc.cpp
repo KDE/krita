@@ -214,7 +214,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     d->currentFramePosition = frame;
 
-    int opacity = OPACITY_TRANSPARENT_U8;
+    int opacity = OPACITY_OPAQUE_U8;
 
     if(d->currentFramePosition.y() == 0) {
         opacity = animation->bgColor().opacityU8();
@@ -235,18 +235,52 @@ void KisAnimationDoc::addPaintLayer()
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
+    if(!d->saved) {
+        d->kranimSaver = new KisKranimSaver(this);
+        this->preSaveAnimation();
+    }
+
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+
+    QString location = "";
+    bool hasFile = false;
+
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
+
+    int x = d->currentFramePosition.x();
+
+    for(int i = 0 ; i < d->noLayers ; i++) {
+        location = this->getFrameFile(x, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1;
+        }
+    }
+
     int layer = d->currentFramePosition.y() + 20;
     int frame = 0;
 
     d->noLayers++;
 
     d->currentFramePosition = QRect(frame, layer, 10, 20);
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_TRANSPARENT_U8, animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     this->updateXML();
+
+    setCurrentImage(d->image);
 }
 
 void KisAnimationDoc::slotFrameModified()

@@ -23,6 +23,8 @@
 #include <kis_debug.h>
 #include "kis_timeline_header.h"
 #include "kis_animation_frame.h"
+#include <kis_animation_doc.h>
+#include <kis_view2.h>
 
 KisFrameBox::KisFrameBox(KisTimeline *parent)
 {
@@ -48,6 +50,7 @@ void KisFrameBox::onCanvasReady()
 
 void KisFrameBox::updateUI()
 {
+    kWarning() << "called";
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;
     int y = 0;
@@ -57,8 +60,11 @@ void KisFrameBox::updateUI()
         y = m_layerContents.at(i)->geometry().y();
         m_layerContents.at(i)->setGeometry(QRect(0, y + 20, 10000, 20));
     }
+
     newContents->setGeometry(QRect(0, 20, 10000, 20));
     newContents->show();
+
+    dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addPaintLayer();
 }
 
 void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame)

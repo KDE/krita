@@ -75,10 +75,9 @@ void KisAnimationLayerBox::updateUI()
         y = m_layers.at(i)->geometry().y();
         m_layers.at(i)->setGeometry(QRect(0, y+20, width(), 20));
     }
+
     newLayer->setGeometry(QRect(0, 20, width(), 20));
     newLayer->show();
-
-    dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addPaintLayer();
 }
 
 void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)

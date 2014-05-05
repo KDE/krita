@@ -184,13 +184,17 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 
 void KisLayer::disableAlphaChannel(bool disable)
 {
-    if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true);
+    QBitArray newChannelFlags = m_d->channelFlags;
+
+    if(newChannelFlags.isEmpty())
+        newChannelFlags = colorSpace()->channelFlags(true, true);
 
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false);
+        newChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true);
+        newChannelFlags |= colorSpace()->channelFlags(false, true);
+
+    setChannelFlags(newChannelFlags);
 }
 
 bool KisLayer::alphaChannelDisabled() const
@@ -203,7 +207,14 @@ bool KisLayer::alphaChannelDisabled() const
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
     Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
-    m_d->channelFlags = channelFlags;
+
+    if (!channelFlags.isEmpty() &&
+        channelFlags == QBitArray(channelFlags.size(), true)) {
+
+        m_d->channelFlags.clear();
+    } else {
+        m_d->channelFlags = channelFlags;
+    }
 }
 
 QBitArray & KisLayer::channelFlags() const

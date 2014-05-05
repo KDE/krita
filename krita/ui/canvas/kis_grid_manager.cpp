@@ -224,35 +224,52 @@ void KisGridManager::fastConfig64x64()
 
 void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
-    Q_UNUSED(canvas);
-
     KisConfig cfg;
 
-    quint32 offsetx = cfg.getGridOffsetX();
-    quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing();
-    quint32 vspacing = cfg.getGridVSpacing();
-    quint32 subdivision = cfg.getGridSubdivisions() - 1;
+    int offsetx = cfg.getGridOffsetX();
+    int offsety = cfg.getGridOffsetY();
+    int hspacing = cfg.getGridHSpacing();
+    int vspacing = cfg.getGridVSpacing();
+    int subdivision = cfg.getGridSubdivisions() - 1;
+    bool useEmergencyPen = false;
 
     QPen mainPen = KisGridPainterConfiguration::mainPen();
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
+    QPen emergencyPen(subdivisionPen.color(), 0, Qt::DotLine);
 
     qreal x1, y1, x2, y2;
-    QRectF imageRect = converter->documentToImage(updateRect);
+    QRectF imageRect =
+        converter->documentToImage(updateRect) & canvas->image()->bounds();
     imageRect.getCoords(&x1, &y1, &x2, &y2);
 
     QTransform transform = converter->imageToWidgetTransform();
 
+    bool gridIsPaintable = true;
+    const qreal gridThreshold = 8.0;
+    do {
+        QRectF widgetRect = converter->imageToWidget(QRectF(0, 0, hspacing, vspacing));
+        gridIsPaintable = widgetRect.width() >= gridThreshold &&
+            widgetRect.height() >= gridThreshold;
+
+        if (!gridIsPaintable) {
+            useEmergencyPen = true;
+            hspacing *= qMax(2, subdivision + 1);
+            vspacing *= qMax(2, subdivision + 1);
+        }
+    } while (!gridIsPaintable);
+
     gc.save();
     gc.setTransform(transform);
 
-    quint32 i;
+    int i;
 
     // Draw vertical line
     i = subdivision - (offsetx / hspacing) % (subdivision + 1);
     double x = offsetx % hspacing;
     while (x <= x2) {
-        if (i == subdivision) {
+        if (useEmergencyPen) {
+            gc.setPen(emergencyPen);
+        } else if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
         } else {
@@ -271,7 +288,9 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, cons
     i = subdivision - (offsety / vspacing) % (subdivision + 1);
     qreal y = offsety % vspacing;
     while (y <= y2) {
-        if (i == subdivision) {
+        if (useEmergencyPen) {
+            gc.setPen(emergencyPen);
+        } else if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
         } else {

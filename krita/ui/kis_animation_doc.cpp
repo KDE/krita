@@ -213,7 +213,14 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     d->image->setResolution(animation->resolution(), animation->resolution());
 
     d->currentFramePosition = frame;
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+
+    int opacity = OPACITY_TRANSPARENT_U8;
+
+    if(d->currentFramePosition.y() == 0) {
+        opacity = animation->bgColor().opacityU8();
+    }
+
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), opacity, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
@@ -234,7 +241,7 @@ void KisAnimationDoc::addPaintLayer()
     d->noLayers++;
 
     d->currentFramePosition = QRect(frame, layer, 10, 20);
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_TRANSPARENT_U8, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());

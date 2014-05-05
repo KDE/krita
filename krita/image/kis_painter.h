@@ -357,7 +357,7 @@ public:
     /**
      * First you need to setup the painter with setMirrorInformation,
      * then these set of methods provide way to render the devices mirrored
-     * according the axisCenter vertically or horizontally or both.
+     * according the axesCenter vertically or horizontally or both.
      *
      * @param rc rectangle area covered by dab
      * @param dab this device will be mirrored in-place, it means that it will be changed
@@ -595,7 +595,7 @@ public:
      */
     KisPaintOp* paintOp() const;
 
-    void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
+    void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
 
     /**
      * copy the mirror information to other painter

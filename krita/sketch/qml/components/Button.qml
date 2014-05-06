@@ -127,21 +127,17 @@ Item {
         id: mouse;
         anchors.fill: parent;
         hoverEnabled: true;
+        acceptedButtons: Qt.LeftButton | Qt.RightButton;
+        
         onClicked: {
-            if (base.enabled) {
+            if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
                 if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
-            }
-        }
-        onPressAndHold: {
-            if(base.tooltip !== "") {
+            } else if(mouse.button == Qt.RightButton && base.tooltip != "") {
                 tooltip.show(base.width / 2, 0);
             }
-        }
-        onReleased: {
-            tooltip.hide();
         }
         onEntered: {
             hoverDelayTimer.start();
@@ -160,7 +156,7 @@ Item {
     Timer {
         id: hoverDelayTimer;
         interval: 1000;
-        onTriggered: tooltip.show(base.width / 2, 0);
+        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) };
     }
 
     Tooltip {

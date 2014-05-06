@@ -53,12 +53,6 @@ Item {
     }
 
     function hide() {
-        hideTimer.start();
-    }
-
-    Timer {
-        id: hideTimer;
-        interval: 1000;
-        onTriggered: body.opacity = 0;
+        body.opacity = 0;
     }
 }

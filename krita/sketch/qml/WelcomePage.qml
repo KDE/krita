@@ -56,7 +56,7 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                tooltip: "Mininize";
+                tooltip: "Minimize";
 
                 image: Settings.theme.icon("minimize");
                 onClicked: Krita.Window.minimize();

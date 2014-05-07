@@ -26,7 +26,8 @@
 
 #define TASKSET_VERSION 1
 
-TasksetResource::TasksetResource(const QString& filename): KoResource(filename)
+TasksetResource::TasksetResource(const QString& f)
+    : KoResource(f)
 {
 }
 
@@ -47,24 +48,25 @@ bool TasksetResource::save()
 }
 
 bool TasksetResource::load()
-{    if (filename().isEmpty())
+{
+    QString fn = filename();
+    if (fn.isEmpty()) {
          return false;
+    }
  
-    QFile file(filename());
-     if (file.size() == 0) return false;
-
+    QFile file(fn);
+    if (file.size() == 0) return false;
     QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)) {
         return false;
+    }
     if (!doc.setContent(&file)) {
         file.close();
         return false;
     }
     file.close();
-
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
     QDomNode node = element.firstChild();   
     while (!node.isNull()) {
         QDomElement child = node.toElement();
@@ -96,7 +98,9 @@ QByteArray TasksetResource::generateMD5() const
 {
     QByteArray ba;
     QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
     save(&buf);
+    buf.close();
 
     if (!ba.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);

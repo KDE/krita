@@ -156,7 +156,7 @@ Item {
     Timer {
         id: hoverDelayTimer;
         interval: 1000;
-        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) };
+        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) }
     }
 
     Tooltip {

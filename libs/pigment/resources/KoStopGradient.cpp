@@ -645,7 +645,9 @@ QByteArray KoStopGradient::generateMD5() const
 {
     QByteArray ba;
     QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
     save(&buf);
+    buf.close();
 
     if (!ba.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);

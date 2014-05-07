@@ -220,10 +220,47 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         opacity = animation->bgColor().opacityU8();
     }
 
+    int x = frame.x();
+    int y = frame.y() / 20;
+
+    QString location = "";
+    bool hasFile = false;
+
+    // Load frames from layers below
+    for(int i = 0 ; i < y - 1 ; i++) {
+        location = this->getFrameFile(x, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1;
+        }
+    }
+
+    // Load the new frame
     d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), opacity, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
     d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    // Load the frames from layers above
+    for(int i = y + 1; i < d->noLayers ; i++) {
+        location = this->getFrameFile(x, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1;
+        }
+    }
 
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateXML();
@@ -249,10 +286,11 @@ void KisAnimationDoc::addPaintLayer()
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     d->image->setResolution(animation->resolution(), animation->resolution());
 
-    int x = d->currentFramePosition.x();
+    int layer = d->currentFramePosition.y() + 20;
+    int frame = 0;
 
     for(int i = 0 ; i < d->noLayers ; i++) {
-        location = this->getFrameFile(x, i * 20);
+        location = this->getFrameFile(frame, i * 20);
         hasFile = d->store->hasFile(location);
 
         if(hasFile) {
@@ -265,9 +303,6 @@ void KisAnimationDoc::addPaintLayer()
             kWarning() << "Loading layer " << i+1;
         }
     }
-
-    int layer = d->currentFramePosition.y() + 20;
-    int frame = 0;
 
     d->noLayers++;
 

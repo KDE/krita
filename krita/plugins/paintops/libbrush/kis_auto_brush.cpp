@@ -66,12 +66,12 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     d->density = density;
     d->idealThreadCountCached = QThread::idealThreadCount();
     setBrushType(MASK);
-    setWidth(qMax(qreal(1.0), d->shape->width()));
-    setHeight(qMax(qreal(1.0), d->shape->height()));
-    setAngle(angle);
     QImage image = createBrushPreview();
     setImage(image);
     setBrushTipImage(image);
+    setWidth(qMax(qreal(1.0), d->shape->width()));
+    setHeight(qMax(qreal(1.0), d->shape->height()));
+    setAngle(angle);
 }
 
 KisAutoBrush::~KisAutoBrush()

@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Item {
     height: Constants.GridHeight * 1.5 + Constants.DefaultMargin * 2;

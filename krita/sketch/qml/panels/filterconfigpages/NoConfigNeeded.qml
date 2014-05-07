@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Column {
     Item {

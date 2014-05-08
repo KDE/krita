@@ -24,7 +24,6 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-//#include "dlg_resourcemanager.h"
 #include "KoResourceManagerWidget.h"
 #include "kis_action.h"
 
@@ -48,7 +47,6 @@ void ResourceManager::slotResourceManager()
     KoResourceManagerWidget * resourceManager = new KoResourceManagerWidget();
     Q_CHECK_PTR(resourceManager);
     resourceManager->setObjectName("ResourceManager");
-
     resourceManager->show();
 
 }

@@ -52,7 +52,7 @@ public:
      * @brief KoXmlResourceBundleManifest
      * @param device the device associated to Xml data
      */
-    KoXmlResourceBundleManifest(QIODevice *device);
+    KoXmlResourceBundleManifest(QIODevice *m_device);
     
     /**
      * @brief ~KoXmlResourceBundleManifest : Dtor

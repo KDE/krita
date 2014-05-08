@@ -29,8 +29,8 @@ using namespace std;
 
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
-    root=xmlDocument.createElement("package");
-    xmlDocument.appendChild(root);
+    m_root=m_xmlDocument.createElement("package");
+    m_xmlDocument.appendChild(m_root);
 }
 
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QByteArray data):KoXmlGenerator(data)
@@ -82,7 +82,7 @@ KoXmlResourceBundleManifest::TagEnum KoXmlResourceBundleManifest::getTagEnumValu
 void KoXmlResourceBundleManifest::checkSort()
 {
     QDomNode previousNode;
-    QDomNode currentNode = root.firstChild();
+    QDomNode currentNode = m_root.firstChild();
     QDomNode nextNode = currentNode.nextSibling();
 
     TagEnum currentName;
@@ -102,10 +102,10 @@ void KoXmlResourceBundleManifest::checkSort()
                 merge(previousNode,nextNode);
             }
             else if (previousNode.isNull()){
-                root.insertBefore(nextNode,previousNode);
+                m_root.insertBefore(nextNode,previousNode);
             }
             else {
-                root.insertAfter(nextNode,previousNode);
+                m_root.insertAfter(nextNode,previousNode);
             }
         }
         else if (lastOk==currentName) {
@@ -133,7 +133,7 @@ void KoXmlResourceBundleManifest::merge(QDomNode dest,QDomNode src)
         currentNode=src.firstChild();
     }
 
-    root.removeChild(src);
+    m_root.removeChild(src);
 }
 
 //TODO A Revoir vu que c'était censé redéfinir le addTag de generator
@@ -143,18 +143,18 @@ QDomElement KoXmlResourceBundleManifest::addManiTag(QString fileTypeName,QString
     bool newNode=false;
 
     fileTypeName=fileTypeName.toLower();
-    QDomNodeList fileTypeList=xmlDocument.elementsByTagName(fileTypeName);
+    QDomNodeList fileTypeList=m_xmlDocument.elementsByTagName(fileTypeName);
 
     if (emptyFile || fileTypeList.isEmpty()) {
-        currentNode=xmlDocument.createElement(fileTypeName);
-        root.appendChild(currentNode);
+        currentNode=m_xmlDocument.createElement(fileTypeName);
+        m_root.appendChild(currentNode);
         newNode=true;
     }
     else {
         currentNode=fileTypeList.item(0);
     }
 
-    if (emptyFile || searchValue(xmlDocument.elementsByTagName("file"),"name",fileName).isNull()) {
+    if (emptyFile || searchValue(m_xmlDocument.elementsByTagName("file"),"name",fileName).isNull()) {
         QDomElement result=addManiTag(currentNode.toElement(),"file","");
         result.setAttribute("name",fileName);
 
@@ -168,7 +168,7 @@ QDomElement KoXmlResourceBundleManifest::addManiTag(QString fileTypeName,QString
     }
     else {
         if (newNode) {
-            root.removeChild(currentNode);
+            m_root.removeChild(currentNode);
         }
         return QDomElement();
     }
@@ -185,12 +185,12 @@ QDomElement KoXmlResourceBundleManifest::addManiTag(QDomElement parent,QString t
                 return tagList.at(i).toElement();
             }
         }
-        currentElem=xmlDocument.createElement(tagName);
-        currentElem.appendChild(xmlDocument.createTextNode(textValue));
+        currentElem=m_xmlDocument.createElement(tagName);
+        currentElem.appendChild(m_xmlDocument.createTextNode(textValue));
         parent.appendChild(currentElem);
     }
     else {
-        currentElem=xmlDocument.createElement(tagName);
+        currentElem=m_xmlDocument.createElement(tagName);
         parent.appendChild(currentElem);
     }
 
@@ -206,7 +206,7 @@ QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
     QDomAttr currentAtt;
 
     QList<QString> result;
-    QDomNodeList tagList=xmlDocument.elementsByTagName("file");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("file");
 
     if (tagList.isEmpty()) {
         return result;
@@ -242,7 +242,7 @@ QList<QString> KoXmlResourceBundleManifest::getTagsList()
 {
     QString currentTextValue;
     QList<QString> result;
-    QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("tag");
 
     for (int i=0;i<tagList.size();i++) {
         currentTextValue=tagList.at(i).firstChild().toText().data();
@@ -257,7 +257,7 @@ QList<QString> KoXmlResourceBundleManifest::getTagsList()
 QList<QString> KoXmlResourceBundleManifest::getFileList(QString kritaPath,bool firstBuild)
 {
     QList<QString> result;
-    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    QDomNodeList fileList=m_xmlDocument.elementsByTagName("file");
 
     if (firstBuild || isInstalled()) {
         for (int i=0;i<fileList.size();i++) {
@@ -289,7 +289,7 @@ QMap<QString,QString> KoXmlResourceBundleManifest::getFilesToExtract()
     QString targetFileName;
 
     QMap<QString,QString> result;
-    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    QDomNodeList fileList=m_xmlDocument.elementsByTagName("file");
 
     for (int i=0;i<fileList.size();i++) {
         targetFileName = fileList.at(i).toElement().attribute("name");
@@ -306,7 +306,7 @@ QMap<QString,QString> KoXmlResourceBundleManifest::getFilesToExtract()
 QList<QString> KoXmlResourceBundleManifest::getDirList()
 {
     QList<QString> result;
-    QDomElement currentElement = root.firstChildElement();
+    QDomElement currentElement = m_root.firstChildElement();
 
     while (!currentElement.isNull()) {
         if (!result.contains(currentElement.tagName()) && currentElement.tagName()!="installed") {
@@ -326,7 +326,7 @@ void KoXmlResourceBundleManifest::exportTags()
     QString fileName;
     QDomElement fileElem;
     QDomElement tagElem;
-    QDomElement typeElem=root.firstChildElement();
+    QDomElement typeElem=m_root.firstChildElement();
 
     while (!typeElem.isNull()) {
         tagName=typeElem.tagName();
@@ -421,8 +421,8 @@ void KoXmlResourceBundleManifest::exportTags()
 
 void KoXmlResourceBundleManifest::install()
 { 
-    if (xmlDocument.elementsByTagName("installed").isEmpty()) {
-        root.appendChild(xmlDocument.createElement("installed"));
+    if (m_xmlDocument.elementsByTagName("installed").isEmpty()) {
+        m_root.appendChild(m_xmlDocument.createElement("installed"));
     }
 }
 
@@ -430,7 +430,7 @@ void KoXmlResourceBundleManifest::updateFilePaths(QString kritaPath,QString bund
 {
     bundleName=bundleName.section('/',bundleName.count('/')).section('.',0,0);
 
-    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    QDomNodeList fileList=m_xmlDocument.elementsByTagName("file");
     for (int i=0;i<fileList.size();i++) {
         QDomNode currentNode=fileList.at(i);
         if(!currentNode.attributes().contains("src")) {
@@ -445,7 +445,7 @@ void KoXmlResourceBundleManifest::updateFilePaths(QString kritaPath,QString bund
 
 void KoXmlResourceBundleManifest::rename(QString newName)
 {
-    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    QDomNodeList fileList=m_xmlDocument.elementsByTagName("file");
     for (int i=0;i<fileList.size();i++) {
         QDomElement currentElement=fileList.at(i).toElement();
         QString oldValue=currentElement.attribute("name");
@@ -458,21 +458,21 @@ void KoXmlResourceBundleManifest::rename(QString newName)
 
 void KoXmlResourceBundleManifest::uninstall()
 {
-    QDomNodeList instList=xmlDocument.elementsByTagName("installed");
+    QDomNodeList instList=m_xmlDocument.elementsByTagName("installed");
 
     if (!instList.isEmpty()) {
         for (int i=0;i<instList.size();i++) {
-            root.removeChild(instList.at(i));
+            m_root.removeChild(instList.at(i));
         }
     }
 }
 
 bool KoXmlResourceBundleManifest::isInstalled()
 {
-    return xmlDocument.elementsByTagName("installed").size()!=0;
+    return m_xmlDocument.elementsByTagName("installed").size()!=0;
 }
 
 QDomDocument KoXmlResourceBundleManifest::getXmlDocument()
 {
-    return this->xmlDocument;
+    return this->m_xmlDocument;
 }

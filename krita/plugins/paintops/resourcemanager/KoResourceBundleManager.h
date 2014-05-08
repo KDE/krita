@@ -41,25 +41,25 @@ public:
      * @param packName the name of the package to be opened/created
      * @param mode the opening mode for the file
      */
-    KoResourceBundleManager(QString kritaPath="",QString packName="",KoStore::Mode mode=KoStore::Write);
+    KoResourceBundleManager(QString m_kritaPath="",QString m_packName="",KoStore::Mode mode=KoStore::Write);
 
     /**
      * @brief setReadPack : Opens the store in Read mode
      * @param packName the name of the package to be opened
      */
-    void setReadPack(QString packName);
+    void setReadPack(QString m_packName);
 
     /**
      * @brief setWritePack : Opens the store in Write mode
      * @param packName the name of the package to be opened
      */
-    void setWritePack(QString packName);
+    void setWritePack(QString m_packName);
 
     /**
      * @brief setKritaPath : Set the path of Krita resources
      * @param kritaPath
      */
-    void setKritaPath(QString kritaPath);
+    void setKritaPath(QString m_kritaPath);
 
     /**
      * @brief isPathSet : Check if the path of Krita resources is set
@@ -163,9 +163,9 @@ public:
     qint64 write(const QByteArray &_data);
 
 private:
-    QString kritaPath;
-    QString packName;
-    KoStore* resourcePack;
+    QString m_kritaPath;
+    QString m_packName;
+    KoStore* m_resourceStore;
 };
 
 #endif // KORESOURCEBUNDLEMANAGER_H

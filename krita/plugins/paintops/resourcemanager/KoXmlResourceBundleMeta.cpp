@@ -20,8 +20,8 @@
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)
 {
-    root=xmlDocument.createElement("package");
-    xmlDocument.appendChild(root);
+    m_root=m_xmlDocument.createElement("package");
+    m_xmlDocument.appendChild(m_root);
 }
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QIODevice *device):KoXmlGenerator(device)
@@ -85,7 +85,7 @@ KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QStrin
 void KoXmlResourceBundleMeta::checkSort()
 {
     QDomNode prevNode;
-    QDomNode currentNode = root.firstChild();
+    QDomNode currentNode = m_root.firstChild();
     QDomNode nextNode = currentNode.nextSibling();
 
     TagEnum currentName;
@@ -101,17 +101,17 @@ void KoXmlResourceBundleMeta::checkSort()
             }
 
             if (currentName!=Tag && currentName!=Other && getTagEnumValue(prevNode.toElement().tagName())==currentName) {
-                root.removeChild(nextNode);
+                m_root.removeChild(nextNode);
             }
             else if (prevNode.isNull()){
-                root.insertBefore(nextNode,prevNode);
+                m_root.insertBefore(nextNode,prevNode);
             }
             else {
-                root.insertAfter(nextNode,prevNode);
+                m_root.insertAfter(nextNode,prevNode);
             }
         }
         else if (lastOk==currentName && currentName!=Tag && currentName!=Other) {
-            root.removeChild(nextNode);
+            m_root.removeChild(nextNode);
         }
         else {
             lastOk=currentName;
@@ -134,15 +134,15 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
         return QDomElement();
     }
     else {
-        QDomNodeList tagList=xmlDocument.elementsByTagName(tagName);
+        QDomNodeList tagList=m_xmlDocument.elementsByTagName(tagName);
         QDomNode currentNode=tagList.item(0);
 
         if (emptyFile || tagEnumValue==Other || currentNode.isNull() || (tagEnumValue==Tag &&
              searchValue(tagList,textValue).isNull())) {
             if (textValue!="") {
-                QDomElement child = xmlDocument.createElement(tagName);
-                root.appendChild(child);
-                child.appendChild(xmlDocument.createTextNode(textValue));
+                QDomElement child = m_xmlDocument.createElement(tagName);
+                m_root.appendChild(child);
+                child.appendChild(m_xmlDocument.createTextNode(textValue));
                 return child;
             }
             else {
@@ -151,7 +151,7 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
         }
         else if (tagEnumValue!=Tag) {
             if (textValue=="") {
-                root.removeChild(currentNode);
+                m_root.removeChild(currentNode);
             }
             else {
                 currentNode.firstChild().setNodeValue(textValue);
@@ -167,7 +167,7 @@ QDomElement KoXmlResourceBundleMeta::addTag(QString tagName,QString textValue,bo
 void KoXmlResourceBundleMeta::addTags(QList<QString> list)
 {
     QString currentTag;
-    QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("tag");
 
     for (int i=0;i<list.size();i++) {
         currentTag=list.at(i);
@@ -179,7 +179,7 @@ void KoXmlResourceBundleMeta::addTags(QList<QString> list)
 
 QString KoXmlResourceBundleMeta::getPackName()
 {
-    QDomNodeList tagList=xmlDocument.elementsByTagName("name");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("name");
 
     if (tagList.size() == 1) {
         return tagList.at(0).firstChild().toText().data();
@@ -191,7 +191,7 @@ QString KoXmlResourceBundleMeta::getPackName()
 
 QString KoXmlResourceBundleMeta::getPackFileName()
 {
-    QDomNodeList tagList=xmlDocument.elementsByTagName("filename");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("filename");
 
     if (tagList.size() == 1) {
         return tagList.at(0).firstChild().toText().data();
@@ -205,7 +205,7 @@ QList<QString> KoXmlResourceBundleMeta::getTagsList()
 {
     QString currentTextValue;
     QList<QString> result;
-    QDomNodeList tagList=xmlDocument.elementsByTagName("tag");
+    QDomNodeList tagList=m_xmlDocument.elementsByTagName("tag");
 
     for (int i=0;i<tagList.size();i++) {
         currentTextValue=tagList.at(i).firstChild().toText().data();

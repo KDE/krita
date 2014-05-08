@@ -11,12 +11,12 @@ using namespace std;
 
 KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::KoBundleCreationWidget)
+    m_ui(new Ui::KoBundleCreationWidget)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    this->newMeta = newMeta;
-    this->kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0)
+    this->m_newMeta = newMeta;
+    this->m_kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0)
                         +QString("/share/apps/krita/");
 
     initializeUI();
@@ -24,31 +24,31 @@ KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta,
 
 KoBundleCreationWidget::~KoBundleCreationWidget()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void KoBundleCreationWidget::initializeUI()
 {
     QString detailsStyleSheet=QString("QCheckBox { spacing: 5px; } QCheckBox::indicator { width: 13px; height: 13px; } ")
-            +QString("QCheckBox::indicator:unchecked { image: url(")+kritaPath+QString("pics/arrow-down.png); } ")
-            +QString("QCheckBox::indicator:checked { image: url(")+kritaPath+QString("pics/arrow-right.png); } ");
+            +QString("QCheckBox::indicator:unchecked { image: url(")+m_kritaPath+QString("pics/arrow-down.png); } ")
+            +QString("QCheckBox::indicator:checked { image: url(")+m_kritaPath+QString("pics/arrow-right.png); } ");
 
-    ui->detailsBox->setStyleSheet(detailsStyleSheet);
+    m_ui->detailsBox->setStyleSheet(detailsStyleSheet);
 
     this->resize(450,10);
-    ui->metaData->setVisible(false);
-    ui->detailsBox->setVisible(true);
+    m_ui->metaData->setVisible(false);
+    m_ui->detailsBox->setVisible(true);
 
-    connect(ui->detailsBox,SIGNAL(clicked()),this,SLOT(showHide()));
-    connect(ui->okButton,SIGNAL(clicked()),this,SLOT(createBundle()));
-    connect(ui->cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+    connect(m_ui->detailsBox,SIGNAL(clicked()),this,SLOT(showHide()));
+    connect(m_ui->okButton,SIGNAL(clicked()),this,SLOT(createBundle()));
+    connect(m_ui->cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
 
 void KoBundleCreationWidget::showHide()
 {
-    ui->metaData->setVisible(!ui->metaData->isVisible());
-    if (!ui->metaData->isVisible()) {
+    m_ui->metaData->setVisible(!m_ui->metaData->isVisible());
+    if (!m_ui->metaData->isVisible()) {
         this->adjustSize();
         this->resize(450,this->sizeHint().height());
     }
@@ -61,22 +61,22 @@ void KoBundleCreationWidget::showHide()
 //Même s'ils semblent acceptés par le système
 void KoBundleCreationWidget::createBundle()
 {
-    QString name = ui->editBundleName->text().remove(" ");
+    QString name = m_ui->editBundleName->text().remove(" ");
 
     if (name.isEmpty()) {
-        ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
+        m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
         emit status("Empty bundle name...");
     }
     else {
-        QFileInfo fileInfo(kritaPath+"bundles/"+name+".zip");
+        QFileInfo fileInfo(m_kritaPath+"bundles/"+name+".zip");
 
         if (fileInfo.exists()) {
-            ui->editBundleName->setStyleSheet("border: 1px solid red");
+            m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             emit status("Bundle already exists : choose another name...");
         }
         else {
-            newMeta->setMeta(name,ui->editAuthor->text(),ui->editLicense->text(),
-                                ui->editWebsite->text(),ui->editDescription->text());
+            m_newMeta->setMeta(name,m_ui->editAuthor->text(),m_ui->editLicense->text(),
+                                m_ui->editWebsite->text(),m_ui->editDescription->text());
             accept();
         }
     }

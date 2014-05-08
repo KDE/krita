@@ -15,7 +15,7 @@ class KoBundleCreationWidget : public QDialog
     Q_OBJECT
     
 public:
-    explicit KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent = 0);
+    explicit KoBundleCreationWidget(KoXmlResourceBundleMeta* m_newMeta, QWidget *parent = 0);
     ~KoBundleCreationWidget();
 
     void initializeUI();
@@ -28,9 +28,9 @@ private slots:
     void showHide();
     
 private:
-    Ui::KoBundleCreationWidget *ui;
-    KoXmlResourceBundleMeta *newMeta;
-    QString kritaPath;
+    Ui::KoBundleCreationWidget *m_ui;
+    KoXmlResourceBundleMeta *m_newMeta;
+    QString m_kritaPath;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

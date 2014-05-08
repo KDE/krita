@@ -162,12 +162,12 @@ protected:
     virtual QByteArray generateMD5() const;
 
 private:
-    QImage thumbnail;
-    KoXmlResourceBundleManifest* manifest;
-    KoResourceBundleManager* manager;
-    KoXmlResourceBundleMeta* meta;
+    QImage m_thumbnail;
+    KoXmlResourceBundleManifest* m_manifest;
+    KoResourceBundleManager* m_manager;
+    KoXmlResourceBundleMeta* m_meta;
 
-    bool installed;
+    bool m_installed;
 };
 
 #endif // KORESOURCEBUNDLE_H

@@ -218,7 +218,7 @@ QList<QSharedPointer<KoAbstractResourceServerAdapter> > KoResourceTableModel::ge
     QList<QSharedPointer<KoAbstractResourceServerAdapter> > res;
     QSharedPointer<KoAbstractResourceServerAdapter> currentAdapter;
 
-    if (newSelection) {
+    if (m_newSelection) {
         for (int i=0;i<m_resourceSelected.size();i++) {
             currentAdapter=getResourceAdapter(m_resourceSelected.at(i));
             if (!res.contains(currentAdapter)){
@@ -226,7 +226,7 @@ QList<QSharedPointer<KoAbstractResourceServerAdapter> > KoResourceTableModel::ge
             }
         }
         m_selectedAdapterList=res;
-        newSelection=false;
+        m_newSelection=false;
     }
 
     return m_selectedAdapterList;
@@ -245,7 +245,7 @@ void KoResourceTableModel::resourceSelected(QModelIndex targetIndex)
             m_resourceSelected.append(filename);
         }
         reset();
-        newSelection=true;
+        m_newSelection=true;
     }
 }
 

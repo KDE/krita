@@ -142,7 +142,7 @@ class KoResourceTableModel : public KoResourceModelBase
         QList<QSharedPointer<KoAbstractResourceServerAdapter> > m_resourceAdapterList;
         QList<KoResource*> m_resources;
         QList<QSharedPointer<KoAbstractResourceServerAdapter> > m_selectedAdapterList;
-        bool newSelection;
+        bool m_newSelection;
         int m_dataType;
 };
 

@@ -38,40 +38,40 @@
 using namespace std;
 
 
-KoResourceManagerControl::KoResourceManagerControl(int nb): nbModels(nb)
+KoResourceManagerControl::KoResourceManagerControl(int nb): m_modelsCount(nb)
 {
-    root=QProcessEnvironment::systemEnvironment().value("KDEDIRS");
+    m_root=QProcessEnvironment::systemEnvironment().value("KDEDIRS");
 
-    if (root.isEmpty()) {
+    if (m_root.isEmpty()) {
         exit(1);
     }
 
-    root=root.section(':',0,0);
+    m_root=m_root.section(':',0,0);
 
-    if (root.at(root.size()-1)!='/') {
-        root.append('/');
+    if (m_root.at(m_root.size()-1)!='/') {
+        m_root.append('/');
     }
 
-    extractor=new KoResourceBundleManager(root+"share/apps/krita/");
+    m_extractor=new KoResourceBundleManager(m_root+"share/apps/krita/");
 
-    for(int i=0;i<nbModels;i++) {
-        modelList.append(0);
+    for(int i=0;i<m_modelsCount;i++) {
+        m_modelList.append(0);
     }
 
-    mkdir(QString(root+"share/apps/krita/temp/").toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
+    mkdir(QString(m_root+"share/apps/krita/temp/").toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
 
     filterResourceTypes(0);
 }
 
 KoResourceManagerControl::~KoResourceManagerControl()
 {
-    delete meta;
-    delete manifest;
-    delete extractor;
-    delete bundleServer;
+    delete m_meta;
+    delete m_manifest;
+    delete m_extractor;
+    delete m_bundleServer;
 
-    for (int i=0;i<nbModels;i++) {
-        delete modelList.at(i);
+    for (int i=0;i<m_modelsCount;i++) {
+        delete m_modelList.at(i);
     }
 }
 
@@ -87,8 +87,8 @@ KoResourceManagerControl::~KoResourceManagerControl()
 
 
 void KoResourceManagerControl::configureFilters(int filterType, bool enable) {
-    if (!modelList.isEmpty()) {
-        modelList.at(0)->configureFilters(filterType,enable);
+    if (!m_modelList.isEmpty()) {
+        m_modelList.at(0)->configureFilters(filterType,enable);
     }
 }
 
@@ -119,7 +119,7 @@ bool KoResourceManagerControl::createPack(int type)
             return false;
         }
         else {
-            QString bundlePath=root+"share/apps/krita/bundles/"+newMeta->getPackName()+".zip";
+            QString bundlePath=m_root+"share/apps/krita/bundles/"+newMeta->getPackName()+".zip";
             KoResourceBundle* newBundle=new KoResourceBundle(bundlePath);
             bool isEmpty = true;
 
@@ -147,12 +147,12 @@ bool KoResourceManagerControl::createPack(int type)
             newBundle->addMeta("fileName",bundlePath);
             newBundle->addMeta("created",QDate::currentDate().toString("dd/MM/yyyy")); 
 
-            bundleServer->addResource(newBundle);
+            m_bundleServer->addResource(newBundle);
 
             QStringList tagsList = newBundle->getTagsList();
 
             for (int i=0;i<tagsList.size();i++) {
-                bundleServer->addTag(newBundle,tagsList.at(i));
+                m_bundleServer->addTag(newBundle,tagsList.at(i));
             }
 
             currentModel->tagCategoryMembersChanged();
@@ -196,8 +196,8 @@ bool KoResourceManagerControl::install(int type)
         }
         else {
             currentModel->clearSelected();
-            for (int i=0;i<nbModels;i++) {
-                modelList.at(i)->refreshBundles();
+            for (int i=0;i<m_modelsCount;i++) {
+                m_modelList.at(i)->refreshBundles();
             }
             return true;
         }
@@ -236,8 +236,8 @@ bool KoResourceManagerControl::uninstall(int type)
         }
         else {
             currentModel->clearSelected();
-            for (int i=0;i<nbModels;i++) {
-                modelList.at(i)->refreshBundles();
+            for (int i=0;i<m_modelsCount;i++) {
+                m_modelList.at(i)->refreshBundles();
             }
 
             return true;
@@ -282,7 +282,7 @@ bool KoResourceManagerControl::remove(int type)
                 }
 
                 currentModel->removeResourceFile(currentResource,currentFileName);
-                QString delFilename = root+"share/apps/krita/temp/"+currentFileName.section('/',currentFileName.count('/'));
+                QString delFilename = m_root+"share/apps/krita/temp/"+currentFileName.section('/',currentFileName.count('/'));
 
                 QFileInfo fileInfo(delFilename);
                 if (fileInfo.exists()) {
@@ -303,13 +303,13 @@ bool KoResourceManagerControl::remove(int type)
         }
 
         currentModel->clearSelected();
-        for (int i=0;i<nbModels;i++) {
-            currentModel=modelList.at(i);
+        for (int i=0;i<m_modelsCount;i++) {
+            currentModel=m_modelList.at(i);
             for (int j=0;j<selected.size();j++) {
-                modelList.at(i)->removeOneSelected(selected.at(j));
+                m_modelList.at(i)->removeOneSelected(selected.at(j));
             }
             if (bundleModified) {
-                modelList.at(i)->refreshBundles();
+                m_modelList.at(i)->refreshBundles();
             }
         }
         return true;
@@ -319,23 +319,23 @@ bool KoResourceManagerControl::remove(int type)
 KoResourceTableModel* KoResourceManagerControl::getModel(int type)
 {
     if (type==KoResourceTableModel::Undefined) {
-        return modelList.at(0);
+        return m_modelList.at(0);
     }
     else {
-        return modelList.at(type);
+        return m_modelList.at(type);
     }
 }
 
 int KoResourceManagerControl::getNbModels()
 {
-    return nbModels;
+    return m_modelsCount;
 }
 
 void KoResourceManagerControl::launchServer()
 {
     KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
-    bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
-    bundleServer->loadResources(bundleServer->fileNames());
+    m_bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
+    m_bundleServer->loadResources(m_bundleServer->fileNames());
 }
 
 void KoResourceManagerControl::thumbnail(QModelIndex index,QString fileName,int type)
@@ -404,7 +404,7 @@ bool KoResourceManagerControl::rename(QModelIndex index,QString newName,int type
                 currentBundle->rename(newFilename,newName);
             }
             else {
-                if (newFilename.count('/')==root.count()+5) {
+                if (newFilename.count('/')==m_root.count()+5) {
                     QString bundleName=newFilename.section('/',newFilename.count('/')-1,newFilename.count('/')-1);
                     QString fileType=newFilename.section('/',newFilename.count('/')-2,newFilename.count('/')-2);
 
@@ -434,13 +434,13 @@ void KoResourceManagerControl::filterResourceTypes(int index)
 {
     QList<QSharedPointer<KoAbstractResourceServerAdapter> > list;
 
-    for (int i=0;i<nbModels;i++) {
-        KoResourceTableModel* currentModel=modelList.at(i);
+    for (int i=0;i<m_modelsCount;i++) {
+        KoResourceTableModel* currentModel=m_modelList.at(i);
         if (currentModel!=0) {
             delete currentModel;
         }
     }
-    modelList.clear();
+    m_modelList.clear();
 
     switch (index) {
     case 0:
@@ -451,45 +451,45 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(bundleServer)));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(m_bundleServer)));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
         break;
     case 1:
         launchServer();
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(bundleServer)));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(m_bundleServer)));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Available));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Installed));
         break;
     case 2:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 3:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 4:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 5:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 6:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     case 7:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
-        modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
+        m_modelList.append(new KoResourceTableModel(list,KoResourceTableModel::Undefined));
         break;
     }
 }
@@ -502,7 +502,7 @@ void KoResourceManagerControl::addFiles(QString bundleName,int type)
 {
     KoResourceTableModel* currentModel=getModel(type);
     QList<QString> selected=currentModel->getSelectedResource();
-    KoResourceBundle* currentBundle=dynamic_cast<KoResourceBundle*> (bundleServer->resourceByName(bundleName));
+    KoResourceBundle* currentBundle=dynamic_cast<KoResourceBundle*> (m_bundleServer->resourceByName(bundleName));
     QString path=currentBundle->filename().section('/',0,currentBundle->filename().count('/')-2)+"/";
 
     bundleName=bundleName.section('.',0,0);
@@ -557,8 +557,8 @@ void KoResourceManagerControl::exportBundle(int type)
             emit status("Bundle(s) exported successfully",3000);
 
             currentModel->clearSelected();
-            for (int i=0;i<nbModels;i++) {
-                modelList.at(i)->refreshBundles();
+            for (int i=0;i<m_modelsCount;i++) {
+                m_modelList.at(i)->refreshBundles();
             }
         }
     }
@@ -571,7 +571,7 @@ bool KoResourceManagerControl::importBundle()
          tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':',0,0), tr("Archive Files (*.zip)"));
 
     if (!filePath.isEmpty()) {
-        QFile::copy(filePath,root+"share/apps/krita/bundles/"+filePath.section('/',filePath.count('/')));
+        QFile::copy(filePath,m_root+"share/apps/krita/bundles/"+filePath.section('/',filePath.count('/')));
         emit status("Bundle imported successfully",3000);
         return true;
     }
@@ -584,8 +584,8 @@ bool KoResourceManagerControl::importBundle()
 //TODO Problème nb de valeurs affichées sur le précédent onglet
 void KoResourceManagerControl::refreshTaggingManager()
 {
-    for(int i=0;i<nbModels;i++){
-        KoResourceTableModel *currentModel = modelList.at(i);
+    for(int i=0;i<m_modelsCount;i++){
+        KoResourceTableModel *currentModel = m_modelList.at(i);
         currentModel->enableResourceFiltering(false);
         currentModel->setCurrentTag(QString());
         currentModel->refreshResources();

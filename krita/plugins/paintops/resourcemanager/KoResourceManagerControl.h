@@ -69,13 +69,13 @@ private slots:
     void toStatus(QString text,int timeout=0);
 
 private:
-    KoXmlResourceBundleMeta *meta;
-    KoXmlResourceBundleManifest *manifest;
-    KoResourceBundleManager *extractor;
-    KoResourceServer<KoResourceBundle> *bundleServer;
-    QList<KoResourceTableModel*> modelList;
-    QString root;
-    int nbModels;
+    KoXmlResourceBundleMeta *m_meta;
+    KoXmlResourceBundleManifest *m_manifest;
+    KoResourceBundleManager *m_extractor;
+    KoResourceServer<KoResourceBundle> *m_bundleServer;
+    QList<KoResourceTableModel*> m_modelList;
+    QString m_root;
+    int m_modelsCount;
 
     enum {
         Install=0,

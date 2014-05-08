@@ -104,11 +104,11 @@ private slots:
     void status(QString text,int timeout);
 
 private:
-    Ui::KoResourceManagerWidget *ui;
-    KoResourceManagerControl *control;
-    KoResourceTaggingManager *tagMan;
-    ClickLabel *resourceNameLabel;
-    bool firstRefresh;
+    Ui::KoResourceManagerWidget *m_ui;
+    KoResourceManagerControl *m_control;
+    KoResourceTaggingManager *m_tagManager;
+    ClickLabel *m_resourceNameLabel;
+    bool m_firstRefresh;
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

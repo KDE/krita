@@ -48,7 +48,7 @@ public:
      * @brief KoXmlResourceBundleMeta
      * @param device the device associated to Xml data
      */
-    KoXmlResourceBundleMeta(QIODevice *device);
+    KoXmlResourceBundleMeta(QIODevice *m_device);
 
     /**
      * @brief ~KoXmlResourceBundleMeta : Dtor

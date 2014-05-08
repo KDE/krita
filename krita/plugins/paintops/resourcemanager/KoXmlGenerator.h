@@ -50,7 +50,7 @@ public:
      * @brief KoXmlGenerator : Ctor
      * @param device the device associated to Xml data
      */
-    KoXmlGenerator(QIODevice *device);
+    KoXmlGenerator(QIODevice *m_device);
 
     /**
      * @brief ~KoXmlGenerator : Dtor
@@ -147,17 +147,17 @@ protected:
     /**
      * @description The virtual XML file.
      */
-    QDomDocument xmlDocument;
+    QDomDocument m_xmlDocument;
 
     /**
      * @description The element considered as root of the XML tree of the document
      */
-    QDomElement root;
+    QDomElement m_root;
 
     /**
      * @description The device if initialized using second constructor
      */
-    QIODevice *device;
+    QIODevice *m_device;
 };
 
 #endif // KOXMLGENERATOR_H

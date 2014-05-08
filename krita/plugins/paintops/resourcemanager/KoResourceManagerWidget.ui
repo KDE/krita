@@ -893,8 +893,6 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionUndo"/>
-    <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionRename"/>
     <addaction name="separator"/>
@@ -957,16 +955,6 @@
   <action name="actionDelete">
    <property name="text">
     <string>Delete</string>
-   </property>
-  </action>
-  <action name="actionUndo">
-   <property name="text">
-    <string>Undo</string>
-   </property>
-  </action>
-  <action name="actionRedo">
-   <property name="text">
-    <string>Redo</string>
    </property>
   </action>
   <action name="actionAll">

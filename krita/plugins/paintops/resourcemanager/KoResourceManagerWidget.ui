@@ -31,7 +31,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="cmbResourceType">
             <property name="currentIndex">
              <number>0</number>
             </property>
@@ -110,7 +110,7 @@
               <height>23</height>
              </size>
             </property>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="bnRefresh">
              <property name="geometry">
               <rect>
                <x>0</x>
@@ -123,7 +123,7 @@
               <string>Refresh</string>
              </property>
             </widget>
-            <widget class="QPushButton" name="pushButton_10">
+            <widget class="QPushButton" name="bnOpen">
              <property name="geometry">
               <rect>
                <x>70</x>
@@ -147,7 +147,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTabWidget" name="tabWidget">
+         <widget class="QTabWidget" name="tabResourceBundles">
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -163,7 +163,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="tableView">
+             <widget class="QTableView" name="tableAvailable">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -198,7 +198,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="tableView_2">
+             <widget class="QTableView" name="tableAvailable_2">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -227,7 +227,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="tableView_3">
+             <widget class="QTableView" name="tableBlacklists">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -256,7 +256,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="tableView_4">
+             <widget class="QTableView" name="tableDownloads">
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
@@ -285,7 +285,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="tableView_5">
+             <widget class="QTableView" name="tableFavorites">
               <property name="alternatingRowColors">
                <bool>false</bool>
               </property>
@@ -346,7 +346,7 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="bnCreateSet">
           <property name="text">
            <string>Create Set</string>
           </property>
@@ -384,7 +384,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="bnDetails">
             <property name="text">
              <string>Details</string>
             </property>
@@ -410,14 +410,14 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_7">
+           <widget class="QPushButton" name="bnInstall">
             <property name="text">
              <string>Install</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_8">
+           <widget class="QPushButton" name="bnUninstall">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -440,7 +440,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_9">
+           <widget class="QPushButton" name="bnDelete">
             <property name="text">
              <string>Delete</string>
             </property>
@@ -591,10 +591,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_5"/>
+            <widget class="QLineEdit" name="txtName"/>
            </item>
            <item>
-            <widget class="QToolButton" name="toolButton">
+            <widget class="QToolButton" name="bnEdit">
              <property name="text">
               <string/>
              </property>
@@ -604,7 +604,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QToolButton" name="toolButton_2">
+            <widget class="QToolButton" name="bnNew">
              <property name="text">
               <string/>
              </property>
@@ -651,7 +651,7 @@
               </widget>
              </item>
              <item row="4" column="1">
-              <widget class="QDateEdit" name="dateEdit_2">
+              <widget class="QDateEdit" name="dateUpdated">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -677,7 +677,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_2">
+              <widget class="QLineEdit" name="txtAuthor">
                <property name="text">
                 <string>Boudewijn Rempt</string>
                </property>
@@ -698,7 +698,7 @@
               </widget>
              </item>
              <item row="5" column="1">
-              <widget class="QListWidget" name="listWidget"/>
+              <widget class="QListWidget" name="listTags"/>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_7">
@@ -728,7 +728,7 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QDateEdit" name="dateEdit">
+              <widget class="QDateEdit" name="dateCreated">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -738,14 +738,14 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEdit_4">
+              <widget class="QLineEdit" name="txtWebsite">
                <property name="text">
                 <string>www.krita.fr</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_3">
+              <widget class="QLineEdit" name="txtLicense">
                <property name="text">
                 <string>LGPL</string>
                </property>
@@ -767,7 +767,7 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_11">
+                <widget class="QPushButton" name="bnRemoveTag">
                  <property name="text">
                   <string>Remove Tag</string>
                  </property>
@@ -811,7 +811,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_12">
+            <widget class="QPushButton" name="bnSave">
              <property name="text">
               <string>Save</string>
              </property>
@@ -853,7 +853,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="bnClose">
         <property name="maximumSize">
          <size>
           <width>100</width>

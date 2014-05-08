@@ -46,15 +46,15 @@ KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent)
     initializeFilterMenu();
     refreshTaggingManager();
 
-    m_ui->pushButton_2->setIcon(koIcon("list-add"));
-    m_ui->pushButton_9->setIcon(koIcon("edit-delete"));
-    m_ui->toolButton->setIcon(koIcon("document-edit"));
-    m_ui->toolButton_2->setIcon(koIcon("document-new"));
-    m_ui->pushButton_12->setIcon(koIcon("dialog-ok"));
+    m_ui->bnCreateSet->setIcon(koIcon("list-add"));
+    m_ui->bnDelete->setIcon(koIcon("edit-delete"));
+    m_ui->bnEdit->setIcon(koIcon("document-edit"));
+    m_ui->bnNew->setIcon(koIcon("document-new"));
+    m_ui->bnSave->setIcon(koIcon("dialog-ok"));
 
-    m_ui->tabWidget->removeTab(2);
-    m_ui->tabWidget->removeTab(2);
-    m_ui->tabWidget->removeTab(2);
+    m_ui->tabResourceBundles->removeTab(2);
+    m_ui->tabResourceBundles->removeTab(2);
+    m_ui->tabResourceBundles->removeTab(2);
 
     m_ui->statusbar->showMessage("Welcome back ! Resource Manager is ready to use...", 1500);
 }
@@ -78,7 +78,7 @@ void KoResourceManagerWidget::initializeFilterMenu()
 
     QMenu *buttonMenu = new QMenu();
     buttonMenu->addActions(liste);
-    m_ui->pushButton_10->setMenu(buttonMenu);
+    m_ui->bnOpen->setMenu(buttonMenu);
     m_ui->actionAll->setChecked(true);
 }
 
@@ -93,18 +93,18 @@ void KoResourceManagerWidget::initializeTitle()
     m_resourceNameLabel->setFont(labelFont);
     m_resourceNameLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_ui->horizontalLayout_4->insertWidget(2, m_resourceNameLabel);
-    m_ui->lineEdit_5->setVisible(false);
+    m_ui->txtName->setVisible(false);
     m_ui->scrollArea->setVisible(false);
     m_ui->label->setVisible(false);
-    m_ui->toolButton->setVisible(false);
-    m_ui->toolButton_2->setVisible(false);
-    m_ui->pushButton_12->setVisible(false);
+    m_ui->bnEdit->setVisible(false);
+    m_ui->bnNew->setVisible(false);
+    m_ui->bnSave->setVisible(false);
 }
 
 void KoResourceManagerWidget::initializeModels(bool first)
 {
     for (int i = 0; i < m_control->getNbModels(); i++) {
-        QTableView* currentTableView = tableView(i);
+        QTableView* currentTableView = tableAvailable(i);
         currentTableView->setModel(m_control->getModel(i));
         currentTableView->resizeColumnToContents(1);
         currentTableView->resizeColumnToContents(0);
@@ -124,18 +124,18 @@ void KoResourceManagerWidget::initializeConnect()
 {
     connect(m_control, SIGNAL(status(QString, int)), this, SLOT(status(QString, int)));
 
-    connect(m_ui->pushButton_6, SIGNAL(clicked()), this, SLOT(showHide()));
+    connect(m_ui->bnDetails, SIGNAL(clicked()), this, SLOT(showHide()));
 
-    connect(m_ui->lineEdit_2, SIGNAL(editingFinished()), this, SLOT(setMeta()));
-    connect(m_ui->lineEdit_3, SIGNAL(editingFinished()), this, SLOT(setMeta()));
-    connect(m_ui->lineEdit_4, SIGNAL(editingFinished()), this, SLOT(setMeta()));
-    connect(m_ui->dateEdit_2, SIGNAL(editingFinished()), this, SLOT(setMeta()));
-    connect(m_ui->dateEdit, SIGNAL(editingFinished()), this, SLOT(setMeta()));
+    connect(m_ui->txtAuthor, SIGNAL(editingFinished()), this, SLOT(setMeta()));
+    connect(m_ui->txtLicense, SIGNAL(editingFinished()), this, SLOT(setMeta()));
+    connect(m_ui->txtWebsite, SIGNAL(editingFinished()), this, SLOT(setMeta()));
+    connect(m_ui->dateUpdated, SIGNAL(editingFinished()), this, SLOT(setMeta()));
+    connect(m_ui->dateCreated, SIGNAL(editingFinished()), this, SLOT(setMeta()));
 
-    connect(m_ui->pushButton_2, SIGNAL(clicked()), this, SLOT(createPack()));
-    connect(m_ui->pushButton_7, SIGNAL(clicked()), this, SLOT(installPack()));
-    connect(m_ui->pushButton_8, SIGNAL(clicked()), this, SLOT(uninstallPack()));
-    connect(m_ui->pushButton_9, SIGNAL(clicked()), this, SLOT(deletePack()));
+    connect(m_ui->bnCreateSet, SIGNAL(clicked()), this, SLOT(createPack()));
+    connect(m_ui->bnInstall, SIGNAL(clicked()), this, SLOT(installPack()));
+    connect(m_ui->bnUninstall, SIGNAL(clicked()), this, SLOT(uninstallPack()));
+    connect(m_ui->bnDelete, SIGNAL(clicked()), this, SLOT(deletePack()));
 
     connect(m_ui->actionCreate_Resources_Set, SIGNAL(triggered()), this, SLOT(createPack()));
     connect(m_ui->actionInstall, SIGNAL(triggered()), this, SLOT(installPack()));
@@ -148,26 +148,26 @@ void KoResourceManagerWidget::initializeConnect()
     connect(m_ui->actionName, SIGNAL(toggled(bool)), this, SLOT(filterFieldSelected(bool)));
     connect(m_ui->actionFile, SIGNAL(toggled(bool)), this, SLOT(filterFieldSelected(bool)));
 
-    connect(m_ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(filterResourceTypes(int)));
+    connect(m_ui->cmbResourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(filterResourceTypes(int)));
 
     connect(m_ui->actionRename, SIGNAL(triggered()), this, SLOT(startRenaming()));
-    connect(m_ui->lineEdit_5, SIGNAL(editingFinished()), this, SLOT(endRenaming()));
+    connect(m_ui->txtName, SIGNAL(editingFinished()), this, SLOT(endRenaming()));
 
-    connect(m_ui->pushButton_12, SIGNAL(clicked()), this, SLOT(saveMeta()));
+    connect(m_ui->bnSave, SIGNAL(clicked()), this, SLOT(saveMeta()));
 
     connect(m_ui->actionAbout_ResManager, SIGNAL(triggered()), this, SLOT(about()));
 
     connect(m_ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(m_ui->pushButton_3, SIGNAL(clicked()), this, SLOT(close()));
+    connect(m_ui->bnClose, SIGNAL(clicked()), this, SLOT(close()));
 
-    connect(m_ui->toolButton, SIGNAL(clicked()), this, SLOT(startRenaming()));
-    connect(m_ui->toolButton_2, SIGNAL(clicked()), this, SLOT(thumbnail()));
+    connect(m_ui->bnEdit, SIGNAL(clicked()), this, SLOT(startRenaming()));
+    connect(m_ui->bnNew, SIGNAL(clicked()), this, SLOT(thumbnail()));
 
-    connect(m_ui->pushButton_11, SIGNAL(clicked()), this, SLOT(removeTag()));
+    connect(m_ui->bnRemoveTag, SIGNAL(clicked()), this, SLOT(removeTag()));
 
-    connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(refresh()));
+    connect(m_ui->bnRefresh, SIGNAL(clicked()), this, SLOT(refresh()));
 
-    connect(m_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tableViewChanged(int)));
+    connect(m_ui->tabResourceBundles, SIGNAL(currentChanged(int)), this, SLOT(tableAvailableChanged(int)));
 }
 
 /*Tools*/
@@ -182,19 +182,19 @@ void KoResourceManagerWidget::status(QString text, int timeout)
     m_ui->statusbar->showMessage(text, timeout);
 }
 
-QTableView* KoResourceManagerWidget::tableView(int index)
+QTableView* KoResourceManagerWidget::tableAvailable(int index)
 {
-    return dynamic_cast<QTableView*>(m_ui->tabWidget->widget(index)->layout()->itemAt(0)->widget());
+    return dynamic_cast<QTableView*>(m_ui->tabResourceBundles->widget(index)->layout()->itemAt(0)->widget());
 }
 
 void KoResourceManagerWidget::toBundleView(int installTab)
 {
-    if (m_ui->tabWidget->currentIndex() != installTab) {
-        m_ui->tabWidget->setCurrentIndex(installTab);
+    if (m_ui->tabResourceBundles->currentIndex() != installTab) {
+        m_ui->tabResourceBundles->setCurrentIndex(installTab);
     }
 
-    if (m_ui->comboBox->currentIndex() != 1) {
-        m_ui->comboBox->setCurrentIndex(1);
+    if (m_ui->cmbResourceType->currentIndex() != 1) {
+        m_ui->cmbResourceType->setCurrentIndex(1);
     } else {
         refresh();
     }
@@ -211,7 +211,7 @@ void KoResourceManagerWidget::about()
 
 void KoResourceManagerWidget::createPack()
 {
-    if (m_control->createPack(m_ui->tabWidget->currentIndex())) {
+    if (m_control->createPack(m_ui->tabResourceBundles->currentIndex())) {
         toBundleView(0);
         status("New bundle created successfully", 3000);
     }
@@ -219,7 +219,7 @@ void KoResourceManagerWidget::createPack()
 
 void KoResourceManagerWidget::installPack()
 {
-    if (m_control->install(m_ui->tabWidget->currentIndex())) {
+    if (m_control->install(m_ui->tabResourceBundles->currentIndex())) {
         toBundleView(1);
         status("Bundle(s) installed successfully", 3000);
     }
@@ -227,15 +227,15 @@ void KoResourceManagerWidget::installPack()
 
 void KoResourceManagerWidget::deletePack()
 {
-    if (m_control->remove(m_ui->tabWidget->currentIndex())) {
-        refreshDetails(tableView(m_ui->tabWidget->currentIndex())->currentIndex());
+    if (m_control->remove(m_ui->tabResourceBundles->currentIndex())) {
+        refreshDetails(tableAvailable(m_ui->tabResourceBundles->currentIndex())->currentIndex());
         emit status("Resource(s) removed successfully", 3000);
     }
 }
 
 void KoResourceManagerWidget::uninstallPack()
 {
-    if (m_control->uninstall(m_ui->tabWidget->currentIndex())) {
+    if (m_control->uninstall(m_ui->tabResourceBundles->currentIndex())) {
         toBundleView(0);
         status("Bundle(s) uninstalled successfully", 3000);
     }
@@ -244,12 +244,12 @@ void KoResourceManagerWidget::uninstallPack()
 //TODO Régler le pb de chgt de taille de la thumbnail
 void KoResourceManagerWidget::thumbnail()
 {
-    QTableView* currentTableView = tableView(m_ui->tabWidget->currentIndex());
+    QTableView* currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());
     QModelIndex currentIndex = currentTableView->currentIndex();
     QString fileName = QFileDialog::getOpenFileName(0,
                        tr("Import Thumbnail"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Image Files (*.jpg)"));
 
-    m_control->thumbnail(currentIndex, fileName, m_ui->tabWidget->currentIndex());
+    m_control->thumbnail(currentIndex, fileName, m_ui->tabResourceBundles->currentIndex());
     currentTableView->reset();
     currentTableView->setCurrentIndex(currentIndex);
 }
@@ -259,25 +259,25 @@ void KoResourceManagerWidget::setMeta()
     QObject *emetteur = sender();
 
     if (emetteur->inherits("QLineEdit")) {
-        int currentIndex = m_ui->tabWidget->currentIndex();
-        QTableView* currentTableView = tableView(currentIndex);
+        int currentIndex = m_ui->tabResourceBundles->currentIndex();
+        QTableView* currentTableView = tableAvailable(currentIndex);
         QLineEdit* sender = (QLineEdit*)emetteur;
 
-        if (emetteur == m_ui->lineEdit_2) {
+        if (emetteur == m_ui->txtAuthor) {
             m_control->setMeta(currentTableView->currentIndex(), "Author", sender->text(), currentIndex);
-            m_ui->lineEdit_2->blockSignals(true);
-            m_ui->lineEdit_2->clearFocus();
-            m_ui->lineEdit_2->blockSignals(false);
-        } else if (emetteur == m_ui->lineEdit_3) {
+            m_ui->txtAuthor->blockSignals(true);
+            m_ui->txtAuthor->clearFocus();
+            m_ui->txtAuthor->blockSignals(false);
+        } else if (emetteur == m_ui->txtLicense) {
             m_control->setMeta(currentTableView->currentIndex(), "License", sender->text(), currentIndex);
-            m_ui->lineEdit_3->blockSignals(true);
-            m_ui->lineEdit_3->clearFocus();
-            m_ui->lineEdit_3->blockSignals(false);
-        } else if (emetteur == m_ui->lineEdit_4) {
+            m_ui->txtLicense->blockSignals(true);
+            m_ui->txtLicense->clearFocus();
+            m_ui->txtLicense->blockSignals(false);
+        } else if (emetteur == m_ui->txtWebsite) {
             m_control->setMeta(currentTableView->currentIndex(), "Website", sender->text(), currentIndex);
-            m_ui->lineEdit_4->blockSignals(true);
-            m_ui->lineEdit_4->clearFocus();
-            m_ui->lineEdit_4->blockSignals(false);
+            m_ui->txtWebsite->blockSignals(true);
+            m_ui->txtWebsite->clearFocus();
+            m_ui->txtWebsite->blockSignals(false);
         }
     }
 }
@@ -285,55 +285,55 @@ void KoResourceManagerWidget::setMeta()
 void KoResourceManagerWidget::startRenaming()
 {
     m_ui->statusbar->showMessage("Renaming...");
-    m_ui->lineEdit_5->blockSignals(false);
+    m_ui->txtName->blockSignals(false);
     m_resourceNameLabel->setVisible(false);
-    m_ui->toolButton->setVisible(false);
+    m_ui->bnEdit->setVisible(false);
 
-    if (m_ui->toolButton_2->isVisible()) {
-        m_ui->toolButton_2->setVisible(false);
+    if (m_ui->bnNew->isVisible()) {
+        m_ui->bnNew->setVisible(false);
     }
 
-    m_ui->lineEdit_5->setVisible(true);
-    m_ui->lineEdit_5->setFocus();
+    m_ui->txtName->setVisible(true);
+    m_ui->txtName->setFocus();
 }
 
 void KoResourceManagerWidget::endRenaming()
 {
-    QTableView* currentTableView = tableView(m_ui->tabWidget->currentIndex());
+    QTableView* currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());
     QModelIndex currentIndex = currentTableView->currentIndex();
-    m_ui->lineEdit_5->blockSignals(true);
+    m_ui->txtName->blockSignals(true);
 
-    QString newFileName = m_ui->lineEdit_5->text();
+    QString newFileName = m_ui->txtName->text();
     QString extension = m_resourceNameLabel->text().section('.', 1);
     if (!extension.isEmpty()) {
         newFileName += "." + extension;
     }
 
-    if (m_control->rename(currentIndex, newFileName, m_ui->tabWidget->currentIndex())) {
+    if (m_control->rename(currentIndex, newFileName, m_ui->tabResourceBundles->currentIndex())) {
         m_resourceNameLabel->setText(newFileName);
         currentTableView->reset();
         m_ui->statusbar->showMessage("Resource renamed successfully...", 3000);
     } else {
-        m_ui->lineEdit_5->setText(m_resourceNameLabel->text().section('.', 0, 0));
+        m_ui->txtName->setText(m_resourceNameLabel->text().section('.', 0, 0));
         m_ui->statusbar->showMessage("Rename cancelled...", 3000);
     }
 
     currentTableView->setCurrentIndex(currentIndex);
     m_resourceNameLabel->setVisible(true);
-    m_ui->toolButton->setVisible(true);
-    m_ui->lineEdit_5->setVisible(false);
+    m_ui->bnEdit->setVisible(true);
+    m_ui->txtName->setVisible(false);
 }
 
 void KoResourceManagerWidget::rename(QString newName)
 {
     m_ui->statusbar->showMessage("Renaming...");
 
-    QTableView* currentTableView = tableView(m_ui->tabWidget->currentIndex());
+    QTableView* currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());
     QModelIndex currentIndex = currentTableView->currentIndex();
 
     QString newFileName = newName + "." + m_resourceNameLabel->text().section('.', 1);
 
-    if (m_control->rename(currentIndex, newFileName, m_ui->tabWidget->currentIndex())) {
+    if (m_control->rename(currentIndex, newFileName, m_ui->tabResourceBundles->currentIndex())) {
         m_resourceNameLabel->setText(newFileName);
         currentTableView->reset();
         m_ui->statusbar->showMessage("Resource renamed successfully...", 3000);
@@ -344,13 +344,13 @@ void KoResourceManagerWidget::rename(QString newName)
 
 void KoResourceManagerWidget::removeTag()
 {
-    if (m_ui->listWidget->selectedItems().size() != 1) {
+    if (m_ui->listTags->selectedItems().size() != 1) {
         m_ui->statusbar->showMessage("No tag selected in the above list...Tag removing aborted.", 3000);
     } else {
         m_ui->statusbar->showMessage("Removing tag from resource...");
-        QString tagName = m_ui->listWidget->selectedItems().at(0)->data(Qt::DisplayRole).toString();
-        KoResourceTableModel *currentModel = m_control->getModel(m_ui->tabWidget->currentIndex());
-        QTableView *currentTableView = tableView(m_ui->tabWidget->currentIndex());
+        QString tagName = m_ui->listTags->selectedItems().at(0)->data(Qt::DisplayRole).toString();
+        KoResourceTableModel *currentModel = m_control->getModel(m_ui->tabResourceBundles->currentIndex());
+        QTableView *currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());
         KoResource* currentResource = currentModel->getResourceFromIndex(currentTableView->currentIndex());
 
         currentModel->deleteTag(currentResource, tagName);
@@ -413,7 +413,7 @@ void KoResourceManagerWidget::filterFieldSelected(bool value)
 
 void KoResourceManagerWidget::filterResourceTypes(int index)
 {
-    int currentTab = m_ui->tabWidget->currentIndex();
+    int currentTab = m_ui->tabResourceBundles->currentIndex();
     KoResourceTableModel* model;
 
     m_ui->statusbar->showMessage("Filtering...", 3000);
@@ -429,7 +429,7 @@ void KoResourceManagerWidget::filterResourceTypes(int index)
         QModelIndex index = model->index(0);
 
         m_ui->widget_2->setEnabled(true);
-        tableView(currentTab)->setCurrentIndex(index);
+        tableAvailable(currentTab)->setCurrentIndex(index);
         refreshDetails(index);
     }
     refreshTaggingManager();
@@ -446,14 +446,14 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
         m_ui->widget_2->setEnabled(true);
     }
 
-    KoResource* currentResource = m_control->getModel(m_ui->tabWidget->currentIndex())->currentlyVisibleResources().at(newIndex.row());
+    KoResource* currentResource = m_control->getModel(m_ui->tabResourceBundles->currentIndex())->currentlyVisibleResources().at(newIndex.row());
     KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
     QString currentDate;
 
     if (m_firstRefresh) {
         m_ui->scrollArea->setVisible(true);
         m_ui->label->setVisible(true);
-        m_ui->toolButton->setVisible(true);
+        m_ui->bnEdit->setVisible(true);
 
         QFont labelFont("Arial Black", 14, QFont::Bold);
         labelFont.setWeight(75);
@@ -463,23 +463,23 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
         m_firstRefresh = false;
         m_tagManager->showTaggingBar(true, true);
         m_ui->widget_2->layout()->addWidget(m_tagManager->tagChooserWidget());
-        m_ui->dateEdit->setDisplayFormat("dd/MM/yyyy");
-        m_ui->dateEdit_2->setDisplayFormat("dd/MM/yyyy");
+        m_ui->dateCreated->setDisplayFormat("dd/MM/yyyy");
+        m_ui->dateUpdated->setDisplayFormat("dd/MM/yyyy");
     }
 
     //Name
 
     m_resourceNameLabel->setText(currentResource->shortFilename());
-    m_ui->lineEdit_5->setText(currentResource->shortFilename().section('.', 0, 0));
+    m_ui->txtName->setText(currentResource->shortFilename().section('.', 0, 0));
 
     m_resourceNameLabel->setVisible(true);
-    m_ui->lineEdit_5->setVisible(false);
+    m_ui->txtName->setVisible(false);
 
     //Tags
 
-    m_ui->listWidget->clear();
-    m_ui->listWidget->addItems(m_control->getModel(m_ui->tabWidget->currentIndex())->assignedTagsList(currentResource));
-    m_ui->pushButton_11->setEnabled(!m_ui->listWidget->count() == 0);
+    m_ui->listTags->clear();
+    m_ui->listTags->addItems(m_control->getModel(m_ui->tabResourceBundles->currentIndex())->assignedTagsList(currentResource));
+    m_ui->bnRemoveTag->setEnabled(!m_ui->listTags->count() == 0);
 
     //Overview
 
@@ -488,63 +488,63 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
     } else {
         m_ui->label->setPixmap(QPixmap::fromImage(currentResource->image()).scaled(1000, 150, Qt::KeepAspectRatio));
     }
-    m_ui->toolButton_2->setVisible(false);
+    m_ui->bnNew->setVisible(false);
 
     if (currentBundle != 0) {
-        m_ui->toolButton_2->setVisible(true);
+        m_ui->bnNew->setVisible(true);
 
         m_ui->label_3->setVisible(true);
         m_ui->label_4->setVisible(true);
         m_ui->label_5->setVisible(true);
 
-        m_ui->lineEdit_2->setText(currentBundle->getAuthor());
-        m_ui->lineEdit_2->setVisible(true);
-        m_ui->lineEdit_3->setText(currentBundle->getLicense());
-        m_ui->lineEdit_3->setVisible(true);
-        m_ui->lineEdit_4->setText(currentBundle->getWebSite());
-        m_ui->lineEdit_4->setVisible(true);
+        m_ui->txtAuthor->setText(currentBundle->getAuthor());
+        m_ui->txtAuthor->setVisible(true);
+        m_ui->txtLicense->setText(currentBundle->getLicense());
+        m_ui->txtLicense->setVisible(true);
+        m_ui->txtWebsite->setText(currentBundle->getWebSite());
+        m_ui->txtWebsite->setVisible(true);
 
         currentDate = currentBundle->getCreated();
         if (currentDate.isEmpty()) {
             m_ui->label_6->setVisible(false);
-            m_ui->dateEdit->setVisible(false);
+            m_ui->dateCreated->setVisible(false);
         } else {
             m_ui->label_6->setVisible(true);
-            m_ui->dateEdit->setVisible(true);
-            m_ui->dateEdit->setDate(QDate::fromString(currentDate, "dd/MM/yyyy"));
+            m_ui->dateCreated->setVisible(true);
+            m_ui->dateCreated->setDate(QDate::fromString(currentDate, "dd/MM/yyyy"));
         }
 
         currentDate = currentBundle->getUpdated();
         if (currentDate.isEmpty()) {
             m_ui->label_7->setVisible(false);
-            m_ui->dateEdit_2->setVisible(false);
+            m_ui->dateUpdated->setVisible(false);
         } else {
             m_ui->label_7->setVisible(true);
-            m_ui->dateEdit_2->setVisible(true);
-            m_ui->dateEdit_2->setDate(QDate::fromString(currentDate, "dd/MM/yyyy"));
+            m_ui->dateUpdated->setVisible(true);
+            m_ui->dateUpdated->setDate(QDate::fromString(currentDate, "dd/MM/yyyy"));
         }
-        m_ui->pushButton_12->setVisible(true);
+        m_ui->bnSave->setVisible(true);
     } else {
-        m_ui->lineEdit_2->setVisible(false);
-        m_ui->lineEdit_3->setVisible(false);
-        m_ui->lineEdit_4->setVisible(false);
-        m_ui->dateEdit->setVisible(false);
-        m_ui->dateEdit_2->setVisible(false);
+        m_ui->txtAuthor->setVisible(false);
+        m_ui->txtLicense->setVisible(false);
+        m_ui->txtWebsite->setVisible(false);
+        m_ui->dateCreated->setVisible(false);
+        m_ui->dateUpdated->setVisible(false);
         m_ui->label_3->setVisible(false);
         m_ui->label_4->setVisible(false);
         m_ui->label_5->setVisible(false);
         m_ui->label_6->setVisible(false);
         m_ui->label_7->setVisible(false);
-        m_ui->pushButton_12->setVisible(false);
+        m_ui->bnSave->setVisible(false);
     }
 }
 
 void KoResourceManagerWidget::saveMeta()
 {
-    int currentTabIndex = m_ui->tabWidget->currentIndex();
+    int currentTabIndex = m_ui->tabResourceBundles->currentIndex();
 
     m_ui->statusbar->showMessage("Saving metadata...", 3000);
-    m_control->saveMeta(tableView(currentTabIndex)->currentIndex(), currentTabIndex);
+    m_control->saveMeta(tableAvailable(currentTabIndex)->currentIndex(), currentTabIndex);
     m_ui->statusbar->showMessage("Metadata saved successfully...", 3000);
 }
 
@@ -553,7 +553,7 @@ void KoResourceManagerWidget::refreshTaggingManager(int index)
     if (m_tagManager) {
         if (!m_tagManager->tagChooserWidget()->selectedTagIsReadOnly()) {
             m_control->refreshTaggingManager();
-            tableView(index)->reset();
+            tableAvailable(index)->reset();
         }
         m_ui->widget_2->layout()->removeWidget(m_tagManager->tagChooserWidget());
         m_tagManager->showTaggingBar(true, false);
@@ -568,11 +568,11 @@ void KoResourceManagerWidget::refreshTaggingManager(int index)
     m_ui->widget_2->layout()->addWidget(m_tagManager->tagChooserWidget());
 }
 
-void KoResourceManagerWidget::tableViewChanged(int index)
+void KoResourceManagerWidget::tableAvailableChanged(int index)
 {
     refreshTaggingManager(index);
 
-    QTableView *newView = tableView(index);
+    QTableView *newView = tableAvailable(index);
     newView->setFocus();
     newView->setCurrentIndex(newView->currentIndex());
     newView->resizeColumnToContents(0);
@@ -580,17 +580,17 @@ void KoResourceManagerWidget::tableViewChanged(int index)
     refreshDetails(newView->currentIndex());
 
     if (index == KoResourceTableModel::Available) {
-        m_ui->pushButton_7->setEnabled(true);
-        m_ui->pushButton_8->setEnabled(false);
+        m_ui->bnInstall->setEnabled(true);
+        m_ui->bnUninstall->setEnabled(false);
     } else if (index == KoResourceTableModel::Installed) {
-        m_ui->pushButton_7->setEnabled(false);
-        m_ui->pushButton_8->setEnabled(true);
+        m_ui->bnInstall->setEnabled(false);
+        m_ui->bnUninstall->setEnabled(true);
     }
 }
 
 void KoResourceManagerWidget::exportBundle()
 {
-    m_control->exportBundle(m_ui->tabWidget->currentIndex());
+    m_control->exportBundle(m_ui->tabResourceBundles->currentIndex());
 }
 
 void KoResourceManagerWidget::importBundle()
@@ -602,5 +602,5 @@ void KoResourceManagerWidget::importBundle()
 
 void KoResourceManagerWidget::refresh()
 {
-    filterResourceTypes(m_ui->comboBox->currentIndex());
+    filterResourceTypes(m_ui->cmbResourceType->currentIndex());
 }

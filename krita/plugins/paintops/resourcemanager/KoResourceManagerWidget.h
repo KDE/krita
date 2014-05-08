@@ -67,7 +67,7 @@ public:
     void initializeModels(bool first = false);
     void initializeTitle();
 
-    QTableView* tableView(int index);
+    QTableView* tableAvailable(int index);
 
 private slots:
     void about();
@@ -94,7 +94,7 @@ private slots:
     void refreshDetails(QModelIndex newIndex);
     void saveMeta();
     void refreshTaggingManager(int index = 0);
-    void tableViewChanged(int index);
+    void tableAvailableChanged(int index);
 
     void refresh();
     void removeTag();

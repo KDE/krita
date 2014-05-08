@@ -269,18 +269,6 @@ private:
 
     void extractTempFiles(QList<QString> pathList);
 
-    ///File Method shortcuts
-
-    bool atEnd() const;
-    bool bad() const;
-    bool close();
-    bool hasFile(const QString &name) const;
-    bool finalize();
-    bool isOpen() const;
-    bool open(const QString &name);
-    QByteArray read(qint64 max);
-    qint64 size() const;
-    qint64 write(const QByteArray &_data);
 
 private:
     QString m_kritaPath;

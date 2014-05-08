@@ -67,7 +67,7 @@ QImage KoResourceBundle::image() const
 bool KoResourceBundle::load()
 {
     setReadPack(filename());
-    if (bad()) {
+    if (m_resourceStore->bad()) {
         m_manifest = new KoXmlResourceBundleManifest();
         m_meta = new KoXmlResourceBundleMeta();
         m_installed = false;
@@ -77,7 +77,7 @@ bool KoResourceBundle::load()
         m_manifest = new KoXmlResourceBundleManifest(getFile("manifest.xml"));
         m_meta = new KoXmlResourceBundleMeta(getFile("meta.xml"));
         m_thumbnail.load(getFile("thumbnail.jpg"), "JPG");
-        close();
+        m_resourceStore->close();
         m_installed = m_manifest->isInstalled();
         setValid(true);
     }
@@ -90,7 +90,7 @@ bool KoResourceBundle::save()
     m_manifest->checkSort();
     m_meta->checkSort();
 
-    if (bad()) {
+    if (m_resourceStore->bad()) {
         //meta->addTags(manifest->getTagsList());
         createPack(m_manifest, m_meta, m_thumbnail, true);
     } else {
@@ -109,7 +109,7 @@ bool KoResourceBundle::save()
 void KoResourceBundle::install()
 {
     //load();
-    if (!bad()) {
+    if (!m_resourceStore->bad()) {
         extractKFiles(m_manifest->getFilesToExtract());
         m_manifest->exportTags();
         m_installed = true;
@@ -405,12 +405,12 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
 void KoResourceBundle::addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta)
 {
     toRoot();
-    open("manifest.xml");
-    write(manifest->toByteArray());
-    close();
-    open("meta.xml");
-    write(meta->toByteArray());
-    close();
+    m_resourceStore->open("manifest.xml");
+    m_resourceStore->write(manifest->toByteArray());
+    m_resourceStore->close();
+    m_resourceStore->open("meta.xml");
+    m_resourceStore->write(meta->toByteArray());
+    m_resourceStore->close();
 }
 
 //TODO Voir pour importer d'autres types d'images
@@ -421,9 +421,9 @@ void KoResourceBundle::addThumbnail(QImage thumbnail)
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         thumbnail.save(&buffer, "JPG");
-        open("thumbnail.jpg");
-        write(byteArray);
-        close();
+        m_resourceStore->open("thumbnail.jpg");
+        m_resourceStore->write(byteArray);
+        m_resourceStore->close();
     }
 }
 
@@ -432,15 +432,15 @@ QByteArray KoResourceBundle::getFileData(const QString &fileName)
 {
     QByteArray result;
 
-    if (hasFile(fileName)) {
-        if (isOpen()) {
-            close();
+    if (m_resourceStore->hasFile(fileName)) {
+        if (m_resourceStore->isOpen()) {
+            m_resourceStore->close();
         }
-        open(fileName);
-        while (!atEnd()) {
-            result += read(size());
+        m_resourceStore->open(fileName);
+        while (!m_resourceStore->atEnd()) {
+            result += m_resourceStore->read(m_resourceStore->size());
         }
-        close();
+        m_resourceStore->close();
     }
 
     return result;
@@ -448,11 +448,11 @@ QByteArray KoResourceBundle::getFileData(const QString &fileName)
 
 QIODevice* KoResourceBundle::getFile(const QString &fileName)
 {
-    if (hasFile(fileName)) {
-        if (isOpen()) {
-            close();
+    if (m_resourceStore->hasFile(fileName)) {
+        if (m_resourceStore->isOpen()) {
+            m_resourceStore->close();
         }
-        open(fileName);
+        m_resourceStore->open(fileName);
         return m_resourceStore->device();
     }
 
@@ -491,56 +491,4 @@ QString KoResourceBundle::getKritaPath()
 QString KoResourceBundle::getPackName()
 {
     return m_packName;
-}
-
-//File Method Shortcuts
-
-bool KoResourceBundle::atEnd() const
-{
-    return m_resourceStore->atEnd();
-}
-
-bool KoResourceBundle::bad() const
-{
-    return m_resourceStore->bad();
-}
-
-bool KoResourceBundle::close()
-{
-    return m_resourceStore->close();
-}
-
-bool KoResourceBundle::finalize()
-{
-    return m_resourceStore->finalize();
-}
-
-bool KoResourceBundle::hasFile(const QString &name) const
-{
-    return m_resourceStore->hasFile(name);
-}
-
-bool KoResourceBundle::isOpen() const
-{
-    return m_resourceStore->isOpen();
-}
-
-bool KoResourceBundle::open(const QString &name)
-{
-    return m_resourceStore->open(name);
-}
-
-QByteArray KoResourceBundle::read(qint64 max)
-{
-    return m_resourceStore->read(max);
-}
-
-qint64 KoResourceBundle::size() const
-{
-    return m_resourceStore->size();
-}
-
-qint64 KoResourceBundle::write(const QByteArray &_data)
-{
-    return m_resourceStore->write(_data);
 }

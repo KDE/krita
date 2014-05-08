@@ -20,7 +20,6 @@
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include "KoResourceBundleManager.h"
 #include "KoResourceTableModel.h"
 #include "KoBundleCreationWidget.h"
 

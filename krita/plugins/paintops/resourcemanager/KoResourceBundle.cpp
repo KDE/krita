@@ -18,9 +18,10 @@
  */
 
 #include "KoResourceBundle.h"
-#include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
+
+#include <KoStore.h>
 
 #include <kglobal.h>
 #include <kcomponentdata.h>
@@ -30,18 +31,25 @@
 #include <QDate>
 #include <QDir>
 #include <QDebug>
+#include <QBuffer>
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& bundlePath)
     : KoResource(bundlePath)
 {
-    m_manager = new KoResourceBundleManager(bundlePath.section('/', 0, bundlePath.count('/') - 2));
+    m_kritaPath = bundlePath.section('/', 0, bundlePath.count('/') - 2);
+    if (!m_kritaPath.isEmpty() && m_kritaPath.at(m_kritaPath.size() - 1) != '/') {
+        this->m_kritaPath.append("/");
+    }
+
+    m_packName = QString();
+    m_resourceStore = 0;
+
     setName(bundlePath.section('/', bundlePath.count('/')));
 }
 
 KoResourceBundle::~KoResourceBundle()
 {
-    delete m_manager;
     delete m_meta;
     delete m_manifest;
 }
@@ -58,18 +66,18 @@ QImage KoResourceBundle::image() const
 
 bool KoResourceBundle::load()
 {
-    m_manager->setReadPack(filename());
-    if (m_manager->bad()) {
+    setReadPack(filename());
+    if (bad()) {
         m_manifest = new KoXmlResourceBundleManifest();
         m_meta = new KoXmlResourceBundleMeta();
         m_installed = false;
     } else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
         //A optimiser si possible
-        m_manifest = new KoXmlResourceBundleManifest(m_manager->getFile("manifest.xml"));
-        m_meta = new KoXmlResourceBundleMeta(m_manager->getFile("meta.xml"));
-        m_thumbnail.load(m_manager->getFile("thumbnail.jpg"), "JPG");
-        m_manager->close();
+        m_manifest = new KoXmlResourceBundleManifest(getFile("manifest.xml"));
+        m_meta = new KoXmlResourceBundleMeta(getFile("meta.xml"));
+        m_thumbnail.load(getFile("thumbnail.jpg"), "JPG");
+        close();
         m_installed = m_manifest->isInstalled();
         setValid(true);
     }
@@ -82,11 +90,11 @@ bool KoResourceBundle::save()
     m_manifest->checkSort();
     m_meta->checkSort();
 
-    if (m_manager->bad()) {
+    if (bad()) {
         //meta->addTags(manifest->getTagsList());
-        m_manager->createPack(m_manifest, m_meta, m_thumbnail, true);
+        createPack(m_manifest, m_meta, m_thumbnail, true);
     } else {
-        m_manager->createPack(m_manifest, m_meta, m_thumbnail);
+        createPack(m_manifest, m_meta, m_thumbnail);
     }
 
     if (!valid()) {
@@ -101,8 +109,8 @@ bool KoResourceBundle::save()
 void KoResourceBundle::install()
 {
     //load();
-    if (!m_manager->bad()) {
-        m_manager->extractKFiles(m_manifest->getFilesToExtract());
+    if (!bad()) {
+        extractKFiles(m_manifest->getFilesToExtract());
         m_manifest->exportTags();
         m_installed = true;
         m_manifest->install();
@@ -115,12 +123,12 @@ void KoResourceBundle::uninstall()
     if (!m_installed)
         return;
 
-    QString dirPath = this->m_manager->getKritaPath();
+    QString dirPath = this->getKritaPath();
     QList<QString> directoryList = m_manifest->getDirList();
     QString shortPackName = m_meta->getPackName();
 
     for (int i = 0; i < directoryList.size(); i++) {
-        if (!KoResourceBundleManager::removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
+        if (!removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
             qWarning() << "Error : Couldn't delete folder : " << dirPath;
         }
     }
@@ -171,7 +179,7 @@ void KoResourceBundle::addResourceDirs()
 {
     QList<QString> listeType = m_manifest->getDirList();
     for (int i = 0; i < listeType.size(); i++) {
-        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->m_manager->getKritaPath() + listeType.at(i) + "/" + this->name());
+        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->getKritaPath() + listeType.at(i) + "/" + this->name());
     }
 }
 
@@ -194,7 +202,7 @@ void KoResourceBundle::rename(QString filename, QString name)
         QString dirPath;
         QDir dir;
         for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = m_manager->getKritaPath();
+            dirPath = getKritaPath();
             dirPath.append(directoryList.at(i)).append("/");
             dir.rename(dirPath + oldName, dirPath + shortName);
         }
@@ -244,4 +252,295 @@ QString KoResourceBundle::getUpdated()
     return m_meta->getValue("updated");
 }
 
+void KoResourceBundle::setReadPack(QString packName)
+{
+    if (!packName.isEmpty()) {
+        m_resourceStore = KoStore::createStore(packName, KoStore::Read, "", KoStore::Zip);
+        this->m_packName = packName;
+    }
+}
 
+void KoResourceBundle::setWritePack(QString packName)
+{
+    if (!packName.isEmpty()) {
+        m_resourceStore = KoStore::createStore(packName, KoStore::Write, "", KoStore::Zip);
+        this->m_packName = packName;
+    }
+}
+
+void KoResourceBundle::setKritaPath(QString kritaPath)
+{
+    this->m_kritaPath = kritaPath;
+
+    if (!kritaPath.isEmpty() && kritaPath.at(kritaPath.size() - 1) != '/') {
+        this->m_kritaPath.append("/");
+    }
+}
+
+bool KoResourceBundle::isPathSet()
+{
+    return !m_kritaPath.isEmpty();
+}
+
+void KoResourceBundle::toRoot()
+{
+    while (m_resourceStore->leaveDirectory());
+}
+
+bool KoResourceBundle::addKFile(QString path)
+{
+    toRoot();
+    int pathSize = path.count('/');
+    return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 1));
+}
+
+//TODO Réfléchir à fusionner addKFile et addKFileBundle
+//TODO Trouver un moyen de détecter si bundle ou pas
+bool KoResourceBundle::addKFileBundle(QString path)
+{
+    toRoot();
+    int pathSize = path.count('/');
+    return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 2, pathSize - 2)
+                                         .append("/").append(path.section('/', pathSize)));
+}
+
+void KoResourceBundle::addKFiles(QList<QString> pathList)
+{
+    QString bundleName = m_packName.section('/', m_packName.count('/')).section('.', 0, 0);
+    for (int i = 0; i < pathList.size(); i++) {
+        QString currentFile = pathList.at(i);
+        if (currentFile.contains("/" + bundleName + "/")) {
+            if (!addKFileBundle(pathList.at(i))) {
+                continue;
+            }
+        } else {
+            if (!addKFile(pathList.at(i))) {
+                continue;
+            }
+        }
+    }
+}
+
+void KoResourceBundle::extractKFiles(QMap<QString, QString> pathList)
+{
+    QString currentPath;
+    QString targetPath;
+    QString dirPath;
+
+    if (isPathSet()) {
+        for (int i = 0; i < pathList.size(); i++) {
+            toRoot();
+            currentPath = pathList.keys().at(i);
+            targetPath = pathList.values().at(i);
+            if (!m_resourceStore->extractFile(currentPath, targetPath)) {
+                dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+                QDir dir(dirPath);
+                dir.mkdir(dirPath);
+                if (!m_resourceStore->extractFile(currentPath, targetPath)) {
+                    qDebug() << currentPath << targetPath;
+                    //TODO Supprimer le dossier créé
+                    continue;
+                }
+            }
+        }
+    }
+}
+
+void KoResourceBundle::extractTempFiles(QList<QString> pathList)
+{
+    QString currentPath;
+    QString targetPath;
+
+    for (int i = 0; i < pathList.size(); i++) {
+        toRoot();
+        targetPath = pathList.at(i);
+        if (targetPath.contains("temp")) {
+            currentPath = targetPath.section('/', targetPath.count('/') - 1);
+            if (!m_resourceStore->extractFile(currentPath, targetPath)) {
+                QString dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+                QDir dir(dirPath);
+                dir.mkdir(dirPath);
+
+                if (!m_resourceStore->extractFile(currentPath, targetPath)) {
+                    continue;
+                }
+            }
+        }
+    }
+}
+
+void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild)
+{
+    m_packName = meta->getPackFileName();
+    if (!m_packName.isEmpty()) {
+        QList<QString> fileList = manifest->getFileList(m_kritaPath, firstBuild);
+
+        if (!firstBuild && !manifest->isInstalled()) {
+            m_resourceStore = KoStore::createStore(m_packName, KoStore::Read, "", KoStore::Zip);
+            if (m_resourceStore == NULL || m_resourceStore->bad()) {
+                return;
+            } else {
+                extractTempFiles(fileList);
+            }
+        }
+
+        m_resourceStore = KoStore::createStore(m_packName, KoStore::Write, "", KoStore::Zip);
+        if (m_resourceStore != NULL && !m_resourceStore->bad()) {
+            addKFiles(fileList);
+            manifest->updateFilePaths(m_kritaPath, m_packName);
+            addThumbnail(thumbnail);
+            addManiMeta(manifest, meta);
+            m_resourceStore->finalize();
+        }
+
+        if (!firstBuild && !manifest->isInstalled()) {
+            QList<QString> dirList = manifest->getDirList();
+            for (int i = 0; i < dirList.size(); i++) {
+                removeDir(m_kritaPath + "temp/" + dirList.at(i));
+            }
+        }
+    }
+}
+
+void KoResourceBundle::addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta)
+{
+    toRoot();
+    open("manifest.xml");
+    write(manifest->toByteArray());
+    close();
+    open("meta.xml");
+    write(meta->toByteArray());
+    close();
+}
+
+//TODO Voir pour importer d'autres types d'images
+void KoResourceBundle::addThumbnail(QImage thumbnail)
+{
+    if (!thumbnail.isNull()) {
+        toRoot();
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        thumbnail.save(&buffer, "JPG");
+        open("thumbnail.jpg");
+        write(byteArray);
+        close();
+    }
+}
+
+
+QByteArray KoResourceBundle::getFileData(const QString &fileName)
+{
+    QByteArray result;
+
+    if (hasFile(fileName)) {
+        if (isOpen()) {
+            close();
+        }
+        open(fileName);
+        while (!atEnd()) {
+            result += read(size());
+        }
+        close();
+    }
+
+    return result;
+}
+
+QIODevice* KoResourceBundle::getFile(const QString &fileName)
+{
+    if (hasFile(fileName)) {
+        if (isOpen()) {
+            close();
+        }
+        open(fileName);
+        return m_resourceStore->device();
+    }
+
+    return 0;
+}
+
+bool KoResourceBundle::removeDir(const QString & dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System
+                  | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                result = removeDir(info.absoluteFilePath());
+            } else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+    return result;
+}
+
+
+QString KoResourceBundle::getKritaPath()
+{
+    return m_kritaPath;
+}
+
+QString KoResourceBundle::getPackName()
+{
+    return m_packName;
+}
+
+//File Method Shortcuts
+
+bool KoResourceBundle::atEnd() const
+{
+    return m_resourceStore->atEnd();
+}
+
+bool KoResourceBundle::bad() const
+{
+    return m_resourceStore->bad();
+}
+
+bool KoResourceBundle::close()
+{
+    return m_resourceStore->close();
+}
+
+bool KoResourceBundle::finalize()
+{
+    return m_resourceStore->finalize();
+}
+
+bool KoResourceBundle::hasFile(const QString &name) const
+{
+    return m_resourceStore->hasFile(name);
+}
+
+bool KoResourceBundle::isOpen() const
+{
+    return m_resourceStore->isOpen();
+}
+
+bool KoResourceBundle::open(const QString &name)
+{
+    return m_resourceStore->open(name);
+}
+
+QByteArray KoResourceBundle::read(qint64 max)
+{
+    return m_resourceStore->read(max);
+}
+
+qint64 KoResourceBundle::size() const
+{
+    return m_resourceStore->size();
+}
+
+qint64 KoResourceBundle::write(const QByteArray &_data)
+{
+    return m_resourceStore->write(_data);
+}

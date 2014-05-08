@@ -6,10 +6,12 @@
 #include <QProcessEnvironment>
 #include <QFileInfo>
 
+#include <resourcemanager.h>
 
 KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent)
     : KDialog(parent)
     , m_ui(new Ui::KoBundleCreationWidget)
+    , m_newMeta(newMeta)
 {
     m_page = new QWidget();
     m_ui->setupUi(m_page);
@@ -20,10 +22,6 @@ KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta,
 
     connect(this, SIGNAL(okClicked()), SLOT(createBundle()));
     connect(this, SIGNAL(cancelClicked()), SLOT(reject()));
-
-    m_newMeta = newMeta;
-    m_kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':', 0, 0)
-                        + QString("/share/apps/krita/");
 }
 
 KoBundleCreationWidget::~KoBundleCreationWidget()
@@ -40,13 +38,18 @@ void KoBundleCreationWidget::createBundle()
     if (name.isEmpty()) {
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
         emit status("Empty bundle name...");
-    } else {
-        QFileInfo fileInfo(m_kritaPath + "bundles/" + name + ".zip");
+    }
+    else {
+
+        KoResourceServer<KoResourceBundle> *rServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+
+        QFileInfo fileInfo(rServer->saveLocation() + name + ".bundle");
 
         if (fileInfo.exists()) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             emit status("Bundle already exists : choose another name...");
-        } else {
+        }
+        else {
             m_newMeta->setMeta(name, m_ui->editAuthor->text(), m_ui->editLicense->text(),
                                m_ui->editWebsite->text(),
                                m_ui->editDescription->document()->toPlainText());

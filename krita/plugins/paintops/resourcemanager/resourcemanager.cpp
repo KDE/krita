@@ -20,12 +20,52 @@
 
 #include "resourcemanager.h"
 
+#include <QDir>
+
 #include <klocale.h>
-#include <kis_debug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-#include "KoResourceManagerWidget.h"
+#include <kis_debug.h>
 #include "kis_action.h"
+
+#include <KoResource.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
+
+#include "KoResourceManagerWidget.h"
+
+ResourceBundleServerProvider::ResourceBundleServerProvider()
+{
+    // user-local
+    KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
+    KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
+    m_resourceBundleServer = new KoResourceServer<KoResourceBundle>("kis_resourcebundles", "*.bundle");
+    KoResourceLoaderThread loader(m_resourceBundleServer);
+    loader.start();
+    loader.barrier();
+}
+
+
+ResourceBundleServerProvider *ResourceBundleServerProvider::instance()
+{
+    K_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance);
+    return s_instance;
+}
+
+ResourceBundleServerProvider::~ResourceBundleServerProvider()
+{
+    delete m_resourceBundleServer;
+}
+
+KoResourceServer<KoResourceBundle> *ResourceBundleServerProvider::resourceBundleServer()
+{
+    return m_resourceBundleServer;
+}
+
+
 
 K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
 K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
@@ -50,5 +90,7 @@ void ResourceManager::slotResourceManager()
     resourceManager->show();
 
 }
+
+
 
 #include "resourcemanager.moc"

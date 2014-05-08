@@ -35,6 +35,8 @@
 #include <QFileDialog>
 #include <QProcessEnvironment>
 
+#include "resourcemanager.h"
+
 KoResourceManagerControl::KoResourceManagerControl(int nb)
     : m_modelsCount(nb)
 {
@@ -66,7 +68,7 @@ KoResourceManagerControl::~KoResourceManagerControl()
     delete m_meta;
     delete m_manifest;
     delete m_extractor;
-    delete m_bundleServer;
+    delete ResourceBundleServerProvider::instance()->resourceBundleServer();
 
     for (int i = 0; i < m_modelsCount; i++) {
         delete m_modelList.at(i);
@@ -116,7 +118,7 @@ bool KoResourceManagerControl::createPack(int type)
             emit status("Creation cancelled", 3000);
             return false;
         } else {
-            QString bundlePath = m_root + "share/apps/krita/bundles/" + newMeta->getPackName() + ".zip";
+            QString bundlePath = m_root + "share/apps/krita/bundles/" + newMeta->getPackName() + ".bundle";
             KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
             bool isEmpty = true;
 
@@ -144,12 +146,12 @@ bool KoResourceManagerControl::createPack(int type)
             newBundle->addMeta("fileName", bundlePath);
             newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
 
-            m_bundleServer->addResource(newBundle);
+            ResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle);
 
             QStringList tagsList = newBundle->getTagsList();
 
             for (int i = 0; i < tagsList.size(); i++) {
-                m_bundleServer->addTag(newBundle, tagsList.at(i));
+                ResourceBundleServerProvider::instance()->resourceBundleServer()->addTag(newBundle, tagsList.at(i));
             }
 
             currentModel->tagCategoryMembersChanged();
@@ -322,13 +324,6 @@ int KoResourceManagerControl::getNbModels()
     return m_modelsCount;
 }
 
-void KoResourceManagerControl::launchServer()
-{
-    KGlobal::mainComponent().dirs()->addResourceType("ko_bundles", "data", "krita/bundles/");
-    m_bundleServer = new KoResourceServer<KoResourceBundle>("ko_bundles", "*.zip");
-    m_bundleServer->loadResources(m_bundleServer->fileNames());
-}
-
 void KoResourceManagerControl::thumbnail(QModelIndex index, QString fileName, int type)
 {
     KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(getModel(type)->getResourceFromIndex(index));
@@ -399,7 +394,7 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
                     QString fileType = newFilename.section('/', newFilename.count('/') - 2, newFilename.count('/') - 2);
 
                     currentBundle = dynamic_cast<KoResourceBundle*>
-                                    (currentModel->getResourceFromFilename(bundleName.append(".zip")));
+                                    (currentModel->getResourceFromFilename(bundleName.append(".bundle")));
 
                     if (currentBundle) {
                         currentBundle->removeFile(oldFilename);
@@ -434,20 +429,18 @@ void KoResourceManagerControl::filterResourceTypes(int index)
 
     switch (index) {
     case 0:
-        launchServer();
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(m_bundleServer)));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(ResourceBundleServerProvider::instance()->resourceBundleServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Available));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Installed));
         break;
     case 1:
-        launchServer();
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(m_bundleServer)));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(ResourceBundleServerProvider::instance()->resourceBundleServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Available));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Installed));
         break;
@@ -492,7 +485,7 @@ void KoResourceManagerControl::addFiles(QString bundleName, int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
     QList<QString> selected = currentModel->getSelectedResource();
-    KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(m_bundleServer->resourceByName(bundleName));
+    KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(ResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(bundleName));
     QString path = currentBundle->filename().section('/', 0, currentBundle->filename().count('/') - 2) + "/";
 
     bundleName = bundleName.section('.', 0, 0);
@@ -556,7 +549,7 @@ bool KoResourceManagerControl::importBundle()
 {
     emit status("Importing...");
     QString filePath = QFileDialog::getOpenFileName(0,
-                       tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Archive Files (*.zip)"));
+                       tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Archive Files (*.bundle)"));
 
     if (!filePath.isEmpty()) {
         QFile::copy(filePath, m_root + "share/apps/krita/bundles/" + filePath.section('/', filePath.count('/')));

@@ -29,7 +29,6 @@ private:
     QWidget *m_page;
     Ui::KoBundleCreationWidget *m_ui;
     KoXmlResourceBundleMeta *m_newMeta;
-    QString m_kritaPath;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

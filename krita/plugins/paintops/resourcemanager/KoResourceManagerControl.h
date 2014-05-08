@@ -22,12 +22,12 @@
 
 #include "KoResourceBundle.h"
 #include <QModelIndex>
+#include "resourcemanager.h"
 
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
 class KoResourceBundleManager;
 class KoResourceTableModel;
-template <class T> class KoResourceServer;
 
 class KoResourceManagerControl : public QObject
 {
@@ -38,8 +38,6 @@ public:
     ~KoResourceManagerControl();
 
     KoResourceTableModel* getModel(int type);
-    void launchServer();
-
     int getNbModels();
 
     void addFiles(QString, int type);
@@ -72,7 +70,6 @@ private:
     KoXmlResourceBundleMeta *m_meta;
     KoXmlResourceBundleManifest *m_manifest;
     KoResourceBundleManager *m_extractor;
-    KoResourceServer<KoResourceBundle> *m_bundleServer;
     QList<KoResourceTableModel*> m_modelList;
     QString m_root;
     int m_modelsCount;

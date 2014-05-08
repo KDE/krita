@@ -48,7 +48,7 @@ KoResourceBundle::~KoResourceBundle()
 
 QString KoResourceBundle::defaultFileExtension() const
 {
-    return QString(".zip");
+    return QString(".bundle");
 }
 
 QImage KoResourceBundle::image() const

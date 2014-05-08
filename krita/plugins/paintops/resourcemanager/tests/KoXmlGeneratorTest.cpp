@@ -44,7 +44,7 @@ void KoXmlGeneratorTest::ctorTest()
     //Xml content
     QFile* device =  new QFile(env + "/fileTest.xml");
     device->open(QIODevice::WriteOnly);
-    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
     device->close();
     KoXmlGenerator* gen = new KoXmlGenerator(device);
     device->open(QIODevice::ReadOnly);
@@ -54,7 +54,7 @@ void KoXmlGeneratorTest::ctorTest()
 
 //   device =  new QFile(env+"/fileTest.xml");
 //   device->open(QIODevice::WriteOnly);
-//   device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newPackage.zip</name>\n <created>26/03/2011</created>\n <updated>26/02/2014</updated>\n</package>\n");
+//   device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newPackage.bundle</name>\n <created>26/03/2011</created>\n <updated>26/02/2014</updated>\n</package>\n");
 //   device->close();
 //   gen = new KoXmlGenerator(env+"/fileTest.xml");
 //   device->open(QIODevice::ReadOnly);
@@ -72,10 +72,10 @@ void KoXmlGeneratorTest::getValueTest()
     env = QProcessEnvironment::systemEnvironment().value("HOME");
     QFile *device =  new QFile(env + "/fileTest.xml");
     device->open(QIODevice::WriteOnly);
-    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
     device->close();
     KoXmlGenerator* gen = new KoXmlGenerator(device);
-    QCOMPARE((gen->getValue("name")).toUtf8().data(), "/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip");
+    QCOMPARE((gen->getValue("name")).toUtf8().data(), "/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle");
     QCOMPARE((gen->getValue("created")).toUtf8().data(), "26/03/2014");
     QCOMPARE((gen->getValue("package")).toUtf8().data(), "");
     QCOMPARE((gen->getValue("updated")).toUtf8().data(), "26/03/2014");
@@ -92,12 +92,12 @@ void KoXmlGeneratorTest::addTagTest()
 
     QFile *device =  new QFile(env + "/fileTest.xml");
     device->open(QIODevice::WriteOnly);
-    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
     device->close();
 
     //Test de la méthode addTag(...) avec des nom de tags non-nuls
     KoXmlGenerator* gen = new KoXmlGenerator(device);
-    QString xmlContent = "<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n";
+    QString xmlContent = "<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n";
     xmlContent.append(" <newTag1>newTag1 Content 1</newTag1>\n");
     gen->addTag("newTag1", "newTag1 Content 1");
     xmlContent.append(" <newTag1>newTag1 Content 2</newTag1>\n");
@@ -109,7 +109,7 @@ void KoXmlGeneratorTest::addTagTest()
 
     //Test de la méthode addTag(...) avec des nom de tags non-nuls
     gen = new KoXmlGenerator(device);
-    xmlContent = "<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n";
+    xmlContent = "<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n";
     xmlContent.append(" <newTag1/>\n</package>\n");
     gen->addTag("newTag1", "");
     QCOMPARE((gen->toString()), xmlContent);

@@ -212,10 +212,10 @@ void KoXmlResourceBundleMetaTest::getPackNameTest()
     env = QProcessEnvironment::systemEnvironment().value("HOME");
     QFile* device =  new QFile(env + "/fileTest.xml");
     device->open(QIODevice::WriteOnly);
-    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
     device->close();
     KoXmlResourceBundleMeta *meta = new KoXmlResourceBundleMeta(device);
-    QCOMPARE(meta->getPackName(), QString("/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip"));
+    QCOMPARE(meta->getPackName(), QString("/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle"));
 
     device->open(QIODevice::WriteOnly);
     device->write("<!DOCTYPE meta>\n<package>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
@@ -232,13 +232,13 @@ void KoXmlResourceBundleMetaTest::getShortPackNameTest()
 //    env=QProcessEnvironment::systemEnvironment().value("HOME");
 //    QFile* device =  new QFile(env+"/fileTest.xml");
 //    device->open(QIODevice::WriteOnly);
-//    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+//    device->write("<!DOCTYPE meta>\n<package>\n <name>/home/sniperwolf/kde4/inst/share/apps/krita/bundles/newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
 //    device->close();
 //    KoXmlResourceBundleMeta *meta = new KoXmlResourceBundleMeta(device);
 //    QCOMPARE(meta->getShortPackName(),QString("newBundle"));
 
 //    device->open(QIODevice::WriteOnly);
-//    device->write("<!DOCTYPE meta>\n<package>\n <name>newBundle.zip</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
+//    device->write("<!DOCTYPE meta>\n<package>\n <name>newBundle.bundle</name>\n <created>26/03/2014</created>\n <updated>26/03/2014</updated>\n</package>\n");
 //    device->close();
 //    meta = new KoXmlResourceBundleMeta(device);
 //    QCOMPARE(meta->getShortPackName(),QString("newBundle"));

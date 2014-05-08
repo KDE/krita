@@ -2,7 +2,6 @@ add_subdirectory( tests )
 
 set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
-    dlg_resourcemanager.cpp
     KoXmlGenerator.cpp
 	KoXmlResourceBundleManifest.cpp
 	KoXmlResourceBundleMeta.cpp
@@ -15,7 +14,6 @@ set(kritaresourcemanager_PART_SRCS
 )
 
 kde4_add_ui_files(kritaresourcemanager_PART_SRCS
-    wdg_resourcemanager.ui
     KoResourceManagerWidget.ui
     KoBundleCreationWidget.ui
 )

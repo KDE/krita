@@ -8,50 +8,27 @@
 
 
 KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent)
-    : QDialog(parent)
+    : KDialog(parent)
     , m_ui(new Ui::KoBundleCreationWidget)
 {
-    m_ui->setupUi(this);
+    m_page = new QWidget();
+    m_ui->setupUi(m_page);
+    setMainWidget(m_page);
+    resize(m_page->sizeHint());
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
-    this->m_newMeta = newMeta;
-    this->m_kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':', 0, 0)
+    connect(this, SIGNAL(okClicked()), SLOT(createBundle()));
+    connect(this, SIGNAL(cancelClicked()), SLOT(reject()));
+
+    m_newMeta = newMeta;
+    m_kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':', 0, 0)
                         + QString("/share/apps/krita/");
-
-    initializeUI();
 }
 
 KoBundleCreationWidget::~KoBundleCreationWidget()
 {
     delete m_ui;
-}
-
-void KoBundleCreationWidget::initializeUI()
-{
-    QString detailsStyleSheet = QString("QCheckBox { spacing: 5px; } QCheckBox::indicator { width: 13px; height: 13px; } ")
-                                + QString("QCheckBox::indicator:unchecked { image: url(") + m_kritaPath + QString("pics/arrow-down.png); } ")
-                                + QString("QCheckBox::indicator:checked { image: url(") + m_kritaPath + QString("pics/arrow-right.png); } ");
-
-    m_ui->detailsBox->setStyleSheet(detailsStyleSheet);
-
-    this->resize(450, 10);
-    m_ui->metaData->setVisible(false);
-    m_ui->detailsBox->setVisible(true);
-
-    connect(m_ui->detailsBox, SIGNAL(clicked()), this, SLOT(showHide()));
-    connect(m_ui->okButton, SIGNAL(clicked()), this, SLOT(createBundle()));
-    connect(m_ui->cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
-}
-
-
-void KoBundleCreationWidget::showHide()
-{
-    m_ui->metaData->setVisible(!m_ui->metaData->isVisible());
-    if (!m_ui->metaData->isVisible()) {
-        this->adjustSize();
-        this->resize(450, this->sizeHint().height());
-    } else {
-        this->resize(450, 200);
-    }
 }
 
 //TODO Vérifier la présence de caractères invalides dans le nom du paquet (exemple : *"')
@@ -71,7 +48,8 @@ void KoBundleCreationWidget::createBundle()
             emit status("Bundle already exists : choose another name...");
         } else {
             m_newMeta->setMeta(name, m_ui->editAuthor->text(), m_ui->editLicense->text(),
-                               m_ui->editWebsite->text(), m_ui->editDescription->text());
+                               m_ui->editWebsite->text(),
+                               m_ui->editDescription->document()->toPlainText());
             accept();
         }
     }

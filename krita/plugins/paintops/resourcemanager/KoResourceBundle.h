@@ -249,18 +249,6 @@ private:
     QIODevice* getFile(const QString &fileName);
 
     /**
-     * @brief getKritaPath
-     * @return the path of Krita used when initialized
-     */
-    QString getKritaPath();
-
-    /**
-     * @brief getPackName
-     * @return the name of the current bundle
-     */
-    QString getPackName();
-
-    /**
      * @brief removeDir : Remove the chosen directory
      * @param dirName the name of the directory to be removed
      * @return true if succeed, false otherwise.

@@ -123,7 +123,7 @@ void KoResourceBundle::uninstall()
     if (!m_installed)
         return;
 
-    QString dirPath = this->getKritaPath();
+    QString dirPath = m_kritaPath;
     QList<QString> directoryList = m_manifest->getDirList();
     QString shortPackName = m_meta->getPackName();
 
@@ -179,7 +179,7 @@ void KoResourceBundle::addResourceDirs()
 {
     QList<QString> listeType = m_manifest->getDirList();
     for (int i = 0; i < listeType.size(); i++) {
-        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->getKritaPath() + listeType.at(i) + "/" + this->name());
+        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->m_kritaPath + listeType.at(i) + "/" + this->name());
     }
 }
 
@@ -202,7 +202,7 @@ void KoResourceBundle::rename(QString filename, QString name)
         QString dirPath;
         QDir dir;
         for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = getKritaPath();
+            dirPath = m_kritaPath;
             dirPath.append(directoryList.at(i)).append("/");
             dir.rename(dirPath + oldName, dirPath + shortName);
         }
@@ -480,15 +480,4 @@ bool KoResourceBundle::removeDir(const QString & dirName)
         result = dir.rmdir(dirName);
     }
     return result;
-}
-
-
-QString KoResourceBundle::getKritaPath()
-{
-    return m_kritaPath;
-}
-
-QString KoResourceBundle::getPackName()
-{
-    return m_packName;
 }

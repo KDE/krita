@@ -20,10 +20,12 @@
 #ifndef KORESOURCEMANAGERWIDGET_H
 #define KORESOURCEMANAGERWIDGET_H
 
-#include <QMainWindow>
 #include <QModelIndex>
-#include <krita_export.h>
 #include <QLabel>
+
+#include <kdialog.h>
+
+#include <krita_export.h>
 
 namespace Ui
 {
@@ -54,7 +56,7 @@ class KoResourceManagerControl;
 class KoResourceTaggingManager;
 class QTableView;
 
-class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
+class KRITAUI_EXPORT KoResourceManagerWidget : public KDialog
 {
     Q_OBJECT
 
@@ -70,7 +72,6 @@ public:
     QTableView* tableAvailable(int index);
 
 private slots:
-    void about();
 
     void createPack();
     void deletePack();
@@ -99,14 +100,21 @@ private slots:
     void refresh();
     void removeTag();
 
-    void status(QString text, int timeout);
+    void status(QString text = QString(), int timeout = 2000);
 
 private:
+
+    QWidget *m_page;
+
     Ui::KoResourceManagerWidget *m_ui;
     KoResourceManagerControl *m_control;
     KoResourceTaggingManager *m_tagManager;
     ClickLabel *m_resourceNameLabel;
     bool m_firstRefresh;
+
+    QAction *m_actionAll;
+    QAction *m_actionName;
+    QAction *m_actionFile;
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

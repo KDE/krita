@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either 
+   License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public 
+   You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -32,15 +32,16 @@ private:
      * @description Allows to sort correctly the XML document.
      * @details Other means all other values that are not listed before.
      */
-    enum TagEnum {Brush=0, Gradient, Paintop, Palette, Pattern,
-                  Template, Workspace, Reference, Other};
+    enum TagEnum {Brush = 0, Gradient, Paintop, Palette, Pattern,
+                  Template, Workspace, Reference, Other
+                 };
 
 public:
     /**
      * @brief KoXmlResourceBundleManifest : Ctor
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlResourceBundleManifest(QString xmlName="manifest");
+    KoXmlResourceBundleManifest(QString xmlName = "manifest");
 
     /**
      * @brief KoXmlResourceBundleManifest : Ctor
@@ -53,7 +54,7 @@ public:
      * @param device the device associated to Xml data
      */
     KoXmlResourceBundleManifest(QIODevice *m_device);
-    
+
     /**
      * @brief ~KoXmlResourceBundleManifest : Dtor
      */
@@ -76,7 +77,7 @@ public:
      * @param dest the node that will contain the whole data
      * @param src the node that will be removed after merging
      */
-    void merge(QDomNode dest,QDomNode src);
+    void merge(QDomNode dest, QDomNode src);
 
     /**
      * @brief addTag : Add a file tag as a child of the fileType tag.
@@ -85,19 +86,19 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    QDomElement addManiTag(QString fileType,QString fileName,QStringList tagFileList,bool emptyFile=false);
+    QDomElement addManiTag(QString fileType, QString fileName, QStringList tagFileList, bool emptyFile = false);
 
     /**
      * @brief getFileList
      * @return the list of the files enumerared in the XML
      */
-    QList<QString> getFileList(QString kritaPath,bool firstBuild);
+    QList<QString> getFileList(QString kritaPath, bool firstBuild);
 
     /**
      * @brief getFilesToExtract
      * @return the list of the files to be extracted
      */
-    QMap<QString,QString> getFilesToExtract();
+    QMap<QString, QString> getFilesToExtract();
 
     /**
      * @brief getDirList
@@ -112,7 +113,7 @@ public:
      * @param textValue the text value associated to the tag
      * @return the child as a QDomElement
      */
-    QDomElement addManiTag(QDomElement parent,QString tagName,QString textValue);
+    QDomElement addManiTag(QDomElement parent, QString tagName, QString textValue);
 
     /**
      * @brief importFileTags : import the resource tags associated to the file to the manifest
@@ -120,7 +121,7 @@ public:
      * @param fileTypeName the type of the file
      * @param fileName the name of the file
      */
-    void importFileTags(QDomElement parent,QString fileTypeName,QString fileName);
+    void importFileTags(QDomElement parent, QString fileTypeName, QString fileName);
 
     /**
      * @brief getTagList
@@ -164,8 +165,8 @@ public:
 
     void rename(QString newName);
 
-    void updateFilePaths(QString kritaPath,QString bundleName);
- };
+    void updateFilePaths(QString kritaPath, QString bundleName);
+};
 
 
 #endif // KOXMLRESOURCEBUNDLEMANIFEST_H

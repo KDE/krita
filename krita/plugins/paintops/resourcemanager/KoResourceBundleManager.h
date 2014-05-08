@@ -41,7 +41,7 @@ public:
      * @param packName the name of the package to be opened/created
      * @param mode the opening mode for the file
      */
-    KoResourceBundleManager(QString m_kritaPath="",QString m_packName="",KoStore::Mode mode=KoStore::Write);
+    KoResourceBundleManager(QString m_kritaPath = "", QString m_packName = "", KoStore::Mode mode = KoStore::Write);
 
     /**
      * @brief setReadPack : Opens the store in Read mode
@@ -96,14 +96,14 @@ public:
      * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
      * @param pathList the list containing all the paths of the files to be extracted.
      */
-    void extractKFiles(QMap<QString,QString> pathList);
+    void extractKFiles(QMap<QString, QString> pathList);
 
     /**
      * @brief createPack : Create a full resource package.
      * @param manifest the virtual generator of manifest file
      * @param meta the virtual generator of meta file
      */
-    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta,QImage thumbnail,bool firstBuild=false);
+    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
 
     /**
      * @brief addManiMeta : Add manifest and meta Xml Files to the store

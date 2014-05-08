@@ -31,11 +31,11 @@ private slots:
     void getValueTest();
     void addTagTest();
     void removeFirstTagTest();
-    void removeTagTest();	
+    void removeTagTest();
     void searchValueTest();
     void toFileTest();
 private:
- QString env;
+    QString env;
 
 };
 #endif // KOXMLGENERATORTEST_H

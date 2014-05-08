@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either 
+   License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public 
+   You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -20,26 +20,26 @@
 #include "KoXmlGenerator.h"
 
 
-KoXmlGenerator::KoXmlGenerator(QString xmlFileName):m_xmlDocument(xmlFileName)
+KoXmlGenerator::KoXmlGenerator(QString xmlFileName)
+    : m_xmlDocument(xmlFileName)
 {
-    this->m_device=0;
-    m_root=m_xmlDocument.documentElement();
+    this->m_device = 0;
+    m_root = m_xmlDocument.documentElement();
 }
 
 KoXmlGenerator::KoXmlGenerator(QByteArray data)
 {
-    this->m_device=0;
+    this->m_device = 0;
     if (!m_xmlDocument.setContent(data)) {
         exit(1);
-    }
-    else {
-        m_root=m_xmlDocument.documentElement();
+    } else {
+        m_root = m_xmlDocument.documentElement();
     }
 }
 
 KoXmlGenerator::KoXmlGenerator(QIODevice *device)
 {
-    this->m_device=device;
+    this->m_device = device;
 
     if (!device->isOpen() && !device->open(QIODevice::ReadOnly)) {
         exit(1);
@@ -48,10 +48,9 @@ KoXmlGenerator::KoXmlGenerator(QIODevice *device)
     if (!m_xmlDocument.setContent(device)) {
         device->close();
         exit(1);
-    }
-    else {
+    } else {
         device->close();
-        m_root=m_xmlDocument.documentElement();
+        m_root = m_xmlDocument.documentElement();
     }
 }
 
@@ -67,7 +66,7 @@ QByteArray KoXmlGenerator::toByteArray()
 
 QString KoXmlGenerator::getName()
 {
-	return m_xmlDocument.doctype().name();
+    return m_xmlDocument.doctype().name();
 }
 
 void KoXmlGenerator::checkSort()
@@ -78,47 +77,43 @@ void KoXmlGenerator::checkSort()
 QString KoXmlGenerator::getValue(QString tagName)
 {
     QDomText currentTextValue;
-    QDomNodeList list=m_xmlDocument.elementsByTagName(tagName);
+    QDomNodeList list = m_xmlDocument.elementsByTagName(tagName);
 
-    if (list.isEmpty() || (currentTextValue=list.at(0).firstChild().toText()).isNull()) {
+    if (list.isEmpty() || (currentTextValue = list.at(0).firstChild().toText()).isNull()) {
         return QString();
-    }
-    else {
+    } else {
         return currentTextValue.data();
     }
 }
 
-QDomElement KoXmlGenerator::addTag(QString tagName,QString textValue,bool emptyFile)
+QDomElement KoXmlGenerator::addTag(QString tagName, QString textValue, bool emptyFile)
 {
     Q_UNUSED(emptyFile);
     QDomElement child = m_xmlDocument.createElement(tagName);
     m_root.appendChild(child);
 
-    if (textValue!="") {
+    if (textValue != "") {
         child.appendChild(m_xmlDocument.createTextNode(textValue));
     }
 
     return child;
 }
 
-bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
+bool KoXmlGenerator::removeFirstTag(QString tagName, QString textValue)
 {
-    QDomNodeList tagList=m_xmlDocument.elementsByTagName(tagName);
+    QDomNodeList tagList = m_xmlDocument.elementsByTagName(tagName);
 
     if (tagList.isEmpty()) {
         return false;
-    }
-    else {
-        if (textValue=="") {
+    } else {
+        if (textValue == "") {
             m_root.removeChild(tagList.item(0));
             return true;
-        }
-        else {
-            QDomNode currentNode=searchValue(tagList,textValue);
+        } else {
+            QDomNode currentNode = searchValue(tagList, textValue);
             if (currentNode.isNull()) {
                 return false;
-            }
-            else {
+            } else {
                 m_root.removeChild(currentNode);
                 return true;
             }
@@ -126,19 +121,17 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString textValue)
     }
 }
 
-bool KoXmlGenerator::removeFirstTag(QString tagName,QString attName,QString attValue)
+bool KoXmlGenerator::removeFirstTag(QString tagName, QString attName, QString attValue)
 {
-    QDomNodeList tagList=m_xmlDocument.elementsByTagName(tagName);
+    QDomNodeList tagList = m_xmlDocument.elementsByTagName(tagName);
 
-    if (tagList.isEmpty() || attName=="" || attValue=="") {
+    if (tagList.isEmpty() || attName == "" || attValue == "") {
         return false;
-    }
-    else {
-        QDomNode currentNode=searchValue(tagList,attName,attValue);
+    } else {
+        QDomNode currentNode = searchValue(tagList, attName, attValue);
         if (currentNode.isNull()) {
             return false;
-        }
-        else {
+        } else {
             currentNode.parentNode().removeChild(currentNode);
             return true;
         }
@@ -147,25 +140,24 @@ bool KoXmlGenerator::removeFirstTag(QString tagName,QString attName,QString attV
 
 void KoXmlGenerator::removeTag(QString tagName)
 {
-    QDomNodeList tagList=m_xmlDocument.elementsByTagName(tagName);
+    QDomNodeList tagList = m_xmlDocument.elementsByTagName(tagName);
 
     if (tagList.isEmpty()) {
         return;
-    }
-    else {
-        for (int i=0;i<tagList.size();i++) {
+    } else {
+        for (int i = 0; i < tagList.size(); i++) {
             m_root.removeChild(tagList.item(i));
         }
     }
 }
 
-QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
+QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList, QString textValue)
 {
     QDomNode currentNode;
 
-    for (int i=0;i<tagList.size();i++) {
-        currentNode=tagList.item(i);
-        if (currentNode.firstChild().toText().data()==textValue) {
+    for (int i = 0; i < tagList.size(); i++) {
+        currentNode = tagList.item(i);
+        if (currentNode.firstChild().toText().data() == textValue) {
             return currentNode;
         }
     }
@@ -173,13 +165,13 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString textValue)
     return QDomNode();
 }
 
-QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString attName,QString attValue)
+QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList, QString attName, QString attValue)
 {
     QDomNode currentNode;
 
-    for (int i=0;i<tagList.size();i++) {
-        currentNode=tagList.item(i);
-        if (currentNode.toElement().attributeNode(attName).value()==attValue) {
+    for (int i = 0; i < tagList.size(); i++) {
+        currentNode = tagList.item(i);
+        if (currentNode.toElement().attributeNode(attName).value() == attValue) {
             return currentNode;
         }
     }
@@ -194,23 +186,21 @@ QString KoXmlGenerator::toString()
 
 QString KoXmlGenerator::toFile()
 {
-    QString xmlName=getName().append(".xml");
+    QString xmlName = getName().append(".xml");
 
-    if (m_device!=0) {
-        xmlName=((QFile*)m_device)->fileName();
-    }
-    else {
-        m_device=new QFile(xmlName);
+    if (m_device != 0) {
+        xmlName = ((QFile*)m_device)->fileName();
+    } else {
+        m_device = new QFile(xmlName);
     }
 
-    if (!m_device->open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Truncate)) {
+    if (!m_device->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         return "";
-    }
-    else {
+    } else {
         QTextStream flux(m_device);
 
         flux.setCodec("UTF-8");
-        flux<<toString();
+        flux << toString();
         m_device->close();
         return xmlName;
     }

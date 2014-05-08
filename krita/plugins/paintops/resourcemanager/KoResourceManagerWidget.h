@@ -27,7 +27,7 @@
 
 namespace Ui
 {
-    class KoResourceManagerWidget;
+class KoResourceManagerWidget;
 }
 
 class ClickLabel : public QLabel
@@ -36,8 +36,7 @@ class ClickLabel : public QLabel
 
 public:
     ClickLabel(QWidget * parent = 0)
-        :QLabel(parent)
-    {
+        : QLabel(parent) {
 
     }
 
@@ -45,8 +44,7 @@ signals:
     void clicked();
 
 private:
-    void mousePressEvent ( QMouseEvent * event )
-    {
+    void mousePressEvent(QMouseEvent * event) {
         Q_UNUSED(event);
         emit clicked();
     }
@@ -66,7 +64,7 @@ public:
 
     void initializeConnect();
     void initializeFilterMenu();
-    void initializeModels(bool first=false);
+    void initializeModels(bool first = false);
     void initializeTitle();
 
     QTableView* tableView(int index);
@@ -95,13 +93,13 @@ private slots:
     void showHide();
     void refreshDetails(QModelIndex newIndex);
     void saveMeta();
-    void refreshTaggingManager(int index=0);
+    void refreshTaggingManager(int index = 0);
     void tableViewChanged(int index);
 
     void refresh();
     void removeTag();
 
-    void status(QString text,int timeout);
+    void status(QString text, int timeout);
 
 private:
     Ui::KoResourceManagerWidget *m_ui;

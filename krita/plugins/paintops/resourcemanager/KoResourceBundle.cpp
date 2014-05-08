@@ -35,10 +35,11 @@ using namespace std;
 
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
-KoResourceBundle::KoResourceBundle(QString const& bundlePath):KoResource(bundlePath)
+KoResourceBundle::KoResourceBundle(QString const& bundlePath)
+    : KoResource(bundlePath)
 {
-    m_manager=new KoResourceBundleManager(bundlePath.section('/',0,bundlePath.count('/')-2));
-    setName(bundlePath.section('/',bundlePath.count('/')));
+    m_manager = new KoResourceBundleManager(bundlePath.section('/', 0, bundlePath.count('/') - 2));
+    setName(bundlePath.section('/', bundlePath.count('/')));
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -62,18 +63,17 @@ bool KoResourceBundle::load()
 {
     m_manager->setReadPack(filename());
     if (m_manager->bad()) {
-        m_manifest=new KoXmlResourceBundleManifest();
-        m_meta=new KoXmlResourceBundleMeta();
-        m_installed=false;
-    }
-    else {
+        m_manifest = new KoXmlResourceBundleManifest();
+        m_meta = new KoXmlResourceBundleMeta();
+        m_installed = false;
+    } else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
         //A optimiser si possible
-        m_manifest=new KoXmlResourceBundleManifest(m_manager->getFile("manifest.xml"));
-        m_meta=new KoXmlResourceBundleMeta(m_manager->getFile("meta.xml"));
-        m_thumbnail.load(m_manager->getFile("thumbnail.jpg"),"JPG");
+        m_manifest = new KoXmlResourceBundleManifest(m_manager->getFile("manifest.xml"));
+        m_meta = new KoXmlResourceBundleMeta(m_manager->getFile("meta.xml"));
+        m_thumbnail.load(m_manager->getFile("thumbnail.jpg"), "JPG");
         m_manager->close();
-        m_installed=m_manifest->isInstalled();
+        m_installed = m_manifest->isInstalled();
         setValid(true);
     }
     return true;
@@ -81,16 +81,15 @@ bool KoResourceBundle::load()
 
 bool KoResourceBundle::save()
 {
-    addMeta("updated",QDate::currentDate().toString("dd/MM/yyyy"));
+    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
     m_manifest->checkSort();
     m_meta->checkSort();
 
     if (m_manager->bad()) {
         //meta->addTags(manifest->getTagsList());
-        m_manager->createPack(m_manifest,m_meta,m_thumbnail,true);
-    }
-    else {
-        m_manager->createPack(m_manifest,m_meta,m_thumbnail);
+        m_manager->createPack(m_manifest, m_meta, m_thumbnail, true);
+    } else {
+        m_manager->createPack(m_manifest, m_meta, m_thumbnail);
     }
 
     if (!valid()) {
@@ -108,7 +107,7 @@ void KoResourceBundle::install()
     if (!m_manager->bad()) {
         m_manager->extractKFiles(m_manifest->getFilesToExtract());
         m_manifest->exportTags();
-        m_installed=true;
+        m_installed = true;
         m_manifest->install();
         save();
     }
@@ -125,32 +124,32 @@ void KoResourceBundle::uninstall()
 
     for (int i = 0; i < directoryList.size(); i++) {
         if (!KoResourceBundleManager::removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
-            cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
+            cerr << "Error : Couldn't delete folder : " << qPrintable(dirPath) << endl;
         }
     }
 
-    m_installed=false;
+    m_installed = false;
     m_manifest->uninstall();
     save();
 }
 
-void KoResourceBundle::addMeta(QString type,QString value)
+void KoResourceBundle::addMeta(QString type, QString value)
 {
-    if (type=="created") {
+    if (type == "created") {
         setValid(true);
     }
-    m_meta->addTag(type,value);
+    m_meta->addTag(type, value);
 }
 
 void KoResourceBundle::setMeta(KoXmlResourceBundleMeta* newMeta)
 {
-    m_meta=newMeta;
+    m_meta = newMeta;
 }
 
 //TODO Voir s'il faut aussi rajouter les tags dans le meta
-void KoResourceBundle::addFile(QString fileType,QString filePath, QStringList fileTagList)
+void KoResourceBundle::addFile(QString fileType, QString filePath, QStringList fileTagList)
 {
-    m_manifest->addManiTag(fileType,filePath,fileTagList);
+    m_manifest->addManiTag(fileType, filePath, fileTagList);
     m_meta->addTags(fileTagList);
 }
 
@@ -164,18 +163,18 @@ QList<QString> KoResourceBundle::getTagsList()
 
 void KoResourceBundle::removeFile(QString fileName)
 {
-    QList<QString> list=m_manifest->removeFile(fileName);
+    QList<QString> list = m_manifest->removeFile(fileName);
 
-    for (int i=0;i<list.size();i++) {
-        m_meta->removeFirstTag("tag",list.at(i));
+    for (int i = 0; i < list.size(); i++) {
+        m_meta->removeFirstTag("tag", list.at(i));
     }
 }
 
 void KoResourceBundle::addResourceDirs()
 {
     QList<QString> listeType = m_manifest->getDirList();
-    for(int i = 0; i < listeType.size();i++) {
-        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->m_manager->getKritaPath()+listeType.at(i)+"/"+this->name());
+    for (int i = 0; i < listeType.size(); i++) {
+        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->m_manager->getKritaPath() + listeType.at(i) + "/" + this->name());
     }
 }
 
@@ -184,13 +183,13 @@ bool KoResourceBundle::isInstalled()
     return m_installed;
 }
 
-void KoResourceBundle::rename(QString filename,QString name)
+void KoResourceBundle::rename(QString filename, QString name)
 {
-    QString oldName=m_meta->getPackName();
-    QString shortName=name.section('.',0,0);
+    QString oldName = m_meta->getPackName();
+    QString shortName = name.section('.', 0, 0);
 
-    addMeta("filename",filename);
-    addMeta("name",shortName);
+    addMeta("filename", filename);
+    addMeta("name", shortName);
     m_manifest->rename(shortName);
 
     if (isInstalled()) {
@@ -200,7 +199,7 @@ void KoResourceBundle::rename(QString filename,QString name)
         for (int i = 0; i < directoryList.size(); i++) {
             dirPath = m_manager->getKritaPath();
             dirPath.append(directoryList.at(i)).append("/");
-            dir.rename(dirPath+oldName,dirPath+shortName);
+            dir.rename(dirPath + oldName, dirPath + shortName);
         }
     }
     save();
@@ -208,12 +207,12 @@ void KoResourceBundle::rename(QString filename,QString name)
 
 void KoResourceBundle::removeTag(QString tagName)
 {
-    m_meta->removeFirstTag("tag",tagName);
+    m_meta->removeFirstTag("tag", tagName);
 }
 
 void KoResourceBundle::setThumbnail(QString filename)
 {
-    m_thumbnail=QImage(filename);
+    m_thumbnail = QImage(filename);
     save();
 }
 

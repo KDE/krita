@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either 
+   License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public 
+   You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -83,7 +83,7 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    virtual QDomElement addTag(QString tagName,QString textValue="",bool emptyFile=false);
+    virtual QDomElement addTag(QString tagName, QString textValue = "", bool emptyFile = false);
 
     /**
      * @brief removeFirstTag : Remove the first tag having same name (and same textvalue)
@@ -91,7 +91,7 @@ public:
      * @param textValue the text linked to the tag
      * @return true if succeed, false otherwise.
      */
-    bool removeFirstTag(QString tagName,QString textValue="");
+    bool removeFirstTag(QString tagName, QString textValue = "");
 
     /**
      * @brief removeFirstTag : Remove the first tag having same name and attribute
@@ -100,7 +100,7 @@ public:
      * @param attValue the value of the attribute
      * @return true if succeed, false otherwise.
      */
-    bool removeFirstTag(QString tagName,QString attName,QString attValue);
+    bool removeFirstTag(QString tagName, QString attName, QString attValue);
 
     /**
      * @brief removeTag : Remove all the tags having the same name.
@@ -114,7 +114,7 @@ public:
      * @param textValue the text to be found in the tag
      * @return the first node found, null node otherwise.
      */
-    QDomNode searchValue(QDomNodeList tagList,QString textValue);
+    QDomNode searchValue(QDomNodeList tagList, QString textValue);
 
     /**
      * @brief searchValue : Search in the list the first tag having the right attribute value
@@ -123,7 +123,7 @@ public:
      * @param attValue the value of the attribute
      * @return the first node found, null node otherwise.
      */
-    QDomNode searchValue(QDomNodeList tagList,QString attName,QString attValue);
+    QDomNode searchValue(QDomNodeList tagList, QString attName, QString attValue);
 
     /**
      * @brief toString

@@ -84,7 +84,7 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(QString type,QString value);
+    void addMeta(QString type, QString value);
 
     /**
      * @brief addMeta : Add a Metadata to the resource
@@ -98,7 +98,7 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType,QString filePath,QStringList fileTagList);
+    void addFile(QString fileType, QString filePath, QStringList fileTagList);
 
     QList<QString> getTagsList();
 
@@ -116,7 +116,7 @@ public:
     /**
      * @brief rename : Rename the bundle
      */
-    void rename(QString,QString);
+    void rename(QString, QString);
 
     /**
      * @brief getAuthor

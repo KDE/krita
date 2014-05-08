@@ -32,7 +32,7 @@ K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
 K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
+    : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
 {
     KisAction *action = new KisAction(i18n("Resource Manager..."), this);
     addAction("resourcemanager", action);

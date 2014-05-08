@@ -29,37 +29,37 @@ using namespace std;
 
 void KoResourceBundleManager_test::initTestCase()
 {
-    env=QProcessEnvironment::systemEnvironment().value("HOME");
+    env = QProcessEnvironment::systemEnvironment().value("HOME");
 }
 
 void KoResourceBundleManager_test::ctorTest()
-{    
+{
     //Without parameter
 
-    man=new KoResourceBundleManager();
-    QCOMPARE(man->getKritaPath(),QString(""));
-    QCOMPARE(man->getPackName(),QString(""));
-    QVERIFY(man->m_resourceStore==0);
+    man = new KoResourceBundleManager();
+    QCOMPARE(man->getKritaPath(), QString(""));
+    QCOMPARE(man->getPackName(), QString(""));
+    QVERIFY(man->m_resourceStore == 0);
 
     //Empty parameters
 
-    man=new KoResourceBundleManager();
-    QCOMPARE(man->getKritaPath(),QString(""));
-    QCOMPARE(man->getPackName(),QString(""));
-    QVERIFY(man->m_resourceStore==0);
-    
+    man = new KoResourceBundleManager();
+    QCOMPARE(man->getKritaPath(), QString(""));
+    QCOMPARE(man->getPackName(), QString(""));
+    QVERIFY(man->m_resourceStore == 0);
+
     //KritaPath specified
 
-    man=new KoResourceBundleManager(env);
-    QCOMPARE(man->getKritaPath(),QString(env+"/"));
-    QCOMPARE(man->getPackName(),QString(""));
-    QVERIFY(man->m_resourceStore==0);
+    man = new KoResourceBundleManager(env);
+    QCOMPARE(man->getKritaPath(), QString(env + "/"));
+    QCOMPARE(man->getPackName(), QString(""));
+    QVERIFY(man->m_resourceStore == 0);
 
     //PackName specified
 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
-    QCOMPARE(man->getKritaPath(),QString(env+"/"));
-    QCOMPARE(man->getPackName(),QString(env+"/monPaquet.zip"));
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
+    QCOMPARE(man->getKritaPath(), QString(env + "/"));
+    QCOMPARE(man->getPackName(), QString(env + "/monPaquet.zip"));
     QVERIFY(!man->m_resourceStore->bad());
 
     delete man;
@@ -67,46 +67,46 @@ void KoResourceBundleManager_test::ctorTest()
 
 void KoResourceBundleManager_test::setReadPackTest()
 {
-    QFile::remove(env+"/monPaquet.zip");
-    man=new KoResourceBundleManager();
-    man->setReadPack(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
+    man = new KoResourceBundleManager();
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(man->m_resourceStore->bad());
-    KoStore::createStore(env+"/monPaquet.zip",KoStore::Write,"",KoStore::Zip)->finalize();
-    man->setReadPack(env+"/monPaquet.zip");
+    KoStore::createStore(env + "/monPaquet.zip", KoStore::Write, "", KoStore::Zip)->finalize();
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(!man->m_resourceStore->bad());
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::setWritePackTest()
 {
-    QFile::remove(env+"/monPaquet.zip");
-    man=new KoResourceBundleManager();
-    man->setWritePack(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
+    man = new KoResourceBundleManager();
+    man->setWritePack(env + "/monPaquet.zip");
     QVERIFY(!man->m_resourceStore->bad());
     man->finalize();
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(!man->m_resourceStore->bad());
-    man->setWritePack(env+"/monPaquet.zip");
+    man->setWritePack(env + "/monPaquet.zip");
     QVERIFY(!man->m_resourceStore->bad());
-    QVERIFY(QFile::remove(env+"/monPaquet.zip"));
+    QVERIFY(QFile::remove(env + "/monPaquet.zip"));
 }
 
 void KoResourceBundleManager_test::setKritaPathTest()
 {
-    man=new KoResourceBundleManager();
-    man->setKritaPath(env+"/");
-    QCOMPARE(man->getKritaPath(),QString(env+"/"));
+    man = new KoResourceBundleManager();
+    man->setKritaPath(env + "/");
+    QCOMPARE(man->getKritaPath(), QString(env + "/"));
     man->setKritaPath("");
-    QCOMPARE(man->getKritaPath(),QString(""));
+    QCOMPARE(man->getKritaPath(), QString(""));
     man->setKritaPath(env);
-    QCOMPARE(man->getKritaPath(),QString(env+"/"));
+    QCOMPARE(man->getKritaPath(), QString(env + "/"));
 }
 
 void KoResourceBundleManager_test::isPathSetTest()
 {
-    man=new KoResourceBundleManager();
+    man = new KoResourceBundleManager();
     QVERIFY(!man->isPathSet());
-    man->setKritaPath(env+"/");
+    man->setKritaPath(env + "/");
     QVERIFY(man->isPathSet());
     man->setKritaPath("");
     QVERIFY(!man->isPathSet());
@@ -116,210 +116,210 @@ void KoResourceBundleManager_test::isPathSetTest()
 
 void KoResourceBundleManager_test::toRootTest()
 {
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
     man->toRoot();
-    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory()==QString("./"));
+    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory() == QString("./"));
     man->m_resourceStore->enterDirectory("Test_Dir_1");
-    QVERIFY(!(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory()==QString("./")));
+    QVERIFY(!(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory() == QString("./")));
     man->toRoot();
-    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory()==QString("./"));
+    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory() == QString("./"));
 
-    QString prov="test";
-    for(int i=0;i<10;i++) {
-        prov+="/test";
+    QString prov = "test";
+    for (int i = 0; i < 10; i++) {
+        prov += "/test";
     }
-    
-    QFile fileTest(env+"/testFile.txt");
-    fileTest.open(QIODevice::ReadWrite);
-    man->m_resourceStore->addLocalFile(env+"/testFile.txt",prov+"/testFile.txt");
-    
-    man->toRoot();
-    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory()==QString("./"));
 
-    QFile::remove(env+"/testFile.txt");
+    QFile fileTest(env + "/testFile.txt");
+    fileTest.open(QIODevice::ReadWrite);
+    man->m_resourceStore->addLocalFile(env + "/testFile.txt", prov + "/testFile.txt");
+
+    man->toRoot();
+    QVERIFY(man->m_resourceStore->currentDirectory().isEmpty() || man->m_resourceStore->currentDirectory() == QString("./"));
+
+    QFile::remove(env + "/testFile.txt");
 }
 
 void KoResourceBundleManager_test::addKFileTest()
 {
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
     QDir dir;
-    QFile::remove(env+"/brushes/example.txt");
-    dir.rmdir(env+"/brushes");
+    QFile::remove(env + "/brushes/example.txt");
+    dir.rmdir(env + "/brushes");
 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
-    dir.mkdir(env+"/brushes");
-    QFile file(env+"/brushes/example.txt");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
+    dir.mkdir(env + "/brushes");
+    QFile file(env + "/brushes/example.txt");
     file.open(QIODevice::ReadWrite);
 
-    man->addKFile(env+"/brushes/example.txt");
+    man->addKFile(env + "/brushes/example.txt");
     QVERIFY(man->m_resourceStore->hasFile("/brushes/example.txt"));
     man->finalize();
 
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(man->open("/brushes/example.txt"));
-    QCOMPARE(man->size(),file.size());
+    QCOMPARE(man->size(), file.size());
     man->close();
     file.close();
 
-    QFile::remove(env+"/brushes/example.txt");
-    dir.rmdir(env+"/brushes");
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/brushes/example.txt");
+    dir.rmdir(env + "/brushes");
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::addKFileBundleTest()
 {
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
     QDir dir;
-    QFile::remove(env+"/brushes/example.txt");
-    dir.rmdir(env+"/brushes/pack");
-    dir.rmdir(env+"/brushes");
+    QFile::remove(env + "/brushes/example.txt");
+    dir.rmdir(env + "/brushes/pack");
+    dir.rmdir(env + "/brushes");
 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
-    dir.mkpath(env+"/brushes/pack");
-    QFile file(env+"/brushes/pack/example.txt");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
+    dir.mkpath(env + "/brushes/pack");
+    QFile file(env + "/brushes/pack/example.txt");
     file.open(QIODevice::ReadWrite);
 
-    man->addKFileBundle(env+"/brushes/pack/example.txt");
+    man->addKFileBundle(env + "/brushes/pack/example.txt");
     QVERIFY(man->m_resourceStore->hasFile("/brushes/example.txt"));
     man->finalize();
 
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(man->open("/brushes/example.txt"));
-    QCOMPARE(man->size(),file.size());
+    QCOMPARE(man->size(), file.size());
     man->close();
     file.close();
 
-    QFile::remove(env+"/brushes/pack/example.txt");
-    dir.rmdir(env+"/brushes/pack");
-    dir.rmdir(env+"/brushes");
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/brushes/pack/example.txt");
+    dir.rmdir(env + "/brushes/pack");
+    dir.rmdir(env + "/brushes");
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::addKFilesTest()
 {
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
     QDir dir;
     QList<QString> liste;
-    QFile::remove(env+"/brushes/example.txt");
-    QFile::remove(env+"/brushes/example2.txt");
-    QFile::remove(env+"/brushes/example3.txt");
-    dir.rmdir(env+"/brushes");
+    QFile::remove(env + "/brushes/example.txt");
+    QFile::remove(env + "/brushes/example2.txt");
+    QFile::remove(env + "/brushes/example3.txt");
+    dir.rmdir(env + "/brushes");
 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
-    dir.mkdir(env+"/brushes");
-    QFile file(env+"/brushes/example.txt");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
+    dir.mkdir(env + "/brushes");
+    QFile file(env + "/brushes/example.txt");
     file.open(QIODevice::ReadWrite);
 
-    QFile file2(env+"/brushes/example2.txt");
+    QFile file2(env + "/brushes/example2.txt");
     file2.open(QIODevice::ReadWrite);
 
-    QFile file3(env+"/brushes/example3.txt");
+    QFile file3(env + "/brushes/example3.txt");
     file3.open(QIODevice::ReadWrite);
-    
+
     liste.push_back(file.fileName());
     liste.push_back(file2.fileName());
     liste.push_back(file3.fileName());
 
     man->addKFiles(liste);
     QVERIFY(man->m_resourceStore->hasFile("/brushes/example.txt")
-        && man->m_resourceStore->hasFile("/brushes/example2.txt")
-        && man->m_resourceStore->hasFile("/brushes/example3.txt"));
+            && man->m_resourceStore->hasFile("/brushes/example2.txt")
+            && man->m_resourceStore->hasFile("/brushes/example3.txt"));
     man->finalize();
 
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
 
     QVERIFY(man->open("/brushes/example.txt"));
-    QCOMPARE(man->size(),file.size());
+    QCOMPARE(man->size(), file.size());
     man->close();
-    
+
     QVERIFY(man->open("/brushes/example2.txt"));
-    QCOMPARE(man->size(),file2.size());
+    QCOMPARE(man->size(), file2.size());
     man->close();
 
     QVERIFY(man->open("/brushes/example3.txt"));
-    QCOMPARE(man->size(),file3.size());
-    man->close();  
+    QCOMPARE(man->size(), file3.size());
+    man->close();
 
     file.close();
     file2.close();
     file3.close();
 
-    QFile::remove(env+"/brushes/example.txt");
-    QFile::remove(env+"/brushes/example2.txt");
-    QFile::remove(env+"/brushes/example3.txt");
-    dir.rmdir(env+"/brushes");
-    QFile::remove(env+"/monPaquet.zip");
+    QFile::remove(env + "/brushes/example.txt");
+    QFile::remove(env + "/brushes/example2.txt");
+    QFile::remove(env + "/brushes/example3.txt");
+    dir.rmdir(env + "/brushes");
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::addManiMetaTest()
 {
-    KoXmlResourceBundleManifest* mani=new KoXmlResourceBundleManifest();
-    KoXmlResourceBundleMeta* meta=new KoXmlResourceBundleMeta();
+    KoXmlResourceBundleManifest* mani = new KoXmlResourceBundleManifest();
+    KoXmlResourceBundleMeta* meta = new KoXmlResourceBundleMeta();
 
-    meta->addTag("name","NameExample",true);
+    meta->addTag("name", "NameExample", true);
     mani->install();
 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
-    man->addManiMeta(mani,meta);
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
+    man->addManiMeta(mani, meta);
     QVERIFY(man->m_resourceStore->hasFile("manifest.xml")
-        && man->m_resourceStore->hasFile("meta.xml"));
+            && man->m_resourceStore->hasFile("meta.xml"));
     man->finalize();
 
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     QVERIFY(man->open("/manifest.xml"));
-    QCOMPARE((int)man->size(),mani->toByteArray().size());
+    QCOMPARE((int)man->size(), mani->toByteArray().size());
     man->close();
 
     QVERIFY(man->open("/meta.xml"));
-    QCOMPARE((int)man->size(),meta->toByteArray().size());
+    QCOMPARE((int)man->size(), meta->toByteArray().size());
     man->close();
 
-    QFile::remove(env+"/monPaquet.zip");   
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::getFileTest()
 {
-    QFile::remove(env+"/monPaquet.zip"); 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
     man->open("test.txt");
     man->write("Ceci est un fichier de test");
     man->close();
     man->finalize();
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     man->open("test.txt");
-    QByteArray val=man->read(man->size());
+    QByteArray val = man->read(man->size());
     man->close();
-    QCOMPARE(man->getFile("test.txt")->readAll(),val);
-    QFile::remove(env+"/monPaquet.zip"); 
+    QCOMPARE(man->getFile("test.txt")->readAll(), val);
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::getFileDataTest()
 {
-    QFile::remove(env+"/monPaquet.zip"); 
-    man=new KoResourceBundleManager(env,env+"/monPaquet.zip");
+    QFile::remove(env + "/monPaquet.zip");
+    man = new KoResourceBundleManager(env, env + "/monPaquet.zip");
     man->open("test.txt");
     man->write("Ceci est un fichier de test");
     man->close();
     man->finalize();
-    man->setReadPack(env+"/monPaquet.zip");
+    man->setReadPack(env + "/monPaquet.zip");
     man->open("test.txt");
-    QByteArray val=man->read(man->size());
+    QByteArray val = man->read(man->size());
     man->close();
-    QCOMPARE(man->getFileData("test.txt"),val);
-    QFile::remove(env+"/monPaquet.zip"); 
+    QCOMPARE(man->getFileData("test.txt"), val);
+    QFile::remove(env + "/monPaquet.zip");
 }
 
 void KoResourceBundleManager_test::cleanupTestCase()
 {
     QStringList filters;
-    filters<<"monPaquet.*.new";
+    filters << "monPaquet.*.new";
 
     QDir dir(env);
     dir.setNameFilters(filters);
 
-    QStringList filesToBeRemoved=dir.entryList(dir.nameFilters(),QDir::Files);
+    QStringList filesToBeRemoved = dir.entryList(dir.nameFilters(), QDir::Files);
 
-    for(int i=0;i<filesToBeRemoved.size();i++) {
+    for (int i = 0; i < filesToBeRemoved.size(); i++) {
         dir.remove(filesToBeRemoved.at(i));
     }
 }

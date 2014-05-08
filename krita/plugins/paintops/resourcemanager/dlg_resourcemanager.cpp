@@ -27,7 +27,7 @@
 
 
 DlgResourceManager::DlgResourceManager(QWidget *parent)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     setCaption(i18n("Manage Resources"));
     setButtons(Ok);

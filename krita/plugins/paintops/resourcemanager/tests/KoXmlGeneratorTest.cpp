@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <iostream>
 #include "KoXmlGenerator.h"
-#include <QtTest/QTest>
+#include <QTest>
 using namespace std;
 
 void KoXmlGeneratorTest::ctorTest()

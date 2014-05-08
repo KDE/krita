@@ -24,8 +24,8 @@
 #include "KoResourceTaggingManager.h"
 #include <QFileDialog>
 #include "KoBundleCreationWidget.h"
-#include <QtCore/QProcessEnvironment>
-#include <QtGui/QMessageBox>
+#include <QProcessEnvironment>
+#include <QMessageBox>
 #include "KoTagChooserWidget.h"
 
 #include <iostream>

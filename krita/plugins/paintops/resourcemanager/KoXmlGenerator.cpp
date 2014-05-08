@@ -15,8 +15,8 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
+#include <QFile>
+#include <QTextStream>
 #include "KoXmlGenerator.h"
 #include <cstdlib>
 #include <iostream>

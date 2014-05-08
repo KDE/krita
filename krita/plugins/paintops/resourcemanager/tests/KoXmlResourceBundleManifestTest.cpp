@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <iostream>
 #include "KoXmlResourceBundleManifest.h"
-#include <QtTest/QTest>
+#include <QTest>
 using namespace std;
 
 void KoXmlResourceBundleManifestTest::ctorTest()

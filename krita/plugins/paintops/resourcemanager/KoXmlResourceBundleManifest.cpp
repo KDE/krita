@@ -15,7 +15,7 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "KoXmlResourceBundleManifest.h"
-#include <QtCore/QList>
+#include <QList>
 #include "KoPattern.h"
 #include "KoAbstractGradient.h"
 #include "KoResourceServerProvider.h"

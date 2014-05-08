@@ -3,8 +3,8 @@
 
 #include "KoXmlResourceBundleMeta.h"
 
-#include <QtCore/QProcessEnvironment>
-#include <QtCore/QFileInfo>
+#include <QProcessEnvironment>
+#include <QFileInfo>
 
 #include <iostream>
 using namespace std;

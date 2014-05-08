@@ -20,7 +20,7 @@
 
 #ifndef KOXMLGENERATORTEST_H
 #define KOXMLGENERATORTEST_H
-#include <QtTest/QTest>
+#include <QTest>
 #include <KoConfig.h>
 
 class KoXmlGeneratorTest: public QObject

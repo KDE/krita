@@ -18,10 +18,10 @@
 #ifndef KOXMLGENERATOR_H
 #define KOXMLGENERATOR_H
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
-#include <QtXml/QDomNodeList>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QDomNodeList>
 #include "krita_export.h"
 
 class QIODevice;

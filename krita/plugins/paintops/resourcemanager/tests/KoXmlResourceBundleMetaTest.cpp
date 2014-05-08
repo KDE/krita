@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <iostream>
 #include "KoXmlResourceBundleMeta.h"
-#include <QtTest/QTest>
+#include <QTest>
 using namespace std;
 
 void KoXmlResourceBundleMetaTest::ctorTest()

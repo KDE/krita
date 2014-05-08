@@ -26,9 +26,9 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
-#include <QtCore/QProcessEnvironment>
-#include <QtCore/QDate>
-#include <QtCore/QDir>
+#include <QProcessEnvironment>
+#include <QDate>
+#include <QDir>
 
 #include <iostream>
 using namespace std;

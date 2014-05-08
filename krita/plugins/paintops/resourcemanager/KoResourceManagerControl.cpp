@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 
 #include <QFileDialog>
-#include <QtCore/QProcessEnvironment>
+#include <QProcessEnvironment>
 #include <iostream>
 using namespace std;
 

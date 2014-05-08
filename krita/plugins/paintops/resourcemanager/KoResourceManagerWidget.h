@@ -20,10 +20,10 @@
 #ifndef KORESOURCEMANAGERWIDGET_H
 #define KORESOURCEMANAGERWIDGET_H
 
-#include <QtGui/QMainWindow>
-#include <QtCore/QModelIndex>
+#include <QMainWindow>
+#include <QModelIndex>
 #include <krita_export.h>
-#include <QtGui/QLabel>
+#include <QLabel>
 
 namespace Ui
 {

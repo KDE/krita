@@ -15,7 +15,7 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QList>
+#include <QList>
 #include "KoXmlResourceBundleMeta.h"
 
 KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QString xmlName):KoXmlGenerator(xmlName)

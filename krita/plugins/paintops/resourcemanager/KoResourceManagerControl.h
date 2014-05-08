@@ -21,7 +21,7 @@
 #define KORESOURCEMANAGERCONTROL_H
 
 #include "KoResourceBundle.h"
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;

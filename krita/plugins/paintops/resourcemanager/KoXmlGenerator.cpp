@@ -19,6 +19,7 @@
 #include <QTextStream>
 #include "KoXmlGenerator.h"
 
+#include <kis_assert.h>
 
 KoXmlGenerator::KoXmlGenerator(QString xmlFileName)
     : m_xmlDocument(xmlFileName)
@@ -30,9 +31,7 @@ KoXmlGenerator::KoXmlGenerator(QString xmlFileName)
 KoXmlGenerator::KoXmlGenerator(QByteArray data)
 {
     this->m_device = 0;
-    if (!m_xmlDocument.setContent(data)) {
-        exit(1);
-    } else {
+    if (m_xmlDocument.setContent(data)) {
         m_root = m_xmlDocument.documentElement();
     }
 }
@@ -41,17 +40,15 @@ KoXmlGenerator::KoXmlGenerator(QIODevice *device)
 {
     this->m_device = device;
 
-    if (!device->isOpen() && !device->open(QIODevice::ReadOnly)) {
-        exit(1);
+    if (!device->isOpen()) {
+        device->open(QIODevice::ReadOnly);
+        KIS_ASSERT_RECOVER_RETURN(device->isOpen());
     }
 
-    if (!m_xmlDocument.setContent(device)) {
-        device->close();
-        exit(1);
-    } else {
-        device->close();
+    if (m_xmlDocument.setContent(device)) {
         m_root = m_xmlDocument.documentElement();
     }
+    device->close();
 }
 
 KoXmlGenerator::~KoXmlGenerator()

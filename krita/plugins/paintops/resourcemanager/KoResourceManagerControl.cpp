@@ -48,8 +48,6 @@ KoResourceManagerControl::~KoResourceManagerControl()
 {
     delete m_meta;
     delete m_manifest;
-    delete ResourceBundleServerProvider::instance()->resourceBundleServer();
-
     for (int i = 0; i < m_modelsCount; i++) {
         delete m_modelList.at(i);
     }

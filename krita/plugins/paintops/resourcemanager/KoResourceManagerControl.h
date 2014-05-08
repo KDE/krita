@@ -26,7 +26,6 @@
 
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
-class KoResourceBundleManager;
 class KoResourceTableModel;
 
 class KoResourceManagerControl : public QObject

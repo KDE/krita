@@ -4,7 +4,6 @@
 #include <kdialog.h>
 
 class KoXmlResourceBundleMeta;
-class KoResourceManagerControl;
 
 namespace Ui
 {

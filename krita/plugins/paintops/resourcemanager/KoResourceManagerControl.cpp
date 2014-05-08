@@ -41,7 +41,7 @@ KoResourceManagerControl::KoResourceManagerControl(int nb)
     m_root = QProcessEnvironment::systemEnvironment().value("KDEDIRS");
 
     if (m_root.isEmpty()) {
-        exit(1);
+       return;
     }
 
     m_root = m_root.section(':', 0, 0);

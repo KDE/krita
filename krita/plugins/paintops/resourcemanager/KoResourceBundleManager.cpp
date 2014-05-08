@@ -100,11 +100,11 @@ void KoResourceBundleManager::addKFiles(QList<QString> pathList)
         QString currentFile = pathList.at(i);
         if (currentFile.contains("/" + bundleName + "/")) {
             if (!addKFileBundle(pathList.at(i))) {
-                exit(2);
+                continue;
             }
         } else {
             if (!addKFile(pathList.at(i))) {
-                exit(3);
+                continue;
             }
         }
     }
@@ -127,7 +127,7 @@ void KoResourceBundleManager::extractKFiles(QMap<QString, QString> pathList)
                 if (!m_resourceStore->extractFile(currentPath, targetPath)) {
                     qDebug() << currentPath << targetPath;
                     //TODO Supprimer le dossier créé
-                    exit(1);
+                    continue;
                 }
             }
         }
@@ -148,7 +148,7 @@ void KoResourceBundleManager::extractTempFiles(QList<QString> pathList)
                 QString dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
                 mkdir(dirPath.toUtf8().constData(), S_IRWXU | S_IRGRP | S_IXGRP);
                 if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                    exit(5);
+                    continue;
                 }
             }
         }
@@ -164,7 +164,7 @@ void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, 
         if (!firstBuild && !manifest->isInstalled()) {
             m_resourceStore = KoStore::createStore(m_packName, KoStore::Read, "", KoStore::Zip);
             if (m_resourceStore == NULL || m_resourceStore->bad()) {
-                exit(4);
+                return;
             } else {
                 extractTempFiles(fileList);
             }

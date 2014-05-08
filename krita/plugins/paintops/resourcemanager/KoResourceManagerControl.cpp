@@ -30,8 +30,6 @@
 #include "kis_paintop_preset.h"
 #include "kis_brush_server.h"
 
-#include <sys/stat.h>
-
 #include <QFileDialog>
 #include <QProcessEnvironment>
 
@@ -40,25 +38,9 @@
 KoResourceManagerControl::KoResourceManagerControl(int nb)
     : m_modelsCount(nb)
 {
-    m_root = QProcessEnvironment::systemEnvironment().value("KDEDIRS");
-
-    if (m_root.isEmpty()) {
-       return;
-    }
-
-    m_root = m_root.section(':', 0, 0);
-
-    if (m_root.at(m_root.size() - 1) != '/') {
-        m_root.append('/');
-    }
-
-    m_extractor = new KoResourceBundleManager(m_root + "share/apps/krita/");
-
     for (int i = 0; i < m_modelsCount; i++) {
         m_modelList.append(0);
     }
-
-    mkdir(QString(m_root + "share/apps/krita/temp/").toUtf8().constData(), S_IRWXU | S_IRGRP | S_IXGRP);
 
     filterResourceTypes(0);
 }
@@ -67,7 +49,6 @@ KoResourceManagerControl::~KoResourceManagerControl()
 {
     delete m_meta;
     delete m_manifest;
-    delete m_extractor;
     delete ResourceBundleServerProvider::instance()->resourceBundleServer();
 
     for (int i = 0; i < m_modelsCount; i++) {
@@ -107,7 +88,8 @@ bool KoResourceManagerControl::createPack(int type)
     if (selected.isEmpty()) {
         emit status("No resource selected for bundle creation...", 3000);
         return false;
-    } else {
+    }
+    else {
         emit status("Creating new bundle...");
 
         KoXmlResourceBundleMeta* newMeta = new KoXmlResourceBundleMeta();
@@ -117,8 +99,9 @@ bool KoResourceManagerControl::createPack(int type)
         if (bundleCreationWidget->exec() == 0 || newMeta == 0) {
             emit status("Creation cancelled", 3000);
             return false;
-        } else {
-            QString bundlePath = m_root + "share/apps/krita/bundles/" + newMeta->getPackName() + ".bundle";
+        }
+        else {
+            QString bundlePath = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + newMeta->getPackName() + ".bundle";
             KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
             bool isEmpty = true;
 
@@ -276,7 +259,7 @@ bool KoResourceManagerControl::remove(int type)
                 }
 
                 currentModel->removeResourceFile(currentResource, currentFileName);
-                QString delFilename = m_root + "share/apps/krita/temp/" + currentFileName.section('/', currentFileName.count('/'));
+                QString delFilename = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/temp/" + currentFileName.section('/', currentFileName.count('/'));
 
                 QFileInfo fileInfo(delFilename);
                 if (fileInfo.exists()) {
@@ -389,18 +372,17 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
             if (currentBundle) {
                 currentBundle->rename(newFilename, newName);
             } else {
-                if (newFilename.count('/') == m_root.count() + 5) {
-                    QString bundleName = newFilename.section('/', newFilename.count('/') - 1, newFilename.count('/') - 1);
-                    QString fileType = newFilename.section('/', newFilename.count('/') - 2, newFilename.count('/') - 2);
+                QString bundleName = newFilename.section('/', newFilename.count('/') - 1, newFilename.count('/') - 1);
+                QString fileType = newFilename.section('/', newFilename.count('/') - 2, newFilename.count('/') - 2);
 
-                    currentBundle = dynamic_cast<KoResourceBundle*>
-                                    (currentModel->getResourceFromFilename(bundleName.append(".bundle")));
+                currentBundle = dynamic_cast<KoResourceBundle*>
+                        (currentModel->getResourceFromFilename(bundleName.append(".bundle")));
 
-                    if (currentBundle) {
-                        currentBundle->removeFile(oldFilename);
-                        currentBundle->addFile(fileType, newFilename, tagList);
-                    }
+                if (currentBundle) {
+                    currentBundle->removeFile(oldFilename);
+                    currentBundle->addFile(fileType, newFilename, tagList);
                 }
+
             }
 
             for (int i = 0; i < tagList.size(); i++) {
@@ -552,7 +534,7 @@ bool KoResourceManagerControl::importBundle()
                        tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Archive Files (*.bundle)"));
 
     if (!filePath.isEmpty()) {
-        QFile::copy(filePath, m_root + "share/apps/krita/bundles/" + filePath.section('/', filePath.count('/')));
+        QFile::copy(filePath, ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation());
         emit status("Bundle imported successfully", 3000);
         return true;
     } else {

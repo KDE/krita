@@ -69,9 +69,7 @@ private slots:
 private:
     KoXmlResourceBundleMeta *m_meta;
     KoXmlResourceBundleManifest *m_manifest;
-    KoResourceBundleManager *m_extractor;
     QList<KoResourceTableModel*> m_modelList;
-    QString m_root;
     int m_modelsCount;
 
     enum {

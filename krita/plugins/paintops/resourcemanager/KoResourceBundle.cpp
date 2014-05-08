@@ -34,10 +34,10 @@
 #include <QBuffer>
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
-KoResourceBundle::KoResourceBundle(QString const& bundlePath)
-    : KoResource(bundlePath)
+KoResourceBundle::KoResourceBundle(QString const& fileName)
+    : KoResource(fileName)
 {
-    m_kritaPath = bundlePath.section('/', 0, bundlePath.count('/') - 2);
+    m_kritaPath = fileName.section('/', 0, fileName.count('/') - 2);
     if (!m_kritaPath.isEmpty() && m_kritaPath.at(m_kritaPath.size() - 1) != '/') {
         this->m_kritaPath.append("/");
     }
@@ -45,7 +45,7 @@ KoResourceBundle::KoResourceBundle(QString const& bundlePath)
     m_packName = QString();
     m_resourceStore = 0;
 
-    setName(bundlePath.section('/', bundlePath.count('/')));
+    setName(fileName.section('/', fileName.count('/')));
 }
 
 KoResourceBundle::~KoResourceBundle()

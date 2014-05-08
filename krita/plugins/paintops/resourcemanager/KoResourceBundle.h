@@ -38,7 +38,7 @@ public:
      * @brief KoResourceBundle : Ctor
      * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath);
+    KoResourceBundle(QString const& fileName);
 
     /**
      * @brief ~KoResourceBundle : Dtor

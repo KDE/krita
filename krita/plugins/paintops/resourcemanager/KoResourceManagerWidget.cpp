@@ -28,9 +28,6 @@
 #include <QMessageBox>
 #include "KoTagChooserWidget.h"
 
-#include <iostream>
-using namespace std;
-
 //TODO KoResourceManagerControl constructor parameter is the number of tabs of the Resource Manager
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent)
     : QMainWindow(parent)

@@ -164,18 +164,6 @@ protected:
 private:
 
     /**
-     * @brief setReadPack : Opens the store in Read mode
-     * @param packName the name of the package to be opened
-     */
-    void setReadPack(QString m_packName);
-
-    /**
-     * @brief setWritePack : Opens the store in Write mode
-     * @param packName the name of the package to be opened
-     */
-    void setWritePack(QString m_packName);
-
-    /**
      * @brief setKritaPath : Set the path of Krita resources
      * @param kritaPath
      */

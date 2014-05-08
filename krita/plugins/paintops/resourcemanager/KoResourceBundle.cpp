@@ -66,7 +66,11 @@ QImage KoResourceBundle::image() const
 
 bool KoResourceBundle::load()
 {
-    setReadPack(filename());
+    if (filename().isEmpty()) return false;
+
+    m_resourceStore = KoStore::createStore(filename(), KoStore::Read, "", KoStore::Zip);
+    m_packName = filename();
+
     if (m_resourceStore->bad()) {
         m_manifest = new KoXmlResourceBundleManifest();
         m_meta = new KoXmlResourceBundleMeta();
@@ -250,22 +254,6 @@ QString KoResourceBundle::getCreated()
 QString KoResourceBundle::getUpdated()
 {
     return m_meta->getValue("updated");
-}
-
-void KoResourceBundle::setReadPack(QString packName)
-{
-    if (!packName.isEmpty()) {
-        m_resourceStore = KoStore::createStore(packName, KoStore::Read, "", KoStore::Zip);
-        this->m_packName = packName;
-    }
-}
-
-void KoResourceBundle::setWritePack(QString packName)
-{
-    if (!packName.isEmpty()) {
-        m_resourceStore = KoStore::createStore(packName, KoStore::Write, "", KoStore::Zip);
-        this->m_packName = packName;
-    }
 }
 
 void KoResourceBundle::setKritaPath(QString kritaPath)

@@ -126,11 +126,6 @@ public:
     QDomNode searchValue(QDomNodeList tagList,QString attName,QString attValue);
 
     /**
-     * @brief show : Show the XML data of the document in cout.
-     */
-    void show();
-
-    /**
      * @brief toString
      * @return the string containing the whole XML data of the document.
      */

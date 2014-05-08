@@ -18,9 +18,6 @@
 #include <QFile>
 #include <QTextStream>
 #include "KoXmlGenerator.h"
-#include <cstdlib>
-#include <iostream>
-using namespace std;
 
 
 KoXmlGenerator::KoXmlGenerator(QString xmlFileName):m_xmlDocument(xmlFileName)
@@ -189,10 +186,6 @@ QDomNode KoXmlGenerator::searchValue(QDomNodeList tagList,QString attName,QStrin
     return QDomNode();
 }
 
-void KoXmlGenerator::show()
-{
-    cout<<qPrintable(toString())<<endl;
-}
 
 QString KoXmlGenerator::toString()
 {

@@ -6,8 +6,6 @@
 #include <QProcessEnvironment>
 #include <QFileInfo>
 
-#include <iostream>
-using namespace std;
 
 KoBundleCreationWidget::KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent)
     : QDialog(parent)

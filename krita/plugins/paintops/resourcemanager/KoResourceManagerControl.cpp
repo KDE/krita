@@ -34,9 +34,6 @@
 
 #include <QFileDialog>
 #include <QProcessEnvironment>
-#include <iostream>
-using namespace std;
-
 
 KoResourceManagerControl::KoResourceManagerControl(int nb)
     : m_modelsCount(nb)

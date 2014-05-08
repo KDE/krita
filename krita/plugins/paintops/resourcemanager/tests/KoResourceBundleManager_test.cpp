@@ -24,8 +24,7 @@
 #include <QTest>
 #include <QFile>
 #include <qtest_kde.h>
-#include <iostream>
-using namespace std;
+
 
 void KoResourceBundleManager_test::initTestCase()
 {

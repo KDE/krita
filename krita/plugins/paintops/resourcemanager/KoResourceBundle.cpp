@@ -29,10 +29,7 @@
 #include <QProcessEnvironment>
 #include <QDate>
 #include <QDir>
-
-#include <iostream>
-using namespace std;
-
+#include <QDebug>
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& bundlePath)
@@ -124,7 +121,7 @@ void KoResourceBundle::uninstall()
 
     for (int i = 0; i < directoryList.size(); i++) {
         if (!KoResourceBundleManager::removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
-            cerr << "Error : Couldn't delete folder : " << qPrintable(dirPath) << endl;
+            qWarning() << "Error : Couldn't delete folder : " << dirPath;
         }
     }
 

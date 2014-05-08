@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QAbstractItemModel>
+#include <QDebug>
+
 #include "KoResourceTableModel.h"
 #include "KoResourceBundle.h"
-#include <QAbstractItemModel>
-#include <klocale.h>
 
-#include <iostream>
-using namespace std;
+#include <klocale.h>
 
 KoResourceTableModel::KoResourceTableModel(QList<QSharedPointer<KoAbstractResourceServerAdapter> > resourceAdapterList, int t, QObject *parent)
     : KoResourceModelBase(parent)
@@ -191,8 +191,7 @@ QSharedPointer<KoAbstractResourceServerAdapter> KoResourceTableModel::getResourc
             }
         }
     }
-    cout << "erreur" << endl;
-    cout << "--------" << endl;
+    qDebug() << "Error!";
     return res;
 }
 
@@ -328,11 +327,10 @@ QModelIndex KoResourceTableModel::indexFromResource(KoResource* resource) const
     return index(m_resources.indexOf(resource), 1);
 }
 
-//TODO Supprimer le cout une fois tous les pbs réglés.
 QStringList KoResourceTableModel::assignedTagsList(KoResource *resource) const
 {
     if (!getResourceAdapter(resource))
-        cout << qPrintable(resource->filename()) << endl;
+        qDebug() << resource->filename();
     return getResourceAdapter(resource)->assignedTagsList(resource);
 }
 

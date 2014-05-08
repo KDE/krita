@@ -22,10 +22,9 @@
 #include <qtest_kde.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <iostream>
 #include "KoXmlGenerator.h"
 #include <QTest>
-using namespace std;
+
 
 void KoXmlGeneratorTest::ctorTest()
 {

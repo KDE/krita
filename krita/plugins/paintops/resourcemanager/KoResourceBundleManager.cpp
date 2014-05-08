@@ -21,11 +21,9 @@
 #include <QImage>
 #include <QBuffer>
 #include <QDir>
+#include <QDebug>
 
 #include <sys/stat.h>
-
-#include <iostream>
-using namespace std;
 
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath, QString pName, KoStore::Mode mode)
@@ -127,8 +125,7 @@ void KoResourceBundleManager::extractKFiles(QMap<QString, QString> pathList)
                 dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
                 mkdir(dirPath.toUtf8().constData(), S_IRWXU | S_IRGRP | S_IXGRP);
                 if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                    cout << qPrintable(currentPath) << endl;
-                    cout << qPrintable(targetPath) << endl;
+                    qDebug() << currentPath << targetPath;
                     //TODO Supprimer le dossier créé
                     exit(1);
                 }

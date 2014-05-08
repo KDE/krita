@@ -23,10 +23,9 @@
 #include <qtest_kde.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <iostream>
 #include "KoXmlResourceBundleManifest.h"
 #include <QTest>
-using namespace std;
+
 
 void KoXmlResourceBundleManifestTest::ctorTest()
 {

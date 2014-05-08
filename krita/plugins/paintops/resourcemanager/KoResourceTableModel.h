@@ -26,9 +26,6 @@
 #include <QItemDelegate>
 #include <QLineEdit>
 
-#include <iostream>
-using namespace std;
-
 class KoResource;
 
 class KoResourceTableDelegate : public QItemDelegate

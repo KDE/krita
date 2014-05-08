@@ -17,16 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QFileDialog>
+#include <QProcessEnvironment>
+#include <QMessageBox>
+
 #include "ui_KoResourceManagerWidget.h"
 #include "KoResourceManagerWidget.h"
 #include "KoResourceManagerControl.h"
 #include "KoResourceTableModel.h"
 #include "KoResourceTaggingManager.h"
-#include <QFileDialog>
 #include "KoBundleCreationWidget.h"
-#include <QProcessEnvironment>
-#include <QMessageBox>
 #include "KoTagChooserWidget.h"
+#include <KoIcon.h>
 
 //TODO KoResourceManagerControl constructor parameter is the number of tabs of the Resource Manager
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent)
@@ -44,13 +46,11 @@ KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent)
     initializeFilterMenu();
     refreshTaggingManager();
 
-    QString kritaPath = QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':', 0, 0);
-
-    m_ui->pushButton_2->setIcon(QIcon(kritaPath + "/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-add.svg"));
-    m_ui->pushButton_9->setIcon(QIcon(kritaPath + "/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-delete.svg"));
-    m_ui->toolButton->setIcon(QIcon(kritaPath + "/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-edit.svg"));
-    m_ui->toolButton_2->setIcon(QIcon(kritaPath + "/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-paint.svg"));
-    m_ui->pushButton_12->setIcon(QIcon(kritaPath + "/lib/x86_64-linux-gnu/calligra/imports/org/krita/sketch/images/svg/icon-apply.svg"));
+    m_ui->pushButton_2->setIcon(koIcon("list-add"));
+    m_ui->pushButton_9->setIcon(koIcon("edit-delete"));
+    m_ui->toolButton->setIcon(koIcon("document-edit"));
+    m_ui->toolButton_2->setIcon(koIcon("document-new"));
+    m_ui->pushButton_12->setIcon(koIcon("dialog-ok"));
 
     m_ui->tabWidget->removeTab(2);
     m_ui->tabWidget->removeTab(2);

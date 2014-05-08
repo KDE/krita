@@ -219,7 +219,10 @@ QString KisSketchView::fileTitle() const
 
 bool KisSketchView::isModified() const
 {
-    return d->doc->isModified();
+    if(d->doc)
+        return d->doc->isModified();
+
+    return false;
 }
 
 void KisSketchView::setFile(const QString& file)

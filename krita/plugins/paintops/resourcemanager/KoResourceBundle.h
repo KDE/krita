@@ -203,13 +203,6 @@ private:
     void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
 
     /**
-     * @brief getFile
-     * @param fileName the path of the file in the store
-     * @return a QIODevice containing the file in the store
-     */
-    QIODevice* getFile(const QString &fileName);
-
-    /**
      * @brief removeDir : Remove the chosen directory
      * @param dirName the name of the directory to be removed
      * @return true if succeed, false otherwise.

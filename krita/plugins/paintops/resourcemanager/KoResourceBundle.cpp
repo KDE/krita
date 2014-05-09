@@ -71,21 +71,34 @@ QImage KoResourceBundle::image() const
 bool KoResourceBundle::load()
 {
     if (filename().isEmpty()) return false;
-
-    m_resourceStore = KoStore::createStore(filename(), KoStore::Read, "", KoStore::Zip);
-    m_packName = filename();
+    m_resourceStore = KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle");
 
     if (m_resourceStore->bad()) {
         m_installed = false;
+        setValid(false);
+        return false;
+
     } else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
         //A optimiser si possible
         delete m_manifest;
         delete m_meta;
-        m_manifest = new KoXmlResourceBundleManifest(getFile("manifest.xml"));
-        m_meta = new KoXmlResourceBundleMeta(getFile("meta.xml"));
-        m_thumbnail.load(getFile("thumbnail.jpg"), "JPG");
-        m_resourceStore->close();
+
+        if (m_resourceStore->open("manifest.xml")) {
+            m_manifest = new KoXmlResourceBundleManifest(m_resourceStore->device());
+            m_resourceStore->close();
+        }
+
+        if (m_resourceStore->open("meta.xml")) {
+            m_meta = new KoXmlResourceBundleMeta(m_resourceStore->device());
+            m_resourceStore->close();
+        }
+
+        if (m_resourceStore->open("thumbnail.png")) {
+            m_thumbnail.load(m_resourceStore->device(), "PNG");
+            m_resourceStore->close();
+        }
+
         m_installed = m_manifest->isInstalled();
         setValid(true);
     }
@@ -378,8 +391,8 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
                 while (m_resourceStore->leaveDirectory());
                 QByteArray byteArray;
                 QBuffer buffer(&byteArray);
-                thumbnail.save(&buffer, "JPG");
-                m_resourceStore->open("thumbnail.jpg");
+                thumbnail.save(&buffer, "PNG");
+                m_resourceStore->open("thumbnail.png");
                 m_resourceStore->write(byteArray);
                 m_resourceStore->close();
             }
@@ -400,19 +413,6 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
             }
         }
     }
-}
-
-QIODevice* KoResourceBundle::getFile(const QString &fileName)
-{
-    if (m_resourceStore->hasFile(fileName)) {
-        if (m_resourceStore->isOpen()) {
-            m_resourceStore->close();
-        }
-        m_resourceStore->open(fileName);
-        return m_resourceStore->device();
-    }
-
-    return 0;
 }
 
 bool KoResourceBundle::removeDir(const QString & dirName)

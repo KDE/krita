@@ -32,6 +32,8 @@
 #include <QDir>
 #include <QDebug>
 #include <QBuffer>
+#include <QCryptographicHash>
+#include <QByteArray>
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& fileName)
@@ -227,7 +229,14 @@ void KoResourceBundle::setThumbnail(QString filename)
 
 QByteArray KoResourceBundle::generateMD5() const
 {
-    Q_ASSERT("Implement this!");
+    QFile f(filename());
+    if (f.exists()) {
+        f.open(QFile::ReadOnly);
+        QByteArray ba = f.readAll();
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
     return QByteArray();
 }
 

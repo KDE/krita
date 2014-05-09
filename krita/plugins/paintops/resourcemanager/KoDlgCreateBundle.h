@@ -5,16 +5,16 @@
 
 namespace Ui
 {
-class KoBundleCreationWidget;
+class WdgDlgCreateBundle;
 }
 
-class KoBundleCreationWidget : public KDialog
+class KoDlgCreateBundle : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit KoBundleCreationWidget(QWidget *parent = 0);
-    ~KoBundleCreationWidget();
+    explicit KoDlgCreateBundle(QWidget *parent = 0);
+    ~KoDlgCreateBundle();
 
     QString bundleName() const;
     QString authorName() const;
@@ -29,7 +29,7 @@ private slots:
 
 private:
     QWidget *m_page;
-    Ui::KoBundleCreationWidget *m_ui;
+    Ui::WdgDlgCreateBundle *m_ui;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

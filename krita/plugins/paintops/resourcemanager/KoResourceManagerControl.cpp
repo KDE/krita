@@ -20,7 +20,7 @@
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoResourceTableModel.h"
-#include "KoBundleCreationWidget.h"
+#include "KoDlgCreateBundle.h"
 
 #include "KoResourceServerProvider.h"
 #include "kis_resource_server_provider.h"
@@ -86,20 +86,20 @@ bool KoResourceManagerControl::createPack(int type)
     else {
         emit status("Creating new bundle...");
 
-        KoBundleCreationWidget bundleCreationWidget;
-        if (bundleCreationWidget.exec() != QDialog::Accepted) {
+        KoDlgCreateBundle dlgCreateBundle;
+        if (dlgCreateBundle.exec() != QDialog::Accepted) {
             emit status("Creation cancelled", 3000);
             return false;
         }
-        QString bundlePath = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + bundleCreationWidget.bundleName() + ".bundle";
+        QString bundlePath = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + dlgCreateBundle.bundleName() + ".bundle";
         KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
         bool isEmpty = true;
-        newBundle->addMeta("name", bundleCreationWidget.bundleName());
-        newBundle->addMeta("author", bundleCreationWidget.authorName());
-        newBundle->addMeta("email", bundleCreationWidget.email());
-        newBundle->addMeta("license", bundleCreationWidget.license());
-        newBundle->addMeta("website", bundleCreationWidget.website());
-        newBundle->addMeta("description", bundleCreationWidget.description());
+        newBundle->addMeta("name", dlgCreateBundle.bundleName());
+        newBundle->addMeta("author", dlgCreateBundle.authorName());
+        newBundle->addMeta("email", dlgCreateBundle.email());
+        newBundle->addMeta("license", dlgCreateBundle.license());
+        newBundle->addMeta("website", dlgCreateBundle.website());
+        newBundle->addMeta("description", dlgCreateBundle.description());
 
         for (int i = 0; i < selected.size(); i++) {
             QString currentFileName = selected.at(i);

@@ -9,12 +9,12 @@ set(kritaresourcemanager_PART_SRCS
     KoResourceManagerWidget.cpp
     KoResourceManagerControl.cpp
     KoResourceTableModel.cpp
-    KoBundleCreationWidget.cpp
+    KoDlgCreateBundle.cpp
 )
 
 kde4_add_ui_files(kritaresourcemanager_PART_SRCS
     KoResourceManagerWidget.ui
-    KoBundleCreationWidget.ui
+    wdg_dlgcreatebundle.ui 
 )
 
 kde4_add_plugin(kritaresourcemanager ${kritaresourcemanager_PART_SRCS})

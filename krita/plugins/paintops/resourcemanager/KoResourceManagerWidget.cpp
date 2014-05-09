@@ -29,7 +29,7 @@
 #include "KoResourceManagerControl.h"
 #include "KoResourceTableModel.h"
 #include "KoResourceTaggingManager.h"
-#include "KoBundleCreationWidget.h"
+#include "KoDlgCreateBundle.h"
 #include "KoTagChooserWidget.h"
 #include <KoIcon.h>
 

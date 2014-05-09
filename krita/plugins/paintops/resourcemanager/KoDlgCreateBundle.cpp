@@ -1,5 +1,6 @@
-#include "KoBundleCreationWidget.h"
-#include "ui_KoBundleCreationWidget.h"
+#include "KoDlgCreateBundle.h"
+
+#include "ui_wdg_dlgcreatebundle.h"
 
 #include "KoXmlResourceBundleMeta.h"
 #include <KoDocumentInfo.h>
@@ -12,9 +13,9 @@
 
 #include <resourcemanager.h>
 
-KoBundleCreationWidget::KoBundleCreationWidget(QWidget *parent)
+KoDlgCreateBundle::KoDlgCreateBundle(QWidget *parent)
     : KDialog(parent)
-    , m_ui(new Ui::KoBundleCreationWidget)
+    , m_ui(new Ui::WdgDlgCreateBundle)
 {
     m_page = new QWidget();
     m_ui->setupUi(m_page);
@@ -34,37 +35,37 @@ KoBundleCreationWidget::KoBundleCreationWidget(QWidget *parent)
     m_ui->editLicense->setText(cfg.readEntry<QString>("BunleLicense", "CC-BY-SA"));
 }
 
-KoBundleCreationWidget::~KoBundleCreationWidget()
+KoDlgCreateBundle::~KoDlgCreateBundle()
 {
     delete m_ui;
 }
 
-QString KoBundleCreationWidget::bundleName() const
+QString KoDlgCreateBundle::bundleName() const
 {
     return m_ui->editBundleName->text().replace(" ", "_");
 }
 
-QString KoBundleCreationWidget::authorName() const
+QString KoDlgCreateBundle::authorName() const
 {
     return m_ui->editAuthor->text();
 }
 
-QString KoBundleCreationWidget::email() const
+QString KoDlgCreateBundle::email() const
 {
     return m_ui->editEmail->text();
 }
 
-QString KoBundleCreationWidget::website() const
+QString KoDlgCreateBundle::website() const
 {
     return m_ui->editWebsite->text();
 }
 
-QString KoBundleCreationWidget::license() const
+QString KoDlgCreateBundle::license() const
 {
     return m_ui->editLicense->text();
 }
 
-QString KoBundleCreationWidget::description() const
+QString KoDlgCreateBundle::description() const
 {
     return m_ui->editDescription->document()->toPlainText();
 }
@@ -72,7 +73,7 @@ QString KoBundleCreationWidget::description() const
 
 //TODO Vérifier la présence de caractères invalides dans le nom du paquet (exemple : *"')
 //Même s'ils semblent acceptés par le système
-void KoBundleCreationWidget::accept()
+void KoDlgCreateBundle::accept()
 {
     QString name = m_ui->editBundleName->text().remove(" ");
 

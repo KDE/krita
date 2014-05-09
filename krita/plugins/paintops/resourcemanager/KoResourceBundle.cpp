@@ -37,7 +37,9 @@
 
 //TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& fileName)
-    : KoResource(fileName)
+    : KoResource(fileName)\
+    , m_manifest(new KoXmlResourceBundleManifest())
+    , m_meta(new KoXmlResourceBundleMeta())
 {
     m_kritaPath = fileName.section('/', 0, fileName.count('/') - 2);
     if (!m_kritaPath.isEmpty() && m_kritaPath.at(m_kritaPath.size() - 1) != '/') {
@@ -74,12 +76,12 @@ bool KoResourceBundle::load()
     m_packName = filename();
 
     if (m_resourceStore->bad()) {
-        m_manifest = new KoXmlResourceBundleManifest();
-        m_meta = new KoXmlResourceBundleMeta();
         m_installed = false;
     } else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
         //A optimiser si possible
+        delete m_manifest;
+        delete m_meta;
         m_manifest = new KoXmlResourceBundleManifest(getFile("manifest.xml"));
         m_meta = new KoXmlResourceBundleMeta(getFile("meta.xml"));
         m_thumbnail.load(getFile("thumbnail.jpg"), "JPG");

@@ -3,8 +3,6 @@
 
 #include <kdialog.h>
 
-class KoXmlResourceBundleMeta;
-
 namespace Ui
 {
 class KoBundleCreationWidget;
@@ -15,19 +13,23 @@ class KoBundleCreationWidget : public KDialog
     Q_OBJECT
 
 public:
-    explicit KoBundleCreationWidget(KoXmlResourceBundleMeta* m_newMeta, QWidget *parent = 0);
+    explicit KoBundleCreationWidget(QWidget *parent = 0);
     ~KoBundleCreationWidget();
 
-signals:
-    void status(QString text, int timeout = 0);
+    QString bundleName() const;
+    QString authorName() const;
+    QString email() const;
+    QString website() const;
+    QString license() const;
+    QString description() const;
 
 private slots:
-    void createBundle();
+
+    void accept();
 
 private:
     QWidget *m_page;
     Ui::KoBundleCreationWidget *m_ui;
-    KoXmlResourceBundleMeta *m_newMeta;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

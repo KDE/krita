@@ -29,7 +29,17 @@ private:
      * @description Allows to sort correctly the XML document.
      * @details Other means all other values that are not listed before.
      */
-    enum TagEnum {Name = 0, Filename, Author, Created, License, Updated, Description, Website, Tag, Other};
+    enum TagEnum {Name = 0,
+                  Filename,
+                  Author,
+                  Created,
+                  License,
+                  Updated,
+                  Description,
+                  Website,
+                  Tag,
+                  Email,
+                  Other};
 
 public:
     /**

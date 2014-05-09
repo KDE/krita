@@ -57,6 +57,8 @@ KoXmlResourceBundleMeta::TagEnum KoXmlResourceBundleMeta::getTagEnumValue(QStrin
         return Filename;
     } else if (tagName == "author") {
         return Author;
+    } else if (tagName == "email") {
+        return Email;
     } else if (tagName == "created") {
         return Created;
     } else if (tagName == "license") {

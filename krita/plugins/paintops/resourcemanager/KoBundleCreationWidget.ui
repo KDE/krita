@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="bundleName">
      <property name="text">
-      <string>Bundle Name </string>
+      <string>Bundle Name:</string>
      </property>
     </widget>
    </item>
@@ -36,7 +36,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="author">
      <property name="text">
-      <string>Author</string>
+      <string>Author:</string>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
@@ -53,43 +53,53 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="website">
      <property name="text">
-      <string>Website</string>
+      <string>Website:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="4" column="1">
     <widget class="QLineEdit" name="editWebsite">
      <property name="text">
-      <string/>
+      <string>http://</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="license">
      <property name="text">
-      <string>License</string>
+      <string>License:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="5" column="1">
     <widget class="QLineEdit" name="editLicense">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="description">
      <property name="text">
-      <string>Description</string>
+      <string>Description:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="6" column="1">
     <widget class="QPlainTextEdit" name="editDescription"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="editEmail"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Email:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either 
+   License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public 
+   You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -29,14 +29,14 @@ private:
      * @description Allows to sort correctly the XML document.
      * @details Other means all other values that are not listed before.
      */
-    enum TagEnum {Name=0, Filename, Author, Created, License, Updated, Description, Website, Tag, Other};
+    enum TagEnum {Name = 0, Filename, Author, Created, License, Updated, Description, Website, Tag, Other};
 
 public:
     /**
      * @brief KoXmlResourceBundleMeta : Ctor
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlResourceBundleMeta(QString xmlName="meta");
+    KoXmlResourceBundleMeta(QString xmlName = "meta");
 
     /**
      * @brief KoXmlResourceBundleMeta : Ctor
@@ -48,7 +48,7 @@ public:
      * @brief KoXmlResourceBundleMeta
      * @param device the device associated to Xml data
      */
-    KoXmlResourceBundleMeta(QIODevice *device);
+    KoXmlResourceBundleMeta(QIODevice *m_device);
 
     /**
      * @brief ~KoXmlResourceBundleMeta : Dtor
@@ -74,13 +74,15 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    QDomElement addTag(QString tagName,QString textValue="",bool empty=false);
+    QDomElement addTag(QString tagName, QString textValue = "", bool empty = false);
 
     /**
      * @brief addTags : Add all the resource tags in the list if necessary
      * @param list the list of resource tags to be added
      */
     void addTags(QList<QString> list);
+
+    QList<QString> getTagsList();
 
     /**
      * @brief getPackName
@@ -90,7 +92,7 @@ public:
 
     QString getPackFileName();
 
-    void setMeta(QString name="", QString author="", QString license="", QString website="", QString description="");
+    void setMeta(QString name = "", QString author = "", QString license = "", QString website = "", QString description = "");
 };
 
 

@@ -63,11 +63,6 @@ public:
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
-
-
-    QImage image() const;
-
-    void setImage(QImage image);
     
     bool removable() const {
         return true;
@@ -77,7 +72,13 @@ public:
         return ".kpp";
     }
 
+protected:
+
+    virtual QByteArray generateMD5() const;
+
 private:
+
+    bool save(QIODevice *io) const;
 
     struct Private;
     Private * const m_d;

@@ -189,24 +189,28 @@ KisLayerBox::KisLayerBox()
     m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_removeAction->setObjectName("remove_layer");
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
     m_actions.append(m_removeAction);
 
     KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_left");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLeftClicked()));
     m_actions.append(action);
 
     action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_right");
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
     m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_propertiesAction->setObjectName("layer_properties");
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
     m_actions.append(m_propertiesAction);
 
@@ -223,6 +227,7 @@ KisLayerBox::KisLayerBox()
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
     m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_selectOpaque->setObjectName(""); // no name to avoid addition to the action collection
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
@@ -324,8 +329,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->addAction(action);
+            m_canvas->view()->actionManager()->
+                addAction(action->objectName(),
+                          action,
+                          actionCollection);
         }
 
         connectActionToButton(m_wdgLayerBox->bnAdd, "add_new_paint_layer");
@@ -350,8 +359,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 void KisLayerBox::unsetCanvas()
 {
     if (m_canvas) {
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->takeAction(action);
+            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
         }
         m_newLayerMenu->clear();
     }

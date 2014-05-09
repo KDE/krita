@@ -37,8 +37,7 @@ public:
     virtual ~KisActionManager();
 
     void addAction(const QString& name, KisAction* action, KActionCollection* actionCollection);
-    void addAction(KisAction* action);
-    void takeAction(KisAction* action);
+    void takeAction(KisAction* action, KActionCollection *actionCollection);
 
     KisAction *actionByName(const QString &name) const;
 

@@ -243,8 +243,8 @@ void KisTextureOption::resetGUI(KoResource* res)
     KoPattern *pattern = static_cast<KoPattern *>(res);
     if (!pattern) return;
 
-    m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
-    m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
+    m_optionWidget->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
+    m_optionWidget->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
 }
 
 void KisTextureProperties::recalculateMask()
@@ -253,7 +253,7 @@ void KisTextureProperties::recalculateMask()
 
     m_mask = 0;
 
-    QImage mask = pattern->image();
+    QImage mask = pattern->pattern();
 
     if (mask.format() != QImage::Format_RGB32 ||
             mask.format() != QImage::Format_ARGB32) {

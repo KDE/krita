@@ -31,6 +31,8 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QString>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -360,9 +362,9 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
 
     // filename - filename of the file , e.g. test.abr
     // name - test_number_of_the_brush, e.g test_1, test_2
-    KisAbrBrush* abrBrush = new KisAbrBrush(name);
+    KisAbrBrush* abrBrush = new KisAbrBrush(name, md5());
 
-    abrBrush->setImage(convertToQImage(buffer, width, height));
+    abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
     // XXX: call extra setters on abrBrush for other options of ABR brushes
     abrBrush->setValid(true);
     abrBrush->setName(name);
@@ -450,8 +452,8 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 rle_decode(abr, buffer, height);
             }
 
-            KisAbrBrush* abrBrush = new KisAbrBrush(name);
-            abrBrush->setImage(convertToQImage(buffer, width, height));
+            KisAbrBrush* abrBrush = new KisAbrBrush(name, md5());
+            abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
             abrBrush->setValid(true);
             abrBrush->setName(name);
@@ -504,7 +506,13 @@ bool KisAbrBrushCollection::load()
         warnKrita << "Can't open file " << filename();
         return false;
     }
-    QDataStream abr(&file);
+    QByteArray ba = file.readAll();
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    setMD5(md5.result());
+
+    QBuffer buf(&ba);
+    QDataStream abr(&buf);
 
     if (!abr_read_content(abr, &abr_hdr)) {
         warnKrita << "Error: cannot parse ABR file: " << filename();
@@ -537,12 +545,6 @@ bool KisAbrBrushCollection::load()
 
 bool KisAbrBrushCollection::save()
 {
-    return false;
-}
-
-bool KisAbrBrushCollection::saveToDevice(QIODevice* dev) const
-{
-    Q_UNUSED(dev);
     return false;
 }
 

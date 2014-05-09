@@ -451,7 +451,8 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
         connectCurrentCanvas();
         notifyZoomChanged();
     }
-
+#else
+    Q_UNUSED(useOpenGL)
 #endif
 
     updateCanvasWidgetImpl();

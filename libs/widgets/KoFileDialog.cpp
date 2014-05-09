@@ -301,7 +301,7 @@ QStringList KoFileDialog::urls()
 
 void KoFileDialog::filterSelected(const QString &filter)
 {
-    //"Windows BMP image ( *.bmp )";
+    // "Windows BMP image ( *.bmp )";
     int start = filter.lastIndexOf("*.") + 2;
     int end = filter.lastIndexOf(" )");
     int n = end - start;

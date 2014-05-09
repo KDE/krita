@@ -418,8 +418,24 @@ void KisCustomImageWidget::saveAsPredefined()
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
-    doubleWidth->setValue(doubleHeight->value());
+    double height = doubleHeight->value();
+    KoUnit widthUnit = m_widthUnit;
+    KoUnit heightUnit = m_heightUnit;
+
+    doubleHeight->blockSignals(true);
+    doubleWidth->blockSignals(true);
+    cmbWidthUnit->blockSignals(true);
+    cmbHeightUnit->blockSignals(true);
+
+    doubleWidth->setValue(height);
     doubleHeight->setValue(width);
+    cmbWidthUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
+    cmbHeightUnit->setCurrentIndex(m_widthUnit.indexInListForUi(KoUnit::ListAll));
+
+    doubleHeight->blockSignals(false);
+    doubleWidth->blockSignals(false);
+    cmbWidthUnit->blockSignals(false);
+    cmbHeightUnit->blockSignals(false);
 }
 
 void KisCustomImageWidget::switchPortraitLandscape()

@@ -1,36 +1,33 @@
 #ifndef KOBUNDLECREATIONWIDGET_H
 #define KOBUNDLECREATIONWIDGET_H
 
-#include <QDialog>
+#include <kdialog.h>
 
 class KoXmlResourceBundleMeta;
-class KoResourceManagerControl;
 
-namespace Ui {
+namespace Ui
+{
 class KoBundleCreationWidget;
 }
 
-class KoBundleCreationWidget : public QDialog
+class KoBundleCreationWidget : public KDialog
 {
     Q_OBJECT
-    
+
 public:
-    explicit KoBundleCreationWidget(KoXmlResourceBundleMeta* newMeta, QWidget *parent = 0);
+    explicit KoBundleCreationWidget(KoXmlResourceBundleMeta* m_newMeta, QWidget *parent = 0);
     ~KoBundleCreationWidget();
 
-    void initializeUI();
-
 signals:
-    void status(QString text,int timeout=0);
+    void status(QString text, int timeout = 0);
 
 private slots:
     void createBundle();
-    void showHide();
-    
+
 private:
-    Ui::KoBundleCreationWidget *ui;
-    KoXmlResourceBundleMeta *newMeta;
-    QString kritaPath;
+    QWidget *m_page;
+    Ui::KoBundleCreationWidget *m_ui;
+    KoXmlResourceBundleMeta *m_newMeta;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

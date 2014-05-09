@@ -50,9 +50,8 @@ protected:
     ToolType m_type;
 
     void updateArea();
-    virtual void paintRectangle(QPainter &gc, const QRect &viewRect);
-
-
+    virtual void paintRectangle(QPainter &gc, const QRectF &imageRect);
+    virtual QRectF createRect(const QPointF &start, const QPointF &end);
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

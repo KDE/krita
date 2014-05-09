@@ -135,4 +135,10 @@ QObject* Settings::customImageSettings() const
     return settings;
 }
 
+QString Settings::lastPreset() const
+{
+    KisConfig cfg;
+    return cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+}
+
 #include "Settings.moc"

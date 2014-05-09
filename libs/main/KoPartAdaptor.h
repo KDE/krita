@@ -125,6 +125,9 @@ public slots: // METHODS
     Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 
+signals:
+    
+    
 public:
 
 protected:

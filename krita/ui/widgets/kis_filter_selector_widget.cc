@@ -137,9 +137,9 @@ bool KisFilterSelectorWidget::isFilterGalleryVisible() const
     return d->uiFilterSelector.splitter->sizes()[0] > 0;
 }
 
-const QString KisFilterSelectorWidget::currentFilterName() const
+KisFilterSP KisFilterSelectorWidget::currentFilter() const
 {
-    return d->currentFilter->name();
+    return d->currentFilter;
 }
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)

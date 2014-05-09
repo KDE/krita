@@ -20,10 +20,14 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QBuffer>
+#include <QByteArray>
+#include <QCryptographicHash>
 
 #define TASKSET_VERSION 1
 
-TasksetResource::TasksetResource(const QString& filename): KoResource(filename)
+TasksetResource::TasksetResource(const QString& f)
+    : KoResource(f)
 {
 }
 
@@ -38,43 +42,31 @@ bool TasksetResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("Taskset");
-    root.setAttribute("name", name() );
-    root.setAttribute("version", TASKSET_VERSION);
-    foreach(const QString& action, m_actions) {
-        QDomElement element = doc.createElement("action");
-        element.appendChild(doc.createTextNode(action));
-        root.appendChild(element);
-    }
-    doc.appendChild(root);
-     
-    QTextStream textStream(&file);
-    doc.save(textStream, 4);
+    save(&file);
     file.close();
     return true;
 }
 
 bool TasksetResource::load()
-{    if (filename().isEmpty())
+{
+    QString fn = filename();
+    if (fn.isEmpty()) {
          return false;
+    }
  
-    QFile file(filename());
-     if (file.size() == 0) return false;
-
+    QFile file(fn);
+    if (file.size() == 0) return false;
     QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)) {
         return false;
+    }
     if (!doc.setContent(&file)) {
         file.close();
         return false;
     }
     file.close();
-
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
     QDomNode node = element.firstChild();   
     while (!node.isNull()) {
         QDomElement child = node.toElement();
@@ -85,11 +77,6 @@ bool TasksetResource::load()
     }
     setValid(true);
     return true;
-}
-
-QImage TasksetResource::image() const
-{
-    return KoResource::image();
 }
 
 QString TasksetResource::defaultFileExtension() const
@@ -105,6 +92,42 @@ void TasksetResource::setActionList(const QStringList actions)
 QStringList TasksetResource::actionList()
 {
     return m_actions;
+}
+
+QByteArray TasksetResource::generateMD5() const
+{
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    save(&buf);
+    buf.close();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
+
+}
+
+void TasksetResource::save(QIODevice *io) const
+{
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("Taskset");
+    root.setAttribute("name", name() );
+    root.setAttribute("version", TASKSET_VERSION);
+    foreach(const QString& action, m_actions) {
+        QDomElement element = doc.createElement("action");
+        element.appendChild(doc.createTextNode(action));
+        root.appendChild(element);
+    }
+    doc.appendChild(root);
+
+    QTextStream textStream(io);
+    doc.save(textStream, 4);
 }
 
 

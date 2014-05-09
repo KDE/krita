@@ -1,7 +1,5 @@
 /*
- *  dlg_resourcemanager.h -- part of KimageShop^WKrayon^WKrita
- *
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,35 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef DLG_RESOURCEMANAGER
-#define DLG_RESOURCEMANAGER
 
-#include <kdialog.h>
+#include <QSortFilterProxyModel>
 
-class WdgResourceManager;
-
-#include "ui_wdg_resourcemanager.h"
-
-class WdgResourceManager : public QWidget, public Ui::WdgResourceManager
+class KisGmicFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    WdgResourceManager(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
+    KisGmicFilterProxyModel (QObject *parent = 0);
+
+protected:
+    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
 };
-
-class DlgResourceManager: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-    DlgResourceManager(QWidget * parent = 0);
-    ~DlgResourceManager();
-
-    WdgResourceManager *m_page;
-};
-
-#endif // DLG_RESOURCEMANAGER

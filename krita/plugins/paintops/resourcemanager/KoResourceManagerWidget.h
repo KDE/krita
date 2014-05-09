@@ -20,14 +20,16 @@
 #ifndef KORESOURCEMANAGERWIDGET_H
 #define KORESOURCEMANAGERWIDGET_H
 
-#include <QtGui/QMainWindow>
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
+#include <QLabel>
+
+#include <kdialog.h>
+
 #include <krita_export.h>
-#include <QtGui/QLabel>
 
 namespace Ui
 {
-    class KoResourceManagerWidget;
+class KoResourceManagerWidget;
 }
 
 class ClickLabel : public QLabel
@@ -36,8 +38,7 @@ class ClickLabel : public QLabel
 
 public:
     ClickLabel(QWidget * parent = 0)
-        :QLabel(parent)
-    {
+        : QLabel(parent) {
 
     }
 
@@ -45,8 +46,7 @@ signals:
     void clicked();
 
 private:
-    void mousePressEvent ( QMouseEvent * event )
-    {
+    void mousePressEvent(QMouseEvent * event) {
         Q_UNUSED(event);
         emit clicked();
     }
@@ -56,7 +56,7 @@ class KoResourceManagerControl;
 class KoResourceTaggingManager;
 class QTableView;
 
-class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
+class KRITAUI_EXPORT KoResourceManagerWidget : public KDialog
 {
     Q_OBJECT
 
@@ -66,13 +66,12 @@ public:
 
     void initializeConnect();
     void initializeFilterMenu();
-    void initializeModels(bool first=false);
+    void initializeModels(bool first = false);
     void initializeTitle();
 
-    QTableView* tableView(int index);
+    QTableView* tableAvailable(int index);
 
 private slots:
-    void about();
 
     void createPack();
     void deletePack();
@@ -95,23 +94,27 @@ private slots:
     void showHide();
     void refreshDetails(QModelIndex newIndex);
     void saveMeta();
-    void refreshTaggingManager(int index=0);
-    void tableViewChanged(int index);
+    void refreshTaggingManager(int index = 0);
+    void tableAvailableChanged(int index);
 
     void refresh();
     void removeTag();
 
-    void status(QString text,int timeout);
+    void status(QString text = QString(), int timeout = 2000);
 
 private:
-    Ui::KoResourceManagerWidget *ui;
-    KoResourceManagerControl *control;
-    KoResourceTaggingManager *tagMan;
-    ClickLabel *resourceNameLabel;
-    bool firstRefresh;
 
-    /*QSortFilterProxyModel* m_filter;
-    MyTableModel *model2;*/
+    QWidget *m_page;
+
+    Ui::KoResourceManagerWidget *m_ui;
+    KoResourceManagerControl *m_control;
+    KoResourceTaggingManager *m_tagManager;
+    ClickLabel *m_resourceNameLabel;
+    bool m_firstRefresh;
+
+    QAction *m_actionAll;
+    QAction *m_actionName;
+    QAction *m_actionFile;
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

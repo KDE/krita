@@ -148,8 +148,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.fillRect(ev->rect(), color);
 #endif
 
-    QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
-    drawDecorations(gc, boundingRect);
+    drawDecorations(gc, ev->rect());
     gc.end();
 
     QPainter painter(this);

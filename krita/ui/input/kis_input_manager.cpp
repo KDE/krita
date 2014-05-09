@@ -395,7 +395,7 @@ bool KisInputManager::Private::tryHidePopupPalette()
 bool KisInputManager::Private::trySetMirrorMode(const QPointF &mousePosition)
 {
     if (setMirrorMode) {
-        canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, canvas->image()->documentToPixel(mousePosition));
+        canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, canvas->image()->documentToPixel(mousePosition));
         QApplication::restoreOverrideCursor();
         setMirrorMode = false;
         return true;

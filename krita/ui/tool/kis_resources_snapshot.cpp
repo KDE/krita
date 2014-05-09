@@ -55,7 +55,7 @@ struct KisResourcesSnapshot::Private {
     qreal currentExposure;
     KisFilterConfiguration *currentGenerator;
 
-    QPointF axisCenter;
+    QPointF axesCenter;
     bool mirrorMaskHorizontal;
     bool mirrorMaskVertical;
 
@@ -92,10 +92,10 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
     m_d->currentGenerator = static_cast<KisFilterConfiguration*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void*>());
 
-    m_d->axisCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
-    if (m_d->axisCenter.isNull()){
+    m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+    if (m_d->axesCenter.isNull()){
         QRect bounds = m_d->bounds->bounds();
-        m_d->axisCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
+        m_d->axesCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
     }
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
@@ -140,7 +140,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setOpacity(m_d->opacity);
     painter->setCompositeOp(m_d->compositeOp);
-    painter->setMirrorInformation(m_d->axisCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
+    painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);

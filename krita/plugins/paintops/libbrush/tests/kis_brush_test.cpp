@@ -164,7 +164,7 @@ void KisBrushTest::testImageGeneration()
     bool res = brush->load();
     Q_UNUSED(res);
     Q_ASSERT(res);
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
@@ -196,7 +196,7 @@ void KisBrushTest::benchmarkPyramidCreation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
 
     QBENCHMARK {
         brush->prepareBrushPyramid();
@@ -208,7 +208,7 @@ void KisBrushTest::benchmarkScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
@@ -226,7 +226,7 @@ void KisBrushTest::benchmarkRotation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
@@ -243,7 +243,7 @@ void KisBrushTest::benchmarkMaskScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 

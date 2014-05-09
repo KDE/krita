@@ -21,13 +21,12 @@
 #define KORESOURCEMANAGERCONTROL_H
 
 #include "KoResourceBundle.h"
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
+#include "resourcemanager.h"
 
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
-class KoResourceBundleManager;
 class KoResourceTableModel;
-template <class T> class KoResourceServer;
 
 class KoResourceManagerControl : public QObject
 {
@@ -38,11 +37,9 @@ public:
     ~KoResourceManagerControl();
 
     KoResourceTableModel* getModel(int type);
-    void launchServer();
-
     int getNbModels();
 
-    void addFiles(QString,int type);
+    void addFiles(QString, int type);
 
     void filterResourceTypes(int index);
 
@@ -50,36 +47,32 @@ public:
     bool createPack(int type);
     bool install(int type);
     bool uninstall(int type);
-    void remove(int type);
+    bool remove(int type);
 
     void configureFilters(int filterType, bool enable);
 
-    bool rename(QModelIndex index,QString,int type);
-    void setMeta(QModelIndex index,QString metaType,QString metaValue, int type);
-    void setMeta(KoResourceBundle *bundle, QString metaType,QString metaValue);
-    void saveMeta(QModelIndex index,int type);
-    void thumbnail(QModelIndex index,QString fileName,int type);
+    bool rename(QModelIndex index, QString, int type);
+    void setMeta(QModelIndex index, QString metaType, QString metaValue, int type);
+    void saveMeta(QModelIndex index, int type);
+    void thumbnail(QModelIndex index, QString fileName, int type);
     void exportBundle(int type);
     bool importBundle();
     void refreshTaggingManager();
 
 signals:
-    void status(QString text,int timeout=0);
+    void status(QString text, int timeout = 0);
 
 private slots:
-    void toStatus(QString text,int timeout=0);
+    void toStatus(QString text, int timeout = 0);
 
 private:
-    KoXmlResourceBundleMeta *meta;
-    KoXmlResourceBundleManifest *manifest;
-    KoResourceBundleManager *extractor;
-    KoResourceServer<KoResourceBundle> *bundleServer;
-    QList<KoResourceTableModel*> modelList;
-    QString root;
-    int nbModels;
+    KoXmlResourceBundleMeta *m_meta;
+    KoXmlResourceBundleManifest *m_manifest;
+    QList<KoResourceTableModel*> m_modelList;
+    int m_modelsCount;
 
     enum {
-        Install=0,
+        Install = 0,
         Uninstall,
         Delete
     };

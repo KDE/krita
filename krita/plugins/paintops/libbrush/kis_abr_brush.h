@@ -44,16 +44,11 @@ class BRUSH_EXPORT KisAbrBrush : public KisBrush
 public:
 
     /// Construct brush to load filename later as brush
-    KisAbrBrush(const QString& filename);
+    KisAbrBrush(const QString& filename, const QByteArray &parentMD5);
 
     virtual bool load();
 
     virtual bool save();
-
-    /**
-     * save the content of this brush to an IO device
-     */
-    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @return default file extension for saving the brush
@@ -64,12 +59,13 @@ protected:
 
     friend class KisAbrBrushCollection;
 
-    virtual void setImage(const QImage& image);
+    virtual QByteArray generateMD5() const;
+    virtual void setBrushTipImage(const QImage& image);
 
     void toXML(QDomDocument& d, QDomElement& e) const;
 
 private:
-
+    QByteArray m_parentMD5;
 
 };
 

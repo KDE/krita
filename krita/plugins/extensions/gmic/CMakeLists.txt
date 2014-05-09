@@ -66,6 +66,7 @@ set(kritagmic_shared_PART_SRCS
     kis_html_delegate.cpp
     kis_gmic_settings_widget.cpp
     kis_gmic_input_output_widget.cpp
+    kis_gmic_filter_proxy_model.cpp
     kis_gmic_widget.cpp
 )
 

@@ -30,6 +30,7 @@
 #include <ksharedconfig.h>
 #include <KoConfig.h>
 
+class KoResourceServerBase;
 
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
@@ -43,7 +44,7 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagStore(const QString& resourceType, const QString& extensions);
+    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions);
     ~KoResourceTagStore();
 
     QStringList assignedTagsList(KoResource* resource) const;
@@ -57,30 +58,39 @@ public:
 
     void delTag(const QString& tag);
 
+    /// @return a list of all the tags in this store
     QStringList tagNamesList() const;
 
+    /// Return a list of filenames for the given tag
     QStringList searchTag(const QString& tag);
 
+    void loadTags();
     void serializeTags();
 
 private:
-    void readXMLFile(bool serverIdentity = true);
-    void writeXMLFile(bool serverIdentity = true);
+    friend class KoResourceTaggingTest;
+
+    void readXMLFile(const QString &tagstore);
+    void writeXMLFile(const QString &tagstore);
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;
-    void addTag(const QString& fileName, const QString& tag);
+
     /// If resource filenames have no extensions, then we add "-krita.extension".
     QString adjustedFileName(const QString &fileName) const;
+
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<QString, QString> m_tagRepo;
+    QMultiHash<KoResource*, QString> m_resourceToTag;
     QHash<QString, int> m_tagList;
+
     QString m_tagsXMLFile;
     QString m_serverExtensions;
 
     KConfigGroup m_config;
+
+    KoResourceServerBase *m_resourceServer;
 };
 
 

@@ -20,7 +20,7 @@
 
 #ifndef KOXMLGENERATORTEST_H
 #define KOXMLGENERATORTEST_H
-#include <QtTest/QTest>
+#include <QTest>
 #include <KoConfig.h>
 
 class KoXmlGeneratorTest: public QObject
@@ -31,11 +31,11 @@ private slots:
     void getValueTest();
     void addTagTest();
     void removeFirstTagTest();
-    void removeTagTest();	
+    void removeTagTest();
     void searchValueTest();
     void toFileTest();
 private:
- QString env;
+    QString env;
 
 };
 #endif // KOXMLGENERATORTEST_H

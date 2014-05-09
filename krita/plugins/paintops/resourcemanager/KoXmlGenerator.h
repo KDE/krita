@@ -3,7 +3,7 @@
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either 
+   License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
@@ -11,17 +11,17 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
 
-   You should have received a copy of the GNU Lesser General Public 
+   You should have received a copy of the GNU Lesser General Public
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef KOXMLGENERATOR_H
 #define KOXMLGENERATOR_H
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
-#include <QtXml/QDomNodeList>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QDomNodeList>
 #include "krita_export.h"
 
 class QIODevice;
@@ -50,7 +50,7 @@ public:
      * @brief KoXmlGenerator : Ctor
      * @param device the device associated to Xml data
      */
-    KoXmlGenerator(QIODevice *device);
+    KoXmlGenerator(QIODevice *m_device);
 
     /**
      * @brief ~KoXmlGenerator : Dtor
@@ -83,7 +83,7 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    virtual QDomElement addTag(QString tagName,QString textValue="",bool emptyFile=false);
+    virtual QDomElement addTag(QString tagName, QString textValue = "", bool emptyFile = false);
 
     /**
      * @brief removeFirstTag : Remove the first tag having same name (and same textvalue)
@@ -91,7 +91,7 @@ public:
      * @param textValue the text linked to the tag
      * @return true if succeed, false otherwise.
      */
-    bool removeFirstTag(QString tagName,QString textValue="");
+    bool removeFirstTag(QString tagName, QString textValue = "");
 
     /**
      * @brief removeFirstTag : Remove the first tag having same name and attribute
@@ -100,7 +100,7 @@ public:
      * @param attValue the value of the attribute
      * @return true if succeed, false otherwise.
      */
-    bool removeFirstTag(QString tagName,QString attName,QString attValue);
+    bool removeFirstTag(QString tagName, QString attName, QString attValue);
 
     /**
      * @brief removeTag : Remove all the tags having the same name.
@@ -114,7 +114,7 @@ public:
      * @param textValue the text to be found in the tag
      * @return the first node found, null node otherwise.
      */
-    QDomNode searchValue(QDomNodeList tagList,QString textValue);
+    QDomNode searchValue(QDomNodeList tagList, QString textValue);
 
     /**
      * @brief searchValue : Search in the list the first tag having the right attribute value
@@ -123,12 +123,7 @@ public:
      * @param attValue the value of the attribute
      * @return the first node found, null node otherwise.
      */
-    QDomNode searchValue(QDomNodeList tagList,QString attName,QString attValue);
-
-    /**
-     * @brief show : Show the XML data of the document in cout.
-     */
-    void show();
+    QDomNode searchValue(QDomNodeList tagList, QString attName, QString attValue);
 
     /**
      * @brief toString
@@ -147,17 +142,17 @@ protected:
     /**
      * @description The virtual XML file.
      */
-    QDomDocument xmlDocument;
+    QDomDocument m_xmlDocument;
 
     /**
      * @description The element considered as root of the XML tree of the document
      */
-    QDomElement root;
+    QDomElement m_root;
 
     /**
      * @description The device if initialized using second constructor
      */
-    QIODevice *device;
+    QIODevice *m_device;
 };
 
 #endif // KOXMLGENERATOR_H

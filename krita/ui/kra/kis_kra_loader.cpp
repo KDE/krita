@@ -19,12 +19,17 @@
 
 #include "kra/kis_kra_loader.h"
 
+#include <QApplication>
 #include <QStringList>
+
+#include <kmessagebox.h>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
+#include <KoFileDialog.h>
+#include <KoFilterManager.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -585,7 +590,38 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageWSP i
         documentPath = m_d->document->url().toLocalFile();
     }
     QFileInfo info(documentPath);
-    KisLayer *layer = new KisFileLayer(image, info.absolutePath(), filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
+    QString basePath = info.absolutePath();
+
+    QString fullPath = basePath + QDir::separator() + filename;
+
+    if (!QFileInfo(fullPath).exists()) {
+        QString msg = i18nc(
+            "@info",
+            "The file associated to a file layer with the name \"%1\" is not found.<nl/><nl/>"
+            "Expected path:<nl/>"
+            "%2<nl/><nl/>"
+            "Do you want to locate it manually?", name, fullPath);
+
+        int result = KMessageBox::warningYesNo(0, msg,
+                                               i18n("File not found"));
+
+        if (result == KMessageBox::Yes) {
+
+            KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+            dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+            dialog.setDefaultDir(basePath);
+            QString url = dialog.url();
+
+            if (!QFileInfo(basePath).exists()) {
+                filename = url;
+            } else {
+                QDir d(basePath);
+                filename = d.relativeFilePath(url);
+            }
+        }
+    }
+
+    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;

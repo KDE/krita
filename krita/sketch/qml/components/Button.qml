@@ -45,6 +45,8 @@ Item {
 
     property bool hasFocus: false;
 
+    property string tooltip: "";
+
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
@@ -124,14 +126,42 @@ Item {
     MouseArea {
         id: mouse;
         anchors.fill: parent;
+        hoverEnabled: true;
+        acceptedButtons: Qt.LeftButton | Qt.RightButton;
+        
         onClicked: {
-            if (base.enabled) {
+            if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
                 if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
+            } else if(mouse.button == Qt.RightButton && base.tooltip != "") {
+                tooltip.show(base.width / 2, 0);
             }
         }
+        onEntered: {
+            hoverDelayTimer.start();
+        }
+        onPositionChanged: {
+            if(hoverDelayTimer.running) {
+                hoverDelayTimer.restart();
+            }
+        }
+        onExited: {
+            hoverDelayTimer.stop();
+            tooltip.hide();
+        }
+    }
+
+    Timer {
+        id: hoverDelayTimer;
+        interval: 1000;
+        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) }
+    }
+
+    Tooltip {
+        id: tooltip;
+        text: base.tooltip;
     }
 
     states: State {

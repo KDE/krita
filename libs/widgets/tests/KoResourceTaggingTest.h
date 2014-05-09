@@ -23,21 +23,16 @@
 #include <KoConfig.h>
 #include "KoResourceTagStore.h"
 
-class KoResourceTagStore_test : public QObject
+class KoResourceTaggingTest : public QObject
 {
     Q_OBJECT
 
 private slots:
 
     // tests
-    void testIntialization();
-    void testAddingDeletingTag();
-    void testSearchingTag();
+    void testInitialization();
+    void testTagging();
     void testReadWriteXML();
-private:
-    void addData();
-    KoResourceTagStore* m_tagObject;
-    QStringList m_resourceNames, m_tags;
 };
 
 #endif

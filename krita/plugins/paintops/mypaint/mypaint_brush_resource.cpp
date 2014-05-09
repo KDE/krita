@@ -21,6 +21,8 @@
 #include <QFile>
 #include <QString>
 #include <QTextStream>
+#include <QCryptographicHash>
+#include <QBuffer>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -409,10 +411,12 @@ bool MyPaintBrushResource::load()
             }
 
         }
+        setImage(m_icon);
         setValid(true);
         return true;
     }
     setValid(false);
+
     return false;
 }
 
@@ -432,12 +436,6 @@ bool MyPaintBrushResource::save()
 #endif
 
     return true;
-}
-
-
-QImage MyPaintBrushResource::image() const
-{
-    return m_icon;
 }
 
 BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)
@@ -488,6 +486,21 @@ QRgb MyPaintBrushResource::get_color_rgb()
 
 bool MyPaintBrushResource::is_eraser() {
     return setting_by_cname("eraser")->base_value > 0.9;
+}
+
+QByteArray MyPaintBrushResource::generateMD5() const
+{
+    QByteArray ba;
+//    QBuffer buf(&ba);
+//    save(&buf);
+
+//    if (!ba.isEmpty()) {
+//        QCryptographicHash md5(QCryptographicHash::Md5);
+//        md5.addData(ba);
+//        return md5.result();
+//    }
+
+    return ba;
 }
 
 

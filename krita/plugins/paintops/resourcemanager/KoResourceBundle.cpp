@@ -281,14 +281,9 @@ bool KoResourceBundle::isPathSet()
     return !m_kritaPath.isEmpty();
 }
 
-void KoResourceBundle::toRoot()
-{
-    while (m_resourceStore->leaveDirectory());
-}
-
 bool KoResourceBundle::addKFile(QString path)
 {
-    toRoot();
+    while (m_resourceStore->leaveDirectory());
     int pathSize = path.count('/');
     return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 1));
 }
@@ -297,7 +292,7 @@ bool KoResourceBundle::addKFile(QString path)
 //TODO Trouver un moyen de détecter si bundle ou pas
 bool KoResourceBundle::addKFileBundle(QString path)
 {
-    toRoot();
+    while (m_resourceStore->leaveDirectory());
     int pathSize = path.count('/');
     return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 2, pathSize - 2)
                                          .append("/").append(path.section('/', pathSize)));
@@ -328,7 +323,7 @@ void KoResourceBundle::extractKFiles(QMap<QString, QString> pathList)
 
     if (isPathSet()) {
         for (int i = 0; i < pathList.size(); i++) {
-            toRoot();
+            while (m_resourceStore->leaveDirectory());
             currentPath = pathList.keys().at(i);
             targetPath = pathList.values().at(i);
             if (!m_resourceStore->extractFile(currentPath, targetPath)) {
@@ -351,7 +346,7 @@ void KoResourceBundle::extractTempFiles(QList<QString> pathList)
     QString targetPath;
 
     for (int i = 0; i < pathList.size(); i++) {
-        toRoot();
+        while (m_resourceStore->leaveDirectory());
         targetPath = pathList.at(i);
         if (targetPath.contains("temp")) {
             currentPath = targetPath.section('/', targetPath.count('/') - 1);
@@ -387,8 +382,23 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
         if (m_resourceStore != NULL && !m_resourceStore->bad()) {
             addKFiles(fileList);
             manifest->updateFilePaths(m_kritaPath, m_packName);
-            addThumbnail(thumbnail);
-            addManiMeta(manifest, meta);
+
+            if (!thumbnail.isNull()) {
+                while (m_resourceStore->leaveDirectory());
+                QByteArray byteArray;
+                QBuffer buffer(&byteArray);
+                thumbnail.save(&buffer, "JPG");
+                m_resourceStore->open("thumbnail.jpg");
+                m_resourceStore->write(byteArray);
+                m_resourceStore->close();
+            }
+
+            m_resourceStore->open("manifest.xml");
+            m_resourceStore->write(manifest->toByteArray());
+            m_resourceStore->close();
+            m_resourceStore->open("meta.xml");
+            m_resourceStore->write(meta->toByteArray());
+            m_resourceStore->close();
             m_resourceStore->finalize();
         }
 
@@ -400,32 +410,6 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
         }
     }
 }
-
-void KoResourceBundle::addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta)
-{
-    toRoot();
-    m_resourceStore->open("manifest.xml");
-    m_resourceStore->write(manifest->toByteArray());
-    m_resourceStore->close();
-    m_resourceStore->open("meta.xml");
-    m_resourceStore->write(meta->toByteArray());
-    m_resourceStore->close();
-}
-
-//TODO Voir pour importer d'autres types d'images
-void KoResourceBundle::addThumbnail(QImage thumbnail)
-{
-    if (!thumbnail.isNull()) {
-        toRoot();
-        QByteArray byteArray;
-        QBuffer buffer(&byteArray);
-        thumbnail.save(&buffer, "JPG");
-        m_resourceStore->open("thumbnail.jpg");
-        m_resourceStore->write(byteArray);
-        m_resourceStore->close();
-    }
-}
-
 
 QByteArray KoResourceBundle::getFileData(const QString &fileName)
 {

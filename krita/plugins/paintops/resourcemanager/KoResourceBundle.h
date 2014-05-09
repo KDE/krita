@@ -176,11 +176,6 @@ private:
     bool isPathSet();
 
     /**
-     * @brief toRoot : Go to the root of the store
-     */
-    void toRoot();
-
-    /**
      * @brief addKFile : Add a Krita resource file to the store.
      * @param path the path containing the Krita resource File.
      * @return true if succeed, false otherwise.
@@ -212,15 +207,6 @@ private:
      * @param meta the virtual generator of meta file
      */
     void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
-
-    /**
-     * @brief addManiMeta : Add manifest and meta Xml Files to the store
-     * @param manifest the virtual generator of manifest file
-     * @param meta the virtual generator of meta file
-     */
-    void addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
-
-    void addThumbnail(QImage thumbnail);
 
     /**
      * @brief getFileData

@@ -36,15 +36,13 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 
+#include <resourcemanager.h>
+
 KoResourceBundle::KoResourceBundle(QString const& fileName)
     : KoResource(fileName)\
     , m_manifest(new KoXmlResourceBundleManifest())
     , m_meta(new KoXmlResourceBundleMeta())
 {
-    m_kritaPath = fileName.section('/', 0, fileName.count('/') - 2);
-    if (!m_kritaPath.isEmpty() && m_kritaPath.at(m_kritaPath.size() - 1) != '/') {
-        this->m_kritaPath.append("/");
-    }
     setName(QFileInfo(fileName).baseName());
 }
 
@@ -130,8 +128,10 @@ bool KoResourceBundle::save()
     m_meta->checkSort();
 
     bool bundleExists = QFileInfo(filename()).exists();
+    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+    bundleDir.cdUp();
 
-    QList<QString> fileList = m_manifest->getFileList(m_kritaPath, !bundleExists); // -- firstBuild
+    QList<QString> fileList = m_manifest->getFileList(bundleDir.absolutePath(), !bundleExists); // -- firstBuild
 
     if (bundleExists && !m_manifest->isInstalled()) {
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
@@ -178,7 +178,7 @@ bool KoResourceBundle::save()
     }
 
 
-    m_manifest->updateFilePaths(m_kritaPath, filename());
+    m_manifest->updateFilePaths(bundleDir.absolutePath(), filename());
 
     if (!m_thumbnail.isNull()) {
         while (resourceStore->leaveDirectory());
@@ -202,7 +202,7 @@ bool KoResourceBundle::save()
     if (bundleExists && !m_manifest->isInstalled()) {
         QList<QString> dirList = m_manifest->getDirList();
         for (int i = 0; i < dirList.size(); i++) {
-            removeDir(m_kritaPath + "temp/" + dirList.at(i));
+            removeDir(bundleDir.absolutePath() + "/temp/" + dirList.at(i));
         }
     }
 
@@ -220,24 +220,25 @@ void KoResourceBundle::install()
 
     QMap<QString, QString> pathList = m_manifest->getFilesToExtract();
 
+    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+    bundleDir.cdUp();
+
     QString currentPath;
     QString targetPath;
     QString dirPath;
 
-    if (!m_kritaPath.isEmpty()) {
-        for (int i = 0; i < pathList.size(); i++) {
-            while (resourceStore->leaveDirectory());
-            currentPath = pathList.keys().at(i);
-            targetPath = pathList.values().at(i);
+    for (int i = 0; i < pathList.size(); i++) {
+        while (resourceStore->leaveDirectory());
+        currentPath = pathList.keys().at(i);
+        targetPath = pathList.values().at(i);
+        if (!resourceStore->extractFile(currentPath, targetPath)) {
+            dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+            QDir dir(dirPath);
+            dir.mkdir(dirPath);
             if (!resourceStore->extractFile(currentPath, targetPath)) {
-                dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
-                QDir dir(dirPath);
-                dir.mkdir(dirPath);
-                if (!resourceStore->extractFile(currentPath, targetPath)) {
-                    qWarning() << "Could not install" << currentPath << "to" << targetPath;
-                    //TODO Supprimer le dossier créé
-                    continue;
-                }
+                qWarning() << "Could not install" << currentPath << "to" << targetPath;
+                //TODO Supprimer le dossier créé
+                continue;
             }
         }
     }
@@ -253,7 +254,9 @@ void KoResourceBundle::uninstall()
     if (!m_installed)
         return;
 
-    QString dirPath = m_kritaPath;
+    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+    bundleDir.cdUp();
+    QString dirPath = bundleDir.absolutePath();
     QList<QString> directoryList = m_manifest->getDirList();
     QString shortPackName = m_meta->getPackName();
 
@@ -307,9 +310,11 @@ void KoResourceBundle::removeFile(QString fileName)
 
 void KoResourceBundle::addResourceDirs()
 {
-    QList<QString> listeType = m_manifest->getDirList();
-    for (int i = 0; i < listeType.size(); i++) {
-        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->m_kritaPath + listeType.at(i) + "/" + this->name());
+    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+    bundleDir.cdUp();
+    QString localSavePath = bundleDir.absolutePath();
+    foreach(const QString& resourceType,  m_manifest->getDirList())  {
+        KGlobal::mainComponent().dirs()->addResourceDir(resourceType.toLatin1().data(), localSavePath + "/" + resourceType + "/" + this->name());
     }
 }
 
@@ -327,12 +332,16 @@ void KoResourceBundle::rename(QString filename, QString name)
     addMeta("name", shortName);
     m_manifest->rename(shortName);
 
+    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+    bundleDir.cdUp();
+    QString localSavePath = bundleDir.absolutePath();
+
     if (isInstalled()) {
         QList<QString> directoryList = m_manifest->getDirList();
         QString dirPath;
         QDir dir;
         for (int i = 0; i < directoryList.size(); i++) {
-            dirPath = m_kritaPath;
+            dirPath = localSavePath;
             dirPath.append(directoryList.at(i)).append("/");
             dir.rename(dirPath + oldName, dirPath + shortName);
         }

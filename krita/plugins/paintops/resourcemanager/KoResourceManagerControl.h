@@ -24,8 +24,6 @@
 #include <QModelIndex>
 #include "resourcemanager.h"
 
-class KoXmlResourceBundleMeta;
-class KoXmlResourceBundleManifest;
 class KoResourceTableModel;
 
 class KoResourceManagerControl : public QObject

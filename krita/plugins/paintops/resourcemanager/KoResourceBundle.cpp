@@ -267,15 +267,6 @@ QString KoResourceBundle::getUpdated()
     return m_meta->getValue("updated");
 }
 
-void KoResourceBundle::setKritaPath(QString kritaPath)
-{
-    this->m_kritaPath = kritaPath;
-
-    if (!kritaPath.isEmpty() && kritaPath.at(kritaPath.size() - 1) != '/') {
-        this->m_kritaPath.append("/");
-    }
-}
-
 bool KoResourceBundle::isPathSet()
 {
     return !m_kritaPath.isEmpty();
@@ -409,24 +400,6 @@ void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlRe
             }
         }
     }
-}
-
-QByteArray KoResourceBundle::getFileData(const QString &fileName)
-{
-    QByteArray result;
-
-    if (m_resourceStore->hasFile(fileName)) {
-        if (m_resourceStore->isOpen()) {
-            m_resourceStore->close();
-        }
-        m_resourceStore->open(fileName);
-        while (!m_resourceStore->atEnd()) {
-            result += m_resourceStore->read(m_resourceStore->size());
-        }
-        m_resourceStore->close();
-    }
-
-    return result;
 }
 
 QIODevice* KoResourceBundle::getFile(const QString &fileName)

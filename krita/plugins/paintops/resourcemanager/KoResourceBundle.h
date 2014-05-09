@@ -164,12 +164,6 @@ protected:
 private:
 
     /**
-     * @brief setKritaPath : Set the path of Krita resources
-     * @param kritaPath
-     */
-    void setKritaPath(QString m_kritaPath);
-
-    /**
      * @brief isPathSet : Check if the path of Krita resources is set
      * @return true if succeed, false otherwise.
      */
@@ -207,13 +201,6 @@ private:
      * @param meta the virtual generator of meta file
      */
     void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
-
-    /**
-     * @brief getFileData
-     * @param fileName the path of the file in the store
-     * @return a QByteArray containing data of the file in the store
-     */
-    QByteArray getFileData(const QString &fileName);
 
     /**
      * @brief getFile

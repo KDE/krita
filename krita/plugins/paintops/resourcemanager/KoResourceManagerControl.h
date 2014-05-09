@@ -67,7 +67,6 @@ private slots:
 
 private:
     KoXmlResourceBundleMeta *m_meta;
-    KoXmlResourceBundleManifest *m_manifest;
     QList<KoResourceTableModel*> m_modelList;
     int m_modelsCount;
 

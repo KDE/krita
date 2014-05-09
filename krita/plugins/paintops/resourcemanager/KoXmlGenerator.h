@@ -30,7 +30,7 @@ class QIODevice;
  * @brief The KoXmlGenerator class
  * @details Allow to manage Xml file content
  */
-class KRITAUI_EXPORT KoXmlGenerator
+class  KoXmlGenerator
 {
 public:
 

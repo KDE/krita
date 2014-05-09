@@ -25,8 +25,6 @@
 
 #include <kdialog.h>
 
-#include <krita_export.h>
-
 namespace Ui
 {
 class KoResourceManagerWidget;
@@ -56,7 +54,7 @@ class KoResourceManagerControl;
 class KoResourceTaggingManager;
 class QTableView;
 
-class KRITAUI_EXPORT KoResourceManagerWidget : public KDialog
+class  KoResourceManagerWidget : public KDialog
 {
     Q_OBJECT
 

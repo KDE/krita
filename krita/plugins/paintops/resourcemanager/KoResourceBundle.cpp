@@ -27,6 +27,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
+#include <QScopedPointer>
 #include <QProcessEnvironment>
 #include <QDate>
 #include <QDir>
@@ -35,7 +36,6 @@
 #include <QCryptographicHash>
 #include <QByteArray>
 
-//TODO Voir s'il ne vaut pas mieux faire un constructeur avec un xmlmeta plutot qu'un setmeta (cf control createPack)
 KoResourceBundle::KoResourceBundle(QString const& fileName)
     : KoResource(fileName)\
     , m_manifest(new KoXmlResourceBundleManifest())
@@ -47,9 +47,8 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
     }
 
     m_packName = QString();
-    m_resourceStore = 0;
 
-    setName(fileName.section('/', fileName.count('/')));
+    setName(QFileInfo(fileName).baseName());
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -71,9 +70,9 @@ QImage KoResourceBundle::image() const
 bool KoResourceBundle::load()
 {
     if (filename().isEmpty()) return false;
-    m_resourceStore = KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle");
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
-    if (m_resourceStore->bad()) {
+    if (resourceStore->bad()) {
         m_installed = false;
         setValid(false);
         return false;
@@ -84,59 +83,172 @@ bool KoResourceBundle::load()
         delete m_manifest;
         delete m_meta;
 
-        if (m_resourceStore->open("manifest.xml")) {
-            m_manifest = new KoXmlResourceBundleManifest(m_resourceStore->device());
-            m_resourceStore->close();
+        if (resourceStore->open("manifest.xml")) {
+            m_manifest = new KoXmlResourceBundleManifest(resourceStore->device());
+            resourceStore->close();
+        } else {
+            return false;
         }
 
-        if (m_resourceStore->open("meta.xml")) {
-            m_meta = new KoXmlResourceBundleMeta(m_resourceStore->device());
-            m_resourceStore->close();
+        if (resourceStore->open("meta.xml")) {
+            m_meta = new KoXmlResourceBundleMeta(resourceStore->device());
+            resourceStore->close();
+        } else {
+            return false;
         }
 
-        if (m_resourceStore->open("thumbnail.png")) {
-            m_thumbnail.load(m_resourceStore->device(), "PNG");
-            m_resourceStore->close();
+        if (resourceStore->open("thumbnail.png")) {
+            m_thumbnail.load(resourceStore->device(), "PNG");
+            resourceStore->close();
         }
 
         m_installed = m_manifest->isInstalled();
         setValid(true);
     }
+
     return true;
 }
 
+bool addKFile(KoStore* store, QString path)
+{
+    while (store->leaveDirectory());
+    int pathSize = path.count('/');
+    return store->addLocalFile(path, path.section('/', pathSize - 1));
+}
+
+bool addKFileBundle(KoStore* store, QString path)
+{
+    while (store->leaveDirectory());
+    int pathSize = path.count('/');
+    return store->addLocalFile(path, path.section('/', pathSize - 2, pathSize - 2).append("/").append(path.section('/', pathSize)));
+}
+
+
 bool KoResourceBundle::save()
 {
+    if (filename().isEmpty()) return false;
+
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
     m_manifest->checkSort();
     m_meta->checkSort();
 
-    if (m_resourceStore->bad()) {
-        //meta->addTags(manifest->getTagsList());
-        createPack(m_manifest, m_meta, m_thumbnail, true);
-    } else {
-        createPack(m_manifest, m_meta, m_thumbnail);
+    bool bundleExists = QFileInfo(filename()).exists();
+
+    QList<QString> fileList = m_manifest->getFileList(m_kritaPath, !bundleExists); // -- firstBuild
+
+    if (bundleExists && !m_manifest->isInstalled()) {
+        QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_packName, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+        if (!resourceStore || resourceStore->bad()) {
+            return false;
+        } else {
+            // Copy the contents of an uninstalled, existing bundle to a temporary directory
+            QString currentPath;
+
+            foreach (QString targetPath, fileList) {
+                while (resourceStore->leaveDirectory());
+                if (targetPath.contains("temp")) {
+                    currentPath = targetPath.section('/', targetPath.count('/') - 1);
+                    if (!resourceStore->extractFile(currentPath, targetPath)) {
+                        QString dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+                        QDir dir(dirPath);
+                        dir.mkdir(dirPath);
+                        if (!resourceStore->extractFile(currentPath, targetPath)) {
+                            qWarning() << "Failed to extract" << currentPath << "to" << targetPath;
+                            continue;
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
-    if (!valid()) {
-        setValid(true);
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_packName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+    if (!resourceStore || resourceStore->bad()) return false;
+
+    QString bundleName = m_packName.section('/', m_packName.count('/')).section('.', 0, 0);
+    for (int i = 0; i < fileList.size(); i++) {
+        QString currentFile = fileList.at(i);
+        if (currentFile.contains("/" + bundleName + "/")) {
+            if (!addKFileBundle(resourceStore.data(), fileList.at(i))) {
+                continue;
+            }
+        } else {
+            if (!addKFile(resourceStore.data(), fileList.at(i))) {
+                continue;
+            }
+        }
     }
 
-    return load();
+
+    m_manifest->updateFilePaths(m_kritaPath, m_packName);
+
+    if (!m_thumbnail.isNull()) {
+        while (resourceStore->leaveDirectory());
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        m_thumbnail.save(&buffer, "PNG");
+        resourceStore->open("thumbnail.png");
+        resourceStore->write(byteArray);
+        resourceStore->close();
+    }
+
+    resourceStore->open("manifest.xml");
+    resourceStore->write(m_manifest->toByteArray());
+    resourceStore->close();
+    resourceStore->open("meta.xml");
+    resourceStore->write(m_meta->toByteArray());
+    resourceStore->close();
+    resourceStore->finalize();
+
+
+    if (bundleExists && !m_manifest->isInstalled()) {
+        QList<QString> dirList = m_manifest->getDirList();
+        for (int i = 0; i < dirList.size(); i++) {
+            removeDir(m_kritaPath + "temp/" + dirList.at(i));
+        }
+    }
+
+    setValid(true);
+    return true;
 }
 
 //TODO getFilesToExtract à vérifier
 //TODO exportTags à vérifier
 void KoResourceBundle::install()
 {
-    //load();
-    if (!m_resourceStore->bad()) {
-        extractKFiles(m_manifest->getFilesToExtract());
-        m_manifest->exportTags();
-        m_installed = true;
-        m_manifest->install();
-        save();
+    if (filename().isEmpty()) return;
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+    if (!resourceStore || resourceStore->bad()) return;
+
+    QMap<QString, QString> pathList = m_manifest->getFilesToExtract();
+
+    QString currentPath;
+    QString targetPath;
+    QString dirPath;
+
+    if (!m_kritaPath.isEmpty()) {
+        for (int i = 0; i < pathList.size(); i++) {
+            while (resourceStore->leaveDirectory());
+            currentPath = pathList.keys().at(i);
+            targetPath = pathList.values().at(i);
+            if (!resourceStore->extractFile(currentPath, targetPath)) {
+                dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+                QDir dir(dirPath);
+                dir.mkdir(dirPath);
+                if (!resourceStore->extractFile(currentPath, targetPath)) {
+                    qWarning() << "Could not install" << currentPath << "to" << targetPath;
+                    //TODO Supprimer le dossier créé
+                    continue;
+                }
+            }
+        }
     }
+
+    m_manifest->exportTags();
+    m_installed = true;
+    m_manifest->install();
+    save();
 }
 
 void KoResourceBundle::uninstall()
@@ -280,140 +392,6 @@ QString KoResourceBundle::getUpdated()
     return m_meta->getValue("updated");
 }
 
-bool KoResourceBundle::isPathSet()
-{
-    return !m_kritaPath.isEmpty();
-}
-
-bool KoResourceBundle::addKFile(QString path)
-{
-    while (m_resourceStore->leaveDirectory());
-    int pathSize = path.count('/');
-    return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 1));
-}
-
-//TODO Réfléchir à fusionner addKFile et addKFileBundle
-//TODO Trouver un moyen de détecter si bundle ou pas
-bool KoResourceBundle::addKFileBundle(QString path)
-{
-    while (m_resourceStore->leaveDirectory());
-    int pathSize = path.count('/');
-    return m_resourceStore->addLocalFile(path, path.section('/', pathSize - 2, pathSize - 2)
-                                         .append("/").append(path.section('/', pathSize)));
-}
-
-void KoResourceBundle::addKFiles(QList<QString> pathList)
-{
-    QString bundleName = m_packName.section('/', m_packName.count('/')).section('.', 0, 0);
-    for (int i = 0; i < pathList.size(); i++) {
-        QString currentFile = pathList.at(i);
-        if (currentFile.contains("/" + bundleName + "/")) {
-            if (!addKFileBundle(pathList.at(i))) {
-                continue;
-            }
-        } else {
-            if (!addKFile(pathList.at(i))) {
-                continue;
-            }
-        }
-    }
-}
-
-void KoResourceBundle::extractKFiles(QMap<QString, QString> pathList)
-{
-    QString currentPath;
-    QString targetPath;
-    QString dirPath;
-
-    if (isPathSet()) {
-        for (int i = 0; i < pathList.size(); i++) {
-            while (m_resourceStore->leaveDirectory());
-            currentPath = pathList.keys().at(i);
-            targetPath = pathList.values().at(i);
-            if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
-                QDir dir(dirPath);
-                dir.mkdir(dirPath);
-                if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                    qDebug() << currentPath << targetPath;
-                    //TODO Supprimer le dossier créé
-                    continue;
-                }
-            }
-        }
-    }
-}
-
-void KoResourceBundle::extractTempFiles(QList<QString> pathList)
-{
-    QString currentPath;
-    QString targetPath;
-
-    for (int i = 0; i < pathList.size(); i++) {
-        while (m_resourceStore->leaveDirectory());
-        targetPath = pathList.at(i);
-        if (targetPath.contains("temp")) {
-            currentPath = targetPath.section('/', targetPath.count('/') - 1);
-            if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                QString dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
-                QDir dir(dirPath);
-                dir.mkdir(dirPath);
-
-                if (!m_resourceStore->extractFile(currentPath, targetPath)) {
-                    continue;
-                }
-            }
-        }
-    }
-}
-
-void KoResourceBundle::createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild)
-{
-    m_packName = meta->getPackFileName();
-    if (!m_packName.isEmpty()) {
-        QList<QString> fileList = manifest->getFileList(m_kritaPath, firstBuild);
-
-        if (!firstBuild && !manifest->isInstalled()) {
-            m_resourceStore = KoStore::createStore(m_packName, KoStore::Read, "", KoStore::Zip);
-            if (m_resourceStore == NULL || m_resourceStore->bad()) {
-                return;
-            } else {
-                extractTempFiles(fileList);
-            }
-        }
-
-        m_resourceStore = KoStore::createStore(m_packName, KoStore::Write, "", KoStore::Zip);
-        if (m_resourceStore != NULL && !m_resourceStore->bad()) {
-            addKFiles(fileList);
-            manifest->updateFilePaths(m_kritaPath, m_packName);
-
-            if (!thumbnail.isNull()) {
-                while (m_resourceStore->leaveDirectory());
-                QByteArray byteArray;
-                QBuffer buffer(&byteArray);
-                thumbnail.save(&buffer, "PNG");
-                m_resourceStore->open("thumbnail.png");
-                m_resourceStore->write(byteArray);
-                m_resourceStore->close();
-            }
-
-            m_resourceStore->open("manifest.xml");
-            m_resourceStore->write(manifest->toByteArray());
-            m_resourceStore->close();
-            m_resourceStore->open("meta.xml");
-            m_resourceStore->write(meta->toByteArray());
-            m_resourceStore->close();
-            m_resourceStore->finalize();
-        }
-
-        if (!firstBuild && !manifest->isInstalled()) {
-            QList<QString> dirList = manifest->getDirList();
-            for (int i = 0; i < dirList.size(); i++) {
-                removeDir(m_kritaPath + "temp/" + dirList.at(i));
-            }
-        }
-    }
-}
 
 bool KoResourceBundle::removeDir(const QString & dirName)
 {
@@ -422,7 +400,7 @@ bool KoResourceBundle::removeDir(const QString & dirName)
 
     if (dir.exists(dirName)) {
         Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System
-                  | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+                                                    | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
             if (info.isDir()) {
                 result = removeDir(info.absoluteFilePath());
             } else {

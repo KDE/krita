@@ -164,58 +164,16 @@ protected:
 private:
 
     /**
-     * @brief isPathSet : Check if the path of Krita resources is set
-     * @return true if succeed, false otherwise.
-     */
-    bool isPathSet();
-
-    /**
-     * @brief addKFile : Add a Krita resource file to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
-    bool addKFile(QString path);
-
-    /**
-     * @brief addKFileBundle : Add a Krita resource file from a bundle folder to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
-    bool addKFileBundle(QString path);
-
-    /**
-     * @brief addKFiles : Add several Krita resource files to the store.
-     * @param pathList the list containing all the paths of the files to be added.
-     */
-    void addKFiles(QList<QString> pathList);
-
-    /**
-     * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
-     * @param pathList the list containing all the paths of the files to be extracted.
-     */
-    void extractKFiles(QMap<QString, QString> pathList);
-
-    /**
-     * @brief createPack : Create a full resource package.
-     * @param manifest the virtual generator of manifest file
-     * @param meta the virtual generator of meta file
-     */
-    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
-
-    /**
      * @brief removeDir : Remove the chosen directory
      * @param dirName the name of the directory to be removed
      * @return true if succeed, false otherwise.
      */
     static bool removeDir(const QString & dirName);
 
-    void extractTempFiles(QList<QString> pathList);
-
 
 private:
     QString m_kritaPath;
     QString m_packName;
-    KoStore* m_resourceStore;
     QImage m_thumbnail;
     KoXmlResourceBundleManifest* m_manifest;
     KoXmlResourceBundleMeta* m_meta;

@@ -113,7 +113,24 @@ struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter
             int btn = 0x1 << i;
 
             if (btn & btnNew) {
-                *buttons |= buttonValueToEnum(btn);
+                Qt::MouseButton convertedButton =
+                    buttonValueToEnum(btn);
+
+                *buttons |= convertedButton;
+
+                /**
+                 * If a button that is present in hardware input is
+                 * mapped to a Qt::NoButton, it means that it is going
+                 * to be eaten by the driver, for example by its
+                 * "Pan/Scroll" feature. Therefore we shouldn't handle
+                 * any of the events associated to it. So just return
+                 * Qt::NoButton here.
+                 */
+                if (convertedButton == Qt::NoButton) {
+                    *button = Qt::NoButton;
+                    *buttons = Qt::NoButton;
+                    break;
+                }
             }
         }
     }
@@ -360,10 +377,15 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                  << "Scaled:" << hiResGlobal;
 #endif
 
+        Qt::MouseButton button = Qt::NoButton;
+        Qt::MouseButtons buttons;
+
+        globalButtonsConverter->convert(btnOld, btnNew, &button, &buttons);
+
         t = KisTabletEvent::TabletMoveEx;
-        if (buttonPressed) {
+        if (buttonPressed && button != Qt::NoButton) {
             t = KisTabletEvent::TabletPressEx;
-        } else if (buttonReleased) {
+        } else if (buttonReleased && button != Qt::NoButton) {
             t = KisTabletEvent::TabletReleaseEx;
         }
 
@@ -441,11 +463,6 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             tiltY = int(-degY * (180 / Q_PI));
             rotation = ort.orTwist;
         }
-
-        Qt::MouseButton button = Qt::NoButton;
-        Qt::MouseButtons buttons;
-
-        globalButtonsConverter->convert(btnOld, btnNew, &button, &buttons);
 
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,
                          currentTabletPointer.currentPointerType, prsNew, tiltX, tiltY,

@@ -172,7 +172,6 @@ private:
 
 
 private:
-    QString m_kritaPath;
     QImage m_thumbnail;
     KoXmlResourceBundleManifest* m_manifest;
     KoXmlResourceBundleMeta* m_meta;

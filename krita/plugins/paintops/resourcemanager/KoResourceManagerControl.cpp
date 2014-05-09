@@ -46,7 +46,6 @@ KoResourceManagerControl::KoResourceManagerControl(int nb)
 
 KoResourceManagerControl::~KoResourceManagerControl()
 {
-    delete m_meta;
     for (int i = 0; i < m_modelsCount; i++) {
         delete m_modelList.at(i);
     }

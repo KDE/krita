@@ -66,7 +66,6 @@ private slots:
     void toStatus(QString text, int timeout = 0);
 
 private:
-    KoXmlResourceBundleMeta *m_meta;
     QList<KoResourceTableModel*> m_modelList;
     int m_modelsCount;
 

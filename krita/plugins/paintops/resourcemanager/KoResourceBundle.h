@@ -46,12 +46,6 @@ public:
     virtual ~KoResourceBundle();
 
     /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
-
-    /**
      * @brief defaultFileExtension
      * @return the default file extension which should be when saving the resource
      */

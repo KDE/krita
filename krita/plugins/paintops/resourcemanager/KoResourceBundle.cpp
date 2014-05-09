@@ -57,11 +57,6 @@ QString KoResourceBundle::defaultFileExtension() const
     return QString(".bundle");
 }
 
-QImage KoResourceBundle::image() const
-{
-    return m_thumbnail;
-}
-
 bool KoResourceBundle::load()
 {
     if (filename().isEmpty()) return false;
@@ -99,6 +94,7 @@ bool KoResourceBundle::load()
 
         m_installed = m_manifest->isInstalled();
         setValid(true);
+        setImage(m_thumbnail);
     }
 
     return true;

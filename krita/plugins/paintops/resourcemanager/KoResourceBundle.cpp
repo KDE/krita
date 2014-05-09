@@ -45,9 +45,6 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
     if (!m_kritaPath.isEmpty() && m_kritaPath.at(m_kritaPath.size() - 1) != '/') {
         this->m_kritaPath.append("/");
     }
-
-    m_packName = QString();
-
     setName(QFileInfo(fileName).baseName());
 }
 
@@ -137,7 +134,7 @@ bool KoResourceBundle::save()
     QList<QString> fileList = m_manifest->getFileList(m_kritaPath, !bundleExists); // -- firstBuild
 
     if (bundleExists && !m_manifest->isInstalled()) {
-        QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_packName, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+        QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {
             return false;
         } else {
@@ -163,10 +160,10 @@ bool KoResourceBundle::save()
         }
     }
 
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_packName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
     if (!resourceStore || resourceStore->bad()) return false;
 
-    QString bundleName = m_packName.section('/', m_packName.count('/')).section('.', 0, 0);
+    QString bundleName = filename().section('/', filename().count('/')).section('.', 0, 0);
     for (int i = 0; i < fileList.size(); i++) {
         QString currentFile = fileList.at(i);
         if (currentFile.contains("/" + bundleName + "/")) {
@@ -181,7 +178,7 @@ bool KoResourceBundle::save()
     }
 
 
-    m_manifest->updateFilePaths(m_kritaPath, m_packName);
+    m_manifest->updateFilePaths(m_kritaPath, filename());
 
     if (!m_thumbnail.isNull()) {
         while (resourceStore->leaveDirectory());

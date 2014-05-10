@@ -115,7 +115,6 @@ void KoXmlResourceBundleMeta::checkSort()
 //TODO Vérifier si on peut pas simplifier cette méthode
 QDomElement KoXmlResourceBundleMeta::addTag(QString tagName, QString textValue, bool emptyFile)
 {
-    textValue.remove(" ");
     tagName = tagName.toLower();
 
     int tagEnumValue = getTagEnumValue(tagName);

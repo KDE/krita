@@ -269,9 +269,6 @@ void KoResourceBundle::uninstall()
 
 void KoResourceBundle::addMeta(const QString &type, const QString &value)
 {
-    if (type == "created") {
-        setValid(true);
-    }
     m_meta->addTag(type, value);
 }
 

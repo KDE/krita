@@ -87,8 +87,6 @@ public:
      */
     void addFile(QString fileType, QString filePath, QStringList fileTagList);
 
-
-
     QList<QString> getTagsList();
 
     /**

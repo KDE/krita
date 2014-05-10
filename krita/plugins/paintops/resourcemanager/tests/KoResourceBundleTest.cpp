@@ -81,6 +81,7 @@ void KoResourceBundleTest::testLoadSave()
     bundle.addMeta("created", "TestCreated");
     bundle.addMeta("updated", "TestUpdated");
     bundle.addMeta("description", "Test Description");
+    bundle.setThumbnail(QString(FILES_DATA_DIR) + "/" + "thumb.png");
 
     int tagCount = 0;
 
@@ -160,6 +161,10 @@ void KoResourceBundleTest::testLoadSave()
     QCOMPARE(bundle2.getMeta("updated"), QDate::currentDate().toString("dd/MM/yyyy"));
     QCOMPARE(bundle2.getMeta("description"), QString("Test Description"));
 
+    QImage img = bundle2.image();
+    QImage thumb = QImage(QString(FILES_DATA_DIR) + "/" + "thumb.png");
+
+    QCOMPARE(img, thumb);
 }
 
 void KoResourceBundleTest::testInstallUninstall()

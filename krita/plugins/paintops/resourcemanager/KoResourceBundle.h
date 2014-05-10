@@ -35,8 +35,7 @@ class KoResourceBundle : public KoResource
 
 public:
     /**
-     * @brief KoResourceBundle : Ctor
-     * @param bundlePath the path of the bundle
+     * @brief KoResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
     KoResourceBundle(QString const& fileName);
 
@@ -78,7 +77,8 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(QString type, QString value);
+    void addMeta(const QString &type, const QString &value);
+    const QString getMeta(const QString &type) const;
 
     /**
      * @brief addFile : Add a file to the bundle
@@ -86,6 +86,8 @@ public:
      * @param filePath path of the resource file
      */
     void addFile(QString fileType, QString filePath, QStringList fileTagList);
+
+
 
     QList<QString> getTagsList();
 
@@ -104,36 +106,6 @@ public:
      * @brief rename : Rename the bundle
      */
     void rename(QString, QString);
-
-    /**
-     * @brief getAuthor
-     * @return the metadata associated to the field "author" or QString() if it doesn't exist
-     */
-    QString getAuthor();
-
-    /**
-     * @brief getLicense
-     * @return the metadata associated to the field "license" or QString() if it doesn't exist
-     */
-    QString getLicense();
-
-    /**
-     * @brief getWebSite
-     * @return the metadata associated to the field "website" or QString() if it doesn't exist
-     */
-    QString getWebSite();
-
-    /**
-     * @brief getCreated
-     * @return the metadata associated to the field "created" or QString() if it doesn't exist
-     */
-    QString getCreated();
-
-    /**
-     * @brief getUpdated
-     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
-     */
-    QString getUpdated();
 
     /**
      * @brief isInstalled

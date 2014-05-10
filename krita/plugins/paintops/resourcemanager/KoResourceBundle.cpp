@@ -267,12 +267,17 @@ void KoResourceBundle::uninstall()
     save();
 }
 
-void KoResourceBundle::addMeta(QString type, QString value)
+void KoResourceBundle::addMeta(const QString &type, const QString &value)
 {
     if (type == "created") {
         setValid(true);
     }
     m_meta->addTag(type, value);
+}
+
+const QString KoResourceBundle::getMeta(const QString &type) const
+{
+    return m_meta->getValue(type);
 }
 
 
@@ -363,31 +368,6 @@ QByteArray KoResourceBundle::generateMD5() const
         return md5.result();
     }
     return QByteArray();
-}
-
-QString KoResourceBundle::getAuthor()
-{
-    return m_meta->getValue("author");
-}
-
-QString KoResourceBundle::getLicense()
-{
-    return m_meta->getValue("license");
-}
-
-QString KoResourceBundle::getWebSite()
-{
-    return m_meta->getValue("website");
-}
-
-QString KoResourceBundle::getCreated()
-{
-    return m_meta->getValue("created");
-}
-
-QString KoResourceBundle::getUpdated()
-{
-    return m_meta->getValue("updated");
 }
 
 

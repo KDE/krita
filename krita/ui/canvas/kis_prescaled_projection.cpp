@@ -324,6 +324,10 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
 void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
                                                      KisPPUpdateInfoSP info)
 {
+    if(!m_d->image) {
+        return;
+    }
+
     m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas

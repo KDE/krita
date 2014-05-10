@@ -275,10 +275,6 @@ void KoResourceBundle::addMeta(QString type, QString value)
     m_meta->addTag(type, value);
 }
 
-void KoResourceBundle::setMeta(KoXmlResourceBundleMeta* newMeta)
-{
-    m_meta = newMeta;
-}
 
 //TODO Voir s'il faut aussi rajouter les tags dans le meta
 void KoResourceBundle::addFile(QString fileType, QString filePath, QStringList fileTagList)

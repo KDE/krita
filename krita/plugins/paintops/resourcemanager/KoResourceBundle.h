@@ -81,13 +81,6 @@ public:
     void addMeta(QString type, QString value);
 
     /**
-     * @brief addMeta : Add a Metadata to the resource
-     * @param type type of the metadata
-     * @param value value of the metadata
-     */
-    void setMeta(KoXmlResourceBundleMeta* newMeta);
-
-    /**
      * @brief addFile : Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file

@@ -142,6 +142,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         }
     }
 
+    //this->updateActiveFrame();
     setCurrentImage(d->image);
 }
 
@@ -264,6 +265,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateXML();
+    this->updateActiveFrame();
 
     setCurrentImage(d->image);
 }
@@ -314,6 +316,7 @@ void KisAnimationDoc::addPaintLayer()
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     this->updateXML();
+    this->updateActiveFrame();
 
     setCurrentImage(d->image);
 }
@@ -342,6 +345,7 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     this->updateXML();
+    this->updateActiveFrame();
 
     setCurrentImage(d->image);
 }
@@ -410,6 +414,11 @@ void KisAnimationDoc::preSaveAnimation()
     this->updateXML();
 
     d->saved = true;
+}
+
+void KisAnimationDoc::updateActiveFrame()
+{
+    this->setPreActivatedNode(d->currentFrame);
 }
 
 KisAnimationStore* KisAnimationDoc::getStore()

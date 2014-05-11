@@ -60,6 +60,7 @@ public slots:
 private:
     void preSaveAnimation();
     void updateXML();
+    void updateActiveFrame();
     QString getFrameFile(int frame, int layer);
     QRect getParentFramePosition(int frame, int layer);
 

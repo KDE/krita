@@ -108,8 +108,8 @@ bool KoResourceManagerControl::createPack(int type)
 
             if (currentFileName.contains('/') && !currentBundle) {
                 isEmpty = false;
-                newBundle->addFile(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
-                                   currentModel->assignedTagsList(currentResource));
+                newBundle->addResource(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
+                                   currentModel->assignedTagsList(currentResource), currentResource->md5());
             }
         }
 
@@ -373,7 +373,7 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
 
                 if (currentBundle) {
                     currentBundle->removeFile(oldFilename);
-                    currentBundle->addFile(fileType, newFilename, tagList);
+                    currentBundle->addResource(fileType, newFilename, tagList, currentResource->md5());
                 }
 
             }
@@ -469,8 +469,8 @@ void KoResourceManagerControl::addFiles(QString bundleName, int type)
         for (int i = 0; i < selected.size(); i++) {
             QString currentSelect = selected.at(i);
             QString resourceType = currentSelect.section('/', currentSelect.count("/") - 2, currentSelect.count("/") - 2);
-
-            currentBundle->addFile(resourceType, currentSelect, currentModel->assignedTagsList(currentModel->getResourceFromFilename(currentSelect)));
+            KoResource *res = currentModel->getResourceFromFilename(currentSelect);
+            currentBundle->addResource(resourceType, currentSelect, currentModel->assignedTagsList(res), res->md5());
             QFile::copy(currentSelect, path + resourceType + QString("/") + bundleName + QString("/")
                         + currentSelect.section('/', currentSelect.count("/")));
         }

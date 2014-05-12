@@ -21,8 +21,8 @@
 #define KORESOURCEBUNDLE_H
 
 #include "KoResource.h"
+#include "KoXmlResourceBundleManifest.h"
 
-class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
 class KoStore;
 
@@ -85,7 +85,7 @@ public:
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType, QString filePath, QStringList fileTagList);
+    void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
 
     QList<QString> getTagsList();
 
@@ -130,7 +130,7 @@ private:
 
 private:
     QImage m_thumbnail;
-    KoXmlResourceBundleManifest* m_manifest;
+    KoXmlResourceBundleManifest m_manifest;
     KoXmlResourceBundleMeta* m_meta;
 
     bool m_installed;

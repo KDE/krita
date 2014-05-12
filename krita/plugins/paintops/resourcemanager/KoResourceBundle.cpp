@@ -40,7 +40,6 @@
 
 KoResourceBundle::KoResourceBundle(QString const& fileName)
     : KoResource(fileName)\
-    , m_manifest(new KoXmlResourceBundleManifest())
     , m_meta(new KoXmlResourceBundleMeta())
 {
     setName(QFileInfo(fileName).baseName());
@@ -49,7 +48,6 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
 KoResourceBundle::~KoResourceBundle()
 {
     delete m_meta;
-    delete m_manifest;
 }
 
 QString KoResourceBundle::defaultFileExtension() const
@@ -68,13 +66,14 @@ bool KoResourceBundle::load()
         return false;
 
     } else {
-        //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
+        //TODO Vérifier si on peut éviter de recréer meta à chaque load
         //A optimiser si possible
-        delete m_manifest;
         delete m_meta;
 
-        if (resourceStore->open("manifest.xml")) {
-            m_manifest = new KoXmlResourceBundleManifest(resourceStore->device());
+        if (resourceStore->open("META-INF/manifest.xml")) {
+            if (!m_manifest.load(resourceStore->device())) {
+                return false;
+            }
             resourceStore->close();
         } else {
             return false;
@@ -92,7 +91,7 @@ bool KoResourceBundle::load()
             resourceStore->close();
         }
 
-        m_installed = m_manifest->isInstalled();
+        m_installed = m_manifest.isInstalled();
         setValid(true);
         setImage(m_thumbnail);
     }
@@ -120,16 +119,15 @@ bool KoResourceBundle::save()
     if (filename().isEmpty()) return false;
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
-    m_manifest->checkSort();
     m_meta->checkSort();
 
     bool bundleExists = QFileInfo(filename()).exists();
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
 
-    QList<QString> fileList = m_manifest->getFileList(bundleDir.absolutePath(), !bundleExists); // -- firstBuild
+    QList<QString> fileList = m_manifest.getFileList(bundleDir.absolutePath(), !bundleExists); // -- firstBuild
 
-    if (bundleExists && !m_manifest->isInstalled()) {
+    if (bundleExists && !m_manifest.isInstalled()) {
         QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
         if (!resourceStore || resourceStore->bad()) {
             return false;
@@ -174,7 +172,7 @@ bool KoResourceBundle::save()
     }
 
 
-    m_manifest->updateFilePaths(bundleDir.absolutePath(), filename());
+    m_manifest.updateFilePaths(bundleDir.absolutePath(), filename());
 
     if (!m_thumbnail.isNull()) {
         while (resourceStore->leaveDirectory());
@@ -186,8 +184,10 @@ bool KoResourceBundle::save()
         resourceStore->close();
     }
 
-    resourceStore->open("manifest.xml");
-    resourceStore->write(m_manifest->toByteArray());
+    resourceStore->open("META-INF/manifest.xml");
+    QBuffer buf;
+    m_manifest.save(&buf);
+    resourceStore->write(buf.data());
     resourceStore->close();
     resourceStore->open("meta.xml");
     resourceStore->write(m_meta->toByteArray());
@@ -195,8 +195,8 @@ bool KoResourceBundle::save()
     resourceStore->finalize();
 
 
-    if (bundleExists && !m_manifest->isInstalled()) {
-        QList<QString> dirList = m_manifest->getDirList();
+    if (bundleExists && !m_manifest.isInstalled()) {
+        QList<QString> dirList = m_manifest.getDirList();
         for (int i = 0; i < dirList.size(); i++) {
             removeDir(bundleDir.absolutePath() + "/temp/" + dirList.at(i));
         }
@@ -214,7 +214,7 @@ void KoResourceBundle::install()
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
     if (!resourceStore || resourceStore->bad()) return;
 
-    QMap<QString, QString> pathList = m_manifest->getFilesToExtract();
+    QMap<QString, QString> pathList = m_manifest.getFilesToExtract();
 
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
@@ -239,9 +239,9 @@ void KoResourceBundle::install()
         }
     }
 
-    m_manifest->exportTags();
+    m_manifest.exportTags();
     m_installed = true;
-    m_manifest->install();
+    m_manifest.install();
     save();
 }
 
@@ -253,7 +253,7 @@ void KoResourceBundle::uninstall()
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
     QString dirPath = bundleDir.absolutePath();
-    QList<QString> directoryList = m_manifest->getDirList();
+    QList<QString> directoryList = m_manifest.getDirList();
     QString shortPackName = m_meta->getPackName();
 
     for (int i = 0; i < directoryList.size(); i++) {
@@ -263,7 +263,7 @@ void KoResourceBundle::uninstall()
     }
 
     m_installed = false;
-    m_manifest->uninstall();
+    m_manifest.uninstall();
     save();
 }
 
@@ -279,9 +279,9 @@ const QString KoResourceBundle::getMeta(const QString &type) const
 
 
 //TODO Voir s'il faut aussi rajouter les tags dans le meta
-void KoResourceBundle::addFile(QString fileType, QString filePath, QStringList fileTagList)
+void KoResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
 {
-    m_manifest->addManiTag(fileType, filePath, fileTagList);
+    m_manifest.addResource(fileType, filePath, fileTagList, md5sum);
     m_meta->addTags(fileTagList);
 }
 
@@ -295,7 +295,7 @@ QList<QString> KoResourceBundle::getTagsList()
 
 void KoResourceBundle::removeFile(QString fileName)
 {
-    QList<QString> list = m_manifest->removeFile(fileName);
+    QList<QString> list = m_manifest.removeFile(fileName);
 
     for (int i = 0; i < list.size(); i++) {
         m_meta->removeFirstTag("tag", list.at(i));
@@ -307,7 +307,7 @@ void KoResourceBundle::addResourceDirs()
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
     QString localSavePath = bundleDir.absolutePath();
-    foreach(const QString& resourceType,  m_manifest->getDirList())  {
+    foreach(const QString& resourceType,  m_manifest.getDirList())  {
         KGlobal::mainComponent().dirs()->addResourceDir(resourceType.toLatin1().data(), localSavePath + "/" + resourceType + "/" + this->name());
     }
 }
@@ -324,14 +324,14 @@ void KoResourceBundle::rename(QString filename, QString name)
 
     addMeta("filename", filename);
     addMeta("name", shortName);
-    m_manifest->rename(shortName);
+    m_manifest.rename(shortName);
 
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
     QString localSavePath = bundleDir.absolutePath();
 
     if (isInstalled()) {
-        QList<QString> directoryList = m_manifest->getDirList();
+        QList<QString> directoryList = m_manifest.getDirList();
         QString dirPath;
         QDir dir;
         for (int i = 0; i < directoryList.size(); i++) {

@@ -19,59 +19,50 @@
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
 #include <QMap>
+#include <QMultiMap>
 #include "KoXmlGenerator.h"
 #include "krita_export.h"
 
 class KoResource;
 
-class  KoXmlResourceBundleManifest: public KoXmlGenerator
+class  KoXmlResourceBundleManifest
 {
-private:
-    /**
-     * @brief The TagEnum enum : Contains all the resource types.
-     * @description Allows to sort correctly the XML document.
-     * @details Other means all other values that are not listed before.
-     */
-    enum TagEnum {Brush = 0, Gradient, Paintop, Palette, Pattern,
-                  Template, Workspace, Reference, Other
-                 };
+
+    struct ResourceReference {
+
+        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QByteArray &_md5) {
+            resourcePath = _resourcePath;
+            tagList = _tagList;
+            md5sum = _md5;
+        }
+
+        QString resourcePath;
+        QList<QString> tagList;
+        QByteArray md5sum;
+    };
 
 public:
     /**
      * @brief KoXmlResourceBundleManifest : Ctor
      * @param xmlName the name of the XML file to be created
      */
-    KoXmlResourceBundleManifest(QString xmlName = "manifest");
-
-    /**
-     * @brief KoXmlResourceBundleManifest
-     * @param device the device associated to Xml data
-     */
-    KoXmlResourceBundleManifest(QIODevice *device);
+    KoXmlResourceBundleManifest();
 
     /**
      * @brief ~KoXmlResourceBundleManifest : Dtor
      */
     virtual ~KoXmlResourceBundleManifest();
 
-    /**
-     * @brief getTagEnumValue
-     * @param tagName the name of the tag
-     * @return the value from TagEnum corresponding to the tag.
-     */
-    static TagEnum getTagEnumValue(QString tagName);
 
     /**
-     * @brief checkSort : Check/sort the file to be easily comprehensible
+     * @brief load the KoXmlResourceBundleManifest from the given device
      */
-    void checkSort();
+    bool load(QIODevice *device);
 
     /**
-     * @brief merge : Merge the data contained in two tags in only one tag
-     * @param dest the node that will contain the whole data
-     * @param src the node that will be removed after merging
+     * @brief save the KoXmlResourceBundleManifest to the given device
      */
-    void merge(QDomNode dest, QDomNode src);
+    bool save(QIODevice *device);
 
     /**
      * @brief addTag : Add a file tag as a child of the fileType tag.
@@ -80,11 +71,11 @@ public:
      * @param emptyFile true if the file is empty
      * @return the element corresponding to the created tag.
      */
-    QDomElement addManiTag(QString fileType, QString fileName, QStringList tagFileList, bool emptyFile = false);
+    void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QByteArray &md5);
 
     /**
      * @brief getFileList
-     * @return the list of the files enumerared in the XML
+     * @return the list of the files enumerated in the XML
      */
     QList<QString> getFileList(QString kritaPath, bool firstBuild);
 
@@ -99,30 +90,6 @@ public:
      * @return the list of the directories containing the files of the Xml document
      */
     QList<QString> getDirList();
-
-    /**
-     * @brief addTag : Add a tag as the child of the node
-     * @param parent the parent node of the tag
-     * @param tagName the name of the tag to be added
-     * @param textValue the text value associated to the tag
-     * @return the child as a QDomElement
-     */
-    QDomElement addManiTag(QDomElement parent, QString tagName, QString textValue);
-
-    /**
-     * @brief importFileTags : import the resource tags associated to the file to the manifest
-     * @param parent the parent node of the tag
-     * @param fileTypeName the type of the file
-     * @param fileName the name of the file
-     */
-    void importFileTags(QDomElement parent, QString fileTypeName, QString fileName);
-
-    /**
-     * @brief getTagList
-     * @return the list of all resource tags contained in the manifest
-     */
-    QList<QString> getTagsList();
-
     /**
      * @brief removeFile : remove a file from the manifest
      * @param fileName : the name of the file to be removed
@@ -151,15 +118,12 @@ public:
      */
     bool isInstalled();
 
-    /**
-     * @brief getXmlDocument
-     * @return xmlDocument
-     */
-    QDomDocument getXmlDocument();
-
     void rename(QString newName);
 
     void updateFilePaths(QString kritaPath, QString bundleName);
+
+private:
+    QMultiMap<QString, ResourceReference> m_resources;
 };
 
 

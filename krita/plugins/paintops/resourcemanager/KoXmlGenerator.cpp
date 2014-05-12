@@ -28,14 +28,6 @@ KoXmlGenerator::KoXmlGenerator(QString xmlFileName)
     m_root = m_xmlDocument.documentElement();
 }
 
-KoXmlGenerator::KoXmlGenerator(QByteArray data)
-{
-    this->m_device = 0;
-    if (m_xmlDocument.setContent(data)) {
-        m_root = m_xmlDocument.documentElement();
-    }
-}
-
 KoXmlGenerator::KoXmlGenerator(QIODevice *device)
 {
     this->m_device = device;

@@ -35,12 +35,8 @@ KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName)
     m_xmlDocument.appendChild(m_root);
 }
 
-KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QByteArray data): KoXmlGenerator(data)
-{
-
-}
-
-KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QIODevice *device): KoXmlGenerator(device)
+KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QIODevice *device)
+    : KoXmlGenerator(device)
 {
 
 }

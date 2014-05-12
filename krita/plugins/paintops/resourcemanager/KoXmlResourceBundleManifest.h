@@ -44,16 +44,10 @@ public:
     KoXmlResourceBundleManifest(QString xmlName = "manifest");
 
     /**
-     * @brief KoXmlResourceBundleManifest : Ctor
-     * @param data the QByteArray containing Xml data
-     */
-    KoXmlResourceBundleManifest(QByteArray data);
-
-    /**
      * @brief KoXmlResourceBundleManifest
      * @param device the device associated to Xml data
      */
-    KoXmlResourceBundleManifest(QIODevice *m_device);
+    KoXmlResourceBundleManifest(QIODevice *device);
 
     /**
      * @brief ~KoXmlResourceBundleManifest : Dtor

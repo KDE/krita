@@ -30,11 +30,6 @@ KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QIODevice *device): KoXmlGenera
 
 }
 
-KoXmlResourceBundleMeta::KoXmlResourceBundleMeta(QByteArray data): KoXmlGenerator(data)
-{
-
-}
-
 KoXmlResourceBundleMeta::~KoXmlResourceBundleMeta()
 {
 

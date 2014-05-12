@@ -49,12 +49,6 @@ public:
     KoXmlResourceBundleMeta(QString xmlName = "meta");
 
     /**
-     * @brief KoXmlResourceBundleMeta : Ctor
-     * @param data the QByteArray containing Xml data
-     */
-    KoXmlResourceBundleMeta(QByteArray data);
-
-    /**
      * @brief KoXmlResourceBundleMeta
      * @param device the device associated to Xml data
      */

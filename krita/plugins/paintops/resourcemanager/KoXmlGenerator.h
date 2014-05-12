@@ -42,12 +42,6 @@ public:
 
     /**
      * @brief KoXmlGenerator : Ctor
-     * @param data the QByteArray containing Xml data
-     */
-    KoXmlGenerator(QByteArray data);
-
-    /**
-     * @brief KoXmlGenerator : Ctor
      * @param device the device associated to Xml data
      */
     KoXmlGenerator(QIODevice *m_device);

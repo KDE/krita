@@ -89,6 +89,7 @@ void KoResourceBundleTest::testLoadSave()
     gradientServer->loadResources(gradientServer->fileNames());
     QVERIFY(gradientServer->resoureCount() > 0);
     foreach(KoAbstractGradient* gradient, gradientServer->resources()) {
+        if (gradient->name() == "Foreground to Transparent" || gradient->name() == "Foreground to Background") continue;
         gradientServer->addTag(gradient, QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addFile(gradientServer->type(), gradient->filename(), gradientServer->tagObject()->assignedTagsList(gradient));

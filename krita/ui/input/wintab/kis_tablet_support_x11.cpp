@@ -405,6 +405,8 @@ void kis_x11_init_tablet()
                         device_data.maxTanPressure = 0;
                         device_data.minZ = 0;
                         device_data.maxZ = 0;
+                        device_data.minRotation = a[5].min_value;
+                        device_data.maxRotation = a[5].max_value;
 #endif
 
                         // got the max pressure no need to go further...
@@ -611,7 +613,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         pressure = tablet->savedAxesData.pressure();
         xTilt = tablet->savedAxesData.xTilt();
         yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
+        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+            (tablet->maxRotation - tablet->minRotation) * 360.0;
 
     } else if (button) {
         // see the comment in 'motion' branch
@@ -625,7 +628,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         pressure = tablet->savedAxesData.pressure();
         xTilt = tablet->savedAxesData.xTilt();
         yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
+        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+            (tablet->maxRotation - tablet->minRotation) * 360.0;
     }
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;

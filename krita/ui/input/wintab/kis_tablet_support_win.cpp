@@ -234,6 +234,9 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qt_tablet_tilt_support = tpOri[0].axResolution && tpOri[1].axResolution;
     }
 
+    tdd.minRotation = 0;
+    tdd.maxRotation = int(tpOri[2].axResolution);
+
     tdd.minX = int(lc.lcOutOrgX);
     tdd.maxX = int(qAbs(lc.lcOutExtX)) + int(lc.lcOutOrgX);
 
@@ -461,7 +464,12 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             double degY = atan(cos(radAzim) / tanAlt);
             tiltX = int(degX * (180 / Q_PI));
             tiltY = int(-degY * (180 / Q_PI));
-            rotation = ort.orTwist;
+
+            // FIXME: rotation support is not finished yet!
+            rotation = qreal(ort.orTwist - currentTabletPointer.minRotation) /
+                (currentTabletPointer.maxRotation - currentTabletPointer.minRotation) * 360.0;
+
+            //qDebug() << "Rotation" << ppVar(rotation) << ppVar(ort.orTwist) << ppVar(currentTabletPointer.minRotation) << ppVar(currentTabletPointer.maxRotation);
         }
 
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,

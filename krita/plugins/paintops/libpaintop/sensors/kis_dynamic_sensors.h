@@ -43,7 +43,7 @@ public:
     KisDynamicSensorRotation();
     virtual ~KisDynamicSensorRotation() { }
     virtual qreal value(const KisPaintInformation& info) {
-        return info.rotation() / 28 + 0.5; // it appears that rotation is between -14 and +14
+        return info.rotation() / 360.0;
     }
 };
 

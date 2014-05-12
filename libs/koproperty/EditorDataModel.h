@@ -63,15 +63,6 @@ public:
     bool setHeaderData(int section, Qt::Orientation orientation,
                        const QVariant &value, int role = Qt::EditRole);
 
-    /*  bool insertColumns(int position, int columns,
-                         const QModelIndex &parent = QModelIndex());
-      bool removeColumns(int position, int columns,
-                         const QModelIndex &parent = QModelIndex());
-      bool insertRows(int position, int rows,
-                      const QModelIndex &parent = QModelIndex());
-      bool removeRows(int position, int rows,
-                      const QModelIndex &parent = QModelIndex());*/
-
     QModelIndex buddy(const QModelIndex & index) const;
 
     //! @return property set object for this model.
@@ -96,8 +87,8 @@ public:
 
     //! Reimplemented for optimization.
     bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
+
 private:
-//    void setupModelData(const QStringList &lines, TreeItem *parent);
     void collectIndices() const;
 
     class Private;

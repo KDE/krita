@@ -21,7 +21,6 @@
 
 #include "Property.h"
 #include "Property_p.h"
-//#include "customproperty.h"
 #include "Set.h"
 #include "Factory.h"
 
@@ -44,7 +43,6 @@ public:
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0)
-//            sortingKey(0)
     {
     }
 
@@ -86,7 +84,6 @@ public:
     QVariant oldValue;
     /*! The string-to-value correspondence list of the property.*/
     Property::ListData* listData;
-// QMap<QString, QVariant> *valueList;
     QString icon;
 
     bool changed;
@@ -104,14 +101,11 @@ public:
     QPointer<Set> set;
     //! Used when multiple sets are assigned for the property
     QList< QPointer<Set> > *sets;
-// QValueList<Set*>  sets;
 
     Property  *parent;
     QList<Property*>  *children;
     //! list of properties with the same name (when intersecting buffers)
     QList<Property*>  *relatedProperties;
-
-//    int sortingKey;
 };
 }
 
@@ -121,19 +115,16 @@ using namespace KoProperty;
 
 Property::ListData::ListData(const QStringList& keys_, const QStringList& names_)
         : names(names_)
-// , fixed(true)
 {
     setKeysAsStringList(keys_);
 }
 
 Property::ListData::ListData(const QList<QVariant> keys_, const QStringList& names_)
         : keys(keys_), names(names_)
-// , fixed(true)
 {
 }
 
 Property::ListData::ListData()
-// : fixed(true)
 {
 }
 
@@ -159,24 +150,6 @@ QStringList Property::ListData::keysAsStringList() const
 }
 
 /////////////////////////////////////////////////////////////////
-
-/*
-KOPROPERTY_EXPORT QMap<QString, QVariant>
-KoProperty::createValueListFromStringLists(const QStringList &keys, const QStringList &values)
-{
-  QMap<QString, QVariant> map;
-  if(keys.count() != values.count())
-    return map;
-
-  QStringList::ConstIterator valueIt = values.begin();
-  QStringList::ConstIterator endIt = keys.constEnd();
-  for(QStringList::ConstIterator it = keys.begin(); it != endIt; ++it, ++valueIt)
-    map.insert( *it, *valueIt);
-
-  return map;
-}
-*/
-
 
 Property::Property(const QByteArray &name, const QVariant &value,
                    const QString &caption, const QString &description,
@@ -320,17 +293,12 @@ Property::setIcon(const QString &icon)
 QVariant
 Property::value() const
 {
-//??    if (d->custom && d->custom->handleValue())
-//??        return d->custom->value();
     return d->value;
 }
 
 QVariant
 Property::oldValue() const
 {
-    /* if(d->oldValue.isNull())
-        return value();
-      else*/
     return d->oldValue;
 }
 
@@ -430,13 +398,11 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
         d->composed->setChildValueChangedEnabled(false);
         d->composed->setValue(this, value, rememberOldValue);
         d->composed->setChildValueChangedEnabled(true);
-//        prevValue = d->composed->value();
     }
     else {
         prevValue = currentValue;
     }
 
-//    if (!d->composed || !useComposedProperty)// || !composed->handleValue())
     d->value = value;
 
     if (!d->parent) { // emit only if parent has not done it
@@ -469,18 +435,14 @@ Property::resetValue()
     }
 }
 
-//const QMap<QString, QVariant>*
-Property::ListData*
-Property::listData() const
+Property::ListData* Property::listData() const
 {
     return d->listData;
 }
 
 void
-Property::setListData(ListData* list) //const QMap<QString, QVariant> &list)
+Property::setListData(ListData* list)
 {
-// if(!d->valueList)
-//  d->valueList = new QMap<QString, QVariant>();
     if (list == d->listData)
         return;
     delete d->listData;
@@ -492,10 +454,6 @@ Property::setListData(const QStringList &keys, const QStringList &names)
 {
     ListData* list = new ListData(keys, names);
     setListData(list);
-
-// if(!d->valueList)
-//  d->valueList = new QMap<QString, QVariant>();
-// *(d->valueList) = createValueListFromStringLists(keys, values);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -623,7 +581,7 @@ Property::operator= (const Property & property)
     d->options = property.d->options;
 
     if (property.d->listData) {
-        d->listData = new ListData(*property.d->listData); //QMap<QString, QVariant>(*(property.d->valueList));
+        d->listData = new ListData(*property.d->listData);
     }
     if (property.d->composed) {
         delete d->composed;
@@ -650,8 +608,6 @@ Property::operator= (const Property & property)
     // update these later because they may have been changed when creating children
     d->oldValue = property.d->oldValue;
     d->changed = property.d->changed;
-//    d->sortingKey = property.d->sortingKey;
-
     return *this;
 }
 
@@ -696,11 +652,10 @@ Property::addChild(Property *prop)
         if (!d->children)
             d->children = new QList<Property*>();
         d->children->append(prop);
-//        prop->setSortingKey(d->children->count());
         prop->d->parent = this;
     } else {
         kWarning() << "property" << name()
-                << ": child property" << prop->name() << "already added";
+                   << ": child property" << prop->name() << "already added";
         return;
     }
 }

@@ -52,6 +52,7 @@
 #include "kis_input_profile_manager.h"
 #include "kis_shortcut_configuration.h"
 
+#include <input/kis_tablet_debugger.h>
 #include <input/kis_tablet_event.h>
 #include <kis_signal_compressor.h>
 
@@ -75,7 +76,6 @@ public:
         , defaultInputAction(0)
         , eventsReceiver(0)
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
-        , logTabletEvents(false)
     {
     }
 
@@ -117,88 +117,19 @@ public:
 
     QSet<QObject*> priorityEventFilter;
 
-    bool logTabletEvents;
-    void debugMouseEvent(QEvent *event);
-    void debugTabletEvent(QEvent *event);
+    template <class Event, bool useBlocking>
+    void debugEvent(QEvent *event);
 
     class ProximityNotifier;
 };
 
-void KisInputManager::Private::debugMouseEvent(QEvent *event)
+template <class Event, bool useBlocking>
+void KisInputManager::Private::debugEvent(QEvent *event)
 {
-    if (!logTabletEvents) return;
-
-    QString msg1 = ignoreQtCursorEvents ? "[BLOCKED] " : "[       ] ";
-
-    QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-
-    QString msg2 =
-        mevent->type() == QEvent::MouseButtonPress ? "QEvent::MouseButtonPress" :
-        mevent->type() == QEvent::MouseButtonRelease ? "QEvent::MouseButtonRelease" :
-        mevent->type() == QEvent::MouseButtonDblClick ? "QEvent::MouseButtonDblClick" :
-        mevent->type() == QEvent::MouseMove ? "QEvent::MouseMove" : "unknown";
-
-    QString msg3 = QString("gpos: %1,%2").arg(mevent->globalPos().x()).arg(mevent->globalPos().y());
-    QString msg4 = QString("pos: %1,%2").arg(mevent->pos().x()).arg(mevent->pos().y());
-
-    QString msg5 = QString("button: %1").arg(mevent->button());
-    QString msg6 = QString("buttons: %1").arg(mevent->buttons());
-
-    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6;
-}
-
-void KisInputManager::Private::debugTabletEvent(QEvent *event)
-{
-    if (!logTabletEvents) return;
-
-    QString msg1 = ignoreQtCursorEvents ? "[BLOCKED] " : "[       ] ";
-
-    QTabletEvent *tevent = static_cast<QTabletEvent*>(event);
-
-    QString msg2 =
-        tevent->type() == QEvent::TabletPress ? "QEvent::TabletPress" :
-        tevent->type() == QEvent::TabletRelease ? "QEvent::TabletRelease" :
-        tevent->type() == QEvent::TabletMove ? "QEvent::TabletMove" : "unknown";
-
-    QString msg3 = QString("gpos: %1,%2").arg(tevent->globalPos().x()).arg(tevent->globalPos().y());
-    QString msg4 = QString("pos: %1,%2").arg(tevent->pos().x()).arg(tevent->pos().y());
-
-    QString msg5 = QString("hres: %1,%2").arg(tevent->hiResGlobalPos().x()).arg(tevent->hiResGlobalPos().y());
-
-    QString msg6 = QString(
-        " Pressure: %1"
-        " Rotation: %2"
-        " Tangential pressure: %3"
-        " Unique id: %4"
-        " z: %5"
-        " xTilt: %6"
-        " yTilt: %7"
-        )
-        .arg(tevent->pressure())
-        .arg(tevent->rotation())
-        .arg(tevent->tangentialPressure())
-        .arg(tevent->uniqueId())
-        .arg(tevent->z())
-        .arg(tevent->xTilt())
-        .arg(tevent->yTilt());
-
-    QString msg7 =
-        tevent->device() == QTabletEvent::NoDevice ? "NoDevice" :
-        tevent->device() == QTabletEvent::Puck ? "Puck" :
-        tevent->device() == QTabletEvent::Stylus ? "Stylus" :
-        tevent->device() == QTabletEvent::Airbrush ? "Airbrush" :
-        tevent->device() == QTabletEvent::FourDMouse ? "FourDMouse" :
-        tevent->device() == QTabletEvent::RotationStylus ? "RotationStylus" :
-        "unknown";
-
-    QString msg8 =
-        tevent->pointerType() == QTabletEvent::UnknownPointer ? "UnknownPointer" :
-        tevent->pointerType() == QTabletEvent::Pen ? "Pen" :
-        tevent->pointerType() == QTabletEvent::Cursor ? "Cursor" :
-        tevent->pointerType() == QTabletEvent::Eraser ? "Eraser" :
-        "unknown";
-
-    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6 << msg7 << msg8;
+    if (!KisTabletDebugger::instance()->debugEnabled()) return;
+    QString msg1 = useBlocking && ignoreQtCursorEvents ? "[BLOCKED] " : "[       ]";
+    Event *specificEvent = static_cast<Event*>(event);
+    qDebug() << KisTabletDebugger::instance()->eventToString(*specificEvent, msg1);
 }
 
 #define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
@@ -232,9 +163,11 @@ public:
     bool eventFilter(QObject* object, QEvent* event ) {
         switch (event->type()) {
         case QEvent::TabletEnterProximity:
+            d->debugEvent<QEvent, false>(event);
             start_ignore_cursor_events();
             break;
         case QEvent::TabletLeaveProximity:
+            d->debugEvent<QEvent, false>(event);
             stop_ignore_cursor_events();
             break;
         default:
@@ -510,10 +443,12 @@ KisInputManager::~KisInputManager()
 
 void KisInputManager::toggleTabletLogger()
 {
-    d->logTabletEvents = !d->logTabletEvents;
-    QMessageBox::information(0, "Krita", d->logTabletEvents ? "Tablet Event Logging Enabled" :
-                                                              "Tablet Event Logging Disabled");
-    if (d->logTabletEvents) {
+    KisTabletDebugger::instance()->toggleDebugging();
+
+    bool enabled = KisTabletDebugger::instance()->debugEnabled();
+    QMessageBox::information(0, "Krita", enabled ? "Tablet Event Logging Enabled" :
+                             "Tablet Event Logging Disabled");
+    if (enabled) {
         qDebug() << "vvvvvvvvvvvvvvvvvvvvvvv START TABLET EVENT LOG vvvvvvvvvvvvvvvvvvvvvvv";
     }
     else {
@@ -577,7 +512,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
-        d->debugMouseEvent(event);
+        d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -594,7 +529,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseButtonRelease: {
-        d->debugMouseEvent(event);
+        d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -604,8 +539,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::ShortcutOverride: {
+        d->debugEvent<QKeyEvent, false>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if (d->logTabletEvents) qDebug() << "KeyPress" << keyEvent->key();
 
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
@@ -627,8 +562,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
+        d->debugEvent<QKeyEvent, false>(event);
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if (d->logTabletEvents) qDebug() << "KeyRelease" << keyEvent->key();
 
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
@@ -637,7 +572,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::MouseMove: {
-        d->debugMouseEvent(event);
+        d->debugEvent<QMouseEvent, true>(event);
         break_if_should_ignore_cursor_events();
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -651,7 +586,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Wheel: {
-        if (d->logTabletEvents) qDebug() << "Wheel";
+        d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
         KisSingleActionShortcut::WheelAction action;
 
@@ -678,6 +613,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Enter:
+        d->debugEvent<QEvent, false>(event);
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
         //Ensure we have focus so we get key events.
@@ -685,6 +621,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         stop_ignore_cursor_events();
         break;
     case QEvent::Leave:
+        d->debugEvent<QEvent, false>(event);
         /**
          * We won't get a TabletProximityLeave event when the tablet
          * is hovering above some other widget, so restore cursor
@@ -693,6 +630,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         stop_ignore_cursor_events();
         break;
     case QEvent::FocusIn:
+        d->debugEvent<QEvent, false>(event);
         KisAbstractInputAction::setInputManager(this);
 
         //Clear all state so we don't have half-matched shortcuts dangling around.
@@ -713,7 +651,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::TabletPress:
     case QEvent::TabletMove:
     case QEvent::TabletRelease: {
-        d->debugTabletEvent(event);
+        d->debugEvent<QTabletEvent, true>(event);
         break_if_should_ignore_cursor_events();
         //We want both the tablet information and the mouse button state.
         //Since QTabletEvent only provides the tablet information, we
@@ -728,7 +666,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case KisTabletEvent::TabletPressEx:
     case KisTabletEvent::TabletMoveEx:
     case KisTabletEvent::TabletReleaseEx: {
-
+        d->debugEvent<KisTabletEvent, false>(event);
         stop_ignore_cursor_events();
 
         KisTabletEvent *tevent = static_cast<KisTabletEvent*>(event);

@@ -85,8 +85,10 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     reloadAction->disconnect(d->desktopView);
     connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
-    loadExistingAsNewAction->disconnect(d->desktopView);
-    connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
+    //Hide the "Load existing as new" action. It serves little purpose and currently
+    //does the same as open. We cannot just remove it from the action collection though
+    //since that causes a crash in KoMainWindow.
+    loadExistingAsNewAction->setVisible(false);
 
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));

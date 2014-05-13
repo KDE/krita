@@ -116,6 +116,12 @@ bool KisTabletDebugger::initializationDebugEnabled() const
     return true;
 }
 
+bool KisTabletDebugger::debugRawTabletValues() const
+{
+    // FIXME: make configurable!
+    return m_debugEnabled;
+}
+
 QString KisTabletDebugger::eventToString(const QMouseEvent &ev, const QString &prefix)
 {
     QString string;

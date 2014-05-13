@@ -27,6 +27,8 @@ public:
     /// Construct brush to load filename later as brush
     KisPngBrush(const QString& filename);
     virtual bool load();
+    virtual bool save();
+    virtual bool saveToDevice(QIODevice *dev) const;
     virtual QString defaultFileExtension() const;
     void toXML(QDomDocument& d, QDomElement& e) const;
 };

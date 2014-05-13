@@ -50,6 +50,8 @@ public:
 
     virtual bool save();
 
+    virtual bool saveToDevice(QIODevice* dev) const;
+
     /**
      * @return default file extension for saving the brush
      */

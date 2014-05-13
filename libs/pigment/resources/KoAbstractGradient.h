@@ -42,6 +42,9 @@ public:
     virtual bool save() {
         return false;
     }
+    virtual bool saveToDevice(QIODevice*) const {
+        return false;
+    }
 
     /**
     * Creates a QGradient from the gradient.

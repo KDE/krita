@@ -71,6 +71,11 @@ bool KoSegmentGradient::save()
     return false;
 }
 
+bool KoSegmentGradient::saveToDevice(QIODevice *) const
+{
+    return false;
+}
+
 bool KoSegmentGradient::init()
 {
     QFile file(filename());

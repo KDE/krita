@@ -42,7 +42,13 @@ bool KisWorkspaceResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
+    bool res = saveToDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
+{
     QDomDocument doc;
     QDomElement root = doc.createElement("Workspace");
     root.setAttribute("name", name() );
@@ -56,12 +62,12 @@ bool KisWorkspaceResource::save()
     KisPropertiesConfiguration::toXML(doc, settings);
     root.appendChild(settings);
     doc.appendChild(root);
-     
-    QTextStream textStream(&file);
+
+    QTextStream textStream(dev);
     doc.save(textStream, 4);
-    file.close();
 
     return true;
+
 }
 
 bool KisWorkspaceResource::load()

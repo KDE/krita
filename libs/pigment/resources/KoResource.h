@@ -63,6 +63,8 @@ public:
      */
     virtual bool save() = 0;
 
+    virtual bool saveToDevice(QIODevice* dev) const = 0;
+
     /**
      * @returns a QImage thumbnail image representing this resource.
      *

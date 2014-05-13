@@ -61,6 +61,11 @@ bool KisAbrBrush::save()
     return true;
 }
 
+bool KisAbrBrush::saveToDevice(QIODevice* dev) const
+{
+    return true;
+}
+
 void KisAbrBrush::setBrushTipImage(const QImage& image)
 {
     setValid(true);

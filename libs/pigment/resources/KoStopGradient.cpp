@@ -83,7 +83,7 @@ bool KoStopGradient::save()
     if (! fileOut.open(QIODevice::WriteOnly))
         return false;
 
-    bool retval = save(&fileOut);
+    bool retval = saveToDevice(&fileOut);
     fileOut.close();
 
     return retval;
@@ -603,9 +603,9 @@ QString KoStopGradient::defaultFileExtension() const
     return QString(".svg");
 }
 
-bool KoStopGradient::save(QIODevice *io) const
+bool KoStopGradient::saveToDevice(QIODevice *dev) const
 {
-    QTextStream stream(io);
+    QTextStream stream(dev);
 
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
@@ -646,7 +646,7 @@ QByteArray KoStopGradient::generateMD5() const
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
-    save(&buf);
+    saveToDevice(&buf);
     buf.close();
 
     if (!ba.isEmpty()) {

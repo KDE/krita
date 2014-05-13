@@ -61,8 +61,8 @@ public:
     virtual ~KisGbrBrush();
 
     virtual bool load();
-
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @return a preview of the brush
@@ -100,7 +100,7 @@ protected:
      * save the content of this brush to an IO device
      */
     friend class KisImageBrushesPipe;
-    virtual bool saveToDevice(QIODevice* dev) const;
+
 
     KisGbrBrush(const KisGbrBrush& rhs);
 

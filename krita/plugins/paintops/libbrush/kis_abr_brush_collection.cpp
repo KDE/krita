@@ -548,6 +548,11 @@ bool KisAbrBrushCollection::save()
     return false;
 }
 
+bool KisAbrBrushCollection::saveToDevice(QIODevice */*dev*/) const
+{
+    return false;
+}
+
 QImage KisAbrBrushCollection::image() const
 {
     return QImage();

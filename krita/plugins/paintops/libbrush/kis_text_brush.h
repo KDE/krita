@@ -46,7 +46,15 @@ public:
 
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const;
 
-    virtual bool load() {
+    bool load() {
+        return false;
+    }
+
+    bool save()  {
+        return false;
+    }
+
+    bool saveToDevice(QIODevice* dev) const {
         return false;
     }
 

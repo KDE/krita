@@ -130,6 +130,10 @@ public:
         return false;
     }
 
+    virtual bool saveToDevice(QIODevice* ) const {
+        return false;
+    }
+
     /**
      * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
      * image.

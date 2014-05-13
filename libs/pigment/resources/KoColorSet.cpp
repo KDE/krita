@@ -120,7 +120,7 @@ bool KoColorSet::save()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
-    save(&file);
+    saveToDevice(&file);
     file.close();
     return true;
 }
@@ -140,9 +140,9 @@ QByteArray KoColorSet::generateMD5() const
     return QByteArray();
 }
 
-void KoColorSet::save(QIODevice *io) const
+bool KoColorSet::saveToDevice(QIODevice *dev) const
 {
-    QTextStream stream(io);
+    QTextStream stream(dev);
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << m_columns << "\n#\n";
 
     for (int i = 0; i < m_colors.size(); i++) {
@@ -154,7 +154,7 @@ void KoColorSet::save(QIODevice *io) const
         else
             stream << entry.name << "\n";
     }
-
+    return true;
 }
 
 bool KoColorSet::init()

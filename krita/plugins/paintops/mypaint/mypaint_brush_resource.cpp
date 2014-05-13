@@ -435,7 +435,12 @@ bool MyPaintBrushResource::save()
     return res
 #endif
 
-    return true;
+      return false;
+}
+
+bool MyPaintBrushResource::saveToDevice(QIODevice *dev) const
+{
+    return false;
 }
 
 BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)

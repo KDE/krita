@@ -56,6 +56,8 @@ public:
 
     bool save();
 
+    virtual bool saveToDevice(QIODevice* dev) const;
+
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush
 
     BrushSetting* setting_by_cname(const QString& cname);

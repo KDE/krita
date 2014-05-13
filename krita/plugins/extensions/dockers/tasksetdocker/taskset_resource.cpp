@@ -42,9 +42,9 @@ bool TasksetResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
-    save(&file);
+    bool res = saveToDevice(&file);
     file.close();
-    return true;
+    return res;
 }
 
 bool TasksetResource::load()
@@ -99,7 +99,7 @@ QByteArray TasksetResource::generateMD5() const
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
-    save(&buf);
+    saveToDevice(&buf);
     buf.close();
 
     if (!ba.isEmpty()) {
@@ -112,7 +112,7 @@ QByteArray TasksetResource::generateMD5() const
 
 }
 
-void TasksetResource::save(QIODevice *io) const
+bool TasksetResource::saveToDevice(QIODevice *io) const
 {
 
     QDomDocument doc;
@@ -128,6 +128,7 @@ void TasksetResource::save(QIODevice *io) const
 
     QTextStream textStream(io);
     doc.save(textStream, 4);
+    return true;
 }
 
 

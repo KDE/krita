@@ -73,6 +73,8 @@ K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
 {
+    Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
+
     KisAction *action = new KisAction(i18n("Resource Manager..."), this);
     addAction("resourcemanager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotResourceManager()));

@@ -65,8 +65,6 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
 #else
     version = calligraVersion;
 #endif
-
-
     m_metadata["generator"] = "Krita (" + version + ")";
 }
 

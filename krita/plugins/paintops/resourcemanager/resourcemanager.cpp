@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -39,11 +40,12 @@
 #include <kis_action.h>
 #include <kis_view2.h>
 #include <kis_resource_server_provider.h>
-#include "kis_workspace_resource.h"
-#include "kis_paintop_preset.h"
-#include "kis_brush_server.h"
+#include <kis_workspace_resource.h>
+#include <kis_paintop_preset.h>
+#include <kis_brush_server.h>
 
 #include "KoResourceManagerWidget.h"
+#include "KoDlgCreateBundle.h"
 
 ResourceBundleServerProvider::ResourceBundleServerProvider()
 {
@@ -74,13 +76,36 @@ KoResourceServer<KoResourceBundle> *ResourceBundleServerProvider::resourceBundle
 }
 
 
+class ResourceManager::Private {
 
+public:
+
+    Private() {
+        brushServer = KisBrushServer::instance()->brushServer();
+        paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+        gradientServer = KoResourceServerProvider::instance()->gradientServer();
+        bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+        patternServer = KoResourceServerProvider::instance()->patternServer();
+        paletteServer = KoResourceServerProvider::instance()->paletteServer();
+        workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    }
+
+    KoResourceServer<KisBrush>* brushServer;
+    KoResourceServer<KisPaintOpPreset>* paintopServer;
+    KoResourceServer<KoAbstractGradient>* gradientServer;
+    KoResourceServer<KoResourceBundle> *bundleServer;
+    KoResourceServer<KoPattern>* patternServer;
+    KoResourceServer<KoColorSet>* paletteServer;
+    KoResourceServer< KisWorkspaceResource >* workspaceServer;
+
+};
 
 K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
 K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
+    , d(new Private())
 {
     Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
 
@@ -132,59 +157,52 @@ void ResourceManager::slotImport()
     switch(nameFilters.indexOf(resourceType)) {
     case 0:
     {
-        KoResourceServer<KisBrush>* server = KisBrushServer::instance()->brushServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+            d->brushServer->importResourceFile(res);
         }
         break;
     }
     case 1:
     {
-        KoResourceServer<KisPaintOpPreset>* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+            d->paintopServer->importResourceFile(res);
         }
         break;
     }
     case 2:
     {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+            d->gradientServer->importResourceFile(res);
         }
         break;
     }
     case 3:
     {
-        KoResourceServer<KoResourceBundle> *server = ResourceBundleServerProvider::instance()->resourceBundleServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
-            KoResourceBundle *bundle = server->resourceByFilename(QFileInfo(res).fileName());
+            d->bundleServer->importResourceFile(res);
+            KoResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
             bundle->install();
         }
         break;
     }
     case 4:
     {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+         foreach(const QString &res, resources) {
+            d->patternServer->importResourceFile(res);
         }
         break;
     }
     case 5:
     {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+            d->paletteServer->importResourceFile(res);
         }
         break;
     }
     case 6:
     {
-        KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
         foreach(const QString &res, resources) {
-            server->importResourceFile(res);
+            d->workspaceServer->importResourceFile(res);
         }
         break;
     }
@@ -195,6 +213,63 @@ void ResourceManager::slotImport()
 
 void ResourceManager::slotCreateBundle()
 {
+    KoDlgCreateBundle dlgCreateBundle;
+    if (dlgCreateBundle.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
+    KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
+
+    newBundle->addMeta("name", dlgCreateBundle.bundleName());
+    newBundle->addMeta("author", dlgCreateBundle.authorName());
+    newBundle->addMeta("email", dlgCreateBundle.email());
+    newBundle->addMeta("license", dlgCreateBundle.license());
+    newBundle->addMeta("website", dlgCreateBundle.website());
+    newBundle->addMeta("description", dlgCreateBundle.description());
+
+    QStringList res = dlgCreateBundle.selectedBrushes();
+    foreach(const QString &r, res) {
+        KoResource *res = d->brushServer->resourceByFilename(r);
+        newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedGradients();
+    foreach(const QString &r, res) {
+        KoResource *res = d->gradientServer->resourceByFilename(r);
+        newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPalettes();
+    foreach(const QString &r, res) {
+        KoResource *res = d->paletteServer->resourceByFilename(r);
+        newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPatterns();
+    foreach(const QString &r, res) {
+        KoResource *res = d->patternServer->resourceByFilename(r);
+        newBundle->addResource("kis_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPresets();
+    foreach(const QString &r, res) {
+        KoResource *res = d->paintopServer->resourceByFilename(r);
+        newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedWorkspaces();
+    foreach(const QString &r, res) {
+        KoResource *res = d->workspaceServer->resourceByFilename(r);
+        newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    newBundle->addMeta("fileName", bundlePath);
+    newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
+
+    if (!newBundle->save()) {
+        KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
+    }
 
 }
 

@@ -185,7 +185,7 @@ void KoXmlResourceBundleManifest::addResource(const QString &fileTypeName, const
     if (!m_resources.contains(fileTypeName)) {
         m_resources[fileTypeName] = QMap<QString, ResourceReference>();
     }
-    m_resources[fileTypeName].insert(md5, ref);
+    m_resources[fileTypeName].insert(fileName, ref);
 }
 
 QStringList KoXmlResourceBundleManifest::types() const

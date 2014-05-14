@@ -56,6 +56,9 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     KoResourceLoaderThread loader(m_resourceBundleServer);
     loader.start();
     loader.barrier();
+    foreach(KoResourceBundle *bundle, m_resourceBundleServer->resources()) {
+        bundle->install();
+    }
 }
 
 

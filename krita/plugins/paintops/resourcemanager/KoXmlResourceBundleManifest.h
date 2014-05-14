@@ -77,6 +77,8 @@ public:
 
     QStringList types() const;
 
+    QStringList tags() const;
+
     QList<ResourceReference> files(const QString &type = QString()) const;
 
     /**
@@ -101,7 +103,7 @@ public:
      * @param fileName : the name of the file to be removed
      * @return the list of resource tags to be removed from meta file.
      */
-    QList<QString> removeFile(QString fileName);
+    void removeFile(QString fileName);
 
     /**
      * @brief exportTags : export file tags to the right Krita xml files

@@ -77,7 +77,9 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
     QString errorMessage;
     int errorLine;
     int errorColumn;
-    manifestDocument.setContent(device, true, &errorMessage, &errorLine, &errorColumn);
+    if (!manifestDocument.setContent(device, true, &errorMessage, &errorLine, &errorColumn)) {
+        return false;
+    }
 
     if (!errorMessage.isEmpty()) {
         qWarning() << "Error parsing manifest" << errorMessage << "line" << errorLine << "column" << errorColumn;
@@ -85,7 +87,7 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
     }
 
     // First find the manifest:manifest node.
-    KoXmlNode  n = manifestDocument.firstChild();
+    KoXmlNode n = manifestDocument.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (!n.isElement()) {
             continue;
@@ -195,6 +197,17 @@ QStringList KoXmlResourceBundleManifest::types() const
     return m_resources.keys();
 }
 
+QStringList KoXmlResourceBundleManifest::tags() const
+{
+    QSet<QString> tags;
+    foreach(const QString &type, m_resources.keys()) {
+        foreach(const ResourceReference &ref, m_resources[type].values()) {
+            tags += ref.tagList.toSet();
+        }
+    }
+    return QStringList::fromSet(tags);
+}
+
 QList<KoXmlResourceBundleManifest::ResourceReference> KoXmlResourceBundleManifest::files(const QString &type) const
 {
     if (!m_resources.contains(type)) {
@@ -203,43 +216,14 @@ QList<KoXmlResourceBundleManifest::ResourceReference> KoXmlResourceBundleManifes
     return m_resources[type].values();
 }
 
-QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
+void KoXmlResourceBundleManifest::removeFile(QString fileName)
 {
-    int i;
-
-    QDomNode currentNode;
-    QString currentTag;
-    QDomAttr currentAtt;
-
-    QList<QString> result;
-//    QDomNodeList tagList = m_xmlDocument.elementsByTagName("file");
-
-//    if (tagList.isEmpty()) {
-//        return result;
-//    } else {
-//        for (i = 0; i < tagList.size(); i++) {
-//            currentNode = tagList.at(i);
-//            currentAtt = currentNode.toElement().attributeNode("name");
-//            if (!currentAtt.isNull() && currentAtt.value() == fileName) {
-//                break;
-//            }
-//        }
-
-//        if (i == tagList.size() || currentNode.isNull()) {
-//            return result;
-//        } else {
-//            tagList = currentNode.toElement().elementsByTagName("tag");
-//            for (i = 0; i < tagList.size(); i++) {
-//                currentTag = tagList.at(i).firstChild().toText().data();
-//                if (!result.contains(currentTag)) {
-//                    result.push_front(currentTag);
-//                }
-//            }
-//        }
-//    }
-
-//    currentNode.parentNode().removeChild(currentNode);
-    return result;
+    QList<QString> tags;
+    foreach(const QString &type, m_resources.keys()) {
+        if (m_resources[type].contains(fileName)) {
+            m_resources[type].remove(fileName);
+        }
+    }
 }
 
 QList<QString> KoXmlResourceBundleManifest::getFileList(QString kritaPath, bool firstBuild)

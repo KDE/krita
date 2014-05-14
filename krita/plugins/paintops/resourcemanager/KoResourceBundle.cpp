@@ -19,8 +19,9 @@
 
 #include "KoResourceBundle.h"
 #include "KoXmlResourceBundleManifest.h"
-#include "KoXmlResourceBundleMeta.h"
 
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoStore.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceTagStore.h>
@@ -43,19 +44,34 @@
 #include "kis_paintop_preset.h"
 #include "kis_brush_server.h"
 
+#include <calligraversion.h>
+#include <calligragitversion.h>
+
 #include <resourcemanager.h>
 
 
 KoResourceBundle::KoResourceBundle(QString const& fileName)
     : KoResource(fileName)\
-    , m_meta(new KoXmlResourceBundleMeta())
 {
     setName(QFileInfo(fileName).baseName());
+
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
+
+
+    m_metadata["generator"] = "Krita (" + version + ")";
 }
 
 KoResourceBundle::~KoResourceBundle()
 {
-    delete m_meta;
 }
 
 QString KoResourceBundle::defaultFileExtension() const
@@ -76,7 +92,7 @@ bool KoResourceBundle::load()
     } else {
         //TODO Vérifier si on peut éviter de recréer meta à chaque load
         //A optimiser si possible
-        delete m_meta;
+        m_metadata.clear();
 
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
@@ -96,7 +112,11 @@ bool KoResourceBundle::load()
         }
 
         if (resourceStore->open("meta.xml")) {
-            m_meta = new KoXmlResourceBundleMeta(resourceStore->device());
+            KoXmlDocument doc;
+            if (!doc.setContent(resourceStore->device())) {
+                return false;
+            }
+            KoXmlNode n = doc.firstChild();
             resourceStore->close();
         } else {
             return false;
@@ -123,7 +143,6 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
     QByteArray ba;
     QBuffer buf;
 
-    qDebug() << "Saving" << resource->name() << resource->filename();
 
     if (QFileInfo(resource->filename()).exists()) {
         resource->save();
@@ -149,13 +168,11 @@ bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &re
 
 }
 
-
 bool KoResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
-    m_meta->checkSort();
 
     bool bundleExists = QFileInfo(filename()).exists();
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
@@ -225,25 +242,53 @@ bool KoResourceBundle::save()
         store->close();
     }
 
-    store->open("META-INF/manifest.xml");
-    QBuffer buf;
-    m_manifest.save(&buf);
-    store->write(buf.data());
-    store->close();
-    store->open("meta.xml");
-    store->write(m_meta->toByteArray());
+    {
+        store->open("META-INF/manifest.xml");
+        QBuffer buf;
+        buf.open(QBuffer::WriteOnly);
+        m_manifest.save(&buf);
+        buf.close();
+        store->write(buf.data());
+        store->close();
+    }
+
+    {
+        QBuffer buf;
+
+        store->open("meta.xml");
+        buf.open(QBuffer::WriteOnly);
+
+        KoXmlWriter metaWriter(&buf);
+        metaWriter.startDocument("office:document-meta");
+        metaWriter.startElement("meta:meta");
+
+        writeMeta("meta:generator", "generator", &metaWriter);
+        writeMeta("dc:author", "author", &metaWriter);
+        writeMeta("dc:title", "filename", &metaWriter);
+        writeMeta("dc:description", "description", &metaWriter);
+        writeMeta("meta:initial-creator", "author", &metaWriter);
+        writeMeta("dc:creator", "author", &metaWriter);
+        writeMeta("meta:creation-date", "created", &metaWriter);
+        writeMeta("meta:dc-date", "updated", &metaWriter);
+        writeUserDefinedMeta("email", &metaWriter);
+        writeUserDefinedMeta("license", &metaWriter);
+        writeUserDefinedMeta("website", &metaWriter);
+        foreach (const QString &tag, m_bundletags) {
+            metaWriter.startElement("meta-userdefined");
+            metaWriter.addAttribute("meta:name", "tag");
+            metaWriter.addAttribute("meta:value", tag);
+            metaWriter.endElement();
+        }
+
+        metaWriter.endElement(); // meta:meta
+        metaWriter.endDocument();
+
+        buf.close();
+        store->write(buf.data());
+    }
     store->close();
     store->finalize();
 
-
-    if (bundleExists && !m_manifest.isInstalled()) {
-        QList<QString> dirList = m_manifest.getDirList();
-        for (int i = 0; i < dirList.size(); i++) {
-            removeDir(bundleDir.absolutePath() + "/temp/" + dirList.at(i));
-        }
-    }
-
-    setValid(true);
     return true;
 }
 
@@ -256,96 +301,95 @@ bool KoResourceBundle::saveToDevice(QIODevice */*dev*/) const
 //TODO exportTags à vérifier
 void KoResourceBundle::install()
 {
-    if (filename().isEmpty()) return;
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-    if (!resourceStore || resourceStore->bad()) return;
+//    if (filename().isEmpty()) return;
+//    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+//    if (!resourceStore || resourceStore->bad()) return;
 
-    QMap<QString, QString> pathList = m_manifest.getFilesToExtract();
+//    QMap<QString, QString> pathList = m_manifest.getFilesToExtract();
 
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
+//    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+//    bundleDir.cdUp();
 
-    QString currentPath;
-    QString targetPath;
-    QString dirPath;
+//    QString currentPath;
+//    QString targetPath;
+//    QString dirPath;
 
-    for (int i = 0; i < pathList.size(); i++) {
-        while (resourceStore->leaveDirectory());
-        currentPath = pathList.keys().at(i);
-        targetPath = pathList.values().at(i);
-        if (!resourceStore->extractFile(currentPath, targetPath)) {
-            dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
-            QDir dir(dirPath);
-            dir.mkdir(dirPath);
-            if (!resourceStore->extractFile(currentPath, targetPath)) {
-                qWarning() << "Could not install" << currentPath << "to" << targetPath;
-                //TODO Supprimer le dossier créé
-                continue;
-            }
-        }
-    }
+//    for (int i = 0; i < pathList.size(); i++) {
+//        while (resourceStore->leaveDirectory());
+//        currentPath = pathList.keys().at(i);
+//        targetPath = pathList.values().at(i);
+//        if (!resourceStore->extractFile(currentPath, targetPath)) {
+//            dirPath = targetPath.section('/', 0, targetPath.count('/') - 1);
+//            QDir dir(dirPath);
+//            dir.mkdir(dirPath);
+//            if (!resourceStore->extractFile(currentPath, targetPath)) {
+//                qWarning() << "Could not install" << currentPath << "to" << targetPath;
+//                //TODO Supprimer le dossier créé
+//                continue;
+//            }
+//        }
+//    }
 
-    m_manifest.exportTags();
-    m_installed = true;
-    m_manifest.install();
-    save();
+//    m_manifest.exportTags();
+//    m_installed = true;
+//    m_manifest.install();
+//    save();
 }
 
 void KoResourceBundle::uninstall()
 {
-    if (!m_installed)
-        return;
+//    if (!m_installed)
+//        return;
 
-    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
-    bundleDir.cdUp();
-    QString dirPath = bundleDir.absolutePath();
-    QList<QString> directoryList = m_manifest.getDirList();
-    QString shortPackName = m_meta->getPackName();
+//    QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
+//    bundleDir.cdUp();
+//    QString dirPath = bundleDir.absolutePath();
+//    QList<QString> directoryList = m_manifest.getDirList();
+//    QString shortPackName = shortFilename();
 
-    for (int i = 0; i < directoryList.size(); i++) {
-        if (!removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
-            qWarning() << "Error : Couldn't delete folder : " << dirPath;
-        }
-    }
+//    for (int i = 0; i < directoryList.size(); i++) {
+//        if (!removeDir(dirPath + directoryList.at(i) + QString("/") + shortPackName)) {
+//            qWarning() << "Error : Couldn't delete folder : " << dirPath;
+//        }
+//    }
 
-    m_installed = false;
-    m_manifest.uninstall();
-    save();
+//    m_installed = false;
+//    m_manifest.uninstall();
+//    save();
 }
 
 void KoResourceBundle::addMeta(const QString &type, const QString &value)
 {
-    m_meta->addTag(type, value);
+    m_metadata.insert(type, value);
 }
 
-const QString KoResourceBundle::getMeta(const QString &type) const
+const QString KoResourceBundle::getMeta(const QString &type, const QString &defaultValue) const
 {
-    return m_meta->getValue(type);
+    if (m_metadata.contains(type)) {
+        return m_metadata[type];
+    }
+    else {
+       return defaultValue;
+    }
 }
 
 
-//TODO Voir s'il faut aussi rajouter les tags dans le meta
 void KoResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
 {
     m_manifest.addResource(fileType, filePath, fileTagList, md5sum);
-    m_meta->addTags(fileTagList);
 }
 
 //On rappelle que les tags d'un bundle ne sont stockés que dans le meta
 //Les tags du manifest sont ajoutés au fur et à mesure de l'ajout des fichiers
 QList<QString> KoResourceBundle::getTagsList()
 {
-    return m_meta->getTagsList();
+    return QList<QString>::fromSet(m_bundletags);
 }
 
 
 void KoResourceBundle::removeFile(QString fileName)
 {
-    QList<QString> list = m_manifest.removeFile(fileName);
-
-    for (int i = 0; i < list.size(); i++) {
-        m_meta->removeFirstTag("tag", list.at(i));
-    }
+    m_manifest.removeFile(fileName);
 }
 
 void KoResourceBundle::addResourceDirs()
@@ -365,7 +409,7 @@ bool KoResourceBundle::isInstalled()
 
 void KoResourceBundle::rename(QString filename, QString name)
 {
-    QString oldName = m_meta->getPackName();
+    QString oldName = shortFilename();
     QString shortName = name.section('.', 0, 0);
 
     addMeta("filename", filename);
@@ -391,13 +435,18 @@ void KoResourceBundle::rename(QString filename, QString name)
 
 void KoResourceBundle::removeTag(QString tagName)
 {
-    m_meta->removeFirstTag("tag", tagName);
+    m_bundletags.remove(tagName);
 }
 
 void KoResourceBundle::setThumbnail(QString filename)
 {
     m_thumbnail = QImage(filename);
     save();
+}
+
+void KoResourceBundle::addTag(const QString &tagName)
+{
+    m_bundletags << tagName;
 }
 
 QByteArray KoResourceBundle::generateMD5() const
@@ -413,26 +462,21 @@ QByteArray KoResourceBundle::generateMD5() const
     return QByteArray();
 }
 
-
-bool KoResourceBundle::removeDir(const QString & dirName)
+void KoResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
 {
-    bool result = true;
-    QDir dir(dirName);
-
-    if (dir.exists(dirName)) {
-        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System
-                                                    | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
-            if (info.isDir()) {
-                result = removeDir(info.absoluteFilePath());
-            } else {
-                result = QFile::remove(info.absoluteFilePath());
-            }
-
-            if (!result) {
-                return result;
-            }
-        }
-        result = dir.rmdir(dirName);
+    if (m_metadata.contains(metaKey)) {
+        writer->startElement(metaTag);
+        writer->addTextNode(m_metadata[metaKey].toUtf8());
+        writer->endElement();
     }
-    return result;
+}
+
+void KoResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer)
+{
+    if (m_metadata.contains(metaKey)) {
+        writer->startElement("meta:meta-userdefined");
+        writer->addAttribute("meta:name", metaKey);
+        writer->addAttribute("meta:value", m_metadata[metaKey]);
+        writer->endElement();
+    }
 }

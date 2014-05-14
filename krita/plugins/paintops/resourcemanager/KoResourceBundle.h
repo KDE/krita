@@ -20,6 +20,10 @@
 #ifndef KORESOURCEBUNDLE_H
 #define KORESOURCEBUNDLE_H
 
+#include <QSet>
+
+#include <KoXmlWriter.h>
+
 #include "KoResource.h"
 #include "KoXmlResourceBundleManifest.h"
 
@@ -80,7 +84,7 @@ public:
      * @param value value of the metadata
      */
     void addMeta(const QString &type, const QString &value);
-    const QString getMeta(const QString &type) const;
+    const QString getMeta(const QString &type, const QString &defaultValue = QString()) const;
 
     /**
      * @brief addFile : Add a file to the bundle
@@ -114,6 +118,8 @@ public:
     bool isInstalled();
 
     void setThumbnail(QString);
+
+    void addTag(const QString &tagName);
     void removeTag(QString tagName);
 
 protected:
@@ -122,19 +128,14 @@ protected:
 
 private:
 
-    /**
-     * @brief removeDir : Remove the chosen directory
-     * @param dirName the name of the directory to be removed
-     * @return true if succeed, false otherwise.
-     */
-    static bool removeDir(const QString & dirName);
-
+    void writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer);
+    void writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer);
 
 private:
     QImage m_thumbnail;
     KoXmlResourceBundleManifest m_manifest;
-    KoXmlResourceBundleMeta* m_meta;
-
+    QMap<QString, QString> m_metadata;
+    QSet<QString> m_bundletags;
     bool m_installed;
 };
 

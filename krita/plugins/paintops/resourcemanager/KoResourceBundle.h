@@ -62,6 +62,8 @@ public:
      */
     bool save();
 
+    virtual bool saveToDevice(QIODevice* dev) const;
+
     /**
      * @brief install : Install the resource bundle.
      */

@@ -18,6 +18,7 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QPair>
 #include <QMap>
 #include <QMultiMap>
 #include "KoXmlGenerator.h"
@@ -27,6 +28,7 @@ class KoResource;
 
 class  KoXmlResourceBundleManifest
 {
+public:
 
     struct ResourceReference {
 
@@ -41,7 +43,6 @@ class  KoXmlResourceBundleManifest
         QByteArray md5sum;
     };
 
-public:
     /**
      * @brief KoXmlResourceBundleManifest : Ctor
      * @param xmlName the name of the XML file to be created
@@ -72,6 +73,11 @@ public:
      * @return the element corresponding to the created tag.
      */
     void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QByteArray &md5);
+
+
+    QStringList types() const;
+
+    QList<ResourceReference> files(const QString &type = QString()) const;
 
     /**
      * @brief getFileList
@@ -123,7 +129,7 @@ public:
     void updateFilePaths(QString kritaPath, QString bundleName);
 
 private:
-    QMultiMap<QString, ResourceReference> m_resources;
+    QMap<QString, QMap<QString, ResourceReference> > m_resources;
 };
 
 

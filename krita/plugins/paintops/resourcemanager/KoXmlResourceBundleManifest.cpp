@@ -119,7 +119,7 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
         QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
         QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
         QString md5sum = el.attributeNS(KoXmlNS::manifest, "md5sum", QString(""));
-        //QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
+        QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
 
         QStringList tagList;
         KoXmlNode tagNode = n.firstChild();
@@ -132,8 +132,8 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
 
         // Only if fullPath is valid, should we store this entry.
         // If not, we don't bother to find out exactly what is wrong, we just skip it.
-        if (!fullPath.isNull() && !mediaType.isEmpty()) {
-            m_resources.insert(manifestTypeToResourceType(mediaType), ResourceReference(fullPath, tagList, QByteArray::fromHex(md5sum.toAscii())));
+        if (!fullPath.isNull() && !mediaType.isEmpty() && !md5sum.isEmpty()) {
+            addResource(mediaType, fullPath, tagList, QByteArray::fromHex(md5sum.toAscii()));
         }
     }
 
@@ -155,7 +155,7 @@ bool KoXmlResourceBundleManifest::save(QIODevice *device)
        manifestWriter.addManifestEntry("/", "application/x-krita-resourcebundle");
 
        foreach(QString resourceType, m_resources.uniqueKeys()) {
-           foreach(const ResourceReference &resource, m_resources.values(resourceType)) {
+           foreach(const ResourceReference &resource, m_resources[resourceType].values()) {
                manifestWriter.startElement("manifest:file-entry");
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
                manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).completeBaseName());
@@ -183,7 +183,24 @@ bool KoXmlResourceBundleManifest::save(QIODevice *device)
 //TODO A Revoir vu que c'était censé redéfinir le addTag de generator
 void KoXmlResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
 {
-    m_resources.insert(fileTypeName, ResourceReference(fileName, fileTagList, md5));
+    ResourceReference ref(fileName, fileTagList, md5);
+    if (!m_resources.contains(fileTypeName)) {
+        m_resources[fileTypeName] = QMap<QString, ResourceReference>();
+    }
+    m_resources[fileTypeName].insert(md5, ref);
+}
+
+QStringList KoXmlResourceBundleManifest::types() const
+{
+    return m_resources.keys();
+}
+
+QList<KoXmlResourceBundleManifest::ResourceReference> KoXmlResourceBundleManifest::files(const QString &type) const
+{
+    if (!m_resources.contains(type)) {
+        return QList<KoXmlResourceBundleManifest::ResourceReference>();
+    }
+    return m_resources[type].values();
 }
 
 QList<QString> KoXmlResourceBundleManifest::removeFile(QString fileName)
@@ -433,6 +450,6 @@ void KoXmlResourceBundleManifest::uninstall()
 
 bool KoXmlResourceBundleManifest::isInstalled()
 {
-    return false; //m_xmlDocument.elementsByTagName("installed").size() != 0;
+    return false;
 }
 

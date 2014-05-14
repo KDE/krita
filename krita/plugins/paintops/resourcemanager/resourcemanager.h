@@ -51,6 +51,8 @@ public:
 
 private slots:
     void slotResourceManager();
+    void slotImport();
+    void slotCreateBundle();
 };
 
 #endif // RESOURCEMANAGER_H

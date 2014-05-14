@@ -77,6 +77,9 @@ public:
     }
 
 private:
+
+    friend class KoResourceBundle;
+
     virtual KoAbstractGradient* createResource( const QString & filename ) {
 
         QString fileExtension;

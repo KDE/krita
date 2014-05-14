@@ -39,8 +39,16 @@ bool KisSvgBrush::load()
     if (f.size() == 0) return false;
     if (!f.exists()) return false;
 
+    bool res = loadFromDevice(&f);
+    f.close();
 
-    m_svg = f.readAll();
+    return res;
+}
+
+bool KisSvgBrush::loadFromDevice(QIODevice *dev)
+{
+
+    m_svg = dev->readAll();
 
     QSvgRenderer renderer(m_svg);
 

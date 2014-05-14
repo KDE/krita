@@ -53,9 +53,9 @@ public:
     // XXX: implement copy constructor!!!
 
     bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     bool save();
-
     virtual bool saveToDevice(QIODevice* dev) const;
 
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush

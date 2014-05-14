@@ -420,6 +420,11 @@ bool MyPaintBrushResource::load()
     return false;
 }
 
+bool MyPaintBrushResource::loadFromDevice(QIODevice *)
+{
+    return false;
+}
+
 bool MyPaintBrushResource::save()
 {
 #if 0

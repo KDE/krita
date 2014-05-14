@@ -27,6 +27,7 @@ public:
     /// Construct brush to load filename later as brush
     KisSvgBrush(const QString& filename);
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
     virtual bool saveToDevice(QIODevice *dev) const;
 

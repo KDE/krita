@@ -57,10 +57,10 @@ public:
     KisPaintOpSettingsSP settings() const;
 
     bool load();
+    bool loadFromDevice(QIODevice *dev);
 
     bool save();
-    
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool saveToDevice(QIODevice* dev) const;
 
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 

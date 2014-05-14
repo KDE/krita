@@ -54,6 +54,11 @@ bool KisAbrBrush::load()
     return true;
 }
 
+bool KisAbrBrush::loadFromDevice(QIODevice */*dev*/)
+{
+    return true;
+}
+
 bool KisAbrBrush::save()
 {
     //Return true, otherwise the brush won't be added to the

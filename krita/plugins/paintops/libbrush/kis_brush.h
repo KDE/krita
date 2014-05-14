@@ -126,6 +126,12 @@ public:
     virtual bool load() {
         return false;
     }
+
+    virtual bool loadFromDevice(QIODevice *) {
+        return false;
+    }
+
+
     virtual bool save() {
         return false;
     }

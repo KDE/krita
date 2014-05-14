@@ -86,6 +86,19 @@ KoPattern::~KoPattern()
 
 bool KoPattern::load()
 {
+    QFile file(filename());
+    if (file.size() == 0) return false;
+
+    bool result;
+    file.open(QIODevice::ReadOnly);
+    result = loadFromDevice(&file);
+    file.close();
+
+    return result;
+}
+
+bool KoPattern::loadFromDevice(QIODevice *dev)
+{
     QString fileExtension;
     int index = filename().lastIndexOf('.');
 
@@ -94,21 +107,19 @@ bool KoPattern::load()
 
     bool result;
 
-    QFile file(filename());
-    if (file.size() == 0) return false;
 
     if (fileExtension == ".pat") {
-        file.open(QIODevice::ReadOnly);
-        QByteArray data = file.readAll();
-        file.close();
+        QByteArray data = dev->readAll();
         result = init(data);
-    } else {
+    }
+    else {
         QImage image;
-        result = image.load(filename());
+        result = image.load(dev, fileExtension.toUpper().toAscii());
         setPatternImage(image);
     }
 
     return result;
+
 }
 
 bool KoPattern::save()

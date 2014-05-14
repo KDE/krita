@@ -125,7 +125,14 @@ bool KisPaintOpPreset::load()
     QFile file(filename());
     if (file.size() == 0) return false;
 
-    QImageReader reader(filename(), "PNG");
+    bool res = loadFromDevice(&file);
+
+    return true;
+}
+
+bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
+{
+    QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
@@ -137,8 +144,7 @@ bool KisPaintOpPreset::load()
     }
 
     QImage img;
-    if (!reader.read(&img))
-    {
+    if (!reader.read(&img)) {
         dbgImage << "Fail to decode PNG";
         return false;
     }
@@ -152,12 +158,16 @@ bool KisPaintOpPreset::load()
     if (!doc.setContent(preset)) {
         return false;
     }
+
     fromXML(doc.documentElement());
+
     if (!m_d->settings) {
         return false;
     }
+
     setValid(true);
     setImage(img);
+
     return true;
 }
 

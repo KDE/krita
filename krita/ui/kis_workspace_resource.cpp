@@ -77,28 +77,31 @@ bool KisWorkspaceResource::load()
  
     QFile file(filename());
     if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
+    bool res = loadFromDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
+{
     QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
-    if (!doc.setContent(&file)) {
-        file.close();
+    if (!doc.setContent(dev)) {
         return false;
     }
-    file.close();
 
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
-        
+
     QDomElement state = element.firstChildElement("state");
-    
-    if(!state.isNull()) {
+
+    if (!state.isNull()) {
         m_dockerState = QByteArray::fromBase64(state.text().toLatin1());
     }
 
     QDomElement settings = element.firstChildElement("settings");
-    if(!settings.isNull()) {
+    if (!settings.isNull()) {
         KisPropertiesConfiguration::fromXML(settings);
     }
 

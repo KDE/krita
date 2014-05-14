@@ -496,17 +496,27 @@ KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
 bool KisAbrBrushCollection::load()
 {
     QFile file(filename());
-    AbrInfo abr_hdr;
-    qint32 image_ID;
-    int i;
-    qint32 layer_ID;
-
     // check if the file is open correctly
     if (!file.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
     }
-    QByteArray ba = file.readAll();
+
+    bool res = loadFromDevice(&file);
+    file.close();
+
+    return res;
+
+}
+
+bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
+{
+    AbrInfo abr_hdr;
+    qint32 image_ID;
+    int i;
+    qint32 layer_ID;
+
+    QByteArray ba = dev->readAll();
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(ba);
     setMD5(md5.result());
@@ -537,7 +547,6 @@ bool KisAbrBrushCollection::load()
             warnKrita << "Warning: problem loading brush #" << i << " in " << filename();
         }
     }
-    file.close();
 
     return true;
 

@@ -60,6 +60,10 @@ public:
         return false;
     }
 
+    virtual bool loadFromDevice(QIODevice *) {
+        return false;
+    }
+
     bool save()  {
         return false;
     }

@@ -103,13 +103,18 @@ bool KoColorSet::load()
     QFile file(filename());
     if (file.size() == 0) return false;
     file.open(QIODevice::ReadOnly);
-    m_data = file.readAll();
+    bool res =  loadFromDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KoColorSet::loadFromDevice(QIODevice *dev)
+{
+    m_data = dev->readAll();
 
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(m_data);
     setMD5(md5.result());
-
-    file.close();
     return init();
 }
 

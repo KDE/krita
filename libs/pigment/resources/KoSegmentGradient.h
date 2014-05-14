@@ -267,6 +267,7 @@ public:
 
     /// reimplemented
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /// not implemented
     virtual bool save();

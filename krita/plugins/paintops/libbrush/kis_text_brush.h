@@ -50,11 +50,15 @@ public:
         return false;
     }
 
+    virtual bool loadFromDevice(QIODevice *) {
+        return false;
+    }
+
     bool save()  {
         return false;
     }
 
-    bool saveToDevice(QIODevice* dev) const {
+    bool saveToDevice(QIODevice* ) const {
         return false;
     }
 

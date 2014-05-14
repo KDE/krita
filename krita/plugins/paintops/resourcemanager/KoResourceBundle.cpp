@@ -186,6 +186,11 @@ bool KoResourceBundle::load()
     return true;
 }
 
+bool KoResourceBundle::loadFromDevice(QIODevice *)
+{
+    return false;
+}
+
 bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
 {
     if (!resource) return false;

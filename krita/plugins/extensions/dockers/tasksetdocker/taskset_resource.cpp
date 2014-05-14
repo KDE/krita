@@ -50,24 +50,28 @@ bool TasksetResource::save()
 bool TasksetResource::load()
 {
     QString fn = filename();
-    if (fn.isEmpty()) {
-         return false;
-    }
+    if (fn.isEmpty()) return false;
  
     QFile file(fn);
     if (file.size() == 0) return false;
-    QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    if (!doc.setContent(&file)) {
-        file.close();
-        return false;
-    }
+    if (!file.open(QIODevice::ReadOnly)) return false;
+
+    bool res = loadFromDevice(&file);
+
     file.close();
+
+    return res;
+}
+
+bool TasksetResource::loadFromDevice(QIODevice *dev)
+{
+    QDomDocument doc;
+    if (!doc.setContent(dev)) {
+        return false;
+    }
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-    QDomNode node = element.firstChild();   
+    QDomNode node = element.firstChild();
     while (!node.isNull()) {
         QDomElement child = node.toElement();
         if (!child.isNull() && child.tagName() == "action") {

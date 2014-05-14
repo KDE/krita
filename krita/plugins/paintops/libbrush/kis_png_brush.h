@@ -21,12 +21,13 @@
 
 #include "kis_brush.h"
 
-class BRUSH_EXPORT KisPngBrush : public KisBrush
+class BRUSH_EXPORT  KisPngBrush : public KisBrush
 {
 public:
     /// Construct brush to load filename later as brush
     KisPngBrush(const QString& filename);
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
     virtual bool saveToDevice(QIODevice *dev) const;
     virtual QString defaultFileExtension() const;

@@ -56,6 +56,7 @@ public:
      * @return true if succeed, false otherwise.
      */
     bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /**
      * @brief save : Save this resource.

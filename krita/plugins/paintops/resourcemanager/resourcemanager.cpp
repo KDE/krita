@@ -106,8 +106,8 @@ void ResourceManager::slotResourceManager()
     KoResourceManagerWidget * resourceManager = new KoResourceManagerWidget();
     Q_CHECK_PTR(resourceManager);
     resourceManager->setObjectName("ResourceManager");
-    resourceManager->show();
-
+    resourceManager->exec();
+    delete resourceManager;
 }
 
 void ResourceManager::slotImport()

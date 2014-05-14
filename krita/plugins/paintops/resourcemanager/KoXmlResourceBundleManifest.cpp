@@ -92,17 +92,13 @@ bool KoXmlResourceBundleManifest::load(QIODevice *device)
         if (!n.isElement()) {
             continue;
         }
-        qDebug()  << "name:" << n.toElement().localName() << "namespace:" << n.toElement().namespaceURI();
-
-        if (n.toElement().localName() == "manifest" && n.toElement().namespaceURI() == KoXmlNS::manifest)
-        {
-            qDebug() << "found manifest:manifest";
+        if (n.toElement().localName() == "manifest" && n.toElement().namespaceURI() == KoXmlNS::manifest) {
             break;
         }
     }
 
     if (n.isNull()) {
-         qDebug() << "Could not find manifest:manifest";
+        // "Could not find manifest:manifest";
         return false;
     }
 

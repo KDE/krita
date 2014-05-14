@@ -2,7 +2,6 @@
 
 #include "ui_wdg_dlgcreatebundle.h"
 
-#include "KoXmlResourceBundleMeta.h"
 #include <KoDocumentInfo.h>
 
 #include <QProcessEnvironment>

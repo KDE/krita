@@ -90,8 +90,6 @@ bool KoResourceBundle::load()
         return false;
 
     } else {
-        //TODO Vérifier si on peut éviter de recréer meta à chaque load
-        //A optimiser si possible
         m_metadata.clear();
 
         if (resourceStore->open("META-INF/manifest.xml")) {
@@ -116,9 +114,62 @@ bool KoResourceBundle::load()
             if (!doc.setContent(resourceStore->device())) {
                 return false;
             }
+            // First find the manifest:manifest node.
             KoXmlNode n = doc.firstChild();
+            for (; !n.isNull(); n = n.nextSibling()) {
+                if (!n.isElement()) {
+                    continue;
+                }
+                if (n.toElement().tagName() == "meta:meta") {
+                    break;
+                }
+            }
+
+            if (n.isNull()) {
+                return false;
+            }
+
+            const KoXmlElement  metaElement = n.toElement();
+            for (n = metaElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+                if (n.isElement()) {
+                    KoXmlElement e = n.toElement();
+                    if (e.tagName() == "meta:generator") {
+                        m_metadata.insert("generator", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "dc:author") {
+                        m_metadata.insert("author", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "dc:title") {
+                        m_metadata.insert("title", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "dc:description") {
+                        m_metadata.insert("description", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "meta:initial-creator") {
+                        m_metadata.insert("author", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "dc:creator") {
+                        m_metadata.insert("author", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "meta:creation-date") {
+                         m_metadata.insert("created", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "meta:dc-date") {
+                        m_metadata.insert("updated", e.firstChild().toText().data());
+                    }
+                    else if (e.tagName() == "meta:meta-userdefined") {
+                        if (e.attribute("meta:name") == "tag") {
+                            m_bundletags << e.attribute("meta:value");
+                        }
+                        else {
+                            m_metadata.insert(e.attribute("meta:name"), e.attribute("meta:value"));
+                        }
+                    }
+                }
+            }
             resourceStore->close();
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -126,6 +177,8 @@ bool KoResourceBundle::load()
             m_thumbnail.load(resourceStore->device(), "PNG");
             resourceStore->close();
         }
+
+        qDebug() << m_metadata;
 
         m_installed = m_manifest.isInstalled();
         setValid(true);
@@ -174,7 +227,6 @@ bool KoResourceBundle::save()
 
     addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    bool bundleExists = QFileInfo(filename()).exists();
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
 
@@ -274,7 +326,7 @@ bool KoResourceBundle::save()
         writeUserDefinedMeta("license", &metaWriter);
         writeUserDefinedMeta("website", &metaWriter);
         foreach (const QString &tag, m_bundletags) {
-            metaWriter.startElement("meta-userdefined");
+            metaWriter.startElement("meta:meta-userdefined");
             metaWriter.addAttribute("meta:name", "tag");
             metaWriter.addAttribute("meta:value", tag);
             metaWriter.endElement();

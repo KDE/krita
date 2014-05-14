@@ -27,9 +27,6 @@
 #include "KoResource.h"
 #include "KoXmlResourceBundleManifest.h"
 
-class KoXmlResourceBundleMeta;
-class KoStore;
-
 /**
  * @brief The KoResourceBundle class
  * @details Describe the resource bundles as KoResources

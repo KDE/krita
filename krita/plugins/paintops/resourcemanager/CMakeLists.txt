@@ -2,9 +2,7 @@ add_subdirectory( tests )
 
 set(kritaresourcemanager_PART_SRCS
     resourcemanager.cpp
-    KoXmlGenerator.cpp
 	KoXmlResourceBundleManifest.cpp
-	KoXmlResourceBundleMeta.cpp
     KoResourceBundle.cpp
     KoResourceManagerWidget.cpp
     KoResourceManagerControl.cpp

@@ -21,7 +21,6 @@
 #include <QPair>
 #include <QMap>
 #include <QMultiMap>
-#include "KoXmlGenerator.h"
 #include "krita_export.h"
 
 class KoResource;

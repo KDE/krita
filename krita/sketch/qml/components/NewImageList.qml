@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 ListView {
     id: base;
@@ -28,7 +29,7 @@ ListView {
         width: ListView.view.width;
 
         title: model.name;
-        image.source: Settings.theme.icon(model.image);
+        image.source: Krita.fileExists(model.icon) ? model.icon : Settings.theme.icon(model.icon);
         image.asynchronous: false;
         imageShadow: false;
 
@@ -38,7 +39,7 @@ ListView {
         }
 
         onClicked: {
-            switch(model.bnrole) {
+            switch(model.file) {
                 case "a5p": {
                     base.clicked({
                         width: 600,
@@ -83,20 +84,28 @@ ListView {
                 case "webcam": {
                     base.clicked({ source: "webcam" });
                 }
+                default: {
+                    console.debug(model.file);
+                    if(model.file.indexOf("template://") === 0) {
+                        base.clicked({ template: model.file });
+                    }
+                }
             }
         }
     }
 
-    model: ListModel {
-        ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "A4portrait-black" }
-        ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "A4landscape-black" }
-//                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
-//                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
-        ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "filenew-black" }
-        ListElement { bnrole: "custom"; name: "Custom Image"; image: "filenew-black" }
-        ListElement { bnrole: "clip";   name: "From Clipboard"; image: "fileclip-black" }
-//                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
-    }
+    model: TemplatesModel {}
+//     model: ListModel {
+//         ListElement { bnrole: "custom"; name: "Custom Image"; image: "filenew-black" }
+//         ListElement { bnrole: "clip";   name: "From Clipboard"; image: "fileclip-black" }
+// 
+//         ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "A4portrait-black" }
+//         ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "A4landscape-black" }
+//         ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "filenew-black" }
+// //                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
+// //                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
+// //                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
+//     }
 
     ScrollDecorator { }
 }

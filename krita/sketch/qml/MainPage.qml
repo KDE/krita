@@ -341,7 +341,10 @@ Page {
 
             if(newFileOptions !== undefined) {
                 loadingDialog.show("Creating new image...");
-                if(newFileOptions.source === undefined) {
+                if(newFileOptions.template !== undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(newFileOptions);
+                    settings.temporaryFile = true;
+                } else if(newFileOptions.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(newFileOptions);
                     Settings.temporaryFile = true;
                 } else if(newFileOptions.source == "clipboard") {

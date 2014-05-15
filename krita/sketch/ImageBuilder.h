@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE QString createBlankImage(const QVariantMap& options);
     Q_INVOKABLE QString createImageFromClipboard();
     Q_INVOKABLE QString createImageFromWebcam(int width, int height, int resolution);
+    Q_INVOKABLE QString createImageFromTemplate(const QVariantMap& options);
 
 private Q_SLOTS:
     void createImageFromClipboardDelayed();

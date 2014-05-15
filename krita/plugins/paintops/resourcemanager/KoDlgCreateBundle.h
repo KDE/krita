@@ -23,6 +23,7 @@ public:
     QString license() const;
     QString description() const;
     QString saveLocation() const;
+    QString previewImage() const;
 
     QStringList selectedBrushes() const { return m_selectedBrushes; }
     QStringList selectedPresets() const { return m_selectedPresets; }
@@ -38,6 +39,7 @@ private slots:
     void addSelected();
     void removeSelected();
     void resourceTypeSelected(int idx);
+    void getPreviewImage();
 
 private:
     QWidget *m_page;
@@ -50,7 +52,7 @@ private:
     QStringList m_selectedPalettes;
     QStringList m_selectedWorkspaces;
 
-
+    QString m_previewImage;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

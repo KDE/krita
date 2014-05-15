@@ -38,6 +38,7 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QByteArray>
+#include <QPainter>
 
 #include <kis_resource_server_provider.h>
 #include "kis_workspace_resource.h"
@@ -171,12 +172,10 @@ bool KoResourceBundle::load()
             return false;
         }
 
-        if (resourceStore->open("thumbnail.png")) {
+        if (resourceStore->open("preview.png")) {
             m_thumbnail.load(resourceStore->device(), "PNG");
             resourceStore->close();
         }
-
-        qDebug() << m_metadata;
 
         m_installed = m_manifest.isInstalled();
         setValid(true);
@@ -288,12 +287,11 @@ bool KoResourceBundle::save()
     }
 
     if (!m_thumbnail.isNull()) {
-        while (store->leaveDirectory());
         QByteArray byteArray;
         QBuffer buffer(&byteArray);
         m_thumbnail.save(&buffer, "PNG");
-        store->open("thumbnail.png");
-        store->write(byteArray);
+        if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
+        if (!store->write(byteArray) == buffer.size()) qWarning() << "Could not write preview.png";
         store->close();
     }
 
@@ -569,8 +567,17 @@ void KoResourceBundle::removeTag(QString tagName)
 
 void KoResourceBundle::setThumbnail(QString filename)
 {
-    m_thumbnail = QImage(filename);
-    save();
+    if (QFileInfo(filename).exists()) {
+        m_thumbnail = QImage(filename);
+        m_thumbnail = m_thumbnail.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        Q_ASSERT(!m_thumbnail.isNull());
+    }
+    else {
+        m_thumbnail = QImage(256, 256, QImage::Format_ARGB32);
+        QPainter gc(&m_thumbnail);
+        gc.fillRect(0, 0, 256, 256, Qt::red);
+        gc.end();
+    }
 }
 
 void KoResourceBundle::addTag(const QString &tagName)

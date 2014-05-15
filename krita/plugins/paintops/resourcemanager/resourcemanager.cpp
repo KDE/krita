@@ -270,9 +270,12 @@ void ResourceManager::slotCreateBundle()
     newBundle->addMeta("fileName", bundlePath);
     newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
 
+    newBundle->setThumbnail(dlgCreateBundle.previewImage());
+
     if (!newBundle->save()) {
         KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
     }
+
 
 }
 

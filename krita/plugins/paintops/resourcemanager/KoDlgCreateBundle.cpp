@@ -10,6 +10,7 @@
 #include <QTableWidget>
 #include <QPainter>
 
+#include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <KoIcon.h>
@@ -71,6 +72,8 @@ KoDlgCreateBundle::KoDlgCreateBundle(QWidget *parent)
     m_ui->tableSelected->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_ui->tableSelected->setSelectionMode(QAbstractItemView::MultiSelection);
 
+    connect(m_ui->bnGetPreview, SIGNAL(clicked()), SLOT(getPreviewImage()));
+
     resourceTypeSelected(0);
 }
 
@@ -112,6 +115,11 @@ QString KoDlgCreateBundle::description() const
 QString KoDlgCreateBundle::saveLocation() const
 {
     return m_ui->lblSaveLocation->text();
+}
+
+QString KoDlgCreateBundle::previewImage() const
+{
+    return m_previewImage;
 }
 
 
@@ -312,6 +320,18 @@ void KoDlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
     }
+}
+
+void KoDlgCreateBundle::getPreviewImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
+    dialog.setCaption(i18n("Select file to use as dynamic file layer."));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+    m_previewImage = dialog.url();
+    QImage img(m_previewImage);
+    img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
 }
 
 

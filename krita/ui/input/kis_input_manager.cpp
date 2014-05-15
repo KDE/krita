@@ -65,7 +65,6 @@ public:
     Private(KisInputManager *qq)
         : q(qq)
         , toolProxy(0)
-        , setMirrorMode(false)
         , forwardAllEventsToTool(false)
         , ignoreQtCursorEvents(false)
     #ifdef Q_WS_X11
@@ -80,7 +79,6 @@ public:
     }
 
     bool tryHidePopupPalette();
-    bool trySetMirrorMode(const QPointF &mousePosition);
     void saveTabletEvent(const QTabletEvent *event);
     void resetSavedTabletEvent(QEvent::Type type);
     void addStrokeShortcut(KisAbstractInputAction* action, int index, const QList< Qt::Key >& modifiers, Qt::MouseButtons buttons);
@@ -98,7 +96,6 @@ public:
     KisCanvas2 *canvas;
     KisToolProxy *toolProxy;
 
-    bool setMirrorMode;
     bool forwardAllEventsToTool;
     bool ignoreQtCursorEvents;
 
@@ -325,17 +322,6 @@ bool KisInputManager::Private::tryHidePopupPalette()
     return false;
 }
 
-bool KisInputManager::Private::trySetMirrorMode(const QPointF &mousePosition)
-{
-    if (setMirrorMode) {
-        canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, canvas->image()->documentToPixel(mousePosition));
-        QApplication::restoreOverrideCursor();
-        setMirrorMode = false;
-        return true;
-    }
-    return false;
-}
-
 #ifdef Q_WS_X11
 inline QPointF dividePoints(const QPointF &pt1, const QPointF &pt2) {
     return QPointF(pt1.x() / pt2.x(), pt1.y() / pt2.y());
@@ -412,18 +398,6 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     d->toolProxy = proxy;
 
     d->setupActions();
-
-    /*
-     * Temporary solution so we can still set the mirror axes.
-     *
-     * TODO: Create a proper interface for this.
-     * There really should be a better way to handle this, one that neither
-     * relies on "hidden" mouse interaction or shortcuts.
-     */
-    KAction *setMirrorAxes = new KAction(i18n("Set Mirror Axes"), this);
-    d->canvas->view()->actionCollection()->addAction("set_mirror_axes", setMirrorAxes);
-    setMirrorAxes->setShortcut(QKeySequence("Shift+r"));
-    connect(setMirrorAxes, SIGNAL(triggered(bool)), SLOT(setMirrorAxes()));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));
@@ -517,7 +491,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        if (d->tryHidePopupPalette() || d->trySetMirrorMode(widgetToDocument(mouseEvent->posF()))) {
+        if (d->tryHidePopupPalette()) {
             retval = true;
         } else {
             //Make sure the input actions know we are active.
@@ -768,12 +742,6 @@ QTabletEvent* KisInputManager::lastTabletEvent() const
 QTouchEvent *KisInputManager::lastTouchEvent() const
 {
     return d->lastTouchEvent;
-}
-
-void KisInputManager::setMirrorAxes()
-{
-    d->setMirrorMode = true;
-    QApplication::setOverrideCursor(Qt::CrossCursor);
 }
 
 void KisInputManager::slotToolChanged()

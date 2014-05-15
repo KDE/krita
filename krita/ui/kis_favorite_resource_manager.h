@@ -81,6 +81,9 @@ public:
     virtual void syncTagAddition(const QString& tag);
     virtual void syncTagRemoval(const QString& tag);
 
+    //BgColor;
+    QColor bgColor();
+
     /**
      * Set palette to block updates, paintops won't be deleted when they are deleted from server
      * Used when overwriting a resource
@@ -90,6 +93,7 @@ public:
 signals:
 
     void sigSetFGColor(const KoColor& c);
+    void sigSetBGColor(const KoColor& c);
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -118,6 +122,8 @@ public slots:
 
     void slotChangeFGColorSelector(KoColor c);
 
+    void slotSetBGColor(const KoColor c);
+
 private:
 
     KisPaletteManager *m_favoriteBrushManager;
@@ -132,6 +138,7 @@ private:
 
     void saveFavoritePresets();
 
+    QColor m_bgColor;
 };
 
 #endif

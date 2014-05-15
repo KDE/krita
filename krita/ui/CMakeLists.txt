@@ -261,6 +261,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_mirror_axis.cpp
 )
 
 if(WIN32)

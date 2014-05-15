@@ -129,6 +129,7 @@
 #include "kis_canvas_controls_manager.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
+#include "kis_mirror_axis.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -222,6 +223,7 @@ public:
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
     QMainWindow* mainWindow;
+    KisMirrorAxis* mirrorAxis;
 };
 
 
@@ -1008,6 +1010,9 @@ void KisView2::createManagers()
 
     m_d->canvasControlsManager = new KisCanvasControlsManager(this);
     m_d->canvasControlsManager->setup(actionCollection());
+
+    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
+    m_d->canvas->addDecoration(m_d->mirrorAxis);
 }
 
 void KisView2::updateGUI()

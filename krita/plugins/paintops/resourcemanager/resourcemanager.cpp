@@ -45,6 +45,7 @@
 #include <kis_brush_server.h>
 
 #include "KoResourceManagerWidget.h"
+#include "dlg_bundle_manager.h"
 #include "KoDlgCreateBundle.h"
 
 ResourceBundleServerProvider::ResourceBundleServerProvider()
@@ -126,6 +127,10 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     action = new KisAction(i18n("Create Resource Bundle..."), this);
     addAction("createbundle", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
+
+    action = new KisAction(i18n("Manage Resource Bundles..."), this);
+    addAction("managebundles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 }
 
 ResourceManager::~ResourceManager()
@@ -279,6 +284,15 @@ void ResourceManager::slotCreateBundle()
         KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
     }
 
+
+}
+
+void ResourceManager::slotManageBundles()
+{
+    DlgBundleManager dlg;
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
 
 }
 

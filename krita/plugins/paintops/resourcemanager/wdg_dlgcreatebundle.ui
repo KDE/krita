@@ -192,8 +192,8 @@
     </layout>
    </item>
    <item row="0" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLabel" name="label_3">
@@ -217,7 +217,7 @@
        </item>
       </layout>
      </item>
-     <item>
+     <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QWidget" name="wdgAvailablePage" native="true">
@@ -299,8 +299,6 @@
    </item>
   </layout>
   <zorder></zorder>
-  <zorder>bnGetPreview</zorder>
-  <zorder>lblPreview</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -5,6 +5,7 @@
          <Menu name="Resources"><text>&amp;Resources</text>
             <Action name="import"/>
             <Action name="createbundle"/>
+            <Action name="managebundles"/>
             <Action name="resourcemanager"/>
         </Menu>
  </Menu>

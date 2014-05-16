@@ -31,6 +31,7 @@ struct TemplatesModel::ItemData {
 public:
     ItemData()
         : favourite(false)
+        , groupFolded(false)
     {};
     QString name;
     QString description;
@@ -38,6 +39,7 @@ public:
     QString icon;
     QString groupName;
     bool favourite;
+    bool groupFolded;
 };
 
 class TemplatesModel::Private {
@@ -57,6 +59,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     roleNames[FileRole] = "file";
     roleNames[IconRole] = "icon";
     roleNames[GroupName] = "groupName";
+    roleNames[GroupFolded] = "groupFolded";
     setRoleNames(roleNames);
 
     // Prefill a couple of 
@@ -133,6 +136,9 @@ QVariant TemplatesModel::data(const QModelIndex& index, int role) const
             case GroupName:
                 data = item->groupName;
                 break;
+            case GroupFolded:
+                data = item->groupFolded;
+                break;
             default:
                 break;
         }
@@ -152,6 +158,15 @@ QString TemplatesModel::groupNameOf(int index) const
     if(index > 0 && index < d->items.count())
         return d->items[index]->groupName;
     return QString();
+}
+
+void TemplatesModel::toggleGroup(const QString& name)
+{
+    foreach(ItemData* item, d->items) {
+        if(item->groupName == name)
+            item->groupFolded = !item->groupFolded;
+    }
+    dataChanged(index(0), index(d->items.count() - 1));
 }
 
 #include "TemplatesModel.moc"

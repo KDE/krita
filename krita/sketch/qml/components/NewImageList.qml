@@ -54,6 +54,10 @@ ListView {
                 font: Settings.theme.font("title");
                 color: Settings.theme.color("pages/welcome/create/header/text");
             }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: base.model.toggleGroup(model.groupName);
+            }
 
             Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
@@ -62,6 +66,10 @@ ListView {
             anchors.top: header.bottom;
             anchors.topMargin: header.visible ? Constants.DefaultMargin : 0;
             width: base.width;
+            opacity: model.groupFolded ? 0 : 1;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            height: model.groupFolded ? 0 : Constants.GridHeight * 1.75
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
 
             title: model.name;
             image.source: Krita.fileExists(model.icon) ? model.icon : Settings.theme.icon(model.icon);

@@ -35,13 +35,15 @@ public:
         DescriptionRole,
         FileRole,
         IconRole,
-        GroupName
+        GroupName,
+        GroupFolded
     };
     explicit TemplatesModel(QObject* parent = 0);
     virtual ~TemplatesModel();
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
     Q_INVOKABLE QString groupNameOf(int index) const;
+    Q_INVOKABLE void toggleGroup(const QString& name);
 
 private:
     struct ItemData;

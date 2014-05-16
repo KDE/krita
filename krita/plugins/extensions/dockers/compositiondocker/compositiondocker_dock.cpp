@@ -156,6 +156,7 @@ void CompositionDockerDock::saveClicked()
     saveNameEdit->clear();
     updateModel();
     compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
+    image->setModified();
 }
 
 void CompositionDockerDock::updateModel()

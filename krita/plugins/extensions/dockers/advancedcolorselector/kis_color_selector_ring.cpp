@@ -30,13 +30,19 @@ KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_cachedColorSpace(0),
     m_cachedSize(0),
-    m_lastHue(0)
+    m_lastHue(0),
+    m_innerRingRadiusFraction(0.85)
 {
 }
 
 int KisColorSelectorRing::innerRadius() const
 {
-    return (qMin(width(), height())/2)*0.85;
+    return (qMin(width(), height())/2)*m_innerRingRadiusFraction;
+}
+
+void KisColorSelectorRing::setInnerRingRadiusFraction(qreal newFraction)
+{
+    m_innerRingRadiusFraction = newFraction;
 }
 
 bool KisColorSelectorRing::containsPointInComponentCoords(int x, int y) const

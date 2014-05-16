@@ -64,7 +64,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
 
     setWidget(widget);
 
-    connect( compositionView, SIGNAL(clicked( const QModelIndex & ) ),
+    connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(activated ( const QModelIndex & ) ) );
 
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));

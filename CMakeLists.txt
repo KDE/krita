@@ -52,11 +52,13 @@ set(CALLIGRA_GIT_SHA1_STRING "")
 
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+get_git_branch(GIT_BRANCH)
 
-if(GIT_SHA1)
+if(GIT_SHA1 AND GIT_BRANCH)
     string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
     set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
-endif(GIT_SHA1)
+    set(CALLIGRA_GIT_BRANCH_STRING ${GIT_BRANCH})
+endif()
 
  ########################
 #########################

@@ -66,7 +66,7 @@ int CompositionModel::columnCount(const QModelIndex& /*parent*/) const
 
 Qt::ItemFlags CompositionModel::flags(const QModelIndex& /*index*/) const
 {
-    Qt::ItemFlags flags = /*Qt::ItemIsSelectable |*/ Qt::ItemIsEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     return flags;
 }
 

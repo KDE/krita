@@ -27,6 +27,7 @@
 #include <QAction>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -42,6 +43,8 @@
 #include <kis_group_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
+#include <kis_action.h>
+#include <kis_action_manager.h>
 
 #include "compositionmodel.h"
 
@@ -67,12 +70,21 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(activated ( const QModelIndex & ) ) );
 
+    compositionView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect( compositionView, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(customContextMenuRequested(QPoint)));
+
     connect( deleteButton, SIGNAL(clicked(bool)), this, SLOT(deleteClicked()));
     connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
     connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
 #if QT_VERSION >= 0x040700
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 #endif
+
+    updateAction  = new KisAction(i18n("Update Composition"), this);
+    updateAction->setObjectName("update_composition");
+    connect(updateAction, SIGNAL(triggered()), this, SLOT(updateComposition()));
+    m_actions.append(updateAction);
 }
 
 CompositionDockerDock::~CompositionDockerDock()
@@ -83,11 +95,21 @@ CompositionDockerDock::~CompositionDockerDock()
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+    foreach(KisAction *action, m_actions) {
+       m_canvas->view()->actionManager()->addAction(action->objectName(), action, actionCollection);
+    }
     updateModel();
 }
 
 void CompositionDockerDock::unsetCanvas()
 {
+    if (m_canvas) {
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
+        foreach(KisAction *action, m_actions) {
+            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
+        }
+    }
     m_canvas = 0;
     m_model->setCompositions(QList<KisLayerComposition*>());
 }
@@ -133,6 +155,7 @@ void CompositionDockerDock::saveClicked()
     image->addComposition(composition);
     saveNameEdit->clear();
     updateModel();
+    compositionView->setCurrentIndex(m_model->index(image->compositions().count()-1, 0));
 }
 
 void CompositionDockerDock::updateModel()
@@ -221,6 +244,22 @@ void CompositionDockerDock::activateCurrentIndex()
     QModelIndex index = compositionView->currentIndex();
     if (index.isValid()) {
         activated(index);
+    }
+}
+
+void CompositionDockerDock::customContextMenuRequested(QPoint pos)
+{
+    QMenu menu;
+    menu.addAction(updateAction);
+    menu.exec(compositionView->mapToGlobal(pos));
+}
+
+void CompositionDockerDock::updateComposition()
+{
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        composition->store();
     }
 }
 

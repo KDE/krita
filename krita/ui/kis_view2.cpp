@@ -633,6 +633,10 @@ bool KisView2::event( QEvent* event )
 
             syncObject->gridData = &document()->gridData();
 
+            syncObject->mirrorHorizontal = provider->mirrorHorizontal();
+            syncObject->mirrorVertical = provider->mirrorVertical();
+            syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
             syncObject->initialized = true;
 
             QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
@@ -654,6 +658,10 @@ bool KisView2::event( QEvent* event )
 
             if(syncObject->initialized) {
                 KisCanvasResourceProvider* provider = resourceProvider();
+
+                provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
+                provider->setMirrorVertical(syncObject->mirrorVertical);
+                provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
 
                 provider->setPaintOpPreset(syncObject->paintOp);
                 qApp->processEvents();
@@ -683,6 +691,7 @@ bool KisView2::event( QEvent* event )
                 document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
                 document()->gridData().setShowGrid(syncObject->gridData->showGrid());
                 document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
+
 
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();

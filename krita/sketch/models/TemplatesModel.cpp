@@ -56,6 +56,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     roleNames[DescriptionRole] = "description";
     roleNames[FileRole] = "file";
     roleNames[IconRole] = "icon";
+    roleNames[GroupName] = "groupName";
     setRoleNames(roleNames);
 
     // Prefill a couple of 
@@ -129,6 +130,9 @@ QVariant TemplatesModel::data(const QModelIndex& index, int role) const
             case IconRole:
                 data = item->icon;
                 break;
+            case GroupName:
+                data = item->groupName;
+                break;
             default:
                 break;
         }
@@ -141,6 +145,13 @@ int TemplatesModel::rowCount(const QModelIndex& parent) const
     if(parent.isValid())
         return 0;
     return d->items.count();
+}
+
+QString TemplatesModel::groupNameOf(int index) const
+{
+    if(index > 0 && index < d->items.count())
+        return d->items[index]->groupName;
+    return QString();
 }
 
 #include "TemplatesModel.moc"

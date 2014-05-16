@@ -25,69 +25,105 @@ ListView {
 
     signal clicked(variant options);
 
-    delegate: ListItem {
-        width: ListView.view.width;
+    delegate: Item {
+        height: header.height + listItem.height;
+        width: base.width;
+        Rectangle {
+            id: header;
+            width: base.width;
+            height: index > 0 && (base.model.groupNameOf(index - 1) != model.groupName) ? Constants.GridHeight : 0;
+            visible: height > 0;gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: Settings.theme.color("pages/welcome/create/header/start");
+                }
 
-        title: model.name;
-        image.source: Krita.fileExists(model.icon) ? model.icon : Settings.theme.icon(model.icon);
-        image.asynchronous: false;
-        imageShadow: false;
 
-        gradient: Gradient {
-            GradientStop { position: 0; color: Settings.theme.color("components/newImageList/start") }
-            GradientStop { position: 0.4; color: Settings.theme.color("components/newImageList/stop"); }
+                GradientStop {
+                    position: 1
+                    color: Settings.theme.color("pages/welcome/create/header/stop");
+                }
+            }
+            Label {
+                anchors {
+                    left: parent.left;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                text: model.groupName;
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/create/header/text");
+            }
+
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
+        ListItem {
+            id: listItem;
+            anchors.top: header.bottom;
+            anchors.topMargin: header.visible ? Constants.DefaultMargin : 0;
+            width: base.width;
 
-        onClicked: {
-            switch(model.file) {
-                case "a5p": {
-                    base.clicked({
-                        width: 600,
-                        height: 875,
-                        resolution: 150,
-                    });
-                }
-                case "a5l": {
-                    base.clicked({
-                        width: 875,
-                        height: 600,
-                        resolution: 150,
-                    });
-                }
-                case "a4p": {
-                    base.clicked({
-                        width: 1200,
-                        height: 1750,
-                        resolution: 150,
-                    });
-                }
-                case "a4l": {
-                    base.clicked({
-                        width: 1750,
-                        height: 1200,
-                        resolution: 150,
-                    });
-                }
-                case "screen": {
-                    base.clicked({
-                        width: Krita.Window.width,
-                        height: Krita.Window.height,
-                        resolution: 72.0
-                    });
-                }
-                case "custom": {
-                    base.clicked(null);
-                }
-                case "clip": {
-                    base.clicked({ source: "clipboard" });
-                }
-                case "webcam": {
-                    base.clicked({ source: "webcam" });
-                }
-                default: {
-                    console.debug(model.file);
-                    if(model.file.indexOf("template://") === 0) {
-                        base.clicked({ template: model.file });
+            title: model.name;
+            image.source: Krita.fileExists(model.icon) ? model.icon : Settings.theme.icon(model.icon);
+            image.asynchronous: false;
+            imageShadow: false;
+
+            gradient: Gradient {
+                GradientStop { position: 0; color: Settings.theme.color("components/newImageList/start") }
+                GradientStop { position: 0.4; color: Settings.theme.color("components/newImageList/stop"); }
+            }
+
+            onClicked: {
+                switch(model.file) {
+                    case "a5p": {
+                        base.clicked({
+                            width: 600,
+                            height: 875,
+                            resolution: 150,
+                        });
+                    }
+                    case "a5l": {
+                        base.clicked({
+                            width: 875,
+                            height: 600,
+                            resolution: 150,
+                        });
+                    }
+                    case "a4p": {
+                        base.clicked({
+                            width: 1200,
+                            height: 1750,
+                            resolution: 150,
+                        });
+                    }
+                    case "a4l": {
+                        base.clicked({
+                            width: 1750,
+                            height: 1200,
+                            resolution: 150,
+                        });
+                    }
+                    case "screen": {
+                        base.clicked({
+                            width: Krita.Window.width,
+                            height: Krita.Window.height,
+                            resolution: 72.0
+                        });
+                    }
+                    case "custom": {
+                        base.clicked(null);
+                    }
+                    case "clip": {
+                        base.clicked({ source: "clipboard" });
+                    }
+                    case "webcam": {
+                        base.clicked({ source: "webcam" });
+                    }
+                    default: {
+                        console.debug(model.file);
+                        if(model.file.indexOf("template://") === 0) {
+                            base.clicked({ template: model.file });
+                        }
                     }
                 }
             }

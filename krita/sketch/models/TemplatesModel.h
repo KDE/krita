@@ -34,12 +34,14 @@ public:
         NameRole = Qt::UserRole + 1,
         DescriptionRole,
         FileRole,
-        IconRole
+        IconRole,
+        GroupName
     };
     explicit TemplatesModel(QObject* parent = 0);
     virtual ~TemplatesModel();
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
+    Q_INVOKABLE QString groupNameOf(int index) const;
 
 private:
     struct ItemData;

@@ -73,6 +73,11 @@ TemplatesModel::TemplatesModel(QObject* parent)
     clipItem->file = "clip";
     clipItem->icon = "fileclip-black";
     d->items << clipItem;
+    ItemData* screenItem = new ItemData();
+    screenItem->name = "Blank Image (Screen Size)";
+    screenItem->file = "screen";
+    screenItem->icon = "filenew-black";
+    d->items << screenItem;
     ItemData* a4pItem = new ItemData();
     a4pItem->name = "Blank Image (A4 Portrait)";
     a4pItem->file = "a4p";
@@ -83,11 +88,6 @@ TemplatesModel::TemplatesModel(QObject* parent)
     a4lItem->file = "a4l";
     a4lItem->icon = "A4landscape-black";
     d->items << a4lItem;
-    ItemData* screenItem = new ItemData();
-    screenItem->name = "Blank Image (Screen Size)";
-    screenItem->file = "screen";
-    screenItem->icon = "filenew-black";
-    d->items << screenItem;
 
     KoTemplateTree templateTree("krita_template", KisFactory2::componentData(), true);
     foreach (KoTemplateGroup *group, templateTree.groups()) {

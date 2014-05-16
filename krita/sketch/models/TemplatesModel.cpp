@@ -82,7 +82,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     d->items << a4lItem;
     ItemData* screenItem = new ItemData();
     screenItem->name = "Blank Image (Screen Size)";
-    screenItem->file = "scren";
+    screenItem->file = "screen";
     screenItem->icon = "filenew-black";
     d->items << screenItem;
 

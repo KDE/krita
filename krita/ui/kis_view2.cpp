@@ -659,9 +659,17 @@ bool KisView2::event( QEvent* event )
             if(syncObject->initialized) {
                 KisCanvasResourceProvider* provider = resourceProvider();
 
-                provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
-                provider->setMirrorVertical(syncObject->mirrorVertical);
                 provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
+                if (provider->mirrorHorizontal() != syncObject->mirrorHorizontal) {
+                    QAction* mirrorAction = actionCollection()->action("hmirror_action");
+                    mirrorAction->setChecked(syncObject->mirrorHorizontal);
+                    provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
+                }
+                if (provider->mirrorVertical() != syncObject->mirrorVertical) {
+                    QAction* mirrorAction = actionCollection()->action("vmirror_action");
+                    mirrorAction->setChecked(syncObject->mirrorVertical);
+                    provider->setMirrorVertical(syncObject->mirrorVertical);
+                }
 
                 provider->setPaintOpPreset(syncObject->paintOp);
                 qApp->processEvents();

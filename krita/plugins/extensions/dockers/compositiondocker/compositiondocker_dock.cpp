@@ -270,6 +270,7 @@ void CompositionDockerDock::updateComposition()
     if (index.isValid()) {
         KisLayerComposition* composition = m_model->compositionFromIndex(index);
         composition->store();
+        m_canvas->image()->setModified();
     }
 }
 
@@ -285,6 +286,7 @@ void CompositionDockerDock::renameComposition()
                                              composition->name(), &ok);
         if (ok && !name.isEmpty()) {
             composition->setName(name);
+            m_canvas->image()->setModified();
         }
     }
 }

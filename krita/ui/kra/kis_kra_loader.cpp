@@ -828,6 +828,8 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
             QUuid uuid(e.attribute("uuid"));
             bool visible = e.attribute("visible", "1") == "0" ? false : true;
             composition->setVisible(uuid, visible);
+            bool collapsed = e.attribute("collapsed", "1") == "0" ? false : true;
+            composition->setCollapsed(uuid, collapsed);
         }
 
         image->addComposition(composition);

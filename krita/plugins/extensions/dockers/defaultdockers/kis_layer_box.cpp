@@ -307,6 +307,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
+        connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
 
         // cold start
         setCurrentNode(m_nodeManager->activeNode());
@@ -637,6 +638,12 @@ void KisLayerBox::slotSelectOpaque()
     if (action) {
         action->trigger();
     }
+}
+
+void KisLayerBox::slotNodeCollapsedChanged()
+{
+    m_wdgLayerBox->listLayers->expandAll();
+    expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
 }
 
 

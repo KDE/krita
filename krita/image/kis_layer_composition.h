@@ -72,12 +72,15 @@ public:
 
     void setVisible(QUuid id, bool visible);
 
+    void setCollapsed(QUuid id, bool collapsed);
+
     void save(QDomDocument& doc, QDomElement& element);
 
 private:
     KisImageWSP m_image;
     QString m_name;
     QMap<QUuid, bool> m_visibilityMap;
+    QMap<QUuid, bool> m_collapsedMap;
     bool m_exportEnabled;
     
     friend class KisCompositionVisitor;

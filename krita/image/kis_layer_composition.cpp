@@ -62,6 +62,7 @@ public:
     bool process(KisNode* node) {
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
+            m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
         } else {
             bool newState = false;
             if(m_layerComposition->m_visibilityMap.contains(node->uuid())) {
@@ -70,6 +71,9 @@ public:
             if(node->visible() != newState) {
                 node->setVisible(m_layerComposition->m_visibilityMap[node->uuid()]);
                 node->setDirty();
+            }
+            if(m_layerComposition->m_collapsedMap.contains(node->uuid())) {
+                node->setCollapsed(m_layerComposition->m_collapsedMap[node->uuid()]);
             }
         }
         
@@ -116,6 +120,7 @@ void KisLayerComposition::apply()
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::APPLY);
     m_image->rootLayer()->accept(visitor);
+    m_image->notifyNodeCollpasedChanged();
 }
 
 void KisLayerComposition::setExportEnabled ( bool enabled )
@@ -133,6 +138,11 @@ void KisLayerComposition::setVisible(QUuid id, bool visible)
     m_visibilityMap[id] = visible;
 }
 
+void KisLayerComposition::setCollapsed ( QUuid id, bool collapsed )
+{
+    m_collapsedMap[id] = collapsed;
+}
+
 void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
 {
     QDomElement compositionElement = doc.createElement("composition");
@@ -144,6 +154,11 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
         QDomElement valueElement = doc.createElement("value");
         valueElement.setAttribute("uuid", iter.key().toString());
         valueElement.setAttribute("visible", iter.value());
+        kDebug() << "contains" << m_collapsedMap.contains(iter.key());
+        if (m_collapsedMap.contains(iter.key())) {
+            kDebug() << "colapsed :" << m_collapsedMap[iter.key()];
+            valueElement.setAttribute("collapsed", m_collapsedMap[iter.key()]);
+        }
         compositionElement.appendChild(valueElement);
     }
     element.appendChild(compositionElement);

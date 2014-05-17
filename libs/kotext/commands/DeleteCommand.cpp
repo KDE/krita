@@ -137,16 +137,13 @@ bool DeleteCommand::getPreviousBlock(QTextCursor &cur)
 {
     QTextCursor prev = cur;
     bool ok = prev.movePosition(QTextCursor::PreviousBlock);
-    qDebug() << "going to previous block " << prev.position() << ' ' << ok << ' ' << prev.block().blockNumber();
 
     while (ok && prev.currentFrame() != cur.currentFrame()) {
         ok = prev.movePosition(QTextCursor::PreviousBlock);
-        qDebug() << "going to previous block " << prev.position() << ' ' << ok << ' ' << prev.block().blockNumber();
     }
 
     if (!ok || prev.currentFrame() != cur.currentFrame()) {
         // there is no previous block
-        qDebug() << "Cannot find previous block";
         return false;
     }
 
@@ -158,16 +155,13 @@ bool DeleteCommand::getNextBlock(QTextCursor &cur)
 {
     QTextCursor next = cur;
     bool ok = next.movePosition(QTextCursor::NextBlock);
-    qDebug() << "going to next block " << next.position() << ' ' << ok << ' ' << next.block().blockNumber();
 
     while (ok && next.currentFrame() != cur.currentFrame()) {
         ok = next.movePosition(QTextCursor::PreviousBlock);
-        qDebug() << "going to next block " << next.position() << ' ' << ok << ' ' << next.block().blockNumber();
     }
 
     if (!ok || next.currentFrame() != next.currentFrame()) {
         // there is no previous block
-        qDebug() << "Cannot find next block";
         return false;
     }
     cur = next;
@@ -178,37 +172,37 @@ void DeleteCommand::deleteSingleSections(QTextCursor &cur)
 {
     QTextBlockFormat format = cur.blockFormat();
     QVariant var = format.property(KoParagraphStyle::SectionStartings);
-    QList<QVariant> open_list = var.value< QList<QVariant> >();
+    QList<QVariant> openList = var.value< QList<QVariant> >();
 
     var = format.property(KoParagraphStyle::SectionEndings);
-    QList<QVariant> close_list = var.value< QList<QVariant> >();
+    QList<QVariant> closeList = var.value< QList<QVariant> >();
 
-    for (QList<QVariant>::iterator open_it = open_list.begin();
-         open_it != open_list.end(); ) {
-        KoSection *sec = static_cast<KoSection *>(open_it->value<void *>());
+    for (QList<QVariant>::iterator openIt = openList.begin();
+        openIt != openList.end(); ) {
+        KoSection *sec = static_cast<KoSection *>( openIt->value<void *>());
 
         bool found = false;
-        QList<QVariant>::iterator close_it = close_list.begin();
-        for (; close_it != close_list.end(); close_it++) {
-            KoSectionEnd *sec_end = static_cast<KoSectionEnd *>(close_it->value<void *>());
+        QList<QVariant>::iterator closeIt = closeList.begin();
+        for (; closeIt != closeList.end(); closeIt++) {
+            KoSectionEnd *secEnd = static_cast<KoSectionEnd *>( closeIt->value<void *>());
 
-            if (sec_end->name == sec->name()) {
+            if (secEnd->name == sec->name()) {
                 found = true;
                 break;
             }
         }
 
         if (found) {
-            open_it = open_list.erase(open_it);
-            close_list.erase(close_it);
+            openIt = openList.erase( openIt );
+            closeList.erase( closeIt );
         } else {
-            open_it++;
+            openIt++;
         }
     }
 
-    var.setValue< QList<QVariant> >(close_list);
+    var.setValue< QList<QVariant> >(closeList);
     format.setProperty(KoParagraphStyle::SectionEndings, var);
-    var.setValue< QList<QVariant> >(open_list);
+    var.setValue< QList<QVariant> >(openList);
     format.setProperty(KoParagraphStyle::SectionStartings, var);
     cur.setBlockFormat(format);
 }
@@ -257,31 +251,31 @@ void DeleteCommand::doDelete()
 
         QTextCursor next = cur;
         if (getNextBlock(next)) {
-            QTextBlockFormat cur_format = cur.blockFormat();
-            QTextBlockFormat next_format = next.blockFormat();
+            QTextBlockFormat curFormat = cur.blockFormat();
+            QTextBlockFormat nextFormat = next.blockFormat();
 
-            if (next_format.hasProperty(KoParagraphStyle::SectionEndings)) {
+            if (nextFormat.hasProperty(KoParagraphStyle::SectionEndings)) {
                 deleteSingleSections(next);
-                next_format = next.blockFormat();
+                nextFormat = next.blockFormat();
 
-                QVariant var = next_format.property(KoParagraphStyle::SectionEndings);
-                QList<QVariant> close_list_next = var.value< QList<QVariant> >();
+                QVariant var = nextFormat.property(KoParagraphStyle::SectionEndings);
+                QList<QVariant> closeListNext = var.value< QList<QVariant> >();
 
-                QList<QVariant> close_list_cur;
-                if (cur_format.hasProperty(KoParagraphStyle::SectionEndings)) {
-                    var = cur_format.property(KoParagraphStyle::SectionEndings);
-                    close_list_cur = var.value< QList<QVariant> >();
+                QList<QVariant> closeListCur;
+                if (curFormat.hasProperty(KoParagraphStyle::SectionEndings)) {
+                    var = curFormat.property(KoParagraphStyle::SectionEndings);
+                    closeListCur = var.value< QList<QVariant> >();
                 }
 
-                if (!close_list_next.empty()) {
-                    close_list_cur.append(close_list_next);
+                if (!closeListNext.empty()) {
+                    closeListCur.append(closeListNext);
 
-                    var.setValue< QList<QVariant> >(close_list_cur);
-                    cur_format.setProperty(KoParagraphStyle::SectionEndings, var);
-                    cur.setBlockFormat(cur_format);
+                    var.setValue< QList<QVariant> >(closeListCur);
+                    curFormat.setProperty(KoParagraphStyle::SectionEndings, var);
+                    cur.setBlockFormat(curFormat);
 
-//                  next_format.clearProperty(KoParagraphStyle::SectionEndings);
-//                  next.setBlockFormat(next_format);
+//                  nextFormat.clearProperty(KoParagraphStyle::SectionEndings);
+//                  next.setBlockFormat(nextFormat);
                 }
             }
         }
@@ -302,32 +296,32 @@ void DeleteCommand::doDelete()
         if (getNextBlock(next)) {
             QTextCursor nextnext = next;
             if (getNextBlock(nextnext)) {
-                QTextBlockFormat nextnext_format = nextnext.blockFormat();
-                QTextBlockFormat next_format = next.blockFormat();
+                QTextBlockFormat nextNextFormat = nextnext.blockFormat();
+                QTextBlockFormat nextFormat = next.blockFormat();
 
-                if (next_format.hasProperty(KoParagraphStyle::SectionStartings)) {
+                if (nextFormat.hasProperty(KoParagraphStyle::SectionStartings)) {
                     deleteSingleSections(next);
-                    next_format = next.blockFormat();
+                    nextFormat = next.blockFormat();
 
-                    QVariant var = next_format.property(KoParagraphStyle::SectionStartings);
-                    QList<QVariant> open_list_next = var.value< QList<QVariant> >();
+                    QVariant var = nextFormat.property(KoParagraphStyle::SectionStartings);
+                    QList<QVariant> openListNext = var.value< QList<QVariant> >();
 
-                    QList<QVariant> open_list_nextnext;
-                    if (nextnext_format.hasProperty(KoParagraphStyle::SectionStartings)) {
-                        var = nextnext_format.property(KoParagraphStyle::SectionStartings);
-                        open_list_nextnext = var.value< QList<QVariant> >();
+                    QList<QVariant> openListNextNext;
+                    if (nextNextFormat.hasProperty(KoParagraphStyle::SectionStartings)) {
+                        var = nextNextFormat.property(KoParagraphStyle::SectionStartings);
+                        openListNextNext = var.value< QList<QVariant> >();
                     }
 
 
-                    if (!open_list_next.empty()) {
-                        open_list_next.append(open_list_nextnext);
+                    if (!openListNext.empty()) {
+                        openListNext.append(openListNextNext);
 
-                        var.setValue< QList<QVariant> >(open_list_next);
-                        nextnext_format.setProperty(KoParagraphStyle::SectionStartings, var);
-                        nextnext.setBlockFormat(nextnext_format);
+                        var.setValue< QList<QVariant> >(openListNext);
+                        nextNextFormat.setProperty(KoParagraphStyle::SectionStartings, var);
+                        nextnext.setBlockFormat(nextNextFormat);
 
-                        next_format.clearProperty(KoParagraphStyle::SectionEndings);
-                        next.setBlockFormat(next_format);
+                        nextFormat.clearProperty(KoParagraphStyle::SectionEndings);
+                        next.setBlockFormat(nextFormat);
                     }
                 }
             }

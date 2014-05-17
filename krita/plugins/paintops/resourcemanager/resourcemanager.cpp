@@ -53,6 +53,9 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
     m_resourceBundleServer = new KoResourceServer<KoResourceBundle>("kis_resourcebundles", "*.bundle");
+    if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
+        QDir().mkpath(m_resourceBundleServer->saveLocation());
+    }
     KoResourceLoaderThread loader(m_resourceBundleServer);
     loader.start();
     loader.barrier();

@@ -39,6 +39,11 @@ public:
     ~KisLayerComposition();
 
    /**
+    * Sets name of the composition
+    */
+    void setName(const QString& name);
+
+   /**
     * Name of the composition as show in the docker
     * \return name of the composition
     */

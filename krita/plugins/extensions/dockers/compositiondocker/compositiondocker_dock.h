@@ -49,6 +49,7 @@ private slots:
     void activateCurrentIndex();
     void customContextMenuRequested(QPoint pos);
     void updateComposition();
+    void renameComposition();
 
 private:
     KisCanvas2 *m_canvas;
@@ -56,6 +57,7 @@ private:
 
     QVector<KisAction*> m_actions;
     KisAction* updateAction;
+    KisAction* renameAction;
 };
 
 

@@ -90,6 +90,11 @@ KisLayerComposition::~KisLayerComposition()
 
 }
 
+void KisLayerComposition::setName(const QString& name)
+{
+    m_name = name;
+}
+
 QString KisLayerComposition::name()
 {
     return m_name;

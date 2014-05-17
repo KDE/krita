@@ -84,7 +84,11 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     updateAction  = new KisAction(i18n("Update Composition"), this);
     updateAction->setObjectName("update_composition");
     connect(updateAction, SIGNAL(triggered()), this, SLOT(updateComposition()));
-    m_actions.append(updateAction);
+
+    renameAction  = new KisAction(i18n("Rename Composition..."), this);
+    renameAction->setObjectName("rename_composition");
+    connect(renameAction, SIGNAL(triggered()), this, SLOT(renameComposition()));
+    m_actions.append(renameAction);
 }
 
 CompositionDockerDock::~CompositionDockerDock()
@@ -252,6 +256,7 @@ void CompositionDockerDock::customContextMenuRequested(QPoint pos)
 {
     QMenu menu;
     menu.addAction(updateAction);
+    menu.addAction(renameAction);
     menu.exec(compositionView->mapToGlobal(pos));
 }
 
@@ -264,6 +269,21 @@ void CompositionDockerDock::updateComposition()
     }
 }
 
+void CompositionDockerDock::renameComposition()
+{
+    kDebug() << "rename";
+    QModelIndex index = compositionView->currentIndex();
+    if (index.isValid()) {
+        KisLayerComposition* composition = m_model->compositionFromIndex(index);
+        bool ok;
+        QString name = QInputDialog::getText(this, i18n("Rename Composition"),
+                                             i18n("New Name:"), QLineEdit::Normal,
+                                             composition->name(), &ok);
+        if (ok && !name.isEmpty()) {
+            composition->setName(name);
+        }
+    }
+}
 
 
 #include "compositiondocker_dock.moc"

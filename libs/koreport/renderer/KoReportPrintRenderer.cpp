@@ -86,9 +86,9 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
             // Render Page Objects
             for (int i = 0; i < p->primitives(); i++) {
                 OROPrimitive * prim = p->primitive(i);
-                kDebug() << "Rendering object" << i << "type" << prim->type();
+                //kDebug() << "Rendering object" << i << "type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
-                    kDebug() << "Text Box";
+                    //kDebug() << "Text Box";
                     OROTextBox * tb = (OROTextBox*) prim;
 
                     QPointF ps = tb->position();
@@ -119,7 +119,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     context.painter->restore();
 
                 } else if (prim->type() == OROLine::Line) {
-                    kDebug() << "Line";
+                    //kDebug() << "Line";
                     OROLine * ln = (OROLine*) prim;
                     QPointF s = ln->startPoint();
                     QPointF e = ln->endPoint();
@@ -133,7 +133,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     context.painter->setRenderHint(QPainter::Antialiasing, false);
                     context.painter->restore();
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Image";
+                    //kDebug() << "Image";
                     OROImage * im = (OROImage*) prim;
                     QPointF ps = im->position();
                     QSizeF sz = im->size();
@@ -146,7 +146,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                     QRectF sr = QRectF(QPointF(0.0, 0.0), rc.size().boundedTo(img.size()));
                     context.painter->drawImage(rc.topLeft(), img, sr);
                 } else if (prim->type() == ORORect::Rect) {
-                    kDebug() << "Rect";
+                    //kDebug() << "Rect";
                     ORORect * re = (ORORect*) prim;
 
                     QPointF ps = re->position();

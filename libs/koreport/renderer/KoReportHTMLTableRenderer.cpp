@@ -49,7 +49,7 @@ bool KoReportHTMLTableRenderer::render(const KoReportRendererContext& context, O
     Q_UNUSED(page);
     KTemporaryFile tempHtmlFile; // auto removed by default on destruction
     if (!tempHtmlFile.open()) {
-        kDebug() << "Couldn't create temporary file to write into";
+        kWarning() << "Couldn't create temporary file to write into";
         return false;
     }
 
@@ -129,14 +129,14 @@ QString KoReportHTMLTableRenderer::renderTable(ORODocument *document)
                           tb->text() +
                           "</td>\n";
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Saving an image";
+                    //kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
                     tr += "<td>"
                           "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
                           "</td>\n";
                     im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
-                    kDebug() << "Saving a picture";
+                    //kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
 
                     tr += "<td>"
@@ -147,7 +147,7 @@ QString KoReportHTMLTableRenderer::renderTable(ORODocument *document)
                     im->picture()->play(&painter);
                     image.save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
-                    kDebug() << "unhandled primitive type";
+                    kWarning() << "unhandled primitive type";
                 }
             }
             tr += "</tr>\n";

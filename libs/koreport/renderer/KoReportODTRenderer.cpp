@@ -95,7 +95,7 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
 
                     m_cursor.insertImage(image);
                 } else {
-                    kDebug() << "unhandled primitive type";
+                    kWarning() << "unhandled primitive type";
                 }
                 m_cursor.movePosition(QTextCursor::NextCell);
 

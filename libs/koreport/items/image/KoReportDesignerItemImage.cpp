@@ -42,7 +42,7 @@
 
 void KoReportDesignerItemImage::init(QGraphicsScene * scene)
 {
-    kDebug();
+    //kDebug();
     if (scene)
         scene->addItem(this);
 
@@ -58,7 +58,7 @@ void KoReportDesignerItemImage::init(QGraphicsScene * scene)
 KoReportDesignerItemImage::KoReportDesignerItemImage(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-  kDebug();
+    //kDebug();
     init(scene);
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);

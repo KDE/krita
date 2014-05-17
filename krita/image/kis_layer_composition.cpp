@@ -80,7 +80,7 @@ private:
     Mode m_mode;
 };
 
-KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name)
+KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name), m_exportEnabled(true)
 {
 
 }
@@ -118,6 +118,16 @@ void KisLayerComposition::apply()
     m_image->rootLayer()->accept(visitor);
 }
 
+void KisLayerComposition::setExportEnabled ( bool enabled )
+{
+    m_exportEnabled = enabled;
+}
+
+bool KisLayerComposition::isExportEnabled()
+{
+    return m_exportEnabled;
+}
+
 void KisLayerComposition::setVisible(QUuid id, bool visible)
 {
     m_visibilityMap[id] = visible;
@@ -127,6 +137,7 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
 {
     QDomElement compositionElement = doc.createElement("composition");
     compositionElement.setAttribute("name", m_name);
+    compositionElement.setAttribute("exportEnabled", m_exportEnabled);
     QMapIterator<QUuid, bool> iter(m_visibilityMap);
     while (iter.hasNext()) {
         iter.next();

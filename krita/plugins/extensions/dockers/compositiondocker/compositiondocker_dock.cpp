@@ -198,6 +198,10 @@ void CompositionDockerDock::exportClicked()
     }
 
     foreach(KisLayerComposition* composition, m_canvas->view()->image()->compositions()) {
+        if (!composition->isExportEnabled()) {
+            continue;
+        }
+
         composition->apply();
         image->refreshGraph();
         image->lock();

@@ -522,7 +522,9 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     setMD5(md5.result());
 
     QBuffer buf(&ba);
+    buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);
+
 
     if (!abr_read_content(abr, &abr_hdr)) {
         warnKrita << "Error: cannot parse ABR file: " << filename();

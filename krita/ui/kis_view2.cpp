@@ -130,6 +130,7 @@
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 #include "kis_mirror_axis.h"
+#include "kis_tooltip_manager.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -170,6 +171,7 @@ public:
         , paintingAssistantsDecoration(0)
         , actionManager(0)
         , mainWindow(0)
+        , tooltipManager(0)
     {
     }
 
@@ -193,6 +195,7 @@ public:
         delete statusBar;
         delete actionManager;
         delete canvasControlsManager;
+        delete tooltipManager;
     }
 
 public:
@@ -224,6 +227,7 @@ public:
     KisActionManager* actionManager;
     QMainWindow* mainWindow;
     KisMirrorAxis* mirrorAxis;
+    KisTooltipManager* tooltipManager;
 };
 
 
@@ -473,6 +477,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     }
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
+
+    m_d->tooltipManager = new KisTooltipManager(this);
+//     m_d->tooltipManager->record();
 }
 
 

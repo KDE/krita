@@ -207,7 +207,6 @@ public:
     KisCanvasResourceProvider *resourceProvider;
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
-    KAction *totalRefresh;
     KAction *mirrorCanvas;
     KAction *createTemplate;
     KAction *saveIncremental;
@@ -260,19 +259,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-
-    KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
-    if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
-    }
-    if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
-    }
-    grp.writeEntry("CreatingCanvas", true);
-    grp.sync();
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
-    grp.writeEntry("CreatingCanvas", false);
-    grp.sync();
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
@@ -287,8 +274,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
-
-
 
     // krita/krita.rc must also be modified to add actions to the menu entries
 
@@ -309,12 +294,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         m_d->saveIncremental->setEnabled(false);
         m_d->saveIncrementalBackup->setEnabled(false);
     }
-
-    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
-    actionCollection()->addAction("total_refresh", m_d->totalRefresh);
-    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
-    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
-
 
     KAction *tabletDebugger = new KAction(i18n("Toggle Tablet Debugger"), this);
     actionCollection()->addAction("tablet_debugger", tabletDebugger );
@@ -1202,12 +1181,6 @@ QMainWindow* KisView2::qtMainWindow()
 void KisView2::setQtMainWindow(QMainWindow* newMainWindow)
 {
     m_d->mainWindow = newMainWindow;
-}
-
-void KisView2::slotTotalRefresh()
-{
-    KisConfig cfg;
-    m_d->canvas->resetCanvas(cfg.useOpenGL());
 }
 
 void KisView2::slotCreateTemplate()

@@ -104,6 +104,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
             item->file = QString("template://").append(t->file());
             item->icon = KIconLoader::global()->iconPath(t->picture(), KIconLoader::Desktop);
             item->groupName = group->name();
+            item->groupFolded = true; // default hide groups
             d->items << item;
         }
     }

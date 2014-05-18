@@ -54,6 +54,19 @@ ListView {
                 font: Settings.theme.font("title");
                 color: Settings.theme.color("pages/welcome/create/header/text");
             }
+            Image {
+                anchors {
+                    right: parent.right;
+                    rightMargin: Constants.DefaultMargin * 3;
+                    verticalCenter: parent.verticalCenter;
+                }
+                height: parent.height / 2;
+                width: height;
+                smooth: true;
+                source: Settings.theme.icon("expansionmarker");
+                rotation: model.groupFolded ? 90 : 0;
+                Behavior on rotation { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            }
             MouseArea {
                 anchors.fill: parent;
                 onClicked: base.model.toggleGroup(model.groupName);

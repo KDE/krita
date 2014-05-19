@@ -30,8 +30,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <kparts/plugin.h>
-#include <kparts/componentfactory.h>
 #include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>
@@ -44,18 +42,51 @@
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <kis_paintop_registry.h>
+
 #include <flake/kis_shape_selection.h>
 #include "kis_animation_doc.h"
 #include "kis_animation_part.h"
 #include "kis_animator_aboutdata.h"
+
 #include <kisexiv2/kis_exiv2.h>
 
 KAboutData* KisAnimationFactory::s_aboutData = 0;
 KComponentData* KisAnimationFactory::s_instance = 0;
 
+static int factoryCount = 0;
+
 KisAnimationFactory::KisAnimationFactory(QObject *parent) : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
+
+    if (factoryCount == 0) {
+
+        // XXX_EXIV: make the exiv io backends real plugins
+        KisExiv2::initialize();
+
+        KoShapeRegistry* r = KoShapeRegistry::instance();
+        r->add(new KisShapeSelectionFactory());
+
+        KisFilterRegistry::instance();
+        KisGeneratorRegistry::instance();
+        KisPaintOpRegistry::instance();
+
+        // Load the krita-specific tools
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
+        // Load dockers
+        KoPluginLoader::PluginsConfig config;
+        config.blacklist = "DockerPluginsDisabled";
+        config.group = "krita";
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
+        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/AnimationDock"),
+                                         QString::fromLatin1("[X-Krita-Version] == 28"));
+
+    }
+    factoryCount++;
 }
 
 KisAnimationFactory::~KisAnimationFactory()
@@ -66,8 +97,10 @@ KisAnimationFactory::~KisAnimationFactory()
     s_instance = 0;
 }
 
-QObject* KisAnimationFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
+QObject* KisAnimationFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
+                                     const QVariantList &args, const QString &keyword)
 {
+    Q_UNUSED( parent );
     Q_UNUSED( args );
     Q_UNUSED( keyword);
 
@@ -87,50 +120,25 @@ KAboutData* KisAnimationFactory::aboutData()
 
 const KComponentData &KisAnimationFactory::componentData()
 {
-    if(!s_instance) {
-        if(s_aboutData) {
-            s_instance = new KComponentData(s_aboutData);
-        }
-        else {
-            s_instance = new KComponentData(newKritaAnimatorAboutData());
-        }
-
+    if (!s_instance) {
+        s_instance = new KComponentData(aboutData());
         Q_CHECK_PTR(s_instance);
-
-        KisExiv2::initialize();
-
-        KoShapeRegistry* r = KoShapeRegistry::instance();
-        r->add(new KisShapeSelectionFactory());
-
-        KisFilterRegistry::instance();
-        KisGeneratorRegistry::instance();
-        KisPaintOpRegistry::instance();
-
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
-        KoPluginLoader::PluginsConfig config;
-        config.blacklist = "DockerPluginsDisabled";
-        config.group = "krita";
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
-        KoPluginLoader::instance()->load(QString::fromLatin1("Krita/AnimationDock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 28"));
-
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
+        // for cursors
         s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
 
+        // for images in the paintop box
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
 
         s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
-        s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
-
+        // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
+
+
     }
 
     return *s_instance;

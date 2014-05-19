@@ -52,7 +52,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18n("MyPaint brush");
+        return i18n("MyPaint");
     }
 
     virtual QString pixmap() {

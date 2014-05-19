@@ -30,7 +30,7 @@ public:
 };
 
 KisHairyShapeOption::KisHairyShapeOption()
-    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush shape"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();

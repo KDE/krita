@@ -31,7 +31,7 @@ class KisPainter;
 class KisRateOption: public KisCurveOption
 {
 public:
-    KisRateOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::brushCategory());
+    KisRateOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::commonCategory());
 
     /**
      * Set the opacity of the painter based on the rate

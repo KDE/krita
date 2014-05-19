@@ -42,7 +42,7 @@ public:
         return "deformbrush";
     }
     virtual QString name() const {
-        return i18n("Deform brush");
+        return i18n("Deform");
     }
     virtual QString pixmap() {
         return "krita-deform.png";

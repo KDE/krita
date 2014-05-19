@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisPaintOpOption : public QObject
 {
     Q_OBJECT
 public:
-    static QString brushCategory();
+    static QString commonCategory();
     static QString colorCategory();
     static QString textureCategory();
 

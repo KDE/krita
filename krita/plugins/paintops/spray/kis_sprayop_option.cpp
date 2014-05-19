@@ -34,7 +34,7 @@ public:
 };
 
 KisSprayOpOption::KisSprayOpOption()
-    : KisPaintOpOption(i18n("Spray area"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Spray area"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();

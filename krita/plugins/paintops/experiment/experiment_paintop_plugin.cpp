@@ -39,8 +39,13 @@ ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariant
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp, KisExperimentPaintOpSettings, KisExperimentPaintOpSettingsWidget>("experimentbrush", i18n("Experiment"),
-            KisPaintOpFactory::categoryExperimental(), "krita-experiment.png"));
+    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp,
+           KisExperimentPaintOpSettings,
+           KisExperimentPaintOpSettingsWidget>("experimentbrush",
+                                               i18n("Shape"),
+                                               KisPaintOpFactory::categoryStable(),
+                                               "krita-experiment.png",
+                                               QString(), QStringList(), 5));
 }
 
 ExperimentPaintOpPlugin::~ExperimentPaintOpPlugin()

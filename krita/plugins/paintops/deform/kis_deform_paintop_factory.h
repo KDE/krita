@@ -48,7 +48,7 @@ public:
         return "krita-deform.png";
     }
     virtual QString category() const {
-        return KisPaintOpFactory::categoryExperimental();
+        return KisPaintOpFactory::categoryStable();
     }
 
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);

@@ -41,7 +41,7 @@ HatchingPaintOpPlugin::HatchingPaintOpPlugin(QObject *parent, const QVariantList
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisHatchingPaintOp, KisHatchingPaintOpSettings, KisHatchingPaintOpSettingsWidget>("hatchingbrush", i18n("Hatching"),
-            KisPaintOpFactory::categoryStable() , "krita-hatching.png"));
+                                                                                                                         KisPaintOpFactory::categoryStable() , "krita-hatching.png", QString(), QStringList(), 7));
 
 }
 

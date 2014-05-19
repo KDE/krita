@@ -39,7 +39,7 @@ GridPaintOpPlugin::GridPaintOpPlugin(QObject *parent, const QVariantList &)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisGridPaintOp, KisGridPaintOpSettings, KisGridPaintOpSettingsWidget>("gridbrush", i18n("Grid"),
-            KisPaintOpFactory::categoryExperimental(), "krita-grid.png"));
+                                                                                                             KisPaintOpFactory::categoryStable(), "krita-grid.png", QString(), QStringList(), 8));
 
 }
 

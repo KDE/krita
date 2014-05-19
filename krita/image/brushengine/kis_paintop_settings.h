@@ -59,7 +59,7 @@ public:
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
-     * the paintop needs mouse interaction for instance in the case of the duplicate op.
+     * the paintop needs mouse interaction for instance in the case of the clone op.
      * If the tool is supposed to ignore the event, the paint op should return false
      * and if the tool is supposed to use the event, return true.
      */
@@ -107,7 +107,7 @@ public:
 
     /**
      * @return the composite op it to which the indirect painting device
-     * should be initialized to. This is used by duplicate op to reset
+     * should be initialized to. This is used by clone op to reset
      * the composite op to COMPOSITE_COPY
      */
     virtual QString indirectPaintingCompositeOp() const;
@@ -132,13 +132,13 @@ public:
      */
     enum OutlineMode {
         CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
-        CursorIsNotOutline = 2 ///< Currently, this mode means that there is no outline active. It used to mean using of QImage-based outlines (e.g. for duplicate tool) but it was not implemented.
+        CursorIsNotOutline = 2 ///< Currently, this mode means that there is no outline active. It used to mean using of QImage-based outlines (e.g. for clone tool) but it was not implemented.
     };
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
-     * always like duplicate paintop indicating the duplicate position
+     * always like clone paintop indicating the duplicate position
      */
     virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 

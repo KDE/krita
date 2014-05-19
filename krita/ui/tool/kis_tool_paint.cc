@@ -90,9 +90,9 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
         int brushSize = 1;
         do {
+            m_standardBrushSizes.push_back(brushSize);
             int increment = std::max(1, int(std::ceil(qreal(brushSize) / 15)));
             brushSize += increment;
-            m_standardBrushSizes.push_back(brushSize);
         } while (brushSize < maxSize);
 
         m_standardBrushSizes.push_back(maxSize);

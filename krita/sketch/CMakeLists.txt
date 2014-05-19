@@ -23,6 +23,7 @@ set(kritasketchlib_SRCS
     KisSketchPart.cpp
     RecentFileManager.cpp
     ProgressProxy.cpp
+    PropertyContainer.cpp
     Settings.cpp
     SketchDeclarativeView.cpp
     SketchInputContext.cpp
@@ -52,6 +53,7 @@ set(kritasketchplugin_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
+    models/TemplatesModel.cpp
     models/KeyboardModel.cpp
     models/ColorImageProvider.cpp
     models/CompositeOpModel.cpp

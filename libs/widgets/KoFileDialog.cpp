@@ -114,6 +114,15 @@ void KoFileDialog::setHideNameFilterDetailsOption()
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
 }
 
+QString KoFileDialog::selectedNameFilter() const
+{
+#ifndef Q_OS_WIN
+    return d->fileDialog->selectedNameFilter();
+#else
+    return d->defaultFilter;
+#endif
+}
+
 void KoFileDialog::createFileDialog()
 {
     if (d->fileDialog) {
@@ -242,7 +251,6 @@ QString KoFileDialog::url()
     default:
         ;
     }
-    qDebug() << url << "," << d->defaultFilter;
     if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
         int start = d->defaultFilter.lastIndexOf("*.") + 2;
         int end = d->defaultFilter.lastIndexOf(" )");
@@ -301,12 +309,13 @@ QStringList KoFileDialog::urls()
 
 void KoFileDialog::filterSelected(const QString &filter)
 {
-    //"Windows BMP image ( *.bmp )";
+    qDebug() << "filterselected" << filter;
+    // "Windows BMP image ( *.bmp )";
     int start = filter.lastIndexOf("*.") + 2;
     int end = filter.lastIndexOf(" )");
     int n = end - start;
     QString extension = filter.mid(start, n);
-
+    d->defaultFilter = filter;
     d->fileDialog->setDefaultSuffix(extension);
 }
 

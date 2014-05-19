@@ -113,7 +113,7 @@ void AxisCommand::setAxisTitle(const QString &title)
 {
     m_newTitleText = title;
 
-    setText(i18nc("(qtundo-format)", "Axis Title"));
+    setText(i18nc("(qtundo-format)", "Set Axis Title"));
 }
 
 void AxisCommand::setAxisShowGridLines(bool show)
@@ -142,14 +142,14 @@ void AxisCommand::setAxisStepWidth(qreal width)
 {
     m_newStepWidth = width;
 
-    setText(i18nc("(qtundo-format)", "Axis step width"));
+    setText(i18nc("(qtundo-format)", "Set Axis Step Width"));
 }
 
 void AxisCommand::setAxisSubStepWidth(qreal width)
 {
     m_newSubStepWidth = width;
 
-    setText(i18nc("(qtundo-format)", "Axis substep width"));
+    setText(i18nc("(qtundo-format)", "Set Axis Substep Width"));
 }
 
 void AxisCommand::setAxisUseAutomaticStepWidth(bool automatic)
@@ -157,9 +157,9 @@ void AxisCommand::setAxisUseAutomaticStepWidth(bool automatic)
     m_newShowGridLines = automatic;
 
     if (automatic) {
-        setText(i18nc("(qtundo-format)", "Automatic step width"));
+        setText(i18nc("(qtundo-format)", "Set Automatic Step Width"));
     } else {
-        setText(i18nc("(qtundo-format)", "Manual step width"));
+        setText(i18nc("(qtundo-format)", "Set Manual Step Width"));
     }
 }
 
@@ -168,9 +168,9 @@ void AxisCommand::setAxisUseAutomaticSubStepWidth(bool automatic)
     m_newShowGridLines = automatic;
 
     if (automatic) {
-        setText(i18nc("(qtundo-format)", "Automatic substep width"));
+        setText(i18nc("(qtundo-format)", "Automatic Substep Width"));
     } else {
-        setText(i18nc("(qtundo-format)", "Manual substep width"));
+        setText(i18nc("(qtundo-format)", "Manual Substep Width"));
     }
 }
 
@@ -178,5 +178,5 @@ void AxisCommand::setAxisLabelsFont(const QFont &font)
 {
     m_newLabelsFont = font;
 
-    setText(i18nc("(qtundo-format)", "Axis Label Font"));
+    setText(i18nc("(qtundo-format)", "Set Axis Label Font"));
 }

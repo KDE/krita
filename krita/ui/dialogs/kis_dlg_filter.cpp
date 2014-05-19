@@ -72,16 +72,15 @@ KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *fil
     }
 
     d->uiFilterDialog.filterSelection->setPaintDevice(true, d->node->original());
-    d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
-    d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
-    connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.buttonBox, SIGNAL(accepted()), SLOT(accept()));
+    connect(d->uiFilterDialog.buttonBox, SIGNAL(rejected()), SLOT(reject()));
     connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
-    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
-    connect(this, SIGNAL(finished(int)), SLOT(close()));
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(filterSelectionChanged()));
+
+    connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
+    connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
     KConfigGroup group(KGlobal::config(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
@@ -95,10 +94,15 @@ KisDlgFilter::~KisDlgFilter()
 void KisDlgFilter::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
-    setWindowTitle(f->name());
+    setDialogTitle(f);
     d->uiFilterDialog.filterSelection->setFilter(f);
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(f->supportsAdjustmentLayers());
     updatePreview();
+}
+
+void KisDlgFilter::setDialogTitle(KisFilterSP filter)
+{
+    setWindowTitle(filter.isNull() ? i18n("Filter") : i18n("Filter: %1", filter->name()));
 }
 
 void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)
@@ -121,10 +125,10 @@ void KisDlgFilter::updatePreview()
         startApplyingFilter(config);
     }
 
-    d->uiFilterDialog.pushButtonOk->setEnabled(true);
+    d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
-void KisDlgFilter::apply()
+void KisDlgFilter::slotOnAccept()
 {
     if (!d->filterManager->isStrokeRunning()) {
         KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
@@ -132,10 +136,12 @@ void KisDlgFilter::apply()
     }
     d->filterManager->finish();
 
-    d->uiFilterDialog.pushButtonOk->setEnabled(false);
+    d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
+    KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
 }
 
-void KisDlgFilter::close()
+void KisDlgFilter::slotOnReject()
 {
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
@@ -176,6 +182,15 @@ void KisDlgFilter::previewCheckBoxChange(int state)
     group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
     group.config()->sync();
 }
+
+void KisDlgFilter::filterSelectionChanged()
+{
+    KisFilterSP filter = d->uiFilterDialog.filterSelection->currentFilter();
+    setDialogTitle(filter);
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : filter->supportsAdjustmentLayers());
+    updatePreview();
+}
+
 
 void KisDlgFilter::resizeEvent(QResizeEvent* event)
 {

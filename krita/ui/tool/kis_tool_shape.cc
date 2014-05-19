@@ -136,7 +136,7 @@ void KisToolShape::addShape(KoShape* shape)
         case KisPainter::FillStylePattern:
             if (imageCollection) {
                 QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-                fill->setPattern(currentPattern()->image());
+                fill->setPattern(currentPattern()->pattern());
                 shape->setBackground(fill);
             } else {
                 shape->setBackground(QSharedPointer<KoShapeBackground>(0));

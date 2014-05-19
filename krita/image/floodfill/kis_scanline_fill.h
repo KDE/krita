@@ -41,7 +41,7 @@ public:
 
 private:
     friend class KisScanlineFillTest;
-    Q_DISABLE_COPY(KisScanlineFill);
+    Q_DISABLE_COPY(KisScanlineFill)
 
     template <class T>
     void processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy);

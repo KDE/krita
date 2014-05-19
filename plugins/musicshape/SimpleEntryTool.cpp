@@ -747,7 +747,7 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff,
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Import");
+    QString file = KFileDialog::getOpenFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Import"));
     if (file.isEmpty() || file.isNull()) return;
     QFile f(file);
     f.open(QIODevice::ReadOnly);
@@ -764,7 +764,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
+    QString file = KFileDialog::getSaveFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Export"));
     if (file.isEmpty() || file.isNull()) return;
 
     QBuffer b;

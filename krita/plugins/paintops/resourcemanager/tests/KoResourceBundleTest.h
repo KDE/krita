@@ -17,26 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KORESOURCEBUNDLE_TEST_H
+#define KORESOURCEBUNDLE_TEST_H
 
-#ifndef KOXMLRESOURCEBUNDLEMETATEST_H
-#define KOXMLRESOURCEBUNDLEMETATEST_H
-#include <QtTest/QTest>
-#include <KoConfig.h>
+#include <QTest>
 
-class KoXmlResourceBundleMetaTest : public QObject
+class KoResourceBundleTest : public QObject
 {
     Q_OBJECT
-private slots:
-    void ctorTest();
-    void getTagEnumValueTest();
-    void checkSortTest();
-    void addTagTest();
-    void addTagsTest();
-    void getPackNameTest();
-    void getShortPackNameTest();
 
-private:
-    QString env;
+private slots:
+
+    void testCreateBundle();
+    void testLoadSave();
+    void testInstallUninstall();
+
 
 };
-#endif // KOXMLRESOURCEBUNDLEMETATEST_H
+
+#endif // KORESOURCEBUNDLE_TEST_H

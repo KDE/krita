@@ -30,14 +30,14 @@ public:
     , hasNewFilters(false)
     , name(true)
     , filename(true)
-    , tagObject(0)
+    , tagStore(0)
     {}
     QRegExp isTag;
     QRegExp isExactMatch;
     QRegExp searchTokenizer;
     bool hasNewFilters;
     bool name,filename;
-    KoResourceTagStore *tagObject;
+    KoResourceTagStore *tagStore;
     QStringList tagSetFilenames;
     QStringList includedNames;
     QStringList excludedNames;
@@ -131,9 +131,9 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
 
         if(!name.isEmpty()) {
             if (name.startsWith('[')) {
-                if (d->isTag.exactMatch(name) && d->tagObject) {
+                if (d->isTag.exactMatch(name) && d->tagStore) {
                     name = d->isTag.cap(1);
-                    (*target) += d->tagObject->searchTag(name);
+                    (*target) += d->tagStore->searchTag(name);
                 }
             }
             else if (name.startsWith('"')) {
@@ -172,7 +172,7 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
 {
     QList<QString> filteredList;
 
-    QString resourceFileName = resource->filename();
+    QString resourceFileName = resource->shortFilename();
     QString resourceName = resource->name();
 
     if (d->name) {
@@ -182,7 +182,7 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
     if (d->filename) {
         filteredList.push_back(resourceFileName);
     }
-    
+
     if (matchesResource(filteredList,d->excludedNames)) {
         return false;
     }
@@ -241,7 +241,7 @@ void KoResourceFiltering::setDoneFiltering()
 
 void KoResourceFiltering::rebuildCurrentTagFilenames()
 {
-    d->tagSetFilenames = d->tagObject->searchTag(d->currentTag);
+    d->tagSetFilenames = d->tagStore->searchTag(d->currentTag);
 }
 
 void KoResourceFiltering::setCurrentTag(const QString& tagSet)
@@ -250,7 +250,7 @@ void KoResourceFiltering::setCurrentTag(const QString& tagSet)
     rebuildCurrentTagFilenames();
 }
 
-void KoResourceFiltering::setTagObject(KoResourceTagStore* tagObject)
+void KoResourceFiltering::setTagStore(KoResourceTagStore* tagStore)
 {
-    d->tagObject = tagObject;
+    d->tagStore = tagStore;
 }

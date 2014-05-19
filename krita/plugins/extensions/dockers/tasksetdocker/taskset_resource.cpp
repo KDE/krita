@@ -20,10 +20,14 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QTextStream>
+#include <QBuffer>
+#include <QByteArray>
+#include <QCryptographicHash>
 
 #define TASKSET_VERSION 1
 
-TasksetResource::TasksetResource(const QString& filename): KoResource(filename)
+TasksetResource::TasksetResource(const QString& f)
+    : KoResource(f)
 {
 }
 
@@ -38,44 +42,36 @@ bool TasksetResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
-    QDomDocument doc;
-    QDomElement root = doc.createElement("Taskset");
-    root.setAttribute("name", name() );
-    root.setAttribute("version", TASKSET_VERSION);
-    foreach(const QString& action, m_actions) {
-        QDomElement element = doc.createElement("action");
-        element.appendChild(doc.createTextNode(action));
-        root.appendChild(element);
-    }
-    doc.appendChild(root);
-     
-    QTextStream textStream(&file);
-    doc.save(textStream, 4);
+    bool res = saveToDevice(&file);
     file.close();
-    return true;
+    return res;
 }
 
 bool TasksetResource::load()
-{    if (filename().isEmpty())
-         return false;
+{
+    QString fn = filename();
+    if (fn.isEmpty()) return false;
  
-    QFile file(filename());
-     if (file.size() == 0) return false;
+    QFile file(fn);
+    if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
-    QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
-    if (!doc.setContent(&file)) {
-        file.close();
-        return false;
-    }
+    bool res = loadFromDevice(&file);
+
     file.close();
 
+    return res;
+}
+
+bool TasksetResource::loadFromDevice(QIODevice *dev)
+{
+    QDomDocument doc;
+    if (!doc.setContent(dev)) {
+        return false;
+    }
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
-    QDomNode node = element.firstChild();   
+    QDomNode node = element.firstChild();
     while (!node.isNull()) {
         QDomElement child = node.toElement();
         if (!child.isNull() && child.tagName() == "action") {
@@ -85,11 +81,6 @@ bool TasksetResource::load()
     }
     setValid(true);
     return true;
-}
-
-QImage TasksetResource::image() const
-{
-    return KoResource::image();
 }
 
 QString TasksetResource::defaultFileExtension() const
@@ -105,6 +96,43 @@ void TasksetResource::setActionList(const QStringList actions)
 QStringList TasksetResource::actionList()
 {
     return m_actions;
+}
+
+QByteArray TasksetResource::generateMD5() const
+{
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    saveToDevice(&buf);
+    buf.close();
+
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+
+    return ba;
+
+}
+
+bool TasksetResource::saveToDevice(QIODevice *io) const
+{
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("Taskset");
+    root.setAttribute("name", name() );
+    root.setAttribute("version", TASKSET_VERSION);
+    foreach(const QString& action, m_actions) {
+        QDomElement element = doc.createElement("action");
+        element.appendChild(doc.createTextNode(action));
+        root.appendChild(element);
+    }
+    doc.appendChild(root);
+
+    QTextStream textStream(io);
+    doc.save(textStream, 4);
+    return true;
 }
 
 

@@ -193,7 +193,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
         m_d->brushesPipe.addBrush(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
-    setImage(m_d->brushesPipe.firstBrush()->image());
+    setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
@@ -213,8 +213,14 @@ bool KisImagePipeBrush::load()
 {
     QFile file(filename());
     file.open(QIODevice::ReadOnly);
-    QByteArray data = file.readAll();
+    bool res = loadFromDevice(&file);
     file.close();
+    return res;
+}
+
+bool KisImagePipeBrush::loadFromDevice(QIODevice *dev)
+{
+    QByteArray data = dev->readAll();
     return initFromData(data);
 }
 
@@ -271,7 +277,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setSpacing(m_d->brushesPipe.lastBrush()->spacing());
         setWidth(m_d->brushesPipe.firstBrush()->width());
         setHeight(m_d->brushesPipe.firstBrush()->height());
-        setImage(m_d->brushesPipe.firstBrush()->image());
+        setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
     }
 
     return true;

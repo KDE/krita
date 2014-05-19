@@ -213,13 +213,14 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
             return;
         }
         KisSafeFilterConfigurationSP config;
-        if(model->filter(index)->showConfigurationWidget()) {
-            KisConfigWidget* wdg = model->filter(index)->createConfigurationWidget(0, d->view->activeNode()->original());
+        KisFilter* filter = model->filter(index);
+        if(filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
+            KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(static_cast<KisFilterConfiguration*>(wdg->configuration())));
         }
         else {
-            config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original())));
+            config = KisSafeFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(filter->defaultConfiguration(d->view->activeNode()->original())));
         }
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
         foreach(const QByteArray& propName, configuration->dynamicPropertyNames()) {

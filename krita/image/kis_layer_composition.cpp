@@ -62,6 +62,7 @@ public:
     bool process(KisNode* node) {
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
+            m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
         } else {
             bool newState = false;
             if(m_layerComposition->m_visibilityMap.contains(node->uuid())) {
@@ -70,6 +71,9 @@ public:
             if(node->visible() != newState) {
                 node->setVisible(m_layerComposition->m_visibilityMap[node->uuid()]);
                 node->setDirty();
+            }
+            if(m_layerComposition->m_collapsedMap.contains(node->uuid())) {
+                node->setCollapsed(m_layerComposition->m_collapsedMap[node->uuid()]);
             }
         }
         
@@ -80,7 +84,7 @@ private:
     Mode m_mode;
 };
 
-KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name)
+KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name), m_exportEnabled(true)
 {
 
 }
@@ -88,6 +92,11 @@ KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name)
 KisLayerComposition::~KisLayerComposition()
 {
 
+}
+
+void KisLayerComposition::setName(const QString& name)
+{
+    m_name = name;
 }
 
 QString KisLayerComposition::name()
@@ -111,6 +120,17 @@ void KisLayerComposition::apply()
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::APPLY);
     m_image->rootLayer()->accept(visitor);
+    m_image->notifyNodeCollpasedChanged();
+}
+
+void KisLayerComposition::setExportEnabled ( bool enabled )
+{
+    m_exportEnabled = enabled;
+}
+
+bool KisLayerComposition::isExportEnabled()
+{
+    return m_exportEnabled;
 }
 
 void KisLayerComposition::setVisible(QUuid id, bool visible)
@@ -118,16 +138,27 @@ void KisLayerComposition::setVisible(QUuid id, bool visible)
     m_visibilityMap[id] = visible;
 }
 
+void KisLayerComposition::setCollapsed ( QUuid id, bool collapsed )
+{
+    m_collapsedMap[id] = collapsed;
+}
+
 void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
 {
     QDomElement compositionElement = doc.createElement("composition");
     compositionElement.setAttribute("name", m_name);
+    compositionElement.setAttribute("exportEnabled", m_exportEnabled);
     QMapIterator<QUuid, bool> iter(m_visibilityMap);
     while (iter.hasNext()) {
         iter.next();
         QDomElement valueElement = doc.createElement("value");
         valueElement.setAttribute("uuid", iter.key().toString());
         valueElement.setAttribute("visible", iter.value());
+        kDebug() << "contains" << m_collapsedMap.contains(iter.key());
+        if (m_collapsedMap.contains(iter.key())) {
+            kDebug() << "colapsed :" << m_collapsedMap[iter.key()];
+            valueElement.setAttribute("collapsed", m_collapsedMap[iter.key()]);
+        }
         compositionElement.appendChild(valueElement);
     }
     element.appendChild(compositionElement);

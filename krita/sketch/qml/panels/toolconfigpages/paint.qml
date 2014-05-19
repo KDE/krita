@@ -76,7 +76,7 @@ Item {
         }
         height: childrenRect.height;
 
-        RangeInput {
+        RangeCombo {
             id: sizeInput;
             width: parent.width;
             visible: compositeOpModel.sizeEnabled;
@@ -85,6 +85,18 @@ Item {
             min: 1; max: 1000; decimals: 0;
             value: compositeOpModel.size;
             onValueChanged: compositeOpModel.changePaintopValue("size", value);
+            model: ListModel {
+                ListElement { value: 1 }
+                ListElement { value: 2 }
+                ListElement { value: 5 }
+                ListElement { value: 10 }
+                ListElement { value: 20 }
+                ListElement { value: 50 }
+                ListElement { value: 100 }
+                ListElement { value: 200 }
+                ListElement { value: 500 }
+                ListElement { value: 1000 }
+            }
         }
         RangeInput {
             id: opacityInput;

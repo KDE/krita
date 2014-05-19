@@ -39,7 +39,16 @@ public:
     virtual bool load() {
         return false;
     }
+
+    virtual bool loadFromDevice(QIODevice *) {
+        return false;
+    }
+
     virtual bool save() {
+        return false;
+    }
+
+    virtual bool saveToDevice(QIODevice*) const {
         return false;
     }
 
@@ -63,10 +72,11 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
-    QImage image() const;
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
+protected:
+    virtual QByteArray generateMD5() const;
 
 private:
     struct Private;

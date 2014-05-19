@@ -27,7 +27,7 @@ class KisKraLoaderTest : public QObject
 private slots:
 
     void testLoading();
-
+    void testObligeSingleChild();
 };
 
 #endif

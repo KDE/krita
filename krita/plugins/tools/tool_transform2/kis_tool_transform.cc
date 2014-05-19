@@ -641,7 +641,16 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 QCursor KisToolTransform::getScaleCursor(const QPointF &handlePt)
 {
     QPointF direction = handlePt - m_currentArgs.transformedCenter();
-    qreal angle = atan2(-direction.y(), direction.x());
+    qreal angle;
+
+    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+
+    if (converter->xAxisMirrored()) {
+        angle = atan2(direction.y(), direction.x());
+    }
+    else {
+        angle = atan2(-direction.y(), direction.x());
+    }
     qreal rotationAngle = m_canvas->rotationAngle() * M_PI / 180.0;
     angle -= rotationAngle - M_PI / 8.0;
 

@@ -54,6 +54,11 @@ struct ViewModeSynchronisationObject {
     QString activeToolId;
 
     KoGridData* gridData;
+
+    // Mirror-axes
+    QPointF mirrorAxesCenter;
+    bool mirrorHorizontal;
+    bool mirrorVertical;
 };
 
 class ViewModeSwitchEvent : public QEvent

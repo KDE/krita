@@ -227,10 +227,10 @@ void KisTextBrush::updateBrush()
     
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);
-        setImage(m_brushesPipe->firstBrush()->image());
+        setBrushTipImage(m_brushesPipe->firstBrush()->brushTipImage());
     }
     else { /* if (brushType() == MASK)*/
-        setImage(KisTextBrushesPipe::renderChar(m_text, m_font));
+        setBrushTipImage(KisTextBrushesPipe::renderChar(m_text, m_font));
     }
 
     resetBoundary();

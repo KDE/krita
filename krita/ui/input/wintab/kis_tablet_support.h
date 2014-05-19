@@ -43,6 +43,8 @@ struct QTabletDeviceData
     int minTanPressure;
     int maxTanPressure;
     int minX, maxX, minY, maxY, minZ, maxZ;
+    int minRotation;
+    int maxRotation;
     inline QPointF scaleCoord(int coordX, int coordY, int outOriginX, int outExtentX,
                               int outOriginY, int outExtentY) const;
 #endif
@@ -142,7 +144,7 @@ struct QTabletDeviceData
         }
 
         inline int rotation() const {
-            return m_axis_data[Rotation] / 64;
+            return m_axis_data[Rotation];
         }
 
         bool updateAxesData(int firstAxis, int axesCount, const int axes[NAxes]) {

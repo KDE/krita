@@ -48,7 +48,9 @@ MyPaintFactory::MyPaintFactory()
     KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
 
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
-
+    if (!QFileInfo(m_d->brushServer->saveLocation()).exists()) {
+        QDir().mkpath(m_d->brushServer->saveLocation());
+    }
     QStringList extensionList = m_d->brushServer->extensions().split(':');
     QStringList fileNames;
 

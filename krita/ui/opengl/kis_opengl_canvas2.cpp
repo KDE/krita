@@ -45,6 +45,7 @@
 #include "KoToolManager.h"
 #include "KoShapeManager.h"
 
+#include "kis_config.h"
 #include "kis_types.h"
 #include <kis_favorite_resource_manager.h>
 #include "canvas/kis_canvas2.h"
@@ -73,6 +74,8 @@ namespace
 {
 const GLuint NO_PROGRAM = 0;
 }
+
+static int openGLFrames = 0;
 
 struct KisOpenGLCanvas2::Private
 {
@@ -143,6 +146,9 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
+    KisConfig cfg;
+    cfg.writeEntry("canvasState", "OPENGL_STARTED");
+
     d->openGLImageTextures = imageTextures;
 
     setAcceptDrops(true);
@@ -162,7 +168,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
-    KisConfig cfg;
+
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
@@ -234,6 +240,14 @@ void KisOpenGLCanvas2::paintGL()
     }
 
     d->glSyncObject = Sync::getSync();
+
+    if (openGLFrames == 5) {
+        KisConfig cfg;
+        cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
+    }
+    else {
+        openGLFrames++;
+    }
 }
 
 bool KisOpenGLCanvas2::isBusy() const

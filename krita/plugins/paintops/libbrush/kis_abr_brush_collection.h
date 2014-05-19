@@ -55,17 +55,16 @@ public:
 
     virtual bool load();
 
+    virtual bool loadFromDevice(QIODevice *dev);
+
     virtual bool save();
+
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @return a preview of the brush
      */
     virtual QImage image() const;
-
-    /**
-     * save the content of this brush to an IO device
-     */
-    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @return default file extension for saving the brush

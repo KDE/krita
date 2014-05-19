@@ -22,7 +22,6 @@
 #ifndef KEXIDB_DRIVER_MANAGER_H
 #define KEXIDB_DRIVER_MANAGER_H
 
-//#include <klibloader.h>
 #include <kservice.h>
 
 #include "driver.h"

@@ -14,16 +14,7 @@
    <string>Filter selection</string>
   </property>
   <layout class="QGridLayout">
-   <property name="leftMargin">
-    <number>4</number>
-   </property>
-   <property name="topMargin">
-    <number>4</number>
-   </property>
-   <property name="rightMargin">
-    <number>4</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -31,8 +22,11 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QVBoxLayout">
+       <property name="rightMargin">
+        <number>-1</number>
+       </property>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -55,10 +49,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget">
       <layout class="QGridLayout">
        <property name="leftMargin">
-        <number>9</number>
+        <number>-1</number>
        </property>
        <property name="topMargin">
         <number>0</number>
@@ -71,9 +65,6 @@
        </property>
        <property name="horizontalSpacing">
         <number>0</number>
-       </property>
-       <property name="verticalSpacing">
-        <number>3</number>
        </property>
        <item row="0" column="2">
         <widget class="QPushButton" name="pushButtonEditPressets">

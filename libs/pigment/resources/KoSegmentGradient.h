@@ -267,9 +267,11 @@ public:
 
     /// reimplemented
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /// not implemented
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const;
@@ -288,13 +290,16 @@ public:
     QString defaultFileExtension() const;
 
 protected:
+
+    virtual QByteArray generateMD5() const;
+
     inline void pushSegment(KoGradientSegment* segment) {
         m_segments.push_back(segment);
     }
 
     QList<KoGradientSegment *> m_segments;
 
-private:
+    private:
     bool init();
 };
 

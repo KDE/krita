@@ -132,7 +132,7 @@ public:
      * of the TextShape. With that the styles only have to be read once and can be used in
      * all shapes that also need them.
      *
-     * The ownership of the added data is passed to teh context. The KoShapeLoadingContext will
+     * The ownership of the added data is passed to the context. The KoShapeLoadingContext will
      * delete the added data when it is destroyed.
      *
      * Data inserted for a specific id will not be overwritten by calling addSharedData with

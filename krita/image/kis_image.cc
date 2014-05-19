@@ -1668,5 +1668,11 @@ bool KisImage::wrapAroundModeActive() const
         m_d->scheduler->wrapAroundModeSupported();
 }
 
+void KisImage::notifyNodeCollpasedChanged()
+{
+    emit sigNodeCollapsedChanged();
+}
+
+
 #include "kis_image.moc"
 

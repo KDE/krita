@@ -84,7 +84,7 @@
       <enum>Qt::StrongFocus</enum>
      </property>
      <property name="label">
-      <string>Angle</string>
+      <string>Angle:</string>
      </property>
      <property name="minimum">
       <number>0</number>
@@ -109,7 +109,7 @@
       </sizepolicy>
      </property>
      <property name="label">
-      <string>Length</string>
+      <string>Length:</string>
      </property>
      <property name="minimum">
       <number>0</number>

@@ -124,7 +124,12 @@ void FiltersModel::addFilter(KisFilterSP filter)
         int newRow = d->filters.count();
         beginInsertRows(QModelIndex(), newRow, newRow);
         d->filters << filter;
-        if(filter->showConfigurationWidget()) {
+        // We're not asking for the config widget config for color transfer
+        // The reason for this is that the completion widget is VERY slow to destruct on
+        // Windows. This can be removed once that bug has been alleviated at some later
+        // point in time, but for now it has no side effects, as this filter's default
+        // config is fine anyway.
+        if(filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             d->configurations << KisSafeFilterConfigurationSP(static_cast<KisFilterConfiguration*>(wdg->configuration()));
@@ -154,7 +159,7 @@ QObject* FiltersModel::configuration(int index)
     PropertyContainer* config = new PropertyContainer(d->filters[index]->id(), this);
     if (!d->configurations[index]) {
         // if we have a config widget to show, reinitialise the configuration, just in case
-        if(d->filters[index]->showConfigurationWidget()) {
+        if(d->filters[index]->showConfigurationWidget() && d->filters[index]->id() != QLatin1String("colortransfer")) {
             KisConfigWidget* wdg = d->filters[index]->createConfigurationWidget(0, d->view->activeNode()->original());
             wdg->deleteLater();
             d->configurations[index] = KisSafeFilterConfigurationSP(static_cast<KisFilterConfiguration*>(wdg->configuration()));

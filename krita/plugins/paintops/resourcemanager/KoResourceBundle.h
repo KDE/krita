@@ -20,11 +20,12 @@
 #ifndef KORESOURCEBUNDLE_H
 #define KORESOURCEBUNDLE_H
 
-#include "KoResource.h"
+#include <QSet>
 
-class KoXmlResourceBundleManifest;
-class KoXmlResourceBundleMeta;
-class KoResourceBundleManager;
+#include <KoXmlWriter.h>
+
+#include "KoResource.h"
+#include "KoXmlResourceBundleManifest.h"
 
 /**
  * @brief The KoResourceBundle class
@@ -35,21 +36,14 @@ class KoResourceBundle : public KoResource
 
 public:
     /**
-     * @brief KoResourceBundle : Ctor
-     * @param bundlePath the path of the bundle
+     * @brief KoResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath);
+    KoResourceBundle(QString const& fileName);
 
     /**
      * @brief ~KoResourceBundle : Dtor
      */
     virtual ~KoResourceBundle();
-
-    /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
 
     /**
      * @brief defaultFileExtension
@@ -62,12 +56,15 @@ public:
      * @return true if succeed, false otherwise.
      */
     bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /**
      * @brief save : Save this resource.
      * @return true if succeed, false otherwise.
      */
     bool save();
+
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @brief install : Install the resource bundle.
@@ -84,28 +81,23 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(QString type,QString value);
-
-    /**
-     * @brief addMeta : Add a Metadata to the resource
-     * @param type type of the metadata
-     * @param value value of the metadata
-     */
-    void setMeta(KoXmlResourceBundleMeta* newMeta);
+    void addMeta(const QString &type, const QString &value);
+    const QString getMeta(const QString &type, const QString &defaultValue = QString()) const;
 
     /**
      * @brief addFile : Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType,QString filePath);
+    void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
+
+    QList<QString> getTagsList();
 
     /**
      * @brief removeFile : Remove a file from the bundle
      * @param fileName name of the resource file
      */
     void removeFile(QString fileName);
-
 
     /**
      * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
@@ -115,37 +107,7 @@ public:
     /**
      * @brief rename : Rename the bundle
      */
-    void rename(QString,QString);
-
-    /**
-     * @brief getAuthor
-     * @return the metadata associated to the field "author" or QString() if it doesn't exist
-     */
-    QString getAuthor();
-
-    /**
-     * @brief getLicense
-     * @return the metadata associated to the field "license" or QString() if it doesn't exist
-     */
-    QString getLicense();
-
-    /**
-     * @brief getWebSite
-     * @return the metadata associated to the field "website" or QString() if it doesn't exist
-     */
-    QString getWebSite();
-
-    /**
-     * @brief getCreated
-     * @return the metadata associated to the field "created" or QString() if it doesn't exist
-     */
-    QString getCreated();
-
-    /**
-     * @brief getUpdated
-     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
-     */
-    QString getUpdated();
+    void rename(QString, QString);
 
     /**
      * @brief isInstalled
@@ -155,13 +117,24 @@ public:
 
     void setThumbnail(QString);
 
-private:
-    QImage thumbnail;
-    KoXmlResourceBundleManifest* manifest;
-    KoResourceBundleManager* manager;
-    KoXmlResourceBundleMeta* meta;
+    void addTag(const QString &tagName);
+    void removeTag(QString tagName);
 
-    bool installed;
+protected:
+
+    virtual QByteArray generateMD5() const;
+
+private:
+
+    void writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer);
+    void writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer);
+
+private:
+    QImage m_thumbnail;
+    KoXmlResourceBundleManifest m_manifest;
+    QMap<QString, QString> m_metadata;
+    QSet<QString> m_bundletags;
+    bool m_installed;
 };
 
 #endif // KORESOURCEBUNDLE_H

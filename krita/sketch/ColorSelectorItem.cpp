@@ -47,6 +47,7 @@ public:
         , repaintTimer(new QTimer)
     {
         ring = new KisColorSelectorRing(selector);
+        ring->setInnerRingRadiusFraction(0.7);
         triangle = new KisColorSelectorTriangle(selector);
         slider = new KisColorSelectorSimple(selector);
         square = new KisColorSelectorSimple(selector);

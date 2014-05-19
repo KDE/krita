@@ -1,10 +1,11 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Martin Ellis <martin.ellis@kdemail.net>
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Wojciech Kosowicz <pcellix@gmail.com>
 
    This file has been automatically generated from
    calligra/kexi/tools/sql_keywords/sql_keywords.sh and
-   ../../3rdparty/kexisql3/src/tokenize.c.
+   sqlite-src-3080403/tool/mkkeywordhash.c.
 
    Please edit the sql_keywords.sh, not this file!
 
@@ -23,37 +24,60 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include <sqlitedriver.h>
 
-namespace KexiDB
-{
-const char* SQLiteDriver::keywords[] = {
-    "ABORT",
-    "ATTACH",
-    "CLUSTER",
-    "CONFLICT",
-    "DEFERRED",
-    "DEFERRABLE",
-    "DETACH",
-    "EACH",
-    "EXCEPT",
-    "FAIL",
-    "GLOB",
-    "IMMEDIATE",
-    "INITIALLY",
-    "INSTEAD",
-    "INTERSECT",
-    "ISNULL",
-    "NOTNULL",
-    "OF",
-    "PRAGMA",
-    "RAISE",
-    "STATEMENT",
-    "TEMP",
-    "TRIGGER",
-    "VACUUM",
-    "VIEW",
-    0
-};
+namespace KexiDB {
+  const char* SQLiteDriver::keywords[] = {
+		"ABORT",
+		"ACTION",
+		"ADD",
+		"ALTER",
+		"ANALYZE",
+		"ATTACH",
+		"AUTOINCREMENT",
+		"CAST",
+		"COLUMN",
+		"CONFLICT",
+		"CURRENT_DATE",
+		"CURRENT_TIME",
+		"CURRENT_TIMESTAMP",
+		"DEFERRED",
+		"DEFERRABLE",
+		"DETACH",
+		"EACH",
+		"ESCAPE",
+		"EXCEPT",
+		"EXCLUSIVE",
+		"EXISTS",
+		"FAIL",
+		"GLOB",
+		"IF",
+		"IMMEDIATE",
+		"INDEXED",
+		"INITIALLY",
+		"INSTEAD",
+		"INTERSECT",
+		"ISNULL",
+		"NO",
+		"NOTNULL",
+		"OF",
+		"PLAN",
+		"PRAGMA",
+		"QUERY",
+		"RAISE",
+		"RECURSIVE",
+		"REGEXP",
+		"REINDEX",
+		"RELEASE",
+		"RENAME",
+		"SAVEPOINT",
+		"TEMP",
+		"TRIGGER",
+		"VACUUM",
+		"VIEW",
+		"VIRTUAL",
+		"WITH",
+		"WITHOUT",
+		0
+  };
 }

@@ -3,6 +3,8 @@
 <MenuBar>
      <Menu name="Edit"><text>&amp;Edit</text>
          <Menu name="Resources"><text>&amp;Resources</text>
+            <Action name="import"/>
+            <Action name="createbundle"/>
             <Action name="resourcemanager"/>
         </Menu>
  </Menu>

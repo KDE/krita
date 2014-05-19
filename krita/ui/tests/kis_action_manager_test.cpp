@@ -104,7 +104,7 @@ void KisActionManagerTest::testTakeAction()
     view->actionManager()->addAction("dummy", action, view->actionCollection());
     QVERIFY(view->actionManager()->actionByName("dummy") != 0);
 
-    view->actionManager()->takeAction(action);
+    view->actionManager()->takeAction(action, view->actionCollection());
     QVERIFY(view->actionManager()->actionByName("dummy") == 0);
 }
 

@@ -41,6 +41,7 @@ public:
     QString colorModelId() const;
 
     Q_INVOKABLE QString id(int index);
+    Q_INVOKABLE int indexOf(const QString& id);
 
 public Q_SLOTS:
     void setColorModelId(const QString& id);

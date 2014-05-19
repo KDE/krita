@@ -65,9 +65,8 @@ public:
     virtual ~KisImagePipeBrush();
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-
-    /// Will call KisBrush's saveToDevice as well
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
@@ -112,6 +111,9 @@ public:
 protected:
     void setBrushType(enumBrushType type);
     void setHasColor(bool hasColor);
+    /// Will call KisBrush's saveToDevice as well
+
+
 
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 

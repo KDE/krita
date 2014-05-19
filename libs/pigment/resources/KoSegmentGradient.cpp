@@ -28,6 +28,8 @@
 #include <QImage>
 #include <QTextStream>
 #include <QFile>
+#include <QCryptographicHash>
+#include <QByteArray>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
@@ -47,7 +49,7 @@ KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::Sph
 KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
 KoSegmentGradient::KoSegmentGradient(const QString& file)
-        : KoAbstractGradient(file)
+    : KoAbstractGradient(file)
 {
 }
 
@@ -61,25 +63,24 @@ KoSegmentGradient::~KoSegmentGradient()
 
 bool KoSegmentGradient::load()
 {
-    return init();
-}
-
-bool KoSegmentGradient::save()
-{
-    return false;
-}
-
-bool KoSegmentGradient::init()
-{
     QFile file(filename());
 
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
-    QByteArray m_data = file.readAll();
+    bool res = loadFromDevice(&file);
     file.close();
+    return res;
+}
 
-    QTextStream fileContent(m_data, QIODevice::ReadOnly);
+bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
+{
+    QByteArray data = dev->readAll();
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(data);
+    setMD5(md5.result());
+
+    QTextStream fileContent(data, QIODevice::ReadOnly);
     fileContent.setAutoDetectUnicode(true);
 
     QString header = fileContent.readLine();
@@ -173,6 +174,17 @@ bool KoSegmentGradient::init()
     } else {
         return false;
     }
+
+}
+
+bool KoSegmentGradient::save()
+{
+    return false;
+}
+
+bool KoSegmentGradient::saveToDevice(QIODevice *) const
+{
+    return false;
 }
 
 KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const
@@ -216,6 +228,20 @@ QGradient* KoSegmentGradient::toQGradient() const
 QString KoSegmentGradient::defaultFileExtension() const
 {
     return QString(".ggr");
+}
+
+QByteArray KoSegmentGradient::generateMD5() const
+{
+    QFile f(filename());
+    if (f.exists()) {
+        QByteArray ba = f.readAll();
+        if (!ba.isEmpty()) {
+            QCryptographicHash md5(QCryptographicHash::Md5);
+            md5.addData(ba);
+            return md5.result();
+        }
+    }
+    return QByteArray();
 }
 
 KoGradientSegment::KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor)

@@ -373,7 +373,7 @@ K_GLOBAL_STATIC_WITH_ARGS(KexiDB::StaticSetOfStrings, KexiDB_kexiSQLKeywords, (D
 
 CALLIGRADB_EXPORT bool KexiDB::isKexiSQLKeyword(const QByteArray& word)
 {
-    return KexiDB_kexiSQLKeywords->contains(word);
+    return KexiDB_kexiSQLKeywords->contains(word.toUpper());
 }
 
 CALLIGRADB_EXPORT QString KexiDB::escapeString(const QString& str)

@@ -21,6 +21,7 @@
 #include <qdialogbuttonbox.h>
 #include <QLabel>
 #include <QCloseEvent>
+#include <QLineEdit>
 #include <kis_debug.h>
 
 #include <QMetaType>
@@ -31,6 +32,8 @@
 #include <kis_gmic_filter_settings.h>
 #include "kis_gmic_settings_widget.h"
 #include <kis_gmic_input_output_widget.h>
+
+#include <kis_gmic_filter_proxy_model.h>
 
 static const QString maximizeStr = i18n("Maximize");
 
@@ -57,7 +60,12 @@ void KisGmicWidget::createMainLayout()
     column++;
 
     m_filterTree = new QTreeView();
-    m_filterTree->setModel(m_filterModel);
+
+    KisGmicFilterProxyModel *proxyModel = new KisGmicFilterProxyModel(this);
+    proxyModel->setSourceModel(m_filterModel);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    m_filterTree->setModel(proxyModel);
     m_filterTree->setItemDelegate(new HtmlDelegate());
 
     QItemSelectionModel *selectionModel= m_filterTree->selectionModel();
@@ -65,6 +73,11 @@ void KisGmicWidget::createMainLayout()
             this, SLOT(selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 
     m_filterConfigLayout->addWidget(m_filterTree, row, column);
+
+    QLineEdit * searchBox = new QLineEdit(this);
+    connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
+    m_filterConfigLayout->addWidget(searchBox, row+1, column);
+
     column++;
 
     m_filterOptions = new QWidget();

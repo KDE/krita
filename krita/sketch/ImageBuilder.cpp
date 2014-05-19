@@ -99,3 +99,9 @@ QString ImageBuilder::createImageFromWebcam(int width, int height, int resolutio
     Q_UNUSED(width); Q_UNUSED(height); Q_UNUSED(resolution);
     return QString();
 }
+
+QString ImageBuilder::createImageFromTemplate(const QVariantMap& options)
+{
+    DocumentManager::instance()->newDocument(options);
+    return QString("temp://%1").arg(options.value("template").toString());
+}

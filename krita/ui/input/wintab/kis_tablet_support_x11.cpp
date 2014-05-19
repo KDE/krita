@@ -28,6 +28,9 @@
 #include "kis_tablet_support.h"
 #include "wacomcfg.h"
 
+#include <input/kis_tablet_debugger.h>
+
+
 /**
  * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
  * intended to block Mouse events after any accepted Tablet event. In
@@ -190,6 +193,11 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
                                     &prop);
 
     if (result == Success && propertyType > 0) {
+
+        if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+            qDebug() << "# Building tablet axes remapping table:";
+        }
+
         QVector<AxesIndexes> axesMap(NAxes, Unused);
 
         for (unsigned int axisIndex = 0; axisIndex < nitems; axisIndex++) {
@@ -211,8 +219,11 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
             }
 
             axesMap[axisIndex] = mappedIndex;
-            qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
-                     << axisIndex << "->" << mappedIndex;
+
+            if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
+                         << axisIndex << "->" << mappedIndex;
+            }
         }
 
         this->setAxesMap(axesMap);
@@ -384,6 +395,12 @@ void kis_x11_init_tablet()
                     continue;
                 }
 
+                if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                    qDebug() << "###################################";
+                    qDebug() << "# Adding a tablet device:" << devs->name;
+                    qDebug() << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
+                }
+
                 device_data.savedAxesData.tryFetchAxesMapping(dev);
 
                 // get the min/max value for pressure!
@@ -405,6 +422,19 @@ void kis_x11_init_tablet()
                         device_data.maxTanPressure = 0;
                         device_data.minZ = 0;
                         device_data.maxZ = 0;
+                        device_data.minRotation = a[5].min_value;
+                        device_data.maxRotation = a[5].max_value;
+
+                        if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                            qDebug() << "# Axes limits data";
+                            qDebug() << "X:       " << device_data.minX << device_data.maxX;
+                            qDebug() << "Y:       " << device_data.minY << device_data.maxY;
+                            qDebug() << "Z:       " << device_data.minZ << device_data.maxZ;
+                            qDebug() << "Pressure:" << device_data.minPressure << device_data.maxPressure;
+                            qDebug() << "Rotation:" << device_data.minRotation << device_data.maxRotation;
+                            qDebug() << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
+                        }
+
 #endif
 
                         // got the max pressure no need to go further...
@@ -413,7 +443,6 @@ void kis_x11_init_tablet()
                     any = (XAnyClassPtr) ((char *) any + any->length);
                 } // end of for loop
 
-                qDebug() << "Recognized a tablet device:" << devs->name;
                 qt_tablet_devices()->append(device_data);
             } // if (gotStylus || gotEraser)
         }
@@ -611,7 +640,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         pressure = tablet->savedAxesData.pressure();
         xTilt = tablet->savedAxesData.xTilt();
         yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
+        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+            (tablet->maxRotation - tablet->minRotation) * 360.0;
 
     } else if (button) {
         // see the comment in 'motion' branch
@@ -625,7 +655,8 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         pressure = tablet->savedAxesData.pressure();
         xTilt = tablet->savedAxesData.xTilt();
         yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
+        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+            (tablet->maxRotation - tablet->minRotation) * 360.0;
     }
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;
@@ -665,7 +696,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
                      qreal(pressure / qreal(tablet->maxPressure - tablet->minPressure)),
                      xTilt, yTilt, tangentialPressure, rotation, z, modifiers, uid,
                      qtbutton, qtbuttons);
-
 
     e.ignore();
     QApplication::sendEvent(w, &e);

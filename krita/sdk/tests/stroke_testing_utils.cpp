@@ -118,7 +118,7 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
     manager->setResource(KisCanvasResourceProvider::HdrExposure, i);
 
     i.setValue(QPoint());
-    manager->setResource(KisCanvasResourceProvider::MirrorAxisCenter, i);
+    manager->setResource(KisCanvasResourceProvider::MirrorAxesCenter, i);
 
     return manager;
 }

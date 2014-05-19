@@ -53,10 +53,10 @@ public:
     // XXX: implement copy constructor!!!
 
     bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     bool save();
-
-    QImage image() const;
+    virtual bool saveToDevice(QIODevice* dev) const;
 
 public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Brush
 
@@ -77,7 +77,8 @@ public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Bru
 
 
     bool is_eraser();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
 
     QImage m_icon;

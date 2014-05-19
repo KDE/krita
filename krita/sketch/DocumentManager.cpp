@@ -126,6 +126,25 @@ void DocumentManager::delayedNewDocument()
     {
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
+        d->document->setUrl(KUrl("New Image.kra"));
+    }
+    else if(d->newDocOptions.contains("template")) {
+        KUrl url(d->newDocOptions.value("template").toString().remove("template://"));
+        bool ok = d->document->loadNativeFormat(url.toLocalFile());
+        d->document->setModified(false);
+        d->document->undoStack()->clear();
+
+        if (ok) {
+            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            // in case this is a open document template remove the -template from the end
+            mimeType.remove( QRegExp( "-template$" ) );
+            d->document->setMimeTypeAfterLoading(mimeType);
+            d->document->resetURL();
+            d->document->setEmpty();
+        } else {
+            d->document->showLoadingErrorDialog();
+            d->document->initEmpty();
+        }
     }
     else
     {
@@ -154,6 +173,7 @@ void DocumentManager::delayedNewDocument()
         KoColor bg(background, profile);
 
         d->document->newImage(name, width, height, profile, bg, QString(), res);
+        d->document->setUrl(KUrl("New Image.kra"));
     }
 
     d->temporaryFile = true;

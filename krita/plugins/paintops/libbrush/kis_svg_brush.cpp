@@ -35,10 +35,22 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 
 bool KisSvgBrush::load()
 {
-    QFileInfo fi(filename());
-    if (fi.size() == 0) return false;
+    QFile f(filename());
+    if (f.size() == 0) return false;
+    if (!f.exists()) return false;
 
-    QSvgRenderer renderer(filename());
+    bool res = loadFromDevice(&f);
+    f.close();
+
+    return res;
+}
+
+bool KisSvgBrush::loadFromDevice(QIODevice *dev)
+{
+
+    m_svg = dev->readAll();
+
+    QSvgRenderer renderer(m_svg);
 
     QRect box = renderer.viewBox();
     if (box.isEmpty()) return false;
@@ -54,12 +66,12 @@ bool KisSvgBrush::load()
     for (int i = 0; i < 256; ++i) table.push_back(qRgb(i, i, i));
     image_ = image_.convertToFormat(QImage::Format_Indexed8, table);
 
-    setImage(image_);
+    setBrushTipImage(image_);
 
     setValid(true);
 
     // Well for now, always true
-    if (image().isGrayscale()) {
+    if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
     }
@@ -67,9 +79,23 @@ bool KisSvgBrush::load()
         setBrushType(IMAGE);
         setHasColor(true);
     }
-    setWidth(image().width());
-    setHeight(image().height());
-    return !image().isNull();
+    setWidth(brushTipImage().width());
+    setHeight(brushTipImage().height());
+    return !brushTipImage().isNull();
+}
+
+bool KisSvgBrush::save()
+{
+    QFile f(filename());
+    if (!f.open(QFile::WriteOnly)) return false;
+    bool res = saveToDevice(&f);
+    f.close();
+    return res;
+}
+
+bool KisSvgBrush::saveToDevice(QIODevice *dev) const
+{
+    return (dev->write(m_svg.constData(), m_svg.size()) == m_svg.size());
 }
 
 QString KisSvgBrush::defaultFileExtension() const

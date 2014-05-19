@@ -22,7 +22,6 @@ install( FILES
     krita_tool.desktop
     krita_generator.desktop
     krita_dock.desktop
-    krita_animationdock.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 install( FILES
@@ -36,7 +35,6 @@ install( FILES
 
 install( FILES
     krita.xml
-    kritaanimation.xml
     DESTINATION ${XDG_MIME_INSTALL_DIR}
 )
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

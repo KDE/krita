@@ -46,7 +46,7 @@ class KRITAUI_EXPORT KisFloatingMessage : public QWidget
 public:
 
     explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent = false);
-    void showMessage();
+    void showMessage(int timeout = 4500);
 
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);

@@ -141,14 +141,14 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));
 }
 
-void KisFloatingMessage::showMessage()
+void KisFloatingMessage::showMessage(int timeout)
 {
 
     setGeometry(determineMetrics(fontMetrics().width('x')));
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
     QWidget::setVisible(true);
-    m_timer.start(4500);
+    m_timer.start(timeout);
 }
 
 void KisFloatingMessage::setShowOverParent(bool show)

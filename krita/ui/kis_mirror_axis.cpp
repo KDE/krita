@@ -42,7 +42,7 @@ public:
         , resourceProvider(0)
         , mirrorX(false)
         , mirrorY(false)
-        , handleSize(50)
+        , handleSize(32)
         , xActive(false)
         , yActive(false)
         , xHandlePosition(30.f)
@@ -89,8 +89,8 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* pare
     QPointF point(imageWidth / 2, imageHeight / 2);
     d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
     QPointF handlePos = parent->canvasBase()->coordinatesConverter()->imageToViewport(QPointF(imageWidth / 3, imageHeight / 3));
-    d->xHandlePosition = handlePos.x();
-    d->yHandlePosition = handlePos.y();
+    d->xHandlePosition = handlePos.y();
+    d->yHandlePosition = handlePos.x();
 
     parent->installEventFilter(this);
     parent->canvasBase()->inputManager()->attachPriorityEventFilter(this);
@@ -124,6 +124,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     gc.setPen(QPen(Qt::black, 2));
     gc.setBrush(Qt::white);
+    gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
     float halfHandleSize = d->handleSize / 2;
 
     d->axisPosition = converter->imageToWidget<QPointF>(canvas->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF());
@@ -137,7 +139,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     if(d->mirrorX) {
         gc.drawLine(d->axisPosition.x(), 0, d->axisPosition.x(), view()->height());
         gc.drawEllipse(xIndicator);
-        gc.drawPixmap(xIndicator.adjusted(10, 10, -10, -10).toRect(), d->xAxisIcon);
+        gc.drawPixmap(xIndicator.adjusted(5, 5, -5, -5).toRect(), d->xAxisIcon);
         gc.drawEllipse(d->xHandle);
         gc.drawPixmap(d->xHandle.adjusted(5, 5, -5, -5).toRect(), d->xHandleIcon);
     }
@@ -145,7 +147,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     if(d->mirrorY) {
         gc.drawLine(0, d->axisPosition.y(), view()->width(), d->axisPosition.y());
         gc.drawEllipse(yIndicator);
-        gc.drawPixmap(yIndicator.adjusted(10, 10, -10, -10).toRect(), d->yAxisIcon);
+        gc.drawPixmap(yIndicator.adjusted(5, 5, -5, -5).toRect(), d->yAxisIcon);
         gc.drawEllipse(d->yHandle);
         gc.drawPixmap(d->yHandle.adjusted(5, 5, -5, -5).toRect(), d->yHandleIcon);
     }
@@ -173,13 +175,13 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         QMouseEvent* me = static_cast<QMouseEvent*>(event);
         if(d->xActive) {
             d->setAxisPosition(me->posF().x(), d->axisPosition.y());
-            d->xHandlePosition = me->posF().y() - d->handleSize / 2;
+            d->xHandlePosition = qBound<float>(0.f, me->posF().y() - d->handleSize / 2, view()->height() - d->handleSize);
             event->accept();
             return true;
         }
         if(d->yActive) {
             d->setAxisPosition(d->axisPosition.x(), me->posF().y());
-            d->yHandlePosition = me->posF().x() - d->handleSize / 2;
+            d->yHandlePosition = qBound<float>(0.f, me->posF().x() - d->handleSize / 2, view()->width() - d->handleSize);
             event->accept();
             return true;
         }
@@ -208,8 +210,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
     if(target == view() && event->type() == QEvent::Resize) {
         QResizeEvent* re = static_cast<QResizeEvent*>(event);
         if(re->oldSize().width() > 0 && re->oldSize().height() > 0) {
-            d->xHandlePosition = (d->xHandlePosition / re->oldSize().width()) * re->size().width();
-            d->yHandlePosition = (d->yHandlePosition / re->oldSize().height()) * re->size().height();
+            d->xHandlePosition = qBound<float>(0.f, (d->xHandlePosition / re->oldSize().height()) * re->size().height(), re->size().height());
+            d->yHandlePosition = qBound<float>(0.f, (d->yHandlePosition / re->oldSize().width()) * re->size().width(), re->size().width());
         }
     }
     return QObject::eventFilter(target, event);

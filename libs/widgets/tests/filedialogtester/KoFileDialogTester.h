@@ -15,6 +15,19 @@ public:
     explicit KoFileDialogTester(QWidget *parent = 0);
     ~KoFileDialogTester();
     
+private slots:
+
+    void testOpenFile();
+    void testOpenFiles();
+    void testOpenDirectory();
+    void testOpenDirectories();
+    void testImportFile();
+    void testImportFiles();
+    void testImportDirectory();
+    void testImportDirectories();
+    void testSaveFile();
+    void testSaveFiles();
+
 private:
     Ui::KoFileDialogTester *ui;
 };

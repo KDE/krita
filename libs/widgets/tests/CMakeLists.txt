@@ -4,7 +4,7 @@ include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/widgets)
 add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
-add_subdirectory(filedialogtester)
+#add_subdirectory(filedialogtester)
 
 ########### next target ###############
 

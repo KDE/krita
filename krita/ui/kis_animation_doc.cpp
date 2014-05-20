@@ -134,6 +134,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
             kWarning() << "Loading layer " << i+1;
+
             // Current frame
             if(frame.y() == i * 20) {
                 d->currentFramePosition = frame;
@@ -142,7 +143,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         }
     }
 
-    //this->updateActiveFrame();
+    this->updateActiveFrame();
     setCurrentImage(d->image);
 }
 

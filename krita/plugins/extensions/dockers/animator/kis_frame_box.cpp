@@ -73,7 +73,9 @@ void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame)
     if(this->m_selectedFrame) {
         int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
         QRect globalPosition(this->m_selectedFrame->x(),
-                             layerIndex, this->m_selectedFrame->width(), this->m_selectedFrame->height());
+                             layerIndex * 20,
+                             this->m_selectedFrame->width(),
+                             this->m_selectedFrame->height());
         emit frameSelectionChanged(globalPosition);
     }
 }

@@ -19,7 +19,9 @@
 
 #include "kis_mirror_axis.h"
 
-#include <GL/glew.h>
+#ifdef HAVE_OPENGL
+    #include <GL/glew.h>
+#endif
 
 #include <QtGui/QPainter>
 #include <QtGui/QToolButton>
@@ -139,6 +141,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     d->horizontalHandle = QRectF(d->axisPosition.x() - halfHandleSize, d->horizontalHandlePosition, d->handleSize, d->handleSize);
     d->verticalHandle = QRectF(d->verticalHandlePosition, d->axisPosition.y() - halfHandleSize, d->handleSize, d->handleSize);
 
+#ifdef HAVE_OPENGL
     // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
     // So instead, use native OpenGL anti-aliasing when available.
     if(gc.paintEngine()->type() == QPaintEngine::OpenGL2 && GLEW_ARB_multisample) {
@@ -146,6 +149,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         glEnable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
+#endif
 
     if(d->mirrorHorizontal) {
         gc.drawLine(d->axisPosition.x(), 0, d->axisPosition.x(), view()->height());
@@ -163,11 +167,13 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalHandleIcon);
     }
 
+#ifdef HAVE_OPENGL
     if(gc.paintEngine()->type() == QPaintEngine::OpenGL2 && GLEW_ARB_multisample) {
         gc.beginNativePainting();
         glDisable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
+#endif
 }
 
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)

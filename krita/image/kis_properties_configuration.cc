@@ -73,8 +73,22 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
         QDomElement e = n.toElement();
         if (!e.isNull()) {
             if (e.tagName() == "param") {
-                // XXX Convert the variant pro-actively to the right type?
-                d->properties[e.attribute("name")] = QVariant(e.text());
+                // If the file contains the new type parameter introduced in Krita act on it
+                // Else invoke old behaviour
+                if(e.attributes().contains("type"))
+                {
+                    QString type = e.attribute("type");
+                    QString name = e.attribute("name");
+                    QString value = e.text();
+                    if(type == "bytearray")
+                    {
+                        d->properties[name] = QVariant(QByteArray::fromBase64(value.toAscii()));
+                    }
+                    else
+                        d->properties[name] = value;
+                }
+                else
+                    d->properties[e.attribute("name")] = QVariant(e.text());
             }
         }
         n = n.nextSibling();
@@ -92,6 +106,7 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
 
         QDomElement e = doc.createElement("param");
         e.setAttribute("name", QString(it.key().toLatin1()));
+        QString type = "string";
         QVariant v = it.value();
         QDomText text;
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
@@ -102,11 +117,18 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
             doc.appendChild(root);
             v.value<KoColor>().toXML(doc, root);
             text = doc.createCDATASection(doc.toString());
+            type = "color";
         } else if(v.type() == QVariant::String ) {
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
+            type = "string";
+        } else if(v.type() == QVariant::ByteArray ) {
+            text = doc.createTextNode(QString::fromAscii(v.toByteArray().toBase64())); // Arbitary Data
+            type = "bytearray";
         } else {
             text = doc.createTextNode(v.toString());
+            type = "internal";
         }
+        e.setAttribute("type", type);
         e.appendChild(text);
         root.appendChild(e);
     }

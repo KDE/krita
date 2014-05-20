@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Index Colors Filter
+Comment=Reduce the amount of colors in the picture to a pre-defined palette.
+X-KDE-ServiceTypes=Krita/Filter
+Type=Service
+X-KDE-Library=kritaindexcolors
+X-Krita-Version=28

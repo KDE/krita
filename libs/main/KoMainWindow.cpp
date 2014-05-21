@@ -1200,6 +1200,7 @@ void KoMainWindow::saveWindowSettings()
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
+                dockGroup.writeEntry("Locked", i.value()->property("Locked").toBool());
                 dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
             }
         }
@@ -1857,12 +1858,17 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         bool collapsed = factory->defaultCollapsed();
+        bool locked = false;
         if (rootDocument()) {
             KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
             collapsed = group.readEntry("Collapsed", collapsed);
+            locked = group.readEntry("Locked", locked);
         }
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
+        if (titleBar && locked)
+            titleBar->setLocked(true);
+
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     } else {
         dockWidget = d->dockWidgetsMap[ factory->id()];

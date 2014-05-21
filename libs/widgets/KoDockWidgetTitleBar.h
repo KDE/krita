@@ -40,7 +40,7 @@ public:
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
-
+    void setLocked(bool locked);
     void setCollapsable(bool collapsable);
 
     enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};

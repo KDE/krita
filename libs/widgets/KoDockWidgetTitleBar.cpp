@@ -234,6 +234,15 @@ void KoDockWidgetTitleBar::setCollapsed(bool collapsed)
         d->toggleCollapsed();
 }
 
+void KoDockWidgetTitleBar::setLocked(bool locked)
+{
+    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
+
+    if (q && q->widget() && d->locked != locked)
+        d->toggleLocked();
+}
+
+
 void KoDockWidgetTitleBar::setCollapsable(bool collapsable)
 {
     d->collapseButton->setVisible(collapsable);
@@ -288,6 +297,7 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
         floatButton->setEnabled(true);
         collapseButton->setEnabled(true);
     }
+    q->setProperty("Locked", locked);
 
 }
 

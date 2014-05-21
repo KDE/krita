@@ -48,6 +48,7 @@
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"
+#include "krita_utils.h"
 
 class KisZoomController : public KoZoomController
 {
@@ -222,12 +223,12 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     m_view->canvasBase()->notifyZoomChanged();
 
     qreal humanZoom = zoom * 100.0;
-    int precision = qMax(1, qCeil(log10(humanZoom))) + 2;
 
     m_view->
         showFloatingMessage(
-            QString(i18nc("floating point message about zoom", "Zoom: %1 \%").
-                    arg(QString::number(humanZoom, 'g', precision))), QIcon(), 500);
+            i18nc("floating message about zoom", "Zoom: %1 \%",
+                  KritaUtils::prettyFormatReal(humanZoom)),
+            QIcon(), 500, KisFloatingMessage::Low);
 
 }
 

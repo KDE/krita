@@ -30,6 +30,8 @@
 #include "kis_view2.h"
 #include "input/kis_input_manager.h"
 #include "input/kis_tablet_event.h"
+#include "krita_utils.h"
+
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
@@ -47,6 +49,8 @@ struct KisCanvasController::Private {
 
     void emitPointerPositionChangedSignals(QEvent *event);
     void updateDocumentSizeAfterTransform();
+    void showRotationValueOnCanvas();
+    void showMirrorStateOnCanvas();
 };
 
 void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
@@ -150,12 +154,35 @@ void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCe
     emit documentSizeChanged();
 }
 
+void KisCanvasController::Private::showMirrorStateOnCanvas()
+{
+    bool isXMirrored = coordinatesConverter->xAxisMirrored();
+
+    view->
+        showFloatingMessage(
+            i18nc("floating message about mirroring",
+                  "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
+            QIcon(), 500, KisFloatingMessage::Low);
+}
+
 void KisCanvasController::mirrorCanvas(bool enable)
 {
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->paintOpTransformationConnector->notifyTransformationChanged();
+    m_d->showMirrorStateOnCanvas();
+}
+
+void KisCanvasController::Private::showRotationValueOnCanvas()
+{
+    qreal rotationAngle = coordinatesConverter->rotationAngle();
+
+    view->
+        showFloatingMessage(
+            i18nc("floating message about rotation", "Rotation: %1° ",
+                  KritaUtils::prettyFormatReal(rotationAngle)),
+            QIcon(), 500, KisFloatingMessage::Low);
 }
 
 void KisCanvasController::rotateCanvas(qreal angle)
@@ -164,6 +191,7 @@ void KisCanvasController::rotateCanvas(qreal angle)
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->paintOpTransformationConnector->notifyTransformationChanged();
+    m_d->showRotationValueOnCanvas();
 }
 
 void KisCanvasController::rotateCanvasRight15()
@@ -176,12 +204,13 @@ void KisCanvasController::rotateCanvasLeft15()
     rotateCanvas(-15.0);
 }
 
-void KisCanvasController::resetCanvasTransformations()
+void KisCanvasController::resetCanvasRotation()
 {
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->paintOpTransformationConnector->notifyTransformationChanged();
+    m_d->showRotationValueOnCanvas();
 }
 
 void KisCanvasController::slotToggleWrapAroundMode(bool value)

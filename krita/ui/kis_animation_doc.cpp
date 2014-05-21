@@ -90,7 +90,6 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     d->currentFramePosition = QRect(0, 0, 10, 20);
     d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
-    d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     d->kranimLoader->loadFrame(d->currentFrame, d->store, "frame0layer0");
@@ -130,7 +129,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
             KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
             kWarning() << "Loading layer " << i+1;
@@ -216,12 +214,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
     d->currentFramePosition = frame;
 
-    int opacity = OPACITY_OPAQUE_U8;
-
-    if(d->currentFramePosition.y() == 0) {
-        opacity = animation->bgColor().opacityU8();
-    }
-
     int x = frame.x();
     int y = frame.y() / 20;
 
@@ -236,7 +228,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         if(hasFile) {
             KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
             kWarning() << "Loading layer " << i+1;
@@ -244,9 +235,13 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     }
 
     // Load the new frame
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), opacity, animation->colorSpace());
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
-    d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+
+    if(d->currentFramePosition.y() == 0) {
+        d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+    }
+
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
     // Load the frames from layers above
@@ -257,7 +252,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         if(hasFile) {
             KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
             kWarning() << "Loading layer " << i+1;
@@ -300,7 +294,6 @@ void KisAnimationDoc::addPaintLayer()
 
             KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
             newLayer->setName("Layer " + QString::number(i + 1));
-            newLayer->paintDevice()->setDefaultPixel(animation->bgColor().data());
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
             kWarning() << "Loading layer " << i+1;
@@ -312,7 +305,6 @@ void KisAnimationDoc::addPaintLayer()
     d->currentFramePosition = QRect(frame, layer, 10, 20);
     d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
     d->currentFrame->setName("Layer " + QString::number(d->noLayers));
-    d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
 
     d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 

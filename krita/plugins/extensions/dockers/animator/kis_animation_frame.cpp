@@ -133,7 +133,7 @@ QRect KisAnimationFrame::convertSelectionToFrame(int type)
             KisAnimationFrame* newFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, newFrameWidth);
             newFrame->setGeometry(this->geometry().x(), 0, newFrameWidth, 20);
             newFrame->show();
-            globalGeometry.setRect(this->geometry().x(), this->getParent()->getLayerIndex(), newFrameWidth, 20);
+            globalGeometry.setRect(this->geometry().x(), this->getParent()->getLayerIndex() * 20, newFrameWidth, 20);
             this->getParent()->mapFrame(this->geometry().x() / 10, newFrame);
             this->getParent()->getParent()->getSelectedFrame()->hide();
             this->getParent()->getParent()->setSelectedFrame(0);

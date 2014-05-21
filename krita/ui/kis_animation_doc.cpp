@@ -217,11 +217,13 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     int x = frame.x();
     int y = frame.y() / 20;
 
+    kWarning() << frame.y();
+
     QString location = "";
     bool hasFile = false;
 
     // Load frames from layers below
-    for(int i = 0 ; i < y - 1 ; i++) {
+    for(int i = 0 ; i < y ; i++) {
         location = this->getFrameFile(x, i * 20);
         hasFile = d->store->hasFile(location);
 
@@ -230,7 +232,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1;
+            kWarning() << "Loading layer " << i+1 << " Frame" << x;
         }
     }
 
@@ -254,7 +256,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1;
+            kWarning() << "Loading layer " << i+1 << " Frame " << x;
         }
     }
 

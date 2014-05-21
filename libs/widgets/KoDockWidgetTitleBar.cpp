@@ -70,6 +70,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->collapseButton->setVisible(false);
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
 
+    d->lockIcon = koIcon("object-unlocked");
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setIcon(d->lockIcon);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLocked()));
@@ -111,6 +112,9 @@ QSize KoDockWidgetTitleBar::sizeHint() const
     if (d->collapseButton && d->collapseButton->isVisible()) {
         hideSize = d->collapseButton->sizeHint();
     }
+
+    d->lockButton->setIcon(d->lockIcon);
+
     QSize lockSize(0, 0);
     if (d->lockButton && d->lockButton->isVisible()) {
         hideSize = d->lockButton->sizeHint();
@@ -160,12 +164,6 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     }
     QSize lockButtonSize(0,0);
     if (d->lockButton->isVisible()) {
-        if (d->locked) {
-            d->lockButton->setIcon(koIcon("locked"));
-        }
-        else {
-            d->lockButton->setIcon(koIcon("unlocked"));
-        }
         lockButtonSize = d->lockButton->size();
     }
 
@@ -282,7 +280,8 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
 
     if (!locked) {
         locked = true;
-        lockButton->setIcon(koIcon("locked"));
+        lockIcon = koIcon("object-locked");
+        lockButton->setIcon(koIcon("object-locked"));
         features = q->features();
         q->setFeatures(QDockWidget::NoDockWidgetFeatures);
         closeButton->setEnabled(false);
@@ -291,13 +290,14 @@ void KoDockWidgetTitleBar::Private::toggleLocked()
     }
     else {
         locked = false;
-        lockButton->setIcon(koIcon("unlocked"));
+        lockIcon = koIcon("object-unlocked");
+        lockButton->setIcon(koIcon("object-unlocked"));
         q->setFeatures(features);
         closeButton->setEnabled(true);
         floatButton->setEnabled(true);
         collapseButton->setEnabled(true);
     }
-    q->setProperty("Locked", locked);
+    q->setProperty("object-locked", locked);
 
 }
 

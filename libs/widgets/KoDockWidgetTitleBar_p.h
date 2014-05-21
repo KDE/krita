@@ -42,6 +42,7 @@ public:
         : thePublic(thePublic),
             openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
             closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
+            lockIcon(koIcon("object-unlocked")),
             textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
             preCollapsedWidth(-1),
             locked(false)
@@ -51,7 +52,7 @@ public:
         if (closeIcon.isNull())
             closeIcon = koIcon("arrow-right");
 
-        lockIcon = koIcon("unlocked");
+
     }
 
     KoDockWidgetTitleBar* thePublic;

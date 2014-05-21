@@ -1591,19 +1591,18 @@ void KisView2::updateIcons()
     }
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout)
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
 {
     // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
     if (mainWindow()) {
-        if (!m_d->savedFloatingMessage.isNull()) {
-            m_d->savedFloatingMessage->hide();
-            m_d->savedFloatingMessage->deleteLater();
+        if (m_d->savedFloatingMessage) {
+            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
+        } else {
+            m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget(), false, timeout, priority);
+            m_d->savedFloatingMessage->setShowOverParent(true);
+            m_d->savedFloatingMessage->setIcon(icon);
+            m_d->savedFloatingMessage->showMessage();
         }
-
-        m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
-        m_d->savedFloatingMessage->setShowOverParent(true);
-        m_d->savedFloatingMessage->setIcon(icon);
-        m_d->savedFloatingMessage->showMessage(timeout);
     }
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());

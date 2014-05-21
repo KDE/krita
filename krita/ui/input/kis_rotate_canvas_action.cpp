@@ -99,7 +99,7 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
             canvasController->rotateCanvasRight15();
             break;
         case RotateResetShortcut:
-            canvasController->resetCanvasTransformations();
+            canvasController->resetCanvasRotation();
             break;
     }
 }

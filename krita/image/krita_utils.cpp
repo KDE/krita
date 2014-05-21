@@ -18,6 +18,8 @@
 
 #include "krita_utils.h"
 
+#include <QtCore/qmath.h>
+
 #include <QRect>
 #include <QRegion>
 #include <QPainterPath>
@@ -166,6 +168,12 @@ namespace KritaUtils
         *outlinePen = QPen(Qt::SolidLine);
         outlinePen->setCosmetic(true);
         outlinePen->setColor(Qt::white);
+    }
+
+    QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
+    {
+        int precision = qMax(1, qCeil(log10(value))) + 2;
+        return QString::number(value, 'g', precision);
     }
 
 }

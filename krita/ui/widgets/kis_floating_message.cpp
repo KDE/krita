@@ -122,10 +122,12 @@ namespace ShadowEngine
 
 #define OSD_WINDOW_OPACITY 0.74
 
-KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent)
+KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout, Priority priority)
     : QWidget(parent)
     , m_message(message)
     , m_showOverParent(showOverParent)
+    , m_timeout(timeout)
+    , m_priority(priority)
 {
     m_icon = koIcon("calligrakrita").pixmap(256, 256).toImage();
 
@@ -141,14 +143,29 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));
 }
 
-void KisFloatingMessage::showMessage(int timeout)
+void KisFloatingMessage::tryOverrideMessage(const QString message,
+                                            const QIcon& icon,
+                                            int timeout,
+                                            KisFloatingMessage::Priority priority)
+{
+    if ((int)priority > (int)m_priority) return;
+
+    m_message = message;
+    setIcon(icon);
+    m_timeout = timeout;
+    m_priority = priority;
+    showMessage();
+    update();
+}
+
+void KisFloatingMessage::showMessage()
 {
 
     setGeometry(determineMetrics(fontMetrics().width('x')));
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
     QWidget::setVisible(true);
-    m_timer.start(timeout);
+    m_timer.start(m_timeout);
 }
 
 void KisFloatingMessage::setShowOverParent(bool show)

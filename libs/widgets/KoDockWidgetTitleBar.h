@@ -54,6 +54,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())
+    Q_PRIVATE_SLOT(d, void toggleLocked())
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 
     class Private;

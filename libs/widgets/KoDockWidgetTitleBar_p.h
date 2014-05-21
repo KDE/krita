@@ -43,25 +43,31 @@ public:
             openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
             closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
             textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
-            preCollapsedWidth(-1)
+            preCollapsedWidth(-1),
+            locked(false)
     {
         if (openIcon.isNull())
             openIcon = koIcon("arrow-down");
         if (closeIcon.isNull())
             closeIcon = koIcon("arrow-right");
+
+        lockIcon = koIcon("unlocked");
     }
+
     KoDockWidgetTitleBar* thePublic;
-    KIcon openIcon, closeIcon;
+    KIcon openIcon, closeIcon, lockIcon;
     QAbstractButton* closeButton;
     QAbstractButton* floatButton;
     QAbstractButton* collapseButton;
-
+    QAbstractButton* lockButton;
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
-
     int preCollapsedWidth;
+    bool locked;
+    QDockWidget::DockWidgetFeatures features;
 
     void toggleFloating();
     void toggleCollapsed();
+    void toggleLocked();
     void featuresChanged(QDockWidget::DockWidgetFeatures features);
 };
 #endif

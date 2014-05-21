@@ -215,8 +215,13 @@ void KisInputManager::Private::addKeyShortcut(KisAbstractInputAction* action, in
     KisSingleActionShortcut *keyShortcut =
             new KisSingleActionShortcut(action, index);
 
-    QList<Qt::Key> modifiers = keys.mid(1);
-    keyShortcut->setKey(modifiers, keys.at(0));
+    //Note: Ordering is important here, Shift + V is different from V + Shift,
+    //which is the reason we use the last key here since most users will enter
+    //shortcuts as "Shift + V". Ideally this should not happen, but this is
+    //the way the shortcut matcher is currently implemented.
+    QList<Qt::Key> modifiers = keys;
+    Qt::Key key = modifiers.takeLast();
+    keyShortcut->setKey(modifiers, key);
     matcher.addShortcut(keyShortcut);
 }
 

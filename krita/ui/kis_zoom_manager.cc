@@ -220,6 +220,15 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
 
     m_view->canvasBase()->notifyZoomChanged();
+
+    qreal humanZoom = zoom * 100.0;
+    int precision = qMax(1, qCeil(log10(humanZoom))) + 2;
+
+    m_view->
+        showFloatingMessage(
+            QString(i18nc("floating point message about zoom", "Zoom: %1 \%").
+                    arg(QString::number(humanZoom, 'g', precision))), QIcon(), 500);
+
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

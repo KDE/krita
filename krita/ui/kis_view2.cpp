@@ -227,6 +227,7 @@ public:
     QMainWindow* mainWindow;
     KisMirrorAxis* mirrorAxis;
     KisTooltipManager* tooltipManager;
+    QPointer<KisFloatingMessage> savedFloatingMessage;
 };
 
 
@@ -1533,9 +1534,9 @@ void KisView2::showJustTheCanvas(bool toggled)
 
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
-        floatingMessage->showMessage();
+
+        showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                 actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), QIcon());
     }
 }
 
@@ -1592,14 +1593,19 @@ void KisView2::updateIcons()
     }
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout)
 {
     // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
     if (mainWindow()) {
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(icon);
-        floatingMessage->showMessage();
+        if (!m_d->savedFloatingMessage.isNull()) {
+            m_d->savedFloatingMessage->hide();
+            m_d->savedFloatingMessage->deleteLater();
+        }
+
+        m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+        m_d->savedFloatingMessage->setShowOverParent(true);
+        m_d->savedFloatingMessage->setIcon(icon);
+        m_d->savedFloatingMessage->showMessage(timeout);
     }
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());

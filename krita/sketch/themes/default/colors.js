@@ -169,7 +169,7 @@ var values = {
             text: "#ffffff",
             header: "#000000",
             headerText: "#ffffff",
-            subheader: Qt.rgba(1.0, 1.0, 1.0, 0.5),
+            subheader: "#cfcfcf",
             editorButtons: {
                 active: "#EAEAEA",
                 inactive: "transparent",
@@ -217,7 +217,7 @@ var values = {
             text: "#ffffff",
             header: "#000000",
             headerText: "#ffffff",
-            subheader: Qt.rgba(1.0, 1.0, 1.0, 0.5),
+            subheader: "#cfcfcf",
         },
 
         menu: {

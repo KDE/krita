@@ -50,17 +50,6 @@ KoResourceManagerControl::~KoResourceManagerControl()
     }
 }
 
-//Voir si on autorise la modification d'un paquet qui n'est pas installé
-//Si oui, pb peut se poser pour récupérer les fichiers si leur chemin source n'est plus valable
-//ou si la ressource pointée par le chemin a été modifiée à l'intérieur du paquet
-//(exemple : installation modif désinstallation)
-//Préférable au moins pour les fichiers de demander l'installation
-//avant tout ajout, modif, suppression de fichiers
-
-//TODO Une solution est l'extraction de tous les fichiers existants dans un dossier temporaire
-//Puis on construit l'archive a partir de ses fichiers qui sont obligatoirement les plus récents
-
-
 void KoResourceManagerControl::configureFilters(int filterType, bool enable)
 {
     if (!m_modelList.isEmpty()) {
@@ -73,7 +62,6 @@ void KoResourceManagerControl::toStatus(QString text, int timeout)
     emit status(text, timeout);
 }
 
-//TODO Design Decision : Un paquet peut il contenir un paquet
 bool KoResourceManagerControl::createPack(int type)
 {
     KoResourceTableModel *currentModel = getModel(type);
@@ -137,7 +125,6 @@ bool KoResourceManagerControl::createPack(int type)
     }
 }
 
-//TODO Trouver une solution pour que les ressources installées soient visibles
 bool KoResourceManagerControl::install(int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -326,16 +313,6 @@ void KoResourceManagerControl::saveMeta(QModelIndex index, int type)
     }
 }
 
-//TODO Bug Foreground to Background
-//TODO Bug rename bouton/label
-//TODO Rafraichir réellement un bundle renommé
-//TODO Trouver pourquoi les tags sont préservés pour les fichiers mais pas pour les paquets
-//TODO Trouver un moyen pour bien différencier et renommer fichier et nom de ressource
-//TODO Bug pour les noms qui n'ont pas l'extension du fichier de base
-//TODO A tester pr tous les cas possibles
-//TODO Rajouter le cas où le nom est déjà utilisé
-//TODO Vérifier comment on supprime un tag d'un bundle <=> est ce qu'on supprime la méta donnée dans le xml
-//<=>est-ce qu'on vérifie avant de modif le xml si un fichier qu'il contient n'a pas ce tag...
 bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -389,7 +366,6 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
     return false;
 }
 
-//TODO Voir s'il est intéressant de garder la sélection
 void KoResourceManagerControl::filterResourceTypes(int index)
 {
     QList<QSharedPointer<KoAbstractResourceServerAdapter> > list;
@@ -452,10 +428,6 @@ void KoResourceManagerControl::filterResourceTypes(int index)
     }
 }
 
-
-//TODO Rajouter la mise a jour des tags
-//TODO Voir si ce traitement ne peut pas etre généraliser ou fait ailleurs
-//TODO Lors de l'ajout d'un tag à un paquet, rajouter le tag aussi dans le meta
 void KoResourceManagerControl::addFiles(QString bundleName, int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -536,7 +508,6 @@ bool KoResourceManagerControl::importBundle()
     }
 }
 
-//TODO Problème nb de valeurs affichées sur le précédent onglet
 void KoResourceManagerControl::refreshTaggingManager()
 {
     for (int i = 0; i < m_modelsCount; i++) {

@@ -140,9 +140,6 @@ QString KoDlgCreateBundle::previewImage() const
     return m_previewImage;
 }
 
-
-//TODO Vérifier la présence de caractères invalides dans le nom du paquet (exemple : *"')
-//Même s'ils semblent acceptés par le système
 void KoDlgCreateBundle::accept()
 {
     QString name = m_ui->editBundleName->text().remove(" ");

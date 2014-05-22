@@ -248,7 +248,6 @@ void KoResourceManagerWidget::uninstallPack()
     }
 }
 
-//TODO Régler le pb de chgt de taille de la thumbnail
 void KoResourceManagerWidget::thumbnail()
 {
     QTableView* currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());

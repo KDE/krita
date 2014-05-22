@@ -195,7 +195,7 @@ void KisFloatColorInput::update()
     m_dblNumInput->setMaximum(maxVisibleFloatValue);
 
     // ensure at least 3 significant digits are always shown
-    int newPrecision = 2 + std::max(0.0, std::ceil(-std::log10(maxVisibleFloatValue)));
+    int newPrecision = 2 + qMax(0.0, std::ceil(-std::log10(maxVisibleFloatValue)));
     if (newPrecision != m_dblNumInput->decimals()) {
         m_dblNumInput->setDecimals(newPrecision);
         m_dblNumInput->updateGeometry();

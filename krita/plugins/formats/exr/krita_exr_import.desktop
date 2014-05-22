@@ -41,6 +41,6 @@ Name[zh_TW]=Krita exr 匯入過濾程式
 X-KDE-ServiceTypes=Calligra/Filter
 Type=Service
 X-KDE-Export=application/x-krita
-X-KDE-Import=image/x-exr
+X-KDE-Import=image/x-exr,application/x-extension-exr
 X-KDE-Library=kritaexrimport
 X-KDE-Weight=1

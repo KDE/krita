@@ -44,7 +44,7 @@ KoColor KoDumbColorDisplayRenderer::approximateFromRenderedQColor(const QColor &
 
 KoColor KoDumbColorDisplayRenderer::fromHsv(int h, int s, int v, int a) const
 {
-    QColor qcolor(QColor::fromHsvF(h, s, v, a));
+    QColor qcolor(QColor::fromHsv(h, s, v, a));
     return KoColor(qcolor, KoColorSpaceRegistry::instance()->rgb8());
 }
 

@@ -210,22 +210,25 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
     originalProjection->readBytes(originalBytes.data(), rect);
 
     if (m_displayFilter &&
-        !m_displayFilter->useInternalColorManagement() &&
         m_useOcio &&
         projectionCs->colorModelId() == RGBAColorModelID) {
 
 #ifdef HAVE_OCIO
+        const KoColorProfile *destinationProfile =
+            m_displayFilter->useInternalColorManagement() ?
+            m_monitorProfile : projectionCs->profile();
+
         const KoColorSpace *floatCs =
             KoColorSpaceRegistry::instance()->colorSpace(
                 RGBAColorModelID.id(),
                 Float32BitsColorDepthID.id(),
-                projectionCs->profile());
+                destinationProfile);
 
         const KoColorSpace *modifiedMonitorCs =
             KoColorSpaceRegistry::instance()->colorSpace(
                 RGBAColorModelID.id(),
                 Integer8BitsColorDepthID.id(),
-                projectionCs->profile());
+                destinationProfile);
 
         if (projectionCs->colorDepthId() == Float32BitsColorDepthID) {
             m_displayFilter->filter(originalBytes.data(), numPixels);

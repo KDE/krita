@@ -16,26 +16,41 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef DLG_BUNDLE_MANAGER_H
+#define DLG_BUNDLE_MANAGER_H
 
+#include <QWidget>
 
-#ifndef KOXMLGENERATORTEST_H
-#define KOXMLGENERATORTEST_H
-#include <QTest>
-#include <KoConfig.h>
+#include <kdialog.h>
 
-class KoXmlGeneratorTest: public QObject
+class KoResourceBundle;
+class QListWidget;
+
+namespace Ui
+{
+class WdgDlgBundleManager;
+}
+
+class DlgBundleManager : public KDialog
 {
     Q_OBJECT
-private slots:
-    void ctorTest();
-    void getValueTest();
-    void addTagTest();
-    void removeFirstTagTest();
-    void removeTagTest();
-    void searchValueTest();
-    void toFileTest();
-private:
-    QString env;
+public:
+    explicit DlgBundleManager(QWidget *parent = 0);
 
+private slots:
+
+    void addSelected();
+    void removeSelected();
+
+private:
+
+    QWidget *m_page;
+    Ui::WdgDlgBundleManager *m_ui;
+
+    void fillListWidget(QList<KoResourceBundle*> bundles, QListWidget *w);
+
+    QMap<QString, KoResourceBundle*> m_blacklistedBundles;
+    QMap<QString, KoResourceBundle*> m_activeBundles;
 };
-#endif // KOXMLGENERATORTEST_H
+
+#endif // DLG_BUNDLE_MANAGER_H

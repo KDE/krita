@@ -20,40 +20,166 @@ import QtQuick 1.1
 import org.krita.sketch 1.0
 import "../../components"
 
-Item {
+Column {
     id: base
     property bool fullView: true;
+    height: childrenRect.height;
+    spacing: Constants.DefaultMargin;
+
+    // === Blending Mode ===
     Label {
-        id: compositeModeListLabel
         visible: fullView;
-        height: fullView ? Constants.DefaultFontSize : 0;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
         text: "Blending mode:"
         font: Settings.theme.font("panelSection");
     }
     ExpandingListView {
         id: compositeModeList
         visible: fullView;
+        width: parent.width;
         expandedHeight: Constants.GridHeight * 6;
-        anchors {
-            top: compositeModeListLabel.bottom;
-            left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
+
         property bool firstSet: false;
         onCurrentIndexChanged: {
             if (firstSet) { model.activateItem(currentIndex); }
             else { firstSet = true; }
         }
+
         model: compositeOpModel;
     }
-    Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
+
+    // === Brush Properties ===
+    RangeCombo {
+        id: sizeInput;
+        width: parent.width;
+        visible: compositeOpModel.sizeEnabled;
+        placeholder: "Size";
+        useExponentialValue: true;
+        min: 1; max: 1000; decimals: 0;
+        value: compositeOpModel.size;
+        onValueChanged: compositeOpModel.changePaintopValue("size", value);
+        model: ListModel {
+            ListElement { value: 1 }
+            ListElement { value: 2 }
+            ListElement { value: 5 }
+            ListElement { value: 10 }
+            ListElement { value: 20 }
+            ListElement { value: 50 }
+            ListElement { value: 100 }
+            ListElement { value: 200 }
+            ListElement { value: 500 }
+            ListElement { value: 1000 }
+        }
+    }
+
+    RangeInput {
+        id: opacityInput;
+        width: parent.width;
+        visible: compositeOpModel.opacityEnabled;
+        placeholder: "Opacity";
+        min: 0; max: 1; decimals: 2;
+        value: compositeOpModel.opacity;
+        onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
+    }
+
+    RangeInput {
+        id: flowInput;
+        width: parent.width;
+        placeholder: "Flow";
+        min: 0; max: 1; decimals: 2;
+        value: compositeOpModel.flow;
+        onValueChanged: compositeOpModel.changePaintopValue("flow", value);
+        visible: compositeOpModel.flowEnabled;
+    }
+
+    // === Smoothing ===
+    Label {
+        id: smoothingLabel
+        visible: d.smoothingVisible;
+        font: Settings.theme.font("panelSection");
+        text: "Smoothing:";
+    }
+
+    ExpandingListView {
+        id: smoothnessTypeList
+        visible: d.smoothingVisible;
+        width: parent.width;
+        expandedHeight: Constants.GridHeight * 2
+        model: ListModel {
+            ListElement { text: "No smoothing" }
+            ListElement { text: "Basic smoothing" }
+            ListElement { text: "Weighted smoothing" }
+        }
+        currentIndex: (toolManager.currentTool && toolManager.currentTool.smoothingType) ? toolManager.currentTool.smoothingType : 1;
+        onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
+    }
+
+    RangeInput {
+        id: smoothnessQualitySlider;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 2
+        width: parent.width;
+        placeholder: "Distance";
+        min: 3; max: 1000; decimals: 1;
+        useExponentialValue: true;
+        value: toolManager.currentTool.smoothnessQuality;
+        onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
+    }
+
+    RangeInput {
+        id: smoothnessFactorSlider;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 2
+        width: parent.width;
+        placeholder: "Stroke Ending"
+        useExponentialValue: true;
+        min: 0; max: 1; decimals: 2;
+        value: toolManager.currentTool.smoothnessFactor;
+        onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
+    }
+
+    CheckBox {
+        id: smoothPressureCheck;
+        visible: d.smoothingVisible && smoothnessTypeList.currentIndex === 2
+        width: parent.width;
+        text: "Smooth Pressure";
+        checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
+        onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
+    }
+
+    // === Mirror ===
+    Label {
+        visible: fullView;
+        font: Settings.theme.font("panelSection");
+        height: Constants.GridHeight / 2;
+        text: "Mirror:";
+    }
+
+    CheckBox {
+        visible: fullView;
+        width: parent.width;
+        text: "Mirror Horizontally"
+        checked: compositeOpModel.mirrorHorizontally;
+        onCheckedChanged: compositeOpModel.mirrorHorizontally = checked;
+    }
+
+    CheckBox {
+        visible: fullView;
+        width: parent.width;
+        text: "Mirror Vertically";
+        checked: compositeOpModel.mirrorVertically;
+        onCheckedChanged: compositeOpModel.mirrorVertically = checked;
+    }
+
+    // === Other Things ===
+    Component.onCompleted: {
+        compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
+
+        if (toolManager.currentTool === null)
+            return;
+
+        smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+        smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+        smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
+    }
+
     Connections {
         target: compositeOpModel;
         onSizeChanged: sizeInput.value = compositeOpModel.size;
@@ -66,177 +192,21 @@ Item {
             }
         }
     }
-    Column {
-        anchors {
-            top: fullView ? compositeModeList.bottom : compositeModeList.top;
-            left: parent.left;
-            leftMargin: Constants.DefaultMargin;
-            right: parent.right;
-            rightMargin: Constants.DefaultMargin;
-        }
-        height: childrenRect.height;
 
-        RangeInput {
-            id: sizeInput;
-            width: parent.width;
-            visible: compositeOpModel.sizeEnabled;
-            placeholder: "Size";
-            useExponentialValue: true;
-            min: 1; max: 1000; decimals: 0;
-            value: compositeOpModel.size;
-            onValueChanged: compositeOpModel.changePaintopValue("size", value);
+    Connections {
+        target: toolManager;
+        onCurrentToolChanged: {
+            if (toolManager.currentTool === null || toolManager.currentTool.smoothnessQuality === undefined)
+                return;
+            smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+            smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+            smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
         }
-        RangeInput {
-            id: opacityInput;
-            width: parent.width;
-            visible: compositeOpModel.opacityEnabled;
-            placeholder: "Opacity";
-            min: 0; max: 1; decimals: 2;
-            value: compositeOpModel.opacity;
-            onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
-        }
-        RangeInput {
-            id: flowInput;
-            width: parent.width;
-            placeholder: "Flow";
-            min: 0; max: 1; decimals: 2;
-            value: compositeOpModel.flow;
-            onValueChanged: compositeOpModel.changePaintopValue("flow", value);
-            visible: compositeOpModel.flowEnabled;
-        }
+    }
 
-        Column {
-            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.smoothingType !== undefined;
-            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQualitySlider.height + smoothnessFactorSlider.height + smoothPressureCheck.height)
-            width: parent.width;
-            Label {
-                id: smoothingLabel
-                horizontalAlignment: Text.AlignLeft;
-                font: Settings.theme.font("panelSection");
-                height: visible ? Constants.GridHeight / 2 : 0;
-                text: "Smoothing:";
-            }
-            ExpandingListView {
-                id: smoothnessTypeList
-                width: parent.width;
-                expandedHeight: Constants.GridHeight * 2
-                model: ListModel {
-                    ListElement { text: "No smoothing" }
-                    ListElement { text: "Basic smoothing" }
-                    ListElement { text: "Weighted smoothing" }
-                }
-                currentIndex: (toolManager.currentTool && toolManager.currentTool.smoothingType) ? toolManager.currentTool.smoothingType : 1;
-                onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
-            }
-            RangeInput {
-                id: smoothnessQualitySlider;
-                visible: smoothnessTypeList.currentIndex === 2
-                height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
-                width: parent.width;
-                placeholder: "Distance";
-                min: 3; max: 1000; decimals: 1;
-                useExponentialValue: true;
-                value: toolManager.currentTool.smoothnessQuality;
-                onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
-            }
-            RangeInput {
-                id: smoothnessFactorSlider;
-                visible: smoothnessTypeList.currentIndex === 2
-                height: visible ? childrenRect.height : 0;
-                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
-                width: parent.width;
-                placeholder: "Stroke Ending"
-                useExponentialValue: true;
-                min: 0; max: 1; decimals: 2;
-                value: toolManager.currentTool.smoothnessFactor;
-                onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
-            }
-            CheckBox {
-                id: smoothPressureCheck;
-                visible: smoothnessTypeList.currentIndex === 2
-                height: visible ? Constants.DefaultFontSize + Constants.DefaultMargin * 4 : 0;
-                Behavior on height { NumberAnimation { duration: Constants.AnimationDuration; } }
-                width: parent.width;
-                text: "Smooth Pressure";
-                checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
-                onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
-            }
-            Component.onCompleted: {
-                if (toolManager.currentTool === null)
-                    return;
-                smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
-                smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
-                smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
-            }
-            Connections {
-                target: toolManager;
-                onCurrentToolChanged: {
-                    if (toolManager.currentTool === null || toolManager.currentTool.smoothnessQuality === undefined)
-                        return;
-                    smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
-                    smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
-                    smoothPressureCheck.checked = toolManager.currentTool.smoothPressure;
-                }
-            }
-        }
-// No Assistant for the first release
-//         RangeInput {
-//             visible: fullView;
-//             width: parent.width;
-//             placeholder: "Assistant";
-//             min: 0; max: 1000; decimals: 0;
-//             value: 1000;
-//             onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
-//         }
+    QtObject {
+        id: d;
 
-        Label {
-            visible: fullView;
-            width: parent.width;
-            horizontalAlignment: Text.AlignLeft;
-            font: Settings.theme.font("panelSection");
-            height: Constants.GridHeight / 2;
-            text: "Mirror:";
-        }
-
-        Item {
-            width: childrenRect.width;
-            height: childrenRect.height;
-            anchors.horizontalCenter: parent.horizontalCenter;
-            Button {
-                id: mirrorVertical;
-                image: Settings.theme.icon("mirror_v-black");
-                width: Constants.GridWidth * 2 / 3;
-                height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
-                checked: compositeOpModel.mirrorVertically;
-                onClicked: compositeOpModel.mirrorVertically = !compositeOpModel.mirrorVertically;
-            }
-            Button {
-                id: mirrorHorizontal;
-                anchors.left: mirrorVertical.right;
-                image: Settings.theme.icon("mirror_h-black")
-                width: Constants.GridWidth * 2 / 3;
-                height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
-                checked: compositeOpModel.mirrorHorizontally;
-                onClicked: compositeOpModel.mirrorHorizontally = !compositeOpModel.mirrorHorizontally;
-            }
-            Button {
-                id: mirrorCenter;
-                anchors.left: mirrorHorizontal.right;
-                image: Settings.theme.icon("mirror_c-black")
-                width: Constants.GridWidth * 2 / 3;
-                height: width;
-                color: "transparent";
-                shadow: false;
-                highlight: false;
-                onClicked: compositeOpModel.setMirrorCenter();
-            }
-        }
+        property bool smoothingVisible: base.fullView && toolManager.currentTool !== null && toolManager.currentTool.smoothingType !== undefined;
     }
 }

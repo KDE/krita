@@ -42,32 +42,36 @@ bool TasksetResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
-    save(&file);
+    bool res = saveToDevice(&file);
     file.close();
-    return true;
+    return res;
 }
 
 bool TasksetResource::load()
 {
     QString fn = filename();
-    if (fn.isEmpty()) {
-         return false;
-    }
+    if (fn.isEmpty()) return false;
  
     QFile file(fn);
     if (file.size() == 0) return false;
-    QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    if (!doc.setContent(&file)) {
-        file.close();
-        return false;
-    }
+    if (!file.open(QIODevice::ReadOnly)) return false;
+
+    bool res = loadFromDevice(&file);
+
     file.close();
+
+    return res;
+}
+
+bool TasksetResource::loadFromDevice(QIODevice *dev)
+{
+    QDomDocument doc;
+    if (!doc.setContent(dev)) {
+        return false;
+    }
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-    QDomNode node = element.firstChild();   
+    QDomNode node = element.firstChild();
     while (!node.isNull()) {
         QDomElement child = node.toElement();
         if (!child.isNull() && child.tagName() == "action") {
@@ -99,7 +103,7 @@ QByteArray TasksetResource::generateMD5() const
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
-    save(&buf);
+    saveToDevice(&buf);
     buf.close();
 
     if (!ba.isEmpty()) {
@@ -112,7 +116,7 @@ QByteArray TasksetResource::generateMD5() const
 
 }
 
-void TasksetResource::save(QIODevice *io) const
+bool TasksetResource::saveToDevice(QIODevice *io) const
 {
 
     QDomDocument doc;
@@ -128,6 +132,7 @@ void TasksetResource::save(QIODevice *io) const
 
     QTextStream textStream(io);
     doc.save(textStream, 4);
+    return true;
 }
 
 

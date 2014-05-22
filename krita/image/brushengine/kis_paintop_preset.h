@@ -57,9 +57,11 @@ public:
     KisPaintOpSettingsSP settings() const;
 
     bool load();
+    bool loadFromDevice(QIODevice *dev);
 
     bool save();
-    
+    bool saveToDevice(QIODevice* dev) const;
+
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
@@ -77,8 +79,6 @@ protected:
     virtual QByteArray generateMD5() const;
 
 private:
-
-    bool save(QIODevice *io) const;
 
     struct Private;
     Private * const m_d;

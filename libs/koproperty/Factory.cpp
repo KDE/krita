@@ -22,29 +22,7 @@
 #include "EditorView.h"
 #include "EditorDataModel.h"
 #include "Property.h"
-//#include "customproperty.h"
-/*
-#include "booledit.h"
-#include "combobox.h"
-#include "coloredit.h"
-#include "cursoredit.h"
-#include "dateedit.h"
-#include "datetimeedit.h"
-#include "dummywidget.h"
-#include "fontedit.h"
-//TODO #include "linestyleedit.h"
-#include "pixmapedit.h"
-#include "pointedit.h"
-#include "rectedit.h"
-#include "sizeedit.h"
-#include "sizepolicyedit.h"
-#include "spinbox.h"
-#include "stringlistedit.h"
-#include "stringedit.h"
-#include "symbolcombo.h"
-#include "timeedit.h"
-#include "urledit.h"
-*/
+
 #include <kdebug.h>
 #include <kiconloader.h>
 
@@ -96,8 +74,6 @@ public:
     QHash<int, EditorCreatorInterface*> editorCreators;
     QHash<int, ValuePainterInterface*> valuePainters;
     QHash<int, ValueDisplayInterface*> valueDisplays;
-//    QHash<int, Factory*> factoryForType;
-//    QHash<int, CustomPropertyFactory*> registeredCustomProperties;
 };
 
 //! @internal
@@ -347,7 +323,6 @@ QWidget * FactoryManager::createEditor(
                 dynamic_cast<EditorView*>(parent)->gridLineColor()
                 : EditorView::defaultGridLineColor() );
             QString css =
-//                w->styleSheet() + " " + 
                 QString::fromLatin1("%1 { border-top: 1px solid %2; } ")
                 .arg(QString::fromLatin1(w->metaObject()->className()).remove("KoProperty::"))
                 .arg(gridLineColor.name());

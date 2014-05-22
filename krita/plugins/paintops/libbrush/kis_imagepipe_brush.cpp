@@ -213,8 +213,14 @@ bool KisImagePipeBrush::load()
 {
     QFile file(filename());
     file.open(QIODevice::ReadOnly);
-    QByteArray data = file.readAll();
+    bool res = loadFromDevice(&file);
     file.close();
+    return res;
+}
+
+bool KisImagePipeBrush::loadFromDevice(QIODevice *dev)
+{
+    QByteArray data = dev->readAll();
     return initFromData(data);
 }
 

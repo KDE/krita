@@ -360,7 +360,6 @@ void KoResourceTableModel::addTag(KoResource* resource, const QString& tag)
 void KoResourceTableModel::deleteTag(KoResource *resource, const QString &tag)
 {
     KoResourceBundle *currentBundle = dynamic_cast<KoResourceBundle*>(resource);
-
     getResourceAdapter(resource)->deleteTag(resource, tag);
     if (currentBundle) {
         currentBundle->removeTag(tag);

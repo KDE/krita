@@ -212,7 +212,6 @@ private slots:
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void slotImageResolutionChanged();
     void slotNodeChanged();
-    void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();

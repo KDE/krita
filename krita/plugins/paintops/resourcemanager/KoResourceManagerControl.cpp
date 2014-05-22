@@ -19,9 +19,8 @@
 
 #include "KoResourceManagerControl.h"
 #include "KoXmlResourceBundleManifest.h"
-#include "KoXmlResourceBundleMeta.h"
 #include "KoResourceTableModel.h"
-#include "KoBundleCreationWidget.h"
+#include "KoDlgCreateBundle.h"
 
 #include "KoResourceServerProvider.h"
 #include "kis_resource_server_provider.h"
@@ -46,8 +45,6 @@ KoResourceManagerControl::KoResourceManagerControl(int nb)
 
 KoResourceManagerControl::~KoResourceManagerControl()
 {
-    delete m_meta;
-    delete m_manifest;
     for (int i = 0; i < m_modelsCount; i++) {
         delete m_modelList.at(i);
     }
@@ -89,55 +86,54 @@ bool KoResourceManagerControl::createPack(int type)
     else {
         emit status("Creating new bundle...");
 
-        KoXmlResourceBundleMeta* newMeta = new KoXmlResourceBundleMeta();
-        KoBundleCreationWidget *bundleCreationWidget = new KoBundleCreationWidget(newMeta);
-        connect(bundleCreationWidget, SIGNAL(status(QString, int)), this, SLOT(toStatus(QString, int)));
-
-        if (bundleCreationWidget->exec() == 0 || newMeta == 0) {
+        KoDlgCreateBundle dlgCreateBundle;
+        if (dlgCreateBundle.exec() != QDialog::Accepted) {
             emit status("Creation cancelled", 3000);
             return false;
         }
-        else {
-            QString bundlePath = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + newMeta->getPackName() + ".bundle";
-            KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
-            bool isEmpty = true;
+        QString bundlePath = ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + dlgCreateBundle.bundleName() + ".bundle";
+        KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
+        bool isEmpty = true;
+        newBundle->addMeta("name", dlgCreateBundle.bundleName());
+        newBundle->addMeta("author", dlgCreateBundle.authorName());
+        newBundle->addMeta("email", dlgCreateBundle.email());
+        newBundle->addMeta("license", dlgCreateBundle.license());
+        newBundle->addMeta("website", dlgCreateBundle.website());
+        newBundle->addMeta("description", dlgCreateBundle.description());
 
-            newBundle->load();
-            newBundle->setMeta(newMeta);
+        for (int i = 0; i < selected.size(); i++) {
+            QString currentFileName = selected.at(i);
+            KoResource* currentResource = currentModel->getResourceFromFilename(selected.at(i));
+            KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
 
-            for (int i = 0; i < selected.size(); i++) {
-                QString currentFileName = selected.at(i);
-                KoResource* currentResource = currentModel->getResourceFromFilename(selected.at(i));
-                KoResourceBundle* currentBundle = dynamic_cast<KoResourceBundle*>(currentResource);
-
-                if (currentFileName.contains('/') && !currentBundle) {
-                    isEmpty = false;
-                    newBundle->addFile(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
-                                       currentModel->assignedTagsList(currentResource));
-                }
+            if (currentFileName.contains('/') && !currentBundle) {
+                isEmpty = false;
+                newBundle->addResource(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
+                                   currentModel->assignedTagsList(currentResource), currentResource->md5());
             }
-
-            if (isEmpty) {
-                delete newBundle;
-                emit status("No valid content to be added to a new bundle...Creation Cancelled", 3000);
-                return false;
-            }
-
-            newBundle->addMeta("fileName", bundlePath);
-            newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
-
-            ResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle);
-
-            QStringList tagsList = newBundle->getTagsList();
-
-            for (int i = 0; i < tagsList.size(); i++) {
-                ResourceBundleServerProvider::instance()->resourceBundleServer()->addTag(newBundle, tagsList.at(i));
-            }
-
-            currentModel->tagCategoryMembersChanged();
-            currentModel->clearSelected();
-            return true;
         }
+
+        if (isEmpty) {
+            delete newBundle;
+            emit status("No valid content to be added to a new bundle...Creation Cancelled", 3000);
+            return false;
+        }
+
+        newBundle->addMeta("fileName", bundlePath);
+        newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
+
+        ResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle);
+
+        QStringList tagsList = newBundle->getTagsList();
+
+        for (int i = 0; i < tagsList.size(); i++) {
+            ResourceBundleServerProvider::instance()->resourceBundleServer()->addTag(newBundle, tagsList.at(i));
+        }
+
+        currentModel->tagCategoryMembersChanged();
+        currentModel->clearSelected();
+        return true;
+
     }
 }
 
@@ -377,7 +373,7 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
 
                 if (currentBundle) {
                     currentBundle->removeFile(oldFilename);
-                    currentBundle->addFile(fileType, newFilename, tagList);
+                    currentBundle->addResource(fileType, newFilename, tagList, currentResource->md5());
                 }
 
             }
@@ -473,8 +469,8 @@ void KoResourceManagerControl::addFiles(QString bundleName, int type)
         for (int i = 0; i < selected.size(); i++) {
             QString currentSelect = selected.at(i);
             QString resourceType = currentSelect.section('/', currentSelect.count("/") - 2, currentSelect.count("/") - 2);
-
-            currentBundle->addFile(resourceType, currentSelect, currentModel->assignedTagsList(currentModel->getResourceFromFilename(currentSelect)));
+            KoResource *res = currentModel->getResourceFromFilename(currentSelect);
+            currentBundle->addResource(resourceType, currentSelect, currentModel->assignedTagsList(res), res->md5());
             QFile::copy(currentSelect, path + resourceType + QString("/") + bundleName + QString("/")
                         + currentSelect.section('/', currentSelect.count("/")));
         }

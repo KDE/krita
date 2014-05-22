@@ -125,7 +125,14 @@ bool KisPaintOpPreset::load()
     QFile file(filename());
     if (file.size() == 0) return false;
 
-    QImageReader reader(filename(), "PNG");
+    bool res = loadFromDevice(&file);
+
+    return true;
+}
+
+bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
+{
+    QImageReader reader(dev, "PNG");
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
@@ -137,8 +144,7 @@ bool KisPaintOpPreset::load()
     }
 
     QImage img;
-    if (!reader.read(&img))
-    {
+    if (!reader.read(&img)) {
         dbgImage << "Fail to decode PNG";
         return false;
     }
@@ -152,12 +158,16 @@ bool KisPaintOpPreset::load()
     if (!doc.setContent(preset)) {
         return false;
     }
+
     fromXML(doc.documentElement());
+
     if (!m_d->settings) {
         return false;
     }
+
     setValid(true);
     setImage(img);
+
     return true;
 }
 
@@ -175,7 +185,7 @@ bool KisPaintOpPreset::save()
     QFile f(filename());
     f.open(QFile::WriteOnly);
 
-    return save(&f);
+    return saveToDevice(&f);
 }
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
@@ -193,15 +203,13 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");
 
-    if (paintopid.isEmpty())
-    {
+    if (paintopid.isEmpty()) {
         dbgImage << "No paintopid attribute";
         setValid(false);
         return;
     }
 
-    if (KisPaintOpRegistry::instance()->get(paintopid) == 0)
-    {
+    if (KisPaintOpRegistry::instance()->get(paintopid) == 0) {
         dbgImage << "No paintop " << paintopid;
         setValid(false);
         return;
@@ -210,8 +218,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     KoID id(paintopid, "");
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
-    if (!settings)
-    {
+    if (!settings) {
         setValid(false);
         qWarning() << "Could not load settings for preset" << paintopid;
         return;
@@ -225,7 +232,7 @@ QByteArray KisPaintOpPreset::generateMD5() const
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
-    save(&buf);
+    saveToDevice(&buf);
     buf.close();
 
     if (!ba.isEmpty()) {
@@ -237,9 +244,9 @@ QByteArray KisPaintOpPreset::generateMD5() const
     return ba;
 }
 
-bool KisPaintOpPreset::save(QIODevice *io) const
+bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 {
-    QImageWriter writer(io, "PNG");
+    QImageWriter writer(dev, "PNG");
 
     QDomDocument doc;
     QDomElement root = doc.createElement("Preset");

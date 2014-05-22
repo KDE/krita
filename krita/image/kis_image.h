@@ -521,6 +521,11 @@ public:
      */
     bool wrapAroundModeActive() const;
 
+    /**
+     * Notifies that the node collapsed state has changed
+     */
+    void notifyNodeCollpasedChanged();
+
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
@@ -653,6 +658,12 @@ signals:
      * action was requested
      */
     void sigIsolatedModeChanged();
+
+    /**
+     * Emitted when one or more nodes changed the collapsed state
+     *
+     */
+    void sigNodeCollapsedChanged();
 
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();

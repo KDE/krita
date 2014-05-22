@@ -63,29 +63,24 @@ KoSegmentGradient::~KoSegmentGradient()
 
 bool KoSegmentGradient::load()
 {
-    return init();
-}
-
-bool KoSegmentGradient::save()
-{
-    return false;
-}
-
-bool KoSegmentGradient::init()
-{
     QFile file(filename());
 
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
-    QByteArray m_data = file.readAll();
+    bool res = loadFromDevice(&file);
     file.close();
+    return res;
+}
+
+bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
+{
+    QByteArray data = dev->readAll();
 
     QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(m_data);
+    md5.addData(data);
     setMD5(md5.result());
 
-    QTextStream fileContent(m_data, QIODevice::ReadOnly);
+    QTextStream fileContent(data, QIODevice::ReadOnly);
     fileContent.setAutoDetectUnicode(true);
 
     QString header = fileContent.readLine();
@@ -179,6 +174,17 @@ bool KoSegmentGradient::init()
     } else {
         return false;
     }
+
+}
+
+bool KoSegmentGradient::save()
+{
+    return false;
+}
+
+bool KoSegmentGradient::saveToDevice(QIODevice *) const
+{
+    return false;
 }
 
 KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const

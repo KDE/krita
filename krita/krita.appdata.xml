@@ -18,6 +18,7 @@
   <description>
     <p>Krita is the full-featured digital art studio.</p>
     <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreiche Funktionen</p>
     <p xml:lang="fi">Krita on täysin varusteltu digitaalisen taiteen ateljee.</p>
     <p xml:lang="ia">Krita es le studio de arte digital complete.</p>
     <p xml:lang="nl">Krita is de digitale kunststudio vol mogelijkheden.</p>
@@ -28,17 +29,16 @@
     <p xml:lang="sv">Krita är den fullfjädrade digitala konststudion.</p>
     <p xml:lang="uk">Krita — повноцінний комплекс для створення цифрових художніх творів.</p>
     <p xml:lang="x-test">xxKrita is the full-featured digital art studio.xx</p>
-    <p>It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters..</p>
+    <p>It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="ca">És perfecte per fer esbossos i pintar, i predefineix una solució final per crear fitxers de dibuix digital des de zero per a mestres.</p>
-    <p xml:lang="ia">Illo es perfecte pro schizzar e pinger, e prefixa un solution ab initio al fin pro crear files de pictura digital ab grattamentos per maestros.</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
     <p xml:lang="pl">Nadaje się perfekcyjnie do szkicowania i malowania i dostarcza zupełnego rozwiązania dla tworzenia plików malowideł cyfrowych od zalążka.</p>
-    <p xml:lang="pt">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar ficheiros de pintura digital do zero por mestres..</p>
-    <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres...</p>
+    <p xml:lang="pt">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar ficheiros de pintura digital do zero por mestres.</p>
+    <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres.</p>
     <p xml:lang="sk">Je ideálna na skicovanie a maľovanie a poskytuje end-to-end riešenie na vytváranie súborov digitálneho maľovania od základu od profesionálov.</p>
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
-    <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters..xx</p>
+    <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
     <p>
       Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK
       at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.

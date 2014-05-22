@@ -219,7 +219,10 @@ QString KisSketchView::fileTitle() const
 
 bool KisSketchView::isModified() const
 {
-    return d->doc->isModified();
+    if(d->doc)
+        return d->doc->isModified();
+
+    return false;
 }
 
 void KisSketchView::setFile(const QString& file)
@@ -405,6 +408,10 @@ bool KisSketchView::event( QEvent* event )
 
                 syncObject->gridData = &d->view->document()->gridData();
 
+                syncObject->mirrorHorizontal = provider->mirrorHorizontal();
+                syncObject->mirrorVertical = provider->mirrorVertical();
+                syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
                 syncObject->initialized = true;
             }
 
@@ -418,6 +425,10 @@ bool KisSketchView::event( QEvent* event )
                 qApp->processEvents();
 
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
+
+                provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
+                provider->setMirrorVertical(syncObject->mirrorVertical);
+                provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
 
                 provider->setPaintOpPreset(syncObject->paintOp);
                 qApp->processEvents();

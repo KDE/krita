@@ -60,6 +60,18 @@ public:
         return false;
     }
 
+    virtual bool loadFromDevice(QIODevice *) {
+        return false;
+    }
+
+    bool save()  {
+        return false;
+    }
+
+    bool saveToDevice(QIODevice*) const {
+        return false;
+    }
+
     void toXML(QDomDocument& , QDomElement&) const;
     const KisMaskGenerator* maskGenerator() const;
     qreal randomness() const;

@@ -25,7 +25,7 @@
 
 
 KisHatchingPressureCrosshatchingOption::KisHatchingPressureCrosshatchingOption()
-    : KisCurveOption(i18n("Crosshatching"), "Crosshatching", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Crosshatching"), "Crosshatching", KisPaintOpOption::commonCategory(), false)
 {
 }
 

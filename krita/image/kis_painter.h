@@ -582,7 +582,7 @@ public:
      * Set the paintop preset to use. If @param image is given,
      * the paintop will be created using this image as parameter.
      * Some paintops really want to know about the image they work
-     * for, e.g. the duplicate paintop.
+     * for, e.g. the clone paintop.
      */
     void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image);
 

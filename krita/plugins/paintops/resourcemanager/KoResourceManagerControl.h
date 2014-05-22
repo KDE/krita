@@ -24,8 +24,6 @@
 #include <QModelIndex>
 #include "resourcemanager.h"
 
-class KoXmlResourceBundleMeta;
-class KoXmlResourceBundleManifest;
 class KoResourceTableModel;
 
 class KoResourceManagerControl : public QObject
@@ -66,8 +64,6 @@ private slots:
     void toStatus(QString text, int timeout = 0);
 
 private:
-    KoXmlResourceBundleMeta *m_meta;
-    KoXmlResourceBundleManifest *m_manifest;
     QList<KoResourceTableModel*> m_modelList;
     int m_modelsCount;
 

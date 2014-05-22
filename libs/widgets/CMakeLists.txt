@@ -67,7 +67,7 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
-    
+
     KoResourceModelBase.cpp
 )
 
@@ -142,3 +142,14 @@ install( FILES
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra
 COMPONENT Devel)
+
+set(filedialogtester_SRCS
+    KoFileDialogTester.cpp
+    main.cpp
+)
+kde4_add_ui_files(filedialogtester_SRCS
+    KoFileDialogTester.ui
+)
+
+kde4_add_executable(filedialogtester ${filedialogtester_SRCS})
+target_link_libraries(filedialogtester kowidgets)

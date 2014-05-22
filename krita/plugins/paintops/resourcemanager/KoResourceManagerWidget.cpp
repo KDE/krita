@@ -29,7 +29,7 @@
 #include "KoResourceManagerControl.h"
 #include "KoResourceTableModel.h"
 #include "KoResourceTaggingManager.h"
-#include "KoBundleCreationWidget.h"
+#include "KoDlgCreateBundle.h"
 #include "KoTagChooserWidget.h"
 #include <KoIcon.h>
 
@@ -504,14 +504,14 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
         m_ui->label_4->setVisible(true);
         m_ui->label_5->setVisible(true);
 
-        m_ui->txtAuthor->setText(currentBundle->getAuthor());
+        m_ui->txtAuthor->setText(currentBundle->getMeta("author"));
         m_ui->txtAuthor->setVisible(true);
-        m_ui->txtLicense->setText(currentBundle->getLicense());
+        m_ui->txtLicense->setText(currentBundle->getMeta("license"));
         m_ui->txtLicense->setVisible(true);
-        m_ui->txtWebsite->setText(currentBundle->getWebSite());
+        m_ui->txtWebsite->setText(currentBundle->getMeta("website"));
         m_ui->txtWebsite->setVisible(true);
 
-        currentDate = currentBundle->getCreated();
+        currentDate = currentBundle->getMeta("created");
         if (currentDate.isEmpty()) {
             m_ui->label_6->setVisible(false);
             m_ui->dateCreated->setVisible(false);
@@ -521,7 +521,7 @@ void KoResourceManagerWidget::refreshDetails(QModelIndex newIndex)
             m_ui->dateCreated->setDate(QDate::fromString(currentDate, "dd/MM/yyyy"));
         }
 
-        currentDate = currentBundle->getUpdated();
+        currentDate = currentBundle->getMeta("updated");
         if (currentDate.isEmpty()) {
             m_ui->label_7->setVisible(false);
             m_ui->dateUpdated->setVisible(false);

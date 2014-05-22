@@ -181,6 +181,8 @@ signals:
     void sigSavingWorkspace(KisWorkspaceResource* workspace);
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
 
+    void mirrorModeChanged();
+
 private:
 
     KisView2 * m_view;

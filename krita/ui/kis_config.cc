@@ -368,8 +368,8 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 bool KisConfig::useOpenGL() const
 {
     if (qApp->applicationName() == "krita" ) {
-        QString canvasState = m_cfg.readEntry("canvasState");
-        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+        QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS"));
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
@@ -386,7 +386,7 @@ void KisConfig::setUseOpenGL(bool useOpenGL) const
 
 int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("OpenGLFilterMode", 1);
+    return m_cfg.readEntry("OpenGLFilterMode", 3);
 }
 
 void KisConfig::setOpenGLFilteringMode(int filteringMode)
@@ -396,7 +396,7 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
 
 bool KisConfig::useOpenGLTextureBuffer() const
 {
-    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
+    return m_cfg.readEntry("useOpenGLTextureBuffer", true);
 }
 
 void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)

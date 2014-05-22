@@ -23,7 +23,7 @@
 
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
+    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::commonCategory(), true)
 {
     m_checkable = false;
     setMinimumLabel(i18n("Transparent"));

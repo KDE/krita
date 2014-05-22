@@ -68,13 +68,13 @@ Q_SIGNALS:
 
 private:
     QGridLayout *m_optionLayout;
-    QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
     QCheckBox *m_chkSmoothPressure;
+    QButtonGroup * m_buttonGroup;
 };
 
 

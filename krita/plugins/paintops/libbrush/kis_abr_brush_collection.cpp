@@ -496,23 +496,35 @@ KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
 bool KisAbrBrushCollection::load()
 {
     QFile file(filename());
-    AbrInfo abr_hdr;
-    qint32 image_ID;
-    int i;
-    qint32 layer_ID;
-
     // check if the file is open correctly
     if (!file.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
     }
-    QByteArray ba = file.readAll();
+
+    bool res = loadFromDevice(&file);
+    file.close();
+
+    return res;
+
+}
+
+bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
+{
+    AbrInfo abr_hdr;
+    qint32 image_ID;
+    int i;
+    qint32 layer_ID;
+
+    QByteArray ba = dev->readAll();
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(ba);
     setMD5(md5.result());
 
     QBuffer buf(&ba);
+    buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);
+
 
     if (!abr_read_content(abr, &abr_hdr)) {
         warnKrita << "Error: cannot parse ABR file: " << filename();
@@ -537,13 +549,17 @@ bool KisAbrBrushCollection::load()
             warnKrita << "Warning: problem loading brush #" << i << " in " << filename();
         }
     }
-    file.close();
 
     return true;
 
 }
 
 bool KisAbrBrushCollection::save()
+{
+    return false;
+}
+
+bool KisAbrBrushCollection::saveToDevice(QIODevice */*dev*/) const
 {
     return false;
 }

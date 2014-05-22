@@ -110,7 +110,7 @@ void DatasetCommand::setDataSetChartType(ChartType type, ChartSubtype subtype)
     m_newType    = type;
     m_newSubtype = subtype;
 
-    setText(i18nc("(qtundo-format)", "Dataset Chart Type"));
+    setText(i18nc("(qtundo-format)", "Set Dataset Chart Type"));
 }
 
 void DatasetCommand::setDataSetShowCategory(bool show)
@@ -161,26 +161,26 @@ void DatasetCommand::setDataSetBrush(const QColor &color)
 {
     m_newBrushColor = color;
 
-    setText(i18nc("(qtundo-format)", "Dataset Brush color"));
+    setText(i18nc("(qtundo-format)", "Set Dataset Brush Color"));
 }
 
 void DatasetCommand::setDataSetPen(const QColor &color)
 {
     m_newPenColor = color;
 
-    setText(i18nc("(qtundo-format)", "Dataset Pen color"));
+    setText(i18nc("(qtundo-format)", "Set Dataset Pen Color"));
 }
 
 void DatasetCommand::setDataSetMarker(OdfMarkerStyle style)
 {
     m_newMarkerStyle = style;
 
-    setText(i18nc("(qtundo-format)", "Dataset Marker style"));
+    setText(i18nc("(qtundo-format)", "Set Dataset Marker Style"));
 }
 
 void DatasetCommand::setDataSetAxis(Axis *axis)
 {
     m_newAxis = axis;
 
-    setText(i18nc("(qtundo-format)", "Dataset Axis"));
+    setText(i18nc("(qtundo-format)", "Set Dataset Axis"));
 }

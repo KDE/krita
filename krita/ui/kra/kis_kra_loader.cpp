@@ -817,8 +817,10 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
 
         KoXmlElement e = child.toElement();
         QString name = e.attribute("name");
+        bool exportEnabled = e.attribute("exportEnabled", "1") == "0" ? false : true;
 
         KisLayerComposition* composition = new KisLayerComposition(image, name);
+        composition->setExportEnabled(exportEnabled);
 
         KoXmlNode value;
         for (value = child.lastChild(); !value.isNull(); value = value.previousSibling()) {
@@ -826,6 +828,8 @@ void KisKraLoader::loadCompositions(const KoXmlElement& elem, KisImageWSP image)
             QUuid uuid(e.attribute("uuid"));
             bool visible = e.attribute("visible", "1") == "0" ? false : true;
             composition->setVisible(uuid, visible);
+            bool collapsed = e.attribute("collapsed", "1") == "0" ? false : true;
+            composition->setCollapsed(uuid, collapsed);
         }
 
         image->addComposition(composition);

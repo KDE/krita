@@ -41,7 +41,9 @@ public:
     virtual ~KoStopGradient();
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /// reimplemented
     virtual QGradient* toQGradient() const;
@@ -72,8 +74,6 @@ private:
     mutable KoColor buffer;
 
 private:
-
-    bool save(QIODevice *io) const;
 
     void loadKarbonGradient(QIODevice *file);
     void parseKarbonGradient(const QDomElement& element);

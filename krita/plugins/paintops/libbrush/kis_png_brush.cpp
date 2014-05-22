@@ -31,15 +31,21 @@ KisPngBrush::KisPngBrush(const QString& filename)
     setBrushType(INVALID);
     setSpacing(0.25);
     setHasColor(false);
-
 }
 
 bool KisPngBrush::load()
 {
-    QFileInfo fi(filename());
-    if (fi.size() == 0) return false;
+    QFile f(filename());
+    if (f.size() == 0) return false;
+    if (!f.exists()) return false;
+    bool res = loadFromDevice(&f);
+    f.close();
+    return res;
+}
 
-    QImageReader reader(filename(), "PNG");
+bool KisPngBrush::loadFromDevice(QIODevice *dev)
+{
+    QImageReader reader(dev, "PNG");
 
     if (reader.textKeys().contains("brush_spacing")) {
         setSpacing(reader.text("brush_spacing").toDouble());
@@ -68,6 +74,20 @@ bool KisPngBrush::load()
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
     return !brushTipImage().isNull();
+}
+
+bool KisPngBrush::save()
+{
+    QFile f(filename());
+    if (!f.open(QFile::WriteOnly)) return false;
+    bool res = saveToDevice(&f);
+    f.close();
+    return res;
+}
+
+bool KisPngBrush::saveToDevice(QIODevice *dev) const
+{
+    return brushTipImage().save(dev, "PNG");
 }
 
 QString KisPngBrush::defaultFileExtension() const

@@ -26,6 +26,7 @@
 class CompositionModel;
 class QListView;
 class KisCanvas2;
+class KisAction;
 
 class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker {
     Q_OBJECT
@@ -46,10 +47,17 @@ private slots:
     void saveClicked();
     void exportClicked();
     void activateCurrentIndex();
+    void customContextMenuRequested(QPoint pos);
+    void updateComposition();
+    void renameComposition();
 
 private:
     KisCanvas2 *m_canvas;
     CompositionModel *m_model;
+
+    QVector<KisAction*> m_actions;
+    KisAction* updateAction;
+    KisAction* renameAction;
 };
 
 

@@ -267,9 +267,11 @@ public:
 
     /// reimplemented
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /// not implemented
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const;

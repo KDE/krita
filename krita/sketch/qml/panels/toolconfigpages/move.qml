@@ -22,6 +22,8 @@ import "../../components"
 Item {
     id: base
     property bool fullView: true;
+    height: childrenRect.height;
+
     ExpandingListView {
         anchors {
             top: parent.top;
@@ -29,6 +31,7 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
+        expandedHeight: Constants.GridHeight * 3;
         model: ListModel {
             ListElement {
                 text: "Current Layer";

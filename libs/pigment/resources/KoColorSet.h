@@ -72,7 +72,9 @@ public:
     virtual ~KoColorSet();
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     virtual QString defaultFileExtension() const;
 
@@ -91,7 +93,7 @@ protected:
 
 private:
 
-    void save(QIODevice *io) const;
+
     bool init();
 
     bool loadGpl();

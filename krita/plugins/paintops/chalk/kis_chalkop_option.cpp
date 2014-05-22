@@ -29,7 +29,7 @@ public:
 };
 
 KisChalkOpOption::KisChalkOpOption()
-    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();

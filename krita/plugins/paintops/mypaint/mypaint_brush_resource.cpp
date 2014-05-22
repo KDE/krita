@@ -420,6 +420,11 @@ bool MyPaintBrushResource::load()
     return false;
 }
 
+bool MyPaintBrushResource::loadFromDevice(QIODevice *)
+{
+    return false;
+}
+
 bool MyPaintBrushResource::save()
 {
 #if 0
@@ -435,7 +440,12 @@ bool MyPaintBrushResource::save()
     return res
 #endif
 
-    return true;
+      return false;
+}
+
+bool MyPaintBrushResource::saveToDevice(QIODevice *dev) const
+{
+    return false;
 }
 
 BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)

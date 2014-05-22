@@ -733,16 +733,8 @@ void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
+    resetCanvas(cfg.useOpenGL());
 
-    // first, assume we're going to crash when switching to opengl
-    bool useOpenGL = cfg.useOpenGL();
-    if (cfg.canvasState() == "TRY_OPENGL" && useOpenGL) {
-        cfg.setCanvasState("OPENGL_FAILED");
-    }
-    resetCanvas(useOpenGL);
-    if (useOpenGL) {
-        cfg.setCanvasState("OPENGL_SUCCESS");
-    }
 }
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)

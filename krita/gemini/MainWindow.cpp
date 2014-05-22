@@ -419,7 +419,8 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
+        view->canvasControllerWidget()->setFocus();
+        view->setFocus();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
@@ -435,6 +436,10 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
+    // Ensure that we do, in fact, have the brush tool selected on the currently active canvas
+    KoToolManager::instance()->switchToolRequested( "InteractionTool" );
+    qApp->processEvents();
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 }
 
 void MainWindow::documentChanged()

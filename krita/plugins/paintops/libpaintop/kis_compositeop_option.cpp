@@ -28,7 +28,7 @@
 #include <kis_composite_ops_model.h>
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
+    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::commonCategory(), true),
     m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;

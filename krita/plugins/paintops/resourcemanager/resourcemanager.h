@@ -51,6 +51,12 @@ public:
 
 private slots:
     void slotResourceManager();
+    void slotImport();
+    void slotCreateBundle();
+    void slotManageBundles();
+private:
+    class Private;
+    Private *const d;
 };
 
 #endif // RESOURCEMANAGER_H

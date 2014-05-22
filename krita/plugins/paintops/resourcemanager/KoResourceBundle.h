@@ -20,11 +20,12 @@
 #ifndef KORESOURCEBUNDLE_H
 #define KORESOURCEBUNDLE_H
 
-#include "KoResource.h"
+#include <QSet>
 
-class KoXmlResourceBundleManifest;
-class KoXmlResourceBundleMeta;
-class KoStore;
+#include <KoXmlWriter.h>
+
+#include "KoResource.h"
+#include "KoXmlResourceBundleManifest.h"
 
 /**
  * @brief The KoResourceBundle class
@@ -35,21 +36,14 @@ class KoResourceBundle : public KoResource
 
 public:
     /**
-     * @brief KoResourceBundle : Ctor
-     * @param bundlePath the path of the bundle
+     * @brief KoResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath);
+    KoResourceBundle(QString const& fileName);
 
     /**
      * @brief ~KoResourceBundle : Dtor
      */
     virtual ~KoResourceBundle();
-
-    /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
 
     /**
      * @brief defaultFileExtension
@@ -62,12 +56,15 @@ public:
      * @return true if succeed, false otherwise.
      */
     bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
 
     /**
      * @brief save : Save this resource.
      * @return true if succeed, false otherwise.
      */
     bool save();
+
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @brief install : Install the resource bundle.
@@ -84,21 +81,15 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(QString type, QString value);
-
-    /**
-     * @brief addMeta : Add a Metadata to the resource
-     * @param type type of the metadata
-     * @param value value of the metadata
-     */
-    void setMeta(KoXmlResourceBundleMeta* newMeta);
+    void addMeta(const QString &type, const QString &value);
+    const QString getMeta(const QString &type, const QString &defaultValue = QString()) const;
 
     /**
      * @brief addFile : Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType, QString filePath, QStringList fileTagList);
+    void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
 
     QList<QString> getTagsList();
 
@@ -119,42 +110,14 @@ public:
     void rename(QString, QString);
 
     /**
-     * @brief getAuthor
-     * @return the metadata associated to the field "author" or QString() if it doesn't exist
-     */
-    QString getAuthor();
-
-    /**
-     * @brief getLicense
-     * @return the metadata associated to the field "license" or QString() if it doesn't exist
-     */
-    QString getLicense();
-
-    /**
-     * @brief getWebSite
-     * @return the metadata associated to the field "website" or QString() if it doesn't exist
-     */
-    QString getWebSite();
-
-    /**
-     * @brief getCreated
-     * @return the metadata associated to the field "created" or QString() if it doesn't exist
-     */
-    QString getCreated();
-
-    /**
-     * @brief getUpdated
-     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
-     */
-    QString getUpdated();
-
-    /**
      * @brief isInstalled
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
 
     void setThumbnail(QString);
+
+    void addTag(const QString &tagName);
     void removeTag(QString tagName);
 
 protected:
@@ -163,133 +126,14 @@ protected:
 
 private:
 
-    /**
-     * @brief setReadPack : Opens the store in Read mode
-     * @param packName the name of the package to be opened
-     */
-    void setReadPack(QString m_packName);
-
-    /**
-     * @brief setWritePack : Opens the store in Write mode
-     * @param packName the name of the package to be opened
-     */
-    void setWritePack(QString m_packName);
-
-    /**
-     * @brief setKritaPath : Set the path of Krita resources
-     * @param kritaPath
-     */
-    void setKritaPath(QString m_kritaPath);
-
-    /**
-     * @brief isPathSet : Check if the path of Krita resources is set
-     * @return true if succeed, false otherwise.
-     */
-    bool isPathSet();
-
-    /**
-     * @brief toRoot : Go to the root of the store
-     */
-    void toRoot();
-
-    /**
-     * @brief addKFile : Add a Krita resource file to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
-    bool addKFile(QString path);
-
-    /**
-     * @brief addKFileBundle : Add a Krita resource file from a bundle folder to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
-    bool addKFileBundle(QString path);
-
-    /**
-     * @brief addKFiles : Add several Krita resource files to the store.
-     * @param pathList the list containing all the paths of the files to be added.
-     */
-    void addKFiles(QList<QString> pathList);
-
-    /**
-     * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
-     * @param pathList the list containing all the paths of the files to be extracted.
-     */
-    void extractKFiles(QMap<QString, QString> pathList);
-
-    /**
-     * @brief createPack : Create a full resource package.
-     * @param manifest the virtual generator of manifest file
-     * @param meta the virtual generator of meta file
-     */
-    void createPack(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta, QImage thumbnail, bool firstBuild = false);
-
-    /**
-     * @brief addManiMeta : Add manifest and meta Xml Files to the store
-     * @param manifest the virtual generator of manifest file
-     * @param meta the virtual generator of meta file
-     */
-    void addManiMeta(KoXmlResourceBundleManifest* manifest, KoXmlResourceBundleMeta* meta);
-
-    void addThumbnail(QImage thumbnail);
-
-    /**
-     * @brief getFileData
-     * @param fileName the path of the file in the store
-     * @return a QByteArray containing data of the file in the store
-     */
-    QByteArray getFileData(const QString &fileName);
-
-    /**
-     * @brief getFile
-     * @param fileName the path of the file in the store
-     * @return a QIODevice containing the file in the store
-     */
-    QIODevice* getFile(const QString &fileName);
-
-    /**
-     * @brief getKritaPath
-     * @return the path of Krita used when initialized
-     */
-    QString getKritaPath();
-
-    /**
-     * @brief getPackName
-     * @return the name of the current bundle
-     */
-    QString getPackName();
-
-    /**
-     * @brief removeDir : Remove the chosen directory
-     * @param dirName the name of the directory to be removed
-     * @return true if succeed, false otherwise.
-     */
-    static bool removeDir(const QString & dirName);
-
-    void extractTempFiles(QList<QString> pathList);
-
-    ///File Method shortcuts
-
-    bool atEnd() const;
-    bool bad() const;
-    bool close();
-    bool hasFile(const QString &name) const;
-    bool finalize();
-    bool isOpen() const;
-    bool open(const QString &name);
-    QByteArray read(qint64 max);
-    qint64 size() const;
-    qint64 write(const QByteArray &_data);
+    void writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer);
+    void writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer);
 
 private:
-    QString m_kritaPath;
-    QString m_packName;
-    KoStore* m_resourceStore;
     QImage m_thumbnail;
-    KoXmlResourceBundleManifest* m_manifest;
-    KoXmlResourceBundleMeta* m_meta;
-
+    KoXmlResourceBundleManifest m_manifest;
+    QMap<QString, QString> m_metadata;
+    QSet<QString> m_bundletags;
     bool m_installed;
 };
 

@@ -207,29 +207,31 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
-        QFileInfo fileInfo(resource->filename());
+        if (save) {
+            QFileInfo fileInfo(resource->filename());
 
-        if (fileInfo.exists()) {
-            QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
-            kDebug() << "fileName is " << filename;
-            QTemporaryFile file(filename);
-            if (file.open()) {
-                kDebug() << "now " << file.fileName();
-                resource->setFilename(file.fileName());
+            if (fileInfo.exists()) {
+                QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+                kDebug() << "fileName is " << filename;
+                QTemporaryFile file(filename);
+                if (file.open()) {
+                    kDebug() << "now " << file.fileName();
+                    resource->setFilename(file.fileName());
+                }
+            }
+
+            if (resource->save()) {
+                kWarning(30009) << "Could not save resource!";
+                return false;
             }
         }
 
-        if( save && ! resource->save()) {
-            kWarning(30009) << "Could not save resource!";
-            return false;
+        Q_ASSERT(!resource->filename().isEmpty() || !resource->name().isEmpty());
+        if (resource->filename().isEmpty()) {
+            resource->setFilename(resource->name());
         }
-
-        Q_ASSERT( !resource->filename().isEmpty() || !resource->name().isEmpty() );
-        if ( resource->filename().isEmpty() ) {
-            resource->setFilename( resource->name() );
-        }
-        else if ( resource->name().isEmpty() ) {
-            resource->setName( resource->filename() );
+        else if (resource->name().isEmpty()) {
+            resource->setName(resource->filename());
         }
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
@@ -498,7 +500,6 @@ public:
     }
 
 
-protected:
 
     /**
      * Create one or more resources from a single file. By default one resource is created.
@@ -513,6 +514,8 @@ protected:
     }
 
     virtual T* createResource( const QString & filename ) { return new T(filename); }
+
+protected:
 
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<T*> sortedResources()

@@ -112,7 +112,7 @@ void KoTriangleColorSelector::updateTriangleCircleParameters()
 {
     d->sizeColorSelector = qMin(width(), height());
     d->centerColorSelector = 0.5 * d->sizeColorSelector;
-    d->wheelWidthProportion = 0.3;
+    d->wheelWidthProportion = 0.25;
     d->wheelWidth = d->centerColorSelector * d->wheelWidthProportion;
     d->wheelNormExt = qAbs( d->centerColorSelector );
     d->wheelNormInt = qAbs( d->centerColorSelector * (1.0 - d->wheelWidthProportion));

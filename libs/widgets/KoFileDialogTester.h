@@ -1,5 +1,5 @@
-/*
- *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+/* This file is part of the KDE project
+ * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2014
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,38 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOFILEDIALOGTESTER_H
+#define KOFILEDIALOGTESTER_H
 
+#include <QWidget>
 
-#ifndef KOXMLRESOURCEBUNDLEMETATEST_H
-#define KOXMLRESOURCEBUNDLEMETATEST_H
-#include <QTest>
-#include <KoConfig.h>
+namespace Ui {
+class KoFileDialogTester;
+}
 
-class KoXmlResourceBundleMetaTest : public QObject
+class KoFileDialogTester : public QWidget
 {
     Q_OBJECT
+    
+public:
+    explicit KoFileDialogTester(QWidget *parent = 0);
+    ~KoFileDialogTester();
+    
 private slots:
-    void ctorTest();
-    void getTagEnumValueTest();
-    void checkSortTest();
-    void addTagTest();
-    void addTagsTest();
-    void getPackNameTest();
-    void getShortPackNameTest();
+
+    void testOpenFile();
+    void testOpenFiles();
+    void testOpenDirectory();
+    void testOpenDirectories();
+    void testImportFile();
+    void testImportFiles();
+    void testImportDirectory();
+    void testImportDirectories();
+    void testSaveFile();
+    void testSaveFiles();
 
 private:
-    QString env;
-
+    Ui::KoFileDialogTester *ui;
 };
-#endif // KOXMLRESOURCEBUNDLEMETATEST_H
+
+#endif // KOFILEDIALOGTESTER_H

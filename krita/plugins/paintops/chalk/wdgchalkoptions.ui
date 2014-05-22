@@ -177,7 +177,7 @@
   </connection>
   <connection>
    <sender>inkDepletionCHBox</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>opacity</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -193,7 +193,7 @@
   </connection>
   <connection>
    <sender>inkDepletionCHBox</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>saturation</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>

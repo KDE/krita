@@ -177,8 +177,6 @@ bool KoXmlResourceBundleManifest::save(QIODevice *device)
        return true;
 }
 
-
-//TODO A Revoir vu que c'était censé redéfinir le addTag de generator
 void KoXmlResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
 {
     ResourceReference ref(fileName, fileTagList, md5);
@@ -283,8 +281,6 @@ QList<QString> KoXmlResourceBundleManifest::getDirList()
     return result;
 }
 
-//TODO Lors de l'ajout d'un fichier, changer le nom de celui-ci une fois le paquet construit
-//Si c'est la première fois qu'il est construit
 
 void KoXmlResourceBundleManifest::exportTags()
 {

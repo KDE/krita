@@ -28,23 +28,28 @@
 
 struct KoColorSlider::Private
 {
-    Private() : upToDate(false) {}
+    Private() : upToDate(false), displayRenderer(0) {}
     KoColor minColor;
     KoColor maxColor;
     QPixmap pixmap;
     bool upToDate;
+    KoColorDisplayRendererInterface *displayRenderer;
 };
 
-KoColorSlider::KoColorSlider(QWidget* parent)
+KoColorSlider::KoColorSlider(QWidget* parent, KoColorDisplayRendererInterface *displayRenderer)
   : KSelector(parent), d(new Private)
 {
     setMaximum(255);
+    d->displayRenderer = displayRenderer;
+    connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
 }
 
-KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent)
+KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
   : KSelector(o, parent), d(new Private)
 {
     setMaximum(255);
+    d->displayRenderer = displayRenderer;
+    connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
 }
 
 KoColorSlider::~KoColorSlider()
@@ -97,7 +102,7 @@ void KoColorSlider::drawContents( QPainter *painter )
 
                 mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-                c.toQColor(&color);
+                color = d->displayRenderer->toQColor(c);
 
                 for (int y = 0; y < contentsRect_.height(); y++)
                 image.setPixel(x, y, color.rgba());
@@ -114,7 +119,7 @@ void KoColorSlider::drawContents( QPainter *painter )
 
                 mixOp->mixColors(colors, colorWeights, 2, c.data());
 
-                c.toQColor(&color);
+                color = d->displayRenderer->toQColor(c);
 
                 for (int x = 0; x < contentsRect_.width(); x++)
                 image.setPixel(x, y, color.rgba());

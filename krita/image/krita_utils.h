@@ -39,6 +39,8 @@ namespace KritaUtils
 
     void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
                                        int antLength = 4, int antSpace = 4);
+
+    QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value);
 }
 
 #endif /* __KRITA_UTILS_H */

@@ -508,8 +508,6 @@ void KoResourceBundle::addResource(QString fileType, QString filePath, QStringLi
     m_manifest.addResource(fileType, filePath, fileTagList, md5sum);
 }
 
-//On rappelle que les tags d'un bundle ne sont stockés que dans le meta
-//Les tags du manifest sont ajoutés au fur et à mesure de l'ajout des fichiers
 QList<QString> KoResourceBundle::getTagsList()
 {
     return QList<QString>::fromSet(m_bundletags);

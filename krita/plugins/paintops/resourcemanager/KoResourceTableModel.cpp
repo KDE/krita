@@ -261,7 +261,6 @@ QList<QString> KoResourceTableModel::getSelectedResource()
     return m_resourceSelected;
 }
 
-//TODO Rajouter le traitement de la liste de sélection si besoin
 void KoResourceTableModel::refreshResources()
 {
     m_resources.clear();
@@ -319,8 +318,6 @@ int KoResourceTableModel::getDataType()
 {
     return m_dataType;
 }
-
-/*A tester : Implémentation des fonctions virtuelles de KoResourceModelBase*/
 
 QModelIndex KoResourceTableModel::indexFromResource(KoResource* resource) const
 {
@@ -420,7 +417,6 @@ void KoResourceTableModel::enableResourceFiltering(bool enable)
     }
 }
 
-//TODO Vérifier que le refreshResources est indispensable
 void KoResourceTableModel::searchTextChanged(const QString& searchString)
 {
     for (int i = 0; i < m_resourceAdapterList.size(); i++) {
@@ -466,7 +462,6 @@ QList< KoResource* > KoResourceTableModel::serverResources() const
     return res;
 }
 
-//TODO Voir si on peut optimiser
 void KoResourceTableModel::resourceAdded(KoResource *resource)
 {
     Q_UNUSED(resource);

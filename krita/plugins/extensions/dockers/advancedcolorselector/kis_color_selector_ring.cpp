@@ -25,6 +25,8 @@ USING_PART_OF_NAMESPACE_EIGEN
 #include <cmath>
 
 #include "KoColor.h"
+#include "kis_display_color_converter.h"
+
 
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
@@ -106,7 +108,8 @@ void KisColorSelectorRing::paint(QPainter* painter)
     }
 }
 
-QColor KisColorSelectorRing::selectColor(int x, int y) {
+KoColor KisColorSelectorRing::selectColor(int x, int y)
+{
     QPoint ringMiddle(width()/2, height()/2);
     QPoint ringCoord = QPoint(x, y)-ringMiddle;
     qreal hue = std::atan2(qreal(ringCoord.y()), qreal(ringCoord.x()))+(M_PI);
@@ -115,18 +118,21 @@ QColor KisColorSelectorRing::selectColor(int x, int y) {
     m_lastHue=hue;
     emit update();
 
-    return QColor();
+    return KoColor();
 }
 
-void KisColorSelectorRing::setColor(const QColor &color)
+void KisColorSelectorRing::setColor(const KoColor &color)
 {
+    qreal h, s, v;
+    m_parent->converter()->getHsvF(color, &h, &s, &v);
+
+    emit paramChanged(h, -1, -1, -1, -1);
+
     // selector keeps the position on the ring if hue is undefined (when saturation is 0)
-    if (!qFuzzyCompare(color.saturationF(), 0.0)) {
-        emit paramChanged(color.hueF(), -1, -1, -1, -1);
-        m_lastHue=color.hueF();
-    } else {
-        emit paramChanged(m_lastHue, -1, -1, -1, -1);
+    if (!qFuzzyCompare(s, 0.0)) {
+        m_lastHue=h;
     }
+
     emit update();
 }
 
@@ -190,12 +196,12 @@ void KisColorSelectorRing::colorCache()
 {
     Q_ASSERT(m_cachedColorSpace);
     m_cachedColors.clear();
-    KoColor koColor(m_cachedColorSpace);
+    KoColor koColor;
     QColor qColor;
     for(int i=0; i<360; i++) {
-        qColor.setHsv(i, 255, 255);
-        koColor.fromQColor(qColor);
-        m_cachedColors.append(koColor.toQColor().rgb());
+        koColor = m_parent->converter()->fromHsvF(1.0 * i / 360.0, 1.0, 1.0);
+        qColor = m_parent->converter()->toQColor(koColor);
+        m_cachedColors.append(qColor.rgb());
     }
 }
 

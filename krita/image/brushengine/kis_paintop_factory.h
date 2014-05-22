@@ -57,7 +57,6 @@ public:
     virtual ~KisPaintOpFactory() {}
 
     static QString categoryStable();
-    static QString categoryExperimental();
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     virtual void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings);

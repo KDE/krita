@@ -19,9 +19,12 @@
 #define KIS_SHADE_SELECTOR_LINE_H
 
 #include <QWidget>
+#include <KoColor.h>
+#include "kis_types.h"
 
 class KisCanvas2;
 class KisShadeSelectorLineComboBox;
+class KisColorSelectorBaseProxy;
 
 class KisShadeSelectorLineBase : public QWidget {
 public:
@@ -40,10 +43,16 @@ class KisShadeSelectorLine : public KisShadeSelectorLineBase
 {
     Q_OBJECT
 public:
-    explicit KisShadeSelectorLine(QWidget *parent = 0);
-    explicit KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent = 0, qreal hueShift = 0, qreal satShift = 0, qreal shiftVal = 0);
+
+    explicit KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProxy,
+                                  QWidget *parent = 0);
+    explicit KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
+                                  KisColorSelectorBaseProxy *parentProxy, QWidget *parent = 0, qreal hueShift = 0, qreal satShift = 0, qreal valShift = 0);
+
+    ~KisShadeSelectorLine();
+
     void setParam(qreal hue, qreal sat, qreal val, qreal hueShift, qreal satShift, qreal shiftVal);
-    void setColor(const QColor& color);
+    void setColor(const KoColor& color);
     void updateSettings();
     void setCanvas(KisCanvas2* canvas);
     void showHelpText() {m_displayHelpText=true;}
@@ -64,10 +73,8 @@ private:
     qreal m_saturationShift;
     qreal m_valueShift;
 
-    QColor m_color;
-    QColor m_backgroundColor;
-
-    QImage m_pixelCache;
+    KoColor m_realColor;
+    KisPaintDeviceSP m_realPixelCache;
 
     bool m_gradient;
     int m_patchCount;
@@ -75,6 +82,8 @@ private:
     bool m_displayHelpText;
 
     friend class KisShadeSelectorLineComboBox;
+
+    KisColorSelectorBaseProxy* m_parentProxy;
 };
 
 #endif // KIS_SHADE_SELECTOR_LINE_H

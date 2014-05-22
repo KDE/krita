@@ -61,12 +61,3 @@ vec4 filterPureLinear8(sampler2D texture, vec2 texcoord)
     return (p1 + p2 + p3 + p4 + p5 + p6) / vec4(11.0);
 
 }
-
-void main() {
-
-    if (viewportScale < 0.5 - eps) {
-        fragColor = filterPureLinear8(texture0, v_textureCoordinate.st);
-    } else {
-        fragColor = texture2D(texture0, v_textureCoordinate.st);
-    }
-}

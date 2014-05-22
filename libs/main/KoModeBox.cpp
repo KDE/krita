@@ -383,6 +383,7 @@ void KoModeBox::addItem(const KoToolButton button)
     sa->setContentsMargins(0,0,0,0);
     sa->setWidget(widget);
     sa->setFrameShape(QFrame::NoFrame);
+    sa->setFocusPolicy(Qt::NoFocus);
     d->stack->addWidget(sa);
     d->addedButtons.append(button);
 }

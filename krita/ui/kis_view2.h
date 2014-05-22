@@ -27,6 +27,7 @@
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
+#include "kis_floating_message.h"
 
 class KisAction;
 class QDragEnterEvent;
@@ -181,8 +182,9 @@ public:
     void enableControls();
     void disableControls();
 
+
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon);
+    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500, KisFloatingMessage::Priority priority = KisFloatingMessage::Medium);
 
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.

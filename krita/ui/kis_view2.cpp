@@ -227,6 +227,7 @@ public:
     QMainWindow* mainWindow;
     KisMirrorAxis* mirrorAxis;
     KisTooltipManager* tooltipManager;
+    QPointer<KisFloatingMessage> savedFloatingMessage;
 };
 
 
@@ -326,10 +327,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
     connect(rotateCanvasLeft, SIGNAL(triggered()),m_d->canvasController, SLOT(rotateCanvasLeft15()));
 
-    KAction *resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
-    actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
-    resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
-    connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasTransformations()));
+    KAction *resetCanvasRotation = new KAction(i18n("Reset Canvas Rotation"), this);
+    actionCollection()->addAction("reset_canvas_rotation", resetCanvasRotation);
+    resetCanvasRotation->setShortcut(QKeySequence("Ctrl+'"));
+    connect(resetCanvasRotation, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasRotation()));
 
     KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
     actionCollection()->addAction("wrap_around_mode", wrapAroundAction);
@@ -457,8 +458,13 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
 
-    m_d->tooltipManager = new KisTooltipManager(this);
-//     m_d->tooltipManager->record();
+    /**
+     * FIXME: for now enable tooltip manager only in non-sketch mode!
+     */
+    if (mainWindow()) {
+        m_d->tooltipManager = new KisTooltipManager(this);
+        // m_d->tooltipManager->record();
+    }
 }
 
 
@@ -1533,9 +1539,9 @@ void KisView2::showJustTheCanvas(bool toggled)
 
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
-        floatingMessage->showMessage();
+
+        showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                 actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), QIcon());
     }
 }
 
@@ -1592,14 +1598,18 @@ void KisView2::updateIcons()
     }
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
 {
     // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
     if (mainWindow()) {
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(icon);
-        floatingMessage->showMessage();
+        if (m_d->savedFloatingMessage) {
+            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
+        } else {
+            m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget(), false, timeout, priority);
+            m_d->savedFloatingMessage->setShowOverParent(true);
+            m_d->savedFloatingMessage->setIcon(icon);
+            m_d->savedFloatingMessage->showMessage();
+        }
     }
 #if QT_VERSION >= 0x040700
     emit floatingMessageRequested(message, icon.name());

@@ -178,6 +178,7 @@ QWidget * KisToolBrush::createOptionWidget()
     addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
 
     m_buttonGroup->button((int)m_smoothingOptions.smoothingType())->setChecked(true);
+    slotSetSmoothingType((int)m_smoothingOptions.smoothingType());
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionsWidget);

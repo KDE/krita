@@ -21,30 +21,12 @@
  */
 
 #include "indexcolors.h"
-#include <stdlib.h>
-#include <vector>
 
-#include <QPoint>
-#include <QTime>
-#include <qmath.h>
-
-#include <klocale.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
-
-#include <kis_processing_information.h>
-#include <kis_types.h>
-#include <kis_selection.h>
-#include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
-
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSet.h>
 #include <filter/kis_filter_configuration.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 
@@ -74,42 +56,17 @@ KisFilterIndexColors::KisFilterIndexColors() : KisColorTransformationFilter(id()
 
 KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    KisIndexColorPalette pal;
+    IndexColorPalette pal;
 
     PaletteGeneratorConfig palCfg;
     palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());
-
-    // Add all colors to the palette
-    for(int y = 0; y < 4; ++y)
-        for(int x = 0; x < 4; ++x)
-            if(palCfg.colorsEnabled[y][x])
-                pal.insertColor(palCfg.colors[y][x]);
-
-    // Now all this convulved code is for determining what gradients should be generated
-    for(int y = 0; y < 3; ++y)
-        for(int x = 0; x < 4; ++x)
-            if(palCfg.colorsEnabled[y][x] && palCfg.colorsEnabled[y+1][x])
-                pal.insertShades(palCfg.colors[y][x], palCfg.colors[y+1][x], palCfg.gradientSteps[y]);
-
-    if(palCfg.inbetweenRampSteps != 2)
+    pal = palCfg.generate();
+    if(config->getBool("reduceColorsEnabled"))
     {
-        for(int y = 0; y < 4; ++y)
-            for(int x = 0; x < 3; ++x)
-                if(palCfg.colorsEnabled[y][x] && palCfg.colorsEnabled[y][x+1])
-                    pal.insertShades(palCfg.colors[y][x], palCfg.colors[y][x+1], palCfg.inbetweenRampSteps);
+        int maxClrs = config->getInt("colorLimit");
+        while(pal.numColors() > maxClrs)
+            pal.mergeMostReduantColors();
     }
-
-    if(palCfg.diagonalGradients)
-        for(int y = 0; y < 3; ++y)
-            for(int x = 0; x < 4; ++x)
-            {
-                if(x+1 < 4)
-                    if(palCfg.colorsEnabled[y][x+1] && palCfg.colorsEnabled[y+1][x])
-                        pal.insertShades(palCfg.colors[y][x+1], palCfg.colors[y+1][x], palCfg.gradientSteps[y]);
-                if(x-1 >= 0)
-                    if(palCfg.colorsEnabled[y][x-1] && palCfg.colorsEnabled[y+1][x])
-                        pal.insertShades(palCfg.colors[y][x-1], palCfg.colors[y+1][x], palCfg.gradientSteps[y]);
-            }
 
     pal.similarityFactors.L = config->getFloat("LFactor");
     pal.similarityFactors.a = config->getFloat("aFactor");
@@ -137,11 +94,13 @@ KisFilterConfiguration* KisFilterIndexColors::factoryConfiguration(const KisPain
     config->setProperty("LFactor",    1.f);
     config->setProperty("aFactor",    1.f);
     config->setProperty("bFactor",    1.f);
-    config->setProperty("alphaSteps", 2);
+    config->setProperty("reduceColorsEnabled", false);
+    config->setProperty("colorLimit", 32);
+    config->setProperty("alphaSteps", 1);
     return config;
 }
 
-KisIndexColorTransformation::KisIndexColorTransformation(KisIndexColorPalette palette, const KoColorSpace* cs, int alphaSteps)
+KisIndexColorTransformation::KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace* cs, int alphaSteps)
     : m_colorSpace(cs),
       m_psize(cs->pixelSize())
 {
@@ -159,92 +118,6 @@ KisIndexColorTransformation::KisIndexColorTransformation(KisIndexColorPalette pa
         m_alphaHalfStep = 0;
     }
 }
-
-float KisIndexColorPalette::similarity(LabColor c0, LabColor c1) const
-{
-    static const qreal max = KoColorSpaceMathsTraits<quint16>::max;
-    quint16 diffL = qAbs(c0.L - c1.L);
-    quint16 diffa = qAbs(c0.a - c1.a);
-    quint16 diffb = qAbs(c0.b - c1.b);
-    float valL = diffL/max*similarityFactors.L;
-    float valA = diffa/max*similarityFactors.a;
-    float valB = diffb/max*similarityFactors.b;
-    return 1.f - qSqrt(valL * valL + valA * valA + valB * valB);
-}
-
-LabColor KisIndexColorPalette::getNearestIndex(LabColor clr) const
-{
-    float diffs[256];
-    for(int i = 0; i < numColors; ++i)
-        diffs[i] = similarity(colors[i], clr);
-
-    int primaryColor = 0;
-    for(int i = 0; i < numColors; ++i)
-        if(diffs[i] > diffs[primaryColor])
-            primaryColor = i;
-
-    return colors[primaryColor];
-}
-
-void KisIndexColorPalette::insertShades(LabColor clrA, LabColor clrB, int shades)
-{
-    if(shades == 0) return;
-    qint16  lumaStep = (clrB.L - clrA.L) / shades;
-    qint16 astarStep = (clrB.a - clrA.a) / shades;
-    qint16 bstarStep = (clrB.b - clrA.b) / shades;
-    for(int i = 0; i < shades; ++i)
-    {
-        clrA.L += lumaStep;
-        clrA.a += astarStep;
-        clrA.b += bstarStep;
-        insertColor(clrA);
-    }
-}
-
-void KisIndexColorPalette::insertShades(KoColor koclrA, KoColor koclrB, int shades)
-{
-    koclrA.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    koclrB.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    LabColor clrA = *(reinterpret_cast<LabColor*>(koclrA.data()));
-    LabColor clrB = *(reinterpret_cast<LabColor*>(koclrB.data()));
-    insertShades(clrA, clrB, shades);
-}
-
-void KisIndexColorPalette::insertShades(QColor qclrA, QColor qclrB, int shades)
-{
-    KoColor koclrA;
-    koclrA.fromQColor(qclrA);
-    koclrA.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    KoColor koclrB;
-    koclrB.fromQColor(qclrB);
-    koclrB.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    LabColor clrA = *(reinterpret_cast<LabColor*>(koclrA.data()));
-    LabColor clrB = *(reinterpret_cast<LabColor*>(koclrB.data()));
-    insertShades(clrA, clrB, shades);
-}
-
-void KisIndexColorPalette::insertColor(LabColor clr)
-{
-    if(numColors == 255) return;
-    colors[numColors++] = clr;
-}
-
-void KisIndexColorPalette::insertColor(KoColor koclr)
-{
-    koclr.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    LabColor clr = *(reinterpret_cast<LabColor*>(koclr.data()));
-    insertColor(clr);
-}
-
-void KisIndexColorPalette::insertColor(QColor qclr)
-{
-    KoColor koclr;
-    koclr.fromQColor(qclr);
-    koclr.convertTo(KoColorSpaceRegistry::instance()->lab16());
-    LabColor clr = *(reinterpret_cast<LabColor*>(koclr.data()));
-    insertColor(clr);
-}
-
 
 void KisIndexColorTransformation::transform(const quint8* src, quint8* dst, qint32 nPixels) const
 {

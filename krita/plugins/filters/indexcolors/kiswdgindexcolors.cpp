@@ -34,7 +34,9 @@ KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): 
     connect(ui->diagCheck,  SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->inbetweenSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->alphaStepsSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
-
+    connect(ui->colorLimit, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(ui->colorLimitCheck, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationItemChanged()));
+    
     connect(ui->luminanceSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->aSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(ui->bSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
@@ -69,9 +71,9 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
         QLabel* l2 = new QLabel(shadesLabels[row]);
 
         QSpinBox* s = new QSpinBox();
-        s->setMinimum(2);
+        s->setMinimum(0);
         s->setMaximum(32);
-        s->setValue(4);
+        s->setValue(2);
 
         connect(s, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationItemChanged()));
         m_stepSpinners[row] = s;
@@ -127,12 +129,18 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
 
     palCfg.diagonalGradients = ui->diagCheck->isChecked();
     palCfg.inbetweenRampSteps = ui->inbetweenSpinBox->value();
+    
+    IndexColorPalette pal = palCfg.generate();
+    ui->colorCount->setText(QString::number(pal.numColors()));
 
     config->setProperty("paletteGen", palCfg.toByteArray());
 
     config->setProperty("LFactor",   ui->luminanceSlider->value() / 100.f);
     config->setProperty("aFactor",   ui->aSlider->value() / 100.f);
     config->setProperty("bFactor",   ui->bSlider->value() / 100.f);
+    
+    config->setProperty("reduceColorsEnabled", ui->colorLimitCheck->isChecked());
+    config->setProperty("colorLimit", ui->colorLimit->value());
 
     config->setProperty("alphaSteps", ui->alphaStepsSpinBox->value());
     return config;
@@ -140,14 +148,16 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
 
 void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* config)
 {
+    PaletteGeneratorConfig palCfg;
+    palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());
+    
     ui->luminanceSlider->setValue(config->getFloat("LFactor")*100);
     ui->aSlider->setValue(config->getFloat("aFactor")*100);
     ui->bSlider->setValue(config->getFloat("bFactor")*100);
     ui->alphaStepsSpinBox->setValue(config->getInt("alphaSteps"));
-
-    PaletteGeneratorConfig palCfg;
-    palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());
-
+    ui->colorLimitCheck->setChecked(config->getBool("reduceColorsEnabled"));
+    ui->colorLimit->setEnabled(config->getBool("reduceColorsEnabled"));
+    ui->colorLimit->setValue(config->getInt("colorLimit"));
     ui->diagCheck->setChecked(palCfg.diagonalGradients);
     ui->inbetweenSpinBox->setValue(palCfg.inbetweenRampSteps);
 
@@ -161,4 +171,7 @@ void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* confi
 
     for(int y = 0; y < 3; ++y)
         m_stepSpinners[y]->setValue(palCfg.gradientSteps[y]);
+    
+    IndexColorPalette pal = palCfg.generate();
+    ui->colorCount->setText(QString::number(pal.numColors()));
 }

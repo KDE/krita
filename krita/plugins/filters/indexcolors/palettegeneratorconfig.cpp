@@ -41,7 +41,7 @@ PaletteGeneratorConfig::PaletteGeneratorConfig()
         gradientSteps[i] = 4;
 
     inbetweenRampSteps = 2;
-    diagonalGradients = true;
+    diagonalGradients = false;
 }
 
 QByteArray PaletteGeneratorConfig::toByteArray()
@@ -96,4 +96,44 @@ void PaletteGeneratorConfig::fromByteArray(const QByteArray& str)
     }
     else
         qDebug("PaletteGeneratorConfig::FromByteArray: Unsupported data version");
+}
+
+IndexColorPalette PaletteGeneratorConfig::generate()
+{
+    IndexColorPalette pal;
+    // Add all colors to the palette
+    for(int y = 0; y < 4; ++y)
+        for(int x = 0; x < 4; ++x)
+            if(colorsEnabled[y][x])
+                pal.insertColor(colors[y][x]);
+
+    for(int y = 0; y < 3; ++y)
+    {
+        for(int x = 0; x < 4; ++x)
+            if(colorsEnabled[y][x] && colorsEnabled[y+1][x])
+                pal.insertShades(colors[y][x], colors[y+1][x], gradientSteps[y]);
+    }
+
+    if(inbetweenRampSteps)
+    {
+        for(int y = 0; y < 4; ++y)
+            for(int x = 0; x < 3; ++x)
+                if(colorsEnabled[y][x] && colorsEnabled[y][x+1])
+                    pal.insertShades(colors[y][x], colors[y][x+1], inbetweenRampSteps);
+    }
+
+    if(diagonalGradients)
+    {
+        for(int y = 0; y < 3; ++y)
+            for(int x = 0; x < 4; ++x)
+            {
+                if(x+1 < 4)
+                    if(colorsEnabled[y][x+1] && colorsEnabled[y+1][x])
+                        pal.insertShades(colors[y][x+1], colors[y+1][x], gradientSteps[y]);
+                if(x-1 >= 0)
+                    if(colorsEnabled[y][x-1] && colorsEnabled[y+1][x])
+                        pal.insertShades(colors[y][x-1], colors[y+1][x], gradientSteps[y]);
+            }
+    }
+    return pal;
 }

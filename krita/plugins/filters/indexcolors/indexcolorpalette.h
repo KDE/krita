@@ -20,21 +20,47 @@
  * this software.
  */
 
-#pragma once
+#ifndef INDEXCOLORPALETTE_H
+#define INDEXCOLORPALETTE_H
 
+#include <QVector>
 #include <QColor>
-#include "indexcolorpalette.h"
+#include <QPair>
+#include <KoColor.h>
 
-struct PaletteGeneratorConfig
+struct LabColor
 {
-    QColor colors[4][4];
-    bool   colorsEnabled[4][4];
-    int    gradientSteps[3];
-    int    inbetweenRampSteps;
-    bool   diagonalGradients;
-
-    PaletteGeneratorConfig();
-    QByteArray toByteArray();
-    void fromByteArray(const QByteArray& str);
-    IndexColorPalette generate();
+    quint16 L;
+    quint16 a;
+    quint16 b;
 };
+
+struct IndexColorPalette
+{
+    QVector<LabColor> colors;
+
+    struct
+    {
+        float L;
+        float a;
+        float b;
+    } similarityFactors;
+
+    IndexColorPalette();
+    void insertShades(QColor clrA, QColor clrB, int shades);
+    void insertShades(KoColor clrA, KoColor clrB, int shades);
+    void insertShades(LabColor clrA, LabColor clrB, int shades);
+    
+    void insertColor(QColor clr);
+    void insertColor(KoColor clr);
+    void insertColor(LabColor clr);
+    
+    void mergeMostReduantColors();
+    
+    LabColor getNearestIndex(LabColor clr) const;
+    int numColors() const;
+    float similarity(LabColor c0, LabColor c1) const;
+    QPair< int, int > getNeighbours(int mainClr) const;
+};
+
+#endif // INDEXCOLORPALETTE_H

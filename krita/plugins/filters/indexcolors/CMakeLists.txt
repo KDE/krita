@@ -1,4 +1,4 @@
-set(INDEXCOLORS_SOURCE kiswdgindexcolors.cpp indexcolors.cpp palettegeneratorconfig.cpp)
+set(INDEXCOLORS_SOURCE kiswdgindexcolors.cpp indexcolors.cpp indexcolorpalette.cpp palettegeneratorconfig.cpp)
 
 kde4_add_ui_files(INDEXCOLORS_SOURCE kiswdgindexcolors.ui)
 

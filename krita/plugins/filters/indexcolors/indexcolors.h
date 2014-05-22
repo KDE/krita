@@ -29,6 +29,8 @@
 #include "kis_config_widget.h"
 #include <KoColor.h>
 
+#include "indexcolorpalette.h"
+
 class IndexColors : public QObject
 {
     Q_OBJECT
@@ -51,48 +53,15 @@ protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
-struct LabColor
-{
-    quint16 L;
-    quint16 a;
-    quint16 b;
-};
-
-struct KisIndexColorPalette
-{
-    LabColor colors[256];
-    int numColors;
-
-    struct
-    {
-        float L;
-        float a;
-        float b;
-    } similarityFactors;
-
-    KisIndexColorPalette()
-    {
-        numColors = 0;
-    };
-    void insertShades(QColor clrA, QColor clrB, int shades);
-    void insertShades(KoColor clrA, KoColor clrB, int shades);
-    void insertShades(LabColor clrA, LabColor clrB, int shades);
-    void insertColor(LabColor clr);
-    void insertColor(KoColor clr);
-    void insertColor(QColor clr);
-    LabColor getNearestIndex(LabColor clr) const;
-    float similarity(LabColor c0, LabColor c1) const;
-};
-
 class KisIndexColorTransformation : public KoColorTransformation
 {
 public:
-    KisIndexColorTransformation(KisIndexColorPalette palette, const KoColorSpace* cs, int alphaSteps);
+    KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace* cs, int alphaSteps);
     virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;
-    KisIndexColorPalette m_palette;
+    IndexColorPalette m_palette;
     quint16 m_alphaStep;
     quint16 m_alphaHalfStep;
 };

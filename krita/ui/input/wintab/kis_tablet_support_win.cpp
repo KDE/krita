@@ -232,9 +232,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qt_tablet_tilt_support = tpOri[0].axResolution && tpOri[1].axResolution;
     }
 
-    tdd.minRotation = 0;
-    tdd.maxRotation = int(tpOri[2].axResolution);
-
     tdd.minX = int(lc.lcOutOrgX);
     tdd.maxX = int(qAbs(lc.lcOutExtX)) + int(lc.lcOutOrgX);
 
@@ -249,7 +246,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qDebug() << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
         qDebug() << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
         qDebug() << ppVar(qt_tablet_tilt_support);
-        qDebug() << ppVar(tdd.minRotation) << ppVar(tdd.maxRotation);
         qDebug() << ppVar(tdd.minX) << ppVar(tdd.maxX);
         qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
         qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
@@ -477,9 +473,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             tiltX = int(degX * (180 / Q_PI));
             tiltY = int(-degY * (180 / Q_PI));
 
-            // FIXME: rotation support is not finished yet!
-            rotation = qreal(ort.orTwist - currentTabletPointer.minRotation) /
-                (currentTabletPointer.maxRotation - currentTabletPointer.minRotation) * 360.0;
+            // Rotation is measured in degrees. Axis inverted to fit
+            // the coordinate system of the Linux driver.
+            rotation = (360 - 1) - ort.orTwist / 10;
         }
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {

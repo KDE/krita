@@ -23,6 +23,8 @@
 #include <half.h>
 #endif
 
+#include <cmath>
+
 #include <kis_debug.h>
 
 #include <QHBoxLayout>
@@ -37,7 +39,7 @@
 #include <KoColorSlider.h>
 #include <KoColorSpace.h>
 
-KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color) : QWidget(parent), m_channelInfo(channelInfo), m_color(color)
+KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer)
 {
 }
 
@@ -48,7 +50,7 @@ void KisColorInput::init()
     m_label->setMinimumWidth(50);
     m_layout->addWidget(m_label);
 
-    m_colorSlider = new KoColorSlider(Qt::Horizontal, this);
+    m_colorSlider = new KoColorSlider(Qt::Horizontal, this, m_displayRenderer);
     m_colorSlider->setMaximumHeight(20);
     m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_layout->addWidget(m_colorSlider);
@@ -58,7 +60,7 @@ void KisColorInput::init()
     m_layout->addWidget(m_input);
 }
 
-KisIntegerColorInput::KisIntegerColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color) : KisColorInput(parent, channelInfo, color)
+KisIntegerColorInput::KisIntegerColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, channelInfo, color, displayRenderer)
 {
     init();
 }
@@ -141,7 +143,7 @@ QWidget* KisIntegerColorInput::createInput()
 }
 
 
-KisFloatColorInput::KisFloatColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color) : KisColorInput(parent, channelInfo, color)
+KisFloatColorInput::KisFloatColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, channelInfo, color, displayRenderer)
 {
     init();
 }
@@ -176,38 +178,60 @@ QWidget* KisFloatColorInput::createInput()
 
 void KisFloatColorInput::sliderChanged(int i)
 {
-    m_dblNumInput->setValue(i / 255.0);
+    const qreal minVisibleFloatValue = m_displayRenderer->minVisibleFloatValue();
+    const qreal maxVisibleFloatValue = m_displayRenderer->maxVisibleFloatValue();
+    const qreal floatRange = maxVisibleFloatValue - minVisibleFloatValue;
+
+    m_dblNumInput->setValue(minVisibleFloatValue + (i / 255.0) * floatRange);
 }
 
 void KisFloatColorInput::update()
 {
+    const qreal minVisibleFloatValue = m_displayRenderer->minVisibleFloatValue();
+    const qreal maxVisibleFloatValue = m_displayRenderer->maxVisibleFloatValue();
+    const qreal floatRange = maxVisibleFloatValue - minVisibleFloatValue;
+
+    m_dblNumInput->setMinimum(minVisibleFloatValue);
+    m_dblNumInput->setMaximum(maxVisibleFloatValue);
+
+    // ensure at least 3 significant digits are always shown
+    int newPrecision = 2 + std::max(0.0, std::ceil(-std::log10(maxVisibleFloatValue)));
+    if (newPrecision != m_dblNumInput->decimals()) {
+        m_dblNumInput->setDecimals(newPrecision);
+        m_dblNumInput->updateGeometry();
+    }
+
     KoColor min = *m_color;
     KoColor max = *m_color;
     quint8* data = m_color->data() + m_channelInfo->pos();
     quint8* dataMin = min.data() + m_channelInfo->pos();
     quint8* dataMax = max.data() + m_channelInfo->pos();
+
+    qreal value = 1.0;
+
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
-        m_dblNumInput->setValue(*(reinterpret_cast<half*>(data)));
-        m_colorSlider->setValue(*(reinterpret_cast<half*>(data)) * 255);
-        *(reinterpret_cast<half*>(dataMin)) = 0.0;
-        *(reinterpret_cast<half*>(dataMax)) = 1.0;
+        value = *(reinterpret_cast<half*>(data));
+        *(reinterpret_cast<half*>(dataMin)) = minVisibleFloatValue;
+        *(reinterpret_cast<half*>(dataMax)) = maxVisibleFloatValue;
         break;
 #endif
     case KoChannelInfo::FLOAT32:
-        m_dblNumInput->setValue(*(reinterpret_cast<float*>(data)));
-        m_colorSlider->setValue(*(reinterpret_cast<float*>(data)) * 255);
-        *(reinterpret_cast<float*>(dataMin)) = 0.0;
-        *(reinterpret_cast<float*>(dataMax)) = 1.0;
+        value = *(reinterpret_cast<float*>(data));
+        *(reinterpret_cast<float*>(dataMin)) = minVisibleFloatValue;
+        *(reinterpret_cast<float*>(dataMax)) = maxVisibleFloatValue;
         break;
     default:
         Q_ASSERT(false);
     }
     m_colorSlider->setColors(min, max);
+
+    m_dblNumInput->setValue(value);
+    m_colorSlider->setValue((value - minVisibleFloatValue) / floatRange * 255);
 }
 
-KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color) : KisColorInput(parent, 0, color)
+KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer) : KisColorInput(parent, 0, color, displayRenderer)
 {
     QHBoxLayout* m_layout = new QHBoxLayout(this);
     QLabel* m_label = new QLabel(i18n("Color name:"), this);

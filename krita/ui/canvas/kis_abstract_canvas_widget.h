@@ -28,7 +28,9 @@ class KoToolProxy;
 
 class KisCanvas2;
 class KisCanvasDecoration;
-class KisDisplayFilter;
+
+#include "kis_types.h"
+
 
 class KisAbstractCanvasWidget
 {
@@ -55,7 +57,7 @@ public:
     virtual QList<KisCanvasDecoration*> decorations() const = 0;
 
     /// set the specified display filter on the canvas
-    virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
+    virtual void setDisplayFilter(KisDisplayFilterSP displayFilter) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
 

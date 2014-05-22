@@ -24,11 +24,14 @@
 
 class KisShadeSelectorLineBase;
 class KisShadeSelectorLineEditor;
+class KisColorSelectorBaseProxy;
 
 
 class KisShadeSelectorLineComboBoxPopup : public QWidget {
     Q_OBJECT
 public:
+    ~KisShadeSelectorLineComboBoxPopup();
+
     const int spacing;
 
     KisShadeSelectorLineComboBoxPopup(QWidget* parent);
@@ -52,6 +55,7 @@ private:
 
     QRect m_highlightedArea;
     QRect m_selectedArea;
+    QScopedPointer<KisColorSelectorBaseProxy> m_parentProxy;
 };
 
 #endif /* __KIS_SHADE_SELECTOR_LINE_COMBO_BOX_POPUP_H */

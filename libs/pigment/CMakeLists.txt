@@ -35,6 +35,7 @@ add_subdirectory(benchmarks)
 set(pigmentcms_SRCS
     KoBasicHistogramProducers.cpp
     KoColor.cpp
+    KoColorDisplayRendererInterface.cpp
     KoColorConversionAlphaTransformation.cpp
     KoColorConversionCache.cpp
     KoColorConversions.cpp

@@ -27,34 +27,37 @@
 #include "kis_global.h"
 #include "kis_shade_selector_line.h"
 #include "kis_shade_selector_line_editor.h"
+#include "kis_color_selector_base_proxy.h"
+
 
 KisShadeSelectorLineComboBoxPopup::KisShadeSelectorLineComboBoxPopup(QWidget* parent)
     : QWidget(parent, Qt::Popup),
       spacing(10),
       m_lastHighlightedItem(0),
       m_lastSelectedItem(0),
-      m_lineEditor(0)
+      m_lineEditor(0),
+      m_parentProxy(new KisColorSelectorBaseProxyNoop())
 {
     setMouseTracking(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(spacing);
 
-    layout->addWidget(new KisShadeSelectorLine(1.0, 0.0, 0.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.1, 0.0, 0.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.2, 0.0, 0.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 1.0, 0.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.0, 0.5, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.0, 1.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 1.0, 1.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, -1.0, 1.0, this));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, this, -0.04));
-    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, this, +0.04));
-    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, this, -0.04));
-    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, this, +0.04));
+    layout->addWidget(new KisShadeSelectorLine(1.0, 0.0, 0.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.1, 0.0, 0.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.2, 0.0, 0.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 1.0, 0.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.0, 0.5, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.0, 1.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 1.0, 1.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, -1.0, 1.0, m_parentProxy.data(), this));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, m_parentProxy.data(), this, -0.04));
+    layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, m_parentProxy.data(), this, +0.04));
+    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this, -0.04));
+    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this, +0.04));
 
     m_lineEditor = new KisShadeSelectorLineEditor(this);
     layout->addWidget(m_lineEditor);
@@ -66,10 +69,16 @@ KisShadeSelectorLineComboBoxPopup::KisShadeSelectorLineComboBoxPopup(QWidget* pa
         if(item!=0) {
             item->setMouseTracking(true);
             item->setEnabled(false);
-            item->setColor(QColor(190,50,50));
+            KoColor color;
+            color.fromQColor(QColor(190, 50, 50));
+            item->setColor(color);
             item->showHelpText();
         }
     }
+}
+
+KisShadeSelectorLineComboBoxPopup::~KisShadeSelectorLineComboBoxPopup()
+{
 }
 
 void KisShadeSelectorLineComboBoxPopup::setConfiguration(const QString &string)

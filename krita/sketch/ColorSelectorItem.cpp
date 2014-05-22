@@ -30,6 +30,8 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QTimer>
+#include "kis_display_color_converter.h"
+
 
 class ColorSelectorItem::Private
 {
@@ -38,8 +40,7 @@ public:
         : q(qq)
         , selector(new KisColorSelector)
         , view(0)
-        , colorRole(KisColorSelectorBase::Foreground)
-        , currentColor(0, 0, 0)
+        , colorRole(Acs::Foreground)
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
         , changeBackground(false)
@@ -87,40 +88,32 @@ public:
     KisColorSelectorComponent* sub;
 
     KisView2* view;
-    KisColorSelectorBase::ColorRole colorRole;
-    QColor currentColor;
+    Acs::ColorRole colorRole;
+    KoColor currentColor;
     KisColorSelectorComponent* grabbingComponent;
 
-    void commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role);
+    void commitColor(const KoColor& color, Acs::ColorRole role);
     bool colorUpdateAllowed;
     bool changeBackground;
     bool shown;
     QTimer* repaintTimer;
+
+    void colorChangedImpl(const KoColor &color, Acs::ColorRole role);
 };
 
-void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role)
+void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRole role)
 {
     if (!view->canvas())
         return;
 
-    if (role==KisColorSelectorBase::Foreground)
-    {
-        if (view->resourceProvider()->fgColor() == color)
-            return;
-        colorUpdateAllowed=false;
-        view->resourceProvider()->setFGColor(color);
-        emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), false);
-        colorUpdateAllowed=true;
-    }
-    else
-    {
-        if (view->resourceProvider()->bgColor() == color)
-            return;
-        colorUpdateAllowed=false;
-        view->resourceProvider()->setBGColor(color);
-        emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), true);
-        colorUpdateAllowed=true;
-    }
+    KoColor currentColor = Acs::currentColor(view->resourceProvider(), role);
+    if (color == currentColor) return;
+
+    colorUpdateAllowed = false;
+    Acs::setCurrentColor(view->resourceProvider(), role, color);
+    QColor qcolor = selector->converter()->toQColor(currentColor);
+    emit q->colorChanged(qcolor, color.opacityF(), false);
+    colorUpdateAllowed = true;
 }
 
 ColorSelectorItem::ColorSelectorItem(QDeclarativeItem* parent)
@@ -204,27 +197,26 @@ void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF&
             }
         }
     }
-    if (d->view)
-    {
-        if (d->colorRole == KisColorSelectorBase::Foreground)
-            d->selector->setColor(d->view->resourceProvider()->resourceManager()->foregroundColor().toQColor());
-        else
-            d->selector->setColor(d->view->resourceProvider()->resourceManager()->backgroundColor().toQColor());
+
+    if (d->view) {
+        d->selector->setColor(Acs::currentColor(d->view->resourceProvider(), d->colorRole));
     }
+
     d->repaintTimer->start();
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton && d->changeBackground != true)
-        d->colorRole=KisColorSelectorBase::Foreground;
-    else
-        d->colorRole=KisColorSelectorBase::Background;
-    if (d->main->wantsGrab(event->pos().x(), event->pos().y()))
-        d->grabbingComponent=d->main;
-    else if (d->sub->wantsGrab(event->pos().x(), event->pos().y()))
-        d->grabbingComponent=d->sub;
+    d->colorRole = d->changeBackground ?
+        Acs::Background : Acs::buttonToRole(event->button());
+
+    if (d->main->wantsGrab(event->pos().x(), event->pos().y())) {
+        d->grabbingComponent = d->main;
+    } else if (d->sub->wantsGrab(event->pos().x(), event->pos().y())) {
+        d->grabbingComponent = d->sub;
+    }
+
     mouseEvent(event);
 }
 
@@ -244,10 +236,10 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
     {
         d->grabbingComponent->mouseEvent(event->pos().x(), event->pos().y());
 
-        qreal alpha = d->currentColor.alphaF();
-        d->currentColor=d->main->currentColor();
-        d->currentColor.setAlphaF(alpha);
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        qreal alpha = d->currentColor.opacityF();
+        d->currentColor = d->main->currentColor();
+        d->currentColor.setOpacity(alpha);
+        d->commitColor(d->currentColor, d->colorRole);
         d->repaintTimer->start();
     }
 }
@@ -266,7 +258,7 @@ void ColorSelectorItem::setView(QObject* newView)
         connect(d->view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)),
                 this, SLOT(bgColorChanged(KoColor)));
 
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        d->commitColor(d->currentColor, d->colorRole);
         setChangeBackground(changeBackground());
     }
     emit viewChanged();
@@ -280,14 +272,14 @@ bool ColorSelectorItem::changeBackground() const
 void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
 {
     d->changeBackground = newChangeBackground;
-    d->colorRole = newChangeBackground ? KisColorSelectorBase::Background : KisColorSelectorBase::Foreground;
+    d->colorRole = newChangeBackground ? Acs::Background : Acs::Foreground;
     emit changeBackgroundChanged();
     if (!d->view)
         return;
-    if (newChangeBackground)
-        d->currentColor = d->view->resourceProvider()->bgColor().toQColor();
-    else
-        d->currentColor = d->view->resourceProvider()->fgColor().toQColor();
+
+
+    d->currentColor = Acs::currentColor(d->view->resourceProvider(), d->colorRole);
+
     d->main->setColor(d->currentColor);
     d->sub->setColor(d->currentColor);
     d->repaintTimer->start();
@@ -307,46 +299,36 @@ void ColorSelectorItem::setShown(bool newShown)
 void ColorSelectorItem::setAlpha(int percentValue)
 {
     qreal alpha = (float)percentValue / 100.0;
-    d->currentColor.setAlphaF(alpha);
+    d->currentColor.setOpacity(alpha);
     if (d->view) {
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        d->commitColor(d->currentColor, d->colorRole);
     }
+}
+
+void ColorSelectorItem::Private::colorChangedImpl(const KoColor &newColor, Acs::ColorRole role)
+{
+    if (colorRole != role) return;
+    if (colorUpdateAllowed == false) return;
+
+    if(newColor == currentColor) return;
+
+    currentColor = newColor;
+    main->setColor(newColor);
+    sub->setColor(newColor);
+    commitColor(currentColor, colorRole);
+    QColor qcolor = selector->converter()->toQColor(currentColor);
+    emit q->colorChanged(qcolor, currentColor.opacityF(), false);
+    repaintTimer->start();
 }
 
 void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
 {
-    if (d->colorRole == KisColorSelectorBase::Foreground )
-    {
-        if (d->colorUpdateAllowed==false)
-            return;
-        QColor c = d->selector->findGeneratingColor(newColor);
-        if(c == d->currentColor)
-            return;
-        d->currentColor = c;
-        d->main->setColor(c);
-        d->sub->setColor(c);
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
-        emit colorChanged(d->currentColor, d->currentColor.alphaF(), false);
-        d->repaintTimer->start();
-    }
+    d->colorChangedImpl(newColor, Acs::Foreground);
 }
 
 void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
 {
-    if (d->colorRole == KisColorSelectorBase::Background )
-    {
-        if (d->colorUpdateAllowed==false)
-            return;
-        QColor c = d->selector->findGeneratingColor(newColor);
-        if(c == d->currentColor)
-            return;
-        d->currentColor = c;
-        d->main->setColor(c);
-        d->sub->setColor(c);
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
-        emit colorChanged(d->currentColor, d->currentColor.alphaF(), true);
-        d->repaintTimer->start();
-    }
+    d->colorChangedImpl(newColor, Acs::Background);
 }
 
 void ColorSelectorItem::repaint()

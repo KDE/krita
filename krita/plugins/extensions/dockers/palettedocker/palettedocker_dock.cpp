@@ -40,6 +40,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -189,6 +190,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
     KisView2* view = m_canvas->view();
     connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
@@ -216,11 +218,16 @@ void PaletteDockerDock::addColorForeground()
 void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
+
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
         QColor color;
-        int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
+
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
-            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);
             m_currentColorSet->save();
             setColorSet(m_currentColorSet); // update model

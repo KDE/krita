@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <QQueue>
 #include <KoTriangleColorSelector.h>
+#include <KoColorDisplayRendererInterface.h>
+
 
 class KisFavoriteBrushData;
 class KisFavoriteResourceManager;
@@ -39,7 +41,7 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, QWidget *parent = 0);
+    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
@@ -94,6 +96,7 @@ private:
 
     QTimer* m_timer;
     QTimer* m_colorChangeTimer;
+    const KoColorDisplayRendererInterface *m_displayRenderer;
 
 signals:
     void sigChangeActivePaintop(int);
@@ -110,7 +113,7 @@ signals:
 
 private slots:
 
-    void slotChangefGColor(const QColor& newColor);
+    void slotChangefGColor(const KoColor& newColor);
     void slotColorChangeTimeout();
     void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
     void slotTriggerTimer();

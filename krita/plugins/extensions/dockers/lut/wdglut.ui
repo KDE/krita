@@ -6,21 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>224</width>
+    <width>282</width>
     <height>279</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -32,32 +23,12 @@
       <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="leftMargin">
+      <property name="margin">
        <number>2</number>
       </property>
-      <property name="topMargin">
-       <number>2</number>
-      </property>
-      <property name="rightMargin">
-       <number>2</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QCheckBox" name="m_chkUseOcioEnvironment">
-          <property name="text">
-           <string>Use Environment</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item>
        <layout class="QFormLayout" name="gridLayout">
-        <item row="4" column="1">
+        <item row="5" column="1">
          <widget class="SqueezedComboBox" name="m_cmbView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -67,8 +38,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_2">
+        <item row="4" column="0">
+         <widget class="QLabel" name="m_lblDisplayDevice">
           <property name="text">
            <string>Display Device:</string>
           </property>
@@ -80,7 +51,7 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Components:</string>
@@ -93,7 +64,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="SqueezedComboBox" name="m_cmbDisplayDevice">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -103,7 +74,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="SqueezedComboBox" name="m_cmbInputColorSpace">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -113,7 +84,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="label_7">
           <property name="text">
            <string>Exposure:</string>
@@ -126,8 +97,8 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
+        <item row="3" column="0">
+         <widget class="QLabel" name="m_lblInputColorSpace">
           <property name="text">
            <string>Input ColorSpace:</string>
           </property>
@@ -139,7 +110,7 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="7" column="1">
          <widget class="KisDoubleWidget" name="m_exposureDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -149,7 +120,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QLabel" name="lblConfig">
           <property name="text">
            <string>Configuration:</string>
@@ -162,7 +133,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLineEdit" name="m_txtConfigurationPath">
@@ -180,7 +151,7 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="m_lblLut">
           <property name="text">
            <string>LUT file:</string>
@@ -193,7 +164,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QLineEdit" name="m_txtLut">
@@ -218,7 +189,7 @@
           </item>
          </layout>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="SqueezedComboBox" name="m_cmbComponents">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -228,7 +199,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="8" column="1">
          <widget class="KisDoubleWidget" name="m_gammaDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -238,7 +209,7 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>Gamma:</string>
@@ -251,8 +222,8 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_3">
+        <item row="5" column="0">
+         <widget class="QLabel" name="m_lblView">
           <property name="text">
            <string>View:</string>
           </property>
@@ -262,6 +233,38 @@
           <property name="buddy">
            <cstring>m_cmbView</cstring>
           </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Color Engine:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="m_colorManagement">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>Internal</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>OCIO</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>OCIO (environment)</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

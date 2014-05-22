@@ -28,7 +28,6 @@
 #include <KoColor.h>
 
 class QString;
-class QColor;
 class QStringList;
 class QToolButton;
 class QPoint;
@@ -82,7 +81,7 @@ public:
     virtual void syncTagRemoval(const QString& tag);
 
     //BgColor;
-    QColor bgColor();
+    KoColor bgColor() const;
 
     /**
      * Set palette to block updates, paintops won't be deleted when they are deleted from server
@@ -102,7 +101,7 @@ signals:
     // is not visible
     void sigEnableChangeColor(bool b);
 
-    void sigChangeFGColorSelector(const QColor&);
+    void sigChangeFGColorSelector(const KoColor&);
 
     void setSelectedColor(int);
 
@@ -138,7 +137,7 @@ private:
 
     void saveFavoritePresets();
 
-    QColor m_bgColor;
+    KoColor m_bgColor;
 };
 
 #endif

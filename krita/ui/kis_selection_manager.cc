@@ -164,6 +164,8 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_invert->setActivationFlags(KisAction::PIXEL_SELECTION_WITH_PIXELS);
     m_invert->setActivationConditions(KisAction::SELECTION_EDITABLE);
     m_invert->setOperationID("invertselection");
+    m_invert->setToolTip("foo");
+
     actionManager->addAction("invert", m_invert, collection);
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
 
@@ -174,6 +176,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     actionManager->addAction("copy_selection_to_new_layer", m_copyToNewLayer, collection);
     m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_J));
     connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
+
 
     m_cutToNewLayer  = new KisAction(i18n("Cut Selection to New Layer"), this);
     m_cutToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);

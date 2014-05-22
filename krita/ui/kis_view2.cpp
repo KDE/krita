@@ -458,8 +458,13 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
     updateIcons();
 
-    m_d->tooltipManager = new KisTooltipManager(this);
-//     m_d->tooltipManager->record();
+    /**
+     * FIXME: for now enable tooltip manager only in non-sketch mode!
+     */
+    if (mainWindow()) {
+        m_d->tooltipManager = new KisTooltipManager(this);
+        // m_d->tooltipManager->record();
+    }
 }
 
 

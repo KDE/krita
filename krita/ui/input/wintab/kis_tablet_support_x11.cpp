@@ -623,41 +623,36 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     fetchWacomToolId(deviceType, uid);
 
     QRect screenArea = qApp->desktop()->rect();
+
+    /**
+     * Some 'nice' tablet drivers (evdev) do not return the value
+     * of all the axes each time. Instead they tell about the
+     * recenty changed axes only, so we have to keep the state of
+     * all the axes internally and update the relevant part only.
+     */
+    bool hasSaneData = false;
     if (motion) {
-        /**
-         * Some 'nice' tablet drivers (evdev) do not return the value
-         * of all the axes each time. Instead they tell about the
-         * recenty changed axes only, so we have to keep the state of
-         * all the axes internally and update the relevant part only.
-         */
-        bool hasSaneData =
+        hasSaneData =
             tablet->savedAxesData.updateAxesData(motion->first_axis,
                                                  motion->axes_count,
                                                  motion->axis_data);
-        if (!hasSaneData) return false;
-
-        hiRes = tablet->savedAxesData.position(tablet, screenArea);
-        pressure = tablet->savedAxesData.pressure();
-        xTilt = tablet->savedAxesData.xTilt();
-        yTilt = tablet->savedAxesData.yTilt();
-        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
-            (tablet->maxRotation - tablet->minRotation) * 360.0;
-
     } else if (button) {
-        // see the comment in 'motion' branch
-        bool hasSaneData =
+        hasSaneData =
             tablet->savedAxesData.updateAxesData(button->first_axis,
                                                  button->axes_count,
                                                  button->axis_data);
-        if (!hasSaneData) return false;
-
-        hiRes = tablet->savedAxesData.position(tablet, screenArea);
-        pressure = tablet->savedAxesData.pressure();
-        xTilt = tablet->savedAxesData.xTilt();
-        yTilt = tablet->savedAxesData.yTilt();
-        rotation = qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
-            (tablet->maxRotation - tablet->minRotation) * 360.0;
     }
+
+    if (!hasSaneData) return false;
+
+    hiRes = tablet->savedAxesData.position(tablet, screenArea);
+    pressure = tablet->savedAxesData.pressure();
+    xTilt = tablet->savedAxesData.xTilt();
+    yTilt = tablet->savedAxesData.yTilt();
+
+    rotation = std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                         (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0) * 360.0;
+
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;
         rotation = 0.;

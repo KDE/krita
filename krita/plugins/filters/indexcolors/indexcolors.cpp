@@ -79,7 +79,7 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
     Q_UNUSED(dev);
     KisWdgIndexColors* w = new KisWdgIndexColors(parent);
     w->setup(
-        QStringList() << "Bright" << "Light"   << "Base" << "Shadow", 4
+        QStringList() << QObject::tr("Bright") << QObject::tr("Light") << QObject::tr("Base") << QObject::tr("Shadow"), 4
     );
     return w;
 }

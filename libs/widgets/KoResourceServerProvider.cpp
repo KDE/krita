@@ -166,13 +166,13 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     KGlobal::mainComponent().dirs()->addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
 
     KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "krita/gradients/");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "data", "karbon/gradients/");
+    KGlobal::mainComponent().dirs()->addResourceType("ko_gradients", "data", "karbon/gradients/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
 
+    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "calligra/palettes/");
     KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "krita/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "data", "calligra/palettes/");
-    KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "data", "karbon/palettes/");
+    KGlobal::mainComponent().dirs()->addResourceType("ko_palettes", "data", "karbon/palettes/");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
@@ -188,7 +188,6 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     }
 
     d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
-    qDebug() << d->gradientServer->saveLocation();
     if (!QFileInfo(d->gradientServer->saveLocation()).exists()) {
         QDir().mkpath(d->gradientServer->saveLocation());
     }

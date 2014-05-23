@@ -98,6 +98,7 @@ public:
         , sketchKisView(0)
         , desktopKisView(0)
         , desktopViewProxy(0)
+        , forceFullScreen(false)
         , forceDesktop(false)
         , forceSketch(false)
         , temporaryFile(false)
@@ -129,6 +130,7 @@ public:
     KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
+    bool forceFullScreen;
     bool forceDesktop;
     bool forceSketch;
     bool temporaryFile;
@@ -393,7 +395,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
-    setWindowState(windowState() & ~Qt::WindowFullScreen);
+    if (!d->forceFullScreen) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -462,6 +466,7 @@ void MainWindow::documentChanged()
     factory->removeClient(d->desktopKisView);
     factory->addClient(d->desktopKisView);
 
+    d->desktopViewProxy->documentChanged();
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
@@ -728,6 +733,15 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
+}
+
+bool MainWindow::forceFullScreen() {
+    return d->forceFullScreen;
+}
+
+void MainWindow::forceFullScreen(bool newValue)
+{
+    d->forceFullScreen = newValue;
 }
 
 #include "MainWindow.moc"

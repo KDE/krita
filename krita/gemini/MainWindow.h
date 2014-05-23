@@ -59,6 +59,8 @@ public:
 
     virtual void closeEvent(QCloseEvent* event);
 
+    bool forceFullScreen();
+    void forceFullScreen(bool newValue);
 public Q_SLOTS:
     void minimize();
     void closeWindow();

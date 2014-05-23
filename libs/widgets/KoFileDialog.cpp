@@ -181,12 +181,6 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setWindowModality(Qt::WindowModal);
     }
 
-#ifdef Q_WS_X11
-    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
-        d->fileDialog->setOption(QFileDialog::DontUseNativeDialog);
-    }
-#endif
-
     connect(d->fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 

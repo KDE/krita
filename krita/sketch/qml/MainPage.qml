@@ -168,7 +168,12 @@ Page {
         }
         Connections {
             target: sketchView;
-            onFloatingMessageRequested: messageStack.showMessage(message, iconName);
+            onFloatingMessageRequested: {
+                if(message.startsWith("Zoom") || message.startsWith("Rotation"))
+                    return;
+                
+                messageStack.showMessage(message, iconName);
+            }
         }
     }
 

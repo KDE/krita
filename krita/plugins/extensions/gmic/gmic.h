@@ -46,7 +46,7 @@
 */
 #include <locale>
 #ifndef gmic_version
-#define gmic_version 1584
+#define gmic_version 1590
 
 // Define environment variables.
 #ifndef gmic_split_compilation
@@ -70,9 +70,23 @@
 #include cimg_include_file
 #if cimg_OS==2
 #include <process.h>
-#pragma comment(linker,"/STACK:8388608")
+#ifdef _MSC_VER
+#pragma comment(linker,"/STACK:16777216")
+#endif
 #elif cimg_OS==1
 #include <cerrno>
+#include <sys/resource.h>
+static struct gmic_increase_stack {
+  gmic_increase_stack() {
+    const rlim_t requested_stack_size = 16777216;
+    struct rlimit rl;
+    const int result = getrlimit(RLIMIT_STACK,&rl);
+    if (!result && rl.rlim_cur<requested_stack_size) {
+      rl.rlim_cur = requested_stack_size;
+      setrlimit(RLIMIT_STACK,&rl);
+    }
+  }
+} _gmic_increase_stack;
 #endif // #if cimg_OS==2
 
 // Define some special character codes used for replacement in double quoted strings.
@@ -220,9 +234,9 @@ struct gmic {
                      gmic_list<char> commands[256],
                      gmic_list<char> commands_has_arguments[256],
                      const bool add_debug_infos=false);
-  gmic_image<char> scope2string(const bool is_last_slash=true) const;
-  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection,
-                                const bool is_last_slash=true) const;
+  gmic_image<char> scope2string() const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>& scope_selection) const;
+  gmic_image<char> scope2string(const gmic_image<unsigned int>* scope_selection) const;
 
   gmic_image<unsigned int> selection2cimg(const char *const string, const unsigned int indice_max,
                                           const gmic_list<char>& names,
@@ -241,32 +255,21 @@ struct gmic {
 				   unsigned int variables_sizes[256]);
 
   gmic& print(const char *format, ...);
+  gmic& error(const char *format, ...);
+  gmic& debug(const char *format, ...);
+
   template<typename T>
-  gmic& print(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& print(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
 	      const char *format, ...);
 
-  gmic& warn(const char *format, ...);
   template<typename T>
-  gmic& warn(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
+  gmic& warn(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
              const char *format, ...);
 
-  gmic& error(const char *format, ...);
   template<typename T>
-  gmic& error(const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const char *const command, const gmic_list<T>& list, const char *format, ...);
-  template<typename T>
-  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int>& scope_selection,
-	      const char *format, ...);
-  template<typename T>
-  gmic& _arg_error(const gmic_list<T>& list, const char *const command,
-		   const char *const argument);
+  gmic& error(const gmic_list<T>& list, const gmic_image<unsigned int> *const scope_selection,
+	      const char *const command, const char *format, ...);
 
-  gmic& debug(const char *format, ...);
   template<typename T>
   gmic& debug(const gmic_list<T>& list, const char *format, ...);
 

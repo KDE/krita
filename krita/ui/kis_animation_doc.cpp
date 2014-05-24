@@ -337,8 +337,56 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     d->image->setResolution(animation->resolution(), animation->resolution());
 
     d->currentFramePosition = frame;
-    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
 
+    int x = frame.x();
+    int y = frame.y() / 20;
+
+    kWarning() << frame.y();
+
+    QString location = "";
+    bool hasFile = false;
+
+    // Load the frames from layers below
+    for(int i = 0 ; i < y ; i++) {
+        location = this->getFrameFile(x, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1 << " Frame" << x;
+        }
+    }
+
+    // Load the cloned frame
+    location = this->getFrameFile(frame.x(), frame.y());
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+    d->currentFrame->setName("Layer " + QString::number((d->currentFramePosition.y() / 20) + 1));
+
+    if(d->currentFramePosition.y() == 0) {
+        d->currentFrame->paintDevice()->setDefaultPixel(animation->bgColor().data());
+    }
+
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+    d->kranimLoader->loadFrame(d->currentFrame, d->store, location);
+
+    // Load the frames from layers above
+    for(int i = y + 1; i < d->noLayers ; i++) {
+        location = this->getFrameFile(x, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1 << " Frame " << x;
+        }
+    }
+
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateXML();
     this->updateActiveFrame();
 

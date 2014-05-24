@@ -257,7 +257,7 @@ void KisTimeline::keyFramePressed()
         newSelection->setGeometry(oldSelection->geometry());
         this->m_cells->setSelectedFrame(newSelection);
         newSelection->show();
-        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
+        dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
     }
 }
 

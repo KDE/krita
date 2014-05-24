@@ -70,12 +70,12 @@
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 #define PROGRAM_TEXCOORD_ATTRIBUTE 1
 
+static bool OPENGL_SUCCESS = false;
+
 namespace
 {
 const GLuint NO_PROGRAM = 0;
 }
-
-static int openGLFrames = 0;
 
 struct KisOpenGLCanvas2::Private
 {
@@ -170,6 +170,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
 
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
+    cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
@@ -228,6 +229,11 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 
 void KisOpenGLCanvas2::paintGL()
 {
+    if (!OPENGL_SUCCESS) {
+        KisConfig cfg;
+        cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
+    }
+
     renderCanvasGL();
 
     QPainter gc(this);
@@ -240,12 +246,10 @@ void KisOpenGLCanvas2::paintGL()
 
     d->glSyncObject = Sync::getSync();
 
-    if (openGLFrames == 5) {
+    if (!OPENGL_SUCCESS) {
         KisConfig cfg;
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
-    }
-    else {
-        openGLFrames++;
+        OPENGL_SUCCESS = true;
     }
 }
 

@@ -220,7 +220,7 @@ public:
                 }
             }
 
-            if (resource->save()) {
+            if (!resource->save()) {
                 kWarning(30009) << "Could not save resource!";
                 return false;
             }

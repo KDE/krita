@@ -51,7 +51,7 @@ KisPanAction::KisPanAction()
     setDescription(i18n("The <i>Pan Canvas</i> action pans the canvas."));
 
     QHash<QString, int> shortcuts;
-    shortcuts.insert(i18n("Toggle Pan Mode"), PanToggleShortcut);
+    shortcuts.insert(i18n("Pan Mode"), PanModeShortcut);
     shortcuts.insert(i18n("Pan Left"), PanLeftShortcut);
     shortcuts.insert(i18n("Pan Right"), PanRightShortcut);
     shortcuts.insert(i18n("Pan Up"), PanUpShortcut);
@@ -86,7 +86,7 @@ void KisPanAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case PanToggleShortcut: {
+        case PanModeShortcut: {
             QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
             if(tevent)
                 d->lastPosition = d->averagePoint(tevent);
@@ -163,5 +163,5 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
 
 bool KisPanAction::isShortcutRequired(int shortcut) const
 {
-    return shortcut == PanToggleShortcut;
+    return shortcut == PanModeShortcut;
 }

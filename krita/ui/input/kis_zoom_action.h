@@ -33,8 +33,8 @@ public:
      * The different behaviours for this action.
      */
     enum Shortcuts {
-        ZoomToggleShortcut, ///< Toggle zoom mode.
-        DiscreteZoomToggleShortcut, ///< Toggle discrete zoom mode
+        ZoomModeShortcut, ///< Toggle zoom mode.
+        DiscreteZoomModeShortcut, ///< Toggle discrete zoom mode
         ZoomInShortcut, ///< Zoom in by a fixed amount.
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
         ZoomResetShortcut, ///< Reset zoom to 100%.

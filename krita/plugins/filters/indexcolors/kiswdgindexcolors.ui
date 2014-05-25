@@ -14,7 +14,7 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0" alignment="Qt::AlignLeft">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Ramps</string>
@@ -23,7 +23,7 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0" alignment="Qt::AlignLeft">
+      <item row="1" column="0">
        <widget class="QWidget" name="colorsBox" native="true">
         <property name="minimumSize">
          <size>
@@ -54,7 +54,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" alignment="Qt::AlignLeft">
+   <item row="2" column="0">
     <widget class="QGroupBox" name="gradientStepsBox">
      <property name="title">
       <string>Gradient Steps</string>
@@ -109,7 +109,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2" alignment="Qt::AlignLeft">
+      <item row="1" column="0" colspan="2">
        <widget class="QWidget" name="widget" native="true">
         <property name="minimumSize">
          <size>
@@ -144,7 +144,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" alignment="Qt::AlignLeft|Qt::AlignTop">
+   <item row="3" column="0">
     <widget class="QGroupBox" name="indexingBox">
      <property name="title">
       <string>Indexing Factors</string>
@@ -268,7 +268,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0" alignment="Qt::AlignLeft">
+   <item row="4" column="0">
     <widget class="QGroupBox" name="otherBox">
      <property name="title">
       <string>Other</string>

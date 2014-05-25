@@ -393,26 +393,6 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     setCurrentImage(d->image);
 }
 
-bool KisAnimationDoc::completeSaving(KoStore *store)
-{
-    return true;
-}
-
-QDomDocument KisAnimationDoc::saveXML()
-{
-    return QDomDocument();
-}
-
-bool KisAnimationDoc::loadXML(const KoXmlDocument &doc, KoStore *store)
-{
-    return true;
-}
-
-bool KisAnimationDoc::completeLoading(KoStore *store)
-{
-    return true;
-}
-
 void KisAnimationDoc::preSaveAnimation()
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();

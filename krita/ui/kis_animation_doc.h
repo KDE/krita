@@ -43,12 +43,6 @@ public:
     KisAnimationStore* getStore();
     KisAnimation* getAnimation();
 
-    virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore*store);
-
-    virtual QDomDocument saveXML();
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
-
     void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store);
 
 public slots:

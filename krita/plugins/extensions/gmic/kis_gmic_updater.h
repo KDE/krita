@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,31 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_GMIC_COMMAND_H
-#define __KIS_GMIC_COMMAND_H
 
-#include <QSharedPointer>
+#ifndef KIS_GMIC_UPDATER
+#define KIS_GMIC_UPDATER
 
-#include <gmic.h>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <qsslerror.h>
+#include <QList>
 
-#include <kundo2command.h>
-#include "kis_types.h"
-
-class QString;
-
-class KisGmicCommand : public KUndo2Command
+class KisGmicUpdater : public QObject
 {
+    Q_OBJECT
 public:
-    KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands = 0);
+    KisGmicUpdater(const QString &updateurl, QObject *parent = 0);
+    virtual ~KisGmicUpdater();
 
-    void undo();
-    void redo();
+    void start();
+
+signals:
+    void updated();
+
+private slots:
+    void finishedDownload(QNetworkReply *);
+    void reportProgress(qint64 arrived,qint64 total);
+    void slotError(QNetworkReply::NetworkError error);
+    void slotSslErrors(QList<QSslError> error);
 
 private:
-    QString m_gmicCommandString;
-    QSharedPointer<gmic_list<float> > m_images;
-    const char * m_customCommands;
-    bool m_firstRedo;
+    QNetworkAccessManager m_manager;
+    QString m_url;
+
 };
 
-#endif /* __KIS_GMIC_COMMAND_H */
+#endif // KIS_GMIC_UPDATER

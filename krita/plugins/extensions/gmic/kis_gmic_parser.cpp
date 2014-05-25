@@ -30,7 +30,7 @@
 #include "kis_gmic_widget.h"
 
 
-KisGmicParser::KisGmicParser(const QString& filePath):m_fileName(filePath)
+KisGmicParser::KisGmicParser(const QStringList& filePaths):m_filePaths(filePaths)
 {
 
 }
@@ -70,113 +70,157 @@ QString KisGmicParser::parseCategoryName(const QString& line)
 
 Component* KisGmicParser::createFilterTree()
 {
-    QFile file(m_fileName);
-
-    if (!file.open(QIODevice::ReadOnly))
+    Category * rootCategory = 0;
+    foreach (const QString &fileName, m_filePaths)
     {
-        dbgPlugins << "Can't open file " << m_fileName << file.errorString();
-        return 0;
-    }
+        QFile file(fileName);
 
-    QTextStream in(&file);
-
-    Category * rootCategory = new Category();
-    rootCategory->setName("Filters");
-
-    Command * command = 0;
-    Category * category = rootCategory;
-    int lineNum = 0;
-    while(!in.atEnd()) {
-        QString line = fetchLine(in, lineNum);
-
-        if (line.startsWith(GIMP_COMMENT))
+        if (!file.open(QIODevice::ReadOnly))
         {
-            if (isCategory(line))
+            dbgPlugins << "Can't open file " << fileName << file.errorString();
+            continue;
+        }
+        else
+        {
+            if (!rootCategory)
             {
-                QString categoryName = parseCategoryName(line);
+                rootCategory = new Category();
+                rootCategory->setName("Filters");
+            }
+        }
 
-                if (categoryName.startsWith("_"))
+        QTextStream in(&file);
+
+        Command * command = 0;
+        Category * category = rootCategory;
+        int lineNum = 0;
+        while(!in.atEnd()) {
+            QString line = fetchLine(in, lineNum);
+
+            if (line.startsWith(GIMP_COMMENT))
+            {
+                if (isCategory(line))
                 {
-                    // root category
-                    if (categoryName != "_")
+                    command = 0;
+                    QString categoryName = parseCategoryName(line);
+
+                    int toParentSteps = 0;
+                    // count the prefix occurences of "_"
+                    while ( (toParentSteps < categoryName.size()) && (categoryName.at(toParentSteps) == '_') )
                     {
-                        category = new Category();
-                        category->setName(categoryName.remove(0,1)); // remove _
-                        rootCategory->add(category);
-                    } else
-                    {
-                        // set current category to parent category
-                        category = static_cast<Category*>(category->parent());
+                        toParentSteps++;
                     }
-                }
-                else
-                {
-                    // set current category as parent
-                    Category * childCategory = new Category(category);
-                    childCategory->setName(categoryName);
-                    category->add(childCategory);
-                    category = childCategory; // set current category to child
-                }
-            }
-            else if (isCommand(line))
-            {
-                // dbgPlugins << "command" << line;
-                command = new Command(category);
-                command->processCommandName(line);
-                category->add(command);
-            }
-            else if (isParameter(line))
-            {
-                if (command)
-                {
-                    QStringList block;
-                    block.append(line);
-                    bool parameterIsComplete = false;
-                    int lines = 1;
-                    while (!parameterIsComplete)
-                    {
-                        //dbgPlugins << "Line number" << lineNum;
-                        parameterIsComplete = command->processParameter(block);
-                        if (!parameterIsComplete)
-                        {
 
-                            QString anotherLine = fetchLine(in, lineNum);
-                            if (!anotherLine.isNull())
+                    if (toParentSteps > 0)
+                    {
+                        // move to correct category
+                        for (int i = 0; i < toParentSteps; i++)
+                        {
+                            Category * parent = dynamic_cast<Category *>(category->parent());
+                            if (parent)
                             {
-                                block.append(anotherLine);
-                                lines++;
+                                category = parent;
                             }
                             else
                             {
-                                warnPlugins << "We are and the end of the file unexpectedly"; // we are at the end of the file
+                                // already in root category
                                 break;
                             }
                         }
-                        else if (lines > 1)
+
+
+
+                        categoryName = categoryName.remove(0,toParentSteps);
+                    }
+
+                    if (!categoryName.isEmpty())
+                    {
+                        // create new category in current category and set it as current
+                        int categoryChildIndex = category->indexOf<Category>(categoryName);
+                        if (categoryChildIndex != -1)
                         {
-                            dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
+                            category = static_cast<Category *>(category->child(categoryChildIndex));
+                        }
+                        else
+                        {
+                            Category * newCategory = new Category(category);
+                            newCategory->setName(categoryName);
+                            category->add(newCategory);
+                            category = newCategory; // set current category
                         }
                     }
                 }
+                else if (isCommand(line))
+                {
+                    // dbgPlugins << "command" << line;
+                    command = new Command();
+                    command->processCommandName(line);
+
+                    int commandChildIndex = category->indexOf<Command>(command->name());
+                    if (commandChildIndex == -1)
+                    {
+                        category->add(command);
+                    }
+                    else
+                    {
+                        category->replace(commandChildIndex, command);
+                    }
+                    command->setParent(category);
+
+                }
+                else if (isParameter(line))
+                {
+                    if (command)
+                    {
+                        QStringList block;
+                        block.append(line);
+                        bool parameterIsComplete = false;
+                        int lines = 1;
+                        while (!parameterIsComplete)
+                        {
+                            //dbgPlugins << "Line number" << lineNum;
+                            parameterIsComplete = command->processParameter(block);
+                            if (!parameterIsComplete)
+                            {
+
+                                QString anotherLine = fetchLine(in, lineNum);
+                                if (!anotherLine.isNull())
+                                {
+                                    block.append(anotherLine);
+                                    lines++;
+                                }
+                                else
+                                {
+                                    warnPlugins << "We are and the end of the file unexpectedly"; // we are at the end of the file
+                                    break;
+                                }
+                            }
+                            else if (lines > 1)
+                            {
+                                dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        dbgPlugins << "No command for given parameter, invalid gmic definition file";
+                    }
+                }
+                else if (line.startsWith(GIMP_COMMENT+"_"))
+                {
+                    // TODO: do something with those translations
+                }
                 else
                 {
-                    dbgPlugins << "No command for given parameter, invalid gmic definition file";
+                    dbgPlugins << "IGNORING:" << line;
                 }
             }
-            else if (line.startsWith(GIMP_COMMENT+"_"))
-            {
-                // TODO: do something with those translations
-            }
-            else
-            {
-                dbgPlugins << "IGNORING:" << line;
-            }
         }
-    }
-    //command->debug();
+        //command->debug();
 
-    //rootCategory->print();
-    file.close();
+        //rootCategory->print();
+        file.close();
+    }
 
     return rootCategory;
 }
@@ -192,3 +236,29 @@ QString KisGmicParser::fetchLine(QTextStream& input, int& lineCounter)
     }
     return QString();
 }
+
+QByteArray KisGmicParser::extractGmicCommandsOnly(const QString& filePath)
+{
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        //dbgPlugins() << "Can't open file: " << filePath << file.errorString();
+        return QByteArray();
+    }
+
+    QTextStream in(&file);
+    QByteArray result;
+    while(!in.atEnd())
+    {
+        QString line = in.readLine();
+        if (!line.startsWith("#"))
+        {
+            line.append("\n");
+            result.append(line.toUtf8());
+        }
+    }
+
+    return result;
+}
+

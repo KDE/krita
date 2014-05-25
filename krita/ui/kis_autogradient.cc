@@ -41,6 +41,10 @@ KisAutogradient::KisAutogradient(KisAutogradientResource* gradient, QWidget *par
     setupUi(this);
     setWindowTitle(caption);
     gradientSlider->setGradientResource(m_autogradientResource);
+    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    if (segment) {
+        slotSelectedSegment(segment);
+    }
 
     connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));
     connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment*)), SLOT(slotChangedSegment(KoGradientSegment*)));

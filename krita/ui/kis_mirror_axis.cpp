@@ -80,7 +80,7 @@ public:
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
-    : KisCanvasDecoration("mirror_axis", i18n("Mirror Axis"), parent), d(new Private(this))
+    : KisCanvasDecoration("mirror_axis", parent), d(new Private(this))
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));

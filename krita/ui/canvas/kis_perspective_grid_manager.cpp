@@ -137,7 +137,7 @@ struct KisPerspectiveGridManager::SubdivisionLinesInfo {
 /***************************************************************/
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
-        : KisCanvasDecoration("perspectiveGrid", i18n("Perspective grid"), parent)
+        : KisCanvasDecoration("perspectiveGrid", parent)
         , m_view(parent)
 {
 }

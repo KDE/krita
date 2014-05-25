@@ -35,7 +35,7 @@
 
 
 KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
-    : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view),
+    : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
       m_filterInstalled(false),
       m_cursorSwitched(false)
 {

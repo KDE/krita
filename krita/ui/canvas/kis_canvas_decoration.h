@@ -39,10 +39,10 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject
 {
     Q_OBJECT
 public:
-    KisCanvasDecoration(const QString& id, const QString& name, KisView2 * parent);
+    KisCanvasDecoration(const QString& id, KisView2 * parent);
     ~KisCanvasDecoration();
     const QString& id() const;
-    const QString& name() const;
+
     /**
      * @return whether the decoration is visible.
      */

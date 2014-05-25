@@ -18,6 +18,7 @@
 
 #include "kis_tooltip_manager.h"
 
+#include <QFile>
 #include <QAction>
 #include <QInputDialog>
 #include <QDomDocument>

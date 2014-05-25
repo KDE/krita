@@ -22,6 +22,7 @@
 
 #ifdef HAVE_OPENGL
 
+#include <QFile>
 #include <QMenu>
 #include <QWidget>
 #include <QBrush>

@@ -157,7 +157,7 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
 
 void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
-    KisTransaction transaction(i18n("Transform Node"), device);
+    KisTransaction transaction(i18n("Transform Layer"), device);
 
     KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
                           m_shearOrigin.x(), m_shearOrigin.y(),

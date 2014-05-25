@@ -802,7 +802,7 @@ void KisNodeManager::saveNodeAsImage()
     }
 
     KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
-    dialog.setCaption(i18n("Export Node"));
+    dialog.setCaption(i18n("Export \"%1\"", node->name()));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
     QString filename = dialog.url();

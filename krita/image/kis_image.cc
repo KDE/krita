@@ -449,7 +449,8 @@ void KisImage::cropImage(const QRect& newRect)
 
 void KisImage::cropNode(KisNodeSP node, const QRect& newRect)
 {
-    QString actionName = i18n("Crop Node");
+    bool isLayer = dynamic_cast<KisLayer*>(node.data());
+    QString actionName = isLayer ? i18n("Crop Layer") : i18n("Crop Mask");
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;

@@ -34,13 +34,12 @@
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : QWidget(parent)
+KisAutogradient::KisAutogradient(KisAutogradientResource* gradient, QWidget *parent, const char* name, const QString& caption)
+    : QWidget(parent), m_autogradientResource(gradient)
 {
     setObjectName(name);
     setupUi(this);
     setWindowTitle(caption);
-    m_autogradientResource = new KisAutogradientResource();
-    m_autogradientResource->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white);
     gradientSlider->setGradientResource(m_autogradientResource);
 
     connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));

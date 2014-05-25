@@ -28,16 +28,19 @@
 #include <kfiledialog.h>
 #include <KoAbstractGradient.h>
 #include <KoResource.h>
+#include <KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
+#include <KoIcon.h>
 
 #include "kis_view2.h"
 #include "kis_global.h"
 #include "kis_autogradient.h"
 #include "kis_canvas_resource_provider.h"
+#include <kis_autogradient_resource.h>
 
-KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name)
+KisCustomGradientDialog::KisCustomGradientDialog(KisAutogradientResource* gradient, QWidget * parent, const char *name)
         : KDialog(parent)
 {
     setCaption(i18n("Custom Gradient"));
@@ -45,9 +48,8 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
     setDefaultButton(Close);
     setObjectName(name);
     setModal(false);
-    m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
+    m_page = new KisAutogradient(gradient, this, "autogradient", i18n("Custom Gradient"));
     setMainWidget(m_page);
-    connect(m_page, SIGNAL(activatedResource(KoResource *)), view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 }
 
 KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name)
@@ -72,17 +74,23 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SIGNAL(resourceSelected(KoResource *)));
 
-    m_customGradient = new QPushButton(i18n("Custom Gradient..."));
-    m_customGradient->setObjectName("custom gradient button");
-    KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, 0, "autogradient");
-    connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
+    QWidget* buttonWidget = new QWidget(this);
+    QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
+
+    QPushButton* addGradient = new QPushButton(koIcon("list-add"), i18n("Add..."), this);
+    connect(addGradient, SIGNAL(clicked()), this, SLOT(addGradient()));
+    buttonLayout->addWidget(addGradient);
+
+    QPushButton* editGradient = new QPushButton(koIcon("configure"), i18n("Edit..."));
+    connect(editGradient, SIGNAL(clicked()), this, SLOT(editGradient()));
+    buttonLayout->addWidget(editGradient);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
     mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
-    mainLayout->addWidget(m_customGradient, 10);
+    mainLayout->addWidget(buttonWidget);
 
     setLayout(mainLayout);
 }
@@ -108,6 +116,35 @@ void KisGradientChooser::update(KoResource * resource)
     KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);
     m_lbName->setText(i18n(gradient->name().toUtf8().data()));
 }
+
+void KisGradientChooser::addGradient()
+{
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
+    QString saveLocation = rserver->saveLocation();
+
+    KisAutogradientResource* gradient = new KisAutogradientResource();
+    gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white);
+    gradient->setName(i18n("unnamed"));
+
+    KisCustomGradientDialog dialog(gradient, this, "autogradient");
+    dialog.exec();
+
+    gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
+    gradient->setValid(true);
+    rserver->addResource(gradient);
+    m_itemChooser->setCurrentResource(gradient);
+}
+
+void KisGradientChooser::editGradient()
+{
+    KisAutogradientResource* gradient = dynamic_cast<KisAutogradientResource*>(currentResource());
+    if (gradient) {
+        KisCustomGradientDialog dialog(gradient, this, "autogradient");
+        dialog.exec();
+    }
+}
+
+
 
 #include "kis_gradient_chooser.moc"
 

@@ -93,7 +93,7 @@ void KisGeneratorLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *un
 
 QIcon KisGeneratorLayer::icon() const
 {
-    return koIcon("view-filter");
+    return koIcon("krita_tool_color_fill");
 }
 
 KoDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const

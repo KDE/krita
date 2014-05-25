@@ -242,8 +242,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_LAYER_ACTION("add_new_adjustment_layer", i18n("&Filter Layer..."),
                      "KisAdjustmentLayer", koIcon("view-filter"));
 
-    NEW_LAYER_ACTION("add_new_generator_layer", i18n("&Generated Layer..."),
-                     "KisGeneratorLayer", koIcon("view-filter"));
+    NEW_LAYER_ACTION("add_new_fill_layer", i18n("&Fill Layer..."),
+                     "KisGeneratorLayer", koIcon("krita_tool_color_fill"));
 
     NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
                      "KisFileLayer", koIcon("document-open"));

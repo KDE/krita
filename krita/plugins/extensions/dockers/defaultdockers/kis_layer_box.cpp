@@ -346,7 +346,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         addActionToMenu(m_newLayerMenu, "add_new_clone_layer");
         addActionToMenu(m_newLayerMenu, "add_new_shape_layer");
         addActionToMenu(m_newLayerMenu, "add_new_adjustment_layer");
-        addActionToMenu(m_newLayerMenu, "add_new_generator_layer");
+        addActionToMenu(m_newLayerMenu, "add_new_fill_layer");
         addActionToMenu(m_newLayerMenu, "add_new_file_layer");
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");

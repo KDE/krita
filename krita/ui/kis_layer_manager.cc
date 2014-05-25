@@ -401,7 +401,7 @@ void KisLayerManager::layerProperties()
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
 
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
-        dlg.setCaption(i18n("Generator Layer Properties"));
+        dlg.setCaption(i18n("Fill Layer Properties"));
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
         Q_ASSERT(configBefore);

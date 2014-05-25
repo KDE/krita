@@ -367,7 +367,7 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL() const
 {
-    if (qApp->applicationName() == "krita" ) {
+    if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS"));
     }

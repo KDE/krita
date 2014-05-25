@@ -72,5 +72,5 @@ void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
 
 void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
-    m_parentTool->addPathShape(pathShape, i18n("Path"));
+    m_parentTool->addPathShape(pathShape, i18nc("(qtundo-format)", "Draw Bezier Curve"));
 }

@@ -50,7 +50,7 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
+    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString &transactionText);
     virtual ~KisToolFreehand();
     virtual int flags() const;
 

@@ -183,7 +183,7 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 #endif
 
     if (nodeAbility == PAINT) {
-        KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
+        KisFigurePaintingToolHelper helper(i18nc("(qtundo-format)", "Draw Line"),
                                            image(),
                                            canvas()->resourceManager(),
                                            KisPainter::StrokeStyleBrush,

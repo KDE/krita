@@ -49,6 +49,7 @@ protected:
 public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                          const QString &transactionText = "",
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 

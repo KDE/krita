@@ -86,6 +86,8 @@ struct KisToolFreehandHelper::Private
     KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
 
+    QString transactionText;
+
     bool haveTangent;
     QPointF previousTangent;
 
@@ -113,11 +115,14 @@ struct KisToolFreehandHelper::Private
 
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                                             const QString &transactionText,
                                              KisRecordingAdapter *recordingAdapter)
     : m_d(new Private)
 {
     m_d->infoBuilder = infoBuilder;
     m_d->recordingAdapter = recordingAdapter;
+
+    m_d->transactionText = transactionText;
 
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
@@ -198,7 +203,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(m_d->resources->needsIndirectPainting(),
                                    m_d->resources->indirectPaintingCompositeOp(),
-                                   m_d->resources, m_d->painterInfos, i18n("Freehand Brush Stroke"));
+                                   m_d->resources, m_d->painterInfos, m_d->transactionText);
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 

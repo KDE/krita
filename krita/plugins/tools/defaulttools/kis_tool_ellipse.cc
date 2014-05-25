@@ -61,7 +61,7 @@ void KisToolEllipse::finishRect(const QRectF& rect)
 
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisSystemLocker locker(currentNode());
-        KisFigurePaintingToolHelper helper(i18n("Ellipse"),
+        KisFigurePaintingToolHelper helper(i18nc("(qtundo-format)", "Draw Ellipse"),
                                            image(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),

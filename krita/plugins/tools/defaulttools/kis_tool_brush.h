@@ -85,7 +85,7 @@ public:
     KisToolBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
-        setToolTip(i18n("Paint with brushes"));
+        setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

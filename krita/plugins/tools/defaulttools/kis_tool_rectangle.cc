@@ -64,7 +64,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
 
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisSystemLocker locker(currentNode());
-        KisFigurePaintingToolHelper helper(i18n("Rectangle"),
+        KisFigurePaintingToolHelper helper(i18nc("(qtundo-format)", "Draw Rectangle"),
                                            image(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),

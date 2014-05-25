@@ -56,6 +56,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
 {
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
+                                   i18nc("(qtundo-format)", "Multibrush Stroke"),
                                    recordingAdapter());
     resetHelper(m_helper);
 

@@ -245,7 +245,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     NEW_LAYER_ACTION("add_new_generator_layer", i18n("&Generated Layer..."),
                      "KisGeneratorLayer", koIcon("view-filter"));
 
-    NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer"),
+    NEW_LAYER_ACTION("add_new_file_layer", i18n("&File Layer..."),
                      "KisFileLayer", koIcon("document-open"));
 
     NEW_MASK_ACTION("add_new_transparency_mask", i18n("&Transparency Mask"),
@@ -266,7 +266,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     CONVERT_NODE_ACTION("convert_to_selection_mask", i18n("to &Selection Mask"),
                         "KisSelectionMask", koIcon("edit-paste"));
 
-    CONVERT_NODE_ACTION("convert_to_filter_mask", i18n("to &Filter Mask"),
+    CONVERT_NODE_ACTION("convert_to_filter_mask", i18n("to &Filter Mask..."),
                         "KisFilterMask", koIcon("bookmarks"));
 
     CONVERT_NODE_ACTION("convert_to_transparency_mask", i18n("to &Transparency Mask"),

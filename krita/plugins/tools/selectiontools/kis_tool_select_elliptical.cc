@@ -68,7 +68,7 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect)
         return;
     }
 
-    KisSelectionToolHelper helper(kisCanvas, i18n("Elliptical Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18nc("(qtundo-format)", "Select Ellipse"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

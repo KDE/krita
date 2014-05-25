@@ -36,7 +36,7 @@
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisSelectionSP selection,
                                                  KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Transform Stroke"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(i18n("Transform"), false, undoAdapter),
       m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {

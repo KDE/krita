@@ -32,7 +32,7 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
                                                          KisSelectionSP selection,
                                                          KisUpdatesFacade *updatesFacade,
                                                          KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Move Selection Stroke"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(i18n("Move Selection"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
       m_updatesFacade(updatesFacade),

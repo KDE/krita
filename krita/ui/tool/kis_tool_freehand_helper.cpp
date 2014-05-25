@@ -198,7 +198,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(m_d->resources->needsIndirectPainting(),
                                    m_d->resources->indirectPaintingCompositeOp(),
-                                   m_d->resources, m_d->painterInfos, i18n("Freehand Stroke"));
+                                   m_d->resources, m_d->painterInfos, i18n("Freehand Brush Stroke"));
 
     m_d->strokeId = m_d->strokesFacade->startStroke(stroke);
 

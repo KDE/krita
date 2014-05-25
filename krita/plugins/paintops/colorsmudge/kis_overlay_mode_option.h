@@ -27,7 +27,7 @@ class KisOverlayModeOption : public KisPaintOpOption
 {
 public:
     KisOverlayModeOption():
-        KisPaintOpOption(i18n("Overlay Mode"), KisPaintOpOption::commonCategory(), false) { }
+        KisPaintOpOption(i18n("Overlay Mode"), KisPaintOpOption::generalCategory(), false) { }
 
     virtual bool isCheckable() {
         return true;

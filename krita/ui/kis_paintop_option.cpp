@@ -21,9 +21,9 @@
 
 #include <klocale.h>
 
-QString KisPaintOpOption::commonCategory()
+QString KisPaintOpOption::generalCategory()
 {
-    return i18n("Common");
+    return i18n("General");
 }
 
 QString KisPaintOpOption::colorCategory()

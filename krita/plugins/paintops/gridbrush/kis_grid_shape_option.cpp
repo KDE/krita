@@ -30,7 +30,7 @@ public:
 };
 
 KisGridShapeOption::KisGridShapeOption()
-    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::commonCategory(), false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();

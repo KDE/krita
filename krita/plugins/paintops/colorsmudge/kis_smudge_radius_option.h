@@ -27,7 +27,7 @@ class KisPainter;
 class KisSmudgeRadiusOption: public KisRateOption
 {
 public:
-    KisSmudgeRadiusOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::commonCategory());
+    KisSmudgeRadiusOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
 
 
     /**

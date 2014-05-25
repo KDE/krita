@@ -22,7 +22,7 @@
 KisPressureSoftnessOption::KisPressureSoftnessOption()
     : KisCurveOption(i18n("Softness"),
                      "Softness",
-                     KisPaintOpOption::commonCategory(),
+                     KisPaintOpOption::generalCategory(),
                      false,
                      1.0,
                      0.1,

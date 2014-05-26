@@ -246,7 +246,7 @@ QString KoFileDialog::url()
         ;
     }
     if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
-        int start = d->defaultFilter.lastIndexOf("*.") + 2;
+        int start = d->defaultFilter.lastIndexOf("*.") + 1;
         int end = d->defaultFilter.lastIndexOf(" )");
         int n = end - start;
         QString extension = d->defaultFilter.mid(start, n);

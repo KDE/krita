@@ -46,6 +46,7 @@ private slots:
     void slotChangedRightColor(const QColor& color);
     void slotChangedLeftOpacity(int value);
     void slotChangedRightOpacity(int value);
+    void slotChangedName();
     void paramChanged();
 };
 

@@ -7,16 +7,30 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>200</height>
+    <height>250</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>200</height>
+    <height>250</height>
    </size>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="nameedit"/>
+     </item>
+    </layout>
+   </item>
    <item>
     <widget class="KisGradientSliderWidget" name="gradientSlider" native="true">
      <property name="sizePolicy">

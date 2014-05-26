@@ -41,11 +41,13 @@ KisAutogradient::KisAutogradient(KisAutogradientResource* gradient, QWidget *par
     setupUi(this);
     setWindowTitle(caption);
     gradientSlider->setGradientResource(m_autogradientResource);
+    nameedit->setText(gradient->name());
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         slotSelectedSegment(segment);
     }
 
+    connect(nameedit, SIGNAL(editingFinished()), this, SLOT(slotChangedName()));
     connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));
     connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment*)), SLOT(slotChangedSegment(KoGradientSegment*)));
     connect(comboBoxColorInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedColorInterpolation(int)));
@@ -161,6 +163,11 @@ void KisAutogradient::slotChangedRightOpacity(int value)
     gradientSlider->repaint();
 
     paramChanged();
+}
+
+void KisAutogradient::slotChangedName()
+{
+    m_autogradientResource->setName(nameedit->text());
 }
 
 void KisAutogradient::paramChanged()

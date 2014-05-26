@@ -197,3 +197,9 @@ set(kis_categorized_list_model_test_SRCS kis_categorized_list_model_test.cpp mod
 kde4_add_unit_test(KisCategorizedListModelTest TESTNAME krita-ui-KisCategorizedListModelTest  ${kis_categorized_list_model_test_SRCS})
 target_link_libraries(KisCategorizedListModelTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(kis_resource_server_provider_test_SRCS kis_resource_server_provider_test.cpp modeltest.cpp)
+kde4_add_unit_test(KisResourceServerProviderTest TESTNAME krita-ui-KisResourceServerProviderTest  ${kis_resource_server_provider_test_SRCS})
+target_link_libraries(KisResourceServerProviderTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+

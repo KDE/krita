@@ -185,7 +185,15 @@ bool KoSegmentGradient::save()
         return false;
     }
 
-    QTextStream fileContent(&file);
+    saveToDevice(&file);
+    file.close();
+
+    return true;
+}
+
+bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
+{
+    QTextStream fileContent(dev);
     fileContent << "GIMP Gradient\n";
     fileContent << "Name: " << name() << "\n";
     fileContent << m_segments.count() << "\n";
@@ -204,11 +212,6 @@ bool KoSegmentGradient::save()
         fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << "\n";
     }
     return true;
-}
-
-bool KoSegmentGradient::saveToDevice(QIODevice *) const
-{
-    return false;
 }
 
 KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const

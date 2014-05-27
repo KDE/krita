@@ -1558,6 +1558,7 @@ void KisView2::openResourcesDirectory()
 
 void KisView2::updateIcons()
 {
+#if QT_VERSION >= 0x040700
     QColor background = palette().background().color();
     bool useDarkIcons = background.value() > 100;
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
@@ -1596,6 +1597,7 @@ void KisView2::updateIcons()
             }
         }
     }
+#endif
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)

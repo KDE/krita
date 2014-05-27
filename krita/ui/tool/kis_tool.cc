@@ -225,13 +225,15 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
-	break;
+        break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
-	break;
+        break;
     case(KisCanvasResourceProvider::CurrentKritaNode):
         d->currentNode = (v.value<KisNodeSP>());
-	break;
+        break;
+    case(KisCanvasResourceProvider::CurrentPaintOpPreset):
+        emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
     default:
         ;
         // Do nothing

@@ -9,16 +9,16 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 include(LibFindMacros)
-libfind_pkg_check_modules(LIBODFGEN_PKGCONF libodfgen-0.0)
+libfind_pkg_check_modules(LIBODFGEN_PKGCONF libodfgen-0.1)
 
 find_path(LIBODFGEN_INCLUDE_DIR
     NAMES libodfgen/libodfgen.hxx
     HINTS ${LIBODFGEN_PKGCONF_INCLUDE_DIRS} ${LIBODFGEN_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libodfgen-0.0
+    PATH_SUFFIXES libodfgen-0.1
 )
 
 find_library(LIBODFGEN_LIBRARY
-    NAMES odfgen-0.0
+    NAMES odfgen-0.1
     HINTS ${LIBODFGEN_PKGCONF_LIBRARY_DIRS} ${LIBODFGEN_PKGCONF_LIBDIR}
 )
 

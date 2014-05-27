@@ -701,6 +701,16 @@ macro_optional_find_package(Okular)
 macro_log_feature(OKULAR_FOUND "Okular" "Okular ODP Plugin" "http://okular.kde.org/" FALSE "" "Required to build the Okular OpenDocument Presenter plugin")
 
 ##
+## Test for librevenge
+##
+macro_optional_find_package(LibRevenge)
+macro_log_feature(LIBREVENGE_FOUND "LibRevenge"
+                  "A base library for writing document import filters"
+                  "http://sf.net/p/libwpd/librevenge/" FALSE ""
+                  "Required by various import filters"
+)
+
+##
 ## Test for libodfgen
 ##
 macro_optional_find_package(LibOdfGen)

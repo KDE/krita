@@ -120,7 +120,15 @@ QSizeF ImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/)
 // ------------- ImageStripScene ------------------------------------------------------ //
 
 ImageStripScene::ImageStripScene():
-    m_imgSize(80), m_loader(0) { }
+    m_imgSize(80)
+  , m_loader(0)
+{
+}
+
+ImageStripScene::~ImageStripScene()
+{
+    delete m_loader;
+}
 
 bool ImageStripScene::setCurrentDirectory(const QString& path)
 {

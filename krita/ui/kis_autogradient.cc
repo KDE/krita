@@ -27,14 +27,13 @@
 #include <KoColorSpace.h>
 #include <KoSegmentGradient.h>
 
-#include "kis_autogradient_resource.h"
 #include "kis_debug.h"
 
 #include "widgets/kis_gradient_slider_widget.h"
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(KisAutogradientResource* gradient, QWidget *parent, const char* name, const QString& caption)
+KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
     : QWidget(parent), m_autogradientResource(gradient)
 {
     setObjectName(name);

@@ -22,6 +22,7 @@
 
 #include <QFrame>
 
+class KoSegmentGradient;
 class KisAutogradientResource;
 class KisView2;
 class QLabel;
@@ -38,7 +39,7 @@ class KisCustomGradientDialog : public KDialog
 
 public:
 
-    KisCustomGradientDialog(KisAutogradientResource* gradient, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KoSegmentGradient* gradient, QWidget * parent, const char *name);
 
 private:
 
@@ -74,6 +75,7 @@ private slots:
 private:
     QLabel *m_lbName;
     KoResourceItemChooser * m_itemChooser;
+    QPushButton* m_editGradient;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

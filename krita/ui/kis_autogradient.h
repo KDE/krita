@@ -24,19 +24,19 @@
 
 class KoResource;
 class KoGradientSegment;
-class KisAutogradientResource;
+class KoSegmentGradient;
 
 class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
 {
     Q_OBJECT
 
 public:
-    KisAutogradient(KisAutogradientResource* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
     void activate();
 signals:
     void activatedResource(KoResource *r);
 private:
-    KisAutogradientResource* m_autogradientResource;
+    KoSegmentGradient* m_autogradientResource;
 private slots:
     void slotSelectedSegment(KoGradientSegment* segment);
     void slotChangedSegment(KoGradientSegment* segment);

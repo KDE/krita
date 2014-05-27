@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>719</width>
-    <height>414</height>
+    <height>426</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,27 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="label_5">
+      <widget class="QLabel" name="lblKiki">
+       <property name="minimumSize">
+        <size>
+         <width>319</width>
+         <height>400</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>319</width>
+         <height>400</height>
+        </size>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
        </property>
        <property name="pixmap">
         <pixmap>KikiNurse_sm.png</pixmap>
@@ -37,7 +55,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita closed unexpectedly! Please help us make Krita better by sending us more information.&lt;/p&gt;&lt;p&gt;If you'd like us to contact you, please add your email address. We will not share your email address with anyone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sorry!&lt;/p&gt;&lt;p&gt;Krita closed unexpectedly! Please help us make Krita better by sending us more information.&lt;/p&gt;&lt;p&gt;If you'd like us to contact you, please add your email address. We will not share your email address with anyone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>

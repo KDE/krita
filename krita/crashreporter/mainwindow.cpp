@@ -229,6 +229,8 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
     setupUi(this);
     progressBar->hide();
 
+    lblKiki->setPixmap(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/KikiNurse_sm.png")));
+
     setWindowFlags(Qt::WindowStaysOnTopHint | windowFlags());
 
     m_d->networkAccessManager = new QNetworkAccessManager(this);

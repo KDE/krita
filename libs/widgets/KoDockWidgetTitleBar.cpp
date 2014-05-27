@@ -78,7 +78,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));
 
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
-
+    connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
     d->featuresChanged(0);
 }
 
@@ -256,6 +256,11 @@ void KoDockWidgetTitleBar::Private::toggleFloating()
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
 
     q->setFloating(!q->isFloating());
+}
+
+void KoDockWidgetTitleBar::Private::topLevelChanged(bool topLevel)
+{
+    lockButton->setEnabled(!topLevel);
 }
 
 void KoDockWidgetTitleBar::Private::toggleCollapsed()

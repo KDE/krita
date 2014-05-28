@@ -394,7 +394,7 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
         entry = entry.remove(")");
 
         KMimeType::Ptr mime = KMimeType::findByUrl(KUrl("bla" + entry), 0, true, true);
-        if (mime) {
+        if (!mime->is("application/octet-stream")) {
             filters.append(mime->comment() + "( *" + entry + " )");
         }
         else {

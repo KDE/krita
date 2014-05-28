@@ -118,24 +118,40 @@ void KoFileDialog::setNameFilter(const QString &filter)
 {
     d->filterList.clear();
     d->filterList << splitNameFilter(filter);
-    d->defaultFilter.clear();
+    d->defaultFilter = d->filterList.first();
 }
 
 void KoFileDialog::setNameFilters(const QStringList &filterList,
-                                  const QString &defaultFilter)
+                                  QString defaultFilter)
 {
     d->filterList.clear();
     foreach(const QString &filter, filterList) {
         d->filterList << splitNameFilter(filter);
     }
+
+    if (!defaultFilter.isEmpty()) {
+        QStringList defaultFilters = splitNameFilter(defaultFilter);
+        if (defaultFilters.size() > 0) {
+            defaultFilter = defaultFilters.first();
+        }
+    }
+
     d->defaultFilter = defaultFilter;
 }
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
-                                      const QString &defaultFilter)
+                                      QString defaultFilter)
 {
-
     d->filterList = getFilterStringListFromMime(filterList, true);
+
+    if (!defaultFilter.isEmpty()) {
+        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
+        if (defaultFilters.size() > 0) {
+            defaultFilter = defaultFilters.first();
+        }
+    }
+
+
     d->defaultFilter = defaultFilter;
 }
 

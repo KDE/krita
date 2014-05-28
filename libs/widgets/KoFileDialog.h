@@ -90,9 +90,9 @@ public:
 
     void setNameFilter(const QString &filter);
     void setNameFilters(const QStringList &filterList,
-                        const QString &defaultFilter = QString());
+                        QString defaultFilter = QString());
     void setMimeTypeFilters(const QStringList &filterList,
-                            const QString &defaultFilter = QString());
+                            QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();
 
     QStringList urls();

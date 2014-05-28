@@ -53,15 +53,25 @@ public:
         useNative = true;
 #endif
 
-// No, no, no... We cannot use the GTK dialog because it strips the extension away from the
-// filters in the filter list. Palette (*.gpl);; Palette (*.pal) becomes Palette;;Palette...
-//#ifdef Q_WS_X11
-//        // And when we're in X11 but not in KDE, we probably want the GTK dialogs (well...), so we need to
-//        // use the static methods.
-//    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
-//        useStaticForNative = true;
-//    }
-//#endif
+        // No, no, no... We cannot use the GTK dialog because it strips the extension away from the
+        // filters in the filter list. Palette (*.gpl);; Palette (*.pal) becomes Palette;;Palette...
+        // So... _don't_ use the static methods when in X11, but not GTK, so we get the Qt dialogs.
+        //
+        // AND the same is true for the KDE file dialogs when called with the non-static methods.
+        // And non-static KDE file is even more broken, especially when called with QFileDialog::AcceptSave:
+        // then the directory above defaultdir is opened, and defaultdir is given as the default file name...
+        //
+        // So: in X11, use static methods inside KDE, which give working native dialogs, but non-static outside
+        // KDE, which gives working Qt dialogs.
+        //
+        // Never show the GTK dialog.
+#ifdef Q_WS_X11
+        // And when we're in X11 but not in KDE, we probably want the GTK dialogs (well...), so we need to
+        // use the static methods.
+    if (qgetenv("KDE_FULL_SESSION").size() > 0) {
+        useStaticForNative = true;
+    }
+#endif
     }
 
     QWidget *parent;
@@ -262,7 +272,7 @@ QString KoFileDialog::url()
         {
             url = QFileDialog::getExistingDirectory(d->parent,
                                                     d->caption,
-                                                    "",
+                                                    d->defaultDirectory,
                                                     QFileDialog::ShowDirsOnly);
             break;
         }

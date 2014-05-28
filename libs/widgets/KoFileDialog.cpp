@@ -27,7 +27,6 @@
 #include <kmimetype.h>
 #include <klocale.h>
 
-
 class KoFileDialog::Private
 {
 public:
@@ -41,11 +40,26 @@ public:
         , dialogName(dialogName_)
         , caption(caption_)
         , defaultDirectory(defaultDir_)
-        , filterType(KoFileDialog::NameFilter)
         , filterList(QStringList())
         , defaultFilter(QString())
         , fileDialog(0)
+        , mimeType(0)
+        , useStaticForNative(false)
+        , hideDetails(false)
     {
+        // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
+        // using the static methods. The Qt documentation is wrong here.
+#ifdef Q_OS_WIN
+        useNative = true;
+#endif
+
+#ifdef Q_WS_X11
+        // And when we're in X11 but not in KDE, we probably want the GTK dialogs (well...), so we need to
+        // use the static methods.
+    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+        useStaticForNative = true;
+    }
+#endif
     }
 
     QWidget *parent;
@@ -54,10 +68,12 @@ public:
     QString caption;
     QString defaultDirectory;
     QString overrideDirectory;
-    KoFileDialog::FilterType filterType;
     QStringList filterList;
     QString defaultFilter;
     QFileDialog *fileDialog;
+    KMimeType::Ptr mimeType;
+    bool useStaticForNative;
+    bool hideDetails;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
@@ -100,43 +116,51 @@ void KoFileDialog::setImageFilters()
 
 void KoFileDialog::setNameFilter(const QString &filter)
 {
-    d->filterType = KoFileDialog::NameFilter;
     d->filterList.clear();
-    d->filterList << filter;
+    d->filterList << splitNameFilter(filter);
     d->defaultFilter.clear();
 }
 
 void KoFileDialog::setNameFilters(const QStringList &filterList,
                                   const QString &defaultFilter)
 {
-    d->filterType = KoFileDialog::NameFilter;
-    d->filterList = filterList;
+    d->filterList.clear();
+    foreach(const QString &filter, filterList) {
+        d->filterList << splitNameFilter(filter);
+    }
     d->defaultFilter = defaultFilter;
 }
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       const QString &defaultFilter)
 {
-    d->filterType = KoFileDialog::MimeFilter;
-    d->filterList = filterList;
+    d->filterList = getFilterStringListFromMime(filterList, true);
     d->defaultFilter = defaultFilter;
 }
 
 void KoFileDialog::setHideNameFilterDetailsOption()
 {
-    if (!d->fileDialog) {
-        createFileDialog();
-    }
-    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
+    d->hideDetails = true;
 }
 
 QString KoFileDialog::selectedNameFilter() const
 {
-#ifndef Q_OS_WIN
-    return d->fileDialog->selectedNameFilter();
-#else
-    return d->defaultFilter;
-#endif
+    if (!d->useStaticForNative) {
+        return d->fileDialog->selectedNameFilter();
+    }
+    else {
+        return d->defaultFilter;
+    }
+}
+
+QString KoFileDialog::selectedMimeType() const
+{
+    if (d->mimeType) {
+        return d->mimeType->name();
+    }
+    else {
+        return "";
+    }
 }
 
 void KoFileDialog::createFileDialog()
@@ -150,45 +174,35 @@ void KoFileDialog::createFileDialog()
     if (d->type == SaveFile || d->type == SaveFiles) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
-    } else { // open / import
+    }
+    else { // open / import
+
         d->fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-        if (d->type == ImportDirectory || d->type == ImportDirectories ||
-                d->type == OpenDirectory || d->type == OpenDirectories) {
+
+        if (d->type == ImportDirectory
+                || d->type == ImportDirectories
+                || d->type == OpenDirectory
+                || d->type == OpenDirectories)
+        {
             d->fileDialog->setFileMode(QFileDialog::Directory);
             d->fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
-        } else { // open / import file(s)
-            if (d->type == OpenFile || d->type == ImportFile) {
+        }
+        else { // open / import file(s)
+            if (d->type == OpenFile
+                    || d->type == ImportFile)
+            {
                 d->fileDialog->setFileMode(QFileDialog::ExistingFile);
-            } else { // files
+            }
+            else { // files
                 d->fileDialog->setFileMode(QFileDialog::ExistingFiles);
             }
         }
     }
 
-    // add "All Supported Formats" filter
-    if (d->type == OpenFile || d->type == OpenFiles ||
-            d->type == ImportFile || d->type == ImportFiles) {
-        if (d->filterType == MimeFilter) {
-            d->filterType = NameFilter;
-            d->filterList = getFilterStringList(d->filterList, true);
-            d->defaultFilter = getFilterString(d->defaultFilter);
-        }
-    }
+    d->fileDialog->setNameFilters(d->filterList);
 
-    if (d->filterType == MimeFilter) {
-#if QT_VERSION >= 0x050200
-        d->fileDialog->setMimeTypeFilters(d->filterList);
-        if (!d->defaultFilter.isEmpty())
-            d->fileDialog->selectMimeTypeFilter(d->defaultFilter);
-#else
-        d->fileDialog->setNameFilters(getFilterStringList(d->filterList));
-        if (!d->defaultFilter.isEmpty())
-            d->fileDialog->selectNameFilter(getFilterString(d->defaultFilter));
-#endif
-    } else {
-        d->fileDialog->setNameFilters(d->filterList);
-        if (!d->defaultFilter.isEmpty())
-            d->fileDialog->selectNameFilter(d->defaultFilter);
+    if (!d->defaultFilter.isEmpty()) {
+        d->fileDialog->selectNameFilter(d->defaultFilter);
     }
 
     if (d->type == ImportDirectory || d->type == ImportDirectories ||
@@ -197,70 +211,77 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setWindowModality(Qt::WindowModal);
     }
 
+    if (d->hideDetails) {
+        d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
+    }
+
     connect(d->fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 
 QString KoFileDialog::url()
 {
-#ifndef Q_OS_WIN
-    if (!d->fileDialog) {
-        createFileDialog();
-    }
     QString url;
-    if (d->fileDialog->exec() == QDialog::Accepted) {
-        url = d->fileDialog->selectedFiles().first();
-        saveUsedDir(url, d->dialogName);
+    if (!d->useStaticForNative) {
+
+        if (!d->fileDialog) {
+            createFileDialog();
+        }
+
+        if (d->fileDialog->exec() == QDialog::Accepted) {
+            url = d->fileDialog->selectedFiles().first();
+            saveUsedDir(url, d->dialogName);
+        }
     }
-    return url;
-#else
-    QString url;
-    switch (d->type) {
-    case OpenFile:
-    {
-        url = QFileDialog::getOpenFileName(d->parent,
-                                           d->caption,
-                                           d->directory,
-                                           getFilterString(d->filterList),
-                                           &d->defaultFilter);
-        break;
+    else {
+        switch (d->type) {
+        case OpenFile:
+        {
+            url = QFileDialog::getOpenFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        case OpenDirectory:
+        {
+            url = QFileDialog::getExistingDirectory(d->parent,
+                                                    d->caption,
+                                                    "",
+                                                    QFileDialog::ShowDirsOnly);
+            break;
+        }
+        case ImportFile:
+        {
+            url = QFileDialog::getOpenFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        case ImportDirectory:
+        {
+            url = QFileDialog::getExistingDirectory(d->parent,
+                                                    d->caption,
+                                                    d->defaultDirectory,
+                                                    QFileDialog::ShowDirsOnly);
+            break;
+        }
+        case SaveFile:
+        {
+            url = QFileDialog::getSaveFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        default:
+            ;
+        }
     }
-    case OpenDirectory:
-    {
-        url = QFileDialog::getExistingDirectory(d->parent,
-                                                d->caption,
-                                                "",
-                                                QFileDialog::ShowDirsOnly);
-        break;
-    }
-    case ImportFile:
-    {
-        url = QFileDialog::getOpenFileName(d->parent,
-                                           d->caption,
-                                           d->directory,
-                                           getFilterString(d->filterList),
-                                           &d->defaultFilter);
-        break;
-    }
-    case ImportDirectory:
-    {
-        url = QFileDialog::getExistingDirectory(d->parent,
-                                                d->caption,
-                                                d->directory,
-                                                QFileDialog::ShowDirsOnly);
-        break;
-    }
-    case SaveFile:
-    {
-        url = QFileDialog::getSaveFileName(d->parent,
-                                           d->caption,
-                                           d->directory,
-                                           getFilterString(d->filterList),
-                                           &d->defaultFilter);
-        break;
-    }
-    default:
-        ;
-    }
+
     if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
         int start = d->defaultFilter.lastIndexOf("*.") + 1;
         int end = d->defaultFilter.lastIndexOf(" )");
@@ -268,58 +289,64 @@ QString KoFileDialog::url()
         QString extension = d->defaultFilter.mid(start, n);
         url.append(extension);
     }
+
+
+    if (!url.isEmpty()) {
+        d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
+    }
+
     return url;
-#endif
 }
 
 QStringList KoFileDialog::urls()
 {
-#ifndef Q_OS_WIN
-    if (!d->fileDialog) {
-        createFileDialog();
-    }
     QStringList urls;
-    if (d->fileDialog->exec() == QDialog::Accepted) {
-        urls = d->fileDialog->selectedFiles();
-        saveUsedDir(urls.first(), d->dialogName);
-    }
-    return urls;
-#else
-    switch (d->type) {
-    case OpenFiles:
-    case ImportFiles:
-    {
-        return QFileDialog::getOpenFileNames(d->parent,
-                                             d->caption,
-                                             d->directory,
-                                             getFilterString(d->filterList),
-                                             &d->defaultFilter);
-    }
-    case OpenDirectories:
-    case ImportDirectories:
-    case SaveFiles:
-    {
-        // These don't exist as a static method. They aren't used in Calligra either, afaict
+
+    if (!d->useStaticForNative) {
         if (!d->fileDialog) {
             createFileDialog();
         }
-        QStringList urls;
         if (d->fileDialog->exec() == QDialog::Accepted) {
             urls = d->fileDialog->selectedFiles();
             saveUsedDir(urls.first(), d->dialogName);
         }
-        return urls;
+    }
+    else {
+        switch (d->type) {
+        case OpenFiles:
+        case ImportFiles:
+        {
+            urls = QFileDialog::getOpenFileNames(d->parent,
+                                                 d->caption,
+                                                 d->defaultDirectory,
+                                                 d->filterList.join(";;"),
+                                                 &d->defaultFilter);
+            break;
+        }
+        case OpenDirectories:
+        case ImportDirectories:
+        case SaveFiles:
+        {
+            // These don't exist as a static method. They aren't used in Calligra either, afaict
+            if (!d->fileDialog) {
+                createFileDialog();
+            }
+            if (d->fileDialog->exec() == QDialog::Accepted) {
+                urls = d->fileDialog->selectedFiles();
+                saveUsedDir(urls.first(), d->dialogName);
+            }
+            break;
 
+        }
+        default:
+            return QStringList();
+        }
     }
-    default:
-        return QStringList();
-    }
-#endif
+    return urls;
 }
 
 void KoFileDialog::filterSelected(const QString &filter)
 {
-    qDebug() << "filterselected" << filter;
     // "Windows BMP image ( *.bmp )";
     int start = filter.lastIndexOf("*.") + 2;
     int end = filter.lastIndexOf(" )");
@@ -329,8 +356,38 @@ void KoFileDialog::filterSelected(const QString &filter)
     d->fileDialog->setDefaultSuffix(extension);
 }
 
-const QStringList KoFileDialog::getFilterStringList(const QStringList &mimeList,
-                                                bool withAllSupportedEntry)
+QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
+{
+    QStringList filters;
+    QString description;
+
+    if (nameFilter.contains("(")) {
+        description = nameFilter.left(nameFilter.indexOf("(") -1).trimmed();
+    }
+
+
+    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
+
+
+    foreach(QString entry, entries) {
+
+        entry = entry.remove("*");
+        entry = entry.remove(")");
+
+        KMimeType::Ptr mime = KMimeType::findByUrl(KUrl("bla" + entry), 0, true, true);
+        if (mime) {
+            filters.append(mime->comment() + "( *" + entry + " )");
+        }
+        else {
+            filters.append(description + " ( *" + entry + " )");
+        }
+    }
+
+    return filters;
+}
+
+const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList,
+                                                            bool withAllSupportedEntry)
 {
     QStringList ret;
     if (withAllSupportedEntry) {
@@ -358,23 +415,7 @@ const QStringList KoFileDialog::getFilterStringList(const QStringList &mimeList,
     if (withAllSupportedEntry) {
         ret[0].append(")");
     }
-    //qDebug() << ret;
     return ret;
-}
-
-const QString KoFileDialog::getFilterString(const QString &defaultMime)
-{
-    QString filter;
-    KMimeType::Ptr type = KMimeType::mimeType(defaultMime);
-    if(type) {
-        filter.append(type->comment() + " (");
-        QStringList patterns = type->patterns();
-        QStringList::ConstIterator jt;
-        for (jt = patterns.begin(); jt != patterns.end(); ++jt)
-            filter.append(*jt + " ");
-        filter.append(")");
-    }
-    return filter;
 }
 
 const QString KoFileDialog::getUsedDir(const QString &dialogName)
@@ -397,33 +438,3 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 
 }
 
-const QString KoFileDialog::getFilterString(const QStringList &mimeList,
-                                            bool withAllSupported)
-{
-    QString allSupportedFilter;
-    if (withAllSupported) {
-        allSupportedFilter = QString(i18n("All supported formats") + " ( ");
-    }
-    QString restFilters;
-    for (QStringList::ConstIterator it = mimeList.begin(); it != mimeList.end(); ++it) {
-        KMimeType::Ptr type = KMimeType::mimeType( *it );
-        if(!type)
-            continue;
-        restFilters.append(";;" + type->comment() + " ( ");
-        QStringList patterns = type->patterns();
-        QStringList::ConstIterator jt;
-        for (jt = patterns.begin(); jt != patterns.end(); ++jt) {
-            restFilters.append(*jt + " ");
-            if (withAllSupported) {
-                allSupportedFilter.append(*jt + " ");
-            }
-        }
-        restFilters.append(")");
-    }
-
-    if (withAllSupported) {
-        return allSupportedFilter + ")" + restFilters;
-    } else {
-        return restFilters.remove(0, 2);
-    }
-}

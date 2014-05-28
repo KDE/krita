@@ -48,6 +48,9 @@ private slots:
 
 private:
     Ui::KoFileDialogTester *ui;
+
+    QStringList m_nameFilters;
+    QStringList m_mimeFilter;
 };
 
 #endif // KOFILEDIALOGTESTER_H

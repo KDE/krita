@@ -99,6 +99,7 @@ public:
     QString url();
 
 
+
     /**
      * @brief selectedNameFilter returns the name filter the user selected, either
      *    directory or by clicking on it.
@@ -106,28 +107,33 @@ public:
      */
     QString selectedNameFilter() const;
 
+    QString selectedMimeType() const;
+
 private slots:
 
     void filterSelected(const QString &filter);
 
 private:
-    enum FilterType {
-        MimeFilter,
-        NameFilter
-    };
+    /**
+     * @brief splitNameFilter take a single line of a QDialog name filter and split it
+     *   into several lines. This is needed because a single line name filter can contain
+     *   more than one mimetype, making it impossible to figure out the correct extension.
+     *
+     *   The methods takes care of some duplicated extensions, like jpeg and jpg.
+     * @param nameFilter the namefilter to be split
+     * @return a stringlist of all name filters.
+     */
+    QStringList splitNameFilter(const QString &nameFilter);
 
     void createFileDialog();
 
     const QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringList(const QStringList &mimeList,
-                                      bool withAllSupportedEntry = false);
+    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
+                                                  bool withAllSupportedEntry = false);
 
-    const QString getFilterString(const QStringList &mimeList,
-                                  bool withAllSupportedEntry = false);
 
-    const QString getFilterString(const QString &defaultMime);
 
     class Private;
     Private * const d;

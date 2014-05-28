@@ -126,7 +126,7 @@ void DocumentManager::delayedNewDocument()
     {
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
-        d->document->setUrl(KUrl("New Image.kra"));
+        d->document->resetURL();
     }
     else if(d->newDocOptions.contains("template")) {
         KUrl url(d->newDocOptions.value("template").toString().remove("template://"));
@@ -173,7 +173,7 @@ void DocumentManager::delayedNewDocument()
         KoColor bg(background, profile);
 
         d->document->newImage(name, width, height, profile, bg, QString(), res);
-        d->document->setUrl(KUrl("New Image.kra"));
+        d->document->resetURL();
     }
 
     d->temporaryFile = true;

@@ -51,6 +51,7 @@ public:
 
     virtual ~BrushResourceServer()
     {
+        destroyTagStorage();
         foreach(KisBrush* brush, m_brushes) {
             if (!brush->deref()) {
                 delete brush;

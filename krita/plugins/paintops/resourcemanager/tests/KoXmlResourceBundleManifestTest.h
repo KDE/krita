@@ -20,7 +20,7 @@
 
 #ifndef KOXMLRESOURCEBUNDLEMANIFESTTEST_H
 #define KOXMLRESOURCEBUNDLEMANIFESTTEST_H
-#include <QtTest/QTest>
+#include <QTest>
 #include <KoConfig.h>
 
 class KoXmlResourceBundleManifestTest : public QObject

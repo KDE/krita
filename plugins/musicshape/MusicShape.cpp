@@ -27,6 +27,7 @@
 #include <QSvgGenerator>
 
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>
@@ -80,7 +81,7 @@ MusicShape::MusicShape()
         m_sheet = new Sheet();
         Bar* bar = m_sheet->addBar();
 
-        Part* part = m_sheet->addPart("Part 1");
+        Part* part = m_sheet->addPart(i18n("Part 1"));
         Staff* staff = part->addStaff();
         part->addVoice();
         bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));

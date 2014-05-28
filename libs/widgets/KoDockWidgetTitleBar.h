@@ -40,7 +40,7 @@ public:
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
-
+    void setLocked(bool locked);
     void setCollapsable(bool collapsable);
 
     enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
@@ -54,6 +54,8 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())
+    Q_PRIVATE_SLOT(d, void toggleLocked())
+    Q_PRIVATE_SLOT(d, void topLevelChanged(bool topLevel))
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 
     class Private;

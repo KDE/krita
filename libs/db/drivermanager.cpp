@@ -25,7 +25,6 @@
 #include "driver_p.h"
 #include "error.h"
 
-//#include <klibloader.h>
 #include <kservicetypetrader.h>
 #include <kdebug.h>
 #include <klocale.h>

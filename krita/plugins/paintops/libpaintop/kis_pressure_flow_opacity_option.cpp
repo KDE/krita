@@ -29,7 +29,7 @@
 #include <widgets/kis_curve_widget.h>
 
 KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
-    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true, 1.0, 0.0, 1.0)
+    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::commonCategory(), true, 1.0, 0.0, 1.0)
     , m_flow(1.0)
 {
     setCurveUsed(true);

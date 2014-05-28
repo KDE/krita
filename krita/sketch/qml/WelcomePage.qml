@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
@@ -56,7 +56,7 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                tooltip: "Mininize";
+                tooltip: "Minimize";
 
                 image: Settings.theme.icon("minimize");
                 onClicked: Krita.Window.minimize();
@@ -217,7 +217,10 @@ Page {
         function createNewImage(options) {
             if(options !== undefined) {
                 baseLoadingDialog.visible = true;
-                if(options.source === undefined) {
+                if(options.template !== undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(options);
+                    settings.temporaryFile = true;
+                } else if(options.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
                     Settings.temporaryFile = true;
                 } else if(options.source == "clipboard") {

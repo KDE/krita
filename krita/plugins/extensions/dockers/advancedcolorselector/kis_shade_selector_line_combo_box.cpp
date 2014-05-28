@@ -24,19 +24,29 @@
 
 #include "kis_shade_selector_line.h"
 #include "kis_shade_selector_line_combo_box_popup.h"
+#include "kis_color_selector_base_proxy.h"
+
 
 KisShadeSelectorLineComboBox::KisShadeSelectorLineComboBox(QWidget *parent) :
     QComboBox(parent),
     m_popup(new KisShadeSelectorLineComboBoxPopup(this)),
-    m_currentLine(new KisShadeSelectorLine(0,0,0,this))
+    m_parentProxy(new KisColorSelectorBaseProxyNoop()),
+    m_currentLine(new KisShadeSelectorLine(0,0,0, m_parentProxy.data(), this))
 {
     QGridLayout* l = new QGridLayout(this);
     l->addWidget(m_currentLine);
 
     m_currentLine->setEnabled(false);
-    m_currentLine->setColor(QColor(190,50,50));
+
+    KoColor color;
+    color.fromQColor(QColor(190, 50, 50));
+    m_currentLine->setColor(color);
 
     updateSettings();
+}
+
+KisShadeSelectorLineComboBox::~KisShadeSelectorLineComboBox()
+{
 }
 
 void KisShadeSelectorLineComboBox::hidePopup()

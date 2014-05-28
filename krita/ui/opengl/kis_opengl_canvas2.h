@@ -36,7 +36,7 @@ class QWidget;
 class QGLFramebufferObject;
 class QPaintEvent;
 class KisCanvas2;
-class KisDisplayFilter;
+
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -56,7 +56,7 @@ public:
 
     virtual ~KisOpenGLCanvas2();
 
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
     void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
@@ -103,6 +103,7 @@ private:
 
     void drawImage() const;
     void drawCheckers() const;
+    QByteArray buildFragmentShader() const;
 
 };
 

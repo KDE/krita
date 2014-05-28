@@ -140,7 +140,7 @@ bool KoColor::operator==(const KoColor &other) const
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }
 
-void KoColor::convertTo(const KoColorSpace * cs)
+void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     //dbgPigment <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
@@ -151,13 +151,19 @@ void KoColor::convertTo(const KoColorSpace * cs)
     quint8 * data = new quint8[cs->pixelSize()];
     memset(data, 0, cs->pixelSize());
 
-    d->colorSpace->convertPixelsTo(d->data, data, cs, 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    d->colorSpace->convertPixelsTo(d->data, data, cs, 1, renderingIntent, conversionFlags);
 
     delete [] d->data;
     d->data = data;
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
 }
 
+void KoColor::convertTo(const KoColorSpace * cs)
+{
+    convertTo(cs,
+              KoColorConversionTransformation::InternalRenderingIntent,
+              KoColorConversionTransformation::InternalConversionFlags);
+}
 
 void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
 {

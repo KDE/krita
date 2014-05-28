@@ -49,14 +49,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 # fetch git revision for the current build
 
 set(CALLIGRA_GIT_SHA1_STRING "")
+set(CALLIGRA_GIT_BRANCH_STRING "")
 
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+get_git_branch(GIT_BRANCH)
 
-if(GIT_SHA1)
+if(GIT_SHA1 AND GIT_BRANCH)
     string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
     set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
-endif(GIT_SHA1)
+    set(CALLIGRA_GIT_BRANCH_STRING ${GIT_BRANCH})
+endif()
 
  ########################
 #########################
@@ -175,7 +178,7 @@ calligra_define_product(EXTRA_PROPERTIES "Plugin for the KDE file properties dia
 calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
-calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP and MS PPT/PPTX" NEEDS STAGE_PART)
+calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP" NEEDS STAGE_PART)
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  NEEDS CALLIGRA_LIBS)
@@ -278,6 +281,9 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FI
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
 calligra_define_product(ACTIVE "Calligra Active"  NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLIGRA_LIBS)
+# more extras
+calligra_define_product(OKULARGENERATOR_PPT "Plugin for Okular extended with support for PPT" NEEDS OKULARODPGENERATOR FILTER_PPT_TO_ODP)
+calligra_define_product(OKULARGENERATOR_PPTX "Plugin for Okular extended with support for PPTX" NEEDS OKULARODPGENERATOR FILTER_PPTX_TO_ODP)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "cstester " NEEDS SHEETS_PART STAGE_PART WORDS_PART)

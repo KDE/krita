@@ -18,6 +18,8 @@
 
 #include "kis_tool_paint.h"
 
+#include <algorithm>
+
 #include <QWidget>
 #include <QRect>
 #include <QLayout>
@@ -82,6 +84,20 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     updateTabletPressureSamples();
 
     m_supportOutline = false;
+
+    {
+        const int maxSize = 1000;
+
+        int brushSize = 1;
+        do {
+            m_standardBrushSizes.push_back(brushSize);
+            int increment = qMax(1, int(std::ceil(qreal(brushSize) / 15)));
+            brushSize += increment;
+        } while (brushSize < maxSize);
+
+        m_standardBrushSizes.push_back(maxSize);
+    }
+
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -458,26 +474,34 @@ void KisToolPaint::setOutlineEnabled(bool value)
 
 void KisToolPaint::increaseBrushSize()
 {
-    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
-    int increment = 1;
-    if (paintopSize > 100) {
-        increment = 30;
-    } else if (paintopSize > 10){
-        increment = 10;
-    }
+    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+
+    std::vector<int>::iterator result =
+        std::upper_bound(m_standardBrushSizes.begin(),
+                         m_standardBrushSizes.end(),
+                         (int)paintopSize);
+
+    int newValue = result != m_standardBrushSizes.end() ? *result : m_standardBrushSizes.back();
+
+    qreal increment = newValue - paintopSize;
+
     currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::decreaseBrushSize()
 {
-    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
-    int decrement = -1;
-    if (paintopSize > 100) {
-        decrement = -30;
-    } else if (paintopSize > 20){
-        decrement = -10;
-    }
+    qreal paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+
+    std::vector<int>::reverse_iterator result =
+        std::upper_bound(m_standardBrushSizes.rbegin(),
+                         m_standardBrushSizes.rend(),
+                         (int)paintopSize,
+                         std::greater<int>());
+
+    int newValue = result != m_standardBrushSizes.rend() ? *result : m_standardBrushSizes.front();
+    qreal decrement = newValue - paintopSize;
+
     currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
     requestUpdateOutline(m_outlineDocPoint, 0);
 }

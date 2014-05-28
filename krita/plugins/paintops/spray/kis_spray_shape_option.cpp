@@ -33,7 +33,7 @@ public:
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::brushCategory(), true)
+    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::commonCategory(), true)
 {
     m_checkable = true;
     // save this to be able to restore it back

@@ -80,7 +80,7 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
 
         if (m_properties->useSaturation) {
             if (m_transfo) {
-                m_transfo->setParameter(m_saturationId, result);
+                m_transfo->setParameter(m_saturationId, 1.0 + result);
                 m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
             }
 

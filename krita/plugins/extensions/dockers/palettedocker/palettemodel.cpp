@@ -22,15 +22,33 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSet.h>
+#include <KoColorDisplayRendererInterface.h>
+
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
-PaletteModel::PaletteModel(QObject* parent): QAbstractTableModel(parent), m_colorSet(0)
+PaletteModel::PaletteModel(QObject* parent)
+    : QAbstractTableModel(parent),
+      m_colorSet(0),
+      m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
 }
 
 PaletteModel::~PaletteModel()
 {
+}
+
+void PaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
+{
+    disconnect(m_displayRenderer, 0, this, 0);
+    m_displayRenderer = displayRenderer;
+    connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
+            SLOT(slotDisplayConfigurationChanged()));
+}
+
+void PaletteModel::slotDisplayConfigurationChanged()
+{
+    reset();
 }
 
 QVariant PaletteModel::data(const QModelIndex& index, int role) const
@@ -40,8 +58,8 @@ QVariant PaletteModel::data(const QModelIndex& index, int role) const
         if (i < m_colorSet->nColors()) {
             switch (role) {
                 case Qt::BackgroundRole: {
-                    QBrush brush(m_colorSet->getColor(i).color.toQColor());
-                    return brush;
+                    QColor color = m_displayRenderer->toQColor(m_colorSet->getColor(i).color);
+                    return QBrush(color);
                 }
                 break;
             }

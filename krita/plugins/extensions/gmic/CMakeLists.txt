@@ -17,10 +17,17 @@ if(APPLE)
 endif()
 add_definitions(-Dgmic_build )
 add_definitions(-Dgmic_float_only )
+add_definitions(-Dcimg_use_zlib)
 
 add_definitions(-Dcimg_display=0 )
 add_definitions(-fexceptions )
 # TODO: this only for debug
+
+find_package( ZLIB REQUIRED )
+if ( ZLIB_FOUND )
+    include_directories( ${ZLIB_INCLUDE_DIRS} )
+endif( ZLIB_FOUND )
+
 add_definitions(-Dcimg_use_vt100 )
 
 if(FFTW3_FOUND)
@@ -37,6 +44,8 @@ add_library(gmic STATIC ${gmic_sources_SRCS} ${gmic_headers_SRCS})
 if(FFTW3_FOUND)
   target_link_libraries(gmic ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
+
+target_link_libraries(gmic ${ZLIB_LIBRARIES})
 
 if (WIN32)
     target_link_libraries(gmic)
@@ -68,6 +77,7 @@ set(kritagmic_shared_PART_SRCS
     kis_gmic_input_output_widget.cpp
     kis_gmic_filter_proxy_model.cpp
     kis_gmic_widget.cpp
+    kis_gmic_updater.cpp
 )
 
 set(kritagmic_PART_SRCS
@@ -86,10 +96,10 @@ set(gmicparser_PART_SRCS main.cpp ${kritagmic_shared_PART_SRCS})
 kde4_add_ui_files(kritagmic_PART_SRCS wdg_gmic.ui )
 kde4_add_plugin(kritagmic ${kritagmic_PART_SRCS})
 
-target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY})
+target_link_libraries(kritagmic kritaui gmic ${QT_QTXML_LIBRARY} ${ZLIB_LIBRARIES})
 
 kde4_add_executable(gmicparser ${gmicparser_PART_SRCS})
-target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic)
+target_link_libraries(gmicparser ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} kritaui gmic ${ZLIB_LIBRARIES})
 
 install(TARGETS kritagmic  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(TARGETS gmicparser  ${INSTALL_TARGETS_DEFAULT_ARGS})

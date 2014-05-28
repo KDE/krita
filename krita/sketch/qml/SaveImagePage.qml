@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0 as Krita
-import "components"
+import org.krita.sketch.components 1.0
 
 Page {
     id: base;
@@ -88,7 +88,7 @@ Page {
             bottom: footer.top;
         }
 
-        model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
+        model: FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
         delegate: delegate;
 
         cellWidth: Constants.GridWidth * 4;
@@ -178,7 +178,12 @@ Page {
                 onClicked: {
                     if ( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
-                        base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                        if(Krita.fileExists(filePath)) {
+                            confirmOverwrite.show();
+                        }
+                        else {
+                            base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                        }
                     }
                 }
             }
@@ -210,6 +215,30 @@ Page {
                 } else {
                     fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));
                 }
+            }
+        }
+    }
+
+    Dialog {
+        id: confirmOverwrite;
+        title: "File already exists";
+        message: "A file with the name %1 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+        buttons: [ "Overwrite", "Cancel" ];
+        onButtonClicked: {
+            switch(button) {
+                case 0: {
+                    var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+                    base.finished( filePath, fileType.model.get(fileType.currentIndex).mime );
+                }
+                case 1: {
+                    // do nothing, just dismiss dialog
+                }
+                default: {
+                    console.debug("Nope, shouldn't be here. How did you press a button that doesn't exist?");
+                    break;
+                }
+                confirmOverwrite.hide();
+                pageStack.pop();
             }
         }
     }

@@ -22,7 +22,9 @@
 #include <QLabel>
 #include <QCloseEvent>
 #include <QLineEdit>
+#include <QApplication>
 #include <kis_debug.h>
+#include <kmessagebox.h>
 
 #include <QMetaType>
 #include <klocalizedstring.h>
@@ -34,10 +36,11 @@
 #include <kis_gmic_input_output_widget.h>
 
 #include <kis_gmic_filter_proxy_model.h>
+#include "kis_gmic_updater.h"
 
 static const QString maximizeStr = i18n("Maximize");
 
-KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters): QWidget(),m_filterModel(filters)
+KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl): QWidget(),m_filterModel(filters),m_updateUrl(updateUrl)
 {
     createMainLayout();
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -74,9 +77,22 @@ void KisGmicWidget::createMainLayout()
 
     m_filterConfigLayout->addWidget(m_filterTree, row, column);
 
+    QPushButton * updateBtn = new QPushButton(this);
+    updateBtn->setText("Update definitions");
+    if (!m_updateUrl.isEmpty())
+    {
+        updateBtn->setToolTip("Fetching definitions from : " + m_updateUrl);
+    }
+    else
+    {
+        updateBtn->setEnabled(false);
+    }
+    connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
+    m_filterConfigLayout->addWidget(updateBtn, row+1, column);
+
     QLineEdit * searchBox = new QLineEdit(this);
     connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
-    m_filterConfigLayout->addWidget(searchBox, row+1, column);
+    m_filterConfigLayout->addWidget(searchBox, row+2, column);
 
     column++;
 
@@ -248,4 +264,22 @@ void KisGmicWidget::maximizeSlot()
         showMaximized();
         maximizeButton->setText(i18n("Restore"));
     }
+}
+
+void KisGmicWidget::startUpdate()
+{
+    m_updater = new KisGmicUpdater(m_updateUrl);
+    connect(m_updater, SIGNAL(updated()), this, SLOT(finishUpdate()));
+    m_updater->start();
+    qApp->setOverrideCursor(Qt::WaitCursor);
+}
+
+void KisGmicWidget::finishUpdate()
+{
+    qApp->restoreOverrideCursor();
+    m_updater->deleteLater();
+    QString msg = i18nc("@info",
+                        "Update filters done. "
+                        "Restart G'MIC dialog to finish updating! ");
+    KMessageBox::information(this, msg, i18nc("@title:window", "Updated"));
 }

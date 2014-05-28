@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <kaction.h>
 
-#include "kis_autogradient_resource.h"
+#include <KoSegmentGradient.h>
 
 #define MARGIN 5
 #define HANDLE_SIZE 10
@@ -55,7 +55,7 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     m_segmentMenu->addAction(m_removeSegmentAction);
 }
 
-void KisGradientSliderWidget::setGradientResource(KisAutogradientResource* agr)
+void KisGradientSliderWidget::setGradientResource(KoSegmentGradient* agr)
 {
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);

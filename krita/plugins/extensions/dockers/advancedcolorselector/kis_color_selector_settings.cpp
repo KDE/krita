@@ -32,6 +32,8 @@
 
 #include "kis_color_selector_combo_box.h"
 #include "kis_color_selector.h"
+#include "kis_config.h"
+
 
 KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     KisPreferenceSet(parent),
@@ -108,13 +110,12 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("popupOnMouseClick", ui->popupOnMouseClick->isChecked());
     cfg.writeEntry("zoomSize", ui->popupSize->value());
 
-    cfg.writeEntry("useCustomColorSpace", ui->useCustomColorSpace->isChecked());
-    const KoColorSpace* colorSpace = ui->colorSpace->currentColorSpace();
-    if(colorSpace) {
-        cfg.writeEntry("customColorSpaceModel", colorSpace->colorModelId().id());
-        cfg.writeEntry("customColorSpaceDepthID", colorSpace->colorDepthId().id());
-        cfg.writeEntry("customColorSpaceProfile", colorSpace->profile()->name());
-    }
+    bool useCustomColorSpace = ui->useCustomColorSpace->isChecked();
+    const KoColorSpace* colorSpace = useCustomColorSpace ?
+        ui->colorSpace->currentColorSpace() : 0;
+
+    KisConfig kisconfig;
+    kisconfig.setCustomColorSelectorColorSpace(colorSpace);
 
     //color patches
     cfg.writeEntry("lastUsedColorsShow", ui->lastUsedColorsShow->isChecked());
@@ -193,14 +194,18 @@ void KisColorSelectorSettings::loadPreferences()
     else
         ui->shrunkenDoNothing->setChecked(true);
 
-    if(cfg.readEntry("useCustomColorSpace", false))
-        ui->useCustomColorSpace->setChecked(true);
-    else
-        ui->useImageColorSpace->setChecked(true);
 
-    ui->colorSpace->setCurrentColorModel(KoID(cfg.readEntry("customColorSpaceModel", "RGBA")));
-    ui->colorSpace->setCurrentColorDepth(KoID(cfg.readEntry("customColorSpaceDepthID", "U8")));
-    ui->colorSpace->setCurrentProfile(cfg.readEntry("customColorSpaceProfile", KoColorSpaceRegistry::instance()->rgb8()->profile()->name()));
+    {
+        KisConfig kisconfig;
+        const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
+
+        if(cs) {
+            ui->useCustomColorSpace->setChecked(true);
+            ui->colorSpace->setCurrentColorSpace(cs);
+        } else {
+            ui->useImageColorSpace->setChecked(true);
+        }
+    }
 
     a = cfg.readEntry("popupOnMouseOver", false);
     b = cfg.readEntry("popupOnMouseClick", true);

@@ -233,9 +233,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
                             context.painter->drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
                         }
                     }
-
                     context.painter->restore();
-
                 } 
             }
         }
@@ -246,9 +244,3 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
 
     return true;
 }
-
-
-
-//#include <math.h>
-//#include <QFontDatabase>
-

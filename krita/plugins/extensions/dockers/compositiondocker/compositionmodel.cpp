@@ -41,12 +41,35 @@ QVariant CompositionModel::data(const QModelIndex& index, int role) const
             }
             case Qt::DecorationRole:
             {
-                    return koIcon("tools-wizard");
+                return koIcon("tools-wizard");
+            }
+            case Qt::CheckStateRole: {
+                return m_compositions.at(index.row())->isExportEnabled() ? Qt::Checked : Qt::Unchecked;
             }
         }
     }
     return QVariant();
 }
+
+bool CompositionModel::setData ( const QModelIndex& index, const QVariant& value, int role )
+{
+    if (index.isValid()) {
+        if (role == Qt::CheckStateRole) {
+            Q_ASSERT(index.row() < rowCount());
+            Q_ASSERT(index.column() < columnCount());
+            if (index.column() == 0) {
+                bool exportEnabled = value.toInt() == Qt::Checked;
+                KisLayerComposition* layerComposition = m_compositions.at(index.row());
+                if (layerComposition) {
+                    layerComposition->setExportEnabled(exportEnabled);
+                }
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 
 QVariant CompositionModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
@@ -61,12 +84,12 @@ int CompositionModel::rowCount(const QModelIndex& /*parent*/) const
 
 int CompositionModel::columnCount(const QModelIndex& /*parent*/) const
 {
-    return 1;
+    return 2;
 }
 
 Qt::ItemFlags CompositionModel::flags(const QModelIndex& /*index*/) const
 {
-    Qt::ItemFlags flags = /*Qt::ItemIsSelectable |*/ Qt::ItemIsEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return flags;
 }
 

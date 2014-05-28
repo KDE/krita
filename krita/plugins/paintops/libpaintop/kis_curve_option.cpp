@@ -126,6 +126,7 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
 
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
 {
+    if (!setting) return;
     //qDebug() << "readNamedOptionSetting" << prefix;
     setting->dump();
 

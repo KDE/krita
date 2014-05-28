@@ -17,11 +17,13 @@
  */
 
 import QtQuick 1.1
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base
     property bool fullView: true;
+    height: childrenRect.height;
+
     ExpandingListView {
         anchors {
             top: parent.top;
@@ -29,6 +31,7 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
+        expandedHeight: Constants.GridHeight * 3;
         model: ListModel {
             ListElement {
                 text: "Current Layer";

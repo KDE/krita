@@ -51,6 +51,7 @@ public:
 
     virtual ~BrushResourceServer()
     {
+        destroyTagStorage();
         foreach(KisBrush* brush, m_brushes) {
             if (!brush->deref()) {
                 delete brush;
@@ -167,6 +168,9 @@ KisBrushServer::KisBrushServer()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
 
     m_brushServer = new BrushResourceServer();
+    if (!QFileInfo(m_brushServer->saveLocation()).exists()) {
+        QDir().mkpath(m_brushServer->saveLocation());
+    }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
 

@@ -28,7 +28,7 @@
 #include <kis_composite_ops_model.h>
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
+    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::commonCategory(), true),
     m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
@@ -48,7 +48,9 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
 
         setConfigurationPage(widget);
 
-        connect(ui.list    , SIGNAL(activated(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+//        connect(ui.list    , SIGNAL(pressed(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+        connect(ui.list    , SIGNAL(entered(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+//        connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
 }
@@ -90,10 +92,13 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
 void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 {
-    Q_UNUSED(index);
+    m_list->setCurrentIndex(index);
 
-    KoID compositeOp = m_list->selectedCompositeOp();
-    changeCompositeOp(compositeOp);
+    if (m_list->hasSelectedCompositeOp())
+    {
+        KoID compositeOp = m_list->selectedCompositeOp();
+        changeCompositeOp(compositeOp);
+    }
 }
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)

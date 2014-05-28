@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -180,6 +180,7 @@ Panel {
                 right: parent.right;
             }
             height: childrenRect.height;
+            z: 2;
             Item {
                 id: firstToolSelector;
                 width: parent.width;
@@ -239,18 +240,22 @@ Panel {
         Flickable {
             id: toolOptionsFullFlickable;
             contentHeight: toolOptionsFull.height;
-            clip: true;
+            boundsBehavior: Flickable.StopAtBounds;
             anchors {
                 top: toolSelectorContainer.bottom;
                 left: parent.left;
+                leftMargin: Constants.DefaultMargin;
                 right: parent.right;
+                rightMargin: Constants.DefaultMargin * 2;
                 bottom: parent.bottom;
             }
+
             MouseArea {
                 anchors.fill: parent;
                 hoverEnabled: true;
                 onContainsMouseChanged: toolOptionsFull.focus = containsMouse;
             }
+
             Loader {
                 id: toolOptionsFull;
                 width: parent.width;
@@ -258,6 +263,6 @@ Panel {
                 source: "toolconfigpages/paint.qml";
             }
         }
-        ScrollDecorator { flickableItem: toolOptionsFullFlickable; }
+        ScrollDecorator { anchors.topMargin: toolSelectorContainer.height; flickableItem: toolOptionsFullFlickable; }
     }
 }

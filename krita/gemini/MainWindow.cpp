@@ -46,6 +46,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
+#include <kxmlguifactory.h>
 
 #include <KoCanvasBase.h>
 #include <KoMainWindow.h>
@@ -97,6 +98,7 @@ public:
         , sketchKisView(0)
         , desktopKisView(0)
         , desktopViewProxy(0)
+        , forceFullScreen(false)
         , forceDesktop(false)
         , forceSketch(false)
         , temporaryFile(false)
@@ -128,6 +130,7 @@ public:
     KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
+    bool forceFullScreen;
     bool forceDesktop;
     bool forceSketch;
     bool temporaryFile;
@@ -392,7 +395,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
-    setWindowState(windowState() & ~Qt::WindowFullScreen);
+    if (!d->forceFullScreen) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -419,7 +424,8 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
+        view->canvasControllerWidget()->setFocus();
+        view->setFocus();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
@@ -435,6 +441,10 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
+    // Ensure that we do, in fact, have the brush tool selected on the currently active canvas
+    KoToolManager::instance()->switchToolRequested( "InteractionTool" );
+    qApp->processEvents();
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 }
 
 void MainWindow::documentChanged()
@@ -449,6 +459,14 @@ void MainWindow::documentChanged()
     qApp->processEvents();
     d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
     d->desktopKisView->setQtMainWindow(d->desktopView);
+
+    // Define new actions here
+
+    KXMLGUIFactory* factory = d->desktopKisView->factory();
+    factory->removeClient(d->desktopKisView);
+    factory->addClient(d->desktopKisView);
+
+    d->desktopViewProxy->documentChanged();
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
@@ -513,7 +531,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->sketchKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
@@ -525,7 +543,7 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->desktopKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
@@ -715,6 +733,15 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
+}
+
+bool MainWindow::forceFullScreen() {
+    return d->forceFullScreen;
+}
+
+void MainWindow::forceFullScreen(bool newValue)
+{
+    d->forceFullScreen = newValue;
 }
 
 #include "MainWindow.moc"

@@ -81,13 +81,19 @@ private slots:
 
     void updateDisplaySettings();
 
-    void updateWidgets();
+    void slotColorManagementModeChanged();
+
+    void writeControls();
     void selectOcioConfiguration();
     void resetOcioConfiguration();
-    void refillComboboxes();
     void refillViewCombobox();
     void selectLut();
     void clearLut();
+
+private:
+    void enableControls();
+    void refillControls();
+
 
 private:
 
@@ -95,7 +101,7 @@ private:
 
     KisCanvas2 *m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
-    OcioDisplayFilter *m_displayFilter;
+    OcioDisplayFilterSP m_displayFilter;
 
     bool m_draggingSlider;
 };

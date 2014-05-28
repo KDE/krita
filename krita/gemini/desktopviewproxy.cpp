@@ -42,6 +42,7 @@
 #include <sketch/DocumentManager.h>
 #include <sketch/RecentFileManager.h>
 #include <sketch/Settings.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_view2.h>
 
@@ -85,8 +86,10 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     reloadAction->disconnect(d->desktopView);
     connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
-    loadExistingAsNewAction->disconnect(d->desktopView);
-    connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
+    //Hide the "Load existing as new" action. It serves little purpose and currently
+    //does the same as open. We cannot just remove it from the action collection though
+    //since that causes a crash in KoMainWindow.
+    loadExistingAsNewAction->setVisible(false);
 
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
@@ -173,6 +176,49 @@ void DesktopViewProxy::loadExistingAsNew()
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
+}
+
+/**
+ * @brief Override to allow for full-screen support with Canvas-mode
+ *
+ * The basic behaviour of the KisView2 is to check the KoConfig and
+ * to adjust the main window appropriately. If "hideTitlebar" is set
+ * true, then it switches the window between windowed and full-screen.
+ * To prevent it leaving the full-screen mode, we set the mode to false
+ *
+ * @param toggled
+ */
+void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
+{
+    KisView2* kisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    if(toggled) {
+        kisView->showJustTheCanvas(toggled);
+    }
+    else {
+        KisConfig cfg;
+        bool fullScreen = d->mainWindow->forceFullScreen();
+        bool hideTitlebar = cfg.hideTitlebarFullscreen();
+		
+        if (fullScreen) {
+            cfg.setHideTitlebarFullscreen(false);
+        }
+
+        kisView->showJustTheCanvas(toggled);
+
+        if (fullScreen) {
+            cfg.setHideTitlebarFullscreen(hideTitlebar);
+        }
+    }
+}
+
+void DesktopViewProxy::documentChanged()
+{
+    // Remove existing linking for toggling canvas, in order
+    // to over-ride the window state behaviour
+    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
+    toggleJustTheCanvasAction->disconnect(view);
+    connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
 }
 
 #include "desktopviewproxy.moc"

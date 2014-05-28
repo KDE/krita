@@ -322,9 +322,7 @@ void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 
 void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
-    QColor color;
-    color = c.toQColor();
-    emit sigChangeFGColorSelector(color);
+    emit sigChangeFGColorSelector(c);
 }
 
 void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
@@ -362,6 +360,16 @@ int KisFavoriteResourceManager::recentColorsTotal()
 const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)
 {
     return m_colorList->guiColor(pos);
+}
+
+void KisFavoriteResourceManager::slotSetBGColor(const KoColor c)
+{
+    m_bgColor = c;
+}
+
+KoColor KisFavoriteResourceManager::bgColor() const
+{
+    return m_bgColor;
 }
 
 #include "kis_favorite_resource_manager.moc"

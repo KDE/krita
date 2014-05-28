@@ -47,6 +47,9 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
     
     m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
+    if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
+        QDir().mkpath(m_paintOpPresetServer->saveLocation());
+    }
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
     if (!qApp->applicationName().toLower().contains("krita")) {
@@ -54,6 +57,9 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
 
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
+    if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {
+        QDir().mkpath(m_workspaceServer->saveLocation());
+    }
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
     if (!qApp->applicationName().toLower().contains("krita")) {

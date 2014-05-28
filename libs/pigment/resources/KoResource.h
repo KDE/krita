@@ -56,12 +56,14 @@ public:
      * @return true if loading the resource succeeded.
      */
     virtual bool load() = 0;
+    virtual bool loadFromDevice(QIODevice *dev) = 0;
 
     /**
      * Save this resource.
      *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
+    virtual bool saveToDevice(QIODevice* dev) const = 0;
 
     /**
      * @returns a QImage thumbnail image representing this resource.

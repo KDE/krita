@@ -19,7 +19,7 @@
 import QtQuick 1.1
 import org.krita.sketch 1.0
 import org.krita.draganddrop 1.0 as DnD
-import "../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;

@@ -45,7 +45,7 @@ public:
 };
 
 KisExperimentOpOption::KisExperimentOpOption()
-    : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();

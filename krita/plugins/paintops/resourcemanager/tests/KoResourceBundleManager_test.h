@@ -20,7 +20,7 @@
 #ifndef KORESOURCEBUNDLEMANAGER_TEST_H
 #define KORESOURCEBUNDLEMANAGER_TEST_H
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <KoConfig.h>
 
 class KoResourceBundleManager;

@@ -53,6 +53,7 @@ set(kritasketchplugin_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
+    models/TemplatesModel.cpp
     models/KeyboardModel.cpp
     models/ColorImageProvider.cpp
     models/CompositeOpModel.cpp
@@ -83,6 +84,7 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_common_colors.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_common_colors_recalculation_runner.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_minimal_shade_selector.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base_proxy.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_editor.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box.cpp

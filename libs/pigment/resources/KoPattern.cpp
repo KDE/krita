@@ -86,6 +86,19 @@ KoPattern::~KoPattern()
 
 bool KoPattern::load()
 {
+    QFile file(filename());
+    if (file.size() == 0) return false;
+
+    bool result;
+    file.open(QIODevice::ReadOnly);
+    result = loadFromDevice(&file);
+    file.close();
+
+    return result;
+}
+
+bool KoPattern::loadFromDevice(QIODevice *dev)
+{
     QString fileExtension;
     int index = filename().lastIndexOf('.');
 
@@ -94,28 +107,32 @@ bool KoPattern::load()
 
     bool result;
 
-    QFile file(filename());
-    if (file.size() == 0) return false;
 
     if (fileExtension == ".pat") {
-        file.open(QIODevice::ReadOnly);
-        QByteArray data = file.readAll();
-        file.close();
+        QByteArray data = dev->readAll();
         result = init(data);
-    } else {
+    }
+    else {
         QImage image;
-        result = image.load(filename());
+        result = image.load(dev, fileExtension.toUpper().toAscii());
         setPatternImage(image);
     }
 
     return result;
+
 }
 
 bool KoPattern::save()
 {
     QFile file(filename());
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    bool res = saveToDevice(&file);
+    file.close();
+    return res;
+}
 
+bool KoPattern::saveToDevice(QIODevice *dev) const
+{
     // Header: header_size (24+name length),version,width,height,colordepth of brush,magic,name
     // depth: 1 = greyscale, 2 = greyscale + A, 3 = RGB, 4 = RGBA
     // magic = "GPAT", as a single uint32, the docs are wrong here!
@@ -137,13 +154,13 @@ bool KoPattern::save()
     ph.magic_number = htonl(GimpPatternMagic);
 
     QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
-    int wrote = file.write(bytes);
+    int wrote = dev->write(bytes);
     bytes.clear();
 
     if (wrote == -1)
         return false;
 
-    wrote = file.write(name, nameLength + 1); // Trailing 0 apparantly!
+    wrote = dev->write(name, nameLength + 1); // Trailing 0 apparantly!
     if (wrote == -1)
         return false;
 
@@ -160,13 +177,12 @@ bool KoPattern::save()
         }
     }
 
-    wrote = file.write(bytes);
+    wrote = dev->write(bytes);
     if (wrote == -1)
         return false;
 
-    file.close();
-
     return true;
+
 }
 
 bool KoPattern::init(QByteArray& bytes)

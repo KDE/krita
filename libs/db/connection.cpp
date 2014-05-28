@@ -3751,7 +3751,7 @@ Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
 tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema)
 {
     QSet<Connection::TableSchemaChangeListenerInterface*> *listeners
-    = d->tableSchemaChangeListeners.value(&tableSchema);
+        = d->tableSchemaChangeListeners.value(&tableSchema);
     if (!listeners)
         return true;
 //Qt4??? QSet<Connection::TableSchemaChangeListenerInterface*>::ConstIterator tmpListeners(*listeners); //safer copy

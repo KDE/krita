@@ -153,12 +153,19 @@ KisGbrBrush::~KisGbrBrush()
 
 bool KisGbrBrush::load()
 {
+    QFile file(filename());
+    if (file.size() == 0) return false;
+    file.open(QIODevice::ReadOnly);
+    bool res = loadFromDevice(&file);
+    file.close();
+
+    return res;
+}
+
+bool KisGbrBrush::loadFromDevice(QIODevice *dev)
+{
     if (d->ownData) {
-        QFile file(filename());
-        if (file.size() == 0) return false;
-        file.open(QIODevice::ReadOnly);
-        d->data = file.readAll();
-        file.close();
+        d->data = dev->readAll();
     }
     return init();
 }

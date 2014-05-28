@@ -31,8 +31,12 @@ KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase
 {
 }
 
-void KisToolEllipseBase::paintRectangle(QPainter &gc, const QRect &viewRect)
+void KisToolEllipseBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
 {
+    KIS_ASSERT_RECOVER_RETURN(canvas());
+
+    QRect viewRect = pixelToView(imageRect).toRect();
+
     QPainterPath path;
     path.addEllipse(viewRect);
     paintToolOutline(&gc, path);

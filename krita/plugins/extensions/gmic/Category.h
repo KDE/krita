@@ -46,6 +46,26 @@ public:
 
     virtual QVariant data(int column);
 
+    template <typename T>
+    int indexOf(const QString &categoryName) const
+    {
+        for (int i = 0; i < m_components.size(); i++)
+        {
+            const T * component = dynamic_cast<T *>(m_components.at(i));
+            if (component)
+            {
+                if (component->name() == categoryName)
+                {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    void replace(int position, Component * c);
+
 public:
     QList<Component*> m_components; // categories and commands
 private:

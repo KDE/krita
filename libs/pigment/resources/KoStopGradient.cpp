@@ -48,14 +48,21 @@ KoStopGradient::~KoStopGradient()
 
 bool KoStopGradient::load()
 {
+    QFile f(filename());
+    f.open(QIODevice::ReadOnly);
+    bool res = loadFromDevice(&f);
+    f.close();
+    return res;
+}
+
+bool KoStopGradient::loadFromDevice(QIODevice *dev)
+{
     QString strExt;
     const int result = filename().lastIndexOf('.');
     if (result >= 0) {
         strExt = filename().mid(result).toLower();
     }
-    QFile f(filename());
-    f.open(QIODevice::ReadOnly);
-    QByteArray ba = f.readAll();
+    QByteArray ba = dev->readAll();
 
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(ba);
@@ -71,9 +78,7 @@ bool KoStopGradient::load()
     if (m_stops.count() >= 2) {
         setValid(true);
     }
-
     updatePreview();
-
     return true;
 }
 
@@ -83,7 +88,7 @@ bool KoStopGradient::save()
     if (! fileOut.open(QIODevice::WriteOnly))
         return false;
 
-    bool retval = save(&fileOut);
+    bool retval = saveToDevice(&fileOut);
     fileOut.close();
 
     return retval;
@@ -603,9 +608,9 @@ QString KoStopGradient::defaultFileExtension() const
     return QString(".svg");
 }
 
-bool KoStopGradient::save(QIODevice *io) const
+bool KoStopGradient::saveToDevice(QIODevice *dev) const
 {
-    QTextStream stream(io);
+    QTextStream stream(dev);
 
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
@@ -645,7 +650,9 @@ QByteArray KoStopGradient::generateMD5() const
 {
     QByteArray ba;
     QBuffer buf(&ba);
-    save(&buf);
+    buf.open(QBuffer::WriteOnly);
+    saveToDevice(&buf);
+    buf.close();
 
     if (!ba.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);

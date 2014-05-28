@@ -20,23 +20,117 @@
 
 #include "resourcemanager.h"
 
+#include <QDir>
+#include <QFileInfo>
+
+#include <kmessagebox.h>
 #include <klocale.h>
-#include <kis_debug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 
-//#include "dlg_resourcemanager.h"
+#include <KoResourceTagStore.h>
+#include <KoFileDialog.h>
+#include <KoResource.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
+
+#include <kis_debug.h>
+#include <kis_action.h>
+#include <kis_view2.h>
+#include <kis_resource_server_provider.h>
+#include <kis_workspace_resource.h>
+#include <kis_paintop_preset.h>
+#include <kis_brush_server.h>
+
 #include "KoResourceManagerWidget.h"
-#include "kis_action.h"
+#include "dlg_bundle_manager.h"
+#include "KoDlgCreateBundle.h"
+
+ResourceBundleServerProvider::ResourceBundleServerProvider()
+{
+    // user-local
+    KGlobal::mainComponent().dirs()->addResourceType("kis_resourcebundles", "data", "krita/bundles/");
+    KGlobal::mainComponent().dirs()->addResourceDir("kis_resourcebundles", QDir::homePath() + QString("/.create/bundles"));
+    m_resourceBundleServer = new KoResourceServer<KoResourceBundle>("kis_resourcebundles", "*.bundle");
+    if (!QFileInfo(m_resourceBundleServer->saveLocation()).exists()) {
+        QDir().mkpath(m_resourceBundleServer->saveLocation());
+    }
+    KoResourceLoaderThread loader(m_resourceBundleServer);
+    loader.start();
+    loader.barrier();
+    foreach(KoResourceBundle *bundle, m_resourceBundleServer->resources()) {
+        bundle->install();
+    }
+}
+
+
+ResourceBundleServerProvider *ResourceBundleServerProvider::instance()
+{
+    K_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance);
+    return s_instance;
+}
+
+ResourceBundleServerProvider::~ResourceBundleServerProvider()
+{
+    delete m_resourceBundleServer;
+}
+
+KoResourceServer<KoResourceBundle> *ResourceBundleServerProvider::resourceBundleServer()
+{
+    return m_resourceBundleServer;
+}
+
+
+class ResourceManager::Private {
+
+public:
+
+    Private() {
+        brushServer = KisBrushServer::instance()->brushServer();
+        paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+        gradientServer = KoResourceServerProvider::instance()->gradientServer();
+        bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
+        patternServer = KoResourceServerProvider::instance()->patternServer();
+        paletteServer = KoResourceServerProvider::instance()->paletteServer();
+        workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    }
+
+    KoResourceServer<KisBrush>* brushServer;
+    KoResourceServer<KisPaintOpPreset>* paintopServer;
+    KoResourceServer<KoAbstractGradient>* gradientServer;
+    KoResourceServer<KoResourceBundle> *bundleServer;
+    KoResourceServer<KoPattern>* patternServer;
+    KoResourceServer<KoColorSet>* paletteServer;
+    KoResourceServer< KisWorkspaceResource >* workspaceServer;
+
+};
 
 K_PLUGIN_FACTORY(ResourceManagerFactory, registerPlugin<ResourceManager>();)
 K_EXPORT_PLUGIN(ResourceManagerFactory("krita"))
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
+    : KisViewPlugin(parent, "kritaplugins/resourcemanager.rc")
+    , d(new Private())
 {
+    Q_UNUSED(ResourceBundleServerProvider::instance()); // load the bundles
+
     KisAction *action = new KisAction(i18n("Resource Manager..."), this);
     addAction("resourcemanager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotResourceManager()));
+
+    action = new KisAction(i18n("Import Resources or Bundles..."), this);
+    addAction("import", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImport()));
+
+    action = new KisAction(i18n("Create Resource Bundle..."), this);
+    addAction("createbundle", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotCreateBundle()));
+
+    action = new KisAction(i18n("Manage Resource Bundles..."), this);
+    addAction("managebundles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 }
 
 ResourceManager::~ResourceManager()
@@ -48,9 +142,160 @@ void ResourceManager::slotResourceManager()
     KoResourceManagerWidget * resourceManager = new KoResourceManagerWidget();
     Q_CHECK_PTR(resourceManager);
     resourceManager->setObjectName("ResourceManager");
+    resourceManager->exec();
+    delete resourceManager;
+}
 
-    resourceManager->show();
+void ResourceManager::slotImport()
+{
+    KoFileDialog dlg(m_view, KoFileDialog::OpenFiles, "krita_resources");
+    dlg.setCaption(i18n("Add Resources"));
+
+    QStringList nameFilters;
+    nameFilters << "Brushes (*.gbr *gih *.abr *png *svg)"
+                << "Brush Presets (*.kpp)"
+                << "Gradients (*.ggr *.svg *.kgr)"
+                << "Resource Bundles (*.bundle)"
+                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
+                << "Palettes (*.gpl *.pal *.act *.aco *.colors)"
+                << "Workspaces (*.kts)";
+
+    dlg.setNameFilters(nameFilters, nameFilters.first());
+
+    QStringList resources = dlg.urls();
+    QString resourceType = dlg.selectedNameFilter();
+
+    switch(nameFilters.indexOf(resourceType)) {
+    case 0:
+    {
+        foreach(const QString &res, resources) {
+            d->brushServer->importResourceFile(res);
+        }
+        break;
+    }
+    case 1:
+    {
+        foreach(const QString &res, resources) {
+            d->paintopServer->importResourceFile(res);
+        }
+        break;
+    }
+    case 2:
+    {
+        foreach(const QString &res, resources) {
+            d->gradientServer->importResourceFile(res);
+        }
+        break;
+    }
+    case 3:
+    {
+        foreach(const QString &res, resources) {
+            d->bundleServer->importResourceFile(res);
+            KoResourceBundle *bundle = d->bundleServer->resourceByFilename(QFileInfo(res).fileName());
+            bundle->install();
+        }
+        break;
+    }
+    case 4:
+    {
+         foreach(const QString &res, resources) {
+            d->patternServer->importResourceFile(res);
+        }
+        break;
+    }
+    case 5:
+    {
+        foreach(const QString &res, resources) {
+            d->paletteServer->importResourceFile(res);
+        }
+        break;
+    }
+    case 6:
+    {
+        foreach(const QString &res, resources) {
+            d->workspaceServer->importResourceFile(res);
+        }
+        break;
+    }
+    default:
+        qWarning() << "Trying to add a resource of an undefined type";
+    }
+}
+
+void ResourceManager::slotCreateBundle()
+{
+    KoDlgCreateBundle dlgCreateBundle;
+    if (dlgCreateBundle.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
+    KoResourceBundle* newBundle = new KoResourceBundle(bundlePath);
+
+    newBundle->addMeta("name", dlgCreateBundle.bundleName());
+    newBundle->addMeta("author", dlgCreateBundle.authorName());
+    newBundle->addMeta("email", dlgCreateBundle.email());
+    newBundle->addMeta("license", dlgCreateBundle.license());
+    newBundle->addMeta("website", dlgCreateBundle.website());
+    newBundle->addMeta("description", dlgCreateBundle.description());
+
+    QStringList res = dlgCreateBundle.selectedBrushes();
+    foreach(const QString &r, res) {
+        KoResource *res = d->brushServer->resourceByFilename(r);
+        newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedGradients();
+    foreach(const QString &r, res) {
+        KoResource *res = d->gradientServer->resourceByFilename(r);
+        newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPalettes();
+    foreach(const QString &r, res) {
+        KoResource *res = d->paletteServer->resourceByFilename(r);
+        newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPatterns();
+    foreach(const QString &r, res) {
+        KoResource *res = d->patternServer->resourceByFilename(r);
+        newBundle->addResource("kis_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedPresets();
+    foreach(const QString &r, res) {
+        KoResource *res = d->paintopServer->resourceByFilename(r);
+        newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    res = dlgCreateBundle.selectedWorkspaces();
+    foreach(const QString &r, res) {
+        KoResource *res = d->workspaceServer->resourceByFilename(r);
+        newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->tagObject()->assignedTagsList(res), res->md5());
+    }
+
+    newBundle->addMeta("fileName", bundlePath);
+    newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
+
+    newBundle->setThumbnail(dlgCreateBundle.previewImage());
+
+    if (!newBundle->save()) {
+        KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
+    }
+
 
 }
+
+void ResourceManager::slotManageBundles()
+{
+    DlgBundleManager dlg;
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
+
+}
+
+
 
 #include "resourcemanager.moc"

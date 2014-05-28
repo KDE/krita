@@ -31,8 +31,10 @@ class KRITAUI_EXPORT KisWorkspaceResource : public KoResource , public KisProper
 public:
     KisWorkspaceResource(const QString& filename);
     virtual ~KisWorkspaceResource();
-    virtual bool save();
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
+    virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
     virtual QString defaultFileExtension() const;
 
     void setDockerState(const QByteArray& state);

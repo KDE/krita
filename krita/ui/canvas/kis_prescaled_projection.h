@@ -34,7 +34,6 @@ class QPainter;
 
 class KoColorProfile;
 class KisCoordinatesConverter;
-class KisDisplayFilter;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
@@ -117,7 +116,7 @@ public slots:
 
     void setChannelFlags(const QBitArray &channelFlags);
 
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
 
     /**
      * Called whenever the zoom level changes or another chunk of the

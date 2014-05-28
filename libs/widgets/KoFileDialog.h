@@ -78,6 +78,8 @@ public:
 
     QStringList urls();
     QString url();
+    QString selectedNameFilter() const;
+
 
 private slots:
 

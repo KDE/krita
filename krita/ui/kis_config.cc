@@ -47,6 +47,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
+#include "kis_config_notifier.h"
 
 #include <config-ocio.h>
 
@@ -367,8 +368,9 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 bool KisConfig::useOpenGL() const
 {
     if (qApp->applicationName() == "krita" ) {
-        QString canvasState = m_cfg.readEntry("canvasState");
-        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+        qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS"));
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
@@ -385,7 +387,7 @@ void KisConfig::setUseOpenGL(bool useOpenGL) const
 
 int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("OpenGLFilterMode", 1);
+    return m_cfg.readEntry("OpenGLFilterMode", 3);
 }
 
 void KisConfig::setOpenGLFilteringMode(int filteringMode)
@@ -395,7 +397,7 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
 
 bool KisConfig::useOpenGLTextureBuffer() const
 {
-    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
+    return m_cfg.readEntry("useOpenGLTextureBuffer", true);
 }
 
 void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
@@ -954,14 +956,15 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
-bool KisConfig::useOcioEnvironmentVariable() const
+KisConfig::OcioColorManagementMode
+KisConfig::ocioColorManagementMode() const
 {
-    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", false);
+    return (OcioColorManagementMode) m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL);
 }
 
-void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO) const
+void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
 {
-    m_cfg.writeEntry("Krita/Ocio/UseEnvironment", useOCIO);
+    m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) mode);
 }
 
 QString KisConfig::ocioConfigurationPath() const
@@ -1120,4 +1123,32 @@ int KisConfig::paletteDockerPaletteViewSectionSize() const
 void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
 {
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
+}
+
+const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
+{
+    const KoColorSpace *cs = 0;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    if(cfg.readEntry("useCustomColorSpace", true)) {
+        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
+        cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
+                             cfg.readEntry("customColorSpaceDepthID", "U8"),
+                             cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+    }
+
+    return cs;
+}
+
+void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
+{
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    cfg.writeEntry("useCustomColorSpace", bool(cs));
+    if(cs) {
+        cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());
+        cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
+        cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
+    }
+
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }

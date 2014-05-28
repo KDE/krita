@@ -55,23 +55,23 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Autobrush"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
+    addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_brushChooser = new KisBrushChooser(this);
     connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Predefined Brushes"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
+    addChooser(i18n("Predefined"), m_brushChooser, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
+    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
+    addChooser(i18n("Custom"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
 
-    m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard Brush"), 0);
+    m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard"), 0);
     connect(m_clipboardBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Clipboard Brush"), m_clipboardBrushWidget, CLIPBOARDBRUSH, KoGroupButton::GroupCenter);
+    addChooser(i18n("Clipboard"), m_clipboardBrushWidget, CLIPBOARDBRUSH, KoGroupButton::GroupCenter);
 
-    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
+    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
+    addChooser(i18n("Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 

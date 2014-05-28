@@ -62,7 +62,7 @@ public:
         CurrentCompositeOp,
         MirrorHorizontal,
         MirrorVertical,
-        MirrorAxisCenter,
+        MirrorAxesCenter,
         Opacity,
         HdrGamma,
         GlobalAlphaLock,
@@ -180,6 +180,8 @@ signals:
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
+
+    void mirrorModeChanged();
 
 private:
 

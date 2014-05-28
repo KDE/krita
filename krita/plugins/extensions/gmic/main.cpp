@@ -8,7 +8,10 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    KisGmicParser parser("gmic_def.gmic");
+    QStringList definitions;
+    definitions << "gmic_def.gmic";
+
+    KisGmicParser parser(definitions);
     Component * root = parser.createFilterTree();
 
     KisGmicFilterModel * model = new KisGmicFilterModel(root);

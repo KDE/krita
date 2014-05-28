@@ -25,6 +25,7 @@
 #include <kis_types.h>
 
 class KoColorSet;
+class KoColorDisplayRendererInterface;
 
 class PaletteModel : public QAbstractTableModel
 {
@@ -40,9 +41,20 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 
     void setColorSet(KoColorSet* colorSet);
-    
+
+    /**
+     * Installs a display renderer object for a palette that will
+     * convert the KoColor to the displayable QColor. Default is the
+     * dumb renderer.
+     */
+    void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
+
+private slots:
+    void slotDisplayConfigurationChanged();
+
 private:
     KoColorSet* m_colorSet;
+    KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
 #endif // PALETTEMODEL_H

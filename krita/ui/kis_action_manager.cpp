@@ -52,20 +52,23 @@ KisActionManager::~KisActionManager()
 
 void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
 {
-    actionCollection->addAction(name, action);
-    action->setObjectName(name);
-    addAction(action);
-}
+    if (!name.isEmpty()) {
+        actionCollection->addAction(name, action);
+        action->setObjectName(name);
+    }
 
-void KisActionManager::addAction(KisAction* action)
-{
     d->actions.append(action);
     action->setActionManager(this);
 }
 
-void KisActionManager::takeAction(KisAction* action)
+void KisActionManager::takeAction(KisAction* action, KActionCollection *actionCollection)
 {
     d->actions.removeOne(action);
+
+    if (!action->objectName().isEmpty()) {
+        KIS_ASSERT_RECOVER_RETURN(actionCollection);
+        actionCollection->takeAction(action);
+    }
 }
 
 KisAction *KisActionManager::actionByName(const QString &name) const

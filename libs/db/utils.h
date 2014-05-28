@@ -540,7 +540,10 @@ public:
     ~StaticSetOfStrings();
     void setStrings(const char* array[]);
     bool isEmpty() const;
+
+    //! @return true if @a string can be found within set, comparison is case sensitive
     bool contains(const QByteArray& string) const;
+
 private:
     class Private;
     Private * const d;

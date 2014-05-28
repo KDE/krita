@@ -38,7 +38,6 @@ class QString;
 class QHBoxLayout;
 
 class KoColorSpace;
-class KoResourceSelector;
 class KoResource;
 class KoCanvasController;
 

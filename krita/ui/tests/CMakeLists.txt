@@ -64,12 +64,6 @@ target_link_libraries(KisShapeSelectionTest  ${KDE4_KDEUI_LIBS} kritaimage krita
 
 ########### next target ###############
 
-set(kis_autogradient_resource_test_SRCS kis_autogradient_resource_test.cpp )
-kde4_add_unit_test(KisAutogradientResourceTest TESTNAME krita-ui-KisAutogradientResourceTest ${kis_autogradient_resource_test_SRCS})
-target_link_libraries(KisAutogradientResourceTest  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_exiv2_test_SRCS kis_exiv2_test.cpp )
 kde4_add_unit_test(KisExiv2Test TESTNAME krita-ui-KisExiv2Test ${kis_exiv2_test_SRCS})
 target_link_libraries(KisExiv2Test  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})
@@ -196,4 +190,10 @@ target_link_libraries(KisCategoriesMapperTest  ${KDE4_KDEUI_LIBS}  kritaui krita
 set(kis_categorized_list_model_test_SRCS kis_categorized_list_model_test.cpp modeltest.cpp)
 kde4_add_unit_test(KisCategorizedListModelTest TESTNAME krita-ui-KisCategorizedListModelTest  ${kis_categorized_list_model_test_SRCS})
 target_link_libraries(KisCategorizedListModelTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_resource_server_provider_test_SRCS kis_resource_server_provider_test.cpp modeltest.cpp)
+kde4_add_unit_test(KisResourceServerProviderTest TESTNAME krita-ui-KisResourceServerProviderTest  ${kis_resource_server_provider_test_SRCS})
+target_link_libraries(KisResourceServerProviderTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 

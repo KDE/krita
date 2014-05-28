@@ -153,7 +153,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 3, 1);
     spacingLayout->setColumnStretch(1, 3);
 
-    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Brush"), this);
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

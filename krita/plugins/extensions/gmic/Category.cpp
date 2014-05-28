@@ -101,3 +101,8 @@ QVariant Category::data(int column)
     return name();
 }
 
+void Category::replace(int position, Component* c)
+{
+    delete m_components[position];
+    m_components[position] = c;
+}

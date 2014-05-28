@@ -119,7 +119,7 @@ void KisToolPan::beginPrimaryAction(KoPointerEvent *event)
     adjustCursor();
 
     if(m_rotationMode && isInCheckerArea(m_lastPosition)) {
-        kritaCanvasController()->resetCanvasTransformations();
+        kritaCanvasController()->resetCanvasRotation();
     }
 }
 

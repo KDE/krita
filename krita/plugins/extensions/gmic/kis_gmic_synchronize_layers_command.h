@@ -19,9 +19,6 @@
 #ifndef _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 #define _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 
-#include <commands/kis_image_layer_add_command.h>
-#include <commands/kis_image_layer_remove_command.h>
-
 #include <gmic.h>
 #include <kundo2command.h>
 

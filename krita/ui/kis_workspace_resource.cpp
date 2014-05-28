@@ -42,7 +42,13 @@ bool KisWorkspaceResource::save()
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
- 
+    bool res = saveToDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
+{
     QDomDocument doc;
     QDomElement root = doc.createElement("Workspace");
     root.setAttribute("name", name() );
@@ -56,12 +62,12 @@ bool KisWorkspaceResource::save()
     KisPropertiesConfiguration::toXML(doc, settings);
     root.appendChild(settings);
     doc.appendChild(root);
-     
-    QTextStream textStream(&file);
+
+    QTextStream textStream(dev);
     doc.save(textStream, 4);
-    file.close();
 
     return true;
+
 }
 
 bool KisWorkspaceResource::load()
@@ -71,28 +77,31 @@ bool KisWorkspaceResource::load()
  
     QFile file(filename());
     if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
 
+    bool res = loadFromDevice(&file);
+    file.close();
+    return res;
+}
+
+bool KisWorkspaceResource::loadFromDevice(QIODevice *dev)
+{
     QDomDocument doc;
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
-    if (!doc.setContent(&file)) {
-        file.close();
+    if (!doc.setContent(dev)) {
         return false;
     }
-    file.close();
 
     QDomElement element = doc.documentElement();
     setName(element.attribute("name"));
-     
-        
+
     QDomElement state = element.firstChildElement("state");
-    
-    if(!state.isNull()) {
+
+    if (!state.isNull()) {
         m_dockerState = QByteArray::fromBase64(state.text().toLatin1());
     }
 
     QDomElement settings = element.firstChildElement("settings");
-    if(!settings.isNull()) {
+    if (!settings.isNull()) {
         KisPropertiesConfiguration::fromXML(settings);
     }
 

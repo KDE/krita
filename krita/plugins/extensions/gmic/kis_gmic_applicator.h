@@ -27,7 +27,7 @@ class KisGmicApplicator : public QThread
 public:
     KisGmicApplicator();
     ~KisGmicApplicator();
-    void setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand);
+    void setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands = QByteArray());
 protected:
     virtual void run();
 private:
@@ -36,6 +36,7 @@ private:
     QString m_actionName;
     KisNodeListSP m_kritaNodes;
     QString m_gmicCommand;
+    QByteArray m_customCommands;
 };
 
 #endif

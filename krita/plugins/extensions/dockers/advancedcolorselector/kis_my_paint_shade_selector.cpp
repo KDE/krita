@@ -43,6 +43,10 @@
 #include "KoColor.h"
 #include "KoCanvasResourceManager.h"
 
+#include "kis_paint_device.h"
+#include "kis_painter.h"
+#include "kis_display_color_converter.h"
+
 inline int sqr(int x);
 inline qreal sqr2(qreal x);
 inline int signedSqr(int x);
@@ -50,13 +54,14 @@ inline int signedSqr(int x);
 
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
         KisColorSelectorBase(parent),
-        m_pixelCache(0, 0, QImage::Format_ARGB32_Premultiplied),
         m_updateTimer(new QTimer(this))
 {
     setAcceptDrops(true);
 
+    updateSettings();
+
     setMinimumSize(80, 80);
-    setColor(QColor(255,0,0));
+    setColor(KoColor(Qt::red, colorSpace()));
 
     m_updateTimer->setInterval(1);
     m_updateTimer->setSingleShot(true);
@@ -70,15 +75,11 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
 
     // This selector was ported from MyPaint in 2010
 
-    m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
-    QImage circleBorder(width(), height(), QImage::Format_ARGB32_Premultiplied);
-    circleBorder.fill(qRgba(0,0,0,0));
+    m_realPixelCache = new KisPaintDevice(this->colorSpace());
+    KisPaintDeviceSP realCircleBorder = new KisPaintDevice(this->colorSpace());
 
     int size = qMin(width(), height());
     int s_radius = size/2.6;
-
-    KoColor kocolor(colorSpace());
-    QColor qcolor;
 
     for (int x=0; x<width(); x++) {
         for (int y=0; y<height(); y++) {
@@ -148,15 +149,9 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                     fs = qBound(qreal(0.0), fs, qreal(1.0));
                     fv = qBound(qreal(0.1), fv, qreal(1.0));
 
-                    qcolor.setHsvF(fh, fs, fv);
-                    kocolor.fromQColor(qcolor);
-                    kocolor.toQColor(&qcolor);
-
-                    int aaR = qcolor.red()*aaFactor;
-                    int aaG = qcolor.green()*aaFactor;
-                    int aaB = qcolor.blue()*aaFactor;
-
-                    circleBorder.setPixel(x, y, qRgba(aaR, aaG, aaB, 255*aaFactor));
+                    KoColor color = converter()->fromHsvF(fh, fs, fv);
+                    color.setOpacity(aaFactor);
+                    Acs::setColor(realCircleBorder, QPoint(x, y), color);
 
                     h = 180 + 180*atan2f(dys,-dxs)/M_PI;
                     v = 255*(r-s_radius)/(diag-s_radius) - 128;
@@ -176,18 +171,18 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
             fs = qBound(qreal(0.0), fs, qreal(1.0));
             fv = qBound(qreal(0.1), fv, qreal(1.0));
 
-            qcolor.setHsvF(fh, fs, fv);
-            kocolor.fromQColor(qcolor);
-            kocolor.toQColor(&qcolor);
-            m_pixelCache.setPixel(x, y, qcolor.rgb());
+            KoColor color = converter()->fromHsvF(fh, fs, fv);
+            Acs::setColor(m_realPixelCache, QPoint(x, y), color);
         }
     }
 
-    QPainter pixelCachePainter(&m_pixelCache);
-    pixelCachePainter.drawImage(0,0, circleBorder);
+    KisPainter gc(m_realPixelCache);
+    gc.bitBlt(QPoint(0,0), realCircleBorder, rect());
 
     QPainter painter(this);
-    painter.drawImage(0, 0, m_pixelCache);
+    QImage renderedImage = converter()->toQImage(m_realPixelCache);
+
+    painter.drawImage(0, 0, renderedImage);
 }
 
 
@@ -199,8 +194,10 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
-    if(rect().contains(e->pos()))
-        updateColorPreview(m_pixelCache.pixel(e->x(), e->y()));
+    if(rect().contains(e->pos())) {
+        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+        this->updateColorPreview(color);
+    }
     KisColorSelectorBase::mouseMoveEvent(e);
 }
 
@@ -210,38 +207,34 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted()) {
-        QColor color = QColor(m_pixelCache.pixel(e->x(), e->y()));
-        color = findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()));
+        KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
 
-        ColorRole role=Foreground;
-        if(e->button()&Qt::RightButton)
-            role=Background;
+        Acs::ColorRole role = Acs::buttonToRole(e->button());
 
         KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+
         bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
         bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
 
-        if((e->button()&Qt::LeftButton && onLeftClick)
-            || (e->button()&Qt::RightButton && onRightClick)) {
-            setColor(color);
-        }
+        bool explicitColorReset =
+            (e->button() == Qt::LeftButton && onLeftClick) ||
+            (e->button() == Qt::RightButton && onRightClick);
 
-        commitColor(KoColor(color, colorSpace()), role);
+        this->updateColor(color, role, explicitColorReset);
+        e->accept();
     }
 }
 
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
-    popup->setColor(m_lastColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }
 
-void KisMyPaintShadeSelector::setColor(const QColor &c) {
-    m_colorH=c.hsvHueF();
-    m_colorS=c.hsvSaturationF();
-    m_colorV=c.valueF();
-    m_lastColor=c;
+void KisMyPaintShadeSelector::setColor(const KoColor &color) {
+    this->converter()->getHsvF(color, &m_colorH, &m_colorS, &m_colorV);
+    m_lastRealColor = color;
 
     m_updateTimer->start();
 }
@@ -256,9 +249,10 @@ void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
-        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
-        setColor(findGeneratingColor(v.value<KoColor>()));
+    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground) ||
+        (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
+
+        setColor(v.value<KoColor>());
     }
 }
 

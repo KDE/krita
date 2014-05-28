@@ -44,6 +44,8 @@ public:
     QObject *virtualKeyboardController() const;
     QObject *progressProxy() const;
 
+    Q_INVOKABLE bool fileExists(const QString& filename) const;
+
 private:
     class Private;
     Private * const d;

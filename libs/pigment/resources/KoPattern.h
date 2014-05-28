@@ -40,7 +40,9 @@ public:
 public:
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     qint32 width() const;
     qint32 height() const;

@@ -134,6 +134,7 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       const QString &defaultFilter)
 {
+
     d->filterList = getFilterStringListFromMime(filterList, true);
     d->defaultFilter = defaultFilter;
 }
@@ -339,7 +340,7 @@ QStringList KoFileDialog::urls()
 
         }
         default:
-            return QStringList();
+            ;
         }
     }
     return urls;

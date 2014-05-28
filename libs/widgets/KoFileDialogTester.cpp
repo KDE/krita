@@ -48,7 +48,7 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
                 << "Images (*.png *.jpg *.jpeg)"
                 << "Presentations (*.ppt *.odp)";
 
-    QStringList mimeFilter = QStringList()
+    m_mimeFilter = QStringList()
             << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
             << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
             << "image/x-portable-bitmap" << "image/png" << "image/jp2"

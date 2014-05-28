@@ -59,6 +59,19 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
+    struct SectionHandle {
+        QString name;
+        bool type; // true - open, false - close
+        QVariant data;
+
+        SectionHandle(QString _name, bool _type, QVariant _data)
+        : name(_name)
+        , type(_type)
+        , data(_data)
+        {
+        }
+    };
+
     friend class DeleteVisitor;
 
     QWeakPointer<QTextDocument> m_document;
@@ -80,8 +93,6 @@ private:
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
     bool getNextBlock(QTextCursor &cur);
-    bool getPreviousBlock(QTextCursor &cur);
-    void deleteSingleSections(QTextCursor &cur);
 };
 
 #endif // DELETECOMMAND_H

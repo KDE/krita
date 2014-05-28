@@ -133,24 +133,6 @@ public:
     QTextCharFormat m_firstFormat;
 };
 
-bool DeleteCommand::getPreviousBlock(QTextCursor &cur)
-{
-    QTextCursor prev = cur;
-    bool ok = prev.movePosition(QTextCursor::PreviousBlock);
-
-    while (ok && prev.currentFrame() != cur.currentFrame()) {
-        ok = prev.movePosition(QTextCursor::PreviousBlock);
-    }
-
-    if (!ok || prev.currentFrame() != cur.currentFrame()) {
-        // there is no previous block
-        return false;
-    }
-
-    cur = prev;
-    return true;
-}
-
 bool DeleteCommand::getNextBlock(QTextCursor &cur)
 {
     QTextCursor next = cur;
@@ -166,45 +148,6 @@ bool DeleteCommand::getNextBlock(QTextCursor &cur)
     }
     cur = next;
     return true;
-}
-
-void DeleteCommand::deleteSingleSections(QTextCursor &cur)
-{
-    QTextBlockFormat format = cur.blockFormat();
-    QVariant var = format.property(KoParagraphStyle::SectionStartings);
-    QList<QVariant> openList = var.value< QList<QVariant> >();
-
-    var = format.property(KoParagraphStyle::SectionEndings);
-    QList<QVariant> closeList = var.value< QList<QVariant> >();
-
-    for (QList<QVariant>::iterator openIt = openList.begin();
-        openIt != openList.end(); ) {
-        KoSection *sec = static_cast<KoSection *>( openIt->value<void *>());
-
-        bool found = false;
-        QList<QVariant>::iterator closeIt = closeList.begin();
-        for (; closeIt != closeList.end(); closeIt++) {
-            KoSectionEnd *secEnd = static_cast<KoSectionEnd *>( closeIt->value<void *>());
-
-            if (secEnd->name == sec->name()) {
-                found = true;
-                break;
-            }
-        }
-
-        if (found) {
-            openIt = openList.erase( openIt );
-            closeList.erase( closeIt );
-        } else {
-            openIt++;
-        }
-    }
-
-    var.setValue< QList<QVariant> >(closeList);
-    format.setProperty(KoParagraphStyle::SectionEndings, var);
-    var.setValue< QList<QVariant> >(openList);
-    format.setProperty(KoParagraphStyle::SectionStartings, var);
-    cur.setBlockFormat(format);
 }
 
 void DeleteCommand::doDelete()
@@ -231,104 +174,140 @@ void DeleteCommand::doDelete()
         deleteAnchorInlineObject(object);
     }
 
-    //FIXME: can we have a deal with complex selection there??
+    //FIXME: can we have a deal with complex selection here??
 
-    // we are going from the end of the selection,
-    // find all the paragraph delimiters,
-    // and push ends of section backwards
     QTextCursor cur = *caret;
-    cur.setPosition(caret->selectionEnd());
-    cur.movePosition(QTextCursor::PreviousCharacter);
-    while (cur.block().position() + cur.block().length() > caret->selectionStart()) {
-
-        if (cur.block().position() + cur.block().length() > caret->selectionEnd()) {
-            if (getPreviousBlock(cur)) {
-                continue;
-            } else {
-                break;
+    cur.setPosition(caret->selectionStart());
+    int startBlockNum = -1;
+    int endBlockNum = -1;
+    bool hasEntirelyInsideBlock = false;
+    QList<SectionHandle> curSectionDelimiters; // helps us delete all sections, lying entirely in selection
+    while (cur.position() <= caret->selectionEnd()) {
+        bool beginInside = false;
+        bool endInside = false;
+        if (cur.block().position() >= caret->selectionStart()) { // begin of the block inside selection
+            beginInside = true;
+            QList<QVariant> openList = cur.blockFormat()
+                .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, openList) { //FIXME: does this garants from first - to last order??
+                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+                curSectionDelimiters.push_back(SectionHandle(sec->name(), true, sv));
             }
         }
 
-        QTextCursor next = cur;
-        if (getNextBlock(next)) {
-            QTextBlockFormat curFormat = cur.blockFormat();
-            QTextBlockFormat nextFormat = next.blockFormat();
-
-            if (nextFormat.hasProperty(KoParagraphStyle::SectionEndings)) {
-                deleteSingleSections(next);
-                nextFormat = next.blockFormat();
-
-                QVariant var = nextFormat.property(KoParagraphStyle::SectionEndings);
-                QList<QVariant> closeListNext = var.value< QList<QVariant> >();
-
-                QList<QVariant> closeListCur;
-                if (curFormat.hasProperty(KoParagraphStyle::SectionEndings)) {
-                    var = curFormat.property(KoParagraphStyle::SectionEndings);
-                    closeListCur = var.value< QList<QVariant> >();
-                }
-
-                if (!closeListNext.empty()) {
-                    closeListCur.append(closeListNext);
-
-                    var.setValue< QList<QVariant> >(closeListCur);
-                    curFormat.setProperty(KoParagraphStyle::SectionEndings, var);
-                    cur.setBlockFormat(curFormat);
-
-//                  nextFormat.clearProperty(KoParagraphStyle::SectionEndings);
-//                  next.setBlockFormat(nextFormat);
+        if (cur.block().position() + cur.block().length() <= caret->selectionEnd()) { //end if the block inside selection
+            endInside = true;
+            QList<QVariant> closeList = cur.blockFormat()
+                .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, closeList) { //FIXME: does this garants from first - to last order??
+                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+                if (!curSectionDelimiters.empty() && curSectionDelimiters.last().name == sec->name) {
+                    curSectionDelimiters.pop_back();
+                } else {
+                    curSectionDelimiters.push_back(SectionHandle(sec->name, false, sv));
                 }
             }
         }
 
-        if (!getPreviousBlock(cur))
+        if (!beginInside && endInside) {
+            startBlockNum = cur.blockNumber();
+        } else if (beginInside && !endInside) {
+            endBlockNum = cur.blockNumber();
+        } else if (beginInside && endInside) {
+            hasEntirelyInsideBlock = true;
+        }
+
+        if (!getNextBlock(cur)) {
             break;
+        }
     }
 
-    // We are going from the start of the selection,
-    // find all the paragraph delimiters
-    // and push starts of the sections forward.
-    // If start has met the end, we don't push it forward,
-    // but deleting the end and the start
-    cur = *caret;
-    cur.setPosition(caret->selectionStart());
-    while (cur.block().position() + cur.block().length() <= caret->selectionEnd()) {
-        QTextCursor next = cur;
-        if (getNextBlock(next)) {
-            QTextCursor nextnext = next;
-            if (getNextBlock(nextnext)) {
-                QTextBlockFormat nextNextFormat = nextnext.blockFormat();
-                QTextBlockFormat nextFormat = next.blockFormat();
-
-                if (nextFormat.hasProperty(KoParagraphStyle::SectionStartings)) {
-                    deleteSingleSections(next);
-                    nextFormat = next.blockFormat();
-
-                    QVariant var = nextFormat.property(KoParagraphStyle::SectionStartings);
-                    QList<QVariant> openListNext = var.value< QList<QVariant> >();
-
-                    QList<QVariant> openListNextNext;
-                    if (nextNextFormat.hasProperty(KoParagraphStyle::SectionStartings)) {
-                        var = nextNextFormat.property(KoParagraphStyle::SectionStartings);
-                        openListNextNext = var.value< QList<QVariant> >();
-                    }
-
-
-                    if (!openListNext.empty()) {
-                        openListNext.append(openListNextNext);
-
-                        var.setValue< QList<QVariant> >(openListNext);
-                        nextNextFormat.setProperty(KoParagraphStyle::SectionStartings, var);
-                        nextnext.setBlockFormat(nextNextFormat);
-
-                        nextFormat.clearProperty(KoParagraphStyle::SectionEndings);
-                        next.setBlockFormat(nextFormat);
-                    }
-                }
+    if (hasEntirelyInsideBlock || startBlockNum != -1 || endBlockNum != -1) { // it means that selection isn't within one block
+        QList<QVariant> openList, closeList;
+        foreach (const SectionHandle &handle, curSectionDelimiters) {
+            if (handle.type) { // start of the section
+                openList << handle.data;
+            } else { // end of the Section
+                closeList << handle.data;
             }
         }
 
-        if (!getNextBlock(cur))
-            break;
+        if (startBlockNum != -1) { // we're pushing all new section info to the start block
+            QTextBlockFormat fmt = caret->document()->findBlockByNumber(startBlockNum).blockFormat();
+            fmt.clearProperty(KoParagraphStyle::SectionEndings);
+
+            openList = (fmt.property(KoParagraphStyle::SectionStartings)
+                .value< QList<QVariant> >() << openList);
+
+            if (endBlockNum != -1) {
+                closeList << caret->document()->findBlockByNumber(endBlockNum)
+                    .blockFormat().property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            }
+            if (!openList.empty()) {
+                fmt.setProperty(KoParagraphStyle::SectionStartings, openList);
+            } else {
+                fmt.clearProperty(KoParagraphStyle::SectionStartings);
+            }
+            if (!closeList.empty()) {
+                fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
+            } else {
+                fmt.clearProperty(KoParagraphStyle::SectionEndings);
+            }
+
+            QTextCursor changer = cur;
+            changer.setPosition(cur.document()->findBlockByNumber(startBlockNum).position());
+            changer.setBlockFormat(fmt);
+        } else if (endBlockNum != -1) { // we're pushing all new section info to the end block
+            QTextBlockFormat fmt = caret->document()->findBlockByNumber(endBlockNum).blockFormat();
+            fmt.clearProperty(KoParagraphStyle::SectionStartings);
+
+            closeList << fmt.property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+
+            if (!openList.empty()) {
+                fmt.setProperty(KoParagraphStyle::SectionStartings, openList);
+            } else {
+                fmt.clearProperty(KoParagraphStyle::SectionStartings);
+            }
+            if (!closeList.empty()) {
+                fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
+            } else {
+                fmt.clearProperty(KoParagraphStyle::SectionEndings);
+            }
+
+            QTextCursor changer = cur;
+            changer.setPosition(cur.document()->findBlockByNumber(endBlockNum).position());
+            changer.setBlockFormat(fmt);
+        } else {
+            Q_ASSERT(false); //FIXME: delete this before release, is there will be no problems
+//             cur.setPosition(caret->selectionStart());
+//             if (cur.movePosition(QTextCursor::Left)) {
+//                 QList<QVariant> closeListHave = cur.blockFormat()
+//                     .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+//                 closeList = (closeListHave << closeList);
+//
+//                 QTextBlockFormat fmt = cur.blockFormat();
+//                 if (closeList.empty()) {
+//                     fmt.clearProperty(KoParagraphStyle::SectionEndings);
+//                 } else {
+//                     fmt.setProperty(KoParagraphStyle::SectionEndings, closeList);
+//                 }
+//                 cur.setBlockFormat(fmt);
+//             }
+//
+//             cur.setPosition(caret->selectionEnd());
+//             {
+//                 openList << cur.blockFormat()
+//                     .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+//
+//                 QTextBlockFormat fmt = cur.blockFormat();
+//                 if (openList.empty()) {
+//                     fmt.clearProperty(KoParagraphStyle::SectionStartings);
+//                 } else {
+//                     fmt.setProperty(KoParagraphStyle::SectionStartings, openList);
+//                 }
+//                 cur.setBlockFormat(fmt);
+//             }
+        }
     }
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();

@@ -53,13 +53,15 @@ public:
         useNative = true;
 #endif
 
-#ifdef Q_WS_X11
-        // And when we're in X11 but not in KDE, we probably want the GTK dialogs (well...), so we need to
-        // use the static methods.
-    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
-        useStaticForNative = true;
-    }
-#endif
+// No, no, no... We cannot use the GTK dialog because it strips the extension away from the
+// filters in the filter list. Palette (*.gpl);; Palette (*.pal) becomes Palette;;Palette...
+//#ifdef Q_WS_X11
+//        // And when we're in X11 but not in KDE, we probably want the GTK dialogs (well...), so we need to
+//        // use the static methods.
+//    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
+//        useStaticForNative = true;
+//    }
+//#endif
     }
 
     QWidget *parent;

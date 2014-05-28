@@ -32,6 +32,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
+    canvas/kis_exposure_gamma_correction_interface.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -226,6 +227,7 @@ set(kritaui_LIB_SRCS
     input/kis_alternate_invocation_action.cpp
     input/kis_rotate_canvas_action.cpp
     input/kis_zoom_action.cpp
+    input/kis_gamma_exposure_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp

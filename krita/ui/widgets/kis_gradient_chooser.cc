@@ -25,7 +25,6 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <KoAbstractGradient.h>
 #include <KoResource.h>
 #include <KoSegmentGradient.h>

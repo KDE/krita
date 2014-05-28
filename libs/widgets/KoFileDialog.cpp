@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QApplication>
+#include <QImageReader>
 
 #include <kconfiggroup.h>
 #include <kmimetype.h>
@@ -39,7 +40,7 @@ public:
         , type(dialogType_)
         , uniqueName(uniqueName_)
         , caption(caption_)
-        , directory(defaultDir_)
+        , defaultDirectory(defaultDir_)
         , filterType(KoFileDialog::NameFilter)
         , filterList(QStringList())
         , defaultFilter(QString())
@@ -51,7 +52,8 @@ public:
     KoFileDialog::DialogType type;
     QString uniqueName;
     QString caption;
-    QString directory;
+    QString defaultDirectory;
+    QString overrideDirectory;
     KoFileDialog::FilterType filterType;
     QStringList filterList;
     QString defaultFilter;
@@ -78,8 +80,22 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    if (d->directory.isEmpty() || d->directory.isNull())
-        d->directory = defaultDir;
+    d->defaultDirectory = defaultDir;
+}
+
+void KoFileDialog::setOverrideDir(const QString &overrideDir)
+{
+    d->overrideDirectory = overrideDir;
+}
+
+void KoFileDialog::setImageFilters()
+{
+    QStringList imageFilters;
+    // add filters for all formats supported by QImage
+    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+        imageFilters << "image/" + format;
+    }
+    setMimeTypeFilters(imageFilters);
 }
 
 void KoFileDialog::setNameFilter(const QString &filter)
@@ -129,7 +145,7 @@ void KoFileDialog::createFileDialog()
         delete d->fileDialog;
     }
 
-    d->fileDialog = new QFileDialog(d->parent, d->caption, d->directory);
+    d->fileDialog = new QFileDialog(d->parent, d->caption, d->defaultDirectory);
 
     if (d->type == SaveFile || d->type == SaveFiles) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);

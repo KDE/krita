@@ -992,7 +992,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
@@ -1478,7 +1478,7 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");

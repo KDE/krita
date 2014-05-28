@@ -355,10 +355,10 @@ void LutDockerDock::selectOcioConfiguration()
 {
     QString filename = m_txtConfigurationPath->text();
 
-    KoFileDialog dialog(this, KoFileDialog::OpenFile);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
+    dialog.setNameFilter(i18n("OpenColorIO configuration (*.ocio)"));
     filename = dialog.url();
     QFile f(filename);
     if (f.exists()) {
@@ -478,7 +478,12 @@ void LutDockerDock::selectLut()
 {
     QString filename = m_txtLut->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.*", this);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
+    dialog.setCaption(i18n("Select LUT file"));
+    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter("*.*");
+    filename = dialog.url();
+
     QFile f(filename);
     if (f.exists() && filename != m_txtLut->text()) {
         m_txtLut->setText(filename);

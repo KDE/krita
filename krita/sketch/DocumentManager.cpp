@@ -23,6 +23,8 @@
 #include "RecentFileManager.h"
 #include <libs/pigment/KoColor.h>
 
+#include <kmimetype.h>
+
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_doc2.h>

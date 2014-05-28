@@ -28,7 +28,6 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kfiledialog.h>
 #include <kurl.h>
 
 #include <KoFileDialog.h>

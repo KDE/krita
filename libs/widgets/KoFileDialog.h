@@ -61,14 +61,33 @@ public:
      * @return The name of the entry user selected in the file dialog
      *
      */
-    KoFileDialog(QWidget *parent = 0,
-                 KoFileDialog::DialogType type = OpenFile,
-                 const QString uniqueName = QString());
+    KoFileDialog(QWidget *parent,
+                 KoFileDialog::DialogType type,
+                 const QString uniqueName);
 
     ~KoFileDialog();
 
     void setCaption(const QString &caption);
+
+    /**
+     * @brief setDefaultDir set the default directory to defaultDir
+     *
+     * @param defaultDir a path to a file or directory
+     */
     void setDefaultDir(const QString &defaultDir);
+
+    /**
+     * @brief setOverrideDir override both the default dir and the saved dir found by uniqueName
+     * @param overrideDir a path to a file or directory
+     */
+    void setOverrideDir(const QString &overrideDir);
+
+    /**
+     * @brief setImageFilters sets the name filters for the file dialog to all
+     * image formats Qt's QImageReader supports.
+     */
+    void setImageFilters();
+
     void setNameFilter(const QString &filter);
     void setNameFilters(const QStringList &filterList,
                         const QString &defaultFilter = QString());
@@ -78,8 +97,14 @@ public:
 
     QStringList urls();
     QString url();
-    QString selectedNameFilter() const;
 
+
+    /**
+     * @brief selectedNameFilter returns the name filter the user selected, either
+     *    directory or by clicking on it.
+     * @return
+     */
+    QString selectedNameFilter() const;
 
 private slots:
 

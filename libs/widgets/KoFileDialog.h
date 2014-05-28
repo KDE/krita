@@ -55,7 +55,7 @@ public:
      * @brief constructor
      * @param parent The parent of the file dialog
      * @param dialogType usage of the file dialog
-     * @param uniqueName the name for the file dialog. This will be used to open
+     * @param dialogName the name for the file dialog. This will be used to open
      * the filedialog in the last open location, instead the specified directory.
      *
      * @return The name of the entry user selected in the file dialog
@@ -63,7 +63,7 @@ public:
      */
     KoFileDialog(QWidget *parent,
                  KoFileDialog::DialogType type,
-                 const QString uniqueName);
+                 const QString dialogName);
 
     ~KoFileDialog();
 
@@ -77,7 +77,7 @@ public:
     void setDefaultDir(const QString &defaultDir);
 
     /**
-     * @brief setOverrideDir override both the default dir and the saved dir found by uniqueName
+     * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
      * @param overrideDir a path to a file or directory
      */
     void setOverrideDir(const QString &overrideDir);

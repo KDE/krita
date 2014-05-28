@@ -35,10 +35,10 @@ public:
             KoFileDialog::DialogType dialogType_,
             const QString caption_,
             const QString defaultDir_,
-            const QString uniqueName_)
+            const QString dialogName_)
         : parent(parent_)
         , type(dialogType_)
-        , uniqueName(uniqueName_)
+        , dialogName(dialogName_)
         , caption(caption_)
         , defaultDirectory(defaultDir_)
         , filterType(KoFileDialog::NameFilter)
@@ -50,7 +50,7 @@ public:
 
     QWidget *parent;
     KoFileDialog::DialogType type;
-    QString uniqueName;
+    QString dialogName;
     QString caption;
     QString defaultDirectory;
     QString overrideDirectory;
@@ -62,8 +62,8 @@ public:
 
 KoFileDialog::KoFileDialog(QWidget *parent,
                            KoFileDialog::DialogType type,
-                           const QString uniqueName)
-    : d(new Private(parent, type, "", getUsedDir(uniqueName), uniqueName))
+                           const QString dialogName)
+    : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
 {
 }
 
@@ -209,7 +209,7 @@ QString KoFileDialog::url()
     QString url;
     if (d->fileDialog->exec() == QDialog::Accepted) {
         url = d->fileDialog->selectedFiles().first();
-        saveUsedDir(url, d->uniqueName);
+        saveUsedDir(url, d->dialogName);
     }
     return url;
 #else
@@ -281,7 +281,7 @@ QStringList KoFileDialog::urls()
     QStringList urls;
     if (d->fileDialog->exec() == QDialog::Accepted) {
         urls = d->fileDialog->selectedFiles();
-        saveUsedDir(urls.first(), d->uniqueName);
+        saveUsedDir(urls.first(), d->dialogName);
     }
     return urls;
 #else
@@ -306,7 +306,7 @@ QStringList KoFileDialog::urls()
         QStringList urls;
         if (d->fileDialog->exec() == QDialog::Accepted) {
             urls = d->fileDialog->selectedFiles();
-            saveUsedDir(urls.first(), d->uniqueName);
+            saveUsedDir(urls.first(), d->dialogName);
         }
         return urls;
 

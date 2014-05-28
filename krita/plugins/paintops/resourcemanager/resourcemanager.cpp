@@ -152,20 +152,29 @@ void ResourceManager::slotImport()
     dlg.setCaption(i18n("Add Resources"));
 
     QStringList nameFilters;
-    nameFilters << "Brushes (*.gbr *gih *.abr *png *svg)"
-                << "Brush Presets (*.kpp)"
-                << "Gradients (*.ggr *.svg *.kgr)"
-                << "Resource Bundles (*.bundle)"
-                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
-                << "Palettes (*.gpl *.pal *.act *.aco *.colors)"
-                << "Workspaces (*.kts)";
+    nameFilters << i18n("Brushes (*.gbr *gih *.abr *png *svg)")
+                << i18n("Brush Presets (*.kpp)")
+                << i18n("Gradients (*.ggr *.svg *.kgr)")
+                << i18n("Resource Bundles (*.bundle)")
+                << i18n("Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)")
+                << i18n("Palettes (*.gpl *.pal *.act *.aco *.colors)")
+                << i18n("Workspaces (*.kts)");
 
     dlg.setNameFilters(nameFilters, nameFilters.first());
 
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();
+    resourceType = resourceType.left(resourceType.indexOf(" ("));
 
-    switch(nameFilters.indexOf(resourceType)) {
+    int i = -1;
+    foreach(const QString &nf, nameFilters) {
+        i++;
+        if (nf.startsWith(resourceType)) {
+            break;
+        }
+    }
+
+    switch(i) {
     case 0:
     {
         foreach(const QString &res, resources) {

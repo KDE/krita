@@ -17,6 +17,7 @@ Page 1.0 Page.qml
 PageStack 1.0 PageStack.qml
 PanelTextField 1.0 PanelTextField.qml
 ProgressBar 1.0 ProgressBar.qml
+RangeCombo 1.0 RangeCombo.qml
 RangeInput 1.0 RangeInput.qml
 RecentFilesList 1.0 RecentFilesList.qml
 ScrollDecorator 1.0 ScrollDecorator.qml

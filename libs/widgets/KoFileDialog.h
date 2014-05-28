@@ -96,8 +96,6 @@ public:
     QStringList urls();
     QString url();
 
-
-
     /**
      * @brief selectedNameFilter returns the name filter the user selected, either
      *    directory or by clicking on it.

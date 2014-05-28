@@ -98,7 +98,9 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    d->defaultDirectory = defaultDir;
+    if (d->defaultDirectory.isEmpty() || !QDir(d->defaultDirectory).exists()) {
+        d->defaultDirectory = defaultDir;
+    }
 }
 
 void KoFileDialog::setOverrideDir(const QString &overrideDir)
@@ -152,8 +154,6 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
             defaultFilter = defaultFilters.first();
         }
     }
-
-
     d->defaultFilter = defaultFilter;
 }
 
@@ -246,7 +246,6 @@ QString KoFileDialog::url()
 
         if (d->fileDialog->exec() == QDialog::Accepted) {
             url = d->fileDialog->selectedFiles().first();
-            saveUsedDir(url, d->dialogName);
         }
     }
     else {
@@ -299,19 +298,20 @@ QString KoFileDialog::url()
         }
     }
 
-    if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
-        int start = d->defaultFilter.lastIndexOf("*.") + 1;
-        int end = d->defaultFilter.lastIndexOf(" )");
-        int n = end - start;
-        QString extension = d->defaultFilter.mid(start, n);
-        url.append(extension);
-    }
-
-
     if (!url.isEmpty()) {
-        d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
-    }
 
+        if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
+            int start = d->defaultFilter.lastIndexOf("*.") + 1;
+            int end = d->defaultFilter.lastIndexOf(" )");
+            int n = end - start;
+            QString extension = d->defaultFilter.mid(start, n);
+            url.append(extension);
+        }
+
+        d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
+        saveUsedDir(url, d->dialogName);
+
+    }
     return url;
 }
 
@@ -325,7 +325,6 @@ QStringList KoFileDialog::urls()
         }
         if (d->fileDialog->exec() == QDialog::Accepted) {
             urls = d->fileDialog->selectedFiles();
-            saveUsedDir(urls.first(), d->dialogName);
         }
     }
     else {
@@ -348,7 +347,6 @@ QStringList KoFileDialog::urls()
             }
             if (d->fileDialog->exec() == QDialog::Accepted) {
                 urls = d->fileDialog->selectedFiles();
-                saveUsedDir(urls.first(), d->dialogName);
             }
             break;
 
@@ -357,6 +355,7 @@ QStringList KoFileDialog::urls()
             ;
         }
     }
+    saveUsedDir(urls.first(), d->dialogName);
     return urls;
 }
 
@@ -439,12 +438,14 @@ const QString KoFileDialog::getUsedDir(const QString &dialogName)
 
     KConfigGroup group = KGlobal::config()->group("File Dialogs");
     QString dir = group.readEntry(dialogName);
+
     return dir;
 }
 
 void KoFileDialog::saveUsedDir(const QString &fileName,
                                const QString &dialogName)
 {
+
     if (dialogName.isEmpty()) return;
 
     QFileInfo fileInfo(fileName);

@@ -42,11 +42,9 @@ public:
         OpenFile,
         OpenFiles,
         OpenDirectory,
-        OpenDirectories,
         ImportFile,
         ImportFiles,
         ImportDirectory,
-        ImportDirectories,
         SaveFile,
         SaveFiles
     };

@@ -36,11 +36,9 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnOpenFile, SIGNAL(clicked()), SLOT(testOpenFile()));
     connect(ui->bnOpenFiles, SIGNAL(clicked()), SLOT(testOpenFiles()));
     connect(ui->bnOpenDirectory, SIGNAL(clicked()), SLOT(testOpenDirectory()));
-    connect(ui->bnOpenDirectories, SIGNAL(clicked()), SLOT(testOpenDirectories()));
     connect(ui->bnImportFile, SIGNAL(clicked()), SLOT(testImportFile()));
     connect(ui->bnImportFiles, SIGNAL(clicked()), SLOT(testImportFiles()));
     connect(ui->bnImportDirectory, SIGNAL(clicked()), SLOT(testImportDirectory()));
-    connect(ui->bnImportDirectories, SIGNAL(clicked()), SLOT(testImportDirectories()));
     connect(ui->bnSaveFile, SIGNAL(clicked()), SLOT(testSaveFile()));
     connect(ui->bnSaveFiles, SIGNAL(clicked()), SLOT(testSaveFiles()));
 
@@ -179,43 +177,6 @@ void KoFileDialogTester::testOpenDirectory()
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
-void KoFileDialogTester::testOpenDirectories()
-{
-    ui->listResults->clear();
-    KoFileDialog dlg(this, KoFileDialog::OpenDirectories, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: OpenDirectories"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-
-          if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(m_nameFilters);
-        }
-
-    }
-    else {
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(m_mimeFilter);
-        }
-
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QStringList urls = dlg.urls(); foreach(const QString &url, urls) {
-        ui->listResults->addItem(url);
-    }
-    ui->lblMime->setText(dlg.selectedMimeType());
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-}
 
 void KoFileDialogTester::testImportFile()
 {
@@ -311,41 +272,6 @@ void KoFileDialogTester::testImportDirectory()
     }
     else {
             if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(m_mimeFilter);
-        }
-
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QString url = dlg.url();
-    ui->listResults->addItem(url);
-    ui->lblMime->setText(dlg.selectedMimeType());
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-}
-
-void KoFileDialogTester::testImportDirectories()
-{
-    ui->listResults->clear();
-    KoFileDialog dlg(this, KoFileDialog::ImportDirectories, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: ImportDirectories"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(m_nameFilters);
-        }
-
-    }
-    else {
-             if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {

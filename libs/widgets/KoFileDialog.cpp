@@ -199,9 +199,7 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
 
         if (d->type == ImportDirectory
-                || d->type == ImportDirectories
-                || d->type == OpenDirectory
-                || d->type == OpenDirectories)
+                || d->type == OpenDirectory)
         {
             d->fileDialog->setFileMode(QFileDialog::Directory);
             d->fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
@@ -224,7 +222,7 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->selectNameFilter(d->defaultFilter);
     }
 
-    if (d->type == ImportDirectory || d->type == ImportDirectories ||
+    if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||
             d->type == SaveFile || d->type == SaveFiles) {
         d->fileDialog->setWindowModality(Qt::WindowModal);
@@ -342,8 +340,6 @@ QStringList KoFileDialog::urls()
                                                  &d->defaultFilter);
             break;
         }
-        case OpenDirectories:
-        case ImportDirectories:
         case SaveFiles:
         {
             // These don't exist as a static method. They aren't used in Calligra either, afaict

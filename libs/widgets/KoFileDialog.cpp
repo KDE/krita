@@ -69,7 +69,6 @@ public:
     QString dialogName;
     QString caption;
     QString defaultDirectory;
-    QString overrideDirectory;
     QStringList filterList;
     QString defaultFilter;
     QFileDialog *fileDialog;
@@ -105,7 +104,7 @@ void KoFileDialog::setDefaultDir(const QString &defaultDir)
 
 void KoFileDialog::setOverrideDir(const QString &overrideDir)
 {
-    d->overrideDirectory = overrideDir;
+    d->defaultDirectory = overrideDir;
 }
 
 void KoFileDialog::setImageFilters()

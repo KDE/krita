@@ -531,7 +531,7 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->sketchKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
@@ -543,7 +543,7 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->desktopKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);

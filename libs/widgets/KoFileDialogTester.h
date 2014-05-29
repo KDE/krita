@@ -42,7 +42,6 @@ private slots:
     void testImportFiles();
     void testImportDirectory();
     void testSaveFile();
-    void testSaveFiles();
 
 private:
     Ui::KoFileDialogTester *ui;

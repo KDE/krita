@@ -130,26 +130,37 @@ void KoFileDialog::setImageFilters()
 void KoFileDialog::setNameFilter(const QString &filter)
 {
     d->filterList.clear();
-    d->filterList << splitNameFilter(filter);
-    d->defaultFilter = d->filterList.first();
+    if (d->type == KoFileDialog::SaveFile) {
+        d->filterList << splitNameFilter(filter);
+        d->defaultFilter = d->filterList.first();
+    }
+    else {
+        d->filterList << filter;
+    }
 }
 
 void KoFileDialog::setNameFilters(const QStringList &filterList,
                                   QString defaultFilter)
 {
     d->filterList.clear();
-    foreach(const QString &filter, filterList) {
-        d->filterList << splitNameFilter(filter);
-    }
 
-    if (!defaultFilter.isEmpty()) {
-        QStringList defaultFilters = splitNameFilter(defaultFilter);
-        if (defaultFilters.size() > 0) {
-            defaultFilter = defaultFilters.first();
+    if (d->type == KoFileDialog::SaveFile) {
+        foreach(const QString &filter, filterList) {
+            d->filterList << splitNameFilter(filter);
+        }
+
+        if (!defaultFilter.isEmpty()) {
+            QStringList defaultFilters = splitNameFilter(defaultFilter);
+            if (defaultFilters.size() > 0) {
+                defaultFilter = defaultFilters.first();
+            }
         }
     }
-
+    else {
+        d->filterList = filterList;
+    }
     d->defaultFilter = defaultFilter;
+
 }
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
@@ -199,7 +210,7 @@ void KoFileDialog::createFileDialog()
 
     d->fileDialog = new QFileDialog(d->parent, d->caption, d->defaultDirectory);
 
-    if (d->type == SaveFile || d->type == SaveFiles) {
+    if (d->type == SaveFile) {
         d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
         d->fileDialog->setFileMode(QFileDialog::AnyFile);
     }
@@ -226,14 +237,13 @@ void KoFileDialog::createFileDialog()
     }
 
     d->fileDialog->setNameFilters(d->filterList);
-
     if (!d->defaultFilter.isEmpty()) {
         d->fileDialog->selectNameFilter(d->defaultFilter);
     }
 
     if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||
-            d->type == SaveFile || d->type == SaveFiles) {
+            d->type == SaveFile) {
         d->fileDialog->setWindowModality(Qt::WindowModal);
     }
 
@@ -347,18 +357,6 @@ QStringList KoFileDialog::urls()
                                                  d->filterList.join(";;"),
                                                  &d->defaultFilter);
             break;
-        }
-        case SaveFiles:
-        {
-            // These don't exist as a static method. They aren't used in Calligra either, afaict
-            if (!d->fileDialog) {
-                createFileDialog();
-            }
-            if (d->fileDialog->exec() == QDialog::Accepted) {
-                urls = d->fileDialog->selectedFiles();
-            }
-            break;
-
         }
         default:
             ;

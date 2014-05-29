@@ -40,7 +40,6 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnImportFiles, SIGNAL(clicked()), SLOT(testImportFiles()));
     connect(ui->bnImportDirectory, SIGNAL(clicked()), SLOT(testImportDirectory()));
     connect(ui->bnSaveFile, SIGNAL(clicked()), SLOT(testSaveFile()));
-    connect(ui->bnSaveFiles, SIGNAL(clicked()), SLOT(testSaveFiles()));
 
     m_nameFilters << "Documents (*.odt *.doc *.txt)"
                 << "Images (*.png *.jpg *.jpeg)"
@@ -324,42 +323,4 @@ void KoFileDialogTester::testSaveFile()
     ui->listResults->addItem(url);
     ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
-}
-
-void KoFileDialogTester::testSaveFiles()
-{
-    ui->listResults->clear();
-
-    KoFileDialog dlg(this, KoFileDialog::SaveFiles, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: SaveFiles"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-
-          if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(m_nameFilters);
-        }
-
-    }
-    else {
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(m_mimeFilter);
-        }
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QString url = dlg.url();
-    ui->listResults->addItem(url);
-    ui->lblMime->setText(dlg.selectedMimeType());
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-
 }

@@ -59,6 +59,8 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas)
             m_mainWidget->setModel(m_animation);
             connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), m_mainWidget, SLOT(documentModified()));
             //connect(m_canvas->view()->document(), SIGNAL(modified(bool)), m_mainWidget, SLOT(documentModified()));
+            connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigBreakFrame(QRect)), m_mainWidget, SLOT(breakFrame(QRect)));
+
         }
     }
 }

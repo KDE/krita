@@ -68,6 +68,7 @@ private slots:
     void playAnimation();
     void pauseAnimation();
     void stopAnimation();
+    void breakFrame(QRect position);
 
 signals:
     void canvasModified();

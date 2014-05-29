@@ -194,6 +194,11 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
 }
 
+void KisTimeline::breakFrame(QRect position)
+{
+    kWarning() << "Break frame at frame" << position.x() << " layer " << position.y();
+}
+
 void KisTimeline::frameSelectionChanged(QRect frame)
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->frameSelectionChanged(frame);

@@ -64,6 +64,7 @@ private:
 
 signals:
     void sigFrameModified();
+    void sigBreakFrame(QRect);
 };
 
 #endif // KIS_ANIMATION_DOC_H

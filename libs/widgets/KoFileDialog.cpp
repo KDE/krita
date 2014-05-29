@@ -52,7 +52,7 @@ public:
         // the native file dialog is used unless you use a subclass of QFileDialog that contains the Q_OBJECT
         // macro."
 #ifdef Q_OS_WIN
-        useNative = true;
+        useStaticForNative = true;
 #endif
         // Non-static KDE file is broken when called with QFileDialog::AcceptSave:
         // then the directory above defaultdir is opened, and defaultdir is given as the default file name...

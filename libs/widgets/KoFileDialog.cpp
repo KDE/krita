@@ -362,7 +362,9 @@ QStringList KoFileDialog::urls()
             ;
         }
     }
-    saveUsedDir(urls.first(), d->dialogName);
+    if (urls.size() > 0) {
+        saveUsedDir(urls.first(), d->dialogName);
+    }
     return urls;
 }
 

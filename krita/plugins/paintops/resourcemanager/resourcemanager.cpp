@@ -152,11 +152,23 @@ void ResourceManager::slotImport()
     dlg.setCaption(i18n("Add Resources"));
 
     QStringList nameFilters;
-    nameFilters << i18n("Brushes (*.gbr *gih *.abr *png *svg)")
+    nameFilters << i18n("GIMP Brushes (*.gbr)")
+                << i18n("Imagepipe Brushes (*gih)")
+                << i18n("Photoshop Brushes (*.abr)")
+                << i18n("PNG Brushes (*png)")
+                << i18n("SVG Brushes (*svg)")
                 << i18n("Brush Presets (*.kpp)")
-                << i18n("Gradients (*.ggr *.svg *.kgr)")
+                << i18n("GIMP Gradients (*.ggr)")
+                << i18n("SVG Gradients (*.svg)")
+                << i18n("Karbon Gradients (*.kgr)")
                 << i18n("Resource Bundles (*.bundle)")
-                << i18n("Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)")
+                << i18n("GIMP Patterns (*.pat)")
+                << i18n("Jpeg Patterns (*.jpg)")
+                << i18n("Gif Patterns (*.gif)")
+                << i18n("PNG Patterns (*.png)")
+                << i18n("Tiff Patterns (*.tif)")
+                << i18n("XPM Patterns (*.xpm)")
+                << i18n("BMP Patterns (*.bmp)")
                 << i18n("Palettes (*.gpl *.pal *.act *.aco *.colors)")
                 << i18n("Workspaces (*.kts)");
 

@@ -193,13 +193,6 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QPushButton" name="bnSaveFiles">
-     <property name="text">
-      <string>Save Files</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <widget class="QPushButton" name="bnImportDirectory">
      <property name="text">
@@ -215,7 +208,6 @@
   <zorder>bnImportFiles</zorder>
   <zorder>bnImportDirectory</zorder>
   <zorder>bnSaveFile</zorder>
-  <zorder>bnSaveFiles</zorder>
   <zorder>groupBox</zorder>
   <zorder>verticalSpacer</zorder>
   <zorder>lblMime</zorder>

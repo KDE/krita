@@ -226,7 +226,7 @@ void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
     KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "krita/bigbrother");
     dialog.setCaption(i18n("Save Macro"));
     dialog.setOverrideDir(url.url());
-    dialog.setNameFilter(i18n("*.krarec|Recorded actions (*.krarec)"));
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
 
     QString filename = dialog.url();
 

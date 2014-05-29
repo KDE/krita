@@ -442,7 +442,7 @@ void KisRulerAssistantTool::loadAssistants()
     KoFileDialog dialog(m_canvas->view(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Select an Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setNameFilter("*.krassistant|Krita Assistant (*.krassistant)");
+    dialog.setNameFilter("Krita Assistant (*.krassistant)");
     QString filename = dialog.url();
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
@@ -572,7 +572,7 @@ void KisRulerAssistantTool::saveAssistants()
     KoFileDialog dialog(m_canvas->view(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Save Assistant"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setNameFilter("*.krassistant|Krita Assistant (*.krassistant)");
+    dialog.setNameFilter("Krita Assistant (*.krassistant)");
     QString filename = dialog.url();
     if (filename.isEmpty()) return;
 

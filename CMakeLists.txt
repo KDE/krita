@@ -179,6 +179,7 @@ calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP" NEEDS STAGE_PART)
+calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" NEEDS WORDS_PART)
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  NEEDS CALLIGRA_LIBS)
@@ -983,6 +984,10 @@ endif (NOT QT3SUPPORT)
 
 if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
+endif(NOT OKULAR_FOUND)
+
+if(NOT OKULAR_FOUND)
+    calligra_disable_product(OKULAR_GENERATOR_ODT "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
 if (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)

@@ -284,7 +284,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, bool pasteMode)
 {
     const QTextDocument *document = cursor.block().document();
 
@@ -307,7 +307,21 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     cursor.beginEditBlock();
 
-    if (! d->openingSections.isEmpty()) {
+    // if we are pasting text, we should handle sections correctly
+    // we are saving which sections end in current block
+    // and put this ends after the inserted text
+    QList<QVariant> oldSectionEndings;
+    if (pasteMode) {
+        QTextBlockFormat fmt = cursor.blockFormat();
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >();
+        }
+        fmt.clearProperty(KoParagraphStyle::SectionEndings);
+        cursor.setBlockFormat(fmt);
+    }
+
+    if (!d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
         QVariant v;
@@ -416,6 +430,22 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     }
 
     rootCallChecker--;
+
+    // here we put old endings after text insertion
+    if (pasteMode) {
+        QTextBlockFormat fmt = cursor.blockFormat();
+        if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+            oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+                .value< QList<QVariant> >() << oldSectionEndings;
+        }
+
+
+        if (!oldSectionEndings.empty()) {
+            fmt.setProperty(KoParagraphStyle::SectionEndings, oldSectionEndings);
+        }
+        cursor.setBlockFormat(fmt);
+    }
+
     cursor.endEditBlock();
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();

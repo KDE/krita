@@ -94,7 +94,7 @@ public:
     * @param element the element to start loadingat
     * @param cursor the text cursor to insert the body after    *
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor, bool pasteMode = false);
 
 signals:
 

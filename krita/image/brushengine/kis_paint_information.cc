@@ -326,7 +326,17 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     qreal pressure = (1 - t) * pi1.pressure() + t * pi2.pressure();
     qreal xTilt = (1 - t) * pi1.xTilt() + t * pi2.xTilt();
     qreal yTilt = (1 - t) * pi1.yTilt() + t * pi2.yTilt();
-    qreal rotation = (1 - t) * pi1.rotation() + t * pi2.rotation();
+
+    qreal rotation = pi1.rotation();
+
+    if (pi1.rotation() != pi2.rotation()) {
+        qreal a1 = kisDegreesToRadians(pi1.rotation());
+        qreal a2 = kisDegreesToRadians(pi2.rotation());
+        qreal distance = shortestAngularDistance(a2, a1);
+
+        rotation = kisRadiansToDegrees(incrementInDirection(a1, t * distance, a2));
+    }
+
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
     int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();

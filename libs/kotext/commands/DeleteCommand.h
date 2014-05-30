@@ -94,7 +94,6 @@ private:
     void deleteAnchorInlineObject(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
-    bool getNextBlock(QTextCursor &cur);
 };
 
 #endif // DELETECOMMAND_H

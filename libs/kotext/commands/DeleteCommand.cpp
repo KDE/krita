@@ -1,5 +1,4 @@
-/*
- This file is part of the KDE project
+/* This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
@@ -134,24 +133,6 @@ public:
     QTextCharFormat m_firstFormat;
 };
 
-//FIXME: extract from this file, for shared use
-bool DeleteCommand::getNextBlock(QTextCursor &cur)
-{
-    QTextCursor next = cur;
-    bool ok = next.movePosition(QTextCursor::NextBlock);
-
-    while (ok && next.currentFrame() != cur.currentFrame()) {
-        ok = next.movePosition(QTextCursor::PreviousBlock);
-    }
-
-    if (!ok || next.currentFrame() != next.currentFrame()) {
-        // there is no previous block
-        return false;
-    }
-    cur = next;
-    return true;
-}
-
 void DeleteCommand::doDelete()
 {
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
@@ -231,7 +212,7 @@ void DeleteCommand::doDelete()
             hasEntirelyInsideBlock = true;
         }
 
-        if (!getNextBlock(cur)) {
+        if (!KoSectionUtils::getNextBlock(cur)) {
             break;
         }
     }

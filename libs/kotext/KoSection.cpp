@@ -28,6 +28,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoSectionStyle.h>
+#include <QTextFrame>
 
 class KoSection::Private
 {
@@ -120,3 +121,21 @@ void KoSectionEnd::saveOdf(KoShapeSavingContext &context)
     Q_ASSERT(writer);
     writer->endElement();
 }
+
+bool KoSectionUtils::getNextBlock(QTextCursor &cur)
+{
+    QTextCursor next = cur;
+    bool ok = next.movePosition(QTextCursor::NextBlock);
+
+    while (ok && next.currentFrame() != cur.currentFrame()) {
+        ok = next.movePosition(QTextCursor::PreviousBlock);
+    }
+
+    if (!ok || next.currentFrame() != next.currentFrame()) {
+        // there is no previous block
+        return false;
+    }
+    cur = next;
+    return true;
+}
+

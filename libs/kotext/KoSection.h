@@ -23,6 +23,7 @@
 
 #include <QMetaType>
 #include <QString>
+#include <QTextCursor>
 
 class KoXmlElement;
 class KoShapeSavingContext;
@@ -71,6 +72,10 @@ struct KOTEXT_EXPORT KoSectionEnd {
 
     void saveOdf(KoShapeSavingContext &context);
 };
+
+namespace KoSectionUtils {
+    bool getNextBlock(QTextCursor &cur);
+}
 
 Q_DECLARE_METATYPE(KoSection)
 

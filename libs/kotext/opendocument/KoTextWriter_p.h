@@ -149,8 +149,6 @@ private:
         TableCell
     };
 
-    bool getNextBlock(QTextCursor &cursor);
-
     void openTagRegion(KoTextWriter::Private::ElementType elementType, TagInformation &tagInformation);
     void closeTagRegion();
 

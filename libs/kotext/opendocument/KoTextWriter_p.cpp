@@ -20,7 +20,6 @@
 
 #include "KoTextWriter_p.h"
 
-
 #include <KoElementReference.h>
 #include <KoTextRangeManager.h>
 
@@ -51,24 +50,6 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
-}
-
-//FIXME: this method was copied from DeleteCommand, maybe put it in some shared place?
-bool KoTextWriter::Private::getNextBlock(QTextCursor &cur)
-{
-    QTextCursor next = cur;
-    bool ok = next.movePosition(QTextCursor::NextBlock);
-
-    while (ok && next.currentFrame() != cur.currentFrame()) {
-        ok = next.movePosition(QTextCursor::PreviousBlock);
-    }
-
-    if (!ok || next.currentFrame() != next.currentFrame()) {
-        // there is no previous block
-        return false;
-    }
-    cur = next;
-    return true;
 }
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
@@ -109,7 +90,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (!getNextBlock(cur)) {
+        if (!KoSectionUtils::getNextBlock(cur)) {
             break;
         }
     }

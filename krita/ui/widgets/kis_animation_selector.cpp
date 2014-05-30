@@ -31,6 +31,7 @@
 #include <QDesktopWidget>
 #include <kundo2command.h>
 #include <QFile>
+#include <QFileDialog>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
 #include <kfiledialog.h>

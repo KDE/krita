@@ -52,13 +52,61 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     writer = &context.xmlWriter();
 }
 
+//FIXME: this method was copied from DeleteCommand, maybe put it in some shared place?
+bool KoTextWriter::Private::getNextBlock(QTextCursor &cur)
+{
+    QTextCursor next = cur;
+    bool ok = next.movePosition(QTextCursor::NextBlock);
+
+    while (ok && next.currentFrame() != cur.currentFrame()) {
+        ok = next.movePosition(QTextCursor::PreviousBlock);
+    }
+
+    if (!ok || next.currentFrame() != next.currentFrame()) {
+        // there is no previous block
+        return false;
+    }
+    cur = next;
+    return true;
+}
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextList *currentList)
 {
     pairedInlineObjectsStackStack.push(currentPairedInlineObjectsStack);
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     QTextBlock block = document->findBlock(from);
-    int sectionLevel = 0;
+
+    QList< QString > entireWithinSectionNames;
+    QStack< QString > sectionNamesStack;
+
+    QTextCursor cur(document);
+    cur.setPosition(from);
+    while (cur.position() <= to) {
+        if (cur.block().position() >= from) { // begin of the block inside selection
+            QList<QVariant> openList = cur.blockFormat()
+            .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, openList) { //FIXME: does this garants from first - to last order??
+                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+                sectionNamesStack.push_back(sec->name());
+            }
+        }
+
+        if (cur.block().position() + cur.block().length() <= to) { //end if the block inside selection
+            QList<QVariant> closeList = cur.blockFormat()
+            .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, closeList) { //FIXME: does this garants from first - to last order??
+                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+                if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name) {
+                    sectionNamesStack.pop();
+                    entireWithinSectionNames.append(sec->name);
+                }
+            }
+        }
+
+        if (!getNextBlock(cur)) {
+            break;
+        }
+    }
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
@@ -77,9 +125,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QList<QVariant> sectionStarts = v.value<QList<QVariant> >();
 
             foreach (const QVariant &sv, sectionStarts) {
-                KoSection* section = (KoSection*)(sv.value<void*>());
-                if (section) {
-                    ++sectionLevel;
+                KoSection* section = static_cast<KoSection *>(sv.value<void*>());
+                if (entireWithinSectionNames.contains(section->name())) {
                     section->saveOdf(context);
                 }
             }
@@ -121,11 +168,10 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
             QVariant v = format.property(KoParagraphStyle::SectionEndings);
             QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
-            KoSectionEnd sectionEnd;
             foreach (QVariant sv, sectionEndings) {
-                if (sectionLevel >= 1) {
-                    --sectionLevel;
-                    sectionEnd.saveOdf(context);
+                KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
+                if (entireWithinSectionNames.contains(sectionEnd->name)) {
+                    sectionEnd->saveOdf(context);
                 }
             }
         }
@@ -133,12 +179,6 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         block = block.next();
     } // while
-
-    while (sectionLevel >= 1) {
-        --sectionLevel;
-        KoSectionEnd sectionEnd;
-        sectionEnd.saveOdf(context);
-    }
 
     Q_ASSERT(!pairedInlineObjectsStackStack.isEmpty());
     delete currentPairedInlineObjectsStack;

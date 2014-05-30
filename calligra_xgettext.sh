@@ -7,6 +7,7 @@ function calligra_xgettext() {
     SRC_FILES="$*"
     POT_PART_NORMAL="`mktemp $podir/_normal_XXXXXXXX.pot`"
     POT_PART_QUNDOFORMAT="`mktemp $podir/_qundoformat_XXXXXXXX.pot`"
+    POT_PART_QUNDOFORMAT2="`mktemp $podir/_qundoformat2_XXXXXXXX.pot`"
     POT_MERGED="`mktemp $podir/_merged_XXXXXXXX.pot`"
 
     $XGETTEXT ${CXG_EXTRA_ARGS} ${SRC_FILES} -o "${POT_PART_NORMAL}"
@@ -22,8 +23,16 @@ function calligra_xgettext() {
         sed -i -e 's/^msgctxt "/msgctxt "(qtundo-format) /' "${POT_PART_QUNDOFORMAT}"
 
         # Add msgctxt "(qundo-format)" to messages not having msgctxt yet
-        sed -i -e '/^#/{n;/msgid "/i \msgctxt "(qtundo-format)"
-        }' "${POT_PART_QUNDOFORMAT}"
+        #
+        # lastLine != "#, fuzzy" is the check for the .pot header.
+        mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
+        cat "${POT_PART_QUNDOFORMAT2}" | awk '
+            /^msgid "/ {
+                if (lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
+                    print "msgctxt \"(qtundo-format)\""
+                }
+            }
+            { print ; lastLine = $0 }' > "${POT_PART_QUNDOFORMAT}"
     fi
 
     if [[ -f "${POT_PART_NORMAL}" && -f "${POT_PART_QUNDOFORMAT}" ]]; then
@@ -42,5 +51,5 @@ function calligra_xgettext() {
         cat "${POT_PART_QUNDOFORMAT}"
     fi
 
-    rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_MERGED}"
+    rm -f "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}" "${POT_MERGED}"
 }

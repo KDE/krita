@@ -104,9 +104,9 @@ int KisGammaExposureAction::priority() const
 void KisGammaExposureAction::activate(int shortcut)
 {
     if (shortcut == ExposureShortcut) {
-        QApplication::setOverrideCursor(KisCursor::zoomDiscreteCursor());
+        QApplication::setOverrideCursor(KisCursor::changeExposureCursor());
     } else /* if (shortcut == GammaShortcut) */ {
-        QApplication::setOverrideCursor(KisCursor::zoomSmoothCursor());
+        QApplication::setOverrideCursor(KisCursor::changeGammaCursor());
     }
 }
 

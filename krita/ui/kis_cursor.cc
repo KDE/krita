@@ -323,6 +323,16 @@ QCursor KisCursor::pickerLayerBackgroundCursor()
     return load("color-picker_layer_background.xpm", 8, 23);
 }
 
+QCursor KisCursor::changeExposureCursor()
+{
+    return load("exposure-cursor-gesture.xpm", 8, 23);
+}
+
+QCursor KisCursor::changeGammaCursor()
+{
+    return load("gamma-cursor-gesture.xpm", 8, 23);
+}
+
 QCursor KisCursor::triangleLeftHandedCursor()
 {
     return load("cursor-triangle_lefthanded.xpm");

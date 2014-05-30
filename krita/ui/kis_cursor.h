@@ -58,6 +58,8 @@ public:
     static QCursor pickerImageBackgroundCursor();
     static QCursor pickerLayerForegroundCursor();
     static QCursor pickerLayerBackgroundCursor();
+    static QCursor changeExposureCursor();
+    static QCursor changeGammaCursor();
     static QCursor triangleLeftHandedCursor();
     static QCursor triangleRightHandedCursor();
 

@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
@@ -168,7 +168,12 @@ Page {
         }
         Connections {
             target: sketchView;
-            onFloatingMessageRequested: messageStack.showMessage(message, iconName);
+            onFloatingMessageRequested: {
+                if(message.startsWith("Zoom") || message.startsWith("Rotation"))
+                    return;
+                
+                messageStack.showMessage(message, iconName);
+            }
         }
     }
 

@@ -32,7 +32,7 @@ class QString;
 class KisGmicCommand : public KUndo2Command
 {
 public:
-    KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images);
+    KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands = 0);
 
     void undo();
     void redo();
@@ -40,6 +40,7 @@ public:
 private:
     QString m_gmicCommandString;
     QSharedPointer<gmic_list<float> > m_images;
+    const char * m_customCommands;
     bool m_firstRedo;
 };
 

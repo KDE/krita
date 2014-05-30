@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,5 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_AUTOGRADIENT_RESOURCE_TEST_H
-#define KIS_AUTOGRADIENT_RESOURCE_TEST_H
+#include "kis_signal_compressor_with_param.h"
 
-#include <QtTest>
-
-class KisAutogradientResourceTest : public QObject
-{
-    Q_OBJECT
-private slots:
-
-    void testCreation();
-
-};
-
-#endif

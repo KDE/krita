@@ -41,7 +41,6 @@
 // KDE
 #include <krun.h>
 #include <kimageio.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -341,7 +340,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
         return false;
     }
 

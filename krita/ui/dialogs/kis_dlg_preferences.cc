@@ -219,7 +219,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 void ColorSettingsTab::installProfile()
 {
     QStringList mime;
-    mime << "*.icm" <<  "*.icc";
+    mime << "ICM Profile (*.icm(" <<  "ICC Profile (*.icc)";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
@@ -762,18 +762,6 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
-        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_NOT_TRIED") {
-            cfg.setCanvasState("TRY_OPENGL");
-        }
-        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_FAILED") {
-            if (KMessageBox::warningYesNo(0, i18n("You are trying to enable OpenGL\n\n"
-                                                  "But Krita might have had problems with the OpenGL canvas before,\n"
-                                                  "either because of driver issues, or because of issues with window effects.\n\n"
-                                                  "Are you sure you want to enable OpenGL?\n"), i18n("Krita")) == KMessageBox::Yes) {
-                cfg.setCanvasState("TRY_OPENGL");
-            }
-        }
-
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());

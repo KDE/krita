@@ -47,7 +47,7 @@ public:
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
     virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     static inline KoID id() {
-        return KoID("indexcolors", i18n("IndexColors"));
+        return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;

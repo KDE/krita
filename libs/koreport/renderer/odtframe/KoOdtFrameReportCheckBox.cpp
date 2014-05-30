@@ -175,9 +175,9 @@ bool KoOdtFrameReportCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWri
     if (ok) {
         const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());
         manifestWriter->addManifestEntry(name,  mimetype);
-        kDebug()<<"manifest:"<<mimetype;
+        //kDebug() << "manifest:" << mimetype;
     }
     bool cl = store->close();
-    kDebug()<<ok<<cl;
+    //kDebug()<<ok<<cl;
     return ok && cl;
 }

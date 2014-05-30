@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ * Copyright (c) 2014 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_autogradient_resource_test.h"
 
-#include <qtest_kde.h>
-#include "kis_autogradient_resource.h"
+#ifndef KIS_GMIC_UPDATER
+#define KIS_GMIC_UPDATER
 
-void KisAutogradientResourceTest::testCreation()
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+#include <qsslerror.h>
+#include <QList>
+
+class KisGmicUpdater : public QObject
 {
-    KisAutogradientResource test;
-}
+    Q_OBJECT
+public:
+    KisGmicUpdater(const QString &updateurl, QObject *parent = 0);
+    virtual ~KisGmicUpdater();
 
+    void start();
 
-QTEST_KDEMAIN(KisAutogradientResourceTest, GUI)
-#include "kis_autogradient_resource_test.moc"
+signals:
+    void updated();
+
+private slots:
+    void finishedDownload(QNetworkReply *);
+    void reportProgress(qint64 arrived,qint64 total);
+    void slotError(QNetworkReply::NetworkError error);
+    void slotSslErrors(QList<QSslError> error);
+
+private:
+    QNetworkAccessManager m_manager;
+    QString m_url;
+
+};
+
+#endif // KIS_GMIC_UPDATER

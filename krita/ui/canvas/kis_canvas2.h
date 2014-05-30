@@ -44,7 +44,7 @@ class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
 class KisDisplayColorConverter;
-
+class KisExposureGammaCorrectionInterface;
 
 enum KisCanvasType {
     QPAINTER,
@@ -159,6 +159,7 @@ public: // KisCanvas2 methods
 
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
     KisDisplayColorConverter* displayColorConverter() const;
+    KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
 
 signals:
     void imageChanged(KisImageWSP image);

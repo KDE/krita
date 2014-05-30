@@ -201,11 +201,9 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
 
     if (data.tagName() != "report:content") {
         // arg we got an xml file but not one i know of
-        kDebug() << "root element was not <report:content>";;
+        kWarning() << "root element was not <report:content>";;
     }
-
-    kDebug() << data.text();
-    
+    //kDebug() << data.text();
     deleteDetail();
 
     QDomNodeList nlist = data.childNodes();
@@ -216,7 +214,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
         // at this level all the children we get should be Elements
         if (it.isElement()) {
             QString n = it.nodeName().toLower();
-            kDebug() << n;
+            //kDebug() << n;
             if (n == "report:title") {
                 setReportTitle(it.firstChild().nodeValue());
             } else if (n == "report:script") {
@@ -258,7 +256,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
                     sec = sectionlist.item(s);
                     if (sec.isElement()) {
                         QString sn = sec.nodeName().toLower();
-                        kDebug() << sn;
+                        //kDebug() << sn;
                         if (sn == "report:section") {
                             QString sectiontype = sec.toElement().attribute("report:section-type");
                             if (section(KRSectionData::sectionTypeFromString(sectiontype)) == 0) {
@@ -271,12 +269,12 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
                             setDetail(rsd);
                         }
                     } else {
-                        kDebug() << "Encountered an unknown Element: "  << n;
+                        kWarning() << "Encountered an unknown Element: "  << n;
                     }
                 }
             }
         } else {
-            kDebug() << "Encountered a child node of root that is not an Element";
+            kWarning() << "Encountered a child node of root that is not an Element";
         }
     }
     this->slotPageButton_Pressed();
@@ -371,7 +369,7 @@ void KoReportDesigner::slotSectionEditor()
 
 void KoReportDesigner::setReportData(KoReportData* kodata)
 {
-    kDebug();
+    //kDebug();
     if (kodata) {
         m_kordata = kodata;
         slotPageButton_Pressed();
@@ -488,7 +486,7 @@ void KoReportDesigner::insertSection(KRSectionData::Section s)
         }
         if (s > KRSectionData::ReportHeader)
             idx++;
-        kDebug() << idx;
+        //kDebug() << idx;
         ReportSection *rs = new ReportSection(this);
         d->vboxlayout->insertWidget(idx, rs);
 
@@ -871,7 +869,7 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                     }
                 }
                 else {
-                    kDebug() << "attempted to insert an unknown item";
+                    kWarning() << "attempted to insert an unknown item";
                 }
             }
             if (item) {
@@ -1016,9 +1014,7 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
             if (obj) {
                 type = obj->typeName();
             }
-                
-            kDebug() << type;
-
+            //kDebug() << type;
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    

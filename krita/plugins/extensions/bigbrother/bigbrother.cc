@@ -54,7 +54,7 @@
 
 #include <QDesktopServices>
 #include <QApplication>
-#include <QFileDialog>
+
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
@@ -187,7 +187,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     KoFileDialog dialog(m_view, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Macro"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setNameFilter("Recorded actions (*.krarec)");
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
     QString filename = dialog.url();
     RecordedActionLoadContext loadContext;
 
@@ -223,7 +223,13 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    QString filename = QFileDialog::getSaveFileName(m_view, i18n("Save Macro"), url.url(), "*.krarec|Recorded actions (*.krarec)");
+    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "krita/bigbrother");
+    dialog.setCaption(i18n("Save Macro"));
+    dialog.setOverrideDir(url.url());
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
+
+    QString filename = dialog.url();
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

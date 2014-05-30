@@ -36,9 +36,15 @@ public:
     virtual ~KisGmicPlugin();
 
 private:
+    void parseGmicCommandDefinitions(const QStringList &gmicDefinitionFilePaths);
+    void setupDefinitionPaths();
+
+private:
     KisGmicWidget * m_gmicWidget;
     KisGmicApplicator * m_gmicApplicator;
-    QString m_gmicDefinitionFilePath;
+    QStringList m_definitionFilePaths;
+    QString m_blacklistPath;
+    QByteArray m_gmicCustomCommands;
 
 private slots:
     void slotGmic();

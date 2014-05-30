@@ -42,7 +42,7 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
     KoSimpleOdsDocument *doc = new KoSimpleOdsDocument();
     KoSimpleOdsSheet *sht = new KoSimpleOdsSheet();
 
-    kDebug() << "Setting name to: " << document->title();
+    //kDebug() << "Setting name to:" << document->title();
     sht->setName(document->title());
 
     bool renderedPageHeader = false;
@@ -99,7 +99,7 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                  image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
                 }*/
                 else {
-                    kDebug() << "unhandled primitive type";
+                    kWarning() << "unhandled primitive type";
                 }
             }
         }

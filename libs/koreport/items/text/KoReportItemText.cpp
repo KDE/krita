@@ -63,7 +63,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n;
+            kWarning() << "while parsing field element encountered unknow element: " << n;
         }
     }
 
@@ -214,8 +214,7 @@ int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const
     qreal   intBaseTop      = trf.top();
     qreal   intRectHeight   = trf.height();
 
-    kDebug() << qstrValue;
-
+    //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 

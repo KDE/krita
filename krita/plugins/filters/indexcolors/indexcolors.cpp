@@ -134,7 +134,7 @@ void KisIndexColorTransformation::transform(const quint8* src, quint8* dst, qint
         if(m_alphaStep)
         {
             quint16 amod = clr.laba[3] % m_alphaStep;
-            clr.laba[3] = clr.laba[3] + (amod > m_alphaHalfStep ? clr.laba[3] - amod : -amod);
+            clr.laba[3] = clr.laba[3] + (amod > m_alphaHalfStep ? m_alphaStep - amod : -amod);
         }
         m_colorSpace->fromLabA16(reinterpret_cast<quint8 *>(clr.laba), dst, 1);
         src += m_psize;

@@ -89,9 +89,9 @@ public:
     virtual void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0);
     
 private:
-    float           m_size;
+    float m_size;
     ImageLoader* m_loader;
-    QString         m_path;
+    QString m_path;
 };
 
 class ImageStripScene: public QGraphicsScene
@@ -100,6 +100,7 @@ class ImageStripScene: public QGraphicsScene
     
 public:
     ImageStripScene();
+    ~ImageStripScene();
     bool setCurrentDirectory(const QString& path);
     
 signals:
@@ -112,10 +113,10 @@ private slots:
     void slotItemContentChanged(ImageItem* item);
     
 private:
-    float           m_imgSize;
-    quint32         m_numItems;
+    float  m_imgSize;
+    quint32 m_numItems;
     ImageLoader* m_loader;
-    QMutex          m_mutex;
+    QMutex m_mutex;
 };
 
 #endif // H_IMAGE_STRIP_SCENE_H_

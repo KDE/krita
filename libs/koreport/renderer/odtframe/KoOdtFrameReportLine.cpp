@@ -79,7 +79,7 @@ void KoOdtFrameReportLine::createStyle(KoGenStyles &coll)
     KoOdfGraphicStyles::saveOdfStrokeStyle(gs, coll, pen);
 
     m_frameStyleName = coll.insert(gs, "F");
-    kDebug()<<coll;
+    //kDebug()<<coll;
 }
 
 void KoOdtFrameReportLine::createBody(KoXmlWriter *bodyWriter) const
@@ -92,7 +92,7 @@ void KoOdtFrameReportLine::createBody(KoXmlWriter *bodyWriter) const
     qreal width = ex - sx;
     qreal height = ey - sy;
 
-    kDebug()<<line()->startPoint()<<line()->endPoint();
+    //kDebug()<<line()->startPoint()<<line()->endPoint();
 
     bodyWriter->startElement("draw:rect");
     bodyWriter->addAttribute("draw:id", itemName());

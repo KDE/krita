@@ -106,7 +106,7 @@ Methods:
 **/
 
 import QtQuick 1.1
-import "." 0.1
+import "."
 import "PageStack.js" as Engine
 
 Item {

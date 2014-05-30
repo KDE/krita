@@ -59,6 +59,7 @@
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
 #include "kis_display_color_converter.h"
+#include "kis_exposure_gamma_correction_interface.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -518,6 +519,16 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilterSP displayFilter)
 KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 {
     return m_d->displayColorConverter;
+}
+
+KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
+{
+    KisDisplayFilterSP displayFilter =
+        m_d->displayColorConverter->displayFilter();
+
+    return displayFilter ?
+        displayFilter->correctionInterface() :
+        KisDumbExposureGammaCorrectionInterface::instance();
 }
 
 void KisCanvas2::startResizingImage()

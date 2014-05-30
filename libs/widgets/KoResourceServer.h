@@ -126,7 +126,9 @@ public:
 
     virtual ~KoResourceServer()
     {
-        delete m_tagStore;
+        if (m_tagStore) {
+            delete m_tagStore;
+        }
         if (m_deleteResource) {
 
             foreach(KoResourceServerObserver<T>* observer, m_observers) {
@@ -220,7 +222,7 @@ public:
                 }
             }
 
-            if (resource->save()) {
+            if (!resource->save()) {
                 kWarning(30009) << "Could not save resource!";
                 return false;
             }
@@ -625,6 +627,14 @@ protected:
     KoResource *byFileName(const QString &fileName) const
     {
         return resourceByFilename(fileName);
+    }
+
+
+    /// Destory the tag storage, only call this directly before deleting the sever and if the automatic
+    /// delete should not be used.
+    void destroyTagStorage() {
+        delete m_tagStore;
+        m_tagStore = 0;
     }
 
 private:

@@ -287,6 +287,11 @@ void KoResourceModel::tagCategoryRemoved(const QString& tag)
     m_resourceAdapter->tagCategoryRemoved(tag);
 }
 
+QString KoResourceModel::serverType() const
+{
+    return m_resourceAdapter->serverType();
+}
+
 QList< KoResource* > KoResourceModel::serverResources() const
 {
     return m_resourceAdapter->serverResources();

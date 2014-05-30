@@ -24,6 +24,7 @@
 
 #include <opengl/kis_opengl.h>
 #include <krita_export.h>
+#include "kis_exposure_gamma_correction_interface.h"
 
 
 /**
@@ -44,6 +45,7 @@ public:
     virtual void approximateInverseTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual void approximateForwardTransformation(quint8 *pixels, quint32 numPixels) = 0;
     virtual bool useInternalColorManagement() const = 0;
+    virtual KisExposureGammaCorrectionInterface *correctionInterface() const = 0;
 };
 
 

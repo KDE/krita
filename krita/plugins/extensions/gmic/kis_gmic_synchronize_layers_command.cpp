@@ -43,8 +43,8 @@ void KisGmicSynchronizeLayersCommand::redo()
                 KisPaintDevice * device = new KisPaintDevice(m_image->colorSpace());
                 KisLayerSP paintLayer = new KisPaintLayer(m_image, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
                 m_nodes->append(paintLayer);
-                KisImageLayerAddCommand * cmd = new KisImageLayerAddCommand(m_image, paintLayer, m_nodes->at(0)->parent(), 0, true, false);
-                cmd->redo();
+                m_image->addNode(paintLayer, m_nodes->at(0)->parent());
+
                 dbgPlugins << "Added new layer";
             }
 

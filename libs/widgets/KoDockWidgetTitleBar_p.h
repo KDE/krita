@@ -69,6 +69,7 @@ public:
     void toggleFloating();
     void toggleCollapsed();
     void toggleLocked();
+    void topLevelChanged(bool topLevel);
     void featuresChanged(QDockWidget::DockWidgetFeatures features);
 };
 #endif

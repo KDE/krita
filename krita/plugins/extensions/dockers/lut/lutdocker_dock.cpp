@@ -51,9 +51,10 @@
 #include <kis_image.h>
 #include "widgets/squeezedcombobox.h"
 #include "kis_signals_blocker.h"
-
+#include "krita_utils.h"
 
 #include "ocio_display_filter.h"
+
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
 {
@@ -89,6 +90,9 @@ LutDockerDock::LutDockerDock()
     , m_canvas(0)
     , m_draggingSlider(false)
 {
+    m_exposureCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentExposureImpl, this, _1)));
+    m_gammaCompressor.reset(new KisSignalCompressorWithParam<qreal>(40, boost::bind(&LutDockerDock::setCurrentGammaImpl, this, _1)));
+
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     m_page = new QWidget(this);
@@ -154,7 +158,7 @@ LutDockerDock::LutDockerDock()
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetOcioConfiguration()));
 
-    m_displayFilter = OcioDisplayFilterSP(new OcioDisplayFilter);
+    m_displayFilter = OcioDisplayFilterSP(new OcioDisplayFilter(this));
 
     resetOcioConfiguration();
 }
@@ -173,6 +177,55 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
         }
     }
     resetOcioConfiguration();
+}
+
+bool LutDockerDock::canChangeExposureAndGamma() const
+{
+    return m_chkUseOcio->isChecked() && m_ocioConfig;
+}
+
+qreal LutDockerDock::currentExposure() const
+{
+    return canChangeExposureAndGamma() ? m_displayFilter->exposure : 0.0;
+}
+
+void LutDockerDock::setCurrentExposure(qreal value)
+{
+    if (!canChangeExposureAndGamma()) return;
+    m_exposureCompressor->start(value);
+}
+
+qreal LutDockerDock::currentGamma() const
+{
+    return canChangeExposureAndGamma() ? m_displayFilter->gamma : 1.0;
+}
+
+void LutDockerDock::setCurrentGamma(qreal value)
+{
+    if (!canChangeExposureAndGamma()) return;
+    m_gammaCompressor->start(value);
+}
+
+void LutDockerDock::setCurrentExposureImpl(qreal value)
+{
+    m_exposureDoubleWidget->setValue(value);
+    if (!m_canvas) return;
+
+    m_canvas->view()->showFloatingMessage(
+        i18nc("floating message about exposure", "Exposure: %1",
+              KritaUtils::prettyFormatReal(m_exposureDoubleWidget->value())),
+        QIcon(), 500, KisFloatingMessage::Low);
+}
+
+void LutDockerDock::setCurrentGammaImpl(qreal value)
+{
+    m_gammaDoubleWidget->setValue(value);
+    if (!m_canvas) return;
+
+    m_canvas->view()->showFloatingMessage(
+        i18nc("floating message about gamma", "Gamma: %1",
+              KritaUtils::prettyFormatReal(m_gammaDoubleWidget->value())),
+        QIcon(), 500, KisFloatingMessage::Low);
 }
 
 void LutDockerDock::slotImageColorSpaceChanged()
@@ -302,10 +355,10 @@ void LutDockerDock::selectOcioConfiguration()
 {
     QString filename = m_txtConfigurationPath->text();
 
-    KoFileDialog dialog(this, KoFileDialog::OpenFile);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
     dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
+    dialog.setNameFilter(i18n("OpenColorIO configuration (*.ocio)"));
     filename = dialog.url();
     QFile f(filename);
     if (f.exists()) {
@@ -425,7 +478,12 @@ void LutDockerDock::selectLut()
 {
     QString filename = m_txtLut->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.*", this);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "krita/lutdocker");
+    dialog.setCaption(i18n("Select LUT file"));
+    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter("*.*");
+    filename = dialog.url();
+
     QFile f(filename);
     if (f.exists() && filename != m_txtLut->text()) {
         m_txtLut->setText(filename);

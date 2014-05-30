@@ -36,13 +36,27 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnOpenFile, SIGNAL(clicked()), SLOT(testOpenFile()));
     connect(ui->bnOpenFiles, SIGNAL(clicked()), SLOT(testOpenFiles()));
     connect(ui->bnOpenDirectory, SIGNAL(clicked()), SLOT(testOpenDirectory()));
-    connect(ui->bnOpenDirectories, SIGNAL(clicked()), SLOT(testOpenDirectories()));
     connect(ui->bnImportFile, SIGNAL(clicked()), SLOT(testImportFile()));
     connect(ui->bnImportFiles, SIGNAL(clicked()), SLOT(testImportFiles()));
     connect(ui->bnImportDirectory, SIGNAL(clicked()), SLOT(testImportDirectory()));
-    connect(ui->bnImportDirectories, SIGNAL(clicked()), SLOT(testImportDirectories()));
     connect(ui->bnSaveFile, SIGNAL(clicked()), SLOT(testSaveFile()));
-    connect(ui->bnSaveFiles, SIGNAL(clicked()), SLOT(testSaveFiles()));
+
+    m_nameFilters << "Documents (*.odt *.doc *.txt)"
+                << "Images (*.png *.jpg *.jpeg)"
+                << "Presentations (*.ppt *.odp)"
+                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
+                << "Palettes (*.gpl *.pal *.act *.aco *.colors)";
+
+    m_mimeFilter = QStringList()
+            << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
+            << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
+            << "image/x-portable-bitmap" << "image/png" << "image/jp2"
+            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
+            << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
+            << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
+            << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
+            << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
+            << "image/x-wmf" << "application/x-karbon";
 }
 
 KoFileDialogTester::~KoFileDialogTester()
@@ -60,36 +74,19 @@ void KoFileDialogTester::testOpenFile()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -100,7 +97,7 @@ void KoFileDialogTester::testOpenFile()
 
     QString url = dlg.url();
     ui->listResults->addItem(url);
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 
 }
@@ -113,37 +110,20 @@ void KoFileDialogTester::testOpenFiles()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+          if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
 
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+           if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -156,7 +136,7 @@ void KoFileDialogTester::testOpenFiles()
     foreach(const QString &url, urls) {
         ui->listResults->addItem(url);
     }
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
@@ -168,37 +148,20 @@ void KoFileDialogTester::testOpenDirectory()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+         if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
 
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+         if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -209,62 +172,10 @@ void KoFileDialogTester::testOpenDirectory()
 
     QString url = dlg.url();
     ui->listResults->addItem(url);
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
-void KoFileDialogTester::testOpenDirectories()
-{
-    ui->listResults->clear();
-    KoFileDialog dlg(this, KoFileDialog::OpenDirectories, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: OpenDirectories"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(nameFilters);
-        }
-
-    }
-    else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(mimeFilter);
-        }
-
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QStringList urls = dlg.urls(); foreach(const QString &url, urls) {
-        ui->listResults->addItem(url);
-    }
-
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-}
 
 void KoFileDialogTester::testImportFile()
 {
@@ -275,37 +186,21 @@ void KoFileDialogTester::testImportFile()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+         if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
 
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
 
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -316,7 +211,7 @@ void KoFileDialogTester::testImportFile()
 
     QString url = dlg.url();
     ui->listResults->addItem(url);
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
@@ -328,36 +223,21 @@ void KoFileDialogTester::testImportFiles()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+         if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
 
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
 
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -369,7 +249,7 @@ void KoFileDialogTester::testImportFiles()
     QStringList urls = dlg.urls(); foreach(const QString &url, urls) {
         ui->listResults->addItem(url);
     }
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
@@ -381,37 +261,20 @@ void KoFileDialogTester::testImportDirectory()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
 
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+            if (ui->chkSetDefaultFilter->isChecked()) {
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -422,60 +285,7 @@ void KoFileDialogTester::testImportDirectory()
 
     QString url = dlg.url();
     ui->listResults->addItem(url);
-
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-}
-
-void KoFileDialogTester::testImportDirectories()
-{
-    ui->listResults->clear();
-    KoFileDialog dlg(this, KoFileDialog::ImportDirectories, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: ImportDirectories"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(nameFilters);
-        }
-
-    }
-    else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(mimeFilter);
-        }
-
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QString url = dlg.url();
-    ui->listResults->addItem(url);
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
@@ -487,38 +297,20 @@ void KoFileDialogTester::testSaveFile()
     dlg.setCaption(i18n("Testing: SaveFile"));
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
-
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
+            dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
         }
         else {
-            dlg.setNameFilters(nameFilters);
+            dlg.setNameFilters(m_nameFilters);
         }
-
     }
     else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
 
         if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
+            dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
         }
         else {
-            dlg.setMimeTypeFilters(mimeFilter);
+            dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
     }
@@ -529,60 +321,6 @@ void KoFileDialogTester::testSaveFile()
 
     QString url = dlg.url();
     ui->listResults->addItem(url);
-
+    ui->lblMime->setText(dlg.selectedMimeType());
     ui->txtFilter->setText(dlg.selectedNameFilter());
-}
-
-void KoFileDialogTester::testSaveFiles()
-{
-    ui->listResults->clear();
-
-    KoFileDialog dlg(this, KoFileDialog::SaveFiles, ui->txtUniqueKey->text());
-    dlg.setCaption(i18n("Testing: SaveFiles"));
-    dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-    if (ui->radioName->isChecked()) {
-
-        QStringList nameFilters;
-        nameFilters << "Documents (*.odt *doc *.txt)"
-                    << "Images (*.png *jpg)"
-                    << "Presentations (*.ppt *.odp)"
-                       ;
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setNameFilters(nameFilters, nameFilters.last());
-        }
-        else {
-            dlg.setNameFilters(nameFilters);
-        }
-
-    }
-    else {
-        QStringList mimeFilter = QStringList()
-                << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-                << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-                << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-                << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-                << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-                << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-                << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-                << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-                << "image/x-wmf" << "application/x-karbon";
-
-        if (ui->chkSetDefaultFilter->isChecked()) {
-            dlg.setMimeTypeFilters(mimeFilter, mimeFilter[4]);
-        }
-        else {
-            dlg.setMimeTypeFilters(mimeFilter);
-        }
-    }
-
-    if (ui->chkHideNameFilterDetailsOption->isChecked()) {
-        dlg.setHideNameFilterDetailsOption();
-    }
-
-    QString url = dlg.url();
-    ui->listResults->addItem(url);
-
-    ui->txtFilter->setText(dlg.selectedNameFilter());
-
 }

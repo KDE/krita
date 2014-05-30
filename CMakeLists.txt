@@ -49,6 +49,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 # fetch git revision for the current build
 
 set(CALLIGRA_GIT_SHA1_STRING "")
+set(CALLIGRA_GIT_BRANCH_STRING "")
 
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)

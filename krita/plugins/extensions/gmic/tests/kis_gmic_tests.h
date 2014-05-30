@@ -75,6 +75,8 @@ private slots:
 
     void testFilterOnlySelection();
 
+    void testLoadingGmicCommands();
+
 
 };
 

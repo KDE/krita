@@ -23,6 +23,7 @@
 #include "kis_gmic_filter_model.h"
 #include "kis_gmic_filter_settings.h"
 
+class KisGmicUpdater;
 class QCloseEvent;
 class KisGmicInputOutputWidget;
 class QPushButton;
@@ -33,7 +34,7 @@ class KisGmicWidget : public QWidget
 
 public:
     // takes ownership of filter model
-    KisGmicWidget(KisGmicFilterModel * filters);
+    KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl = QString());
     ~KisGmicWidget();
 
     void createMainLayout();
@@ -50,6 +51,8 @@ private slots:
     void okFilterSlot();
     void maximizeSlot();
     void cancelFilterSlot();
+    void startUpdate();
+    void finishUpdate();
 
 private:
     QGridLayout * m_filterConfigLayout;
@@ -59,6 +62,9 @@ private:
     KisGmicInputOutputWidget * m_inputOutputOptions;
 
     KisGmicFilterModel * m_filterModel;
+    KisGmicUpdater * m_updater;
+
+    QString m_updateUrl;
 
     int m_filterOptionsRow;
     int m_filterOptionsColumn;

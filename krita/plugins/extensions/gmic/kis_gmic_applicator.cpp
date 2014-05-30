@@ -37,13 +37,14 @@ KisGmicApplicator::~KisGmicApplicator()
 {
 }
 
-void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand)
+void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const QString &actionName, KisNodeListSP kritaNodes, const QString &gmicCommand, const QByteArray customCommands)
 {
     m_image = image;
     m_node = node;
     m_actionName = actionName;
     m_kritaNodes = kritaNodes;
     m_gmicCommand = gmicCommand;
+    m_customCommands = customCommands;
 }
 
 void KisGmicApplicator::run()
@@ -77,13 +78,14 @@ void KisGmicApplicator::run()
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
 
     // apply gmic filters to provided layers
-    applicator.applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers));
+    const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
+    applicator.applyCommand(new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands));
 
     // synchronize layer count
     applicator.applyCommand(new KisGmicSynchronizeLayersCommand(m_kritaNodes, gmicLayers, m_image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     // would sleep(3) help here?
     visitor = new KisImportGmicProcessingVisitor(m_kritaNodes, gmicLayers, layerSize, selection);
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT); // undo information is stored in this visitor
+    applicator.applyVisitor(visitor, KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
     applicator.end();
 }

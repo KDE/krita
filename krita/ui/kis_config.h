@@ -39,6 +39,9 @@ public:
     KisConfig();
     ~KisConfig();
 
+    bool disableTouchOnCanvas() const;
+    void setDisableTouchOnCanvas(bool value) const;
+
     bool useProjections() const;
     void setUseProjections(bool useProj) const;
 

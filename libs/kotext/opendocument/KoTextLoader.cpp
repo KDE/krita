@@ -307,8 +307,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     cursor.beginEditBlock();
 
-
-
     if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
@@ -371,13 +369,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                     usedParagraph = true;
 
-		    if (localName == "p") {    // text paragraph
-			loadParagraph(tag, cursor);
+                    if (localName == "p") {    // text paragraph
+                        loadParagraph(tag, cursor);
                     } else if (localName == "h") {  // heading
-			loadHeading(tag, cursor);
+                        loadHeading(tag, cursor);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
-                               || localName == "list" || localName == "numbered-paragraph") {  // OASIS
-			loadList(tag, cursor);
+                            || localName == "list" || localName == "numbered-paragraph") {  // OASIS
+                        loadList(tag, cursor);
                     } else if (localName == "section") {
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {

@@ -18,7 +18,7 @@ function calligra_xgettext() {
         exit 17
     fi
 
-    if [ -f "${POT_PART_QUNDOFORMAT}" ]; then
+    if [ -s "${POT_PART_QUNDOFORMAT}" ]; then
         # Prepend "(qtundo-format)" to existing msgctxt properties of messages
         sed -i -e 's/^msgctxt "/msgctxt "(qtundo-format) /' "${POT_PART_QUNDOFORMAT}"
 
@@ -35,7 +35,7 @@ function calligra_xgettext() {
             { print ; lastLine = $0 }' > "${POT_PART_QUNDOFORMAT}"
     fi
 
-    if [[ -f "${POT_PART_NORMAL}" && -f "${POT_PART_QUNDOFORMAT}" ]]; then
+    if [[ -s "${POT_PART_NORMAL}" && -s "${POT_PART_QUNDOFORMAT}" ]]; then
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > ${POT_MERGED}
         MERGED_HEADER_LINE_COUNT=$(cat ${POT_MERGED} | grep "^$" -B 100000 --max-count=1 | wc -l)
 
@@ -45,9 +45,9 @@ function calligra_xgettext() {
         # Print out the resulting .pot
         echo "$KDE_HEADER"
         echo "$MERGED_TAIL"
-    elif [ -f "${POT_PART_NORMAL}" ]; then
+    elif [ -s "${POT_PART_NORMAL}" ]; then
         cat "${POT_PART_NORMAL}"
-    elif [ -f "${POT_PART_QUNDOFORMAT}" ]; then
+    elif [ -s "${POT_PART_QUNDOFORMAT}" ]; then
         cat "${POT_PART_QUNDOFORMAT}"
     fi
 

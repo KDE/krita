@@ -81,7 +81,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
     QTextCursor cur(document);
     cur.setPosition(from);
-    while (cur.position() <= to) {
+    while (to == -1 || cur.position() <= to) {
         if (cur.block().position() >= from) { // begin of the block inside selection
             QList<QVariant> openList = cur.blockFormat()
             .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
@@ -91,7 +91,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (cur.block().position() + cur.block().length() <= to) { //end if the block inside selection
+        if (to == -1 || cur.block().position() + cur.block().length() <= to) { //end if the block inside selection
             QList<QVariant> closeList = cur.blockFormat()
             .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
             foreach (const QVariant &sv, closeList) { //FIXME: does this garants from first - to last order??

@@ -49,7 +49,7 @@ protected:
 public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
-                          const QString &transactionText = "",
+                          const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 

@@ -149,7 +149,7 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
         d->oldControlPoint2 = d->pathShape->shapeToDocument(p2->controlPoint2());
     }
 
-    setText(i18nc("(qtundo-format)", "Merge points"));
+    setText(kundo2_i18n("Merge points"));
 }
 
 KoPathPointMergeCommand::~KoPathPointMergeCommand()

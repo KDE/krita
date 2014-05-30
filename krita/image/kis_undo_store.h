@@ -26,6 +26,7 @@
 #include "kis_types.h"
 
 class KUndo2Command;
+class KUndo2MagicString;
 
 
 /**
@@ -68,7 +69,7 @@ public:
     virtual const KUndo2Command* presentCommand() = 0;
     virtual void undoLastCommand() = 0;
     virtual void addCommand(KUndo2Command *cmd) = 0;
-    virtual void beginMacro(const QString& macroName) = 0;
+    virtual void beginMacro(const KUndo2MagicString& macroName) = 0;
     virtual void endMacro() = 0;
 
 private:

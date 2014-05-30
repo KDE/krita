@@ -147,8 +147,9 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     if (currentImage() && (device = currentNode()->paintDevice())) {
         qApp->setOverrideCursor(Qt::BusyCursor);
 
+        KUndo2MagicString actionName = kundo2_i18n("Gradient");
         KisUndoAdapter *undoAdapter = image()->undoAdapter();
-        undoAdapter->beginMacro(i18n("Gradient"));
+        undoAdapter->beginMacro(actionName);
 
         KisGradientPainter painter(device, currentSelection());
 
@@ -157,12 +158,12 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
                                      canvas()->resourceManager());
         resources->setupPainter(&painter);
 
-        painter.beginTransaction("");
+        painter.beginTransaction();
 
         KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
         KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
 
-        updater->start(100, i18n("Gradient"));
+        updater->start(100, actionName.toString());
         painter.setProgress(updater->startSubtask());
 
         painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());

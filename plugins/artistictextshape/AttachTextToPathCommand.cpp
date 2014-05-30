@@ -25,7 +25,7 @@
 AttachTextToPathCommand::AttachTextToPathCommand( ArtisticTextShape * textShape, KoPathShape * pathShape, KUndo2Command * parent )
     : KUndo2Command(parent), m_textShape(textShape), m_pathShape(pathShape)
 {
-    setText( i18nc("(qtundo-format)", "Attach Path") );
+    setText( kundo2_i18n("Attach Path") );
     m_oldMatrix = m_textShape->transformation();
 }
 

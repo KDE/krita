@@ -28,7 +28,7 @@
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Move"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoAdapter),
       m_node(node),
       m_updatesFacade(updatesFacade)
 {

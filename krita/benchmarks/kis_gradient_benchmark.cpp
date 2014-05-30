@@ -66,7 +66,7 @@ void KisGradientBenchmark::benchmarkGradient()
         //setupPainter(&fillPainter);
         fillPainter.setGradient(kograd);
 
-        fillPainter.beginTransaction(i18n("Gradient Fill"));
+        fillPainter.beginTransaction(kundo2_noi18n("Gradient Fill"));
 
         //fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(OPACITY_OPAQUE_U8);

@@ -49,7 +49,7 @@ void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
 
         // has selection
         KisPaintDeviceSP dst = node->paintDevice();
-        KisTransaction transaction("", dst);
+        KisTransaction transaction(dst);
         if (m_selection)
         {
             KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());

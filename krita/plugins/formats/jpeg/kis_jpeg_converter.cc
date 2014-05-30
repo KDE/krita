@@ -244,7 +244,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
-    KisTransaction("", layer->paintDevice());
+    KisTransaction(layer->paintDevice());
 
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];

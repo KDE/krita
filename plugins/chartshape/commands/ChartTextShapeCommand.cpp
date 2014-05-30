@@ -37,9 +37,9 @@ ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *cha
     , m_newIsVisible(isVisible)
 {
     if (m_newIsVisible) {
-        setText(i18nc("(qtundo-format)", "Show Text Shape"));
+        setText(kundo2_i18n("Show Text Shape"));
     } else {
-        setText(i18nc("(qtundo-format)", "Hide Text Shape"));
+        setText(kundo2_i18n("Hide Text Shape"));
     }
 }
 

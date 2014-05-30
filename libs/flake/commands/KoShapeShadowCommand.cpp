@@ -64,7 +64,7 @@ KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, KoShap
         d->addNewShadow(shadow);
     }
 
-    setText(i18nc("(qtundo-format)", "Set Shadow"));
+    setText(kundo2_i18n("Set Shadow"));
 }
 
 KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, const QList<KoShapeShadow*> &shadows, KUndo2Command *parent)
@@ -81,7 +81,7 @@ KoShapeShadowCommand::KoShapeShadowCommand(const QList<KoShape*> &shapes, const 
     foreach(KoShapeShadow * shadow, shadows)
         d->addNewShadow(shadow);
 
-    setText(i18nc("(qtundo-format)", "Set Shadow"));
+    setText(kundo2_i18n("Set Shadow"));
 }
 
 KoShapeShadowCommand::KoShapeShadowCommand(KoShape* shape, KoShapeShadow *shadow, KUndo2Command *parent)
@@ -92,7 +92,7 @@ KoShapeShadowCommand::KoShapeShadowCommand(KoShape* shape, KoShapeShadow *shadow
     d->addNewShadow(shadow);
     d->addOldShadow(shape->shadow());
 
-    setText(i18nc("(qtundo-format)", "Set Shadow"));
+    setText(kundo2_i18n("Set Shadow"));
 }
 
 KoShapeShadowCommand::~KoShapeShadowCommand()

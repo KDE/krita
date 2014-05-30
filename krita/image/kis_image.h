@@ -769,9 +769,9 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                     bool resizeImage, double radians);
-    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+    void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
 

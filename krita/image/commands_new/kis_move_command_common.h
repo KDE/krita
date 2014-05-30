@@ -37,7 +37,7 @@ class KRITAIMAGE_EXPORT KisMoveCommandCommon : public KUndo2Command
 {
 public:
     KisMoveCommandCommon(ObjectSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0)
-        : KUndo2Command(i18nc("(qtundo-format)", "Move"), parent),
+        : KUndo2Command(kundo2_i18n("Move"), parent),
           m_oldPos(oldPos),
           m_newPos(newPos),
           m_object(object)

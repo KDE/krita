@@ -31,6 +31,7 @@ class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
+class KUndo2MagicString;
 
 class KisDoc2;
 class KisFilterStrategy;
@@ -152,7 +153,7 @@ public slots:
     void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
-    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+    void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation);
     void activateNextNode();
     void activatePreviousNode();
 

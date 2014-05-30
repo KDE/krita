@@ -80,7 +80,7 @@ void ColorRange::selectOpaque()
     QRect rc = device->exactBounds();
     if (rc.isEmpty()) return;
 
-    KisSelectionToolHelper helper(canvas, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, kundo2_i18n("Select Opaque"));
 
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);

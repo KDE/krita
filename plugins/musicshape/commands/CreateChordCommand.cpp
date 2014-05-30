@@ -30,7 +30,7 @@ using namespace MusicCore;
 CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before, int pitch, int accidentals)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
-    setText(i18nc("(qtundo-format)", "Add chord"));
+    setText(kundo2_i18n("Add chord"));
     m_chord = new Chord(staff, duration);
     m_chord->addNote(staff, pitch, accidentals);
 }
@@ -38,7 +38,7 @@ CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, St
 CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
-    setText(i18nc("(qtundo-format)", "Add rest"));
+    setText(kundo2_i18n("Add rest"));
     m_chord = new Chord(staff, duration);
 }
 

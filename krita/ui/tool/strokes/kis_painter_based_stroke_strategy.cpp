@@ -41,7 +41,7 @@ KisPainterBasedStrokeStrategy::PainterInfo::~PainterInfo()
 }
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
-                                                             const QString &name,
+                                                             const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              QVector<PainterInfo*> painterInfos)
     : KisSimpleStrokeStrategy(id, name),
@@ -53,7 +53,7 @@ KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
 }
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QString &id,
-                                                             const QString &name,
+                                                             const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
                                                              PainterInfo *painterInfo)
     : KisSimpleStrokeStrategy(id, name),
@@ -168,7 +168,7 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(layer && indirect && indirect->hasTemporaryTarget()) {
-        QString transactionText = m_transaction->text();
+        KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
 
         indirect->mergeToLayer(layer,

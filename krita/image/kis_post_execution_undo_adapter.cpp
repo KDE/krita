@@ -36,7 +36,7 @@ void KisPostExecutionUndoAdapter::addCommand(KUndo2CommandSP command)
     m_undoStore->addCommand(new KisSavedCommand(command, m_strokesFacade));
 }
 
-KisSavedMacroCommand* KisPostExecutionUndoAdapter::createMacro(const QString& macroName)
+KisSavedMacroCommand* KisPostExecutionUndoAdapter::createMacro(const KUndo2MagicString& macroName)
 {
     return new KisSavedMacroCommand(macroName, m_strokesFacade);
 }

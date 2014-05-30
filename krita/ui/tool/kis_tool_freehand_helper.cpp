@@ -86,7 +86,7 @@ struct KisToolFreehandHelper::Private
     KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
 
-    QString transactionText;
+    KUndo2MagicString transactionText;
 
     bool haveTangent;
     QPointF previousTangent;
@@ -115,7 +115,7 @@ struct KisToolFreehandHelper::Private
 
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
-                                             const QString &transactionText,
+                                             const KUndo2MagicString &transactionText,
                                              KisRecordingAdapter *recordingAdapter)
     : m_d(new Private)
 {

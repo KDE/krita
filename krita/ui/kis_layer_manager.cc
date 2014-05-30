@@ -482,7 +482,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         parent = above ? above->parent() : 0;
     }
 
-    m_commandsAdapter->beginMacro(i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
     m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->endMacro();
@@ -776,7 +776,7 @@ void KisLayerManager::rasterizeLayer()
     QRect rc = layer->projection()->exactBounds();
     gc.bitBlt(rc.topLeft(), layer->projection(), rc);
 
-    m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
     m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
 
     int childCount = layer->childCount();

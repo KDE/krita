@@ -27,7 +27,7 @@ using namespace MusicCore;
 AddBarsCommand::AddBarsCommand(MusicShape* shape, int bars)
     : m_sheet(shape->sheet()), m_bars(bars), m_shape(shape)
 {
-    setText(i18nc("(qtundo-format)", "Add measures"));
+    setText(kundo2_i18n("Add measures"));
 }
 
 void AddBarsCommand::redo()

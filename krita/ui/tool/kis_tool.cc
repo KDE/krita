@@ -540,7 +540,7 @@ void KisTool::deleteSelection()
         KisPaintDeviceSP device = node->paintDevice();
 
         image()->barrierLock();
-        KisTransaction transaction(i18n("Clear"), device);
+        KisTransaction transaction(kundo2_i18n("Clear"), device);
 
         QRect dirtyRect;
         if (selection) {

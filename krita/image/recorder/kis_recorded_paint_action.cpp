@@ -264,7 +264,7 @@ void KisRecordedPaintAction::setGenerator(const KisFilterConfiguration * generat
 void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater) const
 {
     dbgUI << "Play recorded paint action on node : " << node->name() ;
-    KisTransaction transaction("", node->paintDevice());
+    KisTransaction transaction(node->paintDevice());
 
     KisPaintDeviceSP target = 0;
     if (d->paintIncremental) {

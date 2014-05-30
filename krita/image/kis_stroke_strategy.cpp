@@ -20,7 +20,7 @@
 #include <KoCompositeOpRegistry.h>
 
 
-KisStrokeStrategy::KisStrokeStrategy(QString id, QString name)
+KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
     : m_exclusive(false),
       m_supportsWrapAroundMode(false),
       m_needsIndirectPainting(false),
@@ -95,7 +95,7 @@ QString KisStrokeStrategy::id() const
     return m_id;
 }
 
-QString KisStrokeStrategy::name() const
+KUndo2MagicString KisStrokeStrategy::name() const
 {
     return m_name;
 }

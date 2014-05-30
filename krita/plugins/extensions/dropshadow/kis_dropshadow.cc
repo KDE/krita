@@ -123,7 +123,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         shadowDev = bShadowDev;
     }
 
-    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
+    image->undoAdapter()->beginMacro(kundo2_i18n("Add Drop Shadow"));
 
     if (!progressUpdater->interrupted()) {
         shadowDev->move(xoffset, yoffset);

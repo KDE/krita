@@ -601,7 +601,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
     referenceImage = device->convertToQImage(0);
 
 
-    KisTransaction transaction1(0, device);
+    KisTransaction transaction1(device);
 //    qDebug()<<"CLEARING";
     device->clear(clearRect);
 
@@ -612,7 +612,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
     KisPaintDeviceSP clone =  new KisPaintDevice(*device);
 
-    KisTransaction transaction(0, clone);
+    KisTransaction transaction(clone);
 //    qDebug()<<"CLEARING";
     clone->clear(clearRect);
 

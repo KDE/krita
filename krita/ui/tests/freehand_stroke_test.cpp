@@ -47,7 +47,7 @@ protected:
             new FreehandStrokeStrategy::PainterInfo(painter,
                                                     new KisDistanceInformation());
 
-        return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
+        return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke"));
     }
 
     void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {

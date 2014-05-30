@@ -85,7 +85,7 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, i18nc("(qtundo-format)", "Select Rectangle"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Rectangle"));
 
     QRect rc(rect.normalized().toRect());
     helper.cropRectIfNeeded(&rc);

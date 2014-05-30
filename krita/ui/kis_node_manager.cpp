@@ -447,7 +447,7 @@ void KisNodeManager::convertNode(const QString &nodeType)
         KisPaintDeviceSP copyFrom = activeNode->paintDevice() ?
             activeNode->paintDevice() : activeNode->original();
 
-        m_d->commandsAdapter->beginMacro(i18n("Convert to a Selection Mask"));
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 
         if (nodeType == "KisSelectionMask") {
             m_d->maskManager->createSelectionMask(activeNode, copyFrom);
@@ -647,7 +647,7 @@ void KisNodeManager::removeNode()
         return;
 
     if (scanForLastLayer(m_d->view->image(), node)) {
-        m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Last Layer"));
         m_d->commandsAdapter->removeNode(node);
         // An oddity, but this is required as for some reason, we can end up in a situation
         // where our active node is still set to one of the layers removed above.
@@ -664,11 +664,11 @@ void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();
 
-    QString commandName;
+    KUndo2MagicString commandName;
     if (node->inherits("KisLayer")) {
-        commandName = i18n("Mirror Layer X");
+        commandName = kundo2_i18n("Mirror Layer X");
     } else if (node->inherits("KisMask")) {
-        commandName = i18n("Mirror Mask X");
+        commandName = kundo2_i18n("Mirror Mask X");
     }
     mirrorNode(node, commandName, Qt::Horizontal);
 }
@@ -677,11 +677,11 @@ void KisNodeManager::mirrorNodeY()
 {
     KisNodeSP node = activeNode();
 
-    QString commandName;
+    KUndo2MagicString commandName;
     if (node->inherits("KisLayer")) {
-        commandName = i18n("Mirror Layer Y");
+        commandName = kundo2_i18n("Mirror Layer Y");
     } else if (node->inherits("KisMask")) {
-        commandName = i18n("Mirror Mask Y");
+        commandName = kundo2_i18n("Mirror Mask Y");
     }
     mirrorNode(node, commandName, Qt::Vertical);
 }
@@ -774,7 +774,7 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
     nodesUpdated();
 }
 
-void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)
+void KisNodeManager::mirrorNode(KisNodeSP node, const KUndo2MagicString& actionName, Qt::Orientation orientation)
 {
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;

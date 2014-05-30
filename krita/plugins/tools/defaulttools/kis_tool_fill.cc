@@ -125,7 +125,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector() << ModifiedSignal,
-                                       i18n("Flood Fill"));
+                                       kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());

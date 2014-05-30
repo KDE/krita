@@ -36,10 +36,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     m_pages.insert(index, page);
 
     if ( page->pageType() == KoPageApp::Slide ) {
-        setText( i18nc( "(qtundo-format)", "Delete slide" ) );
+        setText( kundo2_i18n( "Delete slide" ) );
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Delete page" ) );
+        setText( kundo2_i18n( "Delete page" ) );
     }
 }
 
@@ -60,10 +60,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList
     }
 
     if (pages.first()->pageType() == KoPageApp::Slide) {
-        setText(i18ncp("(qtundo-format)", "Delete slide", "Delete slides", m_pages.count()));
+        setText(kundo2_i18np("Delete slide", "Delete slides", m_pages.count()));
     }
     else {
-        setText(i18ncp("(qtundo-format)", "Delete page", "Delete pages", m_pages.count()));
+        setText(kundo2_i18np("Delete page", "Delete pages", m_pages.count()));
     }
 }
 

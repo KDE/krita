@@ -585,7 +585,7 @@ void KisGmicTests::testFilterOnlySelection()
     QString gmicCommand = filterSettings.gmicCommand();
 
     KisGmicApplicator applicator;
-    applicator.setProperties(image, image->root(), "Gmic filter", kritaNodes, gmicCommand);
+    applicator.setProperties(image, image->root(), kundo2_noi18n("Gmic filter"), kritaNodes, gmicCommand);
     applicator.start();
     applicator.wait();
     image->waitForDone();

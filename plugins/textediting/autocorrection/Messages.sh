@@ -1,3 +1,3 @@
 #! /bin/sh
 $EXTRACTRC *.ui >> rc.cpp
-$XGETTEXT *.cpp  -o $podir/AutocorrectPlugin.pot
+$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 *.cpp  -o $podir/AutocorrectPlugin.pot

@@ -22,7 +22,7 @@
 
 
 KisProcessingCommand::KisProcessingCommand(KisProcessingVisitorSP visitor, KisNodeSP node, KUndo2Command *parent)
-    : KUndo2Command("processing_command", parent),
+    : KUndo2Command(kundo2_noi18n("processing_command"), parent),
       m_visitor(visitor),
       m_node(node),
       m_visitorExecuted(false)

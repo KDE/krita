@@ -130,10 +130,10 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
 
     KUndo2Command * cmd = 0;
     if ( m_doc->pageType() == KoPageApp::Slide ) {
-        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Slide", "Paste Slides", qMax( newMasterPages.size(), newPages.size() ) ) );
+        cmd = new KUndo2Command( kundo2_i18np( "Paste Slide", "Paste Slides", qMax( newMasterPages.size(), newPages.size() ) ) );
     }
     else {
-        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Page", "Paste Pages", qMax( newMasterPages.size(), newPages.size() ) ) );
+        cmd = new KUndo2Command( kundo2_i18np( "Paste Page", "Paste Pages", qMax( newMasterPages.size(), newPages.size() ) ) );
     }
 
     foreach( KoPAPageBase * masterPage, newMasterPages )

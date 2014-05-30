@@ -27,6 +27,8 @@
 #include <QRect>
 #include <QString>
 
+class KUndo2MagicString;
+
 
 class KRITAIMAGE_EXPORT KisSelectionFilter
 {
@@ -36,7 +38,7 @@ public:
     virtual void process(KisPixelSelectionSP pixelSelection,
                          const QRect &rect) = 0;
 
-    virtual QString name();
+    virtual KUndo2MagicString name();
     virtual QRect changeRect(const QRect &rect);
 
 protected:
@@ -50,7 +52,7 @@ protected:
 class KRITAIMAGE_EXPORT KisErodeSelectionFilter : public KisSelectionFilter
 {
 public:
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -60,7 +62,7 @@ public:
 class KRITAIMAGE_EXPORT KisDilateSelectionFilter : public KisSelectionFilter
 {
 public:
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -72,7 +74,7 @@ class KRITAIMAGE_EXPORT KisBorderSelectionFilter : public KisSelectionFilter
 public:
     KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius);
 
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -88,7 +90,7 @@ class KRITAIMAGE_EXPORT KisFeatherSelectionFilter : public KisSelectionFilter
 public:
     KisFeatherSelectionFilter(qint32 radius);
 
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -102,7 +104,7 @@ class KRITAIMAGE_EXPORT KisGrowSelectionFilter : public KisSelectionFilter
 public:
     KisGrowSelectionFilter(qint32 xRadius, qint32 yRadius);
 
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -118,7 +120,7 @@ class KRITAIMAGE_EXPORT KisShrinkSelectionFilter : public KisSelectionFilter
 public:
     KisShrinkSelectionFilter(qint32 xRadius, qint32 yRadius, bool edgeLock);
 
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -133,7 +135,7 @@ private:
 class KRITAIMAGE_EXPORT KisSmoothSelectionFilter : public KisSelectionFilter
 {
 public:
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 
@@ -142,7 +144,7 @@ public:
 
 class KRITAIMAGE_EXPORT KisInvertSelectionFilter : public KisSelectionFilter
 {
-    QString name();
+    KUndo2MagicString name();
 
     QRect changeRect(const QRect &rect);
 

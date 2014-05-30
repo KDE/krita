@@ -143,7 +143,7 @@ KUndo2Command* ShapeRotateStrategy::createCommand() {
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
-    cmd->setText( i18nc("(qtundo-format)", "Rotate") );
+    cmd->setText( kundo2_i18n("Rotate") );
     KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;

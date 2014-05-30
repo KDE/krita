@@ -53,7 +53,7 @@ public:
         foreach(QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Formatting"), *it, prevFormat, false);
+            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
             ++it;
         }
         QTextCursor cursor(caret);
@@ -90,7 +90,7 @@ ParagraphFormattingCommand::ParagraphFormattingCommand(KoTextEditor *editor,
 {
     Q_ASSERT(editor);
 
-    setText(i18nc("(qtundo-format)", "Direct Paragraph Formatting"));
+    setText(kundo2_i18n("Direct Paragraph Formatting"));
 }
 
 ParagraphFormattingCommand::~ParagraphFormattingCommand()

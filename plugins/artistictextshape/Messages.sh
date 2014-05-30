@@ -1,3 +1,3 @@
 #! /bin/sh
 $EXTRACTRC *.ui >> rc.cpp
-$XGETTEXT *.cpp *.h -o $podir/ArtisticTextShape.pot
+$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 *.cpp *.h -o $podir/ArtisticTextShape.pot

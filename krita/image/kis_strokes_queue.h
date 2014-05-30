@@ -44,7 +44,7 @@ public:
     bool isEmpty() const;
 
     qint32 sizeMetric() const;
-    QString currentStrokeName() const;
+    KUndo2MagicString currentStrokeName() const;
 
     bool wrapAroundModeSupported() const;
 

@@ -29,7 +29,7 @@ struct KisToolMultihandHelper::Private
 };
 
 KisToolMultihandHelper::KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
-                                               const QString &transactionText,
+                                               const KUndo2MagicString &transactionText,
                                                KisRecordingAdapter *recordingAdapter)
     : KisToolFreehandHelper(infoBuilder, transactionText, recordingAdapter)
     , d(new Private)

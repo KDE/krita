@@ -53,7 +53,7 @@ void KisLegacyUndoAdapter::addCommand(KUndo2Command *command)
     }
 }
 
-void KisLegacyUndoAdapter::beginMacro(const QString& macroName)
+void KisLegacyUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     if(!m_macroCounter) {
         m_image->barrierLock();

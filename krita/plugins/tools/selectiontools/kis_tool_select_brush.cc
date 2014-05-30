@@ -173,7 +173,7 @@ void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, i18nc("(qtundo-format)", "Select by Brush"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Brush"));
 
     if (selectionMode() == PIXEL_SELECTION) {
 

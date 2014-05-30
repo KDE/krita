@@ -37,7 +37,7 @@ ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape,
     m_oldVectorType = m_shape->vectorType();
     m_newImageData = newImageData;
     m_newVectorType = newVectorType;
-    setText(i18nc("(qtundo-format)", "Change Vector Data"));
+    setText(kundo2_i18n("Change Vector Data"));
 }
 
 ChangeVectorDataCommand::~ChangeVectorDataCommand()

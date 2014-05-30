@@ -28,6 +28,8 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
+class KUndo2MagicString;
+
 class KoXmlElement;
 class KoChangeTrackerElement;
 class KoFormatChangeInformation;
@@ -59,9 +61,9 @@ public:
     bool displayChanges() const;
 
     /// XXX: these three are called "getXXX" but do change the state of the change tracker
-    int getFormatChangeId(const QString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId);
-    int getInsertChangeId(const QString &title, int existingChangeId);
-    int getDeleteChangeId(const QString &title, const QTextDocumentFragment &selection, int existingChangeId);
+    int getFormatChangeId(const KUndo2MagicString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId);
+    int getInsertChangeId(const KUndo2MagicString &title, int existingChangeId);
+    int getDeleteChangeId(const KUndo2MagicString &title, const QTextDocumentFragment &selection, int existingChangeId);
 
     void setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation);
     KoFormatChangeInformation *formatChangeInformation(int formatChangeId) const;
@@ -73,7 +75,7 @@ public:
     int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector) const;
 
     bool containsInlineChanges(const QTextFormat &format) const;
-    int mergeableId(KoGenChange::Type type, const QString &title, int existingId) const;
+    int mergeableId(KoGenChange::Type type, const KUndo2MagicString &title, int existingId) const;
 
     QColor getInsertionBgColor() const;
     QColor getDeletionBgColor() const;

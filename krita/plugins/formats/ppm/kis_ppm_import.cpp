@@ -292,7 +292,7 @@ KoFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDo
 
     KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-    KisTransaction("", layer->paintDevice());
+    KisTransaction(layer->paintDevice());
 
     KisPpmFlow* ppmFlow = 0;
     if (isAscii) {

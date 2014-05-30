@@ -29,7 +29,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
                                                PainterInfo *painterInfo,
-                                               const QString &name)
+                                               const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo)
 {
@@ -40,7 +40,7 @@ FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
                                                const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
                                                QVector<PainterInfo*> painterInfos,
-                                               const QString &name)
+                                               const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos)
 {

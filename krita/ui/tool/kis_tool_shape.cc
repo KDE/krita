@@ -160,7 +160,7 @@ void KisToolShape::addShape(KoShape* shape)
     canvas()->addCommand(cmd);
 }
 
-void KisToolShape::addPathShape(KoPathShape* pathShape, const QString& name)
+void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)
 {
     KisNodeSP node = currentNode();
     if (!node || node->systemLocked()) {

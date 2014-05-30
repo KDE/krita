@@ -3,4 +3,4 @@ EXCLUDE="-path ./koproperty -o -path ./koreports"
 LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.ui -o -name \*.rc \) -type f | grep -v -e '/\.'`
 $EXTRACTRC $LIST >> rc.cpp
 LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.cpp -o -name \*.cc -o -name \*.h \) -type f | grep -v '/tests/' | grep -v -e '/\.'`
-$XGETTEXT $LIST -o $podir/calligra.pot
+$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 $LIST -o $podir/calligra.pot

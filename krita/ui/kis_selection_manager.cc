@@ -499,16 +499,18 @@ void KisSelectionManager::paintSelectedShapes()
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, i18n("Stroked Shapes"), OPACITY_OPAQUE_U8);
 
-    m_adapter->beginMacro(i18n("Stroke Shapes"));
+    KUndo2MagicString actionName = kundo2_i18n("Stroke Shapes");
+
+    m_adapter->beginMacro(actionName);
     m_adapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
 
-    KisFigurePaintingToolHelper helper(i18n("Stroke Shapes"),
-                                        image,
-                                        m_view->canvasBase()->resourceManager(),
-                                        KisPainter::StrokeStyleBrush,
-                                        KisPainter::FillStyleNone);
+    KisFigurePaintingToolHelper helper(actionName,
+                                       image,
+                                       m_view->canvasBase()->resourceManager(),
+                                       KisPainter::StrokeStyleBrush,
+                                       KisPainter::FillStyleNone);
 
-    foreach(KoShape* shape, shapes) {    
+    foreach(KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
         QPainterPath mapedOutline = matrix.map(shape->outline());
         helper.paintPainterPath(mapedOutline);

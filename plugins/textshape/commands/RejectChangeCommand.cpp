@@ -44,7 +44,7 @@ RejectChangeCommand::RejectChangeCommand (int changeId, QList<QPair<int, int> > 
     m_changeRanges(changeRanges),
     m_document(document)
 {
-    setText(i18nc("(qtundo-format)", "Reject change"));
+    setText(kundo2_i18n("Reject change"));
 
     m_changeTracker = KoTextDocument(m_document).changeTracker();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());

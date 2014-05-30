@@ -36,7 +36,7 @@
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisSelectionSP selection,
                                                  KisPostExecutionUndoAdapter *undoAdapter)
-    : KisStrokeStrategyUndoCommandBased(i18n("Transform"), false, undoAdapter),
+    : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoAdapter),
       m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {
@@ -156,7 +156,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 KisPaintDeviceSP cachedPortion = getDeviceCache(device);
                 Q_ASSERT(cachedPortion);
 
-                KisTransaction transaction("Transform Device", device);
+                KisTransaction transaction(device);
 
                 KisProcessingVisitor::ProgressHelper helper(td->node);
                 transformAndMergeDevice(td->config, cachedPortion,
@@ -192,7 +192,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
              * We use usual transaction here, because we cannot calsulate
              * transformation for perspective and warp workers.
              */
-            KisTransaction transaction("Transform Selection", m_selection->pixelSelection());
+            KisTransaction transaction(m_selection->pixelSelection());
 
             KisProcessingVisitor::ProgressHelper helper(td->node);
             transformDevice(td->config,
@@ -218,7 +218,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 void TransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
 {
-    KisTransaction transaction("Clear Selection", device);
+    KisTransaction transaction(device);
     if (m_selection) {
         device->clearSelection(m_selection);
     } else {

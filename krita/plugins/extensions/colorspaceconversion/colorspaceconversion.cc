@@ -119,7 +119,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
+            image->undoAdapter()->beginMacro(kundo2_i18n("Convert Layer Type"));
 
             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
             if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;

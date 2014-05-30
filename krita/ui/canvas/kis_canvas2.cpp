@@ -246,17 +246,8 @@ void KisCanvas2::channelSelectionChanged()
 
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
+    KIS_ASSERT_RECOVER_NOOP(0 && "This method should have been removed! Please report a bug and press Ignore!");
     m_d->view->koDocument()->addCommand(command);
-}
-
-void KisCanvas2::startMacro(const QString &title)
-{
-    m_d->view->koDocument()->beginMacro(title);
-}
-
-void KisCanvas2::stopMacro()
-{
-    m_d->view->koDocument()->endMacro();
 }
 
 KoShapeManager* KisCanvas2::shapeManager() const

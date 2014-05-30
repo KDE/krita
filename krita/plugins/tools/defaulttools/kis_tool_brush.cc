@@ -37,7 +37,7 @@
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     : KisToolFreehand(canvas,
                       KisCursor::load("tool_freehand_cursor.png", 5, 5),
-                      i18nc("(qtundo-format)", "Freehand Brush Stroke"))
+                      kundo2_i18n("Freehand Brush Stroke"))
 {
     setObjectName("tool_brush");
 }

@@ -44,7 +44,7 @@ ChangeSomethingCommand::ChangeSomethingCommand(TemplateShape *shape, KoSomething
 
     // We need new here as setUserData deletes the old data.
     m_oldSomethingData = oldSomethingData ? new KoSomethingData(*oldSomethingData): 0;
-    setText(i18nc("(qtundo-format)", "Change something"));
+    setText(kundo2_i18n("Change something"));
 
     m_oldSize = shape->size();
     m_newSize = newSomethingData->somethingSize();

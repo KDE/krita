@@ -70,8 +70,8 @@ void OffsetImage::slotOffsetImage()
         DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
-        QString actionName = i18n("Offset Image");
-        dlgOffsetImage->setCaption(actionName);
+        KUndo2MagicString actionName = kundo2_i18n("Offset Image");
+        dlgOffsetImage->setCaption(actionName.toString());
 
         if (dlgOffsetImage->exec() == QDialog::Accepted) {
             QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
@@ -94,8 +94,8 @@ void OffsetImage::slotOffsetLayer()
     DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view, "OffsetLayer", offsetWrapRect().size());
     Q_CHECK_PTR(dlgOffsetImage);
 
-    QString actionName = i18n("Offset Layer");
-    dlgOffsetImage->setCaption(actionName);
+    KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
+    dlgOffsetImage->setCaption(actionName.toString());
 
     if (dlgOffsetImage->exec() == QDialog::Accepted) {
         QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
@@ -111,7 +111,7 @@ void OffsetImage::slotOffsetLayer()
     }
 }
 
-void OffsetImage::offsetImpl(const QString& actionName, KisNodeSP node, const QPoint& offsetPoint)
+void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node, const QPoint& offsetPoint)
 {
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;

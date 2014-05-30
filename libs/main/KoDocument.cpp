@@ -2364,7 +2364,7 @@ void KoDocument::addCommand(KUndo2Command *command)
         d->undoStack->push(command);
 }
 
-void KoDocument::beginMacro(const QString & text)
+void KoDocument::beginMacro(const KUndo2MagicString & text)
 {
     d->undoStack->beginMacro(text);
 }

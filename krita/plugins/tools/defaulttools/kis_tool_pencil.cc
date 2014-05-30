@@ -58,5 +58,5 @@ void __KisToolPencilLocalTool::addPathShape(KoPathShape* pathShape, bool closePa
         pathShape->normalize();
     }
 
-    m_parentTool->addPathShape(pathShape, i18nc("(qtundo-format)", "Draw Freehand Path"));
+    m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Freehand Path"));
 }

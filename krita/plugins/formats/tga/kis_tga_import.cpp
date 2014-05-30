@@ -304,7 +304,7 @@ KoFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const Q
         KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from tga");
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        KisTransaction(0, layer->paintDevice());
+        KisTransaction(layer->paintDevice());
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
         image->addNode(layer.data(), image->rootLayer().data());
 

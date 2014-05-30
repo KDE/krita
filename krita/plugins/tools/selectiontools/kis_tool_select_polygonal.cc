@@ -86,7 +86,7 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, i18nc("(qtundo-format)", "Select Polygon"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
 
     if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();

@@ -153,7 +153,7 @@ void ResourceManager::slotImport()
 
     QStringList nameFilters;
     nameFilters << i18n("GIMP Brushes (*.gbr)")
-                << i18n("Imagepipe Brushes (*gih)")
+                << i18n("Imagepipe Brushes (*.gih)")
                 << i18n("Photoshop Brushes (*.abr)")
                 << i18n("PNG Brushes (*.png)")
                 << i18n("SVG Brushes (*.svg)")

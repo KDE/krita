@@ -4,6 +4,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -133,6 +134,7 @@ public:
     QTextCharFormat m_firstFormat;
 };
 
+//FIXME: extract from this file, for shared use
 bool DeleteCommand::getNextBlock(QTextCursor &cur)
 {
     QTextCursor next = cur;
@@ -176,6 +178,18 @@ void DeleteCommand::doDelete()
 
     //FIXME: can we have a deal with complex selection here??
 
+    //   At first, we go though the all section starts and ends
+    // that are in selection, and delete all pairs, because
+    // they will be deleted.
+    //   Than we have multiple cases: selection start split some block
+    // or don't split any block
+    //   In the first case all formatting info will be stored in the
+    // splitted block(it has startBlockNum number)
+    //   In the second case it will be stored in the block pointed by the
+    // selection end(it has endBlockNum number)
+    //   Also there is a trivial case, when whole selection is inside
+    // one block, in this case hasEntirelyInsideBlock will be false
+    // and we will do nothing
     QTextCursor cur = *caret;
     cur.setPosition(caret->selectionStart());
     int startBlockNum = -1;
@@ -189,7 +203,7 @@ void DeleteCommand::doDelete()
             beginInside = true;
             QList<QVariant> openList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, openList) { //FIXME: does this garants from first - to last order??
+            foreach (const QVariant &sv, openList) {
                 KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
                 curSectionDelimiters.push_back(SectionHandle(sec->name(), true, sv));
             }
@@ -199,7 +213,7 @@ void DeleteCommand::doDelete()
             endInside = true;
             QList<QVariant> closeList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, closeList) { //FIXME: does this garants from first - to last order??
+            foreach (const QVariant &sv, closeList) {
                 KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
                 if (!curSectionDelimiters.empty() && curSectionDelimiters.last().name == sec->name) {
                     curSectionDelimiters.pop_back();
@@ -278,7 +292,7 @@ void DeleteCommand::doDelete()
             changer.setPosition(cur.document()->findBlockByNumber(endBlockNum).position());
             changer.setBlockFormat(fmt);
         } else {
-            Q_ASSERT(false); //FIXME: delete this before release, is there will be no problems
+            Q_ASSERT(false); //FIXME: delete this before release, if there will be no problems
 //             cur.setPosition(caret->selectionStart());
 //             if (cur.movePosition(QTextCursor::Left)) {
 //                 QList<QVariant> closeListHave = cur.blockFormat()

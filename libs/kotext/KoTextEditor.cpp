@@ -3,7 +3,8 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
- *
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -174,7 +175,7 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
     bf.clearProperty(KoParagraphStyle::HiddenByTable);
 
-    // We should stay in the same section so we cant start new one
+    // We should stay in the same section so we can't start new one
     bf.clearProperty(KoParagraphStyle::SectionStartings);
     // But we move all the current endings to the next paragraph
     QTextBlockFormat origin = caret.blockFormat();

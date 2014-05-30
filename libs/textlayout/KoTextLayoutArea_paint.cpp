@@ -11,7 +11,8 @@
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
-  *
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -105,7 +106,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
     }
 
-    int section_level = -1;
+    int sectionLevel = -1;
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
@@ -124,9 +125,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         QVariant var = block.blockFormat().property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> open_list = var.value< QList<QVariant> >();
+        QList<QVariant> openList = var.value< QList<QVariant> >();
 
-        section_level += open_list.count();
+        sectionLevel += openList.count();
 
         if (table) {
             if (tableAreaIndex >= d->tableAreas.size()) {
@@ -156,7 +157,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             tocContext.textContext.selections = QVector<QAbstractTextDocumentLayout::Selection>();
 
             bool pure = true;
-            foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+            foreach(const QAbstractTextDocumentLayout::Selection &selection, context.textContext.selections) {
                 if (selection.cursor.selectionStart()  <= block.position()
                     && selection.cursor.selectionEnd() >= block.position()) {
                     painter->fillRect(d->generatedDocAreas[tocIndex]->boundingRect(), selection.format.background());
@@ -369,13 +370,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
-            decorateParagraphSections(painter, block, section_level);
+            //FIXME: surround this with if to make section viewing optional
+            decorateParagraphSections(painter, block, sectionLevel );
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 
             var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
             QList<QVariant> close_list = var.value< QList<QVariant> >();
-
-            section_level -= close_list.count();
+            sectionLevel -= close_list.count();
 
             painter->restore();
         } else {
@@ -659,28 +660,27 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
     return 0;
 }
 
-void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block, int section_level)
+void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &block, int sectionLevel)
 {
     QTextLayout *layout = block.layout();
     QTextBlockFormat bf = block.blockFormat();
 
     if (bf.hasProperty(KoParagraphStyle::SectionStartings)) {
         QVariant var = bf.property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> open_list = var.value< QList<QVariant> >();
+        QList<QVariant> openList = var.value< QList<QVariant> >();
 
         drawDecorationLine(painter,
                            Qt::green,
                            KoCharacterStyle::SingleLine,
                            KoCharacterStyle::SolidLine,
-                           1 * open_list.count(),
-                           section_level * 50,
+                           1 * openList.count(),
+                           sectionLevel * 50,
                            width(),
                            layout->lineForTextPosition(0).y()
         );
 
         QString sectionsDebug = "Starts :";
-        foreach (const QVariant &sv, open_list)
-        {
+        foreach (const QVariant &sv, openList) {
             KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
             sectionsDebug += sec->name() + " ";
         }
@@ -696,21 +696,20 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
 
     if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
         QVariant var = bf.property(KoParagraphStyle::SectionEndings);
-        QList<QVariant> close_list = var.value< QList<QVariant> >();
+        QList<QVariant> closeList = var.value< QList<QVariant> >();
         drawDecorationLine(painter,
                            Qt::red,
                            KoCharacterStyle::SingleLine,
                            KoCharacterStyle::SolidLine,
-                           1 * close_list.count(),
-                           section_level * 50,
+                           1 * closeList.count(),
+                           sectionLevel * 50,
                            width(),
                            layout->lineForTextPosition(block.length() - 1).y()
                            + layout->lineForTextPosition(block.length() - 1).height()
         );
 
         QString sectionsDebug = "Ends :";
-        foreach (const QVariant &sv, close_list)
-        {
+        foreach (const QVariant &sv, closeList) {
             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
             sectionsDebug += sec->name + " ";
         }

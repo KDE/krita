@@ -2,6 +2,7 @@
  This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
  * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,10 +60,11 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
+    //Helper struct for handling sections
     struct SectionHandle {
-        QString name;
-        bool type; // true - open, false - close
-        QVariant data;
+        QString name; // name of the section
+        bool type; // Action: true - open, false - close
+        QVariant data; // QVariant version of pointer to KoSection or KoSectionEnd
 
         SectionHandle(QString _name, bool _type, QVariant _data)
         : name(_name)

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -76,16 +77,21 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     QTextBlock block = document->findBlock(from);
 
-    QList< QString > entireWithinSectionNames;
-    QStack< QString > sectionNamesStack;
+    // here we are going to detect all sections that
+    // are positioned entirely inside selection
+    // They will stay untouched, and others will be ommited
 
+    // so we are using stack to detect them, by going though
+    // the selection and finding open/close pairs
+    QSet<QString> entireWithinSectionNames;
+    QStack<QString> sectionNamesStack;
     QTextCursor cur(document);
     cur.setPosition(from);
     while (to == -1 || cur.position() <= to) {
         if (cur.block().position() >= from) { // begin of the block inside selection
             QList<QVariant> openList = cur.blockFormat()
-            .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, openList) { //FIXME: does this garants from first - to last order??
+                .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, openList) {
                 KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
                 sectionNamesStack.push_back(sec->name());
             }
@@ -93,12 +99,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (to == -1 || cur.block().position() + cur.block().length() <= to) { //end if the block inside selection
             QList<QVariant> closeList = cur.blockFormat()
-            .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
-            foreach (const QVariant &sv, closeList) { //FIXME: does this garants from first - to last order??
+                .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
+            foreach (const QVariant &sv, closeList) {
                 KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
                 if (!sectionNamesStack.empty() && sectionNamesStack.top() == sec->name) {
                     sectionNamesStack.pop();
-                    entireWithinSectionNames.append(sec->name);
+                    entireWithinSectionNames.insert(sec->name);
                 }
             }
         }
@@ -126,6 +132,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
             foreach (const QVariant &sv, sectionStarts) {
                 KoSection* section = static_cast<KoSection *>(sv.value<void*>());
+
+                // we are writing in only completely inside positioned sections
                 if (entireWithinSectionNames.contains(section->name())) {
                     section->saveOdf(context);
                 }
@@ -168,6 +176,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         if (format.hasProperty(KoParagraphStyle::SectionEndings)) {
             QVariant v = format.property(KoParagraphStyle::SectionEndings);
             QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+
+            // we are writing in only completely inside positioned sections
             foreach (QVariant sv, sectionEndings) {
                 KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
                 if (entireWithinSectionNames.contains(sectionEnd->name)) {
@@ -175,7 +185,6 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 }
             }
         }
-
 
         block = block.next();
     } // while

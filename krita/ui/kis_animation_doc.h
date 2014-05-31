@@ -37,6 +37,7 @@ public:
 
     void addKeyFrame(QRect frame);
     void addBlankFrame(QRect frame);
+    void breakFrame(QRect frame);
 
     void addPaintLayer();
 

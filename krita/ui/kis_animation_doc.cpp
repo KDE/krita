@@ -146,58 +146,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     setCurrentImage(d->image);
 }
 
-QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
-{
-    QDomNodeList list = d->frameElement.childNodes();
-
-    QList<int> frameNumbers;
-
-    for(int i = 0 ; i < list.length() ; i++) {
-        QDomNode node = list.at(i);
-
-        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
-            frameNumbers.append(node.attributes().namedItem("number").nodeValue().toInt());
-        }
-    }
-
-    qSort(frameNumbers);
-
-    if(frameNumbers.contains(frame)) {
-        QRect parentFramePos(frame, layer, 10, 20);
-        return parentFramePos;
-    }
-
-    int frameN;
-    for(int i = 0 ; i < frameNumbers.length() ; i++) {
-        if(frameNumbers.at(i) < frame) {
-            frameN = frameNumbers.at(i);
-        }
-    }
-
-    QRect parentFramePos(frameN, layer, 10, 20);
-
-    return parentFramePos;
-}
-
-QString KisAnimationDoc::getFrameFile(int frame, int layer)
-{
-    QRect parentPos = this->getParentFramePosition(frame, layer);
-    QString location = "frame" + QString::number(parentPos.x()) + "layer" + QString::number(parentPos.y());
-    return location;
-}
-
-void KisAnimationDoc::updateXML()
-{
-    QDomElement frameElement = d->doc.createElement("frame");
-    frameElement.setAttribute("number", d->currentFramePosition.x());
-    frameElement.setAttribute("layer", d->currentFramePosition.y());
-    d->frameElement.appendChild(frameElement);
-
-    d->store->openFileWriting("maindoc.xml");
-    d->store->writeDataToFile(d->doc.toByteArray());
-    d->store->closeFile();
-}
-
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
@@ -265,60 +213,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     this->updateActiveFrame();
 
     setCurrentImage(d->image);
-}
-
-void KisAnimationDoc::addPaintLayer()
-{
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
-
-    if(!d->saved) {
-        d->kranimSaver = new KisKranimSaver(this);
-        this->preSaveAnimation();
-    }
-
-    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
-
-    QString location = "";
-    bool hasFile = false;
-
-    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
-    d->image->setResolution(animation->resolution(), animation->resolution());
-
-    int layer = d->currentFramePosition.y() + 20;
-    int frame = 0;
-
-    for(int i = 0 ; i < d->noLayers ; i++) {
-        location = this->getFrameFile(frame, i * 20);
-        hasFile = d->store->hasFile(location);
-
-        if(hasFile) {
-
-            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
-            newLayer->setName("Layer " + QString::number(i + 1));
-            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
-            d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1;
-        }
-    }
-
-    d->noLayers++;
-
-    d->currentFramePosition = QRect(frame, layer, 10, 20);
-    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
-    d->currentFrame->setName("Layer " + QString::number(d->noLayers));
-
-    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
-
-    this->updateXML();
-    this->updateActiveFrame();
-
-    setCurrentImage(d->image);
-}
-
-void KisAnimationDoc::slotFrameModified()
-{
-    emit sigFrameModified();
 }
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
@@ -392,6 +286,112 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     setCurrentImage(d->image);
 }
 
+void KisAnimationDoc::breakFrame(QRect frame)
+{
+    // Implement breaking of frame and save both the frames.
+}
+
+void KisAnimationDoc::addPaintLayer()
+{
+    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+
+    if(!d->saved) {
+        d->kranimSaver = new KisKranimSaver(this);
+        this->preSaveAnimation();
+    }
+
+    d->kranimSaver->saveFrame(d->store, d->currentFrame, this->getParentFramePosition(d->currentFramePosition.x(), d->currentFramePosition.y()));
+
+    QString location = "";
+    bool hasFile = false;
+
+    d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
+    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
+    d->image->setResolution(animation->resolution(), animation->resolution());
+
+    int layer = d->currentFramePosition.y() + 20;
+    int frame = 0;
+
+    for(int i = 0 ; i < d->noLayers ; i++) {
+        location = this->getFrameFile(frame, i * 20);
+        hasFile = d->store->hasFile(location);
+
+        if(hasFile) {
+
+            KisLayerSP newLayer = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), animation->bgColor().opacityU8(), animation->colorSpace());
+            newLayer->setName("Layer " + QString::number(i + 1));
+            d->image->addNode(newLayer.data(), d->image->rootLayer().data());
+            d->kranimLoader->loadFrame(newLayer, d->store, location);
+            kWarning() << "Loading layer " << i+1;
+        }
+    }
+
+    d->noLayers++;
+
+    d->currentFramePosition = QRect(frame, layer, 10, 20);
+    d->currentFrame = new KisPaintLayer(d->image.data(), d->image->nextLayerName(), OPACITY_OPAQUE_U8, animation->colorSpace());
+    d->currentFrame->setName("Layer " + QString::number(d->noLayers));
+
+    d->image->addNode(d->currentFrame.data(), d->image->rootLayer().data());
+
+    this->updateXML();
+    this->updateActiveFrame();
+
+    setCurrentImage(d->image);
+}
+
+QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
+{
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    for(int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+
+        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
+            frameNumbers.append(node.attributes().namedItem("number").nodeValue().toInt());
+        }
+    }
+
+    qSort(frameNumbers);
+
+    if(frameNumbers.contains(frame)) {
+        QRect parentFramePos(frame, layer, 10, 20);
+        return parentFramePos;
+    }
+
+    int frameN;
+    for(int i = 0 ; i < frameNumbers.length() ; i++) {
+        if(frameNumbers.at(i) < frame) {
+            frameN = frameNumbers.at(i);
+        }
+    }
+
+    QRect parentFramePos(frameN, layer, 10, 20);
+
+    return parentFramePos;
+}
+
+QString KisAnimationDoc::getFrameFile(int frame, int layer)
+{
+    QRect parentPos = this->getParentFramePosition(frame, layer);
+    QString location = "frame" + QString::number(parentPos.x()) + "layer" + QString::number(parentPos.y());
+    return location;
+}
+
+void KisAnimationDoc::updateXML()
+{
+    QDomElement frameElement = d->doc.createElement("frame");
+    frameElement.setAttribute("number", d->currentFramePosition.x());
+    frameElement.setAttribute("layer", d->currentFramePosition.y());
+    d->frameElement.appendChild(frameElement);
+
+    d->store->openFileWriting("maindoc.xml");
+    d->store->writeDataToFile(d->doc.toByteArray());
+    d->store->closeFile();
+}
+
 void KisAnimationDoc::preSaveAnimation()
 {
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
@@ -436,6 +436,11 @@ void KisAnimationDoc::preSaveAnimation()
     this->updateXML();
 
     d->saved = true;
+}
+
+void KisAnimationDoc::slotFrameModified()
+{
+    emit sigFrameModified();
 }
 
 void KisAnimationDoc::updateActiveFrame()

@@ -195,23 +195,6 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
 }
 
-void KisTimeline::breakFrame(QRect position)
-{
-    if(lastBrokenFrame.x() == position.x() && lastBrokenFrame.y() == position.y()) {
-        return;
-    }
-
-    kWarning() << "Break frame at frame" << position.x() << " layer " << position.y();
-
-    KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
-    QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
-    KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(oldSelection->geometry());
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
-    this->lastBrokenFrame = position;
-}
-
 void KisTimeline::frameSelectionChanged(QRect frame)
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->frameSelectionChanged(frame);
@@ -289,6 +272,25 @@ void KisTimeline::addframePressed()
         this->m_cells->setSelectedFrame(newSelection);
         newSelection->show();
     }
+}
+
+
+void KisTimeline::breakFrame(QRect position)
+{
+    if(lastBrokenFrame.x() == position.x() && lastBrokenFrame.y() == position.y()) {
+        return;
+    }
+
+    kWarning() << "Break frame at frame" << position.x() << " layer " << position.y();
+
+    KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
+    QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+    KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+    newSelection->setGeometry(oldSelection->geometry());
+    this->m_cells->setSelectedFrame(newSelection);
+    newSelection->show();
+    this->lastBrokenFrame = position;
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry);
 }
 
 void KisTimeline::documentModified()

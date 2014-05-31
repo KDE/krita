@@ -47,6 +47,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     m_cells = new KisFrameBox(this);
 
     this->m_numberOfLayers = 0;
+    this->lastBrokenFrame = QRect();
 
     QWidget* leftWidget = new QWidget();
     leftWidget->setMinimumWidth(120);
@@ -196,7 +197,19 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 
 void KisTimeline::breakFrame(QRect position)
 {
+    if(lastBrokenFrame.x() == position.x() && lastBrokenFrame.y() == position.y()) {
+        return;
+    }
+
     kWarning() << "Break frame at frame" << position.x() << " layer " << position.y();
+
+    KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
+    QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+    KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+    newSelection->setGeometry(oldSelection->geometry());
+    this->m_cells->setSelectedFrame(newSelection);
+    newSelection->show();
+    this->lastBrokenFrame = position;
 }
 
 void KisTimeline::frameSelectionChanged(QRect frame)
@@ -281,9 +294,8 @@ void KisTimeline::addframePressed()
 void KisTimeline::documentModified()
 {
     emit canvasModified();
-
-    //Convert to keyframe here
-    this->m_cells->getSelectedFrame()->setType(KisAnimationFrame::KEYFRAME);
+    KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
+    this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
 }
 
 void KisTimeline::playAnimation()

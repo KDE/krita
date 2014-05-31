@@ -60,7 +60,6 @@ public:
     KisImageWSP image;
     QDomElement frameElement;
     int noLayers;
-    bool canBreakFrame;
 };
 
 KisAnimationDoc::KisAnimationDoc()
@@ -72,7 +71,6 @@ KisAnimationDoc::KisAnimationDoc()
     d->saved = false;
     //d->player = new KisAnimationPlayer(this);
     d->noLayers = 1;
-    d->canBreakFrame = false;
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -101,8 +99,6 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
-    d->canBreakFrame = true;
-
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     if (!d->saved) {
@@ -204,8 +200,6 @@ void KisAnimationDoc::updateXML()
 
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
-    d->canBreakFrame = false;
-
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
@@ -275,8 +269,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
 void KisAnimationDoc::addPaintLayer()
 {
-    d->canBreakFrame = false;
-
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     if(!d->saved) {
@@ -326,18 +318,11 @@ void KisAnimationDoc::addPaintLayer()
 
 void KisAnimationDoc::slotFrameModified()
 {
-    if(d->canBreakFrame) {
-        emit sigBreakFrame(d->currentFramePosition);
-        d->canBreakFrame = false;
-    }
-
     emit sigFrameModified();
 }
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
 {
-    d->canBreakFrame = false;
-
     KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {

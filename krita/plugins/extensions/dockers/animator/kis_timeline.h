@@ -58,6 +58,7 @@ private:
     KisCanvas2* m_canvas;
     KisAnimationLayerBox *m_list;
     KisAnimation* m_animation;
+    QRect lastBrokenFrame;
 
 private slots:
     void updateHeight();

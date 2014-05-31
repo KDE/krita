@@ -59,6 +59,7 @@ private:
     KisAnimationLayerBox *m_list;
     KisAnimation* m_animation;
     QRect lastBrokenFrame;
+    bool frameBreakState;
 
 private slots:
     void updateHeight();
@@ -70,6 +71,9 @@ private slots:
     void pauseAnimation();
     void stopAnimation();
     void breakFrame(QRect position);
+    void frameBreakStateChanged(bool state);
+    void nextFramePressed();
+    void prevFramePressed();
 
 signals:
     void canvasModified();

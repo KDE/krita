@@ -289,9 +289,11 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
     if(blank) {
         // Blank frame
         kWarning() << "Break frame and add blank frame";
+        this->addBlankFrame(frame);
     } else {
         // Duplicate frame
         kWarning() << "Break frame and duplicate frame";
+        this->addKeyFrame(frame);
     }
 }
 

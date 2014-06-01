@@ -268,6 +268,7 @@ void KisTimeline::setCanvas(KisCanvas2 *canvas)
 void KisTimeline::setModel(KisAnimation *animation)
 {
     this->m_animation = animation;
+    this->m_settingsDialog->setModel(animation);
 }
 
 KisCanvas2* KisTimeline::getCanvas()
@@ -397,6 +398,8 @@ void KisTimeline::documentModified()
     emit canvasModified();
     KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
     if(selectedFrame) {
-        this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
+        if(m_animation->frameBreakingEnabled()) {
+            this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
+        }
     }
 }

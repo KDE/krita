@@ -27,6 +27,7 @@
 
 KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
 {
+    m_frameBreakingEnabled = false;
 }
 
 void KisAnimation::setName(const QString &name)
@@ -137,6 +138,16 @@ void KisAnimation::setLocation(QString location)
 QString KisAnimation::location()
 {
     return m_location;
+}
+
+void KisAnimation::enableFrameBreaking(bool enable)
+{
+    m_frameBreakingEnabled = enable;
+}
+
+bool KisAnimation::frameBreakingEnabled()
+{
+    return m_frameBreakingEnabled;
 }
 
 void KisAnimation::load(const QString &url)

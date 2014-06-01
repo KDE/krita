@@ -20,16 +20,20 @@
 #define ANIMATORSETTINGSDIALOG_H
 
 #include <QDialog>
+#include <kis_animation.h>
 
 class AnimatorSettingsDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit AnimatorSettingsDialog(QWidget *parent = 0);
+    void setModel(KisAnimation* model);
 
-signals:
+private slots:
+    void enableAutoFrameBreak(bool enable);
 
-public slots:
+private:
+    KisAnimation* m_model;
 
 };
 

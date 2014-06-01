@@ -99,7 +99,7 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)
 {
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisAnimation* animation = this->getAnimation();
 
     if (!d->saved) {
         d->kranimSaver = new KisKranimSaver(this);
@@ -146,7 +146,7 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
 
 void KisAnimationDoc::addBlankFrame(QRect frame)
 {
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
         d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
@@ -214,7 +214,7 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
 
 void KisAnimationDoc::addKeyFrame(QRect frame)
 {
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisAnimation* animation = this->getAnimation();
 
     if(d->currentFramePosition.x() == 0 && d->currentFramePosition.y() == 0) {
         d->kranimSaver->saveFrame(d->store, this->image()->projection(), d->currentFramePosition);
@@ -299,7 +299,7 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
 
 void KisAnimationDoc::addPaintLayer()
 {
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisAnimation* animation = this->getAnimation();
 
     if(!d->saved) {
         d->kranimSaver = new KisKranimSaver(this);
@@ -400,7 +400,7 @@ void KisAnimationDoc::updateXML()
 
 void KisAnimationDoc::preSaveAnimation()
 {
-    KisAnimation* animation = dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    KisAnimation* animation = this->getAnimation();
 
     QString filename = animation->location() + "/" + animation->name() + ".kranim";
 

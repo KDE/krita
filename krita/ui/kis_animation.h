@@ -42,6 +42,7 @@ public:
     void setResolution(double res);
     void setBgColor(KoColor bgColor);
     void setLocation(QString location);
+    void enableFrameBreaking(bool enable);
 
     QString name() const;
     QString author() const;
@@ -54,6 +55,7 @@ public:
     double resolution() const;
     KoColor bgColor() const;
     QString location();
+    bool frameBreakingEnabled();
 
     void load(const QString &url);
     void save(const QString &url);
@@ -69,6 +71,7 @@ private:
     double m_resolution;
     KoColor m_bgColor;
     QString m_location;
+    bool m_frameBreakingEnabled;
 };
 
 #endif // KIS_ANIMATION_H

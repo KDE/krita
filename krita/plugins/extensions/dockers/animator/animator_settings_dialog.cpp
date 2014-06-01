@@ -17,10 +17,31 @@
  */
 
 #include "animator_settings_dialog.h"
+#include <QCheckBox>
+#include <QGridLayout>
 
 AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     QDialog(parent)
 {
     this->setWindowTitle("Animator Settings");
     this->setMaximumSize(300, 200);
+
+    QCheckBox* autoFrameBreak = new QCheckBox(this);
+    autoFrameBreak->setText("Enable auto frame break");
+
+    connect(autoFrameBreak, SIGNAL(clicked(bool)), this, SLOT(enableAutoFrameBreak(bool)));
+    QGridLayout* mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(autoFrameBreak);
+
+    this->setLayout(mainLayout);
+}
+
+void AnimatorSettingsDialog::enableAutoFrameBreak(bool enable)
+{
+    m_model->enableFrameBreaking(enable);
+}
+
+void AnimatorSettingsDialog::setModel(KisAnimation *model)
+{
+    this->m_model = model;
 }

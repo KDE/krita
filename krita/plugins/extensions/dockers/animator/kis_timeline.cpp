@@ -32,6 +32,7 @@
 #include <QMenu>
 #include <QScrollBar>
 #include "kis_animation_frame.h"
+#include "animator_settings_dialog.h"
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <kis_doc2.h>
@@ -46,7 +47,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
-    m_settingsDialog = new QDialog();
+    m_settingsDialog = new AnimatorSettingsDialog();
 
     this->m_numberOfLayers = 0;
     this->m_lastBrokenFrame = QRect();

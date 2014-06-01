@@ -24,6 +24,8 @@
 #include <QScrollArea>
 #include <QAction>
 
+#include "animator_settings_dialog.h"
+
 class KisFrameBox;
 class KisAnimationLayerBox;
 class KisCanvas2;
@@ -60,7 +62,7 @@ private:
     KisAnimation* m_animation;
     QRect m_lastBrokenFrame;
     bool m_frameBreakState;
-    QDialog* m_settingsDialog;
+    AnimatorSettingsDialog* m_settingsDialog;
 
 private slots:
     void updateHeight();

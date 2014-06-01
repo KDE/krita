@@ -1,6 +1,7 @@
 
 set(KRITA_ANIMATOR_PART_SRCS animator.cpp
     animator_dock.cpp
+    animator_settings_dialog.cpp
     kis_layer_contents.cpp
     kis_timeline_header.cpp
     kis_frame_box.cpp

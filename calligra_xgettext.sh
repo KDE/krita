@@ -1,7 +1,7 @@
 #
 # Helper function for extracting translatable messages from Calligra source code
 # Usage example:
-#     calligra_xgettext planlibs.pot "`find . -name \*.cpp -o -name \*.h`"
+#     calligra_xgettext `find . -name \*.cpp -o -name \*.h` > $podir/planlibs.pot
 #
 function calligra_xgettext() {
     SRC_FILES="$*"

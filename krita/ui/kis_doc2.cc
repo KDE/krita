@@ -421,7 +421,6 @@ bool KisDoc2::newImage(const QString& name,
     KisConfig cfg;
 
     KisImageWSP image;
-    KisPaintLayerSP layer;
 
     if (!cs) return false;
 
@@ -440,11 +439,11 @@ bool KisDoc2::newImage(const QString& name,
     }
     documentInfo()->setAboutInfo("comments", description);
 
-    layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
-    Q_CHECK_PTR(layer);
+    m_layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
+    Q_CHECK_PTR(m_layer);
 
-    layer->paintDevice()->setDefaultPixel(bgColor.data());
-    image->addNode(layer.data(), image->rootLayer().data());
+    m_layer->paintDevice()->setDefaultPixel(bgColor.data());
+    image->addNode(m_layer.data(), image->rootLayer().data());
     setCurrentImage(image);
 
     cfg.defImageWidth(width);

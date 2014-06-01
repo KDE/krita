@@ -104,7 +104,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
     if (!d->saved) {
         d->kranimSaver = new KisKranimSaver(this);
         this->preSaveAnimation();
-        return;
     }
 
     // Dump the content of the current frame
@@ -437,6 +436,7 @@ void KisAnimationDoc::preSaveAnimation()
 
     QRect initialFramePosition(0, 0, 10, 20);
     d->currentFramePosition = initialFramePosition;
+    d->currentFrame = this->m_layer;
 
     this->updateXML();
 

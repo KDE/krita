@@ -180,6 +180,10 @@ public:
      */
     QList<KisPaintingAssistant *> preLoadedAssistants();
 
+protected:
+
+    KisLayerSP m_layer;
+
 signals:
 
     void sigLoadingFinished();

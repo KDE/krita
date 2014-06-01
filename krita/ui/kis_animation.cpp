@@ -24,10 +24,12 @@
 #include <QDomDocument>
 #include <QByteArray>
 #include <QString>
+#include <kis_config.h>
 
 KisAnimation::KisAnimation(QObject *parent) : QStandardItemModel(parent)
 {
-    m_frameBreakingEnabled = false;
+    KisConfig cfg;
+    m_frameBreakingEnabled = cfg.defAutoFrameBreakEnabled();
 }
 
 void KisAnimation::setName(const QString &name)
@@ -143,6 +145,8 @@ QString KisAnimation::location()
 void KisAnimation::enableFrameBreaking(bool enable)
 {
     m_frameBreakingEnabled = enable;
+    KisConfig cfg;
+    cfg.defAutoFrameBreakEnabled(enable);
 }
 
 bool KisAnimation::frameBreakingEnabled()

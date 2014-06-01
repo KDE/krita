@@ -60,6 +60,9 @@ public:
     double defImageResolution() const;
     void defImageResolution(double res) const;
 
+    bool defAutoFrameBreakEnabled() const;
+    void defAutoFrameBreakEnabled(bool state) const;
+
     /**
      * @return the id of the default color model used for creating new images.
      */

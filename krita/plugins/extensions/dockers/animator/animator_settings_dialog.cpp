@@ -19,6 +19,7 @@
 #include "animator_settings_dialog.h"
 #include <QCheckBox>
 #include <QGridLayout>
+#include <kis_config.h>
 
 AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     QDialog(parent)
@@ -26,8 +27,10 @@ AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     this->setWindowTitle("Animator Settings");
     this->setMaximumSize(300, 200);
 
+    KisConfig cfg;
     QCheckBox* autoFrameBreak = new QCheckBox(this);
     autoFrameBreak->setText("Enable auto frame break");
+    autoFrameBreak->setChecked(cfg.defAutoFrameBreakEnabled());
 
     connect(autoFrameBreak, SIGNAL(clicked(bool)), this, SLOT(enableAutoFrameBreak(bool)));
     QGridLayout* mainLayout = new QGridLayout(this);

@@ -177,6 +177,16 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
+bool KisConfig::defAutoFrameBreakEnabled() const
+{
+    return m_cfg.readEntry("autoFrameBreakEnabled", false);
+}
+
+void KisConfig::defAutoFrameBreakEnabled(bool state) const
+{
+    m_cfg.writeEntry("autoFrameBreakEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));

@@ -298,7 +298,6 @@ void KisTimeline::addframePressed()
 
 void KisTimeline::frameBreakStateChanged(bool state)
 {
-    kWarning() << state;
     this->frameBreakState = state;
 }
 
@@ -317,7 +316,7 @@ void KisTimeline::breakFrame(QRect position)
     this->m_cells->setSelectedFrame(newSelection);
     newSelection->show();
     this->lastBrokenFrame = position;
-    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry);
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->frameBreakState);
 }
 
 void KisTimeline::nextFramePressed()
@@ -334,7 +333,9 @@ void KisTimeline::documentModified()
 {
     emit canvasModified();
     KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
-    this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
+    if(selectedFrame) {
+        this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
+    }
 }
 
 void KisTimeline::playAnimation()

@@ -37,7 +37,7 @@ public:
 
     void addKeyFrame(QRect frame);
     void addBlankFrame(QRect frame);
-    void breakFrame(QRect frame);
+    void breakFrame(QRect frame, bool blank=false);
 
     void addPaintLayer();
 
@@ -50,7 +50,7 @@ public slots:
     void play();
     void pause();
     void stop();
-    void slotFrameModified();
+    void setImageModified();
 
 private:
     void preSaveAnimation();

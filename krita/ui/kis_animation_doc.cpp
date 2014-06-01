@@ -141,7 +141,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
         }
     }
 
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateActiveFrame();
     setCurrentImage(d->image);
 }
@@ -208,7 +207,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
         }
     }
 
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateXML();
     this->updateActiveFrame();
 
@@ -279,16 +277,23 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
         }
     }
 
-    connect(d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotFrameModified()));
     this->updateXML();
     this->updateActiveFrame();
 
     setCurrentImage(d->image);
 }
 
-void KisAnimationDoc::breakFrame(QRect frame)
+void KisAnimationDoc::breakFrame(QRect frame, bool blank)
 {
     // Implement breaking of frame and save both the frames.
+
+    if(blank) {
+        // Blank frame
+        kWarning() << "Break frame and add blank frame";
+    } else {
+        // Duplicate frame
+        kWarning() << "Break frame and duplicate frame";
+    }
 }
 
 void KisAnimationDoc::addPaintLayer()
@@ -438,8 +443,9 @@ void KisAnimationDoc::preSaveAnimation()
     d->saved = true;
 }
 
-void KisAnimationDoc::slotFrameModified()
+void KisAnimationDoc::setImageModified()
 {
+    setModified(true);
     emit sigFrameModified();
 }
 

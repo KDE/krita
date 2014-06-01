@@ -554,7 +554,7 @@ void OrderByColumnList::appendColumn(QueryColumnInfo& columnInfo, bool ascending
 bool OrderByColumnList::appendColumn(QuerySchema& querySchema, bool ascending, int pos)
 {
     QueryColumnInfo::Vector fieldsExpanded(querySchema.fieldsExpanded());
-    QueryColumnInfo* ci = (pos >= (int)fieldsExpanded.size()) ? 0 : fieldsExpanded[pos];
+    QueryColumnInfo* ci = (pos < 0 || pos >= (int)fieldsExpanded.size()) ? 0 : fieldsExpanded[pos];
     if (!ci)
         return false;
     append(new OrderByColumn(*ci, ascending, pos));

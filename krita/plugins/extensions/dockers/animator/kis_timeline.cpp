@@ -46,11 +46,12 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
+    m_settingsDialog = new QDialog();
 
     this->m_numberOfLayers = 0;
-    this->lastBrokenFrame = QRect();
+    this->m_lastBrokenFrame = QRect();
 
-    this->frameBreakState = false;
+    this->m_frameBreakState = false;
 
     QWidget* leftWidget = new QWidget();
     leftWidget->setMinimumWidth(120);
@@ -129,8 +130,16 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     removeFrameButton->setToolTip("Remove frame");
     removeFrameButton->setFixedSize(15, 15);
 
-    QCheckBox* frameBreakState = new QCheckBox(this);
-    frameBreakState->setText("Add blank frame ");
+    frameButtons->addWidget(addFrameButton);
+    frameButtons->addWidget(addKeyFrameButton);
+    frameButtons->addWidget(addBlankFrameButton);
+    frameButtons->addWidget(removeFrameButton);
+
+    connect(addFrameButton, SIGNAL(pressed()), this, SLOT(addframePressed()));
+    connect(addKeyFrameButton, SIGNAL(pressed()), this, SLOT(keyFramePressed()));
+    connect(addBlankFrameButton, SIGNAL(pressed()), this, SLOT(blankFramePressed()));
+
+    QToolBar* navToolBar = new QToolBar(this);
 
     QToolButton* nextFrameButton = new QToolButton(this);
     nextFrameButton->setIcon(koIcon("go-next-view"));
@@ -142,20 +151,25 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     prevFrameButton->setToolTip("Previous frame");
     prevFrameButton->setFixedSize(15, 15);
 
-    frameButtons->addWidget(frameBreakState);
-    frameButtons->addWidget(addFrameButton);
-    frameButtons->addWidget(addKeyFrameButton);
-    frameButtons->addWidget(addBlankFrameButton);
-    frameButtons->addWidget(removeFrameButton);
-    frameButtons->addWidget(prevFrameButton);
-    frameButtons->addWidget(nextFrameButton);
+    QToolButton* prevKeyFrameButton = new QToolButton(this);
+    prevKeyFrameButton->setIcon(koIcon("go-previous-content"));
+    prevKeyFrameButton->setToolTip("Previous keyframe");
+    prevKeyFrameButton->setFixedSize(15, 15);
 
-    connect(addFrameButton, SIGNAL(pressed()), this, SLOT(addframePressed()));
-    connect(addKeyFrameButton, SIGNAL(pressed()), this, SLOT(keyFramePressed()));
-    connect(addBlankFrameButton, SIGNAL(pressed()), this, SLOT(blankFramePressed()));
-    connect(frameBreakState, SIGNAL(clicked(bool)), this, SLOT(frameBreakStateChanged(bool)));
+    QToolButton* nextKeyFrameButton = new QToolButton(this);
+    nextKeyFrameButton->setIcon(koIcon("go-next-content"));
+    nextKeyFrameButton->setToolTip("Previous keyframe");
+    nextKeyFrameButton->setFixedSize(15, 15);
+
+    navToolBar->addWidget(prevKeyFrameButton);
+    navToolBar->addWidget(prevFrameButton);
+    navToolBar->addWidget(nextFrameButton);
+    navToolBar->addWidget(nextKeyFrameButton);
+
     connect(prevFrameButton, SIGNAL(clicked()), this, SLOT(prevFramePressed()));
     connect(nextFrameButton, SIGNAL(clicked()), this, SLOT(nextFramePressed()));
+    connect(nextKeyFrameButton, SIGNAL(clicked()), this, SLOT(nextKeyFramePressed()));
+    connect(prevKeyFrameButton, SIGNAL(clicked()), this, SLOT(prevKeyFramePressed()));
 
     QToolBar* playerButtons = new QToolBar(this);
 
@@ -181,9 +195,27 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     connect(pauseButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
     connect(stopButton, SIGNAL(clicked()), this, SLOT(stopAnimation()));
 
+    QToolBar* settingsToolBar = new QToolBar(this);
+
+    QCheckBox* frameBreakState = new QCheckBox(this);
+    frameBreakState->setText("Add blank frame ");
+
+    QToolButton* settingsButton = new QToolButton(this);
+    settingsButton->setIcon(koIcon("configure"));
+    settingsButton->setToolTip("Settings");
+    settingsButton->setFixedSize(15, 15);
+
+    settingsToolBar->addWidget(frameBreakState);
+    settingsToolBar->addWidget(settingsButton);
+
+    connect(frameBreakState, SIGNAL(clicked(bool)), this, SLOT(frameBreakStateChanged(bool)));
+    connect(settingsButton, SIGNAL(clicked()), this, SLOT(settingsButtonPressed()));
+
     QHBoxLayout* rightToolBarLayout = new QHBoxLayout();
     rightToolBarLayout->addWidget(frameButtons);
+    rightToolBarLayout->addWidget(navToolBar);
     rightToolBarLayout->addWidget(playerButtons);
+    rightToolBarLayout->addWidget(settingsToolBar);
     rightToolBar->setLayout(rightToolBarLayout);
 
     QScrollArea* rightScrollArea = new QScrollArea(this);
@@ -298,12 +330,12 @@ void KisTimeline::addframePressed()
 
 void KisTimeline::frameBreakStateChanged(bool state)
 {
-    this->frameBreakState = state;
+    this->m_frameBreakState = state;
 }
 
 void KisTimeline::breakFrame(QRect position)
 {
-    if(lastBrokenFrame.x() == position.x() && lastBrokenFrame.y() == position.y()) {
+    if(m_lastBrokenFrame.x() == position.x() && m_lastBrokenFrame.y() == position.y()) {
         return;
     }
 
@@ -315,8 +347,8 @@ void KisTimeline::breakFrame(QRect position)
     newSelection->setGeometry(oldSelection->geometry());
     this->m_cells->setSelectedFrame(newSelection);
     newSelection->show();
-    this->lastBrokenFrame = position;
-    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->frameBreakState);
+    this->m_lastBrokenFrame = position;
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->m_frameBreakState);
 }
 
 void KisTimeline::nextFramePressed()
@@ -329,13 +361,19 @@ void KisTimeline::prevFramePressed()
     kWarning() << "Previous frame pressed";
 }
 
-void KisTimeline::documentModified()
+void KisTimeline::nextKeyFramePressed()
 {
-    emit canvasModified();
-    KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
-    if(selectedFrame) {
-        this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
-    }
+    kWarning() << "Next keyframe pressed";
+}
+
+void KisTimeline::prevKeyFramePressed()
+{
+    kWarning() << "Previous keyframe pressed";
+}
+
+void KisTimeline::settingsButtonPressed()
+{
+    m_settingsDialog->setVisible(true);
 }
 
 void KisTimeline::playAnimation()
@@ -351,4 +389,13 @@ void KisTimeline::pauseAnimation()
 void KisTimeline::stopAnimation()
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->stop();
+}
+
+void KisTimeline::documentModified()
+{
+    emit canvasModified();
+    KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
+    if(selectedFrame) {
+        this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
+    }
 }

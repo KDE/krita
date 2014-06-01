@@ -58,8 +58,9 @@ private:
     KisCanvas2* m_canvas;
     KisAnimationLayerBox *m_list;
     KisAnimation* m_animation;
-    QRect lastBrokenFrame;
-    bool frameBreakState;
+    QRect m_lastBrokenFrame;
+    bool m_frameBreakState;
+    QDialog* m_settingsDialog;
 
 private slots:
     void updateHeight();
@@ -74,6 +75,9 @@ private slots:
     void frameBreakStateChanged(bool state);
     void nextFramePressed();
     void prevFramePressed();
+    void nextKeyFramePressed();
+    void prevKeyFramePressed();
+    void settingsButtonPressed();
 
 signals:
     void canvasModified();

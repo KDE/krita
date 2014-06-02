@@ -36,7 +36,6 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
-#include <kis_resource_server_provider.h>
 
 class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
@@ -173,13 +172,7 @@ KisBrushServer::KisBrushServer()
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
-
-    if (qApp->applicationName().toLower().contains("test")) {
-        m_brushThread->wait();
-    }
-
-    connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
-            this, SLOT(slotRemoveBlacklistedResources()));
+    m_brushThread->barrier();
 }
 
 KisBrushServer::~KisBrushServer()

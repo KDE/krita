@@ -23,9 +23,9 @@ set(kritalibbrush_LIB_SRCS
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
 if (WIN32)
-    target_link_libraries(kritalibbrush kritaui ${WIN32_PLATFORM_NET_LIBS})
+    target_link_libraries(kritalibbrush kritaimage kowidgets ${WIN32_PLATFORM_NET_LIBS})
 else (WIN32)
-    target_link_libraries(kritalibbrush kritaui)
+    target_link_libraries(kritalibbrush kritaimage kowidgets)
 endif (WIN32)
 
 
@@ -35,7 +35,7 @@ if(HAVE_VC)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
 endif(HAVE_VC)
 
-target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
+target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaimage kowidgets)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

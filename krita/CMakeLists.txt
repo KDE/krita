@@ -91,6 +91,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
+    ${CMAKE_SOURCE_DIR}/krita/libbrush
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/canvas
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
@@ -125,6 +126,7 @@ if(HAVE_OPENGL)
 endif(HAVE_OPENGL)
 
 add_subdirectory( image )
+add_subdirectory( libbrush )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )

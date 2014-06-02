@@ -39,8 +39,13 @@
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 
+#include <kis_brush_server.h>
+
 KisResourceServerProvider::KisResourceServerProvider()
 {
+
+    KisBrushServer *brushServer = KisBrushServer::instance();
+
     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
@@ -52,9 +57,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     }
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    if (!qApp->applicationName().toLower().contains("krita")) {
-        paintOpPresetThread->wait();
-    }
+    paintOpPresetThread->barrier();
 
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
     if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {
@@ -63,8 +66,12 @@ KisResourceServerProvider::KisResourceServerProvider()
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
     if (!qApp->applicationName().toLower().contains("krita")) {
-        workspaceThread->wait();
+        workspaceThread->barrier();
     }
+
+
+    connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
+            brushServer, SLOT(slotRemoveBlacklistedResources()));
 
 }
 

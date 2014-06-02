@@ -45,7 +45,7 @@ public:
 
     static KisBrushServer* instance();
 
-private slots:
+public slots:
     void slotRemoveBlacklistedResources();
 
 private:

@@ -22,7 +22,7 @@ function calligra_xgettext() {
         # Prepend "(qtundo-format)" to existing msgctxt properties of messages
         sed -i -e 's/^msgctxt "/msgctxt "(qtundo-format) /' "${POT_PART_QUNDOFORMAT}"
 
-        # Add msgctxt "(qundo-format)" to messages not having msgctxt yet
+        # Add msgctxt "(qtundo-format)" to messages not having msgctxt yet
         #
         # lastLine != "#, fuzzy" is the check for the .pot header.
         mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"

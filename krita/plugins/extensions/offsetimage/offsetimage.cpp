@@ -71,7 +71,7 @@ void OffsetImage::slotOffsetImage()
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Image");
-        dlgOffsetImage->setCaption(actionName.toString());
+        dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Image"));
 
         if (dlgOffsetImage->exec() == QDialog::Accepted) {
             QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
@@ -95,7 +95,7 @@ void OffsetImage::slotOffsetLayer()
     Q_CHECK_PTR(dlgOffsetImage);
 
     KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
-    dlgOffsetImage->setCaption(actionName.toString());
+    dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
 
     if (dlgOffsetImage->exec() == QDialog::Accepted) {
         QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());

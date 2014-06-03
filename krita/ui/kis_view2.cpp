@@ -172,6 +172,7 @@ public:
         , actionManager(0)
         , mainWindow(0)
         , tooltipManager(0)
+        , showFloatingMessage(true)
     {
     }
 
@@ -228,6 +229,7 @@ public:
     KisMirrorAxis* mirrorAxis;
     KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
+    bool showFloatingMessage;
 };
 
 
@@ -1602,12 +1604,11 @@ void KisView2::updateIcons()
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
 {
-    // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
-    if (mainWindow()) {
+    if(m_d->showFloatingMessage) {
         if (m_d->savedFloatingMessage) {
             m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
         } else {
-            m_d->savedFloatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget(), false, timeout, priority);
+            m_d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority);
             m_d->savedFloatingMessage->setShowOverParent(true);
             m_d->savedFloatingMessage->setIcon(icon);
             m_d->savedFloatingMessage->showMessage();
@@ -1630,6 +1631,11 @@ void KisView2::showHideScrollbars()
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
+}
+
+void KisView2::setShowFloatingMessage(bool show)
+{
+    m_d->showFloatingMessage = show;
 }
 
 #include "kis_view2.moc"

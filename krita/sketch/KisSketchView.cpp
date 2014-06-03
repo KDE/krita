@@ -329,6 +329,7 @@ void KisSketchView::documentChanged()
 	Q_ASSERT(part);
 	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
     d->view = view;
+    d->view->setShowFloatingMessage(false);
 
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     

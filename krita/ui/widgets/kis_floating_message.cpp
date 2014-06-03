@@ -131,7 +131,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 {
     m_icon = koIcon("calligrakrita").pixmap(256, 256).toImage();
 
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
     setFocusPolicy(Qt::NoFocus);
     setAttribute(Qt::WA_ShowWithoutActivating);
 

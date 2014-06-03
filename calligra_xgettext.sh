@@ -35,7 +35,7 @@ function calligra_xgettext() {
             { print ; lastLine = $0 }' > "${POT_PART_QUNDOFORMAT}"
     fi
 
-    if [[ -s "${POT_PART_NORMAL}" && -s "${POT_PART_QUNDOFORMAT}" ]]; then
+    if [ -s "${POT_PART_NORMAL}" -a -s "${POT_PART_QUNDOFORMAT}" ]; then
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > ${POT_MERGED}
         MERGED_HEADER_LINE_COUNT=$(cat ${POT_MERGED} | grep "^$" -B 100000 --max-count=1 | wc -l)
 

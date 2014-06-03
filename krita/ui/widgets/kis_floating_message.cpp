@@ -199,7 +199,6 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     // The osd cannot be larger than the screen
     QRect rect = fontMetrics().boundingRect(0, 0, max.width() - image.width(), max.height(),
             Qt::AlignCenter | Qt::TextWordWrap, m_message);
-    rect.setHeight(rect.height() + M + M);
 
     if (!m_icon.isNull()) {
         const int availableWidth = max.width() - rect.width() - M; //WILL be >= (minImageSize.width() - M)

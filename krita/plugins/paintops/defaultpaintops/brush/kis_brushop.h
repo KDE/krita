@@ -30,12 +30,12 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_hsv_option.h>
-#include <kis_pressure_mirror_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
+
 
 class KisBrushBasedPaintOpSettings;
 
@@ -51,16 +51,15 @@ class KisBrushOp : public KisBrushBasedPaintOp
 public:
 
     KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisBrushOp();
+    ~KisBrushOp();
 
-    qreal paintAt(const KisPaintInformation& info);
-    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
-    KisColorSource* m_colorSource;
+    KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
-    KisPressureMirrorOption m_mirrorOption;
     KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
@@ -69,8 +68,9 @@ private:
     KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
-    KoColorTransformation* m_hsvTransfo;
-    KisPaintDeviceSP m_dab;
+
+    KoColorTransformation *m_hsvTransformation;
+    KisPaintDeviceSP m_lineCacheDevice;
     KisPaintDeviceSP m_colorSourceDevice;
 };
 

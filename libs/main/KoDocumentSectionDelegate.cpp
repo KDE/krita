@@ -82,11 +82,12 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
 {
     p->save();
     {
-        QStyleOptionViewItem option = getOptions(o, index);
-        p->setFont(option.font);
+      
+	QStyleOptionViewItemV4 option = getOptions(o, index);
+        QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+        style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, p, option.widget);
 
-        if (option.state & QStyle::State_Selected)
-            p->fillRect(option.rect, option.palette.highlight());
+        p->setFont(option.font);
 
         drawText(p, option, index);
         drawIcons(p, option, index);
@@ -139,8 +140,8 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
                             model->setData(eachItem, QVariant::fromValue(eachPropertyList), Model::PropertiesRole);
                         }
                         /* Now set the current node's clickedProperty back to True, to save the user time
-                        (obviously, if the user is clicking one item with ctrl+click, he's interested in that
-                        item to have a True property value while the others are in stasis and set to False) */
+                        (obviously, if the user is clicking one item with ctrl+click, that item should
+                        have a True property, value while the others are in stasis and set to False) */
                         // First refresh propertyList, otherwise old data will be saved back causing bugs
                         propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                         propertyList[clickedProperty].state = true;
@@ -263,9 +264,9 @@ bool KoDocumentSectionDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItemV4 KoDocumentSectionDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
-    QStyleOptionViewItem option = o;
+    QStyleOptionViewItemV4 option = o;
     QVariant v = index.data(Qt::FontRole);
     if (v.isValid()) {
         option.font = v.value<QFont>();
@@ -279,7 +280,7 @@ QStyleOptionViewItem KoDocumentSectionDelegate::getOptions(const QStyleOptionVie
         option.palette.setColor(QPalette::Text, v.value<QColor>());
     v = index.data(Qt::BackgroundColorRole);
     if (v.isValid())
-        option.palette.setColor(QPalette::Background, v.value<QColor>());
+        option.palette.setColor(QPalette::Window, v.value<QColor>());
 
    return option;
 }

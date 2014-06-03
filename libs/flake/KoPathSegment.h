@@ -21,10 +21,10 @@
 #define KOPATHSEGMENT_H
 
 #include "flake_export.h"
-#include <QtCore/QPointF>
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QRectF>
+#include <QPointF>
+#include <QList>
+#include <QPair>
+#include <QRectF>
 
 class KoPathPoint;
 class QTransform;
@@ -120,6 +120,11 @@ public:
 
     /**
      * Returns the curve parameter at the given length of the segment
+     *
+     * If the specified length is negative it returns 0.0.
+     * If the specified length is bigger that the actual length of the
+     * segment it return 1.0.
+     *
      * @param length the length to get the curve parameter for
      * @param tolerance the length error tolerance
      */

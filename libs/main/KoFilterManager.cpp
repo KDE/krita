@@ -33,12 +33,12 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QByteArray>
 
-#include <KLocale>
-#include <KMessageBox>
-#include <KLibLoader>
-#include <KSqueezedTextLabel>
-#include <KMimeType>
-#include <KDebug>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <klibloader.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetype.h>
+#include <kdebug.h>
 
 #include <queue>
 
@@ -105,10 +105,10 @@ QString KoFilterManager::importDocument(const QString& url,
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KoFilterChooser chooser(0,
                     KoFilterManager::mimeFilter(nativeFormat, KoFilterManager::Import,
-                    m_document->extraNativeMimeTypes(KoDocument::ForImport)), nativeFormat, u);
+                    m_document->extraNativeMimeTypes()), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
-
+                qDebug() << "User choose format" << f;
                 if (f == nativeFormat) {
                     status = KoFilter::OK;
                     QApplication::restoreOverrideCursor();
@@ -134,7 +134,7 @@ QString KoFilterManager::importDocument(const QString& url,
     // Are we owned by a KoDocument?
     if (m_document) {
         QByteArray mimeType = m_document->nativeFormatMimeType();
-        QStringList extraMimes = m_document->extraNativeMimeTypes(KoDocument::ForImport);
+        QStringList extraMimes = m_document->extraNativeMimeTypes();
         int i = 0;
         int n = extraMimes.count();
         chain = m_graph.chain(this, mimeType);
@@ -190,7 +190,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
         // We have to pick the right native mimetype as source.
         QStringList nativeMimeTypes;
         nativeMimeTypes.append(m_document->nativeFormatMimeType());
-        nativeMimeTypes += m_document->extraNativeMimeTypes(KoDocument::ForImport);
+        nativeMimeTypes += m_document->extraNativeMimeTypes();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !chain && it != end; ++it) {
@@ -227,7 +227,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!m_graph.isValid()) {
         kError(30500) << "Couldn't create a valid graph for this source mimetype.";
-        if (!userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch && !userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -236,7 +236,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -288,7 +288,7 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
 
     // partly copied from build graph, but I don't see any other
     // way without crude hacks, as we have to obey the direction here
-    QList<KoDocumentEntry> parts(KoDocumentEntry::query(QFlag(KoDocumentEntry::AllEntries), QString()));
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query(QString()));
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
@@ -449,7 +449,7 @@ QStringList KoFilterManager::mimeFilter()
     QHash<QByteArray, Vertex*> vertices;
     buildGraph(vertices, KoFilterManager::Import);
 
-    QList<KoDocumentEntry> parts(KoDocumentEntry::query(QFlag(KoDocumentEntry::AllEntries), QString()));
+    QList<KoDocumentEntry> parts(KoDocumentEntry::query( QString()));
     QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
@@ -491,9 +491,7 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
 
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
-    QString key(entry->service()->name());
-    key += " - ";
-    key += entry->service()->library();
+    QString key = entry->service()->name() + " - " + entry->service()->library();
 
     if (!m_filterAvailable.contains(key)) {
         //kDebug( 30500 ) <<"Not cached, checking...";
@@ -510,9 +508,9 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
         KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-            kWarning(30500) << "The library " << library.objectName()
-                << " does not offer a check_" << library.objectName()
-                << " function." << endl;
+//            kWarning(30500) << "The library " << library.objectName()
+//                << " does not offer a check_" << library.objectName()
+//                << " function." << endl;
             m_filterAvailable[key] = false;
         } else {
             typedef int (*t_func)();

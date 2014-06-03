@@ -20,8 +20,8 @@
 #ifndef KOPAPAGETHUMBNAILMODEL_H
 #define KOPAPAGETHUMBNAILMODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QSize>
+#include <QAbstractListModel>
+#include <QSize>
 
 #include "kopageapp_export.h"
 

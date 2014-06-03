@@ -23,20 +23,21 @@
 #include "Set.h"
 #include "Factory.h"
 
-#include <QtCore/QPointer>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QStandardItemEditorCreator>
-#include <QtGui/QPainter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QToolTip>
-#include <QtGui/QApplication>
-#include <QtGui/QHeaderView>
+#include <KoIcon.h>
 
-#include <KLocale>
-#include <KIconLoader>
-#include <KIconEffect>
-#include <KDebug>
+#include <QPointer>
+#include <QItemDelegate>
+#include <QStandardItemEditorCreator>
+#include <QPainter>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <QToolTip>
+#include <QApplication>
+#include <QHeaderView>
+
+#include <klocale.h>
+#include <kiconeffect.h>
+#include <kdebug.h>
 
 using namespace KoProperty;
 
@@ -89,17 +90,12 @@ public:
         const QModelIndex &index) const;
     virtual QWidget * createEditor(QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-//    virtual void updateEditorGeometry( QWidget * editor, 
-//        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-//    virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
-//        const QStyleOptionViewItem & option, const QModelIndex & index );
     mutable QPointer<QWidget> m_currentEditor;
 };
 
 ItemDelegate::ItemDelegate(QWidget *parent)
 : QItemDelegate(parent)
 {
-//moved    setItemEditorFactory( new ItemEditorFactory() );
 }
 
 ItemDelegate::~ItemDelegate()
@@ -152,7 +148,7 @@ void ItemDelegate::paint(QPainter *painter,
     }
 
     Property *property = editorModel->propertyForItem(index);
-    const int t = typeForProperty( property ); //index.data(Qt::EditRole).userType();
+    const int t = typeForProperty( property );
     bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
     if (index.column() == 1 && FactoryManager::self()->paint(t, painter, alteredOption, index)) {
         useQItemDelegatePaint = false;
@@ -163,7 +159,6 @@ void ItemDelegate::paint(QPainter *painter,
 
     if (modified) {
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 3 / 2 );
-//        int x1 = alteredOption.rect.right();
         int y1 = alteredOption.rect.top();
         QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
         QColor color(
@@ -173,14 +168,10 @@ void ItemDelegate::paint(QPainter *painter,
         grad.setColorAt(0.0, color);
         color.setAlpha(255);
         grad.setColorAt(0.5, color);
-//        grad.setColorAt(1.0, color);
         QBrush gradBrush(grad);
         painter->fillRect(x2 - iconSize * 2, y1, 
             iconSize * 2, y2 - y1 + 1, gradBrush);
-        QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
-//        QPixmap alphaChannel(revertIcon.size());
-//        alphaChannel.fill(QColor(127, 127, 127));
-//        revertIcon.setAlphaChannel(alphaChannel);
+        QPixmap revertIcon(koIcon("edit-undo").pixmap(iconSize, iconSize));
         revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0, 
             alteredOption.palette.color(
                 (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
@@ -211,8 +202,6 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     if (!index.isValid())
         return 0;
     QStyleOptionViewItem alteredOption(option);
-//    QWidget *w = QStyledItemDelegate::createEditor(parent, alteredOption, index);
-//???    int t = index.data(Qt::EditRole).userType();
     const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
     Property *property = editorModel->propertyForItem(index);
     int t = typeForProperty(property);
@@ -222,8 +211,6 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)"))
             && property && !property->children())
         {
-//            QObject::connect(w, SIGNAL(commitData(QWidget*)),
-//                this, SIGNAL(commitData(QWidget*)));
         }
     }
     else {
@@ -235,32 +222,9 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
     }
-//    w->resize(w->size()+QSize(0,2));
     m_currentEditor = w;
     return w;
 }
-
-/*
-void ItemDelegate::updateEditorGeometry( QWidget * editor, 
-    const QStyleOptionViewItem & option, const QModelIndex & index ) const
-{
-    QStyleOptionViewItem alteredOption(option);
-//    alteredOption.rect.setTop(alteredOption.rect.top() + 1);
-    QStyledItemDelegate::updateEditorGeometry(editor, alteredOption, index);
-    QRect r(editor->geometry());
-//    r.setTop(r.top() + 2);
-    editor->setGeometry(r);
-}
-*/
-/*
-bool ItemDelegate::editorEvent( QEvent * event, QAbstractItemModel * model,
-    const QStyleOptionViewItem & option, const QModelIndex & index )
-{
-    if (index.column() == 0 && event->type() == QEvent::MouseButtonPress) {
-        kDebug() << "!!!";
-    }
-    return QStyledItemDelegate::editorEvent( event, model, option, index );
-}*/
 
 //----------
 
@@ -295,12 +259,10 @@ EditorView::EditorView(QWidget* parent)
     setAnimated(false);
     setAllColumnsShowFocus(true);
     header()->setMovable(false);
-//    setEditTriggers(QAbstractItemView::AllEditTriggers);
     
     setEditTriggers(
           QAbstractItemView::CurrentChanged
         | QAbstractItemView::DoubleClicked
-        //|QAbstractItemView::SelectedClicked
         | QAbstractItemView::EditKeyPressed
         | QAbstractItemView::AnyKeyPressed
         | QAbstractItemView::AllEditTriggers);
@@ -357,7 +319,8 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         //store prev. selection for this prop set
         QModelIndex index = currentIndex();
         if (index.isValid()) {
-#if 0 //todo
+//! @todo
+#if 0
             Property *property = d->model->propertyForItem(index);
             //TODO This crashes when changing the interpreter type in the script plugin
             //if (property->isNull())
@@ -395,7 +358,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
@@ -426,13 +389,13 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         if (index.isValid()) {
             setCurrentIndex(index);
             scrollTo(index);
-//            QTimer::singleShot(10, this, SLOT(selectItemLater()));
-            //d->doNotSetFocusOnSelection = !hasParent(this, focusWidget());
-            //setSelected(item, true);
-            //d->doNotSetFocusOnSelection = false;
-//   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeCleared()
+{
+    changeSet(0, QByteArray());
 }
 
 void EditorView::slotSetWillBeDeleted()
@@ -457,10 +420,6 @@ void EditorView::currentChanged( const QModelIndex & current, const QModelIndex 
 
 bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
 {
-/*    Property *property = d->model->propertyForItem(index);
-    if (property && property->children())
-        return false;*/
-
     bool result = QTreeView::edit( index, trigger, event );
     if (result) {
       QLineEdit *lineEditEditor = dynamic_cast<QLineEdit*>( (QObject*)d->itemDelegate->m_currentEditor );
@@ -515,20 +474,12 @@ void EditorView::mousePressEvent ( QMouseEvent * event )
 
 void EditorView::undo()
 {
-//    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(model());
-//    if (!d->currentWidget || !d->currentItem || (d->set && d->set->isReadOnly()) || (d->currentWidget && d->currentWidget->isReadOnly()))
     if (!d->set || d->set->isReadOnly())
         return;
 
     Property *property = d->model->propertyForItem(currentIndex());
     if (computeAutoSync( property, d->autoSync ))
         property->resetValue();
-//    update( currentIndex() );
-//??    QTreeView::edit(currentIndex());
- /*   if (d->currentWidget && d->currentItem) {//(check because current widget could be removed by resetValue())
-        d->currentWidget->setValue(d->currentItem->property()->value());
-        repaintItem(d->currentItem);
-    }*/
 }
 
 void EditorView::acceptInput()

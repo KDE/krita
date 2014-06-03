@@ -23,7 +23,7 @@
 
 #include "koproperty/Factory.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 class QLineEdit;
 class QPushButton;

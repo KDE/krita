@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 
+#include <QtGlobal>
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -36,11 +37,9 @@
 
 
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
-#include "kis_iterator.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
-#include "kgradientslider.h"
+#include "kis_gradient_slider.h"
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"
@@ -48,8 +47,8 @@
 KisLevelFilter::KisLevelFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
@@ -57,15 +56,9 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
-    return new KisLevelConfigWidget(parent, dev, image->bounds());
-}
-
-bool KisLevelFilter::workWith(KoColorSpace* cs) const
-{
-    Q_UNUSED(cs);
-    return true;
+    return new KisLevelConfigWidget(parent, dev);
 }
 
 KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
@@ -99,7 +92,7 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
     return cs->createBrightnessContrastAdjustment(transfer);
 }
 
-KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds)
+KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
         : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
@@ -144,8 +137,9 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    histogram = new KisHistogram(dev, bounds, producer, LINEAR);
+    histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
     m_histlog = false;
+    m_page.histview->resize(288,100);
     slotDrawHistogram();
 
 }
@@ -157,9 +151,9 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
 
 void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 {
-    int wHeight = height();
+    int wHeight = m_page.histview->height();
     int wHeightMinusOne = wHeight - 1;
-    int wWidth = width();
+    int wWidth = m_page.histview->width();
 
     if (m_histlog != logarithmic) {
         // Update the histogram
@@ -170,7 +164,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
-    QPixmap pix(wWidth, wHeight);
+    QPixmap pix(wWidth-100, wHeight);
     pix.fill();
     QPainter p(&pix);
 
@@ -183,14 +177,14 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     if (histogram->getHistogramType() == LINEAR) {
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1));
+            int binNo = qRound((double)i / wWidth * (bins - 1));
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
         }
     } else {
         double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
+            int binNo = qRound((double)i / wWidth * (bins - 1)) ;
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
         }

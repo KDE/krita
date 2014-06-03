@@ -1,4 +1,4 @@
-
+add_subdirectory( tests )
 
 set(kritaunsharpfilter_PART_SRCS
     unsharp.cpp

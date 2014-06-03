@@ -98,7 +98,7 @@ void StoreDropTest::paste()
         bool oasis = fmt.startsWith(acceptMimeType);
         if (oasis || fmt == "application/x-kpresenter") {
             QByteArray data = m->data(fmt);
-            showZipContents(data, fmt.toAscii(), oasis);
+            showZipContents(data, fmt.toLatin1(), oasis);
             return;
         }
     }

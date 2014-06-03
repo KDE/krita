@@ -18,13 +18,41 @@
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
-    <widget class="StylesWidget" name="styles">
+    <widget class="QTabWidget" name="tabs">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>99</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <widget class="QListView" name="paragraphStylesListView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>14</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <attribute name="title">
+       <string>Paragraph</string>
+      </attribute>
+     </widget>
+     <widget class="QListView" name="characterStylesListView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>14</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <attribute name="title">
+       <string>Character</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
    <item row="0" column="2" rowspan="2">
@@ -36,12 +64,11 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="StyleManagerWelcome" name="welcomePage"/>
      <widget class="ParagraphGeneral" name="paragraphStylePage"/>
      <widget class="CharacterGeneral" name="characterStylePage"/>
-     <widget class="NewStyleWidget" name="createPage"/>
     </widget>
    </item>
    <item row="1" column="0">
@@ -68,21 +95,10 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>NewStyleWidget</class>
-   <extends>QWidget</extends>
-   <header>dialogs/NewStyleWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>CharacterGeneral</class>
    <extends>QWidget</extends>
    <header>dialogs/CharacterGeneral.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StylesWidget</class>
-   <extends>QListWidget</extends>
-   <header>dialogs/StylesWidget.h</header>
   </customwidget>
   <customwidget>
    <class>StyleManagerWelcome</class>

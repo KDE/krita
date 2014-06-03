@@ -18,7 +18,7 @@
 
 #include "kis_macro_player.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -66,6 +66,10 @@ void KisMacroPlayer::run()
     d->paused = false;
     QList<KisRecordedAction*> actions = d->macro->actions();
 
+    if (actions.size() < 1) {
+        return;
+    }
+
     dbgImage << "Start playing macro with " << actions.size() << " actions";
     if (d->info.undoAdapter()) {
         d->info.undoAdapter()->beginMacro(i18n("Play macro"));
@@ -74,7 +78,7 @@ void KisMacroPlayer::run()
     KoProgressUpdater* progressUpdater = 0;
     if(d->updater) {
         progressUpdater = new KoProgressUpdater(d->updater);
-        progressUpdater->start(actions.size());
+        progressUpdater->start(actions.size(), i18n("Playing back macro"));
     }
 
     for (QList<KisRecordedAction*>::iterator it = actions.begin(); it != actions.end(); ++it) {
@@ -97,7 +101,7 @@ void KisMacroPlayer::run()
             d->info.undoAdapter()->undoLastCommand();
         }
     }
-    
+
 }
 
 #include "kis_macro_player.moc"

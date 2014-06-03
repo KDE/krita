@@ -21,9 +21,9 @@ Boston, MA 02110-1301, USA.
 #ifndef __KO_FILTER_H__
 #define __KO_FILTER_H__
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QPointer>
+#include <QObject>
+#include <QMap>
+#include <QPointer>
 
 #include "komain_export.h"
 class QIODevice;
@@ -71,7 +71,8 @@ public:
                             EmbeddedDocError, WrongFormat, NotImplemented,
                             ParsingError, InternalError, UnexpectedEOF,
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
-                            PasswordProtected, InvalidFormat,
+                            PasswordProtected, InvalidFormat, FilterEntryNull,
+                            NoDocumentCreated, DownloadFailed, FilterCreationError,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 

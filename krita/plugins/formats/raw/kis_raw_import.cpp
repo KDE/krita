@@ -18,7 +18,7 @@
  */
 #include "kis_raw_import.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
@@ -32,8 +32,7 @@
 #include "kis_transaction.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
-#include <kis_iterators_pixel.h>
-
+#include "kis_iterator_ng.h"
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -79,7 +78,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();
@@ -121,7 +120,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
         KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
-        image->lock();
+
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
         KisTransaction("", layer -> paintDevice());
 
@@ -132,11 +131,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         if (device.isNull()) return KoFilter::CreationError;
 
         // Copy the data
-        KisHLineIterator it = device->createHLineIterator(0, 0, width);
+        KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
         for (int y = 0; y < height; ++y) {
-            while (!it.isDone()) {
-                KoRgbU16Traits::Pixel* pixel = reinterpret_cast<KoRgbU16Traits::Pixel*>(it.rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it.x()) * 3;
+            do {
+                KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
+                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);
@@ -147,14 +146,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
                 pixel->blue = correctIndian(ptr[2]);
 #endif
                 pixel->alpha = 0xFFFF;
-                ++it;
-            }
-            it.nextRow();
+            } while (it->nextPixel());
+            it->nextRow();
         }
 
-        layer->setDirty();
         QApplication::restoreOverrideCursor();
-        image->unlock();
         doc->setCurrentImage(image);
         return KoFilter::OK;
     }

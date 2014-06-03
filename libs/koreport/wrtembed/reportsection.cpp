@@ -20,20 +20,20 @@
 #include "reportsection.h"
 #include "KoReportDesigner.h"
 #include "KoReportDesignerItemBase.h"
-
+#include "krutils.h"
 #include "KoReportPluginInterface.h"
 #include "KoReportPluginManager.h"
 #include "KoReportDesignerItemRectBase.h"
 #include "KoReportDesignerItemLine.h"
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 #include "reportscene.h"
 #include "reportsceneview.h"
 
 // qt
-#include <qlabel.h>
-#include <qdom.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QDomDocument>
+#include <QLayout>
 #include <QGridLayout>
 #include <QMouseEvent>
 
@@ -41,12 +41,12 @@
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <koproperty/EditorView.h>
-#include <KColorScheme>
+#include <kcolorscheme.h>
 #include <QBitmap>
 
 #include <kdebug.h>
 
-static const char *arrow_xpm[] = {
+static const char * const arrow_xpm[] = {
     /* width height num_colors chars_per_pixel */
     "    11    12       2            1",
     /* colors */
@@ -149,9 +149,7 @@ void ReportSection::slotResizeBarDragged(int delta)
 
 void ReportSection::buildXML(QDomDocument &doc, QDomElement &section)
 {
-    QString un = m_sectionData->m_height->option("unit", "cm").toString();
-
-    section.setAttribute("svg:height", KoUnit::unit(un).toUserStringValue(m_sectionData->m_height->value().toDouble()) + un);
+    KRUtils::setAttribute(section, "svg:height", m_sectionData->m_height->value().toDouble());
     section.setAttribute("fo:background-color", m_sectionData->backgroundColor().name());
 
     // now get a list of all the QGraphicsItems on this scene and output them.
@@ -172,7 +170,7 @@ void ReportSection::initFromXML(QDomNode & section)
     m_sectionData->m_height->setValue(h);
     
     h  = POINT_TO_INCH(h) * KoDpi::dpiY();
-    kDebug() << "Section Height: " << h;
+    //kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
     slotResizeBarDragged(0);
 
@@ -200,7 +198,7 @@ void ReportSection::initFromXML(QDomNode & section)
                 }
             }
             else {
-                kDebug() << "Encountered unknown node while parsing section: " << n;
+                kWarning() << "Encountered unknown node while parsing section: " << n;
             }
         }
     }
@@ -217,7 +215,7 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 
     KoUnit unit = m_reportDesigner->pageUnit();
     
-    m_sectionData->m_height->setOption("unit", KoUnit::unitName(unit));
+    m_sectionData->m_height->setOption("unit", unit.symbol());
 
     //update items position with unit
     QList<QGraphicsItem*> itms = m_scene->items();
@@ -250,8 +248,7 @@ void ReportSection::slotSceneClicked()
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s)
-
-    kDebug() << p.name();
+    //kDebug() << p.name();
     
     //Handle Background Color
     if (p.name() == "background-color") {

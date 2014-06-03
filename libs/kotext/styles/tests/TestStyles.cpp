@@ -21,7 +21,7 @@
 #include "TestStyles.h"
 
 #include <styles/KoParagraphStyle.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextBlockFormat>
@@ -119,12 +119,14 @@ void TestStyles::testApplyParagraphStyle()
     QTextBlockFormat format;
     QCOMPARE(format.properties().count(), 0);
     style.applyStyle(format);
-    QCOMPARE(format.properties().count(), 1); // the styleId
+    QCOMPARE(format.properties().count(), 2); // the styleId and nextStyleId
+    QCOMPARE(format.property(KoParagraphStyle::StyleId).toInt(), 1001);
+    QCOMPARE(format.property(KoParagraphStyle::NextStyle).toInt(), 1001);
 
     style.setName("name");
     style.setAlignment(Qt::AlignRight);
     style.applyStyle(format);
-    QCOMPARE(format.properties().count(), 2);
+    QCOMPARE(format.properties().count(), 3);
     QCOMPARE(format.alignment(), Qt::AlignRight);
 }
 
@@ -158,20 +160,20 @@ void TestStyles::testApplyParagraphStyleWithParent()
     style3.setLineSpacing(23.45);
     style3.setLineHeightPercent(150);
     style3.setLineHeightAbsolute(8.0);
-    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightPercent(), 0.0);
     QCOMPARE(style3.lineHeightAbsolute(), 8.0);
     QCOMPARE(style3.lineSpacing(), 23.45);
     QVERIFY(!style3.hasNormalLineHeight());
 
     style3.setNormalLineHeight();
-    QCOMPARE(style3.lineHeightPercent(), 0);
+    QCOMPARE(style3.lineHeightPercent(), 0.0);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 0.0);
     QVERIFY(style3.hasNormalLineHeight());
 
     style3.setLineHeightPercent(150);
     style3.setLineSpacing(56.78);
-    QCOMPARE(style3.lineHeightPercent(), 150);
+    QCOMPARE(style3.lineHeightPercent(), 150.0);
     QCOMPARE(style3.lineHeightAbsolute(), 0.0);
     QCOMPARE(style3.lineSpacing(), 56.78);
     QVERIFY(!style3.hasNormalLineHeight());
@@ -193,26 +195,32 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QTextBlockFormat rawFormat;
     style1.applyStyle(rawFormat);
     KoParagraphStyle format(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 3);
+    QCOMPARE(rawFormat.properties().count(), 4);
     QCOMPARE(format.alignment(), Qt::AlignRight);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1002);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format.leftMargin(), 10.0);
     QCOMPARE(format.rightMargin(), 0.0);
 
     style2.applyStyle(rawFormat);
     KoParagraphStyle format2(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 4);
+    QCOMPARE(rawFormat.properties().count(), 5);
     QCOMPARE(format2.alignment(), Qt::AlignCenter);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1003);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format2.leftMargin(), 10.0);
     QCOMPARE(format2.rightMargin(), 20.0);
 
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
-    QCOMPARE(rawFormat.properties().count(), 8);
+    QCOMPARE(rawFormat.properties().count(), 9);
     QCOMPARE(rawFormat.property(KoParagraphStyle::LineSpacing).toReal(), 56.78);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
+    //since we have not specified any NextStyle it should be the same as the current style
+    QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), rawFormat.property(KoParagraphStyle::NextStyle).toInt());
     QCOMPARE(format3.leftMargin(), 10.0);
     QCOMPARE(format3.rightMargin(), 20.0);
 }
@@ -222,7 +230,7 @@ void TestStyles::testCopyParagraphStyle()
     QTextLength length1(QTextLength::FixedLength, 10.0);
     QTextLength length2(QTextLength::FixedLength, 20.0);
     QTextLength length3(QTextLength::FixedLength, 30.0);
-    
+
     KoParagraphStyle style1;
     KoParagraphStyle style2;
     style2.setParentStyle(&style1);
@@ -243,15 +251,15 @@ void TestStyles::testUnapplyStyle()
     QColor testOverlineColor(255, 128, 64);
     KoCharacterStyle::LineWeight testOverlineWeight = KoCharacterStyle::ThickLineWeight;
     qreal testOverlineWidth = 1.5;
-    
+
     // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
     KoParagraphStyle headers;
-    headers.characterStyle()->setOverlineColor(testOverlineColor);
-    headers.characterStyle()->setOverlineMode(KoCharacterStyle::ContinuousLineMode);
-    headers.characterStyle()->setOverlineStyle(KoCharacterStyle::DottedLine);
-    headers.characterStyle()->setOverlineType(KoCharacterStyle::DoubleLine);
-    headers.characterStyle()->setOverlineWidth(testOverlineWeight, testOverlineWidth);
-    headers.characterStyle()->setFontWeight(QFont::Bold);
+    headers.setOverlineColor(testOverlineColor);
+    headers.setOverlineMode(KoCharacterStyle::ContinuousLineMode);
+    headers.setOverlineStyle(KoCharacterStyle::DottedLine);
+    headers.setOverlineType(KoCharacterStyle::DoubleLine);
+    headers.setOverlineWidth(testOverlineWeight, testOverlineWidth);
+    headers.setFontWeight(QFont::Bold);
     headers.setAlignment(Qt::AlignCenter);
     KoParagraphStyle head1;
     head1.setParentStyle(&headers);
@@ -274,8 +282,6 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
     QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
-    
-    
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();
@@ -286,7 +292,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
-    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);    
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
 
     doc.clear();
@@ -304,7 +310,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
     QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
-    
+
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();
@@ -314,6 +320,7 @@ void TestStyles::testUnapplyStyle()
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
 
     doc.setHtml("bla bla<i>italic</i>enzo");
+
     block = doc.begin();
     head1.applyStyle(block);
     bf = cursor.blockFormat();
@@ -329,6 +336,15 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), true);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), true);
 
+    cursor.setPosition(7);
+    cursor.setPosition(12, QTextCursor::KeepAnchor);
+    QTextCharFormat italic;
+    italic.setFontItalic(true);
+    cursor.mergeCharFormat(italic);
+    cursor.setPosition(8);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.fontItalic(), true);
+    cursor.setPosition(0);
 
     head1.unapplyStyle(block);
     cursor.setPosition(0);
@@ -355,7 +371,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
-    cursor.setPosition(13);
+    cursor.setPosition(12);
     cf = cursor.charFormat();
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
@@ -366,7 +382,7 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
 
-    cursor.setPosition(14);
+    cursor.setPosition(13);
     cf = cursor.charFormat();
     //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);

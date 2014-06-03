@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_doc2_p.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -35,11 +36,11 @@
 #include <QWidget>
 #include <QList>
 #include <QTimer>
+#include <QScopedPointer>
 
 // KDE
 #include <krun.h>
 #include <kimageio.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -57,7 +58,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
-#include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoStore.h>
@@ -67,6 +67,8 @@
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
+#include <KoPart.h>
+#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -80,13 +82,13 @@
 #include <kis_painter.h>
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
-#include <kis_undo_stores.h>
+#include <kis_document_undo_store.h>
+#include <kis_painting_assistants_decoration.h>
 
 // Local
 #include "kis_factory2.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
-#include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
 #include "canvas/kis_canvas2.h"
 #include "flake/kis_shape_controller.h"
@@ -94,17 +96,12 @@
 #include "kra/kis_kra_saver.h"
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_resource_server_provider.h"
+#include "kis_node_manager.h"
+#include "kis_part2.h"
 
-
-static const char *CURRENT_DTD_VERSION = "2.0";
-
-/**
- * Mime type for this app - not same as file type, but file types
- * can be associated with a mime type and are opened with applications
- * associated with the same mime type
- */
-#define APP_MIMETYPE "application/x-krita"
-
+static const char CURRENT_DTD_VERSION[] = "2.0";
 
 class KisDoc2::KisDocPrivate
 {
@@ -112,10 +109,9 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-            : nserver(0)
-            , macroNestDepth(0)
-            , kraLoader(0)
-            , dieOnError(false)
+        : nserver(0)
+        , macroNestDepth(0)
+        , kraLoader(0)
     {
     }
 
@@ -128,29 +124,49 @@ public:
     qint32 macroNestDepth;
 
     KisImageSP image;
+    KisNodeSP preActivatedNode;
     KisShapeController* shapeController;
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
 
-    QString error;
-    bool dieOnError;
+    QList<KisPaintingAssistant*> assistants;
 
+    QString flipbook;
 };
 
 
-KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode, new UndoStack(this))
-        , m_d(new KisDocPrivate())
+KisDoc2::KisDoc2()
+    : KoDocument(new KisPart2, new UndoStack(this))
+    , m_d(new KisDocPrivate())
 {
-    setComponentData(KisFactory2::componentData(), false);
-    setTemplateType("krita_template");
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
     init();
     connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     undoStack()->setUndoLimit(KisConfig().undoStackLimit());
     setBackupFile(KisConfig().backupFile());
 
 }
+
+KisDoc2::KisDoc2(KisPart2 *part)
+    : KoDocument(part, new UndoStack(this))
+    , m_d(new KisDocPrivate())
+{
+    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
+    // preload the krita resources
+    KisResourceServerProvider::instance();
+
+    init();
+    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
+    setBackupFile(KisConfig().backupFile());
+
+}
+
+
 
 KisDoc2::~KisDoc2()
 {
@@ -168,34 +184,20 @@ KisDoc2::~KisDoc2()
 
 QByteArray KisDoc2::mimeType() const
 {
-    return APP_MIMETYPE;
+    return KIS_MIME_TYPE;
 }
 
 void KisDoc2::slotLoadingFinished() {
-    image()->refreshGraphAsync();
+    if (m_d->image) {
+        m_d->image->initialRefreshGraph();
+    }
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
-void KisDoc2::openExistingFile(const KUrl& url)
-{
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument::openExistingFile(url);
-    qApp->restoreOverrideCursor();
-}
-
-void KisDoc2::openTemplate(const KUrl& url)
-{
-    qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument::openTemplate(url);
-    qApp->restoreOverrideCursor();
-}
-
-bool KisDoc2::init()
+void KisDoc2::init()
 {
     delete m_d->nserver;
     m_d->nserver = 0;
-
-    connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
 
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
@@ -204,8 +206,34 @@ bool KisDoc2::init()
 
     m_d->kraSaver = 0;
     m_d->kraLoader = 0;
+}
 
-    return true;
+bool KisDoc2::saveNativeFormat(const QString &file)
+{
+    const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+    const int emergencyAutoSaveInterval = 10; // sec
+
+    if (!m_d->image->tryBarrierLock()) {
+        if (isAutosaving()) {
+            setDisregardAutosaveFailure(true);
+            if (realAutoSaveInterval) {
+                setAutoSave(emergencyAutoSaveInterval);
+            }
+            return false;
+        } else {
+            m_d->image->requestStrokeEnd();
+            QApplication::processEvents();
+            if (!m_d->image->tryBarrierLock()) {
+                return false;
+            }
+        }
+    }
+    setDisregardAutosaveFailure(false);
+    bool retval = KoDocument::saveNativeFormat(file);
+    m_d->image->unlock();
+    setAutoSave(realAutoSaveInterval);
+
+    return retval;
 }
 
 QDomDocument KisDoc2::saveXML()
@@ -221,6 +249,9 @@ QDomDocument KisDoc2::saveXML()
     m_d->kraSaver = new KisKraSaver(this);
 
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
+    if (!m_d->kraSaver->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
+    }
 
     return doc;
 }
@@ -228,6 +259,7 @@ QDomDocument KisDoc2::saveXML()
 bool KisDoc2::loadOdf(KoOdfReadStore & odfStore)
 {
     Q_UNUSED(odfStore);
+    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
     return false;
 }
 
@@ -235,10 +267,11 @@ bool KisDoc2::loadOdf(KoOdfReadStore & odfStore)
 bool KisDoc2::saveOdf(SavingContext &documentContext)
 {
     Q_UNUSED(documentContext);
+    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
     return false;
 }
 
-bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);
@@ -246,20 +279,24 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     }
 
     KoXmlElement root;
-    QString attr;
     KoXmlNode node;
     KisImageWSP image;
 
-    if (!init())
+    init();
+
+    if (doc.doctype().name() != "DOC") {
+        setErrorMessage(i18n("The format is not supported or the file is corrupted"));
         return false;
-    if (doc.doctype().name() != "DOC")
-        return false;
+    }
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
-    if (syntaxVersion > 2)
+    if (syntaxVersion > 2) {
+         setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));
         return false;
+    }
 
     if (!root.hasChildNodes()) {
+        setErrorMessage(i18n("The file has no layers."));
         return false;
     }
 
@@ -271,10 +308,21 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 KoXmlElement elem = node.toElement();
-                if (!(image = m_d->kraLoader->loadXML(elem)))
+                if (!(image = m_d->kraLoader->loadXML(elem))) {
+                    if (m_d->kraLoader->errorMessages().isEmpty()) {
+                        setErrorMessage(i18n("Unknown error."));
+                    }
+                    else {
+                        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+                    }
                     return false;
+                }
 
-            } else {
+            }
+            else {
+                if (m_d->kraLoader->errorMessages().isEmpty()) {
+                    setErrorMessage(i18n("The file does not contain an image."));
+                }
                 return false;
             }
         }
@@ -294,6 +342,10 @@ bool KisDoc2::completeSaving(KoStore *store)
     QString uri = url().url();
 
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
+    if (!m_d->kraSaver->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
+        return false;
+    }
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
@@ -301,50 +353,50 @@ bool KisDoc2::completeSaving(KoStore *store)
     return true;
 }
 
+int KisDoc2::supportedSpecialFormats() const
+{
+    return 0; // we don't support encryption.
+}
+
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
-    if (!m_d->image) return false;
+    if (!m_d->image) {
+        if (m_d->kraLoader->errorMessages().isEmpty()) {
+            setErrorMessage(i18n("Unknown error."));
+        }
+        else {
+            setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        }
+        return false;
+    }
 
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
+
+    if (!m_d->kraLoader->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        return false;
+    }
+
+    vKisNodeSP preselectedNodes = m_d->kraLoader->selectedNodes();
+    if (preselectedNodes.size() > 0) {
+        m_d->preActivatedNode = preselectedNodes.first();
+    }
+
+    // before deleting the kraloader, get the list with preloaded assistants and save it
+    m_d->assistants = m_d->kraLoader->assistants();
 
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
-    setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
-    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 
     return true;
 }
-
-QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets(QWidget *parent)
-{
-    KisConfig cfg;
-
-    int w = cfg.defImageWidth();
-    int h = cfg.defImageHeight();
-    bool clipAvailable = false;
-
-    QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        w = sz.width();
-        h = sz.height();
-        clipAvailable = true;
-    }
-
-    QList<KoDocument::CustomDocumentWidgetItem> widgetList;
-    KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), "unnamed");
-    widgetList << item;
-
-    return widgetList;
-}
-
-
 
 KisImageWSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
 {
@@ -365,8 +417,9 @@ bool KisDoc2::newImage(const QString& name,
                        const KoColorSpace* cs, const KoColor &bgColor,
                        const QString &description, const double imageResolution)
 {
-    if (!init())
-        return false;
+    Q_ASSERT(cs);
+
+    init();
 
     KisConfig cfg;
 
@@ -379,12 +432,15 @@ bool KisDoc2::newImage(const QString& name,
 
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
-    image->lock();
 
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
     image->setResolution(imageResolution, imageResolution);
+
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
+    if (name != i18n("unnamed") && !name.isEmpty()) {
+        setUrl(KUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + '/' + name + ".kra"));
+    }
     documentInfo()->setAboutInfo("comments", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
@@ -392,78 +448,24 @@ bool KisDoc2::newImage(const QString& name,
 
     layer->paintDevice()->setDefaultPixel(bgColor.data());
     image->addNode(layer.data(), image->rootLayer().data());
-    image->unlock();
     setCurrentImage(image);
 
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
-    cfg.defColorDepth(image->colorSpace()->colorDepthId().id());
+    cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
     qApp->restoreOverrideCursor();
     return true;
 }
 
-KoView* KisDoc2::createViewInstance(QWidget* parent)
-{
-    qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 * v = new KisView2(this, parent);
-    Q_CHECK_PTR(v);
-
-    m_d->shapeController->setInitialShapeForView(v);
-    KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
-
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    setModified(true);
-    setModified(false);
-    qApp->restoreOverrideCursor();
-    return v;
-}
-
-void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
-{
-    // print error if the lcms engine is not available
-    if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
-        // need to wait 1 event since exiting here would not work.
-        m_d->error = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
-        m_d->dieOnError = true;
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    }
-
-    KoDocument::showStartUpWidget(parent, alwaysShow);
-    KisConfig cfg;
-    if (cfg.firstRun()) {
-
-        QStringList qtversion = QString(qVersion()).split('.');
-        if (qtversion[0] == "4" && qtversion[1] <= "6" && qtversion[2].toInt() < 3) {
-            m_d->error = i18n("Krita needs at least Qt 4.6.3 to work correctly. Your Qt version is %1. If you have a graphics tablet it will not work correctly!", qVersion());
-            m_d->dieOnError = false;
-            QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-        }
-
-        cfg.setFirstRun(false);
-    }
-}
-
-void KisDoc2::showErrorAndDie()
-{
-    KMessageBox::error(widget(),
-                       m_d->error,
-                       i18n("Installation error"));
-    if (m_d->dieOnError) {
-        exit(10);
-    }
-}
-
 void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 {
+    if (!m_d->image) return;
     KisConfig cfg;
-    QString monitorProfileName = cfg.monitorProfile();
-    const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+    const KoColorProfile *profile = cfg.displayProfile();
     QRect rect = rc & m_d->image->bounds();
     m_d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }
@@ -471,37 +473,84 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
 QPixmap KisDoc2::generatePreview(const QSize& size)
 {
     if (m_d->image) {
-        QSize newSize = m_d->image->bounds().size();
+        QRect bounds = m_d->image->bounds();
+        QSize newSize = bounds.size();
         newSize.scale(size, Qt::KeepAspectRatio);
 
-        QImage image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
-        //image.save("thumb.png");
+        QImage image;
+        if (bounds.width() < 10000 && bounds.height() < 10000) {
+            image = m_d->image->convertToQImage(m_d->image->bounds(), 0);
+        }
+        else {
+            image = m_d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
+        }
+        image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         return QPixmap::fromImage(image);
     }
     return QPixmap(size);
 }
 
-KoShapeBasedDocumentBase * KisDoc2::shapeController() const
+KoShapeBasedDocumentBase *KisDoc2::shapeController() const
 {
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForNode(KisNodeSP layer) const
+KoShapeLayer* KisDoc2::shapeForNode(KisNodeSP layer) const
 {
     return m_d->shapeController->shapeForNode(layer);
 }
 
-KoShape * KisDoc2::addShape(const KisNodeSP node)
+vKisNodeSP KisDoc2::activeNodes() const
 {
-    KisNodeSP parent = node->parent();
-    m_d->shapeController->slotNodeAdded(parent.data(), parent->index(node));
-    return m_d->shapeController->shapeForNode(node);
+    vKisNodeSP nodes;
+    foreach(KoView *v, documentPart()->views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisNodeSP activeNode = view->activeNode();
+            if (activeNode && !nodes.contains(activeNode)) {
+                if (activeNode->inherits("KisMask")) {
+                    activeNode = activeNode->parent();
+                }
+                nodes.append(activeNode);
+            }
+        }
+    }
+    return nodes;
+}
+
+QList<KisPaintingAssistant*> KisDoc2::assistants()
+{
+    QList<KisPaintingAssistant*> assistants;
+    foreach(KoView *v, documentPart()->views()) {
+        KisView2 *view = qobject_cast<KisView2*>(v);
+        if (view) {
+            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
+            assistants.append(assistantsDecoration->assistants());
+        }
+    }
+    return assistants;
+}
+
+QList<KisPaintingAssistant *> KisDoc2::preLoadedAssistants()
+{
+    return m_d->assistants;
+}
+
+void KisDoc2::setPreActivatedNode(KisNodeSP activatedNode)
+{
+    m_d->preActivatedNode = activatedNode;
+}
+
+KisNodeSP KisDoc2::preActivatedNode() const
+{
+    return m_d->preActivatedNode;
 }
 
 void KisDoc2::prepareForImport()
 {
-    if (m_d->nserver == 0)
+    if (m_d->nserver == 0) {
         init();
+    }
 }
 
 KisImageWSP KisDoc2::image() const
@@ -512,16 +561,19 @@ KisImageWSP KisDoc2::image() const
 
 void KisDoc2::setCurrentImage(KisImageWSP image)
 {
+    //if (!image.isValid()) return;
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
+        m_d->shapeController->setImage(0);
     }
     m_d->image = image;
     m_d->shapeController->setImage(image);
 
     setModified(false);
 
-    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()));
 
     emit sigLoadingFinished();
 }
@@ -533,26 +585,16 @@ void KisDoc2::initEmpty()
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
+void KisDoc2::setImageModified()
+{
+    setModified(true);
+}
+
+
 KisUndoStore* KisDoc2::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
 }
-
-void KisDoc2::undoIndexChanged(int idx)
-{
-    const KUndo2Command* command = undoStack()->command(idx);
-    if (!command) return;
-
-    KisImageWSP image = this->image();
-    if(!image) return;
-
-    KisDocumentUndoStore *undoStore =
-        dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
-    Q_ASSERT(undoStore);
-
-    undoStore->notifyCommandExecuted(command);
-}
-
 
 #include "kis_doc2.moc"
 

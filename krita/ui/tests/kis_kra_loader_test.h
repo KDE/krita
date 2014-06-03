@@ -19,7 +19,7 @@
 #ifndef KIS_KRA_LOADER_TEST_H
 #define KIS_KRA_LOADER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisKraLoaderTest : public QObject
 {
@@ -27,7 +27,7 @@ class KisKraLoaderTest : public QObject
 private slots:
 
     void testLoading();
-
+    void testObligeSingleChild();
 };
 
 #endif

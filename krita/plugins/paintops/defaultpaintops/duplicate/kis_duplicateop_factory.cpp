@@ -23,7 +23,7 @@
 #include "kis_duplicateop_factory.h"
 
 #include <KoInputDevice.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
@@ -36,7 +36,7 @@
 KisDuplicateOpFactory::KisDuplicateOpFactory()
     : KisPaintOpFactory(QStringList(COMPOSITE_COPY))
 {
-    setPriority(3);
+    setPriority(15);
 }
 
 

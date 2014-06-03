@@ -24,22 +24,16 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
-class QToolButton;
-class KoCanvasController;
 class KoCanvasBase;
-class KoShapeLayer;
 class KoToolBox;
 
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    KoToolBoxDocker(KoToolBox *toolBox);
+    explicit KoToolBoxDocker(KoToolBox *toolBox);
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -53,4 +47,4 @@ private:
     KoToolBox *m_toolBox;
 };
 
-#endif // _KO_TOOLBOX_H_
+#endif // _KO_TOOLBOX_DOCKER_H_

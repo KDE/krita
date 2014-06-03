@@ -17,8 +17,8 @@
  */
 #include "KoReportItemChart.h"
 #include <KoGlobal.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include "renderobjects.h"
@@ -356,6 +356,9 @@ void KoReportItemChart::setAxis(const QString& xa, const QString &ya)
 void KoReportItemChart::setBackgroundColor(const QColor&)
 {
     //Set the background color
+    if (!m_chartWidget) {
+        return;
+    }
     KDChart::Chart *cht = m_chartWidget->diagram()->coordinatePlane()->parent();
 
     KDChart::BackgroundAttributes ba;
@@ -392,8 +395,11 @@ QString KoReportItemChart::typeName() const
     return "chart";
 }
 
-int KoReportItemChart::render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script)
+int KoReportItemChart::renderReportData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        KoReportData *data, KRScriptHandler *script)
 {
+    Q_UNUSED(script);
+
     setConnection(data);
 
     QStringList masters = masterFields();

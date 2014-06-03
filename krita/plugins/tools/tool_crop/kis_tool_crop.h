@@ -24,30 +24,16 @@
 #include <QPoint>
 #include <QPainterPath>
 
-#include <KIcon>
+#include <KoIcon.h>
 
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
-
 #include "ui_wdg_tool_crop.h"
 
 class QRect;
+struct DecorationLine;
 
-class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
-{
-    Q_OBJECT
-
-public:
-    WdgToolCrop(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-        boolHeight->setIcon(KIcon("height_icon"));
-        boolWidth->setIcon(KIcon("width_icon"));
-        boolRatio->setIcon(KIcon("ratio_icon"));
-        label_horizPos->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-        label_vertiPos->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
-    }
-};
 
 /**
  * Crop tool
@@ -60,43 +46,102 @@ class KisToolCrop : public KisTool
 {
 
     Q_OBJECT
+    Q_ENUMS(CropToolType);
+    Q_PROPERTY(CropToolType cropType READ cropType WRITE setCropType NOTIFY cropTypeChanged);
+    Q_PROPERTY(bool cropTypeSelectable READ cropTypeSelectable WRITE setCropTypeSelectable NOTIFY cropTypeSelectableChanged);
+    Q_PROPERTY(int cropX READ cropX WRITE setCropX NOTIFY cropXChanged);
+    Q_PROPERTY(int cropY READ cropY WRITE setCropY NOTIFY cropYChanged);
+    Q_PROPERTY(int cropWidth READ cropWidth WRITE setCropWidth NOTIFY cropWidthChanged);
+    Q_PROPERTY(bool forceWidth READ forceWidth WRITE setForceWidth NOTIFY forceWidthChanged);
+    Q_PROPERTY(int cropHeight READ cropHeight WRITE setCropHeight NOTIFY cropHeightChanged);
+    Q_PROPERTY(bool forceHeight READ forceHeight WRITE setForceHeight NOTIFY forceHeightChanged);
+    Q_PROPERTY(double ratio READ ratio WRITE setRatio NOTIFY ratioChanged);
+    Q_PROPERTY(bool forceRatio READ forceRatio WRITE setForceRatio NOTIFY forceRatioChanged);
+    Q_PROPERTY(int decoration READ decoration WRITE setDecoration NOTIFY decorationChanged);
 
 public:
-
+    enum CropToolType {
+        LayerCropType,
+        ImageCropType
+    };
     KisToolCrop(KoCanvasBase * canvas);
     virtual ~KisToolCrop();
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
-    virtual void mousePressEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+
     virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *e);
-    virtual void keyReleaseEvent(QKeyEvent* event);
-    virtual void resourceChanged(int key, const QVariant &res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
+
+    CropToolType cropType() const;
+    bool cropTypeSelectable() const;
+    int cropX() const;
+    int cropY() const;
+    int cropWidth() const;
+    bool forceWidth() const;
+    int cropHeight() const;
+    bool forceHeight() const;
+    double ratio() const;
+    bool forceRatio() const;
+    int decoration() const;
+    bool growCenter() const;
+    bool allowGrow() const;
+
+
+signals:
+    void cropTypeChanged();
+    void cropTypeSelectableChanged();
+    void cropXChanged();
+    void cropYChanged();
+    void cropWidthChanged();
+    void forceWidthChanged();
+    void cropHeightChanged();
+    void forceHeightChanged();
+    void ratioChanged();
+    void forceRatioChanged();
+    void decorationChanged();
+    void cropChanged(bool updateRatio);
 
 public slots:
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
+
+    void crop();
+
+    void setCropTypeLegacy(int cropType);
+    void setCropType(CropToolType cropType);
+    void setCropTypeSelectable(bool selectable);
+    void setCropX(int x);
+    void setCropY(int y);
+    void setCropWidth(int x);
+    void setForceWidth(bool force);
+    void setCropHeight(int y);
+    void setForceHeight(bool force);
+    void setRatio(double ratio);
+    void setForceRatio(bool force);
+    void setDecoration(int i);
+    void setAllowGrow(bool g);
+    void setGrowCenter(bool g);
+
 private:
+    void cancelStroke();
     QRectF boundingRect();
     QRectF borderLineRect();
     QPainterPath handlesPath();
     void paintOutlineWithHandles(QPainter& gc);
     qint32 mouseOnHandle(const QPointF currentViewPoint);
     void setMoveResizeCursor(qint32 handle);
-    void validateSelection(bool updateratio = true);
-    void setOptionWidgetX(qint32 x);
-    void setOptionWidgetY(qint32 y);
-    void setOptionWidgetWidth(qint32 x);
-    void setOptionWidgetHeight(qint32 y);
-    void setOptionWidgetRatio(double ratio);
-    void updateWidgetValues(bool updateratio = true);
+    void validateSelection(bool updateratio=true);
     QRectF lowerRightHandleRect(QRectF cropBorderRect);
     QRectF upperRightHandleRect(QRectF cropBorderRect);
     QRectF lowerLeftHandleRect(QRectF cropBorderRect);
@@ -105,25 +150,32 @@ private:
     QRectF rightHandleRect(QRectF cropBorderRect);
     QRectF upperHandleRect(QRectF cropBorderRect);
     QRectF leftHandleRect(QRectF cropBorderRect);
-
-private slots:
-
-    void crop();
-    void setCropX(int x);
-    void setCropY(int y);
-    void setCropWidth(int x);
-    void setCropHeight(int y);
-    void setRatio(double ratio);
+    void drawDecorationLine(QPainter *p, DecorationLine *decorLine, QRectF rect);
 
 private:
     QRect m_rectCrop; // Is the coordinate of the region to crop.
+    QPoint m_center;
     QPoint m_dragStart;
-
-    WdgToolCrop* m_optWidget;
 
     qint32 m_handleSize;
     bool m_haveCropSelection;
+    bool m_lastCropSelectionWasReset;
     qint32 m_mouseOnHandleType;
+
+    CropToolType m_cropType;
+    bool m_cropTypeSelectable;
+    int m_cropX;
+    int m_cropY;
+    int m_cropWidth;
+    bool m_forceWidth;
+    int m_cropHeight;
+    bool m_forceHeight;
+    double m_ratio;
+    double m_originalRatio;
+    bool m_forceRatio;
+    bool m_growCenter;
+    bool m_grow;
+    int m_decoration;
 
     enum handleType {
         None = 0,
@@ -137,6 +189,7 @@ private:
         Right = 8,
         Inside = 9
     };
+    QList<DecorationLine *> m_decorations;
 };
 
 class KisToolCropFactory : public KoToolFactoryBase
@@ -149,7 +202,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
-        setIcon("tool_crop");
+        setIconName(koIconNameCStr("tool_crop"));
     }
 
     virtual ~KisToolCropFactory() {}

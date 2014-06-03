@@ -87,9 +87,8 @@ QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*stro
     return project(pt);
 }
 
-void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
 {
-    Q_UNUSED(updateRect);
     if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
@@ -100,7 +99,6 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     pts[2] = (handles().size() >= 3) ? (*handles()[2]) : (*handles()[0]);
     pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (handles().size() >= 3) ? (*handles()[2]) : (*handles()[1]);
 
-    gc.save();
     gc.setTransform(initialTransform);
     gc.setPen(QColor(0, 0, 0, 75));
     // Draw control lines
@@ -112,8 +110,6 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
     drawPath(gc, path);
-
-    gc.restore();
 }
 
 QPointF SplineAssistant::buttonPosition() const
@@ -139,7 +135,7 @@ QString SplineAssistantFactory::name() const
     return i18n("Spline");
 }
 
-KisPaintingAssistant* SplineAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* SplineAssistantFactory::createPaintingAssistant() const
 {
     return new SplineAssistant;
 }

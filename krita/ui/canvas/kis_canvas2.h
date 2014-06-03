@@ -25,6 +25,7 @@
 #include <QSize>
 #include <QString>
 
+#include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
 #include <krita_export.h>
 #include <kis_types.h>
@@ -39,7 +40,11 @@ class KoColorProfile;
 class KisCanvasDecoration;
 class KisView2;
 class KisPaintopBox;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
+class KisDisplayFilter;
+class KisInputManager;
+class KisDisplayColorConverter;
+class KisExposureGammaCorrectionInterface;
 
 enum KisCanvasType {
     QPAINTER,
@@ -78,7 +83,11 @@ public:
 
     virtual void disconnectCanvasObserver(QObject *object);
 
+    void toggleTabletLogger();
+
 public: // KoCanvasBase implementation
+
+    KoGuidesData *guidesData();
 
     bool canvasIsOpenGL();
 
@@ -96,7 +105,7 @@ public: // KoCanvasBase implementation
 
     /**
      * Return the right shape manager for the current layer. That is
-     * to say, if the current layer is a shape layer, return the shape
+     * to say, if the current layer is a vector layer, return the shape
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
@@ -122,7 +131,7 @@ public: // KoCanvasBase implementation
 
     virtual KoToolProxy* toolProxy() const;
 
-    KoColorProfile* monitorProfile();
+    const KoColorProfile* monitorProfile();
 
     /**
      * Prescale the canvas represention of the image (if necessary, it
@@ -136,53 +145,54 @@ public: // KoCanvasBase implementation
     // current shape selection.
     KisImageWSP currentImage();
 
+
+    KisInputManager *inputManager() const;
+
 public: // KisCanvas2 methods
 
     KisImageWSP image();
     KisView2* view();
 
-    bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    KisDisplayColorConverter* displayColorConverter() const;
+    KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+
 signals:
-
-    void documentOriginChanged();
-    void scrollAreaSizeChanged();
-
     void imageChanged(KisImageWSP image);
 
-    void canvasDestroyed(QWidget *);
-
-    void favoritePaletteCalled(const QPoint&);
-
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
+    void sigContinueResizeImage(qint32 w, qint32 h);
+
+    void documentOffsetUpdateFinished();
+
+    // emitted whenever the canvas widget thinks sketch should update
+    void updateCanvasRequested(const QRect &rc);
 
 public slots:
 
     /// Update the entire canvas area
     void updateCanvas();
 
+    void startResizingImage();
+    void finishResizingImage(qint32 w, qint32 h);
+
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
+
+    void channelSelectionChanged();
+
+private slots:
+
     /// The image projection has changed, now start an update
     /// of the canvas representation.
     void startUpdateCanvasProjection(const QRect & rc);
-
     void updateCanvasProjection(KisUpdateInfoSP info);
 
-    void setImageSize(qint32 w, qint32 h);
-
-    /// adjust the origin of the document
-    void adjustOrigin();
-
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
-
-private slots:
+    void startUpdateInPatches(QRect imageRect);
 
     /**
      * Called whenever the view widget needs to show a different part of
@@ -202,29 +212,35 @@ private slots:
      */
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
-    void slotCanvasDestroyed(QWidget* w);
-
     void setCursor(const QCursor &cursor);
 
-public:
-//    friend class KisView2;
+    void slotSelectionChanged();
 
+    void slotDoCanvasUpdate();
+
+public:
+
+    bool isPopupPaletteVisible();
+    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
+
+    // interafce for KisCanvasController only
+    void setWrapAroundViewingMode(bool value);
+    void initializeImage();
     // interface for KisView2 only
-    void connectCurrentImage();
-    void disconnectCurrentImage();
     void resetCanvas(bool useOpenGL);
 
-    void createFavoriteResourceManager(KisPaintopBox*);
-    KoFavoriteResourceManager* favoriteResourceManager();
-    bool handlePopupPaletteIsVisible();
+    void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 
 private:
-    Q_DISABLE_COPY(KisCanvas2);
+    Q_DISABLE_COPY(KisCanvas2)
 
+    void connectCurrentCanvas();
+    void disconnectCurrentCanvas();
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
+    void updateCanvasWidgetImpl(const QRect &rc = QRect());
 
 private:
 

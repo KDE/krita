@@ -19,7 +19,7 @@
 #ifndef KIS_BASE_NODE_TESTER_H
 #define KIS_BASE_NODE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBaseNodeTest : public QObject
 {

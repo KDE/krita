@@ -23,7 +23,7 @@
 
 #include "koproperty/Factory.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 namespace KoProperty
 {

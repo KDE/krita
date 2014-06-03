@@ -28,9 +28,9 @@
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
-struct KisAbstractSliderSpinBoxPrivate;
-struct KisSliderSpinBoxPrivate;
-struct KisDoubleSliderSpinBoxPrivate;
+class KisAbstractSliderSpinBoxPrivate;
+class KisSliderSpinBoxPrivate;
+class KisDoubleSliderSpinBoxPrivate;
 
 /**
  * XXX: when inactive, also show the progress bar part as inactive!
@@ -57,8 +57,8 @@ protected:
     virtual void mousePressEvent(QMouseEvent* e);
     virtual void mouseReleaseEvent(QMouseEvent* e);
     virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
 

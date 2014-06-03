@@ -25,14 +25,17 @@
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
+#include <KoListLevelProperties.h>
+#include <commands/ParagraphFormattingCommand.h>
 
 #include <QTextBlock>
 #include <QTimer>
 
-ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, QTextCursor *cursor, QWidget* parent)
-        : KDialog(parent),
-        m_tool(tool),
-        m_cursor(cursor)
+ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent)
+        : KDialog(parent)
+        , m_tool(tool)
+        , m_editor(editor)
+        , m_styleChanged(false)
 {
     setCaption(i18n("Paragraph Format"));
     setModal(true);
@@ -43,9 +46,13 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, QTextCursor *cu
     m_paragraphGeneral->hideStyleName(true);
     setMainWidget(m_paragraphGeneral);
 
+
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
     initTabs();
+
+    // Do this after initTabs so it doesn't cause signals prematurely
+    connect(m_paragraphGeneral, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
 }
 
 ParagraphSettingsDialog::~ParagraphSettingsDialog()
@@ -54,8 +61,13 @@ ParagraphSettingsDialog::~ParagraphSettingsDialog()
 
 void ParagraphSettingsDialog::initTabs()
 {
-    KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_cursor->block());
-    m_paragraphGeneral->setStyle(style, KoList::level(m_cursor->block()));
+    KoParagraphStyle *style = KoParagraphStyle::fromBlock(m_editor->block());
+    m_paragraphGeneral->setStyle(style, KoList::level(m_editor->block()));
+}
+
+void ParagraphSettingsDialog::styleChanged(bool state)
+{
+    m_styleChanged = state;
 }
 
 void ParagraphSettingsDialog::slotOk()
@@ -66,30 +78,37 @@ void ParagraphSettingsDialog::slotOk()
 
 void ParagraphSettingsDialog::slotApply()
 {
-    emit startMacro(i18n("Paragraph Settings"));
+    if (!m_styleChanged)
+        return;
+
     KoParagraphStyle chosenStyle;
     m_paragraphGeneral->save(&chosenStyle);
-    QTextBlockFormat format;
-    chosenStyle.applyStyle(format);
-    m_cursor->mergeBlockFormat(format);
-    if (chosenStyle.listStyle()) {
-        KoTextEditor::ChangeListFlags flags(KoTextEditor::AutoListStyle | KoTextEditor::DontUnsetIfSame);
-        m_tool->textEditor()->setListProperties(static_cast<KoListStyle::Style>(chosenStyle.listStyle()->styleId()),
-                                                chosenStyle.listStyle()->listLevels().first(),
-                                                flags);
 
+    QTextCharFormat cformat;
+    QTextBlockFormat format;
+    chosenStyle.KoCharacterStyle::applyStyle(cformat);
+    chosenStyle.applyStyle(format);
+
+    KoListLevelProperties llp;
+    if (chosenStyle.listStyle()) {
+        llp = chosenStyle.listStyle()->levelProperties(chosenStyle.listStyle()->listLevels().first());
     } else {
-        QTextList *list = m_cursor->block().textList();
-        if (list) { // then remove it.
-            list->remove(m_cursor->block());
-        }
+        llp.setStyle(KoListStyle::None);
     }
-    emit stopMacro();
+
+    m_editor->applyDirectFormatting(cformat, format, llp);
+
+    m_styleChanged = false;
 }
 
 void ParagraphSettingsDialog::setUnit(const KoUnit &unit)
 {
     m_paragraphGeneral->setUnit(unit);
+}
+
+void ParagraphSettingsDialog::setImageCollection(KoImageCollection *imageCollection)
+{
+    m_paragraphGeneral->setImageCollection(imageCollection);
 }
 
 #include <ParagraphSettingsDialog.moc>

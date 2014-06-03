@@ -2,6 +2,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
+ * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,35 +27,43 @@
 #include <QVariantList>
 
 #include <kdebug.h>
+#include <KoTextDebug.h>
+
 #include <kundo2stack.h>
 
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
+#include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
+#include <KoShapeController.h>
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
+Q_DECLARE_METATYPE(QTextFrame*)
+Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextBlockFormat)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
+const QUrl KoTextDocument::TextRangeManagerURL = QUrl("kotext://textRangeManager");
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
-const QUrl KoTextDocument::AuxillaryFrameURL = QUrl("kotext://auxillaryframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
-
-Q_DECLARE_METATYPE(QTextFrame*)
+const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
+const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
+const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -114,6 +123,13 @@ void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manag
     m_document->addResource(KoTextDocument::InlineTextManager, InlineObjectTextManagerURL, v);
 }
 
+void KoTextDocument::setTextRangeManager(KoTextRangeManager *manager)
+{
+    QVariant v;
+    v.setValue(manager);
+    m_document->addResource(KoTextDocument::TextRangeManager, TextRangeManagerURL, v);
+}
+
 KoStyleManager *KoTextDocument::styleManager() const
 {
     QVariant resource = m_document->resource(KoTextDocument::StyleManager, StyleManagerURL);
@@ -132,6 +148,24 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL);
     if (resource.isValid()) {
         return resource.value<KoChangeTracker *>();
+    }
+    else {
+        return 0;
+    }
+}
+
+void KoTextDocument::setShapeController(KoShapeController *controller)
+{
+    QVariant v;
+    v.setValue(controller);
+    m_document->addResource(KoTextDocument::ShapeController, ShapeControllerUrl, v);
+}
+
+KoShapeController *KoTextDocument::shapeController() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::ShapeController, ShapeControllerUrl);
+    if (resource.isValid()) {
+        return resource.value<KoShapeController *>();
     }
     else {
         return 0;
@@ -170,6 +204,9 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
+    if (styleManager()) {
+        styleManager()->setUndoStack(undoStack);
+    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const
@@ -221,6 +258,9 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
 
 KoList *KoTextDocument::list(QTextList *textList) const
 {
+    if (!textList) {
+        return 0;
+    }
     // FIXME: this is horrible.
     foreach(KoList *l, lists()) {
         if (l->textLists().contains(textList))
@@ -250,7 +290,7 @@ QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() c
     QVariant resource = m_document->resource(KoTextDocument::Selections, SelectionsURL);
     QVariantList variants = resource.toList();
 
-    QVector<QAbstractTextDocumentLayout::Selection> selections(variants.size());
+    QVector<QAbstractTextDocumentLayout::Selection> selections;
     foreach(const QVariant &variant, variants) {
         selections.append(variant.value<QAbstractTextDocumentLayout::Selection>());
     }
@@ -275,22 +315,26 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     return resource.value<KoInlineTextObjectManager *>();
 }
 
+KoTextRangeManager *KoTextDocument::textRangeManager() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::TextRangeManager,
+            TextRangeManagerURL);
+    return resource.value<KoTextRangeManager *>();
+}
+
 QTextFrame *KoTextDocument::auxillaryFrame()
 {
-    QVariant resource = m_document->resource(KoTextDocument::AuxillaryFrame,
-            AuxillaryFrameURL);
+    QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *frame = cursor.currentFrame();
 
-    QTextFrame *frame = resource.value<QTextFrame *>();
+    if (frame->format().intProperty(KoText::SubFrameType) != KoText::AuxillaryFrameType) {
+        cursor = m_document->rootFrame()->lastCursorPosition();
 
-    if (frame == 0) {
-        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
         format.setProperty(KoText::SubFrameType, KoText::AuxillaryFrameType);
 
         frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::AuxillaryFrame, AuxillaryFrameURL, resource);
     }
     return frame;
 }
@@ -323,4 +367,32 @@ bool KoTextDocument::paraTableSpacingAtStart() const
         return resource.toBool();
     else
         return false;
+}
+
+QTextCharFormat KoTextDocument::frameCharFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextCharFormat>();
+    else
+        return QTextCharFormat();
+}
+
+void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
+}
+
+QTextBlockFormat KoTextDocument::frameBlockFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextBlockFormat>();
+    else
+        return QTextBlockFormat();
+}
+
+void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }

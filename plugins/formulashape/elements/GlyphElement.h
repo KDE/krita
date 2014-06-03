@@ -33,7 +33,7 @@
 class KOFORMULA_EXPORT GlyphElement : public TokenElement {
 public:
     /// The standart constructor
-    GlyphElement( BasicElement* parent = 0 );
+    explicit GlyphElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
     ElementType elementType() const;

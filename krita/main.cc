@@ -23,54 +23,88 @@
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDesktopServices>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
-#include <ksplashscreen.h>
+#include <ksycoca.h>
+#include <kstandarddirs.h>
+#include <kcrash.h>
 
 #include <KoApplication.h>
+#include <KoConfig.h>
 
 #include <krita_export.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "ui/kis_aboutdata.h"
+#include "ui/kis_factory2.h"
+#include "ui/kis_doc2.h"
+#include "kis_splash_screen.h"
+
+#if defined Q_OS_WIN
+#include "stdlib.h"
+#include <ui/input/wintab/kis_tablet_support_win.h>
+#ifdef USE_BREAKPAD
+    #include "kis_crash_handler.h"
+#endif
+#elif defined Q_WS_X11
+#include <ui/input/wintab/kis_tablet_support_x11.h>
+
+#endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 #ifdef Q_WS_X11
-    setenv("QT_NO_GLIB", "1", true);
+    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        setenv("QT_NO_GLIB", "1", true);
+    }
+#endif
+#ifdef USE_BREAKPAD
+    qputenv("KDE_DEBUG", "1");
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
 #endif
 
     int state;
-    KAboutData * aboutData = newKritaAboutData();
+    KAboutData *aboutData = KisFactory2::aboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
+    options.add( "hwinfo", ki18n( "Show some information about the hardware" ));
     KCmdLineArgs::addCmdLineOptions(options);
 
     // first create the application so we can create a  pixmap
-    KoApplication app;
+    KoApplication app(KIS_MIME_TYPE);
 
-    // then create the pixmap from an xpm: we cannot get the 
-    // location of our datadir before we've started our components, 
+#if defined Q_OS_WIN
+    KisTabletSupportWin::init();
+    app.setEventFilter(&KisTabletSupportWin::eventFilter);
+#elif defined Q_WS_X11
+    KisTabletSupportX11::init();
+    app.setEventFilter(&KisTabletSupportX11::eventFilter);
+#endif
+
+#if defined Q_WS_X11 && QT_VERSION >= 0x040800
+    app.setAttribute(Qt::AA_X11InitThreads, true);
+#endif
+
+    // then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
     // so use an xpm.
-    QPixmap pm(splash_screen_xpm);
-    QSplashScreen *splash = new KSplashScreen(pm);
+    QWidget *splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
     app.setSplashScreen(splash);
 
     if (!app.start()) {
         return 1;
     }
 
-    // now save some memory.
-    app.setSplashScreen(0);
-    delete splash;
-
     state = app.exec();
-
-    delete aboutData;
 
     return state;
 }

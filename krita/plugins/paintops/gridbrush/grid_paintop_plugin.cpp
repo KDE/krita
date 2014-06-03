@@ -18,7 +18,6 @@
 #include "grid_paintop_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -36,11 +35,11 @@ K_EXPORT_PLUGIN(GridPaintOpPluginFactory("krita"))
 
 
 GridPaintOpPlugin::GridPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisGridPaintOp, KisGridPaintOpSettings, KisGridPaintOpSettingsWidget>("gridbrush", i18n("Grid brush"), 
-                                                                                                             KisPaintOpFactory::categoryExperimental(), "krita-grid.png"));
+    r->add(new KisSimplePaintOpFactory<KisGridPaintOp, KisGridPaintOpSettings, KisGridPaintOpSettingsWidget>("gridbrush", i18n("Grid"),
+                                                                                                             KisPaintOpFactory::categoryStable(), "krita-grid.png", QString(), QStringList(), 8));
 
 }
 

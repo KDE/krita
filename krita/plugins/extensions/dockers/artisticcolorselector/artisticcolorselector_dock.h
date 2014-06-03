@@ -39,7 +39,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; }
     
 private slots:
-    void slotResourceChanged(int key, const QVariant& value);
+    void slotCanvasResourceChanged(int key, const QVariant& value);
     void slotFgColorChanged(const KisColor& color);
     void slotBgColorChanged(const KisColor& color);
     void slotColorSpaceSelected(int type);
@@ -47,8 +47,6 @@ private slots:
     void slotMenuActionTriggered(QAction* action);
     void slotResetDefaultSettings();
     void slotLightModeChanged(bool setToAbsolute);
-    void slotDockLocationChanged(Qt::DockWidgetArea area);
-    void slotTopLevelChanged(bool topLevel);
     
 private:
     KoCanvasBase*            m_canvas;

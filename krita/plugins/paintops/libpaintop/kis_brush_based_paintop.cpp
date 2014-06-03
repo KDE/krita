@@ -19,38 +19,123 @@
 #include "kis_brush.h"
 #include "kis_properties_configuration.h"
 #include "kis_brush_option.h"
+#include <kis_pressure_spacing_option.h>
+
 
 #include <QImage>
 #include <QPainter>
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
-        : KisPaintOp(painter)
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+
+class TextBrushInitializationWorkaround
 {
-    Q_ASSERT(settings);
-    KisBrushOption brushOption;
-    brushOption.readOptionSetting(settings);
-    m_brush = brushOption.brush();
+public:
+    static TextBrushInitializationWorkaround* instance() {
+        K_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance);
+        return s_instance;
+    }
+
+    void preinitialize(const KisPropertiesConfiguration *settings) {
+        if (KisBrushOption::isTextBrush(settings)) {
+            KisBrushOption brushOption;
+            brushOption.readOptionSetting(settings);
+            m_brush = brushOption.brush();
+            m_settings = settings;
+        }
+        else {
+            m_brush = 0;
+            m_settings = 0;
+        }
+    }
+
+    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings) {
+        return settings && settings == m_settings ? m_brush : 0;
+    }
+
+private:
+    TextBrushInitializationWorkaround() : m_settings(0) {}
+
+private:
+    KisBrushSP m_brush;
+    const KisPropertiesConfiguration *m_settings;
+};
+
+void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP settings)
+{
+    TextBrushInitializationWorkaround::instance()->preinitialize(settings.data());
 }
 
-double KisBrushBasedPaintOp::spacing(double scale) const
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
+    : KisPaintOp(painter)
 {
-    // XXX: The spacing should vary as the pressure changes along the line.
-    // This is a quick simplification.
-    double xSpacing = m_brush->xSpacing(scale);
-    double ySpacing = m_brush->ySpacing(scale);
+    Q_ASSERT(settings);
 
-    if (xSpacing < 0.5) {
-        xSpacing = 0.5;
-    }
-    if (ySpacing < 0.5) {
-        ySpacing = 0.5;
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    m_brush =
+        TextBrushInitializationWorkaround::instance()->tryGetBrush(settings);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
+    if (!m_brush) {
+        KisBrushOption brushOption;
+        brushOption.readOptionSetting(settings);
+        m_brush = brushOption.brush();
     }
 
-    if (xSpacing > ySpacing) {
-        return xSpacing;
-    } else {
-        return ySpacing;
+    m_precisionOption.readOptionSetting(settings);
+    m_dabCache = new KisDabCache(m_brush);
+    m_dabCache->setPrecisionOption(&m_precisionOption);
+
+    m_mirrorOption.readOptionSetting(settings);
+    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
+
+    m_textureProperties.fillProperties(settings);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
+}
+
+KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
+{
+    delete m_dabCache;
+}
+
+bool KisBrushBasedPaintOp::checkSizeTooSmall(qreal scale)
+{
+    return scale * m_brush->width() < 0.01 ||
+           scale * m_brush->height() < 0.01;
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight) const
+{
+    return effectiveSpacing(dabWidth, dabHeight, 1.0, false);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+{
+    qreal extraSpacingScale = 1.0;
+    if (spacingOption.isChecked()) {
+        extraSpacingScale = spacingOption.apply(pi);
     }
+
+    return effectiveSpacing(dabWidth, dabHeight, extraSpacingScale, spacingOption.isotropicSpacing());
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const
+{
+    QPointF spacing;
+
+    if (!isotropicSpacing) {
+        spacing = QPointF(dabWidth, dabHeight);
+    }
+    else {
+        qreal significantDimension = qMax(dabWidth, dabHeight);
+        spacing = QPointF(significantDimension, significantDimension);
+    }
+
+    spacing *= extraScale * m_brush->spacing();
+
+    return spacing;
 }
 
 bool KisBrushBasedPaintOp::canPaint() const

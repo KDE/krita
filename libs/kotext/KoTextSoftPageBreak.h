@@ -32,6 +32,7 @@
  */
 class KOTEXT_EXPORT KoTextSoftPageBreak : public KoInlineObject
 {
+    Q_OBJECT
 public:
     KoTextSoftPageBreak();
     virtual ~KoTextSoftPageBreak();

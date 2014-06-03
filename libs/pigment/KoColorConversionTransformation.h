@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_CONVERTION_TRANSFORMATION_H_
-#define _KO_COLOR_CONVERTION_TRANSFORMATION_H_
+#ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_H_
+#define _KO_COLOR_CONVERSION_TRANSFORMATION_H_
 
 #include "KoColorTransformation.h"
 
@@ -35,6 +35,7 @@ class PIGMENTCMS_EXPORT KoColorConversionTransformation : public KoColorTransfor
     friend class KoColorConversionCache;
     struct Private;
 public:
+
     /**
      * Possible value for the intent of a color conversion (useful only for ICC
      * transformations)
@@ -45,37 +46,94 @@ public:
         IntentSaturation = 2,
         IntentAbsoluteColorimetric = 3
     };
+
+    /**
+     * Flags for the color conversion, see lcms2 documentation for more information
+     */
+    enum ConversionFlag {
+        Empty                   = 0x0,
+        NoOptimization          = 0x0100,
+        GamutCheck              = 0x1000,    // Out of Gamut alarm
+        SoftProofing            = 0x4000,    // Do softproofing
+        BlackpointCompensation  = 0x2000,
+        NoWhiteOnWhiteFixup     = 0x0004,    // Don't fix scum dot
+        HighQuality             = 0x0400,    // Use more memory to give better accurancy
+        LowQuality              = 0x0800    // Use less memory to minimize resouces
+    };
+    Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
+
+    /**
+     * We have numerous places where we need to convert color spaces.
+     *
+     * In several cases the user asks us about the conversion
+     * explicitly, e.g. when changing the image type or converting
+     * pixel data to the monitor profile. Doing this explicitly the
+     * user can choose what rendering intent and conversion flags to
+     * use.
+     *
+     * But there are also cases when we have to do a conversion
+     * internally (transparently for the user), for example, when
+     * merging heterogeneous images, creating thumbnails, converting
+     * data to/from QImage or while doing some adjustments. We cannot
+     * ask the user about parameters for every single
+     * conversion. That's why in all these non-critical cases the
+     * following default values should be used.
+     */
+
+    static Intent InternalRenderingIntent;
+    static ConversionFlags InternalConversionFlags;
+
+    static Intent AdjustmentRenderingIntent;
+    static ConversionFlags AdjustmentConversionFlags;
+
 public:
-    KoColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, Intent renderingIntent = IntentPerceptual);
+    KoColorConversionTransformation(const KoColorSpace* srcCs,
+                                    const KoColorSpace* dstCs,
+                                    Intent renderingIntent,
+                                    ConversionFlags conversionFlags);
     ~KoColorConversionTransformation();
 public:
+
     /**
      * @return the source color space for this transformation.
      */
     const KoColorSpace* srcColorSpace() const;
+
     /**
      * @return the destination color space for this transformation.
      */
     const KoColorSpace* dstColorSpace() const;
+
     /**
      * @return the rendering intent of this transformation (this is only useful
      * for ICC transformations)
      */
-    Intent renderingIntent();
+    Intent renderingIntent() const;
+
+    /**
+     * @return the conversion flags
+     */
+    ConversionFlags conversionFlags() const;
+
     /**
      * perform the color conversion between two buffers.
      * @param nPixels the number of pixels in the buffers.
      */
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
+
     /**
      * @return false if the  transformation is not valid
      */
     virtual bool isValid() const { return true; }
+
 private:
+
     void setSrcColorSpace(const KoColorSpace*) const;
     void setDstColorSpace(const KoColorSpace*) const;
-private:
+
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoColorConversionTransformation::ConversionFlags)
 
 #endif

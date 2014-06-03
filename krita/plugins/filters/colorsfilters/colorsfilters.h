@@ -41,32 +41,17 @@ class KisAutoContrast : public KisFilter
 public:
     KisAutoContrast();
 public:
-    using KisFilter::process;
-    void process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                ) const;
+
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
     static inline KoID id() {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }
-    virtual bool workWith(const KoColorSpace* cs) const;
 
 };
 
-
-class KisDesaturateFilter : public KisColorTransformationFilter
-{
-public:
-    KisDesaturateFilter();
-    ~KisDesaturateFilter();
-public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    static inline KoID id() {
-        return KoID("desaturate", i18n("Desaturate"));
-    }
-    virtual bool workWith(const KoColorSpace* cs) const;
-
-};
 
 #endif

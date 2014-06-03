@@ -19,13 +19,54 @@
 #include "kis_pattern_test.h"
 
 #include <qtest_kde.h>
-#include "kis_pattern.h"
+#include "KoPattern.h"
 
-void KisPatternTest::testCreation()
+#include <QCryptographicHash>
+#include <QByteArray>
+
+void KoPatternTest::testCreation()
 {
-    KisPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
+    KoPattern test(QString(FILES_DATA_DIR) + QDir::separator() + "pattern.pat");
+}
+
+void KoPatternTest::testRoundTripMd5()
+{
+    QString filename(QString(FILES_DATA_DIR) + QDir::separator() + "test_pattern.png");
+    QString patFilename("test_pattern.pat");
+
+    KoPattern pngPattern(filename);
+    QVERIFY(pngPattern.load());
+
+    qDebug() << "PNG Name:" << pngPattern.name();
+    qDebug() << "PNG Filename:" << pngPattern.filename();
+
+    pngPattern.setFilename(patFilename);
+    pngPattern.save();
+
+    KoPattern patPattern(patFilename);
+    QVERIFY(patPattern.load());
+
+    qDebug() << "PAT Name:" << patPattern.name();
+    qDebug() << "PAT Filename:" << patPattern.filename();
+
+    qDebug() << pngPattern.pattern().format();
+    qDebug() << patPattern.pattern().format();
+
+    QCOMPARE(pngPattern.pattern().convertToFormat(QImage::Format_ARGB32), patPattern.pattern().convertToFormat(QImage::Format_ARGB32));
+    QImage im1 = pngPattern.pattern().convertToFormat(QImage::Format_ARGB32);
+    QImage im2 = patPattern.pattern().convertToFormat(QImage::Format_ARGB32);
+
+    QCryptographicHash h1(QCryptographicHash::Md5);
+    h1.addData(QByteArray::fromRawData((const char*)im1.constBits(), im1.byteCount()));
+
+    QCryptographicHash h2(QCryptographicHash::Md5);
+    h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.byteCount()));
+
+    QCOMPARE(h1.result(), h2.result());
+    QCOMPARE(im1, im2);
+    QCOMPARE(pngPattern.md5(), patPattern.md5());
 }
 
 
-QTEST_KDEMAIN(KisPatternTest, GUI)
+QTEST_KDEMAIN(KoPatternTest, GUI)
 #include "kis_pattern_test.moc"

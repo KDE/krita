@@ -21,7 +21,7 @@
 #define KOPABACKGROUNDTOOLFACTORY_H
 
 #include <KoToolFactoryBase.h>
-#include "KoPABackgroundTool.h"
+#include "tools/backgroundTool/KoPABackgroundTool.h"
 
 class KoPABackgroundToolFactory : public KoToolFactoryBase
 {
@@ -31,8 +31,6 @@ public:
     virtual ~KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase
     virtual KoToolBase * createTool( KoCanvasBase *canvas );
-    ///reimplemented from KoToolFactoryBase
-    virtual bool canCreateTool( KoCanvasBase *canvas ) const;
 };
 
 #endif //KOPABACKGROUNDTOOLFACTORY_H

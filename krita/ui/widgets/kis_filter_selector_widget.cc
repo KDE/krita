@@ -30,7 +30,6 @@
 #include <filter/kis_filter.h>
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
-#include <kis_image.h>
 
 // From krita/ui
 #include "kis_bookmarked_configurations_editor.h"
@@ -38,17 +37,31 @@
 #include "kis_filters_model.h"
 #include "kis_config.h"
 
+class ThumbnailBounds : public KisDefaultBounds {
+public:
+    ThumbnailBounds() : KisDefaultBounds() {}
+    virtual ~ThumbnailBounds() {}
+
+    QRect bounds() const
+    {
+        return QRect(0, 0, 100, 100);
+    }
+private:
+    Q_DISABLE_COPY(ThumbnailBounds)
+};
+
+
 struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
     KisConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
-    KisImageWSP image;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
+    KisView2 *view;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -60,9 +73,12 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->currentBookmarkedFilterConfigurationsModel = 0;
     d->currentFilter = 0;
     d->filtersModel = 0;
+    d->view = 0;
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
+    d->widgetLayout->setContentsMargins(0,0,0,0);
+    d->widgetLayout->setHorizontalSpacing(0);
 
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -73,8 +89,9 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -86,20 +103,21 @@ KisFilterSelectorWidget::~KisFilterSelectorWidget()
     delete d;
 }
 
-void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
+void KisFilterSelectorWidget::setView(KisView2 *view)
+{
+    d->view = view;
+}
+
+void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _paintDevice)
 {
     if (!_paintDevice) return;
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
-    d->filtersModel = new KisFiltersModel(d->thumb);
+    d->thumb->setDefaultBounds(new ThumbnailBounds());
+    d->filtersModel = new KisFiltersModel(showAll, d->thumb);
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
-}
-
-void KisFilterSelectorWidget::setImage(KisImageWSP _image)
-{
-    d->image = _image;
 }
 
 void KisFilterSelectorWidget::showFilterGallery(bool visible)
@@ -119,6 +137,11 @@ bool KisFilterSelectorWidget::isFilterGalleryVisible() const
     return d->uiFilterSelector.splitter->sizes()[0] > 0;
 }
 
+KisFilterSP KisFilterSelectorWidget::currentFilter() const
+{
+    return d->currentFilter;
+}
+
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 {
     Q_ASSERT(f);
@@ -135,7 +158,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     }
 
     KisConfigWidget* widget =
-        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
+        d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
         d->currentFilterConfigurationWidget = 0;
@@ -144,9 +167,10 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     } else {
         d->currentFilterConfigurationWidget = widget;
         d->currentCentralWidget = widget;
+        d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration(d->paintDevice));
+        d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }

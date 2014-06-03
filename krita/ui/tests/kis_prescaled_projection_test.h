@@ -19,7 +19,7 @@
 #ifndef KISPRESCALED_PROJECTION_TEST_H
 #define KISPRESCALED_PROJECTION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 
 class KisPrescaledProjection;
@@ -52,7 +52,11 @@ private slots:
 
     void benchmarkUpdate();
 
-    void testScaling();
+    void testScrollingZoom100();
+    void testScrollingZoom50();
+    void testUpdates();
+
+    void testQtScaling();
 };
 
 #endif

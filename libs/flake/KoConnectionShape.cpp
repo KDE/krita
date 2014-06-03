@@ -36,13 +36,7 @@
 #include <KoUnit.h>
 #include <QPainter>
 
-#include <KDebug>
-
-// IDs of the connecting handles
-enum HandleId {
-    StartHandle,
-    EndHandle
-};
+#include <kdebug.h>
 
 KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q),
@@ -61,8 +55,8 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
     Q_Q(const KoConnectionShape);
     QPointF direction;
     if (handleConnected(handleId)) {
-        KoShape *attachedShape = handleId == StartHandle ? shape1 : shape2;
-        int connectionPointId = handleId == StartHandle ? connectionPointId1 : connectionPointId2;
+        KoShape *attachedShape = handleId == KoConnectionShape::StartHandle ? shape1 : shape2;
+        int connectionPointId = handleId == KoConnectionShape::StartHandle ? connectionPointId1 : connectionPointId2;
         KoConnectionPoint::EscapeDirection ed = attachedShape->connectionPoint(connectionPointId).escapeDirection;
         if (ed == KoConnectionPoint::AllDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
@@ -201,21 +195,21 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
 {
     // Clear the path to build it again.
     path.clear();
-    path.append(handles[StartHandle]);
+    path.append(handles[KoConnectionShape::StartHandle]);
 
     QList<QPointF> edges1;
     QList<QPointF> edges2;
 
-    QPointF direction1 = escapeDirection(StartHandle);
-    QPointF direction2 = escapeDirection(EndHandle);
+    QPointF direction1 = escapeDirection(KoConnectionShape::StartHandle);
+    QPointF direction2 = escapeDirection(KoConnectionShape::EndHandle);
 
-    QPointF edgePoint1 = handles[StartHandle] + MinimumEscapeLength * direction1;
-    QPointF edgePoint2 = handles[EndHandle] + MinimumEscapeLength * direction2;
+    QPointF edgePoint1 = handles[KoConnectionShape::StartHandle] + MinimumEscapeLength * direction1;
+    QPointF edgePoint2 = handles[KoConnectionShape::EndHandle] + MinimumEscapeLength * direction2;
 
     edges1.append(edgePoint1);
     edges2.prepend(edgePoint2);
 
-    if (handleConnected(StartHandle) && handleConnected(EndHandle)) {
+    if (handleConnected(KoConnectionShape::StartHandle) && handleConnected(KoConnectionShape::EndHandle)) {
         QPointF intersection;
         bool connected = false;
         do {
@@ -248,7 +242,7 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
     path.append(edges1);
     path.append(edges2);
 
-    path.append(handles[EndHandle]);
+    path.append(handles[KoConnectionShape::EndHandle]);
 }
 
 qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2) const
@@ -263,9 +257,9 @@ qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2) 
 
 bool KoConnectionShapePrivate::handleConnected(int handleId) const
 {
-    if (handleId == StartHandle && shape1 && connectionPointId1 >= 0)
+    if (handleId == KoConnectionShape::StartHandle && shape1 && connectionPointId1 >= 0)
         return true;
-    if (handleId == EndHandle && shape2 && connectionPointId2 >= 0)
+    if (handleId == KoConnectionShape::EndHandle && shape2 && connectionPointId2 >= 0)
         return true;
 
     return false;
@@ -351,18 +345,18 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     }
 
     if (d->shape1) {
-        context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
+        context.xmlWriter().addAttribute("draw:start-shape", context.xmlid(d->shape1, "shape", KoElementReference::Counter).toString());
         context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointId1);
     } else {
-        QPointF p((d->handles[StartHandle] + position()) * context.shapeOffset(this));
+        QPointF p(shapeToDocument(d->handles[StartHandle]) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x1", p.x());
         context.xmlWriter().addAttributePt("svg:y1", p.y());
     }
     if (d->shape2) {
-        context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
+        context.xmlWriter().addAttribute("draw:end-shape", context.xmlid(d->shape2, "shape", KoElementReference::Counter).toString());
         context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointId2);
     } else {
-        QPointF p((d->handles[EndHandle] + position()) * context.shapeOffset(this));
+        QPointF p(shapeToDocument(d->handles[EndHandle]) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x2", p.x());
         context.xmlWriter().addAttributePt("svg:y2", p.y());
     }
@@ -733,11 +727,9 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     case BackgroundChanged:
     {
         // connection shape should not have a background
-        KoShapeBackground *fill = background();
+        QSharedPointer<KoShapeBackground> fill = background();
         if (fill) {
-            if (fill->deref())
-                delete fill;
-            setBackground(0);
+            setBackground(QSharedPointer<KoShapeBackground>(0));
         }
         return;
     }

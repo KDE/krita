@@ -19,26 +19,25 @@
 #ifndef _KIS_ACTION_RECORDER_H_
 #define _KIS_ACTION_RECORDER_H_
 
-#include <recorder/kis_macro.h>
+#include <QObject>
+#include "krita_export.h"
 
 class KisRecordedAction;
 
 /**
- * This class record actions and allow other \ref KisMacro to connect to it
+ * This class allows other \ref KisMacro to connect to it
  * to get the action that are currently created.
  */
-class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro
+class KRITAIMAGE_EXPORT KisActionRecorder : public QObject
 {
-
     Q_OBJECT
-
 public:
     KisActionRecorder(QObject* parent = 0);
     ~KisActionRecorder();
 
 public slots:
 
-    virtual void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
+    void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
 
 signals:
     /**

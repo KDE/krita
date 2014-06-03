@@ -20,7 +20,7 @@
 #ifndef TESTPOINTMERGECOMMAND_H
 #define TESTPOINTMERGECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestPointMergeCommand : public QObject
 {

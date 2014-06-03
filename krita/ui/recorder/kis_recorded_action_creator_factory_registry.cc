@@ -20,7 +20,7 @@
 
 #include <KoGenericRegistry.h>
 
-#include <qalgorithms.h>
+#include <QtAlgorithms>
 #include <QList>
 #include <QWidget>
 
@@ -64,7 +64,7 @@ KisRecordedActionCreatorFactory* KisRecordedActionCreatorFactoryRegistry::get(co
 QList<KoID> KisRecordedActionCreatorFactoryRegistry::creators() const
 {
     QList<KoID> cs;
-    foreach(QString id, d->factories.keys())
+    foreach(const QString &id, d->factories.keys())
     {
 	cs.push_back(KoID(id, d->factories.get(id)->name()));
     }

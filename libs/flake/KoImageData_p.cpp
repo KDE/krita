@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,11 +23,11 @@
 #include "KoImageData_p.h"
 #include "KoImageCollection.h"
 
-#include <KTemporaryFile>
+#include <ktemporaryfile.h>
 #include <QImageWriter>
 #include <QCryptographicHash>
 #include <QFileInfo>
-#include <KDebug>
+#include <kdebug.h>
 #include <QBuffer>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
@@ -53,34 +53,39 @@ KoImageDataPrivate::~KoImageDataPrivate()
 // called from the collection
 bool KoImageDataPrivate::saveData(QIODevice &device)
 {
+    // if we have a temp file save that to the store. This is needed as to not loose data when
+    // saving lossy formats. Also wrinting out gif is not supported by qt so saving temp file
+    // also fixes the problem that gif images are empty after saving-
+    if (temporaryFile) {
+        if (!temporaryFile->open()) {
+            kWarning(30006) << "Read file from temporary store failed";
+            return false;
+        }
+        char buf[4096];
+        while (true) {
+            temporaryFile->waitForReadyRead(-1);
+            qint64 bytes = temporaryFile->read(buf, sizeof(buf));
+            if (bytes <= 0)
+                break; // done!
+            do {
+                qint64 nWritten = device.write(buf, bytes);
+                if (nWritten == -1) {
+                    temporaryFile->close();
+                    return false;
+                }
+                bytes -= nWritten;
+            } while (bytes > 0);
+        }
+        temporaryFile->close();
+        return true;
+    }
+
     switch (dataStoreState) {
     case KoImageDataPrivate::StateEmpty:
         return false;
     case KoImageDataPrivate::StateNotLoaded:
-        // spool directly.
-        Q_ASSERT(temporaryFile); // otherwise the collection should not have called this
-        if (temporaryFile) {
-            if (!temporaryFile->open()) {
-                kWarning(30006) << "Read file from temporary store failed";
-                return false;
-            }
-            char buf[4096];
-            while (true) {
-                temporaryFile->waitForReadyRead(-1);
-                qint64 bytes = temporaryFile->read(buf, sizeof(buf));
-                if (bytes <= 0)
-                    break; // done!
-                do {
-                    qint64 nWritten = device.write(buf, bytes);
-                    if (nWritten == -1) {
-                        temporaryFile->close();
-                        return false;
-                    }
-                    bytes -= nWritten;
-                } while (bytes > 0);
-            }
-            temporaryFile->close();
-        }
+        // we should not reach this state as above this will already be saved.
+        Q_ASSERT(temporaryFile);
         return true;
     case KoImageDataPrivate::StateImageLoaded:
     case KoImageDataPrivate::StateImageOnly: {
@@ -126,9 +131,10 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
         } while (bytes > 0);
     }
     key = KoImageDataPrivate::generateKey(md5.result());
+
     temporaryFile->close();
 
-    QFileInfo fi(*temporaryFile);
+    //QFileInfo fi(*temporaryFile);
     dataStoreState = StateNotLoaded;
 }
 
@@ -148,6 +154,7 @@ void KoImageDataPrivate::clear()
     imageSize = QSizeF();
     key = 0;
     image = QImage();
+    pixmap = QPixmap();
 }
 
 qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)

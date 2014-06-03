@@ -21,8 +21,11 @@
 
 #include <klocale.h>
 
+const QString ISOTROPIC_SPACING = "Spacing/Isotropic";
+
 KisPressureSpacingOption::KisPressureSpacingOption()
-        : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::commonCategory(), false),
+      m_isotropicSpacing(false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
@@ -31,8 +34,30 @@ KisPressureSpacingOption::KisPressureSpacingOption()
 
 double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
 {
-    if(!isChecked())
+    if (!isChecked())
         return 1.0;
-    
+
     return computeValue(info);
+}
+
+void KisPressureSpacingOption::setIsotropicSpacing(bool isotropic)
+{
+    m_isotropicSpacing = isotropic;
+}
+
+bool KisPressureSpacingOption::isotropicSpacing() const
+{
+    return m_isotropicSpacing;
+}
+
+void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    KisCurveOption::writeOptionSetting(setting);
+    setting->setProperty(ISOTROPIC_SPACING, m_isotropicSpacing);
+}
+
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    KisCurveOption::readOptionSetting(setting);
+    m_isotropicSpacing = setting->getBool(ISOTROPIC_SPACING, false);
 }

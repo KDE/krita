@@ -22,11 +22,11 @@
 
 #include "koproperty_export.h"
 
-#include <QtGui/QItemEditorFactory>
-#include <QtGui/QTreeView>
-#include <QtGui/QLabel>
+#include <QItemEditorFactory>
+#include <QTreeView>
+#include <QLabel>
 
-#include <KLineEdit>
+#include <klineedit.h>
 
 namespace KoProperty
 {
@@ -69,7 +69,7 @@ class KOPROPERTY_EXPORT EditorView : public QTreeView
     Q_OBJECT
 public:
     /*! Creates an empty property editor with @a parent as parent widget. */
-    EditorView(QWidget *parent = 0);
+    explicit EditorView(QWidget *parent = 0);
 
     ~EditorView();
 
@@ -132,6 +132,9 @@ protected:
 protected slots:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
     virtual void commitData( QWidget * editor );
+
+    /*! Called when current propertis of this set are about to be cleared. */
+    void slotSetWillBeCleared();
 
     /*! Called when current property set is about to be destroyed. */
     void slotSetWillBeDeleted();

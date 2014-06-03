@@ -72,24 +72,21 @@ inline double norm2(const QPointF& p)
     return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
-void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
 {
-    Q_UNUSED(updateRect);
     if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    // Draw the gradient
+    // Draw the line
     QPointF p1 = *handles()[0];
     QPointF p2 = *handles()[1];
 
-    gc.save();
     gc.setTransform(initialTransform);
     QPainterPath path;
     path.moveTo(p1);
     path.lineTo(p2);
     drawPath(gc, path);
-    gc.restore();
 }
 
 QPointF RulerAssistant::buttonPosition() const
@@ -115,7 +112,7 @@ QString RulerAssistantFactory::name() const
     return i18n("Ruler");
 }
 
-KisPaintingAssistant* RulerAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* RulerAssistantFactory::createPaintingAssistant() const
 {
     return new RulerAssistant;
 }

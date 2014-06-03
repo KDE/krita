@@ -19,7 +19,7 @@
 #ifndef KIS_STROKE_BENCHMARK_H
 #define KIS_STROKE_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <kis_types.h>
 #include <KoColor.h>
 #include <kis_painter.h>
@@ -35,7 +35,6 @@ class KisStrokeBenchmark : public QObject
     Q_OBJECT
 private:
     const KoColorSpace * m_colorSpace;
-    KisPaintDeviceSP m_device;
     KoColor m_color;
     KisImageSP m_image;
     KisLayerSP m_layer;

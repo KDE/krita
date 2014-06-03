@@ -20,6 +20,7 @@
 
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
+#include <KoIcon.h>
 
 class KisCanvas2;
 
@@ -34,14 +35,17 @@ public:
     KisToolGrid(KoCanvasBase * canvas);
     virtual ~KisToolGrid();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
 
 protected:
 
@@ -66,7 +70,7 @@ public:
             : KoToolFactoryBase("KisToolGrid") {
         setToolTip(i18n("Edit the grid"));
         setToolType(TOOL_TYPE_VIEW);
-        setIcon("krita_tool_grid");
+        setIconName(koIconNameCStr("krita_tool_grid"));
         setPriority(17);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
     };

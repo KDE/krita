@@ -5,7 +5,7 @@ and it should contain an overview of the library goal and scope. If you
 add a class you should likely read this before deciding where it goes.
 
 Various details can also be found here;
-  http://wiki.calligra-suite.org/index.php?title=Libs
+  http://community.kde.org/Calligra/Libs
 
 
 At this point in time (early 2010) all of the libraries in here are not
@@ -49,7 +49,7 @@ obviously does not work if there is more then one class in the file.
 When there is a private class that is not used outside the file it's ok to have it
 in the same file as another class.
 Private classes that should never be exported or used outside the library and should be
-placed in a header file with the extention _p.h  (like KoRuler_p.h)
+placed in a header file with the extension _p.h  (like KoRuler_p.h)
 This makes it very obvious this file is not part of the public API of Calligra.
 
 

@@ -29,7 +29,6 @@
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
-#include <kis_iterators_pixel.h>
 
 #include "ui_wdg_motion_blur.h"
 
@@ -46,14 +45,12 @@
 KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Motion Blur..."))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(true);
     setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP image) const
+KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
-    Q_UNUSED(image)
     return new KisWdgMotionBlur(parent);
 }
 
@@ -66,11 +63,11 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
     return config;
 }
 
-void KisMotionBlurFilter::process(KisPaintDeviceSP device,
-                            const QRect& rect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                           ) const
+void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& rect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 
@@ -142,8 +139,8 @@ QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigu
     uint blurLength = (_config->getProperty("blurLength", value)) ? value.toUInt() : 5;
 
     qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-    uint halfWidth = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
-    uint halfHeight = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
+    const int halfWidth = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
+    const int halfHeight = ceil(fabs(blurLength / 2.0 * cos(angleRadians)));
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
@@ -155,8 +152,8 @@ QRect KisMotionBlurFilter::changedRect(const QRect & rect, const KisFilterConfig
     uint blurLength = (_config->getProperty("blurLength", value)) ? value.toUInt() : 5;
 
     qreal angleRadians = blurAngle / 360.0 * 2 * M_PI;
-    uint halfWidth = ceil(fabs(blurLength * cos(angleRadians)));
-    uint halfHeight = ceil(fabs(blurLength * cos(angleRadians)));
+    const int halfWidth = ceil(fabs(blurLength * cos(angleRadians)));
+    const int halfHeight = ceil(fabs(blurLength * cos(angleRadians)));
 
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }

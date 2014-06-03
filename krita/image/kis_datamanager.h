@@ -18,16 +18,14 @@
 #ifndef KIS_DATAMANAGER_H_
 #define KIS_DATAMANAGER_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 class QRect;
-class KoStore;
+class KisPaintDeviceWriter;
+class QIODevice;
 
-
-// Change the following line to switch (at compiletime) to different datamanager
+// Change cmake to switch (at compiletime) to different datamanager
 #include <config-tiles.h> // For the next define
-#include KIS_TILED_DATA_MANAGER_HEADER
-#include KIS_MEMENTO_HEADER
 
 #define ACTUAL_DATAMGR KisTiledDataManager
 
@@ -56,11 +54,10 @@ public:
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
      * defPixel array.
      */
-KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel), m_abstractCache(0) {}
-KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm), m_abstractCache(0) { }
+KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
+    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
     ~KisDataManager() {
-        delete m_abstractCache;
     }
 
 public:
@@ -121,15 +118,15 @@ public:
 public:
 
     /**
-     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
+     * Reads and writes the tiles
      *
      */
-    inline bool write(KoStore *store) {
-        return ACTUAL_DATAMGR::write(store);
+    inline bool write(KisPaintDeviceWriter &writer) {
+        return ACTUAL_DATAMGR::write(writer);
     }
 
-    inline bool read(KoStore *store) {
-        return ACTUAL_DATAMGR::read(store);
+    inline bool read(QIODevice *io) {
+        return ACTUAL_DATAMGR::read(io);
     }
 
     inline void purge(const QRect& area) {
@@ -214,6 +211,13 @@ public:
     }
 
     /**
+     * The same as \ref bitBlt() but reads old data
+     */
+    inline void bitBltOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -222,6 +226,13 @@ public:
      */
     inline void bitBltRough(KisTiledDataManagerSP srcDM, const QRect &rect) {
         ACTUAL_DATAMGR::bitBltRough(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
+    }
+
+    /**
+     * The same as \ref bitBltRough() but reads old data
+     */
+    inline void bitBltRoughOldData(KisTiledDataManagerSP srcDM, const QRect &rect) {
+        ACTUAL_DATAMGR::bitBltRoughOldData(const_cast<KisTiledDataManager*>(srcDM.data()), rect);
     }
 
 public:
@@ -240,8 +251,9 @@ public:
      */
     inline void readBytes(quint8 * data,
                           qint32 x, qint32 y,
-                          qint32 w, qint32 h) const {
-        ACTUAL_DATAMGR::readBytes(data, x, y, w, h);
+                          qint32 w, qint32 h,
+                          qint32 dataRowStride = -1) const {
+        ACTUAL_DATAMGR::readBytes(data, x, y, w, h, dataRowStride);
     }
 
     /**
@@ -250,8 +262,9 @@ public:
      */
     inline void writeBytes(const quint8 * data,
                            qint32 x, qint32 y,
-                           qint32 w, qint32 h) {
-        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h);
+                           qint32 w, qint32 h,
+                           qint32 dataRowStride = -1) {
+        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h, dataRowStride);
     }
 
 
@@ -263,7 +276,7 @@ public:
      *
      * @param channelsize a vector with for every channel its size in bytes
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) {
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const {
         return ACTUAL_DATAMGR::readPlanarBytes(channelsizes, x, y, w, h);
     }
 
@@ -315,27 +328,10 @@ public:
         return ACTUAL_DATAMGR::rowStride(x, y);
     }
 
-public:
-    class AbstractCache {
-    public:
-        virtual ~AbstractCache() {}
-    };
-
-    inline void setCache(AbstractCache* cache) {
-        delete m_abstractCache;
-        m_abstractCache = cache;
-    }
-
-    inline AbstractCache* cache() const {
-        return m_abstractCache;
-    }
-
 protected:
     friend class KisRectIterator;
     friend class KisHLineIterator;
     friend class KisVLineIterator;
-private:
-    mutable AbstractCache* m_abstractCache;
 };
 
 

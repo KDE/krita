@@ -19,7 +19,7 @@
 #ifndef KIS_ASYNC_MERGER_TEST_H
 #define KIS_ASYNC_MERGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisAsyncMergerTest : public QObject
 {
@@ -29,6 +29,7 @@ private slots:
     void testMerger();
     void debugObligeChild();
     void testFullRefreshWithClones();
+    void testSubgraphingWithoutUpdatingParent();
 private:
 };
 

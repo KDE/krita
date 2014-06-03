@@ -22,13 +22,15 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "kis_canvas2.h"
 #include "KoCanvasResourceManager.h"
+#include "kis_display_color_converter.h"
+
 
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)
@@ -85,11 +87,13 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
             col = i/numPatchesInACol;
         }
 
+        QColor qcolor = converter()->toQColor(m_colors.at(i-m_buttonList.size()));
+
         painter.fillRect(col*m_patchWidth,
                          row*m_patchHeight,
                          m_patchWidth,
                          m_patchHeight,
-                         m_colors.at(i-m_buttonList.size()).toQColor());
+                         qcolor);
     }
 
     QWidget::paintEvent(e);
@@ -143,9 +147,10 @@ void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
     KisColorSelectorBase::mouseReleaseEvent(event);
     event->setAccepted(false);
     KisColorSelectorBase::mouseReleaseEvent(event);
-    if(event->isAccepted() || !rect().contains(event->pos()))
+    if (event->isAccepted() || !rect().contains(event->pos()))
         return;
 
+    if (!m_canvas) return;
 
     KoColor color;
     if(colorAt(event->pos(), &color)) {
@@ -167,7 +172,7 @@ void KisColorPatches::mousePressEvent(QMouseEvent *event)
     if(event->isAccepted())
         return;
 
-    updateColorPreview(koColor.toQColor());
+    updateColorPreview(koColor);
 
     if (event->button() == Qt::LeftButton)
         m_dragStartPos = event->pos();
@@ -193,7 +198,7 @@ void KisColorPatches::mouseMoveEvent(QMouseEvent *event)
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData;
 
-    QColor color = koColor.toQColor();
+    QColor color = converter()->toQColor(koColor);
     mimeData->setColorData(color);
     mimeData->setText(color.name());
     drag->setMimeData(mimeData);

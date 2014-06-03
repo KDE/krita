@@ -22,16 +22,16 @@
 #include <KoShapeContainerModel.h>
 #include <KoShapeContainer.h>
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
-class KoTextAnchor;
+class KoShapeAnchor;
 
 /**
  *  A model to position children of the text shape.
  * All anchored frames are children of the text shape, and they get positioned
  * by the text layouter.
  */
-class TEXTLAYOUT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel
+class KOTEXTLAYOUT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel
 {
 public:
     /// constructor
@@ -64,9 +64,9 @@ public:
     virtual bool inheritsTransform(const KoShape *shape) const;
 
     /// each child that is added due to being anchored in the text has an anchor; register it for rules based placement.
-    void addAnchor(KoTextAnchor *anchor);
+    void addAnchor(KoShapeAnchor *anchor);
     /// When a shape is removed or stops being anchored, remove it.
-    void removeAnchor(KoTextAnchor *anchor);
+    void removeAnchor(KoShapeAnchor *anchor);
 
 private:
     // reset child position and relayout shape to which this shape is linked

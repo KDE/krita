@@ -664,7 +664,7 @@ void KoCsvImportDialog::genericDelimiterChanged( const QString & )
 void KoCsvImportDialog::formatChanged( const QString& newValue )
 {
     QList<QTableWidgetSelectionRange> selectionRanges = d->dialog->m_sheet->selectedRanges();
-    foreach (const QTableWidgetSelectionRange selectionRange, selectionRanges) {
+    foreach (const QTableWidgetSelectionRange &selectionRange, selectionRanges) {
         for (int j = selectionRange.leftColumn(); j <= selectionRange.rightColumn(); ++j) {
              d->dialog->m_sheet->horizontalHeaderItem(j)->setText(newValue);
         }

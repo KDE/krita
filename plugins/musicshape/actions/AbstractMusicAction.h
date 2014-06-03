@@ -19,7 +19,7 @@
 #ifndef ABSTRACTMUSICACTION_H
 #define ABSTRACTMUSICACTION_H
 
-#include <KAction>
+#include <kaction.h>
 
 class SimpleEntryTool;
 class MusicCursor;

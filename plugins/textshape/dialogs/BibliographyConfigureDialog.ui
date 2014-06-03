@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>310</height>
+    <width>455</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>[</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -58,7 +58,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>]</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -79,206 +79,69 @@
      <property name="title">
       <string>Sort</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
        <widget class="QCheckBox" name="sortByPosition">
         <property name="text">
          <string>Sort by position</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item>
+       <widget class="QGroupBox" name="sortKeyGroupBox">
+        <property name="title">
+         <string>Sort keys</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout"/>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="sortByLabel">
+         <widget class="QPushButton" name="addSortKeyButton">
           <property name="text">
-           <string>Sort by</string>
+           <string>Add sort key</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="sortKey">
-          <item>
-           <property name="text">
-            <string>address</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>annote</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>author</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>bibliography-type</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>booktitle</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>chapter</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>custom1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>custom2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>custom3</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>custom4</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>custom5</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>edition</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>editor</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>howpublished</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>identifier</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>institution</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>isbn</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>issn</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>journal</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>month</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>note</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>number</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>organizations</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>pages</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>publisher</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>report-type</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>school</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>series</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>title</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>url</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>volume</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>year</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="sortAlgorithmLabel">
-          <property name="text">
-           <string>Sort algorithm:</string>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>87</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
-         <widget class="QComboBox" name="sortAlgorithm">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <property name="text">
-            <string>Alphanumeric</string>
-           </property>
+           <widget class="QLabel" name="sortAlgorithmLabel">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Sort algorithm:</string>
+            </property>
+           </widget>
           </item>
-         </widget>
+          <item>
+           <widget class="QComboBox" name="sortAlgorithm">
+            <item>
+             <property name="text">
+              <string>Alphanumeric</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -302,7 +165,6 @@
   <tabstop>suffix</tabstop>
   <tabstop>numberedEntries</tabstop>
   <tabstop>sortByPosition</tabstop>
-  <tabstop>sortKey</tabstop>
   <tabstop>sortAlgorithm</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
@@ -315,8 +177,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -331,12 +193,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sortByPosition</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>sortKeyGroupBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>221</y>
     </hint>
    </hints>
   </connection>

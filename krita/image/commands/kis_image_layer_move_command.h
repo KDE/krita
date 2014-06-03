@@ -28,10 +28,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-class KoCompositeOp;
-class KoColorSpace;
-class KoColorProfile;
-
 /// The command for layer moves inside the layer stack
 class KRITAIMAGE_EXPORT KisImageLayerMoveCommand : public KisImageCommand
 {
@@ -59,6 +55,8 @@ private:
     KisNodeSP m_newParent;
     KisNodeSP m_newAbove;
     quint32 m_index;
+
+    bool m_useIndex;
 };
 
 #endif

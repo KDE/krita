@@ -40,7 +40,7 @@ public:
 
 private:
     KisImageWSP m_image;
-    KisSelectionSP m_oldSelection;
+    bool m_canReselect;
 };
 
 

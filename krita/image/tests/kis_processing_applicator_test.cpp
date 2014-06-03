@@ -29,7 +29,9 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "kis_image.h"
 
+#include "testutil.h"
 
 /*
   +----------+
@@ -58,7 +60,7 @@ KisImageSP createImage(KisUndoStore *undoStore,
     image->addNode(paintLayer1, image->rootLayer());
     image->addNode(paintLayer2, image->rootLayer());
 
-    image->refreshGraph();
+    image->initialRefreshGraph();
 
     return image;
 }
@@ -84,7 +86,9 @@ bool checkLayers(KisImageWSP image,
         QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
                    "applicator" + QDir::separator() + names[i]);
 
-        if(ref != images[i]) {
+        QPoint temp;
+
+        if(!TestUtil::compareQImages(temp, ref, images[i], 1)) {
             qDebug() << "--- Wrong image:" << names[i];
             valid = false;
             images[i].save(QString(FILES_OUTPUT_DIR) + QDir::separator() + names[i]);

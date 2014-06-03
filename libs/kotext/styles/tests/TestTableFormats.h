@@ -2,7 +2,7 @@
 #define TESTTABLEFORMATS_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestTableFormats : public QObject
 {

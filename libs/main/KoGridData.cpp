@@ -25,11 +25,13 @@
 #include <KoOasisSettings.h>
 #include <KoXmlWriter.h>
 
-#include <KToggleAction>
-#include <KLocale>
+#include <KoIcon.h>
+
+#include <ktoggleaction.h>
+#include <klocale.h>
 #include <QPainter>
 #include <QRectF>
-#include <KDebug>
+#include <kdebug.h>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
@@ -39,6 +41,7 @@ public:
     Private()
         : snapToGrid(false),
         showGrid(false),
+        paintGridInBackground(false),
         gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
         gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
         gridColor(Qt::lightGray),
@@ -53,6 +56,7 @@ public:
 
     bool snapToGrid;
     bool showGrid;
+    bool paintGridInBackground;
     qreal gridX, gridY;
     QColor gridColor;
     KToggleAction *toggleGridAction;
@@ -116,6 +120,16 @@ void KoGridData::setShowGrid(bool showGrid)
     if (d->toggleGridAction)
         d->toggleGridAction->setChecked(showGrid);
     d->showGrid = showGrid;
+}
+
+bool KoGridData::paintGridInBackground() const
+{
+    return d->paintGridInBackground;
+}
+
+void KoGridData::setPaintGridInBackground(bool inBackground)
+{
+    d->paintGridInBackground = inBackground;
 }
 
 void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
@@ -206,8 +220,7 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
     if (! d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(i18n("Show Grid"), 0);
-        d->toggleGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
+        d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }

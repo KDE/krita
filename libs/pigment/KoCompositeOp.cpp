@@ -24,6 +24,7 @@
 
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceMaths.h"
 
 QString KoCompositeOp::categoryColor()
 {
@@ -40,6 +41,56 @@ QString KoCompositeOp::categoryHSL()        { return i18n("HSL");        }
 QString KoCompositeOp::categoryHSV()        { return i18n("HSV");        }
 QString KoCompositeOp::categoryMix()        { return i18n("Mix");        }
 QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
+
+KoCompositeOp::ParameterInfo::ParameterInfo()
+    : opacity(1.0f),
+      flow(1.0f),
+      lastOpacity(&opacity)
+{
+}
+
+KoCompositeOp::ParameterInfo::ParameterInfo(const ParameterInfo &rhs)
+{
+    copy(rhs);
+}
+
+KoCompositeOp::ParameterInfo& KoCompositeOp::ParameterInfo::operator=(const ParameterInfo &rhs)
+{
+    copy(rhs);
+    return *this;
+}
+
+void KoCompositeOp::ParameterInfo::copy(const ParameterInfo &rhs)
+{
+    dstRowStart = rhs.dstRowStart;
+    dstRowStride = rhs.dstRowStride;
+    srcRowStart = rhs.srcRowStart;
+    srcRowStride = rhs.srcRowStride;
+    maskRowStart = rhs.maskRowStart;
+    maskRowStride = rhs.maskRowStride;
+    rows = rhs.rows;
+    cols = rhs.cols;
+    opacity = rhs.opacity;
+    flow = rhs.flow;
+    _lastOpacityData = rhs._lastOpacityData;
+    channelFlags = rhs.channelFlags;
+
+    lastOpacity = rhs.lastOpacity == &rhs.opacity ?
+        &opacity : &_lastOpacityData;
+}
+
+void KoCompositeOp::ParameterInfo::updateOpacityAndAverage(float value) {
+    const float exponent = 0.1;
+
+    opacity = value;
+
+    if (*lastOpacity < opacity) {
+        lastOpacity = &opacity;
+    } else {
+        _lastOpacityData = exponent * opacity + (1.0 - exponent) * (*lastOpacity);
+        lastOpacity = &_lastOpacityData;
+    }
+}
 
 struct KoCompositeOp::Private {
     const KoColorSpace * colorSpace;
@@ -94,11 +145,13 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
 
 void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
+    using namespace Arithmetic;
+
     composite(params.dstRowStart           , params.dstRowStride ,
               params.srcRowStart           , params.srcRowStride ,
               params.maskRowStart          , params.maskRowStride,
               params.rows                  , params.cols         ,
-              quint8(params.opacity*255.0f), params.channelFlags );
+              scale<quint8>(params.opacity), params.channelFlags );
 }
 
 

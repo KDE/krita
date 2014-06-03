@@ -25,14 +25,14 @@
 const QString COLOROP_HUE = "ColorOption/hue";
 const QString COLOROP_SATURATION = "ColorOption/saturation";
 const QString COLOROP_VALUE = "ColorOption/value";
-    
+
 const QString COLOROP_USE_RANDOM_HSV = "ColorOption/useRandomHSV";
 const QString COLOROP_USE_RANDOM_OPACITY = "ColorOption/useRandomOpacity";
 const QString COLOROP_SAMPLE_COLOR = "ColorOption/sampleInputColor";
-    
+
 const QString COLOROP_FILL_BG = "ColorOption/fillBackground";
 const QString COLOROP_COLOR_PER_PARTICLE = "ColorOption/colorPerParticle";
-const QString COLOROP_MIX_BG_COLOR= "ColorOption/mixBgColor";
+const QString COLOROP_MIX_BG_COLOR = "ColorOption/mixBgColor";
 
 class KisColorOptionsWidget;
 
@@ -45,12 +45,12 @@ public:
     bool useRandomHSV() const;
     bool useRandomOpacity() const;
     bool sampleInputColor() const;
-    
+
     bool fillBackground() const;
     bool colorPerParticle() const;
     bool mixBgColor() const;
-    
-    // TODO: these should be intervals like 20..180 
+
+    // TODO: these should be intervals like 20..180
     int hue() const;
     int saturation() const;
     int value() const;
@@ -58,7 +58,7 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 private:
-   KisColorOptionsWidget * m_options;
+    KisColorOptionsWidget * m_options;
 };
 
 class PAINTOP_EXPORT KisColorProperties

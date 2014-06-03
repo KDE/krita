@@ -43,9 +43,8 @@ public:
 
 public slots:
 
-    void setZoom(int percentage);
     void documentMousePositionChanged(const QPointF &p);
-    void imageSizeChanged(qint32 w, qint32 h);
+    void imageSizeChanged();
     void setSelection(KisImageWSP image);
     void setProfile(KisImageWSP image);
     void setHelp(const QString &t);
@@ -65,7 +64,6 @@ private:
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
-    KSqueezedTextLabel *m_statusBarHelpLabel;
 
 };
 

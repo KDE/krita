@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILES_TEST_H_
-#define _KIS_FILES_TEST_H_
+#ifndef _KIS_EXR_TEST_H_
+#define _KIS_EXR_TEST_H_
 
 #include <QObject>
 
@@ -26,6 +26,7 @@ class KisExrTest : public QObject
     Q_OBJECT
 private slots:
     void testFiles();
+    void testRoundTrip();
 };
 
 #endif

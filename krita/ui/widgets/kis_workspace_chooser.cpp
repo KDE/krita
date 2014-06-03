@@ -31,12 +31,13 @@
 #include <KoMainWindow.h>
 #include <KoResource.h>
 
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
 #include "kis_view2.h"
 #include <QGridLayout>
 #include <klineedit.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -61,34 +62,38 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+        painter->setBrush(option.palette.highlightedText());
+    }
+    else {
+        painter->setBrush(option.palette.text());
     }
 
-    painter->setPen(Qt::black);
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());      
+
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());
 
 }
 
 KisWorkspaceChooser::KisWorkspaceChooser(KisView2 * view, QWidget* parent): QWidget(parent), m_view(view)
 {
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisWorkspaceResource>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setColumnCount(1);
+    m_itemChooser->showTaggingBar(false, false);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-    
+
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
-    
+
     m_nameEdit = new KLineEdit(this);
     m_nameEdit->setClickMessage(i18n("Insert name"));
     m_nameEdit->setClearButtonShown(true);
-    
+
     QGridLayout* layout = new QGridLayout(this);
-    layout->setMargin(0);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);
     layout->addWidget(m_nameEdit, 1, 0, 1, 1);
     layout->addWidget(saveButton, 1, 1, 1, 1);
@@ -101,24 +106,25 @@ KisWorkspaceChooser::~KisWorkspaceChooser()
 
 void KisWorkspaceChooser::slotSave()
 {
-    if(!m_view->shell()) {
+    if (!m_view->qtMainWindow()) {
         return;
     }
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource("");
-    workspace->setDockerState(m_view->shell()->saveState());
+    workspace->setDockerState(m_view->qtMainWindow()->saveState());
+    m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
     QString name = m_nameEdit->text();
-    
+
     bool newName = false;
     if(name.isEmpty()) {
         newName = true;
         name = i18n("Workspace");
     }
     QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
-    
+
     int i = 1;
     while (fileInfo.exists()) {
         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
@@ -126,7 +132,7 @@ void KisWorkspaceChooser::slotSave()
     }
     workspace->setFilename(fileInfo.filePath());
     if(newName) {
-        name = i18n("Workspace %1").arg(i);
+        name = i18n("Workspace %1", i);
     }
     workspace->setName(name);
     rserver->addResource(workspace);
@@ -134,8 +140,10 @@ void KisWorkspaceChooser::slotSave()
 
 void KisWorkspaceChooser::resourceSelected(KoResource* resource)
 {
-    if(!m_view->shell()) {
+    if (!m_view->qtMainWindow()) {
         return;
     }
-    m_view->shell()->restoreState(static_cast<KisWorkspaceResource*>(resource)->dockerState());
+    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    m_view->qtMainWindow()->restoreState(workspace->dockerState());
+    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 }

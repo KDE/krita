@@ -46,7 +46,6 @@ OraConverter::~OraConverter()
 {
 }
 
-
 KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
@@ -56,33 +55,35 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    // We're not set up to handle asynchronous loading at the moment.
-    QString tmpFile;
-
     KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
+        delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
+    store->disallowNameExpansion();
 
     OraLoadContext olc(store);
-    KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
+    KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
     m_image = orslv.image();
-    
+    m_activeNodes = orslv.activeNodes();
     delete store;
-    
+
     return KisImageBuilder_RESULT_OK;
 
 }
-
 
 KisImageWSP OraConverter::image()
 {
     return m_image;
 }
 
+vKisNodeSP OraConverter::activeNodes()
+{
+    return m_activeNodes;
+}
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image)
+KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
     if (uri.isEmpty())
@@ -95,9 +96,9 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-
+    store->disallowNameExpansion();
     OraSaveContext osc(store);
-    KisOpenRasterStackSaveVisitor orssv(&osc);
+    KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 
     image->rootLayer()->accept(orssv);
 
@@ -109,7 +110,17 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
 
         KoStoreDevice io(store);
         if (io.open(QIODevice::WriteOnly)) {
-            preview.save(&io, "PNG", 0);
+            preview.save(&io, "PNG");
+        }
+        io.close();
+        store->close();
+    }
+
+    if (store->open("mergedimage.png")) {
+        QImage mergedimage = image->projection()->convertToQImage(0);
+        KoStoreDevice io(store);
+        if (io.open(QIODevice::WriteOnly)) {
+            mergedimage.save(&io, "PNG");
         }
         io.close();
         store->close();

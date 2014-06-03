@@ -26,6 +26,7 @@
 #include <QPoint>
 #include <KoToolFactoryBase.h>
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <KoIcon.h>
 
 class QPainterPath;
 
@@ -37,19 +38,18 @@ public:
     KisToolSelectOutline(KoCanvasBase *canvas);
     virtual ~KisToolSelectOutline();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-    QWidget* createOptionWidget();
 
 public slots:
     virtual void deactivate();
 
 private:
     void updateFeedback();
+    void updateCanvas();
 
     QPainterPath * m_paintPath;
     vQPointF m_points;
@@ -65,7 +65,7 @@ public:
             : KoToolFactoryBase("KisToolSelectOutline") {
         setToolTip(i18n("Select an area by its outline"));
         setToolType(TOOL_TYPE_SELECTED);
-        setIcon("tool_outline_selection");
+        setIconName(koIconNameCStr("tool_outline_selection"));
         setPriority(55);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

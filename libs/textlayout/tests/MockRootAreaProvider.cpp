@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +23,7 @@
 
 MockRootAreaProvider::MockRootAreaProvider()
     : m_area(0),
-    m_suggestedSize(QSizeF(200,1000)),
+      m_suggestedRect(QRectF(100, 100, 200,1000)),
     m_askedForMoreThenOneArea(false)
 {
 }
@@ -44,20 +44,24 @@ void MockRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isN
     Q_UNUSED(isNewRootArea);
 }
 
+void MockRootAreaProvider::updateAll()
+{
+}
+
 void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
     Q_UNUSED(afterThis);
 }
 
-QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+QRectF MockRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
 {
     Q_UNUSED(rootArea);
-    return m_suggestedSize;
+    return m_suggestedRect;
 }
 
-void MockRootAreaProvider::setSuggestedSize(QSizeF size)
+void MockRootAreaProvider::setSuggestedRect(QRectF rect)
 {
-    m_suggestedSize = size;
+    m_suggestedRect = rect;
 }
 
 QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)

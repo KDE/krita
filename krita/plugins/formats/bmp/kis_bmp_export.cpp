@@ -26,7 +26,6 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 
-#include <KoColorSpace.h>
 #include <KoFilterChain.h>
 
 #include <kis_paint_device.h>
@@ -45,24 +44,15 @@ KisBMPExport::~KisBMPExport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
-        if (w->isVisible()) return true;
-    }
-    return false;
-}
-
 KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << "BMP export! From:" << from << ", To:" << to << "";
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::CreationError;
+    if (!input)
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -72,11 +62,14 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     KUrl url;
     url.setPath(filename);
 
-    QRect rc = output->image()->bounds();
-    output->image()->refreshGraph();
-    output->image()->lock();
-    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
-    output->image()->unlock();
+    qApp->processEvents(); // For vector layers to be updated
+    input->image()->waitForDone();
+
+    QRect rc = input->image()->bounds();
+    input->image()->refreshGraph();
+    input->image()->lock();
+    QImage image = input->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    input->image()->unlock();
     image.save(url.toLocalFile());
     return KoFilter::OK;
 }

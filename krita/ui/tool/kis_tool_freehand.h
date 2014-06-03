@@ -25,11 +25,9 @@
 #include "kis_resources_snapshot.h"
 #include "kis_paintop_settings.h"
 #include "kis_distance_information.h"
+#include "kis_smoothing_options.h"
 
 #include "krita_export.h"
-
-// OpenGL
-#include <opengl/kis_opengl.h>
 
 class KAction;
 
@@ -57,32 +55,40 @@ public:
     virtual int flags() const;
 
 protected:
-    void gesture(const QPointF &offsetInDocPixels,
-                 const QPointF &initialDocPoint);
+    bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
+    bool primaryActionSupportsHiResEvents() const;
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void activateAlternateAction(AlternateAction action);
+    void deactivateAlternateAction(AlternateAction action);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual bool wantsAutoScroll() const;
-    virtual void deactivate();
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void deactivate();
+    void resetCursorStyle();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        const KoPointerEvent *event,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
-    void updateOutlineDocPoint(const QPointF &point);
 
 protected slots:
 
-    void setSmooth(bool smooth);
     void setAssistant(bool assistant);
 
 private:
@@ -100,48 +106,20 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
-    void showOutlineTemporary();
-
-    void updateOutlineRect();
-    QPainterPath getOutlinePath(const QPointF &documentPos,
-                                KisPaintOpSettings::OutlineMode outlineMode);
-
-
-
-private slots:
-    void increaseBrushSize();
-    void decreaseBrushSize();
-    void hideOutline();
-
 protected:
-    bool m_smooth;
-    double m_smoothness;
+
+    KisSmoothingOptions m_smoothingOptions;
     bool m_assistant;
     double m_magnetism;
 
 private:
-#if defined(HAVE_OPENGL)
-    qreal m_xTilt;
-    qreal m_yTilt;
-
-    qreal m_prevxTilt;
-    qreal m_prevyTilt;
-
-    GLuint m_displayList;
-    QString m_brushModelName;
-#endif
-
-    QPointF m_outlineDocPoint;
-    QTimer m_outlineTimer;
-    QRectF m_oldOutlineRect;
-    bool m_explicitShowOutline;
-
-    KAction* m_increaseBrushSize;
-    KAction* m_decreaseBrushSize;
-
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;
+
+    QPointF m_initialGestureDocPoint;
+    QPointF m_lastDocumentPoint;
+    QPoint m_initialGestureGlobalPoint;
 };
 
 

@@ -18,36 +18,49 @@
  */
 
 #include "kis_selection_mask.h"
+
+#include "kis_image.h"
+#include "kis_layer.h"
 #include "kis_selection.h"
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include "kis_fill_painter.h"
-#include "kis_image.h"
 #include <KoCompositeOp.h>
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_pixel_selection.h"
 #include "kis_undo_adapter.h"
+#include <KoIcon.h>
 
-class KisSelectionMask::Private
+struct KisSelectionMask::Private
 {
 public:
     KisImageWSP image;
-    KisSelectionSP deselectedSelection;
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
         : KisMask("selection")
         , m_d(new Private())
 {
-    setActive(true);
+    setActive(false);
     m_d->image = image;
-    m_d->deselectedSelection = 0;
+}
+
+KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
+        : KisMask(rhs)
+        , m_d(new Private())
+{
+    setActive(false);
+    m_d->image = rhs.image();
 }
 
 KisSelectionMask::~KisSelectionMask()
 {
     delete m_d;
+}
+
+QIcon KisSelectionMask::icon() const {
+    return koIcon("edit-paste");
 }
 
 bool KisSelectionMask::allowAsChild(KisNodeSP node) const
@@ -57,13 +70,6 @@ bool KisSelectionMask::allowAsChild(KisNodeSP node) const
 }
 
 
-KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
-        : KisMask(rhs)
-        , m_d(new Private())
-{
-    m_d->image=rhs.image();
-}
-
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
     if (selection) {
@@ -72,7 +78,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
         KisMask::setSelection(new KisSelection());
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
-        KisFillPainter gc(KisPaintDeviceSP(this->selection()->getOrCreatePixelSelection().data()));
+        KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
     }
@@ -94,20 +100,10 @@ void KisSelectionMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
-KisSelectionSP KisSelectionMask::deleselectedSelection()
-{
-    return m_d->deselectedSelection;
-}
-
-void KisSelectionMask::setDeleselectedSelection(KisSelectionSP selection)
-{
-    m_d->deselectedSelection = selection;
-}
-
 KoDocumentSectionModel::PropertyList KisSelectionMask::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("local_selection_active"),KIcon("local_selection_inactive"),active());
+    l << KoDocumentSectionModel::Property(i18n("Active"), koIcon("local_selection_active"), koIcon("local_selection_inactive"), active());
     return l;
 }
 
@@ -118,13 +114,15 @@ void KisSelectionMask::setSectionModelProperties(const KoDocumentSectionModel::P
     setActive(properties.at(2).state.toBool());
 }
 
-void KisSelectionMask::setVisible(bool visible)
+void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
     nodeProperties().setProperty("visible", visible);
 
-    if (selection())
-        selection()->setVisible(visible);
-    emit(visibilityChanged(visible));
+    if (!isLoading) {
+        if (selection())
+            selection()->setVisible(visible);
+        emit(visibilityChanged(visible));
+    }
 }
 
 bool KisSelectionMask::active() const
@@ -134,7 +132,21 @@ bool KisSelectionMask::active() const
 
 void KisSelectionMask::setActive(bool active)
 {
-    //the change needs to be done by the manager to deactivate current active selectionMask
-    emit changeActivity(this,active);
+    KisImageWSP image = this->image();
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+
+    if (active && parentLayer) {
+        KisSelectionMaskSP activeMask = parentLayer->selectionMask();
+        if (activeMask) {
+            activeMask->setActive(false);
+        }
+    }
+
+    nodeProperties().setProperty("active", active);
+
+    if (image) {
+        image->nodeChanged(this);
+        image->undoAdapter()->emitSelectionChanged();
+    }
 }
 

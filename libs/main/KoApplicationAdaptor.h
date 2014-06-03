@@ -21,14 +21,17 @@
 #ifndef __KoApplicationAdaptor_h__
 #define __KoApplicationAdaptor_h__
 
-#include <QtCore/QObject>
-#include <QtDBus/QtDBus>
+#ifndef QT_NO_DBUS
+
+#include <QObject>
+#include <QtDBus>
 #include "komain_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;
+
 class QString;
 class QStringList;
-
+class KoApplication;
 
 /**
  * D-BUS interface for any Calligra application (entry point)
@@ -38,15 +41,15 @@ class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.application")
 public:
-    explicit KoApplicationAdaptor(QObject *parent);
+    explicit KoApplicationAdaptor(KoApplication *parent);
     virtual ~KoApplicationAdaptor();
 
 public slots: // METHODS
-    /**
-     * Creates a new document for the given native mimetype
-     * Use it to create a shell and to load an existing file, if any
-     */
-    Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
+//    /**
+//     * Creates a new document for the given native mimetype
+//     * Use it to create a main window and to load an existing file, if any
+//     */
+//    Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
 
     /**
      * @return a list of references to all the documents
@@ -77,7 +80,12 @@ signals:
      * emitted when an old document is closed.
      */
     void documentClosed(const QString &ref);
+private:
+
+    KoApplication *m_application;
 };
+
+#endif // QT_NO_DBUS
 
 #endif
 

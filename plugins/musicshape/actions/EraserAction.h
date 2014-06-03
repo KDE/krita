@@ -24,7 +24,7 @@
 class EraserAction : public AbstractNoteMusicAction
 {
 public:
-    EraserAction(SimpleEntryTool* tool);
+    explicit EraserAction(SimpleEntryTool *tool);
 
     virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
     virtual void mousePress(MusicCore::StaffElement* note, qreal distance, const QPointF& pos);

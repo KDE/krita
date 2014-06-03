@@ -19,7 +19,7 @@
 #ifndef KIS_ITERATOR_BENCHMARK_H
 #define KIS_ITERATOR_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoColorSpace;
 
@@ -30,10 +30,8 @@ class KisIteratorBenchmark : public QObject
 private:
     void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs));
 
-    void vLineIter(const KoColorSpace * cs);
     void vLineIterNG(const KoColorSpace * cs);
-    void rectIter(const KoColorSpace * cs);
-    void hLineIter(const KoColorSpace * cs);
+    void sequentialIter(const KoColorSpace * colorSpace);
     void hLineIterNG(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
 

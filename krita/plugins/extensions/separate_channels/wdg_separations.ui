@@ -16,6 +16,9 @@
      <property name="text">
       <string>Current color model:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="wordWrap">
       <bool>false</bool>
      </property>
@@ -154,7 +157,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>radioCurrentLayer</tabstop>
   <tabstop>radioLayers</tabstop>

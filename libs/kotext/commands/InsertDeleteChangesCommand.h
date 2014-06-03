@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ class QTextDocument;
 class InsertDeleteChangesCommand : public KUndo2Command
 {
 public:
-    InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent=0);
+    explicit InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent = 0);
     void redo();
 
 private:

@@ -25,11 +25,11 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtGui/QDockWidget>
-#include <QtGui/QToolBox>
+#include <QList>
+#include <QMap>
+#include <QHash>
+#include <QDockWidget>
+#include <QScrollArea>
 
 #include <KoToolManager.h>
 
@@ -38,6 +38,13 @@ class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;
+
+class ScrollArea : public QScrollArea
+{
+    Q_OBJECT
+protected:
+    void showEvent(QShowEvent *);
+};
 
 /**
  * KoModeBox is housed in a dock widget that presents tools as headings in a QToolBox
@@ -51,11 +58,11 @@ class KoShapeLayer;
  *
  * @see KoToolManager
  */
-class KoModeBox : public QToolBox {
+class KoModeBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
-    explicit KoModeBox(KoCanvasControllerWidget *canvas);
+    explicit KoModeBox(KoCanvasControllerWidget *canvas, const QString &applicationName);
     ~KoModeBox();
 
     /**
@@ -73,6 +80,13 @@ public:
      */
     void addButton(const KoToolButton &button);
 
+    /**
+     * Should been called when the docker position has changed.
+     * Organise widgets and icons and orientation of the tabs.
+     *
+     * @param area the new location area
+     */
+    void locationChanged(Qt::DockWidgetArea area);
 public slots:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active tool.
@@ -87,10 +101,9 @@ public slots:
      * The modebox allows buttons to be optionally registered with a visibilityCode. This code
      * can be passed here and all buttons that have that code are shown. All buttons that
      * have another visibility code registered are hidden.
-     * @param canvas the currently active canvas.
      * @param codes a list of all the codes to show.
      */
-    void updateShownTools(const KoCanvasController *canvas, const QList<QString> &codes);
+    void updateShownTools(const QList<QString> &codes);
 
     void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
 
@@ -107,7 +120,36 @@ private slots:
     /// slot for when a new item have been selected in the QToolBox
     void toolSelected(int index);
 
+    /// slot for context menu of the tabbar
+    void slotContextMenuRequested(const QPoint &pos);
+
+    /// switch icon mode
+    void switchIconMode(int);
+
+    /// switch tabs side
+    void switchTabsSide(int);
+
+public:
+    static QString applicationName;
+
 private:
+    enum IconMode {
+        IconAndText,
+        IconOnly
+    };
+
+    enum VerticalTabsSide {
+        TopSide,
+        BottomSide
+    };
+
+    enum HorizontalTabsSide {
+        LeftSide,
+        RightSide
+    };
+
+    QIcon createTextIcon(const KoToolButton button);
+    QIcon createSimpleIcon(const KoToolButton button);
     void addItem(const KoToolButton button);
 
 private:

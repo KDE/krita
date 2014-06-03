@@ -22,12 +22,12 @@
 
 #include "koproperty_global.h"
 #include "Property.h"
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
-#include <QtCore/QHash>
-#include <QtGui/QLabel>
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionViewItem>
+#include <QObject>
+#include <QVariant>
+#include <QHash>
+#include <QLabel>
+#include <QPainter>
+#include <QStyleOptionViewItem>
 
 class QStyleOptionViewItem;
 class QModelIndex;
@@ -62,23 +62,10 @@ public:
         childValueChanged(child, value, rememberOldValue);
     }
 
-    /*! This function is called by \ref Property::value() when
-    a custom property is set and \ref handleValue() is true.
-    You should return property's value, taken from parent's value.*/
-//    virtual QVariant value() const = 0;
-
-    /*! Tells whether CustomProperty should be used to get the property's value.
-    CustomProperty::setValue() will always be called. But if handleValue() == true,
-    then the value stored in the Property won't be changed.
-    You should return true for child properties, and false for others. */
-/*    virtual bool handleValue() const {
-        return false;
-    }*/
     void setChildValueChangedEnabled(bool set) { m_childValueChangedEnabled = set; }
+
 protected:
     virtual void childValueChanged(Property *child, const QVariant &value, bool rememberOldValue) = 0;
-
-    //    Property  *m_property;
 
     /*! This method emits the \a Set::propertyChanged() signal for all
     sets our parent-property is registered in. */
@@ -292,9 +279,8 @@ public:
 
     /*! \return a pointer to a factory manager instance.*/
     static FactoryManager* self();
-private:
-//    Factory* factoryForType(int type) const;
 
+private:
     FactoryManager();
     ~FactoryManager();
 

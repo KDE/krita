@@ -88,6 +88,8 @@ Qt::Alignment KoText::alignmentFromString(const QString &align)
 QString KoText::alignmentToString(Qt::Alignment alignment)
 {
     QString align;
+
+    alignment &= Qt::AlignHorizontal_Mask;
     if (alignment == (Qt::AlignLeft | Qt::AlignAbsolute))
         align = "left";
     else if (alignment == (Qt::AlignRight | Qt::AlignAbsolute))
@@ -118,6 +120,7 @@ Qt::Alignment KoText::valignmentFromString(const QString &align)
 QString KoText::valignmentToString(Qt::Alignment alignment)
 {
     QString align;
+    alignment &= Qt::AlignVertical_Mask;
     if (alignment == (Qt::AlignTop))
         align = "top";
     else if (alignment == Qt::AlignVCenter)
@@ -157,7 +160,7 @@ QString KoText::directionToString(KoText::Direction direction)
         return "tb-lr";
     if (direction == KoText::InheritDirection)
         return "page";
-    
+
     return "auto";
 }
 

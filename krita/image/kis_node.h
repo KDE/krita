@@ -19,7 +19,10 @@
 #define _KIS_NODE_H
 
 #include "kis_types.h"
+
+#include "kis_undo_adapter.h"
 #include "kis_base_node.h"
+
 #include "krita_export.h"
 
 #include <QVector>
@@ -135,12 +138,39 @@ public:
      * Some filters need pixels outside the current processing rect to
      * compute the new value (for instance, convolution filters)
      * See \ref changeRect
+     * See \ref accessRect
      */
     virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    virtual void setSystemLocked(bool l, bool update = true);
+
+    /**
+     * Shows the area of image, that may be accessed during accessing
+     * the node.
+     *
+     * Example. You have a layer that needs to prepare some rect on a
+     * projection, say expectedRect. To perform this, the projection
+     * of all the layers below of the size needRect(expectedRect)
+     * should be calculeated by the merger beforehand and the layer
+     * will access some other area of image inside the rect
+     * accessRect(expectedRect) during updateProjection call.
+     *
+     * This knowledge about real access rect of a node is used by the
+     * scheduler to avoid collisions between two multithreaded updaters
+     * and so avoid flickering of the image.
+     *
+     * Currently, this method has nondefault value for shifted clone
+     * layers only.
+     */
+    virtual QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
 public: // Graph methods
+
+    /**
+     * @return the graph sequence number calculated by the associated
+     * graph listener. You can use it for checking for changes in the
+     * graph.
+     */
+    int graphSequenceNumber() const;
 
     /**
      * @return the graph listener this node belongs to. 0 if the node
@@ -241,8 +271,9 @@ private:
     void createNodeProgressProxy();
 
 protected:
-
     KisBaseNodeSP parentCallback() const;
+    void notifyParentVisibilityChanged(bool value);
+    void baseNodeChangedCallback();
 
     /**
      * Re-implement this method if your node type has to do something
@@ -293,10 +324,12 @@ private:
      */
     bool remove(KisNodeSP node);
 
+    KisNodeSP prevChildImpl(KisNodeSP child);
+    KisNodeSP nextChildImpl(KisNodeSP child);
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

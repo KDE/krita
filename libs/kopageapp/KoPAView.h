@@ -22,16 +22,19 @@
 #ifndef KOPAVIEW_H
 #define KOPAVIEW_H
 
-#include <QObject>
-
-#include <KoView.h>
-#include <KoPAViewBase.h>
-#include <KoZoomHandler.h>
+#include "KoPAViewBase.h"
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+#include <KoView.h>
+#include <KoZoomHandler.h>
+#include <KoPart.h>
+
+#include <QObject>
+
 class KoCanvasController;
 class KoFind;
+class KoPart;
 class KoPACanvasBase;
 class KoPADocument;
 class KoPAPageBase;
@@ -67,12 +70,19 @@ public:
         AllActions       = 0xFF
     };
 
+    enum KoPAFlags
+    {
+        NormalMode =1,
+        ModeBox = 2
+    };
+
     /**
      * Constructor
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
+    explicit KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent);
+
     virtual ~KoPAView();
 
     //  KoPAViewBase/KoView overrides
@@ -119,6 +129,13 @@ public:
      * @param enable new state of the actions
      */
     void setActionEnabled( int actions, bool enable );
+
+    /**
+     * @brief Set the view mode
+     *
+     * @param mode the new view mode
+     */
+    void setViewMode( KoPAViewMode* mode );
 
     /**
      * Set the active page and updates the UI
@@ -181,23 +198,20 @@ public:
     void restoreCentralWidget();
 
 signals:
-    /// emited when select All action is triggered and the view is not visible
+    /// emitted when select All action is triggered and the view is not visible
     void selectAllRequested();
-    /// emited when deselect All action is triggered and the view is not visible
+    /// emitted when deselect All action is triggered and the view is not visible
     void deselectAllRequested();
 
 protected:
 
     /// creates the widgets (called from the constructor)
-    void initGUI();
+    void initGUI(KoPAFlags flags);
     /// creates the actions (called from the constructor)
     void initActions();
 
     /// Returns the document structure docker
     KoPADocumentStructureDocker* documentStructureDocker() const;
-
-    /// Called when receiving a PartActivateEvent
-    virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
@@ -211,6 +225,9 @@ public slots:
 
     /// Delete the current page
     void deletePage();
+
+    /// Make sure the canvas size matches the content
+    void updateCanvasSize(bool forceUpdate = false);
 
 protected slots:
 

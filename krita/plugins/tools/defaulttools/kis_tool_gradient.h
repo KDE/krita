@@ -33,10 +33,7 @@
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
 #include <flake/kis_node_shape.h>
-
-#include <opengl/kis_opengl.h>
-
-class KisOpenGLGradientProgram;
+#include <KoIcon.h>
 
 class KDoubleNumInput;
 
@@ -57,9 +54,9 @@ public:
     KisToolGradient(KoCanvasBase * canvas);
     virtual ~KisToolGradient();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -70,11 +67,6 @@ public slots:
     void slotSetRepeat(int);
     void slotSetReverse(bool);
     void slotSetAntiAliasThreshold(qreal);
-
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    void slotSetPreviewOpacity(qreal value);
-    void slotConfigChanged();
-#endif
 
 private slots:
 
@@ -106,12 +98,6 @@ private:
     QLabel *m_lbAntiAliasThreshold;
     KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
 
-#if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    KisOpenGLGradientProgram *m_gradientProgram;
-    int m_previewOpacityPercent;
-    QLabel *m_lbPreviewOpacity;
-    KisDoubleSliderSpinBox *m_slPreviewOpacity;
-#endif
 };
 
 class KisToolGradientFactory : public KoToolFactoryBase
@@ -122,11 +108,10 @@ public:
             : KoToolFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Draw a gradient."));
         setToolType(TOOL_TYPE_FILL);
-        setIcon("krita_tool_gradient");
+        setIconName(koIconNameCStr("krita_tool_gradient"));
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolGradientFactory() {}

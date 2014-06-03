@@ -44,7 +44,7 @@ class SoftSwapStrategy;
 class AggressiveSwapStrategy;
 
 
-class KisTileDataSwapper::Private
+struct KisTileDataSwapper::Private
 {
 public:
     QSemaphore semaphore;
@@ -234,4 +234,9 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
     strategy::endIteration(m_d->store, iter);
 
     return freedMetric;
+}
+
+void KisTileDataSwapper::testingRereadConfig()
+{
+    m_d->limits = KisStoreLimits();
 }

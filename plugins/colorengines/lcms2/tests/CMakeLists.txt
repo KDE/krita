@@ -1,4 +1,4 @@
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ../colorspaces/cmyk_u16
@@ -20,10 +20,10 @@ endif(OPENEXR_FOUND)
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
 
 
-if(MSVC)
+if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
-endif(MSVC)
+endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 ########### next target ###############
 
@@ -31,7 +31,7 @@ set(TestKoLcmsColorProfile_test_SRCS TestKoLcmsColorProfile.cpp )
 
 kde4_add_unit_test(TestKoLcmsColorProfile TESTNAME libs-pigment-TestKoLcmsColorProfile  ${TestKoLcmsColorProfile_test_SRCS})
 
-target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestKoLcmsColorProfile  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY}  ${LCMS2_LIBRARIES} kolcmsengine )
 
 ########### next target ###############
 

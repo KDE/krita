@@ -26,6 +26,7 @@
 
 const int MAX_CHANNELS = 56;
 
+typedef qint32  Fixed;                  /* Represents a fixed point implied decimal */
 
 /**
  * Image color/depth modes
@@ -86,4 +87,5 @@ QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, qu
  * Convert the Photoshop blend mode strings to Pigment compositeop id's
  */
 QString psd_blendmode_to_composite_op(const QString& blendmode);
+QString composite_op_to_psd_blendmode(const QString& compositeOp);
 #endif // PSD_H

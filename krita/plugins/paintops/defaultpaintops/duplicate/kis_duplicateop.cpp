@@ -31,7 +31,7 @@
 #include <QCheckBox>
 #include <QDomElement>
 #include <QHBoxLayout>
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -39,7 +39,7 @@
 #include <KoColorTransformation.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoInputDevice.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -59,15 +59,15 @@
 #include <kis_perspective_grid.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_iterator_ng.h>
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_option.h"
 
-
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
+    : KisBrushBasedPaintOp(settings, painter)
+    , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -75,6 +75,8 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
     m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
+
+    m_srcdev = source()->createCompositionSourceDevice();
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -85,88 +87,84 @@ qreal KisDuplicateOp::minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
 {
     int rowstride = 3 * w;
     qreal err = 0;
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     m += rowstride;
     sol += rowstride;
     for (int i = 1; i < h - 1; i++) {
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
         for (int j = 3; j < rowstride - 3; j++) {
             qreal tmp = *sol;
-            *sol = ((*(m - 3) + *(m + 3) + *(m - rowstride) + *(m + rowstride)) + 2 * *m) / 6;
+            *sol = ((*(m - 3) + * (m + 3) + * (m - rowstride) + * (m + rowstride)) + 2 * *m) / 6;
             qreal diff = *sol - tmp;
             err += diff * diff;
             m ++; sol ++;
         }
-        memcpy(sol, m, 3* sizeof(qreal));
+        memcpy(sol, m, 3 * sizeof(qreal));
         m += 3; sol += 3;
     }
-    memcpy(sol, m, 3* sizeof(qreal) * w);
+    memcpy(sol, m, 3 * sizeof(qreal) * w);
     return err;
 }
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 
-qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()) return 1.0;
+    if (!painter()->device()) return 1.0;
+
+    KisBrushSP brush = m_brush;
+    if (!brush)
+        return 1.0;
+
+    if (!brush->canPaintFor(info))
+        return 1.0;
 
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
         m_duplicateStart = info.pos();
     }
 
-    if (!source()) return 1.0;
-
-    KisBrushSP brush = m_brush;
-    if (!brush)
-        return 1.0;
-
-    if (! brush->canPaintFor(info))
-        return 1.0;
+    KisPaintDeviceSP realSourceDevice = settings->node()->paintDevice();
 
     qreal scale = m_sizeOption.apply(info);
-    QPointF hotSpot = brush->hotSpot(scale, scale);
-    QPointF pt = info.pos() - hotSpot;
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
 
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
-    xFraction = yFraction = 0.0;
+    QRect dstRect;
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, info.pos(),
+                             scale, scale, 0.0,
+                             info, 1.0,
+                             &dstRect);
+
+    if (dstRect.isEmpty()) return 1.0;
+
 
     QPoint srcPoint;
 
-    if(m_moveSourcePoint)
-    {
-        srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
-                          y - static_cast<qint32>(settings->offset().y()));
+    if (m_moveSourcePoint) {
+        srcPoint = (dstRect.topLeft() - settings->offset()).toPoint();
     } else {
-        srcPoint = QPoint(static_cast<qint32>(settings->position().x() - hotSpot.x()),
-                          static_cast<qint32>(settings->position().y() - hotSpot.y()));
+        QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
+        srcPoint = (settings->position() - hotSpot).toPoint();
     }
 
-    qint32 sw = brush->maskWidth(scale, 0.0);
-    qint32 sh = brush->maskHeight(scale, 0.0);
+    qint32 sw = dstRect.width();
+    qint32 sh = dstRect.height();
 
-    if (srcPoint.x() < 0)
-        srcPoint.setX(0);
+    if (!realSourceDevice->defaultBounds()->wrapAroundMode()) {
+        if (srcPoint.x() < 0)
+            srcPoint.setX(0);
 
-    if (srcPoint.y() < 0)
-        srcPoint.setY(0);
-    if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
-        m_srcdev = new KisPaintDevice(source()->colorSpace());
+        if (srcPoint.y() < 0)
+            srcPoint.setY(0);
     }
-    Q_CHECK_PTR(m_srcdev);
 
     // Perspective correction ?
     KisImageWSP image = settings->m_image;
@@ -195,66 +193,51 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
         QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
         QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
         QPointF translat = duplicateStartPositionT - positionStartPaintingT;
-        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
-        KisRandomSubAccessorPixel srcAcc = source()->createRandomSubAccessor();
+
+        KisSequentialIterator dstIt(m_srcdev, QRect(0, 0, sw, sh));
+        KisRandomSubAccessorSP srcAcc = realSourceDevice->createRandomSubAccessor();
         //Action
-        while (!dstIt.isDone()) {
-            if (dstIt.isSelected()) {
-                QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + x, dstIt.y() + y)) + translat);
-                srcAcc.moveTo(p);
-                srcAcc.sampledOldRawData(dstIt.rawData());
-            }
-            ++dstIt;
-        }
+        do {
+            QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + dstRect.x(), dstIt.y() + dstRect.y())) + translat);
+            srcAcc->moveTo(p);
+            srcAcc->sampledOldRawData(dstIt.rawData());
+        } while (dstIt.nextPixel());
 
 
-    } else {
-        // TODO make it a mode to get the behaviour where the source is rawData
-        // Or, copy the source data on the temporary device:
-//         KisPainter copyPainter(m_srcdev);
-//         copyPainter.setCompositeOp(COMPOSITE_COPY);
-//         copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
-//         copyPainter.end();
-        // Do the copy manually to access old raw data
-        KisHLineIteratorPixel dstIt = m_srcdev->createHLineIterator(0, 0, sw);
-        KisHLineConstIteratorPixel srcIt = source()->createHLineConstIterator(srcPoint.x(), srcPoint.y(), sw);
-        int pixelSize = m_srcdev->pixelSize();
-        for (int i = 0; i < sh; ++i) {
-            while (!dstIt.isDone()) {
-                memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
-                ++dstIt;
-                ++srcIt;
-            }
-            dstIt.nextRow();
-            srcIt.nextRow();
-        }
+    }
+    else {
+        KisPainter copyPainter(m_srcdev);
+        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
     }
 
     // heal ?
 
     if (m_healing) {
-        quint16 dataDevice[4];
-        quint16 dataSrcDev[4];
+        quint16 srcData[4];
+        quint16 tmpData[4];
         qreal* matrix = new qreal[ 3 * sw * sh ];
         // First divide
-        const KoColorSpace* deviceCs = source()->colorSpace();
-        KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw);
-        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        const KoColorSpace* srcCs = realSourceDevice->colorSpace();
+        const KoColorSpace* tmpCs = m_srcdev->colorSpace();
+        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(dstRect.x(), dstRect.y() , sw);
+        KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, sw);
         qreal* matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
-            for (int i = 0; !srcDevIt.isDone(); i++) {
-                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+            for (int i = 0; i < sw; i++) {
+                srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt->rawData(), (quint8*)tmpData, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
-                    matrixIt[k] = dataDevice[k] / (qreal)qMax((int)dataSrcDev [k], 1);
+                    matrixIt[k] = srcData[k] / (qreal)qMax((int)tmpData [k], 1);
                 }
-                ++deviceIt;
-                ++srcDevIt;
+                srcIt->nextPixel();
+                tmpIt->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt.nextRow();
-            srcDevIt.nextRow();
+            srcIt->nextRow();
+            tmpIt->nextRow();
         }
         // Minimize energy
         {
@@ -263,58 +246,47 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
             qreal* solution = new qreal [ 3 * sw * sh ];
             do {
                 err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
-                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(qreal));
+
+                // swap pointers
+                qreal *tmp = matrix;
+                matrix = solution;
+                solution = tmp;
+
                 iter++;
-            } while (err < 0.00001 && iter < 100);
+            } while (err > 0.00001 && iter < 100);
             delete [] solution;
         }
 
         // Finaly multiply
-        deviceIt = source()->createHLineIterator(x, y, sw);
-        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        KisHLineIteratorSP srcIt2 = realSourceDevice->createHLineIteratorNG(dstRect.x(), dstRect.y(), sw);
+        KisHLineIteratorSP tmpIt2 = m_srcdev->createHLineIteratorNG(0, 0, sw);
         matrixIt = &matrix[0];
         for (int j = 0; j < sh; j++) {
-            for (int i = 0; !srcDevIt.isDone(); i++) {
-                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
-                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+            for (int i = 0; i < sw; i++) {
+                srcCs->toLabA16(srcIt2->rawData(), (quint8*)srcData, 1);
+                tmpCs->toLabA16(tmpIt2->rawData(), (quint8*)tmpData, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
-                    dataSrcDev[k] = (int)CLAMP(matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535);
+                    tmpData[k] = (int)CLAMP(matrixIt[k] * qMax((int) tmpData[k], 1), 0, 65535);
                 }
-                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt.rawData(), 1);
-                ++deviceIt;
-                ++srcDevIt;
+                tmpCs->fromLabA16((quint8*)tmpData, tmpIt2->rawData(), 1);
+                srcIt2->nextPixel();
+                tmpIt2->nextPixel();
                 matrixIt += 3;
             }
-            deviceIt.nextRow();
-            srcDevIt.nextRow();
+            srcIt2->nextRow();
+            tmpIt2->nextRow();
         }
         delete [] matrix;
     }
 
-    KisFixedPaintDeviceSP dab = 0;
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(m_srcdev->colorSpace(), scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    } else {
-        dab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    }
+    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                                        m_srcdev, dab,
+                                        dstRect.width(),
+                                        dstRect.height());
 
-    QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
+    painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
+                                    !m_dabCache->needSeparateOriginal());
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
-
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    sw = dstRect.width();
-    sh = dstRect.height();
-
-    painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
-    painter()->renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
-
-    return spacing(scale);
+    return effectiveSpacing(dstRect.width(), dstRect.height());
 }

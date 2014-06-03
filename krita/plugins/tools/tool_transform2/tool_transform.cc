@@ -19,11 +19,8 @@
  */
 
 #include "tool_transform.h"
-#include <stdlib.h>
-#include <vector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -46,7 +43,6 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
-
 }
 
 ToolTransform::~ToolTransform()

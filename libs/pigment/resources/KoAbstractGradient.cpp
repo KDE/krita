@@ -21,6 +21,12 @@
 #include "KoAbstractGradient.h"
 #include "KoColorSpaceRegistry.h"
 
+#include <KoColor.h>
+
+#include <QCryptographicHash>
+#include <QBuffer>
+#include <QByteArray>
+
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
 
@@ -29,7 +35,6 @@ struct KoAbstractGradient::Private {
     const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
-    QImage image;
 };
 
 KoAbstractGradient::KoAbstractGradient(const QString& filename)
@@ -37,6 +42,8 @@ KoAbstractGradient::KoAbstractGradient(const QString& filename)
         , d(new Private)
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    d->spread = QGradient::PadSpread;
+    d->type = QGradient::NoGradient;
 }
 
 KoAbstractGradient::~KoAbstractGradient()
@@ -132,12 +139,12 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     return image;
 }
 
-QImage KoAbstractGradient::image() const
+QByteArray KoAbstractGradient::generateMD5() const
 {
-    return d->image;
+    return QByteArray();
 }
 
 void KoAbstractGradient::updatePreview()
 {
-    d->image = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+    setImage(generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT));
 }

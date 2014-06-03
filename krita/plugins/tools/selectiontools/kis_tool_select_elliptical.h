@@ -23,41 +23,25 @@
 #ifndef __KIS_TOOL_SELECT_ELLIPTICAL_H__
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
-#include <QPoint>
 #include "KoToolFactoryBase.h"
-#include "krita/ui/tool/kis_tool_select_base.h"
 #include "kis_tool_ellipse_base.h"
+#include "kis_selection_tool_config_widget_helper.h"
+#include <KoIcon.h>
 
-
-class KisToolSelectElliptical : public KisToolSelectBase
+class KisToolSelectElliptical : public KisToolEllipseBase
 {
-
     Q_OBJECT
 
 public:
-    KisToolSelectElliptical(KoCanvasBase * canvas);
-    virtual ~KisToolSelectElliptical();
-
-    virtual QWidget * createOptionWidget();
+    KisToolSelectElliptical(KoCanvasBase *canvas);
+    QWidget* createOptionWidget();
 
 private:
-    class LocalTool : public KisToolEllipseBase {
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolSelectElliptical* selectingTool)
-            : KisToolEllipseBase(canvas), m_selectingTool(selectingTool) {}
-        void finishEllipse(const QRectF &rect);
-    private:
-        KisToolSelectElliptical* const m_selectingTool;
-    };
-    LocalTool m_localTool;
+    void keyPressEvent(QKeyEvent *event);
+    void finishRect(const QRectF &rect);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool.paint(gc, converter);}
-    virtual void mousePressEvent(KoPointerEvent *e) {m_localTool.mousePressEvent(e);}
-    virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
-    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
-    virtual void deactivate() {m_localTool.deactivate();}
-
-    friend class LocalTool;
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase
@@ -69,7 +53,7 @@ public:
         setToolTip(i18n("Select an elliptical area"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_elliptical_selection");
+        setIconName(koIconNameCStr("tool_elliptical_selection"));
         setShortcut(KShortcut(Qt::Key_J));
         setPriority(53);
     }

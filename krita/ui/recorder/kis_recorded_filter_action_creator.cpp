@@ -21,7 +21,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <filter/kis_filter.h>
 #include <kis_paint_device.h>
@@ -33,7 +33,7 @@
 
 KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent , Qt::WindowFlags f) : KisRecordedActionCreator(parent, f)
 {
-    m_filterModel = new KisFiltersModel(0);
+    m_filterModel = new KisFiltersModel(true, 0);
     m_filterTree = new QTreeView(this);
     m_filterTree->setModel(m_filterModel);
     m_filterTree->header()->setVisible(false);

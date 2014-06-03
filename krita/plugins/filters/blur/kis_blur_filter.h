@@ -28,20 +28,19 @@ class KisBlurFilter : public KisFilter
 public:
     KisBlurFilter();
 public:
-    using KisFilter::process;
 
-    void process(KisPaintDeviceSP device,
-                 const QRect& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& size,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
     static inline KoID id() {
         return KoID("blur", i18n("Blur"));
     }
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     QRect neededRect(const QRect & rect, const KisFilterConfiguration*) const;
     QRect changedRect(const QRect & rect, const KisFilterConfiguration*) const;
 };

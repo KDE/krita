@@ -23,7 +23,7 @@
 #include <ui_AutocorrectConfig.h>
 #include "Autocorrect.h"
 
-#include <KDialog>
+#include <kdialog.h>
 
 class KCharSelect;
 

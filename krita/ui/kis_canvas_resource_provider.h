@@ -28,13 +28,14 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+class KisWorkspaceResource;
 class KoColorProfile;
 class KoAbstractGradient;
 class KoResource;
 
 class KoCanvasBase;
 class KisView2;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisAbstractPerspectiveGrid;
 
@@ -61,8 +62,11 @@ public:
         CurrentCompositeOp,
         MirrorHorizontal,
         MirrorVertical,
-        MirrorAxisCenter,
-        Opacity
+        MirrorAxesCenter,
+        Opacity,
+        HdrGamma,
+        GlobalAlphaLock,
+        PreviousPaintOpPreset
     };
 
 
@@ -83,11 +87,14 @@ public:
     float HDRExposure() const;
     void setHDRExposure(float exposure);
 
-    KisPattern *currentPattern() const;
+    float HDRGamma() const;
+    void setHDRGamma(float gamma);
+
+    KoPattern *currentPattern() const;
 
     KoAbstractGradient *currentGradient() const;
 
-    void resetDisplayProfile();
+    void resetDisplayProfile(int screen = -1);
     const KoColorProfile * currentDisplayProfile() const;
 
     KisImageWSP currentImage() const;
@@ -95,10 +102,12 @@ public:
     KisNodeSP currentNode() const;
 
     KisPaintOpPresetSP currentPreset() const;
+    void setPaintOpPreset(const KisPaintOpPresetSP preset);
+
+    KisPaintOpPresetSP previousPreset() const;
+    void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
     KisFilterConfiguration* currentGeneratorConfiguration() const;
-
-    static const KoColorProfile* getScreenProfile(int screen = -1);
 
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
@@ -115,9 +124,17 @@ public:
     bool mirrorVertical() const;
 
     void setOpacity(qreal opacity);
-    qreal opacity();
+    qreal opacity() const;
 
-    void setPaintOpPreset(const KisPaintOpPresetSP preset);
+    void setGlobalAlphaLock(bool lock);
+    bool globalAlphaLock() const;
+
+
+    ///Notify that the workspace is saved and settings should be saved to it
+    void notifySavingWorkspace(KisWorkspaceResource* workspace);
+
+    ///Notify that the workspace is loaded and settings can be read
+    void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
 
 public slots:
 
@@ -148,27 +165,29 @@ public slots:
 
 private slots:
 
-    void slotResourceChanged(int key, const QVariant & res);
+    void slotCanvasResourceChanged(int key, const QVariant & res);
 
 signals:
 
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
-    void sigPatternChanged(KisPattern *);
-    void sigPaintOpPresetChanged(KisPaintOpPresetSP preset);
+    void sigPatternChanged(KoPattern *);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-    void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);
     void sigFGColorUsed(const KoColor&);
-    void sigCompositeOpChanged(const QString &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
+    void sigOpacityChanged(qreal);
+    void sigSavingWorkspace(KisWorkspaceResource* workspace);
+    void sigLoadingWorkspace(KisWorkspaceResource* workspace);
+
+    void mirrorModeChanged();
 
 private:
 
     KisView2 * m_view;
-    KoCanvasResourceManager * m_resourceManager;
-    const KoColorProfile * m_displayProfile;
+    KoCanvasResourceManager *m_resourceManager;
+    const KoColorProfile *m_displayProfile;
     bool m_fGChanged;
     QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;
 

@@ -27,7 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <QBuffer>
 
 using namespace MusicCore;
@@ -207,13 +207,13 @@ bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path)
     KoXmlElement r = result.toElement();
     KoXmlElement v = valid.toElement();
     if (!r.isNull() && !v.isNull()) {
-        foreach (QString attr, KoXml::attributeNames(v)) {
+        foreach (const QString &attr, KoXml::attributeNames(v)) {
             if (r.attribute(attr) != v.attribute(attr)) {
                 FAIL(QString("incorrect attribute %1 for %2; expected %3, received %4").arg(attr, path, v.attribute(attr), r.attribute(attr)).toLocal8Bit().constData());
             }
         }
         
-        foreach (QString attr, KoXml::attributeNames(r)) {
+        foreach (const QString &attr, KoXml::attributeNames(r)) {
             if (!v.hasAttribute(attr)) {
                 FAIL(QString("incorrect attribute %1 for %2; expected %3, received %4").arg(attr, path, v.attribute(attr), r.attribute(attr)).toLocal8Bit().constData());
             }
@@ -228,7 +228,7 @@ bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path)
 
     int idx = 0;
     for (KoXmlNode rChild = result.firstChild(), vChild = valid.firstChild(); !rChild.isNull() || !vChild.isNull(); rChild = rChild.nextSibling(), vChild = vChild.nextSibling()) {
-        if (!compareNodes(vChild, rChild, (path + "[%1]").arg(idx++))) return false;
+        if (!compareNodes(vChild, rChild, QString(path + "[%1]").arg(idx++))) return false;
     }
 
     return true;

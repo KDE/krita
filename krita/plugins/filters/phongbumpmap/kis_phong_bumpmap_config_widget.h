@@ -22,6 +22,7 @@
 #include "ui_wdgphongbumpmap.h"
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
+#include "kis_image.h"
 
 class KisNodeModel;
 
@@ -51,7 +52,7 @@ class KisPhongBumpmapConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageWSP image, QWidget *parent, Qt::WFlags f = 0);
+    KisPhongBumpmapConfigWidget(const KisPaintDeviceSP dev, QWidget *parent, Qt::WFlags f = 0);
     virtual ~KisPhongBumpmapConfigWidget() {}
     void setConfiguration(const KisPropertiesConfiguration *config);
     KisPropertiesConfiguration *configuration() const;
@@ -59,7 +60,6 @@ public:
 
 private:
     KisPaintDeviceSP m_device;
-    KisImageWSP m_image;
 };
 
 #endif  //KIS_PHONG_BUMPMAP_CONFIG_WIDGET_H

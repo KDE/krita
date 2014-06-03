@@ -20,10 +20,9 @@
 
 #include "colorgenerator.h"
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -32,12 +31,10 @@
 #include <kstandarddirs.h>
 
 #include <KoProgressUpdater.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_fill_painter.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <generator/kis_generator_registry.h>
 #include <kis_global.h>
@@ -66,7 +63,6 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
@@ -79,10 +75,9 @@ KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDe
     return config;
 }
 
-KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgColor(parent);
 }
 
@@ -96,19 +91,17 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
     Q_ASSERT(!dst.isNull());
     Q_ASSERT(config);
 
-    QVariant value;
     KoColor c;
-    if(config)
-    {
+    if (config) {
         c = config->getColor("color");
+
+
+        KisFillPainter gc(dst);
+        gc.setProgress(progressUpdater);
+        gc.setChannelFlags(config->channelFlags());
+        gc.setOpacity(100);
+        gc.setSelection(dstInfo.selection());
+        gc.fillRect(QRect(dstInfo.topLeft(), size), c);
+        gc.end();
     }
-
-    KisFillPainter gc(dst);
-    gc.setProgress(progressUpdater);
-    gc.setChannelFlags(config->channelFlags());
-    gc.setOpacity(100);
-    gc.setSelection(dstInfo.selection());
-    gc.fillRect(QRect(dstInfo.topLeft(), size), c);
-    gc.end();
-
 }

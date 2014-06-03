@@ -46,12 +46,12 @@ KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand()
 void KoPAChangeMasterPageCommand::redo()
 {
     m_page->setMasterPage( m_newMasterPage );
-    m_document->updateViews(m_page);
+    m_document->emitUpdate(m_page);
 }
 
 void KoPAChangeMasterPageCommand::undo()
 {
     m_page->setMasterPage( m_oldMasterPage );
-    m_document->updateViews(m_page);
+    m_document->emitUpdate(m_page);
 }
 

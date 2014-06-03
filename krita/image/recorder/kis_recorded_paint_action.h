@@ -26,7 +26,6 @@
 class KisPaintInformation;
 class KisPainter;
 class KoColor;
-class KoCompositeOp;
 
 #include <krita_export.h>
 
@@ -81,7 +80,7 @@ public:
     void setStrokeStyle(KisPainter::StrokeStyle );
     void setFillStyle(KisPainter::FillStyle );
     KisPainter::FillStyle fillStyle() const;
-    void setPattern(const KisPattern* );
+    void setPattern(const KoPattern* );
     void setGradient(const KoAbstractGradient* gradient);
     void setGenerator(const KisFilterConfiguration * generator);
 private:

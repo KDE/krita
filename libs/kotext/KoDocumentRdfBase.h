@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QString>
 #include <QMetaType>
+#include <QSharedPointer>
 
 #include <KoDataCenterBase.h>
 
@@ -36,6 +37,10 @@ class KoStore;
 class KoXmlWriter;
 class KoDocument;
 
+
+///**
+// * Dummy definition in case Soprano is not available.
+// */
 namespace Soprano
 {
     class Model;
@@ -54,17 +59,27 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(QObject *parent = 0);
+    explicit KoDocumentRdfBase(QObject *parent = 0);
 
     /**
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual const Soprano::Model *model() const;
+    virtual QSharedPointer<Soprano::Model> model() const;
     virtual void linkToResourceManager(KoDocumentResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
+
+    /**
+     * idrefList queries soprano after loading and creates a list of all rdfid's that
+     * where found in the manifest.rdf document. This list is used to make sure we do not
+     * create more inline rdf objects than necessary
+     * @return a list of xml-id's
+     */
+    virtual QStringList idrefList() const;
+
+
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
 

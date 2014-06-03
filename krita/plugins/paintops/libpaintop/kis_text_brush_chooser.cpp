@@ -23,6 +23,8 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QPixmap>
+#include <QLineEdit>
+#include <QString>
 
 #include <kfontdialog.h>
 #include <klineedit.h>
@@ -30,8 +32,8 @@
 #define showSlider(input) input->setRange(input->minimum(), input->maximum())
 
 KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption)
-        : QWidget(parent)
-        , m_textBrush(new KisTextBrush())
+    : QWidget(parent)
+    , m_textBrush(new KisTextBrush())
 {
     setObjectName(name);
     setupUi(this);
@@ -56,6 +58,11 @@ void KisTextBrushChooser::getFont()
 
 void KisTextBrushChooser::rebuildTextBrush()
 {
+    pipeModeChbox->setEnabled(!lineEdit->text().isEmpty());
+    if (lineEdit->text().isEmpty()) {
+        pipeModeChbox->setChecked(false);
+    }
+
     lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
     lblFont->setFont(m_font);
     KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());

@@ -20,8 +20,8 @@
 #ifndef THESAURUSPLUGIN_H
 #define THESAURUSPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QVariant>
 
 class ThesaurusPlugin : public QObject {
     Q_OBJECT

@@ -46,15 +46,14 @@ public:
 public:
 
 //     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
     static inline KoID id() {
         return KoID("levels", i18n("Levels"));
-    };
+    }
 
-    virtual bool workWith(KoColorSpace* cs) const;
 };
 
 
@@ -62,7 +61,7 @@ class KisLevelConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds);
+    KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
     virtual ~KisLevelConfigWidget();
 
     virtual KisPropertiesConfiguration* configuration() const;

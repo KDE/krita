@@ -24,13 +24,14 @@
 #include <klocale.h>
 
 #include "krita_export.h"
+#include "kis_brush_mask_applicator_base.h"
 
 class QDomElement;
 class QDomDocument;
 
 const KoID DefaultId("default", ki18n("Default")); ///< generate Krita default mask generator
-const KoID SoftId("soft", ki18n("Soft brush")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
-const KoID GaussId("gauss", ki18n("Gaussian brush")); ///< generate brush mask with a Gaussian-blurred edge
+const KoID SoftId("soft", ki18n("Soft")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
+const KoID GaussId("gauss", ki18n("Gaussian")); ///< generate brush mask with a Gaussian-blurred edge
 
 static const int OVERSAMPLING = 4;
 
@@ -69,6 +70,10 @@ public:
     virtual quint8 valueAt(qreal x, qreal y) const = 0;
 
     virtual bool shouldSupersample() const;
+
+    virtual bool shouldVectorize() const;
+
+    virtual KisBrushMaskApplicatorBase* applicator();
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
@@ -110,6 +115,7 @@ protected:
         bool empty;
         Type type;
         QString curveString;
+        KisBrushMaskApplicatorBase *defaultMaskProcessor;
     };
 
     Private* const d;

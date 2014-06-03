@@ -24,6 +24,7 @@
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 
 class QCheckBox;
 class QComboBox;
@@ -31,10 +32,15 @@ class QGridLayout;
 
 class KoCanvasBase;
 class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 
 class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
+    Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessDistance NOTIFY smoothnessQualityChanged)
+    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
+    Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
+    Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
@@ -42,16 +48,33 @@ public:
 
     QWidget * createOptionWidget();
 
-private slots:
-    void slotSetSmoothness(int smoothness);
+    int smoothnessQuality() const;
+    qreal smoothnessFactor() const;
+    bool smoothPressure() const;
+    int smoothingType() const;
+
+public slots:
+    void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
+    void slotSetSmoothingType(int index);
+    void slotSetTailAgressiveness(qreal argh_rhhrr);
+    void setSmoothPressure(bool value);
+
+Q_SIGNALS:
+    void smoothnessQualityChanged();
+    void smoothnessFactorChanged();
+    void smoothPressureChanged();
+    void smoothingTypeChanged();
 
 private:
     QGridLayout *m_optionLayout;
-    QCheckBox *m_chkSmooth;
+
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
-    KisSliderSpinBox *m_sliderSmoothness;
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
+    KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
+    QCheckBox *m_chkSmoothPressure;
+    QButtonGroup * m_buttonGroup;
 };
 
 
@@ -66,11 +89,10 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_freehand");
+        setIconName(koIconNameCStr("krita_tool_freehand"));
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolBrushFactory() {}

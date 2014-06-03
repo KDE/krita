@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "KoReportItemLine.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
@@ -54,7 +55,7 @@ KoReportItemLine::KoReportItemLine(QDomNode & element)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing line element encountered unknow element: " << n;
+            kWarning() << "while parsing line element encountered unknow element: " << n;
         }
     }
 }
@@ -101,7 +102,8 @@ QString KoReportItemLine::typeName() const
     return "line";
 }
 
-int KoReportItemLine::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemLine::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
     Q_UNUSED(data)
@@ -131,3 +133,14 @@ void KoReportItemLine::setUnit(const KoUnit &u)
     m_start.setUnit(u);
     m_end.setUnit(u);
 }
+
+KRPos KoReportItemLine::startPosition() const
+{
+    return m_start;
+}
+
+KRPos KoReportItemLine::endPosition() const
+{
+    return m_end;
+}
+

@@ -44,16 +44,16 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoClipPath.h>
 #include <KoXmlWriter.h>
 
-#include <KMimeType>
+#include <kmimetype.h>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QGradient>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QRadialGradient>
+#include <QBuffer>
+#include <QGradient>
+#include <QLinearGradient>
+#include <QRadialGradient>
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
@@ -74,18 +74,18 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
     }
 
     QBrush fill(Qt::NoBrush);
-    KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
+    QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());
         if (cbg->color().alphaF() < 1.0)
             context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
     }
-    KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
+    QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (gbg) {
         QString gradientId = saveSvgGradient(gbg->gradient(), gbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
-    KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
+    QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
     if (pbg) {
         const QString patternId = saveSvgPattern(pbg, shape, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
@@ -101,7 +101,7 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(shape->border());
+    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
     if (! line)
         return;
 
@@ -284,7 +284,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
     return uid;
 }
 
-QString SvgStyleWriter::saveSvgPattern(KoPatternBackground *pattern, KoShape *shape, SvgSavingContext &context)
+QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
 

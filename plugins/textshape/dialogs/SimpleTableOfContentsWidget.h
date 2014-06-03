@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -42,9 +42,6 @@ class SimpleTableOfContentsWidget : public QWidget
 public:
     explicit SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent = 0);
     ~SimpleTableOfContentsWidget();
-    void setToCConfigureMenu(QMenu *tocMenu);
-    QMenu *ToCConfigureMenu();
-    void showMenu();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -53,7 +50,6 @@ public slots:
 
 signals:
     void doneWithFocus();
-    void showConfgureOptions();
 
 private slots:
     void applyTemplate(int templateId);

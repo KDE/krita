@@ -21,9 +21,9 @@
 #define KOCLIPPATH_H
 
 #include "flake_export.h"
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
-#include <QtCore/qnamespace.h>
+#include <QList>
+#include <QSharedData>
+#include <qnamespace.h>
 
 class KoShape;
 class KoPathShape;
@@ -38,10 +38,10 @@ class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
     /// Creates clip path data from a single path shape, takes ownership of the path shape
-    KoClipData(KoPathShape *clipPathShape);
+    explicit KoClipData(KoPathShape *clipPathShape);
 
     /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    KoClipData(const QList<KoPathShape*> &clipPathShapes);
+    explicit KoClipData(const QList<KoPathShape*> &clipPathShapes);
 
     /// Destroys the clip path data
     ~KoClipData();

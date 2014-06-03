@@ -1,6 +1,10 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_CURRENT_fSOURCE_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
 
 set(kritaxcfimport_PART_SRCS
     kis_xcf_import.cpp
@@ -16,7 +20,11 @@ kde4_add_plugin(kritaxcfimport ${kritaxcfimport_PART_SRCS})
 
 target_link_libraries(kritaxcfimport kritaui )
 
-install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+if (WIN32)
+    target_link_libraries(kritaxcfimport kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
+    install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+endif (WIN32)
 
 ########### install files ###############
 

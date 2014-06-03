@@ -40,22 +40,22 @@ public:
     KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
-                                       const QPointF &prevImagePoint,
                                        int timeElapsed);
 
-    QPointF startPoint() const;
+    KisPaintInformation hover(const QPointF &imagePoint,
+                              const KoPointerEvent *event);
 
 protected slots:
     void updateSettings();
 
 protected:
-    virtual QPointF adjustDocumentPoint(const QPointF &point);
+    virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
     virtual QPointF documentToImage(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 
 private:
+
     KisPaintInformation createPaintingInformation(KoPointerEvent *event,
-                                                  const QPointF &dragVector,
                                                   int timeElapsed);
 
     /**
@@ -79,7 +79,7 @@ public:
     KisToolPaintingInformationBuilder(KisToolFreehand *tool);
 
 protected:
-    virtual QPointF adjustDocumentPoint(const QPointF &point);
+    virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
     virtual QPointF documentToImage(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 

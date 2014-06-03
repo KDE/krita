@@ -5,6 +5,8 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,8 +41,10 @@
 #include <KoText.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoImageData_p.h>
 #include <KoOdfNumberDefinition.h>
 #include <KoGenStyle.h>
+#include <KoTextSharedSavingData.h>
 
 class KoListLevelProperties::Private
 {
@@ -56,11 +60,12 @@ KoListLevelProperties::KoListLevelProperties()
         : QObject()
         , d(new Private())
 {
-    QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
-    setMarkCharacterStyle(charStyle);
+    QSharedPointer<KoCharacterStyle> charStyle(new KoCharacterStyle);
+    setCharacterProperties(charStyle);
 
     setRelativeBulletSize(100);
     setAlignmentMode(false);
+    setDisplayLevel(1);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
@@ -146,6 +151,16 @@ QColor KoListLevelProperties::propertyColor(int key) const
     if (variant.isNull())
         return QColor(Qt::black);
     return qvariant_cast<QColor>(variant);
+}
+
+QVariant KoListLevelProperties::property(int key) const
+{
+    QVariant variant = d->stylesPrivate.value(key);
+    if (!variant.isNull()) {
+        return variant;
+    } else {
+        return QVariant();
+    }
 }
 
 void KoListLevelProperties::applyStyle(QTextListFormat &format) const
@@ -238,16 +253,16 @@ int KoListLevelProperties::characterStyleId() const
     return propertyInt(KoListStyle::CharacterStyleId);
 }
 
-void KoListLevelProperties::setMarkCharacterStyle(QSharedPointer< KoCharacterStyle > style)
+void KoListLevelProperties::setCharacterProperties(QSharedPointer< KoCharacterStyle > style)
 {
-    setProperty(KoListStyle::MarkCharacterStyleId, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(style));
+    setProperty(KoListStyle::CharacterProperties, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(style));
 }
 
-QSharedPointer<KoCharacterStyle> KoListLevelProperties::markCharacterStyle() const
+QSharedPointer<KoCharacterStyle> KoListLevelProperties::characterProperties() const
 {
-    const QVariant v = d->stylesPrivate.value(KoListStyle::MarkCharacterStyleId);
+    const QVariant v = d->stylesPrivate.value(KoListStyle::CharacterProperties);
     if (v.isNull()) {
-        return static_cast< QSharedPointer<KoCharacterStyle> >(0);
+        return QSharedPointer<KoCharacterStyle>(0);
     }
     return v.value< QSharedPointer<KoCharacterStyle> >();
 }
@@ -317,6 +332,11 @@ void KoListLevelProperties::setBulletImage(KoImageData *imageData)
     setProperty(KoListStyle::BulletImage, QVariant::fromValue(imageData));
 }
 
+KoImageData *KoListLevelProperties::bulletImage() const
+{
+    return property(KoListStyle::BulletImage).value< KoImageData * >();
+}
+
 KoListLevelProperties & KoListLevelProperties::operator=(const KoListLevelProperties & other)
 {
     d->copy(other.d);
@@ -344,16 +364,6 @@ bool KoListLevelProperties::letterSynchronization() const
 void KoListLevelProperties::setLetterSynchronization(bool on)
 {
     setProperty(KoListStyle::LetterSynchronization, on);
-}
-
-void KoListLevelProperties::setContinueNumbering(bool enable)
-{
-    setProperty(KoListStyle::ContinueNumbering, enable);
-}
-
-bool KoListLevelProperties::continueNumbering() const
-{
-    return propertyBoolean(KoListStyle::ContinueNumbering);
 }
 
 void KoListLevelProperties::setIndent(qreal value)
@@ -426,6 +436,16 @@ KoListStyle::ListLabelFollowedBy KoListLevelProperties::labelFollowedBy() const
     return (KoListStyle::ListLabelFollowedBy)propertyInt(KoListStyle::LabelFollowedBy);
 }
 
+void KoListLevelProperties::setOutlineList(bool isOutline)
+{
+    setProperty(KoListStyle::IsOutline, isOutline);
+}
+
+bool KoListLevelProperties::isOutlineList() const
+{
+    return propertyBoolean(KoListStyle::IsOutline);
+}
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
@@ -440,21 +460,14 @@ KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 
 void KoListLevelProperties::onStyleChanged(int key)
 {
-    int bullet=0;
-    switch (key) {
-        case KoListStyle::Bullet:               bullet = 0x2022; break;
-        case KoListStyle::BlackCircle:          bullet = 0x25CF; break;
-        case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-        case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-        case KoListStyle::SquareItem:           bullet = 0xE00A; break;
-        case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
-        case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
-        case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
-        case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-    }
-
+    int bullet=KoListStyle::bulletCharacter(key);
     if (bullet != 0)
         setBulletCharacter(QChar(bullet));
+
+    //for numbered list the relative bullet size is made 100
+    if (KoListStyle::isNumberingStyle(key)) {
+        setRelativeBulletSize(100);
+    }
 }
 
 void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
@@ -487,15 +500,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             else {
 //                kDebug(32500) << "==> cs.name:" << cs->name();
 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
-               setCharacterStyleId(cs->styleId());
+                setCharacterStyleId(cs->styleId());
             }
         }
     }
 
-    bool hasBulletRelativeSize=false;
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
-
-        setRelativeBulletSize(45); //arbitary value for bulleted list
         // special case bullets:
         //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
         //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
@@ -512,16 +522,15 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 setStyle(KoListStyle::Bullet);
                 break;
             case 0x25CF: // black circle, large disc -> disc
-            case 0xF0B7: // #113361
                 setStyle(KoListStyle::BlackCircle);
                 break;
             case 0x25CB:           //white circle, no fill
                 setStyle(KoListStyle::CircleItem);
                 break;
-            case 0xE00C: // losange => rhombus
+            case 0x25C6: // losange => rhombus
                 setStyle(KoListStyle::RhombusItem);
                 break;
-            case 0xE00A: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
+            case 0x25A0: // square. Not in OASIS (reserved Unicode area!), but used in both OOo and kotext.
                 setStyle(KoListStyle::SquareItem);
                 break;
             case 0x27A2: // two-colors right-pointing triangle
@@ -549,13 +558,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 // often StarSymbol when it comes from OO; doesn't matter, Qt finds it in another font if needed.
                 if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                 {
-                    customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
-                    kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString::null );
+                    customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString() );
+                    kDebug(32500) <<"customBulletFont style:font-name =" << listStyleProperties.attributeNS( KoXmlNS::style,"font-name", QString() );
                 }
                 else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                 {
-                    customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
-                    kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString::null );
+                    customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString() );
+                    kDebug(32500) <<"customBulletFont fo:font-family =" << listStyleTextProperties.attributeNS( KoXmlNS::fo,"font-family", QString() );
                 }
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 */
@@ -566,13 +575,15 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
-            hasBulletRelativeSize=true;
-            setRelativeBulletSize(size.replace('%', "").toInt());
+            setRelativeBulletSize(size.remove('%').toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
 
-        setRelativeBulletSize(100); //arbitary value for numbered list
+        if (style.localName() == "outline-level-style") {
+            setOutlineList(true);
+        }
+        setRelativeBulletSize(100); //arbitrary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);
@@ -592,6 +603,45 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             break;
         case KoOdfNumberDefinition::RomanUpperCase:
             setStyle(KoListStyle::UpperRomanItem);
+            break;
+        case KoOdfNumberDefinition::ArabicAlphabet:
+                    setStyle(KoListStyle::ArabicAlphabet);
+                    break;
+        case KoOdfNumberDefinition::Thai:
+            setStyle(KoListStyle::Thai);
+            break;
+        case KoOdfNumberDefinition::Abjad:
+            setStyle(KoListStyle::Abjad);
+            break;
+        case KoOdfNumberDefinition::AbjadMinor:
+            setStyle(KoListStyle::AbjadMinor);
+            break;
+        case KoOdfNumberDefinition::Tibetan:
+            setStyle(KoListStyle::Tibetan);
+            break;
+        case KoOdfNumberDefinition::Telugu:
+            setStyle(KoListStyle::Telugu);
+            break;
+        case KoOdfNumberDefinition::Tamil:
+            setStyle(KoListStyle::Tamil);
+            break;
+        case KoOdfNumberDefinition::Oriya:
+            setStyle(KoListStyle::Oriya);
+            break;
+        case KoOdfNumberDefinition::Malayalam:
+            setStyle(KoListStyle::Malayalam);
+            break;
+        case KoOdfNumberDefinition::Kannada:
+            setStyle(KoListStyle::Kannada);
+            break;
+        case KoOdfNumberDefinition::Gurumukhi:
+            setStyle(KoListStyle::Gurumukhi);
+            break;
+        case KoOdfNumberDefinition::Gujarati:
+            setStyle(KoListStyle::Gujarati);
+            break;
+        case KoOdfNumberDefinition::Bengali:
+            setStyle(KoListStyle::Bengali);
             break;
         case KoOdfNumberDefinition::Numeric:
         default:
@@ -728,64 +778,61 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 setHeight(KoUnit::parseValue(height));
 
         } else if (localName == "text-properties") {
-            QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
-            context.styleStack().save();
-            context.styleStack().push(style);
-            context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
-            charStyle->loadOdf(scontext);
-            context.styleStack().restore();
-            //if not set in bullet-relative-size or any where before then set it now
-            if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
-                setRelativeBulletSize((int)charStyle->percentageFontSize());
-                // in bullet lists in layout we recompute the font point size
-                // relatively to the paragraph size of the list item so drop it
-                // to indicate that it is not correct
-                charStyle->clearFontPointSize();
-            }
-            setMarkCharacterStyle(charStyle);
+            QSharedPointer<KoCharacterStyle> charStyle(new KoCharacterStyle);
+            charStyle->loadOdf(&style, scontext);
+            setCharacterProperties(charStyle);
         }
     }
-}
-
-static QString toPoint(qreal number)
-{
-    QString str;
-    str.setNum(number, 'f', DBL_DIG);
-    str += "pt";
-    return str;
 }
 
 void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const
 {
     bool isNumber = KoListStyle::isNumberingStyle(d->stylesPrivate.value(QTextListFormat::ListStyle).toInt());
 
-    if (isNumber) {
-        writer->startElement("text:list-level-style-number");
+    if (isNumber || isOutlineList()) {
+        if (isOutlineList()) {
+            writer->startElement("text:outline-level-style"); } else {
+            writer->startElement("text:list-level-style-number");
+        }
 
         if (d->stylesPrivate.contains(KoListStyle::StartValue))
             writer->addAttribute("text:start-value", d->stylesPrivate.value(KoListStyle::StartValue).toInt());
         if (d->stylesPrivate.contains(KoListStyle::DisplayLevel))
             writer->addAttribute("text:display-levels", d->stylesPrivate.value(KoListStyle::DisplayLevel).toInt());
 
-        QChar format;
+        QByteArray format;
         switch (style()) {
-        case KoListStyle::DecimalItem:      format = '1'; break;
-        case KoListStyle::AlphaLowerItem:   format = 'a'; break;
-        case KoListStyle::UpperAlphaItem:   format = 'A'; break;
-        case KoListStyle::RomanLowerItem:   format = 'i'; break;
-        case KoListStyle::UpperRomanItem:   format = 'I'; break;
-        default: break;
+        case KoListStyle::DecimalItem:      format = "1"; break;
+        case KoListStyle::AlphaLowerItem:   format = "a"; break;
+        case KoListStyle::UpperAlphaItem:   format = "A"; break;
+        case KoListStyle::RomanLowerItem:   format = "i"; break;
+        case KoListStyle::UpperRomanItem:   format = "I"; break;
+        case KoListStyle::ArabicAlphabet:   format = "أ, ب, ت, ..."; break;
+        case KoListStyle::Thai:             format = "ก, ข, ค, ..."; break;
+        case KoListStyle::Abjad:            format = "أ, ب, ج, ..."; break;
+        case KoListStyle::AbjadMinor:       format = "ﺃ,ﺏ, ﺝ, ... "; break;
+        case KoListStyle::Telugu:           format = "౧, ౨, ౩, ..."; break;
+        case KoListStyle::Tamil:            format = "௧, ௨, ௪, ..."; break;
+        case KoListStyle::Oriya:            format = "୧, ୨, ୩, ..."; break;
+        case KoListStyle::Malayalam:        format = "൧, ൨, ൩, ..."; break;
+        case KoListStyle::Kannada:          format = "೧, ೨, ೩, ..."; break;
+        case KoListStyle::Gurumukhi:        format = "੧, ੨, ੩, ..."; break;
+        case KoListStyle::Gujarati:         format = "૧, ૨, ૩, ..."; break;
+        case KoListStyle::Bengali:          format = "১, ২, ৩, ..."; break;
+        default:                            format = ""; break;
         }
         writer->addAttribute("style:num-format", format);
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        if (imageData) {
+        Q_ASSERT(imageData->priv()->collection);
+        if (imageData && imageData->priv()->collection) {
             writer->startElement("text:list-level-style-image");
             writer->addAttribute("xlink:show", "embed");
             writer->addAttribute("xlink:actuate", "onLoad");
             writer->addAttribute("xlink:type", "simple");
             writer->addAttribute("xlink:href", context.imageHref(imageData));
+            context.addDataCenter(imageData->priv()->collection);
         }
     }
     else {
@@ -795,19 +842,19 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         if (d->stylesPrivate.contains(KoListStyle::BulletCharacter)) {
             bullet = d->stylesPrivate.value(KoListStyle::BulletCharacter).toInt();
         } else { // try to determine the bullet character from the style
-            switch (style()) {
-            case KoListStyle::Bullet:               bullet = 0x2022; break;
-            case KoListStyle::CircleItem:           bullet = 0x25CB; break;
-            case KoListStyle::RhombusItem:          bullet = 0xE00C; break;
-            case KoListStyle::SquareItem:           bullet = 0xE00A; break;
-            case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
-            case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
-            case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
-            case KoListStyle::BallotXItem:          bullet = 0x2717; break;
-            default:                                bullet = 0x25CF; break; //KoListStyle::BlackCircle
-            }
+            bullet = KoListStyle::bulletCharacter(style());
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
+    }
+
+    KoTextSharedSavingData *sharedSavingData = 0;
+    if (d->stylesPrivate.contains(KoListStyle::CharacterStyleId) && (characterStyleId() != 0) &&
+           (sharedSavingData = dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID)))) {
+        QString styleName = sharedSavingData->styleName(characterStyleId());
+               // dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))->styleName(characterStyleId());
+        if (!styleName.isEmpty()) {
+            writer->addAttribute("text:style-name", styleName);
+         }
     }
 
     // These apply to bulleted and numbered lists
@@ -820,21 +867,28 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
     writer->startElement("style:list-level-properties", false);
 
+    if (d->stylesPrivate.contains(KoListStyle::Width)) {
+        writer->addAttributePt("fo:width", width());
+    }
+    if (d->stylesPrivate.contains(KoListStyle::Height)) {
+        writer->addAttributePt("fo:height", height());
+    }
+
     if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
 
         writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
         if (d->stylesPrivate.contains(KoListStyle::Indent))
-            writer->addAttribute("text:space-before", toPoint(indent()));
+            writer->addAttributePt("text:space-before", indent());
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-            writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+            writer->addAttributePt("text:min-label-width", minimumWidth());
 
         if (d->stylesPrivate.contains(KoListStyle::Alignment))
             writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-            writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+            writer->addAttributePt("text:min-label-distance", minimumDistance());
     } else {
         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
 
@@ -843,37 +897,29 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
         writer->startElement("style:list-level-label-alignment");
 
-        KoUnit unit(KoUnit::Centimeter);
         if(labelFollowedBy()==KoListStyle::ListTab) {
             writer->addAttribute("text:label-followed-by","listtab");
-            writer->addAttribute("text:list-tab-stop-position",unit.toUserStringValue(tabStopPosition())+"cm");
+            writer->addAttributePt("text:list-tab-stop-position", tabStopPosition());
         } else if (labelFollowedBy()==KoListStyle::Nothing){
             writer->addAttribute("text:label-followed-by","nothing");
         }else{
             writer->addAttribute("text:label-followed-by","space");
         }
 
-        writer->addAttribute("fo:text-indent",unit.toUserStringValue(textIndent())+"cm");
-        writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
+        writer->addAttributePt("fo:text-indent", textIndent());
+        writer->addAttributePt("fo:margin-left", margin());
 
         writer->endElement();
-    }
-
-    if (d->stylesPrivate.contains(KoListStyle::Width)) {
-        writer->addAttribute("fo:width", toPoint(width()));
-    }
-    if (d->stylesPrivate.contains(KoListStyle::Height)) {
-        writer->addAttribute("fo:height", toPoint(height()));
     }
 
     writer->endElement(); // list-level-properties
 
     // text properties
 
-    if (d->stylesPrivate.contains(KoListStyle::MarkCharacterStyleId)) {
+    if (d->stylesPrivate.contains(KoListStyle::CharacterProperties)) {
         KoGenStyle liststyle(KoGenStyle::ListStyle);
 
-        QSharedPointer<KoCharacterStyle> cs = markCharacterStyle();
+        QSharedPointer<KoCharacterStyle> cs = characterProperties();
         cs->saveOdf(liststyle);
 
         liststyle.writeStyleProperties(writer, KoGenStyle::TextType);

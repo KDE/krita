@@ -19,37 +19,42 @@
 #include <cstdlib>
 #include <unistd.h>
 
-#include <kaction.h>
+#include <kis_action.h>
 #include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <KoIcon.h>
 #include <KoUpdater.h>
+#include <KoResourceServerProvider.h>
+#include <KoFileDialog.h>
 
-#include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_pattern.h>
-#include <recorder/kis_play_info.h>
-#include <recorder/kis_recorded_action.h>
-#include <recorder/kis_recorded_action_factory_registry.h>
-#include <recorder/kis_recorded_action_load_context.h>
-#include <recorder/kis_recorded_action_save_context.h>
+#include <kis_resource_server_provider.h>
 #include <kis_types.h>
 #include <kis_view2.h>
+#include <KoPattern.h>
+#include <recorder/kis_action_recorder.h>
+#include <recorder/kis_macro.h>
+#include <recorder/kis_macro_player.h>
+#include <recorder/kis_play_info.h>
+#include <recorder/kis_recorded_action_factory_registry.h>
+#include <recorder/kis_recorded_action.h>
+#include <recorder/kis_recorded_action_load_context.h>
+#include <recorder/kis_recorded_action_save_context.h>
 
 #include "actionseditor/kis_actions_editor.h"
 #include "actionseditor/kis_actions_editor_dialog.h"
-#include <kis_resource_server_provider.h>
-#include <KoResourceServerProvider.h>
-#include <recorder/kis_macro_player.h>
+
+#include <QDesktopServices>
 #include <QApplication>
+
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
@@ -57,51 +62,47 @@ K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
 class RecordedActionSaveContext : public KisRecordedActionSaveContext {
     public:
         virtual void saveGradient(const KoAbstractGradient* ) {}
-        virtual void savePattern(const KisPattern* ) {}
+        virtual void savePattern(const KoPattern* ) {}
 };
 
 class RecordedActionLoadContext : public KisRecordedActionLoadContext {
     public:
         virtual KoAbstractGradient* gradient(const QString& name) const
         {
-            return KoResourceServerProvider::instance()->gradientServer()->getResourceByName(name);
+            return KoResourceServerProvider::instance()->gradientServer()->resourceByName(name);
         }
-        virtual KisPattern* pattern(const QString& name) const
+        virtual KoPattern* pattern(const QString& name) const
         {
-            return KisResourceServerProvider::instance()->patternServer()->getResourceByName(name);
+            return KoResourceServerProvider::instance()->patternServer()->resourceByName(name);
         }
 };
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent), m_recorder(0)
+        : KisViewPlugin(parent, "kritaplugins/bigbrother.rc")
+        , m_recorder(0)
 {
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setComponentData(BigBrotherPluginFactory::componentData());
-
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/bigbrother.rc"), true);
-
-        KAction* action = 0;
+        KisAction* action = 0;
         // Open and play action
-        action  = new KAction(KIcon("media-playback-start"), i18n("Open and play..."), this);
-        actionCollection()->addAction("Macro_Open_Play", action);
+        action  = new KisAction(koIcon("media-playback-start"), i18n("Open and play..."), this);
+        addAction("Macro_Open_Play", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
+
         // Open and edit action
-        action  = new KAction(KIcon("document-edit"), i18n("Open and edit..."), this);
-        actionCollection()->addAction("Macro_Open_Edit", action);
+        action  = new KisAction(koIcon("document-edit"), i18n("Open and edit..."), this);
+        addAction("Macro_Open_Edit", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
-        // Save recorded action
-        action  = new KAction(i18n("Save all actions"), this);
-        actionCollection()->addAction("Recording_Global_Save", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSave()));
+
         // Start recording action
-        m_startRecordingMacroAction = new KAction(KIcon("media-record"), i18n("Start recording macro"), this);
-        actionCollection()->addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
+        m_startRecordingMacroAction = new KisAction(koIcon("media-record"), i18n("Start recording macro"), this);
+        addAction("Recording_Start_Recording_Macro", m_startRecordingMacroAction);
         connect(m_startRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStartRecordingMacro()));
+
         // Save recorded action
-        m_stopRecordingMacroAction  = new KAction(KIcon("media-playback-stop"), i18n("Stop recording actions"), this);
-        actionCollection()->addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
+        m_stopRecordingMacroAction  = new KisAction(koIcon("media-playback-stop"), i18n("Stop recording actions"), this);
+        addAction("Recording_Stop_Recording_Macro", m_stopRecordingMacroAction);
         connect(m_stopRecordingMacroAction, SIGNAL(triggered()), this, SLOT(slotStopRecordingMacro()));
         m_stopRecordingMacroAction->setEnabled(false);
     }
@@ -113,18 +114,14 @@ BigBrotherPlugin::~BigBrotherPlugin()
     delete m_recorder;
 }
 
-void BigBrotherPlugin::slotSave()
-{
-    saveMacro(m_view->image()->actionRecorder(), KUrl());
-}
-
 void BigBrotherPlugin::slotOpenPlay()
 {
     KisMacro* m = openMacro();
+    qDebug() << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
     KoProgressUpdater* updater = m_view->createProgressUpdater();
-    updater->start(1);
+    updater->start(1, i18n("Playing back macro"));
     KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater->startSubtask());
     player.start();
     while(player.isRunning())
@@ -184,9 +181,16 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 {
 
     Q_UNUSED(url);
+    QStringList mimeFilter;
+    mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    KoFileDialog dialog(m_view, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Macro"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
+    QString filename = dialog.url();
     RecordedActionLoadContext loadContext;
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QFile f(filename);
@@ -219,7 +223,13 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    QString filename = KFileDialog::getSaveFileName(url, "*.krarec|Recorded actions (*.krarec)", m_view);
+    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "krita/bigbrother");
+    dialog.setCaption(i18n("Save Macro"));
+    dialog.setOverrideDir(url.url());
+    dialog.setNameFilter(i18n("Recorded actions (*.krarec)"));
+
+    QString filename = dialog.url();
+
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

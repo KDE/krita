@@ -33,29 +33,44 @@ public:
      *
      * @param filename the file name to save and load from.
      */
-    KoPattern(const QString& filename);
+    explicit KoPattern(const QString &filename);
+    KoPattern(const QImage &image, const QString &name, const QString &folderName);
     virtual ~KoPattern();
 
 public:
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-
-    virtual QImage image() const;
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     qint32 width() const;
     qint32 height() const;
 
-    void setImage(const QImage& image);
-
     QString defaultFileExtension() const;
 
     KoPattern& operator=(const KoPattern& pattern);
-private:
-    bool init(QByteArray& data);
+
+    KoPattern* clone() const;
+
+    /**
+     * @brief pattern the actual pattern image
+     * @return a valid QImage. There are no guarantees to the image format.
+     */
+    QImage pattern() const;
+
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
-    QImage m_image;
+
+    bool init(QByteArray& data);
+    void setPatternImage(const QImage& image);
+
+private:
+    QImage m_pattern;
+    mutable QByteArray m_md5;
 };
 
 #endif // KOPATTERN_H

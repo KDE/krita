@@ -50,9 +50,9 @@
 #include <KoClipPath.h>
 #include <KoXmlNS.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtGui/QColor>
+#include <QColor>
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
@@ -533,22 +533,21 @@ void SvgParser::applyFillStyle(KoShape *shape)
         return;
 
     if (gc->fillType == SvgGraphicsContext::None) {
-        shape->setBackground(0);
+        shape->setBackground(QSharedPointer<KoShapeBackground>(0));
     } else if (gc->fillType == SvgGraphicsContext::Solid) {
-        shape->setBackground(new KoColorBackground(gc->fillColor));
+        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
     } else if (gc->fillType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->fillId);
         if (gradient) {
             // great, we have a gradient fill
-            KoGradientBackground *bg = 0;
+            QSharedPointer<KoGradientBackground> bg;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
-                bg = new KoGradientBackground(*gradient->gradient());
+                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(*gradient->gradient()));
                 bg->setTransform(gradient->transform());
             } else {
                 QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
-                bg = new KoGradientBackground(*convertedGradient);
-                delete convertedGradient;
+                bg = QSharedPointer<KoGradientBackground>(new KoGradientBackground(convertedGradient));
                 QTransform invShapematrix = shape->transformation().inverted();
                 bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
             }
@@ -592,7 +591,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 qDeleteAll(patternContent);
 
                 if (!image.isNull()) {
-                    KoPatternBackground *bg = new KoPatternBackground(imageCollection);
+                    QSharedPointer<KoPatternBackground> bg(new KoPatternBackground(imageCollection));
                     bg->setPattern(image);
 
                     QPointF refPoint = shape->documentToShape(pattern->position(objectBound));
@@ -628,7 +627,7 @@ void SvgParser::applyFillStyle(KoShape *shape)
                 }
             } else {
                 // no referenced fill found, use fallback color
-                shape->setBackground(new KoColorBackground(gc->fillColor));
+                shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(gc->fillColor)));
             }
         }
     }
@@ -645,25 +644,25 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
         return;
 
     if (gc->strokeType == SvgGraphicsContext::None) {
-        shape->setBorder(0);
+        shape->setStroke(0);
     } else if (gc->strokeType == SvgGraphicsContext::Solid) {
         double lineWidth = gc->stroke.lineWidth();
         QVector<qreal> dashes = gc->stroke.lineDashes();
 
-        KoLineBorder *border = new KoLineBorder(gc->stroke);
+        KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
 
         // apply line width to dashes and dash offset
         if (dashes.count() && lineWidth > 0.0) {
-            QVector<qreal> dashes = border->lineDashes();
+            QVector<qreal> dashes = stroke->lineDashes();
             for (int i = 0; i < dashes.count(); ++i)
                 dashes[i] /= lineWidth;
-            double dashOffset = border->dashOffset();
-            border->setLineStyle(Qt::CustomDashLine, dashes);
-            border->setDashOffset(dashOffset / lineWidth);
+            double dashOffset = stroke->dashOffset();
+            stroke->setLineStyle(Qt::CustomDashLine, dashes);
+            stroke->setDashOffset(dashOffset / lineWidth);
         } else {
-            border->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
         }
-        shape->setBorder(border);
+        shape->setStroke(stroke);
     } else if (gc->strokeType == SvgGraphicsContext::Complex) {
         // try to find referenced gradient
         SvgGradientHelper *gradient = findGradient(gc->strokeId);
@@ -679,15 +678,15 @@ void SvgParser::applyStrokeStyle(KoShape *shape)
                 delete convertedGradient;
                 brush.setTransform(gradient->transform() * gc->matrix * shape->transformation().inverted());
             }
-            KoLineBorder *border = new KoLineBorder(gc->stroke);
-            border->setLineBrush(brush);
-            border->setLineStyle(Qt::SolidLine, QVector<qreal>());
-            shape->setBorder(border);
+            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
+            stroke->setLineBrush(brush);
+            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            shape->setStroke(stroke);
         } else {
             // no referenced stroke found, use fallback color
-            KoLineBorder *border = new KoLineBorder(gc->stroke);
-            border->setLineStyle(Qt::SolidLine, QVector<qreal>());
-            shape->setBorder(border);
+            KoShapeStroke *stroke = new KoShapeStroke(gc->stroke);
+            stroke->setLineStyle(Qt::SolidLine, QVector<qreal>());
+            shape->setStroke(stroke);
         }
     }
 }
@@ -1111,7 +1110,7 @@ QList<KoShape*> SvgParser::parseContainer(const KoXmlElement &e)
         } else if (b.tagName() == "use") {
             shapes += parseUse(b);
         } else {
-            // this is an unkown element, so try to load it anyway
+            // this is an unknown element, so try to load it anyway
             // there might be a shape that handles that element
             KoShape *shape = createObject(b);
             if (shape) {
@@ -1262,14 +1261,12 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         shape->setTransformation(QTransform());
 
         // reset border
-        KoShapeBorderModel *oldBorder = shape->border();
-        shape->setBorder(0);
-        delete oldBorder;
+        KoShapeStrokeModel *oldStroke = shape->stroke();
+        shape->setStroke(0);
+        delete oldStroke;
 
         // reset fill
-        KoShapeBackground *oldFill = shape->background();
-        shape->setBackground(0);
-        delete oldFill;
+        shape->setBackground(QSharedPointer<KoShapeBackground>(0));
 
         if (!svgShape->loadSvg(element, context)) {
             delete shape;
@@ -1307,14 +1304,12 @@ KoShape * SvgParser::createShape(const QString &shapeID)
     shape->setTransformation(QTransform());
 
     // reset border
-    KoShapeBorderModel *oldBorder = shape->border();
-    shape->setBorder(0);
-    delete oldBorder;
+    KoShapeStrokeModel *oldStroke = shape->stroke();
+    shape->setStroke(0);
+    delete oldStroke;
 
     // reset fill
-    KoShapeBackground *oldFill = shape->background();
-    shape->setBackground(0);
-    delete oldFill;
+    shape->setBackground(QSharedPointer<KoShapeBackground>(0));
 
     return shape;
 }

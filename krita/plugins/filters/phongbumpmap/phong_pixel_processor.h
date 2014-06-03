@@ -15,6 +15,8 @@
 *  along with this program; if not, write to the Free Software
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
+#ifndef PHONG_PIXEL_PROCESSOR_H
+#define PHONG_PIXEL_PROCESSOR_H
 
 #include <QVector3D>
 #include <QTime>
@@ -26,7 +28,6 @@
 
 #include "phong_bumpmap_constants.h"
 #include "kis_properties_configuration.h"
-#include <KoChannelInfo.h>
 
 struct Illuminant
 {
@@ -130,3 +131,4 @@ struct pseudo3DPixel
     quint8* heightmap;
 };
 */
+#endif

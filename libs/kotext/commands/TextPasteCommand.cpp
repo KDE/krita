@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <KAction>
+#include <kaction.h>
 
 #include <QTextDocument>
 #include <QApplication>
@@ -36,29 +36,36 @@
 
 #include "ChangeTrackedDeleteCommand.h"
 #include "DeleteCommand.h"
+#include "KoDocumentRdfBase.h"
 
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
+#include <Soprano/Soprano>
 #else
-#include "KoTextSopranoRdfModel_p.h"
+namespace Soprano
+{
+    class Model
+    {
+    };
+}
 #endif
 
 TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoShapeController *shapeController,
-                                   KUndo2Command *parent, bool pasteAsText)
+                                   KoCanvasBase *canvas, KUndo2Command *parent, bool pasteAsText)
     : KUndo2Command (parent),
       m_mimeData(mimeData),
       m_document(document),
       m_rdf(0),
       m_shapeController(shapeController),
+      m_canvas(canvas),
       m_pasteAsText(pasteAsText),
       m_first(true)
 {
-    m_rdf = static_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<void*>());
+    m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
 
     if (m_pasteAsText)
-        setText(i18n("Paste As Text"));
+        setText(i18nc("(qtundo-format)", "Paste As Text"));
     else
         setText(i18nc("(qtundo-format)", "Paste"));
 }
@@ -78,17 +85,10 @@ void TextPasteCommand::redo()
     if (!m_first) {
         KUndo2Command::redo();
     } else {
-        //kDebug() << "begin paste command";
-        editor->beginEditBlock();
+        editor->beginEditBlock(); //this is needed so Qt does not merge successive paste actions together
         m_first = false;
         if (editor->hasSelection()) { //TODO
-            // XXX: this was m_tool->m_actionShowChanges.isChecked -- but shouldn't we check
-            // whether we should record changes here, instead of showing?
-            if (textDocument.changeTracker()->recordChanges()) {
-                editor->addCommand(new ChangeTrackedDeleteCommand(ChangeTrackedDeleteCommand::NextChar, m_document.data(), m_shapeController));
-            } else {
-                editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController));
-            }
+            editor->addCommand(new DeleteCommand(DeleteCommand::NextChar, m_document.data(), m_shapeController, this));
         }
 
         // check for mime type
@@ -103,40 +103,29 @@ void TextPasteCommand::redo()
                 editor->insertText(m_mimeData->text());
             } else {
 
-                const Soprano::Model *rdfModel = 0;
+                QSharedPointer<Soprano::Model> rdfModel;
 #ifdef SHOULD_BUILD_RDF
-                bool weOwnRdfModel = true;
-                rdfModel = Soprano::createModel();
-                if (m_rdf) {
-                    delete rdfModel;
+                if(!m_rdf) {
+                    rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+                } else {
                     rdfModel = m_rdf->model();
-                    weOwnRdfModel = false;
                 }
 #endif
 
-                //kDebug() << "pasting odf text";
-                KoTextPaste paste(editor, m_shapeController, rdfModel);
+                KoTextPaste paste(editor, m_shapeController, rdfModel, m_canvas, this);
                 paste.paste(odfType, m_mimeData);
-                //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF
                 if (m_rdf) {
                     m_rdf->updateInlineRdfStatements(editor->document());
                 }
-                if (weOwnRdfModel && rdfModel) {
-                    delete rdfModel;
-                }
 #endif
             }
         } else if (!m_pasteAsText && m_mimeData->hasHtml()) {
-            //kDebug() << "pasting html";
             editor->insertHtml(m_mimeData->html());
-            //kDebug() << "done with pasting";
         } else if (m_pasteAsText || m_mimeData->hasText()) {
-            //kDebug() << "pasting text";
             editor->insertText(m_mimeData->text());
-            //kDebug() << "done with pasting";
         }
-        editor->endEditBlock();
+        editor->endEditBlock(); //see above beginEditBlock
     }
 }

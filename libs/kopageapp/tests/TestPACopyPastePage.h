@@ -20,7 +20,7 @@
 #ifndef TESTPACOPYPASTEPAGE_H
 #define TESTPACOPYPASTEPAGE_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class QMimeData;
 class MockDocument;
@@ -36,11 +36,12 @@ private:
     void addShape( KoPAPageBase * page );
 
     QPointF m_pos;
+
 private slots:
+    void copyPasteMultiplePages();
     void copyPasteSinglePage();
     void copyPasteSingleMasterPage();
-    void copyPasteMuliplePages();
-    void copyPasteMulipleMasterPages();
+    void copyPasteMultipleMasterPages();
     void copyPasteMixedPages();
 };
 

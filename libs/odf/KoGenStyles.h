@@ -23,12 +23,12 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QMultiMap>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QFlags>
+#include <QList>
+#include <QMap>
+#include <QMultiMap>
+#include <QSet>
+#include <QString>
+#include <QFlags>
 #include <KoGenStyle.h>
 
 class KoStore;
@@ -119,7 +119,8 @@ public:
 
     /**
      * Return all styles of a given type (NOT marked for styles.xml).
-     * Use this for saving the styles.
+     *
+     * Use this only if you have special needs.
      *
      * @param type the style type, see the KoGenStyle constructor
      * @see insert()
@@ -127,18 +128,9 @@ public:
     QList<KoGenStyles::NamedStyle> styles(KoGenStyle::Type type) const;
 
     /**
-     * Return styles of a given type, marked for styles.xml,
-     * Use this for saving the styles.
-     *
-     * @param type the style type, see the KoGenStyle constructor
-     * @see insert()
-     */
-    QList<KoGenStyles::NamedStyle> stylesForStylesXml(KoGenStyle::Type type) const;
-
-    /**
      * @return an existing style by name. If no such style exists, 0 is returned.
      */
-    const KoGenStyle *style(const QString& name) const;
+    const KoGenStyle *style(const QString &name, const QByteArray &family) const;
 
     /**
      * @return an existing style by name, which can be modified.
@@ -148,7 +140,7 @@ public:
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
      */
-    KoGenStyle* styleForModification(const QString &name);
+    KoGenStyle* styleForModification(const QString &name, const QByteArray &family);
 
     /**
      * Mark a given automatic style as being needed in styles.xml.
@@ -162,7 +154,7 @@ public:
      *
      * @see styles, KoGenStyle::setAutoStyleInStylesDotXml
      */
-    void markStyleForStylesXml(const QString &name);
+    void markStyleForStylesXml(const QString &name, const QByteArray &family);
 
     /**
      * Insert a font face declaration.

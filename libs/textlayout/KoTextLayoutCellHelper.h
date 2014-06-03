@@ -25,18 +25,20 @@
 #ifndef KOTEXTLAYOUTCELLHELPER_H
 #define KOTEXTLAYOUTCELLHELPER_H
 
-#include <QObject>
+#include "kotextlayout_export.h"
+
 #include <KoBorder.h>
 #include <KoTableCellStyle.h>
 
-class KoTableBorderStyle;
+#include <QObject>
+
 class QPainter;
 
-class KoTextLayoutCellHelper : public QObject
+class KOTEXTLAYOUT_EXPORT KoTextLayoutCellHelper : public QObject
 {
     Q_OBJECT
 public:
-    KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = 0);
+    explicit KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle, QObject *parent = 0);
 
     /// draws a horizontal wave line
     void drawHorizontalWave(KoBorder::BorderStyle style, QPainter &painter, qreal x, qreal w, qreal t) const;

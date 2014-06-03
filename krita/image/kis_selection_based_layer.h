@@ -29,11 +29,12 @@
 #include "kis_node_filter_interface.h"
 
 class KisNodeVisitor;
+class KisFilterConfiguration;
 
 /**
  * @class KisSelectionBasedLayer describes base behaviour for
  * selection base classes like KisAdjustmentLayer and KisGeneratorLayer.
- * These clesses should have a persistent selection that controls
+ * These classes should have a persistent selection that controls
  * the area where filter/generators are applied. The area outside
  * this selection is not affected by the layer
  */
@@ -50,7 +51,7 @@ public:
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection);
+    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfiguration *filterConfig, bool useGeneratorRegistry = false);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     virtual ~KisSelectionBasedLayer();
 
@@ -97,10 +98,12 @@ public:
 public:
 
     /**
-     * gets this layer's selection
-     * @return the lsyer's selection
+     * Returns the selection of the layer
+     *
+     * Do not mix it with selection() which returns
+     * the currently active selection of the image
      */
-    KisSelectionSP selection() const;
+    KisSelectionSP internalSelection() const;
 
     /**
      * sets the selection of this layer to a copy of
@@ -108,21 +111,8 @@ public:
      * @param selection the selection to set
      * @return void
      */
-    void setSelection(KisSelectionSP selection);
 
-    /**
-     * gets the state of the selection - if it is shown or
-     * not.
-     * @return the state of the selection
-     */
-    bool showSelection() const;
-
-    /**
-     * sets the state of the selection to show or !show
-     * @param show the state to set the selection visibility to
-     * @return void
-     */
-    void setShowSelection(bool show);
+    void setInternalSelection(KisSelectionSP selection);
 
     /**
      * gets this layer's x coordinate, taking selection into account
@@ -186,7 +176,7 @@ public slots:
     }
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

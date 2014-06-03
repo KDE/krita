@@ -22,38 +22,27 @@
  */
 
 #include "kis_tool_polygon.h"
-#include <math.h>
-
-#include <QPainter>
-#include <QSpinBox>
-
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <klocale.h>
-#include <kis_debug.h>
-#include <knuminput.h>
 
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoPathShape.h>
-#include <KoShapeController.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
-#include <kis_selection.h>
-#include "kis_painter.h"
-#include <kis_paint_device.h>
-#include "kis_paint_information.h"
 #include "kis_paintop_registry.h"
-#include "kis_cursor.h"
+#include "kis_figure_painting_tool_helper.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+#include <kis_system_locker.h>
+
+
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
-        : KisToolPolylineBase(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6))
+        : KisToolPolylineBase(canvas,  KisToolPolylineBase::PAINT, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {
     setObjectName("tool_polygon");
+    setSupportOutline(true);
 }
 
 KisToolPolygon::~KisToolPolygon()
@@ -70,18 +59,13 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-
-        if (device) {
-            KisPainter painter(device, currentSelection());
-            painter.beginTransaction(i18n("Polygon"));
-            setupPainter(&painter);
-            painter.paintPolygon(points);
-            device->setDirty(painter.takeDirtyRegion());
-            notifyModified();
-
-            painter.endTransaction(image()->undoAdapter());
-        }
+        KisSystemLocker locker(currentNode());
+        KisFigurePaintingToolHelper helper(i18n("Polygon"),
+                                           image(),
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
+        helper.paintPolygon(points);
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
@@ -94,8 +78,8 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
         path->close();
         path->normalize();
 
-        KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
-        path->setBorder(border);
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        path->setStroke(border);
 
         addShape(path);
     }

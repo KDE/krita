@@ -22,15 +22,14 @@
 #include <KoResourceModel.h>
 #include <KoResourceItemView.h>
 #include <KoResourceItemDelegate.h>
-#include <QtGui/QPainter>
-#include <QtGui/QTableView>
-#include <QtGui/QListView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QHeaderView>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QStyledItemDelegate>
+#include <QPainter>
+#include <QTableView>
+#include <QListView>
+#include <QHeaderView>
+#include <QMouseEvent>
+#include <QStyledItemDelegate>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KoResourceSelector::Private
 {
@@ -68,7 +67,7 @@ KoResourceSelector::KoResourceSelector(QWidget * parent)
     setMouseTracking(true);
 }
 
-KoResourceSelector::KoResourceSelector( KoAbstractResourceServerAdapter * resourceAdapter, QWidget * parent )
+KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent )
     : QComboBox( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
@@ -82,9 +81,9 @@ KoResourceSelector::KoResourceSelector( KoAbstractResourceServerAdapter * resour
     connect( this, SIGNAL(currentIndexChanged(int)),
              this, SLOT(indexChanged(int)) );
 
-    connect(resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
+    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter, SIGNAL(removingResource(KoResource*)),
+    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
             this, SLOT(resourceRemoved(KoResource*)));
 }
 
@@ -146,15 +145,15 @@ void KoResourceSelector::mouseMoveEvent( QMouseEvent * event )
         unsetCursor();
 }
 
-void KoResourceSelector::setResourceAdapter(KoAbstractResourceServerAdapter *resourceAdapter)
+void KoResourceSelector::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter)
 {
     Q_ASSERT(resourceAdapter);
     setModel(new KoResourceModel(resourceAdapter, this));
     d->updateIndex(this);
 
-    connect(resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
+    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter, SIGNAL(removingResource(KoResource*)),
+    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
             this, SLOT(resourceRemoved(KoResource*)));
 }
 

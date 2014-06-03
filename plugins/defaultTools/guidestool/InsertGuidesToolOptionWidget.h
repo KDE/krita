@@ -40,16 +40,14 @@ class InsertGuidesToolOptionWidget : public QWidget
     Q_OBJECT
 public:
 
-    InsertGuidesToolOptionWidget(QWidget *parent = 0);
+    explicit InsertGuidesToolOptionWidget(QWidget *parent = 0);
     ~InsertGuidesToolOptionWidget();
 
 signals:
     void createGuides(GuidesTransaction *transaction);
 
 private slots:
-    void verticalCheckBoxSlot(bool state);
-    void horizontalCheckBoxSlot(bool state);
-    void createButtonClickedSlot (bool checked);
+    void onCreateButtonClicked(bool checked);
 
 private:
     Ui_InsertGuidesToolOptionWidget m_widget;

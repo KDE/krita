@@ -23,7 +23,6 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
@@ -33,8 +32,6 @@
 #endif
 #include <kis_iterator_ng.h>
 
-typedef QPointer<KoUpdater> KoUpdaterPtr;
-
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
 {
 }
@@ -43,11 +40,11 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 {
 }
 
-void KisColorTransformationFilter::process(KisPaintDeviceSP device, 
-                                           const QRect& applyRect,
-                                           const KisFilterConfiguration* config,
-                                           KoUpdater* progressUpdater
-                                           ) const
+void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device, 
+                                               const QRect& applyRect,
+                                               const KisFilterConfiguration* config,
+                                               KoUpdater* progressUpdater
+                                               ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -59,18 +56,17 @@ void KisColorTransformationFilter::process(KisPaintDeviceSP device,
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
     if (!colorTransformation) return;
 
-    KisRectIteratorSP it = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
     int p = 0;
     int conseq;
     do {
-    
-        conseq = it->nConseqPixels();
+        conseq = it.nConseqPixels();
 
-        colorTransformation->transform(it->oldRawData(), it->rawData(), conseq);
+        colorTransformation->transform(it.oldRawData(), it.rawData(), conseq);
 
         if (progressUpdater) progressUpdater->setValue(p += conseq);
 
-    } while(it->nextPixels(conseq));
+    } while(it.nextPixels(conseq));
     delete colorTransformation;
 
 }

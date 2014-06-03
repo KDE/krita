@@ -101,9 +101,7 @@ bool KoOdfReadStore::loadAndParse(QString &errorMessage)
 
 bool KoOdfReadStore::loadAndParse(const QString &fileName, KoXmlDocument &doc, QString &errorMessage)
 {
-    //kDebug(30003) <<"loadAndParse: Trying to open" << fileName;
     if (!d->store) {
-        kWarning(30003) << "No store backend";
         errorMessage = i18n("No store backend");
         return false;
     }

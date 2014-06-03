@@ -26,7 +26,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 
 #include "mypaint_surface.h"
@@ -41,9 +41,9 @@ MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPainter* painter)
 {
     m_rgb16 = KoColorSpaceRegistry::instance()->rgb16();
     // fake a mypaint tile
-    m_dstData = m_dst->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
-    m_srcData = m_src->colorSpace()->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
-    m_dstRgb16Data = m_rgb16->allocPixelBuffer(TILE_SIZE * TILE_SIZE, true);
+    m_dstData = new quint8[m_dst->colorSpace()->pixelSize() * TILE_SIZE * TILE_SIZE, true];
+    m_srcData = new quint8[m_src->colorSpace()->pixelSize() * TILE_SIZE * TILE_SIZE, true];
+    m_dstRgb16Data = new quint8[m_rgb16->pixelSize() * TILE_SIZE * TILE_SIZE, true];
 }
 
 bool MyPaintSurface::draw_dab (float x, float y,
@@ -88,7 +88,7 @@ bool MyPaintSurface::draw_dab (float x, float y,
 
             //uint16_t * rgba_p = get_tile_memory(tx, ty, false);
             m_dst->readBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
+            m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
 
@@ -156,7 +156,7 @@ bool MyPaintSurface::draw_dab (float x, float y,
                     }
                 }
             }
-            m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE);
+            m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
             m_dst->writeBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             m_painter->addDirtyRect(QRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE));
         }
@@ -210,7 +210,7 @@ void MyPaintSurface::get_color (float x, float y,
             //uint16_t * rgba_p = get_tile_memory(tx, ty, true);
             //qDebug() << "tx" << tx << "tx * TILE_SIZE" << tx * TILE_SIZE << "ty" << ty << "ty * TILE_SIZE" << ty * TILE_SIZE;
             m_src->readBytes(m_srcData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            m_src->colorSpace()->convertPixelsTo(m_srcData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
+            m_src->colorSpace()->convertPixelsTo(m_srcData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
 
             float xc = x - tx*TILE_SIZE;

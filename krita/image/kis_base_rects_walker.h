@@ -32,7 +32,8 @@ class KRITAIMAGE_EXPORT KisBaseRectsWalker : public KisShared
 public:
     enum UpdateType {
         UPDATE,
-        FULL_REFRESH
+        FULL_REFRESH,
+        UNSUPPORTED
     };
 
 
@@ -59,6 +60,26 @@ public:
     #define GRAPH_POSITION_MASK     0x07
     #define POSITION_TO_FILTHY_MASK 0xF8
 
+    struct CloneNotification {
+        CloneNotification() {}
+        CloneNotification(KisNodeSP node, const QRect &dirtyRect)
+            : m_layer(qobject_cast<KisLayer*>(node.data())),
+              m_dirtyRect(dirtyRect) {}
+
+        void notify() {
+            Q_ASSERT(m_layer); // clones are possible for layers only
+            m_layer->updateClones(m_dirtyRect);
+        }
+
+    private:
+        friend class KisWalkersTest;
+
+        KisLayerSP m_layer;
+        QRect m_dirtyRect;
+    };
+
+    typedef QVector<CloneNotification> CloneNotificationsVector;
+
     struct JobItem {
         KisNodeSP m_node;
         NodePosition m_position;
@@ -81,7 +102,9 @@ public:
     void collectRects(KisNodeSP node, const QRect& requestedRect) {
         clear();
         m_nodeChecksum = calculateChecksum(node, requestedRect);
+        m_graphChecksum = node->graphSequenceNumber();
         m_resultChangeRect = requestedRect;
+        m_resultUncroppedChangeRect = requestedRect;
         m_requestedRect = requestedRect;
         m_startNode = node;
         startTrip(node);
@@ -89,12 +112,24 @@ public:
 
     inline void recalculate(const QRect& requestedRect) {
         Q_ASSERT(m_startNode);
-        collectRects(m_startNode, requestedRect);
+
+        if(isStillInGraph(m_startNode)) {
+            collectRects(m_startNode, requestedRect);
+        }
+        else {
+            clear();
+            m_nodeChecksum = calculateChecksum(m_startNode, requestedRect);
+            m_graphChecksum = m_startNode->graphSequenceNumber();
+            m_resultChangeRect = QRect();
+            m_resultUncroppedChangeRect = QRect();
+        }
     }
 
     bool checksumValid() {
         Q_ASSERT(m_startNode);
-        return m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect);
+        return
+            m_nodeChecksum == calculateChecksum(m_startNode, m_requestedRect) &&
+            m_graphChecksum == m_startNode->graphSequenceNumber();
     }
 
     inline void setCropRect(QRect cropRect) {
@@ -110,12 +145,21 @@ public:
         return m_mergeTask;
     }
 
+    // return a reference for efficiency reasons
+    inline CloneNotificationsVector& cloneNotifications() {
+        return m_cloneNotifications;
+    }
+
     inline const QRect& accessRect() const {
         return m_resultAccessRect;
     }
 
     inline const QRect& changeRect() const {
         return m_resultChangeRect;
+    }
+
+    inline const QRect& uncroppedChangeRect() const {
+        return m_resultUncroppedChangeRect;
     }
 
     inline bool needRectVaries() const {
@@ -157,6 +201,10 @@ protected:
         return position & GRAPH_POSITION_MASK;
     }
 
+    static inline bool isStillInGraph(KisNodeSP node) {
+        return node->graphListener();
+    }
+
     static inline bool isLayer(KisNodeSP node) {
         return qobject_cast<KisLayer*>(node.data());
     }
@@ -165,12 +213,30 @@ protected:
         return qobject_cast<KisMask*>(node.data());
     }
 
+    static inline bool hasClones(KisNodeSP node) {
+        KisLayer *layer = qobject_cast<KisLayer*>(node.data());
+        return layer && layer->hasClones();
+    }
+
+    static inline NodePosition calculateNodePosition(KisNodeSP node) {
+        KisNodeSP nextNode = node->nextSibling();
+        while(nextNode && !isLayer(nextNode)) nextNode = nextNode->nextSibling();
+        if (!nextNode) return N_TOPMOST;
+
+        KisNodeSP prevNode = node->prevSibling();
+        while(prevNode && !isLayer(prevNode)) prevNode = prevNode->prevSibling();
+        if (!prevNode) return N_BOTTOMMOST;
+
+        return N_NORMAL;
+    }
+
     inline void clear() {
-        m_resultAccessRect = /*m_resultChangeRect =*/
+        m_resultAccessRect = m_resultNeedRect = /*m_resultChangeRect =*/
             m_childNeedRect = m_lastNeedRect = QRect();
 
         m_needRectVaries = m_changeRectVaries = false;
         m_mergeTask.clear();
+        m_cloneNotifications.clear();
 
         // Not needed really. Think over removing.
         //m_startNode = 0;
@@ -189,9 +255,11 @@ protected:
     /**
      * Used by KisFullRefreshWalker as it has a special changeRect strategy
      */
-    inline void setExplicitChangeRect(const QRect &changeRect, bool changeRectVaries) {
+    inline void setExplicitChangeRect(KisNodeSP node, const QRect &changeRect, bool changeRectVaries) {
         m_resultChangeRect = changeRect;
+        m_resultUncroppedChangeRect = changeRect;
         m_changeRectVaries = changeRectVaries;
+        registerCloneNotification(node, N_FILTHY);
     }
 
     /**
@@ -209,6 +277,25 @@ protected:
             m_changeRectVaries = currentChangeRect != m_resultChangeRect;
 
         m_resultChangeRect = currentChangeRect;
+
+        m_resultUncroppedChangeRect = node->changeRect(m_resultUncroppedChangeRect,
+                                                       getPositionToFilthy(position));
+        registerCloneNotification(node, position);
+    }
+
+    void registerCloneNotification(KisNodeSP node, NodePosition position) {
+        /**
+         * Note, we do not check for (N_ABOVE_FILTHY &&
+         * dependOnLowerNodes(node)) because it may lead to an
+         * infinite loop with filter layer. Activate it when it is
+         * guaranteed that it is not possible to create a filter layer
+         * avobe its own clone
+         */
+
+        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION)) {
+            m_cloneNotifications.append(
+                CloneNotification(node, m_resultUncroppedChangeRect));
+        }
     }
 
     /**
@@ -219,7 +306,7 @@ protected:
         if(!isLayer(node)) return;
 
         if(m_mergeTask.isEmpty())
-            m_resultAccessRect = m_childNeedRect =
+            m_resultAccessRect = m_resultNeedRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
 
         QRect currentNeedRect;
@@ -227,10 +314,13 @@ protected:
         if(position & N_TOPMOST)
             m_lastNeedRect = m_childNeedRect;
 
-        if(position & (N_FILTHY | N_ABOVE_FILTHY)) {
+        if(position & (N_FILTHY | N_ABOVE_FILTHY | N_EXTRA)) {
             if(!m_lastNeedRect.isEmpty())
                 pushJob(node, position, m_lastNeedRect);
             //else /* Why push empty rect? */;
+
+            m_resultAccessRect |= node->accessRect(m_lastNeedRect,
+                                                   getPositionToFilthy(position));
 
             m_lastNeedRect = node->needRect(m_lastNeedRect,
                                             getPositionToFilthy(position));
@@ -240,6 +330,10 @@ protected:
         else if(position & (N_BELOW_FILTHY | N_FILTHY_PROJECTION)) {
             if(!m_lastNeedRect.isEmpty()) {
                 pushJob(node, position, m_lastNeedRect);
+
+                m_resultAccessRect |= node->accessRect(m_lastNeedRect,
+                                                       getPositionToFilthy(position));
+
                 m_lastNeedRect = node->needRect(m_lastNeedRect,
                                                 getPositionToFilthy(position));
                 m_lastNeedRect = cropThisRect(m_lastNeedRect);
@@ -251,8 +345,8 @@ protected:
         }
 
         if(!m_needRectVaries)
-            m_needRectVaries = m_resultAccessRect != m_lastNeedRect;
-        m_resultAccessRect |= m_lastNeedRect;
+            m_needRectVaries = m_resultNeedRect != m_lastNeedRect;
+        m_resultNeedRect |= m_lastNeedRect;
     }
 
     virtual void adjustMasksChangeRect(KisNodeSP firstMask) {
@@ -272,8 +366,14 @@ protected:
                 QRect changeRect = currentNode->changeRect(m_resultChangeRect);
                 m_changeRectVaries |= changeRect != m_resultChangeRect;
                 m_resultChangeRect = changeRect;
+                m_resultUncroppedChangeRect = changeRect;
             }
         }
+
+        KisNodeSP parentLayer = firstMask->parent();
+        Q_ASSERT(parentLayer);
+
+        registerCloneNotification(parentLayer, N_FILTHY_PROJECTION);
     }
 
     static qint32 calculateChecksum(KisNodeSP node, const QRect &requestedRect) {
@@ -301,10 +401,13 @@ private:
      * data for a successful merge operation.
      */
     QRect m_resultAccessRect;
+    QRect m_resultNeedRect;
     QRect m_resultChangeRect;
+    QRect m_resultUncroppedChangeRect;
     bool m_needRectVaries;
     bool m_changeRectVaries;
     NodeStack m_mergeTask;
+    CloneNotificationsVector m_cloneNotifications;
 
     /**
      * Used by update optimization framework
@@ -318,6 +421,13 @@ private:
      * calculated
      */
     qint32 m_nodeChecksum;
+
+    /**
+     * Used for getting know whether the structure of
+     * the graph has changed since the walker was
+     * calculated
+     */
+    qint32 m_graphChecksum;
 
     /**
      * Temporary variables

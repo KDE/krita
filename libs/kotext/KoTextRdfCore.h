@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include <QSharedPointer>
+
 // this file can only be used by code that is built
 // with soprano enabled.
 #include <Soprano/Soprano>
@@ -45,28 +47,28 @@ namespace KoTextRdfCore
  * Save the RDF selected triples from model to the store with the
  * given RDF/XML filename
  */
-bool saveRdf(Soprano::Model *model, Soprano::StatementIterator triples,
-        KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName);
+bool saveRdf( QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples,
+              KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName);
 
 /**
  * Save the given RDF model to the manifest.rdf file. The idmap is used
  * to maintain xml:id links from the model so they will be valid with
  * the content.xml that generated the idmap.
  */
-bool createAndSaveManifest(const Soprano::Model *model,
+bool createAndSaveManifest(QSharedPointer<Soprano::Model> model,
                            const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
 
 /**
  * Load the manifest.rdf file from the ODF container store
  * into the model provided.
  */
-bool loadManifest(KoStore *store, Soprano::Model *model);
+bool loadManifest(KoStore *store, QSharedPointer<Soprano::Model> model);
 
 /**
  * For debugging, dump the model to kDebug() along with the
  * given header message for identification
  */
-void dumpModel(const QString &message, Soprano::Model *model);
+void dumpModel(const QString &message, QSharedPointer<Soprano::Model> model);
 
 /**
  * Load an Rdf linked list of statements. See saveList() for the
@@ -75,7 +77,7 @@ void dumpModel(const QString &message, Soprano::Model *model);
  *
  * @see saveList()
  */
-QList<Soprano::Statement> KOTEXT_EXPORT loadList(Soprano::Model *model, Soprano::Node ListHeadSubject);
+QList<Soprano::Statement> KOTEXT_EXPORT loadList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject);
 
 /**
  * Save an Rdf List of data nodes into the model. Rdf defines a
@@ -111,7 +113,7 @@ QList<Soprano::Statement> KOTEXT_EXPORT loadList(Soprano::Model *model, Soprano:
  * bnodeZ          22-rdf-syntax-ns#rest  nil
  *
  */
-void KOTEXT_EXPORT saveList(Soprano::Model *model, Soprano::Node ListHeadSubject,
+void KOTEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject,
         QList<Soprano::Node> &dataBNodeList, Soprano::Node context);
 
 /**
@@ -122,8 +124,8 @@ void KOTEXT_EXPORT saveList(Soprano::Model *model, Soprano::Node ListHeadSubject
  * because you don't have to ensure that a statement is added only once
  * to the remove list.
  */
-void KOTEXT_EXPORT removeStatementsIfTheyExist(Soprano::Model *model,
-        const QList<Soprano::Statement> &removeList);
+void KOTEXT_EXPORT removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> model,
+                                                const QList<Soprano::Statement> &removeList);
 
 /**
  * Given the Subj+Pred get the Object for the triple. If there are
@@ -131,9 +133,9 @@ void KOTEXT_EXPORT removeStatementsIfTheyExist(Soprano::Model *model,
  * returned. This is mainly useful when you *know* there is only zero
  * or one object.
  */
-Soprano::Node KOTEXT_EXPORT getObject(Soprano::Model *model, Soprano::Node s, Soprano::Node p);
+Soprano::Node KOTEXT_EXPORT getObject(QSharedPointer<Soprano::Model> model, Soprano::Node s, Soprano::Node p);
 
-QString KOTEXT_EXPORT getProperty(Soprano::Model* m,
+QString KOTEXT_EXPORT getProperty(QSharedPointer<Soprano::Model> m,
                                   Soprano::Node subj,
                                   Soprano::Node pred,
                                   const QString &defval);

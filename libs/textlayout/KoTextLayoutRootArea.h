@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTROOTAREA_H
 #define KOTEXTLAYOUTROOTAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -32,7 +32,7 @@ class KoTextPage;
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 {
 public:
     /// constructor

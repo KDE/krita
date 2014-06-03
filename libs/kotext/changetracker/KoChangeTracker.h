@@ -31,7 +31,6 @@
 class KoXmlElement;
 class KoChangeTrackerElement;
 class KoFormatChangeInformation;
-class KoDeleteChangeMarker;
 
 class QTextCursor;
 class QTextFormat;
@@ -50,7 +49,7 @@ public:
         UNKNOWN = 9999
     };
 
-    KoChangeTracker(QObject *parent = 0);
+    explicit KoChangeTracker(QObject *parent = 0);
     ~KoChangeTracker();
 
     void setRecordChanges(bool enabled);
@@ -59,13 +58,10 @@ public:
     void setDisplayChanges(bool enabled);
     bool displayChanges() const;
 
-    /// returns the changeId of the changeElement registered for the given change. This may be an already existing changeId, if the change could be merged.
-    int getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat &newFormat, int prevCharChangeId, int nextCharChangeId) const;
-
-    /// XXX: these three are called "getXXX" but does change the state of the change tracker
-    int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
-    int getInsertChangeId(QString title, int existingChangeId);
-    int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
+    /// XXX: these three are called "getXXX" but do change the state of the change tracker
+    int getFormatChangeId(const QString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId);
+    int getInsertChangeId(const QString &title, int existingChangeId);
+    int getDeleteChangeId(const QString &title, const QTextDocumentFragment &selection, int existingChangeId);
 
     void setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation);
     KoFormatChangeInformation *formatChangeInformation(int formatChangeId) const;
@@ -76,14 +72,12 @@ public:
     //Returns all the deleted changes
     int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector) const;
 
-    int allChangeIds(QVector<int>& changesVector) const;
-
     bool containsInlineChanges(const QTextFormat &format) const;
-    int mergeableId(KoGenChange::Type type, QString &title, int existingId) const;
+    int mergeableId(KoGenChange::Type type, const QString &title, int existingId) const;
 
-    const QColor& getInsertionBgColor() const;
-    const QColor& getDeletionBgColor() const;
-    const QColor& getFormatChangeBgColor() const;
+    QColor getInsertionBgColor() const;
+    QColor getDeletionBgColor() const;
+    QColor getFormatChangeBgColor() const;
 
     void setInsertionBgColor(const QColor& bgColor);
     void setDeletionBgColor(const QColor& color);
@@ -105,14 +99,21 @@ public:
     /// Load/save methods
     bool saveInlineChange(int changeId, KoGenChange &change);
 
+    /**
+     * @brief saveInlineChanges saves all the changes in the internal map, except
+     * for the delete changes, which are changed independently using saveInlineChange.
+     * @return an updated table of numerical, internal changeid's to xml:id strings.
+     */
+    QMap<int, QString> saveInlineChanges(QMap<int, QString> changeTransTable, KoGenChanges &genChanges);
+
     void loadOdfChanges(const KoXmlElement& element);
-    int getLoadedChangeId(QString odfId) const;
+    int getLoadedChangeId(const QString &odfId) const;
 
-    static QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
-    static void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
-    static int fragmentLength(QTextDocumentFragment fragment);
+    static QTextDocumentFragment generateDeleteFragment(const QTextCursor& cursor);
+    static void insertDeleteFragment(QTextCursor &cursor);
+    static int fragmentLength(const QTextDocumentFragment &fragment);
 
-    const QString& authorName() const;
+    QString authorName() const;
     void setAuthorName(const QString &authorName);
 
     ChangeSaveFormat saveFormat() const;
@@ -120,7 +121,7 @@ public:
 
 private:
 
-    static bool checkListDeletion(QTextList *list, QTextCursor &cursor);
+    static bool checkListDeletion(const QTextList &list, const QTextCursor &cursor);
     class Private;
     Private* const d;
 };

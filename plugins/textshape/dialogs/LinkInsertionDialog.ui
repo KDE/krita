@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LinkInsertionDialog</class>
+ <widget class="QDialog" name="LinkInsertionDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>567</width>
+    <height>241</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Link</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QTabWidget" name="linkTypesTab">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="movable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="weblinkInsertionTab">
+      <attribute name="title">
+       <string>Web Link</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Insert links to web documents. You can provide both URL and a label for the link,
+ or just enter the URL and hit &quot;Fetch the title from URL&quot;</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="toolTip">
+            <string>The address of your document (Uniform Resource Locator)</string>
+           </property>
+           <property name="text">
+            <string> URL:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QLineEdit" name="hyperlinkURL"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="fetchTitleButton">
+           <property name="toolTip">
+            <string>Hit this button to get the title from the URL. Redirections are also handled. </string>
+           </property>
+           <property name="text">
+            <string>Fetch Title From URL</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>168</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label">
+           <property name="toolTip">
+            <string>The text that will be displayed for your link</string>
+           </property>
+           <property name="text">
+            <string> Text:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="2">
+          <widget class="QLineEdit" name="hyperlinkText"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="weblinkStatusLabel">
+         <property name="lineWidth">
+          <number>2</number>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="bookmarkLinkInsertionTab">
+      <attribute name="title">
+       <string>Link To Bookmark</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Insert links to Bookmarks. To create bookmarks,
+click &quot;Bookmarks&quot; in the Links and Bookmarks section</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>5</x>
+         <y>5</y>
+         <width>531</width>
+         <height>78</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="toolTip">
+           <string>The name of the bookmark to where the link has to point to</string>
+          </property>
+          <property name="text">
+           <string> Name:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="bookmarkLinkURL">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>18</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="toolTip">
+           <string>The text that will be displayed for your link</string>
+          </property>
+          <property name="text">
+           <string> Text:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="bookmarkLinkText"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QLabel" name="bookmarkLinkStatusLabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>531</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>linkTypesTab</tabstop>
+  <tabstop>hyperlinkURL</tabstop>
+  <tabstop>fetchTitleButton</tabstop>
+  <tabstop>hyperlinkText</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>bookmarkLinkText</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

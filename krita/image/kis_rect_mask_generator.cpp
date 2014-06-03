@@ -25,6 +25,11 @@
 #include "kis_rect_mask_generator.h"
 #include "kis_base_mask_generator.h"
 
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
+
 struct KisRectangleMaskGenerator::Private {
     double m_c;
     double m_halfWidth, m_halfHeight;
@@ -37,7 +42,12 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
         d->m_c = 0;
     } else {
         d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
+#ifdef Q_CC_MSVC
         Q_ASSERT(!isnan(d->m_c));
+#else
+        Q_ASSERT(!std::isnan(d->m_c));
+#endif
+
     }
     d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
     d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;

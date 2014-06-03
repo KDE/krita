@@ -21,7 +21,7 @@
 #define koTarStore_h
 
 #include "KoStore.h"
-//Added by qt3to4:
+
 #include <QByteArray>
 
 class KTar;
@@ -31,13 +31,16 @@ class KUrl;
 class KoTarStore : public KoStore
 {
 public:
-    KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification);
-    KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification);
+    KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+               bool writeMimetype);
+    KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+               bool writeMimetype);
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const QByteArray & appIdentification);
+    KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode,
+               const QByteArray & appIdentification, bool writeMimetype = true);
     ~KoTarStore();
 protected:
     virtual bool init(Mode _mode);

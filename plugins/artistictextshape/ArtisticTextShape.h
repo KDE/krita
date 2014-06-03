@@ -25,7 +25,7 @@
 #include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
 #include <SvgShape.h>
-#include <QtGui/QFont>
+#include <QFont>
 
 class QPainter;
 class KoPathShape;
@@ -52,7 +52,7 @@ public:
     virtual ~ArtisticTextShape();
 
     /// reimplemented
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented

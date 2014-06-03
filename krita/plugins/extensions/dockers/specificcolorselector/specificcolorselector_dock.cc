@@ -24,6 +24,7 @@
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_image.h>
+#include <kis_display_color_converter.h>
 
 #include "kis_specific_color_selector_widget.h"
 
@@ -47,14 +48,14 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     }
 
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
-    Q_ASSERT(canvas);
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     KisView2* view = kisCanvas->view();
 
     if (m_colorSelector) {
         m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
         delete m_colorSelector;
     }
-    m_colorSelector = new KisSpecificColorSelectorWidget(this);
+    m_colorSelector = new KisSpecificColorSelectorWidget(kisCanvas->displayColorConverter()->displayRendererInterface(), this);
     setWidget(m_colorSelector);
 
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
@@ -79,11 +80,15 @@ void SpecificColorSelectorDock::unsetCanvas()
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
     if (!node) return;
+    if (!node->paintDevice()) return;
     if (!m_colorSelector) return;
-    if (node->inherits("KisMask") && node->parent())
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
-    else
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
+    if (!m_colorSelector->customColorSpaceUsed()) {
+        const KoColorSpace *cs = node->paintDevice() ?
+            node->paintDevice()->compositionSourceColorSpace() :
+            node->colorSpace();
+
+        m_colorSelector->setColorSpace(cs);
+    }
     m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
 

@@ -20,12 +20,13 @@
 #include "EllipseShapeFactory.h"
 #include "EllipseShape.h"
 #include "EllipseShapeConfigWidget.h"
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 
@@ -33,7 +34,7 @@ EllipseShapeFactory::EllipseShapeFactory()
     : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
     setToolTip(i18n( "An ellipse"));
-    setIcon("ellipse-shape");
+    setIconName(koIconNameCStr("ellipse-shape"));
     setFamily("geometric");
     setLoadingPriority(1);
 
@@ -49,14 +50,14 @@ KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) co
 {
     EllipseShape *ellipse = new EllipseShape();
 
-    ellipse->setBorder(new KoLineBorder(1.0));
+    ellipse->setStroke(new KoShapeStroke(1.0));
     ellipse->setShapeId(KoPathShapeId);
 
     QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::green);
-    ellipse->setBackground(new KoGradientBackground(gradient));
+    ellipse->setBackground(QSharedPointer<KoGradientBackground>(new KoGradientBackground(gradient)));
 
     return ellipse;
 }

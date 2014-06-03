@@ -20,7 +20,7 @@
 #ifndef KODOCKFACTORY_H
 #define KODOCKFACTORY_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include "flake_export.h"
 

@@ -36,9 +36,11 @@ class KRSize;
 class KOREPORT_EXPORT KoReportDesignerItemRectBase : public QGraphicsRectItem, public KoReportDesignerItemBase
 {
 public:
-    KoReportDesignerItemRectBase(KoReportDesigner*);
+    explicit KoReportDesignerItemRectBase(KoReportDesigner*);
 
     virtual ~KoReportDesignerItemRectBase();
+
+    QRectF pointRect() const;
 
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*);
@@ -54,7 +56,6 @@ protected:
     void setSceneRect(const QRectF& rect, UpdatePropertyFlag update = UpdateProperty);
 
     void drawHandles(QPainter*);
-    QRectF pointRect();
     QRectF sceneRect();
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);

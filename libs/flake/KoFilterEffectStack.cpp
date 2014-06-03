@@ -21,8 +21,8 @@
 #include "KoFilterEffect.h"
 #include "KoXmlWriter.h"
 
-#include <QtCore/QAtomicInt>
-#include <QtCore/QSet>
+#include <QAtomicInt>
+#include <QSet>
 #include <QDebug>
 
 class KoFilterEffectStack::Private

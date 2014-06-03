@@ -20,12 +20,12 @@
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krpos.h"
 #include "krsize.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
+
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
@@ -44,12 +44,11 @@ public:
     KoReportItemImage() {
         createProperties();
     }
-    KoReportItemImage(QDomNode & element);
+    explicit KoReportItemImage(QDomNode & element);
     virtual ~KoReportItemImage();
 
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
-    using KoReportItemBase::render;
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     virtual QString itemDataSource() const;
 

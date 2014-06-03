@@ -21,22 +21,17 @@
 #ifndef _KO_TOOLBOX_LAYOUT_H_
 #define _KO_TOOLBOX_LAYOUT_H_
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QLayout>
 #include <QMap>
-#include <QButtonGroup>
-#include <QToolButton>
-#include <QHash>
-#include <QPainter>
 #include <QRect>
-#include <QTimer>
+#include <QAbstractButton>
 
-#include "math.h"
 
 class SectionLayout : public QLayout
 {
 public:
-    SectionLayout(QWidget *parent)
+    explicit SectionLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical)
     {
     }
@@ -73,6 +68,7 @@ public:
             return 0;
         return m_items.at(i);
     }
+
     QLayoutItem* takeAt(int i) { return m_items.takeAt(i); }
     int count() const { return m_items.count(); }
 
@@ -112,10 +108,12 @@ public:
             const_cast<SectionLayout*> (this)->m_buttonSize = m_items[0]->widget()->sizeHint();
         return m_buttonSize;
     }
+
     void setOrientation (Qt::Orientation orientation)
     {
         m_orientation = orientation;
     }
+
 private:
     QSize m_buttonSize;
     QMap<QAbstractButton*, int> m_priorities;
@@ -126,11 +124,11 @@ private:
 class Section : public QWidget
 {
 public:
-    enum SeperatorFlag {
-        SeperatorTop = 0x0001,/* SeperatorBottom = 0x0002, SeperatorRight = 0x0004,*/ SeperatorLeft = 0x0008
+    enum SeparatorFlag {
+        SeparatorTop = 0x0001,/* SeparatorBottom = 0x0002, SeparatorRight = 0x0004,*/ SeparatorLeft = 0x0008
     };
-    Q_DECLARE_FLAGS(Seperators, SeperatorFlag)
-    Section(QWidget *parent = 0)
+    Q_DECLARE_FLAGS(Separators, SeparatorFlag)
+    explicit Section(QWidget *parent = 0)
         : QWidget(parent),
         m_layout(new SectionLayout(this))
     {
@@ -166,31 +164,35 @@ public:
         }
         return count;
     }
-    void setSeperator(Seperators seperators)
+
+    void setSeparator(Separators separators)
     {
-        m_seperators = seperators;
+        m_separators = separators;
     }
-    Seperators seperators() const
+
+    Separators separators() const
     {
-        return m_seperators;
+        return m_separators;
     }
+
     void setOrientation (Qt::Orientation orientation)
     {
         m_layout->setOrientation(orientation);
     }
+
 private:
     SectionLayout *m_layout;
     QString m_name;
-    Seperators m_seperators;
+    Separators m_separators;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Seperators)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Separators)
 
 class KoToolBoxLayout : public QLayout
 {
 public:
-    KoToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
+    explicit KoToolBoxLayout(QWidget *parent)
+        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
     {
         setSpacing(6);
     }
@@ -214,7 +216,7 @@ public:
         if (m_orientation == Qt::Vertical) {
             s.setHeight(m_currentHeight);
         } else {
-            s.setWidth(m_currentWidth);
+            s.setWidth(m_currentHeight);
         }
         return s;
     }
@@ -249,89 +251,78 @@ public:
 
     void setGeometry (const QRect &rect)
     {
-        if (m_orientation == Qt::Vertical) {
-            tryPlaceItems(rect.width(), true);
-        } else {
-            tryPlaceItems(rect.height(), true);
-        }
-    }
-
-    /// returns height
-    int tryPlaceItems(int width, bool actuallyPlace) const
-    {
+        // nothing to do?
         if (m_sections.isEmpty())
-            return 0;
-        QSize iconSize = static_cast<Section*> (m_sections[0]->widget())->iconSize();
-        const int maxColumns = qMax(1, width / iconSize.width());
+        {
+            m_currentHeight = 0;
+            return;
+        }
+
+        // the names of the variables assume a vertical orientation,
+        // but all calculations are done based on the real orientation
+
+        const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
+
+        const int maxWidth = (m_orientation == Qt::Vertical) ? rect.width() : rect.height();
+        // using min 1 as width to e.g. protect against div by 0 below
+        const int iconWidth = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.width() : iconSize.height());
+        const int iconHeight = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.height() : iconSize.width());
+
+        const int maxColumns = qMax(1, (maxWidth / iconWidth));
 
         int x = 0;
         int y = 0;
-        int unusedButtons = 0;
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
-                if (actuallyPlace)
-                    section->setGeometry(1000, 1000, 0, 0);
+                // move out of view, not perfect TODO: better solution
+                section->setGeometry(1000, 1000, 0, 0);
                 continue;
             }
-            // kDebug() << " + section" << buttonCount;
-            int rows = (int) ceilf(buttonCount / (float) maxColumns);
 
-            int length = 0;
+            // rows needed for the buttons (calculation gets the ceiling value of the plain div)
+            const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
+            const int availableButtonCount = (maxWidth - x + 1) / iconWidth;
+
             if (firstSection) {
                 firstSection = false;
-                unusedButtons = rows * maxColumns;
-            } else if (buttonCount > unusedButtons) {
-                if (m_orientation == Qt::Vertical) {
-                    y += iconSize.height() + spacing();
-                    section->setSeperator(Section::SeperatorTop);
-                } else {
-                    x += iconSize.height() + spacing();
-                    section->setSeperator(Section::SeperatorLeft);
-                }
-                unusedButtons = rows * maxColumns;
-            } else {
-                if (m_orientation == Qt::Vertical) {
-                    length = (maxColumns - unusedButtons) * iconSize.width();
-                    x = length + spacing();
-                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
-                } else {
-                    length = (maxColumns - unusedButtons) * iconSize.height();
-                    y = length + spacing();
-                    section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
-                }
-            }
-
-            if (actuallyPlace) {
-                if (m_orientation == Qt::Vertical) {
-                    section->setGeometry(QRect(x, y, maxColumns * iconSize.width() - length,
-                                               rows * iconSize.height()));
-                } else {
-                    section->setGeometry(QRect(x, y, rows * iconSize.width(),
-                                               maxColumns * iconSize.height() - length));
-                }
-            }
-
-            unusedButtons -= buttonCount;
-
-            if (m_orientation == Qt::Vertical) {
+            } else if (buttonCount > availableButtonCount) {
+                // start on a new row, set separator
                 x = 0;
-                y += (rows - 1) * iconSize.height();
+                y += iconHeight + spacing();
+                const Section::Separators separator =
+                    (m_orientation == Qt::Vertical) ? Section::SeparatorTop : Section::SeparatorLeft;
+                section->setSeparator( separator );
             } else {
-                y = 0;
-                x += (rows - 1) * iconSize.height();
+                // append to last row, set separators (on first row only to the left side)
+                const bool isFirstRow = (y == 0);
+                const Section::Separators separators =
+                    isFirstRow ?
+                        ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
+                        (Section::SeparatorTop | Section::SeparatorLeft);
+                section->setSeparator( separators );
             }
+
+            const int usedColumns = qMin(buttonCount, maxColumns);
+            if (m_orientation == Qt::Vertical) {
+                section->setGeometry(x, y,
+                                     usedColumns * iconWidth, neededRowCount * iconHeight);
+            } else {
+                section->setGeometry(y, x,
+                                     neededRowCount * iconHeight, usedColumns * iconWidth);
+            }
+
+            // advance by the icons in the last row
+            const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
+            x += (lastRowColumnCount * iconWidth) + spacing();
+            // advance by all but the last used row
+            y += (neededRowCount - 1) * iconHeight;
         }
-        m_currentWidth = x;
-        m_currentHeight = y;
-        if (m_orientation == Qt::Vertical) {
-            m_currentHeight += iconSize.height();
-        } else {
-            m_currentWidth += iconSize.height();
-        }
-        return m_currentHeight;
+
+        // cache total height (or width), adding the iconHeight for the current row
+        m_currentHeight = y + iconHeight;
     }
 
     void setOrientation (Qt::Orientation orientation)
@@ -343,7 +334,7 @@ public:
 private:
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
-    mutable int m_currentHeight, m_currentWidth;
+    mutable int m_currentHeight;
 };
 
 #endif

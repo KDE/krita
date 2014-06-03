@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2009, 2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include "KoSharedLoadingData.h"
 #include "KoShapeBasedDocumentBase.h"
 #include "KoImageCollection.h"
+#include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
 
@@ -42,7 +43,8 @@ public:
     Private(KoOdfLoadingContext &c, KoDocumentResourceManager *resourceManager)
             : context(c),
             zIndex(0),
-            documentResources(resourceManager)
+            documentResources(resourceManager),
+            documentRdf(0)
     {
     }
     ~Private() {
@@ -59,11 +61,18 @@ public:
     QMap<QString, KoLoadingShapeUpdater*> updaterById;
     QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
+    QObject *documentRdf;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, KoDocumentResourceManager *documentResources)
         : d(new Private(context, documentResources))
 {
+    if (d->documentResources) {
+        KoMarkerCollection *markerCollection = d->documentResources->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (markerCollection) {
+            markerCollection->loadOdf(*this);
+        }
+    }
 }
 
 KoShapeLoadingContext::~KoShapeLoadingContext()
@@ -183,4 +192,15 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const
 {
     return d->documentResources;
+}
+
+QObject *KoShapeLoadingContext::documentRdf() const
+{
+    return d->documentRdf;
+}
+
+
+void KoShapeLoadingContext::setDocumentRdf(QObject *documentRdf)
+{
+    d->documentRdf = documentRdf;
 }

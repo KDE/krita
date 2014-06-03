@@ -21,39 +21,64 @@
 
 #include "kis_simple_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
+#include "kis_selection.h"
 
 class KisPainter;
+class KisDistanceInformation;
 class KisTransaction;
 
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
+    /**
+     * The distance information should be associated with each
+     * painter individually, so we strore and manipulate with
+     * them together using the structure PainterInfo
+     */
+    class KRITAUI_EXPORT PainterInfo {
+    public:
+        PainterInfo(KisPainter *painter, KisDistanceInformation *dragDistance);
+        ~PainterInfo();
+
+        KisPainter *painter;
+        KisDistanceInformation *dragDistance;
+    };
+
+public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const QString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<KisPainter*> painters);
+                                  QVector<PainterInfo*> painterInfos);
 
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const QString &name,
                                   KisResourcesSnapshotSP resources,
-                                  KisPainter *painter);
+                                  PainterInfo *painterInfo);
 
     void initStrokeCallback();
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+protected:
+    KisPaintDeviceSP targetDevice();
+    KisSelectionSP activeSelection();
+
 private:
     void init();
     void initPainters(KisPaintDeviceSP targetDevice,
                       KisSelectionSP selection,
-                      bool hasIndirectPainting);
+                      bool hasIndirectPainting,
+                      const QString &indirectPaintingCompositeOp);
     void deletePainters();
 
 private:
     KisResourcesSnapshotSP m_resources;
-    QVector<KisPainter*> m_painters;
+    QVector<PainterInfo*> m_painterInfos;
     KisTransaction *m_transaction;
+
+    KisPaintDeviceSP m_targetDevice;
+    KisSelectionSP m_activeSelection;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

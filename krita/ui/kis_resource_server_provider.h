@@ -33,7 +33,6 @@
 
 class KoResource;
 class KoResourceLoaderThread;
-class KisPattern;
 class KisPaintOpPreset;
 class KisWorkspaceResource;
 
@@ -46,23 +45,24 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KoResourceServer<KisPattern>* patternServer();
     KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
 
+    void brushBlacklistCleanup();
+signals:
+    void notifyBrushBlacklistCleanup();
+    
 private:
 
     KisResourceServerProvider();
     KisResourceServerProvider(const KisResourceServerProvider&);
     KisResourceServerProvider operator=(const KisResourceServerProvider&);
 
-    KoResourceServer<KisPattern>* m_patternServer;
     KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
 
 private:
 
-    KoResourceLoaderThread *patternThread;
     KoResourceLoaderThread *paintOpPresetThread;
     KoResourceLoaderThread *workspaceThread;
 };

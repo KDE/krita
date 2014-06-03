@@ -175,8 +175,12 @@ QString KoReportItemBarcode::typeName() const
     return "barcode";
 }
 
-int KoReportItemBarcode::render(OROPage* page, OROSection* /*section*/,  QPointF offset, QVariant data, KRScriptHandler */*script*/)
+int KoReportItemBarcode::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                          const QVariant &data, KRScriptHandler *script)
 {
+    Q_UNUSED(section);
+    Q_UNUSED(script);
+
     QPointF pos = m_pos.toScene();
     QSizeF size = m_size.toScene();
     pos += offset;

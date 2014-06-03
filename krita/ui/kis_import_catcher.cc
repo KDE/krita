@@ -19,7 +19,6 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
-#include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -31,7 +30,6 @@
 #include <kio/job.h>
 
 #include <KoFilterManager.h>
-#include <KoColorSpaceRegistry.h>
 
 #include "kis_node_manager.h"
 #include "kis_types.h"
@@ -40,74 +38,123 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
+#include "kis_statusbar.h"
+#include "kis_progress_widget.h"
+
 #include <QMessageBox>
 
-class KisImportCatcher::Private
+struct KisImportCatcher::Private
 {
 public:
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
+    bool importAsLayer;
+
+    QString prettyLayerName() const;
+    void importAsPaintLayer(KisPaintDeviceSP device);
+    void importAsTransparencyMask(KisPaintDeviceSP device);
 };
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
+QString KisImportCatcher::Private::prettyLayerName() const
+{
+    QString name = url.fileName();
+    return !name.isEmpty() ? name : url.prettyUrl();
+}
+
+void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
+{
+    KisLayerSP newLayer =
+        new KisPaintLayer(view->image(),
+                          prettyLayerName(),
+                          OPACITY_OPAQUE_U8,
+                          device);
+
+    KisNodeSP parent = 0;
+    KisLayerSP currentActiveLayer = view->activeLayer();
+
+    if (currentActiveLayer) {
+        parent = currentActiveLayer->parent();
+    }
+
+    if (parent.isNull()) {
+        parent = view->image()->rootLayer();
+    }
+
+    KisNodeCommandsAdapter adapter(view);
+    adapter.addNode(newLayer, parent, currentActiveLayer);
+}
+
+// NOTE: Unused currently
+void KisImportCatcher::Private::importAsTransparencyMask(KisPaintDeviceSP device)
+{
+    KisLayerSP currentActiveLayer = view->activeLayer();
+
+    if (!currentActiveLayer) {
+        KisNodeSP node = view->activeNode();
+        if (!node) return;
+
+        do {
+            currentActiveLayer = dynamic_cast<KisLayer*>(node.data());
+        } while (!currentActiveLayer && (node = node->parent()));
+
+        if (!currentActiveLayer) return;
+    }
+
+    KisTransparencyMaskSP mask = new KisTransparencyMask();
+    mask->setSelection(new KisSelection(new KisDefaultBounds(currentActiveLayer->image())));
+    mask->setName(prettyLayerName());
+
+    QRect rc(device->exactBounds());
+    KisPainter painter(mask->paintDevice());
+    painter.bitBlt(rc.topLeft(), device, rc);
+
+    KisNodeCommandsAdapter adapter(view);
+    adapter.addNode(mask,
+                    currentActiveLayer,
+                    currentActiveLayer->lastChild());
+}
+
+KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view, bool importAsLayer)
         : m_d(new Private)
 {
-    m_d->doc = new KisDoc2(0);
+    m_d->doc = new KisDoc2();
+
+    KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
+    m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    KoFilterManager manager(m_d->doc);
-    QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
-    KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(url.pathOrUrl(), QString(), status);
+    m_d->importAsLayer = importAsLayer;
+    connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    bool result = m_d->doc->openUrl(url);
+
+    if (!result) {
+        deleteMyself();
+    }
+}
+
+void KisImportCatcher::slotLoadingFinished()
+{
     KisImageWSP importedImage = m_d->doc->image();
+    importedImage->waitForDone();
 
-    if (importedImage) {
-        KisLayerSP importedImageLayer =
-                new KisPaintLayer(importedImage.data(),
-                                  importedImage->nextLayerName(),
-                                  OPACITY_OPAQUE_U8,
-                                  importedImage->projection());
-
-        if (!importedImageLayer.isNull()) {
-            QStringList list;
-            list << "KisLayer";
-
-            KisCountVisitor visitor(list, KoProperties());
-            importedImageLayer->accept(visitor);
-
-            if (visitor.count() == 2) {
-                // Don't import the root if this is not a layered image (1 group layer
-                // plus 1 other).
-                importedImageLayer = dynamic_cast<KisLayer*>(importedImageLayer->firstChild().data());
-                if (importedImageLayer)
-                    importedImage->removeNode(importedImageLayer.data());
-            }
-
-            importedImageLayer->setName(m_d->url.prettyUrl());
-            importedImageLayer->setImage(m_d->view->image());
-
-            KisNodeSP parent = 0;
-            KisLayerSP currentActiveLayer = m_d->view->activeLayer();
-
-            if (currentActiveLayer) {
-                parent = currentActiveLayer->parent();
-            }
-
-            if (parent.isNull()) {
-                parent = m_d->view->image()->rootLayer();
-            }
-
-            KisNodeCommandsAdapter adapter(m_d->view);
-            adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
-            m_d->view->nodeManager()->activateNode(importedImageLayer.data());
-            importedImageLayer->setDirty();
+    if (importedImage && importedImage->projection()->exactBounds().isValid()) {
+        if (m_d->importAsLayer) {
+            m_d->importAsPaintLayer(importedImage->projection());
+        } else {
+            m_d->importAsTransparencyMask(importedImage->projection());
         }
     }
 
+    deleteMyself();
+}
+
+void KisImportCatcher::deleteMyself()
+{
     m_d->doc->deleteLater();
     deleteLater();
 }

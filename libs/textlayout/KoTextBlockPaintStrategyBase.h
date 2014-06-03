@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #ifndef KOTEXTBLOCKPAINTSTRATEGYBASE_H
 #define KOTEXTBLOCKPAINTSTRATEGYBASE_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QBrush>
 
@@ -31,7 +31,7 @@ class QPainter;
  * This class is used to control aspects of textblock painting
  * Which is used when KPresenter animates text.
  */
-class TEXTLAYOUT_EXPORT KoTextBlockPaintStrategyBase
+class KOTEXTLAYOUT_EXPORT KoTextBlockPaintStrategyBase
 {
 public:
     KoTextBlockPaintStrategyBase();

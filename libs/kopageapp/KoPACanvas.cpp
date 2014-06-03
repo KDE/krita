@@ -23,6 +23,7 @@
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoText.h>
+#include <KoCanvasController.h>
 
 #include "KoPADocument.h"
 #include "KoPAView.h"
@@ -32,7 +33,7 @@
 
 #include <kxmlguifactory.h>
 
-#include <KAction>
+#include <kaction.h>
 #include <QMenu>
 #include <QMouseEvent>
 
@@ -41,10 +42,9 @@ KoPACanvas::KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent
     , KoPACanvasBase( doc )
 {
     setView(view);
-    setFocusPolicy( Qt::StrongFocus );
+    setFocusPolicy(Qt::StrongFocus);
     // this is much faster than painting it in the paintevent
-    setBackgroundRole( QPalette::Base );
-    setAutoFillBackground( true );
+    setAutoFillBackground(true);
     updateSize();
     setAttribute(Qt::WA_InputMethodEnabled, true);
 }
@@ -70,7 +70,7 @@ void KoPACanvas::updateSize()
     QSize size;
 
     if ( koPAView()->activePage() ) {
-        KoPageLayout pageLayout = koPAView()->activePage()->pageLayout();
+        KoPageLayout pageLayout = koPAView()->viewMode()->activePageLayout();
         size.setWidth( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.width ) ) );
         size.setHeight( qRound( koPAView()->zoomHandler()->zoomItX( pageLayout.height ) ) );
     }
@@ -115,8 +115,9 @@ void KoPACanvas::mousePressEvent( QMouseEvent *event )
     if(!event->isAccepted() && event->button() == Qt::RightButton)
     {
         showContextMenu( event->globalPos(), toolProxy()->popupActionList() );
-        event->setAccepted( true );
     }
+
+    event->setAccepted( true );
 }
 
 void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
@@ -168,6 +169,16 @@ void KoPACanvas::updateInputMethodInfo()
 
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (toolProxy()->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
+                canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return toolProxy()->inputMethodQuery(query, *(viewConverter()) );
 }
 

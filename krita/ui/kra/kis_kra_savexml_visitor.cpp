@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "kis_kra_utils.h"
 
 #include <QTextStream>
+#include <QDir>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -40,18 +41,29 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
-
+#include <kis_file_layer.h>
 
 using namespace KRA;
 
-KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
-        KisNodeVisitor(),
-        m_doc(doc),
-        m_count(count),
-        m_root(root)
+KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root)
+    : KisNodeVisitor()
+    , m_doc(doc)
+    , m_count(count)
+    , m_url(url)
+    , m_root(root)
 {
     Q_ASSERT(!element.isNull());
     m_elem = element;
+}
+
+void KisSaveXmlVisitor::setSelectedNodes(vKisNodeSP selectedNodes)
+{
+    m_selectedNodes = selectedNodes;
+}
+
+QStringList KisSaveXmlVisitor::errorMessages() const
+{
+    return m_errorMessages;
 }
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
@@ -63,18 +75,55 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         m_count++;
         return saveMasks(layer, layerElement);
     }
+    else if (layer->inherits("KisFileLayer")) {
+        QDomElement layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, FILE_LAYER, layer);
+
+        KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
+
+        QString path = fileLayer->path();
+
+        QDir d(QFileInfo(m_url).absolutePath());
+
+        layerElement.setAttribute("source", d.relativeFilePath(path));
+
+        if (fileLayer->scalingMethod() == KisFileLayer::ToImagePPI) {
+            layerElement.setAttribute("scale", "true");
+        }
+        else {
+            layerElement.setAttribute("scale", "false");
+        }
+        layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
+        layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+
+        m_elem.appendChild(layerElement);
+        m_count++;
+        return saveMasks(layer, layerElement);
+    }
     return false;
+}
+
+QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc)
+{
+    QDomElement element = doc.createElement(LAYER);
+    saveLayer(element, PAINT_LAYER, layer);
+    element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
+    element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
+    return element;
+}
+
+void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer)
+{
+    loadLayerAttributes(el, layer);
+
+    if (el.hasAttribute(CHANNEL_LOCK_FLAGS)) {
+        layer->setChannelLockFlags(stringToFlags(el.attribute(CHANNEL_LOCK_FLAGS)));
+    }
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
-    QDomElement layerElement = m_doc.createElement(LAYER);
-    
-    saveLayer(layerElement, PAINT_LAYER, layer);
-    
-    layerElement.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
-    layerElement.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
-    
+    QDomElement layerElement = savePaintLayerAttributes(layer, m_doc);
     m_elem.appendChild(layerElement);
 
     /*    if(layer->paintDevice()->hasExifInfo())
@@ -98,13 +147,18 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         saveLayer(layerElement, GROUP_LAYER, layer);
         m_elem.appendChild(layerElement);
     }
-
     QDomElement elem = m_doc.createElement(LAYERS);
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
-    KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+    KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
+    visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
+
+    m_errorMessages.append(visitor.errorMessages());
+    if (!m_errorMessages.isEmpty()) {
+        return false;
+    }
 
     QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
     while (i.hasNext()) {
@@ -134,8 +188,8 @@ bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, GENERATOR_LAYER, layer);
-    layerElement.setAttribute(GENERATOR_NAME, layer->generator()->name());
-    layerElement.setAttribute(GENERATOR_VERSION, layer->generator()->version());
+    layerElement.setAttribute(GENERATOR_NAME, layer->filter()->name());
+    layerElement.setAttribute(GENERATOR_VERSION, layer->filter()->version());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -194,6 +248,50 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 }
 
 
+void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *layer)
+{
+    if (el.hasAttribute(NAME)) {
+        QString layerName = el.attribute(NAME);
+        KIS_ASSERT_RECOVER_RETURN(layerName == layer->name());
+    }
+
+    if (el.hasAttribute(CHANNEL_FLAGS)) {
+        layer->setChannelFlags(stringToFlags(el.attribute(CHANNEL_FLAGS)));
+    }
+
+    if (el.hasAttribute(OPACITY)) {
+        layer->setOpacity(el.attribute(OPACITY).toInt());
+    }
+
+    if (el.hasAttribute(COMPOSITE_OP)) {
+        layer->setCompositeOp(el.attribute(COMPOSITE_OP));
+    }
+
+    if (el.hasAttribute(VISIBLE)) {
+        layer->setVisible(el.attribute(VISIBLE).toInt());
+    }
+
+    if (el.hasAttribute(LOCKED)) {
+        layer->setUserLocked(el.attribute(LOCKED).toInt());
+    }
+
+    if (el.hasAttribute(X)) {
+        layer->setX(el.attribute(X).toInt());
+    }
+
+    if (el.hasAttribute(Y)) {
+        layer->setY(el.attribute(Y).toInt());
+    }
+
+    if (el.hasAttribute(UUID)) {
+        layer->setUuid(el.attribute(UUID));
+    }
+
+    if (el.hasAttribute(COLLAPSED)) {
+        layer->setCollapsed(el.attribute(COLLAPSED).toInt());
+    }
+}
+
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
     el.setAttribute(CHANNEL_FLAGS, flagsToString(layer->channelFlags()));
@@ -207,13 +305,21 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
     el.setAttribute(UUID, layer->uuid().toString());
+    el.setAttribute(COLLAPSED, layer->collapsed());
+
+    foreach (KisNodeSP node, m_selectedNodes) {
+        if (node.data() == layer) {
+            el.setAttribute("selected", "true");
+            break;
+        }
+    }
 
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
     dbgFile << "Saved layer "
-    << layer->name()
-    << " of type " << layerType
-    << " with filename " << LAYER + QString::number(m_count);
+            << layer->name()
+            << " of type " << layerType
+            << " with filename " << LAYER + QString::number(m_count);
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
@@ -227,12 +333,16 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(Y, mask->y());
     el.setAttribute(UUID, mask->uuid().toString());
 
+    if (maskType == SELECTION_MASK) {
+        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("visible"));
+    }
+
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 
     dbgFile << "Saved mask "
-    << mask->name()
-    << " of type " << maskType
-    << " with filename " << MASK + QString::number(m_count);
+            << mask->name()
+            << " of type " << maskType
+            << " with filename " << MASK + QString::number(m_count);
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
@@ -241,8 +351,13 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         QDomElement elem = m_doc.createElement(MASKS);
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
-        KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-        bool success =  visitor.visitAllInverse(node);
+        KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
+        visitor.setSelectedNodes(m_selectedNodes);
+        bool success = visitor.visitAllInverse(node);
+        m_errorMessages.append(visitor.errorMessages());
+        if (!m_errorMessages.isEmpty()) {
+            return false;
+        }
 
         QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
         while (i.hasNext()) {

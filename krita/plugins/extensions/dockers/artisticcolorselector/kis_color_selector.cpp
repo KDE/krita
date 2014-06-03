@@ -26,7 +26,10 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QTransform>
+#include <QList>
 #include <cmath>
+
+#include <kis_config.h>
 
 #include "kis_color_selector.h"
 
@@ -43,7 +46,6 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type):
     m_inverseSaturation(false),
     m_relativeLight(false),
     m_light(0.5f),
-    m_lightStripPos(LSP_RIGHT),
     m_selectedColorIsFgColor(true),
     m_clickedRing(-1)
 {
@@ -59,20 +61,13 @@ void KisColorSelector::setColorSpace(KisColor::Type type)
     update();
 }
 
-void KisColorSelector::setLightStripPosition(KisColorSelector::LightStripPos pos)
-{
-    m_lightStripPos = pos;
-    recalculateAreas(quint8(getNumLightPieces()));
-    update();
-}
-
 void KisColorSelector::setNumLightPieces(int num)
 {
     num = qBound(MIN_NUM_LIGHT_PIECES, num, MAX_NUM_LIGHT_PIECES);
     
     recalculateAreas(quint8(num));
     
-    if(m_selectedLightPiece >= 0)
+    if (m_selectedLightPiece >= 0)
         m_selectedLightPiece = getLightIndex(m_selectedColor.getX());
     
     update();
@@ -84,8 +79,8 @@ void KisColorSelector::setNumPieces(int num)
     
     recalculateRings(quint8(getNumRings()), quint8(num));
     
-    if(m_selectedPiece >= 0)
-        m_selectedPiece = getHueIndex(m_selectedColor.getH() * Radian::PI2);
+    if (m_selectedPiece >= 0)
+        m_selectedPiece = getHueIndex(m_selectedColor.getH() * PI2);
     
     update();
 }
@@ -96,7 +91,7 @@ void KisColorSelector::setNumRings(int num)
     
     recalculateRings(quint8(num), quint8(getNumPieces()));
     
-    if(m_selectedRing >= 0)
+    if (m_selectedRing >= 0)
         m_selectedRing = getSaturationIndex(m_selectedColor.getS());
     
     update();
@@ -105,7 +100,7 @@ void KisColorSelector::setNumRings(int num)
 void KisColorSelector::selectColor(const KisColor& color)
 {
     m_selectedColor      = KisColor(color, m_colorSpace);
-    m_selectedPiece      = getHueIndex(m_selectedColor.getH() * Radian::PI2);
+    m_selectedPiece      = getHueIndex(m_selectedColor.getH() * PI2);
     m_selectedRing       = getSaturationIndex(m_selectedColor.getS());
     m_selectedLightPiece = getLightIndex(m_selectedColor.getX());
     update();
@@ -140,7 +135,7 @@ void KisColorSelector::resetLight()
 
 void KisColorSelector::resetSelectedRing()
 {
-    if(m_selectedRing >= 0) {
+    if (m_selectedRing >= 0) {
         m_colorRings[m_selectedRing].angle = 0.0f;
         update();
     }
@@ -158,7 +153,7 @@ void KisColorSelector::setLight(float light, bool relative)
 
 void KisColorSelector::setInverseSaturation(bool inverse)
 {
-    if(m_inverseSaturation != inverse) {
+    if (m_inverseSaturation != inverse) {
         m_selectedRing      = (getNumRings()-1) - m_selectedRing;
         m_inverseSaturation = inverse;
         recalculateRings(quint8(getNumRings()), quint8(getNumPieces()));
@@ -177,12 +172,10 @@ QPointF KisColorSelector::mapCoord(const QPointF& pt, const QRectF& rect) const
 
 qint8 KisColorSelector::getLightIndex(const QPointF& pt) const
 {
-    if(m_lightStripArea.contains(pt.toPoint(), true)) {
+    if (m_lightStripArea.contains(pt.toPoint(), true)) {
         qreal t = (pt.x() - m_lightStripArea.x()) / qreal(m_lightStripArea.width());
-        
-        if(m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-            t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
-        
+        t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
+
         return qint8(t * getNumLightPieces());
     }
     
@@ -197,7 +190,7 @@ qint8 KisColorSelector::getLightIndex(qreal light) const
 
 qreal KisColorSelector::getLight(qreal light, qreal hue, bool relative) const
 {
-    if(relative) {
+    if (relative) {
         KisColor color(hue, 1.0f, m_colorSpace);
         qreal    cl = color.getX();
         light = (light * 2.0f) - 1.0f;
@@ -211,14 +204,11 @@ qreal KisColorSelector::getLight(const QPointF& pt) const
 {
     qint8 clickedLightPiece = getLightIndex(pt);
     
-    if(clickedLightPiece >= 0) {
-        if(getNumLightPieces() > 1)
+    if (clickedLightPiece >= 0) {
+        if (getNumLightPieces() > 1) {
             return 1.0 - (qreal(clickedLightPiece) / qreal(getNumLightPieces()-1));
-    
-        if(m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-            return 1.0 - (qreal(pt.y()) / qreal(m_lightStripArea.height()));
-        
-        return 1.0 - (qreal(pt.x()) / qreal(m_lightStripArea.width()));
+        }
+        return 1.0 - (qreal(pt.y()) / qreal(m_lightStripArea.height()));
     }
     
     return qreal(0);
@@ -233,7 +223,7 @@ qint8 KisColorSelector::getHueIndex(Radian hue, Radian shift) const
 
 qreal KisColorSelector::getHue(int hueIdx, Radian shift) const
 {
-    Radian hue = (qreal(hueIdx) / qreal(getNumPieces())) * Radian::PI2;
+    Radian hue = (qreal(hueIdx) / qreal(getNumPieces())) * PI2;
     hue += shift;
     return hue.scaled(0.0f, 1.0f);
 }
@@ -250,7 +240,7 @@ qint8 KisColorSelector::getSaturationIndex(const QPointF& pt) const
     qreal length = std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
     
     for(int i=0; i<m_colorRings.size(); ++i) {
-        if(length >= m_colorRings[i].innerRadius && length < m_colorRings[i].outerRadius)
+        if (length >= m_colorRings[i].innerRadius && length < m_colorRings[i].outerRadius)
             return qint8(i);
     }
 
@@ -272,39 +262,16 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     int size       = qMin(width, height);
     int stripThick = int(size * LIGHT_STRIP_RATIO);
     
-    if(m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-        width -= stripThick;
-    else
-        height -= stripThick;
-    
+    width -= stripThick;
+
     size = qMin(width, height);
     
     int x = (width  - size) / 2;
     int y = (height - size) / 2;
     
-    switch(m_lightStripPos)
-    {
-    case LSP_LEFT:
-        m_renderArea     = QRect(x+stripThick, y, size, size);
-        m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
-        break;
-        
-    case LSP_RIGHT:
-        m_renderArea     = QRect(x, y, size, size);
-        m_lightStripArea = QRect(QWidget::width()-stripThick, 0, stripThick, QWidget::height());
-        break;
-        
-    case LSP_TOP:
-        m_renderArea     = QRect(x, y+stripThick, size, size);
-        m_lightStripArea = QRect(0, 0, QWidget::width(), stripThick);
-        break;
-        
-    case LSP_BOTTOM:
-        m_renderArea     = QRect(x, y, size, size);
-        m_lightStripArea = QRect(0, QWidget::height()-stripThick, QWidget::width(), stripThick);
-        break;
-    }
-    
+    m_renderArea     = QRect(x+stripThick, y, size, size);
+    m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
+
     m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32);
     m_numLightPieces = numLightPieces;
 }
@@ -352,15 +319,15 @@ void KisColorSelector::createRing(ColorRing& ring, quint8 numPieces, qreal inner
 
 void KisColorSelector::setSelectedColor(const KisColor& color, bool selectAsFgColor, bool emitSignal)
 {
-    if(selectAsFgColor) { m_fgColor = color; }
-    else                { m_bgColor = color; }
+    if (selectAsFgColor) { m_fgColor = color; }
+    else                 { m_bgColor = color; }
     
     m_selectedColor          = color;
     m_selectedColorIsFgColor = selectAsFgColor;
     
-    if(emitSignal) {
-        if(selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
-        else                { emit sigBgColorChanged(m_selectedColor); }
+    if (emitSignal) {
+        if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
+        else                 { emit sigBgColorChanged(m_selectedColor); }
     }
 }
 
@@ -370,7 +337,7 @@ void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& 
     painter.resetTransform();
     painter.translate(rect.width()/2, rect.height()/2);
     
-    if(ring.pieced.size() > 1) {
+    if (ring.pieced.size() > 1) {
         painter.rotate(-ring.getShift().degrees());
         painter.scale(rect.width()/2, rect.height()/2);
         painter.setPen(Qt::NoPen);
@@ -425,7 +392,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
     painter.scale(rect.width()/2, rect.height()/2);
     painter.setPen(QPen(QBrush(Qt::gray), 0.005));
     
-    if(getNumPieces() > 1) {
+    if (getNumPieces() > 1) {
         for(int i=0; i<getNumRings(); ++i) {
             painter.resetTransform();
             painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
@@ -436,7 +403,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
                 painter.drawPath(m_colorRings[i].pieced[j]);
         }
         
-        if(m_selectedRing >= 0 && m_selectedPiece >= 0) {
+        if (m_selectedRing >= 0 && m_selectedPiece >= 0) {
             painter.resetTransform();
             painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
             painter.rotate(-m_colorRings[m_selectedRing].getShift().degrees());
@@ -453,7 +420,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
         }
     }
     
-    if(m_selectedRing >= 0) {
+    if (m_selectedRing >= 0) {
         qreal iRad = m_colorRings[m_selectedRing].innerRadius;
         qreal oRad = m_colorRings[m_selectedRing].outerRadius;
         
@@ -461,9 +428,9 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
         painter.drawEllipse(QRectF(-iRad, -iRad, iRad*2.0, iRad*2.0));
         painter.drawEllipse(QRectF(-oRad, -oRad, oRad*2.0, oRad*2.0));
         
-        if(getNumPieces() <= 1) {
-            float c = std::cos(-m_selectedColor.getH() * Radian::PI2);
-            float s = std::sin(-m_selectedColor.getH() * Radian::PI2);
+        if (getNumPieces() <= 1) {
+            float c = std::cos(-m_selectedColor.getH() * PI2);
+            float s = std::sin(-m_selectedColor.getH() * PI2);
             painter.drawLine(QPointF(c*iRad, s*iRad), QPointF(c*oRad, s*oRad));
         }
     }
@@ -471,13 +438,13 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
 
 void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 {
-    bool     isVertical = (m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT);
+    bool     isVertical = true;
     qreal    penSize    = qreal(qMin(QWidget::width(), QWidget::height())) / 200.0;
     KisColor color(m_selectedColor);
     
     painter.resetTransform();
     
-    if(getNumLightPieces() > 1) {
+    if (getNumLightPieces() > 1) {
         painter.setRenderHint(QPainter::Antialiasing, true);
         painter.setPen(QPen(QBrush(Qt::red), penSize));
         
@@ -497,7 +464,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
             r = matrix.mapRect(r);
             painter.fillRect(r, color.getQColor());
             
-            if(i == m_selectedLightPiece)
+            if (i == m_selectedLightPiece)
                 painter.drawRect(r);
         }
     }
@@ -505,7 +472,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         int size = isVertical ? rect.height() : rect.width();
         painter.setRenderHint(QPainter::Antialiasing, false);
         
-        if(isVertical) {
+        if (isVertical) {
             for(int i=0; i<size; ++i) {
                 int   y     = rect.y() + i;
                 float light = 1.0f - (float(i) / float(size-1));
@@ -528,7 +495,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         painter.setPen(QPen(QBrush(Qt::red), penSize));
         float t = 1.0f - m_light;
         
-        if(isVertical) {
+        if (isVertical) {
             int y = rect.y() + int(size * t);
             painter.drawLine(rect.left(), y, rect.right(), y);
         }
@@ -539,7 +506,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     }
 }
 
-void KisColorSelector::paintEvent(QPaintEvent* event)
+void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
 {
     // 0 red    -> (1,0,0)
     // 1 yellow -> (1,1,0)
@@ -577,23 +544,23 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
     
     qint8 clickedLightPiece = getLightIndex(event->posF());
     
-    if(clickedLightPiece >= 0) {
+    if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), false);
+        setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
         m_mouseMoved   = true;
     }
-    else if(m_clickedRing >= 0) {
-        if(getNumPieces() > 1) {
+    else if (m_clickedRing >= 0) {
+        if (getNumPieces() > 1) {
             for(int i=0; i<getNumRings(); ++i)
                 m_colorRings[i].setTemporaries(m_selectedColor);
         }
         else {
-            Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - Radian::RAD_90;
+            Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
             m_selectedColor.setS(getSaturation(m_clickedRing));
             m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-            setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), false);
+            setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton), true);
             m_selectedRing = m_clickedRing;
             m_mouseMoved   = true;
             update();
@@ -606,62 +573,62 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     QPointF dragPos           = mapCoord(event->posF(), m_renderArea);
     qint8   clickedLightPiece = getLightIndex(event->posF());
     
-    if(clickedLightPiece >= 0) {
+    if (clickedLightPiece >= 0) {
         setLight(getLight(event->posF()), m_relativeLight);
         m_selectedLightPiece = clickedLightPiece;
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, false);
+        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
     }
     
-    if(m_clickedRing < 0) 
+    if (m_clickedRing < 0)
         return;
     
-    if(getNumPieces() > 1) {
+    if (getNumPieces() > 1) {
         float angle     = std::atan2(dragPos.x(), dragPos.y()) - std::atan2(m_clickPos.x(), m_clickPos.y());
         float dist      = std::sqrt(dragPos.x()*dragPos.x() + dragPos.y()*dragPos.y()) * 0.80f;
         float threshold = 5.0f * (1.0f-(dist*dist));
         
-        if(qAbs(angle * Radian::TO_DEG) >= threshold || m_mouseMoved) {
+        if (qAbs(angle * TO_DEG) >= threshold || m_mouseMoved) {
             bool selectedRingMoved = true;
             
-            if(m_pressedButtons & Qt::RightButton) {
+            if (m_pressedButtons & Qt::RightButton) {
                 selectedRingMoved                 = m_clickedRing == m_selectedRing;
                 m_colorRings[m_clickedRing].angle = m_colorRings[m_clickedRing].tmpAngle + angle;
             }
             else for(int i=0; i<getNumRings(); ++i)
                 m_colorRings[i].angle = m_colorRings[i].tmpAngle + angle;
             
-            if(selectedRingMoved) {
+            if (selectedRingMoved) {
                 KisColor color = m_colorRings[m_clickedRing].tmpColor;
-                Radian   angle = m_colorRings[m_clickedRing].getMovedAngel() + (color.getH()*Radian::PI2);
+                Radian   angle = m_colorRings[m_clickedRing].getMovedAngel() + (color.getH()*PI2);
                 color.setH(angle.scaled(0.0f, 1.0f));
                 color.setX(getLight(m_light, color.getH(), m_relativeLight));
                 
                 m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
-                setSelectedColor(color, m_selectedColorIsFgColor, false);
+                setSelectedColor(color, m_selectedColorIsFgColor, true);
             }
             
             m_mouseMoved = true;
         }
     }
     else {
-        Radian angle = std::atan2(dragPos.x(), dragPos.y()) - Radian::RAD_90;
+        Radian angle = std::atan2(dragPos.x(), dragPos.y()) - RAD_90;
         m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
         m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, false);
+        setSelectedColor(m_selectedColor, m_selectedColorIsFgColor, true);
     }
     
     update();
 }
 
-void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
+void KisColorSelector::mouseReleaseEvent(QMouseEvent* /*event*/)
 {
-    if(!m_mouseMoved && m_clickedRing >= 0) {
-        Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - Radian::RAD_90;
+    if (!m_mouseMoved && m_clickedRing >= 0) {
+        Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
         
         m_selectedRing  = m_clickedRing;
         m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
         
-        if(getNumPieces() > 1)
+        if (getNumPieces() > 1)
             m_selectedColor.setH(getHue(m_selectedPiece, m_colorRings[m_clickedRing].getShift()));
         else
             m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
@@ -671,14 +638,71 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* event)
         
         setSelectedColor(m_selectedColor, !(m_pressedButtons & Qt::RightButton));
     }
-    else if(m_mouseMoved)
+    else if (m_mouseMoved)
         setSelectedColor(m_selectedColor, m_selectedColorIsFgColor);
     
     m_clickedRing = -1;
     update();
 }
 
-void KisColorSelector::resizeEvent(QResizeEvent* event)
+void KisColorSelector::resizeEvent(QResizeEvent* /*event*/)
 {
     recalculateAreas(quint8(getNumLightPieces()));
+}
+
+void KisColorSelector::saveSettings()
+{
+    KisConfig cfg;
+    cfg.writeEntry("ArtColorSel.ColorSpace" , qint32(m_colorSpace));
+    cfg.writeEntry("ArtColorSel.NumRings"   , m_colorRings.size());
+    cfg.writeEntry("ArtColorSel.RingPieces" , qint32(m_numPieces));
+    cfg.writeEntry("ArtColorSel.LightPieces", qint32(m_numLightPieces));
+    
+    cfg.writeEntry("ArtColorSel.InversedSaturation", m_inverseSaturation);
+    cfg.writeEntry("ArtColorSel.RelativeLight"     , m_relativeLight);
+    cfg.writeEntry("ArtColorSel.Light"             , m_light);
+    
+    cfg.writeEntry("ArtColorSel.SelColorH", m_selectedColor.getH());
+    cfg.writeEntry("ArtColorSel.SelColorS", m_selectedColor.getS());
+    cfg.writeEntry("ArtColorSel.SelColorX", m_selectedColor.getX());
+    cfg.writeEntry("ArtColorSel.SelColorA", m_selectedColor.getA());
+    
+    QList<float> angles;
+    
+    for(int i=0; i<m_colorRings.size(); ++i)
+        angles.push_back(m_colorRings[i].angle.value());
+    
+    cfg.writeList("ArtColorSel.RingAngles", angles);
+}
+
+void KisColorSelector::loadSettings()
+{
+    KisConfig cfg;
+    setColorSpace(KisColor::Type(cfg.readEntry<qint32>("ArtColorSel.ColorSpace" , KisColor::HSY)));
+    
+    setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", 19));
+    
+    m_selectedColor.setH(cfg.readEntry<float>("ArtColorSel.SelColorH", 0.0f));
+    m_selectedColor.setS(cfg.readEntry<float>("ArtColorSel.SelColorS", 0.0f));
+    m_selectedColor.setX(cfg.readEntry<float>("ArtColorSel.SelColorX", 0.0f));
+    m_selectedColor.setA(1.0f);
+    
+    setInverseSaturation(cfg.readEntry<bool>("ArtColorSel.InversedSaturation", false));
+    setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));
+    
+    recalculateRings(
+                cfg.readEntry("ArtColorSel.NumRings"  , 11),
+                cfg.readEntry("ArtColorSel.RingPieces", 12)
+                );
+    
+    QList<float> angles = cfg.readList<float>("ArtColorSel.RingAngles");
+
+    for (int i = 0; i < m_colorRings.size(); ++i) {
+        if (i < angles.size() && i < m_colorRings.size()) {
+            m_colorRings[i].angle = angles[i];
+        }
+    }
+    
+    selectColor(m_selectedColor);
+    update();
 }

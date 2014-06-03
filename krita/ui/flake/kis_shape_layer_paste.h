@@ -15,7 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_SHAPE_LAYER_PASTE_H
+#define KIS_SHAPE_LAYER_PASTE_H
 #include <KoDrag.h>
 #include <KoOdf.h>
 #include <KoOdfLoadingContext.h>
@@ -43,7 +44,6 @@ public:
         forEachElement(child, body) {
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
-                kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
                 KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
                 if (shapeLayer) {
                     //don't update as the setDirty call would create shared pointer that would delete the layer
@@ -60,3 +60,4 @@ private:
     KoShapeLayer* m_container;
     KoShapeBasedDocumentBase* m_controller;
 };
+#endif

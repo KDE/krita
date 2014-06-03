@@ -36,7 +36,7 @@ public:
      *
      * @return false if:
      *   <li>reading failed
-     *   <li>if the the 8BPS signature is not found
+     *   <li>if the 8BPS signature is not found
      *   <li>if the version is not 1 or 2
      */
     bool read(QIODevice* device);

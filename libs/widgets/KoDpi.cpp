@@ -21,12 +21,12 @@
 
 #include "KoDpi.h"
 
-#include <QtGui/QFontInfo>
+#include <QFontInfo>
 #ifdef Q_WS_X11
-#include <QtGui/QX11Info>
+#include <QX11Info>
 #else
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QApplication>
+#include <QDesktopWidget>
 #endif
 
 #include <kglobal.h>

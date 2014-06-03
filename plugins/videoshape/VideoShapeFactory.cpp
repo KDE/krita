@@ -28,6 +28,7 @@
 #include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include "VideoCollection.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -36,9 +37,9 @@ VideoShapeFactory::VideoShapeFactory()
     : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
-    setIcon("video-x-generic");
+    setIconName(koIconNameCStr("video-x-generic"));
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
-    setLoadingPriority(1);
+    setLoadingPriority(2);
 }
 
 KoShape *VideoShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
@@ -56,7 +57,10 @@ KoShape *VideoShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
 bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
+    if (e.localName() != "plugin" || e.namespaceURI() != KoXmlNS::draw) {
+        return false;
+    }
+    return e.attribute("mime-type") == "application/vnd.sun.star.media";
 }
 
 void VideoShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const

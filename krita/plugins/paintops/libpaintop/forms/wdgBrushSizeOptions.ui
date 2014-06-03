@@ -23,6 +23,9 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
      <item row="1" column="0">
@@ -40,7 +43,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Diameter</string>
+        <string>Diameter:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -93,7 +96,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Scale</string>
+        <string>Scale:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -146,7 +149,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Spacing</string>
+        <string>Spacing:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -202,7 +205,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Aspect ratio</string>
+        <string>Aspect ratio:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -258,7 +261,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Angle</string>
+        <string>Angle:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -320,7 +323,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Shape</string>
+        <string>Shape:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -396,7 +399,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Density</string>
+        <string>Density:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

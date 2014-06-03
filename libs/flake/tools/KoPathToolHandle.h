@@ -27,6 +27,7 @@
 #include "KoInteractionStrategy.h"
 
 #include <QList>
+#include <QRect>
 
 class KoPathTool;
 class KoParameterShape;
@@ -38,7 +39,7 @@ class KoPathShape;
 class KoPathToolHandle
 {
 public:
-    KoPathToolHandle(KoPathTool *tool);
+    explicit KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
     virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
     virtual void repaint() const = 0;
@@ -64,6 +65,7 @@ public:
 private:
     KoPathPoint *m_activePoint;
     KoPathPoint::PointType m_activePointType;
+    mutable QRectF m_oldRepaintedRect;
 };
 
 class ParameterHandle : public KoPathToolHandle

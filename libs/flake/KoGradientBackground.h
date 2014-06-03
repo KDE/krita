@@ -23,8 +23,8 @@
 #include "KoShapeBackground.h"
 #include "flake_export.h"
 
-#include <QtGui/QTransform>
-#include <QtGui/QGradient>
+#include <QTransform>
+#include <QGradient>
 
 class KoGradientBackgroundPrivate;
 
@@ -55,12 +55,6 @@ public:
 
     /**
      * Sets a new gradient.
-     * The background takes ownership of the given gradient.
-     */
-    void setGradient(QGradient *gradient);
-
-    /**
-     * Sets a new gradient.
      * A clone of the given gradient is used.
      */
     void setGradient(const QGradient &gradient);
@@ -68,11 +62,8 @@ public:
     /// Returns the gradient
     const QGradient *gradient() const;
 
-    /// Assignment operator
-    KoGradientBackground& operator=(const KoGradientBackground &rhs);
-
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground
@@ -80,6 +71,7 @@ public:
 
 private:
     Q_DECLARE_PRIVATE(KoGradientBackground)
+    Q_DISABLE_COPY(KoGradientBackground);
 };
 
 #endif // KOGRADIENTBACKGROUND_H

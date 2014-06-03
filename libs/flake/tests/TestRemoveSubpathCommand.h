@@ -19,7 +19,7 @@
 #ifndef TESTREMOVESUBPATHCOMMAND_H
 #define TESTREMOVESUBPATHCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestRemoveSubpathCommand : public QObject
 {

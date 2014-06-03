@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_VOICEBAR_H
 #define MUSIC_CORE_VOICEBAR_H
 
-#include <QtCore/QObject>
-#include <QtCore/QRectF>
+#include <QObject>
+#include <QRectF>
 
 namespace MusicCore {
 

@@ -27,7 +27,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <math.h>
 

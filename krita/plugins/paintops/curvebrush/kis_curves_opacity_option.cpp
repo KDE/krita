@@ -20,14 +20,14 @@
 #include <klocale.h>
 
 KisCurvesOpacityOption::KisCurvesOpacityOption()
-        : KisCurveOption(i18n("Curves opacity"), "Curves opacity", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Curves opacity"), "Curves opacity", KisPaintOpOption::commonCategory(), false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
 }
 
 
-double KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
+qreal KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
 {
     if (!isChecked()) {
         return opacity;

@@ -21,7 +21,7 @@
 
 #include "KoHistogramProducer.h"
 
-#include <QtCore/QVector>
+#include <QVector>
 #include <klocale.h>
 
 #include <KoConfig.h>
@@ -34,7 +34,8 @@
 class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
 {
 public:
-    KoBasicHistogramProducer(const KoID& id, int channels, int nrOfBins, const KoColorSpace *colorSpace);
+    explicit KoBasicHistogramProducer(const KoID& id, int channelCount, int nrOfBins);
+    explicit KoBasicHistogramProducer(const KoID& id, int nrOfBins, const KoColorSpace *colorSpace);
     virtual ~KoBasicHistogramProducer() {}
 
     virtual void clear();
@@ -155,8 +156,15 @@ public:
             : KoHistogramProducerFactory(id), m_modelId(modelId), m_depthId(depthId) {
     }
     virtual ~KoBasicHistogramProducerFactory() {}
+
     virtual KoHistogramProducerSP generate() {
-        return KoHistogramProducerSP(new T(KoID(id(), name()), KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0)));
+        KoHistogramProducerSP producer;
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
+        if (cs) {
+            producer = KoHistogramProducerSP(new T(KoID(id(), name()), cs));
+        }
+        return producer;
+
     }
     virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const {
         return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;

@@ -21,6 +21,7 @@
 */
 
 #include "KoShapeManager.h"
+#include "KoShapeManager_p.h"
 #include "KoSelection.h"
 #include "KoToolManager.h"
 #include "KoPointerEvent.h"
@@ -28,7 +29,7 @@
 #include "KoShape_p.h"
 #include "KoCanvasBase.h"
 #include "KoShapeContainer.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeGroup.h"
 #include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
@@ -46,88 +47,18 @@
 #include <QTimer>
 #include <kdebug.h>
 
-class KoShapeManager::Private
-{
-public:
-    Private(KoShapeManager *shapeManager, KoCanvasBase *c)
-        : selection(new KoSelection()),
-          canvas(c),
-          tree(4, 2),
-          strategy(new KoShapeManagerPaintingStrategy(shapeManager)),
-          q(shapeManager)
-    {
-    }
-
-    ~Private() {
-        delete selection;
-        delete strategy;
-    }
-
-    /**
-     * Update the tree when there are shapes in m_aggregate4update. This is done so not all
-     * updates to the tree are done when they are asked for but when they are needed.
-     */
-    void updateTree();
-
-    /**
-     * Recursively paints the given group shape to the specified painter
-     * This is needed for filter effects on group shapes where the filter effect
-     * applies to all the children of the group shape at once
-     */
-    void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-
-    class DetectCollision
-    {
-    public:
-        DetectCollision() {}
-        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
-                bool isChild = false;
-                KoShapeContainer *parent = s->parent();
-                while (parent && !isChild) {
-                    if (parent == shape)
-                        isChild = true;
-                    parent = parent->parent();
-                }
-                if (isChild)
-                    continue;
-                if (s->zIndex() <= shape->zIndex() && prevZIndex <= shape->zIndex())
-                    // Moving a shape will only make it collide with shapes below it.
-                    continue;
-                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
-                    shapesWithCollisionDetection.append(shape);
-            }
-        }
-
-        void fireSignals() {
-            foreach(KoShape *shape, shapesWithCollisionDetection)
-                shape->priv()->shapeChanged(KoShape::CollisionDetected);
-        }
-
-    private:
-        QList<KoShape*> shapesWithCollisionDetection;
-    };
-
-    QList<KoShape *> shapes;
-    QList<KoShape *> additionalShapes; // these are shapes that are only handled for updates
-    KoSelection *selection;
-    KoCanvasBase *canvas;
-    KoRTree<KoShape *> tree;
-    QSet<KoShape *> aggregate4update;
-    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
-    KoShapeManagerPaintingStrategy *strategy;
-    KoShapeManager *q;
-};
 
 void KoShapeManager::Private::updateTree()
 {
     // for detecting collisions between shapes.
     DetectCollision detector;
     bool selectionModified = false;
+    bool anyModified = false;
     foreach(KoShape *shape, aggregate4update) {
         if (shapeIndexesBeforeUpdate.contains(shape))
             detector.detect(tree, shape, shapeIndexesBeforeUpdate[shape]);
         selectionModified = selectionModified || selection->isSelected(shape);
+        anyModified = true;
     }
 
     foreach (KoShape *shape, aggregate4update) {
@@ -147,6 +78,9 @@ void KoShapeManager::Private::updateTree()
     if (selectionModified) {
         selection->updateSizeAndPosition();
         emit q->selectionContentChanged();
+    }
+    if (anyModified) {
+        emit q->contentChanged();
     }
 }
 
@@ -270,6 +204,10 @@ void KoShapeManager::remove(KoShape *shape)
             remove(containerShape);
         }
     }
+
+    // This signal is used in the annotation shape.
+    // FIXME: Is this really what we want?  (and shouldn't it be called shapeDeleted()?)
+    shapeRemoved(shape);
 }
 
 void KoShapeManager::removeAdditional(KoShape *shape)
@@ -372,9 +310,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.save();
         shape->paint(painter, converter, paintContext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     } else {
@@ -414,9 +352,9 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 imagePainter.save();
                 shape->paint(imagePainter, converter, paintContext);
                 imagePainter.restore();
-                if (shape->border()) {
+                if (shape->stroke()) {
                     imagePainter.save();
-                    shape->border()->paint(shape, imagePainter, converter);
+                    shape->stroke()->paint(shape, imagePainter, converter);
                     imagePainter.restore();
                 }
                 imagePainter.end();
@@ -434,7 +372,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
                 QPainter fillPainter(&fillPaint);
                 QPainterPath fillPath;
                 fillPath.addRect(fillPaint.rect().adjusted(-1,-1,1,1));
-                shape->background()->paint(fillPainter, fillPath);
+                shape->background()->paint(fillPainter, converter, paintContext, fillPath);
             } else {
                 fillPaint.fill(qRgba(0,0,0,0));
             }
@@ -585,6 +523,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     }
     if (wasEmpty && !d->aggregate4update.isEmpty())
         QTimer::singleShot(100, this, SLOT(updateTree()));
+    emit shapeChanged(shape);
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

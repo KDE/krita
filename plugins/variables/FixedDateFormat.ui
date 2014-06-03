@@ -10,19 +10,10 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
      </property>
      <item>
       <widget class="QLabel" name="label_2" >
@@ -80,12 +71,6 @@
      </property>
      <widget class="QWidget" name="normalPage" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item>
         <widget class="QListWidget" name="formatList" >
          <property name="sizePolicy" >
@@ -102,19 +87,10 @@
      </widget>
      <widget class="QWidget" name="customPage" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item>
         <layout class="QHBoxLayout" >
          <property name="margin" >
           <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
          </property>
          <item>
           <widget class="QLineEdit" name="customString" />

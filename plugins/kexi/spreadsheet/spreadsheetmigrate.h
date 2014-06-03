@@ -17,18 +17,19 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIMIGRATIONTXTMIGRATE_H
-#define KEXIMIGRATIONTXTMIGRATE_H
+#ifndef KEXIMIGRATIONSPREADSHEETMIGRATE_H
+#define KEXIMIGRATIONSPREADSHEETMIGRATE_H
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <tables/part/Doc.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
+#include <sheets/part/Doc.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
+#include <KoPart.h>
 
 namespace KexiMigration
 {
@@ -41,7 +42,7 @@ class SpreadsheetMigrate : public KexiMigrate
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit SpreadsheetMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~SpreadsheetMigrate();
 
@@ -80,9 +81,9 @@ public:
 
   private:
     QString m_FileName;
-    Calligra::Tables::Sheet *m_CurSheet;
+    Calligra::Sheets::Sheet *m_CurSheet;
     
-    Calligra::Tables::Doc *m_KSDoc;
+    Calligra::Sheets::Doc *m_KSDoc;
 
     QStringList m_FieldNames;
 

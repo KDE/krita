@@ -46,26 +46,22 @@ QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*str
     return project(pt);
 }
 
-void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
 {
-    Q_UNUSED(updateRect);
     if (handles().size() < 2) return;
     QTransform initialTransform = converter->documentToWidgetTransform();
     if (handles().size() == 2) {
         // just draw the axis
-        gc.save();
         gc.setTransform(initialTransform);
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
         drawPath(gc, path);
-        gc.restore();
         return;
     }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         // valid ellipse
 
-        gc.save();
         gc.setTransform(initialTransform);
         gc.setTransform(e.getInverse(), true);
         QPainterPath path;
@@ -74,7 +70,16 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
         // Draw the ellipse
         path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
         drawPath(gc, path);
-        gc.restore();
+    }
+}
+
+QRect EllipseAssistant::boundingRect() const
+{
+    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
+        return e.boundingRect().adjusted(-2, -2, 2, 2).toAlignedRect();
+    } else {
+        return QRect();
     }
 }
 
@@ -101,7 +106,7 @@ QString EllipseAssistantFactory::name() const
     return i18n("Ellipse");
 }
 
-KisPaintingAssistant* EllipseAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* EllipseAssistantFactory::createPaintingAssistant() const
 {
     return new EllipseAssistant;
 }

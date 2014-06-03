@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,57 +21,65 @@
  */
 
 #include "CharacterGeneral.h"
-#include "FontLayoutTab.h"
-#include "FontTab.h"
 #include "CharacterHighlighting.h"
 #include "LanguageTab.h"
 #include "FontDecorations.h"
 #include "FormattingPreview.h"
 
+#include "StylesCombo.h"
+#include "StylesModel.h"
+
+#include <KoParagraphStyle.h>
+#include <KoStyleThumbnailer.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 
 #include "kdebug.h"
 
-CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
-        : QWidget(parent),
-        m_blockSignals(false),
-        m_style(0)
+CharacterGeneral::CharacterGeneral(QWidget *parent)
+        : QWidget(parent)
+        , m_style(0)
+        , m_styleManager(0)
+        , m_thumbnail(new KoStyleThumbnailer())
+        , m_paragraphStyleModel(new StylesModel(0,StylesModel::ParagraphStyle))
+        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
+    // we don't have next style for character styles
+    widget.nextStyle->setVisible(false);
+    widget.label_2->setVisible(false);
+    //
 
-    m_layoutTab = new FontLayoutTab(true, uniqueFormat, this);
+    // paragraph style model
+    widget.nextStyle->showEditIcon(false);
+    widget.nextStyle->setStyleIsOriginal(true);
+    m_paragraphStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.nextStyle->setStylesModel(m_paragraphStyleModel);
+    // inherited style model
+    widget.inheritStyle->showEditIcon(false);
+    widget.inheritStyle->setStyleIsOriginal(true);
+    //for character General
+    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
+    widget.inheritStyle->setStylesModel(m_characterInheritedStyleModel);
+    widget.inheritStyle->setEnabled(false);
 
-    m_characterDecorations = new FontDecorations(uniqueFormat, this);
-    connect(m_characterDecorations, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
-    connect(m_characterDecorations, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
+    m_characterHighlighting = new CharacterHighlighting(true, this);
+    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SLOT(setPreviewCharacterStyle()));
 
-    m_characterHighlighting = new CharacterHighlighting(uniqueFormat, this);
-    connect(m_characterHighlighting, SIGNAL(underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
-    connect(m_characterHighlighting, SIGNAL(strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
-    connect(m_characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
+    m_languageTab = new LanguageTab(true, this);
 
-    m_fontTab = new FontTab(uniqueFormat, this);
-    connect(m_fontTab, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
+    widget.tabs->addTab(m_characterHighlighting, i18n("Font"));
 
-    m_languageTab = new LanguageTab(uniqueFormat, this);
-
-    widget.tabs->addTab(m_fontTab, i18n("Font"));
-    widget.tabs->addTab(m_characterDecorations, i18n("Decorations"));
-    widget.tabs->addTab(m_characterHighlighting, i18n("Highlighting"));
-    widget.tabs->addTab(m_layoutTab, i18n("Layout"));
-    //widget.tabs->addTab(m_languageTab, i18n("Language"));
     m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
-    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
         disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
-        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -80,17 +90,24 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     m_style = style;
     if (m_style == 0)
         return;
-    m_blockSignals = true;
+    blockSignals(true);
 
     if (!m_nameHidden)
         widget.name->setText(style->name());
-    m_fontTab->setDisplay(style);
-    m_layoutTab->setDisplay(style);
-    m_characterDecorations->setDisplay(style);
-    m_characterHighlighting->setDisplay(style);
-    m_languageTab->setDisplay(style);
 
-    m_blockSignals = false;
+    m_characterHighlighting->setDisplay(style);
+    //m_languageTab->setDisplay(style);
+
+    widget.preview->setCharacterStyle(style);
+
+    if (m_styleManager) {
+        KoCharacterStyle *parentStyle = style->parentStyle();
+        if (parentStyle) {
+            widget.inheritStyle->setCurrentIndex(m_characterInheritedStyleModel->indexOf(*parentStyle).row());
+        }
+    }
+
+    blockSignals(false);
 }
 
 void CharacterGeneral::save(KoCharacterStyle *style)
@@ -105,13 +122,13 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     else
         savingStyle = style;
 
-    m_fontTab->save(savingStyle);
-    m_characterDecorations->save(savingStyle);
     m_characterHighlighting->save(savingStyle);
-    m_layoutTab->save(savingStyle);
-    m_languageTab->save(savingStyle);
+    //m_languageTab->save(savingStyle);
+    savingStyle->setName(widget.name->text());
 
-    emit styleAltered(savingStyle);
+    if (m_style == savingStyle) {
+        emit styleAltered(savingStyle);
+    }
 }
 
 void CharacterGeneral::switchToGeneralTab()
@@ -119,39 +136,67 @@ void CharacterGeneral::switchToGeneralTab()
     widget.tabs->setCurrentIndex(0);
 }
 
-void CharacterGeneral::setName(const QString &name)
+void CharacterGeneral::selectName()
 {
-    m_style->setName(name);
+    widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.generalTab));
+    widget.name->selectAll();
+    widget.name->setFocus(Qt::OtherFocusReason);
 }
 
-void CharacterGeneral::slotCapitalizationChanged(QFont::Capitalization capitalisation)
+void CharacterGeneral::setPreviewCharacterStyle()
 {
-    widget.preview->setFontCapitalisation(capitalisation);
+    KoCharacterStyle *charStyle = new KoCharacterStyle();
+    save(charStyle);
+    if (charStyle) {
+        widget.preview->setCharacterStyle(charStyle);
+    }
+
+    delete charStyle;
 }
 
-void CharacterGeneral::slotFontSelected(const QFont &font)
+QString CharacterGeneral::styleName() const
 {
-    widget.preview->setFont(font);
+    return widget.name->text();
 }
 
-void CharacterGeneral::slotBackgroundColorChanged(QColor color)
+void CharacterGeneral::setStyleManager(KoStyleManager *sm)
 {
-    widget.preview->setBackgroundColor(color);
+    if (!sm)
+        return;
+    m_styleManager = sm;
+    m_paragraphStyleModel->setStyleManager(m_styleManager);
+    m_characterInheritedStyleModel->setStyleManager(m_styleManager);
 }
 
-void CharacterGeneral::slotTextColorChanged(QColor color)
+void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 {
-    widget.preview->setTextColor(color);
+    if (!style)
+        return;
+
+    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexOf(*style).row());
+    m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
 }
 
-void CharacterGeneral::slotUnderlineChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
+int CharacterGeneral::nextStyleId()
 {
-    widget.preview->setUnderline(lineType, lineStyle, lineColor);
+    if (!m_styleManager) {
+        return 0;
+    }
+    int nextStyleIndex = widget.nextStyle->currentIndex();
+    QModelIndex paragraphStyleIndex = m_paragraphStyleModel->index(nextStyleIndex);
+    quint64 internalId = paragraphStyleIndex.internalId();
+    KoParagraphStyle * paragraphStyle = m_styleManager->paragraphStyle(internalId);
+    if (paragraphStyle) {
+        return paragraphStyle->styleId();
+    }
+    else {
+        return 0;
+    }
 }
 
-void CharacterGeneral::slotStrikethroughChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
+KoCharacterStyle *CharacterGeneral::style() const
 {
-    widget.preview->setStrikethrough(lineType, lineStyle, lineColor);
+    return m_style;
 }
 
 #include <CharacterGeneral.moc>

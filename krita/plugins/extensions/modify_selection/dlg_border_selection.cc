@@ -2,6 +2,7 @@
  *  dlg_border_selection.cc - part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,49 +21,86 @@
 
 #include "dlg_border_selection.h"
 
-#include <math.h>
+#include <KoUnit.h>
+#include <KoSizeGroup.h>
+#include <kis_view2.h>
+#include <kis_image.h>
+#include <operations/kis_operation_configuration.h>
 
-#include <klocale.h>
-#include <kis_debug.h>
-
-DlgBorderSelection::DlgBorderSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+WdgBorderSelection::WdgBorderSelection(QWidget* parent, KisView2 *view)
+    : KisOperationUIWidget(i18n("Border Selection"), parent)
+    , m_width(1)
 {
-    setCaption(i18n("Border Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
-    m_page = new WdgBorderSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("border_selection");
+    Q_ASSERT(view);
+    KisImageWSP image = view->image();
+    Q_ASSERT(image);
+    m_resolution = image->yRes();
 
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
+    setupUi(this);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    spbWidth->setValue(m_width);
+    spbWidth->setFocus();
+    spbWidth->setVisible(true);
+    spbWidthDouble->setVisible(false);
+
+    cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
+    cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
+
+    // ensure that both spinboxes request the same horizontal size
+    KoSizeGroup *spbGroup = new KoSizeGroup(this);
+    spbGroup->addWidget(spbWidth);
+    spbGroup->addWidget(spbWidthDouble);
+
+    connect(spbWidth, SIGNAL(valueChanged(int)), this, SLOT(slotWidthChanged(int)));
+    connect(spbWidthDouble, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
+    connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
 }
 
-DlgBorderSelection::~DlgBorderSelection()
+void WdgBorderSelection::slotWidthChanged(int width)
 {
-    delete m_page;
+    slotWidthChanged((double) width);
 }
 
-qint32 DlgBorderSelection::xradius()
+void WdgBorderSelection::slotWidthChanged(double width)
 {
-    return m_page->radiusSpinBox->value();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    const double resWidth = (selectedUnit == KoUnit(KoUnit::Pixel)) ? width : (width * m_resolution);
+    m_width = qRound(selectedUnit.fromUserValue(resWidth));
 }
 
-qint32 DlgBorderSelection::yradius()
+void WdgBorderSelection::slotUnitChanged(int index)
 {
-    return m_page->radiusSpinBox->value();
+    updateWidthUIValue(m_width);
+
+    const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbWidth->setVisible(false);
+        spbWidthDouble->setVisible(true);
+    } else {
+        spbWidth->setVisible(true);
+        spbWidthDouble->setVisible(false);
+    }
 }
 
-
-// SLOTS
-
-void DlgBorderSelection::okClicked()
+void WdgBorderSelection::updateWidthUIValue(double value)
 {
-    accept();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbWidthDouble->blockSignals(true);
+        spbWidthDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+        spbWidthDouble->blockSignals(false);
+    } else {
+        const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+        spbWidth->blockSignals(true);
+        spbWidth->setValue(selectedUnit.toUserValue(finalValue));
+        spbWidth->blockSignals(false);
+    }
+}
+
+void WdgBorderSelection::getConfiguration(KisOperationConfiguration* config)
+{
+    config->setProperty("x-radius", m_width);
+    config->setProperty("y-radius", m_width);
 }
 
 #include "dlg_border_selection.moc"

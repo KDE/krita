@@ -1,7 +1,7 @@
 #ifndef SQUEEZEDCOMBOBOX_TEST_H
 #define SQUEEZEDCOMBOBOX_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class SqueezedComboBoxTest : public QObject
 {

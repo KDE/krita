@@ -16,11 +16,11 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemText.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <QPrinter>
@@ -63,7 +63,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n;
+            kWarning() << "while parsing field element encountered unknow element: " << n;
         }
     }
 
@@ -187,7 +187,9 @@ QString KoReportItemText::typeName() const
     return "report:text";
 }
 
-int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemText::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                       const QVariant &data, KRScriptHandler *script)
+
 {
     Q_UNUSED(script);
 
@@ -212,8 +214,7 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
     qreal   intBaseTop      = trf.top();
     qreal   intRectHeight   = trf.height();
 
-    kDebug() << qstrValue;
-
+    //kDebug() << qstrValue;
     if (qstrValue.length()) {
         QRectF rect = trf;
 

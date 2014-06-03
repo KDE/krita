@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,14 +40,14 @@ public:
      *
      * @param table table to use.
      */
-    TableIterator(QTextTable *table);
+    explicit TableIterator(QTextTable *table);
 
     /**
      * Constructs a new iterator initialized from another.
      *
      * @param other iterator to initialize the iterator from.
      */
-    TableIterator(TableIterator *other);
+    explicit TableIterator(TableIterator *other);
 
     /// Destructor.
     ~TableIterator();

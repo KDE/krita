@@ -22,8 +22,8 @@
 
 #include "flake_export.h"
 
-#include <QtCore/QList>
-#include <QtCore/QRectF>
+#include <QList>
+#include <QRectF>
 
 class KoFilterEffect;
 class KoXmlWriter;

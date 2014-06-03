@@ -23,24 +23,23 @@
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 #include "kis_curve_paintop_settings_widget.h"
-#include <KoColorSpace.h>
 
+class KoColorSpace;
 class CurveProperties;
-class Pen {
+class Pen
+{
 public:
-    Pen():pos(QPointF(0,0)), rotation(0), scale(0)
-    {
+    Pen(): pos(QPointF(0, 0)), rotation(0), scale(0) {
 
     }
 
-    Pen(QPointF ipos,qreal irotation, qreal iscale)
-        :pos(ipos),
-        rotation(irotation),
-        scale(iscale)
-    {
+    Pen(QPointF ipos, qreal irotation, qreal iscale)
+        : pos(ipos),
+          rotation(irotation),
+          scale(iscale) {
 
     }
 
@@ -64,7 +63,7 @@ private:
     QPointF getLinearBezier(const QPointF &p1, const QPointF &p2, qreal u);
     void putPixel(QPointF pos, KoColor &color);
 
-    KisRandomAccessor * m_writeAccessor;
+    KisRandomAccessorSP m_writeAccessor;
     KoColorSpace * cs;
     quint32 m_pixelSize;
 

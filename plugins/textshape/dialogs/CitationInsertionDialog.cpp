@@ -18,8 +18,8 @@
  */
 #include "CitationInsertionDialog.h"
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 #include <KoInlineCite.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>
@@ -42,17 +42,19 @@ CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *
     }
     existingCites.removeDuplicates();
     dialog.existingCites->addItems(existingCites);
+
+    show();
 }
 
 void CitationInsertionDialog::insert()
 {
     if (m_cites.contains(dialog.shortName->text())) {
-        if (!toCite()->hasSameData(m_cites.value(dialog.shortName->text()))) {      //prompts if values are changed
-            int ret = QMessageBox::warning(this,"Warning","The document already contains the bibliography entry with different data.\n"
-                                 "Do you want to adjust existing entries?",QMessageBox::Yes | QMessageBox::No);
+        if (*m_cites.value(dialog.shortName->text()) != *toCite()) {      //prompts if values are changed
+            int ret = QMessageBox::warning(this,i18n("Warning"),i18n("The document already contains the bibliography entry with different data.\n"
+                                 "Do you want to adjust existing entries?"),QMessageBox::Yes | QMessageBox::No);
             if ( ret == QMessageBox::Yes) {
                 foreach(KoInlineCite *existingCite, m_cites.values(dialog.shortName->text())) {
-                    existingCite->copyFrom(toCite());                       //update all cites with new values
+                    *existingCite = *toCite();                       //update all cites with new values
                     existingCite->setType(KoInlineCite::ClonedCitation);    //change type to ClonedCitation
                 }
                 emit accept();
@@ -60,11 +62,14 @@ void CitationInsertionDialog::insert()
         }
     }
     KoInlineCite *cite = m_editor->insertCitation();
-    if (dialog.shortName->text() == "") {
-        dialog.shortName->setText(QString("Short name%1").arg(
-                                      QString::number(KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count())));
+    if (dialog.shortName->text().isEmpty()) {
+        const int number =
+            KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count();
+        dialog.shortName->setText(i18n("Short name%1", number));
+
+        dialog.shortName->setSelection(dialog.shortName->text().length(),0);
     }
-    cite->copyFrom(toCite());
+    *cite = *toCite();
     emit accept();
 }
 
@@ -73,11 +78,12 @@ void CitationInsertionDialog::selectionChangedFromExistingCites()
     if (dialog.existingCites->currentIndex() != 0) {
         KoInlineCite *cite = m_cites[dialog.existingCites->currentText()];
         this->fillValuesFrom(cite);
-    }
-    else if (dialog.existingCites->currentIndex() == 0) {
+    } else if (dialog.existingCites->currentIndex() == 0) {
         KoInlineCite *blankCite = new KoInlineCite(KoInlineCite::Citation);
-        blankCite->setIdentifier(QString("Short name%1").arg(
-                                      QString::number(KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count()+1)));
+        blankCite->setBibliographyType("Article");      //default bibliography type
+        const int number =
+            KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations().count() + 1;
+        blankCite->setIdentifier(i18n("Short name%1", number));
         fillValuesFrom(blankCite);
     }
 }
@@ -88,7 +94,7 @@ KoInlineCite *CitationInsertionDialog::toCite()
     cite->setAddress(dialog.address->text());
     cite->setAnnotation(dialog.annotation->text());
     cite->setAuthor(dialog.author->text());
-    cite->setBibliographyType(dialog.sourceType->currentText().remove(" ").toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
+    cite->setBibliographyType(dialog.sourceType->currentText().remove(QLatin1Char(' ')).toLower());      //removing spaces and lowering case for exact tag attribute of bibliography-type
     cite->setBookTitle(dialog.booktitle->text());
     cite->setChapter(dialog.chapter->text());
     cite->setCustom1(dialog.ud1->text());

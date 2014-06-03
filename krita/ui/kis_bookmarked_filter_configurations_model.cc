@@ -19,7 +19,6 @@
 #include "kis_bookmarked_filter_configurations_model.h"
 
 #include <QFutureWatcher>
-#include <QPixmap>
 #include <QSignalMapper>
 #include <QtConcurrentRun>
 
@@ -58,7 +57,7 @@ QImage generatePreview(const KisFilter* filter, KisPaintDeviceSP thumb, KisFilte
 {
     KisPaintDeviceSP target = new KisPaintDevice(*thumb);
     filter->process(target, QRect(0, 0, 100, 100), config);
-    return target->convertToQImage(0);
+    return target->convertToQImage(0, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 }
 
 QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, int role) const

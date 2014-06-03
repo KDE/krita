@@ -226,7 +226,7 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     style.applyStyle(block);
 
     // check if styles do their work ;)
-    QCOMPARE(block.blockFormat().intProperty(KoParagraphStyle::PercentLineHeight), 80);
+    QCOMPARE(block.blockFormat().doubleProperty(KoParagraphStyle::PercentLineHeight), 80.0);
 
     block = block.next();
     QVERIFY(block.isValid()); //line2
@@ -281,7 +281,7 @@ void TestDocumentLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     // qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING); // 92
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(qreal(12 * 1.2), qreal(5.0)))) < ROUNDING); // 92
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
@@ -838,7 +838,7 @@ void TestDocumentLayout::testDropCaps()
     QTextBlock block = m_doc->begin();
     QTextBlock secondblock = block.next();
     style.applyStyle(block);
-    
+
     m_layout->layout();
 
     // dummy version, caps is still false.

@@ -40,13 +40,13 @@
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QPen>
-#include <QtGui/QPainter>
-#include <QtGui/QFont>
+#include <QBuffer>
+#include <QPen>
+#include <QPainter>
+#include <QFont>
 
 ArtisticTextShape::ArtisticTextShape()
     : m_path(0), m_startOffset(0.0)
@@ -65,11 +65,11 @@ ArtisticTextShape::~ArtisticTextShape()
     }
 }
 
-void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     applyConversion( painter, converter );
     if( background() )
-        background()->paint( painter, outline() );
+        background()->paint( painter, converter, paintContext, outline() );
 }
 
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
@@ -847,10 +847,14 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
     else if(charPos.first < 0)
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length()-1);
 
-    const ArtisticTextRange &range = m_ranges.at(charPos.first);
-    QFontMetrics metrics(range.font());
-    int w = metrics.charWidth(range.text(), charPos.second);
-    return QRectF( 0, 0, w, metrics.height() );
+    if (charPos.first < m_ranges.size()) {
+        const ArtisticTextRange &range = m_ranges.at(charPos.first);
+        QFontMetrics metrics(range.font());
+        int w = metrics.charWidth(range.text(), charPos.second);
+        return QRectF( 0, 0, w, metrics.height() );
+    }
+
+    return QRectF();
 }
 
 void ArtisticTextShape::updateSizeAndPosition( bool global )
@@ -977,7 +981,7 @@ void ArtisticTextShape::finishTextUpdate()
 
 bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 {
-    context.shapeWriter().startElement("text");
+    context.shapeWriter().startElement("text", false);
     context.shapeWriter().addAttribute("id", context.getID(this));
 
     SvgStyleWriter::saveSvgStyle(this, context);
@@ -1001,16 +1005,9 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 
     // check if we are set on a path
     if (layout() == ArtisticTextShape::Straight) {
-        QTransform m = transformation();
-        if (m.type() == QTransform::TxTranslate) {
-            const QPointF pos = position();
-            context.shapeWriter().addAttributePt("x", pos.x() + anchorOffset);
-            context.shapeWriter().addAttributePt("y", pos.y() + baselineOffset());
-        } else {
-            context.shapeWriter().addAttributePt("x", anchorOffset);
-            context.shapeWriter().addAttributePt("y", baselineOffset());
-            context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
-        }
+        context.shapeWriter().addAttributePt("x", anchorOffset);
+        context.shapeWriter().addAttributePt("y", baselineOffset());
+        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
         foreach(const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
@@ -1024,7 +1021,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
         context.styleWriter().endElement();
 
         context.shapeWriter().startElement("textPath");
-        context.shapeWriter().addAttribute("xlink:href", "#"+id);
+        context.shapeWriter().addAttribute("xlink:href", QLatin1Char('#')+id);
         if (startOffset() > 0.0)
             context.shapeWriter().addAttribute("startOffset", QString("%1%").arg(startOffset() * 100.0));
         foreach(const ArtisticTextRange &range, formattedText) {
@@ -1053,14 +1050,14 @@ void ArtisticTextShape::saveSvgFont(const QFont &font, SvgSavingContext &context
 
 void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavingContext &context, bool saveRangeFont, qreal baselineOffset)
 {
-    context.shapeWriter().startElement("tspan");
+    context.shapeWriter().startElement("tspan", false);
     if (range.hasXOffsets()) {
         const char *attributeName = (range.xOffsetType() == ArtisticTextRange::AbsoluteOffset ? "x" : "dx");
         QString attributeValue;
         int charIndex = 0;
         while(range.hasXOffset(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += QLatin1Char(',');
             attributeValue += QString("%1").arg(SvgUtil::toUserSpace(range.xOffset(charIndex++)));
         }
         context.shapeWriter().addAttribute(attributeName, attributeValue);
@@ -1073,7 +1070,7 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
         int charIndex = 0;
         while(range.hasYOffset(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += QLatin1Char(',');
             attributeValue += QString("%1").arg(SvgUtil::toUserSpace(baselineOffset+range.yOffset(charIndex++)));
         }
         context.shapeWriter().addAttribute(attributeName, attributeValue);
@@ -1083,7 +1080,7 @@ void ArtisticTextShape::saveSvgTextRange(const ArtisticTextRange &range, SvgSavi
         int charIndex = 0;
         while(range.hasRotation(charIndex)) {
             if (charIndex)
-                attributeValue += ",";
+                attributeValue += ',';
             attributeValue += QString("%1").arg(range.rotation(charIndex++));
         }
         context.shapeWriter().addAttribute("rotate", attributeValue);

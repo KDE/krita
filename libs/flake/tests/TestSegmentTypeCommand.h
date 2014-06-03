@@ -20,7 +20,7 @@
 #ifndef TESTSEGMENTTYPECOMMAND_H
 #define TESTSEGMENTTYPECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestSegmentTypeCommand : public QObject
 {

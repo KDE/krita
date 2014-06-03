@@ -19,7 +19,7 @@
 #ifndef TESTPOINTREMOVECOMMAND_H
 #define TESTPOINTREMOVECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestPointRemoveCommand : public QObject
 {

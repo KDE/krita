@@ -26,22 +26,28 @@ class KoPAView;
 class KoConfigDocumentPage;
 class KoConfigGridPage;
 class KoConfigMiscPage;
+class KoConfigAuthorPage;
 
 class KoPAConfigureDialog : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    KoPAConfigureDialog(KoPAView* parent);
+    explicit KoPAConfigureDialog(KoPAView *parent);
+
+signals:
+    /// Emitted when the configuration may have changed.
+    void changed();
 
 public slots:
     void slotApply();
     void slotDefault();
 
 private:
-    KoConfigGridPage* m_gridPage;
-    KoConfigDocumentPage* m_docPage;
-    KoConfigMiscPage* m_miscPage;
+    KoConfigGridPage *m_gridPage;
+    KoConfigDocumentPage *m_docPage;
+    KoConfigMiscPage *m_miscPage;
+    KoConfigAuthorPage *m_authorPage;
 };
 
 #endif // KOPACONFIGUREDIALOG_H

@@ -21,7 +21,7 @@
 #define SHADOWDOCKER_H
 
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 
 /// A docker for setting properties of a shape shadow
@@ -35,14 +35,11 @@ public:
     virtual ~ShadowDocker();
 
 private slots:
-    /// selection has changed
-    void selectionChanged();
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
-    
-    void shadowChanged();
+
     void locationChanged(Qt::DockWidgetArea area);
 
 private:

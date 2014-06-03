@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_STAFFELEMENT_H
 #define MUSIC_CORE_STAFFELEMENT_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace MusicCore {
 

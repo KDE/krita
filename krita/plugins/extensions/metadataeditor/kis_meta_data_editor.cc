@@ -24,6 +24,8 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
+
+#include <KoIcon.h>
 #include <kis_debug.h>
 
 #include <kis_meta_data_store.h>
@@ -33,7 +35,7 @@
 #include <kis_meta_data_schema_registry.h>
 
 #include "kis_entry_editor.h"
-#include <qtableview.h>
+#include <QTableView>
 #include "kis_meta_data_model.h"
 #include <QHeaderView>
 
@@ -109,7 +111,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     }
                     QString key = schema->generateQualifiedName(entryName);
                     KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, arrayIndex);
-                    connect(obj, editorSignal.toAscii(), ee, SLOT(valueEdited()));
+                    connect(obj, editorSignal.toLatin1(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(key);
                     foreach(KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
@@ -139,7 +141,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
     tableView->verticalHeader()->setVisible(false);
     tableView->resizeColumnsToContents();
     KPageWidgetItem *page = new KPageWidgetItem(tableView, i18n("List"));
-    page->setIcon(KIcon("format-list-unordered"));
+    page->setIcon(koIcon("format-list-unordered"));
     addPage(page);
 }
 

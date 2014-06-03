@@ -23,7 +23,70 @@
 #ifndef TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 #define TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
+#include <QTest>
+#include <QDebug>
+#include <QString>
+#include <QTextDocument>
+#include <QList>
+#include <QTextCursor>
+#include <QTextCharFormat>
+
+#include <KoInlineObject.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoTextEditor.h>
+#include <KoTextDocument.h>
+
+class DummyInlineObject : public KoInlineObject
+{
+public:
+
+    DummyInlineObject(bool propertyListener)
+        : KoInlineObject(propertyListener)
+        , m_position(-1)
+    {
+    }
+
+    virtual ~DummyInlineObject() {}
+
+    virtual void saveOdf(KoShapeSavingContext &/*context*/)
+    {
+        // dummy impl
+    }
+
+    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
+    {
+        // dummy impl
+        return false;
+    }
+
+    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/)
+    {
+        Q_ASSERT(posInDocument <= document->toPlainText().size()); Q_UNUSED(document);
+        m_position = posInDocument;
+    }
+
+    virtual void resize(const QTextDocument */*document*/, QTextInlineObject /*object*/,
+                        int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/)
+    {
+        // dummy impl
+    }
+
+    virtual void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
+                       const QRectF &/*rect*/, QTextInlineObject /*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/)
+    {
+        // dummy impl
+    }
+
+    virtual void propertyChanged(Property /*property*/, const QVariant &value)
+    {
+        m_property = value;
+    }
+
+    QVariant m_property;
+    int m_position;
+
+};
 
 class TestKoInlineTextObjectManager : public QObject
 {

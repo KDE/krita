@@ -23,21 +23,21 @@ class KisChalkOpOptionsWidget: public QWidget, public Ui::WdgChalkOptions
 {
 public:
     KisChalkOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisChalkOpOption::KisChalkOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisChalkOpOptionsWidget();
+    m_options->hide();
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->inkDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->opacity, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->saturation, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-
     setConfigurationPage(m_options);
 }
 
@@ -54,7 +54,7 @@ int KisChalkOpOption::radius() const
 
 void KisChalkOpOption::setRadius(int radius) const
 {
-    m_options->radiusSpinBox->setValue( radius );
+    m_options->radiusSpinBox->setValue(radius);
 }
 
 

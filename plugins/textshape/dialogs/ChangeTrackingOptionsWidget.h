@@ -26,8 +26,8 @@ class ChangeTrackingOptionsWidget : public QWidget
 {
     Q_OBJECT
     public:
-        ChangeTrackingOptionsWidget(TextTool *tool,QWidget *parent = 0);
-    
+        explicit ChangeTrackingOptionsWidget(TextTool *tool,QWidget *parent = 0);
+
     private slots:
         void recordChangesChanged(int isChecked);
         void showChangesChanged(int isChecked);

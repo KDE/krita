@@ -183,9 +183,9 @@ void Text::setSize(const QSizeF& s)
 void Text::loadFromFile(const QString &fn)
 {
     QFile file(fn);
-    kDebug() << "Loading from " << fn;
+    //kDebug() << "Loading from" << fn;
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        m_text->m_controlSource->setValue("$Unable to read " + fn);
+        m_text->m_controlSource->setValue(QVariant("$Unable to read " + fn));
         return;
     }
     QTextStream in(&file);
@@ -195,7 +195,7 @@ void Text::loadFromFile(const QString &fn)
       QString line = in.readLine();
       process_line(line);
     }*/
-    m_text->m_controlSource->setValue('$' + data);
+    m_text->m_controlSource->setValue(QVariant('$' + data));
 }
 
 }

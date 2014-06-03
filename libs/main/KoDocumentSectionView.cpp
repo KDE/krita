@@ -21,32 +21,65 @@
 #include "KoDocumentSectionDelegate.h"
 #include "KoDocumentSectionModel.h"
 
-#include <KIconLoader>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kiconloader.h>
+#include <ksharedconfig.h>
+#include <ksharedptr.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QHelpEvent>
 #include <QMenu>
+#include <QDrag>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
 #include <QApplication>
 #include <QPainter>
 #include <QScrollBar>
 
+#ifdef Q_WS_X11
+#define DRAG_WHILE_DRAG_WORKAROUND
+#endif
+
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+#define DRAG_WHILE_DRAG_WORKAROUND_START() d->isDragging = true
+#define DRAG_WHILE_DRAG_WORKAROUND_STOP() d->isDragging = false
+#else
+#define DRAG_WHILE_DRAG_WORKAROUND_START()
+#define DRAG_WHILE_DRAG_WORKAROUND_STOP()
+#endif
+
+
 class KoDocumentSectionView::Private
 {
 public:
-    Private(): delegate(0), mode(DetailedMode) { }
+    Private()
+        : delegate(0)
+        , mode(DetailedMode)
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+        , isDragging(false)
+#endif
+    {
+        KSharedConfigPtr config = KGlobal::config();
+        KConfigGroup group = config->group("DocumentSectionView");
+        mode = (DisplayMode) group.readEntry("DocumentSectionViewMode", (int)DetailedMode);
+    }
     KoDocumentSectionDelegate *delegate;
     DisplayMode mode;
     QPersistentModelIndex hovered;
     QPoint lastPos;
+
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+    bool isDragging;
+#endif
 };
 
 KoDocumentSectionView::KoDocumentSectionView(QWidget *parent)
     : QTreeView(parent)
-    , m_dragingFlag(false)
+    , m_draggingFlag(false)
     , d(new Private)
 {
     d->delegate = new KoDocumentSectionDelegate(this, this);
@@ -70,6 +103,9 @@ void KoDocumentSectionView::setDisplayMode(DisplayMode mode)
 {
     if (d->mode != mode) {
         d->mode = mode;
+        KSharedConfigPtr config = KGlobal::config();
+        KConfigGroup group = config->group("DocumentSectionView");
+        group.writeEntry("DocumentSectionViewMode", (int)mode);
         scheduleDelayedItemsLayout();
     }
 }
@@ -86,7 +122,7 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
             connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                     this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
             menu->addAction(a);
         }
     }
@@ -97,6 +133,8 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
     if (model()) {
         switch(e->type()) {
         case QEvent::MouseButtonPress: {
+            DRAG_WHILE_DRAG_WORKAROUND_STOP();
+
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             d->lastPos = pos;
             if (!indexAt(pos).isValid()) {
@@ -113,6 +151,12 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
             d->hovered = QModelIndex();
         } break;
         case QEvent::MouseMove: {
+#ifdef DRAG_WHILE_DRAG_WORKAROUND
+            if (d->isDragging) {
+                return false;
+            }
+#endif
+
             const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
             QModelIndex hovered = indexAt(pos);
             if (hovered != d->hovered) {
@@ -136,7 +180,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
                 return true;
             }
         } break;
-       case QEvent::ToolTip: {
+        case QEvent::ToolTip: {
             const QPoint pos = static_cast<QHelpEvent*>(e)->pos();
             if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
@@ -208,6 +252,8 @@ QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &in
 
 void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
 {
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
         const QModelIndexList indexes = selectionModel()->selectedIndexes();
         if (!indexes.isEmpty()) {
@@ -289,7 +335,7 @@ void KoDocumentSectionView::paintEvent(QPaintEvent *event)
     QTreeView::paintEvent(event);
 
     // Paint the line where the slide should go
-    if (isDraging() && (displayMode() == KoDocumentSectionView::ThumbnailMode)) {
+    if (isDragging() && (displayMode() == KoDocumentSectionView::ThumbnailMode)) {
         QSize size(visualRect(model()->index(0, 0, QModelIndex())).width(), visualRect(model()->index(0, 0, QModelIndex())).height());
         int numberRow = cursorPageIndex();
         int scrollBarValue = verticalScrollBar()->value();
@@ -310,7 +356,7 @@ void KoDocumentSectionView::paintEvent(QPaintEvent *event)
 void KoDocumentSectionView::dropEvent(QDropEvent *ev)
 {
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
-        setDragingFlag(false);
+        setDraggingFlag(false);
         ev->accept();
         clearSelection();
 
@@ -323,6 +369,8 @@ void KoDocumentSectionView::dropEvent(QDropEvent *ev)
         return;
     }
     QTreeView::dropEvent(ev);
+
+    DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
 int KoDocumentSectionView::cursorPageIndex() const
@@ -347,15 +395,23 @@ int KoDocumentSectionView::cursorPageIndex() const
     return numberRow;
 }
 
+void KoDocumentSectionView::dragEnterEvent(QDragEnterEvent *ev)
+{
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+    QTreeView::dragEnterEvent(ev);
+}
+
 void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
 {
+    DRAG_WHILE_DRAG_WORKAROUND_START();
+
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
         ev->accept();
         if (!model()) {
             return;
         }
         QTreeView::dragMoveEvent(ev);
-        setDragingFlag();
+        setDraggingFlag();
         viewport()->update();
         return;
     }
@@ -365,20 +421,22 @@ void KoDocumentSectionView::dragMoveEvent(QDragMoveEvent *ev)
 void KoDocumentSectionView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     if (displayMode() == KoDocumentSectionView::ThumbnailMode) {
-        setDragingFlag(false);
-        return;
+        setDraggingFlag(false);
+    } else {
+        QTreeView::dragLeaveEvent(e);
     }
-    QTreeView::dragLeaveEvent(e);
+
+    DRAG_WHILE_DRAG_WORKAROUND_STOP();
 }
 
-bool KoDocumentSectionView::isDraging() const
+bool KoDocumentSectionView::isDragging() const
 {
-    return m_dragingFlag;
+    return m_draggingFlag;
 }
 
-void KoDocumentSectionView::setDragingFlag(bool flag)
+void KoDocumentSectionView::setDraggingFlag(bool flag)
 {
-    m_dragingFlag = flag;
+    m_draggingFlag = flag;
 }
 
 #include <KoDocumentSectionPropertyAction_p.moc>

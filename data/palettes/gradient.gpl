@@ -1,0 +1,775 @@
+GIMP Palette
+Name: Gradient
+Columns: 16
+#
+# a derivation from 'All color' by Deevad
+#
+
+255 255 255	Untitled
+249 218 255	Untitled
+243 182 255	Untitled
+237 145 255	Untitled
+231 109 255	Untitled
+225  72 255	Untitled
+219  36 255	Untitled
+214   0 255	Untitled
+183   0 218	Untitled
+152   0 182	Untitled
+122   0 145	Untitled
+ 91   0 109	Untitled
+ 61   0  72	Untitled
+ 30   0  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+241 218 255	Untitled
+228 182 255	Untitled
+215 145 255	Untitled
+201 109 255	Untitled
+188  72 255	Untitled
+175  36 255	Untitled
+162   0 255	Untitled
+138   0 218	Untitled
+115   0 182	Untitled
+ 92   0 145	Untitled
+ 69   0 109	Untitled
+ 46   0  72	Untitled
+ 23   0  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+236 218 255	Untitled
+217 182 255	Untitled
+198 145 255	Untitled
+179 109 255	Untitled
+160  72 255	Untitled
+141  36 255	Untitled
+123   0 255	Untitled
+105   0 218	Untitled
+ 87   0 182	Untitled
+ 70   0 145	Untitled
+ 52   0 109	Untitled
+ 35   0  72	Untitled
+ 17   0  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+230 218 255	Untitled
+205 182 255	Untitled
+180 145 255	Untitled
+155 109 255	Untitled
+130  72 255	Untitled
+105  36 255	Untitled
+ 80   0 255	Untitled
+ 68   0 218	Untitled
+ 57   0 182	Untitled
+ 45   0 145	Untitled
+ 34   0 109	Untitled
+ 22   0  72	Untitled
+ 11   0  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+224 218 255	Untitled
+194 182 255	Untitled
+164 145 255	Untitled
+133 109 255	Untitled
+103  72 255	Untitled
+ 73  36 255	Untitled
+ 43   0 255	Untitled
+ 36   0 218	Untitled
+ 30   0 182	Untitled
+ 24   0 145	Untitled
+ 18   0 109	Untitled
+ 12   0  72	Untitled
+  6   0  36	Untitled
+  0   0   0	Untitled
+  6   5   2	Untitled
+255 255 255	Untitled
+223 218 255	Untitled
+192 182 255	Untitled
+160 145 255	Untitled
+129 109 255	Untitled
+ 97  72 255	Untitled
+ 66  36 255	Untitled
+ 35   0 255	Untitled
+ 30   0 218	Untitled
+ 25   0 182	Untitled
+ 20   0 145	Untitled
+ 15   0 109	Untitled
+ 10   0  72	Untitled
+  5   0  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 227 255	Untitled
+182 199 255	Untitled
+145 171 255	Untitled
+109 143 255	Untitled
+ 72 115 255	Untitled
+ 36  87 255	Untitled
+  0  60 255	Untitled
+  0  51 218	Untitled
+  0  42 182	Untitled
+  0  34 145	Untitled
+  0  25 109	Untitled
+  0  17  72	Untitled
+  0   8  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 233 255	Untitled
+182 212 255	Untitled
+145 191 255	Untitled
+109 170 255	Untitled
+ 72 149 255	Untitled
+ 36 128 255	Untitled
+  0 107 255	Untitled
+  0  91 218	Untitled
+  0  76 182	Untitled
+  0  61 145	Untitled
+  0  45 109	Untitled
+  0  30  72	Untitled
+  0  15  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 238 255	Untitled
+182 222 255	Untitled
+145 206 255	Untitled
+109 190 255	Untitled
+ 72 174 255	Untitled
+ 36 158 255	Untitled
+  0 142 255	Untitled
+  0 121 218	Untitled
+  0 101 182	Untitled
+  0  81 145	Untitled
+  0  60 109	Untitled
+  0  40  72	Untitled
+  0  20  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 245 254	Untitled
+182 235 254	Untitled
+145 226 254	Untitled
+109 216 254	Untitled
+ 72 207 254	Untitled
+ 36 197 254	Untitled
+  0 188 254	Untitled
+  0 161 217	Untitled
+  0 134 181	Untitled
+  0 107 145	Untitled
+  0  80 108	Untitled
+  0  53  72	Untitled
+  0  26  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 250 254	Untitled
+182 246 254	Untitled
+145 241 254	Untitled
+109 237 253	Untitled
+ 72 232 253	Untitled
+ 36 228 253	Untitled
+  0 224 253	Untitled
+  0 192 216	Untitled
+  0 160 180	Untitled
+  0 128 144	Untitled
+  0  96 108	Untitled
+  0  64  72	Untitled
+  0  32  36	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 255 252	Untitled
+182 255 250	Untitled
+145 255 248	Untitled
+109 255 246	Untitled
+ 72 255 244	Untitled
+ 36 255 242	Untitled
+  0 255 240	Untitled
+  0 218 205	Untitled
+  0 182 171	Untitled
+  0 145 137	Untitled
+  0 109 102	Untitled
+  0  72  68	Untitled
+  0  36  34	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 255 247	Untitled
+182 255 240	Untitled
+145 255 233	Untitled
+109 255 225	Untitled
+ 72 255 218	Untitled
+ 36 255 211	Untitled
+  0 255 204	Untitled
+  0 218 174	Untitled
+  0 182 145	Untitled
+  0 145 116	Untitled
+  0 109  87	Untitled
+  0  72  58	Untitled
+  0  36  29	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 255 242	Untitled
+182 255 229	Untitled
+145 255 216	Untitled
+109 255 203	Untitled
+ 72 255 190	Untitled
+ 36 255 177	Untitled
+  0 255 164	Untitled
+  0 218 140	Untitled
+  0 182 117	Untitled
+  0 145  93	Untitled
+  0 109  70	Untitled
+  0  72  46	Untitled
+  0  36  23	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 255 236	Untitled
+182 255 217	Untitled
+145 255 198	Untitled
+109 255 179	Untitled
+ 72 255 160	Untitled
+ 36 255 141	Untitled
+  0 255 122	Untitled
+  0 218 104	Untitled
+  0 182  87	Untitled
+  0 145  69	Untitled
+  0 109  52	Untitled
+  0  72  34	Untitled
+  0  36  17	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+218 255 229	Untitled
+182 255 204	Untitled
+145 255 178	Untitled
+109 255 153	Untitled
+ 72 255 127	Untitled
+ 36 255 102	Untitled
+  0 255  77	Untitled
+  0 218  66	Untitled
+  0 182  55	Untitled
+  0 145  44	Untitled
+  0 109  33	Untitled
+  0  72  22	Untitled
+  0  36  11	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+236 255 218	Untitled
+218 255 182	Untitled
+200 255 145	Untitled
+181 255 109	Untitled
+163 255  72	Untitled
+145 255  36	Untitled
+127 255   0	Untitled
+108 218   0	Untitled
+ 90 182   0	Untitled
+ 72 145   0	Untitled
+ 54 109   0	Untitled
+ 36  72   0	Untitled
+ 18  36   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+241 255 218	Untitled
+228 255 182	Untitled
+215 255 145	Untitled
+202 255 109	Untitled
+189 255  72	Untitled
+176 255  36	Untitled
+163 255   0	Untitled
+139 218   0	Untitled
+116 182   0	Untitled
+ 93 145   0	Untitled
+ 69 109   0	Untitled
+ 46  72   0	Untitled
+ 23  36   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+249 255 218	Untitled
+244 255 182	Untitled
+238 255 145	Untitled
+233 255 109	Untitled
+227 255  72	Untitled
+222 255  36	Untitled
+217 255   0	Untitled
+186 218   0	Untitled
+155 182   0	Untitled
+124 145   0	Untitled
+ 93 109   0	Untitled
+ 62  72   0	Untitled
+ 31  36   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 253 219	Untitled
+255 251 183	Untitled
+255 249 148	Untitled
+255 247 112	Untitled
+255 245  77	Untitled
+255 243  41	Untitled
+255 242   6	Untitled
+218 207   5	Untitled
+182 172   4	Untitled
+145 138   3	Untitled
+109 103   2	Untitled
+ 72  69   1	Untitled
+ 36  34   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 248 222	Untitled
+255 242 189	Untitled
+255 236 156	Untitled
+255 230 123	Untitled
+255 224  90	Untitled
+255 218  57	Untitled
+255 212  25	Untitled
+218 181  21	Untitled
+182 151  17	Untitled
+145 121  14	Untitled
+109  90  10	Untitled
+ 72  60   7	Untitled
+ 36  30   3	Untitled
+  0   0   0	Untitled
+  6   5   2	Untitled
+255 255 255	Untitled
+255 241 223	Untitled
+255 227 191	Untitled
+255 213 160	Untitled
+255 199 128	Untitled
+255 185  97	Untitled
+255 171  65	Untitled
+255 158  34	Untitled
+218 135  29	Untitled
+182 112  24	Untitled
+145  90  19	Untitled
+109  67  14	Untitled
+ 72  45   9	Untitled
+ 36  22   4	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 233 224	Untitled
+255 212 193	Untitled
+255 191 162	Untitled
+255 169 131	Untitled
+255 148 100	Untitled
+255 127  69	Untitled
+255 106  38	Untitled
+218  90  32	Untitled
+182  75  27	Untitled
+145  60  21	Untitled
+109  45  16	Untitled
+ 72  30  10	Untitled
+ 36  15   5	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 228 224	Untitled
+255 202 193	Untitled
+255 176 162	Untitled
+255 150 131	Untitled
+255 124 100	Untitled
+255  98  69	Untitled
+255  72  39	Untitled
+218  61  33	Untitled
+182  51  27	Untitled
+145  41  22	Untitled
+109  30  16	Untitled
+ 72  20  11	Untitled
+ 36  10   5	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 224 224	Untitled
+255 194 193	Untitled
+255 164 162	Untitled
+255 133 132	Untitled
+255 103 101	Untitled
+255  73  70	Untitled
+255  43  40	Untitled
+218  36  34	Untitled
+182  30  28	Untitled
+145  24  22	Untitled
+109  18  17	Untitled
+ 72  12  11	Untitled
+ 36   6   5	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 218 224	Untitled
+255 182 193	Untitled
+255 145 163	Untitled
+255 109 132	Untitled
+255  72 102	Untitled
+255  36  71	Untitled
+255   0  41	Untitled
+218   0  35	Untitled
+182   0  29	Untitled
+145   0  23	Untitled
+109   0  17	Untitled
+ 72   0  11	Untitled
+ 36   0   5	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+255 218 218	Untitled
+255 182 182	Untitled
+255 145 145	Untitled
+255 109 109	Untitled
+255  72  72	Untitled
+255  36  36	Untitled
+255   0   0	Untitled
+218   0   0	Untitled
+182   0   0	Untitled
+145   0   0	Untitled
+109   0   0	Untitled
+ 72   0   0	Untitled
+ 36   0   0	Untitled
+  0   0   0	Untitled
+  0   0   0	Untitled
+255   0   0	Untitled
+255  17   0	Untitled
+255  34   0	Untitled
+255  51   0	Untitled
+255  68   0	Untitled
+255  85   0	Untitled
+255 102   0	Untitled
+255 119   0	Untitled
+255 136   0	Untitled
+255 153   0	Untitled
+255 170   0	Untitled
+255 187   0	Untitled
+255 204   0	Untitled
+255 221   0	Untitled
+255 238   0	Untitled
+255 255   0	Untitled
+  0 255   0	Untitled
+ 17 255   0	Untitled
+ 34 255   0	Untitled
+ 51 255   0	Untitled
+ 68 255   0	Untitled
+ 85 255   0	Untitled
+102 255   0	Untitled
+119 255   0	Untitled
+136 255   0	Untitled
+153 255   0	Untitled
+170 255   0	Untitled
+187 255   0	Untitled
+204 255   0	Untitled
+221 255   0	Untitled
+238 255   0	Untitled
+255 255   0	Untitled
+  0   0 255	Untitled
+ 17  17 238	Untitled
+ 34  34 221	Untitled
+ 51  51 204	Untitled
+ 68  68 187	Untitled
+ 85  85 170	Untitled
+102 102 153	Untitled
+119 119 136	Untitled
+136 136 119	Untitled
+153 153 102	Untitled
+170 170  85	Untitled
+187 187  68	Untitled
+204 204  51	Untitled
+221 221  34	Untitled
+238 238  17	Untitled
+255 255   0	Untitled
+255   0 255	Untitled
+255  17 238	Untitled
+255  34 221	Untitled
+255  51 204	Untitled
+255  68 187	Untitled
+255  85 170	Untitled
+255 102 153	Untitled
+255 119 136	Untitled
+255 136 119	Untitled
+255 153 102	Untitled
+255 170  85	Untitled
+255 187  68	Untitled
+255 204  51	Untitled
+255 221  34	Untitled
+255 238  17	Untitled
+255 255   0	Untitled
+  0 255 255	Untitled
+ 17 255 238	Untitled
+ 34 255 221	Untitled
+ 51 255 204	Untitled
+ 68 255 187	Untitled
+ 85 255 170	Untitled
+102 255 153	Untitled
+119 255 136	Untitled
+136 255 119	Untitled
+153 255 102	Untitled
+170 255  85	Untitled
+187 255  68	Untitled
+204 255  51	Untitled
+221 255  34	Untitled
+238 255  17	Untitled
+255 255   0	Untitled
+255   0   0	Untitled
+238  17  17	Untitled
+221  34  34	Untitled
+204  51  51	Untitled
+187  68  68	Untitled
+170  85  85	Untitled
+153 102 102	Untitled
+136 119 119	Untitled
+119 136 136	Untitled
+102 153 153	Untitled
+ 85 170 170	Untitled
+ 68 187 187	Untitled
+ 51 204 204	Untitled
+ 34 221 221	Untitled
+ 17 238 238	Untitled
+  0 255 255	Untitled
+  0 255   0	Untitled
+  0 255  17	Untitled
+  0 255  34	Untitled
+  0 255  51	Untitled
+  0 255  68	Untitled
+  0 255  85	Untitled
+  0 255 102	Untitled
+  0 255 119	Untitled
+  0 255 136	Untitled
+  0 255 153	Untitled
+  0 255 170	Untitled
+  0 255 187	Untitled
+  0 255 204	Untitled
+  0 255 221	Untitled
+  0 255 238	Untitled
+  0 255 255	Untitled
+  0   0 255	Untitled
+  0  17 255	Untitled
+  0  34 255	Untitled
+  0  51 255	Untitled
+  0  68 255	Untitled
+  0  85 255	Untitled
+  0 102 255	Untitled
+  0 119 255	Untitled
+  0 136 255	Untitled
+  0 153 255	Untitled
+  0 170 255	Untitled
+  0 187 255	Untitled
+  0 204 255	Untitled
+  0 221 255	Untitled
+  0 238 255	Untitled
+  0 255 255	Untitled
+255   0 255	Untitled
+238  17 255	Untitled
+221  34 255	Untitled
+204  51 255	Untitled
+187  68 255	Untitled
+170  85 255	Untitled
+153 102 255	Untitled
+136 119 255	Untitled
+119 136 255	Untitled
+102 153 255	Untitled
+ 85 170 255	Untitled
+ 68 187 255	Untitled
+ 51 204 255	Untitled
+ 34 221 255	Untitled
+ 17 238 255	Untitled
+  0 255 255	Untitled
+255 255   0	Untitled
+238 255  17	Untitled
+221 255  34	Untitled
+204 255  51	Untitled
+187 255  68	Untitled
+170 255  85	Untitled
+153 255 102	Untitled
+136 255 119	Untitled
+119 255 136	Untitled
+102 255 153	Untitled
+ 85 255 170	Untitled
+ 68 255 187	Untitled
+ 51 255 204	Untitled
+ 34 255 221	Untitled
+ 17 255 238	Untitled
+  0 255 255	Untitled
+255   0   0	Untitled
+255   0  17	Untitled
+255   0  34	Untitled
+255   0  51	Untitled
+255   0  68	Untitled
+255   0  85	Untitled
+255   0 102	Untitled
+255   0 119	Untitled
+255   0 136	Untitled
+255   0 153	Untitled
+255   0 170	Untitled
+255   0 187	Untitled
+255   0 204	Untitled
+255   0 221	Untitled
+255   0 238	Untitled
+255   0 255	Untitled
+  0 255   0	Untitled
+ 17 238  17	Untitled
+ 34 221  34	Untitled
+ 51 204  51	Untitled
+ 68 187  68	Untitled
+ 85 170  85	Untitled
+102 153 102	Untitled
+119 136 119	Untitled
+136 119 136	Untitled
+153 102 153	Untitled
+170  85 170	Untitled
+187  68 187	Untitled
+204  51 204	Untitled
+221  34 221	Untitled
+238  17 238	Untitled
+255   0 255	Untitled
+  0   0 255	Untitled
+ 17   0 255	Untitled
+ 34   0 255	Untitled
+ 51   0 255	Untitled
+ 68   0 255	Untitled
+ 85   0 255	Untitled
+102   0 255	Untitled
+119   0 255	Untitled
+136   0 255	Untitled
+153   0 255	Untitled
+170   0 255	Untitled
+187   0 255	Untitled
+204   0 255	Untitled
+221   0 255	Untitled
+238   0 255	Untitled
+255   0 255	Untitled
+255 255   0	Untitled
+255 238  17	Untitled
+255 221  34	Untitled
+255 204  51	Untitled
+255 187  68	Untitled
+255 170  85	Untitled
+255 153 102	Untitled
+255 136 119	Untitled
+255 119 136	Untitled
+255 102 153	Untitled
+255  85 170	Untitled
+255  68 187	Untitled
+255  51 204	Untitled
+255  34 221	Untitled
+255  17 238	Untitled
+255   0 255	Untitled
+  0 255 255	Untitled
+  0 246 255	Untitled
+  0 238 255	Untitled
+  0 230 255	Untitled
+  0 222 255	Untitled
+  0 213 255	Untitled
+  0 205 255	Untitled
+  0 197 255	Untitled
+  0 189 255	Untitled
+  0 180 255	Untitled
+  0 172 255	Untitled
+  0 164 255	Untitled
+  0 156 255	Untitled
+  0 148 255	Untitled
+  0 139 255	Untitled
+  0 131 255	Untitled
+  0 123 255	Untitled
+  0 115 255	Untitled
+  0 106 255	Untitled
+  0  98 255	Untitled
+  0  90 255	Untitled
+  0  82 255	Untitled
+  0  74 255	Untitled
+  0  65 255	Untitled
+  0  57 255	Untitled
+  0  49 255	Untitled
+  0  41 255	Untitled
+  0  32 255	Untitled
+  0  24 255	Untitled
+  0  16 255	Untitled
+  0   8 255	Untitled
+  0   0 255	Untitled
+255 236 188	Untitled
+254 233 184	Untitled
+254 231 181	Untitled
+254 229 178	Untitled
+254 227 175	Untitled
+254 225 172	Untitled
+254 223 169	Untitled
+254 221 166	Untitled
+254 219 163	Untitled
+254 217 160	Untitled
+254 215 157	Untitled
+254 213 153	Untitled
+254 211 150	Untitled
+254 209 147	Untitled
+254 207 144	Untitled
+254 205 141	Untitled
+254 203 138	Untitled
+254 201 135	Untitled
+254 199 132	Untitled
+254 197 129	Untitled
+254 195 126	Untitled
+254 193 122	Untitled
+254 191 119	Untitled
+254 189 116	Untitled
+254 187 113	Untitled
+254 185 110	Untitled
+254 183 107	Untitled
+254 181 104	Untitled
+254 179 101	Untitled
+254 177  98	Untitled
+254 175  95	Untitled
+254 173  92	Untitled
+245 166  86	Untitled
+236 160  80	Untitled
+227 153  74	Untitled
+218 147  69	Untitled
+209 140  63	Untitled
+200 134  57	Untitled
+191 127  51	Untitled
+183 121  46	Untitled
+174 114  40	Untitled
+165 108  34	Untitled
+156 101  28	Untitled
+147  95  23	Untitled
+138  88  17	Untitled
+129  82  11	Untitled
+120  75   5	Untitled
+109  65   0	Untitled
+102  60   0	Untitled
+ 95  56   0	Untitled
+ 88  52   0	Untitled
+ 81  48   0	Untitled
+ 74  44   0	Untitled
+ 68  40   0	Untitled
+ 61  36   0	Untitled
+ 54  32   0	Untitled
+ 47  28   0	Untitled
+ 40  24   0	Untitled
+ 34  20   0	Untitled
+ 27  16   0	Untitled
+ 20  12   0	Untitled
+ 13   8   0	Untitled
+  6   4   0	Untitled
+  0   0   0	Untitled
+255 255 255	Untitled
+252 250 244	Untitled
+250 245 234	Untitled
+247 241 224	Untitled
+245 236 214	Untitled
+242 232 204	Untitled
+240 227 193	Untitled
+238 223 183	Untitled
+235 218 173	Untitled
+233 214 163	Untitled
+230 209 153	Untitled
+228 205 142	Untitled
+226 200 132	Untitled
+223 196 122	Untitled
+221 191 112	Untitled
+219 187 102	Untitled

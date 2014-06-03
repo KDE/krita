@@ -24,8 +24,8 @@
 #include <krita_export.h>
 #include <KoID.h>
 
+class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
-class KisPresetProxyAdapter;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -42,48 +42,43 @@ public:
 
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPresetChooser();
-    
+
     enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
         DETAIL,  /// Shows thumbsnails with text next to it
         STRIP  /// Shows thumbnails arranged in a single row
     };
-    
-    ///Set id for paintop to be accept by the proxy model
-    ///@param paintopID id of the paintop for which the presets will be shown
-    void setPresetFilter(const KoID & paintopID);
 
     /// Set a list of preset names for resources that should be show, others will be hidden
     /// Turns on name filter mode
     ///@param filteredNames list of names of presets that will be shown
-    void setFilteredNames(const QStringList filteredNames);
-    /// get tag names and used to set Completer object in paintop_presets_popup class
-    QStringList getTagNamesList(const QString& searchString);
+    void filterPaletteFavorites(const QStringList& filteredNames);
     /// Sets a list of resources in the paintop list, when ever user press enter in the linedit of paintop_presets_popup Class
-    void returnKeyPressed(QString lineEditText);
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
-    
+
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar( bool showSearchBar, bool showOpBar );
 
+    KoResourceItemChooser *itemChooser();
+
+    void setPresetFilter(const QString& paintOpId);
+
 signals:
     void resourceSelected(KoResource * resource);
-    
+
 public slots:
-    void searchTextChanged(const QString& searchString);
-    void setShowAll(bool show);
     void updateViewSettings();
-    
+
 protected:
     virtual void resizeEvent(QResizeEvent* event);
-    
+
 private:
     KoResourceItemChooser *m_chooser;
-    KisPresetProxyAdapter *m_presetProxy;
     KisPresetDelegate* m_delegate;
     ViewMode m_mode;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

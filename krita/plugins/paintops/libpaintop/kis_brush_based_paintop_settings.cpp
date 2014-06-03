@@ -24,9 +24,17 @@
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
 
+
+KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
+            KisCurrentOutlineFetcher::ROTATION_OPTION |
+            KisCurrentOutlineFetcher::MIRROR_OPTION)
+{
+}
+
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if(hasProperty("PaintOpAction")) {
+    if (hasProperty("PaintOpAction")) {
         return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
     }
     return true;
@@ -43,72 +51,26 @@ int KisBrushBasedPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-
-QRectF KisBrushBasedPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return QRectF();
-    
-    if (_mode != CursorIsOutline) return QRectF();
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    QRectF rect = image->pixelToDocument(
-                  QRectF(0, 0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)))
-                  ).translated(pos);
-    rect.adjust(-2, -2, 2, 2);
-    return rect;
-}
+    if (mode != CursorIsOutline) return QPainterPath();
 
-void KisBrushBasedPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const
-{
-    KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-    if(!options)
-        return;
-    
-    if (_mode != CursorIsOutline) return;
-    KisBrushSP brush = options->brush();
-    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-    painter.setPen(Qt::black);
-    painter.setBackground(Qt::black);
-    painter.translate(pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5)));
-    painter.scale(1/image->xRes(), 1/image->yRes());
-    brush->boundary()->paint(painter);
-}
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
-{
-    QPainterPath path;
-    if (mode == CursorIsOutline) {
-    
-        KisBrushBasedPaintopOptionWidget* options = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
-        if(!options) {
-            return KisPaintOpSettings::brushOutline(pos,mode);
-        }
-        
-        KisBrushSP brush = options->brush();
-        QPointF hotSpot = brush->hotSpot(1.0/brush->scale(),1.0/brush->scale(), -brush->angle());
-
-        QTransform m;
-        m.reset();
-        m.rotateRadians(-rotation - brush->angle()); 
-        m.scale(brush->scale() * scale, brush->scale() * scale);
-        m.translate(-hotSpot.x(), -hotSpot.y());
-        
-        
-        path = brush->outline();
-        path = m.map(path);
-        
-        path.translate(pos);
+    if (!widget) {
+        return KisPaintOpSettings::brushOutline(info, mode);
     }
-    return path;
+
+    KisBrushSP brush = widget->brush();
+
+    return outlineFetcher()->fetchOutline(info, this, brush->outline(), brush->scale(), brush->angle());
 }
 
-bool KisBrushBasedPaintOpSettings::isValid()
+bool KisBrushBasedPaintOpSettings::isValid() const
 {
-    QString filename = getString("requiredBrushFile","");
+    QString filename = getString("requiredBrushFile", "");
     if (!filename.isEmpty()) {
-        KisBrushSP brush = KisBrushServer::instance()->brushServer()->getResourceByFilename(filename);
+        KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
         if (!brush) {
             return false;
         }

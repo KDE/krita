@@ -18,12 +18,14 @@
 
 #include "kis_recorded_action_creator.h"
 
-KisRecordedActionCreator::KisRecordedActionCreator(QWidget* parent, Qt::WindowFlags f) : QWidget(parent, f), d(0)
+KisRecordedActionCreator::KisRecordedActionCreator(QWidget* parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
+    , d(0)
 {
 }
 
 KisRecordedActionCreator::~KisRecordedActionCreator()
 {
-//   delete d;
+   // delete d;
 }
 

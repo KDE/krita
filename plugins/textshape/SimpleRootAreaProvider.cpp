@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,10 +54,19 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 {
     Q_UNUSED(isNewRootArea);
 
-    QRectF updateRect = rootArea->associatedShape()->outlineRect();
-    rootArea->associatedShape()->update(updateRect);
+    m_textShape->update(m_textShape->outlineRect());
 
-    QSizeF newSize = rootArea->associatedShape()->size();
+    QSizeF newSize = m_textShape->size()
+                    - QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
+                             m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
+
+    KoBorder *border = m_textShape->border();
+
+    if (border) {
+        newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
+
+
     if (m_textShapeData->verticalAlignment() & Qt::AlignBottom) {
     }
     if (m_textShapeData->verticalAlignment() & Qt::AlignVCenter) {
@@ -66,12 +75,17 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         qreal height = rootArea->bottom() - rootArea->top();
         if (height > newSize.height()) {
-            newSize.setHeight(rootArea->bottom() - rootArea->top());
+            newSize.setHeight(height);
+        }
+        if (m_textShape->shapeId() == "AnnotationTextShapeID") {
+            if (height < newSize.height()) {
+                newSize.setHeight(rootArea->bottom() - rootArea->top());
+            }
         }
     }
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
-        qreal width = rootArea->bottom() - rootArea->top();
+        qreal width = rootArea->right() - rootArea->left();
         if (width > newSize.width()) {
             newSize.setWidth(rootArea->right() - rootArea->left());
         }
@@ -92,40 +106,67 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
             sizeAnchor = KoFlake::CenteredPosition;
         }
     }
+    newSize += QSizeF(m_textShapeData->leftPadding() + m_textShapeData->rightPadding(),
+                      m_textShapeData->topPadding() + m_textShapeData->bottomPadding());
+    if (border) {
+        newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
 
-    if (newSize != rootArea->associatedShape()->size()) {
+    if (newSize != m_textShape->size()) {
         // OO grows to both sides so when to small the initial layouting needs
         // to keep that into account.
         if (m_fixAutogrow) {
             m_fixAutogrow = false;
-            QSizeF tmpSize = rootArea->associatedShape()->size();
+            QSizeF tmpSize = m_textShape->size();
             tmpSize.setWidth(newSize.width());
             QPointF centerpos = rootArea->associatedShape()->absolutePosition(KoFlake::CenteredPosition);
-            rootArea->associatedShape()->setSize(tmpSize);
-            rootArea->associatedShape()->setAbsolutePosition(centerpos, KoFlake::CenteredPosition);
+            m_textShape->setSize(tmpSize);
+            m_textShape->setAbsolutePosition(centerpos, KoFlake::CenteredPosition);
             centerpos = rootArea->associatedShape()->absolutePosition(sizeAnchor);
-            rootArea->associatedShape()->setSize(newSize);
-            rootArea->associatedShape()->setAbsolutePosition(centerpos, sizeAnchor);
+            m_textShape->setSize(newSize);
+            m_textShape->setAbsolutePosition(centerpos, sizeAnchor);
         }
-        rootArea->associatedShape()->setSize(newSize);
+        m_textShape->setSize(newSize);
     }
 
-    updateRect |= rootArea->associatedShape()->outlineRect();
-    rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());
+    m_textShape->update(m_textShape->outlineRect());
 }
 
-QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+void SimpleRootAreaProvider::updateAll()
 {
-    QSizeF size = m_textShape->size();
+    if (m_area && m_area->associatedShape()) {
+        m_area->associatedShape()->update();
+    }
+}
+
+QRectF SimpleRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
+{
+    //Come up with a rect, but actually we don't need the height, as we set it to infinite below
+    // Still better keep it for completeness sake
+    QRectF rect(QPointF(), m_textShape->size());
+    rect.adjust(m_textShapeData->leftPadding(), m_textShapeData->topPadding(), -m_textShapeData->rightPadding(), - m_textShapeData->bottomPadding());
+
+    KoBorder *border = m_textShape->border();
+    if (border) {
+        rect.adjust(border->borderWidth(KoBorder::LeftBorder),  border->borderWidth(KoBorder::TopBorder),
+              -border->borderWidth(KoBorder::RightBorder), - border->borderWidth(KoBorder::BottomBorder));
+    }
+
     // In simple cases we always set height way too high so that we have no breaking
     // If the shape grows afterwards or not is handled in doPostLayout()
-    size.setHeight(1E6);
+    rect.setHeight(1E6);
 
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         rootArea->setNoWrap(1E6);
     }
-    return size;
+
+    // Make sure the size is not negative due to padding and border with
+    // This can happen on vertical lines containing text on shape.
+    if (rect.width() < 0) {
+        rect.setWidth(0);
+    }
+    return rect;
 }
 
 QList<KoTextLayoutObstruction *> SimpleRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)

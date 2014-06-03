@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,19 +19,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QMutexLocker>
-#include <QMutex>
+
+#include "KoShapeFactoryBase.h"
+
+#include "KoDocumentResourceManager.h"
+#include "KoDeferredShapeFactoryBase.h"
+#include "KoShape.h"
+#include "KoShapeLoadingContext.h"
+
+#include <KoOdfLoadingContext.h>
+#include <KoProperties.h>
 
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <KoDocumentResourceManager.h>
-#include "KoShapeFactoryBase.h"
-#include "KoDeferredShapeFactoryBase.h"
-#include "KoShape.h"
-#include "KoShapeLoadingContext.h"
-#include <KoOdfLoadingContext.h>
-#include <KoProperties.h>
+#include <QMutexLocker>
+#include <QMutex>
+
+
 
 #include <kdebug.h>
 
@@ -86,7 +91,7 @@ QString KoShapeFactoryBase::toolTip() const
     return d->tooltip;
 }
 
-QString KoShapeFactoryBase::icon() const
+QString KoShapeFactoryBase::iconName() const
 {
     return d->iconName;
 }
@@ -123,9 +128,9 @@ void KoShapeFactoryBase::setToolTip(const QString & tooltip)
     d->tooltip = tooltip;
 }
 
-void KoShapeFactoryBase::setIcon(const QString & iconName)
+void KoShapeFactoryBase::setIconName(const char *iconName)
 {
-    d->iconName = iconName;
+    d->iconName = QLatin1String(iconName);
 }
 
 void KoShapeFactoryBase::setFamily(const QString & family)
@@ -242,18 +247,13 @@ void KoShapeFactoryBase::getDeferredPlugin()
     if (d->deferredFactory) return;
 
     const QString serviceType = "Calligra/Deferred";
-    QString query = QString::fromLatin1("(Type == 'Service') and (Name == '%1')").arg(d->deferredPluginName);
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString());
     Q_ASSERT(offers.size() > 0);
 
     foreach(KSharedPtr<KService> service, offers) {
-        QString error = 0;  // FIXME: From where does error get a value?
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
-        if (plugin) {
+        if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
-        }
-        else {
-            kWarning(30003) << "loading plugin" << service->name() << "failed, " << error;
         }
     }
 

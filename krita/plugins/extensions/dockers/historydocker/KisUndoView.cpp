@@ -63,9 +63,9 @@
 #ifndef QT_NO_UNDOVIEW
 
 #include <kundo2group.h>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qicon.h>
+#include <QAbstractItemModel>
+#include <QPointer>
+#include <QIcon>
 
 
 /*!
@@ -117,7 +117,9 @@ void KisUndoViewPrivate::init(KisUndoView* view)
     Constructs a new view with parent \a parent.
 */
 
-KisUndoView::KisUndoView(QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+KisUndoView::KisUndoView(QWidget *parent)
+    : QListView(parent)
+    , d(new KisUndoViewPrivate)
 {
     d->init(this);
 }
@@ -126,7 +128,9 @@ KisUndoView::KisUndoView(QWidget *parent) : QListView(parent), d(new KisUndoView
     Constructs a new view with parent \a parent and sets the observed stack to \a stack.
 */
 
-KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent)
+    : QListView(parent)
+    , d(new KisUndoViewPrivate)
 {
     d->init(this);
     setStack(stack);
@@ -137,10 +141,12 @@ KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent) : QListView(paren
 /*!
     Constructs a new view with parent \a parent and sets the observed group to \a group.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 */
 
-KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent)
+    : QListView(parent)
+    , d(new KisUndoViewPrivate)
 {
     d->init(this);
     setGroup(group);
@@ -152,7 +158,9 @@ KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent) : QListView(parent
     Destroys this view.
 */
 
-KisUndoView::~KisUndoView() {
+KisUndoView::~KisUndoView()
+{
+    delete d;
 
 }
 

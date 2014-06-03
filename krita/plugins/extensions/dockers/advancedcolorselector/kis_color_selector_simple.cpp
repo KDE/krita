@@ -16,11 +16,13 @@
  */
 
 #include "kis_color_selector_simple.h"
-
 #include <QImage>
 #include <QPainter>
 #include <QColor>
 #include <cmath>
+#include "kis_display_color_converter.h"
+#include "kis_acs_pixel_cache_renderer.h"
+
 
 KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
@@ -28,82 +30,8 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
 {
 }
 
-void KisColorSelectorSimple::setColor(const QColor &c)
+KoColor KisColorSelectorSimple::selectColor(int x, int y)
 {
-    switch (m_parameter) {
-    case KisColorSelector::SL:
-        m_lastClickPos.setX(c.hslSaturationF());
-        m_lastClickPos.setY(1.-c.lightnessF());
-        emit paramChanged(-1, -1, -1, c.hslSaturationF(), c.lightnessF());
-        break;
-    case KisColorSelector::LH:
-        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1.-c.lightnessF());
-        emit paramChanged(c.hueF(), -1, -1, -1, c.lightnessF());
-        break;
-    case KisColorSelector::SV:
-        m_lastClickPos.setX(c.saturationF());
-        m_lastClickPos.setY(1-c.valueF());
-        emit paramChanged(-1, c.saturationF(), c.valueF(), -1, -1);
-        break;
-    case KisColorSelector::SV2: {
-        qreal xRel = c.hsvSaturationF();
-        qreal yRel = 0.5;
-        
-        if(xRel != 1.0)
-            yRel = 1.0 - qBound<qreal>(0.0, (c.valueF() - xRel) / (1.0 - xRel), 1.0);
-        
-        m_lastClickPos.setX(xRel);
-        m_lastClickPos.setY(yRel);
-        emit paramChanged(-1, -1, -1, xRel, yRel);
-        break;
-    }
-    case KisColorSelector::VH:
-        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(c.valueF());
-        emit paramChanged(c.hueF(), -1, c.valueF(), -1, -1);
-        break;
-    case KisColorSelector::hsvSH:
-        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1-c.saturationF());
-        emit paramChanged(c.hueF(), c.saturationF(), -1, -1, -1);
-        break;
-    case KisColorSelector::hslSH:
-        m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
-        m_lastClickPos.setY(1-c.hslSaturationF());
-        emit paramChanged(c.hueF(), -1, -1, c.hslSaturationF(), -1);
-        break;
-    case KisColorSelector::L:
-        m_lastClickPos.setX(1-c.lightnessF());
-        emit paramChanged(-1, -1, -1, -1, c.lightnessF());
-        break;
-    case KisColorSelector::V:
-        m_lastClickPos.setX(c.valueF());
-        emit paramChanged(-1, -1, c.valueF(), -1, -1);
-        break;
-    case KisColorSelector::hsvS:
-        m_lastClickPos.setX(c.saturationF());
-        emit paramChanged(-1, c.saturationF(), -1, -1, -1);
-        break;
-    case KisColorSelector::hslS:
-        m_lastClickPos.setX(c.hslSaturationF());
-        emit paramChanged(-1, -1, -1, c.hslSaturationF(), -1);
-        break;
-    case KisColorSelector::H:
-        m_lastClickPos.setX(1-qBound<qreal>(0., c.hueF(), 1.));
-        emit paramChanged(c.hueF(), -1, -1, -1, -1);
-        break;
-    default:
-        Q_ASSERT(false);
-        break;
-    }
-    emit update();
-}
-
-QColor KisColorSelectorSimple::selectColor(int x, int y)
-{
-    m_kocolor.convertTo(colorSpace());
-
     m_lastClickPos.setX(x/qreal(width()));
     m_lastClickPos.setY(y/qreal(height()));
 
@@ -113,7 +41,7 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
     if(height()>width())
         relPos = 1.-y/qreal(height());
     else
-        relPos = 1.-x/qreal(width());
+        relPos = x/qreal(width());
 
     switch (m_parameter) {
     case KisColorSelector::H:
@@ -153,24 +81,102 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
     }
 
     emit update();
-
-//    kDebug()<<"selectColor(x/y) y rel="<<yRel<<"  value="<<QColor::fromRgb(colorAt(x, y)).valueF();
     return colorAt(x, y);
+}
+
+void KisColorSelectorSimple::setColor(const KoColor &color)
+{
+    qreal hsvH, hsvS, hsvV;
+    qreal hslH, hslS, hslL;
+    m_parent->converter()->getHsvF(color, &hsvH, &hsvS, &hsvV);
+    m_parent->converter()->getHslF(color, &hslH, &hslS, &hslL);
+
+    switch (m_parameter) {
+    case KisColorSelector::SL:
+        m_lastClickPos.setX(hslS);
+        m_lastClickPos.setY(1 - hslL);
+        emit paramChanged(-1, -1, -1, hslS, hslL);
+        break;
+    case KisColorSelector::LH:
+        m_lastClickPos.setX(qBound<qreal>(0., hslH, 1.));
+        m_lastClickPos.setY(1 - hslL);
+        emit paramChanged(hslH, -1, -1, -1, hslL);
+        break;
+    case KisColorSelector::SV:
+        m_lastClickPos.setX(hsvS);
+        m_lastClickPos.setY(1 - hsvV);
+        emit paramChanged(-1, hsvS, hsvV, -1, -1);
+        break;
+    case KisColorSelector::SV2: {
+        qreal xRel = hsvS;
+        qreal yRel = 0.5;
+
+        if(xRel != 1.0)
+            yRel = 1.0 - qBound<qreal>(0.0, (hsvV - xRel) / (1.0 - xRel), 1.0);
+
+        m_lastClickPos.setX(xRel);
+        m_lastClickPos.setY(yRel);
+        emit paramChanged(-1, -1, -1, xRel, yRel);
+        break;
+    }
+    case KisColorSelector::VH:
+        m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
+        m_lastClickPos.setY(1 - hsvV);
+        emit paramChanged(hsvH, -1, hsvV, -1, -1);
+        break;
+    case KisColorSelector::hsvSH:
+        m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
+        m_lastClickPos.setY(1 - hsvS);
+        emit paramChanged(hsvH, hsvS, -1, -1, -1);
+        break;
+    case KisColorSelector::hslSH:
+        m_lastClickPos.setX(qBound<qreal>(0., hslH, 1.));
+        m_lastClickPos.setY(1 - hslS);
+        emit paramChanged(hslH, -1, -1, hslS, -1);
+        break;
+    case KisColorSelector::L:
+        m_lastClickPos.setX(qBound<qreal>(0., hslL, 1.));
+        emit paramChanged(-1, -1, -1, -1, hslL);
+        break;
+    case KisColorSelector::V:
+        m_lastClickPos.setX(hsvV);
+        emit paramChanged(-1, -1, hsvV, -1, -1);
+        break;
+    case KisColorSelector::hsvS:
+        m_lastClickPos.setX( hsvS );
+        emit paramChanged(-1, hsvS, -1, -1, -1);
+        break;
+    case KisColorSelector::hslS:
+        m_lastClickPos.setX( hslS );
+        emit paramChanged(-1, -1, -1, hslS, -1);
+        break;
+    case KisColorSelector::H:
+        m_lastClickPos.setX(qBound<qreal>(0., hsvH, 1.));
+        emit paramChanged(hsvH, -1, -1, -1, -1);
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+    emit update();
+    //Workaround for bug 317648
+    setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
 }
 
 void KisColorSelectorSimple::paint(QPainter* painter)
 {
     if(isDirty()) {
-        m_kocolor.convertTo(colorSpace());
+        KisPaintDeviceSP realPixelCache;
+        QPoint pixelCacheOffset;
+        Acs::PixelCacheRenderer::render(this,
+                                        m_parent->converter(),
+                                        QRect(0, 0, width(), height()),
+                                        realPixelCache,
+                                        m_pixelCache,
+                                        pixelCacheOffset);
 
-        m_pixelCache=QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
-
-        for(int x=0; x<width(); x++) {
-            for(int y=0; y<height(); y++) {
-                m_kocolor.fromQColor(colorAt(x, y));
-                m_kocolor.toQColor(&m_qcolor);
-                m_pixelCache.setPixel(x, y, m_qcolor.rgb());
-            }
+        if (!pixelCacheOffset.isNull()) {
+            qWarning() << "WARNING: offset of the rectangle selector is not null!";
         }
     }
 
@@ -214,66 +220,60 @@ void KisColorSelectorSimple::paint(QPainter* painter)
     }
 }
 
-const QColor& KisColorSelectorSimple::colorAt(int x, int y)
+KoColor KisColorSelectorSimple::colorAt(int x, int y)
 {
-    if (x < 0) x = 0;
-    if (x > width()) x = width();
-    if (y < 0) y = 0;
-    if (y > width()) y = height();
-
     qreal xRel = x/qreal(width());
     qreal yRel = 1.-y/qreal(height());
     qreal relPos;
     if(height()>width())
         relPos = 1.-y/qreal(height());
     else
-        relPos = 1.-x/qreal(width());
+        relPos = x/qreal(width());
 
-    QColor color;
-    color.setHsvF(m_hue, 1.0, 1.0);
-    
+    KoColor color(Qt::transparent, m_parent->colorSpace());
+
     switch(m_parameter) {
     case KisColorSelector::SL:
-        m_qcolor.setHslF(m_hue, xRel, yRel);
+        color = m_parent->converter()->fromHslF(m_hue, xRel, yRel);
         break;
     case KisColorSelector::SV:
-        m_qcolor.setHsvF(m_hue, xRel, yRel);
+        color = m_parent->converter()->fromHsvF(m_hue, xRel, yRel);
         break;
     case KisColorSelector::SV2:
-        m_qcolor.setHsvF(m_hue, xRel, xRel + (1.0-xRel)*yRel);
+        color = m_parent->converter()->fromHsvF(m_hue, xRel, xRel + (1.0-xRel)*yRel);
         break;
     case KisColorSelector::hsvSH:
-        m_qcolor.setHsvF(xRel, yRel, m_value);
+        color = m_parent->converter()->fromHsvF(xRel, yRel, m_value);
         break;
     case KisColorSelector::hslSH:
-        m_qcolor.setHslF(xRel, yRel, m_lightness);
+        color = m_parent->converter()->fromHslF(xRel, yRel, m_lightness);
         break;
     case KisColorSelector::VH:
-        m_qcolor.setHsvF(xRel, m_hsvSaturation, yRel);
+        color = m_parent->converter()->fromHsvF(xRel, m_hsvSaturation, yRel);
         break;
     case KisColorSelector::LH:
-        m_qcolor.setHslF(xRel, m_hslSaturation, yRel);
+        color = m_parent->converter()->fromHslF(xRel, m_hslSaturation, yRel);
         break;
     case KisColorSelector::H:
-        m_qcolor.setHsvF(relPos, 1, 1);
+        color = m_parent->converter()->fromHsvF(relPos, 1, 1);
         break;
     case KisColorSelector::hsvS:
-        m_qcolor.setHsvF(m_hue, relPos, m_value);
+        color = m_parent->converter()->fromHsvF(m_hue, relPos, m_value);
         break;
     case KisColorSelector::hslS:
-        m_qcolor.setHslF(m_hue, relPos, m_lightness);
+        color = m_parent->converter()->fromHslF(m_hue, relPos, m_lightness);
         break;
     case KisColorSelector::V:
-        m_qcolor.setHsvF(m_hue, m_hsvSaturation, relPos);
+        color = m_parent->converter()->fromHsvF(m_hue, m_hsvSaturation, relPos);
         break;
     case KisColorSelector::L:
-        m_qcolor.setHslF(m_hue, m_hslSaturation, relPos);
+        color = m_parent->converter()->fromHslF(m_hue, m_hslSaturation, relPos);
         break;
     default:
         Q_ASSERT(false);
-        m_qcolor = QColor();
-        return m_qcolor;
+
+        return color;
     }
 
-    return m_qcolor;
+    return color;
 }

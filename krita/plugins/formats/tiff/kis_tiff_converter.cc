@@ -35,7 +35,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <KoColorProfile.h>
 #include <kis_group_layer.h>
@@ -147,6 +146,9 @@ KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
     m_doc = doc;
     m_job = 0;
     m_stop = false;
+
+    TIFFSetWarningHandler(0);
+    TIFFSetErrorHandler(0);
 }
 
 KisTIFFConverter::~KisTIFFConverter()
@@ -231,7 +233,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         color_type = PHOTOMETRIC_MINISWHITE;
     }
 
-    uint8 dstDepth;
+    uint8 dstDepth = 0;
     QPair<QString, QString> colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if (colorSpaceId.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;
@@ -283,7 +285,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs);
+        transform = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     }
 
     // Check if there is an alpha channel
@@ -331,10 +333,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     if (! m_image) {
         m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
-        m_image->lock();
         Q_CHECK_PTR(m_image);
     } else {
-        m_image->lock();
         if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {
             quint32 newwidth = (m_image->width() < (qint32)width) ? width : m_image->width();
             quint32 newheight = (m_image->height() < (qint32)height) ? height : m_image->height();
@@ -538,8 +538,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
-    layer->setDirty();
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -596,15 +594,15 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageWSP 
     KoDocumentInfo * info = m_doc->documentInfo();
     QString title = info->aboutInfo("title");
     if (!title.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toAscii().data());
+        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toLatin1().constData());
     }
     QString abstract = info->aboutInfo("description");
     if (!abstract.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toAscii().data());
+        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toLatin1().constData());
     }
     QString author = info->authorInfo("creator");
     if (!author.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
+        TIFFSetField(image, TIFFTAG_ARTIST, author.toLatin1().constData());
     }
 
     dbgFile << "xres: " << INCH_TO_POINT(kisimage->xRes()) << " yres: " << INCH_TO_POINT(kisimage->yRes());

@@ -39,13 +39,17 @@ public:
      * and the curve (if checked) and return the old opacity
      * of the painter.
      */
-    quint8 apply(KisPainter * painter, const KisPaintInformation& info) const;
-    quint8 getOpacityU8(const KisPaintInformation& info) { return quint8(qRound(getOpacityf(info) * 255.0)); }
+    quint8 apply(KisPainter* painter, const KisPaintInformation& info) const;
+    \
+    quint8 getOpacityU8(const KisPaintInformation& info) {
+        return quint8(qRound(getOpacityf(info) * 255.0));
+    }
+
     qreal  getOpacityf(const KisPaintInformation& info);
-    
+
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 };
 
 #endif

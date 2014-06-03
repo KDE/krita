@@ -1,6 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Ganesh Paramasivam <ganesh@crystalfab.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +26,7 @@
 #include "KoTextCommandBase.h"
 
 #include <QTextCharFormat>
-#include <QList>
+#include <QHash>
 #include <QSet>
 #include <QWeakPointer>
 
@@ -35,6 +36,10 @@ class KoInlineObject;
 class KoShape;
 
 class QTextCursor;
+
+class DeleteVisitor;
+class KoTextRange;
+class KoTextEditor;
 
 class DeleteCommand : public KoTextCommandBase
 {
@@ -54,24 +59,25 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
+    friend class DeleteVisitor;
+
     QWeakPointer<QTextDocument> m_document;
     KoShapeController *m_shapeController;
 
-    QList<KUndo2Command *> m_shapeDeleteCommands;
     QSet<KoInlineObject *> m_invalidInlineObjects;
+    QHash<int, KoTextRange *> m_rangesToRemove;
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;
     int m_position;
     int m_length;
     QTextCharFormat m_format;
-    bool m_multipleFormatDeletion;
+    bool m_mergePossible;
 
-    virtual void doDelete();
-    virtual void deleteInlineObjects();
-    virtual void deleteTextAnchor(KoInlineObject *object);
-    virtual bool checkMerge(const KUndo2Command *command);
-    virtual void updateListChanges();
+    void doDelete();
+    void deleteAnchorInlineObject(KoInlineObject *object);
+    bool checkMerge(const KUndo2Command *command);
+    void updateListChanges();
 };
 
-#endif // DELTECOMMAND_H
+#endif // DELETECOMMAND_H

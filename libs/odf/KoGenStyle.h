@@ -25,9 +25,9 @@
 #ifndef KOGENSTYLE_H
 #define KOGENSTYLE_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QList>
+#include <QMap>
+#include <QString>
 #include <iostream>
 #include "koodf_export.h"
 
@@ -125,6 +125,7 @@ public:
                                      ///<  @note unused
         MarkerStyle,                 ///< draw:marker as in odf 14.14.6 Marker
         PresentationPageLayoutStyle, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
+        OutlineLevelStyle,           ///< text:outline-style as in odf 1.2 section 16.34
         //   TODO differently
         MasterPageStyle,             ///< style:master-page as in odf 14.4 14.4 Master Pages (office:master-styles)
         // style:default-style as in odf 14.2 Default Styles
@@ -250,9 +251,8 @@ public:
         Reserved1, ///< @internal for binary compatible extensions
         /// For elements that are children of the style itself, not any of the properties
         StyleChildElement,
-        ChildElement, ///< @internal
         /// @internal @note always update when adding values to this enum
-        LastPropertyType = ChildElement
+        LastPropertyType = StyleChildElement
     };
 
     /// Add a property to the style. Passing DefaultType as property type uses a style-type specific property type.
@@ -299,8 +299,28 @@ public:
      *  and the unit name ("pt" or "%") is appended to it.
      */
     void addPropertyLength(const QString &propName, const QTextLength &propValue, PropertyType type = DefaultType);
-    
-    
+
+    /**
+     *  Remove a property from the style.  Passing DefaultType as property type
+     *  uses a style-type specific property type.
+     */
+    void removeProperty(const QString &propName, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].remove(propName);
+    }
+
+    /**
+     *  Remove properties of defined type from the style.  Passing DefaultType
+     *  as property type uses a style-type specific property type.
+     */
+    void removeAllProperties(PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_properties[type].clear();
+    }
 
     /**
      *  Add an attribute to the style
@@ -333,6 +353,24 @@ public:
     void addAttributePt(const QString &attrName, qreal attrValue);
 
     /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, qreal value);
+
+    /**
+     * Add an attribute that represents a percentage value as defined in ODF
+     */
+    void addAttributePercent(const QString &attrName, int value);
+
+    /**
+     *  Remove an attribute from the style.
+     */
+    void removeAttribute(const QString &attrName) {
+        m_attributes.remove(attrName);
+    }
+
+
+    /**
      * @brief Add a child element to the style properties.
      *
      * What is meant here is that the contents of the QString
@@ -351,16 +389,22 @@ public:
      *
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
-    void addChildElement(const QString &elementName, const QString& elementContents) {
-        m_properties[ChildElement].insertMulti(elementName, elementContents);
+    void addChildElement(const QString &elementName, const QString& elementContents, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_childProperties[type].insert(elementName, elementContents);
     }
 
     /**
      * Same like \a addChildElement above but with QByteArray to explicit convert from QByteArray
      * to QString using utf8 to prevent a dirty pitfall.
      */
-    void addChildElement(const QString &elementName, const QByteArray& elementContents) {
-        m_properties[ChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
+    void addChildElement(const QString &elementName, const QByteArray& elementContents, PropertyType type = DefaultType) {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        m_childProperties[type].insert(elementName, QString::fromUtf8(elementContents));
     }
 
     /**
@@ -445,6 +489,21 @@ public:
         return QString();
     }
 
+    /**
+     * Returns a property of this style. In prinicpal this class is meant to be write-only, but
+     * some exceptional cases having read-support as well is very useful.  Passing DefaultType
+     * as property type uses a style-type specific property type.
+     */
+    QString childProperty(const QString &propName, PropertyType type = DefaultType) const {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
+        const QMap<QString, QString>::const_iterator it = m_childProperties[type].constFind(propName);
+        if (it != m_childProperties[type].constEnd())
+            return it.value();
+        return QString();
+    }
+
     /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
     QString attribute(const QString &propName) const {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
@@ -476,6 +535,7 @@ private:
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     typedef QMap<QString, QString> StyleMap;
     StyleMap m_properties[LastPropertyType+1];
+    StyleMap m_childProperties[LastPropertyType+1];
     StyleMap m_attributes;
     QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 

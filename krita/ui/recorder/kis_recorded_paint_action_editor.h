@@ -24,7 +24,6 @@
 #include "kis_types.h"
 
 class QGridLayout;
-class KoColor;
 class KoColorPopupAction;
 class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;

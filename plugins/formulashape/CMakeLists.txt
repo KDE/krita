@@ -1,3 +1,11 @@
+# To hide all the warnings from the generated itex2MML code
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-label)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-function)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
                      ${QT_INCLUDES}
@@ -6,7 +14,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
 
 ########### KFormula Library ###############
 
-set( kformulalib_PART_SRCS
+set( kformula_LIB_SRCS
    AttributeManager.cpp
    FormulaRenderer.cpp
    FormulaData.cpp
@@ -48,16 +56,27 @@ set( kformulalib_PART_SRCS
    elements/UnknownElement.cpp
 )
 
-kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
+kde4_add_library(kformula SHARED ${kformula_LIB_SRCS})
 
-target_link_libraries(kformulalib komain)
-target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES komain)
+target_link_libraries(kformula komain)
+target_link_libraries(kformula LINK_INTERFACE_LIBRARIES komain)
 
-set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kformula ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
+
+find_package(Cauchy)
+
+macro_optional_find_package(Cauchy)
+macro_log_feature(M2MML_FOUND "Cauchy's M2MML" "Matlab/Octave to MathML compiler" "https://bitbucket.org/cyrille/cauchy" FALSE "" "Required for the matlab/octave formula tool")
+
+if(M2MML_FOUND)
+    set(M2MML_TOOL_LIBRARIES ${M2MML_LIBRARY})
+    include_directories(${CAUCHY_INCLUDE_DIR})
+    add_definitions(-DHAVE_M2MML)
+endif()
 
 set( formulashape_PART_SRCS
    KoFormulaShapePlugin.cpp
@@ -69,20 +88,31 @@ set( formulashape_PART_SRCS
    KoFormulaToolFactory.cpp
    FormulaToolWidget.cpp
    FormulaDocument.cpp
+   FormulaPart.cpp
 )
+
+if (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+set (formulashape_PART_SRCS
+   ${formulashape_PART_SRCS}
+   KoM2MMLForumulaTool.cpp
+   # itexToMML files
+   itexToMML/lex.yy.c
+   itexToMML/y.tab.c
+)
+endif (NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 kde4_add_ui_files( formulashape_PART_SRCS
     FormulaToolWidget.ui
 )
 
-kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
+kde4_add_plugin(calligra_shape_formular ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape kformulalib)
+target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 
 
-#set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS formulashape  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES formulashape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+#set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES calligra_shape_formular.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

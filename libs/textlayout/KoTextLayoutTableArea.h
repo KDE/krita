@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTTABLEAREA_H
 #define KOTEXTLAYOUTTABLEAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextLayoutArea.h"
 #include "KoPointedAt.h"
@@ -33,7 +33,7 @@ class TableIterator;
 /**
  * This class represent a (full width) piece of a table
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 {
 public:
     /// constructor
@@ -58,8 +58,8 @@ private:
     bool layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth);
     bool layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
-    void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell);
-    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders);
+    void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, KoTextLayoutArea *frameArea);
+    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, int maxRow, QVector<QLineF> *accuBlankBorders);
 
     class Private;
     Private * const d;

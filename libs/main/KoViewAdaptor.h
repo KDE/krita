@@ -22,9 +22,11 @@
 #ifndef __KoViewAdaptor_h__
 #define __KoViewAdaptor_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QObject>
-#include <QtDBus/QtDBus>
+#ifndef QT_NO_DBUS
+
+#include <QMap>
+#include <QObject>
+#include <QtDBus>
 
 class QString;
 class QStringList;
@@ -49,5 +51,7 @@ protected:
     KoView *m_pView;
 
 };
+
+#endif // QT_NO_DBUS
 
 #endif

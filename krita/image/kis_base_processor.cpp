@@ -48,8 +48,7 @@ struct KisBaseProcessor::Private {
     Private()
             : bookmarkManager(0)
             , supportsPainting(false)
-            , supportsAdjustmentLayers(false)
-            , supportsIncrementalPainting(true)
+            , supportsAdjustmentLayers(true)
             , supportsThreading(true)
             , showConfigurationWidget(true)
             , colorSpaceIndependence(FULLY_INDEPENDENT) {
@@ -60,9 +59,9 @@ struct KisBaseProcessor::Private {
     KoID id;
     KoID category; // The category in the filter menu this filter fits
     QString entry; // the i18n'ed accelerated menu text
+    KShortcut shortcut;
     bool supportsPainting;
     bool supportsAdjustmentLayers;
-    bool supportsIncrementalPainting;
     bool supportsThreading;
     bool showConfigurationWidget;
     ColorSpaceIndependence colorSpaceIndependence;
@@ -95,16 +94,16 @@ KisFilterConfiguration * KisBaseProcessor::factoryConfiguration(const KisPaintDe
 KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
     KisFilterConfiguration* fc = 0;
-    if (bookmarkManager()) {
-        fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
-    }
+//     if (bookmarkManager()) {
+//         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
+//     }
     if (!fc || !fc->isCompatible(pd)) {
         fc = factoryConfiguration(pd);
     }
     return fc;
 }
 
-KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
 {
     return 0;
 }
@@ -139,6 +138,16 @@ QString KisBaseProcessor::menuEntry() const
     return d->entry;
 }
 
+KShortcut KisBaseProcessor::shortcut() const
+{
+    return d->shortcut;
+}
+
+void KisBaseProcessor::setShortcut(const KShortcut & shortcut)
+{
+    d->shortcut = shortcut;
+}
+
 bool KisBaseProcessor::supportsPainting() const
 {
     return d->supportsPainting;
@@ -147,11 +156,6 @@ bool KisBaseProcessor::supportsPainting() const
 bool KisBaseProcessor::supportsAdjustmentLayers() const
 {
     return d->supportsAdjustmentLayers;
-}
-
-bool KisBaseProcessor::supportsIncrementalPainting() const
-{
-    return d->supportsIncrementalPainting;
 }
 
 bool KisBaseProcessor::supportsThreading() const
@@ -172,11 +176,6 @@ void KisBaseProcessor::setSupportsPainting(bool v)
 void KisBaseProcessor::setSupportsAdjustmentLayers(bool v)
 {
     d->supportsAdjustmentLayers = v;
-}
-
-void KisBaseProcessor::setSupportsIncrementalPainting(bool v)
-{
-    d->supportsIncrementalPainting = v;
 }
 
 void KisBaseProcessor::setSupportsThreading(bool v)

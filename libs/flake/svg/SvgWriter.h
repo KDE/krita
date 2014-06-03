@@ -30,8 +30,8 @@
 #define SVGWRITER_H
 
 #include "flake_export.h"
-#include <QtCore/QList>
-#include <QtCore/QSizeF>
+#include <QList>
+#include <QSizeF>
 
 class SvgSavingContext;
 class KoShapeLayer;

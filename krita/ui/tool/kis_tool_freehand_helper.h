@@ -24,6 +24,9 @@
 #include "kis_types.h"
 #include "krita_export.h"
 #include "kis_paint_information.h"
+#include "strokes/freehand_stroke.h"
+#include "kis_default_bounds.h"
+#include "kis_paintop_settings.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -33,60 +36,78 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-
+struct KisSmoothingOptions;
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
     Q_OBJECT
 
+protected:
+
+    typedef FreehandStrokeStrategy::PainterInfo PainterInfo;
+
 public:
+
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(bool smooth, qreal smoothness);
+    void setSmoothness(const KisSmoothingOptions &smoothingOptions);
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
                    KisStrokesFacade *strokesFacade,
                    KisPostExecutionUndoAdapter *undoAdapter,
-                   KisNodeSP overrideNode = 0);
+                   KisNodeSP overrideNode = 0,
+                   KisDefaultBoundsBaseSP bounds = 0);
     void paint(KoPointerEvent *event);
     void endPaint();
 
     const KisPaintOp* currentPaintOp() const;
+    QPainterPath paintOpOutline(const QPointF &savedCursorPos,
+                                const KoPointerEvent *event,
+                                const KisPaintOpSettings *globalSettings,
+                                KisPaintOpSettings::OutlineMode mode) const;
 
 protected:
-    virtual void createPainters(QVector<KisPainter*> &painters);
 
-    virtual void paintAt(const QVector<KisPainter*> &painters,
+    virtual void createPainters(QVector<PainterInfo*> &painterInfos,
+                                const QPointF &lastPosition,
+                                int lastTime);
+
+    virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
                          const KisPaintInformation &pi);
 
-    virtual void paintLine(const QVector<KisPainter*> &painters,
+    virtual void paintLine(const QVector<PainterInfo*> &painterInfos,
                            const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2);
 
-    virtual void paintBezierCurve(const QVector<KisPainter*> &painters,
+    virtual void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
                                   const KisPaintInformation &pi1,
                                   const QPointF &control1,
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2);
 
-protected:
-    void paintAt(KisPainter *painter, const KisPaintInformation &pi);
 
-    void paintLine(KisPainter *painter,
+    void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
+
+    void paintLine(PainterInfo *painterInfo,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(KisPainter *painter,
+    void paintBezierCurve(PainterInfo *painterInfo,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);
 
+private:
+    void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
+                                                   QPointF tangent1, QPointF tangent2);
+
 private slots:
+
     void finishStroke();
     void doAirbrushing();
 

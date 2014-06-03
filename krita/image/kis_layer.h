@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
@@ -75,6 +75,8 @@ public:
 
     /// returns the image's colorSpace or null, if there is no image
     virtual const KoColorSpace * colorSpace() const;
+
+    /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const;
 
     /**
@@ -115,12 +117,12 @@ public:
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
-    
+
     /**
      * set/unset the channel flag for the alpha channel of this layer
      */
     void disableAlphaChannel(bool disable);
-    
+
     /**
      * returns true if the channel flag for the alpha channel
      * of this layer is not set.
@@ -163,7 +165,7 @@ public:
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
 
     /**
      * Clones should be informed about updates of the original
@@ -183,6 +185,20 @@ public:
      * with the list, because it is not thread safe.
      */
     const QList<KisCloneLayerWSP> registeredClones() const;
+
+
+    /**
+     * Returns whether we have a clone.
+     *
+     * Be careful with it. It is not thread safe to add/remove
+     * clone while checking hasClones(). So there should be no updates.
+     */
+    bool hasClones() const;
+
+    /**
+     * It is calles by the async merger after projection update is done
+     */
+    void updateClones(const QRect &rect);
 
 public:
     qint32 x() const;
@@ -204,12 +220,8 @@ public:
     QRect exactBounds() const;
 
     QImage createThumbnail(qint32 w, qint32 h);
+
 public:
-
-    void setDirty(const QRect & rect);
-
-    using KisNode::setDirty;
-
     /**
      * Returns true if there are any effect masks present
      */
@@ -223,24 +235,9 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
     /**
-     * Set a temporary effect mask on this layer for filter previews.
-     */
-    void setPreviewMask(KisEffectMaskSP mask);
-
-    /**
-     * Retrieve the current preview effect mask
-     */
-    KisEffectMaskSP previewMask() const;
-
-    /**
      * Get the group layer that contains this layer.
      */
     KisLayerSP parentLayer() const;
-
-    /**
-     * Remove the temporary effect mask.
-     */
-    void removePreviewMask();
 
     /**
      * @return the metadata object associated with this object.
@@ -281,7 +278,7 @@ protected:
                      const QRect &requestedRect) const;
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

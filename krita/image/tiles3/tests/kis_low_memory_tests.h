@@ -19,7 +19,7 @@
 #ifndef __KIS_LOW_MEMORY_TESTS_H
 #define __KIS_LOW_MEMORY_TESTS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisLowMemoryTests : public QObject
 {

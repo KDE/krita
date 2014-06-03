@@ -24,6 +24,9 @@
 
 #include <kis_types.h>
 #include <krita_export.h>
+
+class KisShapeController;
+
 /**
  * KisMimeData implements delayed retrieval of node for d&d and copy/paste.
  *
@@ -33,12 +36,7 @@ class KRITAUI_EXPORT KisMimeData : public QMimeData
 {
     Q_OBJECT
 public:
-    KisMimeData();
-
-    /**
-     * Set the node this KisMimeData instance contains. There can be only one node.
-     */
-    void setNode(KisNodeSP node);
+    KisMimeData(KisNodeSP node);
 
     /// return the node set on this mimedata object -- for internal use
     KisNodeSP node() const;
@@ -54,9 +52,34 @@ public:
      */
     QStringList formats () const;
 
+    /**
+     * Try load the node, which belongs to the same Krita instance,
+     * that is can be fetched without serialization
+     */
+    static KisNodeSP tryLoadInternalNode(const QMimeData *data,
+                                         KisImageWSP image,
+                                         KisShapeController *shapeController,
+                                         bool /* IN-OUT */ &copyNode);
+
+    /**
+     * Loads a node from a mime container
+     * Supports application/x-krita-node and image types.
+     */
+    static KisNodeSP loadNode(const QMimeData *data,
+                              const QRect &imageBounds,
+                              const QPoint &preferredCenter,
+                              bool forceRecenter,
+                              KisImageWSP image,
+                              KisShapeController *shapeController);
+
 protected:
 
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const;
+
+private:
+    static void initializeExternalNode(KisNodeSP &node,
+                                       KisImageWSP image,
+                                       KisShapeController *shapeController);
 
 private:
 

@@ -20,9 +20,9 @@
 #ifndef _KO_COLOR_TRANSFORMATION_FACTORY_H_
 #define _KO_COLOR_TRANSFORMATION_FACTORY_H_
 
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QString>
+#include <QList>
+#include <QPair>
+#include <QString>
 
 class KoColorTransformation;
 class KoColorSpace;
@@ -37,11 +37,10 @@ class KoID;
 class PIGMENTCMS_EXPORT KoColorTransformationFactory
 {
 public:
-    KoColorTransformationFactory(QString id, QString name);
+    KoColorTransformationFactory(const QString &id);
     virtual ~KoColorTransformationFactory();
 public:
     QString id() const;
-    QString name() const;
 public:
     /**
      * @return an empty list if the factory support all type of colorspaces models.

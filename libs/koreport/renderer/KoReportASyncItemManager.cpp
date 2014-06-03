@@ -49,15 +49,15 @@ void KoReportASyncItemManager::addItem(KoReportASyncItemBase* item, OROPage* pag
         m_itemList.append(item);
         connect(item, SIGNAL(finishedRendering()), this, SLOT(itemFinished()));
     }    
-    kDebug() << m_renderList.count();
+    //kDebug() << m_renderList.count();
 }
 
 void KoReportASyncItemManager::itemFinished()
 {
-    kDebug();
+    //kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
-        rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
+        rdata->item->renderSimpleData(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
     } else {
         emit(finished());
     }
@@ -65,10 +65,10 @@ void KoReportASyncItemManager::itemFinished()
 
 void KoReportASyncItemManager::startRendering()
 {
-    kDebug();
+    //kDebug();
     if (m_renderList.count() > 0) {
         RenderData *rdata = m_renderList.dequeue();
-        rdata->item->render(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
+        rdata->item->renderSimpleData(rdata->page, rdata->section, rdata->offset, rdata->data, rdata->script);
     } else {
         emit(finished());
     }

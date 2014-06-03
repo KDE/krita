@@ -23,12 +23,21 @@
 #include "KoGenStyles.h"
 #include "KoXmlNS.h"
 
-#include <QtCore/QBuffer>
+#include <QBuffer>
+#include <QDateTime>
+#include <QTime>
 
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <writeodf/writeodfnumber.h>
+
+#include <math.h>
+
+using namespace writeodf;
 
 namespace KoOdfNumberStyles
 {
@@ -39,6 +48,298 @@ namespace KoOdfNumberStyles
     static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text);
     static void addCalligraNumericStyleExtension(KoXmlWriter &elementWriter, const QString &_suffix, const QString &_prefix);
 
+QString format(const QString &value, const NumericStyleFormat &format)
+{
+    switch (format.type) {
+        case Number: {
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatNumber(v, format.formatStr, format.precision) : value;
+        } break;
+        case Boolean: {
+            return formatBoolean(value, format.formatStr);
+        } break;
+        case Date: {
+            bool ok;
+            int v = value.toInt(&ok);
+            return ok ? formatDate(v, format.formatStr) : value;
+        } break;
+        case Time: {
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatTime(v, format.formatStr) : value;
+        } break;
+        case Percentage: {
+            return formatPercent(value, format.formatStr, format.precision);
+        } break;
+        case Currency: {
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatCurrency(v, format.formatStr, format.currencySymbol, format.precision) : value;
+        } break;
+        case Scientific: {
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatScientific(v, format.formatStr, format.precision) : value;
+        } break;
+        case Fraction: {
+            bool ok;
+            qreal v = value.toDouble(&ok);
+            return ok ? formatFraction(v, format.formatStr) : value;
+        } break;
+        case Text: {
+            return value;
+        } break;
+    }
+    return value;
+}
+
+QString formatNumber(qreal value, const QString &format, int precision)
+{
+    QString result;
+    int start = 0;
+    bool showNegative = format.startsWith('-');
+    if (showNegative)
+        start = 1;
+    for (int i = start; i < format.length(); ++i) {
+        QChar c = format[ i ];
+        switch (c.unicode()) {
+            case '.':
+            case ',':
+            case '#':
+            case '0':
+            case '?': {
+//                bool grouping = false;
+                bool gotDot = false;
+                bool gotE = false;
+                bool gotFraction = false;
+                int decimalPlaces = 0;
+                int integerDigits = 0;
+                int optionalDecimalPlaces = 0;
+                int optionalIntegerDigits = 0;
+                int exponentDigits = 0;
+                int numeratorDigits = 0;
+                int denominatorDigits = 0;
+                char ch = format[ i ].toLatin1();
+                do {
+                    if (ch == '.') {
+                        gotDot = true;
+                    } else if (ch == ',') {
+                //        grouping = true; 
+                    } else if (ch == 'E' || ch == 'e') {
+                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericScientificStyle);
+
+                        if (i >= format.length() - 1) break;
+                        const char chN = format[ i + 1 ].toLatin1();
+                        if (chN == '-' || chN == '+') {
+                            gotE = true;
+                            ++i;
+                        }
+                    } else if (ch == '0' && gotE) {
+                        ++exponentDigits;
+                    } else if (ch == '0' && !gotDot && !gotFraction) {
+                        ++integerDigits;
+                    } else if (ch == '#' && !gotDot && !gotFraction) {
+                        ++optionalIntegerDigits;
+                    } else if (ch == '0' && gotDot && !gotFraction) {
+                        ++decimalPlaces;
+                    } else if (ch == '#' && gotDot && !gotFraction) {
+                        ++optionalDecimalPlaces;
+                    } else if (ch == '?' && !gotFraction) {
+                        ++numeratorDigits;
+                    } else if (ch == '?' && gotFraction) {
+                        ++denominatorDigits;
+                    } else if (ch == '/') {
+                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericFractionStyle);
+                        if (gotDot) return QString(); // invalid
+                        gotFraction = true;
+                    }
+
+                    if (i >= format.length() - 1) break;
+                    ch = format[ ++i ].toLatin1();
+
+                    if (ch == ' ') {
+                        // spaces are not allowed - but there's an exception: if this is a fraction. Let's check for '?' or '/'
+                        const char c = format[ i + 1 ].toLatin1();
+                        if (c == '?' || c == '/')
+                            ch = format[ ++i ].toLatin1();
+                    }
+                } while (i < format.length() && (ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
+                if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/')) {
+                    --i;
+                }
+
+                QString v(QString::number(qAbs(value), 'f', precision >= 0 ? precision : (optionalDecimalPlaces + decimalPlaces)));
+                int p = v.indexOf('.');
+                QString integerValue = p >= 0 ? v.left(p) : v;
+                if (integerValue.length() < integerDigits)
+                    integerValue.prepend(QString().fill('0', integerDigits - integerValue.length()));
+                QString decimalValue =  p >= 0 ? v.mid(p + 1) : QString();
+                if (decimalValue.length() < decimalPlaces)
+                    decimalValue.append(QString().fill('0', decimalPlaces - decimalValue.length()));
+
+                if (showNegative && value < 0)
+                    result.append('-');
+                result.append(integerValue);
+                if (!decimalValue.isEmpty())
+                    result.append('.' + decimalValue);
+            } break;
+            case '\\': { // backslash escapes the next char
+                if (i < format.length() - 1) {
+                    result.append(format[ ++i ]);
+                }
+            } break;
+            default:
+                result.append(c);
+                break;
+        }
+    }
+
+    return result;
+}
+
+QString formatBoolean(const QString &value, const QString &format)
+{
+    Q_UNUSED(format);
+    bool ok = false;
+    int v = value.toInt(&ok);
+    return ok && v != 0 ? "TRUE" : "FALSE";
+}
+
+QString formatDate(int value, const QString &format)
+{
+    QDateTime dt(QDate(1899, 12, 30)); // reference date
+    dt = dt.addDays(value);
+    return dt.toString(format);
+}
+
+QString formatTime(qreal value, const QString &format)
+{
+    QTime t(0,0,0);
+    t = t.addSecs(qRound(value * 86400.0)); // 24 hours
+    return t.toString(format);
+}
+
+QString formatCurrency(qreal value, const QString &format, const QString& currencySymbol, int precision)
+{
+    if (currencySymbol == "CCC") // undocumented hack, see doc attached to comment 6 at bug 282972
+        return KGlobal::locale()->formatMoney(value, "USD", precision);
+    if (format.isEmpty()) // no format means use locale format
+        return KGlobal::locale()->formatMoney(value, currencySymbol.isEmpty() ? KGlobal::locale()->currencySymbol() : currencySymbol, precision);
+    return formatNumber(value, format, precision);
+}
+
+QString formatScientific(qreal value, const QString &format, int precision)
+{
+    Q_UNUSED(format);
+    QString v(QString::number(value, 'E', precision));
+    int pos = v.indexOf('.');
+    if (pos != -1) {
+        v.replace(pos, 1, KGlobal::locale()->decimalSymbol());
+    }
+    return v;
+}
+
+QString formatFraction(qreal value, const QString &format)
+{
+    QString prefix = value < 0 ? "-" : "";
+    value = fabs(value);
+    qreal result = value - floor(value);
+
+    if (result == 0) // return w/o fraction part if not necessary
+        return prefix + QString::number(value);
+
+    int index = 0;
+    int limit = 0;
+    if (format.endsWith("/2")) {
+        index = 2;
+    } else if (format.endsWith("/4")) {
+        index = 4;
+    } else if (format.endsWith("/8")) {
+        index = 8;
+    } else if (format.endsWith("/16")) {
+        index = 16;
+    } else if (format.endsWith("/10")) {
+        index = 10;
+    } else if (format.endsWith("/100")) {
+        index = 100;
+    } else if (format.endsWith("/?")) {
+        index = 3;
+        limit = 9;
+    } else if (format.endsWith("/??")) {
+        index = 4;
+        limit = 99;
+    } else if (format.endsWith("/???")) {
+        index = 5;
+        limit = 999;
+    } else { // fallback
+        return prefix + QString::number(value);
+    }
+
+    // handle halves, quarters, tenths, ...
+    if (!format.endsWith("/?") && !format.endsWith("/??") && !format.endsWith("/???")) {
+        qreal calc = 0;
+        int index1 = 0;
+        qreal diff = result;
+        for (int i = 1; i <= index; i++) {
+            calc = i * 1.0 / index;
+            if (fabs(result - calc) < diff) {
+                index1 = i;
+                diff = fabs(result - calc);
+            }
+        }
+        if (index1 == 0)
+            return prefix + QString("%1").arg(floor(value));
+        if (index1 == index)
+            return prefix + QString("%1").arg(floor(value) + 1);
+        if (floor(value) == 0)
+            return prefix + QString("%1/%2").arg(index1).arg(index);
+        return prefix + QString("%1 %2/%3").arg(floor(value)).arg(index1).arg(index);
+    }
+
+    // handle Format::fraction_one_digit, Format::fraction_two_digit and Format::fraction_three_digit style
+    qreal target = result;
+    qreal numerator = 1;
+    qreal denominator = 1;
+    qreal bestNumerator = 0;
+    qreal bestDenominator = 1;
+    qreal bestDist = target;
+
+    // as soon as either numerator or denominator gets above the limit, we're done
+    while (numerator <= limit && denominator <= limit) {
+        qreal dist = fabs((numerator / denominator) - target);
+        if (dist < bestDist) {
+            bestDist = dist;
+            bestNumerator = numerator;
+            bestDenominator = denominator;
+        }
+        if (numerator / denominator > target) {
+            ++denominator;
+        } else {
+            ++numerator;
+        }
+    }
+
+    if (bestNumerator == 0)
+        return prefix + QString().setNum(floor(value));
+    if (bestDenominator == bestNumerator)
+        return prefix + QString().setNum(floor(value + 1));
+    if (floor(value) == 0)
+        return prefix + QString("%1/%2").arg(bestNumerator).arg(bestDenominator);
+    return prefix + QString("%1 %2/%3").arg(floor(value)).arg(bestNumerator).arg(bestDenominator);
+
+}
+
+QString formatPercent(const QString &value, const QString &/*format*/, int precision)
+{
+    if (value.contains('.')) {
+        bool ok;
+        qreal v = value.toDouble(&ok);
+        if (ok)
+            return QString::number(v * 100., 'f', precision) + QLatin1String("%");
+    }
+    return value;
+}
 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
@@ -313,15 +614,50 @@ kDebug()<<"99 ******************************************************************
     return QPair<QString, NumericStyleFormat>(styleName, dataStyle);
 }
 
-#define addTextNumber( text, elementWriter ) { \
-        if ( !text.isEmpty() ) \
-        { \
-            elementWriter.startElement( "number:text" ); \
-            elementWriter.addTextNode( text ); \
-            elementWriter.endElement(); \
-            text=""; \
-        } \
+QString saveOdfNumberStyle(KoGenStyles &mainStyles, const NumericStyleFormat &format)
+{
+    QString styleName;
+    switch (format.type) {
+        case KoOdfNumberStyles::Number: {
+            styleName = KoOdfNumberStyles::saveOdfNumberStyle(mainStyles, format.formatStr, format.prefix, format.suffix, format.thousandsSep);
+        } break;
+        case KoOdfNumberStyles::Boolean: {
+            styleName = KoOdfNumberStyles::saveOdfBooleanStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Date: {
+            bool localeFormat = format.formatStr.isEmpty();
+            styleName = KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Time: {
+            bool localeFormat = format.formatStr.isEmpty();
+            styleName = KoOdfNumberStyles::saveOdfTimeStyle(mainStyles, format.formatStr, localeFormat, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Percentage: {
+            styleName = KoOdfNumberStyles::saveOdfPercentageStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Currency: {
+            styleName = KoOdfNumberStyles::saveOdfCurrencyStyle(mainStyles, format.formatStr, format.currencySymbol, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Scientific: {
+            styleName = KoOdfNumberStyles::saveOdfScientificStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Fraction: {
+            styleName = KoOdfNumberStyles::saveOdfFractionStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+        } break;
+        case KoOdfNumberStyles::Text: {
+            styleName = KoOdfNumberStyles::saveOdfTextStyle(mainStyles, format.formatStr, format.prefix, format.suffix);
+        } break;
     }
+    return styleName;
+}
+
+void addTextNumber(QString& text, KoXmlWriter &elementWriter)
+{
+    if (!text.isEmpty()) {
+        number_text(&elementWriter).addTextNode(text);
+        text.clear();
+    }
+}
 
 void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &text)
 {
@@ -329,7 +665,7 @@ void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
     do {
         if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
             text += format[0];
-            format = format.remove(0, 1);
+            format.remove(0, 1);
         }
     } while (format.length() > 0);
     addTextNumber(text, elementWriter);
@@ -342,18 +678,14 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
         //hour in 24h
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:hours");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_hours(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%k")) { //h
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:hours");
-        elementWriter.addAttribute("number:style", "short");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_hours(&elementWriter).set_number_style("short");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%I")) { // ?????
         //TODO hour in 12h
@@ -364,27 +696,22 @@ bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString &format, QStri
     } else if (format.startsWith("%M")) { // mm
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:minutes");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_minutes(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
 
     } else if (format.startsWith("%S")) {  //ss
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:seconds");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_seconds(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith("%p")) {
         //TODO am or pm
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:am-pm");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_am_pm(&elementWriter).end();
+        format.remove(0, 2);
         changed = true;
     }
     return changed;
@@ -397,63 +724,50 @@ bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString &format, QString &tex
     //we can also add time to date.
     if (antislash) {
         text += format[0];
-        format = format.remove(0, 1);
+        format.remove(0, 1);
         antislash = false;
         changed = true;
     } else if (format.startsWith("hh")) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:hours");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_hours(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('h')) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:hours");
-        elementWriter.addAttribute("number:style", "short");
-        elementWriter.endElement();
-        format = format.remove(0, 1);
+        number_hours(&elementWriter).set_number_style("short");
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("mm")) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:minutes");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_minutes(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('m')) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:minutes");
-        elementWriter.addAttribute("number:style", "short");
-        elementWriter.endElement();
-        format = format.remove(0, 1);
+        number_minutes(&elementWriter).set_number_style("short");
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ss")) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:seconds");
-        elementWriter.addAttribute("number:style", "long");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_seconds(&elementWriter).set_number_style("long");
+        format.remove(0, 2);
         changed = true;
     } else if (format.startsWith('s')) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:seconds");
-        elementWriter.addAttribute("number:style", "short");
-        elementWriter.endElement();
-        format = format.remove(0, 1);
+        number_seconds(&elementWriter).set_number_style("short");
+        format.remove(0, 1);
         changed = true;
     } else if (format.startsWith("ap")) {
         addTextNumber(text, elementWriter);
 
-        elementWriter.startElement("number:am-pm");
-        elementWriter.endElement();
-        format = format.remove(0, 2);
+        number_am_pm(&elementWriter).end();
+        format.remove(0, 2);
         changed = true;
     }
     return changed;
@@ -478,7 +792,7 @@ QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString &_format, bool k
         do {
             if (!saveOdfTimeFormat(elementWriter, format, text, antislash)) {
                 QString elem(format[0]);
-                format = format.remove(0, 1);
+                format.remove(0, 1);
                 if (elem == "\\") {
                     antislash = true;
                 } else {
@@ -501,77 +815,69 @@ void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString &format, QString &t
     do {
         if (format.startsWith("%Y")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:year");
-            elementWriter.addAttribute("number:style", "long");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+
+            number_year(&elementWriter).set_number_style("long");
+            format.remove(0, 2);
         } else if (format.startsWith("%y")) {
 
             addTextNumber(text, elementWriter);
 
-            elementWriter.startElement("number:year");
-            elementWriter.addAttribute("number:style", "short");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+            number_year(&elementWriter).set_number_style("short");
+            format.remove(0, 2);
         } else if (format.startsWith("%n")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:month");
-            elementWriter.addAttribute("number:style", "short");
-            elementWriter.addAttribute("number:textual", "false");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+
+            number_month month(&elementWriter);
+            month.set_number_style("short");
+            month.set_number_textual("false");
+            format.remove(0, 2);
         } else if (format.startsWith("%m")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:month");
-            elementWriter.addAttribute("number:style", "long");
-            elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+
+            number_month month(&elementWriter);
+            month.set_number_style("long");
+            month.set_number_textual("false");  //not necessary remove it
+            format.remove(0, 2);
         } else if (format.startsWith("%e")) {
             addTextNumber(text, elementWriter);
 
-            elementWriter.startElement("number:day");
-            elementWriter.addAttribute("number:style", "short");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+            number_day(&elementWriter).set_number_style("short");
+            format.remove(0, 2);
         } else if (format.startsWith("%d")) {
             addTextNumber(text, elementWriter);
 
-            elementWriter.startElement("number:day");
-            elementWriter.addAttribute("number:style", "long");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+            number_day(&elementWriter).set_number_style("long");
+            format.remove(0, 2);
         } else if (format.startsWith("%b")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:month");
-            elementWriter.addAttribute("number:style", "short");
-            elementWriter.addAttribute("number:textual", "true");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+
+            number_month month(&elementWriter);
+            month.set_number_style("short");
+            month.set_number_textual("true");
+            format.remove(0, 2);
         } else if (format.startsWith("%B")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:month");
-            elementWriter.addAttribute("number:style", "long");
-            elementWriter.addAttribute("number:textual", "true");
+
+            number_month month(&elementWriter);
+            month.set_number_style("long");
+            month.set_number_textual("true");
             elementWriter.endElement();
-            format = format.remove(0, 2);
+            format.remove(0, 2);
         } else if (format.startsWith("%a")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:day-of-week");
-            elementWriter.addAttribute("number:style", "short");
-            elementWriter.endElement();
 
-            format = format.remove(0, 2);
+            number_day_of_week(&elementWriter).set_number_style("short");
+
+            format.remove(0, 2);
         } else if (format.startsWith("%A")) {
             addTextNumber(text, elementWriter);
-            elementWriter.startElement("number:day-of-week");
-            elementWriter.addAttribute("number:style", "long");
-            elementWriter.endElement();
-            format = format.remove(0, 2);
+
+            number_day_of_week(&elementWriter).set_number_style("long");
+            format.remove(0, 2);
         } else {
             if (!saveOdfKlocaleTimeFormat(elementWriter, format, text)) {
                 text += format[0];
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             }
         }
     } while (format.length() > 0);
@@ -600,109 +906,95 @@ QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString &_format, bool k
         do {
             if (antislash) {
                 text += format[0];
-                format = format.remove(0, 1);
+                format.remove(0, 1);
             }
             //TODO implement loading ! What is it ?
             else if (format.startsWith("MMMMM")) {        // MMMMM is extra-short month name (only 1st character)
                 addTextNumber(text, elementWriter);
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:textual", "true");
-                elementWriter.addAttribute("calligra:number-length", "extra-short");
-                elementWriter.endElement();
-                format = format.remove(0, 5);
+
+                number_month month(&elementWriter);
+                month.set_number_textual("true");
+                month.set_calligra_number_length("extra-short");
+                format.remove(0, 5);
             } else if (format.startsWith("MMMM")) {
                 addTextNumber(text, elementWriter);
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:style", "long");
-                elementWriter.addAttribute("number:textual", "true");
-                elementWriter.endElement();
-                format = format.remove(0, 4);
+
+                number_month month(&elementWriter);
+                month.set_number_style("long");
+                month.set_number_textual("true");
+                format.remove(0, 4);
             } else if (format.startsWith("MMM")) {
                 addTextNumber(text, elementWriter);
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.addAttribute("number:textual", "true");
-                elementWriter.endElement();
-                format = format.remove(0, 3);
+
+                number_month month(&elementWriter);
+                month.set_number_style("short");
+                month.set_number_textual("true");
+                format.remove(0, 3);
             } else if (format.startsWith("MM")) {
                 addTextNumber(text, elementWriter);
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:style", "long");
-                elementWriter.addAttribute("number:textual", "false");  //not necessary remove it
-                elementWriter.endElement();
-                format = format.remove(0, 2);
+
+                number_month month(&elementWriter);
+                month.set_number_style("long");
+                month.set_number_textual("false"); //not necessary remove it
+                format.remove(0, 2);
             } else if (format.startsWith('M')) {
                 addTextNumber(text, elementWriter);
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.addAttribute("number:textual", "false");
-                elementWriter.endElement();
-                format = format.remove(0, 1);
+
+                number_month month(&elementWriter);
+                month.set_number_style("short");
+                month.set_number_textual("false");
+                format.remove(0, 1);
             } else if (format.startsWith("PPPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="long"/>
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.addAttribute("number:textual", "false");
-                elementWriter.addAttribute("number:possessive-form", "true");
-                elementWriter.endElement();
-                format = format.remove(0, 4);
+
+                number_month month(&elementWriter);
+                month.set_number_style("short");
+                month.set_number_textual("false");
+                month.set_number_possessive_form("true");
+                format.remove(0, 4);
             } else if (format.startsWith("PPP")) {
                 addTextNumber(text, elementWriter);
                 //<number:month number:possessive-form="true" number:textual="true" number:style="short"/>
-                elementWriter.startElement("number:month");
-                elementWriter.addAttribute("number:possessive-form", "true");
-
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.addAttribute("number:textual", "false");
-                elementWriter.endElement();
-                format = format.remove(0, 3);
+                number_month month(&elementWriter);
+                month.set_number_possessive_form("true");
+                month.set_number_style("short");
+                month.set_number_textual("false");
+                format.remove(0, 3);
             } else if (format.startsWith("dddd")) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:day-of-week");
-                elementWriter.addAttribute("number:style", "long");
-                elementWriter.endElement();
-                format = format.remove(0, 4);
+                number_day_of_week(&elementWriter).set_number_style("long");
+                format.remove(0, 4);
             } else if (format.startsWith("ddd")) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:day-of-week");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.endElement();
-                format = format.remove(0, 3);
+                number_day_of_week(&elementWriter).set_number_style("short");
+                format.remove(0, 3);
             } else if (format.startsWith("dd")) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:day");
-                elementWriter.addAttribute("number:style", "long");
-                elementWriter.endElement();
-                format = format.remove(0, 2);
+                number_day(&elementWriter).set_number_style("long");
+                format.remove(0, 2);
             } else if (format.startsWith('d')) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:day");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.endElement();
-                format = format.remove(0, 1);
+                number_day(&elementWriter).set_number_style("short");
+                format.remove(0, 1);
             } else if (format.startsWith("yyyy")) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:year");
-                elementWriter.addAttribute("number:style", "long");
-                elementWriter.endElement();
-                format = format.remove(0, 4);
+                number_year(&elementWriter).set_number_style("long");
+                format.remove(0, 4);
             } else if (format.startsWith("yy")) {
                 addTextNumber(text, elementWriter);
 
-                elementWriter.startElement("number:year");
-                elementWriter.addAttribute("number:style", "short");
-                elementWriter.endElement();
-                format = format.remove(0, 2);
+                number_year(&elementWriter).set_number_style("short");
+                format.remove(0, 2);
             } else {
                 if (!saveOdfTimeFormat(elementWriter, format, text, antislash)) {
                     QString elem(format[0]);
-                    format = format.remove(0, 1);
+                    format.remove(0, 1);
                     if (elem == "\\") {
                         antislash = true;
                     } else {
@@ -761,13 +1053,14 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
     text = _prefix;
     addTextNumber(text, elementWriter);
 
-    elementWriter.startElement("number:fraction");
-    elementWriter.addAttribute("number:min-integer-digits", integer);
-    elementWriter.addAttribute("number:min-numerator-digits", numerator);
-    elementWriter.addAttribute("number:min-denominator-digits", denominator);
-    if (denominatorValue != 0)
-        elementWriter.addAttribute("number:denominator-value", denominatorValue);
-    elementWriter.endElement();
+    number_fraction fraction(&elementWriter);
+    fraction.set_number_min_integer_digits(integer);
+    fraction.set_number_min_numerator_digits(numerator);
+    fraction.set_number_min_denominator_digits(denominator);
+    if (denominatorValue != 0) {
+        fraction.set_number_denominator_value(denominatorValue);
+    }
+    fraction.end();
 
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
@@ -807,18 +1100,40 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
     } while (format.length() > 0);
     text = _prefix ;
     addTextNumber(text, elementWriter);
-    elementWriter.startElement("number:number");
+    number_number number(&elementWriter);
     //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
-    if (!beforeSeparator)
-        elementWriter.addAttribute("number:decimal-places", decimalplaces);
-    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
-    if (thousandsSep)
-        elementWriter.addAttribute("number:grouping", true);
-    elementWriter.endElement();
+    if (!beforeSeparator) {
+        number.set_number_decimal_places(decimalplaces);
+    }
+    number.set_number_min_integer_digits(integerdigits);
+    if (thousandsSep) {
+        number.set_number_grouping(true);
+    }
+    number.end();
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    currentStyle.addChildElement("number", elementContents);
+    return mainStyles.insert(currentStyle, "N");
+}
+
+QString saveOdfBooleanStyle(KoGenStyles &mainStyles, const QString &format, const QString &prefix, const QString &suffix)
+{
+    Q_UNUSED(format);
+
+    KoGenStyle currentStyle(KoGenStyle::NumericBooleanStyle);
+
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
+    QString text = prefix;
+    addTextNumber(text, elementWriter);
+    number_boolean(&elementWriter).end();
+    text = suffix;
+    addTextNumber(text, elementWriter);
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -857,13 +1172,15 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
     } while (format.length() > 0);
     text = _prefix ;
     addTextNumber(text, elementWriter);
-    elementWriter.startElement("number:number");
-    if (!beforeSeparator)
-        elementWriter.addAttribute("number:decimal-places", decimalplaces);
-    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
-    elementWriter.endElement();
+    number_number number(&elementWriter);
+    if (!beforeSeparator) {
+        number.set_number_decimal_places(decimalplaces);
+    }
+    number.set_number_min_integer_digits(integerdigits);
+    number.end();
 
-    addTextNumber(QString("%"), elementWriter);
+    QString percent(QChar('%'));
+    addTextNumber(percent, elementWriter);
 
     text = _suffix ;
     addTextNumber(text, elementWriter);
@@ -928,15 +1245,17 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
     text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    elementWriter.startElement("number:scientific-number");
+    number_scientific_number number(&elementWriter);
     //kDebug(30003) << " decimalplace :" << decimalplace << " integerdigits :" << integerdigits << " exponentdigits :" << exponentdigits;
-    if (!beforeSeparator)
-        elementWriter.addAttribute("number:decimal-places", decimalplace);
-    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
-    elementWriter.addAttribute("number:min-exponent-digits", exponentdigits);
-    if (thousandsSep)
-        elementWriter.addAttribute("number:grouping", true);
-    elementWriter.endElement();
+    if (!beforeSeparator) {
+        number.set_number_decimal_places(decimalplace);
+    }
+    number.set_number_min_integer_digits(integerdigits);
+    number.set_number_min_exponent_digits(exponentdigits);
+    if (thousandsSep) {
+        number.set_number_grouping(true);
+    }
+    number.end();
 
     text = _suffix;
     addTextNumber(text, elementWriter);
@@ -984,21 +1303,22 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
     text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    elementWriter.startElement("number:number");
+    number_number number(&elementWriter);
     //kDebug(30003) << " decimalplaces :" << decimalplaces << " integerdigits :" << integerdigits;
-    if (!beforeSeparator)
-        elementWriter.addAttribute("number:decimal-places", decimalplaces);
-    elementWriter.addAttribute("number:min-integer-digits", integerdigits);
-    elementWriter.endElement();
+    if (!beforeSeparator) {
+        number.set_number_decimal_places(decimalplaces);
+    }
+    number.set_number_min_integer_digits(integerdigits);
+    number.end();
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
 
-    elementWriter.startElement("number:currency-symbol");
+    number_currency_symbol sym(&elementWriter);
     //kDebug(30003) << " currency-symbol:" << symbol;
-    elementWriter.addTextNode(symbol.toUtf8());
-    elementWriter.endElement();
+    sym.addTextNode(symbol.toUtf8());
+    sym.end();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);
@@ -1007,31 +1327,26 @@ QString saveOdfCurrencyStyle(KoGenStyles &mainStyles,
 
 QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString &_format, const QString &_prefix, const QString &_suffix)
 {
+    Q_UNUSED(_format);
 
     //<number:text-style style:name="N100">
     //<number:text-content/>
     ///</number:text-style>
 
     //kDebug(30003) << "QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
-    QString format(_format);
 
     KoGenStyle currentStyle(KoGenStyle::NumericTextStyle);
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
-    QString text;
-    do {
-        format.remove(0, 1);
-    } while (format.length() > 0);
-    text =  _prefix ;
+    QString text =  _prefix ;
     addTextNumber(text, elementWriter);
 
-    elementWriter.startElement("number:text-style");
+    number_text_content(&elementWriter).end();
 
     text =  _suffix ;
     addTextNumber(text, elementWriter);
     addCalligraNumericStyleExtension(elementWriter, _suffix, _prefix);
-    elementWriter.endElement();
 
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     currentStyle.addChildElement("number", elementContents);

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2013 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,43 +25,64 @@
 
 #include <QWidget>
 
+class StylesManagerModel;
+class StylesSortFilterProxyModel;
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
+
+class QModelIndex;
 
 class StyleManager : public QWidget
 {
     Q_OBJECT
 public:
-    StyleManager(QWidget *parent = 0);
+    explicit StyleManager(QWidget *parent = 0);
     ~StyleManager();
 
     void setStyleManager(KoStyleManager *sm);
 
     void setUnit(const KoUnit &unit);
 
+    //Check that the new name of style is unique or not
+    bool checkUniqueStyleName();
+
 public slots:
     void save();
+    void setParagraphStyle(KoParagraphStyle *style);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
+    bool unappliedStyleChanges();
 
 private slots:
+    void slotParagraphStyleSelected(QModelIndex index);
+    void slotCharacterStyleSelected(QModelIndex index);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
-    void setParagraphStyle(KoParagraphStyle *style);
-    void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
+    void currentParagraphStyleChanged();
+    void currentParagraphNameChanged(const QString &name);
+    void currentCharacterStyleChanged();
+    void currentCharacterNameChanged(const QString &name);
+    void buttonNewPressed();
+    void tabChanged(int index);
 
 private:
+    bool checkUniqueStyleName(int widgetIndex);
+
     Ui::StyleManager widget;
     KoStyleManager *m_styleManager;
 
-    QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
-    QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
+    QMap<KoParagraphStyle *, KoParagraphStyle *> m_modifiedParagraphStyles;
+    QMap<KoCharacterStyle *, KoCharacterStyle *> m_modifiedCharacterStyles;
 
-    KoParagraphStyle *m_selectedParagStyle;
-    KoCharacterStyle *m_selectedCharStyle;
-
-    bool m_blockSignals;
+    StylesManagerModel *m_paragraphStylesModel;
+    StylesManagerModel *m_characterStylesModel;
+    StylesSortFilterProxyModel *m_paragraphProxyModel;
+    StylesSortFilterProxyModel *m_characterProxyModel;
+    KoStyleThumbnailer *m_thumbnailer;
+    bool m_unappliedStyleChanges;
 };
 
 #endif

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,18 +21,21 @@
 #ifndef KORESOURCEMODEL_H
 #define KORESOURCEMODEL_H
 
-#include <QAbstractTableModel>
+#include <QSharedPointer>
+
+#include "KoResourceModelBase.h"
+#include "kowidgets_export.h"
 
 class KoAbstractResourceServerAdapter;
 class KoResource;
 
 /// The resource model managing the resource data
-class KoResourceModel : public QAbstractTableModel
+class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:
-    explicit KoResourceModel( KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
-    virtual ~KoResourceModel() {}
+    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
+    virtual ~KoResourceModel();
 
     /// reimplemented
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -43,8 +47,6 @@ public:
     virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
     /// Sets the number of columns to display
     void setColumnCount( int columnCount );
-    /// @returns the resource server adapter the model is connnected to
-    KoAbstractResourceServerAdapter * resourceServerAdapter();
 
     /// Extensions to Qt::ItemDataRole.
     enum ItemDataRole
@@ -52,16 +54,49 @@ public:
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole = 33
     };
-    
-    QModelIndex indexFromResource(KoResource* resource);
+
+    QModelIndex indexFromResource(KoResource* resource) const;
+
+    /// facade for KoAbstractResourceServerAdapter
+    QString extensions() const;
+    void importResourceFile(const QString &filename);
+    void importResourceFile(const QString &filename, bool fileCreation);
+    bool removeResource(KoResource* resource);
+    void removeResourceFile(const QString & filename);
+    QStringList assignedTagsList(KoResource *resource) const;
+    void addTag(KoResource* resource, const QString& tag);
+    void deleteTag( KoResource* resource, const QString& tag);
+    QStringList tagNamesList() const;
+    QStringList searchTag(const QString& lineEditText);
+    void enableResourceFiltering(bool enable);
+    void setCurrentTag(const QString& currentTag);
+    void searchTextChanged(const QString& searchString);
+    void updateServer();
+    int resourcesCount() const;
+    QList<KoResource *> currentlyVisibleResources() const;
+    QList<KoResource *> serverResources() const;
+    void tagCategoryMembersChanged();
+    void tagCategoryAdded(const QString& tag);
+    void tagCategoryRemoved(const QString& tag);
+
+    QString serverType() const;
+
+signals:
+    /// XXX: not sure if this is the best place for these
+    void tagBoxEntryModified();
+    void tagBoxEntryAdded(const QString& tag);
+    void tagBoxEntryRemoved(const QString& tag);
 
 private slots:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
     void resourceChanged(KoResource *resource);
+    void tagBoxEntryWasModified();
+    void tagBoxEntryWasAdded(const QString& tag);
+    void tagBoxEntryWasRemoved(const QString& tag);
 
 private:
-    KoAbstractResourceServerAdapter * m_resourceAdapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;
     int m_columnCount;
 };
 

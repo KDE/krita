@@ -23,7 +23,7 @@
 #ifndef KOFINDBASE_H
 #define KOFINDBASE_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "KoFindMatch.h"
 #include "komain_export.h"

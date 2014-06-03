@@ -24,8 +24,8 @@
 
 #include "koproperty/Factory.h"
 
-#include <QtCore/QVariant>
-#include <KLineEdit>
+#include <QVariant>
+#include <klineedit.h>
 
 namespace KoProperty
 {
@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT StringEdit : public KLineEdit
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
-    StringEdit(QWidget *parent = 0);
+    explicit StringEdit(QWidget *parent = 0);
 
     ~StringEdit();
 

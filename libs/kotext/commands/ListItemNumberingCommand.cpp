@@ -19,7 +19,7 @@
 
 #include "ListItemNumberingCommand.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
@@ -50,9 +50,8 @@ void ListItemNumberingCommand::setNumbered(bool numbered)
     }
     cursor.setBlockFormat(blockFormat);
 
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
-    if (userData)
-        userData->setCounterWidth(-1.0);
+    KoTextBlockData data(m_block);
+    data.setCounterWidth(-1.0);
 }
 
 void ListItemNumberingCommand::redo()
@@ -60,9 +59,9 @@ void ListItemNumberingCommand::redo()
     if (!m_first) {
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
-        KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
-        if (userData)
-            userData->setCounterWidth(-1.0);
+
+        KoTextBlockData data(m_block);
+        data.setCounterWidth(-1.0);
     } else {
         setNumbered(m_numbered);
     }
@@ -74,9 +73,8 @@ void ListItemNumberingCommand::undo()
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
 
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
-    if (userData)
-        userData->setCounterWidth(-1.0);
+    KoTextBlockData data(m_block);
+    data.setCounterWidth(-1.0);
 }
 
 bool ListItemNumberingCommand::mergeWith(const KUndo2Command *other)

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KoRdfLocationViewWidget</class>
+ <widget class="QWidget" name="KoRdfLocationViewWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>896</width>
+    <height>847</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="name">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="Marble::MarbleWidget" name="map">
+     <property name="toolTip">
+      <string>The Earth</string>
+     </property>
+     <property name="whatsThis">
+      <string>The Marble widget displays a virtual globe.</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Marble::MarbleWidget</class>
+   <extends>QWidget</extends>
+   <header>marble/MarbleWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

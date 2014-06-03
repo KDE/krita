@@ -33,8 +33,8 @@
 
 #include <KoXmlReader.h>
 
-#include <QtGui/QGradient>
-#include <QtCore/QMap>
+#include <QGradient>
+#include <QMap>
 
 class KoShape;
 class KoShapeContainer;
@@ -45,7 +45,7 @@ class SvgTextHelper;
 class FLAKE_EXPORT SvgParser
 {
 public:
-    SvgParser(KoDocumentResourceManager *documentResourceManager);
+    explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
 
     /// Parses a svg fragment, returning the list of top level child shapes

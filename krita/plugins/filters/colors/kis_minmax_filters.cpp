@@ -21,8 +21,7 @@
 #include "kis_minmax_filters.h"
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-
-#include <kis_iterators_pixel.h>
+#include <KoChannelInfo.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -70,16 +69,15 @@ void minimize(const quint8* s, quint8* d, uint nbpixels)
 KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize Channel"))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(false);
 }
 
-void KisFilterMax::process(KisPaintDeviceSP device,
-                           const QRect& rect,
-                           const KisFilterConfiguration* config,
-                           KoUpdater* progressUpdater
-                          ) const
+void KisFilterMax::processImpl(KisPaintDeviceSP device,
+                               const QRect& rect,
+                               const KisFilterConfiguration* config,
+                               KoUpdater* progressUpdater
+                               ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
@@ -101,28 +99,27 @@ void KisFilterMax::process(KisPaintDeviceSP device,
     } else {
         return;
     }
-    
-    KisRectIteratorSP it = device->createRectIteratorNG(rect);
+
+    KisSequentialIterator it(device, rect);
 
     do {
-        F(it->oldRawData(), it->rawData(), nC);
+        F(it.oldRawData(), it.rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it->nextPixel());
+    } while(it.nextPixel());
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(false);
 }
 
-void KisFilterMin::process(KisPaintDeviceSP device,
-                           const QRect& rect,
-                           const KisFilterConfiguration* config,
-                           KoUpdater* progressUpdater
-                          ) const
+void KisFilterMin::processImpl(KisPaintDeviceSP device,
+                               const QRect& rect,
+                               const KisFilterConfiguration* config,
+                               KoUpdater* progressUpdater
+                               ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
@@ -145,11 +142,11 @@ void KisFilterMin::process(KisPaintDeviceSP device,
     } else {
         return;
     }
-    KisRectIteratorSP it = device->createRectIteratorNG(rect);
 
+    KisSequentialIterator it(device, rect);
     do {
-        F(it->oldRawData(), it->rawData(), nC);
+        F(it.oldRawData(), it.rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it->nextPixel());
+    } while(it.nextPixel());
 }
 

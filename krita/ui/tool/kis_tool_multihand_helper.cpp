@@ -30,66 +30,75 @@ struct KisToolMultihandHelper::Private
 
 KisToolMultihandHelper::KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
                                                KisRecordingAdapter *recordingAdapter)
-    : KisToolFreehandHelper(infoBuilder, recordingAdapter),
-      m_d(new Private)
+    : KisToolFreehandHelper(infoBuilder, recordingAdapter)
+    , d(new Private)
 {
+}
+
+KisToolMultihandHelper::~KisToolMultihandHelper()
+{
+    delete d;
 }
 
 void KisToolMultihandHelper::setupTransformations(const QVector<QTransform> &transformations)
 {
-    m_d->transformations = transformations;
+    d->transformations = transformations;
 }
 
-void KisToolMultihandHelper::createPainters(QVector<KisPainter*> &painters)
+void KisToolMultihandHelper::createPainters(QVector<PainterInfo*> &painterInfos,
+                                            const QPointF &lastPosition,
+                                            int lastTime)
 {
-    for (int i = 0; i < m_d->transformations.size(); i++) {
-        painters << new KisPainter();
+    for (int i = 0; i < d->transformations.size(); i++) {
+        painterInfos <<
+            new PainterInfo(new KisPainter(),
+                            new KisDistanceInformation(lastPosition, lastTime));
     }
 }
 
-void KisToolMultihandHelper::paintAt(const QVector<KisPainter*> &painters,
+void KisToolMultihandHelper::paintAt(const QVector<PainterInfo*> &painterInfos,
                                      const KisPaintInformation &pi)
 {
-    Q_ASSERT(painters.size() == m_d->transformations.size());
+    Q_ASSERT(painterInfos.size() == d->transformations.size());
 
-    for (int i = 0; i < m_d->transformations.size(); i++) {
-        const QTransform &transform = m_d->transformations[i];
+    for (int i = 0; i < d->transformations.size(); i++) {
+        const QTransform &transform = d->transformations[i];
 
         KisPaintInformation __pi = pi;
         __pi.setPos(transform.map(__pi.pos()));
 
-        paintAt(painters[i], __pi);
+        paintAt(painterInfos[i], __pi);
     }
 }
 
-void KisToolMultihandHelper::paintLine(const QVector<KisPainter*> &painters,
+void KisToolMultihandHelper::paintLine(const QVector<PainterInfo*> &painterInfos,
                                        const KisPaintInformation &pi1,
                                        const KisPaintInformation &pi2)
 {
-    Q_ASSERT(painters.size() == m_d->transformations.size());
+    Q_ASSERT(painterInfos.size() == d->transformations.size());
 
-    for (int i = 0; i < m_d->transformations.size(); i++) {
-        const QTransform &transform = m_d->transformations[i];
+    for (int i = 0; i < d->transformations.size(); i++) {
+        const QTransform &transform = d->transformations[i];
 
         KisPaintInformation __pi1 = pi1;
         KisPaintInformation __pi2 = pi2;
         __pi1.setPos(transform.map(__pi1.pos()));
         __pi2.setPos(transform.map(__pi2.pos()));
 
-        paintLine(painters[i], __pi1, __pi2);
+        paintLine(painterInfos[i], __pi1, __pi2);
     }
 }
 
-void KisToolMultihandHelper::paintBezierCurve(const QVector<KisPainter*> &painters,
+void KisToolMultihandHelper::paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
                                               const KisPaintInformation &pi1,
                                               const QPointF &control1,
                                               const QPointF &control2,
                                               const KisPaintInformation &pi2)
 {
-    Q_ASSERT(painters.size() == m_d->transformations.size());
+    Q_ASSERT(painterInfos.size() == d->transformations.size());
 
-    for (int i = 0; i < m_d->transformations.size(); i++) {
-        const QTransform &transform = m_d->transformations[i];
+    for (int i = 0; i < d->transformations.size(); i++) {
+        const QTransform &transform = d->transformations[i];
 
         KisPaintInformation __pi1 = pi1;
         KisPaintInformation __pi2 = pi2;
@@ -99,6 +108,6 @@ void KisToolMultihandHelper::paintBezierCurve(const QVector<KisPainter*> &painte
         QPointF __control1 = transform.map(control1);
         QPointF __control2 = transform.map(control2);
 
-        paintBezierCurve(painters[i], __pi1, __control1, __control2, __pi2);
+        paintBezierCurve(painterInfos[i], __pi1, __control1, __control2, __pi2);
     }
 }

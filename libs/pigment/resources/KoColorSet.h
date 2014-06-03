@@ -19,10 +19,10 @@
 #ifndef KOCOLORSET
 #define KOCOLORSET
 
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtCore/QVector>
-#include <QtGui/QPixmap>
+#include <QObject>
+#include <QColor>
+#include <QVector>
+#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"
@@ -42,16 +42,26 @@ struct KoColorSetEntry {
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class PIGMENTCMS_EXPORT KoColorSet : public KoResource
+class PIGMENTCMS_EXPORT KoColorSet : public QObject, public KoResource
 {
-    typedef KoResource super;
-
+    Q_OBJECT
 public:
+
+    enum PaletteType {
+        UNKNOWN = 0,
+        GPL,                // GIMP
+        RIFF_PAL,           // RIFF
+        ACT,                // Photoshop binary
+        PSP_PAL,            // PaintShop Pro
+        ACO                 // Photoshop Swatches
+    };
+
+
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
      */
-    KoColorSet(const QString& filename);
+    explicit KoColorSet(const QString &filename);
 
     /// Create an empty color set
     KoColorSet();
@@ -62,7 +72,13 @@ public:
     virtual ~KoColorSet();
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
+
+    virtual QString defaultFileExtension() const;
+
+    int columnCount();
 
 public:
 
@@ -71,10 +87,20 @@ public:
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 
-private:
-    bool init();
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
+
+
+    bool init();
+
+    bool loadGpl();
+    bool loadAct();
+    bool loadRiff();
+    bool loadPsp();
+    bool loadAco();
 
     QByteArray m_data;
     bool m_ownData;

@@ -30,6 +30,7 @@
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include "kis_paint_information.h"
+#include <KoIcon.h>
 
 class KisPainter;
 class QPoint;
@@ -45,13 +46,12 @@ class KisToolLine : public KisToolPaint
 public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
-    
+
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
     virtual int flags() const;
-
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const;
@@ -87,8 +87,7 @@ public:
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(1);
-        setIcon("krita_tool_line");
-        setInputDeviceAgnostic(false);
+        setIconName(koIconNameCStr("krita_tool_line"));
     }
 
     virtual ~KisToolLineFactory() {}

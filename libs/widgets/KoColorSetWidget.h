@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
    Copyright (c) 2007 Fredy Yanardi <fyanardi@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@ class KoColorSet;
  *
  * KoColorSetWidget is a widget for choosing a color (colormanaged via pigment). It shows a a color
  * set plus optionally a checkbox to filter away bad matching colors.
- * Some ways to add and remove plus choose another colorset will be added in the future.
  */
 class KOWIDGETS_EXPORT KoColorSetWidget : public QFrame
 {
@@ -48,7 +47,7 @@ public:
      *
      * @param parent parent QWidget
      */
-    KoColorSetWidget(QWidget *parent=0);
+    explicit KoColorSetWidget(QWidget *parent=0);
 
     /**
      * Destructor
@@ -56,26 +55,16 @@ public:
     virtual ~KoColorSetWidget();
 
     /**
-     * Add a color  to the list of recent colors. This method is useful when the user selects a color
-     * from other interface or dialog.
-     * @param color the color to be added to the list of recent colors.
-     */
-    void addRecentColor(const KoColor &color);
-
-public slots:
-
-    /**
-     * Sets the color of the opposite color. Typically this is the background if this widget controls the
-     * text color. Or vice versa. The color is used to calculate the suggestions.
-     * @param color the opposite color
-     */
-    void setOppositeColor(const KoColor &color);
-
-    /**
      * Sets the color set that this widget shows.
      * @param colorSet pointer to the color set
      */
     void setColorSet(KoColorSet *colorSet);
+    
+    /**
+     * Gets the current color set
+     * @returns current color set,, 0 if none set
+     */
+    KoColorSet* colorSet();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
@@ -100,7 +89,6 @@ signals:
 
 private:
     Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
-    Q_PRIVATE_SLOT(d, void filter(int))
     Q_PRIVATE_SLOT(d, void addRemoveColors())
 
     class KoColorSetWidgetPrivate;

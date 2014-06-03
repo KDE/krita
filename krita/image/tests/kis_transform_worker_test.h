@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSFORM_WORKER_TEST_H
 #define KIS_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransformWorkerTest : public QObject
 {
@@ -27,8 +27,16 @@ class KisTransformWorkerTest : public QObject
 private slots:
 
     void testCreation();
-    void testMirrorX();
-    void testMirrorY();
+
+    void testMirrorX_Even();
+    void testMirrorX_Odd();
+    void testMirrorY_Even();
+    void testMirrorY_Odd();
+
+    void benchmarkMirrorX();
+    void benchmarkMirrorY();
+
+    void testOffset();
     void testMirrorTransactionX();
     void testMirrorTransactionY();
     void testIdentity();
@@ -43,7 +51,19 @@ private slots:
     void testRotation();
     void testMatrices();
     void testRotationSpecialCases();
+    void testScaleUp5times();
+    void rotate90Left();
+    void rotate90Right();
+    void rotate180();
 
+    void benchmarkScale();
+    void benchmarkRotate();
+    void benchmarkRotate1Q();
+    void benchmarkShear();
+    void benchmarkScaleRotateShear();
+
+private:
+    void generateTestImages();
 };
 
 #endif

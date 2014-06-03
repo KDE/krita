@@ -28,20 +28,25 @@
 
 class KoInlineCite;
 class KoBibliographyInfo;
+class BibliographyEntryTemplate;
+class QListWidgetItem;
 
 class InsertBibliographyDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit InsertBibliographyDialog(KoTextEditor *editor , QWidget *parent = 0);
-    void setDefaultIndexEntries();
+    QString bibliographyType();
+
 public slots:
     void insert();
     void updateFields();
     void addField();
     void removeField();
+    void addSpan();
     void insertTabStop();
     void removeTabStop();
+    void spanChanged( QListWidgetItem *);
 
 private:
     Ui::InsertBibliographyDialog dialog;

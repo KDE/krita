@@ -20,7 +20,7 @@
 #include "KoResourceServerAdapter.h"
 
 KoAbstractResourceServerAdapter::KoAbstractResourceServerAdapter(QObject *parent)
-: QObject(parent)
+    : QObject(parent)
 {
 }
 
@@ -43,4 +43,18 @@ void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource* resource)
     emit resourceChanged(resource);
 }
 
+void KoAbstractResourceServerAdapter::emitTagsWereChanged()
+{
+    emit tagsWereChanged();
+}
+
+void KoAbstractResourceServerAdapter::emitTagCategoryWasAdded(const QString& tag)
+{
+    emit tagCategoryWasAdded(tag);
+}
+
+void KoAbstractResourceServerAdapter::emitTagCategoryWasRemoved(const QString& tag)
+{
+    emit tagCategoryWasRemoved(tag);
+}
 #include <KoResourceServerAdapter.moc>

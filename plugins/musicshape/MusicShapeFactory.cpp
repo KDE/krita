@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
@@ -49,9 +50,8 @@ MusicShapeFactory::MusicShapeFactory()
     : KoShapeFactoryBase(MusicShapeId, i18n( "Music Shape" ) )
 {
     setToolTip( i18n( "A shape which provides a music editor" ) );
-    ///@todo setIcon( "musicflake" );
-    setIcon( "music-note-16th" );
-    setXmlElementNames( "http://www.calligra-suite.org/music", QStringList("shape") );
+    setIconName(koIconNameCStrNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
+    setXmlElementNames( "http://www.calligra.org/music", QStringList("shape") );
     setLoadingPriority( 1 );
 }
 
@@ -74,5 +74,5 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
 bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra-suite.org/music" );
+    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra.org/music" );
 }

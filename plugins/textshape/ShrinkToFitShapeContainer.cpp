@@ -139,7 +139,7 @@ void ShrinkToFitShapeContainerModel::finishedLayout()
 
 void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
-    Q_ASSERT(container == q);
+    Q_ASSERT(container == q); Q_UNUSED(container);
     if (type == KoShape::SizeChanged) {
         KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(d->childShape->userData());
         Q_ASSERT(data);
@@ -180,18 +180,18 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
 
 bool ShrinkToFitShapeContainerModel::inheritsTransform(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape);
+    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
     return true;
 }
 
 bool ShrinkToFitShapeContainerModel::isChildLocked(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape);
+    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
     return true;
 }
 
 bool ShrinkToFitShapeContainerModel::isClipped(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape);
+    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
     return false;
 }

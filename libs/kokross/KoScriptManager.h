@@ -23,7 +23,7 @@
 #ifndef KOKROSS_KOSCRIPTMANAGER_H
 #define KOKROSS_KOSCRIPTMANAGER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <kdialog.h>
 

@@ -20,7 +20,7 @@
 
 #include "RemoveTextRangeCommand.h"
 #include "ArtisticTextShape.h"
-#include <KLocale>
+#include <klocale.h>
 
 RemoveTextRangeCommand::RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count)
 : m_tool(tool), m_shape(shape), m_from(from), m_count(count)

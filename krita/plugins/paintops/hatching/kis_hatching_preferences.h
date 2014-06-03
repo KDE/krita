@@ -26,14 +26,14 @@ class KisHatchingPreferencesWidget;
 
 class KisHatchingPreferences : public KisPaintOpOption
 {
-    
+
 public:
     KisHatchingPreferences();
     ~KisHatchingPreferences();
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private:
     KisHatchingPreferencesWidget * m_options;
 

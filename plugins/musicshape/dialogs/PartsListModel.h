@@ -19,7 +19,7 @@
 #ifndef MUSIC_PARTSLISTMODEL_H
 #define MUSIC_PARTSLISTMODEL_H
 
-#include <QtCore/QAbstractListModel>
+#include <QAbstractListModel>
 
 namespace MusicCore {
     class Sheet;
@@ -30,7 +30,7 @@ class PartsListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    PartsListModel(MusicCore::Sheet* sheet);
+    explicit PartsListModel(MusicCore::Sheet *sheet);
 
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

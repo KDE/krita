@@ -34,23 +34,22 @@
 
 // KDE
 #include <kstandarddirs.h>
-#include <KDebug>
+#include <kdebug.h>
 
 // Calligra
-#include "KoUnit.h"
-#include "KoStore.h"
-#include "KoXmlNS.h"
-#include "KoXmlReader.h"
+#include <KoUnit.h>
+#include <KoStore.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoOdfManifestEntry.h>
 #include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeRegistry.h"
-#include <KoShapeBackground.h>
+#include "KoShapeBackground.h"
 
 
 // The XML of a frame looks something like this:
@@ -128,7 +127,7 @@ public:
 
     void storeObjects(const KoXmlElement &element);
     void storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                           ObjectEntry *object);
+                           ObjectEntry *object, QHash<QString, QString> &unknownNamespaces);
     void storeFile(const QString &filename, KoShapeLoadingContext &context);
     QByteArray loadFile(const QString &filename, KoShapeLoadingContext &context);
 
@@ -189,7 +188,7 @@ KoUnavailShape::~KoUnavailShape()
 }
 
 
-void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     applyConversion(painter, converter);
 
@@ -200,7 +199,7 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter, 
         if (background()) {
             QPainterPath p;
             p.addRect(QRectF(QPointF(), size()));
-            background()->paint(painter, p);
+            background()->paint(painter, converter, paintContext, p);
         }
     } else {
         if(shapes().isEmpty()) {
@@ -316,7 +315,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             newName = newName + "_";
 
         // If there was a previous object name, replace it with the new one.
-        if (!objectName.isEmpty()) {
+        if (!objectName.isEmpty() && manifestEntry) {
             // FIXME: We must make a copy of the byte array here because
             //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
@@ -326,8 +325,9 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         // If the objectName is empty, this may be inline XML.
         // If so, we are done now.
-        if (objectName.isEmpty())
+        if (objectName.isEmpty() || !manifestEntry) {
             continue;
+        }
 
         // Save embedded files for this object.
         foreach (FileEntry *entry, d->embeddedFiles) {
@@ -530,12 +530,13 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
         // Save the normalized filename, i.e. without a starting "./".
         // An empty string is saved if no name is found.
         QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
-        if (name.startsWith("./"))
-            name = name.mid(2);
+        if (name.startsWith(QLatin1String("./")))
+            name.remove(0, 2);
         object->objectName = name;
 
         // 2. Copy the XML code.
-        storeXmlRecursive(el, writer, object);
+        QHash<QString, QString> unknownNamespaces;
+        storeXmlRecursive(el, writer, object, unknownNamespaces);
         object->objectXmlContents = contentsTmp;
 
         // 3, 4: the isDir and manifestEntry members are not set here,
@@ -548,24 +549,36 @@ void KoUnavailShape::Private::storeObjects(const KoXmlElement &element)
 }
 
 void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
-                                                ObjectEntry *object)
+                                                ObjectEntry *object, QHash<QString, QString> &unknownNamespaces)
 {
     // Start the element;
-    writer.startElement(el.nodeName().toAscii());
+    // keep the name in a QByteArray so that it stays valid until end element is called.
+    const QByteArray name(el.nodeName().toLatin1());
+    writer.startElement(name.constData());
 
     // Copy all the attributes, including namespaces.
     QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
     for (int i = 0; i < attributeNames.size(); ++i) {
         QPair<QString, QString> attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
-            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+            writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
         }
         else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
-            QString attr(QString(KoXmlNS::nsURI2NS(attrPair.first.toAscii()))
-                         + ':' + attrPair.second);
-            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
+            // in case we don't find the namespace in our list create a own one and use that
+            // so the document created on saving is valid.
+            if (nsShort.isEmpty()) {
+                nsShort = unknownNamespaces.value(attrPair.first);
+                if (nsShort.isEmpty()) {
+                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
+                    unknownNamespaces.insert(attrPair.first, nsShort);
+                }
+                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
+            }
+            QString attr(nsShort + ':' + attrPair.second);
+            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
                                                                attrPair.second));
         }
     }
@@ -575,7 +588,7 @@ void KoUnavailShape::Private::storeXmlRecursive(const KoXmlElement &el, KoXmlWri
     KoXmlNode n = el.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement()) {
-            storeXmlRecursive(n.toElement(), writer, object);
+            storeXmlRecursive(n.toElement(), writer, object, unknownNamespaces);
         }
         else if (n.isText()) {
             writer.addTextNode(n.toText().data()/*.toUtf8()*/);
@@ -611,8 +624,8 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
     // Actually store the file in the list.
         FileEntry *entry = new FileEntry;
         entry->path = fileName;
-        if (entry->path.startsWith("./"))
-                    entry->path = entry->path.mid(2);
+        if (entry->path.startsWith(QLatin1String("./")))
+            entry->path.remove(0, 2);
         entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
         entry->isDir = false;
         entry->contents = fileContent;

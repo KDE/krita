@@ -22,7 +22,7 @@
     <height>60</height>
    </size>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>1</x>
@@ -37,7 +37,10 @@
       <item>
        <widget class="QLabel" name="radiusLabel">
         <property name="text">
-         <string>radius</string>
+         <string>Radius:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -174,7 +177,7 @@
   </connection>
   <connection>
    <sender>inkDepletionCHBox</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>opacity</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -190,7 +193,7 @@
   </connection>
   <connection>
    <sender>inkDepletionCHBox</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>saturation</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>

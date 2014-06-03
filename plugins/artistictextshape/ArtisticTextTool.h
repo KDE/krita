@@ -25,7 +25,7 @@
 #include "ArtisticTextToolSelection.h"
 
 #include <KoToolBase.h>
-#include <QtCore/QTimer>
+#include <QTimer>
 
 class QAction;
 class QActionGroup;
@@ -61,6 +61,9 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented
     virtual KoToolSelection *selection();
+
+    /// reimplemented from superclass
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     /// Sets cursor for specified text shape it is the current text shape
     void setTextCursor(ArtisticTextShape *textShape, int textCursor);

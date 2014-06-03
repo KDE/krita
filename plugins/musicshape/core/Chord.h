@@ -22,7 +22,7 @@
 #include "VoiceElement.h"
 #include "Global.h"
 
-#include <QtCore/QString>
+#include <QString>
 
 namespace MusicCore {
 

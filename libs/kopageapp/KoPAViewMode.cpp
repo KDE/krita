@@ -27,7 +27,7 @@
 
 #include <QCloseEvent>
 
-KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas, QString name)
+KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas, const QString &name)
 : m_canvas( canvas )
 , m_toolProxy( canvas->toolProxy() )
 , m_view( view )

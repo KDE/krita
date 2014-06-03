@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 #include <KoXmlReaderForward.h>
-#include <QtGui/QColor>
+#include <QColor>
 
 class QPainter;
 class QRectF;
@@ -96,6 +96,12 @@ public:
      * @see showGrid()
      */
     void setShowGrid(bool showGrid);
+
+    /// return if grid is marked to be painted in the background
+    bool paintGridInBackground() const;
+
+    /// set if grid is marked to be painted in the background
+    void setPaintGridInBackground(bool inBackground);
 
     /// Loads grid data from the given setting xml document
     bool loadOdfSettings(const KoXmlDocument & settingsDoc);

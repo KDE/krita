@@ -22,8 +22,8 @@
 #include "KoPathPoint.h"
 #include "KoPathShape.h"
 
-#include <KDebug>
-#include <QtGui/QPainter>
+#include <kdebug.h>
+#include <QPainter>
 #include <QPointF>
 
 #include <math.h>

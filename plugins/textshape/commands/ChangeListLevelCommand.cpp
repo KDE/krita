@@ -25,12 +25,14 @@
 #include <KoList.h>
 #include "TextTool.h"
 #include <KoListLevelProperties.h>
-#include <KLocale>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <QTextCursor>
 #include <QHash>
 #include <QList>
+
+#define MARGIN_DEFAULT 18 // we consider it the default value
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
                                                int coef, KUndo2Command *parent)
@@ -72,7 +74,7 @@ int ChangeListLevelCommand::effectiveLevel(int level)
     } else if (m_type == DecreaseLevel) {
         result = level - m_coefficient;
     } else if (m_type == SetLevel) {
-        result = level;
+        result = m_coefficient;
     }
     result = qMax(1, qMin(10, result));
     return result;
@@ -85,15 +87,26 @@ void ChangeListLevelCommand::redo()
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
-            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-                userData->setCounterWidth(-1.0);
+            QTextBlock currentBlock(m_blocks.at(i));
+            KoTextBlockData userData(currentBlock);
+            userData.setCounterWidth(-1.0);
         }
     }
     else {
-        for (int i = 0; i < m_blocks.size(); ++i) {
+        for (int i = 0; i < m_blocks.size() && m_lists.value(i); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
-                llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                if (llp.alignmentMode() == false) {
+                    //old list mode, see KoListLevelProperties::alignmentMode() documentation
+                    llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                } else {
+                    llp.setTabStopPosition(MARGIN_DEFAULT*(m_levels.value(i)+1));
+                    llp.setMargin(MARGIN_DEFAULT*(m_levels.value(i)+1));
+                    llp.setTextIndent(- MARGIN_DEFAULT);
+                }
+                llp.setDisplayLevel(llp.displayLevel() + m_coefficient);
+                llp.setLevel(m_levels.value(i));
+
                 m_lists.value(i)->style()->setLevelProperties(llp);
             }
             m_lists.value(i)->add(m_blocks.at(i), m_levels.value(i));
@@ -109,9 +122,10 @@ void ChangeListLevelCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         if (m_blocks.at(i).textList())
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
-        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-            userData->setCounterWidth(-1.0);
 
+        QTextBlock currentBlock(m_blocks.at(i));
+        KoTextBlockData userData(currentBlock);
+        userData.setCounterWidth(-1.0);
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ public:
     KisColorSpaceConvertVisitor(KisImageWSP image,
                                 const KoColorSpace *srcColorSpace,
                                 const KoColorSpace *dstColorSpace,
-                                KoColorConversionTransformation::Intent renderingIntent);
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -72,6 +73,7 @@ private:
     const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     QBitArray m_emptyChannelFlags;
 };
 

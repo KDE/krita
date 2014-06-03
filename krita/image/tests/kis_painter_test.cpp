@@ -25,9 +25,10 @@
 #include <QTime>
 #include <QtXml>
 
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_datamanager.h"
 #include "kis_types.h"
@@ -37,7 +38,7 @@
 #include "kis_fill_painter.h"
 #include <kis_fixed_paint_device.h>
 #include "testutil.h"
-
+#include <kis_iterator_ng.h>
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -52,6 +53,7 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
         if (csId.startsWith('Y')) continue;
         if (csId.contains("AF")) continue;
         if (csId == "GRAYU16") continue; // No point in testing bounds with a cs without alpha
+        if (csId == "GRAYU8") continue; // No point in testing bounds with a cs without alpha
 
         qDebug() << "Testing with cs" << csId;
 
@@ -132,7 +134,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     QCOMPARE(src->exactBounds(), QRect(0, 0, 20, 20));
 
     KisSelectionSP selection = new KisSelection();
-    selection->getOrCreatePixelSelection()->select(QRect(10, 10, 20, 20));
+    selection->pixelSelection()->select(QRect(10, 10, 20, 20));
     selection->updateProjection();
     QCOMPARE(selection->selectedExactRect(), QRect(10, 10, 20, 20));
 
@@ -177,15 +179,15 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
 
     QCOMPARE(src->exactBounds(), QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP psel = new KisPixelSelection();
+    KisSelectionSP sel = new KisSelection();
+
+    KisPixelSelectionSP psel = sel->pixelSelection();
     psel->select(QRect(10, 15, 20, 15));
     psel->select(QRect(15, 10, 15, 5));
 
     QCOMPARE(psel->selectedExactRect(), QRect(10, 10, 20, 20));
-
     QCOMPARE(TestUtil::alphaDevicePixel(psel, 13, 13), MIN_SELECTED);
-    KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(psel);
+
     KisPainter painter(dst);
     painter.setSelection(sel);
     painter.bitBlt(0, 0, src, 0, 0, 30, 30);
@@ -225,7 +227,7 @@ void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs
     QCOMPARE(src->exactBounds(), QRect(0, 0, 30, 30));
 
     KisSelectionSP sel = new KisSelection();
-    KisPixelSelectionSP psel = sel->getOrCreatePixelSelection();
+    KisPixelSelectionSP psel = sel->pixelSelection();
     psel->select(QRect(10, 10, 20, 20));
     psel->invert();
     sel->updateProjection();
@@ -249,11 +251,12 @@ void KisPainterTest::testSelectionBltSelection()
     src->select(QRect(0, 0, 20, 20));
     QCOMPARE(src->selectedExactRect(), QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP Selection = new KisPixelSelection();
+    KisSelectionSP sel = new KisSelection();
+
+    KisPixelSelectionSP Selection = sel->pixelSelection();
     Selection->select(QRect(10, 10, 20, 20));
     QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
-    KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection);
+
     sel->updateProjection();
     KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
@@ -263,13 +266,12 @@ void KisPainterTest::testSelectionBltSelection()
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
 
-    KisRectConstIteratorPixel it = dst->createRectConstIterator(10, 10, 10, 10);
-    while (!it.isDone()) {
+    KisSequentialConstIterator it(dst, QRect(10, 10, 10, 10));
+    do {
         // These are selections, so only one channel and it should
         // be totally selected
-        QCOMPARE(it.rawData()[0], MAX_SELECTED);
-        ++it;
-    }
+        QCOMPARE(it.oldRawData()[0], MAX_SELECTED);
+    } while (it.nextPixel());
 }
 
 /*
@@ -298,14 +300,14 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     src->select(QRect(0, 0, 20, 20));
     QCOMPARE(src->selectedExactRect(), QRect(0, 0, 20, 20));
 
-    KisPixelSelectionSP Selection = new KisPixelSelection();
+    KisSelectionSP sel = new KisSelection();
+
+    KisPixelSelectionSP Selection = sel->pixelSelection();
     Selection->select(QRect(10, 15, 20, 15));
     Selection->select(QRect(15, 10, 15, 5));
     QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
     QCOMPARE(TestUtil::alphaDevicePixel(Selection, 13, 13), MIN_SELECTED);
 
-    KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(Selection);
     sel->updateProjection();
 
     KisPixelSelectionSP dst = new KisPixelSelection();
@@ -333,7 +335,7 @@ void KisPainterTest::testSelectionBitBltFixedSelection()
     KisFixedPaintDeviceSP fixedSelection = new KisFixedPaintDevice(cs);
     fixedSelection->setRect(QRect(0, 0, 20, 20));
     fixedSelection->initialize();
-    KoColor fill(Qt::black, cs);
+    KoColor fill(Qt::white, cs);
     fixedSelection->fill(5, 5, 10, 10, fill.data());
     fixedSelection->convertTo(KoColorSpaceRegistry::instance()->alpha8());
 
@@ -382,11 +384,9 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     KoColor c2(Qt::black, cs);
     src->fill(50, 50, 50, 50, c2.data());
 
-    KisPixelSelectionSP selection = new KisPixelSelection();
-    selection->select(QRect(25, 25, 100, 100));
-
     KisSelectionSP sel = new KisSelection();
-    sel->setPixelSelection(selection);
+    KisPixelSelectionSP selection = sel->pixelSelection();
+    selection->select(QRect(25, 25, 100, 100));
     sel->updateProjection();
 
     const KoCompositeOp* op = cs->compositeOp(COMPOSITE_ERASE);
@@ -399,13 +399,12 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     //dst->convertToQImage(0).save("result.png");
 
     QRect erasedRect(50, 50, 50, 50);
-    KisRectConstIteratorPixel it = dst->createRectConstIterator(0, 0, 150, 150);
-    while (!it.isDone()) {
+    KisSequentialConstIterator it(dst, QRect(0, 0, 150, 150));
+    do {
         if(!erasedRect.contains(it.x(), it.y())) {
-             QVERIFY(memcmp(it.rawData(), c.data(), cs->pixelSize()) == 0);
+             QVERIFY(memcmp(it.oldRawData(), c.data(), cs->pixelSize()) == 0);
         }
-        ++it;
-    }
+    } while (it.nextPixel());
 
 }
 
@@ -431,7 +430,7 @@ void KisPainterTest::checkPerformance()
     quint8 p = 128;
     src->fill(0, 0, 10000, 5000, &p);
     KisSelectionSP sel = new KisSelection();
-    sel->getOrCreatePixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
+    sel->pixelSelection()->select(QRect(0, 0, 10000, 5000), 128);
     sel->updateProjection();
 
     QTime t;
@@ -445,6 +444,76 @@ void KisPainterTest::checkPerformance()
     for (int i = 0; i < 10; ++i) {
         KisPainter gc(dst, sel);
         gc.bitBlt(0, 0, src, 0, 0, 10000, 5000);
+    }
+}
+
+void KisPainterTest::testBitBltOldData()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    quint8 defaultPixel = 0;
+    quint8 p1 = 128;
+    quint8 p2 = 129;
+    quint8 p3 = 130;
+    KoColor defaultColor(&defaultPixel, cs);
+    KoColor color1(&p1, cs);
+    KoColor color2(&p2, cs);
+    KoColor color3(&p3, cs);
+    QRect fillRect(0,0,5000,5000);
+
+    src->fill(fillRect, color1);
+
+    KisPainter srcGc(src);
+    srcGc.beginTransaction("");
+    src->fill(fillRect, color2);
+
+    KisPainter dstGc(dst);
+    dstGc.bitBltOldData(QPoint(), src, fillRect);
+
+    QVERIFY(TestUtil::checkAlphaDeviceFilledWithPixel(dst, fillRect, p1));
+
+    dstGc.end();
+    srcGc.deleteTransaction();
+}
+
+void KisPainterTest::benchmarkBitBlt()
+{
+    quint8 p = 128;
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    KoColor color(&p, cs);
+    QRect fillRect(0,0,5000,5000);
+
+    src->fill(fillRect, color);
+
+    QBENCHMARK {
+        KisPainter gc(dst);
+        gc.bitBlt(QPoint(), src, fillRect);
+    }
+}
+
+void KisPainterTest::benchmarkBitBltOldData()
+{
+    quint8 p = 128;
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    KoColor color(&p, cs);
+    QRect fillRect(0,0,5000,5000);
+
+    src->fill(fillRect, color);
+
+    QBENCHMARK {
+        KisPainter gc(dst);
+        gc.bitBltOldData(QPoint(), src, fillRect);
     }
 }
 

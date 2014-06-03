@@ -28,10 +28,10 @@
 #include "KoShapeManager.h"
 #include "KoToolProxy.h"
 #include "KoSelection.h"
-#include <KGlobal>
-#include <KConfigGroup>
-#include <KSharedPtr>
-#include <KSharedConfig>
+#include <kglobal.h>
+#include <kconfiggroup.h>
+#include <ksharedptr.h>
+#include <ksharedconfig.h>
 
 class KoCanvasBase::Private
 {
@@ -67,6 +67,10 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
+QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
+{
+    return viewConverter()->viewToDocument(viewPoint - documentOrigin());;
+}
 
 KoShapeController *KoCanvasBase::shapeController() const
 {

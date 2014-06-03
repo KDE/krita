@@ -1,40 +1,35 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>KoConnectionShapeConfigWidget</class>
- <widget class="QWidget" name="KoConnectionShapeConfigWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KoConnectionShapeConfigWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>187</width>
-    <height>173</height>
+    <height>46</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Ellipse Shape</string>
-  </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+  <layout class="QFormLayout">
+   <item row="0" column="0">
+    <widget class="QLabel">
+     <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QComboBox" name="connectionType" />
+   <item row="0" column="1">
+    <widget class="QComboBox" name="connectionType"/>
    </item>
-   <item row="1" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
+   <item row="1" column="1">
+    <widget class="QWidget" name="SpecialSpacer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>

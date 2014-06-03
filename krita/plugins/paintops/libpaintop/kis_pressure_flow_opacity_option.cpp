@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -24,15 +24,24 @@
 
 #include <kis_painter.h>
 #include <kis_paint_information.h>
+#include <kis_indirect_painting_support.h>
+#include <kis_node.h>
 #include <widgets/kis_curve_widget.h>
 
-KisFlowOpacityOption::KisFlowOpacityOption():
-    KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true, 1.0, 0.0, 1.0, true, true),
-    m_flow(1.0)
+KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
+    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::commonCategory(), true, 1.0, 0.0, 1.0)
+    , m_flow(1.0)
 {
+    setCurveUsed(true);
+    setSeparateCurveValue(true);
+
     m_checkable = false;
     setMinimumLabel(i18n("Transparent"));
     setMaximumLabel(i18n("Opaque"));
+
+    m_nodeHasIndirectPaintingSupport =
+        currentNode &&
+        dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
 }
 
 void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -75,10 +84,10 @@ void KisFlowOpacityOption::setOpacity(qreal opacity)
 
 void KisFlowOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info)
 {
-    if(m_paintActionType == WASH)
-        painter->setOpacity(quint8(getDynamicOpacity(info) * 255.0));
+    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport)
+        painter->setOpacityUpdateAverage(quint8(getDynamicOpacity(info) * 255.0));
     else
-        painter->setOpacity(quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0));
-    
+        painter->setOpacityUpdateAverage(quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0));
+
     painter->setFlow(quint8(getFlow() * 255.0));
 }

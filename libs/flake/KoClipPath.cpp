@@ -21,11 +21,11 @@
 #include "KoPathShape.h"
 #include "KoViewConverter.h"
 
-#include <QtGui/QTransform>
-#include <QtGui/QPainterPath>
-#include <QtGui/QPainter>
-#include <qgraphicsitem.h>
-#include <qvarlengtharray.h>
+#include <QTransform>
+#include <QPainterPath>
+#include <QPainter>
+#include <QGraphicsItem>
+#include <QVarLengthArray>
 
 QTransform scaleToPercent(const QSizeF &size)
 {

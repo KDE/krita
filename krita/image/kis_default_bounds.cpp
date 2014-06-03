@@ -55,6 +55,10 @@ QRect KisDefaultBounds::bounds() const
     return m_d->image ? m_d->image->bounds() : infiniteRect;
 }
 
+bool KisDefaultBounds::wrapAroundMode() const
+{
+    return m_d->image ? m_d->image->wrapAroundModeActive() : false;
+}
 
 /******************************************************************/
 /*                  KisSelectionDefaultBounds                     */
@@ -79,6 +83,25 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 
 QRect KisSelectionDefaultBounds::bounds() const
 {
-    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
+}
+
+
+/******************************************************************/
+/*                   KisSelectionEmptyBounds                      */
+/******************************************************************/
+
+KisSelectionEmptyBounds::KisSelectionEmptyBounds(KisImageWSP image)
+    : KisDefaultBounds(image)
+{
+}
+
+KisSelectionEmptyBounds::~KisSelectionEmptyBounds()
+{
+}
+
+QRect KisSelectionEmptyBounds::bounds() const
+{
+    return QRect(0, 0, 0, 0);
 }

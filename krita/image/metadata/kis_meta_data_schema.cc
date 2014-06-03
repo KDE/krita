@@ -37,7 +37,7 @@ const QString Schema::DublinCoreSchemaUri = "http://purl.org/dc/elements/1.1/";
 const QString Schema::XMPSchemaUri = "http://ns.adobe.com/xap/1.0/";
 const QString Schema::XMPRightsSchemaUri = "http://ns.adobe.com/xap/1.0/rights/";
 const QString Schema::XMPMediaManagementUri = "http://ns.adobe.com/xap/1.0/sType/ResourceRef#";
-const QString Schema::MakerNoteSchemaUri = "http://www.calligra-suite.org/krita/xmp/MakerNote/1.0/";
+const QString Schema::MakerNoteSchemaUri = "http://www.calligra.org/krita/xmp/MakerNote/1.0/";
 const QString Schema::IPTCSchemaUri = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/";
 const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
 

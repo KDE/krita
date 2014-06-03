@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -25,22 +25,24 @@
 #include <QTabletEvent>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QTouchEvent>
 #include <QGraphicsSceneMouseEvent>
 
 class KoPointerEvent::Private
 {
 public:
     Private()
-            : tabletEvent(0), mouseEvent(0), wheelEvent(0), gsMouseEvent(0)
-            , gsWheelEvent(0), deviceEvent(0), tabletButton(Qt::NoButton)
-            , globalPos(0, 0), pos(0, 0), posZ(0), rotationX(0), rotationY(0)
-            , rotationZ(0) {}
-    QTabletEvent * tabletEvent;
-    QMouseEvent * mouseEvent;
-    QWheelEvent * wheelEvent;
-    QGraphicsSceneMouseEvent * gsMouseEvent;
-    QGraphicsSceneWheelEvent * gsWheelEvent;
-    KoInputDeviceHandlerEvent * deviceEvent;
+        : tabletEvent(0), mouseEvent(0), wheelEvent(0), touchEvent(0), gsMouseEvent(0)
+        , gsWheelEvent(0), deviceEvent(0), tabletButton(Qt::NoButton)
+        , globalPos(0, 0), pos(0, 0), posZ(0), rotationX(0), rotationY(0)
+        , rotationZ(0) {}
+    QTabletEvent *tabletEvent;
+    QMouseEvent *mouseEvent;
+    QWheelEvent *wheelEvent;
+    QTouchEvent *touchEvent;
+    QGraphicsSceneMouseEvent *gsMouseEvent;
+    QGraphicsSceneWheelEvent *gsWheelEvent;
+    KoInputDeviceHandlerEvent *deviceEvent;
     Qt::MouseButton tabletButton;
     QPoint globalPos, pos;
     int posZ;
@@ -48,53 +50,63 @@ public:
 };
 
 KoPointerEvent::KoPointerEvent(QMouseEvent *ev, const QPointF &pnt)
-        : point(pnt),
-        m_event(ev),
-        d(new Private())
+    : point(pnt),
+      m_event(ev),
+      d(new Private())
 {
     Q_ASSERT(m_event);
     d->mouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QGraphicsSceneMouseEvent *ev, const QPointF &pnt)
-        : point(pnt),
-        m_event(ev),
-        d(new Private())
+    : point(pnt),
+      m_event(ev),
+      d(new Private())
 {
     Q_ASSERT(m_event);
     d->gsMouseEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QGraphicsSceneWheelEvent *ev, const QPointF &pnt)
-        : point(pnt),
-        m_event(ev),
-        d(new Private())
+    : point(pnt),
+      m_event(ev),
+      d(new Private())
 {
     Q_ASSERT(m_event);
     d->gsWheelEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
-        : point(pnt),
-        m_event(ev),
-        d(new Private())
+    : point(pnt),
+      m_event(ev),
+      d(new Private())
 {
     Q_ASSERT(m_event);
     d->tabletEvent = ev;
 }
 
+KoPointerEvent::KoPointerEvent(QTouchEvent *ev, const QPointF &pnt, QList<KoTouchPoint> _touchPoints)
+    : point (pnt)
+    , touchPoints(_touchPoints)
+    , m_event(ev)
+    , d(new Private())
+{
+    Q_ASSERT(m_event);
+    d->touchEvent = ev;
+}
+
 KoPointerEvent::KoPointerEvent(QWheelEvent *ev, const QPointF &pnt)
-        : point(pnt),
-        m_event(ev),
-        d(new Private())
+    : point(pnt),
+      m_event(ev),
+      d(new Private())
 {
     Q_ASSERT(m_event);
     d->wheelEvent = ev;
 }
 
 KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)
-        : m_event(ev)
-        , d(new Private())
+    : m_event(ev)
+    , d(new Private())
 {
     Q_ASSERT(m_event);
     d->deviceEvent = ev;
@@ -107,10 +119,19 @@ KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int
 
 KoPointerEvent::KoPointerEvent(KoPointerEvent *event, const QPointF &point)
     : point(point)
+    , touchPoints(event->touchPoints)
     , m_event(event->m_event)
     , d(new Private(*(event->d)))
 {
     Q_ASSERT(m_event);
+}
+
+KoPointerEvent::KoPointerEvent(const KoPointerEvent &rhs)
+    : point(rhs.point)
+    , touchPoints(rhs.touchPoints)
+    , m_event(rhs.m_event)
+    , d(new Private(*rhs.d))
+{
 }
 
 KoPointerEvent::~KoPointerEvent()
@@ -122,7 +143,7 @@ Qt::MouseButton KoPointerEvent::button() const
 {
     if (d->mouseEvent)
         return d->mouseEvent->button();
-    else if (d->tabletEvent)
+    else if (d->tabletEvent || d->touchEvent)
         return d->tabletButton;
     else if (d->deviceEvent)
         return d->deviceEvent->button();
@@ -138,7 +159,7 @@ Qt::MouseButtons KoPointerEvent::buttons() const
         return d->mouseEvent->buttons();
     else if (d->wheelEvent)
         return d->wheelEvent->buttons();
-    else if (d->tabletEvent)
+    else if (d->tabletEvent || d->touchEvent)
         return d->tabletButton;
     else if (d->deviceEvent)
         return d->deviceEvent->buttons();
@@ -288,6 +309,11 @@ Qt::Orientation KoPointerEvent::orientation() const
         return d->gsWheelEvent->orientation();
     else
         return Qt::Horizontal;
+}
+
+bool KoPointerEvent::isTabletEvent()
+{
+    return dynamic_cast<QTabletEvent*>(m_event) != 0;
 }
 
 void KoPointerEvent::setTabletButton(Qt::MouseButton button)

@@ -146,7 +146,12 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
     if (!d->bodyWriter) {
         Q_ASSERT(!d->contentTmpFile);
         d->contentTmpFile = new KTemporaryFile;
-        d->contentTmpFile->open();
+        if (!d->contentTmpFile->open()) {
+            kWarning() << "Failed to open the temporary content file";
+            delete d->contentTmpFile;
+            d->contentTmpFile = 0;
+            return 0;
+        }
         d->bodyWriter = new KoXmlWriter(d->contentTmpFile, 1);
     }
     return d->bodyWriter;
@@ -154,22 +159,26 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
 
 bool KoOdfWriteStore::closeContentWriter()
 {
-    Q_ASSERT(d->contentWriter);
     Q_ASSERT(d->bodyWriter);
     Q_ASSERT(d->contentTmpFile);
 
     delete d->bodyWriter; d->bodyWriter = 0;
 
     // copy over the contents from the tempfile to the real one
-    d->contentTmpFile->close();
-    d->contentWriter->addCompleteElement(d->contentTmpFile);
-    d->contentTmpFile->close();
-    delete d->contentTmpFile; d->contentTmpFile = 0;
+    d->contentTmpFile->close(); // does not really close but seeks to the beginning of the file
+    if (d->contentWriter) {
+        d->contentWriter->addCompleteElement(d->contentTmpFile);
+    }
+    d->contentTmpFile->close(); // seek again to the beginning
+    delete d->contentTmpFile; d->contentTmpFile = 0; // and finally close and remove the KTemporaryFile
 
-    d->contentWriter->endElement(); // document-content
-    d->contentWriter->endDocument();
+    if (d->contentWriter) {
+        d->contentWriter->endElement(); // document-content
+        d->contentWriter->endDocument();
+        delete d->contentWriter;
+        d->contentWriter = 0;
+    }
 
-    delete d->contentWriter; d->contentWriter = 0;
     delete d->storeDevice; d->storeDevice = 0;
     if (!d->store->close()) {   // done with content.xml
         return false;

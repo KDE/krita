@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Montel Laurent <montel@kde.org>
+   Copyright 2011 Silvio Heinrich <plassy@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,9 +22,14 @@
 #define PICTURE_TOOL
 
 #include <KoToolBase.h>
-#include <KJob>
+#include <kjob.h>
 
 class PictureShape;
+class KoFilterEffect;
+class QComboBox;
+class QScrollArea;
+class CropWidget;
+struct PictureToolUI;
 
 class PictureTool : public KoToolBase
 {
@@ -34,7 +40,7 @@ public:
     /// reimplemented from KoToolBase
     virtual void paint(QPainter&, const KoViewConverter&) {}
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent*) {}
+    virtual void mousePressEvent(KoPointerEvent*);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase
@@ -52,11 +58,19 @@ protected:
     virtual QWidget *createOptionWidget();
 
 private slots:
+    void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
+    void cropRegionChanged(const QRectF& rect, bool undoPrev);
+    void cropEditFieldsChanged();
+    void aspectCheckBoxChanged(bool checked);
+    void contourCheckBoxChanged(bool checked);
+    void fillButtonPressed();
+    void updateControlElements();
     void setImageData(KJob *job);
 
 private:
     PictureShape *m_pictureshape;
+    PictureToolUI *m_pictureToolUI;
 };
 
 #endif

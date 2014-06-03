@@ -44,7 +44,7 @@ void KisClipboardTest::testRoundTrip()
 
     QCOMPARE(dev->exactBounds(), fillRect);
     KisClipboard::instance()->setClip(dev, QPoint());
-    newDev = KisClipboard::instance()->clip(QPoint());
+    newDev = KisClipboard::instance()->clip(QRect(), false);
     QCOMPARE(newDev->exactBounds().size(), fillRect.size());
     newDev->setX(dev->x());
     newDev->setY(dev->y());
@@ -56,7 +56,7 @@ void KisClipboardTest::testRoundTrip()
 
     QCOMPARE(dev->exactBounds(), fillRect.translated(offset));
     KisClipboard::instance()->setClip(dev, QPoint());
-    newDev = KisClipboard::instance()->clip(QPoint());
+    newDev = KisClipboard::instance()->clip(QRect(), true);
     QCOMPARE(newDev->exactBounds().size(), fillRect.translated(offset).size());
     newDev->setX(dev->x());
     newDev->setY(dev->y());

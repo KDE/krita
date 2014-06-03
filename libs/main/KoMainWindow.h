@@ -23,13 +23,14 @@
 
 #include "komain_export.h"
 
-#include <kparts/mainwindow.h>
-
+#include <kxmlguiwindow.h>
+#include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 
 class KoMainWindowPrivate;
 class KoDocument;
+class KoPart;
 class KoView;
 class KoPrintJob;
 class KoDockFactoryBase;
@@ -37,13 +38,10 @@ class KRecentFilesAction;
 class QDockWidget;
 class QLabel;
 
+struct KoPageLayout;
+
 // Calligra class but not in main module
 class KoDockerManager;
-
-namespace KParts
-{
-class PartManager;
-}
 
 /**
  * @brief Main window for a Calligra application
@@ -54,7 +52,7 @@ class PartManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KParts::MainWindow, public KoCanvasSupervisor
+class KOMAIN_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
@@ -64,39 +62,40 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const KComponentData &instance);
+    explicit KoMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
 
     /**
      *  Destructor.
      */
     virtual ~KoMainWindow();
 
+    // If noCleanup is set, KoMainWindow will not delete the root document
+    // or part manager on destruction.
+    void setNoCleanup(bool noCleanup);
+
     /**
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    virtual void setRootDocument(KoDocument *doc);
+    void setRootDocument(KoDocument *doc, KoPart *part = 0, bool deletePrevious = true);
 
     /**
      * This is used to handle the document used at start up before it actually
      * added as root document.
      */
-    void setDocToOpen(KoDocument *doc);
+    void setPartToOpen(KoPart *part);
 
     /**
      * Update caption from document info - call when document info
      * (title in the about page) changes.
      */
-    virtual void updateCaption();
+    void updateCaption();
 
     /**
      *  Retrieves the document that is displayed in the mainwindow.
      */
-    virtual KoDocument* rootDocument() const;
-
-    virtual KoView *rootView() const;
-
-    virtual KParts::PartManager *partManager();
+    KoDocument *rootDocument() const;
+    KoView *rootView() const;
 
     /**
      * The application should call this to show or hide a toolbar.
@@ -108,12 +107,6 @@ public:
      * @return TRUE if the toolbar @p tbName is visible
      */
     bool toolbarIsVisible(const char *tbName);
-
-    /**
-     * Get hold of the label in the statusbar, to write messages to it.
-     * You can also insert other items in the status bar by using QStatusBar::addWidget.
-     */
-    QLabel * statusBarLabel();
 
     /**
      * Sets the maximum number of recent documents entries.
@@ -131,14 +124,14 @@ public:
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument(const KUrl & url);
+    bool openDocument(const KUrl & url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoDocument *newdoc, const KUrl & url);
+    bool openDocument(KoPart *newPart, const KUrl & url);
 
     /**
      * Reloads the recent documents list.
@@ -148,7 +141,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    virtual void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString & caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
@@ -187,11 +180,14 @@ signals:
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
 
-    /// This signal is emitted right before we handle loading or saving of toolbars
-    void beforeHandlingToolBars();
+    /// This signal is emitted when this windows has finished loading of a
+    /// document. The document may be opened in another window in the end.
+    /// In this case, the signal means there is no link between the window
+    /// and the document anymore.
+    void loadCompleted();
 
-    /// This signal is emitted right after we handled loading or saving of toolbars
-    void afterHandlingToolBars();
+    /// This signal is emitted when the color theme changes
+    void themeChanged();
 
 public slots:
 
@@ -207,84 +203,85 @@ public slots:
      *  Slot for opening a new document.
      *
      *  If the current document is empty, the new document replaces it.
-     *  If not, a new shell will be opened for showing the document.
+     *  If not, a new mainwindow will be opened for showing the document.
      */
-    virtual void slotFileNew();
+    void slotFileNew();
 
     /**
      *  Slot for opening a saved file.
      *
      *  If the current document is empty, the opened document replaces it.
-     *  If not a new shell will be opened for showing the opened file.
+     *  If not a new mainwindow will be opened for showing the opened file.
      */
-    virtual void slotFileOpen();
+    void slotFileOpen();
 
     /**
      *  Slot for opening a file among the recently opened files.
      *
      *  If the current document is empty, the opened document replaces it.
-     *  If not a new shell will be opened for showing the opened file.
+     *  If not a new mainwindow will be opened for showing the opened file.
      */
-    virtual void slotFileOpenRecent(const KUrl &);
+    void slotFileOpenRecent(const KUrl &);
 
     /**
      *  Saves the current document with the current name.
      */
-    virtual void slotFileSave();
+    void slotFileSave();
 
     /**
      *  Saves the current document with a new name.
      */
-    virtual void slotFileSaveAs();
+    void slotFileSaveAs();
 
     /**
      *  Prints the actual document.
      */
-    virtual void slotFilePrint();
-    virtual void slotFilePrintPreview();
+    void slotFilePrint();
+    void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(QString fileName = QString());
+    KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
+    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
      */
-    virtual void slotDocumentInfo();
+    void slotDocumentInfo();
 
     /**
      *  Closes the document.
      */
-    virtual void slotFileClose();
+    void slotFileClose();
 
     /**
-     *  Closes the shell.
+     *  Closes the mainwindow.
      */
-    virtual void slotFileQuit();
+    void slotFileQuit();
 
     /**
      *  Configure key bindings.
      */
-    virtual void slotConfigureKeys();
+    void slotConfigureKeys();
 
     /**
      *  Configure toolbars.
      */
-    virtual void slotConfigureToolbars();
+    void slotConfigureToolbars();
 
     /**
      *  Post toolbar config.
      * (Plug action lists back in, etc.)
      */
-    virtual void slotNewToolbarConfig();
+    void slotNewToolbarConfig();
 
     /**
      *  Shows or hides a toolbar
      */
-    virtual void slotToolbarToggled(bool toggle);
+    void slotToolbarToggled(bool toggle);
 
     /**
      * Toggle full screen on/off.
      */
-    virtual void viewFullscreen(bool fullScreen);
+    void viewFullscreen(bool fullScreen);
 
     /**
      * Reload file
@@ -312,12 +309,30 @@ public slots:
      */
     void slotExportFile();
 
+    void slotEncryptDocument();
+    void slotUncompressToDir();
+
     void slotProgress(int value);
 
     /**
      * Hide the dockers
      */
-    void toggleDockersVisibility(bool v) const;
+    void toggleDockersVisibility(bool visible);
+
+    /**
+     * Saves the document, asking for a filename if necessary.
+     *
+     * @param saveas if set to TRUE the user is always prompted for a filename
+     *
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
+     * @param specialOutputFlag set to enums defined in KoDocument if save to special output format
+     *
+     * @return TRUE on success, false on error or cancel
+     *         (don't display anything in this case, the error dialog box is also implemented here
+     *         but restore the original URL in slotFileSaveAs)
+     */
+    bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
 private:
 
@@ -336,30 +351,17 @@ private:
     /**
      * Create a new empty document.
      */
-    virtual KoDocument* createDoc() const;
+    KoPart* createPart() const;
 
-    /**
-     * Saves the document, asking for a filename if necessary.
-     *
-     * @param saveas if set to TRUE the user is always prompted for a filename
-     *
-     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @return TRUE on success, false on error or cancel
-     *         (don't display anything in this case, the error dialog box is also implemented here
-     *         but restore the original URL in slotFileSaveAs)
-     */
-    virtual bool saveDocument(bool saveas = false, bool silent = false);
-
-    virtual void closeEvent(QCloseEvent * e);
-    virtual void resizeEvent(QResizeEvent * e);
+    void closeEvent(QCloseEvent * e);
+    void resizeEvent(QResizeEvent * e);
 
     /**
      * Ask user about saving changes to the document upon exit.
      */
-    virtual bool queryClose();
+    bool queryClose();
 
-    virtual bool openDocumentInternal(const KUrl &url, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -381,18 +383,13 @@ private:
      */
     bool isImporting() const;
 
+    KRecentFilesAction *recentAction() const;
+
+private slots:
     /**
      * Save the list of recent files.
      */
     void saveRecentFiles();
-
-    KRecentFilesAction *recentAction() const;
-
-protected slots:
-
-    virtual void slotActivePartChanged(KParts::Part *newPart);
-
-private slots:
 
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);
@@ -400,7 +397,47 @@ private slots:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
+    /**
+     * Slot to create a new view for the currently activate @ref #koDocument.
+     */
+    virtual void newView();
+
+
+// ---------------------  PartManager
 private:
+
+    friend class KoPart;
+    /**
+     * Removes a part from the manager (this does not delete the object) .
+     *
+     * Sets the active part to 0 if @p part is the activePart() .
+     */
+    virtual void removePart( KoPart *part );
+
+    /**
+     * Sets the active part.
+     *
+     * The active part receives activation events.
+     *
+     * @p widget can be used to specify which widget was responsible for the activation.
+     * This is important if you have multiple views for a document/part , like in KOffice .
+     */
+    virtual void setActivePart(KoPart *part, QWidget *widget);
+
+private slots:
+
+    /**
+     * @internal
+     */
+    void slotWidgetDestroyed();
+    void slotDocumentTitleModified(const QString &caption, bool mod);
+
+// ---------------------  PartManager
+
+private:
+
+    void createMainwindowGUI();
+
     /**
      * Asks the user if they really want to save the document.
      * Called only if outputFormat != nativeFormat.

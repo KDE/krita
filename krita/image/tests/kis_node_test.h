@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_TESTER_H
 #define KIS_NODE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_node.h"
 
@@ -121,6 +121,14 @@ private slots:
     void testDirtyRegion();
 
     void propertiesStressTest();
+    void graphStressTest();
+
+private:
+    class VisibilityKiller;
+    class GraphKiller;
+
+    template <class KillerClass>
+        void propertiesStressTestImpl();
 };
 
 #endif

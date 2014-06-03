@@ -1,0 +1,94 @@
+This directory stores the productsets.
+
+When building Calligra a lot of different things are created and installed.
+All these things are grouped into so-called products. Each product is defined in
+the toplevel CMakeList.txt by a call of calligra_define_product, with the id of
+the product as first parameter.
+These product ids are used to generate cmake variables SHOULD_BUILD_${PRODUCT_ID}
+which then are used to control if the things belonging to the product are build,
+usually with
+if(SHOULD_BUILD_SOME_PRODUCT_ID)
+    [...]
+endif(SHOULD_BUILD_SOME_PRODUCT_ID)
+.
+Dependencies of products on other products are also defined. Using this information
+it is also ensured that if an internal dependency cannot be built due to missing
+external dependencies, all depending products will also not built.
+
+There can be also meta-products, which simply require a certain set of other
+products but are never used directly to control what is build (e.g. WORDS).
+
+At time of writing there are 4 predefined product sets, which you can all see in
+this directory: ALL (default), DESKTOP, ACTIVE, CREATIVE.
+
+You can add your own productset by adding a file in this directory and selecting
+that productset when calling cmake
+
+
+How to add my own product set?
+==============================
+
+The file must be named with the name of the productset in lowercase and have
+the extension ".cmake". The content should be a cmake command that sets the
+variable "CALLIGRA_SHOULD_BUILD_PRODUCTS" to the list of products the productset
+should consist of.
+
+For the possible products have a look at the list of product definitions in the
+toplevel "CMakeLists.txt" file.
+
+
+Example:
+
+You want a productset "PUREWORDS". For that you add a file name "purewords.cmake"
+into this directory, with the content:
+--- 8< ---
+set( CALLIGRA_SHOULD_BUILD_PRODUCTS
+    WORDS
+)
+--- 8< ---
+
+When calling cmake you use the string "PUREWORDS" as value for the parameter
+"PRODUCTSET, like this:
+    cmake -DPRODUCTSET=PUREWORDS [other parameters]
+
+
+How to add another product?
+===========================
+
+1. Define the product by a call of calligra_define_product,
+   e.g.
+
+   calligra_define_product(MYPRODUCT "title of product")
+
+   For the product id use a proper prefix (LIB_, PLUGIN_, FILTER_, ...) or
+   postfix (_APP, _PART, ...), whatever is appropriate.
+
+2. Extend that call with NEEDS or WANTS argument sections, if the product has
+   hard or soft internal dependencies on other products
+   Products that are listed as dependencies have to be defined before
+   (see also the API doc in cmake/modules/CalligraProductSetMacros.cmake)
+   E.g.
+
+   calligra_define_product(MYPRODUCT "title of product"  NEEDS P1 P2  WANTS P3)
+
+3. Add a rule when to not build the product, in the section "Detect which
+   products can be compile" of the toplevel CMakeLists.txt. Each product should
+   have their own boolean expression when to set the build flag to FALSE,
+   e.g.
+
+   if (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+     set(SHOULD_BUILD_MYPRODUCT FALSE)
+   endif (PLATFORMX OR NOT EXTERNAL_DEP_X_FOUND)
+
+4. Wrap everything belonging to the product with the build flag of the product.
+   Ideally this is done around subdirectory inclusions, results in easier code.
+   e.g.
+
+   if (SHOULD_BUILD_MYPRODUCT)
+     add_subdirectory(myproduct)
+   endif (SHOULD_BUILD_MYPRODUCT)
+
+5. Tag the product as STAGING, if it is not yet ready for release, but already
+   integrated in the master branch, e.g.
+
+   calligra_define_product(MYPRODUCT "title of product" STAGING NEEDS P1)

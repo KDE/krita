@@ -21,10 +21,9 @@
 #ifndef KIS_TOOL_POLYLINE_H_
 #define KIS_TOOL_POLYLINE_H_
 
-#include <QString>
-
 #include "kis_tool_polyline_base.h"
 //#include "flake/kis_node_shape.h"
+#include <KoIcon.h>
 
 class KisToolPolyline : public KisToolPolylineBase
 {
@@ -36,7 +35,8 @@ public:
     virtual ~KisToolPolyline();
 
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points);
+    QWidget* createOptionWidget();
+    void finishPolyline(const QVector<QPointF>& points);
 };
 
 
@@ -51,9 +51,8 @@ public:
         setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("polyline");
+        setIconName(koIconNameCStr("polyline"));
         setPriority(5);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolPolylineFactory() {}

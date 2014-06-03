@@ -4,6 +4,8 @@
  *   gimp/xcf-private.h
  * by mkenumsh.pl
  */
+#ifndef ENUMS_H
+#define ENUMS_H
 typedef enum
 {
   GIMP_NORMAL_MODE,
@@ -96,3 +98,4 @@ typedef enum
 } XcfCompressionType;
 const char *showXcfCompressionType(XcfCompressionType);
 #define XcfCompressionType_LAST COMPRESS_FRACTAL
+#endif

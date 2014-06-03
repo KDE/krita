@@ -17,7 +17,7 @@ install( FILES
     ab033_prev.png
     ab043.myb
     ab043_prev.png
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes
+    DESTINATION  ${DATA_INSTALL_DIR}/krita/mypaintbrushes
 )
     
     

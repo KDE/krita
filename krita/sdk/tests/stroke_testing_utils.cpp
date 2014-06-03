@@ -18,19 +18,22 @@
 
 #include "stroke_testing_utils.h"
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include <QDir>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 #include "kis_paintop_preset.h"
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
+
+#include "testutil.h"
 
 
 KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
@@ -89,14 +92,15 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
 
     KisPaintOpPresetSP preset;
 
-    if(!presetFileName.isEmpty()) {
-        QString dataPath = QString(FILES_DATA_DIR) + QDir::separator();
-        preset = new KisPaintOpPreset(dataPath + presetFileName);
-        preset->load();
-    }
+    if (!presetFileName.isEmpty()) {
+        QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
+        preset = new KisPaintOpPreset(fullFileName);
+        bool presetValid = preset->load();
+        Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
-    i.setValue(preset);
-    manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+        i.setValue(preset);
+        manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
+    }
 
     i.setValue(COMPOSITE_OVER);
     manager->setResource(KisCanvasResourceProvider::CurrentCompositeOp, i);
@@ -114,7 +118,7 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
     manager->setResource(KisCanvasResourceProvider::HdrExposure, i);
 
     i.setValue(QPoint());
-    manager->setResource(KisCanvasResourceProvider::MirrorAxisCenter, i);
+    manager->setResource(KisCanvasResourceProvider::MirrorAxesCenter, i);
 
     return manager;
 }
@@ -178,11 +182,13 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
     QImage refImage;
     refImage.load(referenceFile(testName));
 
-    if(resultImage != refImage) {
+    QPoint temp;
+    if(!TestUtil::compareQImages(temp, refImage, resultImage, 1, 1)) {
+        refImage.save(dumpReferenceFile(testName));
         resultImage.save(resultFile(testName));
-    }
 
-    QCOMPARE(resultImage, refImage);
+        QFAIL("Images do not coincide");
+    }
 }
 
 QString utils::StrokeTester::formatTestName(const QString &baseName,
@@ -205,6 +211,15 @@ QString utils::StrokeTester::referenceFile(const QString &testName)
         m_name + QDir::separator();
 
     path += testName;
+    path += ".png";
+    return path;
+}
+
+QString utils::StrokeTester::dumpReferenceFile(const QString &testName)
+{
+    QString path = QString(FILES_OUTPUT_DIR) + QDir::separator();
+    path += testName;
+    path += "_expected";
     path += ".png";
     return path;
 }

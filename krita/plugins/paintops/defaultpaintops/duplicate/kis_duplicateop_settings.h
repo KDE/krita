@@ -41,6 +41,7 @@ public:
 
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
+    QString indirectPaintingCompositeOp() const;
 
     QPointF offset() const;
     QPointF position() const;
@@ -51,17 +52,13 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
 public:
     QPointF m_offset;
     KisImageWSP m_image;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
-private:
-    QRectF duplicateOutlineRect(const QPointF& pos, KisImageWSP image) const;
 };
 
 

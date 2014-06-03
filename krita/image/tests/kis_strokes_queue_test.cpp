@@ -305,6 +305,18 @@ void KisStrokesQueueTest::testStrokesOverlapping()
     VERIFY_EMPTY(jobs[1]);
 }
 
+void KisStrokesQueueTest::testImmediateCancel()
+{
+    KisStrokesQueue queue;
+    KisTestableUpdaterContext context(2);
+
+    KisStrokeId id = queue.startStroke(new KisTestingStrokeStrategy("1_", false, false));
+    queue.cancelStroke(id);
+
+    // this should not crash
+    queue.processQueue(context, false);
+}
+
 void KisStrokesQueueTest::testOpenedStrokeCounter()
 {
     KisStrokesQueue queue;

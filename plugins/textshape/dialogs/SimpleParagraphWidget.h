@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,8 +30,13 @@
 class TextTool;
 class KoStyleManager;
 class KoParagraphStyle;
-class StylesWidget;
 class KoStyleThumbnailer;
+
+class StylesModel;
+class DockerStylesComboModel;
+class StylesDelegate;
+
+class QSignalMapper;
 
 class SimpleParagraphWidget : public QWidget
 {
@@ -38,20 +45,26 @@ public:
     explicit SimpleParagraphWidget(TextTool *tool, QWidget *parent = 0);
     virtual ~SimpleParagraphWidget();
 
+    void setInitialUsedStyles(QVector<int> list);
+
 public slots:
     void setCurrentBlock(const QTextBlock &block);
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
-    void hidePopup();
+    void slotShowStyleManager(int index);
+    void slotParagraphStyleApplied(const KoParagraphStyle *style);
 
 signals:
     void doneWithFocus();
-    void insertTableQuick(int, int);
     void paragraphStyleSelected(KoParagraphStyle *);
+    void newStyleRequested(QString name);
+    void showStyleManager(int styleId);
 
 private slots:
-    void directionChangeRequested();
     void listStyleChanged(int id);
+    void styleSelected(int index);
+    void styleSelected(QModelIndex &index);
+    void changeListLevel(int level);
 
 private:
     enum DirectionButtonState {
@@ -73,7 +86,11 @@ private:
     TextTool *m_tool;
     DirectionButtonState m_directionButtonState;
     KoStyleThumbnailer *m_thumbnailer;
-    StylesWidget *m_stylePopup;
+    QSignalMapper *m_mapper;
+
+    StylesModel *m_stylesModel;
+    DockerStylesComboModel *m_sortedStylesModel;
+    StylesDelegate *m_stylesDelegate;
 };
 
 #endif

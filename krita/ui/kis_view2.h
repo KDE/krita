@@ -27,7 +27,9 @@
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
+#include "kis_floating_message.h"
 
+class KisAction;
 class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
@@ -37,21 +39,24 @@ class KisPaintOpPreset;
 class KoCanvasController;
 
 class KisCanvas2;
+class KisCanvasResourceProvider;
 class KisDoc2;
 class KisFilterManager;
+class KisGridManager;
 class KisImage;
-class KisCanvasResourceProvider;
+class KisImageManager;
+class KisNodeManager;
+class KisPaintingAssistantsDecoration;
+class KisPaintopBox;
+class KisPerspectiveGridManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KisImageManager;
-class KisNodeManager;
-class KisPerspectiveGridManager;
-class KisPaintingAssistantsManager;
-class KisGridManager;
-class KoFavoriteResourceManager;
 class KisPaintopBox;
+class KisCanvasController;
+class KisFlipbook;
+class KisActionManager;
 
 /**
  * Krita view class
@@ -70,7 +75,7 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KisDoc2 * document, QWidget * parent);
+    KisView2(KoPart *part, KisDoc2 *document, QWidget *parent);
     virtual ~KisView2();
 
 public:
@@ -78,6 +83,7 @@ public:
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);
+    virtual bool event(QEvent* event);
 
     // KoView implementation
     virtual void updateReadWrite(bool readwrite) {
@@ -90,7 +96,7 @@ public:
 public:  // Krita specific interfaces
 
     /// Return the image this view is displaying
-    KisImageWSP image();
+    KisImageWSP image() const;
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
@@ -118,10 +124,13 @@ public:  // Krita specific interfaces
     /// and knows where to start painting on the canvas widget, i.e.,
     /// the document offset.
     KoCanvasController * canvasController();
+    KisCanvasController *canvasControllerWidget();
 
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();
 
+    KisActionManager* actionManager();
+    
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection
@@ -149,6 +158,9 @@ public:  // Krita specific interfaces
     /// the global selection.
     KisSelectionSP selection();
 
+    /// Checks if the current global or local selection is editable
+    bool selectionEditable();
+
     /// The undo adapter is used to add commands to the undo stack
     KisUndoAdapter * undoAdapter();
 
@@ -158,52 +170,67 @@ public:  // Krita specific interfaces
 
     KisDoc2* document() const;
 
-    /// Connects the signals from the current image to the various
-    /// slots of the various managers
-    void connectCurrentImage();
-
-    /// Disconnect the current image (for instance, before connecting
-    /// another image) from the slots in the various managers
-    void disconnectCurrentImage();
+public:
 
     virtual KoPrintJob * createPrintJob();
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
-    KisPaintingAssistantsManager* paintingAssistantManager();
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();
     void disableControls();
 
+
+    /// shows a floating message in the top right corner of the canvas
+    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500, KisFloatingMessage::Priority priority = KisFloatingMessage::Medium);
+
+    /// The QMainWindow associated with this view. This is most likely going to be shell(), but
+    /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
+    /// This can be checked by qobject_casting to KoMainWindow to check the difference.
+    QMainWindow* qtMainWindow();
+    /// The mainWindow function will return the shell() value, unless this function is called
+    /// with a non-null value. To make it return shell() again, simply pass null to this function.
+    void setQtMainWindow(QMainWindow* newMainWindow);
+
+public slots:
+
+    void slotLoadingFinished();
+    void slotSavingFinished();
+    void showJustTheCanvas(bool toggled);
+
 signals:
 
     void sigLoadingFinished();
+    void sigSavingFinished();
+    void floatingMessageRequested(QString message, QString iconName);
 
 private slots:
 
-    void slotLoadingFinished();
     void slotPreferences();
-    void slotEditPalette();
-    void slotImageSizeChanged();
-    void slotTotalRefresh();
+    void slotBlacklistCleanup();
+    void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+    void slotImageResolutionChanged();
+    void slotNodeChanged();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
-    void slotFirstRun();
     void showStatusBar(bool toggled);
-    void showJustTheCanvas(bool toggled);
+    void showHideScrollbars();
+    void toggleTabletLogger();
+    void openResourcesDirectory();
+    void updateIcons();
 
 private:
-
-
-    void createGUI();
     void createActions();
     void createManagers();
-
     void loadPlugins();
 
+    void resetImageSizeAndScroll(bool changeCentering,
+                                 const QPointF oldImageStillPoint = QPointF(),
+                                 const QPointF newImageStillPoint = QPointF());
 private:
     class KisView2Private;
     KisView2Private * const m_d;

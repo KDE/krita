@@ -21,8 +21,13 @@
 
 #include "KoUnitDoubleSpinBox.h"
 #include <kdebug.h>
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
+
+#ifdef Q_OS_WIN
+#include <float.h>
+#define isnan _isnan
+#endif
 
 // #define DEBUG_VALIDATOR
 // #define DEBUG_VALUEFROMTEXT
@@ -60,30 +65,6 @@ KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()
     delete d;
 }
 
-// deprecated;
-KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
-						    double lower, double upper,
-						    double step,
-						    double value,
-						    KoUnit unit,
-                            unsigned int precision)
-    : QDoubleSpinBox( parent ),
-    d( new Private(lower, upper, step))
-{
-    setMinimum(lower);
-    setMaximum(upper);
-    setSingleStep(step);
-    setValue(value);
-    setDecimals(precision);
-    d->unit = KoUnit(KoUnit::Point);
-    //setAcceptLocalizedNumbers( true );
-    setUnit( unit );
-    changeValue( value );
-    setLineStepPt( step );
-
-    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
-}
-
 QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 {
 #ifdef DEBUG_VALIDATOR
@@ -116,7 +97,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
     double newVal = 0.0;
     if (!isnan(value)) {
         bool ok;
-        KoUnit unit = KoUnit::unit( unitName, &ok );
+        const KoUnit unit = KoUnit::fromSymbol(unitName, &ok);
         if ( ok )
             newVal = unit.fromUserValue( value );
         else
@@ -159,7 +140,7 @@ void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
     QDoubleSpinBox::setSingleStep( unit.toUserValue( d->stepInPoints ) );
     d->unit = unit;
     QDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
-    setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
+    setSuffix(unit.symbol().prepend(QLatin1Char(' ')));
 }
 
 double KoUnitDoubleSpinBox::value( ) const
@@ -201,7 +182,7 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 QString KoUnitDoubleSpinBox::textFromValue( double value ) const
 {
     //kDebug(30004) <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
-    //const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, d->precision ), KoUnit::unitName( m_unit ) ) );
+    //const QString num(QString("%1%2").arg(KGlobal::locale()->formatNumber(value, d->precision ), m_unit.symbol()));
     //const QString num ( QString( "%1").arg( KGlobal::locale()->formatNumber( value, d->precision )) );
     return KGlobal::locale()->formatNumber( value, decimals() );
 }
@@ -214,7 +195,7 @@ double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const
     const QString sep( KGlobal::locale()->thousandsSeparator() );
     if ( !sep.isEmpty() )
         str2.remove( sep );
-    str2.remove( KoUnit::unitName( d->unit ) );
+    str2.remove(d->unit.symbol());
     bool ok;
     const double dbl = KGlobal::locale()->readNumber( str2, &ok );
 #ifdef DEBUG_VALUEFROMTEXT

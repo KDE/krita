@@ -30,9 +30,7 @@
 #include "KoPAPage.h"
 #include "KoPAPageProvider.h"
 
-#include <kxmlguifactory.h>
-
-#include <KAction>
+#include <kaction.h>
 #include <QMenu>
 #include <QMouseEvent>
 

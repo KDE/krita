@@ -21,7 +21,7 @@
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
 
-#include <QtCore/QHash>
+#include <QHash>
 
 class KoFindOptionSet::Private
 {

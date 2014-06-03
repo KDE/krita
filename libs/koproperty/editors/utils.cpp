@@ -19,10 +19,10 @@
 
 #include "utils.h"
 
-#include <KLocale>
+#include <klocale.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QFontMetrics>
+#include <QPushButton>
+#include <QFontMetrics>
 
 KOPROPERTY_EXPORT void KoProperty::Utils::setupDotDotDotButton(QPushButton *button, const QString& toolTip, const QString& whatsThis)
 {

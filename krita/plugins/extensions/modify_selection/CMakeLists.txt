@@ -6,6 +6,7 @@ set(kritamodifyselection_PART_SRCS
     dlg_border_selection.cc
     dlg_feather_selection.cc
     modify_selection.cc
+    modify_selection_operations.cpp
     )
 
 

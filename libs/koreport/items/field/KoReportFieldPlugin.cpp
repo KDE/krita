@@ -23,7 +23,7 @@
 #include "KoReportDesignerItemField.h"
 #include "KoReportPluginInfo.h"
 #include "krscriptfield.h"
-#include <KIcon>
+#include <KoIcon.h>
 
 KoReportFieldPlugin::KoReportFieldPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
@@ -31,7 +31,7 @@ KoReportFieldPlugin::KoReportFieldPlugin(QObject *parent, const QVariantList &ar
     
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:field");
-    info->setIcon(KIcon("edit-rename"));
+    info->setIcon(koIcon("edit-rename"));
     info->setName(i18n("Field"));
     info->setPriority(2);
     setInfo(info);

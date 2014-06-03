@@ -81,6 +81,11 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
     return cs;
 }
 
+void KisColorSelectorComponent::setDirty()
+{
+    m_dirty = true;
+}
+
 bool KisColorSelectorComponent::isDirty() const
 {
     return m_dirty || m_lastColorSpace!=colorSpace();
@@ -94,7 +99,7 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return false;
 }
 
-QColor KisColorSelectorComponent::currentColor()
+KoColor KisColorSelectorComponent::currentColor()
 {
     return selectColor(m_lastX, m_lastY);
 }
@@ -149,4 +154,13 @@ void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
 {
     m_parameter = param;
     m_type = type;
+}
+
+void KisColorSelectorComponent::setLastMousePosition(int x, int y)
+{
+    // prevent movement due to rouding errors
+    if (abs((int)m_lastX - x) > 1 || abs((int)m_lastY - y) > 1) {
+        m_lastX = x;
+        m_lastY = y;
+    }
 }

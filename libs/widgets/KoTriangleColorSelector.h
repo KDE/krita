@@ -23,10 +23,15 @@
 
 #include "kowidgets_export.h"
 
+class KoColor;
+class KoColorDisplayRendererInterface;
+
+
 class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     Q_OBJECT
     public:
-        KoTriangleColorSelector(QWidget* parent);
+        explicit KoTriangleColorSelector(QWidget *parent);
+        explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
         ~KoTriangleColorSelector();
     protected: // events
         void paintEvent( QPaintEvent * event );
@@ -38,15 +43,24 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
         int hue() const;
         int value() const;
         int saturation() const;
-        QColor color() const;
+        KoColor realColor() const;
+
+        // please use setRealColor() instead!
+        KDE_DEPRECATED QColor color() const;
+
     public slots:
         void setHue(int h);
         void setValue(int v);
         void setSaturation(int s);
         void setHSV(int h, int s, int v);
-        void setQColor(const QColor& );
+
+        // please use setRealColor() instead!
+        KDE_DEPRECATED void setQColor(const QColor& );
+
+        void setRealColor(const KoColor& );
     signals:
         void colorChanged(const QColor& );
+        void realColorChanged(const KoColor& );
     private:
         void tellColorChanged();
         void generateTriangle();

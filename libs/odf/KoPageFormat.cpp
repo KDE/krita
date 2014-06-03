@@ -156,11 +156,20 @@ QString KoPageFormat::name(Format format)
     return i18nc("Page size", pageFormatInfo[ format ].descriptiveName);
 }
 
-QStringList KoPageFormat::allFormats()
+QStringList KoPageFormat::localizedPageFormatNames()
 {
     QStringList lst;
     for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
         lst << i18nc("Page size", pageFormatInfo[ i ].descriptiveName);
+    }
+    return lst;
+}
+
+QStringList KoPageFormat::pageFormatNames()
+{
+    QStringList lst;
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
+        lst << pageFormatInfo[ i ].shortName;
     }
     return lst;
 }

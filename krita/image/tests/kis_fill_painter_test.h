@@ -19,15 +19,23 @@
 #ifndef KIS_FILL_PAINTER_TEST_H
 #define KIS_FILL_PAINTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFillPainterTest : public QObject
 {
     Q_OBJECT
+
+private:
+    void benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning);
+
 private slots:
 
     void testCreation();
-
+    void benchmarkFillPainter();
+    void benchmarkFillPainterOffset();
+    void benchmarkFillPainterOffsetCompositioning();
+    void benchmarkFillingScanlineColor();
+    void benchmarkFillingScanlineSelection();
 };
 
 #endif

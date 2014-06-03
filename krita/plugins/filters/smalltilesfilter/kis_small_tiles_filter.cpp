@@ -31,7 +31,6 @@
 #include <QVector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>
@@ -40,7 +39,6 @@
 #include <kis_doc2.h>
 #include <kis_debug.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -51,22 +49,21 @@
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Small Tiles..."))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setSupportsThreading(false);
 }
 
-void KisSmallTilesFilter::process(KisPaintDeviceSP device,
-                                  const QRect& /*applyRect*/,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                 ) const
+void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
+                                      const QRect& /*applyRect*/,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                      ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -97,7 +94,7 @@ void KisSmallTilesFilter::process(KisPaintDeviceSP device,
     gc.end();
 }
 
-KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));

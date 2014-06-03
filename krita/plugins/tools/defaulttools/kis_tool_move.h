@@ -25,48 +25,70 @@
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
+#include <KoIcon.h>
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
 
 class KoCanvasBase;
-
-#include "ui_wdgmovetool.h"
-
-class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
-{
-    Q_OBJECT
-
-public:
-    MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
+class MoveToolOptionsWidget;
 
 class KisToolMove : public KisTool
 {
-
     Q_OBJECT
-
+    Q_ENUMS(MoveToolMode);
+    Q_PROPERTY(MoveToolMode moveToolMode READ moveToolMode WRITE setMoveToolMode NOTIFY moveToolModeChanged);
+    Q_PROPERTY(bool moveInProgress READ moveInProgress NOTIFY moveInProgressChanged);
 public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
+    void deactivate();
+
+public Q_SLOTS:
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
 
 public:
+    enum MoveToolMode {
+        MoveSelectedLayer,
+        MoveFirstLayer,
+        MoveGroup
+    };
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
+    void startAction(KoPointerEvent *event, MoveToolMode mode);
+    void continueAction(KoPointerEvent *event);
+    void endAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
+
+    MoveToolMode moveToolMode() const;
+    bool moveInProgress() const;
+public Q_SLOTS:
+    void setMoveToolMode(MoveToolMode newMode);
+    void slotWidgetRadioToggled(bool checked);
+
+Q_SIGNALS:
+    void moveToolModeChanged();
+    void moveInProgressChanged();
 
 private:
     void drag(const QPoint& newPos);
+    void cancelStroke();
+    QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
+private slots:
+    void endStroke();
 
 private:
 
@@ -76,6 +98,10 @@ private:
     QPoint m_lastDragPos;
 
     KisStrokeId m_strokeId;
+
+    MoveToolMode m_moveToolMode;
+    bool m_moveInProgress;
+    KisNodeSP m_currentlyProcessingNode;
 };
 
 
@@ -89,8 +115,8 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
-        setIcon("krita_tool_move");
-        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+        setIconName(koIconNameCStr("krita_tool_move"));
+        setShortcut( KShortcut(QKeySequence( Qt::Key_T )) );
     }
 
     virtual ~KisToolMoveFactory() {}

@@ -19,7 +19,7 @@
 #ifndef KIS_RECORDED_ACTION_FACTORY_REGISTRY_TEST_H
 #define KIS_RECORDED_ACTION_FACTORY_REGISTRY_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisRecordedActionFactoryRegistryTest : public QObject
 {

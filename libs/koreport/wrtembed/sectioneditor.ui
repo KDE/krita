@@ -3,6 +3,7 @@
  <comment> * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2012 by Friedrich W. H. Kossebau (kossebau@kde.org)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,267 +18,227 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see http://www.gnu.org/licenses/.</comment>
  <class>SectionEditor</class>
- <widget class="QDialog" name="SectionEditor">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>615</width>
-    <height>442</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Section Editor</string>
-  </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
-  </property>
-  <layout class="QVBoxLayout">
-   <item>
-    <layout class="QGridLayout">
-     <property name="margin">
-      <number>0</number>
+ <widget class="QWidget" name="SectionEditor">
+  <layout class="QGridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="cbReportHeader">
+     <property name="text">
+      <string>Show report header</string>
      </property>
-     <property name="spacing">
-      <number>6</number>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="cbReportFooter">
+     <property name="text">
+      <string>Show report footer</string>
      </property>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="cbReportHeader">
-       <property name="text">
-        <string>Report Header</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QGroupBox" name="gbPageFooter">
-       <property name="title">
-        <string>Page Footer</string>
-       </property>
-       <layout class="QGridLayout">
-        <property name="margin">
-         <number>11</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="cbFootEven">
-          <property name="text">
-           <string>Even Page(s)</string>
-          </property>
-         </widget>
-        </item>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="gbPageHeader">
+     <property name="title">
+      <string>Page Header</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
-         <widget class="QCheckBox" name="cbFootFirst">
+         <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>First Page</string>
+           <string>First page:</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QCheckBox" name="cbFootLast">
+         <widget class="QCheckBox" name="cbHeadFirst">
           <property name="text">
-           <string>Last Page</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Even pages:</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QCheckBox" name="cbFootOdd">
+         <widget class="QCheckBox" name="cbHeadEven">
           <property name="text">
-           <string>Odd Page(s)</string>
+           <string/>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QCheckBox" name="cbFootAny">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Any Page(s)</string>
+           <string>Any pages:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="cbHeadAny">
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>
        </layout>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="cbReportFooter">
-       <property name="text">
-        <string>Report Footer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QGroupBox" name="gbPageHeader">
-       <property name="title">
-        <string>Page Header</string>
-       </property>
-       <layout class="QGridLayout">
-        <property name="margin">
-         <number>11</number>
-        </property>
-        <property name="spacing">
-         <number>6</number>
-        </property>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Last page:</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QCheckBox" name="cbHeadLast">
           <property name="text">
-           <string>Last Page</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Odd pages:</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
          <widget class="QCheckBox" name="cbHeadOdd">
           <property name="text">
-           <string>Odd Page(s)</string>
+           <string/>
           </property>
          </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="cbHeadFirst">
-          <property name="text">
-           <string>First Page</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="cbHeadEven">
-          <property name="text">
-           <string>Even Pages(s)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="cbHeadAny">
-          <property name="text">
-           <string>Any Pages(s)</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="GroupBox1">
-     <property name="title">
-      <string>Group Sections</string>
-     </property>
-     <layout class="QHBoxLayout">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <property name="margin">
-       <number>11</number>
-      </property>
-      <item>
-       <widget class="QListWidget" name="lbGroups"/>
-      </item>
-      <item>
-       <layout class="QVBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="btnAdd">
-          <property name="text">
-           <string>&amp;Add</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnEdit">
-          <property name="text">
-           <string>&amp;Edit</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnRemove">
-          <property name="text">
-           <string>Delete</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnMoveUp">
-          <property name="text">
-           <string>Move &amp;Up</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="brnMoveDown">
-          <property name="text">
-           <string>Move &amp;Down</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
+   <item row="1" column="1">
+    <widget class="QGroupBox" name="gbPageHeader_2">
+     <property name="title">
+      <string>Page Footer</string>
      </property>
-     <property name="margin">
-      <number>0</number>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <layout class="QFormLayout" name="formLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>First page:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="cbFootFirst">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Even pages:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="cbFootEven">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Any pages:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QCheckBox" name="cbFootAny">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout_4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Last page:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="cbFootLast">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Odd pages:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="cbFootOdd">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="GroupBox1">
+     <property name="title">
+      <string>Group Sections</string>
      </property>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonOk">
-       <property name="text">
-        <string>&amp;Close</string>
-       </property>
-       <property name="autoDefault">
-        <bool>true</bool>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <layout class="QHBoxLayout">
+      <item>
+       <widget class="KListWidget" name="lbGroups"/>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="lGroupSectionsButtons">
+        <property name="margin">
+         <number>0</number>
+        </property>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+  <customwidgets>
+  <customwidget>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>KListWidget</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>cbReportHeader</tabstop>
   <tabstop>cbReportFooter</tabstop>
@@ -291,7 +252,6 @@
   <tabstop>cbFootEven</tabstop>
   <tabstop>cbFootOdd</tabstop>
   <tabstop>cbFootAny</tabstop>
-  <tabstop>buttonOk</tabstop>
  </tabstops>
  <resources/>
  <connections/>

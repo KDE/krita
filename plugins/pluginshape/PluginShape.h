@@ -55,7 +55,6 @@ private:
     QString m_xlinkhref;
     QString m_xlinkshow;
     QString m_xlinktype;
-    QString m_xmlid;
 };
 
 #endif

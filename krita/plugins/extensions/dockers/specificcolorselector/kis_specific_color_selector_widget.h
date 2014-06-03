@@ -23,22 +23,28 @@
 #include <KoColor.h>
 
 class KoColorSpace;
+class KoColorDisplayRendererInterface;
 class QVBoxLayout;
 class KisColorInput;
+class KisColorSpaceSelector;
 class QTimer;
+class QCheckBox;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisSpecificColorSelectorWidget(QWidget* parent);
+    KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent);
     ~KisSpecificColorSelectorWidget();
+
+    bool customColorSpaceUsed();
 public slots:
     void setColorSpace(const KoColorSpace*);
     void setColor(const KoColor&);
 private slots:
     void update();
     void updateTimeout();
+    void setCustomColorSpace(const KoColorSpace *);
 signals:
     void colorChanged(const KoColor&);
     void updated();
@@ -49,6 +55,10 @@ private:
     KoColor m_color;
     bool m_updateAllowed;
     QTimer* m_delayTimer;
+    KisColorSpaceSelector *m_colorspaceSelector;
+    bool m_customColorSpaceSelected;
+    QCheckBox *m_chkShowColorSpaceSelector;
+    KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
 #endif

@@ -19,34 +19,7 @@
 #ifndef KIS_NODE_MOVE_COMMAND2_H
 #define KIS_NODE_MOVE_COMMAND2_H
 
-#include "kundo2command.h"
-#include "krita_export.h"
-#include "kis_types.h"
-
-
-class QPoint;
-class KisUndoAdapter;
-
-
-class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KUndo2Command
-{
-
-public:
-    KisNodeMoveCommand2(KisNodeSP node, const QPoint& oldPos, const QPoint& newPos, KisUndoAdapter *undoAdapter, KUndo2Command *parent = 0);
-    virtual ~KisNodeMoveCommand2();
-
-    virtual void redo();
-    virtual void undo();
-
-private:
-    void moveTo(const QPoint& pos);
-
-private:
-    QPoint m_oldPos;
-    QPoint m_newPos;
-    KisNodeSP m_node;
-    KisUndoAdapter *m_undoAdapter;
-};
-
+#include "kis_move_command_common.h"
+typedef KisMoveCommandCommon<KisNodeSP> KisNodeMoveCommand2;
 
 #endif

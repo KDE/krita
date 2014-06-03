@@ -1,27 +1,31 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgFilterNodeCreation</class>
- <widget class="QWidget" name="WdgFilterNodeCreation" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgFilterNodeCreation">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>449</width>
     <height>300</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Name:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="layerName" />
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="layerName"/>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="KisFilterSelectorWidget" native="1" name="filterSelector" />
+   <item row="1" column="0" colspan="2">
+    <widget class="KisFilterSelectorWidget" name="filterSelector" native="true"/>
    </item>
   </layout>
  </widget>

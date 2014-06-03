@@ -1,9 +1,10 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   
+   Copyright (C) 2012 Boudewijn Rempt <boud@kogmbh.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -25,6 +26,8 @@
 
 #include <QInputEvent>
 
+#include <QTouchEvent>
+
 class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
@@ -34,9 +37,18 @@ class QGraphicsSceneWheelEvent;
 
 #include "flake_export.h"
 
+struct KoTouchPoint
+{
+    QTouchEvent::TouchPoint touchPoint;
+    // the point in document coordinates
+    QPointF lastPoint;
+    QPointF point;
+
+};
+
 /**
- * KoPointerEvent is a synthetic event that can be built from a mouse
- * or a tablet event. In addition to always providing tools with tablet
+ * KoPointerEvent is a synthetic event that can be built from a mouse,
+ * touch or tablet event. In addition to always providing tools with tablet
  * pressure characteristics, KoPointerEvent has both the original
  * (canvas based) position as well as the normalized position, that is,
  * the position of the event _in_ the document coordinates.
@@ -79,6 +91,15 @@ public:
     /**
      * Constructor.
      *
+     * @param event the touch event that is the base of this event.
+     * @param point the zoomed point of the primary touch event in the normal coordinate system.
+     * @param touchpoints the zoomed points of the touch event in the normal coordinate system.
+     */
+    KoPointerEvent(QTouchEvent *event, const QPointF &point, QList<KoTouchPoint> _touchPoints);
+
+    /**
+     * Constructor.
+     *
      * @param event the tablet event that is the base of this event.
      * @param point the zoomed point in the normal coordinate system.
      */
@@ -87,6 +108,9 @@ public:
     KoPointerEvent(KoInputDeviceHandlerEvent *event, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
     KoPointerEvent(KoPointerEvent *event, const QPointF& point);
+
+    KoPointerEvent(const KoPointerEvent &rhs);
+
 
     ~KoPointerEvent();
 
@@ -223,12 +247,21 @@ public:
     /// The point in document coordinates.
     const QPointF point;
 
+    const QList<KoTouchPoint> touchPoints;
+    /**
+     * Returns if the event comes from a tablet
+     */
+    bool isTabletEvent();
+
 protected:
     friend class KoToolProxy;
+    friend class KisToolProxy;
     friend class KisScratchPadEventFilter;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
 private:
+    KoPointerEvent& operator=(const KoPointerEvent &rhs);
+
     // for the d-pointer police; we want to make accessors to the event inline, so this one stays here.
     QEvent *m_event;
 

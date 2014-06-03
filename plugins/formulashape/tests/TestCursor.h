@@ -20,7 +20,7 @@
 #ifndef _TESTCURSOR_H_
 #define _TESTCURSOR_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestCursor : public QObject
 {

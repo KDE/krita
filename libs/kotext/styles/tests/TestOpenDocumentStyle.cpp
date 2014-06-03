@@ -34,7 +34,7 @@
 #include <KoXmlNS.h>
 #include <KoShadowStyle.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QBuffer>
 #include <QDomDocument>
@@ -125,7 +125,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                             subValueChild = subValueChild.nextSiblingElement();
                         } while (!subValueChild.isNull());
                         QStringList mergedAllowedValues;
-                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                        while (mergedAllowedValues.length() != (pow((double) allowedValues.length(), allowedValues.length()))) {
                             foreach (QString baseValue, allowedValues) {
                                 if (!mergedAllowedValues.contains(baseValue))
                                     mergedAllowedValues << baseValue;
@@ -211,7 +211,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "relativeLength") {
             result << "42*";
         } else if (reference == "shadowType") {
-            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" /* is this one valid ? */ << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
+            result << "none" << "red" << "#fff 1px 2pt 3pt" << "4pt 3px" << "2pt 4pt blue"
+                   << "white 42px 23pt, red -3pt -5px 3px" << "red -3pt -5px";
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
@@ -224,7 +225,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             // This is not in the spec
             result << "100%" << "42%" << "-30%";
         } else if (reference == "borderWidths") {
-            result << "42px 42pt 12cm" << "2pt 23pt 0cm";
+            result << "42px 42pt 12cm" << "2pt 23pt 0.5cm";
         } else if (reference == "angle") {
             result << "5deg" << "1rad" << "400grad" << "3.14159265rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "zeroToHundredPercent") {
@@ -316,8 +317,12 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
             return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
         } else if (reference == "shadowType") {
             KoShadowStyle initial, output;
-            Q_ASSERT(initial.loadOdf(initialValue));
-            Q_ASSERT(output.loadOdf(outputValue));
+            const bool initialLoaded = initial.loadOdf(initialValue);
+            Q_ASSERT(initialLoaded);
+            Q_UNUSED(initialLoaded);
+            const bool outputLoaded = output.loadOdf(outputValue);
+            Q_ASSERT(outputLoaded);
+            Q_UNUSED(outputLoaded);
             return (initial == output);
         } else if (reference == "borderWidths") {
             QStringList initials, outputs;
@@ -509,10 +514,8 @@ void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *m
 template<>
 void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
-    loadCtxt.addStyles(mainElement, "text");
-    loadCtxt.styleStack().setTypeProperties("text");
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
-    genStyle->loadOdf(shapeCtxt);
+    genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<class T>
@@ -523,6 +526,18 @@ void saveOdf(T* genStyle, KoGenStyle *styleWriter)
 
 template<>
 void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
+{
+    QByteArray array;
+    QBuffer buffer(&array);
+    KoXmlWriter xmlWriter(&buffer);
+    KoGenStyles styles;
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext context(xmlWriter, styles, embeddedSaver);
+    genStyle->saveOdf(*styleWriter, context);
+}
+
+template<>
+void saveOdf<KoTableCellStyle>(KoTableCellStyle *genStyle, KoGenStyle *styleWriter)
 {
     QByteArray array;
     QBuffer buffer(&array);
@@ -562,7 +577,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     }
 
     KoXmlElement root = generatedXmlReader->documentElement();
-    KoXmlElement properties = root.firstChild().toElement();
+    KoXmlElement properties = root.firstChildElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
     if (properties.attributeNames().count() > 1)
     {
@@ -579,6 +594,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     if (!result) {
         kDebug(32500) << "Comparison failed : " << outputPropertyValue << "obtained for " << value;
         kDebug(32500) << generatedXmlOutput;
+        kDebug(32500) << properties.attributeNames();
     }
     return result;
 }
@@ -670,7 +686,7 @@ void TestOpenDocumentStyle::testParagraphStyle_data()
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
-            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+            QTest::newRow((attribute->name()+QLatin1Char('/')+value).toLatin1()) << attribute << value;
         }
     }
 }

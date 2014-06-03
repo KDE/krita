@@ -34,17 +34,21 @@ KisHairyPaintOpSettings::KisHairyPaintOpSettings()
     setProperty(HAIRY_VERSION, "2");
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
-    if (mode == CursorIsOutline){
-        path = KisBrushBasedPaintOpSettings::brushOutline(QPointF(0.0,0.0),mode, scale, rotation);
-        double scaleFactor = getDouble(HAIRY_BRISTLE_SCALE);
-        QTransform m;
-        m.reset();
-        m.scale(scaleFactor * scale, scaleFactor * scale);
-        path = m.map(path);
-        path.translate(pos);
+    if (mode == CursorIsOutline) {
+        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+
+        if (!widget) {
+            return KisPaintOpSettings::brushOutline(info, mode);
+        }
+
+        KisBrushSP brush = widget->brush();
+
+        qreal additionalScale = brush->scale() * getDouble(HAIRY_BRISTLE_SCALE);
+
+        return outlineFetcher()->fetchOutline(info, this, brush->outline(), additionalScale, brush->angle());
     }
     return path;
 }
@@ -54,8 +58,7 @@ void KisHairyPaintOpSettings::fromXML(const QDomElement& elt)
     setProperty(HAIRY_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
     KisBrushBasedPaintOpSettings::fromXML(elt);
     QVariant v;
-    if(!getProperty(HAIRY_VERSION, v) || v == "1")
-    {
+    if (!getProperty(HAIRY_VERSION, v) || v == "1") {
         setProperty(HAIRY_BRISTLE_SCALE, 2.0 * getDouble(HAIRY_BRISTLE_SCALE));
     }
 }

@@ -34,6 +34,8 @@
 #include <kis_types.h>
 #include <generator/kis_generator_layer.h>
 #include "kis_tiff_converter.h"
+#include <kis_iterator_ng.h>
+#include <kis_shape_layer.h>
 
 namespace
 {
@@ -52,7 +54,7 @@ namespace
             sample_type = SAMPLEFORMAT_IEEEFP;
             return true;
         }
-        if (cs->id() == "CMYK" || cs->id() == "CMYKA16") {
+        if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
             return true;
@@ -83,43 +85,42 @@ bool KisTIFFWriterVisitor::saveAlpha()
     return m_options->alpha;
 }
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
 {
     if (depth == 32) {
         quint32 *dst = reinterpret_cast<quint32 *>(buff);
-        while (!it.isDone()) {
-            const quint32 *d = reinterpret_cast<const quint32 *>(it.rawData());
+        do {
+            const quint32 *d = reinterpret_cast<const quint32 *>(it->oldRawData());
             int i;
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
             if (saveAlpha()) *(dst++) = d[poses[i]];
-            ++it;
-        }
+        } while (it->nextPixel());
         return true;
     } else if (depth == 16) {
         quint16 *dst = reinterpret_cast<quint16 *>(buff);
-        while (!it.isDone()) {
-            const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+        do {
+            const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
             int i;
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
             if (saveAlpha()) *(dst++) = d[poses[i]];
-            ++it;
-        }
+            
+        } while (it->nextPixel());
         return true;
     } else if (depth == 8) {
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
-        while (!it.isDone()) {
-            const quint8 *d = it.rawData();
+        do {
+            const quint8 *d = it->oldRawData();
             int i;
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
             if (saveAlpha()) *(dst++) = d[poses[i]];
-            ++it;
-        }
+            
+        } while (it->nextPixel());
         return true;
     }
     return false;
@@ -141,6 +142,15 @@ bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
 {
     // a generator layer has a nice paint device we can save.
     return saveLayerProjection(layer);
+}
+
+bool KisTIFFWriterVisitor::visit(KisExternalLayer* layer)
+{
+    // a shape layer has a nice paint device we can save.
+    if (qobject_cast<KisShapeLayer*>(layer)) {
+        return saveLayerProjection(layer);
+    }
+    return true;
 }
 
 bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
@@ -197,7 +207,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     qint32 width = layer->image()->width();
     bool r = true;
     for (int y = 0; y < height; y++) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
+        KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
                 quint8 poses[] = { 0, 1 };

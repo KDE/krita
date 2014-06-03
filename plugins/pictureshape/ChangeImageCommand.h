@@ -19,17 +19,18 @@
 #ifndef CHANGEIMAGECOMMAND_H
 #define CHANGEIMAGECOMMAND_H
 
+#include <QObject>
 #include <kundo2command.h>
+#include "PictureShape.h"
 
-#include <QSizeF>
-
-class KoImageData;
-class PictureShape;
-
-class ChangeImageCommand : public KUndo2Command
+class ChangeImageCommand : public QObject, public KUndo2Command
 {
+    Q_OBJECT
+
 public:
-    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent = 0);
+    ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent=0);
+    ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent=0);
+    ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent=0);
     virtual ~ChangeImageCommand();
 
     /// redo the command
@@ -37,12 +38,18 @@ public:
     /// revert the actions done in redo
     virtual void undo();
 
+signals:
+    void sigExecuted();
+
 private:
+    bool m_imageChanged;
     PictureShape *m_shape;
     KoImageData *m_oldImageData;
     KoImageData *m_newImageData;
-    QSizeF m_oldSize;
-    QSizeF m_newSize;
+    QRectF m_oldCroppingRect;
+    QRectF m_newCroppingRect;
+    PictureShape::ColorMode m_oldColorMode;
+    PictureShape::ColorMode m_newColorMode;
 };
 
 #endif /* CHANGEIMAGECOMMAND_H */

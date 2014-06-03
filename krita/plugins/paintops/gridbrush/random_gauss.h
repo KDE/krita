@@ -25,16 +25,17 @@
 #define srand48 srand
 #endif
 
-class RandomGauss{
+class RandomGauss
+{
 
 public:
-    RandomGauss(){
-        srand48( 0 );
+    RandomGauss() {
+        srand48(0);
         m_next = false;
     }
 
-    RandomGauss(int seed){
-        srand48( seed );
+    RandomGauss(int seed) {
+        srand48(seed);
         m_next = false;
     }
 private:
@@ -42,8 +43,8 @@ private:
     double m_gauss;
 
 public:
-    /** 
-     * Generates a random Gaussian value with the mean and sigma  
+    /**
+     * Generates a random Gaussian value with the mean and sigma
      */
     double nextGaussian(double mean = 0.0, double sigma = 1.0);
 };

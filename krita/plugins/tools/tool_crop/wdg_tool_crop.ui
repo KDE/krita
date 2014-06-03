@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>197</width>
-    <height>101</height>
+    <width>214</width>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,6 +90,26 @@
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="boolCenter">
+         <property name="toolTip">
+          <string>Resize keeping center fixed</string>
+         </property>
+         <property name="text">
+          <string>Center</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="boolGrow">
+         <property name="toolTip">
+          <string>Allow growing the image by dragging outside bounds of the image</string>
+         </property>
+         <property name="text">
+          <string>Grow</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -168,6 +188,16 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="KDoubleNumInput" name="doubleRatio">
+         <property name="toolTip">
+          <string>Ratio</string>
+         </property>
+         <property name="precision" stdset="0">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="boolRatio">
          <property name="toolTip">
@@ -178,29 +208,16 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="KDoubleNumInput" name="doubleRatio" native="true">
-         <property name="toolTip">
-          <string>Ratio</string>
-         </property>
-         <property name="precision" stdset="0">
-          <number>2</number>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+    <layout class="QGridLayout" name="gridLayout_3">
      <property name="margin">
       <number>0</number>
      </property>
-     <item>
+     <item row="0" column="1">
       <widget class="QComboBox" name="cmbType">
        <property name="currentIndex">
         <number>1</number>
@@ -217,44 +234,78 @@
        </item>
       </widget>
      </item>
-     <item>
+     <item row="2" column="1">
       <widget class="QPushButton" name="bnCrop">
        <property name="text">
         <string>&amp;Crop</string>
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Applies to:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Decoration:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cmbDecor">
+       <item>
+        <property name="text">
+         <string>None</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Thirds</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fifths</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Passport photo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Crosshair</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
-    <spacer name="spacer2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
   <customwidget>
    <class>KIntSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>knuminput.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends></extends>
    <header>knuminput.h</header>
    <container>1</container>
   </customwidget>
@@ -265,7 +316,6 @@
   <tabstop>intWidth</tabstop>
   <tabstop>intHeight</tabstop>
   <tabstop>cmbType</tabstop>
-  <tabstop>bnCrop</tabstop>
  </tabstops>
  <resources/>
  <connections/>

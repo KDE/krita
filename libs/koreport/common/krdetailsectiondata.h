@@ -21,7 +21,7 @@
 #define KRDETAILSECTIONDATA_H
 
 #include <QObject>
-#include <qdom.h>
+#include <QDomDocument>
 #include "KoReportData.h"
 
 class KRSectionData;

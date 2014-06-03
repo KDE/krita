@@ -82,7 +82,27 @@ public:
 
     virtual ~KisMask();
 
+    /**
+     * @brief initSelection initializes the selection for the mask from
+     *   the given selection's projection.
+     * @param copyFrom the selection we base the mask on
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
     void initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer);
+
+    /**
+     * @brief initSelection initializes the selection for the mask from
+     *   the given paint device.
+     * @param copyFromDevice the paint device we base the mask on
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
+    void initSelection(KisPaintDeviceSP copyFromDevice, KisLayerSP parentLayer);
+
+    /**
+     * @brief initSelection initializes an empty selection
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
+    void initSelection(KisLayerSP parentLayer);
 
     const KoColorSpace * colorSpace() const;
     const KoCompositeOp * compositeOp() const;
@@ -97,6 +117,16 @@ public:
      * @return the selection: if you paint on mask, you paint on the selections
      */
     KisPaintDeviceSP paintDevice() const;
+
+    /**
+     * @return the same as paintDevice()
+     */
+    KisPaintDeviceSP original() const;
+
+    /**
+     * @return the same as paintDevice()
+     */
+    KisPaintDeviceSP projection() const;
 
     /**
      * Change the selection to the specified selection object. The
@@ -138,6 +168,8 @@ public:
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);
+
+    void testingInitSelection(const QRect &rect);
 
 protected:
     /**

@@ -24,14 +24,13 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <KIcon>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KAction>
-#include <KActionCollection>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kaction.h>
+#include <kactioncollection.h>
 
 #include "kis_view2.h"
 #include "kis_canvas2.h"
@@ -81,7 +80,7 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
-void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
+void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
@@ -98,28 +97,28 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
-    if (m_canvas->view()->nodeManager()) {
+    if (m_canvas && m_canvas->view()->nodeManager()) {
         connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
     }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
     if (!m_colorSelAction != 0) {
         m_colorSelAction = new KAction("Show color selector", this);
-        m_colorSelAction->setShortcut(QKeySequence(tr("S")));
+        m_colorSelAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_I));
         connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_color_selector", m_colorSelAction);
 
     if (!m_mypaintAction) {
         m_mypaintAction = new KAction("Show MyPaint shade selector", this);
-        m_mypaintAction->setShortcut(QKeySequence(tr("M")));
+        m_mypaintAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_M));
         connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
 
     if (!m_minimalAction) {
         m_minimalAction = new KAction("Show minimal shade selector", this);
-        m_minimalAction->setShortcut(QKeySequence(tr("N")));
+        m_minimalAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_N));
         connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
     }
     actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);

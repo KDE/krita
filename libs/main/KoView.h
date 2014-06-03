@@ -21,15 +21,17 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <QtGui/QWidget>
-#include <kparts/part.h>
+#include <QWidget>
+#include <kxmlguiclient.h>
 #include "komain_export.h"
 
+class KoPart;
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
@@ -40,14 +42,14 @@ class KAction;
 class QToolBar;
 class QDragEnterEvent;
 class QDropEvent;
-
+class QPrintDialog;
 
 /**
  * This class is used to display a @ref KoDocument.
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMAIN_EXPORT KoView : public QWidget, public KParts::PartBase
+class KOMAIN_EXPORT KoView : public QWidget, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -57,13 +59,13 @@ public:
      * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
-     * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
+     * The standard way to retrieve a KoView is to call @ref KoPart::createView.
      *
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
      * @param parent   parent widget for this view.
      */
-    explicit KoView(KoDocument *document, QWidget *parent = 0);
+    KoView(KoPart *part, KoDocument *document, QWidget *parent = 0);
 
     /**
      * Destroys the view and unregisters at the document.
@@ -104,118 +106,6 @@ public:
      * Tells this view that its document has got deleted (called internally)
      */
     void setDocumentDeleted();
-    /**
-     * @return true if the document has already got deleted.
-     * This can be useful for the view destructor to know if it can
-     * access the document or not.
-     */
-    bool documentDeleted() const;
-
-    virtual void setPartManager(KParts::PartManager *manager);
-    virtual KParts::PartManager *partManager() const;
-
-    /**
-     * Returns the action described action object. In fact only the "name" attribute
-     * of @p element is of interest here. The method searches in the
-     * KActionCollection of this view.
-     *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoDocument::action
-     */
-    virtual QAction *action(const QDomElement &element) const;
-
-    /**
-     * Returns the action with the given name. The method searches in the
-     * KActionCollection of this view.
-     *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
-     *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
-     * @see KoDocument::action
-     */
-    virtual QAction *action(const char* name) const;
-
-    /**
-     *  Retrieves the document that is hit. This can be an embedded document.
-     *
-     *  The default implementation asks @ref KoDocument::hitTest. This
-     *  will iterate over all child documents to detect a hit.
-     *
-     *  If your calligra component has multiple pages, like for example KSpread, then the hittest
-     *  may not succeed for a child that is not on the visible page. In those
-     *  cases you need to reimplement this method.
-     */
-    virtual KoDocument *hitTest(const QPoint &pos);
-
-    /**
-     * Retrieves the left border width that is displayed around the content if
-     * the view is active.
-     *
-     * In a spread sheet this border is for example used to display the
-     * rows, while a top border is used to display the names of the cells
-     * and a right and bottom border is used to display scrollbars. If the view
-     * becomes inactive, then this stuff is not displayed anymore.
-     *
-     * The default border is 0.
-     */
-    virtual int leftBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int rightBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int topBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int bottomBorder() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * on some child widget instead of the view directly.
-     *
-     * By default this function returns a pointer to the view.
-     */
-    virtual QWidget *canvas() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasXOffset() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasYOffset() const;
-
-    /**
-     * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
-     */
-    void enableAutoScroll();
-
-    /**
-     * Stops the emitting of autoScroll signals
-     */
-    void disableAutoScroll();
-
-    /**
-     * calls KoDocument::paintEverything()
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect);
 
     /**
      * In order to print the document represented by this view a new print job should
@@ -232,22 +122,24 @@ public:
     virtual KoPrintJob * createPdfPrintJob();
 
     /**
+     * @return the page layout to be used for printing.
+     * Default is the documents layout.
+     * Reimplement if your application needs to use a different layout.
+     */
+    virtual KoPageLayout pageLayout() const;
+
+    /**
+     * Create a QPrintDialog based on the @p printJob
+     */
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);
+
+    /**
      * @return the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
-    KoMainWindow * shell() const;
+    KoMainWindow * mainWindow() const;
 
-    /**
-     * @return the KXmlGuiWindow in which this view is currently.
-     * This one should never return 0, in a KDE app.
-     */
-    KXmlGuiWindow* mainWindow() const;
-
-    /**
+   /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a calligra main window.
-     * (e.g. it can be any KParts application).
      */
     KStatusBar * statusBar() const;
 
@@ -270,11 +162,6 @@ public:
     void removeStatusBarItem(QWidget * widget);
 
     /**
-     * Show or hide all statusbar items. Used by KoMainWindow during saving.
-     */
-    void showAllStatusBarItems(bool show);
-
-    /**
      * You have to implement this method and disable/enable certain functionality (actions for example) in
      * your view to allow/disallow editing of the document.
      */
@@ -285,19 +172,15 @@ public:
      */
     virtual KoZoomController *zoomController() const = 0;
 
-    /**
-     * @return the view bar. The bar is created only if this function is called.
-     */
-    QToolBar* viewBar();
-
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions();
+    QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
+
+    /**
+     * @brief guiActivateEvent is called when the window activates a view. Reimplement this for any special behaviour.
+     */
+    virtual void guiActivateEvent(bool activated);
 
 public slots:
-    /**
-     * Slot to create a new view around the contained @ref #koDocument.
-     */
-    virtual void newView();
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
@@ -311,66 +194,25 @@ public slots:
      */
     void slotClearStatusText();
 
+    /**
+     * Updates the author profile actions from configuration.
+     */
+    void slotUpdateAuthorProfileActions();
+
 protected:
-    /**
-     * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent
-     * and KParts::GUIActivateEvent.
-     * The respective handlers are called if such an event is found.
-     */
-    virtual void customEvent(QEvent *ev);
 
     /**
-     * Handles the event KParts::PartActivateEvent.
+     * Generate a name for this view.
      */
-    virtual void partActivateEvent(KParts::PartActivateEvent *event);
-    /**
-     * Handles the event KParts::PartSelectEvent.
-     */
-    virtual void partSelectEvent(KParts::PartSelectEvent *event);
-    /**
-     * Handles the event KParts::GUIActivateEvent.
-     */
-    virtual void guiActivateEvent(KParts::GUIActivateEvent *);
-
-
-    /**
-       Generate a name for this view.
-    */
     QString newObjectName();
 
-signals:
-    void activated(bool active);
-    void selected(bool select);
-
-    void autoScroll(const QPoint &scrollDistance);
-
-    void regionInvalidated(const QRegion &region, bool erase);
-
-    void invalidated();
-
-// KDE invents public signals :)
-#undef signals
-#define signals public
-signals:
-
-    /**
-      * Make it possible for plugins to request
-      * the embedding of an image into the current
-      * document. Used e.g. by the scan-plugin
-    */
-    void embedImage(const QString &filename);
-
-#undef signals
-#define signals protected
-
 protected slots:
-    virtual void slotAutoScroll();
+
+    virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);
     KoViewPrivate * const d;
-    int autoScrollAcceleration(int offset) const;
-
 };
 
 #endif

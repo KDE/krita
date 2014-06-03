@@ -20,7 +20,7 @@
 #ifndef _TEST_CONVOLUTION_OP_IMPL_H_
 #define _TEST_CONVOLUTION_OP_IMPL_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestConvolutionOpImpl : public QObject
 {

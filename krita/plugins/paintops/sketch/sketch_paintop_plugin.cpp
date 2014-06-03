@@ -19,7 +19,6 @@
 
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -38,10 +37,10 @@ K_EXPORT_PLUGIN(SketchPaintOpPluginFactory("krita"))
 
 
 SketchPaintOpPlugin::SketchPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSketchPaintOp, KisSketchPaintOpSettings, KisSketchPaintOpSettingsWidget>("sketchbrush", i18n("Sketch brush"), KisPaintOpFactory::categoryExperimental(), "krita-sketch.png"));
+    r->add(new KisSimplePaintOpFactory<KisSketchPaintOp, KisSketchPaintOpSettings, KisSketchPaintOpSettingsWidget>("sketchbrush", i18n("Sketch"), KisPaintOpFactory::categoryStable(), "krita-sketch.png", QString(), QStringList(), 3));
 
 }
 

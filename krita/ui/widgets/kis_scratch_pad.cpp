@@ -19,6 +19,8 @@
  */
 #include "kis_scratch_pad.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QMutex>
 
 #include <KoColorSpace.h>
@@ -28,7 +30,7 @@
 #include <KoAbstractGradient.h>
 
 #include <kis_cursor.h>
-#include <kis_color_picker_utils.h>
+#include <kis_tool_utils.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_gradient_painter.h>
@@ -54,16 +56,8 @@ public:
     {
     }
 
-    void aboutToAddANode(KisNode *, int) {}
-    void nodeHasBeenAdded(KisNode *, int) {}
-    void aboutToRemoveANode(KisNode *, int) {}
-    void nodeHasBeenRemoved(KisNode *, int) {}
-    void aboutToMoveNode(KisNode *, int, int) {}
-    void nodeHasBeenMoved(KisNode *, int, int) {}
-    void nodeChanged(KisNode*) {}
-
     void requestProjectionUpdate(KisNode *node, const QRect& rect) {
-        Q_UNUSED(node);
+        KisNodeGraphListener::requestProjectionUpdate(node, rect);
 
         QMutexLocker locker(&m_lock);
         m_scratchPad->imageUpdated(rect);
@@ -84,11 +78,15 @@ public:
     {
     }
 
-    QRect bounds() const {
+    virtual ~KisScratchPadDefaultBounds() {}
+
+    virtual QRect bounds() const {
         return m_scratchPad->imageBounds();
     }
 
 private:
+    Q_DISABLE_COPY(KisScratchPadDefaultBounds)
+
     KisScratchPad *m_scratchPad;
 };
 
@@ -105,7 +103,8 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    QImage checkImage = KisCanvasWidgetBase::checkImage();
+    KisConfig cfg;
+    QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
 
@@ -116,7 +115,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_undoAdapter = new KisPostExecutionUndoAdapter(m_undoStore, m_updateScheduler);
     m_nodeListener = new KisScratchPadNodeListener(this);
 
-    connect(this, SIGNAL(sigUpdateCanvas(const QRect&)), SLOT(slotUpdateCanvas(const QRect&)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sigUpdateCanvas(QRect)), SLOT(slotUpdateCanvas(QRect)), Qt::QueuedConnection);
 
     // filter will be deleted by the QObject hierarchy
     m_eventFilter = new KisScratchPadEventFilter(this);
@@ -199,11 +198,13 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
     KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
-    m_helper->initPaint(event, resourceManager,
+    m_helper->initPaint(event,
+                        resourceManager,
                         0,
                         m_updateScheduler,
                         m_undoAdapter,
-                        m_paintLayer);
+                        m_paintLayer,
+                        m_paintLayer->paintDevice()->defaultBounds());
 }
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
@@ -300,7 +301,9 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.x(),
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
-                                               alignedImageRect.height());
+                                               alignedImageRect.height(),
+                                               KoColorConversionTransformation::InternalRenderingIntent,
+                                               KoColorConversionTransformation::InternalConversionFlags);
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -329,12 +332,12 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 {
     m_resourceProvider = resourceProvider;
     KisConfig cfg;
-    setDisplayProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
-    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal, qreal)),
-            SLOT(setOnScreenResolution(qreal, qreal)));
+    connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
+            SLOT(setOnScreenResolution(qreal,qreal)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 
@@ -343,7 +346,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    m_paintLayer->paintDevice()->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }
@@ -359,7 +362,7 @@ QImage KisScratchPad::cutoutOverlay() const
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
-    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
     QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
                                          Qt::IgnoreAspectRatio,
@@ -386,7 +389,7 @@ void KisScratchPad::paintPresetImage()
                                               Qt::SmoothTransformation);
 
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
-    device->convertFromQImage(scaledImage, "");
+    device->convertFromQImage(scaledImage, 0);
 
     KisPainter painter(paintDevice);
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);

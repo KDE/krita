@@ -27,12 +27,16 @@
 #include "KoShapeLoadingContext.h"
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainerModel.h"
+#include "KoStyleStack.h"
+#include "KoOdfLoadingContext.h"
+#include "KoXmlNS.h"
+#include "KoGenStyle.h"
 
 #include <QTextCursor>
 
 KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
-: KoShapeContainerPrivate(q)
-, resizeBehavior(KoTosContainer::IndependentSizes)
+    : KoShapeContainerPrivate(q)
+    , resizeBehavior(KoTosContainer::IndependentSizes)
 {
 }
 
@@ -42,7 +46,7 @@ KoTosContainerPrivate::~KoTosContainerPrivate()
 
 
 KoTosContainer::KoTosContainer()
-: KoShapeContainer(*(new KoTosContainerPrivate(this)))
+    : KoShapeContainer(*(new KoTosContainerPrivate(this)))
 {
 }
 
@@ -62,35 +66,94 @@ void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShape
 
 bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_D(const KoTosContainer);
+
     KoXmlElement child;
     forEachElement(child, element) {
         // only recreate the text shape if there's something to be loaded
         if (child.localName() == "p" || child.localName() == "list") {
 
             KoShape *textShape = createTextShape(context.documentResourceManager());
+            if (!textShape) {
+                return false;
+            }
+            //apply the style properties to the loaded text
+            setTextAlignment(d->alignment);
 
             // In the case of text on shape, we cannot ask the text shape to load
             // the odf, since it expects a complete document with style info and
             // everything, so we have to use the KoTextShapeData object instead.
             KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
-            if (shapeData) {
-                bool loadOdf = shapeData->loadOdf(element, context);
+            Q_ASSERT(shapeData);
+            shapeData->loadStyle(element, context);
+            bool loadOdf = shapeData->loadOdf(element, context);
 
-                // TODO are the next 3 commands needed that all but setPosition is done in create text shape
-                textShape->setSize(size());
-                textShape->setTransformation(transformation());
-                textShape->setPosition(QPointF(0, 0));
-                textShape->setRunThrough(runThrough());
-
-                // Don't overwrite the alignment that may already have been defined for the
-                // Tos-shape in a paragraph-style.
-                //setTextAlignment(Qt::AlignCenter);
-
-                return loadOdf;
-            }
+            return loadOdf;
         }
     }
     return true;
+}
+
+void KoTosContainer::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    Q_D(KoTosContainer);
+
+    KoShapeContainer::loadStyle(element, context);
+
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.setTypeProperties("graphic");
+
+    QString verticalAlign(styleStack.property(KoXmlNS::draw, "textarea-vertical-align"));
+    Qt::Alignment vAlignment(Qt::AlignTop);
+    if (verticalAlign == "bottom") {
+        vAlignment = Qt::AlignBottom;
+    } else if (verticalAlign == "justify") {
+        // not yet supported
+        vAlignment = Qt::AlignVCenter;
+    } else if (verticalAlign == "middle") {
+        vAlignment = Qt::AlignVCenter;
+    }
+
+    QString horizontalAlign(styleStack.property(KoXmlNS::draw, "textarea-horizontal-align"));
+    Qt::Alignment hAlignment(Qt::AlignLeft);
+    if (horizontalAlign == "center") {
+        hAlignment = Qt::AlignCenter;
+    } else if (horizontalAlign == "justify") {
+        // not yet supported
+        hAlignment = Qt::AlignCenter;
+    } else if (horizontalAlign == "right") {
+        hAlignment = Qt::AlignRight;
+    }
+
+    d->alignment = vAlignment | hAlignment;
+}
+
+QString KoTosContainer::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
+{
+    Qt::Alignment alignment = textAlignment();
+    QString verticalAlignment = "top";
+    Qt::Alignment vAlignment(alignment & Qt::AlignVertical_Mask);
+    if (vAlignment == Qt::AlignBottom) {
+        verticalAlignment = "bottom";
+    } else if (vAlignment == Qt::AlignVCenter || vAlignment == Qt::AlignCenter) {
+        verticalAlignment = "middle";
+    }
+
+    style.addProperty("draw:textarea-vertical-align", verticalAlignment);
+
+    QString horizontalAlignment = "left";
+    Qt::Alignment hAlignment(alignment & Qt::AlignHorizontal_Mask);
+    if (hAlignment == Qt::AlignCenter || hAlignment == Qt::AlignHCenter) {
+        horizontalAlignment = "center";
+    } else if (hAlignment == Qt::AlignJustify) {
+        horizontalAlignment = "justify";
+    } else if (hAlignment == Qt::AlignRight) {
+        horizontalAlignment = "right";
+    }
+
+    style.addProperty("draw:textarea-horizontal-align", horizontalAlignment);
+
+    return KoShapeContainer::saveStyle(style, context);
 }
 
 void KoTosContainer::saveText(KoShapeSavingContext &context) const
@@ -141,6 +204,8 @@ KoTosContainer::ResizeBehavior KoTosContainer::resizeBehavior() const
 
 void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
 {
+    Q_D(KoTosContainer);
+
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
         kWarning(30006) << "No text shape present in KoTosContainer";
@@ -159,6 +224,8 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
     QTextCursor cursor(shapeData->document());
     cursor.setPosition(QTextCursor::End, QTextCursor::KeepAnchor);
     cursor.mergeBlockFormat(bf);
+
+    d->alignment = alignment;
 }
 
 Qt::Alignment KoTosContainer::textAlignment() const
@@ -187,9 +254,9 @@ void KoTosContainer::setPreferredTextRect(const QRectF &rect)
     Q_D(KoTosContainer);
     d->preferredTextRect = rect;
     KoShape *textShape = this->textShape();
-    kDebug(30006) << rect << textShape << d->resizeBehavior;
+    //kDebug(30006) << rect << textShape << d->resizeBehavior;
     if (d->resizeBehavior == TextFollowsPreferredTextRect && textShape) {
-        kDebug(30006) << rect;
+        //kDebug(30006) << rect;
         textShape->setPosition(rect.topLeft());
         textShape->setSize(rect.size());
     }
@@ -204,6 +271,7 @@ QRectF KoTosContainer::preferredTextRect() const
 KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentResources)
 {
     if (!documentResources) {
+        kWarning(30006) << "KoDocumentResourceManager not found";
         return 0;
     }
 
@@ -221,9 +289,18 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
     if (factory) { // not installed, thats too bad, but allowed
         textShape = factory->createDefaultShape(documentResources);
         Q_ASSERT(textShape); // would be a bug in the text shape;
-        textShape->setSize(size());
-        textShape->setTransformation(transformation());
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            textShape->setSize(d->preferredTextRect.size());
+        } else {
+            textShape->setSize(size());
+        }
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            textShape->setPosition(d->preferredTextRect.topLeft());
+        } else {
+            textShape->setPosition(QPointF(0, 0));
+        }
         textShape->setSelectable(false);
+        textShape->setRunThrough(runThrough());
         KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
         Q_ASSERT(shapeData); // would be a bug in kotext
         // TODO check if that is correct depending on the resize mode

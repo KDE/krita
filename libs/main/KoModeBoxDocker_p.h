@@ -24,7 +24,7 @@
 
 #include <KoCanvasObserverBase.h>
 
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 class KoCanvasBase;
 class KoModeBox;
@@ -33,11 +33,15 @@ class KoModeBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    KoModeBoxDocker(KoModeBox *modeBox);
+    explicit KoModeBoxDocker(KoModeBox *modeBox);
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
+
+private slots:
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
 
 private:
     KoModeBox *m_modeBox;

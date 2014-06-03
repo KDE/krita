@@ -61,11 +61,12 @@
 KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
+    m_blockOutgoingHistoryChange = false;
     m_stack = 0;
     m_canvas = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_emty_label = tr("<empty>");
+    m_empty_label = tr("<empty>");
 }
 
 QItemSelectionModel *KisUndoModel::selectionModel() const
@@ -114,11 +115,17 @@ void KisUndoModel::stackDestroyed(QObject *obj)
 void KisUndoModel::stackChanged()
 {
     reset();
+
+    m_blockOutgoingHistoryChange = true;
     m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
+    m_blockOutgoingHistoryChange = false;
 }
 
 void KisUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
+    if (m_blockOutgoingHistoryChange)
+        return;
+
     if (m_stack == 0)
         return;
 
@@ -187,7 +194,7 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole) {
         if (index.row() == 0)
-            return m_emty_label;
+            return m_empty_label;
         return m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
         if(!index.row() == 0) {
@@ -201,12 +208,12 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 
 QString KisUndoModel::emptyLabel() const
 {
-    return m_emty_label;
+    return m_empty_label;
 }
 
 void KisUndoModel::setEmptyLabel(const QString &label)
 {
-    m_emty_label = label;
+    m_empty_label = label;
     stackChanged();
 }
 
@@ -234,7 +241,9 @@ void KisUndoModel::addImage(int idx) {
     if( m_stack->count() == idx && !imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->view()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
-        QImage image = paintDevice->createThumbnail(32, 32);
+        QImage image = paintDevice->createThumbnail(32, 32,
+                                                    KoColorConversionTransformation::InternalRenderingIntent,
+                                                    KoColorConversionTransformation::InternalConversionFlags);
         imageMap[currentCommand] = image;
     }
     QList<const KUndo2Command*> list;

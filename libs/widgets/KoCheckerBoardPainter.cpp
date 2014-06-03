@@ -18,7 +18,7 @@
  */
 
 #include "KoCheckerBoardPainter.h"
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoCheckerBoardPainter::KoCheckerBoardPainter( int checkerSize )
 : m_checkerSize(checkerSize), m_lightColor( Qt::lightGray ), m_darkColor( Qt::darkGray )

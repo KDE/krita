@@ -32,7 +32,7 @@ class ParagraphIndentSpacing : public QWidget
 {
     Q_OBJECT
 public:
-    ParagraphIndentSpacing(QWidget *parent);
+    explicit ParagraphIndentSpacing(QWidget *parent);
     // open and display the style
     void setDisplay(KoParagraphStyle *style);
     void setUnit(const KoUnit &unit);
@@ -41,23 +41,35 @@ public:
     void save(KoParagraphStyle *style);
 
 signals:
-    void firstLineMarginChanged(qreal margin);
-    void leftMarginChanged(qreal margin);
-    void lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
-    void rightMarginChanged(qreal margin);
+    void parStyleChanged();
 
 private slots:
     void lineSpacingChanged(int);
-    void spacingValueChanged(qreal value);
-    void spacingPercentChanged(int percent);
+    void spacingValueChanged();
+    void spacingPercentChanged();
     void useFontMetrices(bool);
     void autoTextIndentChanged(int state);
+    void firstIndentValueChanged();
+    void leftMarginValueChanged();
+    void rightMarginValueChanged();
+    void bottomMarginValueChanged();
+    void topMarginValueChanged();
+    void firstLineMarginChanged(qreal margin);
+    void leftMarginChanged(qreal margin);
+    void rightMarginChanged(qreal margin);
 
 private:
     Ui::ParagraphIndentSpacing widget;
 
     KoParagraphStyle *m_style;
     bool m_fontMetricsChecked;
+    bool m_rightMarginIngerited;
+    bool m_leftMarginInherited;
+    bool m_topMarginInherited;
+    bool m_bottomMarginInherited;
+    bool m_textIndentInherited;
+    bool m_autoTextIndentInherited;
+    bool m_spacingInherited;
 };
 
 #endif

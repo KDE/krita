@@ -1,247 +1,189 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>KoDocumentInfoAuthorWidget</class>
- <widget class="QWidget" name="KoDocumentInfoAuthorWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="KoDocumentInfoAuthorWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>470</height>
+    <width>450</width>
+    <height>307</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="fullNameLabel" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="verticalSpacing">
+    <number>8</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QLabel" name="fullNameLabel">
+     <property name="text">
       <string>Name:</string>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leFullName" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="6" >
-    <widget class="Line" name="line" >
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+   <item row="0" column="2">
+    <widget class="QLabel" name="fullName">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="4" >
-    <widget class="QLabel" name="lblInitialsDesc" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="lblInitialsDesc">
+     <property name="text">
       <string>Initials:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leInitials</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leInitials" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-       <horstretch>1</horstretch>
+   <item row="1" column="2">
+    <widget class="QLabel" name="initials">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="4" >
-    <widget class="QLabel" name="lblTitleDesc" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="lblTitleDesc">
+     <property name="text">
       <string>Title:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leTitle</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="3" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leTitle" />
+   <item row="2" column="2">
+    <widget class="QLabel" name="title">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
-   <item row="4" column="0" colspan="4" >
-    <widget class="QLabel" name="lblPositionDesc" >
-     <property name="text" >
+   <item row="3" column="0">
+    <widget class="QLabel" name="lblPositionDesc">
+     <property name="text">
       <string>Position:</string>
      </property>
-     <property name="buddy" >
-      <cstring>lePosition</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="4" column="4" colspan="2" >
-    <widget class="QLineEdit" name="lePosition" />
+   <item row="3" column="2">
+    <widget class="QLabel" name="position">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
-   <item row="5" column="0" colspan="4" >
-    <widget class="QLabel" name="lblCompanyDesc" >
-     <property name="text" >
+   <item row="4" column="0">
+    <widget class="QLabel" name="lblCompanyDesc">
+     <property name="text">
       <string>Company:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leCompany</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="5" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leCompany" />
-   </item>
-   <item row="6" column="0" colspan="4" >
-    <widget class="QLabel" name="lblEmailDesc" >
-     <property name="text" >
+   <item row="5" column="0">
+    <widget class="QLabel" name="lblEmailDesc">
+     <property name="text">
       <string>Email:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leEmail</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="6" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leEmail" />
-   </item>
-   <item row="7" column="0" colspan="4" >
-    <widget class="QLabel" name="lblPhoneHome" >
-     <property name="text" >
+   <item row="6" column="0">
+    <widget class="QLabel" name="lblPhoneHome">
+     <property name="text">
       <string>Telephone (home):</string>
      </property>
-     <property name="buddy" >
-      <cstring>lePhoneHome</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="7" column="4" colspan="2" >
-    <widget class="QLineEdit" name="lePhoneHome" />
-   </item>
-   <item row="8" column="0" colspan="4" >
-    <widget class="QLabel" name="lblPhoneWork" >
-     <property name="text" >
+   <item row="7" column="0">
+    <widget class="QLabel" name="lblPhoneWork">
+     <property name="text">
       <string>Telephone (work):</string>
      </property>
-     <property name="buddy" >
-      <cstring>lePhoneWork</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="8" column="4" colspan="2" >
-    <widget class="QLineEdit" name="lePhoneWork" />
-   </item>
-   <item row="9" column="0" colspan="4" >
-    <widget class="QLabel" name="lblFaxDesc" >
-     <property name="text" >
+   <item row="8" column="0">
+    <widget class="QLabel" name="lblFaxDesc">
+     <property name="text">
       <string>Fax:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leFax</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="9" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leFax" />
-   </item>
-   <item row="10" column="0" colspan="4" >
-    <widget class="QLabel" name="lblStreetDesc" >
-     <property name="text" >
+   <item row="9" column="0">
+    <widget class="QLabel" name="lblStreetDesc">
+     <property name="text">
       <string>Street:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leStreet</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="10" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leStreet" />
-   </item>
-   <item row="11" column="0" colspan="4" >
-    <widget class="QLabel" name="lblPostalDesc" >
-     <property name="text" >
+   <item row="10" column="0">
+    <widget class="QLabel" name="lblPostalDesc">
+     <property name="text">
       <string>Postal code:</string>
      </property>
-     <property name="buddy" >
-      <cstring>lePostal</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="11" column="4" colspan="2" >
-    <widget class="QLineEdit" name="lePostal" />
-   </item>
-   <item row="12" column="0" colspan="4" >
-    <widget class="QLabel" name="lblCityDesc" >
-     <property name="text" >
+   <item row="11" column="0">
+    <widget class="QLabel" name="lblCityDesc">
+     <property name="text">
       <string>City:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leCity</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="12" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leCity" />
-   </item>
-   <item row="13" column="0" colspan="4" >
-    <widget class="QLabel" name="lblCountryDesc" >
-     <property name="text" >
+   <item row="12" column="0">
+    <widget class="QLabel" name="lblCountryDesc">
+     <property name="text">
       <string>Country:</string>
      </property>
-     <property name="buddy" >
-      <cstring>leCountry</cstring>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="13" column="4" colspan="2" >
-    <widget class="QLineEdit" name="leCountry" />
-   </item>
-   <item row="14" column="0" colspan="3" >
+   <item row="13" column="2">
     <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>0</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="14" column="3" colspan="2" >
-    <widget class="QPushButton" name="pbLoadKABC" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>&amp;Load From Address Book</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="5" >
-    <widget class="QPushButton" name="pbDelete" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text" >
-      <string>&amp;Delete Personal Data</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="5" >
-    <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>0</height>
@@ -249,10 +191,71 @@
      </property>
     </spacer>
    </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="company">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QLabel" name="email">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLabel" name="phoneHome">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="phoneWork">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QLabel" name="fax">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2">
+    <widget class="QLabel" name="street">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="2">
+    <widget class="QLabel" name="postal">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2">
+    <widget class="QLabel" name="city">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="2">
+    <widget class="QLabel" name="country">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <includes/>
  <resources/>
  <connections/>
 </ui>

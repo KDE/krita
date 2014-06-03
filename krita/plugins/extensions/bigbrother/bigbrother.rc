@@ -3,18 +3,12 @@
 <MenuBar>
     <Menu name="Tools">
         <Menu name="Recording"><text>Recording</text>
-            <Action name="Recording_Global_Save"/>
-            <Separator/>
             <Action name="Recording_Start_Recording_Macro"/>
             <Action name="Recording_Stop_Recording_Macro"/>
         </Menu>
         <Menu name="Macros"><text>Macros</text>
             <Action name="Macro_Open_Play" />
             <Action name="Macro_Open_Edit" />
-        </Menu>
-        <Menu name="Tutorials"><text>Tutorials</text>
-            <Action name="Tutorials_start" />
-            <Action name="Tutorials_stop" />
         </Menu>
     </Menu>
 </MenuBar>

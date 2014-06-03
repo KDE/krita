@@ -15,14 +15,15 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "KoReportKSpreadRenderer.h"
+
 #include <ods/KoSimpleOdsDocument.h>
 #include <ods/KoSimpleOdsCell.h>
 #include <ods/KoSimpleOdsSheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoDocument.h>
 #include "renderobjects.h"
 #include <kdebug.h>
 
@@ -41,7 +42,7 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
     KoSimpleOdsDocument *doc = new KoSimpleOdsDocument();
     KoSimpleOdsSheet *sht = new KoSimpleOdsSheet();
 
-    kDebug() << "Setting name to: " << document->title();
+    //kDebug() << "Setting name to:" << document->title();
     sht->setName(document->title());
 
     bool renderedPageHeader = false;
@@ -79,9 +80,9 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                 {
                  kDebug() << "Saving an image";
                  OROImage * im = ( OROImage* ) prim;
-                 tr += "<td>";
-                 tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                 tr += "</td>\n";
+                 tr += "<td>"
+                       "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                       "</td>\n";
                  im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
                 }
                 else if (prim->type() == OROPicture::Picture)
@@ -89,16 +90,16 @@ bool KoReportKSpreadRenderer::render(const KoReportRendererContext& context, ORO
                  kDebug() << "Saving a picture";
                  OROPicture * im = ( OROPicture* ) prim;
 
-                 tr += "<td>";
-                 tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                 tr += "</td>\n";
+                 tr += "<td>"
+                       "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                       "</td>\n";
                  QImage image(im->size().toSize(), QImage::Format_RGB32);
                  QPainter painter(&image);
                  im->picture()->play(&painter);
                  image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
                 }*/
                 else {
-                    kDebug() << "unhandled primitive type";
+                    kWarning() << "unhandled primitive type";
                 }
             }
         }

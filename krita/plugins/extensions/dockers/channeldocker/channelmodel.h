@@ -20,6 +20,8 @@
 
 #include <QModelIndex>
 
+class KoColorSpace;
+
 #include <kis_types.h>
 
 class ChannelModel : public QAbstractTableModel
@@ -38,7 +40,9 @@ public:
 
 public slots:
     void slotLayerActivated(KisLayerSP layer);
-    
+    void slotColorSpaceChanged(const KoColorSpace *colorSpace);
+signals:
+    void channelFlagsChanged();
 private:
     KisLayerWSP m_currentLayer;
 };

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoPointedAt.h"
 
@@ -59,7 +59,7 @@ class FrameIterator;
  * the RootArea, but it may also be set by, for example, a row in a table with
  * fixed height.
  */
-class TEXTLAYOUT_EXPORT KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor
@@ -69,8 +69,14 @@ public:
     /// Returns true if the area starts at the cursor position
     bool isStartingAt(FrameIterator *cursor) const;
 
-    QTextFrame::iterator startTextFrameIterator() const;
-    QTextFrame::iterator endTextFrameIterator() const;
+    /**
+     * These methods are deprecated since they lead to wrong assumptions.
+     * Only use these methods after discussing with boemann. The problem
+     * is related to tables (and paragraphs) split over more than one page,
+     * in which case these methods just don't give correct or enough information.
+     */
+    KDE_DEPRECATED QTextFrame::iterator startTextFrameIterator() const;
+    KDE_DEPRECATED QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);
@@ -110,6 +116,16 @@ public:
     /// The maximum allowed bottom coordinate of the reference rect we place ourselves within
     /// The real bottom will be determined during layout
     qreal maximumAllowedBottom() const;
+
+    FrameIterator *footNoteCursorToNext() const;
+
+    KoInlineNote *continuedNoteToNext() const;
+
+    int footNoteAutoCount() const;
+
+    void setFootNoteCountInDoc(int count);
+
+    void setFootNoteFromPrevious(FrameIterator *footNoteCursor, KoInlineNote *note);
 
     /// Sets the maximum allowed width before wrapping text.
     /// Setting this also indicates that we don't want wrapping.
@@ -162,9 +178,9 @@ protected:
     void setBottom(qreal bottom);
 
     /// If this area has the responsibility to show footnotes then store
-    /// it so it can later bein the m_pregisteredFootnotes
+    /// it so it can later be in the m_pregisteredFootnotes
     /// returns the height of the foot note
-    virtual qreal preregisterFootNote(KoInlineNote *note);
+    virtual qreal preregisterFootNote(KoInlineNote *note, qreal bottomOfText);
 
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();
@@ -187,70 +203,32 @@ private:
     bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
 
     /// Returns vertical height of line
-    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
+    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData &blockData);
 
     /// looks for footnotes and preregisters them
-    void findFootNotes(QTextBlock block, const QTextLine &line);
+    void findFootNotes(QTextBlock block, const QTextLine &line, qreal bottomOfText);
 
     void clearPreregisteredFootNotes();
 
-    void drawListItem(QPainter *painter, const QTextBlock &block);
+    void drawListItem(QPainter *painter, QTextBlock &block);
 
-    void decorateParagraph(QPainter *painter, const QTextBlock &block, bool showFormattingCharacter);
+    void decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacter, bool showSpellChecking);
 
-    void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+    void drawStrikeOuts(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    void drawOverlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+    void drawOverlines(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+    void drawUnderlines(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
     int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
 
-    void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
+    void decorateListLabel(QPainter *painter, const KoTextBlockData &blockData, const QTextLine &listLabelLine, const QTextBlock &listItem);
 
-    KoTextLayoutArea *m_parent; //  A pointer to the parent
+    void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
 
-    KoTextDocumentLayout *m_documentLayout;
-
-    qreal m_left; // reference area left
-    qreal m_right; // reference area right
-    qreal m_top; // reference area top
-    qreal m_bottom; // reference area top
-    qreal m_maximalAllowedBottom;
-    qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
-    QRectF m_boundingRect;
-    bool m_isLayoutEnvironment;
-    bool m_actsHorizontally;
-    KoTextBlockBorderData *m_prevBorder;
-    qreal m_prevBorderPadding;
-
-    qreal m_x; // text area starts here as defined by margins (so not == m_left)
-    qreal m_y;
-    qreal m_width; // of text area as defined by margins (so not == m_right - m_left)
-    qreal m_indent;
-    qreal m_dropCapsWidth;
-    int m_dropCapsNChars;
-    bool m_isRtl;
-    qreal m_bottomSpacing;
-    QList<KoTextLayoutTableArea *> m_tableAreas;
-    FrameIterator *m_startOfArea;
-    FrameIterator *m_endOfArea;
-
-    bool m_acceptsPageBreak;
-    bool m_virginPage;
-    qreal m_verticalAlignOffset;
-    QList<QRectF> m_blockRects;
-
-    qreal m_preregisteredFootNotesHeight;
-    qreal m_footNotesHeight;
-    int m_footNoteAutoCount;
-    qreal m_extraTextIndent;
-    QList<KoTextLayoutNoteArea *> m_preregisteredFootNoteAreas;
-    QList<KoTextLayoutNoteArea *> m_footNoteAreas;
-    QList<QTextFrame *> m_preregisteredFootNoteFrames;
-    QList<QTextFrame *> m_footNoteFrames;
-    KoTextLayoutEndNotesArea *m_endNotesArea;
-    QList<KoTextLayoutArea *> m_generatedDocAreas;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

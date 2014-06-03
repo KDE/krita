@@ -20,15 +20,13 @@
 #ifndef KO_LCMS_ENGINE_PLUGIN_H
 #define KO_LCMS_ENGINE_PLUGIN_H
 
-#include <kparts/plugin.h>
-class KUrl;
+#include <QObject>
+#include <QVariantList>
+
 class LcmsEnginePlugin : public QObject
 {
-
     Q_OBJECT
-
 public:
-
     LcmsEnginePlugin(QObject *parent, const QVariantList &);
 
 };

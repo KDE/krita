@@ -19,7 +19,7 @@
 #ifndef KIS_NAMESERVER_TEST_H
 #define KIS_NAMESERVER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisNameServerTest : public QObject
 {

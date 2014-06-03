@@ -19,7 +19,7 @@
  */
 
 #include "ChangeTextAnchorCommand.h"
-#include <KLocale>
+#include <klocale.h>
 
 ChangeTextAnchorCommand::ChangeTextAnchorCommand( ArtisticTextShape * shape, ArtisticTextShape::TextAnchor anchor )
     : m_shape(shape), m_anchor( anchor )

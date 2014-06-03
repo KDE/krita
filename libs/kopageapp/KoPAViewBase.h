@@ -124,7 +124,7 @@ class KOPAGEAPP_EXPORT KoPAViewProxyObject : public QObject {
 
 public:
 
-    KoPAViewProxyObject(KoPAViewBase * parent);
+    explicit KoPAViewProxyObject(KoPAViewBase * parent);
 
     void emitActivePageChanged() { emit activePageChanged(); }
 

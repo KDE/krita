@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2013 Aman Madaan <madaan.amanmadaan@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define REFERENCESTOOL_H
 
 #include "TextTool.h"
+#include <signal.h>
 
 class KoCanvasBase;
 class TableOfContentsConfigure;
@@ -30,14 +32,15 @@ class SimpleCitationBibliographyWidget;
 class KoInlineNote;
 class KoTextEditor;
 class QPainter;
-
+class SimpleLinksWidget;
+class LabeledWidget;
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
 
 class ReferencesTool : public TextTool
 {
     Q_OBJECT
 public:
-    ReferencesTool(KoCanvasBase *canvas);
+    explicit ReferencesTool(KoCanvasBase *canvas);
 
     virtual ~ReferencesTool();
 
@@ -49,6 +52,8 @@ public:
     KoTextEditor *editor();
     /// inserts a ToC and open a configure dialog for customization
     void insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate);
+    /// insert a bibliography and open a configure dialog for customization
+    void insertCustomBibliography(KoBibliographyInfo *defaultTemplate);
 
 protected:
     /// reimplemented from superclass
@@ -57,8 +62,6 @@ protected:
 private slots:
     /// insert a citation
     void insertCitation();
-    /// insert a bibliography
-    void insertBibliography();
     /// configure a bibliography
     void configureBibliography();
     /// format the table of contents template
@@ -66,7 +69,7 @@ private slots:
     /// shows the configuration dialog for a ToC
     void showConfigureDialog(QAction *action);
     /// hides the configuration dialog for ToC
-    void hideCofigureDialog(int result);
+    void hideCofigureDialog();
     /// insert an autonumbered footnote
     void insertAutoFootNote();
     /// insert a labeled footnote
@@ -75,40 +78,56 @@ private slots:
     void insertAutoEndNote();
     /// insert a labeled endnote
     void insertLabeledEndNote(QString label);
-    /// show the configuration dialog for notes
-    void showNotesConfigureDialog();
+    /// show the configuration dialog for footnotes
+    void showFootnotesConfigureDialog();
+    /// show the configuration dialog for endnotes
+    void showEndnotesConfigureDialog();
     /// enable/disable buttons if cursor in notes' body or not
     void updateButtons();
 
     void customToCGenerated();
-
+    /// insert a Link
+    void insertLink();
+    ///insert a bookmark
+    void insertBookmark(QString bookmarkName);
+    /// validate a bookmark
+    bool validateBookmark(QString bookmarkName);
 private:
     TableOfContentsConfigure *m_configure;
     SimpleTableOfContentsWidget *m_stocw;
-        SimpleFootEndNotesWidget *m_sfenw;
-        KoInlineNote *m_note;
+    SimpleFootEndNotesWidget *m_sfenw;
+    KoInlineNote *m_note;
     SimpleCitationBibliographyWidget *m_scbw;
+    SimpleLinksWidget *m_slw;
+    LabeledWidget *m_bmark;
+    KoCanvasBase *m_canvas;
 };
 
 class KAction;
 class QLineEdit;
-
-class LabeledNoteWidget : public QWidget
+class QLabel;
+class LabeledWidget : public QWidget
 {
     Q_OBJECT
 public:
-    LabeledNoteWidget(KAction *action);
-    KAction *m_action;
-    QLineEdit *m_lineEdit;
-
+    enum LabelPosition {INLINE, ABOVE};
+    LabeledWidget(KAction *action, const QString label, LabelPosition pos, bool warningLabelRequired);
+    void setWarningText(int pos, const QString &warning);
+    void clearLineEdit();
 signals:
     void triggered(QString label);
+    void lineEditChanged(QString);
 
 private slots:
     void returnPressed();
 
 protected:
     virtual void enterEvent(QEvent *event);
+
+private :
+    QLineEdit *m_lineEdit;
+    QLabel *m_warningLabel[2];
+    KAction *m_action;
 };
 
 #endif // REFERENCESTOOL_H

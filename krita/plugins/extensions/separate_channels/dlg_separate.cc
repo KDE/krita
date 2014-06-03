@@ -48,7 +48,8 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
 
     m_page->lblColormodel->setText(layerCS);
     m_page->grpOutput->hide();
-    connect(m_page->grpSource, SIGNAL(clicked(int)), this, SLOT(slotSetColorSpaceLabel(int)));
+    connect(m_page->radioCurrentLayer, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
+    connect(m_page->radioAllLayers, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
     connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(okClicked()),
@@ -61,17 +62,17 @@ DlgSeparate::~DlgSeparate()
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()
 {
-    if (m_page->radioCopyAlpha) return COPY_ALPHA_TO_SEPARATIONS;
-    if (m_page->radioDiscardAlpha) return DISCARD_ALPHA;
-    if (m_page->radioSeparateAlpha) return CREATE_ALPHA_SEPARATION;
+    if (m_page->radioCopyAlpha->isChecked()) return COPY_ALPHA_TO_SEPARATIONS;
+    if (m_page->radioDiscardAlpha->isChecked()) return DISCARD_ALPHA;
+    if (m_page->radioSeparateAlpha->isChecked()) return CREATE_ALPHA_SEPARATION;
 
     return COPY_ALPHA_TO_SEPARATIONS;
 }
 
 enumSepSource DlgSeparate::getSource()
 {
-    if (m_page->radioCopyAlpha) return CURRENT_LAYER;
-    if (m_page->radioAllLayers) return ALL_LAYERS;
+    if (m_page->radioCurrentLayer->isChecked()) return CURRENT_LAYER;
+    if (m_page->radioAllLayers->isChecked()) return ALL_LAYERS;
     //if (XXX) return VISIBLE_LAYERS;
 
     return CURRENT_LAYER;
@@ -79,8 +80,8 @@ enumSepSource DlgSeparate::getSource()
 
 enumSepOutput DlgSeparate::getOutput()
 {
-    if (m_page->radioLayers) return TO_LAYERS;
-    if (m_page->radioImages) return TO_IMAGES;
+    if (m_page->radioLayers->isChecked()) return TO_LAYERS;
+    if (m_page->radioImages->isChecked()) return TO_IMAGES;
 
     return TO_LAYERS;
 }
@@ -101,11 +102,11 @@ void DlgSeparate::okClicked()
     accept();
 }
 
-void DlgSeparate::slotSetColorSpaceLabel(int buttonid)
+void DlgSeparate::slotSetColorSpaceLabel()
 {
-    if (buttonid == 0) {
+    if (m_page->radioCopyAlpha->isChecked()) {
         m_page->lblColormodel->setText(m_layerCS);
-    } else {
+    } else if (m_page->radioAllLayers->isChecked()) {
         m_page->lblColormodel->setText(m_imageCS);
     }
 }

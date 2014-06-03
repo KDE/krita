@@ -56,6 +56,8 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+#ifndef KIS_UNDO_MODEL_H
+#define KIS_UNDO_MODEL_H
 #include <QAbstractItemModel>
 
 #include <kundo2qstack.h>
@@ -104,10 +106,12 @@ private slots:
     void setStackCurrentIndex(const QModelIndex &index);
 
 private:
+    bool m_blockOutgoingHistoryChange;
     KUndo2QStack *m_stack;
     QItemSelectionModel *m_sel_model;
-    QString m_emty_label;
+    QString m_empty_label;
     QIcon m_clean_icon;
     KisCanvas2* m_canvas;
     QMap<const KUndo2Command*, QImage> imageMap;
 };
+#endif

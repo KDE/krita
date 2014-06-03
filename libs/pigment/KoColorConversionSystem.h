@@ -68,7 +68,7 @@ public:
      * between two color space. This function search in the graph of transformations
      * the best possible path between the two color space.
      */
-    KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    KoColorConversionTransformation* createColorConverter(const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
     /**
      * This function creates two transformations, one from the color space and one to the
@@ -116,7 +116,7 @@ private:
      * Insert an engine.
      */
     Node* insertEngine(const KoColorSpaceEngine* engine);
-    KoColorConversionTransformation* createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    KoColorConversionTransformation* createTransformationFromPath(const Path* path, const KoColorSpace * srcColorSpace, const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     /**
      * Query the registry to get the color space associated with this
      * node. (default profile)

@@ -167,6 +167,27 @@ void KisSharedPtrTest::testWeakSP()
 
 }
 
+void KisSharedPtrTest::testBoolOnInvalidWeakPointer()
+{
+    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClass * instance = new TestClass(tcw);
+
+    TestClassWSP instanceWSP(instance);
+    {
+        // Copy the shared pointer; refcount should be 2 by now.
+        // This happens a lot in Krita code!
+        TestClassSP instanceSP(instance);
+    }
+
+    QString result1 = instanceWSP.isValid() ? "should not happen" : "good";
+    QString result2 = instanceWSP ? "should not happen" : "good";
+    QString result3 = !instanceWSP ? "good" : "should not happen";
+
+    QCOMPARE(result1, QString("good"));
+    QCOMPARE(result2, QString("good"));
+    QCOMPARE(result3, QString("good"));
+}
+
 
 QTEST_KDEMAIN(KisSharedPtrTest, NoGUI)
 #include "kis_shared_ptr_test.moc"

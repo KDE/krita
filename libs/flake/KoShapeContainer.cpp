@@ -20,7 +20,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeSavingContext.h"
 
@@ -55,8 +55,9 @@ KoShapeContainer::~KoShapeContainer()
 {
     Q_D(KoShapeContainer);
     if (d->model) {
-        foreach(KoShape *shape, d->model->shapes())
-            shape->setParent(0);
+        foreach(KoShape *shape, d->model->shapes()) {
+            delete shape;
+        }
     }
 }
 
@@ -196,17 +197,18 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
         shape->paint(painter, converter, paintcontext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
             painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape* shape)
 {
+    Q_UNUSED(shape);
     Q_D(KoShapeContainer);
     if (d->model == 0)
         return;

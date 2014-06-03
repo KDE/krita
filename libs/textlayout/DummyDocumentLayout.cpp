@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2011 KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -88,7 +88,7 @@ void DummyDocumentLayout::drawInlineObject(QPainter *, const QRectF &, QTextInli
 {
 }
 
-// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
+// This method is called by qt every time  QTextLine.setWidth()/setNumColumns() is called
 void DummyDocumentLayout::positionInlineObject(QTextInlineObject , int , const QTextFormat &)
 {
 }

@@ -21,7 +21,6 @@
 #include "KoDockWidgetTitleBarButton.h"
 
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <QAbstractButton>
 #include <QAction>

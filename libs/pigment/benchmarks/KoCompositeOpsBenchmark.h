@@ -19,7 +19,7 @@
 #ifndef KO_COMPOSITEOPS_BENCHMARK_H_
 #define KO_COMPOSITEOPS_BENCHMARK_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoCompositeOpsBenchmark : public QObject
 {
@@ -32,15 +32,6 @@ private slots:
     
     void benchmarkCompositeOver();
     void benchmarkCompositeAlphaDarken();
-    void benchmarkCompositeAdd();
-    void benchmarkCompositeBurn();
-    void benchmarkCompositeDivide();
-    void benchmarkCompositeDodge();
-    void benchmarkCompositeInversedSubtract();
-    void benchmarkCompositeMulitply();
-    void benchmarkCompositeOverlay();
-    void benchmarkCompositeScreen();
-    void benchmarkCompositeSubtract();
 
 private:
     quint8 * m_dstBuffer;

@@ -62,14 +62,6 @@ public:
     virtual ~KoOdfDocument();
 
     /**
-     *  Saves all internal children (only!), to the store, using the OASIS format.
-     *  This is called automatically during saveNativeFormat.
-     *  @see saveExternalChildren if you have external children.
-     *  Returns true on success.
-     */
-    bool saveChildrenOdf(SavingContext &documentContext);
-
-    /**
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */
@@ -78,9 +70,9 @@ public:
     /**
      * @return the current URL
      */
-    virtual KUrl odfUrl() const = 0;
+    virtual KUrl url() const = 0;
 
-    virtual void setOdfUrl(const KUrl &url) = 0;
+    virtual void setUrl(const KUrl &url) = 0;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported

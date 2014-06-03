@@ -19,6 +19,7 @@
 #include "freehand_stroke_test.h"
 
 #include <qtest_kde.h>
+#include <KoCompositeOpRegistry.h>
 #include "stroke_testing_utils.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_resources_snapshot.h"
@@ -42,26 +43,31 @@ protected:
                                     KisImageWSP image) {
         Q_UNUSED(image);
 
-        return new FreehandStrokeStrategy(indirectPainting, resources, painter);
+        m_painterInfo =
+            new FreehandStrokeStrategy::PainterInfo(painter,
+                                                    new KisDistanceInformation());
+
+        return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, QLatin1String("Freehand Stroke"));
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources,
-                         KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
+
+        Q_ASSERT(painter == m_painterInfo->painter);
+        Q_UNUSED(painter);
+
         KisPaintInformation pi1;
         KisPaintInformation pi2;
 
-        m_dragDistance.clear();
         pi1 = KisPaintInformation(QPointF(200, 200));
         pi2 = KisPaintInformation(QPointF(300, 300));
 
         image->addJob(strokeId(),
             new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             painter, pi1, pi2,
-                                             m_dragDistance));
+                                             m_painterInfo, pi1, pi2));
     }
 
 private:
-    KisDistanceInformation m_dragDistance;
+    FreehandStrokeStrategy::PainterInfo *m_painterInfo;
 };
 
 void FreehandStrokeTest::testAutobrushStroke()
@@ -79,6 +85,18 @@ void FreehandStrokeTest::testHatchingStroke()
 void FreehandStrokeTest::testColorSmudgeStroke()
 {
     FreehandStrokeTester tester("colorsmudge_predefined.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testAutoTextured17()
+{
+    FreehandStrokeTester tester("auto_textured_17.kpp");
+    tester.test();
+}
+
+void FreehandStrokeTest::testAutoTextured38()
+{
+    FreehandStrokeTester tester("auto_textured_38.kpp");
     tester.test();
 }
 

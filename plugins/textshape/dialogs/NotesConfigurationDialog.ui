@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>380</height>
+    <width>557</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,9 +20,6 @@
    <font>
     <pointsize>9</pointsize>
    </font>
-  </property>
-  <property name="windowTitle">
-   <string>Footnotes/Endnotes Settings</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -52,383 +49,277 @@
       <number>4</number>
      </property>
      <item>
-      <widget class="QDockWidget" name="dockWidget">
-       <property name="minimumSize">
-        <size>
-         <width>196</width>
-         <height>62</height>
-        </size>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Automatic Numbering:</string>
        </property>
-       <property name="features">
-        <set>QDockWidget::DockWidgetMovable</set>
+       <property name="flat">
+        <bool>true</bool>
        </property>
-       <property name="windowTitle">
-        <string>Location</string>
-       </property>
-       <widget class="QWidget" name="dockWidgetContents_2">
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QRadioButton" name="footnote">
-             <property name="text">
-              <string>Foot Note</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="endnote">
-             <property name="text">
-              <string>End Note</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="2" column="0">
+         <widget class="QLabel" name="prefix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>54</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string> Prefix:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="startAt">
+          <property name="text">
+           <string> Start at:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="numStyle">
+          <property name="text">
+           <string> Format:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QLabel" name="suffix">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string> Suffix:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="beginAt">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Starts over at:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QComboBox" name="beginAtCombo">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>Page</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Chapter</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Document</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QLineEdit" name="suffixLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="5">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>100</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="startAtSpinBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="numStyleCombo">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>1, 2, 3, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>a, b, c, ..., aa, ab, ..., ba, bb, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>A, B, C, ..., AA, AB, ..., BA, BB, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>a, b, c, ..., aa, bb, ..., aaa, bbb, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>A, B, C, ..., AA, BB, ..., AAA, BBB, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>i, ii, iii, ...</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>I,II,III, ...</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="2">
+         <widget class="QLineEdit" name="prefixLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>102</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
-      <widget class="QDockWidget" name="dockWidget_2">
-       <property name="minimumSize">
-        <size>
-         <width>404</width>
-         <height>134</height>
-        </size>
+      <widget class="QGroupBox" name="continuationBox">
+       <property name="title">
+        <string>Continuation Notice:</string>
        </property>
-       <property name="features">
-        <set>QDockWidget::DockWidgetMovable</set>
+       <property name="flat">
+        <bool>true</bool>
        </property>
-       <property name="windowTitle">
-        <string>Autonumbering</string>
-       </property>
-       <widget class="QWidget" name="dockWidgetContents_3">
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QLabel" name="numStyle">
-             <property name="text">
-              <string> Format</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="startAt">
-             <property name="text">
-              <string> Start at </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="prefix">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>54</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string> Prefix</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QComboBox" name="numStyleCombo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>94</width>
-               <height>0</height>
-              </size>
-             </property>
-             <item>
-              <property name="text">
-               <string>1, 2, 3, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>a, b, c, ..., aa, ab, ..., ba, bb, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>A, B, C, ..., AA, AB, ..., BA, BB, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>a, b, c, ..., aa, bb, ..., aaa, bbb, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>A, B, C, ..., AA, BB, ..., AAA, BBB, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>i, ii, iii, ...</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>I,II,III, ...</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QSpinBox" name="startAtSpinBox">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>9999</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>58</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="prefixLineEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>102</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>86</width>
-               <height>25</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="beginAt">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>83</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string> Begin at </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="suffix">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string> Suffix</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_13">
-           <item>
-            <spacer name="horizontalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>255</width>
-               <height>25</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QComboBox" name="beginAtCombo">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>10</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <item>
-              <property name="text">
-               <string>Document</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Page</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Chapter</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="suffixLineEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDockWidget" name="dockWidget_5">
-       <property name="minimumSize">
-        <size>
-         <width>211</width>
-         <height>101</height>
-        </size>
-       </property>
-       <property name="features">
-        <set>QDockWidget::DockWidgetMovable</set>
-       </property>
-       <property name="windowTitle">
-        <string>Continuation Notice</string>
-       </property>
-       <widget class="QWidget" name="dockWidgetContents_6">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <item>
-            <widget class="QLabel" name="cont1">
-             <property name="text">
-              <string> End of Footnote </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="cont2">
-             <property name="text">
-              <string> Start of next page </string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>45</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_12">
-           <item>
-            <widget class="QLineEdit" name="endlineEdit"/>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="startlineEdit"/>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="startlineEdit"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="endlineEdit"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="cont2">
+          <property name="text">
+           <string>Text saying it is a continuation:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="cont1">
+          <property name="text">
+           <string> Text saying it will continue:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -439,7 +330,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>150</height>
+         <height>0</height>
         </size>
        </property>
       </spacer>

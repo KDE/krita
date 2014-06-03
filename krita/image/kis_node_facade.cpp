@@ -21,7 +21,7 @@
 #include "kis_node.h"
 #include <kis_debug.h>
 
-class KisNodeFacade::Private
+struct KisNodeFacade::Private
 {
 public:
     KisNodeWSP root;
@@ -79,9 +79,7 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveTh
         dbgImage << "above this parent is not the parent"; return false;
     }
 
-    int newIndex = parent->childCount();
-    if (aboveThis) newIndex = parent->index(aboveThis) + 1;
-
+    int newIndex = aboveThis ? parent->index(aboveThis) + 1 : 0;
     return moveNode(node, parent, newIndex);
 }
 
@@ -165,11 +163,16 @@ bool KisNodeFacade::lowerNode(KisNodeSP node)
     if (!node) return false;
     if (!node->parent()) return false;
 
-    if (node->prevSibling())
-        return raiseNode(node->prevSibling());
-    else
+    KisNodeSP parent = node->parent();
+    KisNodeSP prevSibling = node->prevSibling();
+
+    if (node->prevSibling()) {
+        int prevIndex = parent->index(prevSibling);
+        return moveNode(node, parent, prevIndex);
+    } else {
         return true; // We're already at bottom, but there's no sense
-    // in complaining
+        // in complaining
+    }
 }
 
 bool KisNodeFacade::toTop(KisNodeSP node)

@@ -42,6 +42,15 @@ public:
         Curve     ///< a single curved line between connected shapes
     };
 
+    // IDs of the connecting handles
+    enum HandleId {
+        StartHandle,
+        EndHandle,
+        ControlHandle_1,
+        ControlHandle_2,
+        ControlHandle_3
+    };
+
     KoConnectionShape();
     virtual ~KoConnectionShape();
 

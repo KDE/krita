@@ -46,13 +46,8 @@ public:
     KoPasteController(KoCanvasBase *canvas, QAction *pasteAction);
     ~KoPasteController();
 
-signals:
-    /// emitted when the user pressed paste and the current tool had no selection.
-    void pasteRequested();
-
 private:
     Q_PRIVATE_SLOT(d, void paste())
-    Q_PRIVATE_SLOT(d, void selectionChanged())
 
     class Private;
     Private * const d;

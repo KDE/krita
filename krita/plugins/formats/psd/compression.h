@@ -32,7 +32,7 @@ public:
         Unknown
     };
 
-    static QByteArray uncompress(quint32 nBytes, QByteArray bytes, CompressionType compressionType);
+    static QByteArray uncompress(quint32 unpacked_len, QByteArray bytes, CompressionType compressionType);
     static QByteArray compress(QByteArray bytes, CompressionType compressionType);
 };
 

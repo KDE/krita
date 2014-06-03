@@ -23,10 +23,9 @@
 
 #include <QVariant>
 #include <kundo2stack.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include "KoShape.h"
-#include "KoLineBorder.h"
 
 void KoResourceManager::setResource(int key, const QVariant &value)
 {

@@ -19,7 +19,7 @@
 #ifndef KIS_CHANGE_PROFILE_VISITOR_TEST_H
 #define KIS_CHANGE_PROFILE_VISITOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisChangeProfileVisitorTest : public QObject
 {

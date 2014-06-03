@@ -22,7 +22,7 @@
 
 #include "ui_SnapGuideConfigWidget.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoSnapGuide;
 class QShowEvent;
@@ -35,7 +35,7 @@ public:
     ~SnapGuideConfigWidget();
 
 private slots:
-    void snappingEnabled(int state);
+    void snappingEnabled(bool isEnabled);
     void strategyChanged();
     void distanceChanged(int distance);
     void updateControls();

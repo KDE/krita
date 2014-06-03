@@ -24,11 +24,11 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kicon.h>
-#include <KFileDialog>
-#include <KInputDialog>
-#include <KAction>
+#include <kfiledialog.h>
+#include <kinputdialog.h>
+#include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -87,15 +87,15 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
-    KAction* importAction = new KAction(KIcon("document-import"), i18n("Import"), this);
+    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
 
-    KAction* exportAction = new KAction(KIcon("document-export"), i18n("Export"), this);
+    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
-    KAction* addBars = new KAction(KIcon("list-add"), i18n("Add measures"), this);
+    KAction* addBars = new KAction(koIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
@@ -687,7 +687,7 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = KInputDialog::getInteger("Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
+    int barCount = KInputDialog::getInteger(i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }
@@ -747,7 +747,7 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff,
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Import");
+    QString file = KFileDialog::getOpenFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Import"));
     if (file.isEmpty() || file.isNull()) return;
     QFile f(file);
     f.open(QIODevice::ReadOnly);
@@ -764,7 +764,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
+    QString file = KFileDialog::getSaveFileName(KUrl(), i18n("*xml|MusicXML files (*.xml)"), 0, i18nc("@title:window", "Export"));
     if (file.isEmpty() || file.isNull()) return;
 
     QBuffer b;

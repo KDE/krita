@@ -1,3 +1,3 @@
 #! /bin/sh
-$EXTRACTRC *.ui dialogs/*.ui  >> rc.cpp
-$XGETTEXT *.cpp dialogs/*.cpp -o $podir/ChartShape.pot
+$EXTRACTRC `find . -name \*.ui` >> rc.cpp
+$XGETTEXT `find . -name \*.cpp` -o $podir/ChartShape.pot

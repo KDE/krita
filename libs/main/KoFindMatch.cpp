@@ -22,7 +22,7 @@
 
 #include "KoFindMatch.h"
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 class KoFindMatch::Private : public QSharedData
 {

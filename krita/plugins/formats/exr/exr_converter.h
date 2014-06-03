@@ -53,7 +53,7 @@ class exrConverter : public QObject
 {
     Q_OBJECT
 public:
-    exrConverter(KisDoc2 *doc);
+    exrConverter(KisDoc2 *doc, bool showNotifications);
     virtual ~exrConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -68,10 +68,8 @@ private:
 public slots:
     virtual void cancel();
 private:
-    KisImageWSP m_image;
-    KisDoc2 *m_doc;
-    bool m_stop;
-    KIO::TransferJob *m_job;
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

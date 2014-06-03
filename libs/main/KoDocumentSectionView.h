@@ -56,7 +56,7 @@ public:
     /**
      * Create a new KoDocumentSectionView.
      */
-    KoDocumentSectionView(QWidget *parent = 0);
+    explicit KoDocumentSectionView(QWidget *parent = 0);
     virtual ~KoDocumentSectionView();
 
     /// how items should be displayed
@@ -74,6 +74,8 @@ public:
     virtual void paintEvent (QPaintEvent *event);
 
     virtual void dropEvent(QDropEvent *ev);
+
+    virtual void dragEnterEvent(QDragEnterEvent *e);
 
     virtual void dragMoveEvent(QDragMoveEvent *ev);
 
@@ -141,20 +143,20 @@ private slots:
 
 private:
     /**
-     * Permit to know if a slide is draging
+     * Permit to know if a slide is dragging
      *
      * @return boolean
      */
-    bool isDraging() const;
+    bool isDragging() const;
 
     /**
-     * Setter for the draging flag
+     * Setter for the dragging flag
      *
      * @param flag boolean
      */
-    void setDragingFlag(bool flag = true);
+    void setDraggingFlag(bool flag = true);
 
-    bool m_dragingFlag;
+    bool m_draggingFlag;
 
     QStyleOptionViewItem optionForIndex(const QModelIndex &index) const;
     typedef KoDocumentSectionModel Model;

@@ -19,12 +19,12 @@
 
 #include "KoPAMasterPageDialog.h"
 
-#include <QtGui/QListView>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLabel>
+#include <QListView>
+#include <QVBoxLayout>
+#include <QLabel>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"

@@ -21,6 +21,8 @@
 #ifndef KOSHADOWSTYLE_H
 #define KOSHADOWSTYLE_H
 
+#include "koodf_export.h"
+
 #include <QColor>
 #include <QMetaType>
 #include <QPointF>
@@ -65,7 +67,7 @@ public:
      * Loads the given OpenDocument-defined shadow
      * in this KoShadow object.
      * @param shadow the shadow to parse
-     * @return true when the parsing was successfull
+     * @return true when the parsing was successful
      */
     bool loadOdf(const QString &shadow);
 

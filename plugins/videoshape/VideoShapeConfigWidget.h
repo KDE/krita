@@ -22,10 +22,10 @@
 
 #include <KoShapeConfigWidgetBase.h>
 #include <kurl.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class VideoShape;
-class KFileWidget;
+class SelectVideoWidget;
 
 class VideoShapeConfigWidget : public KoShapeConfigWidgetBase
 {
@@ -45,7 +45,7 @@ public:
 
 private:
     VideoShape *m_shape;
-    KFileWidget *m_fileWidget;
+    SelectVideoWidget *m_fileSelectionWidget;
 };
 
 #endif //VIDEOSHAPECONFIGWIDGET_H

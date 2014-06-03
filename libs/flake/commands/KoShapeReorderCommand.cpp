@@ -19,6 +19,7 @@
 
 #include "KoShapeReorderCommand.h"
 #include "KoShape.h"
+#include "KoShape_p.h"
 #include "KoShapeManager.h"
 #include "KoShapeContainer.h"
 
@@ -140,12 +141,11 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         }
     }
 
-
     QMap<KoShape*, QList<KoShape*> >::iterator newIt(newOrder.begin());
     for (; newIt!= newOrder.end(); ++newIt) {
         QList<KoShape*> order(newIt.value());
         order.removeAll(0);
-        int index = -2^13;
+        int index = -KoShapePrivate::MaxZIndex - 1; // set minimum zIndex
         int pos = 0;
         for (; pos < order.size(); ++pos) {
             if (order[pos]->zIndex() > index) {

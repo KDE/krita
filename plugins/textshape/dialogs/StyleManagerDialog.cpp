@@ -20,6 +20,10 @@
 #include "StyleManagerDialog.h"
 #include "StyleManager.h"
 
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
+#include <QMessageBox>
+
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
         : KDialog(parent)
 {
@@ -28,15 +32,25 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent)
     setMainWidget(m_styleManagerWidget);
     setWindowTitle(i18n("Style Manager"));
 
-    connect(this, SIGNAL(applyClicked()), m_styleManagerWidget, SLOT(save()));
+    connect(this, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
 }
 
 StyleManagerDialog::~StyleManagerDialog()
 {
 }
 
+void StyleManagerDialog::applyClicked()
+{
+    if (m_styleManagerWidget->checkUniqueStyleName()) {
+        m_styleManagerWidget->save();
+    }
+}
+
 void StyleManagerDialog::accept()
 {
+    if (!m_styleManagerWidget->checkUniqueStyleName()) {
+        return;
+    }
     m_styleManagerWidget->save();
     KDialog::accept();
     deleteLater();
@@ -44,8 +58,30 @@ void StyleManagerDialog::accept()
 
 void StyleManagerDialog::reject()
 {
+    if (m_styleManagerWidget->unappliedStyleChanges()){
+        int ans = QMessageBox::warning(this, i18n("Save Changes"), i18n("You have changes that are not applied. "
+        "What do you want to do with those changes?"), QMessageBox::Apply, QMessageBox::Discard, QMessageBox::Cancel);
+        switch (ans) {
+        case QMessageBox::Apply :
+            if (m_styleManagerWidget->checkUniqueStyleName()) {
+                m_styleManagerWidget->save();
+                break;
+            }
+            return;
+        case QMessageBox::Discard :
+            break;
+        case QMessageBox::Cancel :
+            return;
+        }
+    }
     KDialog::reject();
     deleteLater();
+}
+
+void StyleManagerDialog::closeEvent(QCloseEvent *e)
+{
+    e->ignore();
+    reject();
 }
 
 void StyleManagerDialog::setStyleManager(KoStyleManager *sm)
@@ -56,6 +92,16 @@ void StyleManagerDialog::setStyleManager(KoStyleManager *sm)
 void StyleManagerDialog::setUnit(const KoUnit &unit)
 {
     m_styleManagerWidget->setUnit(unit);
+}
+
+void StyleManagerDialog::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
+{
+    m_styleManagerWidget->setCharacterStyle(style, canDelete);
+}
+
+void StyleManagerDialog::setParagraphStyle(KoParagraphStyle *style)
+{
+    m_styleManagerWidget->setParagraphStyle(style);
 }
 
 #include <StyleManagerDialog.moc>

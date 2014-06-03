@@ -22,8 +22,8 @@
 
 #include "KoSnapGuide.h"
 
-#include <QtCore/QPointF>
-#include <QtGui/QPainterPath>
+#include <QPointF>
+#include <QPainterPath>
 
 class TestSnapStrategy;
 class KoPathPoint;

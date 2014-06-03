@@ -60,9 +60,9 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     } else {
         QString cornerRadius = element.attributeNS(KoXmlNS::draw, "corner-radius", "");
         if (! cornerRadius.isEmpty()) {
-            float radius = KoUnit::parseValue(cornerRadius);
-            m_cornerRadiusX = radius / (0.5 * size().width()) * 100;
-            m_cornerRadiusY = radius / (0.5 * size().height()) * 100;
+            qreal radius = KoUnit::parseValue(cornerRadius);
+            m_cornerRadiusX = qMin<qreal>(radius / (0.5 * size().width()) * 100, qreal(100));
+            m_cornerRadiusY = qMin<qreal>(radius / (0.5 * size().height()) * 100, qreal(100));
         }
     }
 
@@ -342,9 +342,9 @@ bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &con
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));
     if (rx >= 0.0)
-        setCornerRadiusX(qMin(100.0, rx / (0.5 * w) * 100.0));
+        setCornerRadiusX(qMin(qreal(100.0), qreal(rx / (0.5 * w) * 100.0)));
     if (ry >= 0.0)
-        setCornerRadiusY(qMin(100.0, ry / (0.5 * h) * 100.0));
+        setCornerRadiusY(qMin(qreal(100.0), qreal(ry / (0.5 * h) * 100.0)));
     if (w == 0.0 || h == 0.0)
         setVisible(false);
 

@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_STAFF_H
 #define MUSIC_CORE_STAFF_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 namespace MusicCore {
 
@@ -44,7 +44,7 @@ public:
      *
      * @param part the part in which to create a staff
      */
-    Staff(Part* part);
+    explicit Staff(Part *part);
 
     /**
      * Destructor.

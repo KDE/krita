@@ -19,9 +19,12 @@
 #ifndef __KIS_PROCESSING_VISITOR_H
 #define __KIS_PROCESSING_VISITOR_H
 
-#include "kis_node.h"
 #include "krita_export.h"
+#include "kis_shared.h"
 
+#include <QMutex>
+
+class KisNode;
 class KoUpdater;
 class KoProgressUpdater;
 class KisUndoAdapter;
@@ -33,7 +36,13 @@ class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
 class KisSelectionMask;
+class KisGeneratorLayer;
 
+/**
+ * A visitor that processes a single layer; it does not recurse into the
+ * layer's children. Classes inheriting KisProcessingVisitor must not
+ * emit signals or ask the image to update the projection.
+ */
 class KRITAIMAGE_EXPORT KisProcessingVisitor : public KisShared
 {
 public:
@@ -50,8 +59,8 @@ public:
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 
-protected:
-    class ProgressHelper {
+public:
+    class KRITAIMAGE_EXPORT ProgressHelper {
     public:
         ProgressHelper(const KisNode *node);
         ~ProgressHelper();
@@ -59,7 +68,7 @@ protected:
         KoUpdater* updater() const;
     private:
         KoProgressUpdater *m_progressUpdater;
-        KoUpdater *m_updater;
+        mutable QMutex m_progressMutex;
     };
 };
 

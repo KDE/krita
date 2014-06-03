@@ -22,9 +22,9 @@
 #ifndef KPROPERTY_PROPERTY_H
 #define KPROPERTY_PROPERTY_H
 
-#include <QtCore/QVariant>
-#include <QtCore/QStringList>
-#include <QtCore/QByteArray>
+#include <QVariant>
+#include <QStringList>
+#include <QByteArray>
 #include "koproperty_global.h"
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
@@ -52,10 +52,6 @@ namespace KoProperty
 class PropertyPrivate;
 class ComposedPropertyInterface;
 class Set;
-
-///*! Helper function to create a value list from two string lists. */
-//KOPROPERTY_EXPORT QMap<QString, QVariant> createValueListFromStringLists(
-// const QStringList &keys, const QStringList &values);
 
 /*! PropertyType.
 Integers that represent the type of the property. Plugin defined properties
@@ -212,7 +208,7 @@ public:
 
 //unused for now   /*! True (the default), if the list has fixed number of possible
 //unused for now    items (keys). If this is false, user can add or enter own values. */
-//unused for now   bool fixed : 1;
+//unused for now   bool fixed;
     };
 
     /*! Constructs a null property. */
@@ -222,6 +218,7 @@ public:
      If \a caption contains newline characters, caption() will return \a caption with substituted
      these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
+    explicit
     Property(const QByteArray &name, const QVariant &value = QVariant(),
              const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, Property* parent = 0);

@@ -23,8 +23,6 @@ Boston, MA 02110-1301, USA.
 #include "KoDocument.h"
 #include "KoFilter.h"
 
-#include <kparts/factory.h>
-
 #include <kservicetype.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
@@ -43,12 +41,11 @@ KoFilterEntry::KoFilterEntry(const KService::Ptr& service)
     available = service->property("X-KDE-Available").toString();
 }
 
-QList<KoFilterEntry::Ptr> KoFilterEntry::query(const QString & _constr)
+QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
-    kDebug(30500) << "KoFilterEntry::query(" << _constr << " )";
     QList<KoFilterEntry::Ptr> lst;
 
-    KService::List offers = KServiceTypeTrader::self()->query("CalligraFilter", _constr);
+    KService::List offers = KServiceTypeTrader::self()->query("Calligra/Filter");
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

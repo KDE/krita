@@ -19,9 +19,9 @@
 
 #include "KoPAPageThumbnailModel.h"
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include "KoPAPageBase.h"
 

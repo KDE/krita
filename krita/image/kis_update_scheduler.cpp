@@ -150,7 +150,16 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
-    lock();
+    bool needLock = true;
+
+    if(m_d->processingBlocked) {
+        warnImage << "WARNING: Calling synchronous fullRefresh under a scheduler lock held";
+        warnImage << "We will not assert for now, but please port caller's to strokes";
+        warnImage << "to avoid this warning";
+        needLock = false;
+    }
+
+    if(needLock) lock();
     m_d->updaterContext->lock();
 
     Q_ASSERT(m_d->updaterContext->isJobAllowed(walker));
@@ -158,7 +167,13 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     m_d->updaterContext->waitForDone();
 
     m_d->updaterContext->unlock();
-    unlock();
+    if(needLock) unlock();
+}
+
+void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    m_d->updatesQueue->addSpontaneousJob(spontaneousJob);
+    processQueues();
 }
 
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
@@ -187,6 +202,11 @@ bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
     return result;
 }
 
+bool KisUpdateScheduler::wrapAroundModeSupported() const
+{
+    return m_d->strokesQueue->wrapAroundModeSupported();
+}
+
 void KisUpdateScheduler::updateSettings()
 {
     if(m_d->updatesQueue) {
@@ -211,10 +231,10 @@ void KisUpdateScheduler::unlock()
 
 void KisUpdateScheduler::waitForDone()
 {
-    while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
+    do {
         processQueues();
         m_d->updaterContext->waitForDone();
-    }
+    } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
 }
 
 bool KisUpdateScheduler::tryBarrierLock()

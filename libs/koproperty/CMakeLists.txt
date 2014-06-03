@@ -1,8 +1,3 @@
-# The following variables should be set: KOPROPERTY_TARGETNAME, KOPROPERTY_LIBS, KOPROPERTY_LIB_VERSION, KOPROPERTY_LIB_SOVERSION.
-# Set KOPROPERTY_USE_KOLIBS to TRUE if extra features that use Calligra libraries should be compiled-in.
-# See calligra/kexi/CMakeLists.txt for example.
-# TODO remove when we move to independent place
-
 add_subdirectory( test )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44022)
@@ -13,8 +8,8 @@ set(libkopropertyeditors_SRCS
   editors/coloredit.cpp
   editors/combobox.cpp
   editors/cursoredit.cpp
-#  editors/dateedit.cpp
-#  editors/datetimeedit.cpp
+  editors/dateedit.cpp
+  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp
   editors/fontedit.cpp
   editors/pixmapedit.cpp
@@ -26,23 +21,14 @@ set(libkopropertyeditors_SRCS
   editors/sizepolicyedit.cpp
   editors/spinbox.cpp
   editors/stringedit.cpp
+  editors/linestyleedit.cpp
 #  editors/stringlistedit.cpp
 #  editors/symbolcombo.cpp
-#  editors/timeedit.cpp
+  editors/timeedit.cpp
 #  editors/urledit.cpp
 )
 
-if(KOPROPERTY_USE_KOLIBS) # TODO remove when we move to independent place
-  add_definitions(-DKOPROPERTY_USE_KOLIBS)
-  include_directories(
-    ${KOPROPERTY_INCLUDES}
-  )
-  list(APPEND libkopropertyeditors_SRCS editors/linestyleedit.cpp)
-else(KOPROPERTY_USE_KOLIBS)
-  include_directories(
-    ${KDE4_INCLUDES}
-  )
-endif(KOPROPERTY_USE_KOLIBS)
+include_directories(${KOPROPERTY_INCLUDES})
 
 ########### next target ###############
 
@@ -57,26 +43,17 @@ set(koproperty_LIB_SRCS
    ${libkopropertyeditors_SRCS}
 )
 
+kde4_add_library(koproperty SHARED ${koproperty_LIB_SRCS})
+target_link_libraries(koproperty ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
+target_link_libraries(koproperty LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kowidgets)
 
-kde4_add_library(${KOPROPERTY_TARGETNAME} SHARED ${koproperty_LIB_SRCS})
-
-set(KOPROPERTY_LINK_LIBS ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
-if(KOPROPERTY_USE_KOLIBS)
-	list(APPEND KOPROPERTY_LINK_LIBS kowidgets)
-endif(KOPROPERTY_USE_KOLIBS)
-target_link_libraries(${KOPROPERTY_TARGETNAME} ${KOPROPERTY_LINK_LIBS})
-
-target_link_libraries(${KOPROPERTY_TARGETNAME} LINK_INTERFACE_LIBRARIES ${KOPROPERTY_LINK_LIBS})
-
-set_target_properties(${KOPROPERTY_TARGETNAME} PROPERTIES VERSION ${KOPROPERTY_LIB_VERSION} SOVERSION ${KOPROPERTY_LIB_SOVERSION} )
-install(TARGETS ${KOPROPERTY_TARGETNAME} ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(koproperty PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
+install(TARGETS koproperty ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
 
-add_definitions(-DKOPROPERTY_APP_DIR="\\"${KOPROPERTY_TARGETNAME}\\"") # for KIconLoader::global()->addAppDir();
-                                                                       # TODO remove when we move to independent place
-kde4_install_icons( ${DATA_INSTALL_DIR}/${KOPROPERTY_TARGETNAME}/icons )
+kde4_install_icons(${DATA_INSTALL_DIR}/koproperty/icons)
 
 if(FALSE) # TODO: install when we move to independent place
   install( FILES

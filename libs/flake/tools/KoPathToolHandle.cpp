@@ -36,7 +36,7 @@
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
         : m_tool(tool)
@@ -76,11 +76,13 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
 
 void PointHandle::repaint() const
 {
+    m_tool->repaint(m_oldRepaintedRect);
     bool active = false;
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
     if (selection && selection->contains(m_activePoint))
         active = true;
-    m_tool->repaint(m_activePoint->boundingRect(!active));
+    m_oldRepaintedRect = m_activePoint->boundingRect(!active);
+    m_tool->repaint(m_oldRepaintedRect);
 }
 
 KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)

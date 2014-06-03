@@ -45,12 +45,12 @@
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QTextStream>
-#include <QtCore/QBuffer>
-#include <QtGui/QPainter>
-#include <QtSvg/QSvgGenerator>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
+#include <QBuffer>
+#include <QPainter>
+#include <QSvgGenerator>
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
     : m_pageSize(pageSize)
@@ -102,7 +102,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
     svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
 
     // add some PR.  one line is more than enough.
-    svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->" << endl;
+    svgStream << "<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->" << endl;
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"";
     svgStream << " width=\"" << m_pageSize.width() << "pt\"";

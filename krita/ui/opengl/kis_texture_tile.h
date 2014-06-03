@@ -26,22 +26,29 @@
 
 #include <QRect>
 #include <QRectF>
-#include <opengl/kis_opengl.h>
+
+#if QT_VERSION >= 0x040700 && !defined(QT_OPENGL_ES)
+#define USE_PIXEL_BUFFERS
+#include <QGLBuffer>
+#endif
 
 
 struct KisGLTexturesInfo {
+
+    // real width and height
     int width;
     int height;
 
+    // width and height minus border padding?
     int effectiveWidth;
     int effectiveHeight;
 
+    // size of the border padding
     int border;
 
+    GLint internalFormat;
     GLint format;
     GLint type;
-
-    QRect imageRect;
 };
 
 inline QRect stretchRect(const QRect &rc, int delta)
@@ -52,12 +59,18 @@ inline QRect stretchRect(const QRect &rc, int delta)
 class KisTextureTile
 {
 public:
+    enum FilterMode {
+        NearestFilterMode,  // nearest
+        BilinearFilterMode, // linear, no mipmap
+        TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
+        HighQualityFiltering // Mipmaps + custom shader
+    };
+
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData);
+                   const QByteArray &fillData, FilterMode mode);
     ~KisTextureTile();
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
-    void drawPoints();
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;
@@ -71,19 +84,30 @@ public:
         return m_textureRectInImagePixels;
     }
 
-private:
-    void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
+    inline QRectF tileRectInTexturePixels() {
+        return m_tileRectInTexturePixels;
+    }
+
+    void bindToActiveTexture();
 
 private:
+    void setNeedsMipmapRegeneration();
+
     GLuint m_textureId;
+
+#ifdef USE_PIXEL_BUFFERS
+    void createTextureBuffer(const QByteArray &fillData);
+    QGLBuffer *m_glBuffer;
+#endif
 
     QRect m_tileRectInImagePixels;
     QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
-
+    FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
+    bool m_needsMipmapRegeneration;
 
-    Q_DISABLE_COPY(KisTextureTile);
+    Q_DISABLE_COPY(KisTextureTile)
 };
 
 

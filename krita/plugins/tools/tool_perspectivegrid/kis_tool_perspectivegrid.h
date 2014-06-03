@@ -23,6 +23,7 @@
 #include <kis_perspective_grid.h>
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
+#include <KoIcon.h>
 
 class KisCanvas2;
 
@@ -32,8 +33,8 @@ class KisToolPerspectiveGrid : public KisTool
     enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
-        MODE_DRAGING_NODE, // In this mode one node is translated
-        MODE_DRAGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
+        MODE_DRAGGING_NODE, // In this mode one node is translated
+        MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
 
 public:
@@ -47,12 +48,10 @@ public:
     virtual quint32 priority() {
         return 3;
     }
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-//     QWidget* createOptionWidget();
-//     virtual QWidget* optionWidget();
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -93,7 +92,7 @@ public:
             : KoToolFactoryBase("KisToolPerspectiveGrid") {
         setToolTip(i18n("Edit the perspective grid"));
         setToolType(TOOL_TYPE_VIEW);
-        setIcon("tool_perspectivegrid");
+        setIconName(koIconNameCStr("tool_perspectivegrid"));
         setPriority(16);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };

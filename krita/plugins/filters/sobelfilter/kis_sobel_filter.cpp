@@ -30,7 +30,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -39,7 +38,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -97,14 +95,14 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
     }
 }
 
-#define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
+#define RMS(a, b) (sqrt ((qreal)(a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(KisPaintDeviceSP device,
-                            const QRect& applyRect,
-                            const KisFilterConfiguration* configuration,
-                            KoUpdater* progressUpdater
-                            ) const
+void KisSobelFilter::processImpl(KisPaintDeviceSP device,
+                                 const QRect& applyRect,
+                                 const KisFilterConfiguration* configuration,
+                                 KoUpdater* progressUpdater
+                                 ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
@@ -128,7 +126,7 @@ void KisSobelFilter::process(KisPaintDeviceSP device,
     Q_CHECK_PTR(curRow);
     quint8* nextRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
-    quint8* dest = new quint8[ width  * pixelSize];
+    quint8* dest = new quint8[width  * pixelSize];
     Q_CHECK_PTR(dest);
 
     quint8* pr = prevRow + pixelSize;
@@ -198,7 +196,7 @@ void KisSobelFilter::process(KisPaintDeviceSP device,
 }
 
 
-KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageWSP) const
+KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
 {
     vKisBoolWidgetParam param;
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));

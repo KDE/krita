@@ -19,7 +19,7 @@
 #ifndef KIS_SHARED_PTR_VECTOR_TEST_H
 #define KIS_SHARED_PTR_VECTOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisSharedPtrVectorTest : public QObject
 {

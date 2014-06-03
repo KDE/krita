@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include "KoConnectionShape.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
+#include "KoShapeConnectionChangeCommand.h"
 
 #include <float.h>
 #include <math.h>
@@ -132,13 +133,12 @@ KUndo2Command* KoPathConnectionPointStrategy::createCommand()
         d->newConnectionId = d->newConnectionShape->addConnectionPoint(d->newConnectionShape->absoluteTransformation(0).inverted().map(p));
     }
 
-    // set the connection corresponding to the handle we are working on
-    if (d->handleId == 0)
-        d->connectionShape->connectFirst(d->newConnectionShape, d->newConnectionId);
-    else
-        d->connectionShape->connectSecond(d->newConnectionShape, d->newConnectionId);
+    KUndo2Command *cmd = KoParameterChangeStrategy::createCommand();
+    if (!cmd)
+        return 0;
 
-    // TODO create a connection command
-    return KoParameterChangeStrategy::createCommand();
+    // change connection
+    new KoShapeConnectionChangeCommand(d->connectionShape, static_cast<KoConnectionShape::HandleId>(d->handleId),
+                                       d->oldConnectionShape, d->oldConnectionId, d->newConnectionShape, d->newConnectionId, cmd);
+    return cmd;
 }
-

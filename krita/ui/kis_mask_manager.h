@@ -44,26 +44,6 @@ public:
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
 
-signals:
-
-    void sigMaskActivated(KisMaskSP mask);
-
-private slots:
-    
-    /**
-     * Create a new global selection from the active mask.
-     */
-    void maskToSelection();
-
-    /**
-     * Create a new layer from the current mask. The user can choose
-     * the colorspace of the new layer and which channels should be
-     * filled from the mask channel.
-     */
-    void maskToLayer();
-
-    void changeActivity(KisSelectionMask *mask,bool active);
-
 private:
     
     friend class KisNodeManager;
@@ -82,17 +62,6 @@ private:
      * @return the active mask, if there is one
      */
     KisMaskSP activeMask();
-
-    /**
-     * Create a new transparency mask.
-     */
-    void createTransparencyMask();
-
-    /**
-     * Create a new filter mask.
-     */
-    void createFilterMask();
-
 
     /**
      * Create an exact duplicate of the current mask.
@@ -130,16 +99,6 @@ private:
     void maskToBottom();
 
     /**
-     * Mirror the mask around the X axis
-     */
-    void mirrorMaskX();
-
-    /**
-     * Mirror the mask around the Y axis
-     */
-    void mirrorMaskY();
-
-    /**
      * Show the mask properties dialog
      */
     void maskProperties();
@@ -156,9 +115,12 @@ private:
      */
     void activateMask(KisMaskSP mask);
 
-    void createSelectionMask(KisNodeSP parent, KisNodeSP above);
-    void createFilterMask(KisNodeSP parent, KisNodeSP above);
-    void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
+    void adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bool avoidActiveNode, KisNodeSP &parent, KisNodeSP &above);
+    void createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const QString &macroName, const QString &nodeType, const QString &nodeName);
+
+    void createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
+    void createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet = false);
+    void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
 
     KisView2 * m_view;
 

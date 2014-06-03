@@ -20,7 +20,6 @@
 #ifndef KIS_TOOL_MEASURE_H_
 #define KIS_TOOL_MEASURE_H_
 
-#include <QWidget>
 #include <QLabel>
 
 #include <KoUnit.h>
@@ -30,6 +29,7 @@
 #include "kis_types.h"
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
+#include <KoIcon.h>
 
 class QPointF;
 class QWidget;
@@ -68,9 +68,9 @@ public:
     KisToolMeasure(KoCanvasBase * canvas);
     virtual ~KisToolMeasure();
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -93,7 +93,7 @@ private:
     }
 
 private:
-    KisToolMeasureOptionsWidget *m_optWidget;
+    KisToolMeasureOptionsWidget *m_optionsWidget;
 
     QPointF m_startPos;
     QPointF m_endPos;
@@ -109,7 +109,7 @@ public:
             : KoToolFactoryBase("KritaShape/KisToolMeasure") {
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure the distance between two points"));
-        setIcon("krita_tool_measure");
+        setIconName(koIconNameCStr("krita_tool_measure"));
         setPriority(16);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
     }

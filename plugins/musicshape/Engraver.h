@@ -19,7 +19,7 @@
 #ifndef MUSIC_ENGRAVER_H
 #define MUSIC_ENGRAVER_H
 
-#include <QtCore/QSizeF>
+#include <QSizeF>
 
 namespace MusicCore {
     class Bar;
@@ -30,7 +30,7 @@ namespace MusicCore {
 
 /**
  * This class is responsible for layint out notes and other musical elements inside a bar, and for laying out bars
- * withing staff systems.
+ * within staff systems.
  */
 class Engraver {
 public:

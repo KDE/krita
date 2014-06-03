@@ -22,13 +22,10 @@
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorConversionTransformation.h"
-#include <KoChannelInfo.h>
 #include <KoID.h>
 #include "pigment_export.h"
 
-class KoCompositeOp;
 class KoColorProfile;
-class KoColorTransformation;
 class KoColorConversionTransformationFactory;
 class QBitArray;
 
@@ -114,9 +111,8 @@ public:
      */
     const KoColorProfile* colorProfile(const QByteArray& rawData) const;
 
-    KoColorSpace* grabColorSpace(const KoColorProfile* profile);
+    const KoColorSpace *grabColorSpace(const KoColorProfile *profile);
 
-    void releaseColorSpace(KoColorSpace *);
 protected:
     /**
      * creates a color space using the given profile.

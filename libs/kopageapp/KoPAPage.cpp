@@ -20,7 +20,7 @@
 #include "KoPAPage.h"
 
 #include <QPainter>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <KoShapePainter.h>
 #include <KoShapeSavingContext.h>
@@ -30,11 +30,12 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 
 #include "KoPAMasterPage.h"
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
-#include "KoPAUtil.h"
+
 
 KoPAPage::KoPAPage( KoPAMasterPage * masterPage )
 : KoPAPageBase()
@@ -51,13 +52,13 @@ KoPAPage::~KoPAPage()
 void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
-
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:name", paContext.pageName( this ) );
     if (!name().isEmpty() && name() != paContext.pageName( this )) {
         paContext.xmlWriter().addAttribute( "calligra:name", name() );
     }
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
+    paContext.xmlWriter().addAttribute( "xml:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
     paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );
 
@@ -114,16 +115,16 @@ void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )
     m_masterPage = masterPage;
 }
 
-void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter )
+void KoPAPage::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )
 {
     if ( m_pageProperties & UseMasterBackground ) {
         if ( m_pageProperties & DisplayMasterBackground ) {
             Q_ASSERT( m_masterPage );
-            m_masterPage->paintBackground( painter, converter );
+            m_masterPage->paintBackground( painter, converter, paintContext );
         }
     }
     else {
-        KoPAPageBase::paintBackground( painter, converter );
+        KoPAPageBase::paintBackground( painter, converter, paintContext );
     }
 }
 
@@ -163,30 +164,10 @@ bool KoPAPage::displayShape(KoShape *shape) const
     return true;
 }
 
-QPixmap KoPAPage::generateThumbnail( const QSize& size )
-{
-    // don't paint null pixmap
-    if ( size.isEmpty() ) // either width or height is <= 0
-        return QPixmap();
-    KoZoomHandler zoomHandler;
-    const KoPageLayout & layout = pageLayout();
-    KoPAUtil::setZoom( layout, size, zoomHandler );
-    QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
-
-    QPixmap pixmap(size);
-    pixmap.fill( Qt::white );
-    QPainter painter( &pixmap );
-    painter.setClipRect( pageRect );
-    painter.setRenderHint( QPainter::Antialiasing );
-    painter.translate( pageRect.topLeft() );
-
-    paintPage( painter, zoomHandler );
-    return pixmap;
-}
-
 void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
 {
-    paintBackground( painter, zoomHandler );
+    KoShapePaintingContext context;
+    paintBackground( painter, zoomHandler, context );
 
     KoShapePainter shapePainter( getPaintingStrategy() );
     if ( displayMasterShapes() ) {

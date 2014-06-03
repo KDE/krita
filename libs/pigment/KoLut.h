@@ -22,7 +22,7 @@
 #ifndef _KO_LUT_H_
 #define _KO_LUT_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 #define _USE_QT_TYPES_
 

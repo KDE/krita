@@ -20,7 +20,7 @@
 #include <KoReportItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include <krpos.h>
 #include <krsize.h>
 
@@ -40,10 +40,9 @@ public:
     };
     KoReportItemLabel(QDomNode & element);
     virtual ~KoReportItemLabel();
-    
+
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
-    using KoReportItemBase::render;
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
 protected:
 

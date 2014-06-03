@@ -20,11 +20,10 @@
 #include <klocale.h>
 #include <kis_painter.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
+    : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::commonCategory(), true)
 {
     m_checkable = false;
     setMinimumLabel(i18n("Transparent"));
@@ -42,17 +41,19 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {
-        QList<QPointF> points = sensor()->curve().points();
-        QList<QPointF> points_new;
-        foreach(QPointF p, points)
-        {
-            points_new.push_back( QPointF(p.x() * 0.5, p.y()));
+        KisDynamicSensorSP pressureSensor = sensor(PressureId.id(), true);
+        if (pressureSensor) {
+            QList<QPointF> points = pressureSensor->curve().points();
+            QList<QPointF> points_new;
+            foreach(const QPointF & p, points) {
+                points_new.push_back(QPointF(p.x() * 0.5, p.y()));
+            }
+            pressureSensor->setCurve(KisCubicCurve(points_new));
         }
-        sensor()->setCurve(KisCubicCurve(points_new));
     }
 }
 
-quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInformation& info) const
+quint8 KisPressureOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
 {
 
     if (!isChecked()) {
@@ -63,7 +64,7 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInfor
     qreal opacity = (qreal)(origOpacity * computeValue(info));
     quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT_U8, opacity, OPACITY_OPAQUE_U8));
 
-    painter->setOpacity(opacity2);
+    painter->setOpacityUpdateAverage(opacity2);
     return origOpacity;
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>225</width>
-    <height>258</height>
+    <width>294</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -46,8 +46,8 @@
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>0</number>
+     <property name="bottomMargin">
+      <number>4</number>
      </property>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -56,7 +56,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>13</width>
          <height>20</height>
         </size>
        </property>
@@ -125,7 +125,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
+         <width>13</width>
          <height>20</height>
         </size>
        </property>
@@ -142,7 +142,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -974,7 +974,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string>buttonGroup</string>
+             <string notr="true">buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1040,7 +1040,7 @@ big!</string>
              <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
-             <string>buttonGroup</string>
+             <string notr="true">buttonGroup</string>
             </attribute>
            </widget>
           </item>
@@ -1095,6 +1095,12 @@ big!</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="topMargin">
+      <number>6</number>
+     </property>
      <item>
       <widget class="QPushButton" name="showDecorationsBox">
        <property name="sizePolicy">
@@ -1105,12 +1111,40 @@ big!</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>40</width>
+         <width>32</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="toolTip">
         <string>Show Decorations</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="chkWorkRecursively">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>32</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Work Recursively</string>
        </property>
        <property name="text">
         <string/>
@@ -1130,8 +1164,8 @@ big!</string>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
-         <height>10</height>
+         <width>13</width>
+         <height>13</height>
         </size>
        </property>
       </spacer>
@@ -1139,7 +1173,7 @@ big!</string>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
+        <enum>Qt::LeftToRight</enum>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -1153,6 +1187,9 @@ big!</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="SpecialSpacer" native="true"/>
    </item>
   </layout>
  </widget>

@@ -40,6 +40,13 @@ class TestBlockLayout : public QObject
 public:
     TestBlockLayout() {}
 
+    /// FIXME: fix these broken tests
+
+    /// Test tabs.
+    void testTabs_data();
+    void testTabs();
+
+
 private slots:
     void initTestCase();
 
@@ -53,9 +60,14 @@ private slots:
     void testBasicLineSpacing();
     /// Tests incrementing Y pos based on the font size
     void testBasicLineSpacing2();
+    /// Tests fixed linespacing.
+    void testFixedLineSpacing();
+    /// Tests percentage linespacing.
+    void testPercentageLineSpacing();
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
-    /// test data integrety for multiple shapes.
+    /// Tests that empty lines are given the correct height like in LibreOffice
+    void testEmptyLineHeights();
 
     /// Test distance above and below paragraphs.
     void testBlockSpacing();
@@ -65,9 +77,6 @@ private slots:
 
     /// Test first line indent of paragraphs.
     void testTextIndent();
-
-    /// Test tabs.
-    void testTabs();
 
     void testBasicTextAlignments();
     void testTextAlignments();

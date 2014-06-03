@@ -22,12 +22,14 @@
 #include "star/StarShapeConfigWidget.h"
 
 #include <KoShapeFactoryBase.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoColorBackground.h>
 #include <KoShapeLoadingContext.h>
+
+#include <KoIcon.h>
 
 #include <klocale.h>
 
@@ -35,7 +37,7 @@ StarShapeFactory::StarShapeFactory()
     : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))
 {
     setToolTip(i18n("A star"));
-    setIcon("star");
+    setIconName(koIconNameCStr("star-shape"));
     QStringList elementNames;
     elementNames << "regular-polygon" << "custom-shape";
     setXmlElementNames(KoXmlNS::draw, elementNames);
@@ -47,7 +49,7 @@ StarShapeFactory::StarShapeFactory()
     t.name = i18n("Star");
     t.family = "geometric";
     t.toolTip = i18n("A star");
-    t.icon = "star-shape";
+    t.iconName = koIconName("star-shape");
     KoProperties *props = new KoProperties();
     props->setProperty("corners", 5);
     QVariant v;
@@ -61,7 +63,7 @@ StarShapeFactory::StarShapeFactory()
     t.name = i18n("Flower");
     t.family = "funny";
     t.toolTip = i18n("A flower");
-    t.icon = "flower-shape";
+    t.iconName = koIconName("flower-shape");
     props = new KoProperties();
     props->setProperty("corners", 5);
     props->setProperty("baseRadius", 10.0);
@@ -78,7 +80,7 @@ StarShapeFactory::StarShapeFactory()
     t.name = i18n("Pentagon");
     t.family = "geometric";
     t.toolTip = i18n("A pentagon");
-    t.icon = "pentagon-shape";
+    t.iconName = koIconName("pentagon-shape");
     props = new KoProperties();
     props->setProperty("corners", 5);
     props->setProperty("convex", true);
@@ -94,7 +96,7 @@ StarShapeFactory::StarShapeFactory()
     t.name = i18n("Hexagon");
     t.family = "geometric";
     t.toolTip = i18n("A hexagon");
-    t.icon = "hexagon-shape";
+    t.iconName = koIconName("hexagon-shape");
     props = new KoProperties();
     props->setProperty("corners", 6);
     props->setProperty("convex", true);
@@ -110,7 +112,7 @@ KoShape *StarShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
 
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoShapeStroke(1.0));
     star->setShapeId(KoPathShapeId);
 
     return star;
@@ -128,11 +130,11 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentRes
     star->setTipRadius(params->doubleProperty("tipRadius", 50.0));
     star->setBaseRoundness(params->doubleProperty("baseRoundness", 0.0));
     star->setTipRoundness(params->doubleProperty("tipRoundness", 0.0));
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoShapeStroke(1.0));
     star->setShapeId(KoPathShapeId);
     QVariant v;
     if (params->property("background", v))
-        star->setBackground(new KoColorBackground(v.value<QColor>()));
+        star->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(v.value<QColor>())));
 
     return star;
 }

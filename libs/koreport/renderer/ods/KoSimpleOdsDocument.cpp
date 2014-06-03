@@ -19,7 +19,9 @@
 */
 
 #include "KoSimpleOdsDocument.h"
+
 #include <kdebug.h>
+#include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 #include "KoSimpleOdsSheet.h"
@@ -49,7 +51,7 @@ QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
     m_store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!m_store) {
-        kDebug() << "Couldn't open the requested file.";
+        kWarning() << "Couldn't open the requested file.";
         return QFile::OpenError;
     }
 
@@ -75,34 +77,40 @@ bool KoSimpleOdsDocument::createContent(KoOdfWriteStore* store)
     KoXmlWriter* contentWriter = store->contentWriter();
     KoXmlWriter* manifestWriter = store->manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
 
-    if (!bodyWriter || !contentWriter || !manifestWriter) {
-        kDebug() << "Bad things happened";
-        return false;
+    bool ok = bodyWriter && contentWriter && manifestWriter;
+    if (!ok) {
+        kWarning() << "Bad things happened";
     }
+    if (ok) {
+        // OpenDocument spec requires the manifest to include a list of the files in this package
+        manifestWriter->addManifestEntry("content.xml",  "text/xml");
 
-    // OpenDocument spec requires the manifest to include a list of the files in this package
-    manifestWriter->addManifestEntry("content.xml",  "text/xml");
+        // FIXME this is dummy and hardcoded, replace with real font names
+        contentWriter->startElement("office:font-face-decls");
+        contentWriter->startElement("style:font-face");
+        contentWriter->addAttribute("style:name", "Arial");
+        contentWriter->addAttribute("svg:font-family", "Arial");
+        contentWriter->endElement(); // style:font-face
+        contentWriter->startElement("style:font-face");
+        contentWriter->addAttribute("style:name", "Times New Roman");
+        contentWriter->addAttribute("svg:font-family", "&apos;Times New Roman&apos;");
+        contentWriter->endElement(); // style:font-face
+        contentWriter->endElement(); // office:font-face-decls
 
-    // FIXME this is dummy and hardcoded, replace with real font names
-    contentWriter->startElement("office:font-face-decls");
-    contentWriter->startElement("style:font-face");
-    contentWriter->addAttribute("style:name", "Arial");
-    contentWriter->addAttribute("svg:font-family", "Arial");
-    contentWriter->endElement(); // style:font-face
-    contentWriter->startElement("style:font-face");
-    contentWriter->addAttribute("style:name", "Times New Roman");
-    contentWriter->addAttribute("svg:font-family", "&apos;Times New Roman&apos;");
-    contentWriter->endElement(); // style:font-face
-    contentWriter->endElement(); // office:font-face-decls
-
-     // office:body
-    bodyWriter->startElement("office:body");
-    foreach(KoSimpleOdsSheet *sheet, m_worksheets) {
-        bodyWriter->startElement("office:spreadsheet");
-        sheet->saveSheet(bodyWriter);
-        bodyWriter->endElement();
+        // office:body
+        bodyWriter->startElement("office:body");
+        foreach(KoSimpleOdsSheet *sheet, m_worksheets) {
+            bodyWriter->startElement("office:spreadsheet");
+            sheet->saveSheet(bodyWriter);
+            bodyWriter->endElement();
+        }
+        bodyWriter->endElement();  // office:body
     }
-    bodyWriter->endElement();  // office:body
-
-    return store->closeContentWriter() && store->closeManifestWriter();
+    if (!store->closeContentWriter()) { // always call
+        ok = false;
+    }
+    if (!store->closeManifestWriter()) { // always call
+        ok = false;
+    }
+    return ok;
 }

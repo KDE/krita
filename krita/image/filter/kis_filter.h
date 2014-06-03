@@ -63,35 +63,47 @@ public:
     /**
      * Override this function with the implementation of your filter.
      *
+     * This is a low level function that expects all the conditions
+     * for the @param device be met. Use usual process() methods
+     * instead.
+     *
      * @param device the paint device to filter
      * @param applyRect the rectangle where the filter is applied
      * @param config the parameters of the filter
      * @param progressUpdater to pass on the progress the filter is making
      */
-    virtual void process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater = 0 ) const = 0;
-    
+    virtual void processImpl(KisPaintDeviceSP device,
+                             const QRect& applyRect,
+                             const KisFilterConfiguration* config,
+                             KoUpdater* progressUpdater = 0 ) const = 0;
+
     /**
-     * Take the src paint device copy it to a temporary device, filter it,
-     * copy and apply the selection on the destination.
-     * 
+     * Filter \p src device and write the result into \p dst device.
+     * If \p dst is an alpha color space device, it will get special
+     * treatment.
+     *
      * @param src the source paint device
      * @param dst the destination paint device
-     * @param sel the selection
+     * @param selection the selection
      * @param applyRect the rectangle where the filter is applied
      * @param config the parameters of the filter
      * @param progressUpdater to pass on the progress the filter is making
      */
     void process(const KisPaintDeviceSP src,
                  KisPaintDeviceSP dst,
-                 KisSelectionSP sel,
+                 KisSelectionSP selection,
                  const QRect& applyRect,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater = 0 ) const;
-    
-    bool workWith(const KoColorSpace* cs) const;
+
+
+    /**
+     * A convenience method for a two-device process() function
+     */
+    void process(KisPaintDeviceSP device,
+                 const QRect& applyRect,
+                 const KisFilterConfiguration* config,
+                 KoUpdater* progressUpdater = 0 ) const;
 
     /**
      * Some filters need pixels outside the current processing rect to compute the new
@@ -110,6 +122,7 @@ public:
 protected:
 
     QString configEntryGroup() const;
+
 
 };
 

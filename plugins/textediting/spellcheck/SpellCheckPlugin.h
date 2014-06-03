@@ -20,8 +20,8 @@
 #ifndef SPELLCHECKPLUGIN_H
 #define SPELLCHECKPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QVariant>
 
 class SpellCheckPlugin : public QObject
 {

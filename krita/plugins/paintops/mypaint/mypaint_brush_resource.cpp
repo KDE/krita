@@ -21,6 +21,8 @@
 #include <QFile>
 #include <QString>
 #include <QTextStream>
+#include <QCryptographicHash>
+#include <QBuffer>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -270,7 +272,7 @@ public:
                                     input->index,
                                     points.size());
         int i = 0;
-        foreach(const QPointF point, points) {
+        foreach(const QPointF &point, points) {
             parent_brush->set_mapping_point(brush_setting_definition->index,
                                             input->index,
                                             i,
@@ -288,7 +290,7 @@ public:
             Q_ASSERT(pointsPerInput.size() < input->index);
             vPoints points = pointsPerInput[input->index];
             s += " | " + input->name + ", ";
-            foreach(QPointF point, points) {
+            foreach(const QPointF &point, points) {
                 s += QString("(%1 %2)").arg(point.x(), point.y());
             }
         }
@@ -313,7 +315,7 @@ public:
 
             //dbgKrita << parts;
 
-            parts = parts[0].trimmed().split(" ", QString::SkipEmptyParts);
+            parts = parts[0].trimmed().split(' ', QString::SkipEmptyParts);
 
             //dbgKrita << "parts" << parts;
 
@@ -373,6 +375,9 @@ bool MyPaintBrushResource::load()
     int version = -1;
 
     QFile f(filename());
+
+    if (f.size() == 0) return false;
+
     if (f.open( QIODevice::ReadOnly)) {
         QTextStream stream(&f);
         QString line;
@@ -406,10 +411,17 @@ bool MyPaintBrushResource::load()
             }
 
         }
+        setImage(m_icon);
         setValid(true);
         return true;
     }
     setValid(false);
+
+    return false;
+}
+
+bool MyPaintBrushResource::loadFromDevice(QIODevice *)
+{
     return false;
 }
 
@@ -428,13 +440,12 @@ bool MyPaintBrushResource::save()
     return res
 #endif
 
-    return true;
+      return false;
 }
 
-
-QImage MyPaintBrushResource::image() const
+bool MyPaintBrushResource::saveToDevice(QIODevice *dev) const
 {
-    return m_icon;
+    return false;
 }
 
 BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)
@@ -485,6 +496,21 @@ QRgb MyPaintBrushResource::get_color_rgb()
 
 bool MyPaintBrushResource::is_eraser() {
     return setting_by_cname("eraser")->base_value > 0.9;
+}
+
+QByteArray MyPaintBrushResource::generateMD5() const
+{
+    QByteArray ba;
+//    QBuffer buf(&ba);
+//    save(&buf);
+
+//    if (!ba.isEmpty()) {
+//        QCryptographicHash md5(QCryptographicHash::Md5);
+//        md5.addData(ba);
+//        return md5.result();
+//    }
+
+    return ba;
 }
 
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2000-2002 David Faure <faure@kde.org>
-   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+   Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,6 @@
 #include "KoStore_p.h"
 
 #include <QBuffer>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kzip.h>
@@ -31,7 +30,8 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification)
+KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+                       bool writeMimetype)
 {
     kDebug(30002) << "KoZipStore Constructor filename =" << _filename
     << " mode = " << int(_mode)
@@ -42,17 +42,21 @@ KoZipStore::KoZipStore(const QString & _filename, Mode _mode, const QByteArray &
 
     m_pZip = new KZip(_filename);
 
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode, appIdentification);   // open the zip file and init some vars
 }
 
-KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification)
+KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+                       bool writeMimetype)
 {
     Q_D(KoStore);
     m_pZip = new KZip(dev);
+    d->writeMimetype = writeMimetype;
     d->good = init(mode, appIdentification);
 }
 
-KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification)
+KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode,
+                       const QByteArray & appIdentification, bool writeMimetype)
 {
     kDebug(30002) << "KoZipStore Constructor url" << _url.pathOrUrl()
     << " filename = " << _filename
@@ -73,6 +77,7 @@ KoZipStore::KoZipStore(QWidget* window, const KUrl & _url, const QString & _file
     }
 
     m_pZip = new KZip(d->localFileName);
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode, appIdentification);   // open the zip file and init some vars
 }
 
@@ -95,6 +100,8 @@ KoZipStore::~KoZipStore()
 
 bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
 {
+    Q_D(KoStore);
+
     KoStore::init(_mode);
     m_currentDir = 0;
     bool good = m_pZip->open(_mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly);
@@ -106,8 +113,13 @@ bool KoZipStore::init(Mode _mode, const QByteArray& appIdentification)
 
         m_pZip->setCompression(KZip::NoCompression);
         m_pZip->setExtraField(KZip::NoExtraField);
+
         // Write identification
-        (void)m_pZip->writeFile("mimetype", "", "", appIdentification.data() , appIdentification.length());
+        if (d->writeMimetype) {
+            (void)m_pZip->writeFile("mimetype", "", "",
+                                    appIdentification.data() , appIdentification.length());
+        }
+
         m_pZip->setCompression(KZip::DeflateCompression);
         // We don't need the extra field in Calligra - so we leave it as "no extra field".
     }

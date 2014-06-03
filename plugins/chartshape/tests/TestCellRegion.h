@@ -53,6 +53,7 @@ private slots:
     void testFromStringWithSpecialCharactersMultipleTables();
     void testTableNameChangeMultipleTables();
     void testListOfRegions();
+    void testListOfRegions2();
 
 private:
     TableSource m_source;

@@ -20,7 +20,7 @@
 #define KODOCKWIDGETTITLEBARBUTTON_H_
 
 #include "kowidgets_export.h"
-#include <QtGui/QAbstractButton>
+#include <QAbstractButton>
 
 class QEvent;
 class QPaintEvent;
@@ -36,7 +36,7 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
     Q_OBJECT
 
 public:
-    KoDockWidgetTitleBarButton(QWidget *parent = 0);
+    explicit KoDockWidgetTitleBarButton(QWidget *parent = 0);
     ~KoDockWidgetTitleBarButton();
 
     QSize sizeHint() const; ///< reimplemented from QWidget

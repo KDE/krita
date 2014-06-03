@@ -31,9 +31,9 @@
 #include <KoGuidesData.h>
 #include <KoToolManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 GuidesTool::GuidesTool(KoCanvasBase *canvas)
     : KoToolBase(canvas),
@@ -372,7 +372,7 @@ GuidesTool::GuideLine GuidesTool::guideLineAtPosition(const QPointF &position)
     return QPair<Qt::Orientation,int>(orientation, index);
 }
 
-void GuidesTool::resourceChanged(int key, const QVariant &res)
+void GuidesTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == KoCanvasResourceManager::Unit) {
         if (m_options)

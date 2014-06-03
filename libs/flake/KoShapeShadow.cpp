@@ -2,7 +2,7 @@
  * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Ariya Hidayat <ariya.hidayat@gmail.com>
- * Copyright (C) 2010-2011 Yue Liu <opuspace@gmail.com>
+ * Copyright (C) 2010-2011 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include "KoShapeGroup.h"
 #include "KoSelection.h"
 #include "KoShapeSavingContext.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
 #include "KoUnit.h"
@@ -32,8 +32,8 @@
 #include <KoGenStyle.h>
 #include <KoViewConverter.h>
 #include <kdebug.h>
-#include <QtGui/QPainter>
-#include <QtCore/QAtomicInt>
+#include <QPainter>
+#include <QAtomicInt>
 #include <QImage>
 #include <QRectF>
 
@@ -83,41 +83,23 @@ void KoShapeShadow::Private::paintGroupShadow(KoShapeGroup *group, QPainter &pai
 
 void KoShapeShadow::Private::paintShadow(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
-    // calculate the shadow offset independent of shape transformation
-    QTransform tm;
-    tm.translate(offset.x(), offset.y());
-    QTransform tr = shape->absoluteTransformation(&converter);
-    QTransform offsetMatrix = tr * tm * tr.inverted();
-
-    if (shape->background()) {
+    QPainterPath path(shape->shadowOutline());
+    if (!path.isEmpty()) {
         painter.save();
         KoShape::applyConversion(painter, converter);
-        // the shadow direction is independent of the shapes transformation
-        // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
-
         painter.setBrush(QBrush(color));
-        QPainterPath path(shape->outline());
+
+        // Make sure the shadow has the same fill rule as the shape.
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape)
             path.setFillRule(pathShape->fillRule());
+
         painter.drawPath(path);
         painter.restore();
     }
 
-    if (shape->border()) {
-        painter.save();
-        QTransform oldPainterMatrix = painter.transform();
-        KoShape::applyConversion(painter, converter);
-        QTransform newPainterMatrix = painter.transform();
-        // the shadow direction is independent of the shapes transformation
-        // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
-        // compensate applyConversion call in paint
-        QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
-        painter.setTransform(scaleMatrix.inverted() * painter.transform());
-        shape->border()->paint(shape, painter, converter);
-        painter.restore();
+    if (shape->stroke()) {
+        shape->stroke()->paint(shape, painter, converter);
     }
 }
 
@@ -204,6 +186,11 @@ void KoShapeShadow::Private::blurShadow(QImage &image, int radius, const QColor&
     p.end();
 }
 
+
+// ----------------------------------------------------------------
+//                         KoShapeShadow
+
+
 KoShapeShadow::KoShapeShadow()
         : d(new Private())
 {
@@ -233,38 +220,48 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     if (! d->visible)
         return;
 
+    // So the approach we are taking here is to draw into a buffer image the size of boundingRect
+    // We offset by the shadow offset at the time we draw into the buffer
+    // Then we filter the image and draw it at the position of the bounding rect on canvas
+
     //the boundingRect of the shape or the KoSelection boundingRect of the group
     QRectF shadowRect = shape->boundingRect();
     QRectF zoomedClipRegion = converter.documentToView(shadowRect);
-    //offset on buffer image from image topleft to shape's position
-    QPointF imagePaintOffset = zoomedClipRegion.topLeft() - converter.documentToView(shape->position());
 
     // Init the buffer image
     QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
     sourceGraphic.fill(qRgba(0,0,0,0));
     // Init the buffer painter
     QPainter imagePainter(&sourceGraphic);
-    imagePainter.translate(-1.0f*imagePaintOffset);
     imagePainter.setPen(Qt::NoPen);
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
+    // Since our imagebuffer and the canvas don't align we need to offset our drawings
+    imagePainter.translate(-1.0f*converter.documentToView(shadowRect.topLeft()));
+
+    // Handle the shadow offset
+    imagePainter.translate(converter.documentToView(offset()));
 
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
     if (group) {
-        //later we'll apply child's absoluteTransformation
-        imagePainter.setTransform(group->absoluteTransformation(&converter).inverted(), true);
         d->paintGroupShadow(group, imagePainter, converter);
     } else {
+        //apply shape's transformation
+        imagePainter.setTransform(shape->absoluteTransformation(&converter), true);
+
         d->paintShadow(shape, imagePainter, converter);
     }
     imagePainter.end();
 
-    //convert relative radius to absolute radius
-    qreal absRadius = converter.documentToViewX(d->blur);
-    d->blurShadow(sourceGraphic, absRadius, d->color);
+    // Blur the shadow (well the entire buffer)
+    d->blurShadow(sourceGraphic, converter.documentToViewX(d->blur), d->color);
+
     // Paint the result
     painter.save();
-    painter.drawImage(imagePaintOffset, sourceGraphic);
+    // The painter is initialized for us with canvas transform 'plus' shape transform
+    // we are only interested in the canvas transform so 'subtract' the shape transform part
+    painter.setTransform(shape->absoluteTransformation(&converter).inverted() * painter.transform());
+    painter.drawImage(zoomedClipRegion.topLeft(), sourceGraphic);
     painter.restore();
 }
 

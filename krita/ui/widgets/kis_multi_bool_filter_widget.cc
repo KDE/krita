@@ -43,7 +43,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
 
     QVBoxLayout *widgetLayout = new QVBoxLayout(this);
     widgetLayout->setMargin(nbboolWidgets + 1);
-
+    widgetLayout->setContentsMargins(0,0,0,0);
 
     for (qint32 i = 0; i < nbboolWidgets; ++i) {
         QCheckBox * cb = new QCheckBox(this);
@@ -63,7 +63,7 @@ void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration
 {
     if (!config) return;
     for (int i = 0; i < nbValues(); ++i) {
-        double val = config->getBool(m_boolWidgets[i]->objectName());
+        bool val = config->getBool(m_boolWidgets[i]->objectName(), true);
         m_boolWidgets[i]->setChecked(val);
     }
 }

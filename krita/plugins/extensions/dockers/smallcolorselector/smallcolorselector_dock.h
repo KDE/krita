@@ -22,7 +22,6 @@
 #include <KoCanvasObserverBase.h>
 
 class KisSmallColorWidget;
-class KoColor;
 
 class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -35,7 +34,7 @@ public:
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
     void colorChangedProxy(const QColor&);
-    void resourceChanged(int, const QVariant&);
+    void canvasResourceChanged(int, const QVariant&);
 private:
     KisSmallColorWidget* m_smallColorWidget;
     KoCanvasBase* m_canvas;

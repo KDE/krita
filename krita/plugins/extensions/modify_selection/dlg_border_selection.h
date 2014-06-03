@@ -2,6 +2,7 @@
  *  dlg_border_selection.h -- part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,40 +21,29 @@
 #ifndef DLG_BORDER_SELECTION_H
 #define DLG_BORDER_SELECTION_H
 
-#include <kdialog.h>
-
 #include "ui_wdg_border_selection.h"
+#include <operations/kis_operation_ui_widget.h>
 
-class WdgBorderSelection : public QWidget, public Ui::WdgBorderSelection
+class KisView2;
+class WdgBorderSelection : public KisOperationUIWidget, public Ui::WdgBorderSelection
 {
     Q_OBJECT
 
 public:
-    WdgBorderSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgBorderSelection(QWidget *parent, KisView2* view);
 
-class DlgBorderSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgBorderSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgBorderSelection();
-
-    qint32 xradius();
-    qint32 yradius();
+    virtual void getConfiguration(KisOperationConfiguration* config);
 
 private slots:
-
-    void okClicked();
+    void slotWidthChanged(int width);
+    void slotWidthChanged(double width);
+    void slotUnitChanged(int index);
 
 private:
+    void updateWidthUIValue(double value);
 
-    WdgBorderSelection * m_page;
+    double m_resolution;
+    int m_width;
 };
 
 #endif // DLG_BORDER_SELECTION_H

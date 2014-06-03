@@ -20,13 +20,13 @@
 
 #include "kis_color_selector_base.h"
 
-#include <QColor>
 class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
 class KisColorSelectorWheel;
 class QPushButton;
+class KisSignalCompressor;
 
 class KisColorSelector : public KisColorSelectorBase
 {
@@ -94,9 +94,10 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
-    void setColor(const QColor& color);
+    void setColor(const KoColor &color);
 
 public slots:
+    void reset();
     void updateSettings();
 
 signals:
@@ -125,13 +126,15 @@ private:
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;
 
-    QTimer* m_updateTimer;
+    KisSignalCompressor *m_signalCompressor;
 
     Configuration m_configuration;
 
-    QColor m_lastColor;
-    QColor m_currentColor;
+    KoColor m_lastRealColor;
+    KoColor m_currentRealColor;
     bool m_blipDisplay;
+    Acs::ColorRole m_lastColorRole;
+
 
 public:
     void setDisplayBlip(bool disp) {m_blipDisplay = disp;}

@@ -20,7 +20,7 @@
 
 #include "KoReportItemBase.h"
 #include <QRect>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krsize.h"
 #include "krpos.h"
 #include <KDChartWidget>
@@ -39,13 +39,13 @@ class KoReportItemChart : public KoReportItemBase
 {
 public:
     KoReportItemChart();
-    KoReportItemChart(QDomNode & element);
+    explicit KoReportItemChart(QDomNode &element);
     ~KoReportItemChart();
 
     virtual QString typeName() const;
 
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script);
-    
+    virtual int renderReportData(OROPage *page, OROSection *section, const QPointF &offset, KoReportData *data, KRScriptHandler *script);
+
     KDChart::Widget *widget() {
         return m_chartWidget;
     }

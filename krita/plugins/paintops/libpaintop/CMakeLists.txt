@@ -13,18 +13,17 @@ set(kritalibpaintop_LIB_SRCS
     kis_color_source.cpp
     kis_color_source_option.cpp
     kis_color_source_option_widget.cpp
-    kis_curve_label.cpp
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
     kis_custom_brush_widget.cpp
+    kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
+    kis_dab_cache.cpp
     kis_filter_option.cpp
     kis_multi_sensors_model_p.cpp
     kis_multi_sensors_selector.cpp
     kis_paint_action_type_option.cpp
-    kis_paintop_option.cpp
-    kis_paintop_options_model.cpp
-    kis_paintop_options_widget.cpp
+    kis_precision_option.cpp
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp
     kis_pressure_opacity_option.cpp
@@ -44,16 +43,21 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_gradient_option.cpp
     kis_pressure_flow_opacity_option.cpp
     kis_pressure_flow_opacity_option_widget.cpp
-    kis_sensor_selector.cc
+    kis_pressure_spacing_option_widget.cpp
+    kis_current_outline_fetcher.cpp
     kis_text_brush_chooser.cpp
     kis_brush_based_paintop_options_widget.cpp
     kis_brush_based_paintop_settings.cpp
     kis_compositeop_option.cpp
+    kis_texture_option.cpp
+    kis_embedded_pattern_manager.cpp
+    kis_pressure_texture_strength_option.cpp
     sensors/kis_dynamic_sensors.cc
+    sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc
-    sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
+    sensors/kis_dynamic_sensor_fuzzy.cpp
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
@@ -61,6 +65,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     forms/wdgBrushSizeOptions.ui
     forms/wdgcurveoption.ui
     forms/wdgcustombrush.ui
+    forms/wdgclipboardbrush.ui
     forms/wdgtextbrush.ui
     forms/wdgincremental.ui
     forms/wdgmultisensorsselector.ui
@@ -69,16 +74,16 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     forms/wdgcoloroptions.ui
     forms/wdgbrushchooser.ui
     forms/wdgCompositeOpOption.ui
-    forms/SensorSelector.ui
     forms/wdgflowopacityoption.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     sensors/SensorFadeConfiguration.ui
+
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 
-target_link_libraries(kritalibpaintop kritaui kritalibbrush)
+target_link_libraries(kritalibpaintop kritaui kritalibbrush kowidgetutils)
 target_link_libraries(kritalibpaintop LINK_INTERFACE_LIBRARIES kritaui kritalibbrush)
 
 set_target_properties(kritalibpaintop PROPERTIES

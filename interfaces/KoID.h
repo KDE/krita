@@ -22,9 +22,9 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <QtCore/QString>
-#include <QtCore/QMetaType>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QMetaType>
+#include <QDebug>
 
 #include <klocalizedstring.h>
 
@@ -60,9 +60,17 @@ public:
             : m_id(id),
             m_localizedString(name) {}
 
+
+    KoID(const KoID &rhs)
+    {
+        m_id = rhs.m_id;
+        m_name = rhs.name();
+    }
+
     QString id() const {
         return m_id;
     }
+
     QString name() const {
         if(m_name.isEmpty()) m_name = m_localizedString.toString();
         return m_name;

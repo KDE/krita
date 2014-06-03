@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
@@ -20,7 +20,8 @@
 
 #include "kis_group_layer.h"
 
-#include <KoCompositeOp.h>
+#include <KoIcon.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
@@ -30,14 +31,16 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_default_bounds.h"
+#include "kis_clone_layer.h"
+#include "kis_selection_mask.h"
 
-class KisGroupLayer::Private
+struct KisGroupLayer::Private
 {
 public:
     Private()
-            : paintDevice(0)
-            , x(0)
-            , y(0) {
+        : paintDevice(0)
+        , x(0)
+        , y(0) {
     }
 
     KisPaintDeviceSP paintDevice;
@@ -46,15 +49,15 @@ public:
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
-        KisLayer(image, name, opacity),
-        m_d(new Private())
+    KisLayer(image, name, opacity),
+    m_d(new Private())
 {
-    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    resetCache();
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
-        KisLayer(rhs),
-        m_d(new Private())
+    KisLayer(rhs),
+    m_d(new Private())
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->x = rhs.m_d->x;
@@ -67,10 +70,51 @@ KisGroupLayer::~KisGroupLayer()
     delete m_d;
 }
 
+bool KisGroupLayer::checkCloneLayer(KisCloneLayerSP clone) const
+{
+    KisNodeSP source = clone->copyFrom();
+    if (source) {
+        if(!allowAsChild(source)) return false;
+
+        if (source->inherits("KisGroupLayer")) {
+            KisNodeSP newParent = const_cast<KisGroupLayer*>(this);
+            while (newParent) {
+                if (newParent == source) {
+                    return false;
+                }
+                newParent = newParent->parent();
+            }
+        }
+    }
+
+    return true;
+}
+
+bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
+{
+    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
+    if(cloneLayer) {
+        return checkCloneLayer(cloneLayer);
+    }
+    else if (node->inherits("KisGroupLayer")) {
+        KisNodeSP child = node->firstChild();
+        while (child) {
+            if (!checkNodeRecursively(child)) {
+                return false;
+            }
+            child = child->nextSibling();
+        }
+    }
+
+    return true;
+}
+
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    Q_UNUSED(node);
-    return true;
+    return checkNodeRecursively(node) &&
+            (parent() ||
+             (node->inherits("KisSelectionMask") && !selectionMask()) ||
+             !node->inherits("KisMask"));
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const
@@ -80,7 +124,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
 
 QIcon KisGroupLayer::icon() const
 {
-    return KIcon("folder");
+    return koIcon("folder");
 }
 
 void KisGroupLayer::setImage(KisImageWSP image)
@@ -94,9 +138,11 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     if (!colorSpace)
         colorSpace = image()->colorSpace();
 
+    Q_ASSERT(colorSpace);
+
     if (!m_d->paintDevice) {
 
-        m_d->paintDevice = new KisPaintDevice(colorSpace);
+        m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         m_d->paintDevice->setX(m_d->x);
         m_d->paintDevice->setY(m_d->y);
     }
@@ -105,8 +151,11 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(m_d->x);
         dev->setY(m_d->y);
-        quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
-        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1);
+        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+
+        colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
+                                    KoColorConversionTransformation::InternalRenderingIntent,
+                                    KoColorConversionTransformation::InternalConversionFlags);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -116,21 +165,42 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
+KisLayer* KisGroupLayer::onlyMeaningfulChild() const
+{
+    KisNode *child = firstChild().data();
+    KisLayer *onlyLayer = 0;
+
+    while (child) {
+        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        if (layer) {
+            if (onlyLayer) return 0;
+            onlyLayer = layer;
+        }
+        child = child->nextSibling().data();
+    }
+
+    return onlyLayer;
+}
+
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    if (childCount() == 1) {
-        const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
+    const KisLayer *child = onlyMeaningfulChild();
 
-        if (child &&
-                child->channelFlags().isEmpty() &&
-                child->projection() &&
-                child->visible() &&
-                (child->compositeOpId() == COMPOSITE_OVER ||
-                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-                 child->compositeOpId() == COMPOSITE_COPY) &&
-                child->opacity() == OPACITY_OPAQUE_U8 &&
-                *child->projection()->colorSpace() == *colorSpace()) {
+    if (child &&
+        child->channelFlags().isEmpty() &&
+        child->projection() &&
+        child->visible() &&
+        (child->compositeOpId() == COMPOSITE_OVER ||
+         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+         child->compositeOpId() == COMPOSITE_COPY) &&
+        child->opacity() == OPACITY_OPAQUE_U8 &&
+        *child->projection()->colorSpace() == *colorSpace()) {
 
+        quint8 defaultOpacity =
+            m_d->paintDevice->colorSpace()->opacityU8(
+                m_d->paintDevice->defaultPixel());
+
+        if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
             return child->projection();
         }
     }

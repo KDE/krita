@@ -86,7 +86,7 @@ void TableOfContentsConfigure::init()
 
     connect(this, SIGNAL(accepted()), this, SLOT(save()));
     connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
-    connect(ui.configureStyles, SIGNAL(clicked(bool)), this, SLOT(showStyleConfiguration(bool)));
+    connect(ui.configureStyles, SIGNAL(clicked(bool)), this, SLOT(showStyleConfiguration()));
     connect(ui.lineEditTitle, SIGNAL(returnPressed()), this, SLOT(updatePreview()));
 }
 
@@ -128,8 +128,8 @@ void TableOfContentsConfigure::save()
 {
     m_tocInfo->m_name = ui.lineEditTitle->text();
     m_tocInfo->m_indexTitleTemplate.text = ui.lineEditTitle->text();
-    m_tocInfo->m_useOutlineLevel = ui.useOutline->checkState() == Qt::Checked ? true : false;
-    m_tocInfo->m_useIndexSourceStyles = ui.useStyles->checkState() == Qt::Checked ? true : false;
+    m_tocInfo->m_useOutlineLevel = (ui.useOutline->checkState() == Qt::Checked);
+    m_tocInfo->m_useIndexSourceStyles = (ui.useStyles->checkState() == Qt::Checked);
 
     if (m_tocEntryStyleModel) {
         m_tocEntryStyleModel->saveData();
@@ -141,7 +141,7 @@ void TableOfContentsConfigure::save()
     cleanUp();
 }
 
-void TableOfContentsConfigure::showStyleConfiguration(bool show)
+void TableOfContentsConfigure::showStyleConfiguration()
 {
     if (!m_tocStyleConfigure) {
         m_tocStyleConfigure = new TableOfContentsStyleConfigure(KoTextDocument(m_textEditor->document()).styleManager(), this);
@@ -158,13 +158,13 @@ void TableOfContentsConfigure::titleTextChanged(const QString &text)
 
 void TableOfContentsConfigure::useOutline(int state)
 {
-    m_tocInfo->m_useOutlineLevel = ui.useOutline->checkState() == Qt::Checked ? true : false;
+    m_tocInfo->m_useOutlineLevel = (state == Qt::Checked);
     updatePreview();
 }
 
 void TableOfContentsConfigure::useIndexSourceStyles(int state)
 {
-    m_tocInfo->m_useIndexSourceStyles = ui.useStyles->checkState() == Qt::Checked ? true : false;
+    m_tocInfo->m_useIndexSourceStyles = (state == Qt::Checked);
     updatePreview();
 }
 

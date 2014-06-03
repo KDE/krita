@@ -73,6 +73,7 @@ namespace utils {
         QString formatTestName(const QString &baseName, bool cancelled,
                                bool indirectPainting, bool externalLayer);
         QString referenceFile(const QString &testName);
+        QString dumpReferenceFile(const QString &testName);
         QString resultFile(const QString &testName);
 
     private:

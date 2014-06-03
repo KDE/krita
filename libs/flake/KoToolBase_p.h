@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTOOLPRIVATE_H
-#define KOTOOLPRIVATE_H
+#ifndef KOTOOLBASE_P_H
+#define KOTOOLBASE_P_H
 
 #include "KoDocumentResourceManager.h"
 #include "KoCanvasResourceManager.h"
@@ -68,14 +68,14 @@ public:
             KoCanvasResourceManager * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
-                q->connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(resourceChanged(int, const QVariant &)));
+                q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),
+                        SLOT(canvasResourceChanged(int, const QVariant &)));
 
-            // can be 0 in the case of Tables
+            // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(resourceChanged(int, const QVariant &)));
+                        SLOT(documentResourceChanged(int, const QVariant &)));
             }
         }
     }

@@ -20,6 +20,7 @@
 #include "EnhancedPathParameter.h"
 #include "EnhancedPathFormula.h"
 #include "EnhancedPathShape.h"
+#include <KoShapeBackground.h>
 #include <KoUnit.h>
 #include <math.h>
 
@@ -94,7 +95,7 @@ EnhancedPathNamedParameter::EnhancedPathNamedParameter(const QString &identifier
 
 qreal EnhancedPathNamedParameter::evaluate()
 {
-    const QRectF &viewBox = parent()->viewBox();
+    const QRect &viewBox = parent()->viewBox();
 
     switch(m_identifier) {
     case IdentifierPi:
@@ -117,7 +118,7 @@ qreal EnhancedPathNamedParameter::evaluate()
     case IdentifierYstretch:
         break;
     case IdentifierHasStroke:
-        return parent()->border() ? 1.0 : 0.0;
+        return parent()->stroke() ? 1.0 : 0.0;
         break;
     case IdentifierHasFill:
         return parent()->background() ? 0.0 : 1.0;
@@ -129,9 +130,11 @@ qreal EnhancedPathNamedParameter::evaluate()
         return viewBox.height();
         break;
     case IdentifierLogwidth:
+        // TODO: ? viewBox does not have any unit or const relation to mm
         return KoUnit::toMillimeter(viewBox.width()) * 100;
         break;
     case IdentifierLogheight:
+        // TODO: ? viewBox does not have any unit or const relation to mm
         return KoUnit::toMillimeter(viewBox.height()) * 100;
         break;
     default:

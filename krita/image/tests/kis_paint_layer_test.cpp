@@ -34,6 +34,7 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_pixel_selection.h"
+#include <kis_iterator_ng.h>
 
 void KisPaintLayerTest::testProjection()
 {
@@ -41,7 +42,6 @@ void KisPaintLayerTest::testProjection()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "merge test");
-    image->lock(); // We'll call for recomposition ourselves
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
     layer->paintDevice()->convertFromQImage(qimage, 0, 0, 0);
@@ -51,7 +51,8 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
-    transparencyMask->selection()->getOrCreatePixelSelection()->invert();
+    transparencyMask->initSelection(layer);
+    transparencyMask->selection()->pixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
 
     // Now there are masks. Verify that
@@ -79,23 +80,22 @@ void KisPaintLayerTest::testProjection()
     // The selection is initially empty, so after an update, all pixels are still visible
     layer->updateProjection(qimage.rect());
 
-    // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
-    KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimage.width(), qimage.height());
-    while (!it.isDone()) {
-        QVERIFY(cs->opacityU8(it.rawData()) == OPACITY_OPAQUE_U8);
-        ++it;
-    }
+    // We've inverted the mask, so now nothing is seen
+    KisSequentialConstIterator it(layer->projection(), qimage.rect());
+    do {
+        QVERIFY(cs->opacityU8(it.oldRawData()) == OPACITY_TRANSPARENT_U8);
+    } while (it.nextPixel());
 
     // Now fill the layer with some opaque pixels
     transparencyMask->select(qimage.rect());
     transparencyMask->setDirty(qimage.rect());
-    layer->updateProjection(qimage.rect());
+    image->waitForDone();
 
     layer->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("aaa.png");
     // Nothing is transparent anymore, so the projection and the paint device should be identical again
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimage, layer->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }

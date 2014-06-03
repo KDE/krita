@@ -66,6 +66,26 @@ QPointF Ellipse::project(const QPointF& pt) const
 /*    return inverse.map(closest(matrix.map(pt)));*/
 }
 
+inline QPointF rotate90(const QPointF& p) {
+    return QPointF(p.y(), -p.x());
+}
+
+QRectF Ellipse::boundingRect() const
+{
+    const QPointF d = rotate90((p2 - p1) * 0.5 * b / a);
+    const QPointF pts[4] = {
+        p1 + d,
+        p1 - d,
+        p2 + d,
+        p2 - d
+    };
+    QRectF ret;
+    for (int i = 0; i < 4; ++i) {
+        ret = ret.united(QRectF(pts[i], QSizeF(0.0001, 0.0001)));
+    }
+    return ret;
+}
+
 inline qreal sqrlength(const QPointF& vec)
 {
     return vec.x() * vec.x() + vec.y() * vec.y();

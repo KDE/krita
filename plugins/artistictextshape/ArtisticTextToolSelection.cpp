@@ -23,10 +23,10 @@
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
+#include <QPainter>
+#include <QFontMetrics>
 
 ArtisticTextToolSelection::ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent)
     : KoToolSelection(parent), m_canvas(canvas), m_currentShape(0)
@@ -114,6 +114,8 @@ QPainterPath ArtisticTextToolSelection::outline()
     QPolygonF polygon;
 
     QList<ArtisticTextRange> ranges = m_currentShape->text();
+    if (ranges.size() == 0) return outline;
+
     int globalCharIndex = m_selectionStart;
     int remainingChars = m_selectionCount;
     while (remainingChars) {

@@ -23,7 +23,7 @@
 #include "StaffSystem.h"
 #include "Staff.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 namespace MusicCore {
 

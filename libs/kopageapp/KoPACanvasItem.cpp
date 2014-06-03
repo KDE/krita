@@ -20,27 +20,25 @@
 
 #include "KoPACanvasItem.h"
 
-#include <QStyleOptionGraphicsItem>
-#include <QGraphicsSceneResizeEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
-
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
-#include <KoUnit.h>
-#include <KoText.h>
-
 #include "KoPADocument.h"
 #include "KoPAView.h"
 #include "KoPAViewMode.h"
 #include "KoPAPage.h"
 #include "KoPAPageProvider.h"
 
-#include <kxmlguifactory.h>
+#include <KoShapeManager.h>
+#include <KoToolProxy.h>
+#include <KoUnit.h>
+#include <KoText.h>
 
-#include <KAction>
-#include <QMenu>
+#include <kxmlguifactory.h>
+#include <kaction.h>
+
+#include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneResizeEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
+#include <QMenu>
 
 KoPACanvasItem::KoPACanvasItem( KoPADocument * doc)
     : QGraphicsWidget()
@@ -80,8 +78,9 @@ void KoPACanvasItem::updateCanvas( const QRectF& rc )
     emit canvasUpdated();
 }
 
-void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget */*widget*/)
+void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(widget)
     KoPACanvasBase::paint(*painter, option->exposedRect);
 }
 

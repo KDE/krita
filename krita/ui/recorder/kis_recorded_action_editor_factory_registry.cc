@@ -18,7 +18,7 @@
 
 #include "kis_recorded_action_editor_factory_registry.h"
 
-#include <qalgorithms.h>
+#include <QtAlgorithms>
 #include <QList>
 #include <QWidget>
 

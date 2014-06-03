@@ -28,7 +28,7 @@ class KoStyleThumbnailer;
 class TableOfContentsEntryDelegate: public QStyledItemDelegate
 {
 public:
-    TableOfContentsEntryDelegate(KoStyleManager *manager);
+    explicit TableOfContentsEntryDelegate(KoStyleManager *manager);
 
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 

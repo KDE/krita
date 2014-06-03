@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <QDomDocument>
 #include <QDomElement>
+#include <QStringList>
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
@@ -29,9 +30,13 @@
 class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 {
 public:
-    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root = false);
+    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root);
+
+    void setSelectedNodes(vKisNodeSP selectedNodes);
 
     using KisNodeVisitor::visit;
+
+    QStringList errorMessages() const;
 
 public:
 
@@ -52,6 +57,13 @@ public:
         return m_nodeFileNames;
     }
 
+public:
+    QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
+    static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer);
+
+private:
+    static void loadLayerAttributes(const QDomElement &el, KisLayer *layer);
+
 private:
 
     void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
@@ -60,11 +72,14 @@ private:
 
     friend class KisKraSaveXmlVisitorTest;
 
+    vKisNodeSP m_selectedNodes;
     QMap<const KisNode*,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;
+    QString m_url;
     bool m_root;
+    QStringList m_errorMessages;
 };
 
 #endif

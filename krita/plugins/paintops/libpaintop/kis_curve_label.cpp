@@ -20,8 +20,7 @@
 #include <QString>
 #include <QImage>
 
-struct KisCurveLabel::Private
-{
+struct KisCurveLabel::Private {
     QString name;
     QImage icon;
 };
@@ -31,11 +30,13 @@ KisCurveLabel::KisCurveLabel() : d(new Private)
     d->name = "xxx UNDEFINED xxx";
 }
 
-KisCurveLabel::KisCurveLabel(const QString& name) : d(new Private)
+KisCurveLabel::KisCurveLabel(const QString& name)
+    : d(new Private)
 {
     d->name = name;
 }
-KisCurveLabel::KisCurveLabel(const QImage& icon) : d(new Private)
+KisCurveLabel::KisCurveLabel(const QImage& icon)
+    : d(new Private)
 {
     d->icon = icon;
 }

@@ -25,19 +25,20 @@
 
 #include "../compositeops/KoCompositeOps.h"
 
-LabColorSpace::LabColorSpace(KoColorProfile *p) :
-        LcmsColorSpace<KoLabU16Traits>(colorSpaceId(), i18n("L*a*b* (16-bit integer/channel)"),  COLORSPACE_SH(PT_Lab) | CHANNELS_SH(3) | BYTES_SH(2) | EXTRA_SH(1), cmsSigLabData, p)
+LabU16ColorSpace::LabU16ColorSpace(const QString &name, KoColorProfile *p)
+    : LcmsColorSpace<KoLabU16Traits>(colorSpaceId(), name, TYPE_LABA_16, cmsSigLabData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L * sizeof(quint16), CHANNEL_L, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
-    addChannel(new KoChannelInfo(i18n("a*"), CHANNEL_A * sizeof(quint16), CHANNEL_A, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));
-    addChannel(new KoChannelInfo(i18n("b*"), CHANNEL_B * sizeof(quint16), CHANNEL_B, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200, 200, 200)));
-    addChannel(new KoChannelInfo(i18n("Alpha"), CHANNEL_ALPHA * sizeof(quint16), CHANNEL_ALPHA, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+    addChannel(new KoChannelInfo(i18n("Lightness"), 0 * sizeof(quint16), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
+    addChannel(new KoChannelInfo(i18n("a*"),        1 * sizeof(quint16), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));
+    addChannel(new KoChannelInfo(i18n("b*"),        2 * sizeof(quint16), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(200, 200, 200)));
+    addChannel(new KoChannelInfo(i18n("Alpha"),     3 * sizeof(quint16), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, sizeof(quint16)));
+
     init();
-    // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
+
     addStandardCompositeOps<KoLabU16Traits>(this);
 }
 
-bool LabColorSpace::willDegrade(ColorSpaceIndependence independence) const
+bool LabU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
     if (independence == TO_RGBA8)
         return true;
@@ -45,7 +46,7 @@ bool LabColorSpace::willDegrade(ColorSpaceIndependence independence) const
         return false;
 }
 
-QString LabColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+QString LabU16ColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
 {
     const KoLabU16Traits::channels_type *pix = reinterpret_cast<const  KoLabU16Traits::channels_type *>(pixel);
     Q_ASSERT(channelIndex < channelCount());
@@ -53,31 +54,25 @@ QString LabColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 c
     // These convert from lcms encoded format to standard ranges.
 
     switch (channelIndex) {
-    case CHANNEL_L:
-        return QString().setNum(100.0 * static_cast<float>(pix[CHANNEL_L]) / MAX_CHANNEL_L);
-    case CHANNEL_A:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[CHANNEL_A]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
-    case CHANNEL_B:
-        return QString().setNum(100.0 * ((static_cast<float>(pix[CHANNEL_B]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
-    case CHANNEL_ALPHA:
-        return QString().setNum(100.0 * static_cast<float>(pix[CHANNEL_ALPHA]) / UINT16_MAX);
+    case 0:
+        return QString().setNum(100.0 * static_cast<float>(pix[0]) / MAX_CHANNEL_L);
+    case 1:
+        return QString().setNum(100.0 * ((static_cast<float>(pix[1]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
+    case 2:
+        return QString().setNum(100.0 * ((static_cast<float>(pix[2]) - CHANNEL_AB_ZERO_OFFSET) / MAX_CHANNEL_AB));
+    case 3:
+        return QString().setNum(100.0 * static_cast<float>(pix[3]) / UINT16_MAX);
     default:
         return QString("Error");
     }
-
 }
 
-KoColorSpace* LabColorSpace::clone() const
+KoColorSpace* LabU16ColorSpace::clone() const
 {
-    return new LabColorSpace(profile()->clone());
+    return new LabU16ColorSpace(name(), profile()->clone());
 }
 
-QString LabColorSpace::colorSpaceId()
-{
-    return QString("LABA");
-}
-
-void LabColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void LabU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
     const KoLabU16Traits::Pixel* p = reinterpret_cast<const KoLabU16Traits::Pixel*>(pixel);
     QDomElement labElt = doc.createElement("Lab");
@@ -88,7 +83,7 @@ void LabColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomEleme
     colorElt.appendChild(labElt);
 }
 
-void LabColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
+void LabU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
     KoLabU16Traits::Pixel* p = reinterpret_cast<KoLabU16Traits::Pixel*>(pixel);
     p->L = KoColorSpaceMaths< qreal, KoLabU16Traits::channels_type >::scaleToA(elt.attribute("L").toDouble());

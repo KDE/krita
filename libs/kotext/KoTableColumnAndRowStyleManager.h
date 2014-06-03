@@ -89,6 +89,8 @@ public:
     /**
      * Get the column style for the column \a column.
      *
+     * If you modify it don't forget to set it back here to actually have an effect
+     *
      * @param column the column to get the style for.
      * @return the column style.
      */
@@ -123,6 +125,8 @@ public:
 
     /**
      * Get the row style for the row \a column.
+     *
+     * If you modify it don't forget to set it back here to actually have an effect
      *
      * @param row the row to get the style for.
      * @return the row style.

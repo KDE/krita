@@ -1,3 +1,3 @@
-if (SHOULD_BUILD_TABLES)
-  macro_optional_add_subdirectory(spreadsheet)
-endif (SHOULD_BUILD_TABLES)
+if (SHOULD_BUILD_PLUGIN_KEXI_SPREADSHEETMIGRATION)
+  add_subdirectory(spreadsheet)
+endif (SHOULD_BUILD_PLUGIN_KEXI_SPREADSHEETMIGRATION)

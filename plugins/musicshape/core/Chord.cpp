@@ -24,7 +24,7 @@
 #include "Bar.h"
 #include "Sheet.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 #include <climits>
 

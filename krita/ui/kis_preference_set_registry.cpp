@@ -25,8 +25,7 @@ KisPreferenceSetRegistry ::KisPreferenceSetRegistry ()
 
 KisPreferenceSetRegistry ::~KisPreferenceSetRegistry ()
 {
-    // the preference items are owned by the preferences dialog,
-    // so we shouldn't delete them on shutdown.
+    qDeleteAll(values());
 }
 
 KisPreferenceSetRegistry * KisPreferenceSetRegistry ::instance()

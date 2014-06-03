@@ -22,7 +22,7 @@
 #define KOFINDOPTIONSET_H
 
 #include "komain_export.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 class KoFindOption;
 

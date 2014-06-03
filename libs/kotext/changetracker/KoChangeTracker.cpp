@@ -34,10 +34,10 @@
 #include <KoFormatChangeInformation.h>
 
 //KDE includes
-#include <KDebug>
-#include <KDateTime>
-#include <KGlobal>
-#include <KLocale>
+#include <kdebug.h>
+#include <kdatetime.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 //Qt includes
 #include <QColor>
@@ -117,7 +117,7 @@ bool KoChangeTracker::displayChanges() const
     return d->displayChanges;
 }
 
-const QString& KoChangeTracker::authorName() const
+QString KoChangeTracker::authorName() const
 {
     return d->changeAuthorName;
 }
@@ -136,18 +136,8 @@ void KoChangeTracker::setSaveFormat(ChangeSaveFormat saveFormat)
 {
     d->changeSaveFormat = saveFormat;
 }
-int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId) const
-{
-    Q_UNUSED(title)
-    Q_UNUSED(type)
-    Q_UNUSED(selection)
-    Q_UNUSED(newFormat)
-    Q_UNUSED(prevCharChangeId)
-    Q_UNUSED(nextCharChangeId)
-    return 0;
-}
 
-int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
+int KoChangeTracker::getFormatChangeId(const QString &title, const QTextFormat &format, const QTextFormat &prevFormat, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -169,7 +159,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     return d->changeId++;
 }
 
-int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
+int KoChangeTracker::getInsertChangeId(const QString &title, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -189,7 +179,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
     return d->changeId++;
 }
 
-int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId)
+int KoChangeTracker::getDeleteChangeId(const QString &title, const QTextDocumentFragment &selection, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->children.insert(existingChangeId, d->changeId);
@@ -234,7 +224,7 @@ bool KoChangeTracker::containsInlineChanges(const QTextFormat &format) const
     return false;
 }
 
-int KoChangeTracker::mergeableId(KoGenChange::Type type, QString &title, int existingId) const
+int KoChangeTracker::mergeableId(KoGenChange::Type type, const QString &title, int existingId) const
 {
     if (!existingId || !d->changes.value(existingId))
         return 0;
@@ -347,6 +337,34 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
     return true;
 }
 
+QMap<int, QString> KoChangeTracker::saveInlineChanges(QMap<int, QString> changeTransTable, KoGenChanges &genChanges)
+{
+    foreach (int changeId, d->changes.keys()) {
+
+        // return if the id we find in the changetranstable already has a length.
+        if (changeTransTable.value(changeId).length()) {
+            continue;
+        }
+
+        if ((elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) &&
+                (saveFormat() == KoChangeTracker::ODF_1_2)) {
+            continue;
+        }
+
+        KoGenChange change;
+        if (saveFormat() == KoChangeTracker::ODF_1_2) {
+            change.setChangeFormat(KoGenChange::ODF_1_2);
+        } else {
+            change.setChangeFormat(KoGenChange::DELTAXML);
+        }
+
+        saveInlineChange(changeId, change);
+        QString changeName = genChanges.insert(change);
+        changeTransTable.insert(changeId, changeName);
+    }
+    return changeTransTable;
+}
+
 void KoChangeTracker::setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation)
 {
     d->changeInformation.insert(formatChangeId, formatInformation);
@@ -432,7 +450,7 @@ void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
     }
 }
 
-int KoChangeTracker::getLoadedChangeId(QString odfId) const
+int KoChangeTracker::getLoadedChangeId(const QString &odfId) const
 {
     return d->loadedChanges.value(odfId);
 }
@@ -450,28 +468,17 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
     return numAppendedItems;
 }
 
-int KoChangeTracker::allChangeIds(QVector<int>& changesVector) const
-{
-    int numAppendedItems = 0;
-    foreach(int changeId, d->changes.keys()) {
-        changesVector << changeId;
-        numAppendedItems++;
-    }
-
-    return numAppendedItems;
-}
-
-const QColor& KoChangeTracker::getInsertionBgColor() const
+QColor KoChangeTracker::getInsertionBgColor() const
 {
     return d->insertionBgColor;
 }
 
-const QColor& KoChangeTracker::getDeletionBgColor() const
+QColor KoChangeTracker::getDeletionBgColor() const
 {
     return d->deletionBgColor;
 }
 
-const QColor& KoChangeTracker::getFormatChangeBgColor() const
+QColor KoChangeTracker::getFormatChangeBgColor() const
 {
     return d->formatChangeBgColor;
 }
@@ -491,24 +498,23 @@ void KoChangeTracker::setFormatChangeBgColor(const QColor& bgColor)
     d->formatChangeBgColor = bgColor;
 }
 
-//A convenience function to get a ListIdType from a format
-static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+////A convenience function to get a ListIdType from a format
+//static KoListStyle::ListIdType ListId(const QTextListFormat &format)
+//{
+//    KoListStyle::ListIdType listId;
+
+//    if (sizeof(KoListStyle::ListIdType) == sizeof(uint)) {
+//        listId = format.property(KoListStyle::ListId).toUInt();
+//    }
+//    else {
+//        listId = format.property(KoListStyle::ListId).toULongLong();
+//    }
+
+//    return listId;
+//}
+
+QTextDocumentFragment KoChangeTracker::generateDeleteFragment(const QTextCursor &cursor)
 {
-    KoListStyle::ListIdType listId;
-
-    if (sizeof(KoListStyle::ListIdType) == sizeof(uint)) {
-        listId = format.property(KoListStyle::ListId).toUInt();
-    }
-    else {
-        listId = format.property(KoListStyle::ListId).toULongLong();
-    }
-
-    return listId;
-}
-
-QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
-{
-    int changeId = marker->changeId();
     QTextCursor editCursor(cursor);
     QTextDocument *document = cursor.document();
 
@@ -520,10 +526,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
         for (int i = cursor.anchor();i <= cursor.position(); i++) {
             if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
                 editCursor.setPosition(i+1);
-                KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(textObjectManager->inlineTextObject(editCursor));
-                if (testMarker)
-                    editCursor.deletePreviousChar();
-            }
+	    }
         }
     }
 
@@ -531,57 +534,19 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
     QTextBlock startBlock = currentBlock;
     QTextBlock endBlock = document->findBlock(cursor.position()).next();
 
-    // First remove any left-over DeletedList set from previous deletes
-    for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
-        editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                QTextListFormat format = editCursor.currentList()->format();
-                format.clearProperty(KoDeleteChangeMarker::DeletedList);
-                editCursor.currentList()->setFormat(format);
-            }
-        }
-    }
-
     currentBlock = document->findBlock(cursor.anchor());
     startBlock = currentBlock;
     endBlock = document->findBlock(cursor.position()).next();
 
     for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
         editCursor.setPosition(currentBlock.position());
-        if (editCursor.currentList()) {
-            if (!editCursor.currentList()->format().hasProperty(KoDeleteChangeMarker::DeletedList)) {
-                bool fullyDeletedList = checkListDeletion(editCursor.currentList(), cursor);
-                QTextListFormat format = editCursor.currentList()->format();
-                format.setProperty(KoDeleteChangeMarker::DeletedList, fullyDeletedList);
-                if (fullyDeletedList) {
-                    KoListStyle::ListIdType listId = ListId(format);
-                    KoList *list = KoTextDocument(document).list(currentBlock);
-                    marker->setDeletedListStyle(listId, list->style());
-                }
-                editCursor.currentList()->setFormat(format);
-            }
-            if (cursor.anchor() <= (currentBlock.position() - 1)) {
-                //Then the list-item has been deleted. Set the block-format to indicate that this is a deleted list-item.
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, true);
-                editCursor.mergeBlockFormat(blockFormat);
-            } else {
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, false);
-                editCursor.mergeBlockFormat(blockFormat);
-            }
-        }
-
         if (editCursor.currentTable()) {
             QTextTableFormat tableFormat = editCursor.currentTable()->format();
-            tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             editCursor.currentTable()->setFormat(tableFormat);
         }
 
         if (currentBlock != startBlock) {
             QTextBlockFormat blockFormat;
-            blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             editCursor.mergeBlockFormat(blockFormat);
         }
     }
@@ -589,10 +554,10 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
     return cursor.selection();
 }
 
-bool KoChangeTracker::checkListDeletion(QTextList *list, QTextCursor &cursor)
+bool KoChangeTracker::checkListDeletion(const QTextList &list, const QTextCursor &cursor)
 {
-    int startOfList = (list->item(0).position() - 1);
-    int endOfList = list->item(list->count() -1).position() + list->item(list->count() -1).length() - 1;
+    int startOfList = (list.item(0).position() - 1);
+    int endOfList = list.item(list.count() -1).position() + list.item(list.count() -1).length() - 1;
     if ((cursor.anchor() <= startOfList) && (cursor.position() >= endOfList))
         return true;
     else {
@@ -602,7 +567,7 @@ bool KoChangeTracker::checkListDeletion(QTextList *list, QTextCursor &cursor)
         if ((cursor.anchor() == (startOfList + 1)) && (cursor.position() > endOfList)) {
             return true;
         /***************************************************************************************************/
-        } else if((cursor.anchor() <= startOfList) && (list->count() == 1)) {
+        } else if((cursor.anchor() <= startOfList) && (list.count() == 1)) {
             return true;
         } else {
             return false;
@@ -610,12 +575,10 @@ bool KoChangeTracker::checkListDeletion(QTextList *list, QTextCursor &cursor)
     }
 }
 
-void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
+void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor)
 {
-    QTextDocumentFragment fragment =  KoTextDocument(cursor.document()).changeTracker()->elementById(marker->changeId())->getDeleteData();
     QTextDocument tempDoc;
     QTextCursor tempCursor(&tempDoc);
-    tempCursor.insertFragment(fragment);
 
     bool deletedListItem = false;
 
@@ -648,18 +611,6 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
         }
 
         if (textList) {
-            if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
-                //Found a Deleted List in the fragment. Create a new KoList.
-                KoListStyle::ListIdType listId;
-                if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
-                    listId = textList->format().property(KoListStyle::ListId).toUInt();
-                else
-                    listId = textList->format().property(KoListStyle::ListId).toULongLong();
-                KoListStyle *style = marker->getDeletedListStyle(listId);
-                currentList = new KoList(cursor.document(), style);
-            }
-
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
             if (deletedListItem && currentBlock != tempDoc.begin()) {
                 // Found a deleted list item in the fragment. So insert a new list-item
                 int deletedListItemLevel = KoList::level(currentBlock);
@@ -740,7 +691,7 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
     }
 }
 
-int KoChangeTracker::fragmentLength(QTextDocumentFragment fragment)
+int KoChangeTracker::fragmentLength(const QTextDocumentFragment &fragment)
 {
     QTextDocument tempDoc;
     QTextCursor tempCursor(&tempDoc);
@@ -750,7 +701,6 @@ int KoChangeTracker::fragmentLength(QTextDocumentFragment fragment)
     for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
         tempCursor.setPosition(currentBlock.position());
         if (tempCursor.currentList()) {
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
             if (currentBlock != tempDoc.begin() && deletedListItem)
                 length += 1; //For the Block separator
         } else if (tempCursor.currentTable()) {

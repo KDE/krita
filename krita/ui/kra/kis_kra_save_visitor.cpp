@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -38,6 +38,7 @@
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_shape_layer.h>
+#include <kis_file_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_mask.h>
 #include <kis_filter_mask.h>
@@ -48,6 +49,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_io_backend.h>
 
+#include "kis_store_paintdevice_writer.h"
 #include "flake/kis_shape_selection.h"
 
 using namespace KRA;
@@ -59,7 +61,13 @@ KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QStri
         , m_count(count)
         , m_name(name)
         , m_nodeFileNames(nodeFileNames)
+        , m_writer(new KisStorePaintDeviceWriter(store))
 {
+}
+
+KisKraSaveVisitor::~KisKraSaveVisitor()
+{
+    delete m_writer;
 }
 
 void KisKraSaveVisitor::setExternalUri(const QString &uri)
@@ -72,7 +80,10 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-        if (!saveMetaData(layer)) return false;
+        if (!saveMetaData(layer)) {
+            m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+            return false;
+        }
         m_store->pushDirectory();
         m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER)) ;
         result = shapeLayer->saveLayer(m_store);
@@ -84,9 +95,18 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
-    if (!savePaintDevice(layer->paintDevice(), getLocation(layer))) return false;
-    if (!saveAnnotations(layer)) return false;
-    if (!saveMetaData(layer)) return false;
+    if (!savePaintDevice(layer->paintDevice(), getLocation(layer))) {
+        m_errorMessages << i18n("Failed to save the pixel data for layer %1.", layer->name());
+        return false;
+    }
+    if (!saveAnnotations(layer)) {
+        m_errorMessages << i18n("Failed to save the annotations for layer %1.", layer->name());
+        return false;
+    }
+    if (!saveMetaData(layer)) {
+        m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+        return false;
+    }
     m_count++;
     return visitAllInverse(layer);
 }
@@ -94,26 +114,53 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
     m_count++;
-    if (!saveMetaData(layer)) return false;
+    if (!saveMetaData(layer)) {
+        m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+        return false;
+    }
     return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 {
-    if (!layer->filter()) return false;
-    if (!saveSelection(layer)) return false;
-    if (!saveFilterConfiguration(layer)) return false;
-    if (!saveMetaData(layer)) return false;
+    if (!layer->filter()) {
+        m_errorMessages << i18n("Failed to save the filter layer %1: it has no filter.", layer->name());
+        return false;
+    }
+    if (!saveSelection(layer)) {
+        m_errorMessages << i18n("Failed to save the selection for filter layer %1.", layer->name());
+        return false;
+    }
+    if (!saveFilterConfiguration(layer)) {
+        m_errorMessages << i18n("Failed to save the filter configuration for filter layer %1.", layer->name());
+        return false;
+    }
+    if (!saveMetaData(layer)) {
+        m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+        return false;
+    }
     m_count++;
     return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 {
-    if (!saveSelection(layer)) return false;
-    if (!saveAnnotations(layer)) return false;   // generator layers can have a profile because they have their own pixel data
-    if (!saveFilterConfiguration(layer)) return false;
-    if (!saveMetaData(layer)) return false;
+    if (!saveSelection(layer)) {
+        m_errorMessages << i18n("Failed to save the selection for layer %1.", layer->name());
+        return false;
+    }
+    if (!saveAnnotations(layer)) {
+        m_errorMessages << i18n("Failed to save the annotations for layer %1.", layer->name());
+        return false;   // generator layers can have a profile because they have their own pixel data
+    }
+    if (!saveFilterConfiguration(layer)) {
+        m_errorMessages << i18n("Failed to save the generator configuration for layer %1.", layer->name());
+        return false;
+    }
+    if (!saveMetaData(layer)) {
+        m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+        return false;
+    }
     m_count++;
     return visitAllInverse(layer);
 }
@@ -122,31 +169,54 @@ bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     // Clone layers do not have a profile
     m_count++;
-    if (!saveMetaData(layer)) return false;
+    if (!saveMetaData(layer)) {
+        m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
+        return false;
+    }
     return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 {
-    if (!mask->filter()) return false;
-    if (!saveSelection(mask)) return false;
-    if (!saveFilterConfiguration(mask)) return false;
+    if (!mask->filter()) {
+        m_errorMessages << i18n("Failed to save filter mask %1. It has no filter", mask->name());
+        return false;
+    }
+    if (!saveSelection(mask)) {
+        m_errorMessages << i18n("Failed to save the selection for filter mask %1.", mask->name());
+        return false;
+    }
+    if (!saveFilterConfiguration(mask)) {
+        m_errorMessages << i18n("Failed to save the filter configuration for filter mask %1.", mask->name());
+        return false;
+    }
     m_count++;
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
 {
-    if (!saveSelection(mask)) return false;
+    if (!saveSelection(mask)) {
+        m_errorMessages << i18n("Failed to save the selection for transparency mask %1.", mask->name());
+        return false;
+    }
     m_count++;
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 {
-    if (!saveSelection(mask)) return false;
+    if (!saveSelection(mask)) {
+        m_errorMessages << i18n("Failed to save the selection for local selection %1.", mask->name());
+        return false;
+    }
     m_count++;
     return true;
+}
+
+QStringList KisKraSaveVisitor::errorMessages() const
+{
+    return m_errorMessages;
 }
 
 
@@ -156,7 +226,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
     // Layer data
     m_store->setCompressionEnabled(false);
     if (m_store->open(location)) {
-        if (!device->write(m_store)) {
+        if (!device->write(*m_writer)) {
             device->disconnect();
             m_store->close();
             return false;
@@ -211,9 +281,9 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     if (node->inherits("KisMask")) {
         selection = static_cast<KisMask*>(node)->selection();
     } else if (node->inherits("KisAdjustmentLayer")) {
-        selection = static_cast<KisAdjustmentLayer*>(node)->selection();
+        selection = static_cast<KisAdjustmentLayer*>(node)->internalSelection();
     } else if (node->inherits("KisGeneratorLayer")) {
-        selection = static_cast<KisGeneratorLayer*>(node)->selection();
+        selection = static_cast<KisGeneratorLayer*>(node)->internalSelection();
     } else {
         return false;
     }
@@ -242,14 +312,15 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter = 0;
-    if (node->inherits("KisFilterMask")) {
-        filter = static_cast<KisFilterMask*>(node)->filter();
-    } else if (node->inherits("KisAdjustmentLayer")) {
-        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
-    } else if (node->inherits("KisGeneratorLayer")) {
-        filter = static_cast<KisGeneratorLayer*>(node)->filter();
+    KisNodeFilterInterface *filterInterface =
+        dynamic_cast<KisNodeFilterInterface*>(node);
+
+    KisSafeFilterConfigurationSP filter;
+
+    if (filterInterface) {
+        filter = filterInterface->filter();
     }
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
@@ -295,7 +366,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
     location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
     return location;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #include "kis_rate_option_widget.h"
 #include "kis_rate_option.h"
 
-KisRateOptionWidget::KisRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
+KisRateOptionWidget::KisRateOptionWidget(const QString& label, const QString& /*sliderLabel*/, const QString& name, bool checked):
     KisCurveOptionWidget(new KisRateOption(name, label, checked))
 {
     KisCurveOptionWidget::setConfigurationPage(curveWidget());

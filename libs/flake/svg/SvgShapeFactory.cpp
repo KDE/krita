@@ -27,7 +27,7 @@
 #include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KLocale>
+#include <klocale.h>
 
 #define SVGSHAPEFACTORYID "SvgShapeFactory"
 
@@ -36,6 +36,9 @@ SvgShapeFactory::SvgShapeFactory()
 {
     setLoadingPriority(10);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
+    // hide from add shapes docker as the shape is not able to be dragged onto 
+    // the canvas as createDefaultShape returns 0.
+    setHidden(true);
 }
 
 SvgShapeFactory::~SvgShapeFactory()
@@ -59,10 +62,11 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
             return false;
 
         // check the mimetype
-        if (href.startsWith("./")) {
+        if (href.startsWith(QLatin1String("./"))) {
             href.remove(0,2);
         }
-        const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+
+        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
         return (mimetype == "image/svg+xml");
     }
 
@@ -84,7 +88,7 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             return 0;
 
         // check the mimetype
-        if (href.startsWith("./")) {
+        if (href.startsWith(QLatin1String("./"))) {
             href.remove(0,2);
         }
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);

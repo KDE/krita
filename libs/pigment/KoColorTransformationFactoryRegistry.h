@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_SPACE_REGISTRY_P_H_
-#define _KO_COLOR_SPACE_REGISTRY_P_H_
+#ifndef KOCOLORTRANSFORMATIONFACTORYREGISTRY_H
+#define KOCOLORTRANSFORMATIONFACTORYREGISTRY_H
 
 #include <KoGenericRegistry.h>
 
@@ -42,7 +42,6 @@ public:
      */
     static void addColorTransformationFactory(KoColorTransformationFactory* factory);
     static void removeColorTransformationFactory(KoColorTransformationFactory* factory);
-    static bool containsColorTransformationFactory(const QString& id);
 private:
     static KoColorTransformationFactoryRegistry* instance();
 private:

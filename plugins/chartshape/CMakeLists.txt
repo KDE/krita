@@ -1,15 +1,21 @@
-add_subdirectory( kdchart )
+# To hide all the warnings from embedded 3rd party software like kdchart
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-switch)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 add_subdirectory( tests )
 
+
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
-                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
                      ${CMAKE_SOURCE_DIR}/interfaces
+                     ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES}
                      ${TEXTLAYOUT_INCLUDES}
 )
 
-########### Flake Plugin library ###############
+########### Chart shape Plugin library ###############
 
 SET (chartshape_LIB_SRCS
     kchart_global.cpp
@@ -26,9 +32,8 @@ SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    ThreeDScene.cpp
-    ThreeDTransformation.cpp
     ChartDocument.cpp
+    ChartPart.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
@@ -42,7 +47,13 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
+    dialogs/FontEditorDialog.cpp
+    dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
+    commands/LegendCommand.cpp
+    commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
+    commands/ChartTextShapeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
@@ -51,21 +62,25 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
+    dialogs/FormatErrorBarDialog.ui
 )
 
-kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapelib kdchart komain textlayout)
-target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
-set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+kde4_add_library(chartshapecore STATIC ${chartshape_LIB_SRCS})
+target_link_libraries(chartshapecore ${KDCHART_LIBS} komain kotextlayout)
+if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-KPIC")
+    else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+        set_target_properties(chartshapecore PROPERTIES COMPILE_FLAGS "-fPIC")
+    endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+endif(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
-install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-kde4_add_plugin(chartshape ChartShapeFactory.cpp )
-target_link_libraries(chartshape chartshapelib kdchart flake)
-install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_plugin(calligra_shape_chart ChartShapeFactory.cpp )
+target_link_libraries(calligra_shape_chart chartshapecore ${KDCHART_LIBS} flake)
+install(TARGETS calligra_shape_chart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_chart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

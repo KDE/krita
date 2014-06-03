@@ -30,19 +30,17 @@ class KisRoundCornersFilter : public KisFilter
 public:
     KisRoundCornersFilter();
 public:
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
     static inline KoID id() {
         return KoID("roundcorners", i18n("Round Corners"));
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
 };
 

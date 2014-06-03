@@ -31,7 +31,7 @@
 #undef _T
 
 /**
- * This is an empty shell that needs to be "specialized" for each possible
+ * This is an empty mainWindow that needs to be "specialized" for each possible
  * numerical type (quint8, quint16...).
  *
  * It needs to defines some static constant fields :
@@ -202,8 +202,6 @@ inline int float2int(double x)
 
 #endif
 
-#include <KoLut.h>
-
 template<typename _T_>
 struct KoIntegerToFloat {
   inline float operator()(_T_ f) const
@@ -275,7 +273,7 @@ public:
      * This function will scale a value of type _T to fit into a _Tdst.
      */
     inline static _Tdst scaleToA(_T a) {
-        return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+        return _Tdst(dst_compositetype(a) * KoColorSpaceMathsTraits<_Tdst>::unitValue / KoColorSpaceMathsTraits<_T>::unitValue);
     }
 
     inline static dst_compositetype clamp(dst_compositetype val) {

@@ -19,7 +19,6 @@
 #define KIS_COLOR_SELECTOR_SIMPLE_H
 
 typedef unsigned int QRgb;
-class KoColorSpace;
 
 #include <QColor>
 #include <QImage>
@@ -27,22 +26,28 @@ class KoColorSpace;
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
 
+namespace Acs {
+    class PixelCacheRenderer;
+}
+
+
 class KisColorSelectorSimple : public KisColorSelectorComponent
 {
 Q_OBJECT
 public:
     explicit KisColorSelectorSimple(KisColorSelector *parent);
-    void setColor(const QColor& c);
+    void setColor(const KoColor &color);
 
 protected:
-    virtual QColor selectColor(int x, int y);
-    virtual void paint(QPainter*);
-    const QColor& colorAt(int x, int y);
+    void paint(QPainter*);
+    KoColor selectColor(int x, int y);
+
+private:
+    friend class Acs::PixelCacheRenderer;
+    KoColor colorAt(int x, int y);
 
 private:
     QPointF m_lastClickPos;
-    KoColor m_kocolor;
-    QColor m_qcolor;
     QImage m_pixelCache;
 };
 

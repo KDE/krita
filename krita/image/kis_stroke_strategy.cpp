@@ -17,11 +17,14 @@
  */
 
 #include "kis_stroke_strategy.h"
+#include <KoCompositeOpRegistry.h>
 
 
 KisStrokeStrategy::KisStrokeStrategy(QString id, QString name)
     : m_exclusive(false),
+      m_supportsWrapAroundMode(false),
       m_needsIndirectPainting(false),
+      m_indirectPaintingCompositeOp(COMPOSITE_ALPHA_DARKEN),
       m_id(id),
       m_name(name)
 {
@@ -72,9 +75,19 @@ bool KisStrokeStrategy::isExclusive() const
     return m_exclusive;
 }
 
+bool KisStrokeStrategy::supportsWrapAroundMode() const
+{
+    return m_supportsWrapAroundMode;
+}
+
 bool KisStrokeStrategy::needsIndirectPainting() const
 {
     return m_needsIndirectPainting;
+}
+
+QString KisStrokeStrategy::indirectPaintingCompositeOp() const
+{
+    return m_indirectPaintingCompositeOp;
 }
 
 QString KisStrokeStrategy::id() const
@@ -92,7 +105,17 @@ void KisStrokeStrategy::setExclusive(bool value)
     m_exclusive = value;
 }
 
+void KisStrokeStrategy::setSupportsWrapAroundMode(bool value)
+{
+    m_supportsWrapAroundMode = value;
+}
+
 void KisStrokeStrategy::setNeedsIndirectPainting(bool value)
 {
     m_needsIndirectPainting = value;
+}
+
+void KisStrokeStrategy::setIndirectPaintingCompositeOp(const QString &id)
+{
+    m_indirectPaintingCompositeOp = id;
 }

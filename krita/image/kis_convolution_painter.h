@@ -26,15 +26,21 @@
 #include "krita_export.h"
 
 class QImage;
+template<class factory> class KisConvolutionWorker;
+
 
 enum KisConvolutionBorderOp {
-    BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
-    // the rect we are convolving.
-    BORDER_WRAP = 1, // Use the pixel on the opposite side to make up for the missing pixels on the border. XXX: Not implemented yet
-    BORDER_REPEAT = 2, // Use the border for the missing pixels, too.
-    BORDER_AVOID = 3 // Skip convolving the border pixels at all.
+    BORDER_IGNORE = 0, // read the pixels outside of the application rect
+    BORDER_REPEAT = 1  // Use the border for the missing pixels
 };
 
+/**
+ * @brief The KisConvolutionPainter class applies a convolution kernel to a paint device.
+ *
+ *
+ * Note: https://bugs.kde.org/show_bug.cgi?id=220310 shows that there's something here
+ * that we need to fix...
+ */
 class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 {
 
@@ -46,13 +52,13 @@ public:
 
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
-     * channels possible. By default the the border pixels are not convolved, that is, convolving
+     * channels possible. By default the border pixels are not convolved, that is, convolving
      * starts with at (x + kernel.width/2, y + kernel.height/2) and stops at w - (kernel.width/2)
      * and h - (kernel.height/2)
      *
      * The border op decides what to do with pixels too close to the edge of the rect as defined above.
      *
-     * The channels flag determines which set out of color channels, alpha channels, substance or substrate
+     * The channels flag determines which set out of color channels, alpha channels.
      * channels we convolve.
      *
      * Note that we do not (currently) support different kernels for
@@ -62,6 +68,27 @@ public:
      * set those channels with KisPainter::setChannelFlags();
      */
     void applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize,
-                     KisConvolutionBorderOp borderOp = BORDER_AVOID);
+                     KisConvolutionBorderOp borderOp = BORDER_REPEAT);
+
+protected:
+    friend class KisConvolutionPainterTest;
+    enum TestingEnginePreference {
+        NONE,
+        SPATIAL,
+        FFTW
+    };
+
+
+    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+
+
+private:
+    template<class factory>
+        KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
+                                                    KisPainter *painter,
+                                                    KoUpdater *progress);
+
+private:
+    TestingEnginePreference m_enginePreference;
 };
 #endif //KIS_CONVOLUTION_PAINTER_H_

@@ -1,6 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}  ${CMAKE_SOURCE_DIR}/krita/image/metadata ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
+macro_add_unittest_definitions()
+
 SET(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
 kde4_add_ui_files(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
 kde4_add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
@@ -32,15 +34,12 @@ target_link_libraries(KisNodeFacadeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
-target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage koodf ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
 set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
 kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
 target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -72,14 +71,6 @@ set(kis_painter_test_SRCS kis_painter_test.cpp )
 kde4_add_unit_test(KisPainterTest TESTNAME krita-image-KisPainterTest ${kis_painter_test_SRCS})
 
 target_link_libraries(KisPainterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
-
-kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-image-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
-
-target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -153,14 +144,6 @@ kde4_add_unit_test(KisPaintLayerTest TESTNAME krita-image-KisPaintLayerTest ${ki
 target_link_libraries(KisPaintLayerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
-# action recorder results vary with the version of lcms
-if(LCMS2_FOUND)
-set(kis_action_recorder_test_SRCS kis_action_recorder_test.cpp )
-kde4_add_unit_test(KisActionRecorderTest TESTNAME krita-image-KisActionRecorderTest ${kis_action_recorder_test_SRCS})
-target_link_libraries(KisActionRecorderTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-endif(LCMS2_FOUND)
-
-########### next target ###############
 
 set(kis_adjustment_layer_test_SRCS kis_adjustment_layer_test.cpp )
 kde4_add_unit_test(KisAdjustmentLayerTest TESTNAME krita-image-KisAdjustmentLayerTest ${kis_adjustment_layer_test_SRCS})
@@ -216,12 +199,6 @@ target_link_libraries(KisCropProcessingVisitorTest  ${KDE4_KDEUI_LIBS} kritaimag
 
 ########### next target ###############
 
-set(kis_processings_test_SRCS kis_processings_test.cpp )
-kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
-target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_processing_applicator_test_SRCS kis_processing_applicator_test.cpp )
 kde4_add_unit_test(KisProcessingApplicatorTest TESTNAME krita-image-KisProcessingApplicatorTest ${kis_processing_applicator_test_SRCS})
 target_link_libraries(KisProcessingApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -252,12 +229,6 @@ target_link_libraries(KisFilterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_L
 
 ########### next target ###############
 
-set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp )
-kde4_add_unit_test(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
-target_link_libraries(KisFilterSelectionsBenchmark  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_filter_processing_information_test_SRCS kis_filter_processing_information_test.cpp )
 kde4_add_unit_test(KisFilterProcessingInformationTest TESTNAME krita-image-KisFilterProcessingInformationTest ${kis_filter_processing_information_test_SRCS})
 target_link_libraries(KisFilterProcessingInformationTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -273,12 +244,6 @@ target_link_libraries(KisFilterRegistryTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_
 set(kis_filter_strategy_test_SRCS kis_filter_strategy_test.cpp )
 kde4_add_unit_test(KisFilterStrategyTest TESTNAME krita-image-KisFilterStrategyTest ${kis_filter_strategy_test_SRCS})
 target_link_libraries(KisFilterStrategyTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_generic_colorspace_test_SRCS kis_generic_colorspace_test.cpp )
-kde4_add_unit_test(KisGenericColorspaceTest TESTNAME krita-image-KisGenericColorspaceTest ${kis_generic_colorspace_test_SRCS})
-target_link_libraries(KisGenericColorspaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -309,12 +274,6 @@ target_link_libraries(KisImageTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LI
 set(kis_image_signal_router_test_SRCS kis_image_signal_router_test.cpp )
 kde4_add_unit_test(KisImageSignalRouterTest TESTNAME krita-image-KisImageSignalRouterTest ${kis_image_signal_router_test_SRCS})
 target_link_libraries(KisImageSignalRouterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_iterators_pixel_test_SRCS kis_iterators_pixel_test.cpp )
-kde4_add_unit_test(KisIteratorsPixelTest TESTNAME krita-image-KisIteratorsPixelTest ${kis_iterators_pixel_test_SRCS})
-target_link_libraries(KisIteratorsPixelTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -451,20 +410,14 @@ target_link_libraries(KisPaintopTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_
 ########### next target ###############
 
 set(kis_pattern_test_SRCS kis_pattern_test.cpp )
-kde4_add_unit_test(KisPatternTest TESTNAME krita-image-KisPatternTest ${kis_pattern_test_SRCS})
-target_link_libraries(KisPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+kde4_add_unit_test(KoPatternTest TESTNAME krita-image-KoPatternTest ${kis_pattern_test_SRCS})
+target_link_libraries(KoPatternTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(kis_perspective_grid_test_SRCS kis_perspective_grid_test.cpp )
 kde4_add_unit_test(KisPerspectiveGridTest TESTNAME krita-image-KisPerspectiveGridTest ${kis_perspective_grid_test_SRCS})
 target_link_libraries(KisPerspectiveGridTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_perspective_math_test_SRCS kis_perspective_math_test.cpp )
-kde4_add_unit_test(KisPerspectiveMathTest TESTNAME krita-image-KisPerspectiveMathTest ${kis_perspective_math_test_SRCS})
-target_link_libraries(KisPerspectiveMathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -486,12 +439,6 @@ target_link_libraries(KisRecordedFilterActionTest  ${KDE4_KDEUI_LIBS} kritaimage
 
 ########### next target ###############
 
-set(kis_selected_transaction_test_SRCS kis_selected_transaction_test.cpp )
-kde4_add_unit_test(KisSelectedTransactionTest TESTNAME krita-image-KisSelectedTransactionTest ${kis_selected_transaction_test_SRCS})
-target_link_libraries(KisSelectedTransactionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_selection_mask_test_SRCS kis_selection_mask_test.cpp )
 kde4_add_unit_test(KisSelectionMaskTest TESTNAME krita-image-KisSelectionMaskTest ${kis_selection_mask_test_SRCS})
 target_link_libraries(KisSelectionMaskTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -510,21 +457,15 @@ target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT
 
 ########### next target ###############
 
-set(kis_shear_visitor_test_SRCS kis_shear_visitor_test.cpp )
-kde4_add_unit_test(KisShearVisitorTest TESTNAME krita-image-KisShearVisitorTest ${kis_shear_visitor_test_SRCS})
-target_link_libraries(KisShearVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_transform_visitor_test_SRCS kis_transform_visitor_test.cpp )
-kde4_add_unit_test(KisTransformVisitorTest TESTNAME krita-image-KisTransformVisitorTest ${kis_transform_visitor_test_SRCS})
-target_link_libraries(KisTransformVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_transform_worker_test_SRCS kis_transform_worker_test.cpp )
 kde4_add_unit_test(KisTransformWorkerTest TESTNAME krita-image-KisTransformWorkerTest ${kis_transform_worker_test_SRCS})
 target_link_libraries(KisTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_perspective_transform_worker_test_SRCS kis_perspective_transform_worker_test.cpp )
+kde4_add_unit_test(KisPerspectiveTransformWorkerTest TESTNAME krita-image-KisPerspectiveTransformWorkerTest ${kis_perspective_transform_worker_test_SRCS})
+target_link_libraries(KisPerspectiveTransformWorkerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -549,12 +490,6 @@ target_link_libraries(KisVecTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBR
 set(kis_filter_config_widget_test_SRCS kis_filter_config_widget_test.cpp )
 kde4_add_unit_test(KisFilterConfigWidgetTest TESTNAME krita-image-KisFilterConfigWidgetTest ${kis_filter_config_widget_test_SRCS})
 target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
-kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
-target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -593,3 +528,55 @@ kde4_add_unit_test(KisNodeQueryPathTest TESTNAME krita-image-KisNodeQueryPathTes
 target_link_libraries(KisNodeQueryPathTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 
+########### next target ###############
+# action recorder results vary with the version of lcms
+if(LCMS2_FOUND)
+
+set(kis_action_recorder_test_SRCS kis_action_recorder_test.cpp )
+kde4_add_unit_test(KisActionRecorderTest TESTNAME krita-image-KisActionRecorderTest ${kis_action_recorder_test_SRCS})
+target_link_libraries(KisActionRecorderTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_processings_test_SRCS kis_processings_test.cpp )
+kde4_add_unit_test(KisProcessingsTest TESTNAME krita-image-KisProcessingsTest ${kis_processings_test_SRCS})
+target_link_libraries(KisProcessingsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+endif(LCMS2_FOUND)
+
+########### next target ###############
+
+set(kis_fixed_point_maths_test_SRCS kis_fixed_point_maths_test.cpp )
+kde4_add_unit_test(KisFixedPointMathsTest TESTNAME krita-image-KisFixedPointMathsTest ${kis_fixed_point_maths_test_SRCS})
+target_link_libraries(KisFixedPointMathsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_filter_weights_buffer_test_SRCS kis_filter_weights_buffer_test.cpp )
+kde4_add_unit_test(KisFilterWeightsBufferTest TESTNAME krita-image-KisFilterWeightsBufferTest ${kis_filter_weights_buffer_test_SRCS})
+target_link_libraries(KisFilterWeightsBufferTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_filter_weights_applicator_test_SRCS kis_filter_weights_applicator_test.cpp )
+kde4_add_unit_test(KisFilterWeightsApplicatorTest TESTNAME krita-image-KisFilterWeightsApplicatorTest ${kis_filter_weights_applicator_test_SRCS})
+target_link_libraries(KisFilterWeightsApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_fill_interval_test_SRCS kis_fill_interval_test.cpp )
+kde4_add_unit_test(KisFillIntervalTest TESTNAME krita-image-FillInterval-Test ${kis_fill_interval_test_SRCS})
+target_link_libraries(KisFillIntervalTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
+set(kis_fill_interval_map_test_SRCS kis_fill_interval_map_test.cpp )
+kde4_add_unit_test(KisFillIntervalMapTest TESTNAME krita-image-FillIntervalMap-Test ${kis_fill_interval_map_test_SRCS})
+target_link_libraries(KisFillIntervalMapTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_scanline_fill_test_SRCS kis_scanline_fill_test.cpp )
+kde4_add_unit_test(KisScanlineFillTest TESTNAME krita-image-ScanlineFill-Test ${kis_scanline_fill_test_SRCS})
+target_link_libraries(KisScanlineFillTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

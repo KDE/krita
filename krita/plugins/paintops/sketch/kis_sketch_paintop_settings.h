@@ -29,7 +29,9 @@
 #include <opengl/kis_opengl.h>
 
 #if defined(_WIN32) || defined(_WIN64)
+#ifndef __MINGW32__
 # include <windows.h>
+#endif
 #endif
 #include <kis_brush_based_paintop_settings.h>
 
@@ -47,17 +49,11 @@ public:
     KisSketchPaintOpSettings();
     virtual ~KisSketchPaintOpSettings() {}
 
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
-    
+    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     bool paintIncremental();
     bool isAirbrushing() const;
     int rate() const;
-    
-#if defined(HAVE_OPENGL)
-    QString modelName() const;
-#endif
-
 };
 
 #endif

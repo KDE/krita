@@ -50,9 +50,10 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(handles().size() == 4);
-    if (snapLine.isNull()) {
+    if (m_snapLine.isNull()) {
         QPolygonF poly;
-        if (!quad(poly)) return nullPoint;
+        QTransform transform;
+        if (!getTransform(poly, transform)) return nullPoint;
         // avoid problems with multiple assistants: only snap if starting in the grid
         if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
 
@@ -65,8 +66,6 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
         }
 
         // construct transformation
-        QTransform transform;
-        if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
         bool invertible;
         const QTransform inverse = transform.inverted(&invertible);
         if (!invertible) return nullPoint; // shouldn't happen
@@ -77,18 +76,18 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
             verticalLine = QLineF(strokeBegin, transform.map(start + QPointF(0, 1))),
             horizontalLine = QLineF(strokeBegin, transform.map(start + QPointF(1, 0)));
         // determine whether the horizontal or vertical line is closer to the point
-        snapLine = distsqr(pt, verticalLine) < distsqr(pt, horizontalLine) ? verticalLine : horizontalLine;
+        m_snapLine = distsqr(pt, verticalLine) < distsqr(pt, horizontalLine) ? verticalLine : horizontalLine;
     }
 
     // snap to line
     const qreal
-        dx = snapLine.dx(),
-        dy = snapLine.dy(),
+        dx = m_snapLine.dx(),
+        dy = m_snapLine.dy(),
         dx2 = dx * dx,
         dy2 = dy * dy,
         invsqrlen = 1.0 / (dx2 + dy2);
-    QPointF r(dx2 * pt.x() + dy2 * snapLine.x1() + dx * dy * (pt.y() - snapLine.y1()),
-              dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
+    QPointF r(dx2 * pt.x() + dy2 * m_snapLine.x1() + dx * dy * (pt.y() - m_snapLine.y1()),
+              dx2 * m_snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - m_snapLine.x1()));
     r *= invsqrlen;
     return r;
 }
@@ -100,7 +99,7 @@ QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& s
 
 void PerspectiveAssistant::endStroke()
 {
-    snapLine = QLineF();
+    m_snapLine = QLineF();
 }
 
 bool PerspectiveAssistant::contains(const QPointF& pt) const
@@ -152,9 +151,8 @@ inline qreal inverseMaxLocalScale(const QTransform& transform)
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
 {
     QPolygonF poly;
-    if (!quad(poly)) return 1.0;
     QTransform transform;
-    if (!QTransform::squareToQuad(poly, transform)) return 1.0;
+    if (!getTransform(poly, transform)) return 1.0;
     bool invertible;
     QTransform inverse = transform.inverted(&invertible);
     if (!invertible) return 1.0;
@@ -166,24 +164,41 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
 }
 
 // draw a vanishing point marker
-inline QPainterPath drawX(QPainter& gc, const QPointF& pt)
+inline QPainterPath drawX(const QPointF& pt)
 {
-    Q_UNUSED(gc);
     QPainterPath path;
     path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
     path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
     return path;
 }
 
-void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2 *canvas)
 {
-    Q_UNUSED(updateRect);
-
+    gc.save();
+    gc.resetTransform();
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPolygonF poly;
-    gc.save();
-    gc.setTransform(initialTransform);
-    if (!quad(poly)) {
+    QTransform transform; // unused, but computed for caching purposes
+    if (getTransform(poly, transform)) {
+        // draw vanishing points
+        QPointF intersection(0, 0);
+        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+            drawPath(gc, drawX(initialTransform.map(intersection)));
+        }
+        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+            drawPath(gc, drawX(initialTransform.map(intersection)));
+        }
+    }
+    gc.restore();
+    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached,canvas);
+}
+
+void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter)
+{
+    gc.setTransform(converter->documentToWidgetTransform());
+    QPolygonF poly;
+    QTransform transform;
+    if (!getTransform(poly, transform)) {
         // color red for an invalid transform, but not for an incomplete one
         if(handles().size() == 4)
         {
@@ -194,17 +209,8 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             path.addPolygon(poly);
             drawPath(gc, path);
         }
-        gc.restore();
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
-
-        QTransform transform;
-        if (!QTransform::squareToQuad(poly, transform)) {
-            qWarning("Failed to create perspective mapping");
-            // bail out
-            gc.restore();
-            return;
-        }
         gc.setTransform(transform, true);
         QPainterPath path;
         for (int y = 0; y <= 8; ++y)
@@ -218,16 +224,6 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             path.lineTo(QPointF(x * 0.125, 1.0));
         }
         drawPath(gc, path);
-        gc.restore();
-
-        // draw vanishing points
-        QPointF intersection(0, 0);
-        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
-        }
-        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
-        }
     }
 }
 
@@ -294,6 +290,37 @@ bool PerspectiveAssistant::quad(QPolygonF& poly) const
     return true;
 }
 
+bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) const
+{
+    if (m_cachedPolygon.size() != 0 && handles().size() == 4) {
+        for (int i = 0; i <= 4; ++i) {
+            if (i == 4) {
+                poly = m_cachedPolygon;
+                transform = m_cachedTransform;
+                return m_cacheValid;
+            }
+            if (m_cachedPoints[i] != *handles()[i]) break;
+        }
+    }
+    m_cachedPolygon.clear();
+    m_cacheValid = false;
+    if (!quad(poly)) {
+        m_cachedPolygon = poly;
+        return false;
+    }
+    if (!QTransform::squareToQuad(poly, transform)) {
+        qWarning("Failed to create perspective mapping");
+        return false;
+    }
+    for (int i = 0; i < 4; ++i) {
+        m_cachedPoints[i] = *handles()[i];
+    }
+    m_cachedPolygon = poly;
+    m_cachedTransform = transform;
+    m_cacheValid = true;
+    return true;
+}
+
 PerspectiveAssistantFactory::PerspectiveAssistantFactory()
 {
 }
@@ -312,7 +339,7 @@ QString PerspectiveAssistantFactory::name() const
     return i18n("Perspective");
 }
 
-KisPaintingAssistant* PerspectiveAssistantFactory::paintingAssistant(const QRectF& /*imageArea*/) const
+KisPaintingAssistant* PerspectiveAssistantFactory::createPaintingAssistant() const
 {
     return new PerspectiveAssistant;
 }

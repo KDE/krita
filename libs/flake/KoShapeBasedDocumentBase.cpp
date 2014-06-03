@@ -22,9 +22,11 @@
 #include "KoShapeBasedDocumentBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
-#include <KGlobal>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <ksharedptr.h>
 
 class KoShapeBasedDocumentBasePrivate
 {
@@ -68,6 +70,10 @@ KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()
 KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
 {
     delete d;
+}
+
+void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
+{
 }
 
 KoDocumentResourceManager *KoShapeBasedDocumentBase::resourceManager() const

@@ -26,20 +26,20 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoShapeSavingContext.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtGui/QBrush>
-#include <QtGui/QPainter>
+#include <QSharedPointer>
+#include <QBrush>
+#include <QPainter>
 
 class KoGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
-    KoGradientBackgroundPrivate() : gradient(0) {};
-    ~KoGradientBackgroundPrivate() {
-        delete gradient;
-    }
+    KoGradientBackgroundPrivate()
+        : gradient(0)
+    {}
 
-    QGradient * gradient;
+    QGradient *gradient;
     QTransform matrix;
 };
 
@@ -79,16 +79,6 @@ QTransform KoGradientBackground::transform() const
     return d->matrix;
 }
 
-void KoGradientBackground::setGradient(QGradient * gradient)
-{
-    Q_D(KoGradientBackground);
-    delete d->gradient;
-
-    d->gradient = gradient;
-    Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
-}
-
 void KoGradientBackground::setGradient(const QGradient &gradient)
 {
     Q_D(KoGradientBackground);
@@ -105,26 +95,10 @@ const QGradient * KoGradientBackground::gradient() const
     return d->gradient;
 }
 
-KoGradientBackground &KoGradientBackground::operator = (const KoGradientBackground &rhs)
-{
-    Q_D(KoGradientBackground);
-    if (this == &rhs)
-        return *this;
-
-    KoGradientBackgroundPrivate *other = static_cast<KoGradientBackgroundPrivate*>(rhs.d_ptr);
-
-    d->matrix = other->matrix;
-    delete d->gradient;
-    d->gradient = KoFlake::cloneGradient(other->gradient);
-    Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
-
-    return *this;
-}
-
-void KoGradientBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
+void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoGradientBackground);
+    if (!d->gradient) return;
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
 
@@ -135,6 +109,7 @@ void KoGradientBackground::paint(QPainter &painter, const QPainterPath &fillPath
 void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_D(KoGradientBackground);
+    if (!d->gradient) return;
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
@@ -154,6 +129,22 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
         if (gradient) {
             d->gradient = KoFlake::cloneGradient(gradient);
             d->matrix = brush.transform();
+
+            //Gopalakrishna Bhat: If the brush has transparency then we ignore the draw:opacity property and use the brush transparency.
+            // Brush will have transparency if the svg:linearGradient stop point has stop-opacity property otherwise it is opaque
+            if (brush.isOpaque() && styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
+                QString opacityPercent = styleStack.property(KoXmlNS::draw, "opacity");
+                if (! opacityPercent.isEmpty() && opacityPercent.right(1) == "%") {
+                    float opacity = qMin(opacityPercent.left(opacityPercent.length() - 1).toDouble(), 100.0) / 100;
+                    QGradientStops stops;
+                    foreach(QGradientStop stop, d->gradient->stops()) {
+                        stop.second.setAlphaF(opacity);
+                        stops << stop;
+                    }
+                    d->gradient->setStops(stops);
+                }
+            }
+
             return true;
         }
     }

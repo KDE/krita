@@ -2,6 +2,7 @@
  *  dlg_grow_selection.cc - part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,48 +21,86 @@
 
 #include "dlg_grow_selection.h"
 
-#include <math.h>
+#include <KoUnit.h>
+#include <KoSizeGroup.h>
+#include <kis_view2.h>
+#include <kis_image.h>
+#include <operations/kis_operation_configuration.h>
 
-#include <klocale.h>
-#include <kis_debug.h>
-DlgGrowSelection::DlgGrowSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisView2* view)
+    : KisOperationUIWidget(i18n("Grow Selection"), parent)
+    , m_growValue(1)
 {
-    setCaption(i18n("Grow Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
-    m_page = new WdgGrowSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("grow_selection");
+    Q_ASSERT(view);
+    KisImageWSP image = view->image();
+    Q_ASSERT(image);
+    m_resolution = image->yRes();
 
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
+    setupUi(this);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    spbGrowValue->setValue(m_growValue);
+    spbGrowValue->setFocus();
+    spbGrowValue->setVisible(true);
+    spbGrowValueDouble->setVisible(false);
+
+    cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
+    cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
+
+    // ensure that both spinboxes request the same horizontal size
+    KoSizeGroup *spbGroup = new KoSizeGroup(this);
+    spbGroup->addWidget(spbGrowValue);
+    spbGroup->addWidget(spbGrowValueDouble);
+
+    connect(spbGrowValue, SIGNAL(valueChanged(int)), this, SLOT(slotGrowValueChanged(int)));
+    connect(spbGrowValueDouble, SIGNAL(valueChanged(double)), this, SLOT(slotGrowValueChanged(double)));
+    connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
 }
 
-DlgGrowSelection::~DlgGrowSelection()
+void WdgGrowSelection::slotGrowValueChanged(int value)
 {
-    delete m_page;
+    slotGrowValueChanged((double) value);
 }
 
-qint32 DlgGrowSelection::xradius()
+void WdgGrowSelection::slotGrowValueChanged(double value)
 {
-    return m_page->radiusSpinBox->value();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? value : (value * m_resolution);
+    m_growValue = qRound(selectedUnit.fromUserValue(resValue));
 }
 
-qint32 DlgGrowSelection::yradius()
+void WdgGrowSelection::slotUnitChanged(int index)
 {
-    return m_page->radiusSpinBox->value();
+    updateGrowUIValue(m_growValue);
+
+    const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbGrowValue->setVisible(false);
+        spbGrowValueDouble->setVisible(true);
+    } else {
+        spbGrowValue->setVisible(true);
+        spbGrowValueDouble->setVisible(false);
+    }
 }
 
-
-// SLOTS
-
-void DlgGrowSelection::okClicked()
+void WdgGrowSelection::updateGrowUIValue(double value)
 {
-    accept();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbGrowValueDouble->blockSignals(true);
+        spbGrowValueDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+        spbGrowValueDouble->blockSignals(false);
+    } else {
+        const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+        spbGrowValue->blockSignals(true);
+        spbGrowValue->setValue(selectedUnit.toUserValue(finalValue));
+        spbGrowValue->blockSignals(false);
+    }
+}
+
+void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
+{
+    config->setProperty("x-radius", m_growValue);
+    config->setProperty("y-radius", m_growValue);
 }
 
 #include "dlg_grow_selection.moc"

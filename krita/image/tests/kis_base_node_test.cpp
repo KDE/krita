@@ -50,7 +50,7 @@ class TestNode : public KisBaseNode
 void KisBaseNodeTest::testCreation()
 {
     KisBaseNodeSP node = new TestNode();
-    QVERIFY(node->name() == QString());
+    QVERIFY(node->name().isEmpty());
     QVERIFY(node->name() == node->objectName());
     QVERIFY(node->icon().isNull());
     QVERIFY(node->visible() == true);

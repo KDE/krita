@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007-2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007-2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -35,6 +35,8 @@
 class KoShape;
 class KoCanvasBase;
 class KoView;
+
+class ZoomAndPanTester;
 
 /**
  * KoCanvasController implementation for QWidget based canvases
@@ -81,7 +83,7 @@ public:
      * they are. This might be used, for example, to switch from a QWidget to a QGLWidget canvas.
      * @param widget the new canvas widget.
      */
-    void changeCanvasWidget(QWidget *widget);
+    virtual void changeCanvasWidget(QWidget *widget);
 
     virtual int visibleHeight() const;
     virtual int visibleWidth() const;
@@ -111,12 +113,18 @@ public:
 
     virtual void zoomTo(const QRect &rect);
 
+    /**
+     * Zoom document keeping point \p widgetPoint unchanged
+     * \param widgetPoint sticky point in widget pixels
+     */
+    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
+
     virtual void recenterPreferred();
 
-    virtual void setPreferredCenter(const QPoint &viewPoint);
+    virtual void setPreferredCenter(const QPointF &viewPoint);
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    virtual QPoint preferredCenter() const;
+    virtual QPointF preferredCenter() const;
 
     virtual void pan(const QPoint &distance);
 
@@ -124,6 +132,10 @@ public:
 
     virtual QPoint scrollBarValue() const;
 
+    /**
+     * Used by KisCanvasController to correct the scrollbars position
+     * after the rotation.
+     */
     virtual void setScrollBarValue(const QPoint &value);
 
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
@@ -158,18 +170,7 @@ private slots:
     void updateCanvasOffsetY();
 
 protected:
-
-    /**
-     * Moves scroll bars to ensure \p center is in the center
-     * of the viewport
-     */
-    virtual void scrollToCenterPoint(const QPoint &center);
-
-    /**
-     * Zoom document keeping point \p widgetPoint unchanged
-     * \param widgetPoint sticky point in widget pixels
-     */
-    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
+    friend class KisZoomAndPanTest;
 
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);

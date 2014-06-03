@@ -20,9 +20,9 @@
 #ifndef KOGENCHANGE_H
 #define KOGENCHANGE_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QList>
+#include <QMap>
+#include <QString>
 #include "koodf_export.h"
 
 #include <QByteArray>

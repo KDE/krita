@@ -15,11 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
- #ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_iptc_io.h"
 
 #include <kis_debug.h>
@@ -111,10 +106,17 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             it != store->end(); ++it) {
         const KisMetaData::Entry& entry = *it;
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
-            QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
-            Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
-            iptcData.add(iptcKey, kmdValueToExivValue(entry.value(),
-                         Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record())));
+            try {
+                QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
+                Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
+                Exiv2::Value *v = kmdValueToExivValue(entry.value(),
+                                                      Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record()));
+                if (v && v->typeId() != Exiv2::invalidTypeId) {
+                    iptcData.add(iptcKey, v);
+                }
+            } catch (Exiv2::AnyError& e) {
+                dbgFile << "exiv error " << e.what();
+            }
         }
     }
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
@@ -177,7 +179,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 
                 QStringList list = data.split(',');
                 QList<KisMetaData::Value> values;
-                foreach(const QString entry, list) {
+                foreach(const QString &entry, list) {
                     values.push_back(KisMetaData::Value(entry));
                 }
                 value = KisMetaData::Value(values, KisMetaData::Value::UnorderedArray);

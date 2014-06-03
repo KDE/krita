@@ -20,7 +20,7 @@
 
 #include "AddTextRangeCommand.h"
 #include "ArtisticTextShape.h"
-#include <KLocale>
+#include <klocale.h>
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
     : m_tool(tool), m_shape(shape), m_plainText(text), m_formattedText(QString(), QFont()), m_from(from)

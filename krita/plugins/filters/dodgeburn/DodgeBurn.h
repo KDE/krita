@@ -14,7 +14,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#ifndef DODGE_BURN_H
+#define DODGE_BURN_H
 
 #include "filter/kis_color_transformation_filter.h"
 
@@ -34,7 +35,7 @@ public:
 public:
 
     virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 private:
     QString m_prefix;
 };
@@ -53,3 +54,5 @@ public:
     QString m_id;
     Ui_DodgeBurnConfigurationBaseWidget * m_page;
 };
+
+#endif

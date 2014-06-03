@@ -28,9 +28,11 @@ class EllipseAssistant : public KisPaintingAssistant
 public:
     EllipseAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 3; }
+protected:
+    virtual QRect boundingRect() const;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
 private:
     QPointF project(const QPointF& pt) const;
     mutable Ellipse e;
@@ -43,7 +45,7 @@ public:
     virtual ~EllipseAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* paintingAssistant(const QRectF& imageArea) const;
+    virtual KisPaintingAssistant* createPaintingAssistant() const;
 };
 
 #endif

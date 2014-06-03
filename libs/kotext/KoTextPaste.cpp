@@ -29,29 +29,39 @@
 #include "KoTextDocument.h"
 #include "KoDocumentRdfBase.h"
 #include "opendocument/KoTextLoader.h"
+#include "KoTextSharedLoadingData.h"
 
 #include <kdebug.h>
 #ifdef SHOULD_BUILD_RDF
 #include "KoTextRdfCore.h"
+#include <Soprano/Soprano>
 #endif
 
 class KoTextPaste::Private
 {
 public:
-    Private(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *_rdfModel)
+    Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel,
+        KoCanvasBase *c, KUndo2Command *cmd
+    )
         : editor(editor)
-        , resourceManager(shapeController->resourceManager())
+        , resourceManager(shapeCont->resourceManager())
         , rdfModel(_rdfModel)
+        , shapeController(shapeCont)
+        , command(cmd)
+        , canvas(c)
     {
     }
 
     KoTextEditor *editor;
     KoDocumentResourceManager *resourceManager;
-    const Soprano::Model *rdfModel;
+    QSharedPointer<Soprano::Model> rdfModel;
+    KoShapeController *shapeController;
+    KUndo2Command *command;
+    KoCanvasBase *canvas;
 };
 
-KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, const Soprano::Model *rdfModel)
-        : d(new Private(editor, shapeController, rdfModel))
+KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KoCanvasBase *c, KUndo2Command *cmd)
+        : d(new Private(editor, shapeController, rdfModel, c, cmd))
 {
 }
 
@@ -77,22 +87,38 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
     if (d->rdfModel)
     {
-        Soprano::Model *tmpmodel(Soprano::createModel());
+        QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
         kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();
         kDebug(30015) << "existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
-        const_cast<Soprano::Model*>(d->rdfModel)->addStatements(tmpmodel->listStatements().allElements());
-        delete tmpmodel;
-
+        d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
         kDebug(30015) << "done... existing rdf model.sz:" << d->rdfModel->statementCount();
 #ifndef NDEBUG
-        KoTextRdfCore::dumpModel("Imported RDF after C+P", const_cast<Soprano::Model*>(d->rdfModel));
+        KoTextRdfCore::dumpModel("Imported RDF after C+P", d->rdfModel);
 #endif
     }
 #endif
+
+    KoTextSharedLoadingData *sharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID));
+
+    // add shapes to the document
+    foreach (KoShape *shape, sharedData->insertedShapes()) {
+        QPointF move;
+        d->canvas->clipToDocument(shape, move);
+        if (move.x() != 0 || move.y() != 0) {
+            shape->setPosition(shape->position() + move);
+        }
+
+        // During load we make page anchored shapes invisible, because otherwise
+        // they leave empty rects in the text if there is run-around
+        // now is the time to make them visible again
+        shape->setVisible(true);
+
+        d->editor->addCommand(d->shapeController->addShapeDirect(shape, d->command));
+    }
 
     return ok;
 }

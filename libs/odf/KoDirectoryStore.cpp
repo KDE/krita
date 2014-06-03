@@ -26,17 +26,16 @@
 
 // HMMM... I used QFile and QDir.... but maybe this should be made network transparent?
 
-KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode)
-        : m_basePath(path)
+KoDirectoryStore::KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype)
+    : m_basePath(path)
 {
     Q_D(KoStore);
-    const int pos = path.lastIndexOf('/');
-    if (pos != -1 && pos != m_basePath.length() - 1)
-        m_basePath = m_basePath.left(pos);
-    if (!m_basePath.endsWith('/'))
-        m_basePath += '/';
-    m_currentPath = m_basePath;
-    kDebug(30002) << "KoDirectoryStore::KoDirectoryStore base path:" << m_basePath;
+    //kDebug(30002) << "path:" << path
+
+
+    //kDebug(30002) << "base path:" << m_basePath;
+
+    d->writeMimetype = writeMimetype;
     d->good = init(_mode);
 }
 
@@ -47,12 +46,14 @@ KoDirectoryStore::~KoDirectoryStore()
 bool KoDirectoryStore::init(Mode _mode)
 {
     KoStore::init(_mode);
+    if (!m_basePath.endsWith('/'))
+        m_basePath += '/';
+    m_currentPath = m_basePath;
     QDir dir(m_basePath);
     if (dir.exists())
         return true;
-    dir = QDir::current();
     // Dir doesn't exist. If reading -> error. If writing -> create.
-    if (_mode == Write && dir.mkdir(m_basePath)) {
+    if (_mode == Write && dir.mkpath(m_basePath)) {
         kDebug(30002) << "KoDirectoryStore::init Directory created:" << m_basePath;
         return true;
     }

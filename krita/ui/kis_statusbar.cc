@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -52,7 +53,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("selection-info").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
@@ -92,20 +93,6 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_progress);
 }
 
-#define EPSILON 1e-6
-
-void KisStatusBar::setZoom(int zoom)
-{
-    Q_UNUSED(zoom);
-    /*
-        if (zoom < 1 - EPSILON) {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
-        } else {
-            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
-        }
-    */
-}
-
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 {
     QPoint pixelPos = m_view->image()->documentToIntPixel(pos);
@@ -115,8 +102,12 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
     m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
-void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
+void KisStatusBar::imageSizeChanged()
 {
+    KisImageWSP image = m_view->image();
+    qint32 w = image->width();
+    qint32 h = image->height();
+
     m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
@@ -125,7 +116,7 @@ void KisStatusBar::setSelection(KisImageWSP image)
     Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

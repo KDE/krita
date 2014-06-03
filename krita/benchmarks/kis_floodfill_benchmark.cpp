@@ -22,7 +22,7 @@
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -80,7 +80,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
     {
         KisFillPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
-        fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
         fillPainter.setPaintColor( fg );
         fillPainter.setBackgroundColor( bg );
 
@@ -91,13 +90,12 @@ void KisFloodFillBenchmark::benchmarkFlood()
         // default
         fillPainter.setFillThreshold(15);
         fillPainter.setCompositeOp(COMPOSITE_OVER);
-        fillPainter.setSampleMerged(false);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(GMP_IMAGE_WIDTH);
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
 
         // fill twice
-        fillPainter.fillColor(1, 1, 0);
+        fillPainter.fillColor(1, 1, m_device);
 
         fillPainter.deleteTransaction();
     }

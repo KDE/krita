@@ -96,6 +96,8 @@ public:
         return m_currentMemento;
     }
 
+    KisMementoSP currentMemento();
+
     void setDefaultTileData(KisTileData *defaultTileData);
 
     void debugPrintInfo();

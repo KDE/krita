@@ -20,7 +20,7 @@
 #include "Staff.h"
 #include "Voice.h"
 #include "Sheet.h"
-#include <QtCore/QList>
+#include <QList>
 
 namespace MusicCore {
 

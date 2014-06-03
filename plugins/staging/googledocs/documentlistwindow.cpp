@@ -19,7 +19,7 @@
 #include "documentlistwindow.h"
 
 #include <QList>
-#include <QtGui/QListWidgetItem>
+#include <QListWidgetItem>
 #include <QDebug>
 
 #include "googledocumentservice.h"
@@ -33,11 +33,13 @@ DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, GoogleDoc
     m_docListDialog->setupUi(this);
     connect(m_docListDialog->listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(getClickedDocument(const QModelIndex &)));
     connect(m_docListDialog->okButton, SIGNAL(clicked()), this, SLOT(fetchDocument()));
-    connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(hideDialog()));
 
-    m_documentList = gList->entries();
     m_docListDialog->listView->setModel(gList->documentModel());
+    m_docListDialog->listView->hideColumn(1);
+    m_docListDialog->listView->setItemsExpandable(false);
     show();
+    m_docListDialog->listView->setColumnWidth(0, m_docListDialog->listView->rect().width() * 0.75);
 }
 
 DocumentListWindow::~DocumentListWindow()
@@ -64,7 +66,7 @@ QString DocumentListWindow::currentDocument()
     int selectedRow = m_docListDialog->listView->currentIndex().row();
     QString name  = m_docListDialog->listView->model()->index(selectedRow, 0).data().toString();
     QString type = m_docListDialog->listView->model()->index(selectedRow, 2).data().toString();
-    QString ext = "";
+    QString ext;
 
     if (QString::compare(type, "document", Qt::CaseInsensitive) == 0 ) {
             ext = ".odt";
@@ -77,3 +79,8 @@ QString DocumentListWindow::currentDocument()
     return (name + ext);
 }
 
+void DocumentListWindow::hideDialog()
+{
+    m_docListDialog->okButton->setEnabled(true);
+    hide();
+}

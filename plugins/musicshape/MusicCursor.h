@@ -34,7 +34,7 @@ class MusicCursor : public QObject
 {
     Q_OBJECT
 public:
-    MusicCursor(MusicCore::Sheet* sheet, QObject* parent = 0);
+    explicit MusicCursor(MusicCore::Sheet *sheet, QObject *parent = 0);
 
     void moveRight();
     void moveLeft();

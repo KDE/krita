@@ -22,8 +22,8 @@
 #ifndef KOFONTFACE_H
 #define KOFONTFACE_H
 
-#include <QtCore/QString>
-#include <QtCore/QSharedData>
+#include <QString>
+#include <QSharedData>
 #include "koodf_export.h"
 
 class KoXmlWriter;

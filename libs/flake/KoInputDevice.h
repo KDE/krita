@@ -30,10 +30,7 @@
 /**
  * This class represents an input device.
  * A user can manipulate flake-shapes using a large variety of input devices. This ranges from
- * a mouse to a paintbrush-like tool connected to a tablet.  All of those need to be handled
- * separately and be given their own tool instance to do their work.
- * @see KoToolFactoryBase::inputDeviceAgnostic()
- */
+ * a mouse to a paintbrush-like tool connected to a tablet. */
 class FLAKE_EXPORT KoInputDevice
 {
 public:

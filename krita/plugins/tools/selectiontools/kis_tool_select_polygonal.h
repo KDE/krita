@@ -24,40 +24,32 @@
 #define KIS_TOOL_SELECT_POLYGONAL_H_
 
 #include "KoToolFactoryBase.h"
-#include "krita/ui/tool/kis_tool_select_base.h"
 #include "kis_tool_polyline_base.h"
+#include "kis_selection_tool_config_widget_helper.h"
+#include <KoIcon.h>
 
-class KisToolSelectPolygonal : public KisToolSelectBase
+
+class KisToolSelectPolygonal : public KisToolPolylineBase
 {
-
     Q_OBJECT
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectPolygonal(KoCanvasBase *canvas);
-    virtual ~KisToolSelectPolygonal();
-
-    virtual void keyPressEvent(QKeyEvent *e);
-
     QWidget* createOptionWidget();
+    SelectionAction selectionAction() const;
+
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
 
 private:
-    class LocalTool : public KisToolPolylineBase {
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolSelectPolygonal* selectingTool)
-            : KisToolPolylineBase(canvas), m_selectingTool(selectingTool) {}
-        void finishPolyline(const QVector<QPointF> &points);
-    private:
-        KisToolSelectPolygonal* const m_selectingTool;
-    };
-    LocalTool m_localTool;
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool.paint(gc, converter);}
-    virtual void mousePressEvent(KoPointerEvent *e) {m_localTool.mousePressEvent(e);}
-    virtual void mouseMoveEvent(KoPointerEvent *e) {m_localTool.mouseMoveEvent(e);}
-    virtual void mouseReleaseEvent(KoPointerEvent *e) {m_localTool.mouseReleaseEvent(e);}
-    virtual void mouseDoubleClickEvent(KoPointerEvent * e) {m_localTool.mouseDoubleClickEvent(e);}
-    virtual void deactivate() {m_localTool.deactivate();}
-
-    friend class LocalTool;
+    void keyPressEvent(QKeyEvent *event);
+    void finishPolyline(const QVector<QPointF> &points);
+private:
+    KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
 
 
@@ -69,7 +61,7 @@ public:
             : KoToolFactoryBase("KisToolSelectPolygonal") {
         setToolTip(i18n("Select a polygonal region"));
         setToolType(TOOL_TYPE_SELECTED);
-        setIcon("tool_polygonal_selection");
+        setIconName(koIconNameCStr("tool_polygonal_selection"));
         setPriority(54);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

@@ -1,9 +1,9 @@
 add_subdirectory(tests)
 
 if(LCMS2_FOUND)
-    include_directories( ${KRITA_INCLUDES} ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
+    include_directories( ${LCMS2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 else(LCMS2_FOUND)
-    include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
+    include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
 endif(LCMS2_FOUND)
 
 set(libkritaconverter_LIB_SRCS

@@ -19,7 +19,7 @@
 #ifndef __KIS_STROKES_QUEUE_TEST_H
 #define __KIS_STROKES_QUEUE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 
 class KisStrokesQueueTest : public QObject
@@ -32,6 +32,7 @@ private slots:
     void testExclusiveStrokes();
     void testBarrierStrokeJobs();
     void testStrokesOverlapping();
+    void testImmediateCancel();
     void testOpenedStrokeCounter();
 };
 

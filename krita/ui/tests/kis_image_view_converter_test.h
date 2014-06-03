@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGEVIEWCONVERTER_TEST_H
 #define KIS_IMAGEVIEWCONVERTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisImageViewConverterTest : public QObject
 {

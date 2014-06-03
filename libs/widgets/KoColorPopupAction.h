@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCOLORSETACTION_H
-#define KOCOLORSETACTION_H
+#ifndef KOCOLORPOPUPACTION_H
+#define KOCOLORPOPUPACTION_H
 
-#include <KAction>
+#include <kaction.h>
 
 #include "kowidgets_export.h"
 
@@ -42,7 +42,7 @@ public:
       *
       * @param parent The parent for this action.
       */
-    KoColorPopupAction(QObject *parent = 0);
+    explicit KoColorPopupAction(QObject *parent = 0);
 
     /**
      * Destructor
@@ -52,15 +52,18 @@ public:
 public slots:
     /// Sets a new color to be displayed
     void setCurrentColor( const QColor &color );
-    
+
     /// Sets a new color to be displayed
     void setCurrentColor( const KoColor &color );
 
     /// Returns the current color
     QColor currentColor() const;
-    
+
     /// Returns the current color as a KoColor
     KoColor currentKoColor() const;
+
+    /// update the icon - only needed if you resize the iconsize in the widget that shows the action
+    void updateIcon();
 
 signals:
     /**
@@ -77,7 +80,6 @@ private slots:
     void opacityWasChanged( int opacity );
 
 private:
-    void updateIcon();
     class KoColorPopupActionPrivate;
     KoColorPopupActionPrivate * const d;
 };

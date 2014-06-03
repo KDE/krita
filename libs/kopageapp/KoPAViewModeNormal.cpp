@@ -25,6 +25,7 @@
 
 #include <KoToolProxy.h>
 #include <KoShapeManager.h>
+#include <KoShapePaintingContext.h>
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
 #include "KoPAPage.h"
@@ -59,23 +60,38 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
     painter.translate( m_canvas->documentOrigin().x(), m_canvas->documentOrigin().y() );
 
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
-    m_view->activePage()->paintBackground( painter, *converter );
+    QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
+    KoShapePaintingContext context;
+    m_view->activePage()->paintBackground( painter, *converter, context );
+
+    const KoPageLayout &layout = activePageLayout();
+    QSizeF pageSize(layout.width, layout.height);
+    QRectF gridRect = QRectF(QPointF(), pageSize).intersected(updateRect);
+    if (m_canvas->document()->gridData().paintGridInBackground()) {
+        painter.setRenderHint(QPainter::Antialiasing, false);
+        m_canvas->document()->gridData().paintGrid(painter, *converter, gridRect );
+    }
+
+    // paint the page margins
+    paintMargins( painter, *converter );
+
+    painter.setRenderHint( QPainter::Antialiasing );
+
+    // paint the shapes
     if ( m_view->activePage()->displayMasterShapes() ) {
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
     }
     m_canvas->shapeManager()->paint( painter, *converter, false );
 
-    // paint the page margins
-    paintMargins( painter, *converter );
-
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    QRectF updateRect = converter->viewToDocument( m_canvas->widgetToView( clipRect ) );
-    m_canvas->document()->gridData().paintGrid( painter, *converter, updateRect );
-    m_canvas->document()->guidesData().paintGuides( painter, *converter, updateRect );
+    if (!m_canvas->document()->gridData().paintGridInBackground()) {
+        m_canvas->document()->gridData().paintGrid(painter, *converter, gridRect);
+    }
+    m_canvas->document()->guidesData().paintGuides(painter, *converter, updateRect);
 
-    painter.setRenderHint( QPainter::Antialiasing );
-    m_toolProxy->paint( painter, *converter );
+    painter.setRenderHint(QPainter::Antialiasing);
+    m_toolProxy->paint(painter, *converter);
 }
 
 void KoPAViewModeNormal::tabletEvent( QTabletEvent *event, const QPointF &point )

@@ -25,11 +25,11 @@
 
 #include <KoDocumentResourceManager.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtCore/QStack>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QStack>
+#include <QFileInfo>
+#include <QDir>
 
 class SvgLoadingContext::Private
 {
@@ -143,7 +143,7 @@ QString SvgLoadingContext::absoluteFilePath(const QString &href)
 
     QString relFile = href;
     while (relFile.startsWith(QLatin1String("../"))) {
-        relFile = relFile.mid(3);
+        relFile.remove(0, 3);
         pathInfo.setFile(pathInfo.dir(), QString());
     }
 

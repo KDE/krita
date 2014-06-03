@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,17 +21,21 @@
 #define KIS_KRA_SAVE_VISITOR_H_
 
 #include <QRect>
+#include <QStringList>
+
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
+
+class KisPaintDeviceWriter;
 class KoStore;
 
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
     KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
-
+    virtual ~KisKraSaveVisitor();
     using KisNodeVisitor::visit;
 
 public:
@@ -59,6 +63,9 @@ public:
 
     bool visit(KisSelectionMask *mask);
 
+    /// @return a list with everything that went wrong while saving
+    QStringList errorMessages() const;
+
 private:
 
     bool savePaintDevice(KisPaintDeviceSP device, QString location);
@@ -66,7 +73,7 @@ private:
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);
     bool saveMetaData(KisNode* node);
-    QString getLocation(KisNode* node, const QString& suffix = "");
+    QString getLocation(KisNode* node, const QString& suffix = QString());
 
 private:
 
@@ -76,6 +83,8 @@ private:
     quint32 &m_count;
     QString m_name;
     QMap<const KisNode*, QString> m_nodeFileNames;
+    KisPaintDeviceWriter *m_writer;
+    QStringList m_errorMessages;
 };
 
 #endif // KIS_KRA_SAVE_VISITOR_H_

@@ -20,7 +20,7 @@
 #ifndef TESTPAPAGEINSERTCOMMAND_H
 #define TESTPAPAGEINSERTCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestPAPageInsertCommand : public QObject
 {

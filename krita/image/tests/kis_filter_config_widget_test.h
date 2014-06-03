@@ -19,7 +19,7 @@
 #ifndef KIS_FILTER_CONFIG_WIDGET_TEST_H
 #define KIS_FILTER_CONFIG_WIDGET_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisConfigWidgetTest : public QObject
 {

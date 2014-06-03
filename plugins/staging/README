@@ -1,0 +1,9 @@
+This is the staging directory.  The shapes in this directory are not
+released as part of the public Calligra releases and can be developed
+on their own pace.
+
+This should be the starting point for all new shapes that aspire to
+become part of the Calligra source code.  When the shape is working
+well, put a review up at reviewboard.kde.org and after the review is
+passed it can be moved to the parent directory. After this, the shape
+is officially part of the Calligra suite.

@@ -21,7 +21,7 @@
 #ifndef TESTINPUTDEVICE_H
 #define TESTINPUTDEVICE_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestInputDevice : public QObject
 {

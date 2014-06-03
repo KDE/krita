@@ -19,7 +19,7 @@
 #ifndef KIS_HLINEITERATOR_BENCHMARK_H
 #define KIS_HLINEITERATOR_BENCHMARK_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPaintDevice;
 class KoColorSpace;

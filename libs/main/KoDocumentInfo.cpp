@@ -23,20 +23,23 @@
 #include "KoDocument.h"
 #include "calligraversion.h"
 #include "KoOdfWriteStore.h"
+#include <KoGlobal.h>
+#include "KoXmlNS.h"
 
 #include <QDateTime>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kuser.h>
+#include <kemailsettings.h>
 
-#include "KoXmlNS.h"
 
-KoDocumentInfo::KoDocumentInfo(QObject* parent) : QObject(parent)
+KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
 {
     m_aboutTags << "title" << "description" << "subject" << "comments"
     << "keyword" << "initial-creator" << "editing-cycles"
@@ -51,17 +54,16 @@ KoDocumentInfo::KoDocumentInfo(QObject* parent) : QObject(parent)
     setAboutInfo("initial-creator", i18n("Unknown"));
     setAboutInfo("creation-date", QDateTime::currentDateTime()
                  .toString(Qt::ISODate));
-    KUser user(KUser::UseRealUserID);
-    setAuthorInfo("creator", user.property(KUser::FullName).toString());
-    m_firstSave = false;
 }
 
 KoDocumentInfo::~KoDocumentInfo()
 {
 }
 
-bool KoDocumentInfo::load(const KoXmlDocument& doc)
+bool KoDocumentInfo::load(const KoXmlDocument &doc)
 {
+    m_authorInfo.clear();
+
     if (!loadAboutInfo(doc.documentElement()))
         return false;
 
@@ -71,8 +73,10 @@ bool KoDocumentInfo::load(const KoXmlDocument& doc)
     return true;
 }
 
-bool KoDocumentInfo::loadOasis(const KoXmlDocument& metaDoc)
+bool KoDocumentInfo::loadOasis(const KoXmlDocument &metaDoc)
 {
+    m_authorInfo.clear();
+
     KoXmlNode t = KoXml::namedItemNS(metaDoc, KoXmlNS::office, "document-meta");
     KoXmlNode office = KoXml::namedItemNS(t, KoXmlNS::office, "meta");
 
@@ -90,7 +94,7 @@ bool KoDocumentInfo::loadOasis(const KoXmlDocument& metaDoc)
 
 QDomDocument KoDocumentInfo::save()
 {
-    saveParameters();
+    updateParametersAndBumpNumCycles();
 
     QDomDocument doc = KoDocument::createDomDocument("document-info"
                        /*DTD name*/, "document-info" /*tag name*/, "1.1");
@@ -110,9 +114,9 @@ QDomDocument KoDocumentInfo::save()
     return doc;
 }
 
-bool KoDocumentInfo::saveOasis(KoStore* store)
+bool KoDocumentInfo::saveOasis(KoStore *store)
 {
-    saveParameters();
+    updateParametersAndBumpNumCycles();
 
     KoStoreDevice dev(store);
     KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
@@ -136,16 +140,30 @@ bool KoDocumentInfo::saveOasis(KoStore* store)
     return true;
 }
 
-void KoDocumentInfo::setAuthorInfo(const QString& info, const QString& data)
+void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
 {
-    if (!m_authorTags.contains(info))
+    if (!m_authorTags.contains(info)) {
         return;
+    }
 
-    m_authorInfo.insert(info, data);
+    m_authorInfoOverride.insert(info, data);
+}
+
+void KoDocumentInfo::setActiveAuthorInfo(const QString &info, const QString &data)
+{
+    if (!m_authorTags.contains(info)) {
+        return;
+    }
+
+    if (data.isEmpty()) {
+        m_authorInfo.remove(info);
+    } else {
+        m_authorInfo.insert(info, data);
+    }
     emit infoUpdated(info, data);
 }
 
-QString KoDocumentInfo::authorInfo(const QString& info) const
+QString KoDocumentInfo::authorInfo(const QString &info) const
 {
     if (!m_authorTags.contains(info))
         return QString();
@@ -153,7 +171,7 @@ QString KoDocumentInfo::authorInfo(const QString& info) const
     return m_authorInfo[ info ];
 }
 
-void KoDocumentInfo::setAboutInfo(const QString& info, const QString& data)
+void KoDocumentInfo::setAboutInfo(const QString &info, const QString &data)
 {
     if (!m_aboutTags.contains(info))
         return;
@@ -162,14 +180,13 @@ void KoDocumentInfo::setAboutInfo(const QString& info, const QString& data)
     emit infoUpdated(info, data);
 }
 
-QString KoDocumentInfo::aboutInfo(const QString& info) const
+QString KoDocumentInfo::aboutInfo(const QString &info) const
 {
     if (!m_aboutTags.contains(info)) {
-        kWarning() << info + " page not found in documentInfo !";
         return QString();
     }
 
-    return m_aboutInfo[ info ];
+    return m_aboutInfo[info];
 }
 
 bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
@@ -190,11 +207,11 @@ bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode& metaDoc)
+bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode &metaDoc)
 {
     KoXmlElement e = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, "creator");
     if (!e.isNull() && !e.text().isEmpty())
-        setAuthorInfo("creator", e.text());
+        setActiveAuthorInfo("creator", e.text());
 
     KoXmlNode n = metaDoc.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
@@ -207,13 +224,13 @@ bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode& metaDoc)
             continue;
 
         QString name = e.attributeNS(KoXmlNS::meta, "name", QString());
-        setAuthorInfo(name, e.text());
+        setActiveAuthorInfo(name, e.text());
     }
 
     return true;
 }
 
-bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement& e)
+bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement &e)
 {
     KoXmlNode n = e.namedItem("author").firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
@@ -222,20 +239,20 @@ bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement& e)
             continue;
 
         if (e.tagName() == "full-name")
-            setAuthorInfo("creator", e.text().trimmed());
+            setActiveAuthorInfo("creator", e.text().trimmed());
         else
-            setAuthorInfo(e.tagName(), e.text().trimmed());
+            setActiveAuthorInfo(e.tagName(), e.text().trimmed());
     }
 
     return true;
 }
 
-QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument& doc)
+QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
 {
     QDomElement e = doc.createElement("author");
     QDomElement t;
 
-    foreach(const QString & tag, m_authorTags) {
+    foreach(const QString &tag, m_authorTags) {
         if (tag == "creator")
             t = doc.createElement("full-name");
         else
@@ -250,9 +267,7 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument& doc)
 
 bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
 {
-    saveParameters();
-
-    foreach(const QString & tag, m_aboutTags) {
+    foreach(const QString &tag, m_aboutTags) {
         if (!aboutInfo(tag).isEmpty() || tag == "title") {
             if (tag == "keyword") {
                 foreach(const QString & tmp, aboutInfo("keyword").split(';')) {
@@ -261,7 +276,7 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
                     xmlWriter.endElement();
                 }
             } else if (tag == "title" || tag == "description" || tag == "subject" ||
-                       tag == "date") {
+                       tag == "date" || tag == "language") {
                 QByteArray elementName(QString("dc:" + tag).toLatin1());
                 xmlWriter.startElement(elementName);
                 xmlWriter.addTextNode(aboutInfo(tag));
@@ -278,39 +293,52 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
     return true;
 }
 
-bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode& metaDoc)
+bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
 {
     QStringList keywords;
     KoXmlElement e;
     forEachElement(e, metaDoc) {
         QString tag(e.localName());
-        if (! m_aboutTags.contains(tag) && tag != "generator")
+        if (! m_aboutTags.contains(tag) && tag != "generator") {
             continue;
+        }
 
         //kDebug( 30003 )<<"localName="<<e.localName();
         if (tag == "keyword") {
             if (!e.text().isEmpty())
                 keywords << e.text().trimmed();
-        } else if (tag == "title" || tag == "description" || tag == "subject"
+        } else if (tag == "description") {
+            //this is the odf way but add meta:comment if is already loaded
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
+            if (!e.isNull() && !e.text().isEmpty())
+                setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
+        } else if (tag == "comments") {
+            //this was the old way so add it to dc:description
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
+            if (!e.isNull() && !e.text().isEmpty())
+                setAboutInfo("description", aboutInfo("description") + e.text().trimmed());
+        } else if (tag == "title"|| tag == "subject"
                    || tag == "date" || tag == "language") {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::dc, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         } else if (tag == "generator") {
             setOriginalGenerator(e.text().trimmed());
         } else {
-            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag.toLatin1().constData());
+            KoXmlElement e  = KoXml::namedItemNS(metaDoc, KoXmlNS::meta, tag);
             if (!e.isNull() && !e.text().isEmpty())
                 setAboutInfo(tag, e.text().trimmed());
         }
     }
-    if (keywords.count() > 0)
+
+    if (keywords.count() > 0) {
         setAboutInfo("keyword", keywords.join(", "));
+    }
 
     return true;
 }
 
-bool KoDocumentInfo::loadAboutInfo(const KoXmlElement& e)
+bool KoDocumentInfo::loadAboutInfo(const KoXmlElement &e)
 {
     KoXmlNode n = e.namedItem("about").firstChild();
     KoXmlElement tmp;
@@ -328,14 +356,12 @@ bool KoDocumentInfo::loadAboutInfo(const KoXmlElement& e)
     return true;
 }
 
-QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument& doc)
+QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
 {
-    saveParameters();
-
     QDomElement e = doc.createElement("about");
     QDomElement t;
 
-    foreach(const QString & tag, m_aboutTags) {
+    foreach(const QString &tag, m_aboutTags) {
         if (tag == "comments") {
             t = doc.createElement("abstract");
             e.appendChild(t);
@@ -350,19 +376,81 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument& doc)
     return e;
 }
 
-void KoDocumentInfo::saveParameters()
+void KoDocumentInfo::updateParametersAndBumpNumCycles()
 {
-    KoDocument* doc = dynamic_cast< KoDocument* >(parent());
-    if (doc && doc->isAutosaving())
+    KoDocument *doc = dynamic_cast< KoDocument *>(parent());
+    if (doc && doc->isAutosaving()) {
         return;
-
-    int cycles = aboutInfo("editing-cycles").toInt();
-    setAboutInfo("editing-cycles", QString::number(cycles));
-    if (m_firstSave) {
-        cycles++;
-        m_firstSave = false;
     }
+
+    setAboutInfo("editing-cycles", QString::number(aboutInfo("editing-cycles").toInt() + 1));
     setAboutInfo("date", QDateTime::currentDateTime().toString(Qt::ISODate));
+
+    updateParameters();
+}
+
+void KoDocumentInfo::updateParameters()
+{
+    KoDocument *doc = dynamic_cast< KoDocument *>(parent());
+    if (doc && (!doc->isModified() && !doc->isEmpty())) {
+        return;
+    }
+
+    KConfig *config = KoGlobal::calligraConfig();
+    config->reparseConfiguration();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
+        setActiveAuthorInfo("creator", cgs.readEntry("creator"));
+        setActiveAuthorInfo("initial", cgs.readEntry("initial"));
+        setActiveAuthorInfo("author-title", cgs.readEntry("author-title"));
+        setActiveAuthorInfo("email", cgs.readEntry("email"));
+        setActiveAuthorInfo("telephone", cgs.readEntry("telephone"));
+        setActiveAuthorInfo("telephone-work", cgs.readEntry("telephone-work"));
+        setActiveAuthorInfo("fax", cgs.readEntry("fax"));
+        setActiveAuthorInfo("country",cgs.readEntry("country"));
+        setActiveAuthorInfo("postal-code",cgs.readEntry("postal-code"));
+        setActiveAuthorInfo("city", cgs.readEntry("city"));
+        setActiveAuthorInfo("street", cgs.readEntry("street"));
+        setActiveAuthorInfo("position", cgs.readEntry("position"));
+        setActiveAuthorInfo("company", cgs.readEntry("company"));
+    } else {
+        if (profile == "anonymous") {
+            setActiveAuthorInfo("creator", QString());
+            setActiveAuthorInfo("telephone", QString());
+            setActiveAuthorInfo("telephone-work", QString());
+            setActiveAuthorInfo("email", QString());
+        } else {
+            KUser user(KUser::UseRealUserID);
+            setActiveAuthorInfo("creator", user.property(KUser::FullName).toString());
+            setActiveAuthorInfo("telephone-work", user.property(KUser::WorkPhone).toString());
+            setActiveAuthorInfo("telephone", user.property(KUser::HomePhone).toString());
+            KEMailSettings eMailSettings;
+            setActiveAuthorInfo("email", eMailSettings.getSetting(KEMailSettings::EmailAddress));
+        }
+        setActiveAuthorInfo("initial", "");
+        setActiveAuthorInfo("author-title", "");
+        setActiveAuthorInfo("fax", "");
+        setActiveAuthorInfo("country", "");
+        setActiveAuthorInfo("postal-code", "");
+        setActiveAuthorInfo("city", "");
+        setActiveAuthorInfo("street", "");
+        setActiveAuthorInfo("position", "");
+        setActiveAuthorInfo("company", "");
+    }
+
+    //alllow author info set programatically to override info from author profile
+    foreach(const QString &tag, m_authorTags) {
+        if (m_authorInfoOverride.contains(tag)) {
+            setActiveAuthorInfo(tag, m_authorInfoOverride.value(tag));
+        }
+    }
 }
 
 void KoDocumentInfo::resetMetaData()

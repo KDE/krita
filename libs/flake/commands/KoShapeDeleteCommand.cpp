@@ -66,7 +66,7 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
         d->oldParents.append(shape->parent());
     }
 
-    setText(i18nc("(qtundo-format)", "Delete shapes"));
+    setText(i18ncp("(qtundo-format)", "Delete shape", "Delete shapes", shapes.count()));
 }
 
 KoShapeDeleteCommand::~KoShapeDeleteCommand()

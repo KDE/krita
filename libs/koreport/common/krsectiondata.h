@@ -30,7 +30,7 @@
 #define KRSECTIONDATA_H
 
 #include <QObject>
-#include <qdom.h>
+#include <QDomDocument>
 
 class KoReportItemBase;
 class KoReportReportData;

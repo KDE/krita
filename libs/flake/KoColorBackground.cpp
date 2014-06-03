@@ -18,33 +18,29 @@
  */
 
 #include "KoColorBackground.h"
+#include "KoColorBackground_p.h"
 #include "KoShapeSavingContext.h"
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
-
-class KoColorBackground::Private
-{
-public:
-    Private() {
-        color = Qt::black;
-        style = Qt::SolidPattern;
-    };
-    Qt::BrushStyle style;
-    QColor color;
-};
+#include <QColor>
+#include <QPainter>
 
 KoColorBackground::KoColorBackground()
-        : d(new Private())
+: KoShapeBackground(*(new KoColorBackgroundPrivate()))
+{
+}
+
+KoColorBackground::KoColorBackground(KoShapeBackgroundPrivate &dd)
+: KoShapeBackground(dd)
 {
 }
 
 KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
-        : d(new Private())
+: KoShapeBackground(*(new KoColorBackgroundPrivate()))
 {
+    Q_D(KoColorBackground);
     if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern)
         style = Qt::SolidPattern;
     d->style = style;
@@ -53,37 +49,42 @@ KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
 
 KoColorBackground::~KoColorBackground()
 {
-    delete d;
 }
 
 QColor KoColorBackground::color() const
 {
+    Q_D(const KoColorBackground);
     return d->color;
 }
 
 void KoColorBackground::setColor(const QColor &color)
 {
+    Q_D(KoColorBackground);
     d->color = color;
 }
 
 Qt::BrushStyle KoColorBackground::style() const
 {
+    Q_D(const KoColorBackground);
     return d->style;
 }
 
-void KoColorBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
+void KoColorBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
+    Q_D(const KoColorBackground);
     painter.setBrush(QBrush(d->color, d->style));
     painter.drawPath(fillPath);
 }
 
 void KoColorBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
+    Q_D(KoColorBackground);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
 }
 
 bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
 {
+    Q_D(KoColorBackground);
     KoStyleStack &styleStack = context.styleStack();
     if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;

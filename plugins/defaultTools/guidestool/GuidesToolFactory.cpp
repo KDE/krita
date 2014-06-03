@@ -19,7 +19,7 @@
 
 #include "GuidesToolFactory.h"
 #include "GuidesTool.h"
-#include <KLocale>
+#include <klocale.h>
 
 GuidesToolFactory::GuidesToolFactory()
     : KoToolFactoryBase(GuidesToolId)
@@ -27,7 +27,6 @@ GuidesToolFactory::GuidesToolFactory()
     setToolTip(i18n("Edit guidelines"));
     setToolType("never");
     setPriority(1);
-    setInputDeviceAgnostic(true);
     setActivationShapeId("itShouldNeverBeActivated");
 }
 

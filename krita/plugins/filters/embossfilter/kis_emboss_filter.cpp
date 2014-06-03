@@ -32,7 +32,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -43,8 +42,7 @@
 #include "KoProgressUpdater.h"
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_selection.h>
@@ -55,12 +53,12 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_RGBA8);
+    setSupportsThreading(false);
 }
 
 KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
@@ -83,11 +81,11 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(KisPaintDeviceSP device,
-                              const QRect& applyRect,
-                              const KisFilterConfiguration* config,
-                              KoUpdater* progressUpdater
-                             ) const
+void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
+                                  const QRect& applyRect,
+                                  const KisFilterConfiguration* config,
+                                  KoUpdater* progressUpdater
+                                  ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
@@ -108,15 +106,15 @@ void KisEmbossFilter::process(KisPaintDeviceSP device,
         progressUpdater->setRange(0, Height);
     }
 
-    KisRectIteratorSP it = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
     QColor color1;
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     do {
     
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
-        device->colorSpace()->toQColor(it->oldRawData(), &color1);
-        acc->moveTo(srcTopLeft.x() + it->x() + Lim_Max(it->x(), 1, Width), srcTopLeft.y() + it->y() + Lim_Max(it->y(), 1, Height));
+        device->colorSpace()->toQColor(it.oldRawData(), &color1);
+        acc->moveTo(srcTopLeft.x() + it.x() + Lim_Max(it.x(), 1, Width), srcTopLeft.y() + it.y() + Lim_Max(it.y(), 1, Height));
 
         device->colorSpace()->toQColor(acc->oldRawData(), &color2);
 
@@ -126,9 +124,9 @@ void KisEmbossFilter::process(KisPaintDeviceSP device,
 
         Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
-        device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it->rawData());
-        if (progressUpdater) { progressUpdater->setValue(it->y()); if(progressUpdater->interrupted()) return; }
-    } while(it->nextPixel());
+        device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it.rawData());
+        if (progressUpdater) { progressUpdater->setValue(it.y()); if(progressUpdater->interrupted()) return; }
+    } while(it.nextPixel());
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -156,10 +154,9 @@ int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
     return (Up);
 }
 
-KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
 
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(10, 300, 30, i18n("Depth"), "depth"));

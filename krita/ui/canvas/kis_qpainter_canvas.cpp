@@ -30,15 +30,12 @@
 #include <QString>
 #include <QTime>
 #include <QTimer>
-#include <QPixmap>
 #include <QApplication>
 #include <QMenu>
 
 #include <kis_debug.h>
 
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
 #include "kis_coordinates_converter.h"
 #include <KoZoomHandler.h>
@@ -66,8 +63,6 @@
 class KisQPainterCanvas::Private
 {
 public:
-    Private() {}
-
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
 };
@@ -137,6 +132,8 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.drawPolygon(polygon);
 
     gc.setTransform(imageTransform);
+    gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -151,65 +148,11 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.fillRect(ev->rect(), color);
 #endif
 
-    QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
-    drawDecorations(gc, boundingRect);
+    drawDecorations(gc, ev->rect());
     gc.end();
 
     QPainter painter(this);
     painter.drawImage(ev->rect(), m_buffer, ev->rect());
-}
-
-bool KisQPainterCanvas::event(QEvent *e)
-{
-    if(toolProxy()) {
-        toolProxy()->processEvent(e);
-    }
-    return QWidget::event(e);
-}
-
-void KisQPainterCanvas::enterEvent(QEvent* e)
-{
-    QWidget::enterEvent(e);
-}
-
-void KisQPainterCanvas::leaveEvent(QEvent* e)
-{
-    QWidget::leaveEvent(e);
-}
-
-void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e)
-{
-    processMouseMoveEvent(e);
-}
-
-void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
-{
-    processContextMenuEvent(e);
-}
-
-void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
-{
-    processMousePressEvent(e);
-}
-
-void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e)
-{
-    processMouseReleaseEvent(e);
-}
-
-void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    processMouseDoubleClickEvent(e);
-}
-
-void KisQPainterCanvas::keyPressEvent(QKeyEvent *e)
-{
-    processKeyPressEvent(e);
-}
-
-void KisQPainterCanvas::keyReleaseEvent(QKeyEvent *e)
-{
-    processKeyReleaseEvent(e);
 }
 
 QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
@@ -220,16 +163,6 @@ QVariant KisQPainterCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
-}
-
-void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
-{
-    processTabletEvent(e);
-}
-
-void KisQPainterCanvas::wheelEvent(QWheelEvent *e)
-{
-    processWheelEvent(e);
 }
 
 void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
@@ -244,12 +177,11 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
     coordinatesConverter()->setCanvasWidgetSize(size);
     m_d->prescaledProjection->notifyCanvasSizeChanged(size);
-    emit needAdjustOrigin();
 }
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    m_d->checkBrush = QBrush(checkImage());
+    m_d->checkBrush = QBrush(createCheckersImage());
     notifyConfigChanged();
 }
 

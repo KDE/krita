@@ -20,7 +20,7 @@
 #ifndef TESTPAPAGEDELETECOMMAND_H
 #define TESTPAPAGEDELETECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestPAPageDeleteCommand : public QObject
 {

@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CHANGEIMAGECOMMAND_H
-#define CHANGEIMAGECOMMAND_H
+#ifndef CHANGEVECTORDATACOMMAND_H
+#define CHANGEVECTORDATACOMMAND_H
 
 #include <kundo2command.h>
 #include <QByteArray>
@@ -28,7 +28,8 @@
 class ChangeVectorDataCommand : public KUndo2Command
 {
 public:
-    ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, KUndo2Command *parent = 0);
+    ChangeVectorDataCommand(VectorShape *shape, const QByteArray &newImageData, VectorShape::VectorType newVectorType,
+                            KUndo2Command *parent = 0);
     virtual ~ChangeVectorDataCommand();
 
     /// redo the command
@@ -39,7 +40,9 @@ public:
 private:
     VectorShape *m_shape;
     QByteArray m_oldImageData;
+    VectorShape::VectorType m_oldVectorType;
     QByteArray m_newImageData;
+    VectorShape::VectorType m_newVectorType;
 };
 
-#endif /* CHANGEIMAGECOMMAND_H */
+#endif /* CHANGEVECTORDATACOMMAND_H */

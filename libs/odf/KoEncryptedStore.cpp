@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thomas Schaap <thomas.schaap@kdemail.net>
-   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+   Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,18 +69,22 @@ const char* META_FILE = "meta.xml";
 const char* THUMBNAIL_FILE = "Thumbnails/thumbnail.png";
 }
 
-KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(const QString & filename, Mode mode,
+                                   const QByteArray & appIdentification, bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(filename)), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
 
     m_pZip = new KZip(filename);
     d->good = true;
+    d->localFileName = filename;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+                                   bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString()), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
@@ -88,10 +92,13 @@ KoEncryptedStore::KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &
     m_pZip = new KZip(dev);
     d->good = true;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
-KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename, Mode mode, const QByteArray & appIdentification)
+KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename,
+                                   Mode mode,
+                                   const QByteArray & appIdentification, bool writeMimetype)
         : m_qcaInit(QCA::Initializer()), m_password(QCA::SecureArray()), m_filename(QString(url.url())), m_manifestBuffer(QByteArray()), m_tempFile(NULL), m_bPasswordUsed(false), m_bPasswordDeclined(false), m_currentDir(NULL)
 {
     Q_D(KoStore);
@@ -115,6 +122,7 @@ KoEncryptedStore::KoEncryptedStore(QWidget* window, const KUrl& url, const QStri
     }
     d->url = url;
 
+    d->writeMimetype = writeMimetype;
     init(mode, appIdentification);
 }
 
@@ -136,10 +144,15 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 d->good = false;
                 return false;
             }
-            m_pZip->setCompression(KZip::NoCompression);
             m_pZip->setExtraField(KZip::NoExtraField);
             // Write identification
-            (void)m_pZip->writeFile("mimetype", "", "", appIdentification.data(), appIdentification.length());
+            if (d->writeMimetype) {
+                m_pZip->setCompression(KZip::NoCompression);
+                (void)m_pZip->writeFile("mimetype", "", "",
+                                        appIdentification.data(), appIdentification.length());
+            }
+            // FIXME: Hmm, seems to be a bug here since this is
+            //        inconsistent with the code in openWrite():
             m_pZip->setCompression(KZip::DeflateCompression);
             // We don't need the extra field in Calligra - so we leave it as "no extra field".
         }
@@ -208,7 +221,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 // Find some things about the checksum
                 if (xmlencnode.toElement().hasAttribute("checksum")) {
                     base64decoder.clear();
-                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("checksum").toAscii()));
+                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("checksum").toLatin1()));
                     if (xmlencnode.toElement().hasAttribute("checksum-type")) {
                         QString checksumType = xmlencnode.toElement().attribute("checksum-type");
                         if (checksumType == "SHA1") {
@@ -243,7 +256,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     // Find some things about the encryption algorithm
                     if (xmlencattr.toElement().localName() == "algorithm" && xmlencattr.toElement().hasAttribute("initialisation-vector")) {
                         algorithmFound = true;
-                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toAscii()));
+                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toLatin1()));
                         if (xmlencattr.toElement().hasAttribute("algorithm-name") && xmlencattr.toElement().attribute("algorithm-name") != "Blowfish CFB") {
                             if (!unreadableErrorShown) {
                                 KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
@@ -256,7 +269,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     // Find some things about the key derivation
                     if (xmlencattr.toElement().localName() == "key-derivation" && xmlencattr.toElement().hasAttribute("salt")) {
                         keyDerivationFound = true;
-                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("salt").toAscii()));
+                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("salt").toLatin1()));
                         encData.iterationCount = 1024;
                         if (xmlencattr.toElement().hasAttribute("iteration-count")) {
                             encData.iterationCount = xmlencattr.toElement().attribute("iteration-count").toUInt();

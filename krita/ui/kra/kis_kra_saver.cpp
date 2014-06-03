@@ -25,29 +25,35 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
+#include <QStringList>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <kis_annotation.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_adjustment_layer.h>
+#include <kis_layer_composition.h>
+#include <kis_painting_assistants_decoration.h>
 
 #include "kis_doc2.h"
+#include <string>
 
 
 using namespace KRA;
 
-class KisKraSaver::Private
+struct KisKraSaver::Private
 {
 public:
     KisDoc2* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
+    QStringList errorMessages;
 };
 
 KisKraSaver::KisKraSaver(KisDoc2* document)
@@ -84,10 +90,17 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     imageElement.setAttribute(Y_RESOLUTION, image->yRes()*72.0);
 
     quint32 count = 1; // We don't save the root layer, but it does count
-    KisSaveXmlVisitor visitor(doc, imageElement, count, true);
+    KisSaveXmlVisitor visitor(doc, imageElement, count, m_d->doc->url().toLocalFile(), true);
+    visitor.setSelectedNodes(m_d->doc->activeNodes());
 
     image->rootLayer()->accept(visitor);
+    m_d->errorMessages.append(visitor.errorMessages());
+
     m_d->nodeFileNames = visitor.nodeFileNames();
+
+    saveBackgroundColor(doc, imageElement, image);
+    saveCompositions(doc, imageElement, image);
+    saveAssistantsList(doc,imageElement);
     return imageElement;
 }
 
@@ -104,13 +117,19 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         visitor.setExternalUri(uri);
 
     image->rootLayer()->accept(visitor);
+
+    m_d->errorMessages.append(visitor.errorMessages());
+    if (!m_d->errorMessages.isEmpty()) {
+        return false;
+    }
+
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
     // e.g. have <ANNOTATION> tags or so.
     KisAnnotationSP annotation = image->annotation("exif");
     if (annotation) {
-        location = external ? QString::null : uri;
+        location = external ? QString() : uri;
         location += m_d->imageName + EXIF_PATH;
         if (store->open(location)) {
             store->write(annotation->annotation());
@@ -132,13 +151,105 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
 
         if (annotation) {
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();
             }
         }
+    }
+
+     if (store->open("mergedimage.png")) {
+        QImage mergedimage = image->projection()->convertToQImage(0);
+        KoStoreDevice io(store);
+        if (io.open(QIODevice::WriteOnly)) {
+            mergedimage.save(&io, "PNG");
+        }
+        io.close();
+        store->close();
+    }
+
+    saveAssistants(store, uri,external);
+    return true;
+}
+
+QStringList KisKraSaver::errorMessages() const
+{
+    return m_d->errorMessages;
+}
+
+void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    QDomElement e = doc.createElement("ProjectionBackgroundColor");
+    KoColor color = image->defaultProjectionColor();
+    QByteArray colorData = QByteArray::fromRawData((const char*)color.data(), color.colorSpace()->pixelSize());
+    e.setAttribute("ColorData", QString(colorData.toBase64()));
+    element.appendChild(e);
+}
+
+void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
+{
+    if (!image->compositions().isEmpty()) {
+        QDomElement e = doc.createElement("compositions");
+        foreach(KisLayerComposition* composition, image->compositions()) {
+            composition->save(doc, e);
+        }
+        element.appendChild(e);
+    }
+}
+
+bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
+{
+    QString location;
+    QMap<QString, int> assistantcounters;
+    QByteArray data;
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    QMap<KisPaintingAssistantHandleSP, int> handlemap;
+    if (!assistants.isEmpty()) {
+        foreach(KisPaintingAssistant* assist, assistants){
+            if (!assistantcounters.contains(assist->id())){
+                assistantcounters.insert(assist->id(),0);
+            }
+            location = external ? QString() : uri;
+            location += m_d->imageName + ASSISTANTS_PATH;
+            location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
+            data = assist->saveXml(handlemap);
+            store->open(location);
+            store->write(data);
+            store->close();
+            assistantcounters[assist->id()]++;
+        }
+
+    }
+    return true;
+}
+
+bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
+{
+    int count_ellipse = 0, count_perspective = 0, count_ruler = 0, count_spline = 0;
+    QList<KisPaintingAssistant*> assistants =  m_d->doc->assistants();
+    if (!assistants.isEmpty()) {
+        QDomElement assistantsElement = doc.createElement("assistants");
+        foreach(KisPaintingAssistant* assist, assistants){
+            if (assist->id() == "ellipse"){
+                assist->saveXmlList(doc, assistantsElement, count_ellipse);
+                count_ellipse++;
+            }
+            else if (assist->id() == "spline"){
+                assist->saveXmlList(doc, assistantsElement, count_spline);
+                count_spline++;
+            }
+            else if (assist->id() == "perspective"){
+                assist->saveXmlList(doc, assistantsElement, count_perspective);
+                count_perspective++;
+            }
+            else if (assist->id() == "ruler"){
+                assist->saveXmlList(doc, assistantsElement, count_ruler);
+                count_ruler++;
+            }
+        }
+        element.appendChild(assistantsElement);
     }
     return true;
 }

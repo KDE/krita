@@ -24,8 +24,11 @@
 #include <kpagedialog.h>
 
 class KoDocumentInfo;
-class KoDocumentRdf;
+class KoDocumentRdfBase;
 class KPageWidgetItem;
+class KoPageWidgetItem;
+
+#include "komain_export.h"
 
 /**
  * @short The dialog that shows information about the document
@@ -45,7 +48,7 @@ class KPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KoDocumentInfoDlg : public KPageDialog
+class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 
@@ -55,7 +58,7 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf = 0);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
@@ -68,6 +71,8 @@ public:
     /** Sets all fields to read-only mode. Used by the property dialog. */
     void setReadOnly(bool ro);
 
+    void addPageItem(KoPageWidgetItem *item);
+
 public slots:
     /** Connected to the okClicked() signal */
     void slotApply();
@@ -77,10 +82,6 @@ private slots:
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
     void slotToggleEncryption();
-    /** Connected with clicked() from pbDelete - Delete all author metadata */
-    void slotDeleteAuthorInfo();
-    /** Connected with clicked() from pbLoadKABC - Load metadata from KABC */
-    void slotLoadFromKABC();
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 
@@ -91,8 +92,6 @@ private:
     void initAuthorTab();
     /** Saves the changed data back to the KoDocumentInfo class */
     void saveAboutData();
-    /** Saves the changed data back to the KoDocumentInfo class */
-    void saveAuthorData();
 
     void slotButtonClicked(int button);
 

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILES_TEST_H_
-#define _KIS_FILES_TEST_H_
+#ifndef _KIS_JPEG_TEST_H_
+#define _KIS_JPEG_TEST_H_
 
 #include <QObject>
 

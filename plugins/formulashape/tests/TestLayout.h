@@ -20,7 +20,7 @@
 #ifndef _TESTLAYOUT_H_
 #define _TESTLAYOUT_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class TestLayout : public QObject
 {

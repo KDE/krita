@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007-2010 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -151,6 +152,9 @@ void KoListStyle::refreshLevelProperties(const KoListLevelProperties &properties
 {
     int level = qMax(1, properties.level());
     KoListLevelProperties llp = properties;
+    if (isOulineStyle()) {
+        llp.setOutlineList(true);
+    }
     llp.setLevel(level);
     d->levels.insert(level, llp);
 }
@@ -177,6 +181,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     if (d->name.isEmpty()) {
         d->name = style.attributeNS(KoXmlNS::style, "name", QString());
     }
+    d->name = style.attributeNS(KoXmlNS::style, "name", QString());
 
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
@@ -199,7 +204,8 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
 
 void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
 {
-    if (!d->name.isEmpty() && !style.isDefaultStyle()) {
+    // style:display-name can be used in list styles but not in outline styles
+    if (!d->name.isEmpty() && !style.isDefaultStyle() && !isOulineStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
     QBuffer buffer;
@@ -251,7 +257,37 @@ bool KoListStyle::isNumberingStyle(int style)
     return retval;
 }
 
+bool KoListStyle::isOulineStyle() const
+{
+    QMap<int, KoListLevelProperties>::const_iterator it(d->levels.constBegin());
+    for (; it != d->levels.constEnd(); ++it) {
+        if (it.value().isOutlineList()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 QList<int> KoListStyle::listLevels() const
 {
     return d->levels.keys();
+}
+
+int KoListStyle::bulletCharacter(int style)
+{
+    int bullet;
+    switch (style) {
+    case KoListStyle::Bullet:               bullet = 0x2022; break;
+    case KoListStyle::CircleItem:           bullet = 0x25CB; break;
+    case KoListStyle::RhombusItem:          bullet = 0x25C6; break;
+    case KoListStyle::SquareItem:           bullet = 0x25A0; break;
+    case KoListStyle::RightArrowHeadItem:   bullet = 0x27A2; break;
+    case KoListStyle::RightArrowItem:       bullet = 0x2794; break;
+    case KoListStyle::HeavyCheckMarkItem:   bullet = 0x2714; break;
+    case KoListStyle::BallotXItem:          bullet = 0x2717; break;
+    case KoListStyle::BlackCircle:
+    case KoListStyle::DiscItem:             bullet = 0x25CF; break;
+    default:                                bullet = 0; break; //empty character
+    }
+    return bullet;
 }

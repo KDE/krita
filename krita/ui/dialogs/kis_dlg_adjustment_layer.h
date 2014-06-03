@@ -22,7 +22,6 @@
 #include <kdialog.h>
 #include <QLabel>
 
-class QTimer;
 class KisFilter;
 class QListWidgetItem;
 class QLabel;
@@ -31,6 +30,7 @@ class QGroupBox;
 class KisConfigWidget;
 class KLineEdit;
 class KisNodeFilterInterface;
+class KisView2;
 #include "kis_types.h"
 #include "ui_wdgfilternodecreation.h"
 
@@ -47,7 +47,6 @@ public:
     /**
      * Create a new adjustmentlayer dialog
      *
-     * @param image the current image
      * @param layerName the name of the adjustment layer
      * @param paintDevice the paint device that is used as source for the preview
      * @param caption the caption for the dialog -- create or properties
@@ -57,11 +56,9 @@ public:
     KisDlgAdjustmentLayer(KisNodeSP node,
                           KisNodeFilterInterface* nfi,
                           KisPaintDeviceSP paintDevice,
-                          KisImageWSP image,
                           const QString & layerName,
                           const QString & caption,
-                          QWidget *parent = 0,
-                          const char *name = 0);
+                          KisView2 *view);
     ~KisDlgAdjustmentLayer();
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
@@ -70,17 +67,16 @@ protected slots:
 
     void slotNameChanged(const QString &);
     void slotConfigChanged();
-private slots:
-    void kickTimer();
 
 private:
 
     KisNodeSP m_node;
-    KisNodeFilterInterface* m_nodeFilterInterface;
+    KisNodeFilterInterface *m_nodeFilterInterface;
     Ui::WdgFilterNodeCreation wdgFilterNodeCreation;
-    KisFilterConfiguration* m_currentFilter;
-    bool m_freezeName;
-    QTimer * m_timer;
+    KisFilterConfiguration *m_currentFilter;
+    bool m_customName;
+    QString m_layerName;
+
 };
 
 #endif

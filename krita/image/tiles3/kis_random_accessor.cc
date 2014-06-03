@@ -49,10 +49,12 @@ KisRandomAccessor2::~KisRandomAccessor2()
 
 void KisRandomAccessor2::moveTo(qint32 x, qint32 y)
 {
-    x -= m_offsetX;
-    y -= m_offsetY;
     m_lastX = x;
     m_lastY = y;
+
+    x -= m_offsetX;
+    y -= m_offsetY;
+
     // Look in the cache if the tile if the data is available
     for (uint i = 0; i < m_tilesCacheSize; i++) {
         if (x >= m_tilesCache[i]->area_x1 && x <= m_tilesCache[i]->area_x2 &&
@@ -89,18 +91,23 @@ void KisRandomAccessor2::moveTo(qint32 x, qint32 y)
 }
 
 
-quint8 * KisRandomAccessor2::rawData()
+quint8* KisRandomAccessor2::rawData()
 {
     return m_data;
 }
 
 
-const quint8 * KisRandomAccessor2::oldRawData() const
+const quint8* KisRandomAccessor2::oldRawData() const
 {
 #ifdef DEBUG
     kWarning(!m_ktm->hasCurrentMemento(), 41004) << "Accessing oldRawData() when no transaction is in progress.";
 #endif
     return m_oldData;
+}
+
+const quint8* KisRandomAccessor2::rawDataConst() const
+{
+    return m_data;
 }
 
 KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, qint32 row)
@@ -123,12 +130,20 @@ KisRandomAccessor2::KisTileInfo* KisRandomAccessor2::fetchTileData(qint32 col, q
     return kti;
 }
 
-qint32 KisRandomAccessor2::nConseqPixels() const
+qint32 KisRandomAccessor2::numContiguousColumns(qint32 x) const
 {
-    qFatal("Not implemented.");
-    return 0;
+    return m_ktm->numContiguousColumns(x - m_offsetX, 0, 0);
 }
 
+qint32 KisRandomAccessor2::numContiguousRows(qint32 y) const
+{
+    return m_ktm->numContiguousRows(y - m_offsetY, 0, 0);
+}
+
+qint32 KisRandomAccessor2::rowStride(qint32 x, qint32 y) const
+{
+    return m_ktm->rowStride(x - m_offsetX, y - m_offsetY);
+}
 
 qint32 KisRandomAccessor2::x() const
 {

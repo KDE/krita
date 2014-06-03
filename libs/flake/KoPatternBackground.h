@@ -22,7 +22,7 @@
 
 #include "KoShapeBackground.h"
 #include "flake_export.h"
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class KoImageCollection;
 class KoOdfLoadingContext;
@@ -53,7 +53,7 @@ public:
     };
 
     /// Constructs a new pattern background utilizing the given image collection
-    KoPatternBackground(KoImageCollection *collection);
+    explicit KoPatternBackground(KoImageCollection *collection);
 
     virtual ~KoPatternBackground();
 
@@ -72,7 +72,7 @@ public:
     /// Returns the pattern
     QImage pattern();
 
-    /// Sets the pattern repeat
+    /// Sets the pattern repeatgfl
     void setRepeat(PatternRepeat repeat);
 
     /// Returns the pattern repeat
@@ -105,11 +105,8 @@ public:
     /// Returns the original image size
     QSizeF patternOriginalSize() const;
 
-    /// Assignment operator
-    KoPatternBackground& operator=(const KoPatternBackground &other);
-
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground
@@ -119,6 +116,7 @@ public:
     QRectF patternRectFromFillSize(const QSizeF &size);
 private:
     Q_DECLARE_PRIVATE(KoPatternBackground)
+    Q_DISABLE_COPY(KoPatternBackground)
 };
 
 #endif // KOPATTERNBACKGROUND_H

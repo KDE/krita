@@ -20,8 +20,8 @@
 #ifndef CHANGECASEPLUGIN_H
 #define CHANGECASEPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QVariant>
 
 class ChangecasePlugin : public QObject {
     Q_OBJECT

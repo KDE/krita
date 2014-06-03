@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,8 +85,18 @@ bool TableIterator::operator ==(const TableIterator &other) const
     if (row != other.row)
         return false;
 
+    if (headerRows != other.headerRows)
+        return false;
+
+    for (int row = 0; row < headerRows; ++row) {
+        for (int col = 0; col < table->columns(); ++col) {
+            if (headerCellAreas[row][col] != other.headerCellAreas[row][col])
+                return false;
+        }
+    }
+
     for (int col = 0; col < table->columns(); ++col) {
-        if (frameIterators[col]) {
+        if (frameIterators[col] && other.frameIterators[col]) {
             if (!(*frameIterators[col] ==
                             *(other.frameIterators[col])))
                 return false;

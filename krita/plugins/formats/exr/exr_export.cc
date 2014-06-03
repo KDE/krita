@@ -28,7 +28,10 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpaceConstants.h>
+#include <KoFilterManager.h>
 
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -59,32 +62,50 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
+        return KoFilter::NoDocumentCreated;
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
+
     KDialog dialog;
-    dialog.setWindowTitle(i18n("TIFF Export Options"));
+    dialog.setWindowTitle(i18n("OpenEXR Export Options"));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
     Ui::ExrExportWidget widget;
-    widget.setupUi(&dialog);
+    QWidget *page = new QWidget(&dialog);
+    widget.setupUi(page);
+    dialog.setMainWidget(page);
+    dialog.resize(dialog.minimumSize());
 
-    if (dialog.exec() == QDialog::Rejected) {
-        return KoFilter::UserCancelled;
+    QString filterConfig = KisConfig().exportConfiguration("EXR");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    widget.flatten->setChecked(cfg.getBool("flatten", false));
+
+    if (!m_chain->manager()->getBatchMode() ) {
+        kapp->restoreOverrideCursor();
+        if (dialog.exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    cfg.setProperty("flatten", widget.flatten->isChecked());
+    KisConfig().setExportConfiguration("EXR", cfg);
+
     QString filename = m_chain->outputFile();
-
-    if (!output)
-        return KoFilter::CreationError;
-
-
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
+    exrConverter kpc(input, !m_chain->manager()->getBatchMode());
 
-    exrConverter kpc(output);
+    KisImageBuilder_Result res;
 
     if (widget.flatten->isChecked()) {
         image->refreshGraph();
@@ -93,29 +114,47 @@ KoFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByt
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
         image->unlock();
 
-        KisImageBuilder_Result res;
-
-        if ((res = kpc.buildFile(url, l)) == KisImageBuilder_RESULT_OK) {
-            dbgFile << "success !";
-            return KoFilter::OK;
-        }
-
-        dbgFile << " Result =" << res;
-        return KoFilter::InternalError;
-    } else {
+        res = kpc.buildFile(url, l);
+    }
+    else {
         image->lock();
 
-        KisImageBuilder_Result res = kpc.buildFile(url, image->rootLayer());
+        res = kpc.buildFile(url, image->rootLayer());
         image->unlock();
 
-        if (res == KisImageBuilder_RESULT_OK) {
-            dbgFile << "success !";
-            return KoFilter::OK;
-        }
-
-        dbgFile << " Result =" << res;
-        return KoFilter::InternalError;
     }
+
+    dbgFile << " Result =" << res;
+    switch (res) {
+    case KisImageBuilder_RESULT_INVALID_ARG:
+        input->setErrorMessage(i18n("This layer cannot be saved to EXR."));
+        return KoFilter::WrongFormat;
+
+    case KisImageBuilder_RESULT_EMPTY:
+        input->setErrorMessage(i18n("The layer does not have an image associated with it."));
+        return KoFilter::WrongFormat;
+
+    case KisImageBuilder_RESULT_NO_URI:
+        input->setErrorMessage(i18n("The filename is empty."));
+        return KoFilter::CreationError;
+
+    case KisImageBuilder_RESULT_NOT_LOCAL:
+        input->setErrorMessage(i18n("EXR images cannot be saved remotely."));
+        return KoFilter::InternalError;
+
+    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
+        input->setErrorMessage(i18n("Colorspace not supported: EXR images must be 16 or 32 bits floating point RGB."));
+        return KoFilter::WrongFormat;
+
+    case KisImageBuilder_RESULT_OK:
+        return KoFilter::OK;
+    default:
+        break;
+    }
+
+    input->setErrorMessage(i18n("Internal Error"));
+    return KoFilter::InternalError;
+
 }
 
 #include <exr_export.moc>

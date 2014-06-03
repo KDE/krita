@@ -24,6 +24,7 @@
 #include "flake_export.h"
 #include <Qt>
 
+class KoColorBackgroundPrivate;
 class QColor;
 
 /// A simple solid color shape background
@@ -47,15 +48,16 @@ public:
     Qt::BrushStyle style() const;
 
     // reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
     // reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     // reimplemented from KoShapeBackground
     virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
-
+protected:
+    KoColorBackground(KoShapeBackgroundPrivate &dd);
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoColorBackground)
+    Q_DISABLE_COPY(KoColorBackground)
 };
 
 #endif // KOCOLORBACKGROUND_H

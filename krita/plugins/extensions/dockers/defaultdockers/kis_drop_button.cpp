@@ -37,7 +37,7 @@
 #include <kis_mimedata.h>
 
 KisDropButton::KisDropButton(QWidget *parent)
-  : QToolButton(parent)
+  : KisToolButton(parent)
 {
     setAcceptDrops(true);
 }
@@ -56,9 +56,9 @@ void KisDropButton::dragEnterEvent(QDragEnterEvent *event)
 void KisDropButton::dropEvent(QDropEvent *event)
 {
     qDebug() << "DROP EVENT" << event->mimeData()->formats();
-    
+
     KisNodeSP node;
-    
+
     const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(event->mimeData());
 
     if (mimedata) {
@@ -66,33 +66,34 @@ void KisDropButton::dropEvent(QDropEvent *event)
         node = mimedata->node();
     }
     else if (event->mimeData()->hasFormat("application/x-krita-node") ) {
-        
+
         qDebug() << "going to deserialize the dropped node";
-        
+
         QByteArray ba = event->mimeData()->data("application/x-krita-node");
-        
+
         KisDoc2 tmpDoc;
+
         tmpDoc.loadNativeFormatFromStore(ba);
-        
+
         node = tmpDoc.image()->rootLayer()->firstChild();
     }
     else if (event->mimeData()->hasImage()) {
-        
+
         qDebug() << "got an image";
-        
+
         QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-        device->convertFromQImage(qimage, "");
+        device->convertFromQImage(qimage, 0);
         node = new KisPaintLayer(0, "node creaed from dropped image", OPACITY_OPAQUE_U8, device);
     }
-    
+
     if (node) {
         if (event->keyboardModifiers() & Qt::ShiftModifier) {
             replaceFromNode(node);
         }
         else {
             createFromNode(node);
-        }        
+        }
 
     }
 }

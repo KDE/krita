@@ -22,7 +22,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
 
 class KoShape;
 
@@ -43,7 +43,7 @@ private slots:
     void selectionChanged();
     void addWidgetForShape( KoShape * shape );
     void shapePropertyChanged();
-    virtual void resourceChanged( int key, const QVariant & res );
+    virtual void canvasResourceChanged( int key, const QVariant & res );
 private:
     class Private;
     Private * const d;

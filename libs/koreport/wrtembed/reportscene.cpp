@@ -41,12 +41,14 @@ ReportScene::ReportScene(qreal w, qreal h, KoReportDesigner *rd)
 {
     m_rd = rd;
 
-    if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
+    if (m_unit.type() != m_rd->pageUnit().type()) {
         m_unit = m_rd->pageUnit();
-        if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
+        if (m_unit.type() == KoUnit::Cicero ||
+            m_unit.type() == KoUnit::Pica ||
+            m_unit.type() == KoUnit::Millimeter) {
             m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
             m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-        } else if (KoUnit::unitName(m_unit) == "pt") {
+        } else if (m_unit.type() == KoUnit::Point) {
             m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
             m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
         } else {
@@ -67,12 +69,14 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
     painter->setRenderHint(QPainter::Antialiasing, false);
 
     if (m_rd->propertySet()->property("grid-visible").value().toBool()) {
-        if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
+        if (m_unit.type() != m_rd->pageUnit().type()) {
             m_unit = m_rd->pageUnit();
-            if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
+            if (m_unit.type() == KoUnit::Cicero ||
+                m_unit.type() == KoUnit::Pica ||
+                m_unit.type() == KoUnit::Millimeter) {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-            } else if (KoUnit::unitName(m_unit) == "pt") {
+            } else if (m_unit.type() == KoUnit::Point) {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
             } else {
@@ -146,14 +150,17 @@ QPointF ReportScene::gridPoint(const QPointF& p)
         return p;
     }
 
-    if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
+    if (m_unit.type() != m_rd->pageUnit().type()) {
         m_unit = m_rd->pageUnit();
-        if (KoUnit::unitName(m_unit) != KoUnit::unitName(m_rd->pageUnit())) {
+        // TODO: Again? Copy&Paste error?
+        if (m_unit.type() != m_rd->pageUnit().type()) {
             m_unit = m_rd->pageUnit();
-            if (KoUnit::unitName(m_unit) == "cc" || KoUnit::unitName(m_unit) == "pi" || KoUnit::unitName(m_unit) == "mm") {
+            if (m_unit.type() == KoUnit::Cicero ||
+                m_unit.type() == KoUnit::Pica ||
+                m_unit.type() == KoUnit::Millimeter) {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(10)) * KoDpi::dpiY();
-            } else if (KoUnit::unitName(m_unit) == "pt") {
+            } else if (m_unit.type() == KoUnit::Point) {
                 m_majorX = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiX();
                 m_majorY = POINT_TO_INCH(m_unit.fromUserValue(100)) * KoDpi::dpiY();
             } else {

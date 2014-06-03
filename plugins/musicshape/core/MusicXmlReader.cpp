@@ -295,7 +295,7 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                 if (!pitch.isNull()) {
                     QString step = getProperty(pitch, "step");
                     int octave = getProperty(pitch, "octave").toInt();
-                    int note = step[0].toAscii() - 'A';
+                    int note = step[0].toLatin1() - 'A';
                     note -= 2;
                     if (note < 0) note += 7;
                     note += (octave - 4) * 7;

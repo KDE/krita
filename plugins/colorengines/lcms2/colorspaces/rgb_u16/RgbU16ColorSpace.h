@@ -24,27 +24,32 @@
 #include "KoColorSpaceTraits.h"
 #include "KoColorModelStandardIds.h"
 
-class RgbU16ColorSpace : public LcmsColorSpace<KoRgbU16Traits>
+class RgbU16ColorSpace : public LcmsColorSpace<KoBgrU16Traits>
 {
 public:
-    RgbU16ColorSpace(KoColorProfile *p);
+    RgbU16ColorSpace(const QString &name, KoColorProfile *p);
+
     virtual bool willDegrade(ColorSpaceIndependence independence) const;
+
     virtual KoID colorModelId() const {
         return RGBAColorModelID;
     }
+
     virtual KoID colorDepthId() const {
         return Integer16BitsColorDepthID;
     }
+
     virtual KoColorSpace* clone() const;
+
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+
     virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 
-    /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
-    static QString colorSpaceId();
+    static QString colorSpaceId()
+    {
+        return QString("RGBA16");
+    }
+
 };
 
 class RgbU16ColorSpaceFactory : public LcmsColorSpaceFactory
@@ -73,7 +78,7 @@ public:
     }
 
     virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
-        return new RgbU16ColorSpace(p->clone());
+        return new RgbU16ColorSpace(name(), p->clone());
     }
 
     virtual QString defaultProfile() const {

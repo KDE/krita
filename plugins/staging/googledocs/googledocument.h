@@ -23,6 +23,8 @@
 
 class GoogleDocument : public QObject
 {
+    Q_OBJECT
+
 public:
     GoogleDocument();
 

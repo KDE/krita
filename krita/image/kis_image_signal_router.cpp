@@ -21,21 +21,10 @@
 #include <QThread>
 
 #include "kis_image.h"
-#include "kis_group_layer.h"
 
-
-#define CONNECT_BLOCKING_SIGNAL(signal)                                 \
-    connect(this, SIGNAL(__##signal), this, SIGNAL(signal), Qt::BlockingQueuedConnection)
 
 #define CONNECT_TO_IMAGE(signal)                                        \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::DirectConnection)
-
-#define EMIT_BLOCKING(signal)                   \
-    {                                           \
-        if(checkSameThread()) { emit signal; }  \
-        else { emit __##signal; }               \
-    }
-
 
 struct ImageSignalsStaticRegistrar {
     ImageSignalsStaticRegistrar() {
@@ -48,42 +37,23 @@ static ImageSignalsStaticRegistrar __registrar;
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     : m_image(image)
 {
-    CONNECT_BLOCKING_SIGNAL(sigNotification(KisImageSignalType));
-    CONNECT_BLOCKING_SIGNAL(sigNodeChanged(KisNode*));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToAddANode(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenAdded(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToRemoveANode(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenRemoved(KisNode*, int));
-    CONNECT_BLOCKING_SIGNAL(sigAboutToMoveNode(KisNode*, int, int));
-    CONNECT_BLOCKING_SIGNAL(sigNodeHasBeenMoved(KisNode*, int, int));
-
     connect(this, SIGNAL(sigNotification(KisImageSignalType)),
             SLOT(slotNotification(KisImageSignalType)));
 
-    CONNECT_TO_IMAGE(sigLayersChanged(KisGroupLayerSP));
-    CONNECT_TO_IMAGE(sigPostLayersChanged(KisGroupLayerSP));
     CONNECT_TO_IMAGE(sigImageModified());
-    CONNECT_TO_IMAGE(sigSizeChanged(qint32, qint32));
+    CONNECT_TO_IMAGE(sigSizeChanged(const QPointF&, const QPointF&));
     CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
     CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
 
-    CONNECT_TO_IMAGE(sigNodeChanged(KisNode*));
-    CONNECT_TO_IMAGE(sigAboutToAddANode(KisNode*, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenAdded(KisNode*, int));
-    CONNECT_TO_IMAGE(sigAboutToRemoveANode(KisNode*, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenRemoved(KisNode*, int));
-    CONNECT_TO_IMAGE(sigAboutToMoveNode(KisNode*, int, int));
-    CONNECT_TO_IMAGE(sigNodeHasBeenMoved(KisNode*, int, int));
+    CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
+    CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
+    CONNECT_TO_IMAGE(sigRemoveNodeAsync(KisNodeSP));
+    CONNECT_TO_IMAGE(sigLayersChangedAsync());
 }
 
 KisImageSignalRouter::~KisImageSignalRouter()
 {
-}
-
-bool KisImageSignalRouter::checkSameThread()
-{
-    return QThread::currentThread() == m_image->thread();
 }
 
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
@@ -95,57 +65,37 @@ void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 
 void KisImageSignalRouter::emitNotification(KisImageSignalType type)
 {
-    EMIT_BLOCKING(sigNotification(type));
+    emit sigNotification(type);
 }
 
-void KisImageSignalRouter::emitNodeChanged(KisNode *node)
+void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
 {
-    EMIT_BLOCKING(sigNodeChanged(node));
-}
-
-void KisImageSignalRouter::emitAboutToAddANode(KisNode *parent, int index)
-{
-    EMIT_BLOCKING(sigAboutToAddANode(parent, index));
+    emit sigNodeChanged(node);
 }
 
 void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigNodeHasBeenAdded(parent, index));
+    emit sigNodeAddedAsync(parent->at(index));
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
-    EMIT_BLOCKING(sigAboutToRemoveANode(parent, index));
-}
-
-void KisImageSignalRouter::emitNodeHasBeenRemoved(KisNode *parent, int index)
-{
-    EMIT_BLOCKING(sigNodeHasBeenRemoved(parent, index));
-}
-
-void KisImageSignalRouter::emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
-{
-    EMIT_BLOCKING(sigAboutToMoveNode(parent, oldIndex, newIndex));
-}
-
-void KisImageSignalRouter::emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
-{
-    EMIT_BLOCKING(sigNodeHasBeenMoved(parent, oldIndex, newIndex));
+    emit sigRemoveNodeAsync(parent->at(index));
 }
 
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
-    switch(type) {
+    switch(type.id) {
     case LayersChangedSignal:
-        emit sigLayersChanged(m_image->rootLayer());
-        emit sigPostLayersChanged(m_image->rootLayer());
+        emit sigLayersChangedAsync();
         break;
     case ModifiedSignal:
         emit sigImageModified();
         break;
     case SizeChangedSignal:
-        emit sigSizeChanged(m_image->width(), m_image->height());
+        emit sigSizeChanged(type.sizeChangedSignal.oldStillPoint,
+                            type.sizeChangedSignal.newStillPoint);
         break;
     case ProfileChangedSignal:
         emit sigProfileChanged(m_image->profile());

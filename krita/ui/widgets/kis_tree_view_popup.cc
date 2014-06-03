@@ -29,7 +29,9 @@ struct KisTreeViewPopup::Private {
 };
 
 
-KisTreeViewPopup::KisTreeViewPopup(QWidget* parent) : KisPopupButton(parent), d(new Private)
+KisTreeViewPopup::KisTreeViewPopup(QWidget* parent)
+    : KisPopupButton(parent)
+    , d(new Private)
 {
     setObjectName("KisTreeViewPopup");
     d->view = new QTreeView;
@@ -38,6 +40,11 @@ KisTreeViewPopup::KisTreeViewPopup(QWidget* parent) : KisPopupButton(parent), d(
     connect(d->view, SIGNAL(entered(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
     connect(d->view, SIGNAL(clicked(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
     connect(d->view, SIGNAL(activated(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
+}
+
+KisTreeViewPopup::~KisTreeViewPopup()
+{
+    delete d;
 }
 
 void KisTreeViewPopup::setModel(QAbstractItemModel* model)

@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <QMetaType>
+#include <QVector>
 
 class QTextDocument;
 class KoCharacterStyle;
@@ -44,6 +45,9 @@ class KoXmlWriter;
 class ChangeFollower;
 class KoShapeSavingContext;
 class KoTextShapeData;
+class KUndo2Stack;
+class ChangeStylesMacroCommand;
+class KoTextTableTemplate;
 
 /**
  * Manages all character, paragraph, table and table cell styles for any number
@@ -64,12 +68,49 @@ public:
      */
     virtual ~KoStyleManager();
 
+    /**
+     * This explicitly set the undo stack used for storing undo commands
+     *
+     * Please note that adding documents \ref add(QTextDocument *document)
+     * extracts the undo stack from those documents,
+     * which can override what you set here. This method is mostly for cases
+     * where you use the style manager, but don't have qtextdocuments.
+     */
+    void setUndoStack(KUndo2Stack *undoStack);
+
+    /**
+     * Mark the beginning of a sequence of style changes, additions, and deletions
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref endEdit
+     */
+    void beginEdit();
+
+    /**
+     * Mark the end of a sequence of style changes, additions, and deletions.
+     *
+     * Manipulation to the styles happen immidiately, but calling this method
+     * will put a command on the stack for undo, plus it changes all the "listening"
+     * qtextdocuments to reflect the style changes.
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref beginEdit
+     */
+    void endEdit();
+
     // load is not needed as it is done in KoTextSharedLoadingData
 
     /**
      * Save document styles
      */
     void saveOdf(KoShapeSavingContext &context);
+
+    /**
+     * Save document styles that are being referred to but not yet saved
+     */
+    void saveReferredStylesToOdf(KoShapeSavingContext &context);
 
     /**
      * Save the default-style styles
@@ -105,9 +146,15 @@ public:
      */
     void add(KoTableCellStyle *style);
     /**
-     * Add a new sewction style, automatically giving it a new styleId.
+     * Add a new section style, automatically giving it a new styleId.
      */
     void add(KoSectionStyle *style);
+
+    /**
+     * Add a table template, automatically giving it a new styleId.
+     */
+    void add(KoTextTableTemplate *tableTemplate);
+
     /**
      * set the notes configuration of the document
      */
@@ -218,6 +265,15 @@ public:
     KoTableCellStyle *tableCellStyle(int id) const;
 
     /**
+     * Return a tableTemplate by its id.
+     * From documents you can retrieve the id out of each QTextTableFormat
+     * by requesting the KoTextTableTemplate::StyleId property.
+     * @param id the unique Id to search for.
+     * @see KoTextTableTemplate::styleId()
+     */
+    KoTextTableTemplate *tableTemplate(int id) const;
+
+    /**
      * Return a sectionStyle by its id.
      * From documents you can retrieve the id out of each QTextFrameFormat
      * by requesting the KoSectionStyle::StyleId property.
@@ -286,6 +342,15 @@ public:
     KoTableCellStyle *tableCellStyle(const QString &name) const;
 
     /**
+     * Return the first tableTemplate with the param user-visible-name.
+     * Since the name does not have to be unique there can be multiple
+     * styles registered with that name, only the first is returned
+     * @param name the name of the style.
+     * @see tableTemplate(id);
+     */
+    KoTextTableTemplate *tableTemplate(const QString &name) const;
+
+    /**
      * Return the first sectionStyle with the param user-visible-name.
      * Since the name does not have to be unique there can be multiple
      * styles registered with that name, only the first is returned
@@ -295,10 +360,19 @@ public:
     KoSectionStyle *sectionStyle(const QString &name) const;
 
      /**
+     * Return the default character style that will always be present in each
+     * document. You can alter the style, but you can never delete it.
+     * The default is suppost to stay invisible to the user and its called
+     * i18n("Default") for that reason. Applications should not
+     * show this style in their document-level configure dialogs.
+     */
+    KoCharacterStyle *defaultCharacterStyle() const;
+
+     /**
      * Return the default paragraph style that will always be present in each
      * document. You can alter the style, but you can never delete it.
      * The default is suppost to stay invisible to the user and its called
-     * i18n("[No Paragraph Style]") for that reason. Applications should not
+     * i18n("Default") for that reason. Applications should not
      * show this style in their document-level configure dialogs.
      */
     KoParagraphStyle *defaultParagraphStyle() const;
@@ -318,6 +392,12 @@ public:
      * that do not specify a list-style
      */
     KoListStyle *defaultListStyle() const;
+
+    /**
+     * Returns the default outline style to be used if outline-style is not specified in the document
+     * that do not specify a list-style
+     */
+    KoListStyle *defaultOutlineStyle() const;
 
     /**
      * Sets the outline style to be used for headers that are not specified as lists
@@ -359,6 +439,12 @@ public:
     /// returns the default style for the ToC title
     KoParagraphStyle *defaultTableOfcontentsTitleStyle();
 
+    /// returns the default style for the Bibliography entries for the specified bibliography type
+    KoParagraphStyle *defaultBibliographyEntryStyle(const QString &bibType);
+
+    /// returns the default style for the Bibliography title
+    KoParagraphStyle *defaultBibliographyTitleStyle();
+
     /// adds a paragraph style to unused paragraph style list
     void addUnusedStyle(KoParagraphStyle *style);
 
@@ -366,6 +452,9 @@ public:
     void moveToUsedStyles(int id);
 
     KoParagraphStyle *unusedStyle(int id);
+
+    QVector<int> usedCharacterStyles() const;
+    QVector<int> usedParagraphStyles() const;
 
 signals:
     void styleAdded(KoParagraphStyle*);
@@ -384,6 +473,10 @@ signals:
     void styleRemoved(KoTableRowStyle*);
     void styleRemoved(KoTableCellStyle*);
     void styleRemoved(KoSectionStyle*);
+    void styleAltered(KoParagraphStyle*);
+    void styleAltered(KoCharacterStyle*);
+    void styleApplied(const KoCharacterStyle*);
+    void styleApplied(const KoParagraphStyle*);
 
 public slots:
     /**
@@ -441,12 +534,12 @@ public slots:
      */
     void alteredStyle(const KoSectionStyle *style);
 
-private slots:
-    void updateAlteredStyles(); // for the QTimer::singleshot
+    void slotAppliedStyle(const KoCharacterStyle*);
+    void slotAppliedStyle(const KoParagraphStyle*);
 
 private:
     friend class ChangeFollower;
-    void requestFireUpdate();
+    friend class ChangeStylesMacroCommand;
     void remove(ChangeFollower *cf);
 
     friend class KoTextSharedLoadingData;

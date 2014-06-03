@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>135</width>
-    <height>173</height>
+    <width>175</width>
+    <height>195</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -54,6 +54,9 @@
        <property name="text">
         <string>Exposure:</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
        <property name="wordWrap">
         <bool>false</bool>
        </property>
@@ -85,14 +88,13 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>41</height>
+       <height>12</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

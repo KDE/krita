@@ -24,7 +24,7 @@
 #include "KoReportPluginInfo.h"
 #include "krscriptbarcode.h"
 
-#include <KIcon>
+#include <KoIcon.h>
 
 K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportBarcodePlugin, barcodeplugin)
 
@@ -32,7 +32,7 @@ KoReportBarcodePlugin::KoReportBarcodePlugin(QObject *parent, const QVariantList
 {
     KoReportPluginInfo *info = new KoReportPluginInfo();
     info->setClassName("report:barcode");
-    info->setIcon(KIcon("report_barcode_element"));
+    info->setIcon(koIcon("report_barcode_element"));
     info->setName(i18n("Barcode"));
     info->setPriority(50);
     setInfo(info);

@@ -22,7 +22,7 @@
 #define ADDCONNECTIONPOINTCOMMAND_H
 
 #include <kundo2command.h>
-#include <QtCore/QPointF>
+#include <QPointF>
 
 class KoShape;
 

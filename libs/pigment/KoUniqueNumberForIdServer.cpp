@@ -20,22 +20,19 @@
 #include "KoUniqueNumberForIdServer.h"
 
 #include <QHash>
-#ifdef Q_CC_MSVC
-#include <iso646.h>
-#endif
 
 #include <kglobal.h>
 
 struct KoUniqueNumberForIdServer::Private {
     Private()
-            : currentNumber(0) {}
+        : currentNumber(0) {}
 
     QHash<QString, quint32 > id2Number;
     quint32 currentNumber;
 };
 
 KoUniqueNumberForIdServer::KoUniqueNumberForIdServer()
-        : d(new Private)
+    : d(new Private)
 {
 }
 

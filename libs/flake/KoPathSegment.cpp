@@ -20,8 +20,8 @@
 #include "KoPathSegment.h"
 #include "KoPathPoint.h"
 #include <kdebug.h>
-#include <QtGui/QPainterPath>
-#include <QtGui/QTransform>
+#include <QPainterPath>
+#include <QTransform>
 #include <math.h>
 
 /// Maximal recursion depth for finding root params
@@ -1078,19 +1078,30 @@ qreal KoPathSegment::lengthAt(qreal t, qreal error) const
 
 qreal KoPathSegment::paramAtLength(qreal length, qreal tolerance) const
 {
-    int deg = degree();
-    if (deg < 1)
+    const int deg = degree();
+    // invalid degree or invalid specified length
+    if (deg < 1 || length <= 0.0) {
         return 0.0;
-    if (length <= 0.0)
-        return 0.0;
+    }
 
-    if (deg == 1)
-        return length / d->chordLength();
+    if (deg == 1) {
+        // make sure we return a maximum value of 1.0
+        return qMin(qreal(1.0), length / d->chordLength());
+    }
+
+    // for curves we need to make sure, that the specified length
+    // value does not exceed the actual length of the segment
+    // if that happens, we return 1.0 to avoid infinite looping
+    if (length >= d->chordLength() && length >= this->length(tolerance)) {
+        return 1.0;
+    }
 
     qreal startT = 0.0; // interval start
     qreal midT = 0.5;   // interval center
     qreal endT = 1.0;   // interval end
 
+    // divide and conquer, split a midpoint and check
+    // on which side of the midpoint to continue
     qreal midLength = lengthAt(0.5);
     while (qAbs(midLength - length) / length > tolerance) {
         if (midLength < length)

@@ -43,7 +43,8 @@ class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
 class KoOdfBibliographyConfiguration;
-class KoTextAnchor;
+class KoShapeAnchor;
+class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -182,17 +183,9 @@ public:
     KoOdfBibliographyConfiguration bibliographyConfiguration() const;
 
     /**
-     * Set the appication default style
-     *
-     * This is done so the application default style needs to be loaded only once.
-     * The ownership of the style is transfered to this class.
+     * Returns a list of shapes that should be inserted.
      */
-    void setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle);
-
-    /**
-     * Get the application default style
-     */
-    KoCharacterStyle *applicationDefaultStyle() const;
+    QList<KoShape *> insertedShapes() const;
 
 protected:
     /**
@@ -202,7 +195,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     enum StyleType {
@@ -226,6 +219,8 @@ private:
         KoCharacterStyle *style;
     };
     QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
+
+    void addDefaultCharacterStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
 
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
@@ -262,6 +257,10 @@ private:
     void addNotesConfiguration(KoShapeLoadingContext &context);
 
     void addBibliographyConfiguration(KoShapeLoadingContext &context);
+
+    void addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager);
+    QList<QPair<QString, KoTextTableTemplate *> > loadTableTemplates(KoShapeLoadingContext &context);
+
 
     class Private;
     Private * const d;

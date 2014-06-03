@@ -18,10 +18,11 @@
  */
 
 #include "KoReportDesignerItemLine.h"
+
 #include "KoReportDesignerItemBase.h"
 #include "KoReportDesigner.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
@@ -29,8 +30,8 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include <koproperty/EditorView.h>
-#include <KoGlobal.h>
 #include "reportscene.h"
+#include "krutils.h"
 
 //
 // class ReportEntityLine
@@ -112,21 +113,13 @@ void KoReportDesignerItemLine::buildXML(QDomDocument & doc, QDomElement & parent
 {
     QDomElement entity = doc.createElement("report:line");
 
-    qreal sx, sy, ex, ey;
-    QString unitname = KoUnit::unitName(m_start.unit());
-    
-    sx = m_start.toUnit().x();
-    sy = m_start.toUnit().y();
-    ex = m_end.toUnit().x();
-    ey = m_end.toUnit().y();
-
     // properties
     addPropertyAsAttribute(&entity, m_name);
     entity.setAttribute("report:z-index", zValue());
-    entity.setAttribute("svg:x1", QString::number(sx) + unitname);
-    entity.setAttribute("svg:y1", QString::number(sy) + unitname);
-    entity.setAttribute("svg:x2", QString::number(ex) + unitname);
-    entity.setAttribute("svg:y2", QString::number(ey) + unitname);
+    KRUtils::setAttribute(entity, "svg:x1", m_start.toPoint().x());
+    KRUtils::setAttribute(entity, "svg:y1", m_start.toPoint().y());
+    KRUtils::setAttribute(entity, "svg:x2", m_end.toPoint().x());
+    KRUtils::setAttribute(entity, "svg:y2", m_end.toPoint().y());
 
     buildXMLLineStyle(doc, entity, lineStyle());
 
@@ -166,7 +159,6 @@ void KoReportDesignerItemLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 QVariant KoReportDesignerItemLine::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    kDebug();
     return QGraphicsItem::itemChange(change, value);
 }
 
@@ -181,9 +173,7 @@ void KoReportDesignerItemLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     int y;
 
     QPointF p = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
-
-    kDebug() << p;
-    
+    //kDebug() << p;
     x = p.x();
     y = p.y();
 

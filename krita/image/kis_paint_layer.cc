@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2006 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
@@ -24,9 +24,10 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -35,7 +36,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
-class KisPaintLayer::Private
+struct KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
@@ -46,13 +47,9 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         : KisLayer(image, name, opacity)
         , m_d(new Private())
 {
-
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
-
-    // fixme: overwriting the default bounds is unexpected behaviour.
-    // maybe something like if(dynamic_cast<KisDefaultBounds*>(dev.defaultBounds())) {..} is better.
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
@@ -123,9 +120,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     gc.bitBlt(rect.topLeft(), original, rect);
 
     if (hasTemporaryTarget()) {
-        gc.setOpacity(temporaryOpacity());
-        gc.setCompositeOp(temporaryCompositeOp());
-        gc.setChannelFlags(temporaryChannelFlags());
+        setupTemporaryPainter(&gc);
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 
@@ -134,7 +129,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisPaintLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
@@ -154,19 +148,19 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
-    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Disabled"), KIcon("transparency-disabled"), KIcon("transparency-enabled"), alphaChannelDisabled());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
     
     return l;
 }
 
 void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
-    foreach (KoDocumentSectionModel::Property property, properties) {
-        if (property.name == i18n("Alpha Channel Locked")) {
+    foreach (const KoDocumentSectionModel::Property &property, properties) {
+        if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
         }
-        else if (property.name == i18n("Alpha Channel Disabled")) {
+        else if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
     }
@@ -214,19 +208,19 @@ QRect KisPaintLayer::exactBounds() const
 
 bool KisPaintLayer::alphaLocked() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->paintChannelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->paintChannelFlags;
     return flags.count(true) == 0 && !m_d->paintChannelFlags.isEmpty();
 }
 
 void KisPaintLayer::setAlphaLocked(bool lock)
 {
     if(m_d->paintChannelFlags.isEmpty())
-        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true, true, true);
+        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
     
     if(lock)
-        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 

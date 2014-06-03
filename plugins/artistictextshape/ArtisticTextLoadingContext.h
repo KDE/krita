@@ -20,10 +20,10 @@
 #ifndef SVGTEXTHELPER_H
 #define SVGTEXTHELPER_H
 
-#include <QtCore/QVector>
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QPointF>
+#include <QVector>
+#include <QString>
+#include <QList>
+#include <QPointF>
 
 typedef QList<qreal> CharTransforms;
 

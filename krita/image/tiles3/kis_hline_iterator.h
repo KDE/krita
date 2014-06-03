@@ -20,10 +20,10 @@
 #define _KIS_HLINE_ITERATOR_H_
 
 #include "kis_base_iterator.h"
-
+#include "krita_export.h"
 #include "kis_iterator_ng.h"
 
-class KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator {
+class KRITAIMAGE_EXPORT KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator {
     KisHLineIterator2(const KisHLineIterator2&);
     KisHLineIterator2& operator=(const KisHLineIterator2&);
 
@@ -43,27 +43,36 @@ public:
     virtual bool nextPixel();
     virtual void nextRow();
     virtual const quint8* oldRawData() const;
+    virtual const quint8* rawDataConst() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);
     virtual qint32 x() const;
     virtual qint32 y() const;
-    
+
+    virtual void resetPixelPos();
+    virtual void resetRowPos();
+
 private:
+    qint32 m_offsetX;
+    qint32 m_offsetY;
+
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_row;    // current row in tilemgr
     quint32 m_index;    // current col in tilemgr
     quint32 m_tileWidth;
     quint8 *m_data;
-    quint8 *m_dataRight;
     quint8 *m_oldData;
     bool m_havePixels;
     
     qint32 m_right;
     qint32 m_left;
+    qint32 m_top;
     qint32 m_leftCol;
     qint32 m_rightCol;
+
+    qint32 m_rightmostInTile; // limited by the current tile border only
 
     qint32 m_leftInLeftmostTile;
     qint32 m_yInTile;

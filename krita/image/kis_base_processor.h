@@ -23,6 +23,7 @@
 #include <QString>
 
 #include <klocale.h>
+#include <kshortcut.h>
 
 #include "KoID.h"
 #include "KoColorSpace.h"
@@ -98,12 +99,19 @@ public:
     QString menuEntry() const;
 
     /**
+     * Return the default keyboard shortcut for activation of this filter
+     *
+     * @return the shortcut
+     */
+    KShortcut shortcut() const;
+
+    /**
      * Create the configuration widget for this processor.
      *
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
     // "Support" functions
 public:
     /**
@@ -113,12 +121,6 @@ public:
 
     /// This filter can be used in adjustment layers
     bool supportsAdjustmentLayers() const;
-
-    /**
-     * Can this filter work incrementally when painting, or do we need to work
-     * on the state as it was before painting started. The former is faster.
-     */
-    bool supportsIncrementalPainting() const;
 
     /**
      * This filter supports cutting up the work area and filtering
@@ -145,10 +147,14 @@ protected:
 
     void setSupportsPainting(bool v);
     void setSupportsAdjustmentLayers(bool v);
-    void setSupportsIncrementalPainting(bool v);
     void setSupportsThreading(bool v);
     void setColorSpaceIndependence(ColorSpaceIndependence v);
     void setShowConfigurationWidget(bool v);
+
+    /**
+     * Set the default shortcut for activation of this filter.
+     */
+    void setShortcut(const KShortcut & shortcut);
 
 protected:
 

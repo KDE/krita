@@ -20,16 +20,21 @@
 #include "KoResource.h"
 
 #include <QDomElement>
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
+#include <QDebug>
+#include <QImage>
 
 struct KoResource::Private {
     QString name;
     QString filename;
     bool valid;
     bool removable;
+    QByteArray md5;
+    QImage image;
 };
 
-KoResource::KoResource(const QString& filename) : d(new Private)
+KoResource::KoResource(const QString& filename)
+    : d(new Private)
 {
     d->filename = filename;
     d->valid = false;
@@ -40,6 +45,29 @@ KoResource::KoResource(const QString& filename) : d(new Private)
 KoResource::~KoResource()
 {
     delete d;
+}
+
+QImage KoResource::image() const
+{
+    return d->image;
+}
+
+void KoResource::setImage(const QImage &image)
+{
+    d->image = image;
+}
+
+QByteArray KoResource::md5() const
+{
+    if (d->md5.isEmpty()) {
+        const_cast<KoResource*>(this)->setMD5(generateMD5());
+    }
+    return d->md5;
+}
+
+void KoResource::setMD5(const QByteArray &md5)
+{
+    d->md5 = md5;
 }
 
 QString KoResource::filename() const
@@ -80,10 +108,10 @@ void KoResource::setValid(bool valid)
     d->valid = valid;
 }
 
-void KoResource::toXML(QDomDocument& , QDomElement& e) const
+void KoResource::toXML(QDomDocument& /*doc*/, QDomElement& element) const
 {
-    e.setAttribute("name", name());
-    e.setAttribute("filename", filename());
+    element.setAttribute("name", name());
+    element.setAttribute("filename", filename());
 }
 
 bool KoResource::removable() const

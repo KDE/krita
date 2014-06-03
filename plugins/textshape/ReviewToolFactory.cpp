@@ -20,21 +20,25 @@
 #include "ReviewToolFactory.h"
 #include "ReviewTool.h"
 #include "TextShape.h"
+#include "AnnotationTextShape.h"
 
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
+
+#include <QDebug>
 
 ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
     setToolTip(i18n("Review"));
     setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-changetracking");
-    setPriority(3);
-    setActivationShapeId(TextShape_SHAPEID);
+    setIconName(koIconNameCStr("tool_review"));
+    setPriority(30);
+    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }
 
 ReviewToolFactory::~ReviewToolFactory()
@@ -44,11 +48,4 @@ ReviewToolFactory::~ReviewToolFactory()
 KoToolBase *ReviewToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ReviewTool(canvas);
-}
-
-bool ReviewToolFactory::canCreateTool(KoCanvasBase* canvas) const
-{
-    if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
-        return true;
-    return false;
 }

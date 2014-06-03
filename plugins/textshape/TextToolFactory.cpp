@@ -20,17 +20,19 @@
 #include "TextToolFactory.h"
 #include "TextTool.h"
 #include "TextShape.h"
+#include "AnnotationTextShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 TextToolFactory::TextToolFactory()
         : KoToolFactoryBase("TextToolFactory_ID")
 {
     setToolTip(i18n("Text editing"));
-    setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-text");
+    setToolType(dynamicToolType()+",calligrawords,calligraauthor");
+    setIconName(koIconNameCStr("tool-text"));
     setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID);
+    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
 }
 
 TextToolFactory::~TextToolFactory()

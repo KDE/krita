@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -83,30 +84,25 @@ KRScriptHandler::KRScriptHandler(const KoReportData* kodata, KoReportReportData*
         m_sectionMap[sec] = new Scripting::Section(sec);
         m_sectionMap[sec]->setParent(m_report);
         m_sectionMap[sec]->setObjectName(sec->name().replace('-', '_').remove("report:"));
-        kDebug() << "Added" << m_sectionMap[sec]->objectName() << "to report" << m_reportData->name();
+        //kDebug() << "Added" << m_sectionMap[sec]->objectName() << "to report" << m_reportData->name();
     }
 
     m_action->addObject(m_report, m_reportData->name());
-    kDebug() << "Report name is" << m_reportData->name();
+    //kDebug() << "Report name is" << m_reportData->name();
 
     QString code = m_koreportData->scriptCode(m_reportData->script(), m_reportData->interpreter());
-
-    m_action->setCode(code.toLocal8Bit());
-
+    m_action->setCode(code.toUtf8());
 }
 
 void KRScriptHandler::trigger()
 {
-    kDebug() << m_action->code();
-
+    //kDebug() << m_action->code();
     m_action->trigger();
-
     if (m_action->hadError()) {
         KMessageBox::error(0, m_action->errorMessage());
     } else {
         kDebug() << "Function Names:" << m_action->functionNames();
     }
-
     m_report->eventOnOpen();
 }
 
@@ -128,14 +124,14 @@ void KRScriptHandler::newPage()
 
 void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
 {
-    kDebug() << key << value;
+    //kDebug() << key << value;
     m_groups[key] = value;
     emit(groupChanged(where()));
 }
 void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 {
     Q_UNUSED(value);
-    kDebug() << key << value;
+    //kDebug() << key << value;
     m_groups.remove(key);
     emit(groupChanged(where()));
 }
@@ -155,7 +151,8 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
 QVariant KRScriptHandler::evaluate(const QString &code)
 {
     if (!m_action->hadError()) {
-        return m_action->evaluate(code.toLocal8Bit());
+        QVariant result = m_action->evaluate(code.toUtf8());
+        return QString::fromUtf8(result.toByteArray());
     } else {
         return QVariant();
     }
@@ -177,13 +174,13 @@ QString KRScriptHandler::where()
         ++i;
     }
     w = w.mid(0, w.length() - 4);
-    kDebug() << w;
+    //kDebug() << w;
     return w;
 }
 
 void KRScriptHandler::registerScriptObject(QObject* obj, const QString& name)
 {
-    kDebug();
+    //kDebug();
     if (m_action)
         m_action->addObject(obj, name);
 }

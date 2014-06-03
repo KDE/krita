@@ -26,15 +26,15 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 
-#include <KMimeType>
-#include <KTemporaryFile>
+#include <kmimetype.h>
+#include <ktemporaryfile.h>
 #include <KIO/NetAccess>
 #include <KIO/CopyJob>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QHash>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QBuffer>
+#include <QHash>
+#include <QFile>
+#include <QFileInfo>
 
 class SvgSavingContext::Private
 {
@@ -190,7 +190,7 @@ QString SvgSavingContext::saveImage(const QImage &image)
             // get the mime type from the temp file content
             KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
             // get extension from mimetype
-            QString ext = "";
+            QString ext;
             QStringList patterns = mimeType->patterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);
@@ -228,7 +228,7 @@ QString SvgSavingContext::saveImage(KoImageData *image)
             // get the mime type from the temp file content
             KMimeType::Ptr mimeType = KMimeType::findByFileContent(imgFile.fileName());
             // get extension from mimetype
-            QString ext = "";
+            QString ext;
             QStringList patterns = mimeType->patterns();
             if (patterns.count())
                 ext = patterns.first().mid(1);

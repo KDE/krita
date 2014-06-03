@@ -35,7 +35,12 @@ class KisFiltersModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    KisFiltersModel(KisPaintDeviceSP thumb);
+    /**
+     * @brief KisFiltersModel create a new filters model
+     * @param showAll if true, show all filters, if false, do not show filters that don't work in adjustment layers
+     * @param thumb the thumbnail image that is filtered
+     */
+    KisFiltersModel(bool showAll, KisPaintDeviceSP thumb);
     ~KisFiltersModel();
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &child) const;

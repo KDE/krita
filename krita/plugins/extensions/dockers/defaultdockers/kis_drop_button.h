@@ -20,7 +20,8 @@
 #ifndef KIS_DROP_BUTTON_H
 #define KIS_DROP_BUTTON_H
 
-#include <QToolButton>
+#include <kis_tool_button.h>
+
 
 class KisView2;
 
@@ -29,7 +30,7 @@ class KisView2;
 /**
  * A toolbutton that implements a drop target.
  */
-class KisDropButton : public QToolButton
+class KisDropButton : public KisToolButton
 {
     Q_OBJECT
 public:

@@ -18,23 +18,30 @@
 
 #include "kis_ppm_export.h"
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
+#include <kapplication.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
-#include <KDialog>
-#include <KMessageBox>
+#include <kdialog.h>
+#include <kmessagebox.h>
 
 #include <kis_debug.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 
 #include "ui_kis_wdg_options_ppm.h"
 #include <qendian.h>
 #include <KoColorSpaceTraits.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include "kis_iterator_ng.h"
 
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
@@ -136,11 +143,11 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::CreationError;
+    if (!input)
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -154,16 +161,33 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    QString filterConfig = KisConfig().exportConfiguration("PPM");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    optionsPPM.type->setCurrentIndex(cfg.getInt("type", 0));
+
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    input->image()->waitForDone();
+
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
+    cfg.setProperty("type", optionsPPM.type->currentIndex());
+    KisConfig().setExportConfiguration("PPM", cfg);
+
     bool bitmap = (to == "image/x-portable-bitmap");
 
-    KisImageWSP image = output->image();
+    KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();
@@ -173,8 +197,12 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     // Test color space
     if (((rgb && (pd->colorSpace()->id() != "RGBA" && pd->colorSpace()->id() != "RGBA16"))
             || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16")))) {
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n", pd->colorSpace()->name())) ;
-        return KoFilter::CreationError;
+        if (rgb) {
+            pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        }
+        else {
+            pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+        }
     }
 
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYA16";
@@ -213,44 +241,43 @@ KoFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const Q
     else flow = new KisPPMAsciiFlow(&fp);
 
     for (int y = 0; y < image->height(); ++y) {
-        KisHLineIterator it = pd->createHLineIterator(0, y, image->width());
+        KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, image->width());
         if (is16bit) {
             if (rgb) {
-                while (!it.isDone()) {
-                    flow->writeNumber(KoRgbU16Traits::red(it.rawData()));
-                    flow->writeNumber(KoRgbU16Traits::green(it.rawData()));
-                    flow->writeNumber(KoRgbU16Traits::blue(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(KoBgrU16Traits::red(it->rawData()));
+                    flow->writeNumber(KoBgrU16Traits::green(it->rawData()));
+                    flow->writeNumber(KoBgrU16Traits::blue(it->rawData()));
+
+                } while (it->nextPixel());
             } else if (bitmap) {
-                while (!it.isDone()) {
-                    flow->writeBool(*reinterpret_cast<quint16*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeBool(*reinterpret_cast<quint16*>(it->rawData()));
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    flow->writeNumber(*reinterpret_cast<quint16*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(*reinterpret_cast<quint16*>(it->rawData()));
+                } while (it->nextPixel());
             }
         } else {
             if (rgb) {
-                while (!it.isDone()) {
-                    flow->writeNumber(KoRgbTraits<quint8>::red(it.rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::green(it.rawData()));
-                    flow->writeNumber(KoRgbTraits<quint8>::blue(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(KoBgrTraits<quint8>::red(it->rawData()));
+                    flow->writeNumber(KoBgrTraits<quint8>::green(it->rawData()));
+                    flow->writeNumber(KoBgrTraits<quint8>::blue(it->rawData()));
+
+                } while (it->nextPixel());
             } else if (bitmap) {
-                while (!it.isDone()) {
-                    flow->writeBool(*reinterpret_cast<quint8*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeBool(*reinterpret_cast<quint8*>(it->rawData()));
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    flow->writeNumber(*reinterpret_cast<quint8*>(it.rawData()));
-                    ++it;
-                }
+                do {
+                    flow->writeNumber(*reinterpret_cast<quint8*>(it->rawData()));
+
+                } while (it->nextPixel());
             }
         }
     }

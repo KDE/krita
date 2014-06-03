@@ -23,7 +23,6 @@
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOp.h>
-#include <KoColorSpace.h>
 #include "kis_node.h"
 #include "kis_mask_generator.h"
 #include "kis_painter.h"
@@ -121,23 +120,22 @@ void KisRecordedPathPaintAction::playPaint(const KisPlayInfo&, KisPainter* paint
     dbgImage << "play path paint action with " << d->curveSlices.size() << " slices";
     if (d->curveSlices.size() <= 0) return;
     KisDistanceInformation savedDist;
-    
-    foreach (Private::BezierCurveSlice slice, d->curveSlices)
+
+    foreach (const Private::BezierCurveSlice &slice, d->curveSlices)
     {
         switch(slice.type)
         {
             case Private::BezierCurveSlice::Point:
-                savedDist = KisDistanceInformation(0, painter->paintAt(slice.point1));
+                painter->paintAt(slice.point1, &savedDist);
                 break;
             case Private::BezierCurveSlice::Line:
-                savedDist = painter->paintLine(slice.point1, slice.point2, savedDist);
+                painter->paintLine(slice.point1, slice.point2, &savedDist);
                 break;
             case Private::BezierCurveSlice::Curve:
-                savedDist = painter->paintBezierCurve(slice.point1, slice.control1, slice.control2, slice.point2, savedDist);
+                painter->paintBezierCurve(slice.point1, slice.control1, slice.control2, slice.point2, &savedDist);
                 break;
         }
     }
-    
 }
 
 void KisRecordedPathPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const

@@ -23,6 +23,7 @@
 #include "kis_merge_walker.h"
 #include "kis_stroke_strategy.h"
 #include "kis_stroke_job.h"
+#include "kis_spontaneous_job.h"
 #include "kis_stroke.h"
 
 
@@ -54,6 +55,26 @@ bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
         return false;
     }
 }
+
+class KisNoopSpontaneousJob : public KisSpontaneousJob
+{
+public:
+    KisNoopSpontaneousJob(bool overridesEverything = false)
+        : m_overridesEverything(overridesEverything)
+    {
+    }
+
+    void run() {
+    }
+
+    bool overrides(const KisSpontaneousJob *otherJob) {
+        Q_UNUSED(otherJob);
+        return m_overridesEverything;
+    }
+
+private:
+    bool m_overridesEverything;
+};
 
 class KisNoopDabStrategy : public KisStrokeJobStrategy
 {

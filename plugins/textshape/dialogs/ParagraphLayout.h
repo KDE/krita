@@ -30,20 +30,27 @@ class ParagraphLayout : public QWidget
 {
     Q_OBJECT
 public:
-    ParagraphLayout(QWidget *parent);
+    explicit ParagraphLayout(QWidget *parent);
 
     void setDisplay(KoParagraphStyle *style);
 
     void save(KoParagraphStyle *style);
 
 signals:
-    void horizontalAlignmentChanged(Qt::Alignment);
+    void parStyleChanged();
 
 private slots:
     void slotAlignChanged();
+    void breakAfterChanged();
+    void breakBeforeChanged();
+    void thresholdValueChanged();
 
 private:
     Ui::ParagraphLayout widget;
+    bool m_alignmentInherited;
+    bool m_breakAfterInherited;
+    bool m_breakBeforeInherited;
+    bool m_orphanThresholdInherited;
 };
 
 #endif

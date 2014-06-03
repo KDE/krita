@@ -17,7 +17,7 @@
  */
 
 #include "kis_legacy_tile_compressor.h"
-
+#include "kis_paint_device_writer.h"
 #include <QIODevice>
 
 #define TILE_DATA_SIZE(pixelSize) ((pixelSize) * KisTileData::WIDTH * KisTileData::HEIGHT)
@@ -30,7 +30,7 @@ KisLegacyTileCompressor::~KisLegacyTileCompressor()
 {
 }
 
-void KisLegacyTileCompressor::writeTile(KisTileSP tile, KoStore *store)
+void KisLegacyTileCompressor::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tile->pixelSize());
 
@@ -39,16 +39,16 @@ void KisLegacyTileCompressor::writeTile(KisTileSP tile, KoStore *store)
 
     writeHeader(tile, headerBuffer);
 
-    store->write((char *)headerBuffer, strlen((char *)headerBuffer));
+    store.write((char *)headerBuffer, strlen((char *)headerBuffer));
 
     tile->lockForRead();
-    store->write((char *)tile->data(), tileDataSize);
+    store.write((char *)tile->data(), tileDataSize);
     tile->unlock();
 
     delete[] headerBuffer;
 }
 
-void KisLegacyTileCompressor::readTile(KoStore *store, KisTiledDataManager *dm)
+bool KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *dm)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize(dm));
 
@@ -58,7 +58,6 @@ void KisLegacyTileCompressor::readTile(KoStore *store, KisTiledDataManager *dm)
     qint32 x, y;
     qint32 width, height;
 
-    QIODevice *stream = store->device();
     stream->readLine((char *)headerBuffer, bufferSize);
     sscanf((char *) headerBuffer, "%d,%d,%d,%d", &x, &y, &width, &height);
 
@@ -70,6 +69,8 @@ void KisLegacyTileCompressor::readTile(KoStore *store, KisTiledDataManager *dm)
     tile->lockForWrite();
     stream->read((char *)tile->data(), tileDataSize);
     tile->unlock();
+
+    return true;
 }
 
 void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
@@ -88,19 +89,16 @@ void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
     bytesWritten += tileDataSize;
 }
 
-void KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
+bool KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
                                                  qint32 bufferSize,
                                                  KisTileData *tileData)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tileData->pixelSize());
-#ifdef NDEBUG
-    Q_UNUSED(bufferSize);
-#else
-    Q_ASSERT(bufferSize >= tileDataSize);
-#endif
-
-
-    memcpy(tileData->data(), buffer, tileDataSize);
+    if (bufferSize >= tileDataSize) {
+        memcpy(tileData->data(), buffer, tileDataSize);
+        return true;
+    }
+    return false;
 }
 
 qint32 KisLegacyTileCompressor::tileDataBufferSize(KisTileData *tileData)

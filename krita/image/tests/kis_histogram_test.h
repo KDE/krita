@@ -19,7 +19,7 @@
 #ifndef KIS_HISTOGRAM_TEST_H
 #define KIS_HISTOGRAM_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisHistogramTest : public QObject
 {

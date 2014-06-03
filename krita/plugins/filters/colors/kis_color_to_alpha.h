@@ -30,13 +30,11 @@ public:
 
     KisFilterColorToAlpha();
 
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP device,
-                 const QRect& rect,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& rect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
 
     static inline KoID id() {
         return KoID("colortoalpha", i18n("Color to Alpha"));
@@ -44,7 +42,7 @@ public:
 
 public:
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP dev) const;
 };
 

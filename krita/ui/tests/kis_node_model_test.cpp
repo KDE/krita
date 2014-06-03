@@ -18,197 +18,98 @@
  */
 
 #include "kis_node_model_test.h"
-#include <QTest>
-#include <QCoreApplication>
 
 #include <qtest_kde.h>
-#include <kactioncollection.h>
 #include <kis_debug.h>
 
-#include "kis_image.h"
-#include "kis_types.h"
-#include "kis_paint_layer.h"
-#include "kis_group_layer.h"
+#include "kis_doc2.h"
+
 #include "kis_node_model.h"
-#include "KoColorSpace.h"
-#include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
+#include "kis_name_server.h"
+#include "flake/kis_shape_controller.h"
+
+
 #include "modeltest.h"
-/*
-Image:
 
-    root
-        first
-        second
-        group 1
-            child
-
-node model
-
-        group1     0
-            child
-        second     1
-        first      2
-    (root) // root is invisible
-
-*/
-void kisnodemodel_test::testRowcount()
+void KisNodeModelTest::init()
 {
-    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    m_doc = new KisDoc2();
 
-    KisNodeModel model(0);
-    ModelTest(&model, this);
-    model.setImage(image);
+    m_nameServer = new KisNameServer();
+    m_shapeController = new KisShapeController(m_doc, m_nameServer);
+    m_nodeModel = new KisNodeModel(0);
 
-    KisLayerSP l1 = new KisPaintLayer(image, "first", 200, image->colorSpace());
-    image->addNode(l1.data(), image->root());
-    QCOMPARE(model.rowCount(), 1);
-
-    KisLayerSP l2 = new KisPaintLayer(image, "second", 200, image->colorSpace());
-    image->addNode(l2.data(), image->root());
-    QVERIFY(model.rowCount() == 2);
-
-    KisGroupLayerSP parent = new KisGroupLayer(image, "group 1", 200);
-    image->addNode(parent, image->rootLayer());
-
-    QVERIFY(model.rowCount() == 3);
-
-    KisPaintLayerSP child = new KisPaintLayer(image, "child", 200);
-    image->addNode(child, parent);
-
-    QVERIFY(model.rowCount() == 3);
-
-    QModelIndex idx = model.index(0, 0);
-    dbgKrita << "node: " << model.nodeFromIndex(idx);
-    QVERIFY(idx.isValid());
-    QVERIFY(!idx.parent().isValid());
-    QVERIFY(model.hasChildren(idx));
-    QVERIFY(model.rowCount(idx) == 1);
+    initBase();
 }
 
-
-/*
-image:
-
-    root
-        first
-        second
-
-mode:
-
-        second 0
-        first  1
-
-*/
-void kisnodemodel_test::testModelIndex()
+void KisNodeModelTest::cleanup()
 {
-    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    cleanupBase();
 
-    KisNodeModel model(0);
-    ModelTest(&model, this);
-    model.setImage(image);
-
-    KisLayerSP first = new KisPaintLayer(image, "first", 200, image->colorSpace());
-    image->addNode(first.data());
-    QModelIndex idx = model.index(0, 0);
-
-    QVERIFY(idx.isValid());
-    QVERIFY(!idx.parent().isValid());
-    QVERIFY(idx.internalPointer() == first.data());
-    QVERIFY(model.hasChildren(idx) == false);
-
-    KisLayerSP second = new KisPaintLayer(image, "second", 200, image->colorSpace());
-    image->addNode(second.data());
-    QModelIndex idx2 = model.index(0, 0);
-    QVERIFY(idx2 != idx);
-    idx = model.index(1, 0);
-
-    QVERIFY(idx2.isValid());
-    QVERIFY(!idx2.parent().isValid());
-    QVERIFY(idx2.internalPointer() == second.data());
-    QVERIFY(idx2.sibling(1, 0) == idx);
-    QVERIFY(idx.sibling(0, 0) == idx2);
-    QVERIFY(idx.model() == &model);
-
-
-    /*
-    image:
-
-        root
-            first
-            second
-            group
-                child
-
-    mode:
-            group
-                child
-            second 0
-            first  1
-     */
-    KisGroupLayerSP parent = new KisGroupLayer(image, "group 1", 200);
-    image->addNode(parent, image->rootLayer());
-
-    KisPaintLayerSP child = new KisPaintLayer(image, "child", 200);
-    image->addNode(child, parent);
-
-    QModelIndex parentIdx = model.index(0, 0);
-
-    QVERIFY(parentIdx.isValid());
-    QVERIFY(!parentIdx.parent().isValid());
-    dbgKrita << model.nodeFromIndex(parentIdx);
-    QVERIFY(parentIdx.internalPointer() == parent.data());
-    QVERIFY(model.hasChildren(parentIdx));
-
-    QModelIndex childIdx = parentIdx.child(0, 0);
-    QVERIFY(childIdx.isValid());
-    QVERIFY(childIdx.parent().isValid());
-    QVERIFY(childIdx.parent() == parentIdx);
-    QVERIFY(childIdx.internalPointer() == child.data());
-    QVERIFY(childIdx.parent().internalPointer() == parent.data());
-
-    QModelIndex childIdx2 = model.index(0, 0, parentIdx);
-    QVERIFY(childIdx2.isValid());
-    QVERIFY(childIdx2.parent().isValid());
-    QVERIFY(childIdx2.parent() == parentIdx);
-    QVERIFY(childIdx2.internalPointer() == child.data());
-    QVERIFY(childIdx2.parent().internalPointer() == parent.data());
-
-    idx = model.index(-1, 0);
-    QVERIFY(!idx.isValid());
+    delete m_nodeModel;
+    delete m_shapeController;
+    delete m_nameServer;
+    delete m_doc;
 }
 
-void kisnodemodel_test::testGroupLayers()
+void KisNodeModelTest::testSetImage()
 {
-    KisImageSP image = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
+    constructImage();
+    m_shapeController->setImage(m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
+    new ModelTest(m_nodeModel, this);
+}
 
-    KisNodeModel model(0);
-    ModelTest(&model, this);
+void KisNodeModelTest::testAddNode()
+{
+    m_shapeController->setImage(m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
+    new ModelTest(m_nodeModel, this);
 
-    model.setImage(image);
-
-    KisLayerSP first = new KisPaintLayer(image, "first", 200, image->colorSpace());
-    KisLayerSP second = new KisPaintLayer(image, "second", 200, image->colorSpace());
-
-    KisGroupLayerSP parent = new KisGroupLayer(image, "group 1", 200);
-    image->addNode(parent, image->rootLayer());
-
-    KisPaintLayerSP child = new KisPaintLayer(image, "child", 200);
-    image->addNode(child, parent);
-
-    QModelIndex parentIdx = model.index(0, 0);
-    QVERIFY(model.hasChildren(parentIdx));
-
-    QModelIndex childIdx2 = model.index(0, 0, parentIdx);
-    QVERIFY(childIdx2.isValid());
-    QVERIFY(childIdx2.parent().isValid());
-    QVERIFY(childIdx2.parent() == parentIdx);
-    QVERIFY(childIdx2.internalPointer() == child.data());
-    QVERIFY(childIdx2.parent().internalPointer() == parent.data());
+    constructImage();
 
 }
 
-QTEST_KDEMAIN(kisnodemodel_test, GUI)
+void KisNodeModelTest::testRemoveAllNodes()
+{
+    constructImage();
+    m_shapeController->setImage(m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
+    new ModelTest(m_nodeModel, this);
+
+    m_image->removeNode(m_layer4);
+    m_image->removeNode(m_layer3);
+    m_image->removeNode(m_layer2);
+    m_image->removeNode(m_layer1);
+}
+
+void KisNodeModelTest::testRemoveIncludingRoot()
+{
+    constructImage();
+    m_shapeController->setImage(m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
+    new ModelTest(m_nodeModel, this);
+
+    m_image->removeNode(m_layer4);
+    m_image->removeNode(m_layer3);
+    m_image->removeNode(m_layer2);
+    m_image->removeNode(m_layer1);
+    m_image->removeNode(m_image->root());
+
+
+}
+
+void KisNodeModelTest::testSubstituteRootNode()
+{
+    constructImage();
+    m_shapeController->setImage(m_image);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0);
+    new ModelTest(m_nodeModel, this);
+
+    m_image->flatten();
+}
+
+QTEST_KDEMAIN(KisNodeModelTest, GUI)
 
 #include "kis_node_model_test.moc"
 

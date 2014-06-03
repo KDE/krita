@@ -20,8 +20,8 @@
 #include <KoReportDesignerItemRectBase.h>
 #include <KoReportDesigner.h>
 
-#include <qdom.h>
-#include <qpainter.h>
+#include <QDomDocument>
+#include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <koproperty/EditorView.h>
@@ -145,8 +145,7 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    kDebug() << endl;
-
+    //kDebug();
     QDomElement entity = doc.createElement("report:check");
 
     //properties

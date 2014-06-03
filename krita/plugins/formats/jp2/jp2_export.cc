@@ -27,7 +27,10 @@
 
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -58,12 +61,14 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!output)
-        return KoFilter::CreationError;
+    if (!input)
+        return KoFilter::NoDocumentCreated;
 
+    KisImageWSP image = input->image();
+    Q_CHECK_PTR(image);
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -75,26 +80,41 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
+
+    QString filterConfig = KisConfig().exportConfiguration("JP2");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+    optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
+    optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
-
+    else {
+        qApp->processEvents(); // For vector layers to be updated
+    }
+    image->waitForDone();
+    
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
+    cfg.setProperty("number_resolutions", options.numberresolution);
     options.rate = optionsJP2.qualityLevel->value();
+    cfg.setProperty("quality", options.rate);
+
+    KisConfig().setExportConfiguration("JP2", cfg);
 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image = output->image();
-    Q_CHECK_PTR(image);
     image->refreshGraph();
     image->lock();
 
-    jp2Converter kpc(output);
+    jp2Converter kpc(input);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2010 Lukáš Tvrdý     <lukast.dev@gmail.com>
  * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
@@ -26,10 +26,18 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
+
+#include <QtGlobal>
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
+#endif
+
 
 KisPressureScatterOption::KisPressureScatterOption()
-        : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::brushCategory(), false, 1.0, 0.0, 5.0)
+    : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::commonCategory(), false, 1.0, 0.0, 5.0)
 {
     m_axisX = true;
     m_axisY = true;
@@ -78,44 +86,43 @@ void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguratio
     KisCurveOption::readOptionSetting(setting);
     m_axisX = setting->getBool(SCATTER_X, true);
     m_axisY = setting->getBool(SCATTER_Y, true);
-    
+
     // backward compatibility: test for a "scatter amount" property
     //                         and use this value if it does exist
-    if(setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
+    if (setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
         KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
 }
 
-QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal diameter) const
+QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal width, qreal height) const
 {
     if ((!m_axisX && !m_axisY) || (!isChecked())) {
         return info.pos();
     }
-    
+
+    // just use the most significant dimension for calculations
+    qreal diameter = qMax(width, height);
     qreal sensorValue = computeValue(info);
 
     qreal jitter = (2.0 * drand48() - 1.0) * diameter * sensorValue;
     QPointF result(0.0, 0.0);
 
-    if (m_axisX && m_axisY){
+    if (m_axisX && m_axisY) {
         qreal jitterY = (2.0 * drand48() - 1.0) * diameter * sensorValue;
         result = QPointF(jitter, jitterY);
         return info.pos() + result;
     }
-    
-    QVector2D movement = toQVector2D( info.movement() ).normalized();
-    if (m_axisX)
-    {
+
+    qreal drawingAngle = info.drawingAngle();
+    QVector2D movement(cos(drawingAngle), sin(drawingAngle));
+    if (m_axisX) {
         movement *= jitter;
         result = movement.toPointF();
-        
     }
-    else if (m_axisY)
-    {
-        QVector2D movementNormal( -movement.y(), movement.x() );    
+    else if (m_axisY) {
+        QVector2D movementNormal(-movement.y(), movement.x());
         movementNormal *= jitter;
         result = movementNormal.toPointF();
     }
 
-    
     return info.pos() + result;
 }

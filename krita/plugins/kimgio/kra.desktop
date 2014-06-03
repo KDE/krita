@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=QImageIOPlugins
+X-KDE-ImageFormat=kra
+X-KDE-MimeType=application/x-krita
+X-KDE-Read=true
+X-KDE-Write=false

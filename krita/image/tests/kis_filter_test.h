@@ -19,7 +19,7 @@
 #ifndef KIS_FILTER_TEST_H
 #define KIS_FILTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisFilterTest : public QObject
 {

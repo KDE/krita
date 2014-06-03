@@ -18,12 +18,28 @@
 
 #include "krita_utils.h"
 
+#include <QtCore/qmath.h>
+
 #include <QRect>
+#include <QRegion>
+#include <QPainterPath>
+#include <QPolygonF>
+#include <QPen>
+
+#include "kis_image_config.h"
+
 
 namespace KritaUtils
 {
 
-    QVector<QRect> KRITAIMAGE_EXPORT splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
+    QSize optimalPatchSize()
+    {
+        KisImageConfig cfg;
+        return QSize(cfg.updatePatchWidth(),
+                     cfg.updatePatchHeight());
+    }
+
+    QVector<QRect> splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
     {
         QVector<QRect> patches;
 
@@ -39,11 +55,125 @@ namespace KritaUtils
                                    patchSize.width(), patchSize.height());
                 QRect patchRect = rc & maxPatchRect;
 
-                patches.append(patchRect);
+                if (!patchRect.isEmpty()) {
+                    patches.append(patchRect);
+                }
             }
         }
 
         return patches;
+    }
+
+    bool checkInTriangle(const QRectF &rect,
+                         const QPolygonF &triangle)
+    {
+        return triangle.intersected(rect).boundingRect().isValid();
+    }
+
+
+    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+                                             const QVector<QPointF> &points)
+    {
+
+        Q_ASSERT(points.size());
+        Q_ASSERT(!(points.size() & 1));
+
+        QVector<QPolygonF> triangles;
+        QRect totalRect;
+
+        for (int i = 0; i < points.size(); i += 2) {
+            QPolygonF triangle;
+            triangle << center;
+            triangle << points[i];
+            triangle << points[i+1];
+
+            totalRect |= triangle.boundingRect().toAlignedRect();
+            triangles << triangle;
+        }
+
+
+        const int step = 64;
+        const int right = totalRect.x() + totalRect.width();
+        const int bottom = totalRect.y() + totalRect.height();
+
+        QRegion dirtyRegion;
+
+        for (int y = totalRect.y(); y < bottom;) {
+            int nextY = qMin((y + step) & ~(step-1), bottom);
+
+            for (int x = totalRect.x(); x < right;) {
+                int nextX = qMin((x + step) & ~(step-1), right);
+
+                QRect rect(x, y, nextX - x, nextY - y);
+
+                foreach(const QPolygonF &triangle, triangles) {
+                    if(checkInTriangle(rect, triangle)) {
+                        dirtyRegion |= rect;
+                        break;
+                    }
+                }
+
+                x = nextX;
+            }
+            y = nextY;
+        }
+        return dirtyRegion;
+    }
+
+    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
+    {
+        QRect totalRect = path.boundingRect().toAlignedRect();
+
+        // adjust the rect for antialiasing to work
+        totalRect.adjusted(-1,-1,1,1);
+
+        const int step = 64;
+        const int right = totalRect.x() + totalRect.width();
+        const int bottom = totalRect.y() + totalRect.height();
+
+        QRegion dirtyRegion;
+
+
+        for (int y = totalRect.y(); y < bottom;) {
+            int nextY = qMin((y + step) & ~(step-1), bottom);
+
+            for (int x = totalRect.x(); x < right;) {
+                int nextX = qMin((x + step) & ~(step-1), right);
+
+                QRect rect(x, y, nextX - x, nextY - y);
+
+                if(path.intersects(rect)) {
+                    dirtyRegion |= rect;
+                }
+
+                x = nextX;
+            }
+            y = nextY;
+        }
+
+        return dirtyRegion;
+    }
+
+    void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
+                                       int antLength, int antSpace)
+    {
+        QVector<qreal> antDashPattern;
+        antDashPattern << antLength << antSpace;
+
+        *antsPen = QPen(Qt::CustomDashLine);
+        antsPen->setDashPattern(antDashPattern);
+        antsPen->setCosmetic(true);
+        antsPen->setColor(Qt::black);
+
+        *outlinePen = QPen(Qt::SolidLine);
+        outlinePen->setCosmetic(true);
+        outlinePen->setColor(Qt::white);
+    }
+
+    QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
+    {
+        int precision = qMax(1, qCeil(log10(value))) + 2;
+        return QString::number(value, 'g', precision);
     }
 
 }

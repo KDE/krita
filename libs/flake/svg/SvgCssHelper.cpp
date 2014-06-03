@@ -19,9 +19,9 @@
 
 #include "SvgCssHelper.h"
 #include <KoXmlReader.h>
-#include <KDebug>
-#include <QtCore/QPair>
-#include <QtCore/QStack>
+#include <kdebug.h>
+#include <QPair>
+#include <QStack>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {
@@ -142,10 +142,10 @@ public:
                 m_type = Equals;
             }
             m_value = pattern.mid(equalPos+1);
-            if (m_value.startsWith('\"'))
+            if (m_value.startsWith(QLatin1Char('"')))
                 m_value.remove(0,1);
-            if (m_value.endsWith('\"'))
-                m_value.remove(m_value.length()-1,1);
+            if (m_value.endsWith(QLatin1Char('"')))
+                m_value.chop(1);
         }
     }
 
@@ -299,7 +299,7 @@ private:
             InId,
             InAttribute,
             InClassAttribute,
-            InPseudoClass,
+            InPseudoClass
         } state;
 
         // add terminator to string
@@ -397,8 +397,8 @@ public:
         int selectorCount = m_selectors.count();
         if (selectorCount) {
             for(int i = 0; i < selectorCount-1; ++i) {
-                str += m_selectors[i]->toString();
-                str += m_combinators[i];
+                str += m_selectors[i]->toString() +
+                       m_combinators[i];
             }
             str += m_selectors.last()->toString();
         }

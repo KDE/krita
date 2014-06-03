@@ -23,9 +23,11 @@
 
 #include "kowidgets_export.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoColor;
+class KoColorDisplayRendererInterface;
+
 /**
  * @short A widget for selecting two related colors.
  *
@@ -67,7 +69,11 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * @param parent The parent widget of the KoDualColorButton.
      * @param dialogParent The parent widget of the color selection dialog.
      */
-    KoDualColorButton( const KoColor &foregroundColor, const KoColor &backgroundColor,
+    KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
+                      QWidget *parent = 0, QWidget* dialogParent = 0 );
+
+    KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
+                      const KoColorDisplayRendererInterface *displayRenderer,
                       QWidget *parent = 0, QWidget* dialogParent = 0 );
 
     /**

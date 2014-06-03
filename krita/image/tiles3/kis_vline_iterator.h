@@ -21,10 +21,10 @@
 #define _KIS_VLINE_ITERATOR_H_
 
 #include "kis_base_iterator.h"
-
+#include "krita_export.h"
 #include "kis_iterator_ng.h"
 
-class KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {
+class KRITAIMAGE_EXPORT KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {
     KisVLineIterator2(const KisVLineIterator2&);
     KisVLineIterator2& operator=(const KisVLineIterator2&);
 
@@ -41,8 +41,12 @@ public:
     KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisVLineIterator2();
 
+    virtual void resetPixelPos();
+    virtual void resetColumnPos();
+
     virtual bool nextPixel();
     virtual void nextColumn();
+    virtual const quint8* rawDataConst() const;
     virtual const quint8* oldRawData() const;
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
@@ -51,6 +55,9 @@ public:
     virtual qint32 y() const;
 
 private:
+    qint32 m_offsetX;
+    qint32 m_offsetY;
+
     qint32 m_x;        // current x position
     qint32 m_y;        // current y position
     qint32 m_column;    // current column in tilemgr
@@ -63,6 +70,7 @@ private:
 
     qint32 m_top;
     qint32 m_bottom;
+    qint32 m_left;
     qint32 m_topRow;
     qint32 m_bottomRow;
 

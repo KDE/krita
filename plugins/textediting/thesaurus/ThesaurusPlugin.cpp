@@ -20,8 +20,8 @@
 #include "ThesaurusPlugin.h"
 #include "ThesaurusFactory.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <KoTextEditingRegistry.h>
 

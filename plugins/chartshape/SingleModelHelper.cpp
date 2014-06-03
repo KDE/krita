@@ -31,24 +31,24 @@
 
 using namespace KChart;
 
-SingleModelHelper::SingleModelHelper( Table *table, ChartProxyModel *proxyModel )
-    : m_table( table )
-    , m_proxyModel( proxyModel )
+SingleModelHelper::SingleModelHelper(Table *table, ChartProxyModel *proxyModel)
+    : m_table(table)
+    , m_proxyModel(proxyModel)
 {
-    Q_ASSERT( table );
-    Q_ASSERT( proxyModel );
+    Q_ASSERT(table);
+    Q_ASSERT(proxyModel);
 
     QAbstractItemModel *model = table->model();
-    connect( model, SIGNAL( modelReset() ),
-             this,  SLOT( slotModelStructureChanged() ) );
-    connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ),
-             this,  SLOT( slotModelStructureChanged() ) );
-    connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
-             this,  SLOT( slotModelStructureChanged() ) );
-    connect( model, SIGNAL( columnsInserted( QModelIndex, int, int ) ),
-             this,  SLOT( slotModelStructureChanged() ) );
-    connect( model, SIGNAL( columnsRemoved( QModelIndex, int, int ) ),
-             this,  SLOT( slotModelStructureChanged() ) );
+    connect(model, SIGNAL(modelReset()),
+            this,  SLOT(slotModelStructureChanged()));
+    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this,  SLOT(slotModelStructureChanged()));
+    connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this,  SLOT(slotModelStructureChanged()));
+    connect(model, SIGNAL(columnsInserted(QModelIndex,int,int)),
+            this,  SLOT(slotModelStructureChanged()));
+    connect(model, SIGNAL(columnsRemoved(QModelIndex,int,int)),
+            this,  SLOT(slotModelStructureChanged()));
 
     // Initialize the proxy with this model
     slotModelStructureChanged();
@@ -57,7 +57,13 @@ SingleModelHelper::SingleModelHelper( Table *table, ChartProxyModel *proxyModel 
 void SingleModelHelper::slotModelStructureChanged()
 {
     QAbstractItemModel *model = m_table->model();
-    QPoint topLeft( 1, 1 );
-    QPoint bottomRight( model->columnCount(), model->rowCount() );
-    m_proxyModel->reset( CellRegion( m_table, QRect( topLeft, bottomRight ) ) );
+    const int columnCount = model->columnCount();
+    const int rowCount = model->rowCount();
+    CellRegion region(m_table);
+    if (columnCount >= 1 && rowCount >= 1) {
+        QPoint topLeft(1, 1);
+        QPoint bottomRight(columnCount, rowCount);
+        region.add(QRect(topLeft, bottomRight));
+    }
+    m_proxyModel->reset(region);
 }

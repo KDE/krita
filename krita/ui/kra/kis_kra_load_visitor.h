@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #define KIS_KRA_LOAD_VISITOR_H_
 
 #include <QRect>
+#include <QStringList>
 
 // kritaimage
 #include "kis_types.h"
@@ -56,14 +57,17 @@ public:
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
 
+    QStringList errorMessages() const;
+
 private:
 
     bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
     bool loadMetaData(KisNode* node);
-    KisSelectionSP loadSelection(const QString& location);
-    QString getLocation(KisNode* node, const QString& suffix = "");
+    void initSelectionForMask(KisMask *mask);
+    bool loadSelection(const QString& location, KisSelectionSP dstSelection);
+    QString getLocation(KisNode* node, const QString& suffix = QString());
 
 private:
     KisImageWSP m_image;
@@ -73,6 +77,7 @@ private:
     QMap<KisNode *, QString> m_layerFilenames;
     QString m_name;
     int m_syntaxVersion;
+    QStringList m_errorMessages;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

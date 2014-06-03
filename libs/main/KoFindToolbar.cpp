@@ -17,63 +17,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-
-
 #include "KoFindToolbar.h"
+#include "KoFindToolbar_p.h"
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QToolButton>
-#include <QtGui/QMenu>
-#include <QtGui/QApplication>
-#include <QtCore/QDebug>
+#include <QHBoxLayout>
+#include <QToolButton>
+#include <QMenu>
+#include <QTimer>
+#include <QApplication>
+#include <QDebug>
 
-#include <KDE/KLocalizedString>
-#include <KDE/KLineEdit>
-#include <KDE/KSqueezedTextLabel>
-#include <KDE/KIcon>
-#include <KDE/KHistoryComboBox>
-#include <KDE/KAction>
-#include <KDE/KActionCollection>
-#include <KDE/KColorScheme>
+#include <klocalizedstring.h>
+#include <klineedit.h>
+#include <ksqueezedtextlabel.h>
+#include <khistorycombobox.h>
+#include <kaction.h>
+#include <kactioncollection.h>
+#include <kcolorscheme.h>
+
+#include <KoIcon.h>
 
 #include "KoFindBase.h"
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
-
-class KoFindToolbar::Private
-{
-public:
-    Private(KoFindToolbar *qq) : q(qq) { }
-
-    void matchFound();
-    void noMatchFound();
-    void searchWrapped(bool direction);
-    void addToHistory();
-    void find(const QString &pattern);
-    void optionChanged();
-    void replace();
-    void replaceAll();
-
-    KoFindToolbar *q;
-
-    KoFindBase *finder;
-
-    QToolButton *closeButton;
-    KHistoryComboBox *searchLine;
-    KHistoryComboBox *replaceLine;
-    QToolButton *previousButton;
-    QToolButton *nextButton;
-    QToolButton *optionsButton;
-    QToolButton *replaceButton;
-    QToolButton *replaceAllButton;
-    QLabel *replaceLabel;
-    KSqueezedTextLabel *information;
-    QLabel *matchCounter;
-
-    static QStringList searchCompletionItems;
-    static QStringList replaceCompletionItems;
-};
 
 QStringList KoFindToolbar::Private::searchCompletionItems = QStringList();
 QStringList KoFindToolbar::Private::replaceCompletionItems = QStringList();
@@ -88,12 +54,18 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     connect(d->finder, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
     connect(d->finder, SIGNAL(wrapAround(bool)), this, SLOT(searchWrapped(bool)));
 
+    d->textTimeout = new QTimer(this);
+    d->textTimeout->setInterval(1000);
+    d->textTimeout->setSingleShot(true);
+    connect(d->textTimeout, SIGNAL(timeout()), this, SLOT(inputTimeout()));
+
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
-    d->closeButton->setIcon(KIcon("dialog-close"));
+    d->closeButton->setIcon(koIcon("dialog-close"));
     d->closeButton->setShortcut(QKeySequence(Qt::Key_Escape));
     connect(d->closeButton, SIGNAL(clicked(bool)), this, SLOT(hide()));
     connect(d->closeButton, SIGNAL(clicked(bool)), d->finder, SLOT(finished()));
+    connect(d->closeButton, SIGNAL(clicked()), d->textTimeout, SLOT(stop()));
     layout->addWidget(d->closeButton, 0, 0);
 
     layout->addWidget(new QLabel(i18nc("Label for the Find text input box", "Find:"), this), 0, 1, Qt::AlignRight);
@@ -101,14 +73,14 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->searchLine = new KHistoryComboBox(true, this);
     d->searchLine->setCompletedItems(d->searchCompletionItems);
     d->searchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->searchLine, SIGNAL(editTextChanged(QString)), this, SLOT(find(QString)));
+    connect(d->searchLine, SIGNAL(editTextChanged(QString)), d->textTimeout, SLOT(start()));
     connect(d->searchLine, SIGNAL(returnPressed()), d->finder, SLOT(findNext()));
     connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
     connect(d->searchLine, SIGNAL(cleared()), finder, SLOT(finished()));
     layout->addWidget(d->searchLine, 0, 2);
 
     d->nextButton = new QToolButton(this);
-    d->nextButton->setIcon(KIcon("go-down-search"));
+    d->nextButton->setIcon(koIcon("go-down-search"));
     d->nextButton->setText(i18nc("Next search result", "Next"));
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
@@ -118,7 +90,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     layout->addWidget(d->nextButton, 0, 3);
 
     d->previousButton = new QToolButton(this);
-    d->previousButton->setIcon(KIcon("go-up-search"));
+    d->previousButton->setIcon(koIcon("go-up-search"));
     d->previousButton->setText(i18nc("Previous search result", "Previous"));
     d->previousButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->previousButton->setEnabled(false);
@@ -134,19 +106,22 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     QList<KoFindOption *> options = finder->options()->options();
     foreach(KoFindOption * option, options) {
-        KAction *action = new KAction(option->title(), menu);
-        action->setHelpText(option->description());
-        action->setObjectName(option->name());
         if(option->value().type() == QVariant::Bool) {
+            KAction *action = new KAction(option->title(), menu);
+            action->setHelpText(option->description());
+            action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());
             connect(action, SIGNAL(triggered(bool)), this, SLOT(optionChanged()));
+            menu->addAction(action);
         }
-        menu->addAction(action);
     }
 
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
+    if(menu->actions().count() == 0) {
+        d->optionsButton->setEnabled(false);
+    }
     layout->addWidget(d->optionsButton, 0, 5);
 
     d->information = new KSqueezedTextLabel(this);
@@ -206,7 +181,7 @@ void KoFindToolbar::activateSearch()
     d->searchLine->setFocus();
 
     if(d->finder->matches().size() == 0) {
-        d->find(d->searchLine->currentText());
+        d->textTimeout->start();
     }
 }
 
@@ -223,7 +198,7 @@ void KoFindToolbar::activateReplace()
     d->replaceAllButton->setVisible(true);
 
     if(d->finder->matches().size() == 0) {
-        d->find(d->searchLine->currentText());
+        d->textTimeout->start();
     }
 }
 
@@ -233,7 +208,7 @@ void KoFindToolbar::Private::matchFound()
     KColorScheme::adjustBackground(current, KColorScheme::PositiveBackground);
     searchLine->setPalette(current);
     replaceLine->setPalette(current);
-    
+
     information->setText(i18ncp("Total number of matches", "1 match found", "%1 matches found", finder->matches().count()));
 }
 
@@ -263,6 +238,8 @@ void KoFindToolbar::Private::addToHistory()
 
 void KoFindToolbar::Private::find(const QString &pattern)
 {
+    textTimeout->stop();
+
     if(pattern.length() > 0) {
         finder->find(pattern);
     } else {
@@ -292,6 +269,11 @@ void KoFindToolbar::Private::replaceAll()
 {
     finder->replaceAll(replaceLine->currentText());
     replaceLine->addToHistory(replaceLine->currentText());
+}
+
+void KoFindToolbar::Private::inputTimeout()
+{
+    find(searchLine->currentText());
 }
 
 #include "KoFindToolbar.moc"

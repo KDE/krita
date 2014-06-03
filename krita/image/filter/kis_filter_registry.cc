@@ -27,10 +27,6 @@
 #include <kglobal.h>
 #include <kaction.h>
 #include <klocale.h>
-#include <kparts/plugin.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kparts/componentfactory.h>
 
 #include <KoPluginLoader.h>
 
@@ -60,7 +56,7 @@ KisFilterRegistry* KisFilterRegistry::instance()
     KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>("");
     if (!reg) {
         reg = new KisFilterRegistry(qApp);
-        KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 4)");
+        KoPluginLoader::instance()->load("Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 28)");
     }
     return reg;
 }

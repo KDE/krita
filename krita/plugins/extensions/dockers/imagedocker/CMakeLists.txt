@@ -2,8 +2,8 @@
 set(kritaimagedocker_PART_SRCS
     imagedocker.cpp
     imagedocker_dock.cpp
-    kis_image_strip_scene.cpp
-    kis_image_view.cpp
+    image_strip_scene.cpp
+    image_view.cpp
 )
 
 kde4_add_ui_files(kritaimagedocker_PART_SRCS forms/wdgimagedocker.ui forms/wdgImageViewPopup.ui)

@@ -19,12 +19,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef __calligra_filter_manager_h__
-#define __calligra_filter_manager_h__
+#ifndef __KO_FILTER_MANAGER_H__
+#define __KO_FILTER_MANAGER_H__
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QByteArray>
+#include <QObject>
+#include <QMap>
+#include <QByteArray>
 
 #include "KoFilterChain.h"
 #include "KoFilterGraph.h"
@@ -81,7 +81,7 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = "",
+    explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
                              KoFilterChain * const parentChain = 0);
 
     virtual ~KoFilterManager();
@@ -111,7 +111,7 @@ public:
     ///@name Static API
     //@{
     /**
-     * Suitable for passing to KFileDialog::setMimeFilter. The default mime
+     * Suitable for passing to KoFileDialog::setMimeTypeFilters. The default mime
      * gets set by the "users" of this method, as we do not have enough
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
@@ -199,4 +199,4 @@ private:
     Private * const d;
 };
 
-#endif  // __calligra_filter_manager_h__
+#endif  // __KO_FILTER_MANAGER_H__

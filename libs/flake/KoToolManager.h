@@ -123,7 +123,7 @@ public:
      * @param ac the actionCollection that will be the parent of the actions.
      * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerTools(KActionCollection *ac, KoCanvasController *controller = 0);
+    void registerTools(KActionCollection *ac, KoCanvasController *controller);
 
     /**
      * Register a new canvas controller
@@ -160,7 +160,7 @@ public:
     KoCreateShapesTool *shapeCreatorTool(KoCanvasBase *canvas) const;
 
     /**
-     * Returns the tool that is able to add/edit guides for this param canvas.
+     * Returns the tool for the given tool id.
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
      * @see addController()
@@ -182,7 +182,7 @@ public:
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<KoToolButton> createToolList(KoCanvasBase *canvas) const;
+    QList<KoToolButton> createToolList() const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
@@ -215,6 +215,21 @@ public slots:
      */
     void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
 
+    /**
+     * Request for temporary switching the tools.
+     * This switch can be later reverted with switchBackRequested().
+     * @param id the id of the tool
+     *
+     * @see switchBackRequested()
+     */
+    void switchToolTemporaryRequested(const QString &id);
+
+    /**
+     * Switches back to the original tool after the temporary switch
+     * has been done. It the user changed the tool manually on the way,
+     * then it switches to the interaction tool
+     */
+    void switchBackRequested();
 
 signals:
     /**
@@ -230,7 +245,7 @@ signals:
      * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
-    void toolCodesSelected(const KoCanvasController *canvas, const QList<QString> &types);
+    void toolCodesSelected(const QList<QString> &types);
 
     /**
      * Emitted after the current layer changed either its properties or to a new layer.
@@ -272,10 +287,8 @@ private:
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void switchBackRequested())
     Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
-    Q_PRIVATE_SLOT(d, void switchToolTemporaryRequested(const QString &id))
 
     QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
 

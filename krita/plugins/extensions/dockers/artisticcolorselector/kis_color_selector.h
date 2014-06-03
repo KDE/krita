@@ -41,9 +41,9 @@ class KisColorSelector: public QWidget
     {
         ColorRing(): angle(0) { }
         
-        Radian getPieceAngle() const { return Radian::RAD_360 / float(pieced.size()); }
-        Radian getShift     () const { return angle % getPieceAngle();                }
-        Radian getMovedAngel() const { return angle - tmpAngle;                       }
+        Radian getPieceAngle() const { return RAD_360 / float(pieced.size()); }
+        Radian getShift     () const { return angle % getPieceAngle();        }
+        Radian getMovedAngel() const { return angle - tmpAngle;               }
         
         void setTemporaries(const KisColor& color) {
             tmpAngle = angle;
@@ -60,12 +60,9 @@ class KisColorSelector: public QWidget
     };
     
 public:
-    enum LightStripPos { LSP_LEFT, LSP_RIGHT, LSP_TOP, LSP_BOTTOM };
-    
     KisColorSelector(QWidget* parent, KisColor::Type type=KisColor::HSL);
     
     void setColorSpace(KisColor::Type type);
-    void setLightStripPosition(LightStripPos pos);
     void setNumPieces(int num);
     void setNumLightPieces(int num);
     void setNumRings(int num);
@@ -78,10 +75,16 @@ public:
     void setFgColor(const KisColor& fgColor);
     void setBgColor(const KisColor& bgColor);
     
-    qint32 getNumRings      () const { return m_colorRings.size(); }
-    qint32 getNumPieces     () const { return m_numPieces;         }
-    qint32 getNumLightPieces() const { return m_numLightPieces;    }
-    qreal  getLight         () const { return m_light;             }
+    void saveSettings();
+    void loadSettings();
+    
+    KisColor::Type getColorSpace       () const { return m_colorSpace;        }
+    qint32         getNumRings         () const { return m_colorRings.size(); }
+    qint32         getNumPieces        () const { return m_numPieces;         }
+    qint32         getNumLightPieces   () const { return m_numLightPieces;    }
+    qreal          getLight            () const { return m_light;             }
+    bool           isSaturationInverted() const { return m_inverseSaturation; }
+    bool           islightRelative     () const { return m_relativeLight;     }
     
 signals:
     void sigFgColorChanged(const KisColor& color);
@@ -131,7 +134,6 @@ private:
     QImage             m_renderBuffer;
     QRect              m_renderArea;
     QRect              m_lightStripArea;
-    LightStripPos      m_lightStripPos;
     bool               m_mouseMoved;
     bool               m_selectedColorIsFgColor;
     QPointF            m_clickPos;

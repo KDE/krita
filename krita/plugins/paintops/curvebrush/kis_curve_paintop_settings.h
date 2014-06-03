@@ -29,11 +29,5 @@ public:
     virtual ~KisCurvePaintOpSettings() {}
 
     virtual bool paintIncremental();
-
-#if defined(HAVE_OPENGL)
-    inline QString modelName() const {
-        return "stylus";
-    }
-#endif
 };
 #endif

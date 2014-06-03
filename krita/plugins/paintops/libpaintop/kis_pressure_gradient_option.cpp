@@ -23,7 +23,7 @@
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
 
-KisPressureGradientOption::KisPressureGradientOption(): KisCurveOption(i18n("Gradient"), "Gradient", KisPaintOpOption::brushCategory(), false)
+KisPressureGradientOption::KisPressureGradientOption(): KisCurveOption(i18n("Gradient"), "Gradient", KisPaintOpOption::commonCategory(), false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
@@ -31,6 +31,6 @@ KisPressureGradientOption::KisPressureGradientOption(): KisCurveOption(i18n("Gra
 
 void KisPressureGradientOption::apply(KoColor& color, const KoAbstractGradient* gradient, const KisPaintInformation& info) const
 {
-    if(isChecked() && gradient)
+    if (isChecked() && gradient)
         gradient->colorAt(color, computeValue(info));
 }

@@ -25,7 +25,7 @@
 #include <KoToolProxy.h>
 #include <KoToolSelection.h>
 
-#include <KDebug>
+#include <kdebug.h>
 #include <QAction>
 
 // KoCopyControllerPrivate

@@ -47,14 +47,14 @@ public:
     }
 
     virtual QString name() const {
-        return i18nc("duplicate paintbrush", "Duplicate");
+        return i18nc("clone paintbrush (previously \"Duplicate\")", "Clone");
     }
 
     virtual QString pixmap() {
         return "krita-duplicate.png";
     }
-    
-    virtual QString category() const{
+
+    virtual QString category() const {
         return KisPaintOpFactory::categoryStable();
     }
 

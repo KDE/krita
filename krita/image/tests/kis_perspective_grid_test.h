@@ -19,7 +19,7 @@
 #ifndef KIS_PERSPECTIVE_GRID_TEST_H
 #define KIS_PERSPECTIVE_GRID_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPerspectiveGridTest : public QObject
 {

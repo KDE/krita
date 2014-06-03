@@ -34,13 +34,13 @@
 
 #include <kis_paint_device.h>
 
-class KisNodeShape::Private
+struct KisNodeShape::Private
 {
 public:
     KisNodeSP node;
 };
 
-KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
+KisNodeShape::KisNodeShape(KisNodeSP node)
         : KoShapeLayer()
         , m_d(new Private())
 {
@@ -48,7 +48,8 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
     m_d->node = node;
 
     setShapeId(KIS_NODE_SHAPE_ID);
-    KoShape::setParent(parent);
+
+    setSelectable(false);
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
@@ -58,6 +59,15 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
 
 KisNodeShape::~KisNodeShape()
 {
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    // If we're the active layer, we should tell the active selection we're dead meat.
+    if (canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
+        KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
+        KoShapeLayer *activeLayer = activeSelection->activeLayer();
+        if (activeLayer == this){
+            activeSelection->setActiveLayer(0);
+        }
+    }
     delete m_d;
 }
 
@@ -66,103 +76,75 @@ KisNodeSP KisNodeShape::node()
     return m_d->node;
 }
 
-void KisNodeShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+void KisNodeShape::setNodeVisible(bool /*v*/)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    // Necessary because shapes are not QObjects
+//     setVisible(v);
 }
 
-
-void KisNodeShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    bool found(false);
+    KoShapeLayer *layer = activeLayer;
+
+    while(layer && !(found = layer == this)) {
+        layer = dynamic_cast<KoShapeLayer*>(layer->parent());
+    }
+
+    return found;
+}
+
+void KisNodeShape::editabilityChanged()
+{
+    if (m_d->node->inherits("KisShapeLayer")) {
+        setGeometryProtected(!m_d->node->isEditable());
+    } else {
+        setGeometryProtected(false);
+    }
+    /**
+     * Editability of a child depends on the editablity
+     * of its parent. So when we change one's editability,
+     * we need to search for active children and reactivate them
+     */
+
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+
+    if(canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
+        KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
+        KoShapeLayer *activeLayer = activeSelection->activeLayer();
+
+        if(activeLayer && checkIfDescendant(activeLayer)) {
+            activeSelection->setActiveLayer(activeLayer);
+        }
+    }
+
 }
 
 QSizeF KisNodeShape::size() const
 {
-    Q_ASSERT(m_d);
-    Q_ASSERT(m_d->node);
-
-    QRect br = m_d->node->extent();
-
-    KisImageWSP image = getImage();
-
-    if (!image) return QSizeF(0.0, 0.0);
-
-    dbgUI << "KisNodeShape::size extent:" << br << ", x res:" << image->xRes() << ", y res:" << image->yRes();
-
-    return QSizeF(br.width() / image->xRes(), br.height() / image->yRes());
+    return boundingRect().size();
 }
 
 QRectF KisNodeShape::boundingRect() const
 {
-    QRect br = m_d->node->extent();
-
-    KisImageWSP image = getImage();
-
-    return QRectF(int(br.left()) / image->xRes(), int(br.top()) / image->yRes(),
-                  int(1 + br.right()) / image->xRes(), int(1 + br.bottom()) / image->yRes());
-
+    return QRectF();
 }
 
-void KisNodeShape::setPosition(const QPointF & position)
+void KisNodeShape::setPosition(const QPointF &)
 {
-    Q_ASSERT(m_d);
-    Q_ASSERT(m_d->node);
-
-    KisImageWSP image = getImage();
-
-    if (image) {
-        // XXX: Does flake handle undo for us?
-        QPointF pf(position.x() / image->xRes(), position.y() / image->yRes());
-        QPoint p = pf.toPoint();
-        m_d->node->setX(p.x());
-        m_d->node->setY(p.y());
-    }
 }
 
-
-void KisNodeShape::saveOdf(KoShapeSavingContext & /*context*/) const
+void KisNodeShape::paint(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
 {
-
-    // TODO
 }
 
-bool KisNodeShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/)
+void KisNodeShape::saveOdf(KoShapeSavingContext &) const
 {
-    return false; // TODO
 }
 
-void KisNodeShape::setNodeVisible(bool v)
+bool KisNodeShape::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
 {
-    // Necessary because shapes are not QObjects
-    setVisible(v);
-}
-
-// Defined in KisNodeContainerShape... FIXME (2.1) find a better way to share code between those two classes, or even better merge them
-bool recursiveFindActiveLayerInChildren(KoSelection* _selection, KoShapeLayer* _currentLayer);
-
-void KisNodeShape::editabilityChanged()
-{
-    dbgKrita << m_d->node->isEditable();
-    setGeometryProtected(!m_d->node->isEditable());
-    KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
-    if (canvas) {
-        recursiveFindActiveLayerInChildren(canvas->canvas()->shapeManager()->selection(), this);
-    }
-}
-
-KisImageWSP KisNodeShape::getImage() const
-{
-
-    if (m_d->node->inherits("KisLayer")) {
-        return dynamic_cast<KisLayer*>(m_d->node.data())->image();
-    } else if (m_d->node->inherits("KisMask")) {
-        return dynamic_cast<KisLayer*>(m_d->node->parent().data())->image();
-    }
-
-    return 0;
+    return false;
 }
 
 #include "kis_node_shape.moc"

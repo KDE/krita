@@ -39,43 +39,8 @@ typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
 class KisTiledIterator;
 class KisTiledRandomAccessor;
-class KoStore;
-
-class KisTileDataWrapper
-{
-public:
-    enum accessType {
-        READ,
-        WRITE
-    };
-    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type)
-            : m_tile(tile), m_offset(offset) {
-        if (type == READ)
-            m_tile->lockForRead();
-        else
-            m_tile->lockForWrite();
-    }
-
-    virtual ~KisTileDataWrapper() {
-        m_tile->unlock();
-    }
-
-    inline qint32 offset() const {
-        return m_offset;
-    }
-
-    inline KisTileSP& tile() {
-        return m_tile;
-    }
-
-    inline quint8* data() const {
-        return m_tile->data() + m_offset;
-    }
-private:
-    KisTileSP m_tile;
-    qint32 m_offset;
-};
-
+class KisPaintDeviceWriter;
+class QIODevice;
 
 /**
  * KisTiledDataManager implements the interface that KisDataManager defines
@@ -103,7 +68,7 @@ protected:
     /*FIXME:*/
 public:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
-    ~KisTiledDataManager();
+    virtual ~KisTiledDataManager();
     KisTiledDataManager(const KisTiledDataManager &dm);
     KisTiledDataManager & operator=(const KisTiledDataManager &dm);
 
@@ -116,15 +81,12 @@ protected:
     friend class KisTiledRandomAccessor;
     friend class KisRandomAccessor2;
     friend class KisStressJob;
-protected:
 
+public:
     void setDefaultPixel(const quint8 *defPixel);
     const quint8 *defaultPixel() const {
         return m_defaultPixel;
     }
-
-    /* FIXME:*/
-public:
 
     inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
         if (writable) {
@@ -147,7 +109,9 @@ public:
 
     KisMementoSP getMemento() {
         QWriteLocker locker(&m_lock);
-        return m_mementoManager->getMemento();
+        KisMementoSP memento = m_mementoManager->getMemento();
+        memento->saveOldDefaultPixel(m_defaultPixel, m_pixelSize);
+        return memento;
     }
 
     /**
@@ -155,19 +119,35 @@ public:
      */
     void commit() {
         QWriteLocker locker(&m_lock);
+
+        KisMementoSP memento = m_mementoManager->currentMemento();
+        if(memento) {
+            memento->saveNewDefaultPixel(m_defaultPixel, m_pixelSize);
+        }
+
         m_mementoManager->commit();
     }
 
     void rollback(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
+        const quint8 *defaultPixel = memento->oldDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     void rollforward(KisMementoSP memento) {
-        Q_UNUSED(memento);
+        commit();
+
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
+        const quint8 *defaultPixel = memento->newDefaultPixel();
+        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+            setDefaultPixelImpl(defaultPixel);
+        }
         recalculateExtent();
     }
     bool hasCurrentMemento() const {
@@ -188,11 +168,10 @@ public:
 
 protected:
     /**
-     * Reads and writes the tiles from/onto a KoStore
-     * (which is simply a file within a zip file)
+     * Reads and writes the tiles 
      */
-    bool write(KoStore *store);
-    bool read(KoStore *store);
+    bool write(KisPaintDeviceWriter &store);
+    bool read(QIODevice *stream);
 
     void purge(const QRect& area);
 
@@ -226,6 +205,11 @@ public:
     void bitBlt(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
+     * The same as \ref bitBlt(), but reads old data
+     */
+    void bitBltOldData(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
      * Clones rect from another datamanager in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * managers, that means it will copy a bigger area than was
@@ -233,6 +217,11 @@ public:
      * into temporary paint devices.
      */
     void bitBltRough(KisTiledDataManager *srcDM, const QRect &rect);
+
+    /**
+     * The same as \ref bitBltRough(), but reads old data
+     */
+    void bitBltRoughOldData(KisTiledDataManager *srcDM, const QRect &rect);
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
@@ -243,19 +232,29 @@ public:
     /**
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void readBytes(quint8 * bytes,
                    qint32 x, qint32 y,
-                   qint32 w, qint32 h) const;
+                   qint32 w, qint32 h,
+                   qint32 dataRowStride = -1) const;
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
+     *
+     * \param dataRowStride is the step (in bytes) which should be
+     *                      added to \p bytes pointer to get to the
+     *                      next row
      */
     void writeBytes(const quint8 * bytes,
                     qint32 x, qint32 y,
-                    qint32 w, qint32 h);
+                    qint32 w, qint32 h,
+                    qint32 dataRowStride = -1);
 
     /**
      * Copy the bytes in the paint device into a vector of arrays of bytes,
@@ -263,7 +262,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channels. If there
@@ -316,32 +315,44 @@ private:
     // Allow compression routines to calculate (col,row) coordinates
     // and pixel size
     friend class KisAbstractTileCompressor;
+    friend class KisTileDataWrapper;
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
 
 private:
-    bool writeTilesHeader(KoStore *store, quint32 numTiles);
+    void setDefaultPixelImpl(const quint8 *defPixel);
+
+    bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    KisTileDataWrapper pixelPtr(qint32 x, qint32 y,
-                                enum KisTileDataWrapper::accessType type);
 
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
     quint8* duplicatePixel(qint32 num, const quint8 *pixel);
 
+    template<bool useOldSrcData>
+        void bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect);
+    template<bool useOldSrcData>
+        void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
+
     void writeBytesBody(const quint8 *data,
-                        qint32 x, qint32 y, qint32 width, qint32 height);
+                        qint32 x, qint32 y,
+                        qint32 width, qint32 height,
+                        qint32 dataRowStride = -1);
     void readBytesBody(quint8 *data,
-                       qint32 x, qint32 y, qint32 width, qint32 height) const;
+                       qint32 x, qint32 y,
+                       qint32 width, qint32 height,
+                       qint32 dataRowStride = -1) const;
+
+    template <bool allChannelsPresent>
     void writePlanarBytesBody(QVector<quint8*> planes,
                               QVector<qint32> channelsizes,
                               qint32 x, qint32 y, qint32 w, qint32 h);
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
                                          qint32 x, qint32 y,
-                                         qint32 w, qint32 h);
+                                         qint32 w, qint32 h) const;
 public:
     void debugPrintInfo() {
         m_mementoManager->debugPrintInfo();
@@ -361,7 +372,6 @@ inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) con
            -(((-x - 1) / y) + 1);
 }
 
-
 inline qint32 KisTiledDataManager::xToCol(qint32 x) const
 {
     return divideRoundDown(x, KisTileData::WIDTH);
@@ -371,7 +381,6 @@ inline qint32 KisTiledDataManager::yToRow(qint32 y) const
 {
     return divideRoundDown(y, KisTileData::HEIGHT);
 }
-
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

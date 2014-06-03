@@ -19,7 +19,7 @@
 #ifndef KIS_COUNT_VISITOR_TESTER_H
 #define KIS_COUNT_VISITOR_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_node.h"
 

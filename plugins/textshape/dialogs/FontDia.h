@@ -26,8 +26,7 @@
 #include <kdialog.h>
 #include <KoCharacterStyle.h>
 
-#include <QTextCursor>
-
+class KoTextEditor;
 
 class CharacterGeneral;
 
@@ -35,15 +34,11 @@ class FontDia : public KDialog
 {
     Q_OBJECT
 public:
-    explicit FontDia(QTextCursor *cursor, QWidget* parent = 0);
-
-signals:
-    /// emitted when a series of commands is started that together need to become 1 undo action.
-    void startMacro(const QString &name);
-    /// emitted when a series of commands has ended that together should be 1 undo action.
-    void stopMacro();
+    explicit FontDia(KoTextEditor *cursor, QWidget* parent = 0);
 
 protected slots:
+    void styleChanged(bool state = true);
+
     void slotReset();
     void slotApply();
     void slotOk();
@@ -53,10 +48,11 @@ private:
 
     CharacterGeneral *m_characterGeneral;
 
-    QTextCursor* m_cursor;
+    KoTextEditor *m_editor;
     QTextCharFormat m_initialFormat;
 
     bool m_uniqueFormat;
+    bool m_styleChanged;
 };
 
 #endif

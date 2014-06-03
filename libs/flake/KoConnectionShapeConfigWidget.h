@@ -40,6 +40,13 @@ public:
     }
     /// reimplemented
     virtual KUndo2Command *createCommand();
+
+signals:
+    void connectionTypeChanged(int type);
+
+public slots:
+    void setConnectionType(int type);
+
 private:
     Ui::KoConnectionShapeConfigWidget widget;
     KoConnectionShape *m_connection;

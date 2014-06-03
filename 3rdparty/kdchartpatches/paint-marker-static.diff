@@ -1,0 +1,13 @@
+diff --git a/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.h b/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.h
+index a410cb8..9a0e723 100644
+--- a/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.h
++++ b/plugins/chartshape/kdchart/src/KDChartAbstractDiagram.h
+@@ -592,7 +592,7 @@ namespace KDChart {
+          */
+         bool percentMode() const;
+ 
+-        virtual void paintMarker( QPainter* painter,
++        static void paintMarker( QPainter* painter,
+                                   const MarkerAttributes& markerAttributes,
+                                   const QBrush& brush, const QPen&,
+                                   const QPointF& point, const QSizeF& size );

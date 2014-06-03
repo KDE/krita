@@ -27,6 +27,7 @@
 #include <QSvgGenerator>
 
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>
@@ -58,7 +59,7 @@ using namespace MusicCore;
 //static MusicShape* firstShape = 0;
 
 MusicShape::MusicShape()
-    : KoFrameShape("http://www.calligra-suite.org/music", "shape"),
+    : KoFrameShape("http://www.calligra.org/music", "shape"),
     m_firstSystem(0),
     m_style(new MusicStyle),
     m_engraver(new Engraver()),
@@ -80,7 +81,7 @@ MusicShape::MusicShape()
         m_sheet = new Sheet();
         Bar* bar = m_sheet->addBar();
 
-        Part* part = m_sheet->addPart("Part 1");
+        Part* part = m_sheet->addPart(i18n("Part 1"));
         Staff* staff = part->addStaff();
         part->addVoice();
         bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
@@ -139,7 +140,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfAttributes(context, OdfAllAttributes);
 
     writer.startElement("music:shape");
-    writer.addAttribute("xmlns:music", "http://www.calligra-suite.org/music");
+    writer.addAttribute("xmlns:music", "http://www.calligra.org/music");
     MusicXmlWriter().writeSheet(writer, m_sheet, false);
     writer.endElement(); // music:shape
 
@@ -216,7 +217,7 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
 
 bool MusicShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & /*context*/ )
 {
-    KoXmlElement score = KoXml::namedItemNS(element, "http://www.calligra-suite.org/music", "score-partwise");
+    KoXmlElement score = KoXml::namedItemNS(element, "http://www.calligra.org/music", "score-partwise");
     if (score.isNull()) {
         kWarning() << "no music:score-partwise element as first child";
         return false;

@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006, 2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,16 +25,19 @@
 
 #include "flake_export.h"
 
+#include <QMetaType>
 #include <QMap>
 
 #include "KoTosContainer.h"
 #include "KoPathSegment.h"
+#include "KoMarkerData.h"
 
 #define KoPathShapeId "KoPathShape"
 
 class KoPathShape;
 class KoPathPoint;
 class KoPathShapePrivate;
+class KoMarker;
 
 typedef QPair<int, int> KoPathPointIndex;
 
@@ -83,7 +87,7 @@ public:
     virtual ~KoPathShape();
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     virtual void paintPoints(QPainter &painter, const KoViewConverter &converter, int handleRadius);
     /// reimplemented
     virtual QPainterPath outline() const;
@@ -91,6 +95,8 @@ public:
     virtual QRectF boundingRect() const;
     /// reimplemented
     virtual QSizeF size() const;
+
+    QPainterPath pathStroke(const QPen &pen) const;
     /**
      * Resize the shape
      *
@@ -110,6 +116,15 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    // basically the same as loadOdf but adapted to the contour cases
+    // tag needs to be either contour-polygon or contour-path from another shape
+    bool loadContourOdf(const KoXmlElement & element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
+
+    /** basically the equivalent saveOdf but adapted to the contour cases
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveContourOdf(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /// Removes all subpaths and their points from the path
     void clear();
@@ -275,7 +290,7 @@ public:
      *
      * @return true when the subpath is closed, false otherwise
      */
-    bool isClosedSubpath(int subpathIndex);
+    bool isClosedSubpath(int subpathIndex) const;
 
     /**
      * @brief Inserts a new point into the given subpath at the specified position
@@ -433,6 +448,20 @@ public:
     /// Creates path shape from given QPainterPath
     static KoPathShape *createShapeFromPainterPath(const QPainterPath &path);
 
+    /// Returns the viewbox from the given xml element.
+    static QRect loadOdfViewbox(const KoXmlElement &element);
+
+    /// Marker setter
+    void setMarker(const KoMarkerData &markerData);
+
+    /// Marker setter
+    void setMarker(KoMarker *marker, KoMarkerData::MarkerPosition position);
+
+    /// returns the list of all the markers of the path
+    KoMarker *marker(KoMarkerData::MarkerPosition position) const;
+
+    KoMarkerData markerData(KoMarkerData::MarkerPosition position) const;
+
 protected:
     /// constructor \internal
     KoPathShape(KoPathShapePrivate &);
@@ -458,9 +487,6 @@ protected:
      */
     int arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAngle, const QPointF &offset, QPointF *curvePoints) const;
 
-    /// Returns the viewbox from the given xml element.
-    QRectF loadOdfViewbox(const KoXmlElement &element) const;
-
     /**
      * Get the resize matrix
      *
@@ -474,5 +500,7 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoPathShape)
 };
+
+Q_DECLARE_METATYPE(KoPathShape*)
 
 #endif /* KOPATHSHAPE_H */

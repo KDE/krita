@@ -48,12 +48,13 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
+#include "kis_default_bounds.h"
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
     KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
 
-    KisFillPainter gc(pixelSelection->getOrCreatePixelSelection());
+    KisFillPainter gc(pixelSelection->pixelSelection());
     gc.fillRect(10, 10, 200, 200, KoColor(gc.device()->colorSpace()));
     gc.fillRect(150, 150, 200, 200, KoColor(QColor(100, 100, 100, 100), gc.device()->colorSpace()));
     gc.end();
@@ -83,7 +84,9 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
 KisDoc2* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
-    KisDoc2* doc = new KisDoc2;
+
+    KisDoc2 *doc = new KisDoc2();
+
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 
@@ -178,12 +181,23 @@ KisDoc2* createCompleteDocument()
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
     selectionMask2->setName("selectionMask2");
+    selectionMask2->setSelection(createPixelSelection(paintLayer2->paintDevice()));
     image->addNode(selectionMask2, paintLayer2);
 
     return doc;
 }
 
+KisDoc2* createEmptyDocument()
+{
+    KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
+    KisDoc2 *doc = new KisDoc2();
+
+    doc->setCurrentImage(image);
+    doc->documentInfo()->setAboutInfo("title", image->objectName());
+
+    return doc;
+}
 
 
 #endif

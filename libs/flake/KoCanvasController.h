@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007-2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007-2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -49,7 +49,7 @@ class KoCanvasControllerProxyObject;
  * imlements KoCanvasController, tools, scrolling and zooming will work.
  *
  * A KoCanvasController implementation acts as a decorator around the canvas widget or
- * graphics item and provides a way to scroll the cavasn, allows the canvas to be centered
+ * graphics item and provides a way to scroll the canvas, allows the canvas to be centered
  * in the viewArea and manages tool activation.
  *
  * <p>The using application can instantiate this class and add its
@@ -73,7 +73,6 @@ public:
         AlignTop,     ///< canvas is top aligned if smaller than the viewport
         Centered,     ///< canvas is centered if smaller than the viewport
         Infinite,     ///< canvas is never smaller than the viewport
-        Presentation, ///< canvas is not handled by KoCanvasController, canvas is full screen
         Spreadsheet   ///< same as Infinite, but supports right-to-left layouts
     };
 
@@ -243,10 +242,10 @@ public:
      * Sets the preferred center point in view coordinates (pixels).
      * @param viewPoint the new preferred center
      */
-    virtual void setPreferredCenter(const QPoint &viewPoint) = 0;
+    virtual void setPreferredCenter(const QPointF &viewPoint) = 0;
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    virtual QPoint preferredCenter() const = 0;
+    virtual QPointF preferredCenter() const = 0;
 
     /**
      * Move the canvas over the x and y distance of the parameter distance
@@ -294,8 +293,10 @@ public:
    /**
      * Returns the action collection for the canvas
      * @returns action collection for this canvas, can be 0
-     */    
+     */
     virtual KActionCollection* actionCollection() const;
+
+    QPoint documentOffset() const;
 
 protected:
     void setDocumentSize(const QSize &sz);
@@ -308,7 +309,7 @@ protected:
     qreal preferredCenterFractionY() const;
 
     void setDocumentOffset( QPoint &offset);
-    QPoint documentOffset() const;
+
 
 private:
     class Private;
@@ -327,7 +328,7 @@ class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(KoCanvasControllerProxyObject)
 public:
-    KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
+    explicit KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
 
 public:
 
@@ -341,7 +342,7 @@ public:
     void emitDocumentMousePositionChanged(const QPointF &position) { emit documentMousePositionChanged(position); }
     void emitSizeChanged(const QSize &size) { emit sizeChanged(size); }
     void emitMoveDocumentOffset(const QPoint &point) { emit moveDocumentOffset(point); }
-    void emitZoomBy(const qreal factor) { emit zoomBy(factor); }
+    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { emit zoomRelative(factor, stillPoint); }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }
@@ -401,13 +402,17 @@ signals:
     void moveDocumentOffset(const QPoint &point);
 
     /**
-     * Emitted when zoomTo have calculated a factor by which the zoom should change,
-     * or if someone calls requestZoomBy
+     * Emitted when zoomRelativeToPoint have calculated a factor by which
+     * the zoom should change and the point which should stand still
+     * on screen.
      * Someone needs to connect to this and take action
      *
      * @param factor by how much the zoom needs to change.
+     * @param stillPoint the point which will not change its position
+     *                   in widget during the zooming. It is measured in
+     *                   view coordinate system *before* zoom.
      */
-    void zoomBy(const qreal factor);
+    void zoomRelative(const qreal factor, const QPointF &stillPoint);
 
 public slots:
     /**

@@ -105,6 +105,7 @@ void KisCompressionTests::benchmarkCompression(KisAbstractCompression *compressi
         compressedBytes = compression->compress(image.bits(), srcSize,
                                                 output, outputSize);
     }
+    Q_UNUSED(compressedBytes);
 }
 
 void KisCompressionTests::benchmarkCompressionTwoPass(KisAbstractCompression *compression)
@@ -126,6 +127,7 @@ void KisCompressionTests::benchmarkCompressionTwoPass(KisAbstractCompression *co
         compressedBytes = compression->compress(tempBuffer, srcSize,
                                                 output, outputSize);
     }
+    Q_UNUSED(compressedBytes);
 }
 
 void KisCompressionTests::benchmarkDecompression(KisAbstractCompression *compression)
@@ -147,6 +149,7 @@ void KisCompressionTests::benchmarkDecompression(KisAbstractCompression *compres
         uncompressedBytes = compression->decompress(output, compressedBytes,
                                                     image.bits(), srcSize);
     }
+    Q_UNUSED(uncompressedBytes);
 }
 
 void KisCompressionTests::benchmarkDecompressionTwoPass(KisAbstractCompression *compression)
@@ -174,6 +177,7 @@ void KisCompressionTests::benchmarkDecompressionTwoPass(KisAbstractCompression *
         KisAbstractCompression::delinearizeColors(tempBuffer, image.bits(),
                                                   srcSize, 4);
     }
+    Q_UNUSED(uncompressedBytes);
 }
 
 void KisCompressionTests::testOverflow(KisAbstractCompression *compression)

@@ -82,14 +82,14 @@ public:
     @brief Render the item into a primitive which is used by the second stage renderer
     @return the height required by the object
     */
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     /**
     @brief Render a complex item that uses a sub query as a data source
     @return the height required by the object
     */
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, KoReportData *data, KRScriptHandler *script);
-    
+    virtual int renderReportData(OROPage *page, OROSection *section, const QPointF &offset, KoReportData *data, KRScriptHandler *script);
+
     /**
     @brief Override if the item supports a simple data source, such as a field
     @return The field name or expression for the data source
@@ -110,6 +110,9 @@ public:
     QString entityName();
 
     virtual void setUnit(const KoUnit& u);
+
+    KRPos position() const;
+    KRSize size() const;
 
     qreal Z;
 protected:

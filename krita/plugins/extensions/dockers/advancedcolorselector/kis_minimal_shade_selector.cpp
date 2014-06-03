@@ -22,18 +22,22 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
 
 #include "KoCanvasResourceManager.h"
 
 #include "kis_shade_selector_line.h"
 
+#include "kis_color_selector_base_proxy.h"
 
-KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
-    KisColorSelectorBase(parent), m_canvas(0)
+
+KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent)
+    : KisColorSelectorBase(parent)
+    , m_canvas(0)
+    , m_proxy(new KisColorSelectorBaseProxyObject(this))
 {
     setAcceptDrops(true);
 
@@ -46,17 +50,29 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     setMouseTracking(true);
 }
 
+KisMinimalShadeSelector::~KisMinimalShadeSelector()
+{
+}
+
+void KisMinimalShadeSelector::unsetCanvas()
+{
+    KisColorSelectorBase::unsetCanvas();
+    m_canvas = 0;
+}
+
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 {
     KisColorSelectorBase::setCanvas(canvas);
-    m_canvas=canvas;
+    m_canvas = canvas;
 }
 
-void KisMinimalShadeSelector::setColor(const QColor& color)
+void KisMinimalShadeSelector::setColor(const KoColor& color)
 {
-    m_lastColor = color;
-    for(int i=0; i<m_shadingLines.size(); i++)
+    m_lastRealColor = color;
+
+    for(int i=0; i<m_shadingLines.size(); i++) {
         m_shadingLines.at(i)->setColor(color);
+    }
 }
 
 void KisMinimalShadeSelector::updateSettings()
@@ -69,7 +85,7 @@ void KisMinimalShadeSelector::updateSettings()
 
     int lineCount = strili.size();
     while(lineCount-m_shadingLines.size() > 0) {
-        m_shadingLines.append(new KisShadeSelectorLine(this));
+        m_shadingLines.append(new KisShadeSelectorLine(m_proxy.data(), this));
         m_shadingLines.last()->setLineNumber(m_shadingLines.size()-1);
         layout()->addWidget(m_shadingLines.last());
     }
@@ -94,7 +110,6 @@ void KisMinimalShadeSelector::updateSettings()
 
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
@@ -109,7 +124,6 @@ void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 
 void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
 {
-//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
@@ -137,7 +151,7 @@ void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
-void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;
@@ -149,7 +163,8 @@ void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
 
     if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
         || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
-        setColor(findGeneratingColor(v.value<KoColor>()));
+
+        setColor(v.value<KoColor>());
     }
 }
 
@@ -162,6 +177,6 @@ void KisMinimalShadeSelector::paintEvent(QPaintEvent *)
 KisColorSelectorBase* KisMinimalShadeSelector::createPopup() const
 {
     KisMinimalShadeSelector* popup = new KisMinimalShadeSelector(0);
-    popup->setColor(m_lastColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }

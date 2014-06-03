@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <KoOdfWorkaround.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
@@ -92,6 +93,8 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     bool radiusGiven = true;
 
+    QString kind = element.attributeNS(KoXmlNS::draw, "kind", "full");
+
     if (element.hasAttributeNS( KoXmlNS::svg, "rx") && element.hasAttributeNS(KoXmlNS::svg, "ry")) {
         qreal rx = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "rx"));
         qreal ry = KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "ry"));
@@ -102,7 +105,11 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     } else {
         size.setWidth(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "width", QString())));
         size.setHeight(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "height", QString())));
+#ifndef NWORKAROUND_ODF_BUGS
+        radiusGiven = KoOdfWorkaround::fixEllipse(kind, context);
+#else
         radiusGiven = false;
+#endif
     }
     setSize(size);
 
@@ -118,7 +125,6 @@ bool EllipseShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     }
     setPosition(pos);
 
-    QString kind = element.attributeNS(KoXmlNS::draw, "kind", "full");
     if (kind == "section")
         setType(Pie);
     else if (kind == "cut")

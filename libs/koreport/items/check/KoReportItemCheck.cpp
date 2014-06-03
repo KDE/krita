@@ -17,14 +17,13 @@
  */
 
 #include "KoReportItemCheck.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <renderobjects.h>
 #include "renderer/scripting/krscripthandler.h"
-#include <KoLut.h>
 
 KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 {
@@ -53,7 +52,7 @@ KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing check element encountered unknow element: " << n;
+            kWarning() << "while parsing check element encountered unknow element: " << n;
         }
     }
 
@@ -112,7 +111,8 @@ QString KoReportItemCheck::typeName() const
     return "report:check";
 }
 
-int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemCheck::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     OROCheck *chk = new OROCheck();
 
@@ -127,8 +127,7 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
     bool v = false;
     QString cs = itemDataSource();
 
-    kDebug() << "ControlSource:" << cs;
-
+    //kDebug() << "ControlSource:" << cs;
     if (!cs.isEmpty()) {
         if (cs.left(1) == "=" && script) {
             str = script->evaluate(cs.mid(1)).toString();
@@ -138,7 +137,7 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
 
         str = str.toLower();
 
-        kDebug() << "Check Value:" << str;
+        //kDebug() << "Check Value:" << str;
         if (str == "t" || str == "true" || str == "1")
             v = true;
 
@@ -162,7 +161,7 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
         delete chk;
     }
         
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 bool KoReportItemCheck::value()

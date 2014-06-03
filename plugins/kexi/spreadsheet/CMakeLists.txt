@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES} )
 
 
 ########### next target ###############
@@ -13,11 +13,11 @@ kde4_add_plugin(keximigrate_spreadsheet ${keximigrate_spreadsheet_PART_SRCS})
 
 
 target_link_libraries(keximigrate_spreadsheet
-    ${KDE4_KPARTS_LIBS}
     keximigrate
     kexidb
     kexiutils
-    calligratablescommon
+    ${CALLIGRADB_LIBS}
+    calligrasheetscommon
 )
 
 install(TARGETS keximigrate_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR})

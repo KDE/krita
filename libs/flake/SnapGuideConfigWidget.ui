@@ -7,10 +7,10 @@
     <x>0</x>
     <y>0</y>
     <width>218</width>
-    <height>55</height>
+    <height>66</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" columnstretch="0,0,0,0,1" rowstretch="0,0,1">
    <property name="margin">
     <number>0</number>
    </property>
@@ -22,12 +22,9 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QCheckBox" name="nodeSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="nodeSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Nodes</string>
@@ -35,19 +32,12 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-hand.png</normaloff>pics/ox22-action-hand.png</iconset>
-     </property>
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="QCheckBox" name="extensionSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="extensionSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Extension of lines</string>
@@ -55,29 +45,18 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-path-break-point.png</normaloff>pics/ox22-action-path-break-point.png</iconset>
-     </property>
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="QCheckBox" name="boundingBoxSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="boundingBoxSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Bounding box of shape</string>
      </property>
      <property name="text">
       <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-path-break-segment.png</normaloff>pics/ox22-action-path-break-segment.png</iconset>
      </property>
     </widget>
    </item>
@@ -98,12 +77,9 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QCheckBox" name="orthogonalSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="orthogonalSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Orthogonal</string>
@@ -111,19 +87,12 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-hand.png</normaloff>pics/ox22-action-hand.png</iconset>
-     </property>
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QCheckBox" name="intersectionSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="intersectionSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Intersection of lines</string>
@@ -131,19 +100,12 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-path-break-point.png</normaloff>pics/ox22-action-path-break-point.png</iconset>
-     </property>
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="QCheckBox" name="lineGuideSnapGuide">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QToolButton" name="lineGuideSnapGuide">
+     <property name="checkable">
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Guide lines</string>
@@ -151,22 +113,22 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>pics/ox22-action-path-break-segment.png</normaloff>pics/ox22-action-path-break-segment.png</iconset>
-     </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QWidget" name="SpecialSpacer" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </spacer>
    </item>

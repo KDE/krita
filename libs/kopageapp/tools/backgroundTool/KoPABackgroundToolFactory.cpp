@@ -20,18 +20,21 @@
 #include "KoPABackgroundToolFactory.h"
 
 //Calligra includes
-#include <KoPACanvas.h>
-
 #include "KoPABackgroundTool.h"
+
+#include <KoPageApp.h>
+#include <KoPADocument.h>
+#include <KoPACanvas.h>
+#include <KoPAViewBase.h>
+#include <KoIcon.h>
 
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
 {
-    setToolTip( i18n( "Background editing tool" ) );
-    setToolType( mainToolType() );
+    setToolType("calligraflow, calligrastage");
     setActivationShapeId("flake/always");
-    setIcon( "backgroundtool" );
-    setPriority( 3 );
+    setIconName(koIconNameCStr("backgroundtool"));
+    setPriority(3);
 }
 
 KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
@@ -40,11 +43,14 @@ KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
 
 KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new KoPABackgroundTool( canvas );
-}
+    // We need the canvas to know in which app we are to turn the tooltip to page or slide design
+    if (dynamic_cast<KoPACanvasBase *>(canvas)) {
+        KoPAViewBase *view = static_cast<KoPACanvasBase *>(canvas)->koPAView();
 
-bool KoPABackgroundToolFactory::canCreateTool( KoCanvasBase *canvas ) const
-{
-    KoPACanvas *paCanvas = dynamic_cast<KoPACanvas *>(canvas);
-    return paCanvas != 0; // we only work in KoPACanvas
+        const QString toolTip =
+                (view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Design") : i18n("Slide Design");
+        setToolTip(toolTip);
+        return new KoPABackgroundTool(canvas);
+    }
+    return 0;
 }

@@ -35,21 +35,30 @@ class KoShapeLoadingContext;
 
 namespace KChart {
 
+#define CHART_MIME_TYPE "application/vnd.oasis.opendocument.chart"
+
 class ChartShape;
 
 class ChartDocument : public KoDocument
 {
 public:
-    ChartDocument( ChartShape *parent );
+    explicit ChartDocument(ChartShape *parent);
     ~ChartDocument();
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return CHART_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return CHART_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const { return QStringList(); }
+
+
+    bool loadOdf(KoOdfReadStore &odfStore);
+    bool loadXML(const KoXmlDocument &doc, KoStore *store);
     
-    bool loadOdf( KoOdfReadStore &odfStore );
-    bool loadXML( const KoXmlDocument &doc, KoStore *store );
+    bool saveOdf(SavingContext &context);
     
-    bool saveOdf( SavingContext &context );
-    KoView *createViewInstance( QWidget *parent );
-    
-    void paintContent( QPainter &painter, const QRect &rect ); 
+    void paintContent(QPainter &painter, const QRect &rect); 
     
 private:
     class Private;

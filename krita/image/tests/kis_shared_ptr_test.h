@@ -19,7 +19,7 @@
 #ifndef KIS_SHARED_PTR_TEST_H
 #define KIS_SHARED_PTR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisSharedPtrTest : public QObject
 {
@@ -33,7 +33,7 @@ private slots:
     void testCopy0();
     void testClear();
     void testWeakSP();
-
+    void testBoolOnInvalidWeakPointer();
 
 };
 

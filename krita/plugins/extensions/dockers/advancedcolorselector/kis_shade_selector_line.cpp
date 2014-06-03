@@ -21,32 +21,41 @@
 #include <QColor>
 #include <QMouseEvent>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KLocale>
-#include <KoColor.h>
-#include "KoColorSpaceRegistry.h"
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "kis_canvas2.h"
 
-#include "kis_color_selector_base.h"
-#include "kis_minimal_shade_selector.h"
+#include "kis_color_selector_base_proxy.h"
+#include "kis_display_color_converter.h"
+#include "kis_paint_device.h"
 
-KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
-    KisShadeSelectorLineBase(parent), m_displayHelpText(false)
+
+KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProxy,
+                                           QWidget *parent)
+    : KisShadeSelectorLineBase(parent),
+      m_displayHelpText(false),
+      m_parentProxy(parentProxy)
 {
     setParam(0, 0, 0, 0, 0, 0);
     updateSettings();
     setMouseTracking(true);
 }
 
-KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
-    KisShadeSelectorLineBase(parent), m_displayHelpText(false)
+KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
+                                           KisColorSelectorBaseProxy *parentProxy, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
+    KisShadeSelectorLineBase(parent),
+    m_displayHelpText(false),
+    m_parentProxy(parentProxy)
 {
     setParam(hueDelta, satDelta, valDelta, hueShift, satShift, valShift);
     updateSettings();
+}
+
+KisShadeSelectorLine::~KisShadeSelectorLine()
+{
 }
 
 void KisShadeSelectorLine::setParam(qreal hueDelta, qreal satDelta, qreal valDelta, qreal hueShift, qreal satShift, qreal valShift)
@@ -60,9 +69,11 @@ void KisShadeSelectorLine::setParam(qreal hueDelta, qreal satDelta, qreal valDel
     m_valueShift = valShift;
 }
 
-void KisShadeSelectorLine::setColor(const QColor &color)
+void KisShadeSelectorLine::setColor(const KoColor &color)
 {
-    m_color=color;
+    m_realColor = color;
+    m_realColor.convertTo(m_parentProxy->colorSpace());
+
     update();
 }
 
@@ -73,7 +84,6 @@ void KisShadeSelectorLine::updateSettings()
     m_gradient = cfg.readEntry("minimalShadeSelectorAsGradient", false);
     m_patchCount = cfg.readEntry("minimalShadeSelectorPatchCount", 10);
     m_lineHeight = cfg.readEntry("minimalShadeSelectorLineHeight", 20);
-    m_backgroundColor = QColor(128, 128, 128);
 
     setMaximumHeight(m_lineHeight);
     setMinimumHeight(m_lineHeight);
@@ -99,18 +109,7 @@ void KisShadeSelectorLine::fromString(const QString& string)
 
 void KisShadeSelectorLine::paintEvent(QPaintEvent *)
 {
-    m_pixelCache = QImage(width(), height(), QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&m_pixelCache);
-    painter.fillRect(0,0, width(), height(), m_backgroundColor);
-
-    KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
-
-    const KoColorSpace* colorspace;
-    if(parent)
-        colorspace = parent->colorSpace();
-    else
-        colorspace = KoColorSpaceRegistry::instance()->rgb8();
-    KoColor koColor(colorspace);
+    m_realPixelCache = new KisPaintDevice(m_parentProxy->colorSpace());
 
     int patchCount;
     int patchSpacing;
@@ -129,26 +128,36 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     qreal saturationStep=m_saturationDelta/qreal(patchCount);
     qreal valueStep=m_valueDelta/qreal(patchCount);
 
+    qreal baseHue;
+    qreal baseSaturation;
+    qreal baseValue;
+    m_parentProxy->converter()->
+        getHsvF(m_realColor, &baseHue, &baseSaturation, &baseValue);
+
     int z=0;
     for(int i=-patchCount/2; i<=patchCount/2; i++) {
         if(i==0 && patchCount%2==0) continue;
 
-        qreal hue=m_color.hueF()+(i*hueStep)+m_hueShift;
-        while(hue<0) hue+=1.;
-        while(hue>1) hue-=1.;
+        qreal hue = baseHue + (i * hueStep) + m_hueShift;
+        while (hue < 0.0) hue += 1.0;
+        while (hue > 1.0) hue -= 1.0;
 
-        qreal saturation = qBound<qreal>(0., m_color.saturationF()+(i*saturationStep)+m_saturationShift, 1.);
+        qreal saturation = qBound<qreal>(0., baseSaturation + (i * saturationStep) + m_saturationShift, 1.);
+        qreal value = qBound<qreal>(0., baseValue + (i * valueStep) + m_valueShift, 1.);
 
-        qreal value = qBound<qreal>(0., m_color.valueF()+(i*valueStep)+m_valueShift, 1.);
+        QRect patchRect(z * (patchWidth + patchSpacing), 0, patchWidth, m_lineHeight);
+        KoColor patchColor = m_parentProxy->converter()->fromHsvF(hue, saturation, value);
 
+        patchColor.convertTo(m_realPixelCache->colorSpace());
+        m_realPixelCache->fill(patchRect, patchColor);
 
-        koColor.fromQColor(QColor::fromHsvF(hue, saturation, value));
-        painter.fillRect(z*(patchWidth+patchSpacing)/*+1*/, 0, patchWidth, m_lineHeight, koColor.toQColor());
         z++;
     }
 
     QPainter wpainter(this);
-    wpainter.drawImage(0,0, m_pixelCache);
+    QImage renderedImage = m_parentProxy->converter()->toQImage(m_realPixelCache);
+    wpainter.drawImage(0, 0, renderedImage);
+
     if(m_displayHelpText) {
         QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6",
                          m_hueDelta,
@@ -169,41 +178,41 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
         return;
     }
 
-    QColor color(m_pixelCache.pixel(e->pos()));
-    if(color==m_backgroundColor)
+    m_parentProxy->showColorPreview();
+    e->accept();
+}
+
+void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
+{
+    KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
+    m_parentProxy->updateColorPreview(color);
+}
+
+void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
+{
+    if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton) {
+        e->ignore();
         return;
+    }
 
-    KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
-    Q_ASSERT(parent);
+    if (!rect().contains(e->pos())) {
+        e->accept();
+        return;
+    }
 
-    KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
-    if(e->button()==Qt::RightButton)
-        role = KisColorSelectorBase::Background;
+    KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
 
-    parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), role);
-    parent->KisColorSelectorBase::mousePressEvent(e);
+    Acs::ColorRole role = Acs::buttonToRole(e->button());
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
     bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
 
-    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick)) {
-        parent->setColor(parent->findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())));
-    }
+    bool explicitColorReset =
+        (e->button() == Qt::LeftButton && onLeftClick) ||
+        (e->button() == Qt::RightButton && onRightClick);
 
+    m_parentProxy->updateColor(color, role, explicitColorReset);
     e->accept();
 }
-
-void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
-{
-//    kDebug() << e->globalX() << "/" << e->globalY();
-    KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
-    QColor color(m_pixelCache.pixel(e->pos()));
-
-    if(parent != 0)
-        parent->updateColorPreview(color);
-}
-
-void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent *)
-{}

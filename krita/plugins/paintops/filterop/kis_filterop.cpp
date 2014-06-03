@@ -24,8 +24,10 @@
 
 #include <kis_debug.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoInputDevice.h>
 
 #include <kis_processing_information.h>
@@ -41,28 +43,35 @@
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 #include <kis_filterop_settings.h>
+#include <kis_iterator_ng.h>
+#include <kis_fixed_paint_device.h>
+#include <kis_transaction.h>
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter)
-        , settings(settings)
-        , m_filterConfiguration(0)
+    : KisBrushBasedPaintOp(settings, painter)
+    , settings(settings)
+    , m_filterConfiguration(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-    m_tmpDevice = new KisPaintDevice(source()->colorSpace());
+    m_tmpDevice = source()->createCompositionSourceDevice();
     m_sizeOption.readOptionSetting(settings);
-    m_sizeOption.sensor()->reset();
+    m_rotationOption.readOptionSetting(settings);
+    m_sizeOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
     m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
     m_filterConfiguration = settings->filterConfig();
-    m_ignoreAlpha = settings->getBool(FILTER_IGNORE_ALPHA);
+    m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
+
+    m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisFilterOp::~KisFilterOp()
 {
 }
 
-qreal KisFilterOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) {
         return 1.0;
@@ -83,75 +92,53 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
         return 1.0;
 
     qreal scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
+    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
 
     setCurrentScale(scale);
-    
-    QPointF hotSpot = brush->hotSpot(scale, scale);
-    QPointF pt = info.pos() - hotSpot;
 
+    qreal rotation = m_rotationOption.apply(info);
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
+    static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    static KoColor color(Qt::black, cs);
 
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
+    QRect dstRect;
+    KisFixedPaintDeviceSP dab =
+        m_dabCache->fetchDab(cs, color, info.pos(),
+                             scale, scale, rotation,
+                             info, 1.0,
+                             &dstRect);
 
-    qint32 maskWidth = brush->maskWidth(scale, 0.0);
-    qint32 maskHeight = brush->maskHeight(scale, 0.0);
+    if (dstRect.isEmpty()) return 1.0;
+
+    QRect dabRect = dab->bounds();
+
+    // sanity check
+    Q_ASSERT(dstRect.size() == dabRect.size());
+
 
     // Filter the paint device
-    QRect rect = QRect(0, 0, maskWidth, maskHeight);
-    QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
+    QRect neededRect = m_filter->neededRect(dstRect, m_filterConfiguration);
+
     KisPainter p(m_tmpDevice);
-    p.bitBltOldData(QPoint(x-neededRect.x(), y-neededRect.y()), source(), neededRect);
-    
-    m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
-
-    // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-
-    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
-    fixedDab->setRect(rect);
-    fixedDab->initialize();
-
-    m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());
-    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
-    m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
-
-    if (!m_ignoreAlpha) {
-        KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator(0, 0, maskWidth);
-        KisHLineIteratorPixel itSrc = source()->createHLineIterator(x, y, maskWidth);
-        const KoColorSpace* cs = m_tmpDevice->colorSpace();
-        for (int y = 0; y < maskHeight; ++y) {
-            while (!itTmpDev.isDone()) {
-                quint8 alphaTmpDev = cs->opacityU8(itTmpDev.rawData());
-                quint8 alphaSrc = cs->opacityU8(itSrc.rawData());
-
-                cs->setOpacity(itTmpDev.rawData(), qMin(alphaTmpDev, alphaSrc), 1);
-                ++itTmpDev;
-                ++itSrc;
-            }
-            itTmpDev.nextRow();
-            itSrc.nextRow();
-        }
+    if (!m_smudgeMode) {
+        p.setCompositeOp(COMPOSITE_COPY);
     }
+    p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
 
-    // Blit the paint device onto the layer
-    QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
+    KisTransaction transaction("", m_tmpDevice);
+    m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
+    transaction.end();
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
+    painter()->
+    bitBltWithFixedSelection(dstRect.x(), dstRect.y(),
+                             m_tmpDevice, dab,
+                             0, 0,
+                             dabRect.x(), dabRect.y(),
+                             dabRect.width(), dabRect.height());
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), m_tmpDevice, sx, sy, sw, sh);
-    return spacing(scale);
+    painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
+                                    !m_dabCache->needSeparateOriginal());
+
+    return effectiveSpacing(dabRect.width(), dabRect.height());
 }

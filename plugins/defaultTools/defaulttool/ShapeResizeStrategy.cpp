@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -97,7 +97,9 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
     QPointF newPos = tool()->canvas()->snapGuide()->snap( point, modifiers );
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
     foreach(KoShape *shape, m_selectedShapes)
@@ -111,20 +113,55 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         startHeight = std::numeric_limits<qreal>::epsilon();
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
+    // guard against resizing zero width shapes, which would result in huge zoom factors
+    if (m_initialSize.width() < std::numeric_limits<qreal>::epsilon()) {
+        distance.rx() = 0.0;
+    }
+    // guard against resizing zero height shapes, which would result in huge zoom factors
+    if (m_initialSize.height() < std::numeric_limits<qreal>::epsilon()) {
+        distance.ry() = 0.0;
+    }
 
     const bool scaleFromCenter = modifiers & Qt::ControlModifier;
     if (scaleFromCenter) {
         distance *= 2.0;
     }
-    qreal zoomX=1, zoomY=1;
-    if (m_left)
-        zoomX = (startWidth - distance.x()) / startWidth;
-    else if (m_right)
-        zoomX = (startWidth + distance.x()) / startWidth;
-    if (m_top)
-        zoomY = (startHeight - distance.y()) / startHeight;
-    else if (m_bottom)
-        zoomY = (startHeight + distance.y()) / startHeight;
+
+    qreal newWidth = startWidth;
+    qreal newHeight = startHeight;
+
+    if (m_left) {
+        newWidth = startWidth - distance.x();
+    } else if (m_right) {
+        newWidth = startWidth + distance.x();
+    }
+
+    if (m_top) {
+        newHeight = startHeight - distance.y();
+    } else if (m_bottom) {
+        newHeight = startHeight + distance.y();
+    }
+
+    /**
+     * Do not let a shape be less than 1px in size in current view
+     * coordinates.  If the user wants it to be smaller, he can just
+     * zoom-in a bit.
+     */
+    QSizeF minViewSize(1.0, 1.0);
+    QSizeF minDocSize = tool()->canvas()->viewConverter()->viewToDocument(minViewSize);
+
+    if (qAbs(newWidth) < minDocSize.width()) {
+        int sign = newWidth >= 0.0 ? 1 : -1; // zero -> '1'
+        newWidth = sign * minDocSize.width();
+    }
+
+    if (qAbs(newHeight) < minDocSize.height()) {
+        int sign = newHeight >= 0.0 ? 1 : -1; // zero -> '1'
+        newHeight = sign * minDocSize.height();
+    }
+
+    qreal zoomX = newWidth / startWidth;
+    qreal zoomY = newHeight / startHeight;
 
     if (keepAspect) {
         const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;
@@ -228,6 +265,7 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 
 KUndo2Command* ShapeResizeStrategy::createCommand()
 {
+    tool()->canvas()->snapGuide()->reset();
     QList<QSizeF> newSizes;
     QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
@@ -240,6 +278,12 @@ KUndo2Command* ShapeResizeStrategy::createCommand()
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
     return cmd;
+}
+
+void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers);
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)

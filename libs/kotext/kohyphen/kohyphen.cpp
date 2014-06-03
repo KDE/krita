@@ -21,7 +21,7 @@
 
 #include "kohyphen.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QFile>
 #include <QTextCodec>
 #include <QString>

@@ -30,7 +30,7 @@
 class KOFORMULA_EXPORT MultiscriptElement : public FixedElement {
 public:
     /// The standard constructor
-    MultiscriptElement( BasicElement* parent = 0 );
+    explicit MultiscriptElement(BasicElement *parent = 0);
 
     /// The destructor
     ~MultiscriptElement();

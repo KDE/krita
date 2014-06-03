@@ -14,7 +14,6 @@ set(textlayout_LIB_SRCS
     KoTextLayoutRootAreaProvider.cpp
     KoTextDocumentLayout.cpp
     ListItemsHelper.cpp
-    KoStyleThumbnailer.cpp
     KoTextShapeContainerModel.cpp
     RunAroundHelper.cpp
     KoTextLayoutObstruction.cpp
@@ -28,32 +27,29 @@ set(textlayout_LIB_SRCS
     ToCGenerator.cpp
     DummyDocumentLayout.cpp
     IndexGeneratorManager.cpp
+    KoStyleThumbnailer.cpp
 )
 
 
-kde4_add_library(textlayout SHARED ${textlayout_LIB_SRCS})
+kde4_add_library(kotextlayout SHARED ${textlayout_LIB_SRCS})
 
-target_link_libraries(textlayout kotext)
-target_link_libraries(textlayout LINK_INTERFACE_LIBRARIES kotext)
+target_link_libraries(kotextlayout kotext)
+target_link_libraries(kotextlayout LINK_INTERFACE_LIBRARIES kotext)
 
-set_target_properties(textlayout PROPERTIES
+set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS textlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install files ###############
-
-#install( FILES ttt.tt DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(
     FILES
     KoTextDocumentLayout.h
-    KoStyleThumbnailer.h
     KoTextLayoutArea.h
     KoTextLayoutRootArea.h
     KoTextShapeData.h
     KoPointedAt.h
-    textlayout_export.h
+    KoStyleThumbnailer.h
+    kotextlayout_export.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
 )

@@ -38,8 +38,11 @@ if(POPPLER_FOUND)
   find_library(POPPLER_LIBRARY poppler-qt4
                HINTS ${_pc_poppler_LIBRARY_DIRS}
   )
+  find_library(POPPLER_CORE_LIBRARY poppler
+               HINTS ${_pc_poppler_LIBRARY_DIRS}
+  )
 
-  find_path(POPPLER_INCLUDE_DIR poppler-qt4.h
+  find_path(POPPLER_INCLUDE_DIR poppler/qt4/poppler-qt4.h
             HINTS ${_pc_poppler_INCLUDE_DIRS}
             PATH_SUFFIXES poppler/qt4
   )
@@ -59,7 +62,7 @@ if (POPPLER_FOUND)
 
   # check whether we're using poppler 0.6
   set(CMAKE_REQUIRED_INCLUDES ${POPPLER_INCLUDE_DIR} ${QT_INCLUDE_DIR})
-  set(CMAKE_REQUIRED_LIBRARIES ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY})
+  set(CMAKE_REQUIRED_LIBRARIES ${POPPLER_LIBRARY} ${POPPLER_CORE_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY})
 check_cxx_source_compiles("
 #include <poppler-qt4.h>
 

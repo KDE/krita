@@ -20,7 +20,7 @@
 #define TESTLISTSTYLE_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestListStyle : public QObject
 {

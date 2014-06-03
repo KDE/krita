@@ -56,6 +56,30 @@ InfoVariableFactory::InfoVariableFactory()
     var3.properties = props;
     addTemplate(var3);
 
+    KoInlineObjectTemplate var4;
+    var4.id = "file-name";
+    var4.name = i18n("File Name");
+    props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::DocumentURL);
+    var4.properties = props;
+    addTemplate(var4);
+
+    KoInlineObjectTemplate var5;
+    var5.id = "keywords";
+    var5.name = i18n("Keywords");
+    props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::Keywords);
+    var5.properties = props;
+    addTemplate(var5);
+
+    KoInlineObjectTemplate var6;
+    var6.id = "comments";
+    var6.name = i18n("Comments");
+    props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::Comments);
+    var6.properties = props;
+    addTemplate(var6);
+
     QStringList elementNames(InfoVariable::tags());
     setOdfElementNames(KoXmlNS::text, elementNames);
 }

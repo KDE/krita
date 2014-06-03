@@ -20,7 +20,7 @@
 
 #include "SpaceNavigatorPollingThread.h"
 #include <KoInputDeviceHandlerEvent.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <spnav.h>
 
 SpaceNavigatorPollingThread::SpaceNavigatorPollingThread( QObject * parent )

@@ -75,13 +75,15 @@ public:
 
     virtual void resizeEvent(QResizeEvent* );
 
+    bool detached() const;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void hideEvent(QHideEvent *);
+    void showEvent(QShowEvent *);
 
 public slots:
-    void switchDetached();
+    void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
@@ -97,11 +99,12 @@ signals:
 
 private slots:
     void slotCheckPresetValidity();
-
+    void slotSwitchPresetStrip(bool visible);
+    void slotSwitchScratchpad(bool visible);
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

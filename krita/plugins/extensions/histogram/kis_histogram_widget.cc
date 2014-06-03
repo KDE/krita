@@ -20,11 +20,10 @@
 #include "kis_histogram_widget.h"
 
 #include <QPainter>
-#include <QPixmap>
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <qscrollbar.h>
+#include <QScrollBar>
 
 #include <kis_debug.h>
 
@@ -36,7 +35,6 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "KoColorSpace.h"
 
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)

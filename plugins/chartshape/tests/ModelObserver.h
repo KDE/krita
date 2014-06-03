@@ -44,15 +44,15 @@ class ModelObserver : public QObject
     Q_OBJECT
 
 public:
-    ModelObserver( QAbstractItemModel *source );
+    ModelObserver(QAbstractItemModel *source);
 
 private slots:
-    void slotRowsInserted( const QModelIndex & parent, int start, int end );
-    void slotColumnsInserted( const QModelIndex & parent, int start, int end );
-    void slotRowsRemoved( const QModelIndex & parent, int start, int end );
-    void slotColumnsRemoved( const QModelIndex & parent, int start, int end );
-    void slotHeaderDataChanged( Qt::Orientation, int first, int last );
-    void slotDataChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight );
+    void slotRowsInserted(const QModelIndex & parent, int start, int end);
+    void slotColumnsInserted(const QModelIndex & parent, int start, int end);
+    void slotRowsRemoved(const QModelIndex & parent, int start, int end);
+    void slotColumnsRemoved(const QModelIndex & parent, int start, int end);
+    void slotHeaderDataChanged(Qt::Orientation, int first, int last);
+    void slotDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
     void slotModelReset();
 
 public:

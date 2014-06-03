@@ -107,6 +107,7 @@ KisNodeQueryPath::KisNodeQueryPath() : d(new Private)
 
 KisNodeQueryPath::~KisNodeQueryPath()
 {
+    delete d;
 }
 
 KisNodeQueryPath::KisNodeQueryPath(const KisNodeQueryPath& nqp) : d(new Private(*nqp.d))
@@ -143,7 +144,7 @@ QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageWSP image, KisNodeSP curre
 
 QString KisNodeQueryPath::toString() const
 {
-    QString str = "";
+    QString str;
     if (!d->relative) {
         str = '/';
     } else if (d->elements.count() == 0) {

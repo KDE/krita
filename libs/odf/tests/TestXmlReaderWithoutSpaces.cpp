@@ -29,6 +29,7 @@ private slots:
     void testSimpleXML();
     void testRootError();
     void testMismatchedTag();
+    void testConvertQDomDocument();
     void testConvertQDomElement();
     void testSimpleOpenDocumentText();
     void testWhitespace();
@@ -1267,7 +1268,31 @@ void TestXmlReaderWithoutSpaces::testMismatchedTag()
     QCOMPARE(errorColumn, 11);
 }
 
-void TestXmlReaderWithoutSpaces::testConvertQDomElement()
+static void dumpNodes(const KoXmlNode &node, int level=0)
+{
+    QString indent = QString("%1").arg("", level*3);
+    if (node.isNull()) {
+        qDebug()<<indent<<"null";
+    }
+    qDebug()<<indent<<node.nodeName();
+    for(KoXmlNode n = node.firstChild(); ! n.isNull(); n = n.nextSibling() ) {
+        dumpNodes(n, level+1);
+    }
+
+}
+static void dumpNodes(const QDomNode &node, int level=0)
+{
+    QString indent = QString("%1").arg("", level*3);
+    if (node.isNull()) {
+        qDebug()<<indent<<"null";
+    }
+    qDebug()<<indent<<node.nodeName();
+    for(QDomNode n = node.firstChild(); ! n.isNull(); n = n.nextSibling() ) {
+        dumpNodes(n, level+1);
+    }
+
+}
+void TestXmlReaderWithoutSpaces::testConvertQDomDocument()
 {
     QString errorMsg;
     int errorLine = 0;
@@ -1293,6 +1318,7 @@ void TestXmlReaderWithoutSpaces::testConvertQDomElement()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
+    dumpNodes(doc);
     // <solarsystem>
     KoXmlElement rootElement;
     rootElement = doc.documentElement();
@@ -1304,14 +1330,90 @@ void TestXmlReaderWithoutSpaces::testConvertQDomElement()
     QCOMPARE(rootElement.tagName(), QString("solarsystem"));
     QCOMPARE(rootElement.prefix().isNull(), true);
 
-    // now test converting KoXmlElement to QDomElement
-    QDomDocument universeDoc;
-    QDomElement universeRoot = universeDoc.createElement("universe");
-    universeDoc.appendChild(universeRoot);
-    universeRoot.appendChild(KoXml::asQDomNode(universeDoc, rootElement));
+    // now test converting KoXmlDocument to QDomDocument
+    QDomDocument universeDoc = KoXml::asQDomDocument(doc);
 
     // <solarsystem>
-    QDomElement solarSystemElement = universeRoot.firstChild().toElement();
+    QDomElement solarSystemElement = universeDoc.documentElement();
+    QCOMPARE(solarSystemElement.isNull(), false);
+    QCOMPARE(solarSystemElement.isElement(), true);
+    QCOMPARE(solarSystemElement.parentNode().isNull(), false);
+    QCOMPARE(solarSystemElement.hasChildNodes(), true);
+    QCOMPARE(solarSystemElement.tagName(), QString("solarsystem"));
+    QCOMPARE(solarSystemElement.prefix().isNull(), true);
+
+    // <earth>
+    QDomElement earthElement = solarSystemElement.namedItem("earth").toElement();
+    QCOMPARE(earthElement.isNull(), false);
+    QCOMPARE(earthElement.isElement(), true);
+    QCOMPARE(earthElement.parentNode().isNull(), false);
+    QCOMPARE(earthElement.hasAttribute("habitable"), true);
+    QCOMPARE(earthElement.hasChildNodes(), true);
+    QCOMPARE(earthElement.tagName(), QString("earth"));
+    QCOMPARE(earthElement.prefix().isNull(), true);
+
+    // <p> in <earth>
+    QDomNode placeNode = earthElement.firstChild();
+    qDebug()<<"placeNode"<<placeNode.nodeName();
+    dumpNodes(placeNode);
+    QCOMPARE(placeNode.isNull(), false);
+    QCOMPARE(placeNode.isElement(), true);
+    QCOMPARE(placeNode.toElement().text(), QString("The best place"));
+    QCOMPARE(placeNode.nextSibling().isNull(), false);
+    QCOMPARE(placeNode.previousSibling().isNull(), true);
+    QCOMPARE(placeNode.parentNode().isNull(), false);
+    QCOMPARE(placeNode.parentNode() == earthElement, true);
+    QCOMPARE(placeNode.hasChildNodes(), true);
+    QCOMPARE(placeNode.childNodes().count(), 1);
+
+    //printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
+}
+
+void TestXmlReaderWithoutSpaces::testConvertQDomElement()
+{
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn = 0;
+
+    QBuffer xmldevice;
+    xmldevice.open(QIODevice::WriteOnly);
+    QTextStream xmlstream(&xmldevice);
+    xmlstream << "<universe>";
+    xmlstream  <<  "<solarsystem star=\"sun\">";
+    xmlstream   << "<mercurius/>";
+    xmlstream   << "<venus/>";
+    xmlstream   << "<earth habitable=\"true\"><p>The best place</p>";
+    xmlstream     << "<moon  habitable=\"possible\"/>";
+    xmlstream   << "</earth>";
+    xmlstream   << "<mars/>";
+    xmlstream   << "<jupiter/>";
+    xmlstream  <<  "</solarsystem>";
+    xmlstream << "</universe>";
+    xmldevice.close();
+
+    KoXmlDocument doc(false);
+    QCOMPARE(doc.setContent(&xmldevice, &errorMsg, &errorLine, &errorColumn), true);
+    QCOMPARE(errorMsg.isEmpty(), true);
+    QCOMPARE(errorLine, 0);
+    QCOMPARE(errorColumn, 0);
+
+    // <solarsystem>
+    KoXmlElement rootElement;
+    rootElement = doc.documentElement();
+    QCOMPARE(rootElement.isNull(), false);
+    QCOMPARE(rootElement.isElement(), true);
+    QCOMPARE(rootElement.parentNode().isNull(), false);
+    QCOMPARE(rootElement.hasChildNodes(), true);
+    QCOMPARE(KoXml::childNodesCount(rootElement), 1);
+    QCOMPARE(rootElement.tagName(), QString("universe"));
+    QCOMPARE(rootElement.prefix().isNull(), true);
+
+    // now test converting KoXmlElement to QDomElement
+    QDomDocument solarDoc;
+    KoXml::asQDomElement(solarDoc, rootElement.firstChild().toElement());
+
+    // <solarsystem>
+    QDomElement solarSystemElement = solarDoc.documentElement();
     QCOMPARE(solarSystemElement.isNull(), false);
     QCOMPARE(solarSystemElement.isElement(), true);
     QCOMPARE(solarSystemElement.parentNode().isNull(), false);
@@ -1343,6 +1445,7 @@ void TestXmlReaderWithoutSpaces::testConvertQDomElement()
 
     //printf("Result:\n%s\n\n", qPrintable(universeDoc.toString()));
 }
+
 
 void TestXmlReaderWithoutSpaces::testSimpleOpenDocumentText()
 {

@@ -23,12 +23,36 @@
 #include <KoImageData.h>
 #include <KoImageCollection.h>
 
-#include <KDebug>
-#include <KFileWidget>
-#include <KJob>
+#include <kdebug.h>
+#include <kfilewidget.h>
+#include <kjob.h>
 #include <KIO/Job>
 
 #include <QGridLayout>
+
+void LoadWaiter::setImageData(KJob *job)
+{
+    if (m_pictureShape == 0)
+        return; // ugh, the shape got deleted meanwhile
+        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    Q_ASSERT(transferJob);
+
+    if (m_pictureShape->imageCollection()) {
+        KoImageData *data = m_pictureShape->imageCollection()->createImageData(transferJob->data());
+        if (data) {
+            m_pictureShape->setUserData(data);
+            // check if the shape still size of the default shape and resize in that case
+            if (qFuzzyCompare(m_pictureShape->size().width(), 50.0)) {
+                m_pictureShape->setSize(data->imageSize());
+            }
+            // trigger repaint as the userData was changed
+            m_pictureShape->update();
+        }
+    }
+    deleteLater();
+}
+
+// ---------------------------------------------------- //
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
     : m_shape(0),
@@ -77,5 +101,3 @@ bool PictureShapeConfigWidget::showOnShapeSelect()
 {
     return false;
 }
-
-#include <PictureShapeConfigWidget.moc>

@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOGRIDCONFIGPAGE_H
-#define KOGRIDCONFIGPAGE_H
+#ifndef KOCONFIGGRIDPAGE_H
+#define KOCONFIGGRIDPAGE_H
 
 #include <QWidget>
 
 #include "komain_export.h"
 
+class KoUnit;
 class KoDocument;
 class KoGridData;
 
@@ -40,7 +41,7 @@ public:
 
 public slots:
     void slotDefault();
-    void slotUnitChanged(int);
+    void slotUnitChanged(const KoUnit &unit);
     void spinBoxHSpacingChanged(qreal);
     void spinBoxVSpacingChanged(qreal);
 
@@ -51,4 +52,4 @@ private:
     Private * const d;
 };
 
-#endif // KOGRIDCONFIGPAGE_H
+#endif // KOCONFIGGRIDPAGE_H

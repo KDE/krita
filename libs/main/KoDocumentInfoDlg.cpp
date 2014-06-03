@@ -26,25 +26,17 @@
 #include "KoDocumentInfo.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
-#include "rdf/KoDocumentRdfEditWidgetBase.h"
-#ifdef SHOULD_BUILD_RDF
-#include "rdf/KoDocumentRdfEditWidget.h"
-#endif
+#include "KoGlobal.h"
+#include <KoEncryptionChecker.h>
+#include "KoPageWidgetItem.h"
+#include <KoDocumentRdfBase.h>
+#include <KoIcon.h>
 
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
-#include <kconfiggroup.h>
 
-#ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#endif
-
-#include <KoGlobal.h>
-#include <KoEncryptionChecker.h>
 
 #include <QLabel>
 #include <QLineEdit>
@@ -52,40 +44,51 @@
 #include <QPixmap>
 #include <QDateTime>
 
+class KoPageWidgetItemAdapter : public KPageWidgetItem
+{
+public:
+    KoPageWidgetItemAdapter(KoPageWidgetItem *item)
+      : KPageWidgetItem(item->widget(), item->name())
+      , m_item(item)
+    {
+        setHeader(item->name());
+        setIcon(KIcon(item->iconName()));
+    }
+    ~KoPageWidgetItemAdapter() { delete m_item; }
+
+    bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
+    void apply() { m_item->apply(); }
+
+private:
+    KoPageWidgetItem * const m_item;
+};
+
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
     KoDocumentInfoDlgPrivate() :
-            m_rdf(0),
-            m_rdfEditWidget(0),
-            m_toggleEncryption(false),
-            m_applyToggleEncryption(false),
-            m_documentSaved(false) {}
+        toggleEncryption(false),
+        applyToggleEncryption(false),
+        documentSaved(false) {}
     ~KoDocumentInfoDlgPrivate() {}
 
-    KoDocumentInfo* m_info;
-    QList<KPageWidgetItem*> m_pages;
-    Ui::KoDocumentInfoAboutWidget* m_aboutUi;
-    Ui::KoDocumentInfoAuthorWidget* m_authorUi;
-    KoDocumentRdf* m_rdf;
-#ifdef SHOULD_BUILD_RDF
-    KoDocumentRdfEditWidget* m_rdfEditWidget;
-#else
-    KoDocumentRdfEditWidgetBase* m_rdfEditWidget;
-#endif
-    bool m_toggleEncryption;
-    bool m_applyToggleEncryption;
-    bool m_documentSaved;
+    KoDocumentInfo* info;
+    QList<KPageWidgetItem*> pages;
+    Ui::KoDocumentInfoAboutWidget* aboutUi;
+    Ui::KoDocumentInfoAuthorWidget* authorUi;
+
+    bool toggleEncryption;
+    bool applyToggleEncryption;
+    bool documentSaved;
 };
 
 
-KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, KoDocumentRdf* docRdf)
-        : KPageDialog(parent)
-        , d(new KoDocumentInfoDlgPrivate)
+KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
+    : KPageDialog(parent)
+    , d(new KoDocumentInfoDlgPrivate)
 {
-    d->m_info = docInfo;
-    d->m_rdf = docRdf;
+    d->info = docInfo;
 
     setCaption(i18n("Document Information"));
     setInitialSize(QSize(500, 500));
@@ -93,63 +96,61 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 
-    d->m_aboutUi = new Ui::KoDocumentInfoAboutWidget();
+    d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
-    d->m_aboutUi->setupUi(infodlg);
+    d->aboutUi->setupUi(infodlg);
     if (!KoEncryptionChecker::isEncryptionSupported()) {
-        d->m_aboutUi->lblEncryptedDesc->setVisible(false);
-        d->m_aboutUi->lblEncrypted->setVisible(false);
-        d->m_aboutUi->pbEncrypt->setVisible(false);
-        d->m_aboutUi->lblEncryptedPic->setVisible(false);
+        d->aboutUi->lblEncryptedDesc->setVisible(false);
+        d->aboutUi->lblEncrypted->setVisible(false);
+        d->aboutUi->pbEncrypt->setVisible(false);
+        d->aboutUi->lblEncryptedPic->setVisible(false);
     }
+    d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
+    d->aboutUi->cbLanguage->setCurrentIndex(-1);
+
     KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
+    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
     if (doc) {
         KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
         if (! mime)
             mime = KMimeType::defaultMimeTypePtr();
-        page->setIcon(KIcon(KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48)));
+        page->setIcon(KIcon(mime->iconName()));
+    } else {
+        // hide all entries not used in pages for KoDocumentInfoPropsPage
+        d->aboutUi->filePathInfoLabel->setVisible(false);
+        d->aboutUi->filePathLabel->setVisible(false);
+        d->aboutUi->filePathSeparatorLine->setVisible(false);
+        d->aboutUi->lblTypeDesc->setVisible(false);
+        d->aboutUi->lblType->setVisible(false);
     }
     addPage(page);
-    d->m_pages.append(page);
+    d->pages.append(page);
 
     initAboutTab();
 
-    d->m_authorUi = new Ui::KoDocumentInfoAuthorWidget();
+    d->authorUi = new Ui::KoDocumentInfoAuthorWidget();
     QWidget *authordlg = new QWidget();
-    d->m_authorUi->setupUi(authordlg);
+    d->authorUi->setupUi(authordlg);
     page = new KPageWidgetItem(authordlg, i18n("Author"));
-    page->setHeader(i18n("Author"));
-    page->setIcon(KIcon("user-identity"));
+    page->setHeader(i18n("Last saved by"));
+    page->setIcon(koIcon("user-identity"));
     addPage(page);
-    d->m_pages.append(page);
+    d->pages.append(page);
 
     initAuthorTab();
 
     // Saving encryption implies saving the document, this is done after closing the dialog
     connect(this, SIGNAL(hidden()), this, SLOT(slotSaveEncryption()));
 
-    if (d->m_rdf) {
-        d->m_rdfEditWidget = 0;
-
-#ifdef SHOULD_BUILD_RDF
-        d->m_rdfEditWidget = new KoDocumentRdfEditWidget(this, d->m_rdf);
-        page = new KPageWidgetItem(d->m_rdfEditWidget->widget(), i18n("Rdf"));
-        page->setHeader(i18n("Rdf"));
-        page->setIcon(KIcon("text-rdf"));
-        addPage(page);
-        d->m_pages.append(page);
-#endif
-    }
 }
 
 KoDocumentInfoDlg::~KoDocumentInfoDlg()
 {
-    delete d->m_authorUi;
-    delete d->m_aboutUi;
+    delete d->authorUi;
+    delete d->aboutUi;
     delete d;
 }
 
@@ -158,9 +159,12 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
     emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
     switch (button) {
     case Ok:
-        if (d->m_rdfEditWidget) {
-            if (d->m_rdfEditWidget->shouldDialogCloseBeVetoed()) {
-                return;
+        foreach(KPageWidgetItem* item, d->pages) {
+            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+            if (page) {
+                if (page->shouldDialogCloseBeVetoed()) {
+                    return;
+                }
             }
         }
         slotApply();
@@ -172,276 +176,176 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
 
 bool KoDocumentInfoDlg::isDocumentSaved()
 {
-    return d->m_documentSaved;
+    return d->documentSaved;
 }
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
-    if (!doc)
-        return;
+    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
 
-    d->m_aboutUi->filePathLabel->setText(doc->localFilePath());
+    if (doc) {
+        d->aboutUi->filePathLabel->setText(doc->localFilePath());
+    }
 
-    d->m_aboutUi->leTitle->setText(d->m_info->aboutInfo("title"));
-    d->m_aboutUi->leSubject->setText(d->m_info->aboutInfo("subject"));
+    d->aboutUi->leTitle->setText(d->info->aboutInfo("title"));
+    d->aboutUi->leSubject->setText(d->info->aboutInfo("subject"));
+    QString language = KoGlobal::languageFromTag(d->info->aboutInfo("language"));
+    d->aboutUi->cbLanguage->setCurrentIndex(d->aboutUi->cbLanguage->findText(language));
 
-    d->m_aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
-    if (!d->m_info->aboutInfo("keyword").isEmpty())
-        d->m_aboutUi->leKeywords->setText(d->m_info->aboutInfo("keyword"));
+    d->aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
+    if (!d->info->aboutInfo("keyword").isEmpty())
+        d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
 
-    d->m_aboutUi->meComments->setPlainText(d->m_info->aboutInfo("comments"));
-    if (!doc->mimeType().isEmpty()) {
+    d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
+    if (doc && !doc->mimeType().isEmpty()) {
         KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
         if (docmime)
-            d->m_aboutUi->lblType->setText(docmime->comment());
+            d->aboutUi->lblType->setText(docmime->comment());
     }
-    if (!d->m_info->aboutInfo("creation-date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->m_info->aboutInfo("creation-date"),
+    if (!d->info->aboutInfo("creation-date").isEmpty()) {
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
         QString s = KGlobal::locale()->formatDateTime(t);
-        d->m_aboutUi->lblCreated->setText(s + ", " +
-                                          d->m_info->aboutInfo("initial-creator"));
+        d->aboutUi->lblCreated->setText(s + ", " +
+                                        d->info->aboutInfo("initial-creator"));
     }
 
-    if (!d->m_info->aboutInfo("date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->m_info->aboutInfo("date"), Qt::ISODate);
+    if (!d->info->aboutInfo("date").isEmpty()) {
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
         QString s = KGlobal::locale()->formatDateTime(t);
-        d->m_aboutUi->lblModified->setText(s + ", " + d->m_info->authorInfo("creator"));
+        d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 
-    d->m_aboutUi->lblRevision->setText(d->m_info->aboutInfo("editing-cycles"));
+    d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
 
-    if ( doc->supportedSpecialFormats() & KoDocument::SaveEncrypted ) {
+    if (doc && (doc->supportedSpecialFormats() & KoDocument::SaveEncrypted)) {
         if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
-            if (d->m_toggleEncryption) {
-                QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-                d->m_aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
-                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-                d->m_aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
+            if (d->toggleEncryption) {
+                d->aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
+                d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
+                d->aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
             } else {
-                QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-                d->m_aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
-                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-                d->m_aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
+                d->aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
+                d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
+                d->aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
             }
         } else {
-            if (d->m_toggleEncryption) {
-                QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-                d->m_aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
-                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-                d->m_aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
+            if (d->toggleEncryption) {
+                d->aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
+                d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
+                d->aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
             } else {
-                QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-                d->m_aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
-                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-                d->m_aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
+                d->aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
+                d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
+                d->aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
             }
         }
     } else {
-        d->m_aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
-        d->m_aboutUi->pbEncrypt->setEnabled( false );
+        d->aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
+        d->aboutUi->pbEncrypt->setEnabled( false );
     }
-    connect(d->m_aboutUi->pbReset, SIGNAL(clicked()),
+    connect(d->aboutUi->pbReset, SIGNAL(clicked()),
             this, SLOT(slotResetMetaData()));
-    connect(d->m_aboutUi->pbEncrypt, SIGNAL(clicked()),
+    connect(d->aboutUi->pbEncrypt, SIGNAL(clicked()),
             this, SLOT(slotToggleEncryption()));
 }
 
 void KoDocumentInfoDlg::initAuthorTab()
 {
-    QPixmap p = KIconLoader::global()->loadIcon("office-address-book", KIconLoader::Small);
-    d->m_authorUi->pbLoadKABC->setIcon(QIcon(p));
-    p = KIconLoader::global()->loadIcon("edit-delete", KIconLoader::Small);
-    d->m_authorUi->pbDelete->setIcon(QIcon(p));
-
-    d->m_authorUi->leFullName->setText(d->m_info->authorInfo("creator"));
-    d->m_authorUi->leInitials->setText(d->m_info->authorInfo("initial"));
-    d->m_authorUi->leTitle->setText(d->m_info->authorInfo("author-title"));
-    d->m_authorUi->leCompany->setText(d->m_info->authorInfo("company"));
-    d->m_authorUi->leEmail->setText(d->m_info->authorInfo("email"));
-    d->m_authorUi->lePhoneWork->setText(d->m_info->authorInfo("telephone-work"));
-    d->m_authorUi->lePhoneHome->setText(d->m_info->authorInfo("telephone"));
-    d->m_authorUi->leFax->setText(d->m_info->authorInfo("fax"));
-    d->m_authorUi->leCountry->setText(d->m_info->authorInfo("country"));
-    d->m_authorUi->lePostal->setText(d->m_info->authorInfo("postal-code"));
-    d->m_authorUi->leCity->setText(d->m_info->authorInfo("city"));
-    d->m_authorUi->leStreet->setText(d->m_info->authorInfo("street"));
-    d->m_authorUi->lePosition->setText(d->m_info->authorInfo("position"));
-
-#ifdef KDEPIMLIBS_FOUND
-    connect(d->m_authorUi->pbLoadKABC, SIGNAL(clicked()),
-            this, SLOT(slotLoadFromKABC()));
-#else
-    d->m_authorUi->pbLoadKABC->hide();
-#endif
-
-    connect(d->m_authorUi->pbDelete, SIGNAL(clicked()),
-            this, SLOT(slotDeleteAuthorInfo()));
+    d->authorUi->fullName->setText(d->info->authorInfo("creator"));
+    d->authorUi->initials->setText(d->info->authorInfo("initial"));
+    d->authorUi->title->setText(d->info->authorInfo("author-title"));
+    d->authorUi->company->setText(d->info->authorInfo("company"));
+    d->authorUi->email->setText(d->info->authorInfo("email"));
+    d->authorUi->phoneWork->setText(d->info->authorInfo("telephone-work"));
+    d->authorUi->phoneHome->setText(d->info->authorInfo("telephone"));
+    d->authorUi->fax->setText(d->info->authorInfo("fax"));
+    d->authorUi->country->setText(d->info->authorInfo("country"));
+    d->authorUi->postal->setText(d->info->authorInfo("postal-code"));
+    d->authorUi->city->setText(d->info->authorInfo("city"));
+    d->authorUi->street->setText(d->info->authorInfo("street"));
+    d->authorUi->position->setText(d->info->authorInfo("position"));
 }
 
 void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
-    saveAuthorData();
-    if (d->m_rdfEditWidget) {
-        d->m_rdfEditWidget->apply();
+    foreach(KPageWidgetItem* item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        if (page) {
+            page->apply();
+        }
     }
 }
 
 void KoDocumentInfoDlg::saveAboutData()
 {
-    d->m_info->setAboutInfo("keyword", d->m_aboutUi->leKeywords->text());
-    d->m_info->setAboutInfo("title", d->m_aboutUi->leTitle->text());
-    d->m_info->setAboutInfo("subject", d->m_aboutUi->leSubject->text());
-    d->m_info->setAboutInfo("comments", d->m_aboutUi->meComments->toPlainText());
-    d->m_applyToggleEncryption = d->m_toggleEncryption;
-}
-
-void KoDocumentInfoDlg::saveAuthorData()
-{
-    d->m_info->setAuthorInfo("creator", d->m_authorUi->leFullName->text());
-    d->m_info->setAuthorInfo("initial", d->m_authorUi->leInitials->text());
-    d->m_info->setAuthorInfo("author-title", d->m_authorUi->leTitle->text());
-    d->m_info->setAuthorInfo("company", d->m_authorUi->leCompany->text());
-    d->m_info->setAuthorInfo("email", d->m_authorUi->leEmail->text());
-    d->m_info->setAuthorInfo("telephone-work", d->m_authorUi->lePhoneWork->text());
-    d->m_info->setAuthorInfo("telephone", d->m_authorUi->lePhoneHome->text());
-    d->m_info->setAuthorInfo("fax", d->m_authorUi->leFax->text());
-    d->m_info->setAuthorInfo("country", d->m_authorUi->leCountry->text());
-    d->m_info->setAuthorInfo("postal-code", d->m_authorUi->lePostal->text());
-    d->m_info->setAuthorInfo("city", d->m_authorUi->leCity->text());
-    d->m_info->setAuthorInfo("street", d->m_authorUi->leStreet->text());
-    d->m_info->setAuthorInfo("position", d->m_authorUi->lePosition->text());
-
-    KConfig* config = KoGlobal::calligraConfig();
-    KConfigGroup cgs(config, "Author");
-    cgs.writeEntry("telephone", d->m_authorUi->lePhoneHome->text());
-    cgs.writeEntry("telephone-work", d->m_authorUi->lePhoneWork->text());
-    cgs.writeEntry("fax", d->m_authorUi->leFax->text());
-    cgs.writeEntry("country", d->m_authorUi->leCountry->text());
-    cgs.writeEntry("postal-code", d->m_authorUi->lePostal->text());
-    cgs.writeEntry("city",  d->m_authorUi->leCity->text());
-    cgs.writeEntry("street", d->m_authorUi->leStreet->text());
-    cgs.sync();
+    d->info->setAboutInfo("keyword", d->aboutUi->leKeywords->text());
+    d->info->setAboutInfo("title", d->aboutUi->leTitle->text());
+    d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
+    d->info->setAboutInfo("description", d->aboutUi->meComments->toPlainText());
+    d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
+    d->applyToggleEncryption = d->toggleEncryption;
 }
 
 void KoDocumentInfoDlg::slotResetMetaData()
 {
-    d->m_info->resetMetaData();
+    d->info->resetMetaData();
 
-    if (!d->m_info->aboutInfo("creation-date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->m_info->aboutInfo("creation-date"),
+    if (!d->info->aboutInfo("creation-date").isEmpty()) {
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
                                             Qt::ISODate);
         QString s = KGlobal::locale()->formatDateTime(t);
-        d->m_aboutUi->lblCreated->setText(s + ", " +
-                                          d->m_info->aboutInfo("initial-creator"));
+        d->aboutUi->lblCreated->setText(s + ", " +
+                                        d->info->aboutInfo("initial-creator"));
     }
 
-    if (!d->m_info->aboutInfo("date").isEmpty()) {
-        QDateTime t = QDateTime::fromString(d->m_info->aboutInfo("date"), Qt::ISODate);
+    if (!d->info->aboutInfo("date").isEmpty()) {
+        QDateTime t = QDateTime::fromString(d->info->aboutInfo("date"), Qt::ISODate);
         QString s = KGlobal::locale()->formatDateTime(t);
-        d->m_aboutUi->lblModified->setText(s + ", " + d->m_info->authorInfo("creator"));
+        d->aboutUi->lblModified->setText(s + ", " + d->info->authorInfo("creator"));
     }
 
-    d->m_aboutUi->lblRevision->setText(d->m_info->aboutInfo("editing-cycles"));
+    d->aboutUi->lblRevision->setText(d->info->aboutInfo("editing-cycles"));
 }
 
 void KoDocumentInfoDlg::slotToggleEncryption()
 {
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
+    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
     if (!doc)
         return;
 
-    d->m_toggleEncryption = !d->m_toggleEncryption;
+    d->toggleEncryption = !d->toggleEncryption;
 
     if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
-        if (d->m_toggleEncryption) {
-            QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
+        if (d->toggleEncryption) {
+            d->aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
+            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
+            d->aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
         } else {
-            QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
+            d->aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
+            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
+            d->aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
         }
     } else {
-        if (d->m_toggleEncryption) {
-            QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
+        if (d->toggleEncryption) {
+            d->aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
+            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-locked"));
+            d->aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
         } else {
-            QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
+            d->aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
+            d->aboutUi->lblEncryptedPic->setPixmap(koSmallIcon("object-unlocked"));
+            d->aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
         }
     }
-}
-
-void KoDocumentInfoDlg::slotDeleteAuthorInfo()
-{
-    d->m_authorUi->leFullName->clear();
-    d->m_authorUi->leInitials->clear();
-    d->m_authorUi->leTitle->clear();
-    d->m_authorUi->leCompany->clear();
-    d->m_authorUi->leEmail->clear();
-    d->m_authorUi->lePhoneHome->clear();
-    d->m_authorUi->lePhoneWork->clear();
-    d->m_authorUi->leFax->clear();
-    d->m_authorUi->leCountry->clear();
-    d->m_authorUi->lePostal->clear();
-    d->m_authorUi->leCity->clear();
-    d->m_authorUi->leStreet->clear();
-}
-
-void KoDocumentInfoDlg::slotLoadFromKABC()
-{
-#ifdef KDEPIMLIBS_FOUND
-    KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
-                               (KABC::StdAddressBook::self());
-    if (!ab)
-        return;
-
-    KABC::Addressee addr = ab->whoAmI();
-    if (addr.isEmpty()) {
-        KMessageBox::sorry(0, i18n("No personal contact data set, please use the option \
-                                    \"Set as Personal Contact Data\" from the \"Edit\"     menu in KAddressbook to set one."));
-        return;
-    }
-
-    d->m_authorUi->leFullName->setText(addr.formattedName());
-    d->m_authorUi->leInitials->setText(addr.givenName()[ 0 ] + ". " +
-                                       addr.familyName()[ 0 ] + '.');
-    d->m_authorUi->leTitle->setText(addr.title());
-    d->m_authorUi->leCompany->setText(addr.organization());
-    d->m_authorUi->leEmail->setText(addr.preferredEmail());
-
-    KABC::PhoneNumber phone = addr.phoneNumber(KABC::PhoneNumber::Home);
-    d->m_authorUi->lePhoneHome->setText(phone.number());
-    phone = addr.phoneNumber(KABC::PhoneNumber::Work);
-    d->m_authorUi->lePhoneWork->setText(phone.number());
-
-    phone = addr.phoneNumber(KABC::PhoneNumber::Fax);
-    d->m_authorUi->leFax->setText(phone.number());
-
-    KABC::Address a = addr.address(KABC::Address::Home);
-    d->m_authorUi->leCountry->setText(a.country());
-    d->m_authorUi->lePostal->setText(a.postalCode());
-    d->m_authorUi->leCity->setText(a.locality());
-    d->m_authorUi->leStreet->setText(a.street());
-#endif
 }
 
 void KoDocumentInfoDlg::slotSaveEncryption()
 {
-    if (!d->m_applyToggleEncryption)
+    if (!d->applyToggleEncryption)
         return;
 
-    KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
+    KoDocument* doc = dynamic_cast< KoDocument* >(d->info->parent());
     if (!doc)
         return;
     KoMainWindow* mainWindow = dynamic_cast< KoMainWindow* >(parent());
@@ -456,18 +360,18 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KGuiItem(i18n("Decrypt")),
                     KStandardGuiItem::cancel(),
                     "DecryptConfirmation"
-                ) != KMessageBox::Continue) {
+                    ) != KMessageBox::Continue) {
             return;
         }
         bool modified = doc->isModified();
         doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocument::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
-                this,
-                i18n("<qt>Your document could not be saved automatically."
-                     "<p>To complete the decryption, please save the document.</qt>"),
-                i18n("Save Document"),
-                "DecryptSaveMessage");
+                        this,
+                        i18n("<qt>Your document could not be saved automatically."
+                             "<p>To complete the decryption, please save the document.</qt>"),
+                        i18n("Save Document"),
+                        "DecryptSaveMessage");
             return;
         }
         if (modified && KMessageBox::questionYesNo(
@@ -478,7 +382,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "DecryptSaveConfirmation"
-                ) != KMessageBox::Yes) {
+                    ) != KMessageBox::Yes) {
             return;
         }
     } else {
@@ -495,7 +399,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                         KGuiItem(i18n("Change")),
                         KStandardGuiItem::cancel(),
                         "EncryptChangeFiletypeConfirmation"
-                    ) != KMessageBox::Continue) {
+                        ) != KMessageBox::Continue) {
                 return;
             }
             doc->resetURL();
@@ -504,11 +408,11 @@ void KoDocumentInfoDlg::slotSaveEncryption()
         doc->setOutputMimeType(doc->nativeOasisMimeType(), KoDocument::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
-                this,
-                i18n("<qt>Your document could not be saved automatically."
-                     "<p>To complete the encryption, please save the document.</qt>"),
-                i18n("Save Document"),
-                "EncryptSaveMessage");
+                        this,
+                        i18n("<qt>Your document could not be saved automatically."
+                             "<p>To complete the encryption, please save the document.</qt>"),
+                        i18n("Save Document"),
+                        "EncryptSaveMessage");
             return;
         }
         if (modified && KMessageBox::questionYesNo(
@@ -519,28 +423,28 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "EncryptSaveConfirmation"
-                ) != KMessageBox::Yes) {
+                    ) != KMessageBox::Yes) {
             return;
         }
     }
     // Why do the dirty work ourselves?
     mainWindow->slotFileSave();
-    d->m_toggleEncryption = false;
-    d->m_applyToggleEncryption = false;
+    d->toggleEncryption = false;
+    d->applyToggleEncryption = false;
     // Detects when the user cancelled saving
-    d->m_documentSaved = !doc->url().isEmpty();
+    d->documentSaved = !doc->url().isEmpty();
 }
 
 QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
 {
-    return d->m_pages;
+    return d->pages;
 }
 
 void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
-    d->m_aboutUi->meComments->setReadOnly(ro);
+    d->aboutUi->meComments->setReadOnly(ro);
 
-    Q_FOREACH(KPageWidgetItem* page, d->m_pages) {
+    Q_FOREACH(KPageWidgetItem* page, d->pages) {
         Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
             le->setReadOnly(ro);
         }
@@ -548,6 +452,14 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
             le->setDisabled(ro);
         }
     }
+}
+
+void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
+{
+    KPageWidgetItem * page = new KoPageWidgetItemAdapter(item);
+
+    addPage(page);
+    d->pages.append(page);
 }
 
 #include <KoDocumentInfoDlg.moc>

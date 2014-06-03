@@ -20,9 +20,16 @@
 
 #include "krita_export.h"
 #include "kis_paintop.h"
+#include "kis_dab_cache.h"
 #include "kis_brush.h"
+#include "kis_texture_option.h"
+#include "kis_precision_option.h"
+#include "kis_pressure_mirror_option.h"
+#include <kis_threaded_text_rendering_workaround.h>
+
 
 class KisPropertiesConfiguration;
+class KisPressureSpacingOption;
 
 /**
  * This is a base class for paintops that use a KisBrush or derived
@@ -35,14 +42,29 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 public:
 
     KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
-    double spacing(double scale) const;
+    ~KisBrushBasedPaintOp();
+
+    bool checkSizeTooSmall(qreal scale);
+
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
+    KisSpacingInformation effectiveSpacing(int dabWidth, int dabHeight, qreal extraScale, bool isotropicSpacing) const;
 
     ///Reimplemented, false if brush is 0
     virtual bool canPaint() const;
-    
+
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    typedef int needs_preinitialization;
+    static void preinitializeOpStatically(const KisPaintOpSettingsSP settings);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
 protected: // XXX: make private!
 
     KisBrushSP m_brush;
+    KisTextureProperties m_textureProperties;
+    KisPressureMirrorOption m_mirrorOption;
+    KisPrecisionOption m_precisionOption;
+    KisDabCache *m_dabCache;
 };
 
 #endif

@@ -1,4 +1,5 @@
 add_subdirectory( tests )
+add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
 
@@ -31,9 +32,11 @@ set(koodf_LIB_SRCS
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
     KoBorder.cpp
+    Ko3dScene.cpp
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
+    KoColumns.cpp
     KoStore.cpp
     KoTarStore.cpp
     KoDirectoryStore.cpp
@@ -42,28 +45,17 @@ set(koodf_LIB_SRCS
     KoXmlWriter.cpp
     KoEncryptedStore.cpp
     KoEncryptionChecker.cpp
-    KoProperties.cpp
     KoUnit.cpp
     KoOdfNotesConfiguration.cpp
     KoOdfBibliographyConfiguration.cpp
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
-    KoCell.cpp
-    KoCellChild.cpp
-    KoCellValue.cpp
-    KoDummyCellValue.cpp
-    KoCellStyle.cpp
-    KoColumn.cpp
-    KoRawCellChild.cpp
-    KoRow.cpp
-    KoStyle.cpp
-    KoTable.cpp
-    KoColumnStyle.cpp
-    KoRowStyle.cpp
-    KoTblStyle.cpp
+    KoElementReference.cpp
+    writeodf/helpers.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
+add_dependencies(koodf writeodf.h-target)
 
 target_link_libraries(koodf ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY})
 target_link_libraries(koodf LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
@@ -104,6 +96,7 @@ install( FILES
     KoGenChanges.h
     KoEmbeddedDocumentSaver.h
     KoBorder.h
+    Ko3dScene.h
     KoShadowStyle.h
     KoPageLayout.h
     KoPageFormat.h
@@ -113,7 +106,7 @@ install( FILES
     KoXmlReader.h
     KoXmlWriter.h
     KoXmlReaderForward.h
-    KoProperties.h
     KoUnit.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
+    KoElementReference.h
+    KoTableTemplate.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

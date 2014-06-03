@@ -36,7 +36,10 @@ public:
      * @param srcColorSpace source color space
      * @param dstColorSpace destination color space
      */
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const = 0;
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const = 0;
 };
 
 #endif

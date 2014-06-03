@@ -1,7 +1,7 @@
 /*
  *  kis_tool_dyna.cpp - part of Krita
  *
- *  Copyright (c) 2009 Lukáš Tvrdý <LukasT.dev@gmail.com>
+ *  Copyright (c) 2009-2011 Lukáš Tvrdý <LukasT.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,16 +28,24 @@
 #include "KoPointerEvent.h"
 
 #include "kis_cursor.h"
+#include <kis_slider_spin_box.h>
 
 
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
 
+#define MIN_MASS 1.0
+#define MAX_MASS 160.0
+#define MIN_DRAG 0.0
+#define MAX_DRAG 0.5
+#define MIN_ACC 0.000001
+#define MIN_VEL 0.000001
+
+
 KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Dyna"))
 {
     setObjectName("tool_dyna");
-
     initDyna();
 }
 
@@ -47,7 +55,7 @@ void KisToolDyna::initDyna()
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
-    m_mouse.fixedangle = true;
+    m_mouse.fixedangle = false;
     m_width = 1.5;
     m_xangle = 0.60;
     m_yangle = 0.20;
@@ -71,29 +79,23 @@ void KisToolDyna::initStroke(KoPointerEvent *event)
     KisToolFreehand::initStroke(event);
 }
 
-void KisToolDyna::mousePressEvent(KoPointerEvent *e)
+void KisToolDyna::beginPrimaryAction(KoPointerEvent *event)
 {
-    setMousePosition(e->point);
+    setMousePosition(event->point);
     m_mouse.init(m_mousePos.x(), m_mousePos.y());
     m_odelx = m_mousePos.x();
     m_odely = m_mousePos.y();
 
-    KisToolFreehand::mousePressEvent(e);
+    KisToolFreehand::beginPrimaryAction(event);
 }
 
-
-void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
+void KisToolDyna::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        KisToolFreehand::mouseMoveEvent(e);
-        return;
-    }
-
-    setMousePosition(e->point);
+    setMousePosition(event->point);
 
     if (applyFilter(m_mousePos.x(), m_mousePos.y())) {
-        KoPointerEvent newEvent = filterEvent(e);
-        KisToolFreehand::mouseMoveEvent(&newEvent);
+        KoPointerEvent newEvent = filterEvent(event);
+        KisToolFreehand::continuePrimaryAction(&newEvent);
     }
 }
 
@@ -101,8 +103,8 @@ void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 int KisToolDyna::applyFilter(qreal mx, qreal my)
 {
     /* calculate mass and drag */
-    qreal mass = flerp(1.0, 160.0, m_curmass);
-    qreal drag = flerp(0.00, 0.5, m_curdrag * m_curdrag);
+    qreal mass = flerp(MIN_MASS, MAX_MASS, m_curmass);
+    qreal drag = flerp(MIN_DRAG, MAX_DRAG, m_curdrag * m_curdrag);
 
     /* calculate force and acceleration */
     qreal fx = mx - m_mouse.curx;
@@ -110,7 +112,7 @@ int KisToolDyna::applyFilter(qreal mx, qreal my)
 
     m_mouse.acc = sqrt(fx * fx + fy * fy);
 
-    if (m_mouse.acc < 0.000001) {
+    if (m_mouse.acc < MIN_ACC) {
         return 0;
     }
 
@@ -123,16 +125,17 @@ int KisToolDyna::applyFilter(qreal mx, qreal my)
     m_mouse.vel = sqrt(m_mouse.velx * m_mouse.velx + m_mouse.vely * m_mouse.vely);
     m_mouse.angx = -m_mouse.vely;
     m_mouse.angy = m_mouse.velx;
-    if (m_mouse.vel < 0.000001) {
+    if (m_mouse.vel < MIN_VEL) {
         return 0;
     }
 
     /* calculate angle of drawing tool */
-    m_mouse.angx /= m_mouse.vel;
-    m_mouse.angy /= m_mouse.vel;
     if (m_mouse.fixedangle) {
         m_mouse.angx = m_xangle;
         m_mouse.angy = m_yangle;
+    } else {
+        m_mouse.angx /= m_mouse.vel;
+        m_mouse.angy /= m_mouse.vel;
     }
 
     m_mouse.velx = m_mouse.velx * (1.0 - drag);
@@ -223,13 +226,13 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
 }
 
 
-void KisToolDyna::slotSetDrag(double drag)
+void KisToolDyna::slotSetDrag(qreal drag)
 {
-    m_dragDist = drag;
+    m_curdrag = drag;
 }
 
 
-void KisToolDyna::slotSetMass(double mass)
+void KisToolDyna::slotSetMass(qreal mass)
 {
     m_curmass = mass;
 }
@@ -247,81 +250,76 @@ void KisToolDyna::slotSetWidthRange(double widthRange)
 }
 
 
-void KisToolDyna::slotSetXangle(double angle)
-{
-    m_xangle = angle;
-}
-
-
-void KisToolDyna::slotSetYangle(double angle)
-{
-    m_yangle = angle;
-}
-
-
 void KisToolDyna::slotSetFixedAngle(bool fixedAngle)
 {
     m_mouse.fixedangle = fixedAngle;
+    m_angleDSSBox->setEnabled(fixedAngle);
 }
 
 QWidget * KisToolDyna::createOptionWidget()
 {
 
-    QWidget * optionWidget = KisToolFreehand::createOptionWidget();
-    optionWidget->setObjectName(toolId() + "option widget");
+    QWidget * optionsWidget = KisToolFreehand::createOptionWidget();
+    optionsWidget->setObjectName(toolId() + "option widget");
 
-    QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
-    QLabel* massLbl = new QLabel(i18n("Mass:"), optionWidget);
-    QLabel* dragLbl = new QLabel(i18n("Drag:"), optionWidget);
-    QLabel* xAngleLbl = new QLabel(i18n("X angle:"), optionWidget);
-    QLabel* yAngleLbl = new QLabel(i18n("Y angle:"), optionWidget);
-    QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
-
-    m_chkFixedAngle = new QCheckBox(i18n("Fixed angle:"), optionWidget);
-    m_chkFixedAngle->setChecked(false);
-    connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
-
-    m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
-    m_initWidthSPBox->setValue(1.5);
-    connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
-    m_massSPBox = new QDoubleSpinBox(optionWidget);
-    m_massSPBox->setValue(0.5);
-    connect(m_massSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetMass(double)));
-    m_dragSPBox = new QDoubleSpinBox(optionWidget);
-    m_dragSPBox->setValue(0.15);
-    connect(m_dragSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDrag(double)));
-    m_xAngleSPBox = new QDoubleSpinBox(optionWidget);
-    m_xAngleSPBox->setValue(0.6);
-    connect(m_xAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetXangle(double)));
-    m_yAngleSPBox = new QDoubleSpinBox(optionWidget);
-    m_yAngleSPBox->setValue(0.2);
-    connect(m_yAngleSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetYangle(double)));
-    m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
-    m_widthRangeSPBox->setValue(0.05);
-    connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
-
-    m_optionLayout = new QGridLayout(optionWidget);
+    m_optionLayout = new QGridLayout(optionsWidget);
     Q_CHECK_PTR(m_optionLayout);
 
     m_optionLayout->setMargin(0);
     m_optionLayout->setSpacing(2);
-
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(initWidthLbl, 5, 0);
-    m_optionLayout->addWidget(m_initWidthSPBox, 5, 1, 1, 2);
-    m_optionLayout->addWidget(massLbl, 6, 0);
-    m_optionLayout->addWidget(m_massSPBox, 6, 1, 1, 2);
-    m_optionLayout->addWidget(dragLbl, 7, 0);
-    m_optionLayout->addWidget(m_dragSPBox, 7, 1, 1, 2);
-    m_optionLayout->addWidget(m_chkFixedAngle, 8, 0);
-    m_optionLayout->addWidget(xAngleLbl, 9, 0);
-    m_optionLayout->addWidget(m_xAngleSPBox, 9, 1, 1, 2);
-    m_optionLayout->addWidget(yAngleLbl, 10, 0);
-    m_optionLayout->addWidget(m_yAngleSPBox, 10, 1, 1, 2);
-    m_optionLayout->addWidget(widthRangeLbl, 11, 0);
-    m_optionLayout->addWidget(m_widthRangeSPBox, 11, 1, 1, 2);
 
-    return optionWidget;
+    QLabel* massLbl = new QLabel(i18n("Mass:"), optionsWidget);
+    m_massSPBox = new KisDoubleSliderSpinBox(optionsWidget);
+    m_massSPBox->setRange(0.0,1.0,2);
+    m_massSPBox->setValue(m_curmass);
+    connect(m_massSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetMass(qreal)));
+    KisToolFreehand::addOptionWidgetOption(m_massSPBox,massLbl);
+
+    QLabel* dragLbl = new QLabel(i18n("Drag:"), optionsWidget);
+    m_dragSPBox = new KisDoubleSliderSpinBox(optionsWidget);
+    m_dragSPBox->setRange(0.0,1.0,2);
+    m_dragSPBox->setValue(m_curdrag);
+    connect(m_dragSPBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetDrag(qreal)));
+    KisToolFreehand::addOptionWidgetOption(m_dragSPBox,dragLbl);
+
+    //NOTE: so far unused, waiting for the changes to propagate rotation/pressure to freehand tool
+    // fixed angle might be for 2.4, but the later one for 2.5
+    m_chkFixedAngle = new QCheckBox(i18n("Fixed angle:"), optionsWidget);
+    m_chkFixedAngle->setChecked(false);
+    connect(m_chkFixedAngle, SIGNAL(toggled(bool)), this, SLOT(slotSetFixedAngle(bool)));
+    m_angleDSSBox = new KisDoubleSliderSpinBox(optionsWidget);
+    m_angleDSSBox->setRange(0,360,0);
+    m_angleDSSBox->setValue(70);
+    m_angleDSSBox->setSuffix(QChar(Qt::Key_degree));
+    m_angleDSSBox->setEnabled(m_chkFixedAngle->isChecked());
+    connect(m_angleDSSBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetAngle(qreal)));
+    m_chkFixedAngle->setEnabled(false);
+    m_angleDSSBox->setEnabled(false);
+    KisToolFreehand::addOptionWidgetOption(m_angleDSSBox,m_chkFixedAngle);
+
+#if 0
+    QLabel* initWidthLbl = new QLabel(i18n("Initial width:"), optionWidget);
+    m_initWidthSPBox = new QDoubleSpinBox(optionWidget);
+    m_initWidthSPBox->setValue(m_width);
+    connect(m_initWidthSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetDynaWidth(double)));
+    KisToolFreehand::addOptionWidgetOption(m_initWidthSPBox,initWidthLbl);
+
+    QLabel* widthRangeLbl = new QLabel(i18n("Width range:"), optionWidget);
+    m_widthRangeSPBox = new QDoubleSpinBox(optionWidget);
+    m_widthRangeSPBox->setValue(m_widthRange);
+    connect(m_widthRangeSPBox, SIGNAL(valueChanged(double)), this, SLOT(slotSetWidthRange(double)));
+    //KisToolFreehand::addOptionWidgetOption(m_widthRangeSPBox,widthRangeLbl);
+#endif
+
+    return optionsWidget;
 }
+
+void KisToolDyna::slotSetAngle(qreal angle)
+{
+    m_xangle = cos(angle * M_PI/180.0);
+    m_yangle = sin(angle * M_PI/180.0);
+}
+
 
 #include "kis_tool_dyna.moc"

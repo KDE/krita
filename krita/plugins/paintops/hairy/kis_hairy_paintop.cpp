@@ -34,13 +34,14 @@
 #include <kis_hairy_bristle_option.h>
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush.h"
 
 KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
-        , m_settings(settings)
-        , newStrokeFlag(true)
+    : KisPaintOp(painter)
+    , m_settings(settings)
+    , newStrokeFlag(true)
 
 {
     Q_UNUSED(image)
@@ -55,25 +56,26 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     KisBrushOption brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
-    KisFixedPaintDeviceSP dab = cachedDab(source()->colorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
-    } else {
-        brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0);
+    }
+    else {
+        brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0, KisPaintInformation());
     }
 
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
     m_brush.setInkColor(painter->paintColor());
 
     loadSettings(settings);
-    m_brush.setProperties( &m_properties );
+    m_brush.setProperties(&m_properties);
 
     m_rotationOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
-    m_sizeOption.sensor()->reset();
+    m_rotationOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+    m_sizeOption.resetAllSensors();
 }
 
 void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
@@ -105,26 +107,27 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 }
 
 
-qreal KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 0.5;
 }
 
 
-KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    // spacing is ignored in hairy, maybe todo
-    Q_UNUSED(savedDist);
-
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    } else {
+        m_dab = source()->createCompositionSourceDevice();
+    }
+    else {
         m_dab->clear();
     }
 
+    // Hairy Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(pi2);
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
@@ -139,10 +142,4 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
-
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-
-    return KisDistanceInformation(0, dragVec.norm());
 }

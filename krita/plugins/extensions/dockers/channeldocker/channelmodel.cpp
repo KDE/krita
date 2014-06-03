@@ -18,6 +18,7 @@
 #include "channelmodel.h"
 
 #include <KoColorSpace.h>
+#include <KoChannelInfo.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
@@ -95,19 +96,20 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
             
             if (index.column() == 0) {
                 QBitArray flags = m_currentLayer->channelFlags();
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Checked);
                 m_currentLayer->setChannelFlags(flags);
             }
             else { //if (index.column() == 1)
                 KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(m_currentLayer.data());
                 QBitArray      flags      = paintLayer->channelLockFlags();
-                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Unchecked);
                 paintLayer->setChannelLockFlags(flags);
             }
             
-            m_currentLayer->setDirty();
+            emit channelFlagsChanged();
             return true;
         }
     }
@@ -122,8 +124,15 @@ Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
 
 void ChannelModel::slotLayerActivated(KisLayerSP layer)
 {
+    beginResetModel();
     m_currentLayer = layer;
-    reset();
+    endResetModel();
+}
+
+void ChannelModel::slotColorSpaceChanged(const KoColorSpace *colorSpace)
+{
+    Q_UNUSED(colorSpace);
+    slotLayerActivated(m_currentLayer);
 }
 
 #include "channelmodel.moc"

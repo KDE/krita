@@ -37,6 +37,8 @@
 #include "ui_wdgfullscreensettings.h"
 
 class KoID;
+class KoConfigAuthorPage;
+class KisInputConfigurationPage;
 
 /**
  *  "General"-tab for preferences dialog
@@ -69,10 +71,6 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
 
- private slots:
-
-    void tagBackendChange(bool on);
-
 };
 
 //=======================
@@ -99,6 +97,8 @@ private slots:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
+    void installProfile();
+    void toggleAllowMonitorProfileSelection(bool useSystemProfile);
 
 public:
     void setDefault();
@@ -275,6 +275,8 @@ protected:
     GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
+    KoConfigAuthorPage *m_authorSettings;
+    KisInputConfigurationPage *m_inputConfiguration;
 
 protected slots:
 

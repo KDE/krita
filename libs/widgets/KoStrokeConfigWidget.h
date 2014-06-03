@@ -7,7 +7,9 @@
  * Copyright (C) 2005 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005, 2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,49 +32,68 @@
 
 #include "kowidgets_export.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
+#include <KoMarkerData.h>
 
 class KoUnit;
-class KoLineBorder;
+class KoShapeStrokeModel;
+class KoMarker;
+class KoCanvasBase;
+class KoShapeStroke;
 
 /// A widget for configuring the stroke of a shape
 class KOWIDGETS_EXPORT KoStrokeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoStrokeConfigWidget( QWidget * parent );
+    explicit KoStrokeConfigWidget(QWidget *parent);
     ~KoStrokeConfigWidget();
 
     // Getters
     Qt::PenStyle lineStyle() const;
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
+    QColor color() const;
     qreal miterLimit() const;
+    KoMarker *startMarker() const;
+    KoMarker *endMarker() const;
+    Qt::PenCapStyle capStyle() const;
+    Qt::PenJoinStyle joinStyle() const;
 
-    void updateControls(KoLineBorder &border);
+    /**
+     * Creates KoShapeStroke object filled with the options
+     * configured by the widget. The caller is in charge of
+     * deletion of the returned object
+     */
+    KoShapeStroke* createShapeStroke() const;
 
-    void locationChanged(Qt::DockWidgetArea area);
+    void setCanvas(KoCanvasBase *canvas);
+    void setActive(bool active);
 
-public slots:
-    void setUnit( const KoUnit &unit );
+private slots:
+    void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);
 
-signals:
-    /// Emitted when the line style changes.
-    void currentIndexChanged();
+    void updateMarkers(const QList<KoMarker*> &markers);
 
-    /// Emitted when the line width changes.
-    void widthChanged();
+    /// start marker has changed
+    void startMarkerChanged();
+    /// end marker has changed
+    void endMarkerChanged();
 
-    /// Emitted when the line cap changes.
-    void capChanged(int button);
+    void canvasResourceChanged(int key, const QVariant &value);
 
-    /// Emitted when the line join changes.
-    void joinChanged(int button);
+    /// selection has changed
+    void selectionChanged();
 
-    /// Emitted when the line miter limit changes.
-    void miterLimitChanged();
+    /// apply line changes to the selected shape
+    void applyChanges();
 
 private:
+    void setUnit(const KoUnit &unit);
+
+    /// apply marker changes to the selected shape
+    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
+
     void blockChildSignals(bool block);
 
 private:

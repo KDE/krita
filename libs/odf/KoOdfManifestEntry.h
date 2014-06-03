@@ -21,7 +21,7 @@
 #define KOODFMANIFEST_H
 
 
-#include <QtCore/QString>
+#include <QString>
 
 #include "koodf_export.h"
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -31,23 +31,24 @@ class KisPainter;
 class PAINTOP_EXPORT KisFlowOpacityOption: public KisCurveOption
 {
 public:
-    KisFlowOpacityOption();
+    KisFlowOpacityOption(KisNodeSP currentNode);
     virtual ~KisFlowOpacityOption() { }
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
     void setFlow(qreal flow);
     void setOpacity(qreal opacity);
     void apply(KisPainter* painter, const KisPaintInformation& info);
-    
+
     qreal getFlow() const;
     qreal getStaticOpacity() const;
     qreal getDynamicOpacity(const KisPaintInformation& info) const;
-    
+
 protected:
     qreal m_flow;
     int   m_paintActionType;
+    bool  m_nodeHasIndirectPaintingSupport;
 };
 
 #endif //KIS_PRESSURE_FLOW_OPACITY_OPTION_H

@@ -23,6 +23,7 @@
 
 #include "KoToolFactoryBase.h"
 #include "krita/ui/tool/kis_tool_select_base.h"
+#include <KoIcon.h>
 #include <QPointF>
 #include <QPainterPath>
 
@@ -40,18 +41,19 @@ public:
 
 public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void mouseMoveEvent(KoPointerEvent *event);
 
 public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
     void slotSetBrushSize(int size);
 
 protected:
-    void applyToSelection(const QPainterPath& selection);
+    void applyToSelection(QPainterPath selection);
     void resetSelection();
     void addPoint(const QPointF& point);
     void addGap(const QPointF& start, const QPointF& end);
@@ -74,7 +76,7 @@ public:
         setToolTip(i18n("Select by brush"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_brush_selection");
+        setIconName(koIconNameCStr("tool_brush_selection"));
         //setShortcut(KShortcut(Qt::Key_B));
         setPriority(53);
     }

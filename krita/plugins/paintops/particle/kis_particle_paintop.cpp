@@ -40,8 +40,8 @@
 #include "particle_brush.h"
 
 KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-    : KisPaintOp( painter )
-    , m_settings( settings )
+    : KisPaintOp(painter)
+    , m_settings(settings)
 {
     Q_UNUSED(image);
 
@@ -49,9 +49,9 @@ KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *setting
     m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);
     m_properties.gravity = settings->getDouble(PARTICLE_GRAVITY);
     m_properties.weight = settings->getDouble(PARTICLE_WEIGHT);
-    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X),settings->getDouble(PARTICLE_SCALE_Y));
+    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X), settings->getDouble(PARTICLE_SCALE_Y));
 
-    m_particleBrush.setProperties( &m_properties );
+    m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
 
     m_first = true;
@@ -61,26 +61,27 @@ KisParticlePaintOp::~KisParticlePaintOp()
 {
 }
 
-qreal KisParticlePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
-    return paintLine(info, info).spacing;
+    KisDistanceInformation di;
+    paintLine(info, info, &di);
+    return di.currentSpacing();
 }
 
-
-KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
+void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    if (!painter()) return;
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+        m_dab = source()->createCompositionSourceDevice();
     }
     else {
         m_dab->clear();
     }
 
 
-    if (m_first){
+    if (m_first) {
         m_particleBrush.setInitialPosition(pi1.pos());
         m_first = false;
     }
@@ -89,8 +90,5 @@ KisDistanceInformation KisParticlePaintOp::paintLine(const KisPaintInformation& 
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    painter()->renderMirrorMask(rc,m_dab);
-
-    QPointF diff = pi2.pos() - pi1.pos();
-    return KisDistanceInformation(0, sqrt( diff.x()*diff.x() + diff.y()*diff.y() ));
+    painter()->renderMirrorMask(rc, m_dab);
 }

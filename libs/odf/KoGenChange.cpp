@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QDateTime>
-
 #include "KoGenChange.h"
+
 #include <KoXmlWriter.h>
+#include <QDateTime>
 
 #include <kdebug.h>
 
@@ -83,6 +83,7 @@ void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) con
 {
     writer->startElement("text:changed-region");
     writer->addAttribute("text:id", name);
+    writer->addAttribute("xml:id", name);
 
     const char* elementName;
     switch (m_type) {

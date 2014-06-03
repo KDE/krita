@@ -22,6 +22,7 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -49,7 +50,7 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -62,27 +63,32 @@ KoFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        exrConverter ib(doc);
+        exrConverter ib(doc, !m_chain->manager()->getBatchMode());
 
 
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:
+            doc->setErrorMessage(i18n("Krita does support this type of EXR file."));
             return KoFilter::NotImplemented;
-            break;
+
         case KisImageBuilder_RESULT_INVALID_ARG:
+            doc->setErrorMessage(i18n("This is not an EXR file."));
             return KoFilter::BadMimeType;
-            break;
+
         case KisImageBuilder_RESULT_NO_URI:
         case KisImageBuilder_RESULT_NOT_LOCAL:
+            doc->setErrorMessage(i18n("The EXR file does not exist."));
             return KoFilter::FileNotFound;
-            break;
+
         case KisImageBuilder_RESULT_BAD_FETCH:
         case KisImageBuilder_RESULT_EMPTY:
+            doc->setErrorMessage(i18n("The EXR is corrupted."));
             return KoFilter::ParsingError;
-            break;
+
         case KisImageBuilder_RESULT_FAILURE:
+            doc->setErrorMessage(i18n("Krita could not create a new image."));
             return KoFilter::InternalError;
-            break;
+
         case KisImageBuilder_RESULT_OK:
             Q_ASSERT(ib.image());
             doc -> setCurrentImage(ib.image());

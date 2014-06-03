@@ -47,6 +47,8 @@ public:
     QString currentStrokeName() const;
     bool hasOpenedStrokes() const;
 
+    bool wrapAroundModeSupported() const;
+
 private:
     bool processOneJob(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool checkStrokeState(bool hasStrokeJobsRunning);
@@ -55,7 +57,7 @@ private:
     bool checkBarrierProperty(qint32 numMergeJobs, qint32 numStrokeJobs,
                               bool externalJobsPending);
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

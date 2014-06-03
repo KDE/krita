@@ -34,7 +34,7 @@ public:
     * Constructs a new filter effect loading context
     * @param basePath the xml document base path
     */
-    KoFilterEffectLoadingContext(const QString &basePath);
+    explicit KoFilterEffectLoadingContext(const QString &basePath);
 
     /// Destructor
     virtual ~KoFilterEffectLoadingContext();

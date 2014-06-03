@@ -21,8 +21,8 @@
 
 #include "TestLoad.h"
 
-#include <QtTest/QtTest>
-#include <QtCore/QBuffer>
+#include <QtTest>
+#include <QBuffer>
 
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>

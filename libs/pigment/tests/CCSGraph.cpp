@@ -21,9 +21,9 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-#include <KAboutData>
-#include <KCmdLineArgs>
-#include <KApplication>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
                          KAboutData::License_LGPL,
                          ki18n("(c) 2007 Cyrille Berger"),
                          KLocalizedString(),
-                         "www.calligra-suite.org",
+                         "www.calligra.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
     // Initialize the list of options

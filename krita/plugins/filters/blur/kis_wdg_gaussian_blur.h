@@ -39,8 +39,8 @@ public:
     virtual KisPropertiesConfiguration* configuration() const;
 
 private slots:
-    void horizontalRadiusChanged(int);
-    void verticalRadiusChanged(int);
+    void horizontalRadiusChanged(qreal);
+    void verticalRadiusChanged(qreal);
     void aspectLockChanged(bool);
 
 private:

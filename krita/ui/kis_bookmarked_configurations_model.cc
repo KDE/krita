@@ -63,9 +63,9 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.row()) {
         case 0:
-            return KisBookmarkedConfigurationManager::ConfigDefault.name();
+            return i18n("Default");
         case 1:
-            return KisBookmarkedConfigurationManager::ConfigLastUsed.name();
+            return i18n("Last Used");
         default:
             return d->configsKey[ index.row() - 2 ];
         }
@@ -95,10 +95,10 @@ KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(co
     switch (index.row()) {
     case 0:
         dbgKrita << "loading default" << endl;
-        return d->bookmarkManager->load(KisBookmarkedConfigurationManager::ConfigDefault.id());
+        return d->bookmarkManager->load(KisBookmarkedConfigurationManager::ConfigDefault);
         break;
     case 1:
-        return d->bookmarkManager->load(KisBookmarkedConfigurationManager::ConfigLastUsed.id());
+        return d->bookmarkManager->load(KisBookmarkedConfigurationManager::ConfigLastUsed);
         break;
     default:
         return d->bookmarkManager->load(d->configsKey[ index.row() - 2 ]);
@@ -150,7 +150,7 @@ Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index)
     case 0:
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     case 1:
-        if (d->bookmarkManager->exists(KisBookmarkedConfigurationManager::ConfigLastUsed.id())) {
+        if (d->bookmarkManager->exists(KisBookmarkedConfigurationManager::ConfigLastUsed)) {
             return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         } else {
             return 0;

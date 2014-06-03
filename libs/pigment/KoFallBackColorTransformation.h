@@ -25,7 +25,6 @@
 #include "pigment_export.h"
 
 class KoColorSpace;
-class KoColorTransformation;
 class KoColorConversionTransformation;
 
 /**

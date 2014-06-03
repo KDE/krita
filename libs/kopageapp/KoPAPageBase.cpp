@@ -18,29 +18,31 @@
 */
 
 #include "KoPAPageBase.h"
+
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAPixmapCache.h"
 #include "KoPAPageContainerModel.h"
-#include "KoPASavingContext.h"
-
-#include <QPainter>
-
-#include <kdebug.h>
+#include "KoPAUtil.h"
 
 #include <KoXmlNS.h>
 #include <KoPageLayout.h>
-#include <KoShapeSavingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoShapeLayer.h>
-#include <KoShapeRegistry.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoXmlWriter.h>
+#include <KoOdfLoadingContext.h>
 #include <KoViewConverter.h>
+#include <KoShapeLayer.h>
+#include <KoShapeRegistry.h>
 #include <KoShapeBackground.h>
+#include <KoZoomHandler.h>
+
+#include <kdebug.h>
+
+#include <QPainter>
+
 
 KoPAPageBase::KoPAPageBase()
 : KoShapeContainer( new KoPAPageContainerModel() )
@@ -52,17 +54,6 @@ KoPAPageBase::KoPAPageBase()
 
 KoPAPageBase::~KoPAPageBase()
 {
-    // Delete all layers and there children cause we are responsible for them.
-    for(int i = shapes().count() - 1; i >= 0; --i) {
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shapes()[i]);
-        if (layer) {
-            removeShape(layer);
-            QList<KoShape*> layershapes = layer->shapes();
-            layer->removeAllShapes();
-            qDeleteAll(layershapes);
-            delete layer;
-        }
-    }
 }
 
 void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
@@ -71,7 +62,7 @@ void KoPAPageBase::paintComponent(QPainter& painter, const KoViewConverter& conv
     Q_UNUSED(converter);
 }
 
-void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter )
+void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext )
 {
     painter.save();
     applyConversion( painter, converter );
@@ -81,7 +72,7 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
     if (background()) {
         QPainterPath p;
         p.addRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
-        background()->paint( painter, p );
+        background()->paint( painter, converter, paintContext, p );
     }
     else {
         painter.setBrush(Qt::white);
@@ -144,7 +135,7 @@ QString KoPAPageBase::saveOdfPageStyle( KoPASavingContext &paContext ) const
 
 void KoPAPageBase::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoShapeBackground * bg = background();
+    QSharedPointer<KoShapeBackground>  bg = background();
     if( bg )
         bg->fillStyle( style, paContext );
 }
@@ -296,6 +287,52 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
 #else
     return generateThumbnail( size );
 #endif
+}
+
+QPixmap KoPAPageBase::generateThumbnail(const QSize &size)
+{
+    // don't paint null pixmap
+    if ( size.isEmpty() ) // either width or height is <= 0
+        return QPixmap();
+
+    KoZoomHandler zoomHandler;
+    QSize thumbnailSize(size);
+
+    KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
+
+    QPixmap pixmap(thumbnailSize);
+    // paint white as default page background
+    pixmap.fill(Qt::white);
+    QPainter painter(&pixmap);
+    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    paintPage(painter, zoomHandler);
+
+    return pixmap;
+}
+
+QImage KoPAPageBase::thumbImage(const QSize &size)
+{
+    if (size.isEmpty()) {
+        return QImage();
+    }
+
+    KoZoomHandler zoomHandler;
+    QSize thumbnailSize(size);
+
+    KoPAUtil::setSizeAndZoom(pageLayout(), thumbnailSize, zoomHandler);
+
+    QImage image(thumbnailSize, QImage::Format_RGB32);
+    // paint white as default page background
+    image.fill(QColor(Qt::white).rgb());
+    QPainter painter(&image);
+    painter.setClipRect(QRect(QPoint(0, 0), thumbnailSize));
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    paintPage(painter, zoomHandler);
+
+    return image;
 }
 
 void KoPAPageBase::pageUpdated()

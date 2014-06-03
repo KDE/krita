@@ -19,10 +19,10 @@
 
 #include "KoFilterEffectLoadingContext.h"
 
-#include <QtCore/QString>
-#include <QtCore/QRectF>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QString>
+#include <QRectF>
+#include <QFileInfo>
+#include <QDir>
 
 class KoFilterEffectLoadingContext::Private
 {
@@ -119,8 +119,8 @@ QString KoFilterEffectLoadingContext::pathFromHref(const QString &href) const
     QFileInfo pathInfo(QFileInfo(d->basePath).filePath());
 
     QString relFile = href;
-    while (relFile.startsWith("../")) {
-        relFile = relFile.mid(3);
+    while (relFile.startsWith(QLatin1String("../"))) {
+        relFile.remove(0, 3);
         pathInfo.setFile(pathInfo.dir(), QString());
     }
 

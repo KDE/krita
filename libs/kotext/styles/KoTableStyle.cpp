@@ -28,7 +28,7 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <QTextTable>
 #include <QTextTableFormat>
@@ -398,7 +398,7 @@ Qt::Alignment KoTableStyle::alignmentFromString(const QString &align)
 
 QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 {
-    QString align = "";
+    QString align;
     if (alignment == Qt::AlignLeft)
         align = "left";
     else if (alignment == Qt::AlignRight)
@@ -633,13 +633,13 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameLeftMargin)) {
+        } else if (key == QTextFormat::FrameLeftMargin) {
             style.addPropertyLength("fo:margin-left", propertyLength(QTextFormat::FrameLeftMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameRightMargin)) {
+        } else if (key == QTextFormat::FrameRightMargin) {
             style.addPropertyLength("fo:margin-right", propertyLength(QTextFormat::FrameRightMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameTopMargin)) {
+        } else if (key == QTextFormat::FrameTopMargin) {
             style.addPropertyLength("fo:margin-top", propertyLength(QTextFormat::FrameTopMargin), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameBottomMargin)) {
+        } else if (key == QTextFormat::FrameBottomMargin) {
             style.addPropertyLength("fo:margin-bottom", propertyLength(QTextFormat::FrameBottomMargin), KoGenStyle::TableType);
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())

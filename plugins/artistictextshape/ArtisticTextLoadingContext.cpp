@@ -22,7 +22,7 @@
 #include "SvgGraphicContext.h"
 
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 
 #include <math.h>
 

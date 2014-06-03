@@ -24,7 +24,7 @@
 #include <kundo2command.h>
 #include "ArtisticTextTool.h"
 #include "ArtisticTextRange.h"
-#include <QtCore/QPointer>
+#include <QPointer>
 
 class ArtisticTextShape;
 

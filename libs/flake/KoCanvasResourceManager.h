@@ -32,7 +32,7 @@
 #include <KoUnit.h>
 
 class KoShape;
-class KoLineBorder;
+class KoShapeStroke;
 class KUndo2Stack;
 class KoImageCollection;
 class KoOdfDocument;
@@ -70,7 +70,7 @@ public:
     enum CanvasResource {
         ForegroundColor,    ///< The active forground color selected for this canvas.
         BackgroundColor,    ///< The active background color selected for this canvas.
-        ActiveBorder,       ///< The active border selected for this canvas
+        ActiveStroke,       ///< The active stroke selected for this canvas
         PageSize,           ///< The size of the (current) page in postscript points.
         Unit,               ///< The unit of this canvas
         CurrentPage,        ///< The current page number
@@ -79,15 +79,22 @@ public:
         ShowTextShapeOutlines,     ///< Paint of text shape outlines ?
         ShowFormattingCharacters,  ///< Paint of formatting characters ?
         ShowTableBorders,  ///< Paint of table borders (when not really there) ?
-        KarbonStart = 1000,      ///< Base number for karbon specific values.
-        KexiStart = 2000,        ///< Base number for kexi specific values.
-        FlowStart = 3000,       ///< Base number for flow specific values.
-        KPlatoStart = 4000,      ///< Base number for kplato specific values.
-        KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
-        KritaStart = 6000,       ///< Base number for krita specific values.
-        KSpreadStart = 7000,     ///< Base number for kspread specific values.
-        WordsStart = 8000,        ///< Base number for words specific values.
+        ShowInlineObjectVisualization, ///< paint a different  background for inline objects
+        ApplicationSpeciality, ///< Special features and limitations of the application
+        KarbonStart = 1000,      ///< Base number for Karbon specific values.
+        KexiStart = 2000,        ///< Base number for Kexi specific values.
+        FlowStart = 3000,        ///< Base number for Flow specific values.
+        PlanStart = 4000,        ///< Base number for Plan specific values.
+        StageStart = 5000,       ///< Base number for Stage specific values.
+        KritaStart = 6000,       ///< Base number for Krita specific values.
+        SheetsStart = 7000,      ///< Base number for Sheets specific values.
+        WordsStart = 8000,       ///< Base number for Words specific values.
         KoPageAppStart = 9000    ///< Base number for KoPageApp specific values.
+    };
+
+    enum ApplicationSpecial {
+        NoSpecial = 0,
+        NoAdvancedText = 1
     };
 
     /**
@@ -97,6 +104,7 @@ public:
     explicit KoCanvasResourceManager(QObject *parent = 0);
     virtual ~KoCanvasResourceManager();
 
+public slots:
     /**
      * Set a resource of any type.
      * @param key the integer key
@@ -129,6 +137,7 @@ public:
      */
     void setResource(int key, const KoUnit &unit);
 
+public:
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
@@ -158,11 +167,11 @@ public:
      */
     KoColor backgroundColor() const;
 
-    /// Sets the border resource
-    void setActiveBorder(const KoLineBorder &border);
+    /// Sets the stroke resource
+    void setActiveStroke(const KoShapeStroke &stroke);
 
-    /// Returns the border resource
-    KoLineBorder activeBorder() const;
+    /// Returns the stroke resource
+    KoShapeStroke activeStroke() const;
 
     /**
      * Return the resource determined by param key as a boolean.
@@ -240,7 +249,7 @@ signals:
      * @param value the variants new value.
      * @see KoCanvasResourceManager::CanvasResource
      */
-    void resourceChanged(int key, const QVariant &value);
+    void canvasResourceChanged(int key, const QVariant &value);
 
 private:
     KoCanvasResourceManager(const KoCanvasResourceManager&);

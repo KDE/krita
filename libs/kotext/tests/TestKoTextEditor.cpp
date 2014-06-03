@@ -19,7 +19,7 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
@@ -35,6 +35,7 @@
 #include <KoBookmark.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoDocumentRdfBase.h>
@@ -60,11 +61,12 @@ void TestKoTextEditor::testInsertInlineObject()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
+    /* Hmm, what kind of inline object should we test. variables maybe?
     // enter some lorem ipsum
     editor.insertText(lorem);
     KoBookmark *startmark = new KoBookmark(editor.document());
-    startmark->setType(KoBookmark::SinglePosition);
     startmark->setName("single!");
     editor.insertInlineObject(startmark);
     Q_ASSERT(startmark->id() == 1);
@@ -77,7 +79,7 @@ void TestKoTextEditor::testInsertInlineObject()
     KoInlineObject *obj = inlineObjectManager.inlineTextObject(cursor.charFormat());
 
     Q_ASSERT(obj == startmark);
-
+*/
 }
 
 void TestKoTextEditor::testRemoveSelectedText()
@@ -87,28 +89,30 @@ void TestKoTextEditor::testRemoveSelectedText()
     // create a document
     QTextDocument doc;
 
-    KoInlineTextObjectManager inlineObjectManager(&parent);
+    KoTextRangeManager rangeManager(&parent);
     KoTextDocument textDoc(&doc);
-    textDoc.setInlineTextObjectManager(&inlineObjectManager);
+    textDoc.setTextRangeManager(&rangeManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
 
-    KoBookmark *startmark = new KoBookmark(editor.document());
-    startmark->setType(KoBookmark::StartBookmark);
-    startmark->setName("start!");
-    editor.insertInlineObject(startmark);
-    Q_ASSERT(startmark->position() == 444);
+    QTextCursor cur(&doc);
+    cur.setPosition(editor.position());
+    KoBookmark *bookmark = new KoBookmark(cur);
+    bookmark->setName("start!");
+    bookmark->setPositionOnlyMode(false); // we want it to be several chars long
+    rangeManager.insert(bookmark);
 
     editor.insertText(lorem);
 
-    KoBookmark *endmark = new KoBookmark(editor.document());
-    endmark->setType(KoBookmark::EndBookmark);
-    startmark->setEndBookmark(endmark);
-    editor.insertInlineObject(endmark);
-    Q_ASSERT(endmark->position() == 888);
+    bookmark->setRangeEnd(editor.position());
+
+    QCOMPARE(bookmark->rangeStart(), lorem.length());
+    QCOMPARE(bookmark->rangeEnd(), lorem.length() * 2);
+    Q_ASSERT(rangeManager.textRanges().length() == 1);
 
     // select all text
     editor.setPosition(0, QTextCursor::MoveAnchor);
@@ -116,11 +120,11 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     Q_ASSERT(editor.hasSelection());
 
-    // remove the table + the markers from the document
-    editor.removeSelectedText();
+    // remove the text + the bookmark from the document
+    editor.deleteChar();
 
-    // check whether the bookmarks have gone.
-    Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
+    // check whether the bookmark has gone.
+    Q_ASSERT(rangeManager.textRanges().length() == 0);
 }
 
 class TestDocument : public KoShapeBasedDocumentBase
@@ -135,7 +139,8 @@ public:
         KoTextEditor *editor = new KoTextEditor(m_document);
 
         textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
-        textDoc.setStyleManager(new KoStyleManager());
+        textDoc.setTextRangeManager(&m_rangeManager);
+        textDoc.setStyleManager(new KoStyleManager(0));
         textDoc.setTextEditor(editor);
 
     }
@@ -164,26 +169,9 @@ public:
 
     QTextDocument *m_document;
     KoInlineTextObjectManager m_inlineObjectManager;
+    KoTextRangeManager m_rangeManager;
     KoDocumentRdfBase m_rdfBase;
 };
-
-void TestKoTextEditor::testPaste()
-{
-    TestDocument *source = new TestDocument();
-    TestDocument *destination = new TestDocument();
-
-    Q_ASSERT(source->textEditor() != destination->textEditor());
-
-    KoShapeController shapeController(0, destination);
-
-    source->textEditor()->insertText("bla");
-
-    destination->textEditor()->paste(source->textEditor(), &shapeController);
-
-    Q_ASSERT(destination->m_document->toPlainText() == "bla");
-
-
-}
 
 QTEST_MAIN(TestKoTextEditor)
 

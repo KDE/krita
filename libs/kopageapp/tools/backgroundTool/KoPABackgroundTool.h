@@ -21,15 +21,17 @@
 #ifndef KOPABACKGROUNDTOOL_H
 #define KOPABACKGROUNDTOOL_H
 
+#include "kopageapp_export.h"
+
 #include <KoToolBase.h>
 
 class KoPAViewBase;
 
-class KoPABackgroundTool : public KoToolBase
+class KOPAGEAPP_EXPORT KoPABackgroundTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    KoPABackgroundTool( KoCanvasBase* base );
+    explicit KoPABackgroundTool(KoCanvasBase *base);
     virtual ~KoPABackgroundTool();
 
     ///Reimplemented from KoToolBase
@@ -47,6 +49,7 @@ public:
 
     KoPAViewBase * view() const;
 
+    void addOptionWidget(QWidget *widget);
 public slots:
     void slotActivePageChanged();
 
@@ -56,6 +59,7 @@ protected:
 
 private:
     KoPAViewBase * m_view;
+    QList<QWidget *> m_addOnWidgets;
 };
 
 #endif //KOPABACKGROUNDTOOL_H

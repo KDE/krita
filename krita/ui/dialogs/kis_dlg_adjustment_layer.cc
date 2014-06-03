@@ -33,45 +33,42 @@
 #include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
-#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_node_filter_interface.h"
 #include <kis_config.h>
+#include "kis_view2.h"
 
 KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
-        KisNodeFilterInterface* nfi,
-        KisPaintDeviceSP paintDevice,
-        KisImageWSP image,
-        const QString & layerName,
-        const QString & caption,
-        QWidget *parent,
-        const char *name)
-        : KDialog(parent)
-        , m_node(node)
-        , m_nodeFilterInterface(nfi)
-        , m_currentFilter(0)
-        , m_freezeName(false)
+                                             KisNodeFilterInterface* nfi,
+                                             KisPaintDeviceSP paintDevice,
+                                             const QString &layerName,
+                                             const QString &caption,
+                                             KisView2 *view)
+    : KDialog(view)
+    , m_node(node)
+    , m_nodeFilterInterface(nfi)
+    , m_currentFilter(0)
+    , m_customName(false)
+    , m_layerName(layerName)
 {
     setCaption(caption);
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setObjectName(name);
-    m_timer = new QTimer(this);
-    m_timer->setSingleShot(true);
-    Q_ASSERT(m_node);
-    Q_ASSERT(m_nodeFilterInterface);
 
     QWidget * page = new QWidget(this);
     wdgFilterNodeCreation.setupUi(page);
     setMainWidget(page);
+
+    wdgFilterNodeCreation.filterSelector->setView(view);
     wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
 
-    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(kickTimer()));
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
-    wdgFilterNodeCreation.filterSelector->setPaintDevice(paintDevice);
-    wdgFilterNodeCreation.filterSelector->setImage(image);
+    wdgFilterNodeCreation.filterSelector->setPaintDevice(false, paintDevice);
     wdgFilterNodeCreation.layerName->setText(layerName);
-    enableButtonOk(0);
+
+    connect(wdgFilterNodeCreation.filterSelector, SIGNAL(configurationChanged()), SLOT(slotConfigChanged()));
+    connect(wdgFilterNodeCreation.layerName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
+
+    enableButtonOk(false);
 }
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
@@ -79,13 +76,11 @@ KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
     KisConfig().setShowFilterGalleryLayerMaskDialog(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
 }
 
-void KisDlgAdjustmentLayer::slotNameChanged(const QString & text)
+void KisDlgAdjustmentLayer::slotNameChanged(const QString &text)
 {
     Q_UNUSED(text);
-    if (m_freezeName)
-        return;
-
-    enableButtonOk(true);
+    m_customName = !text.isEmpty();
+    enableButtonOk(m_currentFilter);
 }
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
@@ -101,17 +96,19 @@ QString KisDlgAdjustmentLayer::layerName() const
 
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
-    enableButtonOk(1);
-    KisFilterConfiguration * config = filterConfiguration();
-    if (config) {
-        m_nodeFilterInterface->setFilter(config);
-    }
-    m_node->setDirty();
-}
+    m_currentFilter = filterConfiguration();
+    enableButtonOk(m_currentFilter);
 
-void KisDlgAdjustmentLayer::kickTimer()
-{
-    m_timer->start(50);
+    if (m_currentFilter) {
+        m_nodeFilterInterface->setFilter(m_currentFilter);
+        if (!m_customName) {
+            wdgFilterNodeCreation.layerName->blockSignals(true);
+            wdgFilterNodeCreation.layerName->setText(m_layerName + " (" + wdgFilterNodeCreation.filterSelector->currentFilter()->name() + ")");
+            wdgFilterNodeCreation.layerName->blockSignals(false);
+        }
+    }
+
+    m_node->setDirty();
 }
 
 #include "kis_dlg_adjustment_layer.moc"

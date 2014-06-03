@@ -97,8 +97,14 @@ protected:
     /// constructor
     KoTosContainer(KoTosContainerPrivate &);
 
+    //reimplemented
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    //reimplemented
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+
     /**
-     * Set the current prefered text rectangle. This rect contains the coordinates of
+     * Set the current preferred text rectangle. This rect contains the coordinates of
      * the embedded text shape relative to the content shape. This value is ignored if
      * resizeBehavior is not TextFollowsPreferredTextRect.
      * @param rect the new preferred text rectangle
@@ -106,7 +112,7 @@ protected:
     void setPreferredTextRect(const QRectF &rect);
 
     /**
-     * Returns the current prefered text rectangle.
+     * Returns the current preferred text rectangle.
      */
     QRectF preferredTextRect() const;
 

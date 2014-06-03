@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_types.h"
-#include "kis_selection.h"
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
 #include "testutil.h"
@@ -45,7 +44,7 @@ void KisAdjustmentLayerTest::testCreation()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisAdjustmentLayer test(image, "test", kfc, 0);
+    KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc, 0);
 }
 
 void KisAdjustmentLayerTest::testSetSelection()
@@ -57,9 +56,9 @@ void KisAdjustmentLayerTest::testSetSelection()
     Q_ASSERT(f);
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
-    sel->getOrCreatePixelSelection()->select(QRect(10, 10, 200, 200), 128);
+    sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
     KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
-    QCOMPARE(sel->selectedExactRect(), l1->selection()->selectedExactRect());
+    QCOMPARE(sel->selectedExactRect(), l1->internalSelection()->selectedExactRect());
 }
 
 void KisAdjustmentLayerTest::testInverted()
@@ -72,14 +71,47 @@ void KisAdjustmentLayerTest::testInverted()
     Q_ASSERT(kfc);
 
     KisSelectionSP sel2 = new KisSelection();
-    sel2->getOrCreatePixelSelection()->invert();
+    sel2->pixelSelection()->invert();
     KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc, sel2);
-    QCOMPARE(sel2->selectedExactRect(), l2->selection()->selectedExactRect());
+    QCOMPARE(sel2->selectedExactRect(), l2->internalSelection()->selectedExactRect());
 
     KisSelectionSP sel3 = new KisSelection();
-    sel3->getOrCreatePixelSelection()->select(QRect(50, -10, 800, 30), 128);
-    l2->setSelection(sel3);
+    sel3->pixelSelection()->select(QRect(50, -10, 800, 30), 128);
+    l2->setInternalSelection(sel3);
 
+}
+
+void KisAdjustmentLayerTest::testSelectionParent()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT(f);
+
+    {
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+    }
+
+    {
+        KisSelectionSP selection = new KisSelection();
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), selection);
+
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+    }
+
+    {
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+
+        KisSelectionSP selection = new KisSelection();
+        adjLayer->setInternalSelection(selection);
+
+        QCOMPARE(adjLayer->internalSelection()->parentNode(), KisNodeWSP(adjLayer));
+    }
 }
 
 QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI)

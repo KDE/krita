@@ -30,6 +30,7 @@
 
 class QModelIndex;
 class KisFilterConfiguration;
+class KisView2;
 class QAbstractItemModel;
 class QHideEvent;
 class QShowEvent;
@@ -44,11 +45,12 @@ public:
     KisFilterSelectorWidget(QWidget* parent);
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
-    void setPaintDevice(KisPaintDeviceSP);
-    void setImage(KisImageWSP);
+    void setView(KisView2 *view);
+    void setPaintDevice(bool showAll, KisPaintDeviceSP);
     KisFilterConfiguration* configuration();
     void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
+    KisFilterSP currentFilter() const;
 protected slots:
     void slotBookmarkedFilterConfigurationSelected(int);
     void setFilterIndex(const QModelIndex&);

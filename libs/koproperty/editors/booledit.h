@@ -25,10 +25,10 @@
 #include "combobox.h"
 #include "koproperty/Factory.h"
 
-#include <QtCore/QEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QToolButton>
+#include <QEvent>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QToolButton>
 
 namespace KoProperty
 {
@@ -80,15 +80,12 @@ class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
+    explicit ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
     ~ThreeStateBoolEdit();
 
     QVariant value() const;
     void setValue(const QVariant &value);
 
-//    virtual void setProperty(Property *property);
-//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-//    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 signals:
     void commitData( QWidget * editor );
 };

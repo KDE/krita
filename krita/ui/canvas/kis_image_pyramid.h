@@ -21,12 +21,13 @@
 
 #include <QImage>
 #include <QVector>
-#include <QThreadPool>
+#include <QThreadStorage>
 
 #include <KoColorSpace.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include "kis_projection_backend.h"
+
 
 class KisImagePyramid : QObject, public KisProjectionBackend
 {
@@ -38,8 +39,10 @@ public:
 
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
-    void setMonitorProfile(const KoColorProfile* monitorProfile);
-    void updateCache(KisPPUpdateInfoSP info);
+    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void setChannelFlags(const QBitArray &channelFlags);
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    void updateCache(const QRect &dirtyImageRect);
     void recalculateCache(KisPPUpdateInfoSP info);
 
     KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
@@ -47,7 +50,7 @@ public:
 
     /**
      * Render the projection onto a QImage.
-     * Color profiling accurs here
+     * Color profiling occurs here
      */
     QImage convertToQImage(qreal scale,
                            const QRect& unscaledRect,
@@ -71,19 +74,7 @@ public:
     void alignSourceRect(QRect& rect, qreal scale);
 
 private:
-    QVector<KisPaintDeviceSP> m_pyramid;
-    //QThreadPool m_pyramidUpdater;
-    KisImageWSP  m_originalImage;
-    const KoColorProfile* m_monitorProfile;
-    const KoColorSpace* m_monitorColorSpace;
-    KoColorConversionTransformation::Intent m_renderingIntent;
 
-    /**
-     * Number of planes inside pyramid
-     */
-    qint32 m_pyramidHeight;
-
-private:
     void retrieveImageData(const QRect &rect);
     void rebuildPyramid();
     void clearPyramid();
@@ -117,6 +108,37 @@ private:
      */
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
                                const QRect& unscaledRect);
+
+private slots:
+
+    void configChanged();
+
+private:
+
+    QVector<KisPaintDeviceSP> m_pyramid;
+    KisImageWSP  m_originalImage;
+
+    const KoColorProfile* m_monitorProfile;
+    const KoColorSpace* m_monitorColorSpace;
+
+    KisDisplayFilterSP m_displayFilter;
+
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+
+
+    /**
+     * Number of planes inside pyramid
+     */
+    qint32 m_pyramidHeight;
+
+    bool m_useOcio;
+
+    QBitArray m_channelFlags;
+    bool m_allChannelsSelected;
+    bool m_onlyOneChannelSelected;
+    int m_selectedChannelIndex;
+    
 };
 
 #endif /* __KIS_IMAGE_PYRAMID */

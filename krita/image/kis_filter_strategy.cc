@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -96,14 +97,14 @@ qint32 KisBoxFilterStrategy::intValueAt(qint32 t) const
     return 0;
 }
 
-qreal KisTriangleFilterStrategy::valueAt(qreal t) const
+qreal KisBilinearFilterStrategy::valueAt(qreal t) const
 {
     if (t < 0.0) t = -t;
     if (t < 1.0) return(1.0 - t);
     return(0.0);
 }
 
-qint32 KisTriangleFilterStrategy::intValueAt(qint32 t) const
+qint32 KisBilinearFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = |t|, -1 <= t <= 1 */
     if (t < 0) t = -t;
@@ -181,7 +182,7 @@ KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 
 KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }    
     dbgRegistry << "deleting KisFilterStrategyRegistry";
@@ -194,10 +195,10 @@ KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
         // s_instance->add(new KisHermiteFilterStrategy);
         s_instance->add(new KisBicubicFilterStrategy);
         s_instance->add(new KisBoxFilterStrategy);
-        s_instance->add(new KisTriangleFilterStrategy);
+        s_instance->add(new KisBilinearFilterStrategy);
         // s_instance->add(new KisBellFilterStrategy);
         // s_instance->add(new KisBSplineFilterStrategy);
-        // s_instance->add(new KisLanczos3FilterStrategy);
+        s_instance->add(new KisLanczos3FilterStrategy);
         // s_instance->add(new KisMitchellFilterStrategy);
 
     }
@@ -212,4 +213,25 @@ QList<KoID> KisFilterStrategyRegistry::listKeys() const
     }
 
     return answer;
+}
+
+QString KisFilterStrategyRegistry::formatedDescriptions() const
+{
+    QString formatedDescription("<html><head/><body>");
+
+    foreach (const QString key, keys()) {
+        KisFilterStrategy *strategy = get(key);
+        QString description = strategy->description();
+
+        if (!description.isEmpty()) {
+            formatedDescription.append("<p><span style=\"font-weight:600;\">");
+            formatedDescription.append(strategy->name());
+            formatedDescription.append("</span>: ");
+            formatedDescription.append(description);
+            formatedDescription.append("</p>");
+        }
+    }
+    formatedDescription.append("</body></html>");
+
+    return formatedDescription;
 }

@@ -22,34 +22,31 @@
 
 #include <VideoData.h>
 #include <VideoCollection.h>
+#include <SelectVideoWidget.h>
 
-#include <kfilewidget.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QGridLayout>
-#include <phonon/backendcapabilities.h>
 
 VideoShapeConfigWidget::VideoShapeConfigWidget()
     : KoShapeConfigWidgetBase()
     ,m_shape(0),
-    m_fileWidget(0)
+    m_fileSelectionWidget(0)
 {
 }
 
 VideoShapeConfigWidget::~VideoShapeConfigWidget()
 {
-    delete m_fileWidget;
+    delete m_fileSelectionWidget;
 }
 
 void VideoShapeConfigWidget::open(KoShape *shape)
 {
     m_shape = dynamic_cast<VideoShape*>(shape);
     Q_ASSERT(m_shape);
-    if (!m_fileWidget) {
+    if (!m_fileSelectionWidget) {
         QVBoxLayout *layout = new QVBoxLayout(this);
-        m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenVideoDialog"), this);
-        m_fileWidget->setOperationMode(KFileWidget::Opening);
-        m_fileWidget->setMimeFilter(Phonon::BackendCapabilities::availableMimeTypes());
-        layout->addWidget(m_fileWidget);
+        m_fileSelectionWidget = new SelectVideoWidget(this);
+        layout->addWidget(m_fileSelectionWidget);
         setLayout(layout);
     }
 }
@@ -58,9 +55,9 @@ void VideoShapeConfigWidget::save()
 {
     if (!m_shape)
         return;
-    m_fileWidget->slotOk();
-    m_fileWidget->accept();
-    VideoData *data = m_shape->videoCollection()->createExternalVideoData(m_fileWidget->selectedUrl());
+    m_fileSelectionWidget->accept();
+    VideoData *data = m_shape->videoCollection()->createExternalVideoData(m_fileSelectionWidget->selectedUrl(),
+                                                                          m_fileSelectionWidget->saveEmbedded());
     m_shape->setUserData(data);
 }
 

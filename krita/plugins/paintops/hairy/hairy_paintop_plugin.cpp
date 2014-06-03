@@ -20,7 +20,6 @@
 
 #include "hairy_paintop_plugin.h"
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -39,10 +38,10 @@ K_EXPORT_PLUGIN(HairyPaintOpPluginFactory("krita"))
 
 
 HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy brush"), KisPaintOpFactory::categoryStable(),"krita-sumi.png"));
+    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy"), KisPaintOpFactory::categoryStable(), "krita-sumi.png", QString(), QStringList(), 4));
 
 }
 

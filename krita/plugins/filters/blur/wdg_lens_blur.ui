@@ -6,11 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
+    <width>232</width>
     <height>263</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -30,6 +33,41 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="KIntNumInput" name="irisRadiusSlider">
+        <property name="label">
+         <string>Radius:</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>256</number>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="KIntNumInput" name="irisRotationSlider">
+        <property name="label">
+         <string>Rotation:</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>360</number>
+        </property>
+        <property name="suffix">
+         <string>°</string>
+        </property>
+        <property name="sliderEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -67,41 +105,6 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="KIntNumInput" name="irisRadiusSlider">
-        <property name="label">
-         <string>Radius</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>256</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="3">
-       <widget class="KIntNumInput" name="irisRotationSlider">
-        <property name="label">
-         <string>Rotation</string>
-        </property>
-        <property name="minimum">
-         <number>0</number>
-        </property>
-        <property name="maximum">
-         <number>360</number>
-        </property>
-        <property name="suffix">
-         <string>°</string>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -113,14 +116,13 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>18</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KIntNumInput</class>
@@ -128,6 +130,11 @@
    <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>irisShapeCombo</tabstop>
+  <tabstop>irisRadiusSlider</tabstop>
+  <tabstop>irisRotationSlider</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

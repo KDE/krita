@@ -132,7 +132,7 @@ public:
      * of the TextShape. With that the styles only have to be read once and can be used in
      * all shapes that also need them.
      *
-     * The ownership of the added data is passed to teh context. The KoShapeLoadingContext will
+     * The ownership of the added data is passed to the context. The KoShapeLoadingContext will
      * delete the added data when it is destroyed.
      *
      * Data inserted for a specific id will not be overwritten by calling addSharedData with
@@ -175,6 +175,18 @@ public:
     static QSet<AdditionalAttributeData> additionalAttributeData();
 
     KoDocumentResourceManager *documentResourceManager() const;
+
+    /**
+     * @brief get the rdf document
+     * @return the rdf document, or 0 if there is none set/
+     */
+    QObject *documentRdf() const;
+
+    /**
+     * @brief setDocumentRdf sets the rdf document for the loading context
+     * @param documentRdf the rdf document -- it needs to have been loaded already
+     */
+    void setDocumentRdf(QObject *documentRdf);
 
 private:
     // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase

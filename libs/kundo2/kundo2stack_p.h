@@ -42,9 +42,9 @@
 #ifndef KUNDO2STACK_P_H
 #define KUNDO2STACK_P_H
 
-#include <QtCore/qlist.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qaction.h>
+#include <QList>
+#include <QString>
+#include <QAction>
 
 #include "kundo2stack.h"
 

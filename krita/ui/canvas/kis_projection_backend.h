@@ -24,6 +24,9 @@
 class KoColorProfile;
 class UpdateInformation;
 class KisImagePatch;
+class KisDisplayFilter;
+
+#include <KoColorConversionTransformation.h>
 
 /**
  * KisProjectionBackend is an abstract class representing
@@ -42,14 +45,16 @@ public:
      */
     virtual void setImage(KisImageWSP image) = 0;
     virtual void setImageSize(qint32 w, qint32 h) = 0;
-    virtual void setMonitorProfile(const KoColorProfile* monitorProfile) = 0;
+    virtual void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) = 0;
+    virtual void setChannelFlags(const QBitArray &channelFlags) = 0;
+    virtual void setDisplayFilter(KisDisplayFilterSP displayFilter) = 0;
 
     /**
      * Updates the cache of the backend by reading from
      * an accociated image. All data transfers with
      * KisImage should happen here
      */
-    virtual void updateCache(KisPPUpdateInfoSP info) = 0;
+    virtual void updateCache(const QRect &dirtyImageRect) = 0;
 
     /**
      * Prescales the cache of the backend. It is intended to be

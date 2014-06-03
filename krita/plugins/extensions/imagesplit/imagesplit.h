@@ -23,13 +23,10 @@
 
 #include <QVariant>
 
-#include <kparts/plugin.h>
 #include <kurl.h>
+#include <kis_view_plugin.h>
 
-class KisView2;
-class KisPainter;
-
-class Imagesplit : public KParts::Plugin
+class Imagesplit : public KisViewPlugin
 {
     Q_OBJECT
 public:
@@ -40,11 +37,6 @@ private slots:
 
     void slotImagesplit();
     void saveAsImage(QRect ,QString, KUrl);
-
-private:
-
-    KisView2 * m_view;
-
 };
 
 #endif // IMAGESPLIT_H

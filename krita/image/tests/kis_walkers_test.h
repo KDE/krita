@@ -19,12 +19,13 @@
 #ifndef KIS_WALKERS_TEST_H
 #define KIS_WALKERS_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_layer.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_device.h"
+#include "kis_merge_walker.h"
 
 class TestLayer : public KisLayer
 {
@@ -197,6 +198,35 @@ public:
     }
 };
 
+class ComplexAccessLayer : public ComplexRectsLayer
+{
+
+    Q_OBJECT
+
+public:
+    ComplexAccessLayer(KisImageWSP image, const QString & name, quint8 opacity)
+            : ComplexRectsLayer(image, name, opacity) {
+    }
+
+
+    QRect accessRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+
+        const qint32 delta = 70;
+        return rect.translated(delta, 0);
+    }
+
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+        return rect;
+    }
+
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const {
+        Q_UNUSED(pos);
+        return rect;
+    }
+};
+
 class KisBaseRectsWalker;
 
 class KisWalkersTest : public QObject
@@ -205,19 +235,27 @@ class KisWalkersTest : public QObject
 
 private slots:
     void testUsualVisiting();
+    void testVisitingWithTopmostMask();
     void testMergeVisiting();
+    void testComplexAccessVisiting();
+    void testCloneNotificationsVisiting();
     void testRefreshSubtreeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();
     void testMasksVisiting();
     void testMasksOverlapping();
-    void testChecksum();
+    void testRectsChecksum();
+    void testGraphStructureChecksum();
 
 private:
     void verifyResult(KisBaseRectsWalker &walker, QStringList reference,
                       QRect accessRect, bool changeRectVaries,
                       bool needRectVaries);
     void verifyResult(KisBaseRectsWalker &walker, struct UpdateTestJob &job);
+
+    void checkNotification(const KisMergeWalker::CloneNotification &notification,
+                           const QString &name,
+                           const QRect &rect);
 };
 
 #endif

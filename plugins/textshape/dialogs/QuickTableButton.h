@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,8 +28,9 @@ class QuickTableButton : public QToolButton
 {
     Q_OBJECT
 public:
-    QuickTableButton( QWidget *parent = 0 );
+    explicit QuickTableButton(QWidget *parent = 0);
     void emitCreate(int rows, int columns);
+    void addAction(QAction *action);
 
 signals:
     void create(int rows, int columns);

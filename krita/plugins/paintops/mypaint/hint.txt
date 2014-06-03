@@ -1,0 +1,77 @@
+This is jonnor's hint on how to use th enew surface api
+
+## mypaint_surface_newapi.c [c++]
+
+
+typedef struct _KritaMyPaintSurface {
+    MyPaintTiledSurface parent;
+
+} KritaMyPaintSurface;
+
+// Forward declare
+static void tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRequestData *request);
+static void tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRequestData *request);
+static void destroy(MyPaintSurface *surf);
+
+// In the future, tile size will be an adjustable parameter of
+// MyPaintTiledSurface that one can set to match the tile backing store
+#define TILE_SIZE 64
+
+KritaMyPaintSurface *
+krita_mypaint_surface_new()
+{
+    KritaMyPaintSurface *self = (KritaMyPaintSurface *)malloc(sizeof(KritaMyPaintSurface));
+
+    mypaint_tiled_surface_init(&self->parent, tile_request_start, tile_request_end);
+
+    // Will enable multithreading
+    // self->parent.threadsafe_tile_requests = TRUE;
+    
+    self->parent.parent.destroy = destroy;
+}
+
+static void
+destroy(MyPaintSurface *surf)
+{
+    KritaMyPaintSurface *self = (MyPaintGeglTiledSurface *)surface;
+
+    mypaint_tiled_surface_destroy(&self->parent);
+    
+    free(self);
+}
+
+static void
+tile_request_start(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRequestData *request)
+{
+    MyPaintGeglTiledSurface *self = (MyPaintGeglTiledSurface *)tiled_surface;
+
+    m_dst->readBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    m_dst->colorSpace()->convertPixelsTo(m_dstData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE,
+                                         KoColorConversionTransformation::InternalRenderingIntent,
+                                         KoColorConversionTransformation::InternalConversionFlags);
+
+    quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
+
+    request->buffer = rgba_p;
+
+    // Used for to pass state between tile_request_start/end() in a multithreading safe way
+    // request->context = (void *)something;
+}
+
+static void
+tile_request_end(MyPaintTiledSurface *tiled_surface, MyPaintTiledSurfaceTileRequestData *request)
+{
+    MyPaintGeglTiledSurface *self = (MyPaintGeglTiledSurface *)tiled_surface;
+
+    // Used for to pass state between tile_request_start/end() in a multithreading safe way
+    // SomeThing *something = (SomeThing*)request->context;
+
+    m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE,
+                             KoColorConversionTransformation::InternalRenderingIntent,
+                             KoColorConversionTransformation::InternalConversionFlags);
+    m_dst->writeBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    m_painter->addDirtyRect(QRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+}
+
+
+

@@ -18,7 +18,7 @@
 #ifndef KIS_COMPRESSION_TESTS_H
 #define KIS_COMPRESSION_TESTS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisAbstractCompression;
 

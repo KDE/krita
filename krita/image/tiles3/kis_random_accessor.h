@@ -76,7 +76,10 @@ public:
     void moveTo(qint32 x, qint32 y);
     quint8* rawData();
     const quint8* oldRawData() const;
-    virtual qint32 nConseqPixels() const;
+    const quint8* rawDataConst() const;
+    qint32 numContiguousColumns(qint32 x) const;
+    qint32 numContiguousRows(qint32 y) const;
+    qint32 rowStride(qint32 x, qint32 y) const;
     qint32 x() const;
     qint32 y() const;
 

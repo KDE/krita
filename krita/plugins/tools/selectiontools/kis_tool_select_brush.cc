@@ -18,13 +18,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_tool_select_brush.h"
+
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QPainterPath>
 
-#include <KIntNumInput>
+#include "knuminput.h"
 
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
@@ -41,13 +43,14 @@ USING_PART_OF_NAMESPACE_EIGEN
 #include "kis_pixel_selection.h"
 #include "kis_image.h"
 #include "kis_selection_options.h"
-#include "kis_tool_select_brush.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_paintop_preset.h"
 
 
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_brush_selection_cursor.png", 6, 6)),
+        : KisToolSelectBase(canvas,
+                            KisCursor::load("tool_brush_selection_cursor.png", 6, 6),
+                            i18n("Brush Selection")),
         m_brushRadius(15),
         m_lastMousePosition(-1, -1)
 {
@@ -61,25 +64,25 @@ KisToolSelectBrush::~KisToolSelectBrush()
 QWidget* KisToolSelectBrush::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Brush Selection"));
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
     QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Brush size:"), m_optWidget);
+    QLabel * lbl = new QLabel(i18n("Brush size:"), selectionWidget);
     fl->addWidget(lbl);
 
-    KIntNumInput * input = new KIntNumInput(m_optWidget);
+    KIntNumInput * input = new KIntNumInput(selectionWidget);
     input->setRange(0, 500, 5);
     input->setValue(m_brushRadius*2);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetBrushSize(int)));
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->insertLayout(1, fl);
 
-    m_optWidget->disableSelectionModeOption();
+    selectionWidget->disableSelectionModeOption();
 
-    return m_optWidget;
+    return selectionWidget;
 }
 
 void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
@@ -95,27 +98,45 @@ void KisToolSelectBrush::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-void KisToolSelectBrush::mousePressEvent(KoPointerEvent *event)
+void KisToolSelectBrush::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(mode() == KisTool::PAINT_MODE) {
-        /**
-         * Cancalling must be done at KisTool level
-         */
-//        resetSelection();
-//        return;
+    if (!selectionEditable()) {
+        event->ignore();
+        return;
     }
 
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    setMode(KisTool::PAINT_MODE);
 
-        setMode(KisTool::PAINT_MODE);
+    m_lastPoint = convertToPixelCoord(event->point);
+    addPoint(m_lastPoint);
+}
 
-        m_lastPoint = convertToPixelCoord(event->point);
-        addPoint(m_lastPoint);
-    }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+void KisToolSelectBrush::continuePrimaryAction(KoPointerEvent *event)
+{
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    // this gives better performance
+    if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
+        return;
+
+    //randomise the point to workaround a bug in QPainterPath::operator|=()
+    //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
+    //will be fixed in version 4.7.0
+    qreal randomX=rand()%100;
+    randomX/=1000.;
+    qreal randomY=rand()%100;
+    randomY/=1000.;
+    QPointF smallRandomPoint(randomX, randomY);
+    addPoint(convertToPixelCoord(event->point)+smallRandomPoint);
+}
+
+void KisToolSelectBrush::endPrimaryAction(KoPointerEvent *event)
+{
+    Q_UNUSED(event;)
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    setMode(KisTool::HOVER_MODE);
+    applyToSelection(m_selection);
 }
 
 void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *event)
@@ -133,44 +154,6 @@ void KisToolSelectBrush::mouseMoveEvent(KoPointerEvent *event)
 
     brushRect.moveCenter(m_lastMousePosition);
     updateCanvasPixelRect(brushRect);
-
-    /**
-     * Do selection
-     */
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        // this gives better performance
-        if(Vector2f((m_lastPoint-convertToPixelCoord(event->point)).x(), (m_lastPoint-convertToPixelCoord(event->point)).y()).norm()<m_brushRadius/6)
-            return;
-
-        //randomise the point to workaround a bug in QPainterPath::operator|=()
-        //FIXME: http://bugreports.qt.nokia.com/browse/QTBUG-8035
-        //will be fixed in version 4.7.0
-        qreal randomX=rand()%100;
-        randomX/=1000.;
-        qreal randomY=rand()%100;
-        randomY/=1000.;
-        QPointF smallRandomPoint(randomX, randomY);
-        addPoint(convertToPixelCoord(event->point)+smallRandomPoint);
-    }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
-}
-
-void KisToolSelectBrush::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-        applyToSelection(m_selection);
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
-    }
-}
-
-void KisToolSelectBrush::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
-{
-    KisToolSelectBase::activate(toolActivation, shapes);
 }
 
 void KisToolSelectBrush::deactivate()
@@ -184,33 +167,30 @@ void KisToolSelectBrush::slotSetBrushSize(int size)
     m_brushRadius = ((qreal) size)/2.0;
 }
 
-void KisToolSelectBrush::applyToSelection(const QPainterPath &selection) {
+void KisToolSelectBrush::applyToSelection(QPainterPath selection) {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Brush Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Brush Selection"));
 
-    if (m_selectionMode == PIXEL_SELECTION) {
+    if (selectionMode() == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
-        painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setGradient(currentGradient());
-        painter.setPattern(currentPattern());
+        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
+        painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());
         painter.setFillStyle(KisPainter::FillStyleForegroundColor);
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-        painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-        painter.setOpacity(OPACITY_OPAQUE_U8);
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
-        painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
+        selection.closeSubpath();
         painter.fillPainterPath(selection);
+        tmpSel->setOutlineCache(selection);
 
-        helper.selectPixelSelection(tmpSel, m_selectAction);
+        helper.selectPixelSelection(tmpSel, selectionAction());
 
         resetSelection();
     }

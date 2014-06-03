@@ -31,7 +31,12 @@ QStringList KisPaintOpFactory::whiteListedCompositeOps() const
     return m_whiteListedCompositeOps;
 }
 
-
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+void KisPaintOpFactory::preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings)
+{
+    Q_UNUSED(settings);
+}
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 void KisPaintOpFactory::setUserVisible(PaintopVisibility visibility)
 {
@@ -56,14 +61,9 @@ QString KisPaintOpFactory::pixmap()
     return "";
 }
 
-QString KisPaintOpFactory::categoryExperimental()
-{
-    return i18nc("Category of brush engines", "Experimental");
-}
-
 QString KisPaintOpFactory::categoryStable()
 {
-    return i18nc("Category of brush engines", "Stable");
+    return i18nc("Category of brush engines", "Brush engines");
 }
 
 void KisPaintOpFactory::setPriority(int newPriority)

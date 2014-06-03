@@ -19,8 +19,12 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QCheckBox>
 
 #include <klocale.h>
+#include <kconfiggroup.h>
+#include <kconfig.h>
+#include <kglobal.h>
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
@@ -29,21 +33,47 @@
 #include "kis_color_input.h"
 #include <KoColorProfile.h>
 #include "kis_debug.h"
+#include "kis_color_space_selector.h"
 
 
-KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
-    : QWidget(parent),
-      m_colorSpace(0)
+KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+    : QWidget(parent)
+    , m_colorSpace(0)
+    , m_customColorSpaceSelected(false)
+    , m_displayRenderer(displayRenderer)
 {
     m_layout = new QVBoxLayout(this);
     m_updateAllowed = true;
     m_delayTimer = new QTimer(this);
-    m_delayTimer->setInterval(50);
+    m_delayTimer->setInterval(5);
     connect(m_delayTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
+
+
+    m_colorspaceSelector = new KisColorSpaceSelector(this);
+    connect(m_colorspaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(setCustomColorSpace(const KoColorSpace*)));
+
+    m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
+    connect(m_chkShowColorSpaceSelector, SIGNAL(toggled(bool)), m_colorspaceSelector, SLOT(setVisible(bool)));
+
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
+    m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
+    m_layout->addWidget(m_chkShowColorSpaceSelector);
+    m_layout->addWidget(m_colorspaceSelector);
+
+
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
+    KConfigGroup cfg = KGlobal::config()->group("");
+    cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
+
+}
+
+bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
+{
+    return m_customColorSpaceSelected;
 }
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
@@ -61,7 +91,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
     m_inputs.clear();
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
-    
+
     foreach(KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;
@@ -69,12 +99,12 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
             case KoChannelInfo::UINT8:
             case KoChannelInfo::UINT16:
             case KoChannelInfo::UINT32: {
-                input = new KisIntegerColorInput(this, channel, &m_color);
+                input = new KisIntegerColorInput(this, channel, &m_color, m_displayRenderer);
             }
             break;
             case KoChannelInfo::FLOAT16:
             case KoChannelInfo::FLOAT32: {
-                input = new KisFloatColorInput(this, channel, &m_color);
+                input = new KisFloatColorInput(this, channel, &m_color, m_displayRenderer);
             }
             break;
             default:
@@ -91,19 +121,23 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         }
     }
     bool allChannels8Bit = true;
-    foreach(KoChannelInfo* channel, channels) {
+    foreach (KoChannelInfo* channel, channels) {
         if (channel->channelType() == KoChannelInfo::COLOR && channel->channelValueType() != KoChannelInfo::UINT8) {
             allChannels8Bit = false;
         }
     }
-    if(allChannels8Bit) {
-        KisColorInput* input = new KisHexColorInput(this, &m_color);
+    if (allChannels8Bit) {
+        KisColorInput* input = new KisHexColorInput(this, &m_color, m_displayRenderer);
         m_inputs.append(input);
         m_layout->addWidget(input);
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
     m_layout->addStretch(10);
+
+    m_colorspaceSelector->blockSignals(true);
+    m_colorspaceSelector->setCurrentColorSpace(cs);
+    m_colorspaceSelector->blockSignals(false);
 }
 
 void KisSpecificColorSelectorWidget::update()
@@ -124,4 +158,11 @@ void KisSpecificColorSelectorWidget::updateTimeout()
     if (m_updateAllowed)
         emit(colorChanged(m_color));
     m_delayTimer->stop();
+}
+
+void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *colorSpace)
+{
+    m_customColorSpaceSelected = true;
+    setColorSpace(colorSpace);
+    setColor(m_color);
 }

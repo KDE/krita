@@ -29,8 +29,9 @@ class QFileSystemModel;
 class QButtonGroup;
 class KoCanvasBase;
 class ImageFilter;
-class KisImageStripScene;
+class ImageStripScene;
 class ImageListModel;
+class QTemporaryFile;
 struct ImageDockerUI;
 struct PopupWidgetUI;
 
@@ -69,11 +70,15 @@ private slots:
     void slotImageChoosenFromComboBox(int index);
     void slotZoomChanged(int zoom);
     void slotColorSelected(const QColor& color);
-    void slotDockLocationChanged(Qt::DockWidgetArea area);
-    void slotTopLevelChanged(bool topLevel);
     void slotViewModeChanged(int viewMode, qreal scale);
     void slotCloseZoomPopup();
+    void slotChangeRoot(const QString& path);
     
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 private:
     void addCurrentPathToHistory();
     void updatePath(const QString& path);
@@ -89,11 +94,12 @@ private:
     ImageFilter*           m_proxyModel;
     ImageListModel*        m_imgListModel;
     QStringList            m_history;
-    KisImageStripScene*    m_thumbModel;
+    ImageStripScene*       m_thumbModel;
     ImageDockerUI*         m_ui;
     PopupWidgetUI*         m_popupUi;
     QMap<qint64,ImageInfo> m_imgInfoMap;
     qint64                 m_currImageID;
+    QList<QTemporaryFile*> m_temporaryFiles;
 };
 
 #endif // H_IMAGEDOCKER_DOCK_H_

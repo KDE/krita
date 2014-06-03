@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPROPERTY_GLOBAL_H
-#define KPROPERTY_GLOBAL_H
+#ifndef KOPROPERTY_GLOBAL_H
+#define KOPROPERTY_GLOBAL_H
 
 #include "koproperty_export.h"
 

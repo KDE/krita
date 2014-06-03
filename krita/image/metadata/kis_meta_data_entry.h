@@ -83,7 +83,7 @@ public:
      * Affect the content of entry to this entry if entry is valid
      */
     Entry& operator=(const Entry& entry);
-    bool operator==(const Entry&);
+    bool operator==(const Entry&) const;
 private:
     void setSchema(const KisMetaData::Schema* schema);
 private:

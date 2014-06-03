@@ -21,7 +21,7 @@
 #define __REPORTENTITYIMAGE_H__
 
 #include <KoReportDesignerItemRectBase.h>
-#include <qimage.h>
+#include <QImage>
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include "KoReportItemImage.h"

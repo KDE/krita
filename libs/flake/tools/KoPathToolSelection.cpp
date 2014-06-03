@@ -29,7 +29,7 @@
 #include <KoCanvasBase.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeController.h>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoPathToolSelection::KoPathToolSelection(KoPathTool * tool)
         : m_tool(tool)

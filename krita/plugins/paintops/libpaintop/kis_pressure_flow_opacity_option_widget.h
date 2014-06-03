@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -31,12 +31,12 @@ class QButtonGroup;
 class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 {
     Q_OBJECT
-    
+
 public:
     KisFlowOpacityOptionWidget();
-    
+
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
 private slots:
     void slotSliderValueChanged();
 

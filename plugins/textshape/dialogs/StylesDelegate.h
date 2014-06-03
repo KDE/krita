@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011-2012 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,19 +22,38 @@
 
 #include <QStyledItemDelegate>
 
-class KoStyleManager;
-class KoParagraphStyle;
-class KoCharacterStyle;
+/** This is an internal class, used for the preview of styles in the dropdown of the @class StylesCombo.
+  * This class is also responsible for drawing and handling the buttons to call the style manager or to delete a style.
+  * NB. Deleting a style is currently not supported, therefore the button has been disabled. */
 
 class StylesDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+
 public:
     StylesDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
                             const QModelIndex &index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    virtual bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                            const QStyleOptionViewItem &option, const QModelIndex &index);
+    void setEditButtonEnable(bool enable);
+
+signals:
+    void styleManagerButtonClicked(QModelIndex index);
+    void deleteStyleButtonClicked(QModelIndex index);
+    void needsUpdate(QModelIndex index);
+    void clickedInItem(QModelIndex index);
+
+private:
+    bool m_editButtonPressed;
+    bool m_deleteButtonPressed;
+    bool m_enableEditButton;
+
+    int m_buttonSize;
+    int m_buttonDistance;
 };
 
 #endif

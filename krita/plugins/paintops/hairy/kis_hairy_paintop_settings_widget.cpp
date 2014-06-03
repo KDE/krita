@@ -31,7 +31,7 @@
 #include <kis_compositeop_option.h>
 
 KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     //m_hairyShapeOption = new KisHairyShapeOption();
 
@@ -39,8 +39,8 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisHairyBristleOption());
     addPaintOpOption(new KisHairyInkOption());
     addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPaintActionTypeOption());
 }

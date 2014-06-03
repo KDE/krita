@@ -22,8 +22,8 @@
 #include "core/Global.h"
 #include "core/Clef.h"
 
-#include <QtGui/QPen>
-#include <QtGui/QPainter>
+#include <QPen>
+#include <QPainter>
 
 /**
  * This class contains various methods that define how music is rendered. Currently all hardcoded

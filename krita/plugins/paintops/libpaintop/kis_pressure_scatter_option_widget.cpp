@@ -37,25 +37,26 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     m_axisX->setChecked(true);
     m_axisY = new QCheckBox(i18n("Axis Y"));
     m_axisY->setChecked(true);
-    
+
     QLabel* scatterLbl = new QLabel(i18n("Scatter amount"));
-    
+
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(scatterLbl);
     hl->addWidget(m_axisX);
     hl->addWidget(m_axisY);
-    
+
     QVBoxLayout* vl = new QVBoxLayout;
+    vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(curveWidget());
 
     w->setLayout(vl);
 
-    connect(m_axisX, SIGNAL(toggled(bool)),SLOT(xAxisEnabled(bool)));
-    connect(m_axisY, SIGNAL(toggled(bool)),SLOT(yAxisEnabled(bool)));
+    connect(m_axisX, SIGNAL(toggled(bool)), SLOT(xAxisEnabled(bool)));
+    connect(m_axisY, SIGNAL(toggled(bool)), SLOT(yAxisEnabled(bool)));
 
     setConfigurationPage(w);
-    
+
     xAxisEnabled(m_axisX->isChecked());
     yAxisEnabled(m_axisY->isChecked());
 }
@@ -63,8 +64,8 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
 void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_axisY->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisXEnabled());
-    m_axisX->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisYEnabled());
+    m_axisX->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisXEnabled());
+    m_axisY->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisYEnabled());
 }
 
 

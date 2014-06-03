@@ -100,7 +100,8 @@ bool KoInlineObject::propertyChangeListener() const
 
 QDebug operator<<(QDebug dbg, const KoInlineObject *o)
 {
-    return o->d_func()->printDebug(dbg);
+    return o ? o->d_func()->printDebug(dbg) : dbg << "KoInlineObject 0";
+;
 }
 
 void KoInlineObject::setInlineRdf(KoTextInlineRdf* rdf)

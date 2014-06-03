@@ -27,10 +27,6 @@
 
 #include <KoTextWriter_p.h>
 
-#include <commands/InsertDeleteChangesCommand.h>
-#include <commands/RemoveDeleteChangesCommand.h>
-
-
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
 {
@@ -42,8 +38,6 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
 
     if (!d->sharedData) {
         d->sharedData = new KoTextSharedSavingData();
-        KoGenChanges *changes = new KoGenChanges();
-        d->sharedData->setGenChanges(*changes);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_SAVING_ID, d->sharedData);
         } else {
@@ -60,37 +54,8 @@ KoTextWriter::~KoTextWriter()
 
 void KoTextWriter::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, QTextDocument *document, int from, int to)
 {
-    InsertDeleteChangesCommand *insertCommand = new InsertDeleteChangesCommand(document);
-    RemoveDeleteChangesCommand *removeCommand = new RemoveDeleteChangesCommand(document);
-
-    KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
-    KoChangeTracker::ChangeSaveFormat changeSaveFormat = KoChangeTracker::UNKNOWN;
-    if (changeTracker) {
-        changeSaveFormat = changeTracker->saveFormat();
-        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            KoTextDocument(document).textEditor()->addCommand(insertCommand, false);
-        }
-
-        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            KoTextDocument(document).textEditor()->addCommand(removeCommand, false);
-        }
-    }
-
     KoTextWriter writer(context, rdfData);
     writer.write(document, from, to);
-
-    if (changeTracker) {
-        changeSaveFormat = changeTracker->saveFormat();
-        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            insertCommand->undo();
-            delete insertCommand;
-        }
-
-        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            removeCommand->undo();
-            delete removeCommand;
-        }
-    }
 }
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context)
@@ -125,8 +90,10 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph", internalName);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
-        if (originalParagraphStyle)
+        if (originalParagraphStyle) {
             paragStyle.removeDuplicates(*originalParagraphStyle);
+            paragStyle.setParentStyle(originalParagraphStyle);
+        }
         paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }
@@ -137,15 +104,6 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
     d->document = const_cast<QTextDocument*>(document);
     d->styleManager = KoTextDocument(document).styleManager();
-    d->changeTracker = KoTextDocument(document).changeTracker();
-
-    QVector<int> changesVector;
-    if (d->changeTracker) {
-        d->changeTracker->allChangeIds(changesVector);
-    }
-    foreach (int changeId, changesVector) {
-        d->saveChange(changeId);
-    }
 
     QTextBlock fromblock = document->findBlock(from);
     QTextBlock toblock = document->findBlock(to);
@@ -156,7 +114,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     QTextList *currentList = fromcursor.currentList();
 
     // NOTE even better would be if we create a new table/list out of multiple selected
-    // tablecells/listitems thta contain only the selected cells/items. But following
+    // tablecells/listitems that contain only the selected cells/items. But following
     // at least enables copying a whole list/table while still being able to copy/paste
     // only parts of the text within a list/table (see also bug 275990).
     if (currentTable || currentList) {
@@ -204,5 +162,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     }
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
+    d->globalFrom = from;
+    d->globalTo = to;
     d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
 }

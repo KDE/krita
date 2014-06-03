@@ -40,8 +40,8 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>
-#include <KNumInput>
-#include <KLocale>
+#include <knuminput.h>
+#include <klocale.h>
 
 ChapterVariable::ChapterVariable()
         : KoVariable(true)
@@ -104,22 +104,22 @@ void ChapterVariable::resize(const QTextDocument *_document, QTextInlineObject o
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
             int level = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
             if (level == m_level) {
-                KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+                KoTextBlockData data(block);
                 switch(m_format) {
                 case ChapterName:
                     setValue(block.text());
                     break;
                 case ChapterNumber:
-                    setValue(data ? data->counterText() : QString());
+                    setValue(data.counterText());
                     break;
                 case ChapterNumberName:
-                    setValue(data ? QString("%1 %2").arg(data->counterText()).arg(block.text()) : block.text());
+                    setValue(QString("%1 %2").arg(data.counterText()).arg(block.text()));
                     break;
                 case ChapterPlainNumber:
-                    setValue(data ? data->counterPlainText() : QString());
+                    setValue(data.counterPlainText());
                     break;
                 case ChapterPlainNumberName:
-                    setValue(data ? QString("%1 %2").arg(data->counterPlainText()).arg(block.text()) : QString());
+                    setValue(QString("%1 %2").arg(data.counterPlainText()).arg(block.text()));
                     break;
                 default:
                     break;

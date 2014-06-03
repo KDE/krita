@@ -19,12 +19,11 @@
 #ifndef KIS_PAINTOP_SETTINGS_H_
 #define KIS_PAINTOP_SETTINGS_H_
 
-#include "opengl/kis_opengl.h"
-
 #include "kis_types.h"
 #include "krita_export.h"
 
 #include <QImage>
+#include <QScopedPointer>
 
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
@@ -60,11 +59,18 @@ public:
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
-     * the paintop needs mouse interaction for instance in the case of the duplicate op.
+     * the paintop needs mouse interaction for instance in the case of the clone op.
      * If the tool is supposed to ignore the event, the paint op should return false
      * and if the tool is supposed to use the event, return true.
      */
     virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers);
+
+    /**
+     * This function is called to set random offsets to the brush whenever the mouse is clicked. It is
+     * specific to when the pattern option is set.
+     *
+     */
+    virtual void setRandomOffset();
 
     /**
      * Clone the current settings object. Override this if your settings instance doesn't
@@ -100,6 +106,13 @@ public:
     }
 
     /**
+     * @return the composite op it to which the indirect painting device
+     * should be initialized to. This is used by clone op to reset
+     * the composite op to COMPOSITE_COPY
+     */
+    virtual QString indirectPaintingCompositeOp() const;
+
+    /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
@@ -118,35 +131,16 @@ public:
      * This enum defines the current mode for painting an outline.
      */
     enum OutlineMode {
-        CursorIsOutline = 1, ///< When this mode is set, then the outline is supposed to paint an outline around the cursor
-        CursorIsNotOutline = 2 ///< When this mode is set, then the outline is no supposed to paint an outline for the cursor (useful for instance in the duplicate op to show the source)
+        CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
+        CursorIsNotOutline = 2 ///< Currently, this mode means that there is no outline active. It used to mean using of QImage-based outlines (e.g. for clone tool) but it was not implemented.
     };
-    /**
-     * @return the rectangle covered by the current brush (or the previous brush??? and what about pressure???)
-     * based on the given position, in XXX (image or view???) coordinates.
-     *
-     * XXX: the function name is very misleading, since this function doesn't do any painting! Rename
-     * to brushOutlineRect, and perhaps just return the brushSize and let the caller handle the x,y
-     * location. If one wants to use QImage, then one use something else
-     */
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-
-    /**
-     * This function allow the paintop to draw an outline at a given position.
-     *
-     * XXX: It would be _much_ better to pass return a QImage, instead of pass a painter and
-     * a KoViewConverter (which is _not_ a class that that should be referenced in krita/image (we could make it return a KisPaintopOutlineDrawer whose implementation can be in krita/ui).
-     * And we need a lot of caching here, since no matter what we do, it is utterly slow, especially
-     * when using a tablet. How does XXX works with the duplicate op ? List of images ? With a center ?
-     */
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
-     * always like duplicate paintop indicating the duplicate position
+     * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     /**
     * Useful for simple elliptical brush outline.
@@ -157,7 +151,7 @@ public:
      * The behaviour might be different per paintop. Most of the time
      * the brush diameter is increased by x pixels, y ignored
      *
-     * @param x is add to the the diameter or radius (according the paintop)
+     * @param x is add to the diameter or radius (according the paintop)
      *  It might be also negative, to decrease the value of the brush diameter/radius.
      *  x is in pixels
      * @param y is unused, it supposed to be used to change some different attribute
@@ -183,12 +177,27 @@ public:
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
-    virtual bool isValid();
+    virtual bool isValid() const;
 
-    /// Check if the settings are loadable, that might the the case if we can fallback to something
+    /// Check if the settings are loadable, that might the case if we can fallback to something
     /// Overwrite if the settings can do some kind of fallback
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();
+
+    /**
+     * These methods are populating properties with runtime
+     * information about canvas rotation/mirroring. This information
+     * is set directly by KisToolFreehand. Later the data is accessed
+     * by the pressure options to make a final decision.
+     */
+    void setCanvasRotation(qreal angle);
+    void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
+
+    /**
+     * Overrides the method in KisPropertiesCofiguration to allow
+     * onPropertyChanged() callback
+     */
+    void setProperty(const QString & name, const QVariant & value);
 
 protected:
      /**
@@ -196,11 +205,15 @@ protected:
      */
     KisPaintOpSettingsWidget* optionsWidget() const;
 
+    /**
+     * The callback is called every time when a property changes
+     */
+    virtual void onPropertyChanged();
+
+
 private:
-
     struct Private;
-    Private* const d;
-
+    const QScopedPointer<Private> d;
 };
 
 #endif

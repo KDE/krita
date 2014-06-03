@@ -19,24 +19,28 @@
 #ifndef KISSHAPECONTROLLER_TEST_H
 #define KISSHAPECONTROLLER_TEST_H
 
-#include <QtTest/QtTest>
+#include "kis_dummies_facade_base_test.h"
 
 class KisDoc2;
+class KisPart2;
 class KisNameServer;
-class KisImage;
 class KisShapeController;
 
-class KisShapeControllerTest : public QObject
+
+class KisShapeControllerTest : public KisDummiesFacadeBaseTest
 {
     Q_OBJECT
 
-private slots:
+public:
+    ~KisShapeControllerTest();
 
-    // tests
-    void testSetImage();
-    void testAddShape();
-    void testRemoveShape();
+protected:
+    KisDummiesFacadeBase* dummiesFacadeFactory();
+    void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
 
+private:
+    KisDoc2 *m_doc;
+    KisNameServer *m_nameServer;
 };
 
 #endif

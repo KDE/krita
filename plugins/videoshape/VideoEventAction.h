@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@ class FullScreenPlayer;
 class VideoEventAction : public KoEventAction
 {
 public:
-    VideoEventAction(VideoShape *parent);
+    explicit VideoEventAction(VideoShape *parent);
 
     /// destructor
     virtual ~VideoEventAction();

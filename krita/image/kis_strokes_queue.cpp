@@ -25,11 +25,15 @@
 #include "kis_updater_context.h"
 
 struct KisStrokesQueue::Private {
-    Private() : needsExclusiveAccess(false), openedStrokesCounter(0) {}
+    Private()
+        : openedStrokesCounter(0),
+          needsExclusiveAccess(false),
+          wrapAroundModeSupported(false) {}
 
     QQueue<KisStrokeSP> strokesQueue;
-    bool needsExclusiveAccess;
     int openedStrokesCounter;
+    bool needsExclusiveAccess;
+    bool wrapAroundModeSupported;
     QMutex mutex;
 };
 
@@ -41,6 +45,10 @@ KisStrokesQueue::KisStrokesQueue()
 
 KisStrokesQueue::~KisStrokesQueue()
 {
+    foreach(KisStrokeSP stroke, m_d->strokesQueue) {
+        stroke->cancelStroke();
+    }
+
     delete m_d;
 }
 
@@ -105,6 +113,11 @@ bool KisStrokesQueue::needsExclusiveAccess() const
     return m_d->needsExclusiveAccess;
 }
 
+bool KisStrokesQueue::wrapAroundModeSupported() const
+{
+    return m_d->wrapAroundModeSupported;
+}
+
 bool KisStrokesQueue::isEmpty() const
 {
     QMutexLocker locker(&m_d->mutex);
@@ -163,8 +176,19 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
     KisStrokeSP stroke = m_d->strokesQueue.head();
     bool result = false;
 
-    if(!stroke->isInitialized()) {
+    /**
+     * The stroke may be cancelled very fast. In this case it will
+     * end up in the state:
+     *
+     * !stroke->isInitialized() && stroke->isEnded() && !stroke->hasJobs()
+     *
+     * This means that !isInitialised() doesn't imply there are any
+     * jobs present.
+     */
+
+    if(!stroke->isInitialized() && stroke->hasJobs()) {
         m_d->needsExclusiveAccess = stroke->isExclusive();
+        m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
         result = true;
     }
     else if(stroke->hasJobs()){
@@ -173,6 +197,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning)
     else if(stroke->isEnded() && !hasStrokeJobsRunning) {
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;
+        m_d->wrapAroundModeSupported = false;
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false);
@@ -186,7 +211,8 @@ bool KisStrokesQueue::checkExclusiveProperty(qint32 numMergeJobs,
                                              qint32 numStrokeJobs)
 {
     if(!m_d->strokesQueue.head()->isExclusive()) return true;
-
+    Q_UNUSED(numMergeJobs);
+    Q_UNUSED(numStrokeJobs);
     Q_ASSERT(!(numMergeJobs && numStrokeJobs));
     return numMergeJobs == 0;
 }

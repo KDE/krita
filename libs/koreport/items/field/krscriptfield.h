@@ -30,7 +30,7 @@ class Field : public QObject
 {
     Q_OBJECT
 public:
-    Field(KoReportItemField*);
+    explicit Field(KoReportItemField*);
 
     ~Field();
 

@@ -21,7 +21,7 @@
 
 #include "KoFontFace.h"
 #include <KoXmlWriter.h>
-#include <KDebug>
+#include <kdebug.h>
 
 class KoFontFacePrivate : public QSharedData
 {
@@ -115,7 +115,11 @@ QString KoFontFace::familyGeneric() const
 
 void KoFontFace::setFamilyGeneric(const QString &familyGeneric)
 {
-    d->familyGeneric = familyGeneric;
+    if (familyGeneric == "decorative" || familyGeneric == "modern"
+            || familyGeneric == "roman" || familyGeneric == "script"
+            || familyGeneric == "swiss" || familyGeneric == "system") {
+        d->familyGeneric = familyGeneric;
+    }
 }
 
 QString KoFontFace::style() const

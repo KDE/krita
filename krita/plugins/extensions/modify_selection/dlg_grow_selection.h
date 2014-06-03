@@ -2,6 +2,7 @@
  *  dlg_grow_selection.h -- part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,40 +21,29 @@
 #ifndef DLG_GROW_SELECTION_H
 #define DLG_GROW_SELECTION_H
 
-#include <kdialog.h>
-
 #include "ui_wdg_grow_selection.h"
+#include <operations/kis_operation_ui_widget.h>
 
-class WdgGrowSelection : public QWidget, public Ui::WdgGrowSelection
+class KisView2;
+class WdgGrowSelection : public KisOperationUIWidget, public Ui::WdgGrowSelection
 {
     Q_OBJECT
 
 public:
-    WdgGrowSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgGrowSelection(QWidget *parent, KisView2* view);
 
-class DlgGrowSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgGrowSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgGrowSelection();
-
-    qint32 xradius();
-    qint32 yradius();
+    virtual void getConfiguration(KisOperationConfiguration* config);
 
 private slots:
-
-    void okClicked();
+    void slotGrowValueChanged(int value);
+    void slotGrowValueChanged(double value);
+    void slotUnitChanged(int index);
 
 private:
+    void updateGrowUIValue(double value);
 
-    WdgGrowSelection * m_page;
+    double m_resolution;
+    int m_growValue;
 };
 
 #endif // DLG_GROW_SELECTION_H

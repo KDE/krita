@@ -21,19 +21,23 @@
 #include "kis_tool_brush.h"
 
 #include <QCheckBox>
+#include <QComboBox>
+#include <QButtonGroup>
 
 #include <klocale.h>
 
 #include "kis_cursor.h"
 #include "kis_slider_spin_box.h"
+#include <KoGroupButton.h>
 
-
-#define MAXIMUM_SMOOTHNESS 1000
+#define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
-        : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18nc("(qtundo-format)", "Brush"))
+    : KisToolFreehand(canvas,
+                      KisCursor::load("tool_freehand_cursor.png", 5, 5),
+                      i18nc("(qtundo-format)", "Brush"))
 {
     setObjectName("tool_brush");
 }
@@ -42,9 +46,66 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
-void KisToolBrush::slotSetSmoothness(int smoothness)
+int KisToolBrush::smoothingType() const
 {
-    m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
+    return m_smoothingOptions.smoothingType();
+}
+
+bool KisToolBrush::smoothPressure() const
+{
+    return m_smoothingOptions.smoothPressure();
+}
+
+int KisToolBrush::smoothnessQuality() const
+{
+    return m_smoothingOptions.smoothnessDistance();
+}
+
+qreal KisToolBrush::smoothnessFactor() const
+{
+    return m_smoothingOptions.tailAggressiveness();
+}
+
+void KisToolBrush::slotSetSmoothingType(int index)
+{
+    switch (index) {
+    case 0:
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
+        m_sliderSmoothnessDistance->setEnabled(false);
+        m_sliderTailAggressiveness->setEnabled(false);
+        m_chkSmoothPressure->setEnabled(false);
+        break;
+    case 1:
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
+        m_sliderSmoothnessDistance->setEnabled(false);
+        m_sliderTailAggressiveness->setEnabled(false);
+        m_chkSmoothPressure->setEnabled(false);
+        break;
+    case 2:
+    default:
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
+        m_sliderSmoothnessDistance->setEnabled(true);
+        m_sliderTailAggressiveness->setEnabled(true);
+        m_chkSmoothPressure->setEnabled(true);
+    }
+    emit smoothingTypeChanged();
+}
+
+void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
+{
+    m_smoothingOptions.setSmoothnessDistance(distance);
+    emit smoothnessQualityChanged();
+}
+
+void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
+{
+    m_smoothingOptions.setTailAggressiveness(argh_rhhrr);
+    emit smoothnessFactorChanged();
+}
+
+void KisToolBrush::setSmoothPressure(bool value)
+{
+    m_smoothingOptions.setSmoothPressure(value);
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -54,31 +115,78 @@ void KisToolBrush::slotSetMagnetism(int magnetism)
 
 QWidget * KisToolBrush::createOptionWidget()
 {
+    QWidget *optionsWidget = KisToolFreehand::createOptionWidget();
+    optionsWidget->setObjectName(toolId() + "option widget");
 
-    QWidget * optionWidget = KisToolFreehand::createOptionWidget();
-    optionWidget->setObjectName(toolId() + "option widget");
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    optionsWidget->layout()->addWidget(specialSpacer);
 
-    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
-    m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(m_smooth);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
+    // Line smoothing configuration
+    QWidget* smoothingWidget = new QWidget(optionsWidget);
+    QHBoxLayout* smoothingLayout = new QHBoxLayout(smoothingWidget);
+    smoothingLayout->setSpacing(0);
+    m_buttonGroup = new QButtonGroup(this);
+    m_buttonGroup->setExclusive(true);
+    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotSetSmoothingType(int)));
 
-    m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
-    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setEnabled(true);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
-    connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
-    m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
+    KoGroupButton * button = new KoGroupButton(optionsWidget);
+    button->setGroupPosition(KoGroupButton::GroupLeft);
+    button->setText(i18nc("No smoothing enabled", "No"));
+    button->setAutoRaise(true);
+    button->setCheckable(true);
+    smoothingLayout->addWidget(button);
+    m_buttonGroup->addButton(button, KisSmoothingOptions::NO_SMOOTHING);
 
-    addOptionWidgetOption(m_sliderSmoothness, m_chkSmooth);
+    button = new KoGroupButton(optionsWidget);
+    button->setGroupPosition(KoGroupButton::GroupCenter);
+    button->setText(i18nc("Basic smoothing enabled", "Basic"));
+    button->setAutoRaise(true);
+    button->setCheckable(true);
+    smoothingLayout->addWidget(button);
+    m_buttonGroup->addButton(button, KisSmoothingOptions::SIMPLE_SMOOTHING);
+
+    button = new KoGroupButton(optionsWidget);
+    button->setGroupPosition(KoGroupButton::GroupRight);
+    button->setText(i18nc("Weighted smoothing enabled", "Weighted"));
+    button->setAutoRaise(true);
+    button->setCheckable(true);
+    smoothingLayout->addWidget(button);
+    m_buttonGroup->addButton(button, KisSmoothingOptions::WEIGHTED_SMOOTHING);
+
+    addOptionWidgetOption(smoothingWidget,  new QLabel(i18nc("Smoothing of the brush", "Smoothing:")));
+
+    m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
+    m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+    m_sliderSmoothnessDistance->setEnabled(true);
+    connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
+    m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance());
+    addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
+
+    m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
+    m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
+    m_sliderTailAggressiveness->setEnabled(true);
+    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
+    m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness());
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
+
+    m_chkSmoothPressure = new QCheckBox("", optionsWidget);
+    m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure());
+    connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
+    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
+
+    m_buttonGroup->button((int)m_smoothingOptions.smoothingType())->setChecked(true);
+    slotSetSmoothingType((int)m_smoothingOptions.smoothingType());
 
     // Drawing assistant configuration
-    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionsWidget);
     m_chkAssistant->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
+    m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
-    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS);
+    m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
@@ -86,7 +194,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
 
-    return optionWidget;
+    return optionsWidget;
 }
 
 #include "kis_tool_brush.moc"

@@ -20,7 +20,7 @@
 #ifndef KODOM_H
 #define KODOM_H
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include "koodf_export.h"
 #include <KoXmlReader.h>

@@ -22,10 +22,9 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -36,9 +35,9 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
+#include <KoMixColorsOp.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -51,6 +50,7 @@
 #include "kis_wdg_noise.h"
 #include "ui_wdgnoiseoptions.h"
 #include <kis_iterator_ng.h>
+
 
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
 K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
@@ -70,7 +70,6 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Rando
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const
@@ -85,18 +84,17 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::process(KisPaintDeviceSP device,
-                            const QRect& applyRect,
-                            const KisFilterConfiguration* config,
-                            KoUpdater* progressUpdater
-                            ) const
+void KisFilterNoise::processImpl(KisPaintDeviceSP device,
+                                 const QRect& applyRect,
+                                 const KisFilterConfiguration* config,
+                                 KoUpdater* progressUpdater
+                                 ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -111,9 +109,9 @@ void KisFilterNoise::process(KisPaintDeviceSP device,
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
-    KisRectIteratorSP srcIt = device->createRectIteratorNG(applyRect);
+    KisSequentialIterator it(device, applyRect);
 
-    quint8* interm = new quint8[ cs->pixelSize()];
+    quint8* interm = new quint8[cs->pixelSize()];
     double threshold = (100.0 - level) * 0.01;
 
     qint16 weights[2];
@@ -141,20 +139,18 @@ void KisFilterNoise::process(KisPaintDeviceSP device,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    for (int row = 0; row < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        do {
-            if (randt.doubleRandomAt(srcIt->x(), srcIt->y()) > threshold) {
-                // XXX: Added static_cast to get rid of warnings
-                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
-                                static_cast<int>((double)randg.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
-                                static_cast<int>((double)randb.doubleRandomAt(srcIt->x(), srcIt->y()) * 255));
-                cs->fromQColor(c, interm, 0);
-                pixels[1] = srcIt->oldRawData();
-                mixOp->mixColors(pixels, weights, 2, srcIt->rawData());
-            }
-            if (progressUpdater) progressUpdater->setValue(++count);
-        } while (srcIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-    }
+    do {
+        if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
+            // XXX: Added static_cast to get rid of warnings
+            QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randg.doubleRandomAt(it.x(), it.y()) * 255),
+                            static_cast<int>((double)randb.doubleRandomAt(it.x(), it.y()) * 255));
+            cs->fromQColor(c, interm, 0);
+            pixels[1] = it.oldRawData();
+            mixOp->mixColors(pixels, weights, 2, it.rawData());
+        }
+        if (progressUpdater) progressUpdater->setValue(++count);
+    } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
 
     delete [] interm;
 }

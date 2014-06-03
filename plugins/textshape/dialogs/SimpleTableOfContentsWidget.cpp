@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -24,9 +24,10 @@
 #include "TableOfContentsPreview.h"
 
 #include <KoTableOfContentsGeneratorInfo.h>
+#include <KoIcon.h>
 
-#include <KAction>
-#include <KDebug>
+#include <kaction.h>
+#include <kdebug.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -43,13 +44,11 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
 
     m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
-    widget.addToC->setDefaultAction(tool->action("insert_tableofcontents"));
-    widget.configureToC->setDefaultAction(tool->action("format_tableofcontents"));
+    widget.addToC->setIcon(koIcon("insert-tableofcontents"));
     widget.addToC->setNumColumns(1);
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
     connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
     connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
-    connect(widget.configureToC, SIGNAL(clicked(bool)), this, SIGNAL(showConfgureOptions()));
 }
 
 SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
@@ -60,25 +59,6 @@ SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-}
-
-void SimpleTableOfContentsWidget::setToCConfigureMenu(QMenu *tocMenu)
-{
-    if (widget.configureToC->menu()) {
-        widget.configureToC->menu()->disconnect();
-    }
-
-    widget.configureToC->setMenu(tocMenu);
-}
-
-QMenu *SimpleTableOfContentsWidget::ToCConfigureMenu()
-{
-    return widget.configureToC->menu();
-}
-
-void SimpleTableOfContentsWidget::showMenu()
-{
-    widget.configureToC->showMenu();
 }
 
 void SimpleTableOfContentsWidget::prepareTemplateMenu()
@@ -113,12 +93,13 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
             QPixmap pmm(QSize(200,120));
             pmm.fill(Qt::white);
             widget.addToC->addItem(pmm, index);
-        }        
+        }
     }
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();
         widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
         connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()), Qt::UniqueConnection);
+        widget.addToC->addAction(m_referenceTool->action("format_tableofcontents"));
     }
 }
 

@@ -21,7 +21,7 @@
 
 #include <ui_PartDetailsDialog.h>
 
-#include <KDialog>
+#include <kdialog.h>
 
 class MusicTool;
 namespace MusicCore {

@@ -2,7 +2,7 @@
  *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
+#include <KoTextDebug.h>
 
 #include <QtGui>
 #include <QTextCursor>
@@ -68,7 +69,7 @@ QTextCursor TestTableLayout::setupTest()
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager();
+    m_styleManager = new KoStyleManager(0);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);
@@ -88,7 +89,6 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     KoParagraphStyle style;
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
     style.applyStyle(m_block);
-
     QTextTableFormat tableFormat;
     if (tableStyle)
         tableStyle->applyStyle(tableFormat);

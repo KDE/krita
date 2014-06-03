@@ -22,47 +22,55 @@
 #include <KoCreatePathTool.h>
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
+#include "kis_delegated_tool.h"
+
+#include <KoIcon.h>
 
 class KoCanvasBase;
-class KoLineBorder;
+class KoShapeStroke;
+class KisToolSelectPath;
 
-class KisToolSelectPath : public KisToolSelectBase
+
+class __KisToolSelectPathLocalTool : public KoCreatePathTool {
+public:
+    __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
+    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+    virtual void addPathShape(KoPathShape* pathShape);
+
+    using KoCreatePathTool::createOptionWidgets;
+    using KoCreatePathTool::endPathWithoutLastPoint;
+    using KoCreatePathTool::endPath;
+    using KoCreatePathTool::cancelPath;
+
+private:
+    KisToolSelectPath* const m_selectionTool;
+    KoShapeStroke* m_borderBackup;
+};
+
+struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
+    __KisToolSelectBaseWrapper(KoCanvasBase *canvas,
+                               const QCursor &cursor)
+        : KisToolSelectBase(canvas, cursor, i18n("Path Selection"))
+    {
+    }
+};
+
+typedef KisDelegatedTool<__KisToolSelectBaseWrapper, __KisToolSelectPathLocalTool> DelegatedSelectPathTool;
+
+class KisToolSelectPath : public DelegatedSelectPathTool
 {
-
     Q_OBJECT
 
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
-    virtual ~KisToolSelectPath();
+    void mousePressEvent(KoPointerEvent* event);
 
-    virtual QWidget * createOptionWidget();
+protected:
+    void requestStrokeCancellation();
+    void requestStrokeEnd();
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
-
-private:
-    /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
-
-    class LocalTool : public KoCreatePathTool {
-        friend class KisToolSelectPath;
-    public:
-        LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);
-        virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-        virtual void addPathShape(KoPathShape* pathShape);
-    private:
-        KisToolSelectPath* const m_selectingTool;
-        KoLineBorder* m_borderBackup;
-    };
-    LocalTool* const m_localTool;
-
+    friend class __KisToolSelectPathLocalTool;
+    QList<QWidget *> createOptionWidgets();
 };
 
 class KisToolSelectPathFactory : public KoToolFactoryBase
@@ -74,7 +82,7 @@ public:
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_path_selection");
+        setIconName(koIconNameCStr("tool_path_selection"));
         setPriority(58);
     }
 

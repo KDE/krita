@@ -68,14 +68,14 @@ namespace CalligraFilter {
     {
         if (!m_filterEntry) {
             kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
-            return KoFilter::CreationError;
+            return KoFilter::FilterEntryNull;
         }
 
         m_filter = m_filterEntry->createFilter(m_chain);
 
         if (!m_filter) {
             kError(30500) << "Couldn't create the filter." << endl;
-            return KoFilter::CreationError;
+            return KoFilter::FilterCreationError;
         }
 
         if (m_updater) {
@@ -99,13 +99,6 @@ namespace CalligraFilter {
     void ChainLink::dump() const
     {
         kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
-    }
-
-    int ChainLink::lruPartIndex() const
-    {
-        if (m_filter && m_filter->inherits("KoEmbeddingFilter"))
-            return static_cast<KoEmbeddingFilter*>(m_filter)->lruPartIndex();
-        return -1;
     }
 
     void ChainLink::setupCommunication(const KoFilter *const parentFilter) const

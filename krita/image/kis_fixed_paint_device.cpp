@@ -21,7 +21,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-
 #include "kis_debug.h"
 
 KisFixedPaintDevice::KisFixedPaintDevice(const KoColorSpace* colorSpace)
@@ -40,6 +39,14 @@ KisFixedPaintDevice::KisFixedPaintDevice(const KisFixedPaintDevice& rhs)
     m_bounds = rhs.m_bounds;
     m_colorSpace = rhs.m_colorSpace;
     m_data = rhs.m_data;
+}
+
+KisFixedPaintDevice& KisFixedPaintDevice::operator=(const KisFixedPaintDevice& rhs)
+{
+    m_bounds = rhs.m_bounds;
+    m_colorSpace = rhs.m_colorSpace;
+    m_data = rhs.m_data;
+    return *this;
 }
 
 void KisFixedPaintDevice::setRect(const QRect& rc)
@@ -82,7 +89,9 @@ quint8* KisFixedPaintDevice::data() const
     return const_cast<quint8*>(m_data.data());
 }
 
-void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
+void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     if (*m_colorSpace == *dstColorSpace) {
         return;
@@ -93,7 +102,8 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace, KoColorCo
     m_colorSpace->convertPixelsTo(data(), dstData.data(),
                                   dstColorSpace,
                                   size,
-                                  renderingIntent);
+                                  renderingIntent,
+                                  conversionFlags);
 
     m_colorSpace = dstColorSpace;
     m_data = dstData;
@@ -112,15 +122,25 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
 
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
-        memcpy(data(), image.bits(), image.width() * image.height() * pixelSize());
+#if QT_VERSION >= 0x040700
+        memcpy(data(), image.constBits(), image.byteCount());
+#else
+        memcpy(data(), image.bits(), image.byteCount());
+#endif
     } else {
         KoColorSpaceRegistry::instance()
-        ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
-        ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height());
+            ->colorSpace( RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), srcProfileName)
+#if QT_VERSION >= 0x040700
+            ->convertPixelsTo(image.constBits(), data(), colorSpace(), image.width() * image.height(),
+#else
+            ->convertPixelsTo(image.bits(), data(), colorSpace(), image.width() * image.height(),
+#endif
+                              KoColorConversionTransformation::InternalRenderingIntent,
+                              KoColorConversionTransformation::InternalConversionFlags);
     }
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     qint32 x1;
     qint32 y1;
@@ -132,13 +152,13 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
     w = m_bounds.width();
     h = m_bounds.height();
 
-    return convertToQImage(dstProfile, x1, y1, w, h);
+    return convertToQImage(dstProfile, x1, y1, w, h, intent, conversionFlags);
 }
 
-QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
+QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
-    
+
     if (w < 0)
         return QImage();
 
@@ -147,30 +167,34 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
 
     if (QRect(x1, y1, w, h) == m_bounds) {
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
-                                             KoColorConversionTransformation::IntentPerceptual);
+                                             intent, conversionFlags);
     } else {
-        int pSize = pixelSize();
-        int deviceWidth = m_bounds.width();
-        quint8* newData = new quint8[w * h * pSize];
-        quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
-        quint8* dstPtr = newData;
-        // copy the right area out of the paint device into data
-        for (int row = 0; row < h; row++) {
-            memcpy(dstPtr, srcPtr, w * pSize);
-            srcPtr += deviceWidth * pSize;
-            dstPtr += w * pSize;
+        try {
+            // XXX: fill the image row by row!
+            int pSize = pixelSize();
+            int deviceWidth = m_bounds.width();
+            quint8* newData = new quint8[w * h * pSize];
+            quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
+            quint8* dstPtr = newData;
+            // copy the right area out of the paint device into data
+            for (int row = 0; row < h; row++) {
+                memcpy(dstPtr, srcPtr, w * pSize);
+                srcPtr += deviceWidth * pSize;
+                dstPtr += w * pSize;
+            }
+            QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
+            return image;
         }
-        QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile,
-                       KoColorConversionTransformation::IntentPerceptual);
-        return image;
+        catch(std::bad_alloc) {
+            return QImage();
+        }
     }
 }
-
 
 void KisFixedPaintDevice::clear(const QRect & rc)
 {
     KoColor c(Qt::black, m_colorSpace);
-    quint8* black = m_colorSpace->allocPixelBuffer(1);
+    quint8* black = new quint8[pixelSize()];
     memcpy(black, c.data(), m_colorSpace->pixelSize());
     m_colorSpace->setOpacity(black, OPACITY_TRANSPARENT_U8, 1);
     fill(rc.x(), rc.y(), rc.width(), rc.height(), black);
@@ -197,7 +221,7 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
             memcpy(dabPointer, fillPixel, pixelSize);
             dabPointer += pixelSize;
         }
-        
+
     } else {
         int deviceWidth = bounds().width();
         quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
@@ -227,8 +251,8 @@ void KisFixedPaintDevice::readBytes(quint8* dstData, qint32 x, qint32 y, qint32 
 
     if (rc == m_bounds) {
             memcpy(dstData, dabPointer, pixelSize * w * h);
-    } 
-    else 
+    }
+    else
     {
         int deviceWidth = bounds().width();
         quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;
@@ -245,14 +269,14 @@ void KisFixedPaintDevice::mirror(bool horizontal, bool vertical)
     if (!horizontal && !vertical){
         return;
     }
-    
+
     int pixelSize = m_colorSpace->pixelSize();
     int w = m_bounds.width();
     int h = m_bounds.height();
 
     if (horizontal){
         int rowSize = pixelSize * w;
-        
+
         quint8 * dabPointer = data();
         quint8 * row = new quint8[ rowSize ];
         quint8 * mirror = 0;
@@ -267,28 +291,28 @@ void KisFixedPaintDevice::mirror(bool horizontal, bool vertical)
                 mirror -= pixelSize;
             }
         }
-        
+
         delete [] row;
     }
 
     if (vertical){
         int rowsToMove = h / 2;
         int rowSize = pixelSize * w;
-        
+
         quint8 * startRow = data();
         quint8 * endRow = data() + (h-1) * w * pixelSize;
         quint8 * row = new quint8[ rowSize ];
-        
+
         for (int y = 0; y < rowsToMove; y++){
             memcpy(row, startRow, rowSize);
             memcpy(startRow, endRow, rowSize);
             memcpy(endRow, row, rowSize);
-            
+
             startRow += rowSize;
             endRow -= rowSize;
         }
-     
+
         delete [] row;
     }
-    
+
 }

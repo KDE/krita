@@ -25,7 +25,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoInlineNote.h>
 
-class TEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
+class KOTEXTLAYOUT_EXPORT KoTextLayoutNoteArea : public KoTextLayoutArea
 {
 public:
     explicit KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
@@ -34,6 +34,12 @@ public:
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
     bool layout(FrameIterator *cursor);
+
+    void setAsContinuedArea(bool isContinuedArea);
+
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
 private:
     class Private;

@@ -19,10 +19,11 @@
 #ifndef KIS_EXTERNAL_LAYER_IFACE_
 #define KIS_EXTERNAL_LAYER_IFACE_
 
-#include "kicon.h"
+#include "KoIcon.h"
 
 #include "kis_types.h"
 
+#include "kis_image.h"
 #include "kis_layer.h"
 
 class QString;
@@ -43,7 +44,7 @@ public:
             : KisLayer(image, name, opacity) {}
 
     virtual QIcon icon() const {
-        return KIcon("system-run");
+        return koIcon("system-run");
     }
 
     virtual void resetCache() {

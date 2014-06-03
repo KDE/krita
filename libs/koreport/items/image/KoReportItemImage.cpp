@@ -16,9 +16,9 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemImage.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
@@ -48,7 +48,7 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
 
             setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else {
-            kDebug() << "while parsing image element encountered unknow element: " << n;
+            kWarning() << "while parsing image element encountered unknow element: " << n;
         }
     }
 
@@ -143,7 +143,8 @@ QString KoReportItemImage::typeName() const
     return "report:image";
 }
 
-int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemImage::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
 
@@ -182,7 +183,7 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
         delete id;
     }
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 

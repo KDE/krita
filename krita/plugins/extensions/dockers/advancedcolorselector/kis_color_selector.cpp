@@ -26,47 +26,53 @@
 #include <QTimer>
 #include <QPushButton>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KComponentData>
-#include <KGlobal>
-#include <KIcon>
-#include <KDebug>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kdebug.h>
+
+#include <KoCanvasResourceManager.h>
+#include <KoIcon.h>
 
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"
 #include "kis_color_selector_simple.h"
 #include "kis_color_selector_wheel.h"
 #include "kis_color_selector_container.h"
+#include "kis_canvas2.h"
+#include "kis_signal_compressor.h"
+
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
-                                       : KisColorSelectorBase(parent),
-                                       m_ring(0),
-                                       m_triangle(0),
-                                       m_slider(0),
-                                       m_square(0),
-                                       m_wheel(0),
-                                       m_mainComponent(0),
-                                       m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+    : KisColorSelectorBase(parent),
+      m_ring(0),
+      m_triangle(0),
+      m_slider(0),
+      m_square(0),
+      m_wheel(0),
+      m_mainComponent(0),
+      m_subComponent(0),
+      m_grabbingComponent(0),
+      m_blipDisplay(true)
 {
     init();
+    updateSettings();
     setConfiguration(conf);
 }
 
 KisColorSelector::KisColorSelector(QWidget* parent)
-                                       : KisColorSelectorBase(parent),
-                                       m_ring(0),
-                                       m_triangle(0),
-                                       m_slider(0),
-                                       m_square(0),
-                                       m_wheel(0),
-                                       m_button(0),
-                                       m_mainComponent(0),
-                                       m_subComponent(0),
-                                       m_grabbingComponent(0),
-                                       m_blipDisplay(true)
+    : KisColorSelectorBase(parent),
+      m_ring(0),
+      m_triangle(0),
+      m_slider(0),
+      m_square(0),
+      m_wheel(0),
+      m_button(0),
+      m_mainComponent(0),
+      m_subComponent(0),
+      m_grabbingComponent(0),
+      m_blipDisplay(true)
 {
     init();
     updateSettings();
@@ -75,7 +81,7 @@ KisColorSelector::KisColorSelector(QWidget* parent)
 KisColorSelectorBase* KisColorSelector::createPopup() const
 {
     KisColorSelectorBase* popup = new KisColorSelector(0);
-    popup->setColor(m_lastColor);
+    popup->setColor(m_lastRealColor);
     return popup;
 }
 
@@ -122,8 +128,8 @@ void KisColorSelector::setConfiguration(Configuration conf)
     connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal)),
             m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal)), Qt::UniqueConnection);
 
-    connect(m_mainComponent, SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
-    connect(m_subComponent,  SIGNAL(update()), m_updateTimer,   SLOT(start()), Qt::UniqueConnection);
+    connect(m_mainComponent, SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
+    connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
     
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
     m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
@@ -142,6 +148,19 @@ void KisColorSelector::updateSettings()
     KisColorSelectorBase::updateSettings();
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     setConfiguration(Configuration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelector::Configuration().toString())));
+}
+
+void KisColorSelector::reset()
+{
+    KisColorSelectorBase::reset();
+
+    if (m_mainComponent) {
+        m_mainComponent->setDirty();
+    }
+
+    if (m_subComponent) {
+        m_subComponent->setDirty();
+    }
 }
 
 void KisColorSelector::paintEvent(QPaintEvent* e)
@@ -219,6 +238,9 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
         }
     }
 
+    // reset the currect color after resizing the widget
+    setColor(m_lastRealColor);
+
     KisColorSelectorBase::resizeEvent(e);
 }
 
@@ -234,60 +256,62 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
             m_grabbingComponent=m_subComponent;
 
         mouseEvent(e);
+        e->accept();
     }
 }
 
 void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 {
     KisColorSelectorBase::mouseMoveEvent(e);
-    
+
     mouseEvent(e);
+    e->accept();
 }
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
-    KisColorSelectorBase::mouseReleaseEvent(e);
-    if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
-        m_lastColor=m_currentColor;
-        ColorRole role;
-        if(e->button() == Qt::LeftButton)
-            role=Foreground;
-        else
-            role=Background;
-        commitColor(KoColor(m_currentColor, colorSpace()), role);
+    e->setAccepted(false);
+    KisColorSelectorBase::mousePressEvent(e);
 
-        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
-            hidePopup();
-        }
+    if(!e->isAccepted() &&
+       !(m_lastRealColor == m_currentRealColor)) {
+
+        m_lastRealColor = m_currentRealColor;
+        m_lastColorRole = Acs::buttonToRole(e->button());
+
+        updateColor(m_lastRealColor, m_lastColorRole, false);
+        e->accept();
     }
-    e->accept();
+
     m_grabbingComponent=0;
 }
 
 bool KisColorSelector::displaySettingsButton()
 {
-    if(dynamic_cast<KisColorSelectorContainer*>(parent())!=0)
-        return true;
-    else
-        return false;
+    return dynamic_cast<KisColorSelectorContainer*>(parent());
 }
 
-void KisColorSelector::setColor(const QColor &color)
+void KisColorSelector::setColor(const KoColor &color)
 {
     m_mainComponent->setColor(color);
     m_subComponent->setColor(color);
-    m_lastColor=color;
-    update();
+    m_lastRealColor = color;
+
+    m_signalCompressor->start();
 }
 
 void KisColorSelector::mouseEvent(QMouseEvent *e)
 {
-    if(m_grabbingComponent && (e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)) {
+    if (m_grabbingComponent && (e->buttons() & Qt::LeftButton || e->buttons() & Qt::RightButton)) {
+
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
-        m_currentColor=m_mainComponent->currentColor();
-        KoColor kocolor(m_currentColor, colorSpace());
-        updateColorPreview(kocolor.toQColor());
+        KoColor color = m_mainComponent->currentColor();
+        m_currentRealColor = color;
+        updateColorPreview(color);
+
+        Acs::ColorRole role = Acs::buttonsToRole(e->button(), e->buttons());
+        updateColor(color, role, false);
     }
 }
 
@@ -295,6 +319,7 @@ void KisColorSelector::init()
 {
     setAcceptDrops(true);
 
+    m_lastColorRole = Acs::Foreground;
     m_ring = new KisColorSelectorRing(this);
     m_triangle = new KisColorSelectorTriangle(this);
     m_slider = new KisColorSelectorSimple(this);
@@ -303,18 +328,14 @@ void KisColorSelector::init()
 
     if(displaySettingsButton()) {
         m_button = new QPushButton(this);
-        m_button->setIcon(KIcon("configure"));
+        m_button->setIcon(koIcon("configure"));
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));
     }
 
     // a tablet can send many more signals, than a mouse
     // this causes many repaints, if updating after every signal.
-    // a workaround with a timer can fix that.
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->setInterval(1);
-    m_updateTimer->setSingleShot(true);
-
-    connect(m_updateTimer,      SIGNAL(timeout()), this,  SLOT(update()));
+    m_signalCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_INACTIVE, this);
+    connect(m_signalCompressor, SIGNAL(timeout()), SLOT(update()));
 
     setMinimumSize(40, 40);
 }

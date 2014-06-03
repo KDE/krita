@@ -42,8 +42,8 @@ SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
 
     connect(m_timer, SIGNAL(timeout()),
             SLOT(slotTimeOut()));
-    //connect(this, SIGNAL(activated( int )), XXX
-    //        SLOT(slotUpdateToolTip( int )));
+    //connect(this, SIGNAL(activated(int)), XXX
+    //        SLOT(slotUpdateToolTip(int)));
 }
 
 SqueezedComboBox::~SqueezedComboBox()

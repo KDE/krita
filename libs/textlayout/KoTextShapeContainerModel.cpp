@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2010 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +19,7 @@
  */
 
 #include "KoTextShapeContainerModel.h"
-#include "KoTextAnchor.h"
+#include "KoAnchorInlineObject.h"
 #include "KoTextShapeData.h"
 #include "KoTextDocumentLayout.h"
 
@@ -28,7 +28,7 @@
 #include <QTextLine>
 #include <QTextDocument>
 
-#include <KDebug>
+#include <kdebug.h>
 
 struct Relation
 {
@@ -40,7 +40,7 @@ struct Relation
     {
     }
     KoShape *child;
-    KoTextAnchor *anchor;
+    KoShapeAnchor *anchor;
     uint nested : 1;
     uint inheritsTransform :1;
 };
@@ -49,7 +49,7 @@ class KoTextShapeContainerModel::Private
 {
 public:
     QHash<const KoShape*, Relation> children;
-    QList<KoTextAnchor *> shapeRemovedAnchors;
+    QList<KoShapeAnchor *> shapeRemovedAnchors;
 };
 
 KoTextShapeContainerModel::KoTextShapeContainerModel()
@@ -69,8 +69,8 @@ void KoTextShapeContainerModel::add(KoShape *child)
     Relation relation(child);
     d->children.insert(child, relation);
 
-    KoTextAnchor *toBeAddedAnchor = 0;
-    foreach (KoTextAnchor *anchor, d->shapeRemovedAnchors) {
+    KoShapeAnchor *toBeAddedAnchor = 0;
+    foreach (KoShapeAnchor *anchor, d->shapeRemovedAnchors) {
         if (child == anchor->shape()) {
             toBeAddedAnchor = anchor;
             break;
@@ -88,7 +88,7 @@ void KoTextShapeContainerModel::remove(KoShape *child)
     Relation relation = d->children.value(child);
     d->children.remove(child);
     if (relation.anchor) {
-        relation.anchor->detachFromModel();
+        relation.anchor->placementStrategy()->detachFromModel();
         d->shapeRemovedAnchors.append(relation.anchor);
     }
 }
@@ -146,6 +146,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
     if (((type == KoShape::RotationChanged ||
           type == KoShape::ScaleChanged ||
           type == KoShape::ShearChanged ||
+          type == KoShape::ClipPathChanged ||
           type == KoShape::PositionChanged ||
           type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
           type == KoShape::TextRunAroundChanged) {
@@ -155,7 +156,7 @@ void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType
     KoShapeContainerModel::childChanged( child, type );
 }
 
-void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor)
+void KoTextShapeContainerModel::addAnchor(KoShapeAnchor *anchor)
 {
     Q_ASSERT(anchor);
     Q_ASSERT(anchor->shape());
@@ -163,7 +164,7 @@ void KoTextShapeContainerModel::addAnchor(KoTextAnchor *anchor)
     d->children[anchor->shape()].anchor = anchor;
 }
 
-void KoTextShapeContainerModel::removeAnchor(KoTextAnchor *anchor)
+void KoTextShapeContainerModel::removeAnchor(KoShapeAnchor *anchor)
 {
     if (d->children.contains(anchor->shape())) {
         d->children[anchor->shape()].anchor = 0;
@@ -186,10 +187,12 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     QTextLayout *layout = 0;
     int anchorPosInParag = -1;
 
-    if (relation.anchor->anchorType() == KoTextAnchor::AnchorAsCharacter) {
-        QTextBlock block = relation.anchor->document()->findBlock(relation.anchor->positionInDocument());
+    if (relation.anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
+        int posInDocument = relation.anchor->textLocation()->position();
+        const QTextDocument *document = relation.anchor->textLocation()->document();
+        QTextBlock block = document->findBlock(posInDocument);
         layout = block.layout();
-        anchorPosInParag = relation.anchor->positionInDocument() - block.position();
+        anchorPosInParag = posInDocument - block.position();
         if (layout) {
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
             Q_ASSERT(tl.isValid());
@@ -201,9 +204,9 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         // the rest of the code uses the shape baseline, at this time the bottom. So adjust
         newPosition.setY(newPosition.y() + child->size().height());
         if (layout == 0) {
-            QTextBlock block = relation.anchor->document()->findBlock(relation.anchor->positionInDocument());
+            QTextBlock block = document->findBlock(posInDocument);
             layout = block.layout();
-            anchorPosInParag = relation.anchor->positionInDocument() - block.position();
+            anchorPosInParag = posInDocument - block.position();
         }
         if (layout->lineCount() > 0) {
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());

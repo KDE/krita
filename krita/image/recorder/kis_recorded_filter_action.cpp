@@ -36,9 +36,15 @@
 #include "kis_play_info.h"
 
 struct KisRecordedFilterAction::Private {
-    Private() : kconfig(0) {}
+    Private()
+        : kconfig(0)
+    {
+
+    }
+
     const KisFilter* filter;
     QRect rect;
+
     KisFilterConfiguration* configuration() {
         if (!kconfig) {
             kconfig = filter->defaultConfiguration(0);
@@ -48,19 +54,23 @@ struct KisRecordedFilterAction::Private {
         }
         return kconfig;
     }
+
     void setConfiguration(KisFilterConfiguration* conf) {
         delete kconfig;
         kconfig = conf;
         configstr = conf->toXML();
     }
+
     void setConfig(const QString& cfg) {
         delete kconfig;
         kconfig = 0;
         configstr = cfg;
     }
+
     const QString& config() {
         return configstr;
     }
+
 private:
     QString configstr;
     KisFilterConfiguration* kconfig;
@@ -81,6 +91,7 @@ KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& 
 
 KisRecordedFilterAction::~KisRecordedFilterAction()
 {
+    delete d;
 }
 
 void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater) const
@@ -93,13 +104,11 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
 
     KisImageWSP image = _info.image();
     r1 = r1.intersected(image->bounds());
-    if (layer && layer->selectionMask()) {
-        r1 = r1.intersected(layer->selectionMask()->exactBounds());
+    if (layer && layer->selection()) {
+        r1 = r1.intersected(layer->selection()->selectedExactRect());
     }
-    if (image->globalSelection())
-        r1 = r1.intersected(image->globalSelection()->selectedExactRect());
 
-    d->filter->process(dev, r1, kfc, _updater);
+    d->filter->process(dev, dev, layer->selection(), r1, kfc, _updater);
     node->setDirty(r1);
 
     transaction.commit(_info.undoAdapter());

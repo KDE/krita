@@ -20,6 +20,7 @@
 #define KIS_KRA_LOADER_H
 
 class QString;
+class QStringList;
 
 #include "KoXmlReaderForward.h"
 class KoStore;
@@ -27,15 +28,16 @@ class KoStore;
 class KisDoc2;
 class KisNode;
 class KoColorSpace;
+class KisPaintingAssistant;
 
 #include <kis_types.h>
-
+#include <krita_export.h>
 /**
  * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
  * compatible. But 2.0 won't be able to save 1.x .kra files unless we
  * implement an export filter.
  */
-class KisKraLoader
+class KRITAUI_EXPORT KisKraLoader
 {
 
 public:
@@ -52,34 +54,49 @@ public:
 
     void loadBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external);
 
-private:
+    vKisNodeSP selectedNodes() const;
 
-    KisNode* loadNodes(const KoXmlElement& element, KisImageWSP image, KisNode* parent);
+    // it's neater to follow the same design as with selectedNodes, so let's have a getter here
+    QList<KisPaintingAssistant*> assistants() const;
 
-    KisNode* loadNode(const KoXmlElement& elem, KisImageWSP image);
-
-    KisNode* loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadGroupLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadShapeLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
-
-    KisNode* loadFilterMask(const KoXmlElement& elem);
-
-    KisNode* loadTransparencyMask(const KoXmlElement& elem);
-
-    KisNode* loadSelectionMask(KisImageWSP image, const KoXmlElement& elem);
-
+    /// if empty, loading didn't fail...
+    QStringList errorMessages() const;
 
 private:
 
-    class Private;
+    // this needs to be private, for neatness sake
+    void loadAssistants(KoStore* store, const QString & uri, bool external);
+
+    KisNodeSP loadNodes(const KoXmlElement& element, KisImageWSP image, KisNodeSP parent);
+
+    KisNodeSP loadNode(const KoXmlElement& elem, KisImageWSP image, KisNodeSP parent);
+
+    KisNodeSP loadPaintLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadGroupLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadShapeLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadGeneratorLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadCloneLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, const KoColorSpace* cs, quint32 opacity);
+
+    KisNodeSP loadFilterMask(const KoXmlElement& elem, KisNodeSP parent);
+
+    KisNodeSP loadTransparencyMask(const KoXmlElement& elem, KisNodeSP parent);
+
+    KisNodeSP loadSelectionMask(KisImageWSP image, const KoXmlElement& elem, KisNodeSP parent);
+
+    KisNodeSP loadFileLayer(const KoXmlElement& elem, KisImageWSP image, const QString& name, quint32 opacity);
+
+    void loadCompositions(const KoXmlElement& elem, KisImageWSP image);
+
+    void loadAssistantsList(const KoXmlElement& elem);
+private:
+
+    struct Private;
     Private * const m_d;
 
 };

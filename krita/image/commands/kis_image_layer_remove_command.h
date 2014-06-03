@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,36 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_LAYER_REMOVE_COMMAND_H_
-#define KIS_IMAGE_LAYER_REMOVE_COMMAND_H_
+#ifndef __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
+#define __KIS_IMAGE_LAYER_REMOVE_COMMAND_H
 
-#include <krita_export.h>
-
+#include "krita_export.h"
 #include "kis_types.h"
 #include "kis_image_command.h"
 
 
-/// The command for removing a layer
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
-
-
 public:
-    /**
-     * Constructor
-     * @param image The image the command will be working on.
-     * @param layer the layer to remove
-     * @param wasParent the parent of the layer
-     * @param wasAbove the layer above the layer
-     */
-    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP layer);
+    KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node);
+    ~KisImageLayerRemoveCommand();
 
-    virtual void redo();
-    virtual void undo();
+    void redo();
+    void undo();
 
 private:
-    KisNodeSP m_layer;
-    KisNodeSP m_prevParent;
-    KisNodeSP m_prevAbove;
+    void addSubtree(KisImageWSP image, KisNodeSP node);
+
+private:
+    KisNodeSP m_node;
 };
-#endif
+
+#endif /* __KIS_IMAGE_LAYER_REMOVE_COMMAND_H */

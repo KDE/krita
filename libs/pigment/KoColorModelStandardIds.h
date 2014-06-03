@@ -37,5 +37,6 @@ extern const KoID PIGMENTCMS_EXPORT Integer8BitsColorDepthID;
 extern const KoID PIGMENTCMS_EXPORT Integer16BitsColorDepthID;
 extern const KoID PIGMENTCMS_EXPORT Float16BitsColorDepthID;
 extern const KoID PIGMENTCMS_EXPORT Float32BitsColorDepthID;
+extern const KoID PIGMENTCMS_EXPORT Float64BitsColorDepthID;
 
 #endif

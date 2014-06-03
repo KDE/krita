@@ -25,8 +25,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
-#include <qscrollbar.h>
-//Added by qt3to4:
+#include <QScrollBar>
 #include <QMouseEvent>
 #include <QFrame>
 #include <QBrush>
@@ -242,7 +241,10 @@ void KisHistogramView::setChannels()
         addProducerChannels(f.generate());
     } else {
         foreach (const QString &id, list) {
-            addProducerChannels(KoHistogramProducerFactoryRegistry::instance()->value(id)->generate());
+            KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->value(id)->generate();
+            if (producer) {
+                addProducerChannels(producer);
+            }
         }
     }
 
@@ -255,6 +257,8 @@ void KisHistogramView::setChannels()
 
 void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer)
 {
+    if (!producer) return;
+
     ComboboxInfo info;
     info.isProducer = true;
     info.producer = producer;

@@ -23,21 +23,18 @@
 
 #include "kis_types.h"
 
-
 class KAction;
 class QAction;
 class KToggleAction;
 class KActionCollection;
 
-class KoCompositeOp;
-class KoColorSpace;
 
 class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
-
+class KisAction;
 
 /**
  * KisLayerManager takes care of the gui around working with layers:
@@ -71,33 +68,26 @@ private:
     
     
     void setup(KActionCollection * collection);
-    void addAction(QAction * action);
 
     void updateGUI();
     
-
-    void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
-    
+
 private slots:
 
     void mergeLayer();
     
     void imageResizeToActiveLayer();
 
-    void actLayerVisChanged(int show);
     void layerProperties();
 
-    void layerRemove();
     void layerDuplicate();
     void layerRaise();
     void layerLower();
     void layerFront();
     void layerBack();
 
-    void mirrorLayerX();
-    void mirrorLayerY();
     void flattenImage();
     
     void flattenLayer();
@@ -105,42 +95,40 @@ private slots:
 
     void layersUpdated();
 
-    void saveLayerAsImage();
+    void saveGroupLayers();
     bool activeLayerHasSelection();
 
-    void layerAdd();
-    void addLayer(KisNodeSP parent, KisNodeSP above);
-    void addGroupLayer(KisNodeSP parent, KisNodeSP above);
+    void convertNodeToPaintLayer(KisNodeSP source);
 
-    void addCloneLayer();
-    void addCloneLayer(KisNodeSP parent, KisNodeSP above);
+    void addLayer(KisNodeSP activeNode);
+    void addGroupLayer(KisNodeSP activeNode);
 
-    void addShapeLayer();
-    void addShapeLayer(KisNodeSP parent, KisNodeSP above);
+    void addCloneLayer(KisNodeSP activeNode);
 
-    void addAdjustmentLayer();
-    void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addShapeLayer(KisNodeSP activeNode);
 
-    void addGeneratorLayer();
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
-    void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    void addAdjustmentLayer(KisNodeSP activeNode);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
+    void addGeneratorLayer(KisNodeSP activeNode);
+
+    void addFileLayer(KisNodeSP activeNode);
+
+private:
+    void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
+    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer);
 
 private:
 
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
-    QList<QAction*> m_pluginActions;
-
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
-    KAction *m_layerSaveAs;
-    bool m_actLayerVis;
-    KAction *m_imageResizeToLayer;
+    KAction *m_groupLayersSave;
+    KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
-    KAction *m_rasterizeLayer;
+    KisAction *m_rasterizeLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

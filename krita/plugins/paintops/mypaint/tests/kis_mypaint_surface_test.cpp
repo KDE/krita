@@ -60,7 +60,7 @@ void KisMyPaintSurfaceTest::testGetColor()
     KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
-    src->convertFromQImage(source, "");
+    src->convertFromQImage(source, 0);
     src->move(400, 400);
     KisPainter painter(dst);
     MyPaintSurface surface(src, &painter);

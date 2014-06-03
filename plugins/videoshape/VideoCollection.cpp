@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,7 +52,7 @@ VideoCollection::VideoCollection(QObject *parent)
 VideoCollection::~VideoCollection()
 {
     foreach(VideoData *id, d->videos) {
-        id->collection = 0;
+        id->setCollection(0);
     }
     delete d;
 }
@@ -70,43 +70,46 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
     QMap<qint64, VideoData *>::iterator dataIt(d->videos.begin());
 
     while (dataIt != d->videos.end()) {
-        if (!dataIt.value()->saveName.isEmpty()) {
+        if (!dataIt.value()->saveName().isEmpty()) {
             VideoData *videoData = dataIt.value();
-            if (store->open(videoData->saveName)) {
+            if (store->open(videoData->saveName())) {
                 KoStoreDevice device(store);
                 bool ok = videoData->saveData(device);
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(videoData->saveName, 0 , true)->name());
-                    manifestWriter->addManifestEntry(videoData->saveName, mimetype);
+                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0 , true)->name());
+                    manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
                     kWarning(30006) << "saving video failed";
                 }
             } else {
                 kWarning(30006) << "saving video failed: open store failed";
             }
-            dataIt.value()->saveName.clear();
-            ++dataIt;
+            dataIt.value()->setSaveName(QString());
         }
+        ++dataIt;
     }
     saveCounter=0;
     return true;
 }
 
-VideoData *VideoCollection::createExternalVideoData(const QUrl &url)
+VideoData *VideoCollection::createExternalVideoData(const QUrl &url, bool saveInternal)
 {
     Q_ASSERT(!url.isEmpty() && url.isValid());
 
     QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(url.toEncoded());
+    md5.addData(url.toEncoded().append(saveInternal ? "true" : "false"));
     qint64 key = VideoData::generateKey(md5.result());
-    if (d->videos.contains(key))
+
+    if (d->videos.contains(key)) {
         return new VideoData(*(d->videos.value(key)));
+    }
+
     VideoData *data = new VideoData();
-    data->setExternalVideo(url);
-    data->collection = this;
-    Q_ASSERT(data->key == key);
+    data->setExternalVideo(url, saveInternal);
+    data->setCollection(this);
+    Q_ASSERT(data->key() == key);
     d->videos.insert(key, data);
     return data;
 }
@@ -119,14 +122,14 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
     // and read and parse it on demand when the video data is actually needed.
     // This leads to having two keys, one for the store and one for the
     // actual video data. We need the latter so if someone else gets the same
-    // video data he can find this data and share (warm fuzzy feeling here)
+    // video data they can find this data and share (warm fuzzy feeling here)
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
     if (d->storeVideos.contains(storeKey))
         return new VideoData(*(d->storeVideos.value(storeKey)));
 
     VideoData *data = new VideoData();
     data->setVideo(href, store);
-    data->collection = this;
+    data->setCollection(this);
 
     d->storeVideos.insert(storeKey, data);
     return data;

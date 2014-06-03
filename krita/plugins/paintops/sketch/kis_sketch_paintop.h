@@ -33,15 +33,19 @@
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
 
+class KisDabCache;
+
+
 class KisSketchPaintOp : public KisPaintOp
 {
 
 public:
 
     KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisSketchPaintOp();
-    virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
-    qreal paintAt(const KisPaintInformation& info);
+    ~KisSketchPaintOp();
+
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     // pixel buffer
@@ -69,6 +73,7 @@ private:
     int m_count;
     KisPainter * m_painter;
     KisBrushSP m_brush;
+    KisDabCache *m_dabCache;
 
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);

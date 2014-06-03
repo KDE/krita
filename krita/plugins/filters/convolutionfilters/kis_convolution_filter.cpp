@@ -36,15 +36,14 @@
 KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
         : KisFilter(id, category, entry)
 {
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 
-void KisConvolutionFilter::process(KisPaintDeviceSP device,
-                                  const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater) const
+void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
+                                       const QRect& applyRect,
+                                       const KisFilterConfiguration* config,
+                                       KoUpdater* progressUpdater) const
 {
     Q_UNUSED(config);
 
@@ -61,18 +60,10 @@ void KisConvolutionFilter::process(KisPaintDeviceSP device,
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
  
-    // disable alpha channel
-    channelFlags.clearBit(1);
-
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, device, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
 
-}
-
-int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const
-{
-    return qMax(m_matrix->width() / 2, m_matrix->height() / 2);
 }
 
 void KisConvolutionFilter::setIgnoreAlpha(bool v)

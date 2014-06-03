@@ -31,7 +31,7 @@ class KisFilterConfiguration;
 class KisFilterOptionWidget;
 
 const QString FILTER_ID = "Filter/id";
-const QString FILTER_IGNORE_ALPHA = "Filter/ignoreAlpha";
+const QString FILTER_SMUDGE_MODE = "Filter/smudgeMode";
 const QString FILTER_CONFIGURATION = "Filter/configuration";
 
 /**
@@ -57,10 +57,7 @@ public:
      */
     KisFilterConfiguration* filterConfig() const;
 
-    /**
-     * XXX
-     */
-    bool ignoreAlpha() const;
+    bool smudgeMode() const;
 
     /**
      * XXX

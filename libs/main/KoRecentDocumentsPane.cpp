@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,21 +28,25 @@
 #include <kfileitem.h>
 #include <kio/previewjob.h>
 
+#include <KoIcon.h>
+
+
+enum KoRecentDocumentRoles {
+    PreviewRole = Qt::UserRole
+};
+
 class KoFileListItem : public QStandardItem
 {
 public:
-    KoFileListItem(const QPixmap& pixmap, const QString& text)
-            : QStandardItem(pixmap, text) {
+    KoFileListItem(const QIcon &icon, const QString &text, const KFileItem& item)
+            : QStandardItem(icon, text)
+            , m_fileItem(item){
     }
 
     ~KoFileListItem() {
     }
 
-    void setFileItem(const KFileItem& item) {
-        m_fileItem = item;
-    }
-
-    KFileItem fileItem() const {
+    const KFileItem &fileItem() const {
         return m_fileItem;
     }
 
@@ -54,15 +59,16 @@ class KoRecentDocumentsPanePrivate
 {
 public:
     KoRecentDocumentsPanePrivate()
-            : m_previewJob(0) {
+    {
     }
 
-    ~KoRecentDocumentsPanePrivate() {
-        if (m_previewJob)
-            m_previewJob->kill();
+    ~KoRecentDocumentsPanePrivate()
+    {
+        foreach(KJob* job, m_previewJobs)
+            job->kill();
     }
 
-    KIO::PreviewJob* m_previewJob;
+    QList<KJob*> m_previewJobs;
     QStandardItemModel* m_model;
 };
 
@@ -73,7 +79,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
         , d(new KoRecentDocumentsPanePrivate)
 {
     setFocusProxy(m_documentList);
-    KGuiItem openGItem(i18n("Open This Document"), "document-open");
+    KGuiItem openGItem(i18n("Open This Document"), koIconName("document-open"));
     m_openButton->setGuiItem(openGItem);
     m_alwaysUseCheckBox->hide();
 
@@ -100,14 +106,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
                 fileList.prepend(fileItem);
-                //center all icons in 64x64 area
-                QImage icon = fileItem.pixmap(64).toImage();
-                icon.convertToFormat(QImage::Format_ARGB32);
-                icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-                KoFileListItem* item = new KoFileListItem(QPixmap::fromImage(icon), name);
+                const QIcon icon = KIcon(fileItem.iconName());
+                KoFileListItem* item = new KoFileListItem(icon, name, fileItem);
                 item->setEditable(false);
-                item->setData(fileItem.pixmap(128), Qt::UserRole);
-                item->setFileItem(fileItem);
                 rootItem->insertRow(0, item);
             }
         }
@@ -122,14 +123,16 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
 #if KDE_IS_VERSION(4,6,80)
-    d->m_previewJob = KIO::filePreview(fileList, QSize(200, 200));
+    QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
+    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
 #else
-    d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);
+    KIO::PreviewJob *previewJob = KIO::filePreview(fileList, IconExtent, IconExtent, 0);
 #endif
 
-    connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
-    connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),
-            this, SLOT(updatePreview(const KFileItem&, const QPixmap&)));
+    d->m_previewJobs.append(previewJob);
+    connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
+    connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
+            SLOT(updateIcon(KFileItem,QPixmap)));
 }
 
 KoRecentDocumentsPane::~KoRecentDocumentsPane()
@@ -141,21 +144,45 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
 {
     if (index.isValid()) {
         KoFileListItem* item = static_cast<KoFileListItem*>(model()->itemFromIndex(index));
+        const KFileItem fileItem = item->fileItem();
+
         m_openButton->setEnabled(true);
         m_titleLabel->setText(item->data(Qt::DisplayRole).toString());
-        m_previewLabel->setPixmap(item->data(Qt::UserRole).value<QPixmap>());
-        KFileItem fileItem = item->fileItem();
+
+        QPixmap preview = item->data(PreviewRole).value<QPixmap>();
+        if (preview.isNull()) {
+            // need to fetch preview
+            const KFileItemList fileList = KFileItemList() << fileItem;
+#if KDE_IS_VERSION(4,6,80)
+            QStringList availablePlugins = KIO::PreviewJob::availablePlugins();
+            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
+#else
+            KIO::PreviewJob *previewJob = KIO::filePreview(fileList, PreviewExtent, PreviewExtent, 0);
+#endif
+
+            d->m_previewJobs.append(previewJob);
+            connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
+            connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
+                    SLOT(updatePreview(KFileItem,QPixmap)));
+
+            // for now set preview to icon
+            preview = item->icon().pixmap(PreviewExtent);
+            if (preview.width() < PreviewExtent && preview.height() < PreviewExtent) {
+                preview = preview.scaled(PreviewExtent, PreviewExtent, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
+        }
+        m_previewLabel->setPixmap(preview);
 
         if (!fileItem.isNull()) {
-            QString details = QString("<center>%1<br>").arg(fileItem.url().path());
-            details += "<table border=\"0\">";
-            details += i18nc("File modification date and time. %1 is date time",
-                             "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
-                             QString(fileItem.timeString(KFileItem::ModificationTime)));
-            details += i18nc("File access date and time. %1 is date time",
-                             "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
-                             QString(fileItem.timeString(KFileItem::AccessTime)));
-            details += "</table></center>";
+            QString details = QString("<center>%1<br>").arg(fileItem.url().path()) +
+                "<table border=\"0\">" +
+                i18nc("File modification date and time. %1 is date time",
+                      "<tr><td><b>Modified:</b></td><td>%1</td></tr>",
+                      QString(fileItem.timeString(KFileItem::ModificationTime))) +
+                i18nc("File access date and time. %1 is date time",
+                      "<tr><td><b>Accessed:</b></td><td>%1</td></tr>",
+                      QString(fileItem.timeString(KFileItem::AccessTime))) +
+                "</table></center>";
             m_detailsLabel->setHtml(details);
         } else {
             m_detailsLabel->clear();
@@ -190,8 +217,7 @@ void KoRecentDocumentsPane::openFile(const QModelIndex& index)
 
 void KoRecentDocumentsPane::previewResult(KJob* job)
 {
-    if (d->m_previewJob == job)
-        d->m_previewJob = 0;
+    d->m_previewJobs.removeOne(job);
 }
 
 void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixmap& preview)
@@ -205,16 +231,34 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem& fileItem, const QPixm
     for (int i = 0; i < rootItem->rowCount(); ++i) {
         KoFileListItem* item = static_cast<KoFileListItem*>(rootItem->child(i));
         if (item->fileItem().url() == fileItem.url()) {
-            item->setData(preview, Qt::UserRole);
-            QImage icon = preview.toImage();
-            icon = icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            icon.convertToFormat(QImage::Format_ARGB32);
-            icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
-            item->setData(QPixmap::fromImage(icon), Qt::DecorationRole);
+            item->setData(preview, PreviewRole);
 
             if (m_documentList->selectionModel()->currentIndex() == item->index()) {
                 m_previewLabel->setPixmap(preview);
             }
+
+            break;
+        }
+    }
+}
+
+void KoRecentDocumentsPane::updateIcon(const KFileItem& fileItem, const QPixmap& pixmap)
+{
+    if (pixmap.isNull()) {
+        return;
+    }
+
+    QStandardItem *rootItem = model()->invisibleRootItem();
+
+    for (int i = 0; i < rootItem->rowCount(); ++i) {
+        KoFileListItem *item = static_cast<KoFileListItem*>(rootItem->child(i));
+        if (item->fileItem().url() == fileItem.url()) {
+            // ensure squareness
+            QImage icon = pixmap.toImage();
+            icon = icon.convertToFormat(QImage::Format_ARGB32);
+            icon = icon.copy((icon.width() - IconExtent) / 2, (icon.height() - IconExtent) / 2, IconExtent, IconExtent);
+
+            item->setIcon(QIcon(QPixmap::fromImage(icon)));
 
             break;
         }

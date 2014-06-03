@@ -30,7 +30,6 @@
 #include <knuminput.h>
 #include <kis_debug.h>
 
-#include "KoColorSpaceRegistry.h"
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "KoID.h"
@@ -61,11 +60,22 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
 
+
+    connect(m_page->colorSpaceSelector, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+
 }
+
+
 
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {
     delete m_page;
+}
+
+void DlgColorSpaceConversion::selectionChanged(bool valid)
+{
+    Q_UNUSED(valid);
+    enableButtonOk(m_page->colorSpaceSelector->currentColorSpace());
 }
 
 // SLOTS

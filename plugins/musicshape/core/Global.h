@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_GLOBAL_H
 #define MUSIC_CORE_GLOBAL_H
 
-#include <QtCore/QString>
+#include <QString>
 
 namespace MusicCore {
     /**

@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 
-#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 #include <KoID.h>
@@ -42,13 +41,13 @@ class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
 {
 public:
     KisFilterOptionWidget(QWidget* parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
 };
 
 KisFilterOption::KisFilterOption()
-        : KisPaintOpOption(i18n("Filter"), i18n("Filter"), true)
+    : KisPaintOpOption(i18n("Filter"), i18n("Filter"), true)
 {
     m_checkable = false;
     m_currentFilterConfigWidget = 0;
@@ -75,7 +74,7 @@ KisFilterOption::KisFilterOption()
         setCurrentFilter(l2.first());
     }
 
-
+    connect(m_options->checkBoxSmudgeMode, SIGNAL(stateChanged(int)), this, SIGNAL(sigSettingChanged()));
 }
 
 const KisFilterSP KisFilterOption::filter() const
@@ -89,12 +88,10 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
     return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
 }
 
-
-bool KisFilterOption::ignoreAlpha() const
+bool KisFilterOption::smudgeMode() const
 {
-    return m_options->checkBoxIgnoreAlpha->isChecked();
+    return m_options->checkBoxSmudgeMode->isChecked();
 }
-
 
 void KisFilterOption::setNode(KisNodeSP node)
 {
@@ -104,12 +101,11 @@ void KisFilterOption::setNode(KisNodeSP node)
         // The "not m_currentFilterConfigWidget" is a corner case
         // which happens because the first configuration settings is
         // created before any layer is selected in the view
-        if (   !m_currentFilterConfigWidget
-            || (    m_currentFilterConfigWidget
-                 && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
-                )
-            )
-        {
+        if (!m_currentFilterConfigWidget
+                || (m_currentFilterConfigWidget
+                    && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
+                   )
+           ) {
             if (m_currentFilter) {
                 KisPropertiesConfiguration* configuration = 0;
                 if (m_currentFilterConfigWidget)
@@ -121,19 +117,21 @@ void KisFilterOption::setNode(KisNodeSP node)
                 delete configuration;
             }
         }
-    } else
+    }
+    else {
         m_paintDevice = 0;
+    }
 }
 
-void KisFilterOption::setImage( KisImageWSP image )
+void KisFilterOption::setImage(KisImageWSP image)
 {
     m_image = image;
-    if(!m_currentFilterConfigWidget) {
+    if (!m_currentFilterConfigWidget) {
         updateFilterConfigWidget();
     }
 }
 
-void KisFilterOption::setCurrentFilter( const KoID& id)
+void KisFilterOption::setCurrentFilter(const KoID& id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     m_options->filtersList->setCurrent(id);
@@ -155,24 +153,24 @@ void KisFilterOption::updateFilterConfigWidget()
     if (m_currentFilter && m_image && m_paintDevice) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
-                    m_paintDevice,
-                    m_image);
+                    m_paintDevice);
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_options->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
             connect(m_currentFilterConfigWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(sigSettingChanged()));
         }
-
     }
     m_layout->update();
 }
 
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+    if (!m_currentFilter) return;
+
     setting->setProperty(FILTER_ID, m_currentFilter->id());
-    setting->setProperty(FILTER_IGNORE_ALPHA, ignoreAlpha());
-    if(filterConfig()) {
+    setting->setProperty(FILTER_SMUDGE_MODE, smudgeMode());
+    if (filterConfig()) {
         setting->setProperty(FILTER_CONFIGURATION, filterConfig()->toXML());
     }
 }
@@ -181,9 +179,9 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* settin
 {
     KoID id(setting->getString(FILTER_ID), "");
     setCurrentFilter(id);
-    m_options->checkBoxIgnoreAlpha->setChecked(setting->getBool(FILTER_IGNORE_ALPHA));
+    m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
     KisFilterConfiguration* configuration = filterConfig();
-    if(configuration) {
+    if (configuration) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
         m_currentFilterConfigWidget->setConfiguration(configuration);
     }

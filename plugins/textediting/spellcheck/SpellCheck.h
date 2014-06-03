@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2007,2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Christoph Goerlich <chgoerlich@gmx.de>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +31,10 @@
 #include <QPointer>
 #include <QQueue>
 #include <QTextLayout>
+#include <QTextStream>
 
 class QTextDocument;
+class QTextStream;
 class BgSpellCheck;
 class SpellCheckMenu;
 
@@ -48,10 +51,13 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition);
 
     /// reimplemented from superclass
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
+
+    /// reimplemented from superclass
     void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
     ///reimplemented from superclass
-    void setCurrentCursorPosition(const QTextDocument *document, int cursorPosition);
+    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
 
     QStringList availableBackends() const;
     QStringList availableLanguages() const;
@@ -64,10 +70,12 @@ public:
     bool skipAllUppercaseWords();
     bool skipRunTogetherWords();
 
-    //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
-    void setDocument(const QTextDocument *document);
+    bool addWordToPersonal(const QString &word, int startPosition);
 
-    void replaceWordBySuggestion(const QString &word, int startPosition);  
+    //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
+    void setDocument(QTextDocument *document);
+
+    void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
 
 public slots:
     void setDefaultLanguage(const QString &lang);
@@ -79,7 +87,6 @@ private slots:
     void runQueue();
     void setBackgroundSpellChecking(bool b);
     void documentChanged(int from, int min, int plus);
-    void clearHighlightMisspelled(int startPosition);
 
 private:
     Sonnet::Speller m_speller;
@@ -99,23 +106,12 @@ private:
     };
     QQueue<SpellSections> m_documentsQueue;
     bool m_enableSpellCheck;
-    bool m_allowSignals;
     bool m_documentIsLoading;
     bool m_isChecking;
-    QTextCharFormat m_defaultMisspelledFormat;
+    QTextStream stream;
     SpellCheckMenu *m_spellCheckMenu;
-
-    /**
-     For a whole text run we accumulate all misspellings and apply them to
-     the doc at once when done.
-     */
-    struct BlockLayout {
-        int start;
-        int length;
-        int checkStart; // in case we partially check this block
-        QList<QTextLayout::FormatRange> ranges;
-    };
-    QList<BlockLayout> m_misspellings;
+    SpellSections m_activeSection; // the section we are currently doing a run on;
+    bool m_simpleEdit; //set when user is doing a simple edit, meaning we should ignore documentCanged
 };
 
 #endif

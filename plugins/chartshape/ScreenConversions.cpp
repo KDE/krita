@@ -34,49 +34,49 @@
 
 using namespace KChart;
 
-qreal ScreenConversions::pxToPtX( qreal px )
+qreal ScreenConversions::pxToPtX(qreal px)
 {
-    return KoUnit( KoUnit::Inch ).fromUserValue( px / KoDpi::dpiX() );
+    return KoUnit(KoUnit::Inch).fromUserValue(px / KoDpi::dpiX());
 }
 
-qreal ScreenConversions::pxToPtY( qreal px )
+qreal ScreenConversions::pxToPtY(qreal px)
 {
-    return KoUnit( KoUnit::Inch ).fromUserValue( px / KoDpi::dpiY() );
+    return KoUnit(KoUnit::Inch).fromUserValue(px / KoDpi::dpiY());
 }
 
-qreal ScreenConversions::ptToPxX( qreal pt )
+qreal ScreenConversions::ptToPxX(qreal pt)
 {
-    return KoUnit::toInch( pt ) * KoDpi::dpiX();
+    return KoUnit::toInch(pt) * KoDpi::dpiX();
 }
 
-qreal ScreenConversions::ptToPxY( qreal pt )
+qreal ScreenConversions::ptToPxY(qreal pt)
 {
-    return KoUnit::toInch( pt ) * KoDpi::dpiY();
+    return KoUnit::toInch(pt) * KoDpi::dpiY();
 }
 
-void ScreenConversions::scaleFromPtToPx( QPainter &painter )
+void ScreenConversions::scaleFromPtToPx(QPainter &painter)
 {
-    const qreal inPerPt = KoUnit::toInch( 1.0 );
-    painter.scale( 1.0 / (inPerPt * KoDpi::dpiX()), 1.0 / (inPerPt * KoDpi::dpiY()) );
+    const qreal inPerPt = KoUnit::toInch(1.0);
+    painter.scale(1.0 / (inPerPt * KoDpi::dpiX()), 1.0 / (inPerPt * KoDpi::dpiY()));
 }
 
-QSize ScreenConversions::scaleFromPtToPx( const QSizeF &size )
+QSize ScreenConversions::scaleFromPtToPx(const QSizeF &size)
 {
-    return QSizeF( ptToPxX( size.width() ), ptToPxY( size.height() ) ).toSize();
+    return QSizeF(ptToPxX(size.width()), ptToPxY(size.height())).toSize();
 }
 
-QSizeF ScreenConversions::scaleFromPxToPt( const QSize &size )
+QSizeF ScreenConversions::scaleFromPxToPt(const QSize &size)
 {
-    return QSizeF( pxToPtX( size.width() ), pxToPtY( size.height() ) );
+    return QSizeF(pxToPtX(size.width()), pxToPtY(size.height()));
 }
 
-QPoint ScreenConversions::scaleFromPtToPx( const QPointF &point )
+QPoint ScreenConversions::scaleFromPtToPx(const QPointF &point)
 {
-    return QPointF( ptToPxX( point.x() ), ptToPxY( point.y() ) ).toPoint();
+    return QPointF(ptToPxX(point.x()), ptToPxY(point.y())).toPoint();
 }
 
-QRect ScreenConversions::scaleFromPtToPx( const QRectF &rect )
+QRect ScreenConversions::scaleFromPtToPx(const QRectF &rect)
 {
-    return QRect( scaleFromPtToPx( rect.topLeft() ),
-                  scaleFromPtToPx( rect.size() ) );
+    return QRect(scaleFromPtToPx(rect.topLeft()),
+                 scaleFromPtToPx(rect.size()));
 }

@@ -31,7 +31,7 @@ class InitialsCommentShape;
 class CommentShape : public KoShapeContainer
 {
 public:
-    CommentShape(KoDocumentResourceManager* resourceManager);
+    explicit CommentShape(KoDocumentResourceManager *resourceManager);
     virtual ~CommentShape();
 
     virtual bool loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context);

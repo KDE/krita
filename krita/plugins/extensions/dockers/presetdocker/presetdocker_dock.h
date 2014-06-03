@@ -15,11 +15,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _DIGITALMIXER_DOCK_H_
-#define _DIGITALMIXER_DOCK_H_
+#ifndef _PRESETDOCKER_DOCK_H_
+#define _PRESETDOCKER_DOCK_H_
 
 #include <QDockWidget>
-#include <KoColor.h>
 #include <KoCanvasObserverBase.h>
 
 class KisPaintOpPresetsChooserPopup;
@@ -32,7 +31,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
-    void resourceChanged(int, const QVariant&);
+    void canvasResourceChanged(int key, const QVariant& v);
 private slots:
 private:
     KisCanvas2* m_canvas;

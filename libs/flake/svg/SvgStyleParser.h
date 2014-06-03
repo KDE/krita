@@ -23,7 +23,7 @@
 #define SVGSTYLEPARSER_H
 
 #include "flake_export.h"
-#include <QtCore/QMap>
+#include <QMap>
 
 typedef QMap<QString, QString> SvgStyles;
 
@@ -36,7 +36,8 @@ class QGradient;
 class FLAKE_EXPORT SvgStyleParser
 {
 public:
-    SvgStyleParser(SvgLoadingContext &context);
+    explicit SvgStyleParser(SvgLoadingContext &context);
+    ~SvgStyleParser();
 
     /// Parses specified style attributes
     void parseStyle(const SvgStyles &styles);

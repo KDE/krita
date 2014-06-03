@@ -31,28 +31,30 @@
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_node_filter_interface.h"
 
-
-KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
-        const KisImageWSP image,
-        KisFilterConfiguration * configuration,
-        const QString & layerName,
-        const QString & caption,
-        QWidget *parent,
-        const char *name)
-        : KDialog(parent)
-        , m_paintDevice(paintDevice)
-        , m_image(0)
-        , m_currentConfigWidget(0)
-        , m_currentFilter(0)
-        , m_currentConfiguration(0)
-        , m_layer(0)
+KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
+                                         KisNodeFilterInterface* nfi,
+                                         KisPaintDeviceSP paintDevice,
+                                         KisView2 *view,
+                                         KisFilterConfiguration *configuration,
+                                         const QString & layerName,
+                                         const QString & caption,
+                                         QWidget *parent,
+                                         const char *name)
+    : KDialog(parent)
+    , m_node(node)
+    , m_paintDevice(paintDevice)
+    , m_currentConfigWidget(0)
+    , m_currentFilter(0)
+    , m_currentConfiguration(0)
+    , m_layer(0)
+    , m_nodeFilterInterface(nfi)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -63,12 +65,12 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
     if (m_currentConfiguration) {
         m_currentFilter = KisFilterRegistry::instance()->get(m_currentConfiguration->name()).data();
     }
+
     setCaption(caption);
     QWidget * page = new QWidget(this);
     page->setObjectName("page widget");
     QHBoxLayout * layout = new QHBoxLayout(page);
     layout->setMargin(0);
-    layout->setSpacing(6);
     setMainWidget(page);
 
     QVBoxLayout *v1 = new QVBoxLayout();
@@ -78,26 +80,31 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
 
     QLabel * lblName = new QLabel(i18n("Layer name:"), page);
     lblName->setObjectName("lblName");
-    hl->addWidget(lblName, 0, 0);
+    hl->addWidget(lblName, 0);
 
     m_layerName = new KLineEdit(page);
     m_layerName->setObjectName("m_layerName");
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-    hl->addWidget(m_layerName, 0, Qt::AlignLeft);
+    hl->addWidget(m_layerName, 10);
     connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     if (m_currentFilter) {
-        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice, image);
+        m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);
+
         if (m_currentConfigWidget) {
+            m_currentConfigWidget->setView(view);
             m_currentConfigWidget->setConfiguration(m_currentConfiguration);
         }
     }
+
     if (m_currentFilter == 0 || m_currentConfigWidget == 0) {
         QLabel * labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"), page);
         v1->addWidget(labelNoConfigWidget);
-    } else {
+    }
+    else {
         v1->addWidget(m_currentConfigWidget);
+        connect(m_currentConfigWidget, SIGNAL(sigConfigurationUpdated()), SLOT(slotConfigChanged()));
     }
 
     enableButtonOk(!m_layerName->text().isEmpty());
@@ -113,7 +120,7 @@ KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 {
     if (m_currentConfigWidget) {
         KisFilterConfiguration * config
-        = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
+                = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
         if (config) {
             return config;
         }
@@ -124,6 +131,16 @@ KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 QString KisDlgAdjLayerProps::layerName() const
 {
     return m_layerName->text();
+}
+
+void KisDlgAdjLayerProps::slotConfigChanged()
+{
+    enableButtonOk(true);
+    KisFilterConfiguration * config = filterConfiguration();
+    if (config) {
+        m_nodeFilterInterface->setFilter(config);
+    }
+    m_node->setDirty();
 }
 
 

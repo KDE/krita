@@ -22,12 +22,12 @@
 
 #include "pointfedit.h"
 
-#include <KLocale>
-#include <QtCore/QPointF>
+#include <klocale.h>
+#include <QPointF>
 
 using namespace KoProperty;
 
-static const char *POINTFEDIT_MASK = "%1, %2";
+static const char POINTFEDIT_MASK[] = "%1, %2";
 
 QString PointFDelegate::displayText( const QVariant& value ) const
 {

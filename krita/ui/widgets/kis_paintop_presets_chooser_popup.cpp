@@ -20,14 +20,21 @@
 
 #include "kis_paintop_presets_chooser_popup.h"
 
+#include <QToolButton>
+
 #include <KoResource.h>
+#include <KoResourceItemChooser.h>
+#include <KoResourceServer.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
 #include <kis_config.h>
+#include <kis_resource_server_provider.h>
+#include <kis_paintop_preset.h>
+#include <KoIcon.h>
 #include <QCompleter>
 
-class KisPaintOpPresetsChooserPopup::Private
+struct KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
@@ -40,53 +47,38 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
     KMenu* menu = new KMenu(this);
-    
+
     QActionGroup *actionGroup = new QActionGroup(this);
 
     KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
-    
-    
-    QAction* action = menu->addAction(KIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+
+    QAction* action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
 
-    action = menu->addAction(KIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action = menu->addAction(koIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
-    
-    m_d->uiWdgPaintOpPresets.viewModeButton->setIcon(KIcon("view-choose"));
-    m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
-    m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
+
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(false,true);
-    
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(true,true);
+
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setViewModeButtonVisible(true);
+    QToolButton *viewModeButton = m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->viewModeButton();
+    viewModeButton->setMenu(menu);
+
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
-
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
-            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
-
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
-                this, SLOT(setLineEditCompleter(const QString&)));
-
-    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(returnPressed(QString)),
-                this, SLOT(returnKeyPressed(QString)));
-
-    connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
-            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
+    
     m_d->firstShown = true;
+
 }
 
 KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
 {
     delete m_d;
-}
-
-void KisPaintOpPresetsChooserPopup::setPresetFilter(const KoID& paintopID)
-{
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->setPresetFilter(paintopID);
 }
 
 void KisPaintOpPresetsChooserPopup::slotThumbnailMode()
@@ -104,25 +96,24 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
-    //Workaround to get the colum and row size right
+    //Workaround to get the column and row size right
     if(m_d->firstShown) {
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;
     }
 }
 
-void KisPaintOpPresetsChooserPopup::setLineEditCompleter(const QString& searchString)
+void KisPaintOpPresetsChooserPopup::showButtons(bool show)
 {
-    QCompleter* tagCompleter = new QCompleter(m_d->uiWdgPaintOpPresets.wdgPresetChooser->getTagNamesList(searchString),this);
-    m_d->uiWdgPaintOpPresets.searchBar->setCompleter(tagCompleter);
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::returnKeyPressed(QString lineEditText)
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource)
 {
-    m_d->uiWdgPaintOpPresets.wdgPresetChooser->returnKeyPressed(lineEditText);
-    if(!lineEditText.endsWith(", ")) {
-        lineEditText.append(", ");
+    if (resource) {
+        blockSignals(true);
+        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(rserver->resourceByName(resource->name()));
+        blockSignals(false);
     }
-    m_d->uiWdgPaintOpPresets.searchBar->setText(lineEditText);
-    setLineEditCompleter(lineEditText);
 }

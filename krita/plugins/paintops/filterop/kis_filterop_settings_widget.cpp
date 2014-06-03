@@ -30,19 +30,26 @@
 
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_rotation_option.h>
 #include <kis_curve_option_widget.h>
+#include <kis_compositeop_option.h>
 #include <kis_filter_option.h>
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("filter option widget");
+    setPrecisionEnabled(true);
+
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
+    addMirrorOption();
 
     m_filterOption = new KisFilterOption();
-
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(m_filterOption);
-
 }
 
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()

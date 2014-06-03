@@ -24,7 +24,6 @@
 #include <QAbstractListModel>
 
 #include <KoColor.h>
-#include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -127,7 +126,7 @@ MyPaintBrushResource* MyPaintSettingsWidget::brush() const
     return m_model->brush(m_activeBrushFilename);
 }
 
-void MyPaintSettingsWidget::changePaintOpSize(qreal x, qreal y)
+void MyPaintSettingsWidget::changePaintOpSize(qreal x, qreal /*y*/)
 {
     float value = expf(m_options->radiusSlider->value()) + x;
     m_options->radiusSlider->setValue(log(value));

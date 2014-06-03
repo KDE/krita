@@ -24,32 +24,45 @@ class KisExperimentOpOptionsWidget: public QWidget, public Ui::WdgExperimentOpti
 {
 public:
     KisExperimentOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
-        displaceStrength->setRange(0.0,100.0,0);
-        displaceStrength->setSuffix(QChar(Qt::Key_Percent));
-        displaceStrength->setValue(42.0); 
-        displaceStrength->setSingleStep(1.0);
-        
-        speed->setRange(0.0,100.0,0);
+
+        speed->setRange(0.0, 100.0, 0);
         speed->setSuffix(QChar(Qt::Key_Percent));
-        speed->setValue(42.0); 
+        speed->setValue(42.0);
         speed->setSingleStep(1.0);
 
+        smoothThreshold->setRange(0.0, 100.0, 0);
+        smoothThreshold->setSuffix(i18n("px"));
+        smoothThreshold->setValue(20.0);
+        smoothThreshold->setSingleStep(1.0);
+
+        displaceStrength->setRange(0.0, 100.0, 0);
+        displaceStrength->setSuffix(QChar(Qt::Key_Percent));
+        displaceStrength->setValue(42.0);
+        displaceStrength->setSingleStep(1.0);
     }
 };
 
 KisExperimentOpOption::KisExperimentOpOption()
-        : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::brushCategory(), false)
+    : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::commonCategory(), false)
 {
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();
-    
+
     connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->speed, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+
+    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SLOT(enableDisplacement(qreal)));
+    connect(m_options->speed, SIGNAL(valueChanged(qreal)), SLOT(enableSpeed(qreal)));
+    connect(m_options->smoothThreshold, SIGNAL(valueChanged(qreal)), SLOT(enableSmooth(qreal)));
+
+    connect(m_options->windingFillCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->hardEdgeCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 
@@ -64,17 +77,44 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setti
     setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
     setting->setProperty(EXPERIMENT_SPEED_ENABLED, m_options->speedCHBox->isChecked());
     setting->setProperty(EXPERIMENT_SPEED_VALUE, m_options->speed->value());
-    setting->setProperty(EXPERIMENT_SMOOTHING, m_options->smoothCHBox->isChecked());
-    
-
+    setting->setProperty(EXPERIMENT_SMOOTHING_ENABLED, m_options->smoothCHBox->isChecked());
+    setting->setProperty(EXPERIMENT_SMOOTHING_VALUE, m_options->smoothThreshold->value());
+    setting->setProperty(EXPERIMENT_WINDING_FILL, m_options->windingFillCHBox->isChecked());
+    setting->setProperty(EXPERIMENT_HARD_EDGE, m_options->hardEdgeCHBox->isChecked());
 }
 
 void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->displaceCHBox->setChecked( setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED) );
-    m_options->displaceStrength->setValue( setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE) );
-    m_options->speedCHBox->setChecked( setting->getBool(EXPERIMENT_SPEED_ENABLED) );
-    m_options->speed->setValue( setting->getDouble(EXPERIMENT_SPEED_VALUE) );
-    m_options->smoothCHBox->setChecked( setting->getBool(EXPERIMENT_SMOOTHING) );
-    
+    ExperimentOption op;
+    op.readOptionSetting(setting);
+
+    m_options->displaceStrength->setValue(op.displacement);
+    m_options->speed->setValue(op.speed);
+    m_options->smoothThreshold->setValue(op.smoothing);
+    m_options->windingFillCHBox->setChecked(op.windingFill);
+    m_options->hardEdgeCHBox->setChecked(op.hardEdge);
+
+    m_options->speedCHBox->setChecked(op.isSpeedEnabled);
+    m_options->smoothCHBox->setChecked(op.isSmoothingEnabled);
+    m_options->displaceCHBox->setChecked(op.isDisplacementEnabled);
+}
+
+inline void enableCheckBox(QCheckBox *checkBox, qreal sliderValue)
+{
+    checkBox->setChecked(sliderValue > 0);
+}
+
+void KisExperimentOpOption::enableSpeed(qreal value)
+{
+    enableCheckBox(m_options->speedCHBox, value);
+}
+
+void KisExperimentOpOption::enableSmooth(qreal value)
+{
+    enableCheckBox(m_options->smoothCHBox, value);
+}
+
+void KisExperimentOpOption::enableDisplacement(qreal value)
+{
+    enableCheckBox(m_options->displaceCHBox, value);
 }

@@ -24,16 +24,14 @@ class KoToolFactoryBase::Private
 public:
     Private(const QString &i)
             : priority(100),
-            inputDeviceAgnostic(true),
             id(i)
     {
     }
     int priority;
-    bool inputDeviceAgnostic;
     QString toolType;
     QString tooltip;
     QString activationId;
-    QString icon;
+    QString iconName;
     const QString id;
     KShortcut shortcut;
 };
@@ -69,9 +67,9 @@ QString KoToolFactoryBase::toolTip() const
     return d->tooltip;
 }
 
-QString KoToolFactoryBase::icon() const
+QString KoToolFactoryBase::iconName() const
 {
-    return d->icon;
+    return d->iconName;
 }
 
 QString KoToolFactoryBase::activationShapeId() const
@@ -99,9 +97,14 @@ void KoToolFactoryBase::setToolType(const QString & toolType)
     d->toolType = toolType;
 }
 
-void KoToolFactoryBase::setIcon(const QString & icon)
+void KoToolFactoryBase::setIconName(const char *iconName)
 {
-    d->icon = icon;
+    d->iconName = QLatin1String(iconName);
+}
+
+void KoToolFactoryBase::setIconName(const QString &iconName)
+{
+    d->iconName = iconName;
 }
 
 void KoToolFactoryBase::setPriority(int newPriority)
@@ -112,19 +115,4 @@ void KoToolFactoryBase::setPriority(int newPriority)
 void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
 {
     d->shortcut = shortcut;
-}
-
-void KoToolFactoryBase::setInputDeviceAgnostic(bool agnostic)
-{
-    d->inputDeviceAgnostic = agnostic;
-}
-
-bool KoToolFactoryBase::inputDeviceAgnostic() const
-{
-    return d->inputDeviceAgnostic;
-}
-
-bool KoToolFactoryBase::canCreateTool(KoCanvasBase *) const
-{
-    return true;
 }

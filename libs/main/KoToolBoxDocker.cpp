@@ -21,23 +21,8 @@
 
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBox_p.h"
-#include <KoCanvasController.h>
-#include <KoToolManager.h>
-#include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
-
-#include <KDebug>
-#include <QLayout>
-#include <QMap>
-#include <QButtonGroup>
-#include <QToolButton>
-#include <QHash>
-#include <QPainter>
-#include <QRect>
-#include <QTimer>
-
-#include "math.h"
 #include <KoDockWidgetTitleBar.h>
+#include <klocale.h>
 
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
@@ -45,13 +30,15 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(toolBox);
+    setWindowTitle(i18n("Tools"));
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
     KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setIgnoreTextSize(false);
+    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
+    titleBar->setToolTip(windowTitle());
     setTitleBarWidget(titleBar);
 }
 

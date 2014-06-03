@@ -24,7 +24,7 @@
 
 #include <kowidgets_export.h>
 
-#include <QtCore/QThread>
+#include <QThread>
 
 #include <kdebug.h>
 
@@ -44,12 +44,12 @@ public:
      * Constructs a KoResourceLoaderThread for a server
      * @param server the server the resources will be loaded for
      */
-    KoResourceLoaderThread(KoResourceServerBase * server);
+    explicit KoResourceLoaderThread(KoResourceServerBase *server);
     ~KoResourceLoaderThread();
 
     /**
      * Checks whether the thread has finished loading and waits
-     * until it is finished if nessesary
+     * until it is finished if necessary
      */
     void barrier();
 
@@ -60,7 +60,7 @@ protected:
     void run();
 
 private:
-    QStringList getFileNames( const QString & extensions);
+
     KoResourceServerBase * m_server;
     QStringList m_fileNames;
 };
@@ -81,6 +81,7 @@ public:
     KoResourceServer<KoPattern>* patternServer();
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
+
 private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);

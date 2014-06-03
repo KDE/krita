@@ -58,7 +58,7 @@ public slots:
     void updatePreview();
 
 private slots:
-    void showStyleConfiguration(bool show);
+    void showStyleConfiguration();
     void titleTextChanged(const QString &text );
     void useOutline(int state);
     void useIndexSourceStyles(int state);

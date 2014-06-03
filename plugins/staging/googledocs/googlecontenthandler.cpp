@@ -74,7 +74,7 @@ bool GoogleContentHandler::endDocument ()
     return true;
 }
 
-bool GoogleContentHandler::endElement ( const QString & /*namespaceURI*/, const QString & localName, const QString & /*qName */)
+bool GoogleContentHandler::endElement ( const QString & /*namespaceURI*/, const QString & /*localName*/, const QString & /*qName */)
 {
 //    printName(localName);
     QString element = m_nodeStack.pop();

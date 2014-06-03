@@ -18,11 +18,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "krsectiondata.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <QColor>
 
@@ -78,7 +77,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
                 }
             }
             else {
-                kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
+                kWarning() << "While parsing section encountered an unknown element: " << elemThis.tagName();
             }
         }
     }
@@ -106,7 +105,7 @@ void KRSectionData::createProperties(const QDomElement & elemSource)
 {
     m_set = new KoProperty::Set(this, "Section");
 
-    m_height = new KoProperty::Property("height", KoUnit::unit("cm").fromUserValue(2.0), i18n("Height"));
+    m_height = new KoProperty::Property("height", KoUnit(KoUnit::Centimeter).fromUserValue(2.0), i18n("Height"));
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
     m_height->setOption("unit", "cm");
     if (!elemSource.isNull())
@@ -123,11 +122,7 @@ QString KRSectionData::name() const
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -184,14 +179,9 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     KRSectionData::Section sec;
-    kDebug() << "Determining section type for " << s;
-
+    //kDebug() << "Determining section type for " << s;
     if (s == "header-page-any")
         sec = KRSectionData::PageHeaderAny;
     else if (s == "header-page-even")

@@ -26,11 +26,11 @@
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QChar>
-#include <QtGui/QTextCharFormat>
-#include <QtCore/QMetaType>
-#include <QtGui/QTextOption>
+#include <QStringList>
+#include <QChar>
+#include <QTextCharFormat>
+#include <QMetaType>
+#include <QTextOption>
 #include <styles/KoCharacterStyle.h>
 
 
@@ -79,6 +79,7 @@ struct KOTEXT_EXPORT Tab {
 enum DocumentResource {
     ChangeTracker = KoDocumentResourceManager::KoTextStart + 1, ///< KoChangeTracker
     InlineTextObjectManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
+    TextRangeManager, ///< The KoText inline-text-object manager. KoInlineTextObjectManager
     StyleManager,           ///< The KoStyleManager
     PageProvider,            ///< The KoPageProvider
     /** The KoDocumentRdf for the document,
@@ -103,8 +104,6 @@ enum Direction {
     RightLeftTopBottom, ///< Text layout for languages like Hebrew
     TopBottomRightLeft,  ///< Vertical text layout.
     TopBottomLeftRight,  ///< Vertical text layout. ?
-    PerhapsLeftRightTopBottom, ///< \internal
-    PerhapsRightLeftTopBottom, ///< \internal
     InheritDirection    ///< Direction is unspecified and should come from the container
 };
 

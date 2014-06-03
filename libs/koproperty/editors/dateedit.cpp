@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2012  Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,74 +21,81 @@
 
 #include "dateedit.h"
 
-#include <q3datetimeedit.h>
-#include <q3rangecontrol.h>
-#include <QObject>
-#include <QLayout>
-#include <QVariant>
-#include <QPainter>
-#include <QHBoxLayout>
-
-#include <klocale.h>
-#include <kglobal.h>
+#include <koproperty/EditorDataModel.h>
+// Qt
+#include <QLocale>
 
 using namespace KoProperty;
 
-DateEdit::DateEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+
+DateEdit::DateEdit(const Property* prop, QWidget* parent)
+  : QDateEdit(parent)
 {
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
+    setFrame(false);
+    setCalendarPopup(true);
 
-    m_edit = new Q3DateEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    l->addWidget(m_edit);
+    const QDate minDate = prop->option("min").toDate();
+    if (minDate.isValid()) {
+        setMinimumDate(minDate);
+    }
+    const QDate maxDate = prop->option("max").toDate();
+    if (maxDate.isValid()) {
+        setMaximumDate(maxDate);
+    }
 
-    setLeavesTheSpaceForRevertButton(true);
-
-    setFocusWidget(m_edit);
-    connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)));
+    connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(onDateChanged()));
 }
 
 DateEdit::~DateEdit()
-{}
-
-QVariant
-DateEdit::value() const
 {
-    return m_edit->date();
 }
 
-void
-DateEdit::setValue(const QVariant &value, bool emitChange)
+QVariant DateEdit::value() const
 {
-    m_edit->blockSignals(true);
-    m_edit->setDate(value.toDate());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
+    return QVariant(date());
 }
 
-void
-DateEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void DateEdit::setValue(const QVariant& value)
 {
-    p->eraseRect(r);
-    Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), KLocale::ShortDate));
+    blockSignals(true);
+    setDate(value.toDate());
+    blockSignals(false);
 }
 
-void
-DateEdit::slotValueChanged(const QDate&)
+void DateEdit::paintEvent(QPaintEvent* event)
 {
-    emit valueChanged(this);
+    QDateEdit::paintEvent(event);
+    Factory::paintTopGridLine(this);
 }
 
-void
-DateEdit::setReadOnlyInternal(bool readOnly)
+
+void DateEdit::onDateChanged()
 {
-    setVisibleFlag(!readOnly);
+    emit commitData(this);
 }
 
-#include "dateedit.moc"
+
+//! @todo Port to KLocale, be inspired by KexiDateTableEdit (with Kexi*Formatter)
+DateDelegate::DateDelegate()
+{
+}
+
+QString DateDelegate::displayTextForProperty(const Property* prop) const
+{
+    const QLocale locale;
+    const QString defaultDateFormat = locale.dateFormat(QLocale::ShortFormat);
+    return prop->value().toDate().toString(defaultDateFormat);
+}
+
+QWidget* DateDelegate::createEditor(int type, QWidget* parent,
+    const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_UNUSED(type);
+    Q_UNUSED(option);
+
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
+
+    return new DateEdit(prop, parent);
+}

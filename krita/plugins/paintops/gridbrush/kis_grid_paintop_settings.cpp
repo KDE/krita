@@ -25,48 +25,27 @@
 #include "kis_grid_shape_option.h"
 #include <kis_color_option.h>
 
+KisGridPaintOpSettings::KisGridPaintOpSettings()
+    : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::NO_OPTION)
+{
+}
 
 bool KisGridPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-void KisGridPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
-    qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
-
-    painter.setPen(QColor(255,128,255));
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawRect(image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos));
-}
-
-
-QRectF KisGridPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
-    qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
-    sizex += 2;
-    sizey += 2;
-    return image->pixelToDocument(QRectF(0, 0, sizex, sizey).translated(- QPoint(sizex * 0.5, sizey * 0.5))).translated(pos);
-}
-
-QPainterPath KisGridPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
+QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;
     if (mode == CursorIsOutline) {
-        qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE) * scale;
-        qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE) * scale;
+        qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
+        qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
-        QTransform m; 
-        m.reset();
-        m.rotate(rotation);
-        path = m.map(path);
         path.addRect(rc);
-        path.translate(pos);
+
+        path = outlineFetcher()->fetchOutline(info, this, path);
     }
     return path;
 }

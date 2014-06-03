@@ -50,7 +50,10 @@ void FencedElement::layout( const AttributeManager* am )
         m_fence.moveTo( m_fence.currentPosition() + QPointF( tmp->width() , 0.0 ) );
         if( tmp != childElements().last() )
             m_fence.addPath( op.renderForFence( separators.at( count ), Infix ) );
-        count++;
+        if(count < separators.size() - 1)
+        {
+            count++;
+        }
     }
 
     m_fence.addPath( op.renderForFence( am->stringOf( "close", this ), Postfix ) );

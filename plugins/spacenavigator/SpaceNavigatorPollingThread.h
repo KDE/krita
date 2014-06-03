@@ -21,13 +21,13 @@
 #ifndef SPACENAVIGATORPOLLINGTHREAD_H
 #define SPACENAVIGATORPOLLINGTHREAD_H
 
-#include <QtCore/QThread>
+#include <QThread>
 
 class SpaceNavigatorPollingThread : public QThread
 {
     Q_OBJECT
 public:
-    SpaceNavigatorPollingThread( QObject * parent );
+    explicit SpaceNavigatorPollingThread(QObject *parent);
     ~SpaceNavigatorPollingThread();
 
     /// Stops the thread

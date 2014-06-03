@@ -35,7 +35,7 @@ public:
         LastColumn,
         LastRow
     };
-    Q_FLAGS(Types, Type);
+    Q_DECLARE_FLAGS(Types, Type);
 
 private:
 };

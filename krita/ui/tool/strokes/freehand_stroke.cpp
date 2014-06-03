@@ -26,52 +26,70 @@
 
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
-                                               KisPainter *painter)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
-                                    resources, painter)
+                                               PainterInfo *painterInfo,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
+                                    resources, painterInfo)
 {
-    init(needsIndirectPainting);
+    init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
-                                               QVector<KisPainter*> painters)
-    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", "Freehand stroke",
-                                    resources, painters)
+                                               QVector<PainterInfo*> painterInfos,
+                                               const QString &name)
+    : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
+                                    resources, painterInfos)
 {
-    init(needsIndirectPainting);
+    init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
-void FreehandStrokeStrategy::init(bool needsIndirectPainting)
+void FreehandStrokeStrategy::init(bool needsIndirectPainting,
+                                  const QString &indirectPaintingCompositeOp)
 {
     setNeedsIndirectPainting(needsIndirectPainting);
+    setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
+    setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
+    PainterInfo *info = d->painterInfo;
 
     switch(d->type) {
     case Data::POINT:
-        d->dragDistance = KisDistanceInformation(0,0);
-        d->painter->paintAt(d->pi1);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        info->painter->paintAt(d->pi1, info->dragDistance);
         break;
     case Data::LINE:
-        d->dragDistance =
-            d->painter->paintLine(d->pi1, d->pi2, d->dragDistance);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        info->painter->paintLine(d->pi1, d->pi2, info->dragDistance);
         break;
     case Data::CURVE:
-        d->dragDistance =
-            d->painter->paintBezierCurve(d->pi1,
-                                         d->control1,
-                                         d->control2,
-                                         d->pi2,
-                                         d->dragDistance);
-        d->node->setDirty(d->painter->takeDirtyRegion());
+        info->painter->paintBezierCurve(d->pi1,
+                                        d->control1,
+                                        d->control2,
+                                        d->pi2,
+                                        info->dragDistance);
         break;
+    case Data::POLYLINE:
+        info->painter->paintPolyline(d->points, 0, d->points.size());
+        break;
+    case Data::POLYGON:
+        info->painter->paintPolygon(d->points);
+        break;
+    case Data::RECT:
+        info->painter->paintRect(d->rect);
+        break;
+    case Data::ELLIPSE:
+        info->painter->paintEllipse(d->rect);
+        break;
+    case Data::PAINTER_PATH:
+        info->painter->paintPainterPath(d->path);
     };
+
+    d->node->setDirty(info->painter->takeDirtyRegion());
 }

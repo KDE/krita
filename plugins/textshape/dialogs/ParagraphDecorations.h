@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef FONTDECORATIONS_H
-#define FONTDECORATIONS_H
+#ifndef PARAGRAPHDECORATIONS_H
+#define PARAGRAPHDECORATIONS_H
 
 #include <ui_ParagraphDecorations.h>
 
@@ -37,7 +37,7 @@ public:
     void save(KoParagraphStyle *style) const;
 
 signals:
-    void backgroundColorChanged(const QColor&);
+    void parStyleChanged();
 
 private slots:
     void clearBackgroundColor();

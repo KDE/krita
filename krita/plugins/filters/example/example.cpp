@@ -25,7 +25,6 @@
 #include <QTime>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -35,7 +34,6 @@
 #include <kis_processing_information.h>
 #include <kis_types.h>
 #include <kis_selection.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -55,9 +53,9 @@ KritaExample::~KritaExample()
 
 KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
 {
+    setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_I)));
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setShowConfigurationWidget(false);
 }
 

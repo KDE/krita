@@ -27,45 +27,15 @@ FontDecorations::FontDecorations(bool uniqueFormat, QWidget* parent)
 {
     widget.setupUi(this);
 
-    widget.resetTextColor->setIcon(KIcon("edit-clear"));
-    widget.resetBackground->setIcon(KIcon("edit-clear"));
-
-    connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
-
-    connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
-    connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
-
-    connect(widget.enableText, SIGNAL(toggled(bool)), this, SLOT(textToggled(bool)));
-    connect(widget.enableBackground, SIGNAL(toggled(bool)), this, SLOT(backgroundToggled(bool)));
+    connect(widget.hyphenate, SIGNAL(stateChanged(int)), this, SLOT(hyphenateStateChanged()));
 
     widget.shadowGroupBox->setVisible(false);
+    widget.positionGroupBox->setVisible(false);
 }
 
-void FontDecorations::backgroundColorChanged()
+void FontDecorations::hyphenateStateChanged()
 {
-    m_backgroundColorReset = false; m_backgroundColorChanged = true;
-    if (widget.enableBackground->isChecked() && widget.backgroundColor->color().isValid())
-        emit backgroundColorChanged(widget.backgroundColor->color());
-}
-
-void FontDecorations::textColorChanged()
-{
-    m_textColorReset = false; m_textColorChanged = true;
-    if (widget.enableText->isChecked() && widget.textColor->color().isValid())
-        emit textColorChanged(widget.textColor->color());
-}
-
-void FontDecorations::textToggled(bool state)
-{
-    widget.textColor->setEnabled(state);
-    widget.resetTextColor->setEnabled(state);
-}
-
-void FontDecorations::backgroundToggled(bool state)
-{
-    widget.backgroundColor->setEnabled(state);
-    widget.resetBackground->setEnabled(state);
+    m_hyphenateInherited = false;
 }
 
 void FontDecorations::setDisplay(KoCharacterStyle *style)
@@ -73,27 +43,13 @@ void FontDecorations::setDisplay(KoCharacterStyle *style)
     if (!style)
         return;
 
-    widget.enableText->setVisible(!m_uniqueFormat);
-    widget.enableText->setChecked(m_uniqueFormat);
-    textToggled(m_uniqueFormat);
-    widget.enableBackground->setVisible(!m_uniqueFormat);
-    widget.enableBackground->setChecked(m_uniqueFormat);
-    backgroundToggled(m_uniqueFormat);
-
-    m_textColorChanged = false;
-    m_backgroundColorChanged = false;
-    m_textColorReset = ! style->hasProperty(QTextFormat::ForegroundBrush);
-    if (m_textColorReset || (style->foreground().style() == Qt::NoBrush)) {
-        clearTextColor();
-    } else {
-        widget.textColor->setColor(style->foreground().color());
+    m_hyphenateInherited = !style->hasProperty(KoCharacterStyle::HasHyphenation);
+    if (!m_uniqueFormat) {
+        widget.hyphenate->setTristate(true);
+        widget.hyphenate->setCheckState(Qt::PartiallyChecked);
     }
-    m_backgroundColorReset = ! style->hasProperty(QTextFormat::BackgroundBrush);
-    if (m_backgroundColorReset || (style->background().style() == Qt::NoBrush)) {
-        clearBackgroundColor();
-    } else {
-        widget.backgroundColor->setColor(style->background().color());
-    }
+    else
+        widget.hyphenate->setChecked(style->hasHyphenation());
 }
 
 void FontDecorations::save(KoCharacterStyle *style) const
@@ -101,28 +57,13 @@ void FontDecorations::save(KoCharacterStyle *style) const
     if (!style)
         return;
 
-    if (widget.enableBackground->isChecked() && m_backgroundColorReset)
-        style->setBackground(QBrush(Qt::NoBrush));
-    else if (widget.enableBackground->isChecked() && m_backgroundColorChanged)
-        style->setBackground(QBrush(widget.backgroundColor->color()));
-    if (widget.enableText->isChecked() && m_textColorReset)
-        style->setForeground(QBrush(Qt::NoBrush));
-    else if (widget.enableText->isChecked() && m_textColorChanged)
-        style->setForeground(QBrush(widget.textColor->color()));
-}
+    if (!m_hyphenateInherited) {
+        if (widget.hyphenate->checkState() == Qt::Checked)
+            style->setHasHyphenation(true);
+        else if (widget.hyphenate->checkState() == Qt::Unchecked)
+            style->setHasHyphenation(false);
+    }
 
-void FontDecorations::clearTextColor()
-{
-    widget.textColor->setColor(widget.textColor->defaultColor());
-    m_textColorReset = true;
-    emit textColorChanged(QColor(Qt::black));
-}
-
-void FontDecorations::clearBackgroundColor()
-{
-    widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
-    m_backgroundColorReset = true;
-    emit backgroundColorChanged(QColor(Qt::transparent));
 }
 
 #include <FontDecorations.moc>

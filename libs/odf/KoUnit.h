@@ -3,6 +3,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2004, Nicolas GOUTTE <goutte@kde.org>
    Copyright (C) 2010 Thomas Zander <zander@kde.org>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +23,19 @@
 
 #ifndef KOUNIT_H
 #define KOUNIT_H
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtCore/QDebug>
-#include <math.h> // for floor
+
+// Calligra
 #include "koodf_export.h"
+// Qt
+#include <QFlags>
+#include <QString>
+#include <QDebug>
+#include <QMetaType>
+// std
+#include <math.h> // for floor
+
+class QStringList;
+class QVariant;
 
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
@@ -54,29 +62,52 @@
  * %Calligra stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
+ *
+ * For implementing the selection of a unit type in the UI use the *ForUi() methods.
+ * They ensure the same order of the unit types in all places, with the order not
+ * bound to the order in the enum (so ABI-compatible extension is possible) and
+ * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
 class KOODF_EXPORT KoUnit
 {
 public:
     /** Length units supported by Calligra. */
-    enum Unit {
-        Millimeter,
+    enum Type {
+        Millimeter = 0,
         Point,  ///< Postscript point, 1/72th of an Inco
         Inch,
         Centimeter,
         Decimeter,
         Pica,
         Cicero,
-        Pixel
+        Pixel,
+        TypeCount ///< @internal
     };
 
+    /// Used to control the scope of the unit types listed in the UI
+    enum ListOption {
+        ListAll = 0,
+        HidePixel = 1,
+        HideMask = HidePixel
+    };
+     Q_DECLARE_FLAGS(ListOptions, ListOption)
+
+    /** Returns a KoUnit instance with the type at the @p index of the UI list with the given @p listOptions. */
+    static KoUnit fromListForUi(int index, ListOptions listOptions = ListAll, qreal factor = 1.0);
+
+    /// Convert a unit symbol string into a KoUnit
+    /// @param symbol symbol to convert
+    /// @param ok if set, it will be true if the unit was known, false if unknown
+    static KoUnit fromSymbol(const QString &symbol, bool *ok = 0);
+
     /** Construction requires initialization. The factor is for variable factor units like pixel */
-    explicit KoUnit(Unit unit = Point, qreal factor = 1.0) {
-        m_unit = unit; m_pixelConversion = factor;
+    explicit KoUnit(Type unit = Point, qreal factor = 1.0) {
+        m_type = unit;
+        m_pixelConversion = factor;
     }
 
-    KoUnit& operator=(Unit unit) {
-        m_unit = unit; m_pixelConversion = 1.0; return *this;
+    KoUnit& operator=(Type unit) {
+        m_type = unit; m_pixelConversion = 1.0; return *this;
     }
 
     bool operator!=(const KoUnit &other) const {
@@ -84,9 +115,16 @@ public:
     }
 
     bool operator==(const KoUnit &other) const {
-        return m_unit == other.m_unit;
+        return m_type == other.m_type;
     }
 
+    KoUnit::Type type() const {
+        return m_type;
+    }
+
+    void setFactor(qreal factor) {
+        m_pixelConversion = factor;
+    }
     /**
      * Prepare ptValue to be displayed in pt
      * This method will round to 0.001 precision
@@ -149,6 +187,12 @@ public:
     }
 
     /**
+     * convert the given value directly from one unit to another
+     */
+    static qreal convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor = 1.0);
+
+
+    /**
      * This method is the one to use to display a value in a dialog
      * \return the value @p ptValue converted to unit and rounded, ready to be displayed
      */
@@ -176,37 +220,31 @@ public:
     /// @return the value converted to points for internal use
     qreal fromUserValue(const QString &value, bool *ok = 0) const;
 
-    /// Convert a unit name into a KoUnit
-    /// @param unitName name to convert
-    /// @param ok if set, it will be true if the unit was known, false if unknown
-    static KoUnit unit(const QString &unitName, bool *ok = 0);
-    /// Get the name of a unit
-    static QString unitName(KoUnit unit);
-    /// Get the full (translated) description of a unit
-    static QString unitDescription(KoUnit unit);
-    static QStringList listOfUnitName(bool hidePixel = true);
+    /// Get the description string of the given unit
+    static QString unitDescription(KoUnit::Type type);
 
-    /// PixelVisibility for indexInList()
-    enum PixelVisibility {
-        ShowAll,
-        HidePixel
-    };
-    /// Get the index of this unit in the list of names
-    /// @param hidePixel count as if the Pixel unit hadn't been shown in the list
-    int indexInList(PixelVisibility visibility = HidePixel) const;
+    /// Get the symbol string of the unit
+    QString symbol() const;
+
+    /// Returns the list of unit types for the UI, controlled with the given @p listOptions.
+    static QStringList listOfUnitNameForUi(ListOptions listOptions = ListAll);
+
+    /// Get the index of this unit in the list of unit types for the UI,
+    /// if it is controlled with the given @p listOptions.
+    int indexInListForUi(ListOptions listOptions = ListAll) const;
 
     /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
     /// parse an angle to its value in degrees
     static qreal parseAngle(const QString &value, qreal defaultVal = 0.0);
-    
+
     QString toString() {
-        return KoUnit::unitName(*this);
+        return symbol();
     }
 
 private:
-    Unit m_unit;
+    Type m_type;
     qreal m_pixelConversion;
 };
 
@@ -215,5 +253,6 @@ KOODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
 #endif
 
 Q_DECLARE_METATYPE(KoUnit)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoUnit::ListOptions)
 
 #endif

@@ -32,7 +32,6 @@
 
 #include <filter/kis_filter_registry.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
@@ -62,15 +61,13 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categ
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsThreading(false);
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setSupportsAdjustmentLayers(false);
 }
 
 
-KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    Q_UNUSED(image);
     return new KisWdgFastColorTransfer(parent);
 }
 
@@ -83,10 +80,10 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater) const
+void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
+                                             const QRect& applyRect,
+                                             const KisFilterConfiguration* config,
+                                             KoUpdater* progressUpdater) const
 {
     Q_ASSERT(device != 0);
 
@@ -103,7 +100,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    KUndo2Command* cmd = srcLAB->convertTo(labCS);
+    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
 
     if (progressUpdater) {
@@ -115,11 +112,11 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     dbgPlugins << "Compute the means and sigmas of src";
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-    
-    KisRectConstIteratorSP srcLABIt = srcLAB->createRectConstIteratorNG(applyRect);
-    
+
+    KisSequentialConstIterator srcIt(srcLAB, applyRect);
+
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(srcLABIt->oldRawData());
+        const quint16* data = reinterpret_cast<const quint16*>(srcIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
         quint32 B = data[2];
@@ -130,7 +127,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
         sigmaA_src += A * A;
         sigmaB_src += B * B;
         if (progressUpdater) progressUpdater->setValue(++count);
-    } while (srcLABIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
+    } while (srcIt.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
     
     double totalSize = 1. / (applyRect.width() * applyRect.height());
     meanL_src *= totalSize;
@@ -168,8 +165,8 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
                 labPixel[3] = data[3];
                 oldCS->fromLabA16(reinterpret_cast<const quint8*>(labPixel), dstIt->rawData(), 1);
                 if (progressUpdater) progressUpdater->setValue(++count);
-                srcLABIt->nextRow();
-            } while(!dstIt->nextPixel());
+                srcLABIt->nextPixel();
+            } while(dstIt->nextPixel());
             dstIt->nextRow();
             srcLABIt->nextRow();
         }

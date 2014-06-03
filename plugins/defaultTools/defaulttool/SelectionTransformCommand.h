@@ -21,7 +21,7 @@
 #define SELECTION_TRANSFORM_COMMAND_H
 
 #include <kundo2command.h>
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class KoSelection;
 class KoShape;

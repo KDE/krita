@@ -23,6 +23,8 @@
 #include "kis_resource_server_provider.h"
 
 #include <QDir>
+#include <QApplication>
+#include <QDebug>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -33,43 +35,51 @@
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 
+#include <kis_brush_server.h>
+
 KisResourceServerProvider::KisResourceServerProvider()
 {
-    KGlobal::mainComponent().dirs()->addResourceType("kis_patterns", "data", "krita/patterns/");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", "/usr/share/create/patterns/gimp");
-    KGlobal::mainComponent().dirs()->addResourceDir("kis_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+
+    KisBrushServer *brushServer = KisBrushServer::instance();
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
     
-    m_patternServer = new KoResourceServer<KisPattern>("kis_patterns", "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
-    patternThread = new KoResourceLoaderThread(m_patternServer);
-    patternThread->start();
-
     m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
+    if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
+        QDir().mkpath(m_paintOpPresetServer->saveLocation());
+    }
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     paintOpPresetThread->start();
-    
+    paintOpPresetThread->barrier();
+
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
+    if (!QFileInfo(m_workspaceServer->saveLocation()).exists()) {
+        QDir().mkpath(m_workspaceServer->saveLocation());
+    }
     workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
     workspaceThread->start();
+    if (!qApp->applicationName().toLower().contains("krita")) {
+        workspaceThread->barrier();
+    }
+
+
+    connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
+            brushServer, SLOT(slotRemoveBlacklistedResources()));
+
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()
 {
-    dbgRegistry << "deleting KisResourceServerProvider";
-
-    delete patternThread;
     delete paintOpPresetThread;
     delete workspaceThread;
 
-    delete m_patternServer;
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
 }
@@ -81,12 +91,6 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
 }
 
 
-KoResourceServer<KisPattern>* KisResourceServerProvider::patternServer()
-{
-    patternThread->barrier();
-    return m_patternServer;
-}
-
 KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServer()
 {
     paintOpPresetThread->barrier();
@@ -97,6 +101,11 @@ KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceSe
 {
     workspaceThread->barrier();
     return m_workspaceServer;
+}
+
+void KisResourceServerProvider::brushBlacklistCleanup()
+{
+    emit notifyBrushBlacklistCleanup();
 }
 
 

@@ -18,6 +18,7 @@
 
 #include "move_stroke_strategy.h"
 
+#include <klocale.h>
 #include "kis_image_interfaces.h"
 #include "kis_node.h"
 #include "commands_new/kis_update_command.h"
@@ -26,13 +27,12 @@
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
-                                       KisPostExecutionUndoAdapter *undoAdapter,
-                                       KisUndoAdapter *legacyUndoAdapter)
-    : KisStrokeStrategyUndoCommandBased("Move stroke", false, undoAdapter),
+                                       KisPostExecutionUndoAdapter *undoAdapter)
+    : KisStrokeStrategyUndoCommandBased(i18n("Move Stroke"), false, undoAdapter),
       m_node(node),
-      m_updatesFacade(updatesFacade),
-      m_legacyUndoAdapter(legacyUndoAdapter)
+      m_updatesFacade(updatesFacade)
 {
+    setSupportsWrapAroundMode(true);
 }
 
 void MoveStrokeStrategy::setNode(KisNodeSP node)
@@ -117,8 +117,7 @@ void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
 {
     QPoint nodeOffset(node->x(), node->y());
 
-    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset,
-                            m_legacyUndoAdapter, parent);
+    new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
 
     KisNodeSP child = node->firstChild();
     while(child) {

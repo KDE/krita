@@ -25,28 +25,33 @@
 
 #include <KoCanvasBase.h>
 #include <KoPathShape.h>
-#include <KoShapeController.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 
-#include <kis_paint_layer.h>
-#include <kis_selection.h>
-#include <kis_painter.h>
-#include <kis_paint_device.h>
-#include <kis_paint_information.h>
 #include <kis_paintop_preset.h>
+#include "kis_figure_painting_tool_helper.h"
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_path_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
+#include <kis_system_locker.h>
+
+
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
-        : KisToolPolylineBase(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6))
+        : KisToolPolylineBase(canvas, KisToolPolylineBase::PAINT, KisCursor::load("tool_polyline_cursor.png", 6, 6))
 {
     setObjectName("tool_polyline");
+    setSupportOutline(true);
 }
 
 KisToolPolyline::~KisToolPolyline()
 {
+}
+
+QWidget* KisToolPolyline::createOptionWidget()
+{
+    // there are no options there
+    return KisTool::createOptionWidget();
 }
 
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
@@ -58,29 +63,13 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         image()->actionRecorder()->addAction(linePaintAction);
     }
     if (!currentNode()->inherits("KisShapeLayer")) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        if (!device) return;
-
-        KisPainter painter(device, currentSelection());
-        painter.beginTransaction(i18n("Polyline"));
-        setupPainter(&painter);
-
-        QPointF start, end;
-        QVector<QPointF>::const_iterator it;
-        for (it =
-                    points.begin();
-                it !=
-                points.end(); ++it) {
-            if (it == points.begin()) {
-                start = (*it);
-            } else {
-                end = (*it);
-                painter.paintLine(start, end);
-                start = end;
-            }
-        }
-        device->setDirty(painter.takeDirtyRegion());
-        painter.endTransaction(image()->undoAdapter());
+        KisSystemLocker locker(currentNode());
+        KisFigurePaintingToolHelper helper(i18n("Polyline"),
+                                           image(),
+                                           canvas()->resourceManager(),
+                                           strokeStyle(),
+                                           fillStyle());
+        helper.paintPolyline(points);
     } else {
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
@@ -92,12 +81,11 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
             path->lineTo(resolutionMatrix.map(points[i]));
         path->normalize();
 
-        KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
-        path->setBorder(border);
+        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        path->setStroke(border);
 
         addShape(path);
     }
-
     notifyModified();
 }
 

@@ -23,8 +23,6 @@
 #include "kis_selection.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
-#include "kis_threaded_applicator.h"
-#include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "kis_transaction.h"
 #include <KoColorSpaceRegistry.h>
@@ -67,7 +65,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPaintDeviceSP dstdev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -105,7 +103,7 @@ bool testFilterNoTransaction(KisFilterSP f)
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -148,7 +146,7 @@ bool testFilter(KisFilterSP f)
         return false;
     }
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
     KisTransaction * cmd = new KisTransaction(f->name(), dev);
 
     // Get the predefined configuration from a file
@@ -191,7 +189,7 @@ bool testFilterWithSelections(KisFilterSP f)
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
     QImage result(QString(FILES_DATA_DIR) + QDir::separator() + "lena_" + f->id() + ".png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -212,7 +210,7 @@ bool testFilterWithSelections(KisFilterSP f)
     qDebug() << f->id();// << "\n"; << kfc->toXML() << "\n";
 
     KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
-    sel1->getOrCreatePixelSelection()->select(qimage.rect());
+    sel1->pixelSelection()->select(qimage.rect());
 
     f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);
 
@@ -242,7 +240,7 @@ void KisAllFilterTest::testAllFilters()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 
@@ -261,7 +259,7 @@ void KisAllFilterTest::testAllFiltersNoTransaction()
     }
     qDebug() << "Success (no transaction): " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters (no transaction):\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 
 }
@@ -281,7 +279,7 @@ void KisAllFilterTest::testAllFiltersSrcNotIsDev()
     }
     qDebug() << "Src!=Dev Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Src!=Dev Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 
 }
@@ -301,7 +299,7 @@ void KisAllFilterTest::testAllFiltersWithSelections()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters with selections:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 

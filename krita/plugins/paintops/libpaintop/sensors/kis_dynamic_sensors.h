@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2006-2007,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -21,20 +21,8 @@
 
 #include "../kis_dynamic_sensor.h"
 
-#include <kis_paintop.h>
-#include <KoID.h>
 
 #include "kis_paint_information.h"
-
-class KisDynamicSensorFuzzy : public KisDynamicSensor
-{
-public:
-    KisDynamicSensorFuzzy();
-    virtual ~KisDynamicSensorFuzzy() { }
-    virtual qreal value(const KisPaintInformation&) {
-        return rand() / (qreal)RAND_MAX;
-    }
-};
 
 class KisDynamicSensorSpeed : public KisDynamicSensor
 {
@@ -43,22 +31,10 @@ public:
     virtual ~KisDynamicSensorSpeed() { }
     virtual qreal value(const KisPaintInformation& info);
     void reset() {
-        m_lastTime = 0;
-        m_lastMove = 0.0;
-        m_speed = 0.0;
+        m_speed = -1.0;
     }
 private:
     double m_speed;
-    double m_lastMove;
-    int m_lastTime;
-};
-
-class KisDynamicSensorDrawingAngle : public KisDynamicSensor
-{
-public:
-    KisDynamicSensorDrawingAngle();
-    virtual ~KisDynamicSensorDrawingAngle() { }
-    virtual qreal value(const KisPaintInformation& info);
 };
 
 class KisDynamicSensorRotation : public KisDynamicSensor
@@ -67,7 +43,7 @@ public:
     KisDynamicSensorRotation();
     virtual ~KisDynamicSensorRotation() { }
     virtual qreal value(const KisPaintInformation& info) {
-        return info.rotation() / 28 + 0.5; // it appears that rotation is between -14 and +14
+        return info.rotation() / 360.0;
     }
 };
 
@@ -106,7 +82,7 @@ class KisDynamicSensorAscension : public KisDynamicSensor
 public:
     KisDynamicSensorAscension();
     virtual ~KisDynamicSensorAscension() {}
-    virtual qreal value(const KisPaintInformation& info){
+    virtual qreal value(const KisPaintInformation& info) {
         return KisPaintInformation::ascension(info, true);
     }
 };
@@ -116,7 +92,7 @@ class KisDynamicSensorDeclination : public KisDynamicSensor
 public:
     KisDynamicSensorDeclination();
     virtual ~KisDynamicSensorDeclination() {}
-    virtual qreal value(const KisPaintInformation& info){
+    virtual qreal value(const KisPaintInformation& info) {
         return KisPaintInformation::declination(info, 60.0, 60.0, true);
     }
 };

@@ -22,24 +22,30 @@
 #include <QRect>
 #include "kis_types.h"
 #include "kis_image.h"
+#include "kis_default_bounds_base.h"
 
 class KisDefaultBounds;
 class KisSelectionDefaultBounds;
+class KisSelectionEmptyBounds;
 typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
 typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
+typedef KisSharedPtr<KisSelectionEmptyBounds> KisSelectionEmptyBoundsSP;
 
-class KRITAIMAGE_EXPORT KisDefaultBounds : public KisShared
+class KRITAIMAGE_EXPORT KisDefaultBounds :  public KisDefaultBoundsBase
 {
 public:
     KisDefaultBounds(KisImageWSP image = 0);
     virtual ~KisDefaultBounds();
 
-    virtual QRect bounds() const;
+    QRect bounds() const;
+    bool wrapAroundMode() const;
 
 protected:
     static const QRect infiniteRect;
 
 private:
+    Q_DISABLE_COPY(KisDefaultBounds)
+
     struct Private;
     Private * const m_d;
 };
@@ -53,8 +59,18 @@ public:
     QRect bounds() const;
 
 private:
+    Q_DISABLE_COPY(KisSelectionDefaultBounds)
+
     struct Private;
     Private * const m_d;
+};
+
+class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
+{
+public:
+    KisSelectionEmptyBounds(KisImageWSP image);
+    virtual ~KisSelectionEmptyBounds();
+    QRect bounds() const;
 };
 
 #endif // KIS_DEFAULT_BOUNDS_H

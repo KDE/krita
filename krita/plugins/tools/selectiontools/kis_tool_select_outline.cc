@@ -53,7 +53,10 @@
 
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5)), m_paintPath(new QPainterPath())
+        : KisToolSelectBase(canvas,
+                            KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
+                            i18n("Outline Selection")),
+          m_paintPath(new QPainterPath())
 {
 }
 
@@ -62,105 +65,86 @@ KisToolSelectOutline::~KisToolSelectOutline()
     delete m_paintPath;
 }
 
-
-void KisToolSelectOutline::mousePressEvent(KoPointerEvent *event)
+void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
-
-        setMode(KisTool::PAINT_MODE);
-
-        m_points.clear();
-        m_points.append(convertToPixelCoord(event));
-        m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
+    if (!selectionEditable()) {
+        event->ignore();
+        return;
     }
-    else {
-        KisTool::mousePressEvent(event);
-    }
+
+    setMode(KisTool::PAINT_MODE);
+
+    m_points.clear();
+    m_points.append(convertToPixelCoord(event));
+    m_paintPath->moveTo(pixelToView(convertToPixelCoord(event)));
 }
 
-void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
+void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 {
-    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        QPointF point = convertToPixelCoord(event);
-        //don't add the point, if the distance is very small
-        if (!m_points.isEmpty()) {
-            QPointF diff = point - m_points.last();
-            if(fabs(diff.x())<3 && fabs(diff.y())<3)
-                return;
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    QPointF point = convertToPixelCoord(event);
+    m_paintPath->lineTo(pixelToView(point));
+    m_points.append(point);
+    updateFeedback();
+}
+
+void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    setMode(KisTool::HOVER_MODE);
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    kisCanvas->updateCanvas();
+
+    if (m_points.count() > 2) {
+        QApplication::setOverrideCursor(KisCursor::waitCursor());
+
+        KisSelectionToolHelper helper(kisCanvas, i18n("Outline Selection"));
+
+        if (selectionMode() == PIXEL_SELECTION) {
+
+            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+
+            KisPainter painter(tmpSel);
+            painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+            painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
+            painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());
+            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+            painter.paintPolygon(m_points);
+
+            QPainterPath cache;
+            cache.addPolygon(m_points);
+            cache.closeSubpath();
+            tmpSel->setOutlineCache(cache);
+
+            helper.selectPixelSelection(tmpSel, selectionAction());
+        } else {
+
+            KoPathShape* path = new KoPathShape();
+            path->setShapeId(KoPathShapeId);
+
+            QTransform resolutionMatrix;
+            resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+            path->moveTo(resolutionMatrix.map(m_points[0]));
+            for (int i = 1; i < m_points.count(); i++)
+                path->lineTo(resolutionMatrix.map(m_points[i]));
+            path->close();
+            path->normalize();
+
+            helper.addSelectionShape(path);
         }
-        m_paintPath->lineTo(pixelToView(point));
-        m_points.append(point);
-        updateFeedback();
+        QApplication::restoreOverrideCursor();
     }
-    else {
-        KisTool::mouseMoveEvent(event);
-    }
+
+    m_points.clear();
+    delete m_paintPath;
+    m_paintPath = new QPainterPath();
 }
-
-void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        setMode(KisTool::HOVER_MODE);
-        deactivate();
-
-        if (m_points.count() > 2) {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            if (!kisCanvas)
-                return;
-
-            if (!currentNode())
-                return;
-
-            KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Outline Selection"));
-
-            if (m_selectionMode == PIXEL_SELECTION) {
-
-                KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-
-                KisPainter painter(tmpSel);
-                painter.setBounds(currentImage()->bounds());
-                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                painter.setGradient(currentGradient());
-                painter.setPattern(currentPattern());
-                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-                painter.setOpacity(OPACITY_OPAQUE_U8);
-                painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
-                painter.setAntiAliasPolygonFill(m_optWidget->antiAliasSelection());
-                painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
-                painter.paintPolygon(m_points);
-
-                helper.selectPixelSelection(tmpSel, m_selectAction);
-            } else {
-
-                KoPathShape* path = new KoPathShape();
-                path->setShapeId(KoPathShapeId);
-
-                QTransform resolutionMatrix;
-                resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-                path->moveTo(resolutionMatrix.map(m_points[0]));
-                for (int i = 1; i < m_points.count(); i++)
-                    path->lineTo(resolutionMatrix.map(m_points[i]));
-                path->close();
-                path->normalize();
-
-                helper.addSelectionShape(path);
-            }
-            QApplication::restoreOverrideCursor();
-        }
-
-        m_points.clear();
-        delete m_paintPath;
-        m_paintPath = new QPainterPath();
-    }
-    else {
-        KisTool::mouseReleaseEvent(event);
-    }
-}
-
 
 void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
 {
@@ -187,18 +171,12 @@ void KisToolSelectOutline::updateFeedback()
 
 void KisToolSelectOutline::deactivate()
 {
-    if (canvas()) {
-        updateCanvasPixelRect(image()->bounds());
-    }
-}
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    kisCanvas->updateCanvas();
 
-QWidget* KisToolSelectOutline::createOptionWidget()
-{
-    KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Outline Selection"));
-    return m_optWidget;
+    KisToolSelectBase::deactivate();
 }
-
 
 #include "kis_tool_select_outline.moc"
 

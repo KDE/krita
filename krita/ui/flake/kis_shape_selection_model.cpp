@@ -19,20 +19,24 @@
 #include "kis_shape_selection_model.h"
 #include "kis_debug.h"
 
-#include "KoShapeContainer.h"
-#include "KoShapeManager.h"
+#include <KoShapeContainer.h>
+#include <KoShapeBackground.h>
+#include <KoShapeManager.h>
 
-#include "kis_paint_device.h"
 #include "kis_shape_selection.h"
 #include "kis_selection.h"
 #include "kis_image.h"
-#include "kis_undo_adapter.h"
+#include "kis_update_selection_job.h"
+
 
 KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection)
-        : m_image(image)
-        , m_parentSelection(selection)
-        , m_shapeSelection(shapeSelection)
+    : m_image(image)
+    , m_parentSelection(selection)
+    , m_shapeSelection(shapeSelection)
+    , m_updateSignalCompressor(new KisSignalCompressor(300, KisSignalCompressor::POSTPONE, this))
+    , m_updatesEnabled(true)
 {
+    connect(m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
 }
 
 KisShapeSelectionModel::~KisShapeSelectionModel()
@@ -41,16 +45,33 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
     m_parentSelection = 0;
 }
 
+void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
+{
+    m_shapeSelection->recalculateOutlineCache();
+
+    if (m_updatesEnabled) {
+        m_updateRect = !updateRect.isEmpty() ? m_updateRect | updateRect : QRect();
+        m_updateSignalCompressor->start();
+    }
+}
+
+void KisShapeSelectionModel::startUpdateJob()
+{
+    m_image->addSpontaneousJob(new KisUpdateSelectionJob(m_parentSelection, m_updateRect));
+    m_updateRect = QRect();
+}
+
 void KisShapeSelectionModel::add(KoShape *child)
 {
+    if (!m_shapeSelection) return;
+
     if (m_shapeMap.contains(child))
         return;
 
-    child->setBorder(0);
-    child->setBackground(0);
+    child->setStroke(0);
+    child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);
-    m_shapeSelection->setDirty();
 
     QRect updateRect = child->boundingRect().toAlignedRect();
     QTransform matrix;
@@ -61,32 +82,39 @@ void KisShapeSelectionModel::add(KoShape *child)
         // The shape is the first one, so the shape selection just got created
         // Pixel selection provides no longer the datamanager of the selection
         // so update the whole selection
-        m_parentSelection->updateProjection();
+        requestUpdate(QRect());
     } else {
-        m_parentSelection->updateProjection(updateRect);
+        requestUpdate(updateRect);
     }
-
-    m_image->undoAdapter()->emitSelectionChanged();
 }
 
 void KisShapeSelectionModel::remove(KoShape *child)
 {
+    if (!m_shapeMap.contains(child)) return;
+
     QRect updateRect = child->boundingRect().toAlignedRect();
     m_shapeMap.remove(child);
 
     if (m_shapeSelection) {
         m_shapeSelection->shapeManager()->remove(child);
-        m_shapeSelection->setDirty();
     }
 
     QTransform matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     updateRect = matrix.mapRect(updateRect);
     if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
-        m_parentSelection->updateProjection(updateRect);
+        requestUpdate(updateRect);
     }
+}
 
-    m_image->undoAdapter()->emitSelectionChanged();
+void KisShapeSelectionModel::setUpdatesEnabled(bool enabled)
+{
+    m_updatesEnabled = enabled;
+}
+
+bool KisShapeSelectionModel::updatesEnabled() const
+{
+    return m_updatesEnabled;
 }
 
 void KisShapeSelectionModel::setClipped(const KoShape *child, bool clipping)
@@ -128,22 +156,18 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *, KoShape::Chang
 
 void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
-    if (type == KoShape::ParentChanged)
-        return;
+    if (!m_shapeSelection) return;
+    if (type == KoShape::ParentChanged) return;
 
-    m_shapeSelection->setDirty();
     QRectF changedRect = m_shapeMap[child];
     changedRect = changedRect.unite(child->boundingRect());
+    m_shapeMap[child] = child->boundingRect();
 
     QTransform matrix;
     matrix.scale(m_image->xRes(), m_image->yRes());
     changedRect = matrix.mapRect(changedRect);
 
-    m_shapeMap[child] = child->boundingRect();
-
-    m_parentSelection->updateProjection(changedRect.toAlignedRect());
-    m_parentSelection->updateProjection();
-    m_image->undoAdapter()->emitSelectionChanged();
+    requestUpdate(changedRect.toAlignedRect());
 }
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const

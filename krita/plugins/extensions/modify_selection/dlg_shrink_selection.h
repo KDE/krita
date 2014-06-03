@@ -2,6 +2,7 @@
  *  dlg_shrink_selection.h -- part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,41 +21,29 @@
 #ifndef DLG_SHRINK_SELECTION_H
 #define DLG_SHRINK_SELECTION_H
 
-#include <kdialog.h>
-
 #include "ui_wdg_shrink_selection.h"
+#include <operations/kis_operation_ui_widget.h>
 
-class WdgShrinkSelection : public QWidget, public Ui::WdgShrinkSelection
+class KisView2;
+class WdgShrinkSelection : public KisOperationUIWidget, public Ui::WdgShrinkSelection
 {
     Q_OBJECT
 
 public:
-    WdgShrinkSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    WdgShrinkSelection(QWidget *parent, KisView2* view);
 
-class DlgShrinkSelection: public KDialog
-{
-
-    Q_OBJECT
-
-public:
-
-    DlgShrinkSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgShrinkSelection();
-
-    qint32 xradius();
-    qint32 yradius();
-    bool shrinkFromImageBorder();
+    virtual void getConfiguration(KisOperationConfiguration* config);
 
 private slots:
-
-    void okClicked();
+    void slotShrinkValueChanged(int value);
+    void slotShrinkValueChanged(double value);
+    void slotUnitChanged(int index);
 
 private:
+    void updateShrinkUIValue(double value);
 
-    WdgShrinkSelection * m_page;
+    double m_resolution;
+    int m_shrinkValue;
 };
 
 #endif // DLG_SHRINK_SELECTION_H

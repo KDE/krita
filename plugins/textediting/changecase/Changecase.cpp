@@ -44,6 +44,12 @@ void Changecase::finishedParagraph(QTextDocument *document, int cursorPosition)
     Q_UNUSED(cursorPosition);
 }
 
+void Changecase::startingSimpleEdit(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
 void Changecase::checkSection(QTextDocument *document, int startPosition, int endPosition)
 {
     m_cursor = QTextCursor(document);

@@ -25,8 +25,6 @@
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
 #include "testutil.h"
-#include "kis_threaded_applicator.h"
-#include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
 #include <KoUpdater.h>
@@ -39,12 +37,10 @@ public:
             : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter") {
     }
 
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP src,
-                 const QRect& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const {
+    void processImpl(KisPaintDeviceSP src,
+                     const QRect& size,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const {
         Q_UNUSED(src);
         Q_UNUSED(size);
         Q_UNUSED(config);
@@ -69,7 +65,7 @@ void KisFilterTest::testWithProgressUpdater()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
@@ -82,7 +78,7 @@ void KisFilterTest::testWithProgressUpdater()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
     delete pu;
     delete bar;
@@ -95,7 +91,7 @@ void KisFilterTest::testSingleThreaded()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
@@ -108,7 +104,7 @@ void KisFilterTest::testSingleThreaded()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -121,10 +117,10 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
     KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
-    sel->getOrCreatePixelSelection()->invert(); // select everything
+    sel->pixelSelection()->invert(); // select everything
     sel->updateProjection();
 
-    src->convertFromQImage(qimage, "", 0, 0);
+    src->convertFromQImage(qimage, 0, 0, 0);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
@@ -137,7 +133,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtertest.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 

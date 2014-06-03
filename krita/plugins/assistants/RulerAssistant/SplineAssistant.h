@@ -27,9 +27,10 @@ class SplineAssistant : public KisPaintingAssistant
 public:
     SplineAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
+protected:
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
 private:
     QPointF project(const QPointF& pt) const;
 };
@@ -41,7 +42,7 @@ public:
     virtual ~SplineAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* paintingAssistant(const QRectF& imageArea) const;
+    virtual KisPaintingAssistant* createPaintingAssistant() const;
 };
 
 #endif

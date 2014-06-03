@@ -19,7 +19,7 @@
 #ifndef XCFTOOLS_H
 #define XCFTOOLS_H
 
-#include "config.h"
+#include <config.h>
 #include "enums.h"
 #include <stddef.h>
 #include <stdio.h>

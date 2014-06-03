@@ -17,10 +17,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_ITERATOR_TEST_H
-#define KIS_ITERATOR_TEST_H
+#ifndef KIS_ITERATOR_NG_TEST_H
+#define KIS_ITERATOR_NG_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KoColorSpace;
 
@@ -35,7 +35,7 @@ private:
     void vLineIter(const KoColorSpace * cs);
     void writeBytes(const KoColorSpace * cs);
     void fill(const KoColorSpace * cs);
-    void rectIter(const KoColorSpace * cs);
+    void sequentialIter(const KoColorSpace * colorSpace);
     void hLineIter(const KoColorSpace * cs);
     void randomAccessor(const KoColorSpace * cs);
 
@@ -44,7 +44,7 @@ private slots:
     void vLineIter();
     void writeBytes();
     void fill();
-    void rectIter();
+    void sequentialIter();
     void hLineIter();
     void randomAccessor();
 };

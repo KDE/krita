@@ -20,7 +20,7 @@
 
 #include "kis_wdg_color.h"
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <knuminput.h>
 #include <KoColor.h>

@@ -63,10 +63,12 @@ void KisGridManager::setup(KActionCollection * collection)
     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
     toggleGrid = m_view->document()->gridData().gridToggleAction();
+    toggleGrid->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Apostrophe));
     collection->addAction("view_grid", toggleGrid);
     connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
+    m_toggleSnapToGrid->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Semicolon));
     collection->addAction("view_snap_to_grid", m_toggleSnapToGrid);
     connect(m_toggleSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
@@ -79,21 +81,41 @@ void KisGridManager::setup(KActionCollection * collection)
     collection->addAction("view_fast_grid_2x2", m_gridFastConfig2x2);
     connect(m_gridFastConfig2x2, SIGNAL(triggered()), this, SLOT(fastConfig2x2()));
 
+    m_gridFastConfig4x4  = new KAction(i18n("4x4"), this);
+    collection->addAction("view_fast_grid_4x4", m_gridFastConfig4x4);
+    connect(m_gridFastConfig4x4, SIGNAL(triggered()), this, SLOT(fastConfig4x4()));
+    
     m_gridFastConfig5x5  = new KAction(i18n("5x5"), this);
     collection->addAction("view_fast_grid_5x5", m_gridFastConfig5x5);
     connect(m_gridFastConfig5x5, SIGNAL(triggered()), this, SLOT(fastConfig5x5()));
 
+    m_gridFastConfig8x8  = new KAction(i18n("8x8"), this);
+    collection->addAction("view_fast_grid_8x8", m_gridFastConfig8x8);
+    connect(m_gridFastConfig8x8, SIGNAL(triggered()), this, SLOT(fastConfig8x8()));
+        
     m_gridFastConfig10x10  = new KAction(i18n("10x10"), this);
     collection->addAction("view_fast_grid_10x10", m_gridFastConfig10x10);
     connect(m_gridFastConfig10x10, SIGNAL(triggered()), this, SLOT(fastConfig10x10()));
+
+    m_gridFastConfig16x16  = new KAction(i18n("16x16"), this);
+    collection->addAction("view_fast_grid_16x16", m_gridFastConfig16x16);
+    connect(m_gridFastConfig16x16, SIGNAL(triggered()), this, SLOT(fastConfig16x16()));
 
     m_gridFastConfig20x20  = new KAction(i18n("20x20"), this);
     collection->addAction("view_fast_grid_20x20", m_gridFastConfig20x20);
     connect(m_gridFastConfig20x20, SIGNAL(triggered()), this, SLOT(fastConfig20x20()));
 
+    m_gridFastConfig32x32  = new KAction(i18n("32x32"), this);
+    collection->addAction("view_fast_grid_32x32", m_gridFastConfig32x32);
+    connect(m_gridFastConfig32x32, SIGNAL(triggered()), this, SLOT(fastConfig32x32()));
+    
     m_gridFastConfig40x40  = new KAction(i18n("40x40"), this);
     collection->addAction("view_fast_grid_40x40", m_gridFastConfig40x40);
     connect(m_gridFastConfig40x40, SIGNAL(triggered()), this, SLOT(fastConfig40x40()));
+    
+    m_gridFastConfig64x64  = new KAction(i18n("64x64"), this);
+    collection->addAction("view_fast_grid_64x64", m_gridFastConfig64x64);
+    connect(m_gridFastConfig64x64, SIGNAL(triggered()), this, SLOT(fastConfig64x64()));
 }
 
 void KisGridManager::updateGUI()
@@ -160,35 +182,94 @@ void KisGridManager::fastConfig40x40()
     m_view->canvas()->update();
 }
 
-void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
+void KisGridManager::fastConfig4x4()
+{
+    KisConfig cfg;
+    cfg.setGridHSpacing(4);
+    cfg.setGridVSpacing(4);
+    m_view->canvas()->update();
+}
+
+void KisGridManager::fastConfig8x8()
+{
+    KisConfig cfg;
+    cfg.setGridHSpacing(8);
+    cfg.setGridVSpacing(8);
+    m_view->canvas()->update();
+}
+
+void KisGridManager::fastConfig16x16()
+{
+    KisConfig cfg;
+    cfg.setGridHSpacing(16);
+    cfg.setGridVSpacing(16);
+    m_view->canvas()->update();
+}
+
+void KisGridManager::fastConfig32x32()
+{
+    KisConfig cfg;
+    cfg.setGridHSpacing(32);
+    cfg.setGridVSpacing(32);
+    m_view->canvas()->update();
+}
+
+void KisGridManager::fastConfig64x64()
+{
+    KisConfig cfg;
+    cfg.setGridHSpacing(64);
+    cfg.setGridVSpacing(64);
+    m_view->canvas()->update();
+}
+
+void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     KisConfig cfg;
 
-    quint32 offsetx = cfg.getGridOffsetX();
-    quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing();
-    quint32 vspacing = cfg.getGridVSpacing();
-    quint32 subdivision = cfg.getGridSubdivisions() - 1;
+    int offsetx = cfg.getGridOffsetX();
+    int offsety = cfg.getGridOffsetY();
+    int hspacing = cfg.getGridHSpacing();
+    int vspacing = cfg.getGridVSpacing();
+    int subdivision = cfg.getGridSubdivisions() - 1;
+    bool useEmergencyPen = false;
 
     QPen mainPen = KisGridPainterConfiguration::mainPen();
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
+    QPen emergencyPen(subdivisionPen.color(), 0, Qt::DotLine);
 
     qreal x1, y1, x2, y2;
-    QRectF imageRect = converter->documentToImage(updateRect);
+    QRectF imageRect =
+        converter->documentToImage(updateRect) & canvas->image()->bounds();
     imageRect.getCoords(&x1, &y1, &x2, &y2);
 
     QTransform transform = converter->imageToWidgetTransform();
 
+    bool gridIsPaintable = true;
+    const qreal gridThreshold = 8.0;
+    do {
+        QRectF widgetRect = converter->imageToWidget(QRectF(0, 0, hspacing, vspacing));
+        gridIsPaintable = widgetRect.width() >= gridThreshold &&
+            widgetRect.height() >= gridThreshold;
+
+        if (!gridIsPaintable) {
+            useEmergencyPen = true;
+            hspacing *= qMax(2, subdivision + 1);
+            vspacing *= qMax(2, subdivision + 1);
+        }
+    } while (!gridIsPaintable);
+
     gc.save();
     gc.setTransform(transform);
 
-    quint32 i;
+    int i;
 
     // Draw vertical line
     i = subdivision - (offsetx / hspacing) % (subdivision + 1);
     double x = offsetx % hspacing;
     while (x <= x2) {
-        if (i == subdivision) {
+        if (useEmergencyPen) {
+            gc.setPen(emergencyPen);
+        } else if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
         } else {
@@ -207,7 +288,9 @@ void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, cons
     i = subdivision - (offsety / vspacing) % (subdivision + 1);
     qreal y = offsety % vspacing;
     while (y <= y2) {
-        if (i == subdivision) {
+        if (useEmergencyPen) {
+            gc.setPen(emergencyPen);
+        } else if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
         } else {

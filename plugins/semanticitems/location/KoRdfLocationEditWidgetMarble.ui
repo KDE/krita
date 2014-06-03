@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KoRdfLocationEditWidget</class>
+ <widget class="QWidget" name="KoRdfLocationEditWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1085</width>
+    <height>747</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="name"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="Marble::LatLonEdit" name="wlat"/>
+   </item>
+   <item row="4" column="2">
+    <widget class="Marble::MarbleWidget" name="map">
+     <property name="toolTip">
+      <string>The Earth</string>
+     </property>
+     <property name="whatsThis">
+      <string>The Marble widget displays a virtual globe.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="Marble::MarbleNavigator" name="zoomer">
+     <property name="toolTip">
+      <string>Navigation Control</string>
+     </property>
+     <property name="whatsThis">
+      <string>Use this control to navigate.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Latitude</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="Marble::LatLonEdit" name="wlong"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Longitude</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Marble::LatLonEdit</class>
+   <extends>QWidget</extends>
+   <header>marble/LatLonEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Marble::MarbleNavigator</class>
+   <extends>QWidget</extends>
+   <header>marble/MarbleNavigator.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Marble::MarbleWidget</class>
+   <extends>QWidget</extends>
+   <header>marble/MarbleWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>moveRight()</signal>
+   <receiver>map</receiver>
+   <slot>moveRight()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>178</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>moveUp()</signal>
+   <receiver>map</receiver>
+   <slot>moveUp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>160</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>moveLeft()</signal>
+   <receiver>map</receiver>
+   <slot>moveLeft()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>moveDown()</signal>
+   <receiver>map</receiver>
+   <slot>moveDown()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>174</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>zoomChanged(int)</signal>
+   <receiver>map</receiver>
+   <slot>zoomView(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>67</x>
+     <y>424</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>220</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>map</sender>
+   <signal>zoomChanged(int)</signal>
+   <receiver>zoomer</receiver>
+   <slot>changeZoom(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>550</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>59</x>
+     <y>550</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>zoomIn()</signal>
+   <receiver>map</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>213</x>
+     <y>325</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomer</sender>
+   <signal>zoomOut()</signal>
+   <receiver>map</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

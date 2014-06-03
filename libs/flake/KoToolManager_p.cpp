@@ -25,19 +25,19 @@
 #include <QToolButton>
 #include <kicon.h>
 
-#include <stdlib.h> // for random()
+#include <QtGlobal> // for qrand()
 
 //   ************ ToolHelper **********
 ToolHelper::ToolHelper(KoToolFactoryBase *tool)
 {
     m_toolFactory = tool;
-    m_uniqueId = (int) random();
+    m_uniqueId = (int) qrand();
 }
 
 QToolButton* ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
-    but->setIcon(KIcon(m_toolFactory->icon()).pixmap(22));
+    but->setIcon(KIcon(m_toolFactory->iconName()));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
     return but;
@@ -65,10 +65,10 @@ QString ToolHelper::toolTip() const
 
 KoToolBase *ToolHelper::createTool(KoCanvasBase *canvas) const
 {
-    if (! canCreateTool(canvas))
-        return 0;
     KoToolBase *tool = m_toolFactory->createTool(canvas);
-    tool->setToolId(id());
+    if (tool) {
+        tool->setToolId(id());
+    }
     return tool;
 }
 
@@ -87,16 +87,6 @@ KShortcut ToolHelper::shortcut() const
     return m_toolFactory->shortcut();
 }
 
-bool ToolHelper::inputDeviceAgnostic() const
-{
-    return m_toolFactory->inputDeviceAgnostic();
-}
-
-bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
-{
-    return m_toolFactory->canCreateTool(canvas);
-}
-
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)
         : QObject(parent),
@@ -111,8 +101,8 @@ void Connector::selectionChanged()
 }
 
 //   ************ ToolAction **********
-ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name)
-    : KAction(name, toolManager),
+ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent)
+    : KAction(name, parent),
     m_toolManager(toolManager),
     m_toolID(id)
 {

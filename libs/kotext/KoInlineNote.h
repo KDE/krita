@@ -29,6 +29,7 @@ class KoChangeTracker;
 class KoStyleManager;
 
 class QTextFrame;
+class InsertNodeCommand;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
@@ -36,6 +37,7 @@ class QTextFrame;
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
@@ -48,7 +50,7 @@ public:
      * Construct a new note to be inserted in the text using KoTextEditor::insertInlineObject() for example.
      * @param type the type of note, which specifies how the application will use the text from the new note.
      */
-    KoInlineNote(Type type);
+    explicit KoInlineNote(Type type);
     // destructor
     virtual ~KoInlineNote();
 
@@ -71,20 +73,11 @@ public:
      */
     void setAutoNumber(int autoNumber);
 
-    /**
-     * Set the id that is used to reference this note.
-     * @param id the new id
-     */
-    void setId(const QString &id);
-
     /// return the current text
     QTextFrame *textFrame() const;
 
     /// return the current label
     QString label() const;
-
-    /// return the current id
-    QString id() const;
 
     /**
      * @return whether the label should be automatically recreated or if the label is static.
@@ -119,6 +112,11 @@ protected:
                        const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
+    friend class InsertNoteCommand;
+
+    // only to be used on subsequent redo of insertion
+    void setTextFrame(QTextFrame *textFrame);
+
     class Private;
     Private * const d;
 };

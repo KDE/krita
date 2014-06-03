@@ -19,7 +19,7 @@
 
 #ifndef KoEncryptedStore_h
 #define KoEncryptedStore_h
-
+#ifdef QCA2
 #include "KoStore.h"
 #include <QHash>
 #include <QtCrypto>
@@ -37,9 +37,12 @@ struct KoEncryptedStore_EncryptionData;
 class KoEncryptedStore : public KoStore
 {
 public:
-    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification);
-    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification);
-    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode, const QByteArray &appIdentification);
+    KoEncryptedStore(const QString &filename, Mode mode, const QByteArray &appIdentification,
+                     bool writeMimetype);
+    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
+                     bool writeMimetype);
+    KoEncryptedStore(QWidget *window, const KUrl &url, const QString &filename, Mode mode,
+                     const QByteArray &appIdentification, bool writeMimetype);
     ~KoEncryptedStore();
 
     /*
@@ -120,5 +123,5 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };
-
+#endif
 #endif

@@ -1,0 +1,9 @@
+- interpretion
+  -  CREATE TABLE
+     - missing keys
+  -  SELECT
+  -  ALTER
+  -  UPDATE
+     -  only op code for now, ignore rest
+  -  INSERT
+     -  only op code for now, ignore rest

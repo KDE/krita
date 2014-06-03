@@ -21,6 +21,7 @@
 #define KOCANVASOBSERVERBASE_H
 
 class KoCanvasBase;
+class KoCanvasObserverBasePrivate;
 
 #include "flake_export.h"
 
@@ -37,6 +38,23 @@ public:
     virtual ~KoCanvasObserverBase();
 
     /**
+     * set observed canvas
+     * @param canvas canvas to observe
+     */
+    void setObservedCanvas(KoCanvasBase *canvas);
+
+    /**
+     * notify the observer that canvas is gone
+     */
+    void unsetObservedCanvas();
+
+    /**
+     * the currently observed canvas
+     * @return observed canvas, can be 0
+     */
+    KoCanvasBase* observedCanvas();
+protected:
+    /**
      * re-implement this method in your canvas observer. It will be called
      * whenever a canvas becomes active. Note that you are responsible for
      * not connecting more than one time to the signals of a canvas or any
@@ -48,9 +66,14 @@ public:
      * re-implement to notify the observer that its canvas is no longer
      * among the living. The daisies, it is pushing up. This means you
      * don't have to unconnect, it's dead.
+     * Note that currently there is a bug where in certain specific
+     * circumstances unsetCanvas can be called when it shouldn't, see for
+     * example KWStatisticsDocker for a workaround for this problem.
      */
     virtual void unsetCanvas() = 0;
 
+private:
+    KoCanvasObserverBasePrivate * const d;
 };
 
 #endif // KOCANVASOBSERVERBASE_H

@@ -23,6 +23,7 @@
 #include <QXmlInputSource>
 #include <QNetworkAccessManager>
 
+#include "onlinedocument.h"
 #include "documentlistwindow.h"
 
 class GoogleDocument;
@@ -34,12 +35,13 @@ class GoogleDocumentService : public QObject
     Q_OBJECT
 
 public:
-    GoogleDocumentService();
+    explicit GoogleDocumentService(OnlineDocument::DocumentType type);
     virtual ~GoogleDocumentService();
     void clientLogin(const QString & username, const QString & password);
     void getDocument();
     void downloadDocument (const QString & url, const QString & type);
     bool alreadyAuthenticated() { return loggedin; }
+    void showDocumentListWindow(bool visible);
 
 signals:
     void receivedDocument(QString path);
@@ -51,7 +53,6 @@ private slots:
     void handleNetworkData(QNetworkReply *networkReply);
 
 private:
-    void hideDocumentListWindow();
     void listDocuments();
 
     QXmlSimpleReader xmlReader;
@@ -68,9 +69,7 @@ private:
     QString password;
     QNetworkAccessManager networkManager;
     bool loggedin;
-
-    static const QString GOOGLE_DOCUMENT_URL;
-    static const QString GOOGLE_SPREADSHEET_URL;
+    OnlineDocument::DocumentType m_type;
 };
 
 #endif // GOOGLEDOCUMENTSERVICE_H

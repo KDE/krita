@@ -15,18 +15,31 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_image_pyramid.h"
-#include "kis_painter.h"
-#include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_iterators_pixel.h"
-#include "kis_datamanager.h"
 
+#include <QBitArray>
+
+#include <KoChannelInfo.h>
+#include <KoCompositeOp.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorSpaceMaths.h>
+
+#include "kis_display_filter.h"
+#include "kis_painter.h"
+#include "kis_iterator_ng.h"
+#include "kis_datamanager.h"
+#include "kis_config_notifier.h"
 #include "kis_debug.h"
+#include "kis_config.h"
 
 //#define DEBUG_PYRAMID
 
+#include <config-ocio.h>
+#ifdef HAVE_OCIO
+#include <OpenColorIO/OpenColorIO.h>
+#include <OpenColorIO/OpenColorTransforms.h>
+#endif
 
 #define ORIGINAL_INDEX           0
 #define FIRST_NOT_ORIGINAL_INDEX 1
@@ -34,6 +47,11 @@
 
 
 /************* AUXILIARY FUNCTIONS **********************************/
+
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 #define isOdd(x) ((x) & 0x01)
@@ -83,10 +101,12 @@ inline void alignRectBy2(qint32 &x, qint32 &y, qint32 &w, qint32 &h)
 /************* class KisImagePyramid ********************************/
 
 KisImagePyramid::KisImagePyramid(qint32 pyramidHeight)
-        : m_monitorProfile(0),
-        m_monitorColorSpace(0),
-        m_pyramidHeight(pyramidHeight)
+        : m_monitorProfile(0)
+        , m_monitorColorSpace(0)
+        , m_pyramidHeight(pyramidHeight)
 {
+    configChanged();
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 }
 
 KisImagePyramid::~KisImagePyramid()
@@ -94,7 +114,9 @@ KisImagePyramid::~KisImagePyramid()
     setImage(0);
 }
 
-void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
+void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile,
+                                        KoColorConversionTransformation::Intent renderingIntent,
+                                        KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     m_monitorProfile = monitorProfile;
     /**
@@ -102,23 +124,51 @@ void KisImagePyramid::setMonitorProfile(const KoColorProfile* monitorProfile)
      * in optimized function downsamplePixels()
      */
     m_monitorColorSpace = KoColorSpaceRegistry::instance()->rgb8(monitorProfile);
+    m_renderingIntent = renderingIntent;
+    m_conversionFlags = conversionFlags;
 
-    // Not used now
-    m_renderingIntent = KoColorConversionTransformation::IntentPerceptual;
     rebuildPyramid();
+}
+
+void KisImagePyramid::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_channelFlags = channelFlags;
+    int selectedChannels = 0;
+    const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
+    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
+    if (channelInfo.size() != m_channelFlags.size()) {
+        m_channelFlags = QBitArray();
+    }
+
+    for (int i = 0; i < m_channelFlags.size(); ++i) {
+        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+            selectedChannels++;
+            m_selectedChannelIndex = i;
+        }
+    }
+    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
+    m_onlyOneChannelSelected = (selectedChannels == 1);
+}
+
+void KisImagePyramid::setDisplayFilter(KisDisplayFilterSP displayFilter)
+{
+    m_displayFilter = displayFilter;
 }
 
 void KisImagePyramid::rebuildPyramid()
 {
     m_pyramid.clear();
-    for (qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         m_pyramid.append(new KisPaintDevice(m_monitorColorSpace));
+    }
 }
 
 void KisImagePyramid::clearPyramid()
 {
-    for (qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         m_pyramid[i]->clear();
+    }
 }
 
 void KisImagePyramid::setImage(KisImageWSP newImage)
@@ -140,20 +190,117 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::updateCache(KisPPUpdateInfoSP info)
+void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 {
-    retrieveImageData(info->dirtyImageRect);
+    retrieveImageData(dirtyImageRect);
 }
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
 {
+    // XXX: use QThreadStorage to cache the two patches (512x512) of pixels. Note
+    // that when we do that, we need to reset that cache when the projection's
+    // colorspace changes.
+    const KoColorSpace *projectionCs = m_originalImage->projection()->colorSpace();
     KisPaintDeviceSP originalProjection = m_originalImage->projection();
+    quint32 numPixels = rect.width() * rect.height();
 
-    KisPainter gc(m_pyramid[ORIGINAL_INDEX]);
-    gc.setCompositeOp(m_monitorColorSpace->compositeOp(COMPOSITE_COPY));
-    gc.setOpacity(OPACITY_OPAQUE_U8);
-    gc.bitBlt(rect.topLeft(), originalProjection, rect);
-    gc.end();
+    QScopedArrayPointer<quint8> originalBytes(
+        new quint8[originalProjection->colorSpace()->pixelSize() * numPixels]);
+
+    originalProjection->readBytes(originalBytes.data(), rect);
+
+    if (m_displayFilter &&
+        m_useOcio &&
+        projectionCs->colorModelId() == RGBAColorModelID) {
+
+#ifdef HAVE_OCIO
+        const KoColorProfile *destinationProfile =
+            m_displayFilter->useInternalColorManagement() ?
+            m_monitorProfile : projectionCs->profile();
+
+        const KoColorSpace *floatCs =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Float32BitsColorDepthID.id(),
+                destinationProfile);
+
+        const KoColorSpace *modifiedMonitorCs =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Integer8BitsColorDepthID.id(),
+                destinationProfile);
+
+        if (projectionCs->colorDepthId() == Float32BitsColorDepthID) {
+            m_displayFilter->filter(originalBytes.data(), numPixels);
+        } else {
+            QScopedArrayPointer<quint8> dst(new quint8[floatCs->pixelSize() * numPixels]);
+            projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), floatCs, numPixels, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+            m_displayFilter->filter(dst.data(), numPixels);
+            originalBytes.swap(dst);
+        }
+
+        {
+            QScopedArrayPointer<quint8> dst(new quint8[modifiedMonitorCs->pixelSize() * numPixels]);
+            floatCs->convertPixelsTo(originalBytes.data(), dst.data(), modifiedMonitorCs, numPixels, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+            originalBytes.swap(dst);
+        }
+#endif
+    }
+    else {
+        QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+        if (!m_channelFlags.size() == channelInfo.size()) {
+            setChannelFlags(QBitArray());
+        }
+        if (!m_channelFlags.isEmpty() && !m_allChannelsSelected) {
+            QScopedArrayPointer<quint8> dst(new quint8[projectionCs->pixelSize() * numPixels]);
+
+            int channelSize = channelInfo[m_selectedChannelIndex]->size();
+            int pixelSize = projectionCs->pixelSize();
+
+            KisConfig cfg;
+
+            if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
+                int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
+
+                        if (channelInfo[channelIndex]->channelType() == KoChannelInfo::COLOR) {
+                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   originalBytes.data() + (pixelIndex * pixelSize) + selectedChannelPos,
+                                   channelSize);
+                        }
+                        else if (channelInfo[channelIndex]->channelType() == KoChannelInfo::ALPHA) {
+                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   originalBytes.data()  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                    }
+                }
+            }
+            else {
+                for (uint pixelIndex = 0; pixelIndex < numPixels; ++pixelIndex) {
+                    for (uint channelIndex = 0; channelIndex < projectionCs->channelCount(); ++channelIndex) {
+                        if (m_channelFlags.testBit(channelIndex)) {
+                            memcpy(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   originalBytes.data()  + (pixelIndex * pixelSize) + (channelIndex * channelSize),
+                                   channelSize);
+                        }
+                        else {
+                            memset(dst.data() + (pixelIndex * pixelSize) + (channelIndex * channelSize), 0, channelSize);
+                        }
+                    }
+                }
+
+            }
+            originalBytes.swap(dst);
+        }
+
+        QScopedArrayPointer<quint8> dst(new quint8[m_monitorColorSpace->pixelSize() * numPixels]);
+        projectionCs->convertPixelsTo(originalBytes.data(), dst.data(), m_monitorColorSpace, numPixels, m_renderingIntent, m_conversionFlags);
+        originalBytes.swap(dst);
+    }
+
+    m_pyramid[ORIGINAL_INDEX]->writeBytes(originalBytes.data(), rect);
 }
 
 void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
@@ -165,19 +312,21 @@ void KisImagePyramid::recalculateCache(KisPPUpdateInfoSP info)
     for (int i = FIRST_NOT_ORIGINAL_INDEX; i < m_pyramidHeight; i++) {
         src = m_pyramid[i-1].data();
         dst = m_pyramid[i].data();
-        currentSrcRect = downsampleByFactor2(currentSrcRect, src, dst);
+        if (!currentSrcRect.isEmpty()) {
+            currentSrcRect = downsampleByFactor2(currentSrcRect, src, dst);
+        }
     }
 
 #ifdef DEBUG_PYRAMID
-    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile);
+    QImage image = m_pyramid[ORIGINAL_INDEX]->convertToQImage(m_monitorProfile, m_renderingIntent, m_conversionFlags);
     image.save("./PYRAMID_BASE.png");
 
-    image = m_pyramid[1]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[1]->convertToQImage(m_monitorProfile, m_renderingIntent, m_conversionFlags);
     image.save("./LEVEL1.png");
 
-    image = m_pyramid[2]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[2]->convertToQImage(m_monitorProfile, m_renderingIntent, m_conversionFlags);
     image.save("./LEVEL2.png");
-    image = m_pyramid[3]->convertToQImage(m_monitorProfile);
+    image = m_pyramid[3]->convertToQImage(m_monitorProfile, m_renderingIntent, m_conversionFlags);
     image.save("./LEVEL3.png");
 #endif
 }
@@ -190,35 +339,40 @@ QRect KisImagePyramid::downsampleByFactor2(const QRect& srcRect,
     srcRect.getRect(&srcX, &srcY, &srcWidth, &srcHeight);
     alignRectBy2(srcX, srcY, srcWidth, srcHeight);
 
+    // Nothing to do
+    if (srcWidth < 1) return QRect();
+    if (srcHeight < 1) return QRect();
+
     qint32 dstX = srcX / 2;
     qint32 dstY = srcY / 2;
     qint32 dstWidth = srcWidth / 2;
     qint32 dstHeight = srcHeight / 2;
 
-    KisHLineConstIteratorPixel srcIt0 = src->createHLineConstIterator(srcX, srcY, srcWidth);
-    KisHLineConstIteratorPixel srcIt1 = src->createHLineConstIterator(srcX, srcY + 1, srcWidth);
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstX, dstY, dstWidth);
+    KisHLineConstIteratorSP srcIt0 = src->createHLineConstIteratorNG(srcX, srcY, srcWidth);
+    KisHLineConstIteratorSP srcIt1 = src->createHLineConstIteratorNG(srcX, srcY + 1, srcWidth);
+    KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(dstX, dstY, dstWidth);
 
+    int conseqPixels = 0;
     for (int row = 0; row < dstHeight; ++row) {
-        while (!dstIt.isDone()) {
-            int srcItConseq = srcIt0.nConseqHPixels();
-            int dstItConseq = dstIt.nConseqHPixels();
-            int conseqPixels = qMin(srcItConseq, dstItConseq * 2);
+        do {
+            int srcItConseq = srcIt0->nConseqPixels();
+            int dstItConseq = dstIt->nConseqPixels();
+            conseqPixels = qMin(srcItConseq, dstItConseq * 2);
 
             Q_ASSERT(!isOdd(conseqPixels));
 
-            downsamplePixels(srcIt0.rawData(), srcIt1.rawData(),
-                             dstIt.rawData(), conseqPixels);
+            downsamplePixels(srcIt0->oldRawData(), srcIt1->oldRawData(),
+                             dstIt->rawData(), conseqPixels);
 
-            srcIt0 += conseqPixels;
-            srcIt1 += conseqPixels;
-            dstIt += conseqPixels / 2;
-        }
-        srcIt0.nextRow();
-        srcIt0.nextRow();
-        srcIt1.nextRow();
-        srcIt1.nextRow();
-        dstIt.nextRow();
+
+            srcIt1->nextPixels(conseqPixels);
+            dstIt->nextPixels(conseqPixels / 2);
+        } while (srcIt0->nextPixels(conseqPixels));
+        srcIt0->nextRow();
+        srcIt0->nextRow();
+        srcIt1->nextRow();
+        srcIt1->nextRow();
+        dstIt->nextRow();
     }
     return QRect(dstX, dstY, dstWidth, dstHeight);
 }
@@ -345,3 +499,10 @@ QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
 
     return image;
 }
+
+void KisImagePyramid::configChanged()
+{
+    KisConfig cfg;
+    m_useOcio = cfg.useOcio();
+}
+

@@ -21,53 +21,43 @@
 
 #include "imagesplit.h"
 
+#include <QStringList>
+#include <QDir>
+#include <QDesktopServices>
+
 #include <klocale.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
-#include <kis_config.h>
+#include <kmimetype.h>
+
+#include <KoFilterManager.h>
+#include <KoFileDialog.h>
+#include <KoDocument.h>
+
+#include <kis_debug.h>
 #include <kis_types.h>
 #include <kis_view2.h>
 #include <kis_image.h>
-
+#include <kis_action.h>
 #include <kis_doc2.h>
-#include <KoDocument.h>
-#include <kmimetype.h>
-#include <qstringlist.h>
-#include <KoFilterManager.h>
-#include <kfiledialog.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
-#include <qdir.h>
-
 #include <kis_paint_device.h>
-#include <kis_background.h>
+
 #include "dlg_imagesplit.h"
 
 K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
 K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-        : KParts::Plugin(parent)
+        : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
 {
-    if (parent->inherits("KisView2")) {
-        setComponentData(ImagesplitFactory::componentData());
-        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesplit.rc"), true);
-        KAction *action  = new KAction(i18n("Image Split "), this);
-        actionCollection()->addAction("imagesplit", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
-        m_view = (KisView2*) parent;
-
-    }
+    KisAction *action  = new KisAction(i18n("Image Split "), this);
+    addAction("imagesplit", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
 }
 
 Imagesplit::~Imagesplit()
 {
-    m_view = 0;
 }
 
 void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
@@ -94,15 +84,17 @@ void Imagesplit::saveAsImage(QRect imgSize,QString mimeType,KUrl url)
 void Imagesplit::slotImagesplit()
 {
     // Taking the title - url from caption function and removing file extension
-    QStringList strList = ((m_view->document())->caption()).split(".");
+    QStringList strList = ((m_view->document())->caption()).split('.');
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QStringList listFileType;
-    foreach(const QString tempStr, listMimeFilter) {
+    foreach(const QString &tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType( tempStr );
-        listFileType.append(type->comment());
+        if (type) {
+            listFileType.append(type->comment());
+        }
     }
 
 
@@ -127,7 +119,7 @@ void Imagesplit::slotImagesplit()
                 {
                     KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType( listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url( QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+mimeTypeSelected->mainExtension();
+                    QString fileName = dlgImagesplit->suffix()+'_'+ QString::number(k)+mimeTypeSelected->mainExtension();
                     url.addPath( fileName );
                     KUrl kurl=url.url();
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(dlgImagesplit->cmbIndex),kurl);
@@ -137,23 +129,19 @@ void Imagesplit::slotImagesplit()
         else {
 
             for(int i=0;i<(numVerticalLines+1);i++) {
-              for(int j=0;j<(numHorizontalLines+1);j++)
-              {
-                    QString mimelist = listMimeFilter.join(" ");
-                    KFileDialog fd(KUrl(QString()), mimelist, m_view);
-                    fd.setObjectName("Save Image on Split");
-                    fd.setCaption(i18n("Save Image on Split"));
-                    fd.setMimeFilter(listMimeFilter, listMimeFilter.at(0));
-                    fd.setOperationMode(KFileDialog::Saving);
+                for(int j=0;j<(numHorizontalLines+1);j++)
+                {
+                    KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                    dialog.setCaption(i18n("Save Image on Split"));
+                    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                    dialog.setMimeTypeFilters(listMimeFilter);
+                    KUrl url = dialog.url();
 
-                    if (!fd.exec()) return;
-
-                    KUrl url = fd.selectedUrl();
-                    QString mimefilter = fd.currentMimeFilter();
+                    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+                    QString mimefilter = mime->name();
 
                     if (url.isEmpty())
                         return;
-
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),mimefilter,url);
                 }
             }

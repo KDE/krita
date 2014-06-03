@@ -20,7 +20,7 @@
 #ifndef _TEST_KO_CHANNEL_INFO_H_
 #define _TEST_KO_CHANNEL_INFO_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestKoChannelInfo : public QObject
 {

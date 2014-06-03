@@ -23,79 +23,93 @@
 
 #include "kis_tool_select_rectangular.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QPen>
-#include <QLayout>
-#include <QVBoxLayout>
-#include <kundo2command.h>
-
-#include <kis_debug.h>
-#include <klocale.h>
-
-#include <KoShapeController.h>
-#include <KoPathShape.h>
-#include <KoShapeManager.h>
-#include <KoShapeRegistry.h>
-
-#include "kis_cursor.h"
-#include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_layer.h"
-
-#include "KoPointerEvent.h"
-#include "kis_selection.h"
+#include "kis_paintop_registry.h"
 #include "kis_selection_options.h"
-#include "canvas/kis_canvas2.h"
-#include "flake/kis_shape_selection.h"
+#include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
 
+#include "kis_system_locker.h"
+#include "kis_view2.h"
+#include "kis_selection_manager.h"
+
+
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
-        m_localTool(canvas, this)
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
+                           KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
+      m_widgetHelper(i18n("Rectangular Selection"))
 {
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
 }
 
-KisToolSelectRectangular::~KisToolSelectRectangular()
+SelectionAction KisToolSelectRectangular::selectionAction() const
 {
+    return m_selectionAction;
+}
+
+void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
+    }
 }
 
 QWidget* KisToolSelectRectangular::createOptionWidget()
 {
-    KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Rectangular Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
-    return m_optWidget;
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    Q_ASSERT(canvas);
+
+    m_widgetHelper.createOptionWidget(canvas, this->toolId());
+    m_widgetHelper.optionWidget()->disableAntiAliasSelectionOption();
+    return m_widgetHelper.optionWidget();
 }
 
-void KisToolSelectRectangular::LocalTool::finishRect(const QRectF& rect)
+void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
 {
-    setCurrentNodeLocked(true);
-    QRect rc(rect.toRect());
-    rc = rc.intersected(currentImage()->bounds());
-    rc = rc.normalized();
+    if (!m_widgetHelper.processKeyPressEvent(event)) {
+        KisTool::keyPressEvent(event);
+    }
+}
 
+void KisToolSelectRectangular::finishRect(const QRectF& rect)
+{
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Rectangular Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Rectangular Selection"));
 
-    if (m_selectingTool->m_selectionMode == PIXEL_SELECTION) {
+    QRect rc(rect.normalized().toRect());
+    helper.cropRectIfNeeded(&rc);
 
-        if (rc.width() > 0 && rc.height() > 0) {
+    // If the user just clicks on the canvas deselect
+    if (rc.isEmpty()) {
+        // Queueing this action to ensure we avoid a race condition when unlocking the node system
+        QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
+        return;
+    }
+
+    if (m_widgetHelper.selectionMode() == PIXEL_SELECTION) {
+        if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
             tmpSel->select(rc);
 
-            helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
+            QPainterPath cache;
+            cache.addRect(rc);
+            tmpSel->setOutlineCache(cache);
+
+            helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
         }
     } else {
-        QRectF documentRect = convertToPt(rect);
+        QRectF documentRect = convertToPt(rc);
         helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
     }
-    setCurrentNodeLocked(false);
 }
-
-#include "kis_tool_select_rectangular.moc"

@@ -55,16 +55,18 @@ public:
     virtual ~OraConverter();
 public:
     KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
+    vKisNodeSP activeNodes();
 public slots:
     virtual void cancel();
 private:
     KisImageWSP m_image;
     KisDoc2 *m_doc;
+    vKisNodeSP m_activeNodes;
     bool m_stop;
     KIO::TransferJob *m_job;
 };

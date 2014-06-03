@@ -43,17 +43,12 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
 {
     m_valid = false;
     init();
-    //bool valid; //used for local unit conversions
-
-    kDebug();
-
+    //kDebug();
     if (elemSource.tagName() != "report:content") {
-        kDebug() << "QDomElement passed to parseReport() was not <report:content> tag";
-        kDebug() << elemSource.text();
+        kWarning() << "QDomElement passed to parseReport() was not <report:content> tag"
+                   << elemSource.text();
         return;
     }
-
-    //qreal d = 0.0;
 
     QDomNodeList sections = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
@@ -69,20 +64,19 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
             if (pagetype == "predefined") {
                 page.setPageSize(elemThis.attribute("report:page-size", "A4"));
             } else if (pagetype == "custom") {
-                page.setCustomWidth(elemThis.attribute("report:custom-page-width", "").toDouble());
-                page.setCustomHeight(elemThis.attribute("report:custom-page-height", "").toDouble());
+                page.setCustomWidth(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-width", ""))) * KoDpi::dpiX());
+                page.setCustomHeight(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-height", ""))) * KoDpi::dpiY());
                 page.setPageSize("Custom");
             } else if (pagetype == "label") {
                 page.setLabelType(elemThis.firstChild().nodeValue());
             }
-
-            page.setMarginBottom(POINT_TO_INCH(elemThis.attribute("report:margin-bottom", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginTop(POINT_TO_INCH(elemThis.attribute("report:margin-top", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginLeft(POINT_TO_INCH(elemThis.attribute("report:margin-left", "28.346").toDouble()) * KoDpi::dpiY());
-            page.setMarginRight(POINT_TO_INCH(elemThis.attribute("report:margin-right", "28.346").toDouble()) * KoDpi::dpiY());
+            //@todo add config for default margins or add within templates support
+            page.setMarginBottom(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-bottom", "1.0cm"))) * KoDpi::dpiY());
+            page.setMarginTop(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-top", "1.0cm"))) * KoDpi::dpiY());
+            page.setMarginLeft(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-left", "1.0cm"))) * KoDpi::dpiX());
+            page.setMarginRight(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("fo:margin-right", "1.0cm"))) * KoDpi::dpiX());
 
             page.setPortrait(elemThis.attribute("report:print-orientation", "portrait") == "portrait");
-
 
         } else if (elemThis.tagName() == "report:body") {
             QDomNodeList sectionlist = elemThis.childNodes();
@@ -92,15 +86,14 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
                 sec = sectionlist.item(s);
                 if (sec.isElement()) {
                     QString sn = sec.nodeName().toLower();
-                    kDebug() << sn;
+                    //kDebug() << sn;
                     if (sn == "report:section") {
                         KRSectionData * sd = new KRSectionData(sec.toElement(), this);
                         if (!sd->isValid()) {
                             kDebug() << "Invalid section";
                             delete sd;
                         } else {
-                            kDebug() << "Adding section of type " << sd->type();
-
+                            //kDebug() << "Adding section of type " << sd->type();
                             switch (sd->type()) {
                             case KRSectionData::PageHeaderFirst:
                                 m_pageHeaderFirst = sd;
@@ -154,7 +147,7 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
                         }
                     }
                 } else {
-                    kDebug() << "Encountered an unknown Element: "  << elemThis.tagName();
+                    kWarning() << "Encountered an unknown Element: "  << elemThis.tagName();
                 }
             }
         }
@@ -181,7 +174,7 @@ QList<KoReportItemBase*> KoReportReportData::objects() const
     }
 
     if (m_detailSection) {
-        kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
+        //kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
             if (g->m_groupHeader) {
                 obs << g->m_groupHeader->objects();
@@ -194,10 +187,10 @@ QList<KoReportItemBase*> KoReportReportData::objects() const
             obs << m_detailSection->m_detailSection->objects();
     }
 
-    kDebug() << "Object List:";
+    /*kDebug() << "Object List:";
     foreach(KoReportItemBase* o, obs) {
         kDebug() << o->entityName();
-    }
+    }*/
     return obs;
 }
 
@@ -225,7 +218,7 @@ QList<KRSectionData*> KoReportReportData::sections() const
     }
 
     if (m_detailSection) {
-        kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
+        //kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
             if (g->m_groupHeader) {
                 secs << g->m_groupHeader;
@@ -297,4 +290,9 @@ KRSectionData* KoReportReportData::section(KRSectionData::Section s) const
         sec = 0;
     }
     return sec;
+}
+
+ReportPageOptions KoReportReportData::pageOptions() const
+{
+    return page;
 }

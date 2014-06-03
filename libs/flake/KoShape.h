@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006, 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
@@ -27,6 +27,7 @@
 #include "KoFlake.h"
 #include "KoConnectionPoint.h"
 
+#include <QSharedPointer>
 #include <QTransform>
 #include <QVector>
 #include <QSet>
@@ -35,6 +36,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
+#include <KoShapeBackground.h>
 
 //#include <KoSnapData.h>
 
@@ -45,8 +47,7 @@ class QRectF;
 class QPainterPath;
 
 class KoShapeContainer;
-class KoShapeBorderModel;
-class KoShapeBackground;
+class KoShapeStrokeModel;
 class KoShapeManager;
 class KoShapeUserData;
 class KoViewConverter;
@@ -64,6 +65,9 @@ class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
 class KoShapePaintingContext;
+class KoShapeAnchor;
+class KoBorder;
+
 
 /**
  *
@@ -122,9 +126,10 @@ public:
         ParentChanged,   ///< used after a setParent()
         CollisionDetected, ///< used when another shape moved in our boundingrect
         Deleted, ///< the shape was deleted
-        BorderChanged, ///< the shapes border has changed
+        StrokeChanged, ///< the shapes stroke has changed
         BackgroundChanged, ///< the shapes background has changed
         ShadowChanged, ///< the shapes shadow has changed
+        BorderChanged, ///< the shapes border has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
@@ -144,10 +149,17 @@ public:
         RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    /// The behavior text should do when intersecting this shape.
+    enum TextRunAroundContour {
+        ContourBox,     /// Run other text around a bounding rect of the outline
+        ContourFull,   ///< Run other text around also on the inside
+        ContourOutside   ///< Run other text around only on the outside
+    };
+
     /**
      * TODO
      */
-    enum Through {
+    enum RunThroughLevel {
         Background,
         Foreground
     };
@@ -181,6 +193,15 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     /**
+     * @brief Paint the shape's border
+     * This is a helper function that could be called from the paint() method of all shapes. 
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
+     * @see applyConversion()
+     */
+    virtual void paintBorder(QPainter &painter, const KoViewConverter &converter);
+
+    /**
      * Load a shape from odf
      *
      * @param context the KoShapeLoadingContext used for loading
@@ -212,8 +233,18 @@ public:
      * This method can be used while saving the shape as Odf to add common child elements
      *
      * The office:event-listeners and draw:glue-point are saved.
+     * @param context the context for the current save.
      */
     void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
+
+    /**
+     * This method can be used to save contour data from the clipPath()
+     *
+     * The draw:contour-polygon or draw:contour-path elements are saved.
+     * @param context the context for the current save.
+     * @param originalSize the original size of the unscaled image.
+     */
+    void saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &originalSize) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -256,7 +287,7 @@ public:
      * scaling is a so called secondary operation which is comparable to zooming in
      * instead of changing the size of the basic shape.
      * Easiest example of this difference is that using this method will not distort the
-     * size of pattern-fills and borders.
+     * size of pattern-fills and strokes.
      */
     virtual void setSize(const QSizeF &size);
 
@@ -301,7 +332,7 @@ public:
 
     /**
      * @brief Add a connector point to the shape
-     * 
+     *
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
@@ -318,7 +349,7 @@ public:
      * are fixed at their default position.
      * The function will insert a new connection point if the specified id was not used
      * before.
-     * 
+     *
      * @param connectionPointId the id of the connection point to set
      * @param point the connection point data
      * @return false if specified connection point id is invalid, else true
@@ -370,19 +401,55 @@ public:
      * @param side the requested side
      * @param runThrought run through the foreground or background or...
      */
-    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+    void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
     /**
-     * The space between this shape's edge and text that runs around this shape.
+     * The space between this shape's left edge and text that runs around this shape.
      * @return the space around this shape to keep free from text
      */
-    qreal textRunAroundDistance() const;
+    qreal textRunAroundDistanceLeft() const;
 
     /**
-     * Set the space between this shape's edge and the text that run around this shape.
+     * Set the space between this shape's left edge and the text that run around this shape.
      * @param distance the space around this shape to keep free from text
      */
-    void setTextRunAroundDistance(qreal distance);
+    void setTextRunAroundDistanceLeft(qreal distance);
+
+    /**
+     * The space between this shape's top edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceTop() const;
+
+    /**
+     * Set the space between this shape's top edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceTop(qreal distance);
+
+    /**
+     * The space between this shape's right edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceRight() const;
+
+    /**
+     * Set the space between this shape's right edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceRight(qreal distance);
+
+    /**
+     * The space between this shape's bottom edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistanceBottom() const;
+
+    /**
+     * Set the space between this shape's bottom edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistanceBottom(qreal distance);
 
     /**
      * Return the threshold above which text should flow around this shape.
@@ -401,6 +468,28 @@ public:
     void setTextRunAroundThreshold(qreal threshold);
 
     /**
+     * Return the how tight text run around is done around this shape.
+     * @return the contour
+     */
+    TextRunAroundContour textRunAroundContour() const;
+
+    /**
+     * Set how tight text run around is done around this shape.
+     * @param contour the new contour
+     */
+    void setTextRunAroundContour(TextRunAroundContour contour);
+
+    /**
+     * Set the KoShapeAnchor
+     */
+    void setAnchor(KoShapeAnchor *anchor);
+
+    /**
+     * Return the KoShapeAnchor, or 0
+     */
+    KoShapeAnchor *anchor() const;
+
+    /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
      * or have a complex fill.
@@ -408,7 +497,7 @@ public:
      * if it is transparent or not.
      * @param background the new shape background.
      */
-    void setBackground(KoShapeBackground *background);
+    void setBackground(QSharedPointer<KoShapeBackground> background);
 
     /**
      * return the brush used to paint te background of this shape with.
@@ -417,7 +506,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    KoShapeBackground *background() const;
+    QSharedPointer<KoShapeBackground> background() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -593,6 +682,25 @@ public:
      */
     virtual void update(const QRectF &rect) const;
 
+    /// Used by compareShapeZIndex() to order shapes
+    enum ChildZOrderPolicy {
+        ChildZDefault,
+        ChildZParentChild = ChildZDefault, ///< normal parent/child ordering
+        ChildZPassThrough ///< children are considered equal to this shape
+    };
+
+   /**
+    * Returns if during compareShapeZIndex() how this shape portrays the values
+    * of its children. The default behaviour is to let this shape's z values take
+    * the place of its childrens values, so you get a parent/child relationship.
+    * The children are naturally still ordered relatively to their z values
+    *
+    * But for special cases (like Calligra's TextShape) it can be overloaded to return
+    * ChildZPassThrough which means the children keep their own z values
+    * @returns the z order policy of this shape
+    */
+    virtual ChildZOrderPolicy childZOrderPolicy();
+
     /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param s1 the first shape
@@ -603,7 +711,7 @@ public:
     /**
      * returns the outline of the shape in the form of a path.
      * The outline returned will always be relative to the position() of the shape, so
-     * moving the shape will not alter the result.  The outline is used to draw the border
+     * moving the shape will not alter the result.  The outline is used to draw the stroke
      * on, for example.
      * @returns the outline of the shape in the form of a path.
      */
@@ -619,28 +727,46 @@ public:
     virtual QRectF outlineRect() const;
 
     /**
-     * Returns the currently set border, or 0 if there is no border.
-     * @return the currently set border, or 0 if there is no border.
+     * returns the outline of the shape in the form of a path for the use of painting a shadow.
+     *
+     * Normally this would be the same as outline() if there is a fill (background) set on the
+     * shape and empty if not.  However, a shape could reimplement this to return an outline
+     * even if no fill is defined. A typical example of this would be the picture shape
+     * which has a picture but almost never a background. 
+     *
+     * @returns the outline of the shape in the form of a path.
      */
-    KoShapeBorderModel *border() const;
+    virtual QPainterPath shadowOutline() const;
 
     /**
-     * Set a new border, removing the old one.
-     * @param border the new border, or 0 if there should be no border.
+     * Returns the currently set stroke, or 0 if there is no stroke.
+     * @return the currently set stroke, or 0 if there is no stroke.
      */
-    void setBorder(KoShapeBorderModel *border);
+    KoShapeStrokeModel *stroke() const;
 
     /**
-     * Return the insets of the border.
-     * Convenience method for KoShapeBorderModel::borderInsets()
+     * Set a new stroke, removing the old one.
+     * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    KoInsets borderInsets() const;
+    void setStroke(KoShapeStrokeModel *stroke);
+
+    /**
+     * Return the insets of the stroke.
+     * Convenience method for KoShapeStrokeModel::strokeInsets()
+     */
+    KoInsets strokeInsets() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
 
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
+
+    /// Sets the new border, removing the old one.
+    void setBorder(KoBorder *border);
+
+    /// Returns the currently set border or 0 if there is no border set
+    KoBorder *border() const;
 
     /// Sets a new clip path, removing the old one
     void setClipPath(KoClipPath *clipPath);
@@ -844,19 +970,6 @@ public:
      */
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
-    /**
-     * Schedule the shape for thread-safe deletion.
-     * After calling this method will self-delete in the main threads event loop.
-     * If your code deletes a shape and your code can possibly be running in a separate thread,
-     * you should use this method to delete the shape.
-     * The reason for this is that If you delete a shape from another thread then it is
-     * possible the main
-     * thread will use it after its been removed, while painting for example.
-     *
-     * Note that in contrary to the equivalent method on QObject, you can not call this more than once.
-     */
-    void deleteLater();
-
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;
 
@@ -882,6 +995,9 @@ public:
 
     /// Returns if the given shape is dependent on this shape
     bool hasDependee(KoShape *shape) const;
+
+    /// Returns list of shapes depending on this shape
+    QList<KoShape*> dependees() const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
@@ -1001,7 +1117,7 @@ protected:
         OdfStyle = 128,              ///< Store the style
         OdfId = 256,                 ///< Store the unique ID
         OdfName = 512,               ///< Store the name of the shape
-        OdfZIndex = 1024,            ///< This only loads the z-index; when saving, it is reflected by the order of the shapes.
+        OdfZIndex = 1024,            ///< Store the z-index
         OdfViewbox = 2048,           ///< Store the viewbox
 
         /// A mask for all mandatory attributes
@@ -1031,7 +1147,7 @@ protected:
     /**
      * @brief Saves the style used for the shape
      *
-     * This method fills the given style object with the border and
+     * This method fills the given style object with the stroke and
      * background properties and then adds the style to the context.
      *
      * @param style the style object to fill
@@ -1050,13 +1166,16 @@ protected:
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// Loads the stroke style
-    KoShapeBorderModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShapeStrokeModel *loadOdfStroke(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
-    /// Loads the shadow style
-    KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
+    /// Loads the fill style
+    QSharedPointer<KoShapeBackground> loadOdfFill(KoShapeLoadingContext &context) const;
 
     /// Loads the connection points
     void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    /// Loads the clip contour
+    void loadOdfClipContour(const KoXmlElement &element, KoShapeLoadingContext &context, const QSizeF &scaleFactor);
 
     /* ** end loading saving */
 

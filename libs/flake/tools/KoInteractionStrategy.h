@@ -51,7 +51,7 @@ class FLAKE_EXPORT KoInteractionStrategy
 {
 public:
     /// constructor
-    KoInteractionStrategy(KoToolBase *parent);
+    explicit KoInteractionStrategy(KoToolBase *parent);
     /// Destructor
     virtual ~KoInteractionStrategy();
 

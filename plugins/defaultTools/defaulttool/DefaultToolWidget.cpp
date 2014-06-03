@@ -35,10 +35,10 @@
 #include "SelectionDecorator.h"
 #include "DefaultToolTransformWidget.h"
 
-#include <KAction>
+#include <kaction.h>
 #include <QSize>
-#include <QtGui/QRadioButton>
-#include <QtGui/QLabel>
+#include <QRadioButton>
+#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>
@@ -74,7 +74,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updatePosition() ) );
     connect( manager, SIGNAL( selectionContentChanged() ), this, SLOT( updateSize() ) );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL( resourceChanged( int, const QVariant& ) ),
+    connect( m_tool->canvas()->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
         this, SLOT( resourceChanged( int, const QVariant& ) ) );
 
     connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
@@ -186,7 +186,8 @@ void DefaultToolWidget::sizeHasChanged()
 
         QTransform resizeMatrix;
         resizeMatrix.translate( scaleCenter.x(), scaleCenter.y() );
-        resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
+        // make sure not to divide by 0 in case the selection is a line and has no width. In this case just scale by 1.
+        resizeMatrix.scale( rect.width() ? newSize.width() / rect.width() : 1, rect.height() ? newSize.height() / rect.height() : 1);
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );

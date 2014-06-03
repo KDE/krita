@@ -41,18 +41,16 @@ public:
     KisFilterNoise();
 public:
 
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP device,
-                const QRect& applyRect,
-                const KisFilterConfiguration* config,
-                KoUpdater* progressUpdater
-                ) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater
+                     ) const;
     static inline KoID id() {
         return KoID("noise", i18n("Noise"));
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

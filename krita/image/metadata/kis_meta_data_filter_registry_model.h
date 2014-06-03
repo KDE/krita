@@ -23,6 +23,8 @@
 
 #include <KoGenericRegistryModel.h>
 
+class QStringList;
+
 namespace KisMetaData
 {
 
@@ -41,6 +43,8 @@ public:
     virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
     /// @return a list of filters that are enabled
     QList<const Filter*> enabledFilters() const;
+    /// enable the filters in the given list; others will be disabled.
+    virtual void setEnabledFilters(const QStringList &enabledFilters);
 private:
     struct Private;
     Private* const d;

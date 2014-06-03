@@ -24,7 +24,7 @@
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <QList>
 #include <QBuffer>
 #include <QRegExp>
@@ -71,6 +71,14 @@ void TestKoGenStyles::testLookup()
     childWriter.endElement();
     QString childContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
 
+    QBuffer buffer2;
+    buffer2.open(QIODevice::WriteOnly);
+    KoXmlWriter childWriter2(&buffer2);
+    childWriter2.startElement("child2");
+    childWriter2.addAttribute("test:foo", "bar");
+    childWriter2.endElement();
+    QString childContents2 = QString::fromUtf8(buffer2.buffer(), buffer2.buffer().size());
+
     KoGenStyle first(KoGenStyle::ParagraphAutoStyle, "paragraph");
     first.addAttribute("style:master-page-name", "Standard");
     first.addProperty("style:page-number", "0");
@@ -78,6 +86,7 @@ void TestKoGenStyles::testLookup()
     first.addStyleMap(map1);
     first.addStyleMap(map2);
     first.addChildElement("test", childContents);
+    first.addChildElement("test", childContents2, KoGenStyle::TextType);
 
     QString firstName = coll.insert(first);
     kDebug() << "The first style got assigned the name" << firstName;
@@ -91,6 +100,7 @@ void TestKoGenStyles::testLookup()
     second.addStyleMap(map1);
     second.addStyleMap(map2);
     second.addChildElement("test", childContents);
+    second.addChildElement("test", childContents2, KoGenStyle::TextType);
 
     QString secondName = coll.insert(second);
     kDebug() << "The second style got assigned the name" << secondName;
@@ -98,10 +108,10 @@ void TestKoGenStyles::testLookup()
     QCOMPARE(firstName, secondName);   // check that sharing works
     QCOMPARE(first, second);   // check that operator== works :)
 
-    const KoGenStyle* s = coll.style(firstName);   // check insert of existing style
+    const KoGenStyle* s = coll.style(firstName, "paragraph");   // check insert of existing style
     QVERIFY(s != 0);
     QCOMPARE(*s, first);
-    s = coll.style("foobarblah");   // check insert of non-existing style
+    s = coll.style("foobarblah", "paragraph");   // check insert of non-existing style
     QVERIFY(s == 0);
 
     KoGenStyle third(KoGenStyle::ParagraphAutoStyle, "paragraph", secondName);   // inherited style
@@ -129,6 +139,7 @@ void TestKoGenStyles::testLookup()
     sameAsParent.addStyleMap(map1);
     sameAsParent.addStyleMap(map2);
     sameAsParent.addChildElement("test", childContents);
+    sameAsParent.addChildElement("test", childContents2, KoGenStyle::TextType);
     QString sapName = coll.insert(sameAsParent, "foobar");
     kDebug() << "The 'same as parent' style got assigned the name" << sapName;
 
@@ -147,13 +158,8 @@ void TestKoGenStyles::testLookup()
     QString headerStyleName = coll.insert(headerStyle, "foobar");
 
     QCOMPARE(coll.styles().count(), 4);
-    QCOMPARE(coll.styles(KoGenStyle::ParagraphAutoStyle).count(), 2);
-    QCOMPARE(coll.styles(KoGenStyle::ParagraphStyle).count(), 1);
-
-    QList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.stylesForStylesXml(KoGenStyle::ParagraphAutoStyle);
-    QCOMPARE(stylesXmlStyles.count(), 1);
-    KoGenStyles::NamedStyle firstStyle = stylesXmlStyles.first();
-    QCOMPARE(firstStyle.name, headerStyleName);
+    //QCOMPARE(coll.styles(KoGenStyle::ParagraphAutoStyle).count(), 2);
+    //QCOMPARE(coll.styles(KoGenStyle::ParagraphStyle).count(), 1);
 
     // XML for first/second style
     TEST_BEGIN(0, 0);
@@ -162,7 +168,8 @@ void TestKoGenStyles::testLookup()
 
     TEST_END_QTTEST("<r>\n <style:style style:name=\"" + firstName + "\" style:family=\"paragraph\" "
         "style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\">\n"
-        "   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\"/>\n"
+        "   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\">\n"
+        "   <child2 test:foo=\"bar\"/>\n  </style:text-properties>\n"
         "  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n"
         " </style:style>\n</r>\n");
 
@@ -173,14 +180,6 @@ void TestKoGenStyles::testLookup()
         " style:parent-style-name=\"" + firstName + "\" style:family=\"paragraph\">\n"
         "  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n"
         "  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n");
-
-    coll.markStyleForStylesXml(firstName);
-    {
-        QList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.stylesForStylesXml(KoGenStyle::ParagraphAutoStyle);
-        QCOMPARE(stylesXmlStyles.count(), 2);
-        QList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles(KoGenStyle::ParagraphAutoStyle);
-        QCOMPARE(contentXmlStyles.count(), 1);
-    }
 }
 
 void TestKoGenStyles::testLookupFlags()

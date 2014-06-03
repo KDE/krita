@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010 Ko Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #ifndef KOTEXTLAYOUTOBSTRUCTION_H
 #define KOTEXTLAYOUTOBSTRUCTION_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <QTransform>
 #include <QMultiMap>
@@ -30,12 +30,14 @@
 class KoShape;
 
 ///  Class that allows us with the runaround of QPainterPaths
-class TEXTLAYOUT_EXPORT KoTextLayoutObstruction
+class KOTEXTLAYOUT_EXPORT KoTextLayoutObstruction
 {
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
 
-    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance, qreal borderHalfWidth);
+    KoTextLayoutObstruction(QRectF rect, bool rtl);
+
+    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal borderHalfWidth);
 
     QRectF limit(const QRectF &content);
 
@@ -78,7 +80,11 @@ private:
     QRectF m_line;
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
-    qreal m_distance;
+    QRectF m_rect;
+    qreal m_distanceLeft;
+    qreal m_distanceTop;
+    qreal m_distanceRight;
+    qreal m_distanceBottom;
     qreal m_borderHalfWidth;
     qreal m_runAroundThreshold;
 };

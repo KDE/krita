@@ -29,20 +29,23 @@ class KRITAUI_EXPORT KisToolMultihandHelper : public KisToolFreehandHelper
 public:
     KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
                            KisRecordingAdapter *recordingAdapter = 0);
+    virtual ~KisToolMultihandHelper();
 
     void setupTransformations(const QVector<QTransform> &transformations);
 
 protected:
-    void createPainters(QVector<KisPainter*> &painters);
+    void createPainters(QVector<PainterInfo*> &painterInfos,
+                        const QPointF &lastPosition,
+                        int lastTime);
 
-    void paintAt(const QVector<KisPainter*> &painters,
+    void paintAt(const QVector<PainterInfo*> &painterInfos,
                  const KisPaintInformation &pi);
 
-    void paintLine(const QVector<KisPainter*> &painters,
+    void paintLine(const QVector<PainterInfo*> &painterInfos,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(const QVector<KisPainter*> &painters,
+    void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
@@ -54,7 +57,7 @@ protected:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 #endif /* __KIS_TOOL_MULTIHAND_HELPER_H */

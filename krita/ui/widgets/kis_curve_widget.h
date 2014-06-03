@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -51,9 +51,10 @@ class KisCubicCurve;
 class KRITAUI_EXPORT KisCurveWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool pointSelected READ pointSelected NOTIFY pointSelectedChanged);
 
 public:
-
+    friend class CurveEditorItem;
     /**
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
@@ -83,6 +84,16 @@ public:
      * itself?
      */
     void setPixmap(const QPixmap & pix);
+    QPixmap getPixmap();
+    
+    void setBasePixmap(const QPixmap & pix);
+    QPixmap getBasePixmap();
+
+    /**
+     * Whether or not there is a point selected
+     * This does NOT include the first and last points
+     */
+    bool pointSelected() const;
 
 signals:
 
@@ -90,6 +101,10 @@ signals:
      * Emitted whenever a control point has changed position.
      */
     void modified(void);
+    /**
+     * Emitted whenever the status of whether a control point is selected or not changes
+     */
+    void pointSelectedChanged();
 
 protected slots:
     void inOutChanged(int);

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,9 +26,20 @@
 #include <kis_types.h>
 
 
-struct MirrorProperties{
+struct MirrorProperties {
+    MirrorProperties()
+        : horizontalMirror(false),
+          verticalMirror(false),
+          coordinateSystemFlipped(false) {}
+
     bool horizontalMirror;
     bool verticalMirror;
+
+    bool coordinateSystemFlipped;
+
+    bool isEmpty() const {
+        return !horizontalMirror && !verticalMirror;
+    }
 };
 
 const QString MIRROR_HORIZONTAL_ENABLED = "HorizontalMirrorEnabled";
@@ -43,21 +54,23 @@ public:
     KisPressureMirrorOption();
 
     /**
-    * Set the 
+    * Set the
     */
     MirrorProperties apply(const KisPaintInformation& info) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
+
     void enableVerticalMirror(bool mirror);
     void enableHorizontalMirror(bool mirror);
     bool isVerticalMirrorEnabled();
     bool isHorizontalMirrorEnabled();
-    
+
 private:
     bool m_enableVerticalMirror;
     bool m_enableHorizontalMirror;
+    bool m_canvasAxisXMirrored;
+    bool m_canvasAxisYMirrored;
 };
 
 #endif

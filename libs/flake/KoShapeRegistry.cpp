@@ -44,8 +44,8 @@
 #include <QMultiMap>
 #include <QPainter>
 
-#include <KDebug>
-#include <KGlobal>
+#include <kdebug.h>
+#include <kglobal.h>
 
 class KoShapeRegistry::Private
 {
@@ -78,12 +78,12 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     config.blacklist = "FlakePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Shape"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     QString::fromLatin1("[X-Flake-PluginVersion] == 28"),
                                      config);
 
     // Also add our hard-coded basic shapes
@@ -168,28 +168,36 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         // The reason is that all subsequent children will be fallbacks, in order of preference.
 
         if (e.hasChildNodes()) {
-            KoXmlElement element = e.firstChild().toElement();
-
-            // Check for draw:object
-            if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
-                // Loop through the elements and find the first one
-                // that is handled by any shape.
-                KoXmlNode n = element.firstChild();
-                for (; !n.isNull(); n = n.nextSibling()) {
-                    if (n.isElement()) {
-                        kDebug(30006) << "trying for element " << n.toElement().tagName();
-                        shape = d->createShapeInternal(e, context, n.toElement());
-                        break;
-                    }
-                }
-                if (shape)
-                    kDebug(30006) << "Found a shape for draw:object";
-                else
-                    kDebug(30006) << "Found NO shape shape for draw:object";
+            // if we don't ignore white spaces it can be that the first child is not a element so look for the first element
+            KoXmlNode node = e.firstChild();
+            KoXmlElement element;
+            while (!node.isNull() && element.isNull()) {
+                element = node.toElement();
+                node = node.nextSibling();
             }
-            else {
-                // If not draw:object, e.g draw:image or draw:plugin
-                shape = d->createShapeInternal(e, context, element);
+
+            if (!element.isNull()) {
+                // Check for draw:object
+                if (element.tagName() == "object" && element.namespaceURI() == KoXmlNS::draw && element.hasChildNodes()) {
+                    // Loop through the elements and find the first one
+                    // that is handled by any shape.
+                    KoXmlNode n = element.firstChild();
+                    for (; !n.isNull(); n = n.nextSibling()) {
+                        if (n.isElement()) {
+                            kDebug(30006) << "trying for element " << n.toElement().tagName();
+                            shape = d->createShapeInternal(e, context, n.toElement());
+                            break;
+                        }
+                    }
+                    if (shape)
+                        kDebug(30006) << "Found a shape for draw:object";
+                    else
+                        kDebug(30006) << "Found NO shape shape for draw:object";
+                }
+                else {
+                    // If not draw:object, e.g draw:image or draw:plugin
+                    shape = d->createShapeInternal(e, context, element);
+                }
             }
 
             if (shape) {
@@ -208,7 +216,13 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 // Check whether we can load a shape to fit the current object.
                 KoXmlElement child;
                 KoShape *childShape = 0;
+                bool first = true;
                 forEachElement(child, e) {
+                    // no need to try to load the first element again as it was already tried before and we could not load it
+                    if (first) {
+                        first = false;
+                        continue;
+                    }
                     kDebug(30006) << "--------------------------------------------------------";
                     kDebug(30006) << "Attempting to check if we can fall back ability to the item"
                                   << child.nodeName();
@@ -310,6 +324,9 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             }
             // Maybe a shape with a lower priority can load our
             // element, but this attempt has failed.
+        }
+        else {
+            kDebug(30006) << "No support for" << p << "by" << factory->id();
         }
     }
 

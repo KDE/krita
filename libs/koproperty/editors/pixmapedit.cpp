@@ -34,7 +34,6 @@
 #include <QToolTip>
 #include <QApplication>
 #include <QDesktopWidget>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
 #include <QKeyEvent>
@@ -42,11 +41,11 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <KDebug>
-#include <KImageIO>
-#include <KPushButton>
-#include <KFileDialog>
-#include <KLocale>
+#include <kdebug.h>
+#include <kimageio.h>
+#include <kpushbutton.h>
+#include <kfiledialog.h>
+#include <klocale.h>
 
 /* KDE4:
 #ifdef Q_WS_WIN
@@ -124,30 +123,6 @@ void PixmapEdit::setValue(const QVariant &value)
 //    if (emitChange)
 //        emit valueChanged(this);
 }
-
-/*
-void
-PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
-{
-    QRect r2(r);
-    r2.setHeight(r2.height() + 1);
-    p->setClipRect(r2);
-    p->setClipping(true);
-    p->eraseRect(r2);
-    if (value.value<QPixmap>().isNull())
-        return;
-    if (m_recentlyPainted != value) {
-        m_recentlyPainted = value;
-        m_scaledPixmap = value.value<QPixmap>();
-        if (m_scaledPixmap.height() > r2.height() || m_scaledPixmap.width() > r2.width()) { //scale down
-            QImage img(m_scaledPixmap.toImage());
-            img = img.scaled(r2.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            m_scaledPixmap = QPixmap::fromImage(img);
-        }
-    }
-    p->drawPixmap(r2.topLeft().x(),
-                  r2.topLeft().y() + (r2.height() - m_scaledPixmap.height()) / 2, m_scaledPixmap);
-}*/
 
 QString PixmapEdit::selectPixmapFileName()
 {

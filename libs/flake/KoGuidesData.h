@@ -22,8 +22,8 @@
 #define KOGUIDESDATA_H
 
 #include "flake_export.h"
-#include <QtCore/QList>
-#include <QtCore/Qt>
+#include <QList>
+#include <Qt>
 #include "KoXmlReaderForward.h"
 
 class QPainter;

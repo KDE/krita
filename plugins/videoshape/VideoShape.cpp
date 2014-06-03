@@ -2,7 +2,8 @@
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,9 @@
 #include <VideoEventAction.h>
 #include <VideoCollection.h>
 #include <VideoData.h>
+#ifdef SHOULD_BUILD_THUMBNAIL
+#include <VideoThumbnailer.h>
+#endif
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -33,14 +37,22 @@
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include <KoIcon.h>
 
-#include <QPainter>
 #include <kdebug.h>
 #include <kurl.h>
 
+#include <QPainter>
+
 VideoShape::VideoShape()
     : KoFrameShape(KoXmlNS::draw, "plugin")
+    , m_videoCollection(0)
     , m_videoEventAction(new VideoEventAction(this))
+#ifdef SHOULD_BUILD_THUMBNAIL
+    , m_thumbnailer(new VideoThumbnailer())
+#endif
+    , m_oldVideoData(0)
+    , m_icon(koIconName("video-x-generic"))
 {
     setKeepAspectRatio(true);
     addEventAction(m_videoEventAction);
@@ -48,19 +60,39 @@ VideoShape::VideoShape()
 
 VideoShape::~VideoShape()
 {
+#ifdef SHOULD_BUILD_THUMBNAIL
+    delete m_thumbnailer;
+#endif
 }
 
 void VideoShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF pixelsF = converter.documentToView(QRectF(QPointF(0,0), size()));
-    VideoData *videoData = qobject_cast<VideoData*>(userData());
-    if (videoData == 0) {
-        painter.fillRect(pixelsF, QColor(Qt::gray));
-        return;
+
+    VideoData *currentVideoData = videoData();
+#ifdef SHOULD_BUILD_THUMBNAIL
+    if (currentVideoData && currentVideoData != m_oldVideoData) {
+        //generate thumbnails
+        m_oldVideoData = currentVideoData;
+        m_thumbnailer->createThumbnail(currentVideoData, pixelsF.size().toSize());
     }
+    QImage thumnailImage = m_thumbnailer->thumbnail();
+    if (thumnailImage.isNull()) {
+            painter.fillRect(pixelsF, QColor(Qt::gray));
+            painter.setPen(QPen());
+            painter.drawRect(pixelsF);
 
+            m_icon.paint(&painter, pixelsF.toRect());
+    } else {
+        painter.drawImage(pixelsF, thumnailImage);
+    }
+#else
+    painter.fillRect(pixelsF, QColor(Qt::gray));
+    painter.setPen(QPen());
+    painter.drawRect(pixelsF);
 
-    painter.fillRect(pixelsF, QColor(Qt::green));
+    m_icon.paint(&painter, pixelsF.toRect());
+#endif
 }
 
 void VideoShape::saveOdf(KoShapeSavingContext &context) const
@@ -77,14 +109,11 @@ void VideoShape::saveOdf(KoShapeSavingContext &context) const
     writer.startElement("draw:plugin");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = videoData->tagForSaving(m_videoCollection->saveCounter);
-    //QUrl storePath = context.odfSavingContext().store()->urlOfStore();
-    //qDebug() << "saving " << storePath << " " << name;
-    //QString relHRef = KUrl::relativeUrl(storePath, name);
-    //qDebug() << "combined " << relHRef;
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
+    writer.addAttribute("draw:mime-type", "application/vnd.sun.star.media");
     writer.endElement(); // draw:plugin
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -112,14 +141,15 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
         if (!href.isEmpty()) {
             QUrl url(href);
             VideoData *data=0;
+
             if(href.startsWith("../")) {
                 // file is outside store
                 KUrl storePath = context.odfLoadingContext().store()->urlOfStore();
                 KUrl extName(storePath, href.mid(3));
-                data = m_videoCollection->createExternalVideoData(extName.url());
+                data = m_videoCollection->createExternalVideoData(extName.url(), false);
             } else if(!url.isRelative()) {
                 // file is outside store and absolute
-                data = m_videoCollection->createExternalVideoData(href);
+                data = m_videoCollection->createExternalVideoData(href, false);
             } else {
                 // file is inside store
                 KoStore *store = context.odfLoadingContext().store();
@@ -140,4 +170,9 @@ VideoCollection *VideoShape::videoCollection() const
 void VideoShape::setVideoCollection(VideoCollection *collection)
 {
     m_videoCollection = collection;
+}
+
+VideoData *VideoShape::videoData() const
+{
+    return qobject_cast<VideoData *>(userData());
 }

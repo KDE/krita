@@ -26,6 +26,11 @@
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
 #include "koodf_export.h"
+
+class KoBibliographyInfo;
+
+typedef QPair<QString, Qt::SortOrder> SortKeyPair;
+
 /**
  * load and save the bibliography-configuration element from the text: namespace.
  * • Prefix
@@ -44,6 +49,8 @@ public:
     KoOdfBibliographyConfiguration(const KoOdfBibliographyConfiguration &other);
     KoOdfBibliographyConfiguration &operator=(const KoOdfBibliographyConfiguration &other);
 
+    static const QList<QString> bibTypes;
+    static const QList<QString> bibDataFields;
 
     /**
      * load the bibliography-configuration element
@@ -90,6 +97,13 @@ public:
      */
     QString sortAlgorithm() const;
     void setSortAlgorithm(const QString &algorithm);
+
+    /**
+     * Sort Keys
+     * The text:sort-key attribute specifies sort key for bibliography entry
+     */
+    QList<SortKeyPair> sortKeys() const;
+    void setSortKeys(const QList<SortKeyPair> &sortKeys);
 
 private:
 

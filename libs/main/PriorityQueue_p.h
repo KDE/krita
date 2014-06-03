@@ -172,8 +172,7 @@ void PriorityQueue<T>::dump() const
         if (m_vector[ i ]->index() != i)
             out += " ERROR: index out of sync. Should be " + QString::number(i) + ", is " +
                    QString::number(m_vector[ i ]->index()) + ". ";
-        out += QString::number(m_vector[ i ]->key());
-        out += ", ";
+        out += QString::number(m_vector[ i ]->key()) + ", ";
     }
     if (out.isEmpty())
         out = "(empty)";

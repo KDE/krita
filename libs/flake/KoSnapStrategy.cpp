@@ -26,12 +26,12 @@
 #include <KoViewConverter.h>
 #include <KoGuidesData.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <math.h>
 
 #ifdef _WIN32
-#define isfinite(x) _finite((double)(x))
+#define isfinite(x) (double)(x)
 #endif
 
 KoSnapStrategy::KoSnapStrategy(KoSnapGuide::Strategy type)

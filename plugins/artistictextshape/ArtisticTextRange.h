@@ -21,9 +21,9 @@
 #ifndef ARTISITICTEXTRANGE_H
 #define ARTISITICTEXTRANGE_H
 
-#include <QtCore/QString>
-#include <QtCore/QPointF>
-#include <QtGui/QFont>
+#include <QString>
+#include <QPointF>
+#include <QFont>
 
 /// Represents a range of characters with the same text properties
 class ArtisticTextRange

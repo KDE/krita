@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,29 +16,50 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_commands.h"
-#include "kis_image.h"
+#include "kis_image_layer_remove_command.h"
 
 #include <klocale.h>
+#include "kis_image.h"
+#include "kis_image_layer_remove_command_impl.h"
 
 
-KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP layer)
-        : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image)
+KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node)
+    : KisImageCommand(i18nc("(qtundo-format)", "Remove Layer"), image),
+      m_node(node)
 {
-    m_layer = layer;
-    m_prevParent = layer->parent();
-    m_prevAbove = layer->prevSibling();
+    addSubtree(image, node);
+}
+
+KisImageLayerRemoveCommand::~KisImageLayerRemoveCommand()
+{
+}
+
+void KisImageLayerRemoveCommand::addSubtree(KisImageWSP image, KisNodeSP node)
+{
+    // Simple tail-recursion to remove nodes in bottom-up way
+    //
+    // Alert: the nodes must be traversed in last-to-first order,
+    //        because each KisImageLayerRemoveCommandImpl stores a
+    //        pointer to the previous node of the stack
+
+    KisNodeSP child = node->lastChild();
+    while (child) {
+        addSubtree(image, child);
+        child = child->prevSibling();
+    }
+
+    new KisImageLayerRemoveCommandImpl(image, node, this);
 }
 
 void KisImageLayerRemoveCommand::redo()
 {
-    UpdateTarget target(m_image, m_layer, m_image->bounds());
-    m_image->removeNode(m_layer);
+    UpdateTarget target(m_image, m_node, m_image->bounds());
+    KisImageCommand::redo();
     target.update();
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
-    m_image->addNode(m_layer, m_prevParent, m_prevAbove);
-    m_layer->setDirty(m_image->bounds());
+    KisImageCommand::undo();
+    m_node->setDirty(m_image->bounds());
 }

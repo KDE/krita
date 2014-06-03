@@ -143,7 +143,7 @@ private:
     // convenience method;
     KoSelection * koSelection();
 
-    void resourceChanged( int key, const QVariant & res );
+    void canvasResourceChanged( int key, const QVariant & res );
 
     /// selects guide line at given position
     void selectGuideAtPosition( const QPointF &position );

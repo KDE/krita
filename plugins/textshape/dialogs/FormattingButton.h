@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,12 +35,13 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    FormattingButton(QWidget *parent = 0 );
+    explicit FormattingButton(QWidget *parent = 0);
 
     void setNumColumns(int columns);
-
-    void addItem(QPixmap pm, int id);
+    void setItemsBackground(const QColor &color);
+    void addItem(QPixmap pm, int id, QString toolTip= QString());
     void addAction(QAction *action);
+    void addBlanks(int n);
     void addSeparator();
     bool hasItemId(int id);
     bool isFirstTimeMenuShown();

@@ -17,13 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_COLOR_CONVERSION_LINK_H_
-#define _KO_COLOR_CONVERSION_LINK_H_
+#ifndef _KO_COLOR_CONVERSION_TRANSFORMATION_FACTORY_H_
+#define _KO_COLOR_CONVERSION_TRANSFORMATION_FACTORY_H_
 
 class KoColorSpace;
 class KoColorConversionTransformation;
 
-#include <QtCore/QString>
+#include <QString>
 #include <KoColorConversionTransformationAbstractFactory.h>
 
 /**
@@ -44,7 +44,7 @@ public:
      * @param _srcProfile name of the source profile, or empty if any profile
      * @param _dstProfile name of the destination profile, or empty if any profile
      */
-    KoColorConversionTransformationFactory(QString _srcModelId, QString _srcDepthId, QString _srcProfile, QString _dstModelId, QString _dstDepthId, QString _dstProfile);
+    KoColorConversionTransformationFactory(const QString &_srcModelId, const QString &_srcDepthId, const QString &_srcProfile, const QString &_dstModelId, const QString &_dstDepthId, const QString &_dstProfile);
     virtual ~KoColorConversionTransformationFactory();
     /**
      * @return true if this factory creates a color conversion transformation which

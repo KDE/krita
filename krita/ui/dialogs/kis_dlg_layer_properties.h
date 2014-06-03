@@ -28,8 +28,6 @@
 #include "ui_wdglayerproperties.h"
 
 class QWidget;
-class KoCompositeOp;
-class KoColorSpace;
 class QBitArray;
 class KisChannelFlagsWidget;
 class KisView2;
@@ -59,6 +57,9 @@ public:
 
     virtual ~KisDlgLayerProperties();
 
+private:
+
+    bool haveChanges() const;
     QString getName() const;
     qint32 getOpacity() const;
     QString getCompositeOp() const;

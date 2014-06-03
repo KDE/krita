@@ -21,9 +21,10 @@
 /** @file */
 
 #include <KoConfig.h>
-#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
+
+#include <config-glew.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -43,6 +44,7 @@
 #include "krita_export.h"
 
 class QGLWidget;
+class QGLContext;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -57,7 +59,6 @@ public:
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
-
     /**
      * Make the shared OpenGL context the current context. You should
      * make the context current before creating textures, display lists,
@@ -65,11 +66,7 @@ public:
      */
     static void makeContextCurrent();
 
-    /**
-     * Returns true if the OpenGL shading language is available
-     * (using the core API, i.e. OpenGL version is 2.0 or greater).
-     */
-    static bool hasShadingLanguage();
+    static void initialMakeContextCurrent();
 
     /**
      * Print any error messages waiting to be read from glGetError(). Use
@@ -84,11 +81,16 @@ public:
      */
     static void clearError();
 
+    /**
+     * @brief supportsGLSL13
+     * @return true if we have a modern opengl capable of high-quality filtering
+     */
+    static bool supportsGLSL13();
+
 private:
     KisOpenGL();
 
     static void createContext();
-    static void initGlew();
 };
 
 /**

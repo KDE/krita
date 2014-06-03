@@ -21,6 +21,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include "kis_selection.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_filter_mask.h"
@@ -44,7 +45,7 @@ void KisFilterMaskTest::testCreation()
 
 #define initImage(image, layer, device, mask) do {                      \
     image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
-    layer = new KisPaintLayer(image, "", 100, device);         \
+    layer = new KisPaintLayer(image, 0, 100, device);         \
     image->addNode(layer);                                              \
     image->addNode(mask, layer);                                        \
     } while(0)
@@ -72,6 +73,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
     initImage(image, layer, projection, mask);
 
     projection->convertFromQImage(qimage, 0, 0, 0);
+    mask->initSelection(layer);
     mask->createNodeProgressProxy();
     mask->select(qimage.rect(), MIN_SELECTED);
     mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
@@ -79,7 +81,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimage, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest1.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -106,6 +108,7 @@ void KisFilterMaskTest::testProjectionSelected()
     initImage(image, layer, projection, mask);
     projection->convertFromQImage(qimage, 0, 0, 0);
 
+    mask->initSelection(layer);
     mask->select(qimage.rect(), MAX_SELECTED);
     mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
     QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
@@ -113,7 +116,7 @@ void KisFilterMaskTest::testProjectionSelected()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest2.png");
-        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }

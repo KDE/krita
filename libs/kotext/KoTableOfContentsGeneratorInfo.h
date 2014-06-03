@@ -40,7 +40,7 @@ class KoTextSharedLoadingData;
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 public:
-    KoTableOfContentsGeneratorInfo(bool generateEntryTemplate = true);
+    explicit KoTableOfContentsGeneratorInfo(bool generateEntryTemplate = true);
     ~KoTableOfContentsGeneratorInfo();
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
@@ -67,5 +67,7 @@ public:
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
 };
+
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
 
 #endif

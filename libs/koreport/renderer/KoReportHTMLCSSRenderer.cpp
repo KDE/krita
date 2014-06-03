@@ -48,7 +48,7 @@ bool KoReportHTMLCSSRenderer::render(const KoReportRendererContext& context, ORO
     Q_UNUSED(page);
     KTemporaryFile tempHtmlFile; // auto removed by default on destruction
     if (!tempHtmlFile.open()) {
-        kDebug() << "Couldn't create temporary file to write into";
+        kWarning() << "Couldn't create temporary file to write into";
         return false;
     }
 
@@ -97,8 +97,6 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
     bool renderedPageHead = false;
     bool renderedPageFoot = false;
 
-    kDebug() << "4";
-
     QDir d(m_tempDirName);
     // Render Each Section
     for (long s = 0; s < document->sections(); s++) {
@@ -128,16 +126,16 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {
                 OROPrimitive * prim = section->primitive(i);
-                kDebug() << "Got object type" << prim->type();
+                //kDebug() << "Got object type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
 
-                    style = "position: absolute; ";
-                    style += "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; ";
-                    style += "top: " + QString::number(tb->position().y()) + "pt; ";
-                    style += "left: " + QString::number(tb->position().x()) + "pt; ";
-                    style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
-                    style += "color: " + tb->textStyle().foregroundColor.name() + "; ";
+                    style = "position: absolute; "
+                            "background-color: " + (tb->textStyle().backgroundOpacity == 0 ? "transparent" : tb->textStyle().backgroundColor.name()) + "; "
+                            "top: " + QString::number(tb->position().y()) + "pt; "
+                            "left: " + QString::number(tb->position().x()) + "pt; "
+                            "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; "
+                            "color: " + tb->textStyle().foregroundColor.name() + "; ";
                     //TODO opaque text + translucent background
                     //it looks a pain to implement
                     //http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
@@ -149,47 +147,47 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += tb->text();
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">" +
+                            tb->text() +
+                            "</div>\n";
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Saving an image";
+                    //kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
-                    style = "position: absolute; ";
-                    style += "top: " + QString::number(im->position().y()) + "pt; ";
-                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    style = "position: absolute; "
+                            "top: " + QString::number(im->position().y()) + "pt; "
+                            "left: " + QString::number(im->position().x()) + "pt; ";
                     if (!styles.contains(style)) {
                         styles << style;
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">"
+                            "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                            "</div>\n";
 
 
                     im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
-                    kDebug() << "Saving a picture";
+                    //kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
-                    style = "position: absolute; ";
-                    style += "top: " + QString::number(im->position().y()) + "pt; ";
-                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    style = "position: absolute; "
+                            "top: " + QString::number(im->position().y()) + "pt; "
+                            "left: " + QString::number(im->position().x()) + "pt; ";
                     if (!styles.contains(style)) {
                         styles << style;
                     }
                     styleindex = styles.indexOf(style);
 
-                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-                    body += "</div>\n";
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">"
+                            "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>"
+                            "</div>\n";
 
                     QImage image(im->size().toSize(), QImage::Format_RGB32);
                     QPainter painter(&image);
                     im->picture()->play(&painter);
                     image.save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
-                    kDebug() << "unrecognized primitive type" << prim->type();
+                    kWarning() << "unrecognized primitive type" << prim->type();
                 }
             }
             body += "</div>\n";

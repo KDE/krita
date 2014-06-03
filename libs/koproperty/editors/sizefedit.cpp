@@ -19,12 +19,12 @@
 
 #include "sizefedit.h"
 
-#include <KLocale>
-#include <QtCore/QSize>
+#include <klocale.h>
+#include <QSize>
 
 using namespace KoProperty;
 
-static const char *SIZEFEDIT_MASK = "%1x%2";
+static const char SIZEFEDIT_MASK[] = "%1x%2";
 
 QString SizeFDelegate::displayText( const QVariant& value ) const
 {

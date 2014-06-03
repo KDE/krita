@@ -28,7 +28,7 @@
 #include <KoDocument.h>
 
 class KoScriptingOdfStore;
-class KoDocumentAdaptor;
+class KoPartAdaptor;
 
 /**
 * The KoScriptingOdfReader provides functionality to read content
@@ -419,7 +419,7 @@ public slots:
 
     /**
     * Set the document the store is the backend for. This could
-    * be a \a KoDocumentAdaptor or a \a KoDocument object.
+    * be a \a KoPartAdaptor or a \a KoDocument object.
     */
     bool setDocument(QObject *document);
 
@@ -438,7 +438,7 @@ private:
     QByteArray getMimeType() const;
 
     QPointer<KoDocument> m_document;
-    QPointer<KoDocumentAdaptor> m_documentAdaptor;
+    QPointer<KoPartAdaptor> m_documentAdaptor;
 
     KoStore *m_readStore;
     QIODevice *m_readDevice;

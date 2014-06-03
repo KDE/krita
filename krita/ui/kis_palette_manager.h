@@ -22,23 +22,23 @@
 
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
-#include <QDialog>
+#include <kdialog.h>
 
 class KoID;
 class QStringListModel;
 class QListView;
 class QLabel;
 class QPushButton;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class KisPaintopBox;
 class KisPresetChooser;
 
-class KisPaletteManager : public QDialog
+class KisPaletteManager : public KDialog
 {
     Q_OBJECT
 
 public:
-    KisPaletteManager(KoFavoriteResourceManager*, KisPaintopBox*);
+    KisPaletteManager(KisFavoriteResourceManager*, QWidget *parent = 0);
     ~KisPaletteManager();
 
     virtual void showEvent(QShowEvent* );
@@ -56,8 +56,7 @@ private slots:
 private:
     QPushButton *m_saveButton;
     QPushButton *m_removeButton;
-    KoFavoriteResourceManager *m_resourceManager;
-    KisPaintopBox *m_paintOpBox;
+    KisFavoriteResourceManager *m_resourceManager;
     KisPresetChooser* m_allPresetsView;
     KisPresetChooser* m_palettePresetsView;
 };

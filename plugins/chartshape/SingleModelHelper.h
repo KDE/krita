@@ -24,6 +24,7 @@
 // Qt
 #include <QObject>
 
+
 namespace KChart {
 
 class ChartProxyModel;
@@ -34,7 +35,7 @@ class SingleModelHelper : public QObject
     Q_OBJECT
 
 public:
-    SingleModelHelper( Table *table, ChartProxyModel *proxyModel );
+    SingleModelHelper(Table *table, ChartProxyModel *proxyModel);
 
 private slots:
     void slotModelStructureChanged();

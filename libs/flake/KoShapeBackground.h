@@ -22,6 +22,9 @@
 
 #include "flake_export.h"
 
+#include <QObject>
+#include <QSharedPointer>
+
 class QSizeF;
 class QPainter;
 class QPainterPath;
@@ -29,6 +32,8 @@ class KoGenStyle;
 class KoShapeSavingContext;
 class KoOdfLoadingContext;
 class KoShapeBackgroundPrivate;
+class KoShapePaintingContext;
+class KoViewConverter;
 
 /**
  * This is the base class for shape backgrounds.
@@ -42,7 +47,7 @@ public:
     virtual ~KoShapeBackground();
 
     /// Paints the background using the given fill path
-    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const = 0;
 
     /// Returns if the background has some transparency.
     virtual bool hasTransparency() const;
@@ -57,25 +62,13 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
-    /**
-     * Increments the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool ref();
-    /**
-     * Decrements the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool deref();
-    /// Return the usage count
-    int useCount() const;
-
 protected:
     KoShapeBackground(KoShapeBackgroundPrivate &);
     KoShapeBackgroundPrivate *d_ptr;
-
 private:
     Q_DECLARE_PRIVATE(KoShapeBackground)
+
+
 };
 
 #endif // KOSHAPEBACKGROUND_H

@@ -33,7 +33,7 @@ class Report : public QObject
 {
     Q_OBJECT
 public:
-    Report(KoReportReportData*);
+    explicit Report(KoReportReportData*);
 
     ~Report();
 

@@ -23,8 +23,8 @@
 
 #include "flake_export.h"
 
-#include <QtCore/QList>
-#include <QtCore/QRectF>
+#include <QList>
+#include <QRectF>
 
 class KoShape;
 class KoViewConverter;
@@ -41,7 +41,7 @@ class QImage;
 class FLAKE_EXPORT KoShapePainter
 {
 public:
-    KoShapePainter(KoShapeManagerPaintingStrategy *strategy = 0);
+    explicit KoShapePainter(KoShapeManagerPaintingStrategy *strategy = 0);
     ~KoShapePainter();
 
     /**

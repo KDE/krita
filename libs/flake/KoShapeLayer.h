@@ -40,7 +40,7 @@ public:
      * Constructor with custom model
      * @param model the custom modem
      */
-    KoShapeLayer(KoShapeContainerModel *model);
+    explicit KoShapeLayer(KoShapeContainerModel *model);
 
     /**
      * Empty implementation, as the layer itself is not visible

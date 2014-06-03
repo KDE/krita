@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006, 2011 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #ifndef KOTEXTDOCUMENTLAYOUT_H
 #define KOTEXTDOCUMENTLAYOUT_H
 
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include "KoTextDocument.h"
 #include <QAbstractTextDocumentLayout>
@@ -37,19 +37,20 @@ class KoShape;
 class KoStyleManager;
 class KoChangeTracker;
 class QTextLayout;
+class KoTextRangeManager;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
-class KoTextAnchor;
+class KoShapeAnchor;
 class KoTextLayoutRootArea;
 class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
+class KoAnchorTextRange;
 
-
-class TEXTLAYOUT_EXPORT KoInlineObjectExtent
+class KOTEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
-    KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
+    explicit KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
     qreal m_ascent;
     qreal m_descent;
 };
@@ -59,7 +60,7 @@ public:
  * Text layouter that allows text to flow in multiple root area and around
  * obstructions.
  */
-class TEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
+class KOTEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
 {
     Q_OBJECT
 public:
@@ -69,6 +70,9 @@ public:
             : viewConverter(0)
             , imageCollection(0)
             , showFormattingCharacters(false)
+            , showSpellChecking(false)
+            , showSelections(true)
+            , background(Qt::white)
         {
         }
 
@@ -81,6 +85,8 @@ public:
         bool showFormattingCharacters;
         bool showTableBorders;
         bool showSpellChecking;
+        bool showSelections;
+        QColor background;
     };
 
     /// constructor
@@ -92,12 +98,19 @@ public:
 
     /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
+
+    /// return the currently set manager, or 0 if none is set.
+    KoTextRangeManager *textRangeManager() const;
+    void setTextRangeManager(KoTextRangeManager *manager);
 
     /// return the currently set changeTracker, or 0 if none is set.
     KoChangeTracker *changeTracker() const;
+    void setChangeTracker(KoChangeTracker *tracker);
 
     /// return the currently set styleManager, or 0 if none is set.
     KoStyleManager *styleManager() const;
+    void setStyleManager(KoStyleManager *manager);
 
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect(const QTextBlock & block) const;
@@ -125,6 +138,9 @@ public:
     /// are the tabs relative to indent or not
     bool relativeTabs(QTextBlock block) const;
 
+    /// visualize inline objects during paint
+    void showInlineObjectVisualization(bool show);
+
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
@@ -137,14 +153,14 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    QList<KoTextAnchor *> textAnchors() const;
+    QList<KoShapeAnchor *> textAnchors() const;
 
     /**
      * Register the anchored obstruction  for run around
      *
      * We have the concept of Obstructions which text has to run around in various ways.
      * We maintain two collections of obstructions. The free which are tied to just a position
-     * (tied to pages), and the anchored obstructions which are each anchored to a KoTextAnchor
+     * (tied to pages), and the anchored obstructions which are each anchored to a KoShapeAnchor
      *
      * The free obstructions are collected from the KoTextLayoutRootAreaProvider during layout
      *
@@ -169,6 +185,10 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the paragraph content rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringParagraphContentRect(const QRectF &paragraphContentRect);
+
     /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
@@ -183,7 +203,7 @@ public:
     void positionAnchoredObstructions();
 
     /// remove inline object
-    void removeInlineObject(KoTextAnchor *textAnchor);
+    void removeInlineObject(KoShapeAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
 
@@ -198,6 +218,9 @@ public:
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
 
+
+    KoTextLayoutRootArea *rootAreaForPoint(const QPointF &point) const;
+
     /**
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .
      * \param rootArea root-area to remove. If NULL then all root-areas are removed.
@@ -206,6 +229,8 @@ public:
 
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
+
+    void setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction);
 
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();
@@ -220,8 +245,19 @@ public:
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
 
+    /// Set \a documentChanged() to be blocked (changes will not result in root-areas being marked dirty)
+    void setBlockChanges(bool block);
+    bool changesBlocked() const;
+
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);
+
+    /**
+     * To be called during layout by KoTextLayoutArea - similar to how qt calls positionInlineObject
+     *
+     * It searches for anchor text ranges in the given span
+     */
+    void positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument);
 
 signals:
     /**
@@ -240,6 +276,8 @@ signals:
      * @see emitLayoutIsDirty
      */
     void layoutIsDirty();
+
+    void foundAnnotation(KoShape *annotationShape, QPointF refPosition);
 
 public slots:
     /**

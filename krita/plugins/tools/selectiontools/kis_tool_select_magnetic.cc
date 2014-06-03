@@ -23,14 +23,13 @@
 #include <QLabel>
 #include <QVector2D>
 #include <QLinkedList>
-#include <KIntNumInput>
+#include <kintnuminput.h>
 #include <cmath>
 #include <cstdlib>
 
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
 #include "kis_cursor.h"
@@ -40,7 +39,7 @@
 #include "kis_painter.h"
 #include "kis_selection_options.h"
 #include "kis_selection_tool_helper.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_pixel_selection.h"
 
 #include "kis_tool_select_magnetic_option_widget.h"
@@ -89,7 +88,7 @@ inline QVector2D rotateAntiClockWise(const QVector2D &v)
 }
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6)),
+    : KisToolSelectBase(canvas, KisCursor::load("tool_magneticoutline_selection_cursor.png", 6, 6), i18n("Magnetic Selection")),
         m_magneticOptions(0),
         m_localTool(canvas, this)
 {
@@ -131,19 +130,21 @@ bool KisToolSelectMagnetic::limitToCurrentLayer() const
 QWidget* KisToolSelectMagnetic::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
-    m_optWidget->setWindowTitle(i18n("Magnetic Selection"));
-    m_optWidget->disableAntiAliasSelectionOption();
-    m_optWidget->disableSelectionModeOption();
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
+
+    selectionWidget->setWindowTitle();
+    selectionWidget->disableAntiAliasSelectionOption();
+    selectionWidget->disableSelectionModeOption();
 
     KisToolSelectMagneticOptionWidget *magneticOptionsWidget;
-    magneticOptionsWidget = new KisToolSelectMagneticOptionWidget(m_optWidget);
+    magneticOptionsWidget = new KisToolSelectMagneticOptionWidget(selectionWidget);
     m_magneticOptions = magneticOptionsWidget->ui;
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
     l->addWidget(magneticOptionsWidget);
 
-    return m_optWidget;
+    return selectionWidget;
 }
 
 
@@ -252,7 +253,7 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
     else {
         dev = img->projection();
     }
-    KisRandomConstAccessor randomAccessor = dev->createRandomAccessor(0,0);
+    KisRandomConstAccessorSP randomAccessorSP = dev->createRandomAccessorNG(0,0);
 
 
     QPolygonF polyline = pixelPath.toFillPolygon();
@@ -302,23 +303,23 @@ void KisToolSelectMagnetic::LocalTool::computeOutline(const QPainterPath &pixelP
 
 }
 
-//void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor)
+//void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessorSP pixelAccessor)
 //{
 //// take the colour value of the starting side and match it against the colour on the current position
 //// if the difference is beyond the threshold, there is a edge.
 //    QVector2D currentPoint = startPoint;
 //    KoColor transformedColor(m_colorSpace);
 //
-//    pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
-//    m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+//    pixelAccessor->moveTo(currentPoint.x(), currentPoint.y());
+//    m_colorTransformation->transform(pixelAccessor->rawData(), transformedColor.data(), 1);
 //
 //    int value = transformedColor.toQColor().value();
 //
 //    while((currentPoint - startPoint).length() < m_selectingTool->radius()*2) {
 //        m_debugScannedPoints.append(currentPoint.toPoint());
 //
-//        pixelAccessor.moveTo(currentPoint.x(), currentPoint.y());
-//        m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+//        pixelAccessor->moveTo(currentPoint.x(), currentPoint.y());
+//        m_colorTransformation->transform(pixelAccessor->rawData(), transformedColor.data(), 1);
 //
 //        int currentValue = transformedColor.toQColor().value();
 //        if(std::abs(value-currentValue)>m_selectingTool->threshold()) {
@@ -343,7 +344,7 @@ inline bool pointCandidateLessThan(const QPair<QVector2D, QHash<int, qreal> >& v
     else return false;
 }
 
-void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessor pixelAccessor)
+void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, const QVector2D &direction, KisRandomConstAccessorSP pixelAccessor)
 {
     QVector2D currentPoint = startPoint;
 //    QVector2D lastPoint = m_tmpDetectedBorder.size()>0?QVector2D(m_tmpDetectedBorder.last()):QVector2D(-1, -1);
@@ -387,7 +388,7 @@ void KisToolSelectMagnetic::LocalTool::computeEdge(const QVector2D &startPoint, 
 }
 
 
-FilterMatrix KisToolSelectMagnetic::LocalTool::getMatrixForPoint(const QVector2D &point, KisRandomConstAccessor pixelAccessor) const
+FilterMatrix KisToolSelectMagnetic::LocalTool::getMatrixForPoint(const QVector2D &point, KisRandomConstAccessorSP pixelAccessor) const
 {
     QVector2D currentPoint(point.x()-1, point.y()-1);
     KoColor transformedColor(m_colorSpace);
@@ -395,8 +396,8 @@ FilterMatrix KisToolSelectMagnetic::LocalTool::getMatrixForPoint(const QVector2D
     double coeff[3][3];
     for(int i=0; i<3; i++) {
         for(int j=0; j<3; j++) {
-            pixelAccessor.moveTo(currentPoint.x()+i, currentPoint.y()+j);
-            m_colorTransformation->transform(pixelAccessor.rawData(), transformedColor.data(), 1);
+            pixelAccessor->moveTo(currentPoint.x()+i, currentPoint.y()+j);
+            m_colorTransformation->transform(pixelAccessor->rawData(), transformedColor.data(), 1);
             coeff[i][j]=transformedColor.toQColor().valueF();
         }
     }
@@ -424,7 +425,7 @@ void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
 {
     //load the points into a linked list, because removing on a vector is expensive
     QLinkedList<QPoint> detectedBorder;
-    foreach(QPoint point, m_detectedBorder) {
+    foreach(const QPoint &point, m_detectedBorder) {
         detectedBorder << point;
     }
 
@@ -455,7 +456,7 @@ void KisToolSelectMagnetic::LocalTool::cleanDetectedBorder()
     }
 
     m_detectedBorder.clear();
-    foreach(QPoint point, detectedBorder) {
+    foreach(const QPoint &point, detectedBorder) {
         m_detectedBorder << point;
     }
 }
@@ -473,10 +474,10 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     if (!kisCanvas)
         return;
 
-    KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
+    KisSelectionToolHelper helper(kisCanvas, i18n("Path Selection"));
 
 
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
     KisPainter painter(tmpSel);
     painter.setBounds(m_selectingTool->currentImage()->bounds());
@@ -486,7 +487,13 @@ void KisToolSelectMagnetic::LocalTool::addPathShape(KoPathShape* pathShape)
     painter.setOpacity(OPACITY_OPAQUE_U8);
     painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
-    painter.paintPolygon(QPolygonF(m_detectedBorder));
+    QPolygonF path = QPolygonF(m_detectedBorder);
+    painter.paintPolygon(path);
+
+    QPainterPath cache;
+    cache.addPolygon(path);
+    cache.closeSubpath();
+    tmpSel.setOutlineCache(cache);
 
     helper.selectPixelSelection(tmpSel, m_selectingTool->m_selectAction);
 

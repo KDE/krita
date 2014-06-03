@@ -21,8 +21,8 @@
 #define SVGPATTERNHELPER_H
 
 #include <KoXmlReader.h>
-#include <QtGui/QImage>
-#include <QtGui/QTransform>
+#include <QImage>
+#include <QTransform>
 
 class KoShape;
 

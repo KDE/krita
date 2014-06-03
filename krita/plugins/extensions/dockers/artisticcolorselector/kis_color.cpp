@@ -59,7 +59,7 @@ struct CoreImpl: public KisColor::Core
         
         float            h = ::getHue(r, g, b);
         float            x = ::getLightness<HSXType>(r, g, b);
-        KisColor::VecRGB hue;
+        KisColor::VecRGB hue(0.0, 0.0, 0.0);
         ::getRGB(hue(0), hue(1), hue(2), h);
         ::setLightness<HSXType>(hue(0), hue(1), hue(2), x);
         KisColor::VecRGB diff1 = hue - KisColor::VecRGB(x,x,x);
@@ -81,7 +81,9 @@ KisColor::KisColor(Type type)
 
 KisColor::KisColor(float hue, float a, Type type)
 {
-    float r, g, b;
+    float r = 0;
+    float g = 0;
+    float b = 0;
     ::getRGB(r, g, b, hue);
     initRGB(type, r, g, b, a);
 }
@@ -125,7 +127,7 @@ void KisColor::initRGB(Type type, float r, float g, float b, float a)
 	// an offset that is added to the m_coreData buffer to make sure
 	// the struct created with the placement new operator is aligned at 16 bytes
 	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
 	
     switch(type)
     {
@@ -144,7 +146,7 @@ void KisColor::initHSX(Type type, float h, float s, float x, float a)
 	// an offset that is added to the m_coreData buffer to make sure
 	// the struct created with the placement new operator is aligned at 16 bytes
 	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16));
+	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
 	
     switch(type)
     {
@@ -160,7 +162,9 @@ void KisColor::initHSX(Type type, float h, float s, float x, float a)
 
 void KisColor::setRGBfromHue(float hue, float alpha)
 {
-    float r, g, b;
+    float r = 0;
+    float g = 0;
+    float b = 0;
     ::getRGB(r, g, b, hue);
     core()->setRGB(r, g, b, alpha);
 }

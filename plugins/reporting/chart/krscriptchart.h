@@ -35,7 +35,7 @@ class Chart : public QObject
 {
     Q_OBJECT
 public:
-    Chart(KoReportItemChart *);
+    explicit Chart(KoReportItemChart *);
 
     ~Chart();
 public slots:

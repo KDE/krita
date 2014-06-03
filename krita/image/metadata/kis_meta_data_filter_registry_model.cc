@@ -18,6 +18,7 @@
 
 #include "kis_meta_data_filter_registry_model.h"
 #include "kis_debug.h"
+#include <QStringList>
 
 using namespace KisMetaData;
 
@@ -77,4 +78,14 @@ QList<const Filter*> FilterRegistryModel::enabledFilters() const
         }
     }
     return enabledFilters;
+}
+
+void FilterRegistryModel::setEnabledFilters(const QStringList &enabledFilters)
+{
+    d->enabled.clear();
+    QList<QString> keys = FilterRegistry::instance()->keys();
+    foreach (const QString &key, keys) {
+        d->enabled.append(enabledFilters.contains(key));
+    }
+
 }

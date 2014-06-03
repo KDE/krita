@@ -32,7 +32,7 @@ class QWidget;
 class KoStorePrivate
 {
 public:
-    KoStorePrivate(KoStore *qq)
+    explicit KoStorePrivate(KoStore *qq)
         : q(qq),
         fileMode(Local),
         window(0),
@@ -40,7 +40,8 @@ public:
         stream(0),
         isOpen(false),
         good(false),
-        finalized(false)
+        finalized(false),
+        writeMimetype(true)
     {
     }
 
@@ -118,6 +119,8 @@ public:
         NamingVersion22,
         NamingVersionRaw  ///< Never expand file and directory names
     } namingVersion;
+
+    bool writeMimetype; ///< true if the backend is allowed to create "mimetype" automatically.
 };
 
 #endif

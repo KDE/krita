@@ -35,7 +35,7 @@
 
 #include "flake_export.h"
 
-class QGraphicsWidget;
+class QGraphicsObject;
 class KUndo2Command;
 
 class KoCanvasResourceManager;
@@ -137,6 +137,12 @@ public:
     virtual KoViewConverter *viewConverter() const = 0;
 
     /**
+     * Convert a coordinate in pixels to pt.
+     * @param viewPoint the point in the coordinate system of the widget, or window.
+     */
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+
+    /**
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget *canvasWidget() = 0;
@@ -149,12 +155,12 @@ public:
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QGraphicsWidget *canvasItem() { return 0; }
+    virtual QGraphicsObject *canvasItem() { return 0; }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QGraphicsWidget *canvasItem() const{ return 0; }
+    virtual const QGraphicsObject *canvasItem() const{ return 0; }
 
     /**
      * Return the unit of the current document for initialization of the widgets created

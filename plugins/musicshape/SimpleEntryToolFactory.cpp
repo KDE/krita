@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <klocale.h>
+#include <KoIcon.h>
 
 #include "MusicShape.h"
 #include "SimpleEntryTool.h"
@@ -27,8 +28,8 @@
 SimpleEntryToolFactory::SimpleEntryToolFactory()
     : KoToolFactoryBase("SimpleEntryToolFactoryId")
 {
-    setToolTip( i18n( "Music editing tool" ) );
-    setIcon( "music-note-16th" );
+    setToolTip( i18n( "Music editing" ) );
+    setIconName(koIconNameCStr("music-note-16th"));
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( MusicShapeId );

@@ -21,6 +21,8 @@
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
 #include "kis_node_progress_proxy.h"
+#include "kis_node.h"
+#include <KLocalizedString>
 
 KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 {
@@ -28,24 +30,25 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 
     if(progressProxy) {
         m_progressUpdater = new KoProgressUpdater(progressProxy);
-        m_progressUpdater->start();
-        m_updater = m_progressUpdater->startSubtask();
+        m_progressUpdater->start(100, i18n("Processing"));
         m_progressUpdater->moveToThread(node->thread());
     }
     else {
         m_progressUpdater = 0;
-        m_updater = 0;
     }
 }
 
 KisProcessingVisitor::ProgressHelper::~ProgressHelper()
 {
-    delete m_progressUpdater;
+    if (m_progressUpdater) {
+        m_progressUpdater->deleteLater();
+    }
 }
 
 KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
 {
-    return m_updater;
+    QMutexLocker l(&m_progressMutex);
+    return m_progressUpdater ? m_progressUpdater->startSubtask() : 0;
 }
 
 

@@ -21,6 +21,7 @@
 
 #include <cmath>
 
+#include <QtGlobal>
 #include <QRect>
 
 #include <kis_image.h>
@@ -32,7 +33,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <kis_fixed_paint_device.h>
 
@@ -41,8 +42,15 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
+#endif
+
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
+    : KisPaintOp(painter)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -53,9 +61,9 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
-    m_sizeOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
-    m_rotationOption.sensor()->reset();
+    m_sizeOption.resetAllSensors();
+    m_opacityOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
 
     m_properties.action = settings->getInt(DEFORM_ACTION);
     m_properties.deformAmount = settings->getDouble(DEFORM_AMOUNT);
@@ -63,8 +71,8 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_properties.useCounter = settings->getBool(DEFORM_USE_COUNTER);
     m_properties.useOldData = settings->getBool(DEFORM_USE_OLD_DATA);
 
-    m_deformBrush.setProperties( &m_properties );
-    m_deformBrush.setSizeProperties( &m_sizeProperties );
+    m_deformBrush.setProperties(&m_properties);
+    m_deformBrush.setSizeProperties(&m_sizeProperties);
 
     m_deformBrush.initDeformAction();
 
@@ -72,7 +80,8 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
-    } else {
+    }
+    else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
@@ -85,70 +94,59 @@ KisDeformPaintOp::~KisDeformPaintOp()
 {
 }
 
-qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return m_spacing;
     if (!m_dev) return m_spacing;
 
-#if 1
-        KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
+    KisFixedPaintDeviceSP dab = cachedDab(source()->compositionSourceColorSpace());
 
-        qint32 x;
-        qreal subPixelX;
-        qint32 y;
-        qreal subPixelY;
+    qint32 x;
+    qreal subPixelX;
+    qint32 y;
+    qreal subPixelY;
 
-        QPointF pt = info.pos();
-        if (m_sizeProperties.jitterEnabled){
-                pt.setX(pt.x() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
-                pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
-        }
+    QPointF pt = info.pos();
+    if (m_sizeProperties.jitterEnabled) {
+        pt.setX(pt.x() + ((m_sizeProperties.diameter * drand48()) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+        pt.setY(pt.y() + ((m_sizeProperties.diameter * drand48()) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
+    }
 
-        qreal rotation = m_rotationOption.apply(info);
-        qreal scale = m_sizeOption.apply(info);
+    qreal rotation = m_rotationOption.apply(info);
 
-        setCurrentRotation(rotation);
-        setCurrentScale(scale);
+    // Deform Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
+    qreal scale = m_sizeOption.apply(info);
 
-        rotation += m_sizeProperties.rotation;
-        scale *= m_sizeProperties.scale;
+    setCurrentRotation(rotation);
+    setCurrentScale(scale);
 
-        QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
+    rotation += m_sizeProperties.rotation;
+    scale *= m_sizeProperties.scale;
 
-        splitCoordinate(pos.x(), &x, &subPixelX);
-        splitCoordinate(pos.y(), &y, &subPixelY);
+    QPointF pos = pt - m_deformBrush.hotSpot(scale, rotation);
 
-        KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
-                                                             scale,rotation,
-                                                             info.pos(),
-                                                             subPixelX,subPixelY,
-                                                             x,y
-                                                             );
+    splitCoordinate(pos.x(), &x, &subPixelX);
+    splitCoordinate(pos.y(), &y, &subPixelY);
 
-        // this happens for the first dab of the move mode, we need more information for being able to move
-        if (!mask){
-            return m_spacing;
-        }
+    KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
+                                 scale, rotation,
+                                 info.pos(),
+                                 subPixelX, subPixelY,
+                                 x, y
+                                                        );
 
-        quint8 origOpacity = m_opacityOption.apply(painter(), info);
-        painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
-        painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
-        painter()->setOpacity(origOpacity);
-
+    // this happens for the first dab of the move mode, we need more information for being able to move
+    if (!mask) {
         return m_spacing;
-#else
-        if (!m_dab) {
-            m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-        } else {
-            m_dab->clear();
-        }
+    }
 
-        m_deformBrush.oldDeform(m_dab,m_dev,info.pos());
-        QRect rc = m_dab->extent();
-        painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-        return m_spacing;
-#endif
+    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    painter()->bltFixedWithFixedSelection(x, y, dab, mask, mask->bounds().width() , mask->bounds().height());
+    painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
+    painter()->setOpacity(origOpacity);
 
+    return m_spacing;
 }
 
 

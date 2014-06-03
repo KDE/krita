@@ -1,3 +1,21 @@
+// Check windows
+#ifdef Q_OS_WIN
+   #if _WIN64
+     #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+#endif
+
+// Check GCC
+#if __GNUC__
+  #if defined (__x86_64__) || defined (__ppc64__)
+    #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+#endif
+
 #ifdef __APPLE__
 # ifdef __BIG_ENDIAN__
 #  define WORDS_BIGENDIAN 1
@@ -13,8 +31,8 @@
 /* Defines if you Get Hot New Stuff support */
 #cmakedefine GHNS 1
 
-/* Defines if you have Nepomuk support */
-#cmakedefine NEPOMUK 1
+/* Defines if the krita crash handler is built */
+#cmakedefine USE_BREAKPAD 1
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 #define _FILE_OFFSET_BITS 64
@@ -33,6 +51,11 @@
 
 /* Defines if we use lcms2 */
 #cmakedefine HAVE_LCMS2 1
+/* Defines if we use lcms2.4 */
+#cmakedefine HAVE_LCMS24 1
+
+/* Defines if we use KActivities */
+#cmakedefine HAVE_KACTIVITIES 1
 
 /* This file contains all the paths that change when changing the installation prefix */
 #define CALLIGRAPREFIX "${CMAKE_INSTALL_PREFIX}"

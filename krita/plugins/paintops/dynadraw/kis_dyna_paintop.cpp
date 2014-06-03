@@ -34,19 +34,20 @@
 #include <kis_types.h>
 #include <kis_paintop.h>
 #include <kis_selection.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 
 #include "kis_dynaop_option.h"
 
 #include "filter.h"
 
 KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
-        : KisPaintOp(painter)
-        , m_settings(settings)
+    : KisPaintOp(painter)
+    , m_settings(settings)
 {
-    if (image){
+    if (image) {
         m_dynaBrush.setCanvasSize(image->width(), image->height());
-    }else{
+    }
+    else {
         // some dummy values for scratchpad
         m_dynaBrush.setCanvasSize(1000, 1000);
     }
@@ -57,8 +58,8 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_properties.drag = settings->getDouble(DYNA_DRAG);
 
     double angle = settings->getDouble(DYNA_ANGLE);
-    m_properties.xAngle = cos(angle * M_PI/180.0);
-    m_properties.yAngle = sin(angle * M_PI/180.0);
+    m_properties.xAngle = cos(angle * M_PI / 180.0);
+    m_properties.yAngle = sin(angle * M_PI / 180.0);
 
     m_properties.widthRange = settings->getDouble(DYNA_WIDTH_RANGE);
     m_properties.diameter = settings->getInt(DYNA_DIAMETER);
@@ -68,21 +69,23 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_properties.useTwoCircles = settings->getBool(DYNA_USE_TWO_CIRCLES);
     m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
 
-    m_dynaBrush.setProperties( &m_properties );
+    m_dynaBrush.setProperties(&m_properties);
 }
 
 KisDynaPaintOp::~KisDynaPaintOp()
 {
 }
 
-KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist)
+void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
-    Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    Q_UNUSED(currentDistance);
+    Q_UNUSED(pi2);
+    if (!painter()) return;
 
     if (!m_dab) {
-        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
-    } else {
+        m_dab = source()->createCompositionSourceDevice();
+    }
+    else {
         m_dab->clear();
     }
 
@@ -97,16 +100,12 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    painter()->renderMirrorMask(rc,m_dab);
-
-    KisVector2D end = toKisVector2D(pi2.pos());
-    KisVector2D start = toKisVector2D(pi1.pos());
-    KisVector2D dragVec = end - start;
-    return KisDistanceInformation(0, dragVec.norm());
+    painter()->renderMirrorMask(rc, m_dab);
 }
 
-qreal KisDynaPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-    KisDistanceInformation di(0.0,1.0);
-    return paintLine(info, info, di).spacing;
+    KisDistanceInformation di;
+    paintLine(info, info, &di);
+    return di.currentSpacing();
 }

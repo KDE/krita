@@ -19,9 +19,7 @@
 #ifndef KIS_SHAPE_SELETION_TEST_H
 #define KIS_SHAPE_SELETION_TEST_H
 
-#include <QtTest/QtTest>
-
-class KoColorSpace;
+#include <QtTest>
 
 class KisShapeSelectionTest : public QObject
 {

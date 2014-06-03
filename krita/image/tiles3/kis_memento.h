@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #ifndef KIS_MEMENTO_H_
 #define KIS_MEMENTO_H_
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QRect>
 
 #include "kis_global.h"
@@ -40,18 +40,19 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 class KisMemento : public KisShared
 {
 public:
-    inline KisMemento(KisMementoManager* mementoManager) {
-        m_mementoManager = mementoManager;
-
-        m_valid = true;
-
+    inline KisMemento(KisMementoManager* /*mementoManager*/) {
         m_extentMinX = qint32_MAX;
         m_extentMinY = qint32_MAX;
         m_extentMaxX = qint32_MIN;
         m_extentMaxY = qint32_MIN;
+
+        m_oldDefaultPixel = 0;
+        m_newDefaultPixel = 0;
     }
 
     inline ~KisMemento() {
+        delete[] m_oldDefaultPixel;
+        delete[] m_newDefaultPixel;
     }
 
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) {
@@ -67,24 +68,23 @@ public:
         return QRect(x, y, w, h);
     }
 
-    inline bool containsTile(qint32 col, qint32 row, quint32 tileHash) const {
-        Q_UNUSED(col);
-        Q_UNUSED(row);
-        Q_UNUSED(tileHash);
-        Q_ASSERT_X(0, "KisMemento::containsTile", "Not implemented");
-        return false; // Compiller would be happy! =)
+    void saveOldDefaultPixel(const quint8* pixel, quint32 pixelSize) {
+        m_oldDefaultPixel = new quint8[pixelSize];
+        memcpy(m_oldDefaultPixel, pixel, pixelSize);
     }
 
+    void saveNewDefaultPixel(const quint8* pixel, quint32 pixelSize) {
+        m_newDefaultPixel = new quint8[pixelSize];
+        memcpy(m_newDefaultPixel, pixel, pixelSize);
+    }
 
-    /**
-     * Not used, happily
-     */
-//    inline bool valid() const {
-//        return m_valid;
-//    }
-//    inline void setInvalid() {
-//        m_valid = false;
-//    }
+    const quint8* oldDefaultPixel() const {
+        return m_oldDefaultPixel;
+    }
+
+    const quint8* newDefaultPixel() const {
+        return m_newDefaultPixel;
+    }
 
 private:
     friend class KisMementoManager;
@@ -102,14 +102,13 @@ private:
     }
 
 private:
-    KisMementoManager* m_mementoManager;
+    quint8 *m_oldDefaultPixel;
+    quint8 *m_newDefaultPixel;
 
     qint32 m_extentMinX;
     qint32 m_extentMaxX;
     qint32 m_extentMinY;
     qint32 m_extentMaxY;
-
-    bool m_valid;
 };
 
 #endif // KIS_MEMENTO_H_

@@ -55,7 +55,15 @@ if (EIGEN2_INCLUDE_DIR)
 
 else (EIGEN2_INCLUDE_DIR)
 
+IF (NOT WIN32)
+   # use pkg-config to get the directories and then use these values
+   # in the FIND_PATH() and FIND_LIBRARY() calls
+   find_package(PkgConfig)
+   pkg_check_modules(PC_EIGEN2 QUIET eigen2)
+ENDIF (NOT WIN32)
+
 find_path(EIGEN2_INCLUDE_DIR NAMES Eigen/Core
+     HINTS ${PC_EIGEN2_INCLUDEDIR} ${PC_EIGEN2_INCLUDE_DIRS}
      PATHS
      ${INCLUDE_INSTALL_DIR}
      ${KDE4_INCLUDE_DIR}

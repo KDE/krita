@@ -19,7 +19,7 @@
 #ifndef KIS_PIXEL_SELECTION_H
 #define KIS_PIXEL_SELECTION_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPixelSelectionTest : public QObject
 {
@@ -31,7 +31,6 @@ private slots:
     void testSetSelected();
     void testSelect();
     void testInvert();
-    void testInvertWithImage();
     void testClear();
     void testExtent();
     void testAddSelection();
@@ -41,6 +40,11 @@ private slots:
     void testUpdateProjection();
     void testExactRectWithImage();
     void testUndo();
+    void testInvertWithImage();
+    void testCrossColorSpacePainting();
+    void testOutlineCache();
+
+    void testOutlineCacheTransactions();
 };
 
 #endif

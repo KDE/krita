@@ -21,7 +21,7 @@
 #define KOTEXTSHAPEDATA_H
 
 #include "KoText.h"
-#include "textlayout_export.h"
+#include "kotextlayout_export.h"
 
 #include <KoTextShapeDataBase.h>
 #include <KoInsets.h>
@@ -46,7 +46,7 @@ class KoTextLayoutRootArea;
  * multiple instances of this shape data) can share one QTextDocument by providing a
  * different view on (a different part of) the QTextDocument.
  */
-class TEXTLAYOUT_EXPORT KoTextShapeData : public KoTextShapeDataBase
+class KOTEXTLAYOUT_EXPORT KoTextShapeData : public KoTextShapeDataBase
 {
     Q_OBJECT
 public:
@@ -73,14 +73,21 @@ public:
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const;
 
-    /// returns true if the selection of the cursor is visible in this shape
-    bool isCursorVisible(QTextCursor *cursor) const;
-
     /// Set the rootArea that is associated to the textshape
     void setRootArea(KoTextLayoutRootArea *rootArea);
 
     /// the rootArea that is associated to the textshape
     KoTextLayoutRootArea *rootArea();
+
+    void setLeftPadding(qreal padding);
+    qreal leftPadding() const;
+    void setTopPadding(qreal padding);
+    qreal topPadding() const;
+    void setRightPadding(qreal padding);
+    qreal rightPadding() const;
+    void setBottomPadding(qreal padding);
+    qreal bottomPadding() const;
+    void setPadding(qreal padding);
 
     /**
     * Load the TextShape from ODF.
@@ -112,6 +119,12 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const {
         saveOdf(context, 0, from, to);
     }
+
+    // reimplemented
+    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+
+    // reimplemented
+    virtual void saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /**
      * Set the page direction.

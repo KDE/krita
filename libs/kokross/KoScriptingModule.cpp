@@ -25,7 +25,7 @@
 // calligra
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
-#include <KoDocumentAdaptor.h>
+#include <KoPartAdaptor.h>
 #include <KoView.h>
 
 /// \internal d-pointer class.
@@ -42,7 +42,7 @@ KoScriptingModule::KoScriptingModule(QObject *parent, const QString &name)
 {
     setObjectName(name);
     d->view = dynamic_cast<KoView*>(parent);
-    //if (d->view) KoMainWindow *mainwindow = d->view->shell();
+    //if (d->view) KoMainWindow *mainwindow = d->view->mainWindow();
 }
 
 KoScriptingModule::~KoScriptingModule()
@@ -67,11 +67,6 @@ QObject *KoScriptingModule::application()
     return qApp->findChild<KoApplicationAdaptor*>();
 }
 
-QObject *KoScriptingModule::shell()
-{
-    return d->view ? d->view->shell() : 0;
-}
-
 QWidget *KoScriptingModule::mainWindow()
 {
     return d->view ? d->view->mainWindow() : 0;
@@ -80,7 +75,7 @@ QWidget *KoScriptingModule::mainWindow()
 QObject *KoScriptingModule::document()
 {
     KoDocument *kdoc = doc();
-    return kdoc ? kdoc->findChild<KoDocumentAdaptor*>() : 0;
+    return kdoc ? kdoc->findChild<KoPartAdaptor*>() : 0;
 }
 
 QObject *KoScriptingModule::store()

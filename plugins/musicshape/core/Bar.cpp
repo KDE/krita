@@ -21,8 +21,8 @@
 #include "StaffElement.h"
 #include "Sheet.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
+#include <QHash>
+#include <QList>
 
 namespace MusicCore {
 

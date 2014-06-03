@@ -20,12 +20,6 @@
       <string>Pages</string>
      </property>
      <layout class="QVBoxLayout">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <property name="margin">
-       <number>11</number>
-      </property>
       <item>
        <widget class="QRadioButton" name="boolAllPages">
         <property name="text">
@@ -69,7 +63,16 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -78,16 +81,22 @@
       <item row="0" column="0">
        <widget class="QLabel" name="textLabel1">
         <property name="text">
-         <string>Resolution:</string>
+         <string>Resolution (dots per inch):</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
+        <property name="leftMargin">
+         <number>0</number>
         </property>
-        <property name="margin">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -108,57 +117,76 @@
         </item>
         <item>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
            <number>0</number>
           </property>
-          <property name="spacing">
-           <number>6</number>
+          <property name="topMargin">
+           <number>0</number>
           </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="intVerticalqsdf">
-            <property name="text">
-             <string comment="vertical resolution">Vertical:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="KComboBox" name="kComboBox1"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="intHorizontal">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>999999</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intVertical">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>999999</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-           </widget>
-          </item>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel5">
             <property name="text">
              <string comment="horizontal resolution">Horizontal:</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="KComboBox" name="kComboBox2"/>
+          <item row="1" column="0">
+           <widget class="QLabel" name="intVerticalqsdf">
+            <property name="text">
+             <string comment="vertical resolution">Vertical:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="intHorizontal">
+            <property name="suffix">
+             <string>dpi</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>3200</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+	  <item row="1" column="2">
+	    <widget class="KoAspectButton" name="pixelAspectRatioBtn" native="true">
+	      <property name="text" stdset="0">
+		<string/>
+	      </property>
+	    </widget>
+	  </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="intVertical">
+            <property name="suffix">
+             <string>dpi</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>3200</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -189,10 +217,16 @@
       </item>
       <item row="3" column="0">
        <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
+        <property name="leftMargin">
+         <number>0</number>
         </property>
-        <property name="margin">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -213,14 +247,23 @@
         </item>
         <item>
          <layout class="QGridLayout">
-          <property name="margin">
+          <property name="leftMargin">
            <number>0</number>
           </property>
-          <property name="spacing">
-           <number>6</number>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
           </property>
           <item row="1" column="1">
            <widget class="QSpinBox" name="intHeight">
+            <property name="suffix">
+             <string>px</string>
+            </property>
             <property name="maximum">
              <number>99999</number>
             </property>
@@ -231,10 +274,16 @@
             <property name="text">
              <string>Width:</string>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QSpinBox" name="intWidth">
+            <property name="suffix">
+             <string>px</string>
+            </property>
             <property name="maximum">
              <number>99999</number>
             </property>
@@ -244,6 +293,9 @@
            <widget class="QLabel" name="intHeightqsdfq">
             <property name="text">
              <string>Height:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -285,12 +337,12 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -299,9 +351,7 @@
   <tabstop>boolSelectionPage</tabstop>
   <tabstop>listPages</tabstop>
   <tabstop>intHorizontal</tabstop>
-  <tabstop>kComboBox1</tabstop>
   <tabstop>intVertical</tabstop>
-  <tabstop>kComboBox2</tabstop>
   <tabstop>intWidth</tabstop>
   <tabstop>intHeight</tabstop>
  </tabstops>

@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_TEST_H
 #define KIS_TRANSACTION_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransactionTest : public QObject
 {
@@ -29,6 +29,7 @@ private slots:
 
     void testUndo();
     void testRedo();
+    void testDeviceMove();
 };
 
 #endif

@@ -19,7 +19,7 @@
 #ifndef KIS_UPDATER_CONTEXT_TEST_H
 #define KIS_UPDATER_CONTEXT_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisUpdaterContextTest : public QObject
 {
@@ -27,6 +27,7 @@ class KisUpdaterContextTest : public QObject
 
 private slots:
     void testJobInterference();
+    void testSnapshot();
     void stressTestExclusiveJobs();
 };
 

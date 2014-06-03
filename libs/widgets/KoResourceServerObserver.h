@@ -31,8 +31,10 @@ template <class T> class KoResourceServerObserver {
 public:
     virtual ~KoResourceServerObserver() {}
 
+    virtual void unsetResourceServer() = 0;
+
     /**
-     * Will be called by the resource server after a resource is added 
+     * Will be called by the resource server after a resource is added
      * @param resource the added resource
      */
     virtual void resourceAdded(T* resource) = 0;
@@ -42,12 +44,29 @@ public:
      * @param resource the resource which is going to be removed
      */
     virtual void removingResource(T* resource) = 0;
-    
+
     /**
      * Will be called by the resource server when a resource is changed
      * @param resource the resource which is going to be removed
      */
     virtual void resourceChanged(T* resource) = 0;
+
+     /**
+     * Will be called by the resource server when resources are added or removed
+     * from a tag category
+     */
+    virtual void syncTaggedResourceView()=0;
+
+     /**
+     * Will be called by the resource server when a new tag category has been created
+     */
+    virtual void syncTagAddition(const QString& tag)=0;
+
+     /**
+     * Will be called by the resource server when a new tag category has been deleted
+     */
+    virtual void syncTagRemoval(const QString& tag)=0;
+
 };
 
 #endif // KORESOURCESERVEROBSERVER_H

@@ -22,6 +22,10 @@
 #include "kis_undo_adapter.h"
 
 
+/**
+ * KisLegacyUndoAdapter -- blocks the strokes and updates queue,
+ * and then adds the command to a store
+ */
 class KRITAIMAGE_EXPORT KisLegacyUndoAdapter : public KisUndoAdapter
 {
 public:

@@ -27,7 +27,6 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_background.h>
 
 DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeFilter)
         : KDialog(view)

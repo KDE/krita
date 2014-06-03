@@ -23,7 +23,7 @@
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -64,7 +64,6 @@ void KisGradientBenchmark::benchmarkGradient()
         Q_ASSERT(kograd);
         KisGradientPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
-        fillPainter.setBounds( QRect(0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT) );
         fillPainter.setGradient(kograd);
 
         fillPainter.beginTransaction(i18n("Gradient Fill"));

@@ -23,34 +23,22 @@
 #include "KoToolBoxLayout_p.h"
 
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoShapeLayer.h>
-#include <KoInteractionTool.h>
-
-#include <KDebug>
-#include <QLayout>
-#include <QMap>
 #include <QButtonGroup>
 #include <QToolButton>
-#include <QHash>
-#include <QPainter>
-#include <QRect>
-#include <QTimer>
-#include <QStyle>
 #include <QStyleOptionFrameV3>
+#include <QPainter>
+#include <QHash>
 #include <QApplication>
-
-#include "math.h"
-#include <KoDockWidgetTitleBar.h>
-
+#include <QTimer>
 
 class KoToolBox::Private
 {
 public:
-    Private(KoCanvasController *c)
+    Private()
         : layout(0)
         , buttonGroup(0)
-        , canvas(c->canvas())
+        , canvas(0)
         , floating(false)
     {
     }
@@ -72,8 +60,8 @@ void KoToolBox::Private::addSection(Section *section, const QString &name)
     sections.insert(name, section);
 }
 
-KoToolBox::KoToolBox(KoCanvasController *canvas)
-    : d( new Private(canvas))
+KoToolBox::KoToolBox()
+    : d(new Private)
 {
     d->layout = new KoToolBoxLayout(this);
     // add defaults
@@ -82,21 +70,19 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
 
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
-    foreach(const KoToolButton & button,
-            KoToolManager::instance()->createToolList(canvas->canvas())) {
+    foreach(const KoToolButton & button, KoToolManager::instance()->createToolList()) {
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
         d->visibilityCodes.insert(button.button, button.visibilityCode);
     }
 
     // Update visibility of buttons
-    setButtonsVisible(canvas, QList<QString>());
+    setButtonsVisible(QList<QString>());
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
             this, SLOT(setActiveTool(KoCanvasController*, int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
-    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
-            this, SLOT(setButtonsVisible(const KoCanvasController*, QList<QString>)));
+    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
@@ -152,12 +138,8 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
     }
 }
 
-void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes)
+void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 {
-    if (canvas->canvas() != d->canvas) {
-        return;
-    }
-
     foreach(QToolButton *button, d->visibilityCodes.keys()) {
         QString code = d->visibilityCodes.value(button);
 
@@ -223,14 +205,14 @@ void KoToolBox::paintEvent(QPaintEvent *)
         frameoption.lineWidth = 1;
         frameoption.midLineWidth = 0;
 
-        if (section->seperators() & Section::SeperatorTop) {
+        if (section->separators() & Section::SeparatorTop) {
             int y = section->y() - halfSpacing;
             frameoption.frameShape = QFrame::HLine;
             frameoption.rect = QRect(section->x(), y, section->width(), 2);
             style()->drawControl(QStyle::CE_ShapedFrame, &frameoption, &painter);
         }
 
-        if (section->seperators() & Section::SeperatorLeft) {
+        if (section->separators() & Section::SeparatorLeft) {
             int x = section->x() - halfSpacing;
             frameoption.frameShape = QFrame::VLine;
             frameoption.rect = QRect(x, section->y(), 2, section->height());
@@ -271,6 +253,6 @@ void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
     if (canvas->canvas() == d->canvas) {
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
         d->visibilityCodes.insert(button.button, button.visibilityCode);
-        setButtonsVisible(canvas, QList<QString>());
+        setButtonsVisible(QList<QString>());
     }
 }

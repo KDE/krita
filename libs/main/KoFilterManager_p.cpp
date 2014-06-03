@@ -20,19 +20,19 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include "KoFilterManager.h"
 #include "KoFilterManager_p.h"
 
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QListWidgetItem>
 
-#include <KLocale>
-#include <KSqueezedTextLabel>
-#include <KMimeType>
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
+#include <kmimetype.h>
 
 #include <unistd.h>
 
-KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &nativeFormat, const KUrl &url)
+KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, const QString &/*nativeFormat*/, const KUrl &url)
         : KDialog(parent),
         m_mimeTypes(mimeTypes)
 {
@@ -58,18 +58,17 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     Q_ASSERT(!m_mimeTypes.isEmpty());
     for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
             it != m_mimeTypes.constEnd();
-            it++) {
+            ++it) {
+
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;
-        if (! name.isEmpty())
-            m_filterList->addItem(name);
+        if (! name.isEmpty()) {
+            QListWidgetItem *item = new QListWidgetItem(name, m_filterList);
+            item->setData(32, *it);
+        }
     }
 
-    if (nativeFormat == "application/x-words") {
-        const int index = m_mimeTypes.indexOf("text/plain");
-        if (index > -1)
-            m_filterList->setCurrentRow(index);
-    }
+    m_filterList->sortItems();
 
     if (m_filterList->currentRow() == -1)
         m_filterList->setCurrentRow(0);
@@ -86,12 +85,8 @@ KoFilterChooser::~KoFilterChooser()
 
 QString KoFilterChooser::filterSelected()
 {
-    const int item = m_filterList->currentRow();
-
-    if (item > -1)
-        return m_mimeTypes [item];
-    else
-        return QString();
+    QListWidgetItem *item = m_filterList->currentItem();
+    return item->data(32).toString();
 }
 
 #include <KoFilterManager_p.moc>

@@ -60,7 +60,7 @@
              <item>
               <widget class="QComboBox" name="cmbPath">
                <property name="editable">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
               </widget>
              </item>
@@ -98,6 +98,12 @@
            </item>
            <item>
             <widget class="QTreeView" name="treeView">
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAsNeeded</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
@@ -136,8 +142,17 @@
           <property name="minimumSize">
            <size>
             <width>50</width>
-            <height>50</height>
+            <height>110</height>
            </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>110</height>
+           </size>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
          </widget>
         </widget>
@@ -219,7 +234,7 @@
         </layout>
        </item>
        <item>
-        <widget class="KisImageView" name="imgView">
+        <widget class="ImageView" name="imgView">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -239,9 +254,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisImageView</class>
+   <class>ImageView</class>
    <extends>QFrame</extends>
-   <header>kis_image_view.h</header>
+   <header>image_view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

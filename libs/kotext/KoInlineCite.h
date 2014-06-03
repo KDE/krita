@@ -38,6 +38,7 @@ class QTextCursor;
  */
 class KOTEXT_EXPORT KoInlineCite : public KoInlineObject
 {
+    Q_OBJECT
 public:
     enum Type {
         Citation,
@@ -46,9 +47,13 @@ public:
     /**
      * Construct a new cite to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
      */
-    KoInlineCite(Type type);
+    explicit KoInlineCite(Type type);
 
     virtual ~KoInlineCite();
+
+    bool operator!= (const KoInlineCite &cite) const;
+
+    KoInlineCite &operator= (const KoInlineCite &cite);
 
     Type type() const;        //return type of cite
 
@@ -83,6 +88,8 @@ public:
     void setInstitution (const QString &institution);
 
     void setJournal (const QString &journal);
+
+    void setLabel(const QString &label);
 
     void setMonth (const QString &month);
 
@@ -187,6 +194,8 @@ public:
     QString custom4() const;
 
     QString custom5() const;
+
+    int posInDocument() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 

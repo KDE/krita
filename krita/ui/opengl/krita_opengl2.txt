@@ -1,0 +1,95 @@
+------------------------
+Differences between Qt4 and Qt5 preferred OpenGL api:
+
+Qt4 
+
+QGLBuffer: Functions for creating and managing GL buffer objects
+QGLColormap: Used for installing custom colormaps into a QGLWidget
+QGLContext: Encapsulates an OpenGL rendering context
+QGLFormat: Specifies the display format of an OpenGL rendering context
+QGLFramebufferObject: Encapsulates an OpenGL framebuffer object
+QGLFramebufferObjectFormat: Specifies the format of an OpenGL framebuffer object
+QGLFunctions: Cross-platform access to the OpenGL/ES 2.0 API
+QGLPixelBuffer: Encapsulates an OpenGL pbuffer
+QGLShader: Allows OpenGL shaders to be compiled
+QGLShaderProgram: Allows OpenGL shader programs to be linked and used
+QGLWidget: Widget for rendering OpenGL graphics
+
+Qt5 
+
+QWindow's surface type: QSurface::OpenGLSurface
+QOpenGLContext: to manage the native OpenGL context
+QOpenGLPaintDevice: enables the use of OpenGL accelerated QPainter rendering
+QOpenGLFunctions 
+QOpenGLBuffer
+QOpenGLFramebufferObject
+QOpenGLShaderProgram
+
+Qt5 also has a scenegraph implementation that looks like it's more or what I am
+trying to do for Krita: a tree of nodes (images, filters, opacity, generators)
+that gets rendered by the GPU. It's not usable outside Qt Quick2, though.
+
+Qt has QT_OPENGL_ES_2 defined if compiled for ES 2.0. For Krita desktop, the 
+target is OpenGL 3.1, which is mostly compatible with ES 2.0. ES 2.0 is 
+something I want to be prepared for so we can port Krita (Sketch) to Android.
+
+------------------------
+
+Texture Precision:
+
+OpenGL 3.1 supports rgba, bgra, 8i, 16i, 16f (half) and 32f.
+OpenGL ES 2.0 supports rgba, 8i, 16f (half, through an extension)
+
+Ideally, we keep as much precision as we can because high-end graphics cards
+and monitors support showing more than 8 bits of precision. However, in practice
+32f is not useful, so we could downscale 32f to 16f. 
+
+Note: need to check whether OCIO supports 16f internally, or only 32f.
+
+------------------------
+
+Canvas Design
+
+I want to make it optionally possible to do the layer stack composition on the
+GPU. GPUImage (https://github.com/BradLarson/GPUImage) has example code for all
+the blending modes, filters and some generators.
+
+However, first steps are:
+
+1. Create projection in a thread on a set of tiled textures
+
+Right now, this is not done in a thread. In the gl2 canvas in sketch, it's done 
+in a thread, but not on tiles, but a big texture that includes the checkers and 
+everything. 
+
+glTexSubImage2d on a big image is pretty slow with some drivers, so that won't 
+work.
+
+If OCIO is not enabled, we need to color correct the image projection data before
+updating the texture tiles.
+
+If OCIO is enabled, we need to make sure as little conversion is done as needed:
+if the source pixels are RGBA 16f or 32f, we should not do any conversion!
+
+2. Draw projection fbo on the widget
+
+* clear to border color
+* draw checkers
+* (enable the OCIO shader)
+* draw projection
+* (disable the OCIO shader)
+* draw canvas decorations (grids, extension bar)
+* draw opengl tool decorations
+* draw qpainter tool decorations
+
+
+------------------------
+
+Legacy:
+
+* the gradient and ocio shaders are just fragment shaders without the necessary 
+vertex shader
+* the tool's opengl code is 1.x based
+
+I removed the 3D cursor code which used display lists. I don't think we actually
+have users who want the 3D cursors -- it was more a gimmick.

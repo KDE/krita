@@ -17,23 +17,23 @@
  */
 
 #include "KoReportPage.h"
-#include <qwidget.h>
+
+#include <QWidget>
 #include <kdebug.h>
-#include <qcolor.h>
-#include <qpixmap.h>
+#include <QColor>
+#include <QPixmap>
 #include <KoPageFormat.h>
 #include <KoUnit.h>
-#include <KoGlobal.h>
 
 #include <renderobjects.h>
 #include <QPainter>
 #include <QTimer>
 
 KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
-        : QWidget(parent)
+        : QObject(parent), QGraphicsRectItem()
 {
-    setAttribute(Qt::WA_NoBackground);
-    kDebug() << "CREATED PAGE";
+    //TODO setAttribute(Qt::WA_NoBackground);
+    //kDebug() << "CREATED PAGE";
     m_reportDocument = document;
     m_page = 0;
     int pageWidth = 0;
@@ -53,16 +53,10 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
             pageHeight = m_reportDocument->pageOptions().heightPx();
         }
     }
-
-    setFixedSize(pageWidth, pageHeight);
-
-    kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-
+    setRect(0,0,pageWidth, pageHeight);
+    //kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
     m_pixmap = new QPixmap(pageWidth, pageHeight);
-    setAutoFillBackground(true);
-
     m_renderer = m_factory.createInstance("screen");
-    
     connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
     m_renderTimer = new QTimer();
@@ -79,10 +73,11 @@ KoReportPage::~KoReportPage()
     delete m_renderTimer;
 }
 
-void KoReportPage::paintEvent(QPaintEvent*)
+void KoReportPage::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    QPainter painter(this);
-    painter.drawPixmap(QPoint(0, 0), *m_pixmap);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+    painter->drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
 void KoReportPage::renderPage(int page)
@@ -100,10 +95,10 @@ void KoReportPage::renderPage(int page)
 
 void KoReportPage::pageUpdated(int pageNo)
 {
-    kDebug() << pageNo << m_page;
+    //kDebug() << pageNo << m_page;
     //Refresh this page if it changes
     if (pageNo == m_page) {
-        kDebug() << "Current page updated";
+        //kDebug() << "Current page updated";
         m_renderTimer->start(100);
     }
 }

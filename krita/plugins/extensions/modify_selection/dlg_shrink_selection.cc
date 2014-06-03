@@ -2,6 +2,7 @@
  *  dlg_shrink_selection.cc - part of Krita
  *
  *  Copyright (c) 2006 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,54 +21,87 @@
 
 #include "dlg_shrink_selection.h"
 
-#include <math.h>
+#include <KoUnit.h>
+#include <KoSizeGroup.h>
+#include <kis_view2.h>
+#include <kis_image.h>
+#include <operations/kis_operation_configuration.h>
 
-#include <klocale.h>
-#include <kis_debug.h>
-DlgShrinkSelection::DlgShrinkSelection(QWidget *  parent, const char * name)
-        : KDialog(parent)
+WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisView2 *view)
+    : KisOperationUIWidget(i18n("Shrink Selection"), parent)
+    , m_shrinkValue(1)
 {
-    setCaption(i18n("Shrink Selection"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
-    setObjectName(name);
+    Q_ASSERT(view);
+    KisImageWSP image = view->image();
+    Q_ASSERT(image);
+    m_resolution = image->yRes();
 
-    m_page = new WdgShrinkSelection(this);
-    Q_CHECK_PTR(m_page);
-    m_page->setObjectName("shrink_selection");
+    setupUi(this);
 
-    setMainWidget(m_page);
-    resize(m_page->sizeHint());
+    spbShrinkValue->setValue(m_shrinkValue);
+    spbShrinkValue->setFocus();
+    spbShrinkValue->setVisible(true);
+    spbShrinkValueDouble->setVisible(false);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
+    cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
+
+    // ensure that both spinboxes request the same horizontal size
+    KoSizeGroup *spbGroup = new KoSizeGroup(this);
+    spbGroup->addWidget(spbShrinkValue);
+    spbGroup->addWidget(spbShrinkValueDouble);
+
+    connect(spbShrinkValue, SIGNAL(valueChanged(int)), this, SLOT(slotShrinkValueChanged(int)));
+    connect(spbShrinkValueDouble, SIGNAL(valueChanged(double)), this, SLOT(slotShrinkValueChanged(double)));
+    connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
 }
 
-DlgShrinkSelection::~DlgShrinkSelection()
+void WdgShrinkSelection::slotShrinkValueChanged(int value)
 {
-    delete m_page;
+    slotShrinkValueChanged((double) value);
 }
 
-qint32 DlgShrinkSelection::xradius()
+void WdgShrinkSelection::slotShrinkValueChanged(double value)
 {
-    return m_page->radiusSpinBox->value();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? value : (value * m_resolution);
+    m_shrinkValue = qRound(selectedUnit.fromUserValue(resValue));
 }
 
-qint32 DlgShrinkSelection::yradius()
+void WdgShrinkSelection::slotUnitChanged(int index)
 {
-    return m_page->radiusSpinBox->value();
+    updateShrinkUIValue(m_shrinkValue);
+
+    const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbShrinkValue->setVisible(false);
+        spbShrinkValueDouble->setVisible(true);
+    } else {
+        spbShrinkValue->setVisible(true);
+        spbShrinkValueDouble->setVisible(false);
+    }
 }
 
-bool DlgShrinkSelection::shrinkFromImageBorder()
+void WdgShrinkSelection::updateShrinkUIValue(double value)
 {
-    return m_page->shrinkFromImageBorderCheckBox->isChecked();
+    const KoUnit selectedUnit = KoUnit::fromListForUi(cmbUnit->currentIndex());
+    if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+        spbShrinkValueDouble->blockSignals(true);
+        spbShrinkValueDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+        spbShrinkValueDouble->blockSignals(false);
+    } else {
+        const int finalValue = (selectedUnit == KoUnit(KoUnit::Point)) ? qRound(value / m_resolution) : value;
+        spbShrinkValue->blockSignals(true);
+        spbShrinkValue->setValue(selectedUnit.toUserValue(finalValue));
+        spbShrinkValue->blockSignals(false);
+    }
 }
 
-
-// SLOTS
-
-void DlgShrinkSelection::okClicked()
+void WdgShrinkSelection::getConfiguration(KisOperationConfiguration* config)
 {
-    accept();
+    config->setProperty("x-radius", m_shrinkValue);
+    config->setProperty("y-radius", m_shrinkValue);
+    config->setProperty("edgeLock", !ckbShrinkFromImageBorder->isChecked());
 }
 
 #include "dlg_shrink_selection.moc"

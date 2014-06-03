@@ -20,8 +20,9 @@
 
 #include <QTimer>
 #include <QPolygon>
-#include <QBrush>
+#include <QPen>
 
+#include <kis_signal_compressor.h>
 #include "canvas/kis_canvas_decoration.h"
 
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
@@ -37,22 +38,28 @@ public:
     };
 
     void setMode(Mode mode);
+    void setVisible(bool v);
+
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+
+private slots:
+    void slotStartUpdateSelection();
+
 public slots:
     void selectionChanged();
-    void selectionTimerEvent();
+    void antsAttackEvent();
 private:
     bool selectionIsActive();
-    void updateSimpleOutline();
-    void updateMaskVisualisation(const QRect & r);
+
 private:
-    QVector<QPolygon> m_outline;
-    QVector<QPolygon> m_simpleOutline;
-    QTimer* m_timer;
+    KisSignalCompressor m_signalCompressor;
+    QPainterPath m_outlinePath;
+    QTimer* m_antsTimer;
     int m_offset;
-    QList<QBrush> m_brushes;
-    QImage m_image;
+
+    QPen m_antsPen;
+    QPen m_outlinePen;
     Mode m_mode;
 };
 

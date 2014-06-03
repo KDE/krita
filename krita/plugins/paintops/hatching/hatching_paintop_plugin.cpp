@@ -19,7 +19,6 @@
 
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -38,11 +37,11 @@ K_EXPORT_PLUGIN(HatchingPaintOpPluginFactory("krita"))
 
 
 HatchingPaintOpPlugin::HatchingPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisHatchingPaintOp, KisHatchingPaintOpSettings, KisHatchingPaintOpSettingsWidget>("hatchingbrush", i18n("Hatching brush"),
-                                                                                                                         KisPaintOpFactory::categoryStable() ,"krita-hatching.png"));
+    r->add(new KisSimplePaintOpFactory<KisHatchingPaintOp, KisHatchingPaintOpSettings, KisHatchingPaintOpSettingsWidget>("hatchingbrush", i18n("Hatching"),
+                                                                                                                         KisPaintOpFactory::categoryStable() , "krita-hatching.png", QString(), QStringList(), 7));
 
 }
 

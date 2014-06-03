@@ -22,17 +22,15 @@
 #include <string.h>
 #include <cfloat>
 
-#include "qbrush.h"
-#include "qcolor.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QBrush>
+#include <QColor>
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 #include <QVector>
@@ -40,18 +38,16 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
-#include <QColor>
-
 #include <KoProgressUpdater.h>
 
 #include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "KoColorSpace.h"
+#include <KoChannelInfo.h>
 #include "kis_types.h"
 
 #include "kis_selection.h"
@@ -67,17 +63,19 @@
 
 
 template<class factory>
-KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
-                                           KisPainter *painter,
-                                           KoUpdater *progress)
+KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConvolutionKernelSP kernel,
+                                                                   KisPainter *painter,
+                                                                   KoUpdater *progress)
 {
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
     #define THRESHOLD_SIZE 5
 
-    if(kernel->width() <= THRESHOLD_SIZE &&
-       kernel->height() <= THRESHOLD_SIZE) {
+    if(m_enginePreference == SPATIAL ||
+       (m_enginePreference != FFTW &&
+        kernel->width() <= THRESHOLD_SIZE &&
+        kernel->height() <= THRESHOLD_SIZE)) {
 
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
     }
@@ -94,22 +92,39 @@ KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
 
 
 KisConvolutionPainter::KisConvolutionPainter()
-        : KisPainter()
+    : KisPainter(),
+      m_enginePreference(NONE)
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device)
-        : KisPainter(device)
+    : KisPainter(device),
+      m_enginePreference(NONE)
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-        : KisPainter(device, selection)
+    : KisPainter(device, selection),
+      m_enginePreference(NONE)
+{
+}
+
+KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference)
+    : KisPainter(device),
+      m_enginePreference(enginePreference)
 {
 }
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)
 {
+    /**
+     * Force BORDER_IGNORE op for the wraparound mode,
+     * because the paint device has its own special
+     * iterators, which do everything for us.
+     */
+    if (src->defaultBounds()->wrapAroundMode()) {
+        borderOp = BORDER_IGNORE;
+    }
 
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
@@ -136,27 +151,8 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         }
         break;
     }
-    return;
-    case BORDER_DEFAULT_FILL : {
-        KisConvolutionWorker<StandardIteratorFactory> *worker;
-        worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
-        worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
-        delete worker;
-        break;
-    }
-    case BORDER_WRAP: {
-        qFatal("Not implemented");
-    }
-    case BORDER_AVOID:
-    default : {
-        // TODO should probably be computed from the exactBounds...
-        qint32 kw = kernel->width();
-        qint32 kh = kernel->height();
-        QPoint tr((kw - 1) / 2, (kh - 1) / 2);
-        srcPos += tr;
-        dstPos += tr;
-        areaSize -= QSize(kw - 1, kh - 1);
-
+    case BORDER_IGNORE:
+    default: {
         KisConvolutionWorker<StandardIteratorFactory> *worker;
         worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
         worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());

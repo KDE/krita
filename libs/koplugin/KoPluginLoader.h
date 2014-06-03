@@ -101,7 +101,7 @@ public:
     /**
      * Load all plugins that conform to the versiontype and versionstring,
      * for instance:
-     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-Version] == 3)");
+     * KoPluginLoader::instance()->load("Calligra/Flake", "([X-Flake-PluginVersion] == 28)");
      * This method allows you to optionally limit the plugins that are loaded by version, but also
      * using a user configurable set of config options.
      * If you pass a PluginsConfig struct only those plugins are loaded that are specified in the

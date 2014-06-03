@@ -94,7 +94,7 @@ void TestDocumentLayout::testNumberedList()
     QTextBlock blok = m_doc->begin().next();
     qreal indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
-    for (i = 1; i <= 9; i++) {
+    for (i = 1; i <= 9; ++i) {
         // qDebug() << "=>" << blok.text();
         QTextList *textList = blok.textList();
         QVERIFY(textList);
@@ -103,7 +103,7 @@ void TestDocumentLayout::testNumberedList()
     }
 
     // now make number of listitems be more than 10, so we use 2 digits.
-    for (i = 9; i <= 12; i++) {
+    for (i = 9; i <= 12; ++i) {
         QVERIFY(block.isValid());
         style.applyStyle(block);
         // qDebug() << "->" << block.text();
@@ -116,7 +116,7 @@ void TestDocumentLayout::testNumberedList()
     blok = m_doc->begin().next();
     qreal indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit
-    for (i = 2; i <= 12; i++) {
+    for (i = 2; i <= 12; ++i) {
         // qDebug() << "=>" << blok.text();
         QCOMPARE(blok.layout()->lineAt(0).x(), indent2); // all the same indent.
         blok = blok.next();
@@ -318,7 +318,7 @@ void TestDocumentLayout::testNestedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
+    static const char* const texts[] = { "1", "1.1.", "1.1.1", "1.1.2", "1.2.", "2", "2.1.", "2.2.", "3", "3.1.1", "1.1" };
     int i = 0;
     qreal indent = 0.0;
     while (block.isValid()) {
@@ -388,7 +388,7 @@ void TestDocumentLayout::testNestedPrefixedLists()
     block = m_doc->begin();
     QVERIFY(block.userData() == 0);
     block = block.next();
-    static const char* texts[] = { "Main1:", "Sub1.1*"};
+    static const char* const texts[] = { "Main1:", "Sub1.1*"};
     int i = 0;
     while (block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -513,7 +513,7 @@ void TestDocumentLayout::testRestartNumbering()
 
     m_layout->layout();
 
-    static const char *values[] = { "1", "2", "1", "2", "3" };
+    static const char * const values[] = { "1", "2", "1", "2", "3" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {
@@ -585,7 +585,7 @@ void TestDocumentLayout::testLetterSynchronization()
 
     m_layout->layout();
 
-    static const char *values[] = { "y", "z", "aa", "bb", "cc" };
+    static const char * const values[] = { "y", "z", "aa", "bb", "cc" };
     block = m_doc->begin();
     int i = 0;
     while (block.isValid()) {

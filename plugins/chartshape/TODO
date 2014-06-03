@@ -1,0 +1,138 @@
+This file describes short and long term tasks that we want to do in
+the chart shape.
+
+
+Legend
+------
+
+* Main issue
++ Sub issue
+- Sub sub issue
+
+[DONE]    Main issue is done
+[Done]    Sub issue is done
+[done]    Sub sub issue is done
+
+[name]    <name> is assigned to this task
+
+
+Guiding principles
+------------------
+
+* The chart shape should never crash or lock up.
+* The chart shape should never lose data even if we cannot render
+  everything .
+  This means that we should load all data, store it and save it back.
+
+
+================================================================
+
+
+Short term issues
+-----------------
+
+Time frame: (days / weeks)
+
+These issues are picked from the medium and long term issues and
+assigned to a person.
+
+Until the branching of 2.5: in priority order
+ * Subtypes for stock charts.                                   [erione]
+    + Get a stock chart manual from KDAB                        [ingwa]
+    + UI							[Done]
+    + implementation						[erione]
+ * Font editing for text items (header/etc, axis labels, ...)   [DONE]
+ * Y error bars                                                 [erione]
+    + UI							[Done]
+    + implementation						[erione]
+ * Edit marker type for dataset                                 [DONE]
+ * Add/delete data set when in a spreadsheet                    [erione]
+
+Assigned issues
+ * Fix bug 300190: crash in legend frame                        [ingwa]
+ * Fix changing chart type to stock chart                       [erione]
+ * 271774 Stock chart ... is not displaying.                    [erione]
+
+
+Medium term issues
+------------------
+
+Time frame: (weeks / months)
+
+General
+ * Make all of the code follow the coding standards             [DONE]
+    + Make the main code follow the coding standards            [Done]
+    + Make the test code follow the coding standards            [Done]
+
+
+Important bugs
+ * 300190 crash in legend frame (assigned, see above)           [ingwa]
+ * Other crash bugs
+ * 298525 Not possible to bring back deleted chart parts
+ * 271774 Stock chart ... is not displaying.                    [erione]
+ * Fix saving of axes                                           [DONE]
+
+Data loss
+ * We should load/store/save floor and wall for 3D charts
+ * Other 3D parameters
+
+Implement missing ODF functionality
+ * Separate chart types per dataset, e.g Bars and Lines.        [DONE]
+   Bugs: 271771 and 288537
+ * Implement all marker types                                   [DONE]
+ * Y error bars (see above)                                     [erione]
+ * Spline types for lines
+ * 2D surface charts
+   This should be possible since kdchart has a relatively
+   simple way of adding new chart types if they fit the
+   existing model.
+ * Gantt charts.
+   We have a gantt component in calligra already and kdgantt
+   is now part of kdchart.
+
+Editing
+ * Edit fonts for all text items
+    + header/subheader/footer
+    + axis labels
+    + axis markers
+    + data point numeric indicators
+ * Edit marker type for datasets (see above)                    [DONE]
+ * Edit (add/delete) datasets when in a spreadsheet
+    + maybe move dataset areas into the DataSets tab
+
+Improve usability
+ * We should design a better data editor.
+
+Make the changes undo'able
+ * Create commands for many more operations
+
+
+Long term issues
+----------------
+
+Time frame: (months / years)
+ 
+Support 3D charts for real
+ * Support 3D versions of the 2D charts we already have
+ * Support other types like cone/cylinder/etc.
+
+Improve the external interface to other apps that want to use charts
+ * Right now Sheets define a kind of data model that are pushed into
+   the charts. This interface is defined from the Sheets point of
+   view.
+
+   It should be the other way around: The chart shape should define an
+   interface and this is then used in the embedding applications.
+   This would make it easier to use charts in other applications,
+   e.g. kexi.
+
+Separate storage from the rendering backend
+ * We need to have a much better separation between the chart shape
+   and the rendering backend. This would lead to the following
+   advantages: 
+    - The storage classes could also be used in filters.
+    - We could use different backends for different kinds of chart
+      types.
+    - We could more easily switch to other backends if necessary.
+
+Themes

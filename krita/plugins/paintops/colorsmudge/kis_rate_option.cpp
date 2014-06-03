@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,21 +26,20 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
+
+#include <iostream>
 
 KisRateOption::KisRateOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisCurveOption(label, name, category, checked) { }
 
 void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {
-    if(!isChecked()) {
+    if (!isChecked()) {
         painter.setOpacity((quint8)(scaleMax * 255.0));
         return;
     }
-    
+
     qreal  rate    = scaleMin + (scaleMax - scaleMin) * multiplicator * computeValue(info); // scale m_rate into the range scaleMin - scaleMax
     quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * 255.0), OPACITY_OPAQUE_U8);
-
     painter.setOpacity(opacity);
 }
-

@@ -40,7 +40,7 @@ protected:
         Q_UNUSED(image);
 
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-        activeNode->original()->convertFromQImage(src, "");
+        activeNode->original()->convertFromQImage(src, 0);
     }
 
     KisStrokeStrategy* createStroke(bool indirectPainting,
@@ -52,7 +52,7 @@ protected:
         Q_UNUSED(painter);
 
         KisNodeSP node = resources->currentNode();
-        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter(), image->undoAdapter());
+        return new MoveStrokeStrategy(node, image.data(), resources->postExecutionUndoAdapter());
     }
 
     void addPaintingJobs(KisImageWSP image,

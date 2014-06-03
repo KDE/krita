@@ -1,4 +1,4 @@
-<schema prefix="mkn" uri="http://www.calligra-suite.org/krita/xmp/MakerNote/1.0/">
+<schema prefix="mkn" uri="http://www.calligra.org/krita/xmp/MakerNote/1.0/">
   <structures>
   </structures>
   <properties>

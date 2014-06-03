@@ -18,27 +18,35 @@
 #ifndef KIS_MINIMAL_SHADE_SELECTOR_H
 #define KIS_MINIMAL_SHADE_SELECTOR_H
 
+#include <QPointer>
+#include <kis_canvas2.h>
+
 #include "kis_color_selector_base.h"
 
 class KisShadeSelectorLine;
 class KisCanvas2;
+class KisColorSelectorBaseProxy;
 
 class KisMinimalShadeSelector : public KisColorSelectorBase
 {
 Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
+    ~KisMinimalShadeSelector();
+    void unsetCanvas();
     void setCanvas(KisCanvas2* canvas);
 
-public slots:
-    void setColor(const QColor& color);
-    void updateSettings();
+protected:
+    void setColor(const KoColor& color);
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 
+public slots:
+    void updateSettings();
+
 protected slots:
-    void resourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant& v);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -46,8 +54,10 @@ protected:
 
 private:
     QList<KisShadeSelectorLine*> m_shadingLines;
-    QColor m_lastColor;
-    KisCanvas2* m_canvas;
+    KoColor m_lastRealColor;
+    QPointer<KisCanvas2> m_canvas;
+
+    QScopedPointer<KisColorSelectorBaseProxy> m_proxy;
 };
 
 #endif

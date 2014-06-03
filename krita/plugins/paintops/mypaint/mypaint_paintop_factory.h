@@ -27,8 +27,6 @@
 
 #include <kis_paintop_factory.h>
 #include <kis_types.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 
 class KisPaintOp;
 class KisPainter;
@@ -54,7 +52,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18n("MyPaint brush");
+        return i18n("MyPaint");
     }
 
     virtual QString pixmap() {
@@ -62,7 +60,7 @@ public:
     }
     
     virtual QString category() const{
-        return KisPaintOpFactory::categoryExperimental();
+        return KisPaintOpFactory::categoryStable();
     }
 
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);

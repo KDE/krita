@@ -59,8 +59,8 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     width = qMax(width, qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width()));
     d->widget.leftLabel->setMinimumSize(QSize(width, 5));
 
-    d->widget.units->addItems(KoUnit::listOfUnitName());
-    d->widget.sizes->addItems(KoPageFormat::allFormats());
+    d->widget.units->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
+    d->widget.sizes->addItems(KoPageFormat::localizedPageFormatNames());
     setPageSpread(false);
 
     connect(d->widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
@@ -126,7 +126,7 @@ void KoPageLayoutWidget::sizeChanged(int row)
 
 void KoPageLayoutWidget::unitChanged(int row)
 {
-    setUnit(KoUnit(static_cast<KoUnit::Unit> (row)));
+    setUnit(KoUnit::fromListForUi(row, KoUnit::HidePixel));
 }
 
 void KoPageLayoutWidget::setUnit(const KoUnit &unit)
@@ -141,7 +141,7 @@ void KoPageLayoutWidget::setUnit(const KoUnit &unit)
     d->widget.bottomMargin->setUnit(unit);
     d->widget.bindingEdgeMargin->setUnit(unit);
     d->widget.pageEdgeMargin->setUnit(unit);
-    d->widget.units->setCurrentIndex(unit.indexInList());
+    d->widget.units->setCurrentIndex(unit.indexInListForUi(KoUnit::HidePixel));
 
     emit unitChanged(d->unit);
 }
@@ -302,11 +302,9 @@ void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
     int index = 0;
     switch(direction) {
     case KoText::LeftRightTopBottom:
-    case KoText::PerhapsLeftRightTopBottom:
         index = 1;
         break;
     case KoText::RightLeftTopBottom:
-    case KoText::PerhapsRightLeftTopBottom:
         index = 2;
         break;
     case KoText::TopBottomRightLeft: // unused for now.

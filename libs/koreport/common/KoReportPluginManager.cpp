@@ -22,12 +22,11 @@
 #include "KoReportPluginManagerPrivate.h"
 #include "KoReportPluginInfo.h"
 
-#include <KIcon>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KIconLoader>
-
-#include <QAction>
+#include <kicon.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <kiconloader.h>
+#include <ktoggleaction.h>
 
 //Include the static items
 #include "../items/label/KoReportLabelPlugin.h"
@@ -70,7 +69,7 @@ QList<QAction*> KoReportPluginManager::actions()
     foreach(KoReportPluginInterface* plugin, plugins) {
         KoReportPluginInfo *info = plugin->info();
         if (info) {
-            QAction *act = new QAction(KIcon(info->icon()), info->name(), this);
+            KToggleAction *act = new KToggleAction(KIcon(info->icon()), info->name(), this);
             act->setObjectName(info->className());
 
             //Store the order priority in the user data field
@@ -112,7 +111,7 @@ KoReportPluginManagerPrivate::KoReportPluginManagerPrivate()
 
 void KoReportPluginManagerPrivate::loadPlugins()
 {
-    kDebug() << "Load all plugins";
+    //kDebug() << "Load all plugins";
     KService::List offers = KServiceTypeTrader::self()->query("KoReport/ItemPlugin");
 
     KService::List::const_iterator iter;
@@ -125,19 +124,18 @@ void KoReportPluginManagerPrivate::loadPlugins()
 
         if (!factory)
         {
-            kDebug() << "KPluginFactory could not load the plugin:" << service->library();
+            kWarning() << "KPluginFactory could not load the plugin:" << service->library();
             continue;
         }
 
        KoReportPluginInterface *plugin = factory->create<KoReportPluginInterface>(this);
 
        if (plugin) {
-           kDebug() << "Load plugin:" << service->name();
-
+           //kDebug() << "Load plugin:" << service->name();
            plugin->info()->setPriority(plugin->info()->priority() + 10); //Ensure plugins always have a higher prioroty than built-in types
            m_plugins.insert(plugin->info()->className(), plugin);
        } else {
-           kDebug() << error;
+           kWarning() << error;
        }
     }
 

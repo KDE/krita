@@ -22,15 +22,16 @@
 
 #include <kselector.h>
 #include "kowidgets_export.h"
+#include "KoColorDisplayRendererInterface.h"
 
-#include <KoColor.h>
+class KoColor;
 
 class KOWIDGETS_EXPORT KoColorSlider : public KSelector
 {
     Q_OBJECT
 public:
-    KoColorSlider(QWidget *parent = 0);
-    explicit KoColorSlider(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit KoColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+    explicit KoColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     virtual ~KoColorSlider();
 
 public:

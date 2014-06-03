@@ -18,30 +18,53 @@
 */
 #include "ChangeImageCommand.h"
 
-#include <math.h>
+#include <cmath>
 #include <klocale.h>
 #include <KoImageData.h>
-#include <KDebug>
+#include <kdebug.h>
 
-#include "PictureShape.h"
-
-ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_shape(shape)
-, m_oldImageData(0)
-, m_newImageData(newImageData)
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent):
+    KUndo2Command(parent),
+    m_imageChanged(true),
+    m_shape(shape),
+    m_newImageData(newImageData),
+    m_oldCroppingRect(shape->cropRect()),
+    m_newCroppingRect(0, 0, 1, 1),
+    m_oldColorMode(shape->colorMode()),
+    m_newColorMode(shape->colorMode())
 {
-    Q_ASSERT( shape );
-    KoImageData *oldImageData = qobject_cast<KoImageData*>(m_shape->userData());
-    // we need new here as setUserData deletes the old data
-    m_oldImageData = oldImageData ? new KoImageData( *oldImageData ): 0;
     setText(i18nc("(qtundo-format)", "Change image"));
 
-    m_oldSize = shape->size();
-    m_newSize = newImageData->imageSize();
-    qreal oldarea = m_oldSize.width() * m_oldSize.height();
-    qreal newarea = m_newSize.width() * m_newSize.height();
-    m_newSize *= sqrt( oldarea / newarea );
+    // we need new here as setUserData deletes the old data
+    m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
+}
+
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent):
+    KUndo2Command(parent),
+    m_imageChanged(false),
+    m_shape(shape),
+    m_oldImageData(0),
+    m_newImageData(0),
+    m_oldCroppingRect(shape->cropRect()),
+    m_newCroppingRect(croppingRect),
+    m_oldColorMode(shape->colorMode()),
+    m_newColorMode(shape->colorMode())
+{
+    setText(i18nc("(qtundo-format)", "Crop image"));
+}
+
+ChangeImageCommand::ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent):
+    KUndo2Command(parent),
+    m_imageChanged(false),
+    m_shape(shape),
+    m_oldImageData(0),
+    m_newImageData(0),
+    m_oldCroppingRect(shape->cropRect()),
+    m_newCroppingRect(shape->cropRect()),
+    m_oldColorMode(shape->colorMode()),
+    m_newColorMode(colorMode)
+{
+    setText(i18nc("(qtundo-format)", "Change image color mode"));
 }
 
 ChangeImageCommand::~ChangeImageCommand()
@@ -52,18 +75,24 @@ ChangeImageCommand::~ChangeImageCommand()
 
 void ChangeImageCommand::redo()
 {
-    m_shape->update();
-    // we need new here as setUserData deletes the old data
-    m_shape->setUserData( m_newImageData ? new KoImageData( *m_newImageData ): 0 );
-    m_shape->setSize( m_newSize );
-    m_shape->update();
+    if (m_imageChanged) {
+        // we need new here as setUserData deletes the old data
+        m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData): 0);
+    }
+
+    m_shape->setColorMode(m_newColorMode);
+    m_shape->setCropRect(m_newCroppingRect);
+    emit sigExecuted();
 }
 
 void ChangeImageCommand::undo()
 {
-    // we need new here as setUserData deletes the old data
-    m_shape->update();
-    m_shape->setUserData( m_oldImageData ? new KoImageData( *m_oldImageData ): 0 );
-    m_shape->setSize( m_oldSize );
-    m_shape->update();
+    if (m_imageChanged) {
+        // we need new here as setUserData deletes the old data
+        m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData): 0);
+    }
+
+    m_shape->setColorMode(m_oldColorMode);
+    m_shape->setCropRect(m_oldCroppingRect);
+    emit sigExecuted();
 }

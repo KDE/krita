@@ -43,9 +43,11 @@ class FLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
     Q_OBJECT
 public:
 
-    KoDeferredShapeFactoryBase(QObject *parent);
+    explicit KoDeferredShapeFactoryBase(QObject *parent);
 
     virtual ~KoDeferredShapeFactoryBase();
+
+    virtual QString deferredPluginName() = 0;
 
     /**
      * This method should be implemented by factories to create a shape that the user

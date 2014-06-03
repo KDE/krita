@@ -27,7 +27,7 @@
 class KoReportMapsPlugin : public KoReportPluginInterface
 {
     public:
-    KoReportMapsPlugin(QObject *parent, const QVariantList &args = QVariantList());
+    explicit KoReportMapsPlugin(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~KoReportMapsPlugin();
 
     virtual QObject* createRendererInstance(QDomNode& element);

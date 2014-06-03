@@ -33,7 +33,6 @@
 
 class KisView2;
 class DlgColorRange;
-class KisSelectedTransaction;
 
 enum enumAction {
     REDS,
@@ -68,7 +67,7 @@ class DlgColorRange: public KDialog
 
 public:
 
-    DlgColorRange(KisView2 * view, KisPaintDeviceSP layer, QWidget * parent = 0, const char* name = 0);
+    DlgColorRange(KisView2 *view, QWidget *parent = 0);
     ~DlgColorRange();
 
 private slots:
@@ -78,7 +77,6 @@ private slots:
 
     void slotInvertClicked();
     void slotSelectionTypeChanged(int index);
-    void updatePreview();
     void slotSubtract(bool on);
     void slotAdd(bool on);
     void slotSelectClicked();
@@ -90,14 +88,12 @@ private:
 private:
 
     WdgColorRange * m_page;
-    KisPixelSelectionSP m_selection;
-    KisPaintDeviceSP m_dev;
     KisView2 * m_view;
-    selectionAction m_mode;
+    SelectionAction m_mode;
     QCursor m_oldCursor;
-    KisSelectedTransaction *m_transaction;
     enumAction m_currentAction;
     bool m_invert;
+    int m_selectionCommandsAdded;
 };
 
 

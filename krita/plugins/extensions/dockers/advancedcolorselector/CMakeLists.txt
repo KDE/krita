@@ -11,6 +11,8 @@ kis_common_colors.cpp
 kis_common_colors_recalculation_runner.cpp
 kis_minimal_shade_selector.cpp
 kis_shade_selector_line.cpp
+kis_shade_selector_line_editor.cpp
+kis_shade_selector_line_combo_box_popup.cpp
 kis_shade_selector_line_combo_box.cpp
 kis_shade_selector_lines_settings.cpp
 kis_color_selector_settings.cpp
@@ -22,6 +24,7 @@ kis_color_selector_triangle.cpp
 kis_color_selector_simple.cpp
 kis_color_selector_wheel.cpp
 kis_color_selector_combo_box.cpp
+kis_color_selector_base_proxy.cpp
 )
 
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS

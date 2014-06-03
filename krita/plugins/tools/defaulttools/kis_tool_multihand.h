@@ -21,6 +21,7 @@
 #define __KIS_TOOL_MULTIHAND_H
 
 #include "kis_tool_brush.h"
+#include <KoIcon.h>
 
 class QPushButton;
 class QCheckBox;
@@ -37,23 +38,27 @@ public:
     KisToolMultihand(KoCanvasBase *canvas);
     ~KisToolMultihand();
 
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+
 protected:
-    void mousePressEvent(KoPointerEvent *e);
-    void mouseMoveEvent(KoPointerEvent *e);
-    void mouseReleaseEvent(KoPointerEvent* e);
     void paint(QPainter& gc, const KoViewConverter &converter);
 
     QWidget* createOptionWidget();
 
 private:
     void initTransformations();
-    void finishAxisSetup();
+    void finishAxesSetup();
     void updateCanvas();
 
 private slots:
-    void activateAxisPointModeSetup();
+    void activateAxesPointModeSetup();
     void slotSetHandsCount(int count);
+    void slotSetAxesAngle(qreal angle);
     void slotSetTransformMode(int qcomboboxIndex);
+    void slotSetAxesVisible(bool vis);
     void slotSetMirrorVertically(bool mirror);
     void slotSetMirrorHorizontally(bool mirror);
     void slotSetTranslateRadius(int radius);
@@ -63,20 +68,24 @@ private:
 
     enum enumTransforModes { SYMMETRY, MIRROR, TRANSLATE };
     enumTransforModes m_transformMode;
-    QPointF m_axisPoint;
+    QPointF m_axesPoint;
+    qreal m_angle;
     int m_handsCount;
     bool m_mirrorVertically;
     bool m_mirrorHorizontally;
+    bool m_showAxes;
     int m_translateRadius;
 
-    bool m_setupAxisFlag;
+    bool m_setupAxesFlag;
     QComboBox * m_transformModesComboBox;
     KisSliderSpinBox *m_handsCountSlider;
+    KisDoubleSliderSpinBox *m_axesAngleSlider;
+    QCheckBox *m_axesChCkBox;
     QStackedWidget *m_modeCustomOption;
     QCheckBox *m_mirrorVerticallyChCkBox;
     QCheckBox *m_mirrorHorizontallyChCkBox;
     KisSliderSpinBox *m_translateRadiusSlider;
-    QPushButton *m_axisPointBtn;
+    QPushButton *m_axesPointBtn;
 };
 
 
@@ -91,11 +100,10 @@ public:
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        setIcon("krita_tool_freehand");
+        setIconName(koIconNameCStr("krita_tool_multihand"));
         setShortcut(KShortcut(Qt::Key_Q));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolMultiBrushFactory() {}

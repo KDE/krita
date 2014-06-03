@@ -33,6 +33,7 @@
 #include "commands/KoPAPageInsertCommand.h"
 
 #include <kdebug.h>
+#include <kglobal.h>
 
 KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 : m_doc( doc )
@@ -42,15 +43,16 @@ KoPAPastePage::KoPAPastePage( KoPADocument * doc, KoPAPageBase * activePage )
 
 bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), KGlobal::mainComponent() );
     KoPALoadingContext paContext(loadingContext, m_doc->resourceManager());
 
-    QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
-    QList<KoPAPageBase *> pages( m_doc->loadOdfPages( body, paContext ) );
+    QList<KoPAPageBase *> newMasterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
+    QList<KoPAPageBase *> newPages( m_doc->loadOdfPages( body, paContext ) );
 
+    // Check where to start inserting pages
     KoPAPageBase * insertAfterPage = 0;
     KoPAPageBase * insertAfterMasterPage = 0;
-    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || ( m_activePage == 0 && pages.empty() ) ) {
+    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || ( m_activePage == 0 && newPages.empty() ) ) {
         insertAfterMasterPage = m_activePage;
         insertAfterPage = m_doc->pages( false ).last();
     }
@@ -59,7 +61,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         insertAfterMasterPage = m_doc->pages( true ).last();
     }
 
-    if ( ! pages.empty() ) {
+    if ( !newPages.empty() ) {
         KoGenStyles mainStyles;
         QBuffer buffer;
         buffer.open( QIODevice::WriteOnly );
@@ -87,10 +89,10 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
 
         }
 
-        m_doc->saveOdfPages( savingContext, emptyList, masterPages );
+        m_doc->saveOdfPages( savingContext, emptyList, newMasterPages );
 
-        QMap<KoPAMasterPage*, KoPAMasterPage*> updateMasterPage;
-        foreach ( KoPAPageBase * page, masterPages )
+        QMap<KoPAMasterPage*, KoPAMasterPage*> masterPagesToUpdate;
+        foreach ( KoPAPageBase * page, newMasterPages )
         {
             KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
             Q_ASSERT( masterPage );
@@ -98,49 +100,49 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
                 QString masterPageName( savingContext.masterPageName( masterPage ) );
                 QMap<QString, KoPAMasterPage*>::const_iterator existingMasterPage( masterPageNames.constFind( masterPageName ) );
                 if ( existingMasterPage != masterPageNames.constEnd() ) {
-                    updateMasterPage.insert( masterPage, existingMasterPage.value() );
+                    masterPagesToUpdate.insert( masterPage, existingMasterPage.value() );
                 }
             }
         }
 
         // update pages which have a duplicate master page
-        foreach ( KoPAPageBase * page, pages )
+        foreach ( KoPAPageBase * page, newPages )
         {
             KoPAPage * p = dynamic_cast<KoPAPage*>( page );
             Q_ASSERT( p );
             if ( p ) {
                 KoPAMasterPage * masterPage( p->masterPage() );
-                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constFind( masterPage ) );
-                if ( pageIt != updateMasterPage.constEnd() ) {
+                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( masterPagesToUpdate.constFind( masterPage ) );
+                if ( pageIt != masterPagesToUpdate.constEnd() ) {
                     p->setMasterPage( pageIt.value() );
                 }
             }
         }
 
-        // delete dumplicate master pages;
-        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constBegin() );
-        for ( ; pageIt != updateMasterPage.constEnd(); ++pageIt )
+        // delete duplicate master pages;
+        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( masterPagesToUpdate.constBegin() );
+        for ( ; pageIt != masterPagesToUpdate.constEnd(); ++pageIt )
         {
-            masterPages.removeAll( pageIt.key() );
+            newMasterPages.removeAll( pageIt.key() );
             delete pageIt.key();
         }
     }
 
     KUndo2Command * cmd = 0;
     if ( m_doc->pageType() == KoPageApp::Slide ) {
-        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Slide", "Paste Slides", qMax( masterPages.size(), pages.size() ) ) );
+        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Slide", "Paste Slides", qMax( newMasterPages.size(), newPages.size() ) ) );
     }
     else {
-        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Page", "Paste Pages", qMax( masterPages.size(), pages.size() ) ) );
+        cmd = new KUndo2Command( i18ncp( "(qtundo-format)", "Paste Page", "Paste Pages", qMax( newMasterPages.size(), newPages.size() ) ) );
     }
 
-    foreach( KoPAPageBase * masterPage, masterPages )
+    foreach( KoPAPageBase * masterPage, newMasterPages )
     {
         new KoPAPageInsertCommand( m_doc, masterPage, insertAfterMasterPage, cmd );
         insertAfterMasterPage = masterPage;
     }
 
-    foreach( KoPAPageBase * page, pages )
+    foreach( KoPAPageBase * page, newPages )
     {
         new KoPAPageInsertCommand( m_doc, page, insertAfterPage, cmd );
         insertAfterPage = page;

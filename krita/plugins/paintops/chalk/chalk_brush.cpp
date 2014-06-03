@@ -19,7 +19,8 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
 #define srand48 srand
-inline double drand48() {
+inline double drand48()
+{
     return double(rand()) / RAND_MAX;
 }
 #endif
@@ -33,7 +34,7 @@ inline double drand48() {
 #include <QVariant>
 #include <QHash>
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include <cmath>
 #include <ctime>
 
@@ -41,14 +42,15 @@ inline double drand48() {
 ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation* transformation)
 {
     m_transfo = transformation;
-    if (m_transfo){
-        m_transfo->setParameter(m_transfo->parameterId("h"),0.0);
+    if (m_transfo) {
+        m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
         m_saturationId = m_transfo->parameterId("s"); // cache for later usage
-        m_transfo->setParameter(m_transfo->parameterId("v"),0.0);
-    }else{
+        m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
+    }
+    else {
         m_saturationId = -1;
     }
-    
+
 
     m_counter = 0;
     m_properties = properties;
@@ -68,47 +70,46 @@ void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     m_counter++;
 
     qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
+    KisRandomAccessorSP accessor = dev->createRandomAccessorNG((int)x, (int)y);
 
     qreal result;
-    if (m_properties->inkDepletion){
+    if (m_properties->inkDepletion) {
         //count decrementing of saturation and opacity
         result = log((qreal)m_counter);
         result = -(result * 10) / 100.0;
 
-        if ( m_properties->useSaturation ){
-            if (m_transfo){
-                m_transfo->setParameter(m_saturationId,result);
+        if (m_properties->useSaturation) {
+            if (m_transfo) {
+                m_transfo->setParameter(m_saturationId, 1.0 + result);
                 m_transfo->transform(m_inkColor.data(), m_inkColor.data(), 1);
             }
-            
+
         }
 
-        if ( m_properties->useOpacity ){
+        if (m_properties->useOpacity) {
             qreal opacity = (1.0f + result);
             m_inkColor.setOpacity(opacity);
         }
     }
-    
+
     int pixelX, pixelY;
     int radiusSquared = m_properties->radius * m_properties->radius;
     double dirtThreshold = 0.5;
-    
+
     for (int by = -m_properties->radius; by <= m_properties->radius; by++) {
-        int bySquared = by*by;
+        int bySquared = by * by;
         for (int bx = -m_properties->radius; bx <= m_properties->radius; bx++) {
             // let's call that noise from ground to chalk :)
-            if ( ((bx*bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
+            if (((bx * bx + bySquared) > radiusSquared) || drand48() < dirtThreshold) {
                 continue;
             }
 
             pixelX = qRound(x + bx);
             pixelY = qRound(y + by);
 
-            accessor.moveTo(pixelX, pixelY);
-            memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
+            accessor->moveTo(pixelX, pixelY);
+            memcpy(accessor->rawData(), m_inkColor.data(), pixelSize);
         }
     }
-
 }
 

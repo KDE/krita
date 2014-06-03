@@ -20,7 +20,7 @@
 
 #include "kis_wdg_fastcolortransfer.h"
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <kurlrequester.h>
 
@@ -30,7 +30,6 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 #include <kundo2command.h>
@@ -64,13 +63,15 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
     QString fileName = this->widget()->fileNameURLRequester->url().url();
-    
+
     if (fileName.isEmpty()) return config;
 
     KisPaintDeviceSP ref;
 
     dbgPlugins << "Use as reference file : " << fileName;
+
     KisDoc2 d;
+
     KoFilterManager manager(&d);
     KoFilter::ConversionStatus status;
     QString s = manager.importDocument(fileName, QString(), status);
@@ -84,25 +85,25 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
         dbgPlugins << "No reference image was specified.";
         return config;
     }
-    
+
     // Convert ref to LAB
     const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
     if (!labCS) {
         dbgPlugins << "The LAB colorspace is not available.";
         return config;
     }
-    
+
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS);
+    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
-    
+
     // Compute the means and sigmas of ref
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
-    
-    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(0, 0, importedImage->width(), importedImage->height());
+
+    KisSequentialConstIterator refIt(ref, importedImage->bounds());
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(refIt->oldRawData());
+        const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
 
         quint32 L = data[0];
         quint32 A = data[1];
@@ -116,7 +117,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
         sigmaA_ref += A * A;
         sigmaB_ref += B * B;
 
-    } while (refIt->nextPixel());
+    } while (refIt.nextPixel());
 
     double totalSize = 1. / (importedImage->width() * importedImage->height());
 
@@ -126,7 +127,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     sigmaL_ref *= totalSize;
     sigmaA_ref *= totalSize;
     sigmaB_ref *= totalSize;
-    
+
     dbgPlugins << totalSize << "" << meanL_ref << "" << meanA_ref << "" << meanB_ref << "" << sigmaL_ref << "" << sigmaA_ref << "" << sigmaB_ref;
 
     config->setProperty("filename", fileName);
@@ -136,6 +137,6 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     config->setProperty("sigmaL", sigmaL_ref);
     config->setProperty("sigmaA", sigmaA_ref);
     config->setProperty("sigmaB", sigmaB_ref);
-    
+
     return config;
 }

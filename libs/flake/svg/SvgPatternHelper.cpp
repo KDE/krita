@@ -24,7 +24,7 @@
 #include <KoShapePainter.h>
 #include <KoShape.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 SvgPatternHelper::SvgPatternHelper()
         : m_patternUnits(ObjectBoundingBox), m_patternContentUnits(UserSpaceOnUse)

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -31,7 +29,7 @@
 #include <QMutexLocker>
 
 #include <KoProperties.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_debug.h"
@@ -40,7 +38,6 @@
 #include "kis_painter.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
-#include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
@@ -53,9 +50,9 @@ public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
         QMutexLocker locker(&m_lock);
 
-        if(!m_reusablePaintDevice)
+        if (!m_reusablePaintDevice) {
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
-
+        }
         if(!m_projection ||
            !(*m_projection->colorSpace() == *prototype->colorSpace())) {
             m_projection = m_reusablePaintDevice;
@@ -99,18 +96,21 @@ public:
         return m_clonesList;
     }
 
+    bool hasClones() const {
+        return !m_clonesList.isEmpty();
+    }
+
 private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
-class KisLayer::Private
+struct KisLayer::Private
 {
 
 public:
 
     KisImageWSP image;
     QBitArray channelFlags;
-    KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
     KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
@@ -134,7 +134,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
-        setName(i18n("Duplicate of '%1'", rhs.name()));
+        setName(rhs.name());
     }
 }
 
@@ -146,7 +146,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image.isValid())
+    if (m_d->image)
         return m_d->image->colorSpace();
     return 0;
 }
@@ -184,26 +184,37 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 
 void KisLayer::disableAlphaChannel(bool disable)
 {
-    if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true, true, true);
-    
+    QBitArray newChannelFlags = m_d->channelFlags;
+
+    if(newChannelFlags.isEmpty())
+        newChannelFlags = colorSpace()->channelFlags(true, true);
+
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        newChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        newChannelFlags |= colorSpace()->channelFlags(false, true);
+
+    setChannelFlags(newChannelFlags);
 }
 
 bool KisLayer::alphaChannelDisabled() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->channelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->channelFlags;
     return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
 }
 
 
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
-    m_d->channelFlags = channelFlags;
+    Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
+
+    if (!channelFlags.isEmpty() &&
+        channelFlags == QBitArray(channelFlags.size(), true)) {
+
+        m_d->channelFlags.clear();
+    } else {
+        m_d->channelFlags = channelFlags;
+    }
 }
 
 QBitArray & KisLayer::channelFlags() const
@@ -237,12 +248,6 @@ void KisLayer::setImage(KisImageWSP image)
     }
 }
 
-void KisLayer::setDirty(const QRect & rect)
-{
-    KisNode::setDirty(rect);
-    m_d->clonesList.setDirty(rect);
-}
-
 void KisLayer::registerClone(KisCloneLayerWSP clone)
 {
     m_d->clonesList.addClone(clone);
@@ -258,29 +263,42 @@ const QList<KisCloneLayerWSP> KisLayer::registeredClones() const
     return m_d->clonesList.registeredClones();
 }
 
+bool KisLayer::hasClones() const
+{
+    return m_d->clonesList.hasClones();
+}
+
+void KisLayer::updateClones(const QRect &rect)
+{
+    m_d->clonesList.setDirty(rect);
+}
+
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
     KoProperties properties;
     properties.setProperty("active", true);
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
-    Q_ASSERT(masks.size() <= 1); // only one active mask at a time
 
-    //finds the active selection mask
-    if (masks.size() == 1) {
-        KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selection;
+    // return the first visible mask
+    foreach (KisNodeSP mask, masks) {
+        if (mask->visible()) {
+            return dynamic_cast<KisSelectionMask*>(mask.data());
+        }
     }
     return 0;
 }
 
 KisSelectionSP KisLayer::selection() const
 {
-    if (selectionMask())
+    if (selectionMask()) {
         return selectionMask()->selection();
-    else if (m_d->image.isValid())
+    }
+    else if (m_d->image) {
         return m_d->image->globalSelection();
-    else
+    }
+    else {
         return 0;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -289,10 +307,6 @@ KisSelectionSP KisLayer::selection() const
 QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
     QList<KisEffectMaskSP> masks;
-
-    if (m_d->previewMask && m_d->previewMask->visible()) {
-        masks.append(m_d->previewMask);
-    }
 
     if (childCount() > 0) {
         KoProperties properties;
@@ -310,7 +324,6 @@ QList<KisEffectMaskSP> KisLayer::effectMasks() const
 
 bool KisLayer::hasEffectMasks() const
 {
-    if (m_d->previewMask && m_d->previewMask->visible()) return true;
     if (childCount() == 0) return false;
 
     KoProperties properties;
@@ -450,7 +463,6 @@ QRect KisLayer::updateProjection(const QRect& rect)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
-
     if (!rect.isValid() ||
             !visible() ||
             !originalDevice) return QRect();
@@ -458,6 +470,7 @@ QRect KisLayer::updateProjection(const QRect& rect)
     if (!needProjection() && !hasEffectMasks()) {
         m_d->safeProjection.freeDevice();
     } else {
+
         if (!updatedRect.isEmpty()) {
             KisPaintDeviceSP projection =
                 m_d->safeProjection.getDeviceLazy(originalDevice);
@@ -510,7 +523,9 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h,
+                                           KoColorConversionTransformation::InternalRenderingIntent,
+                                           KoColorConversionTransformation::InternalConversionFlags) : QImage();
 }
 
 qint32 KisLayer::x() const
@@ -546,23 +561,6 @@ QRect KisLayer::exactBounds() const
 {
     KisPaintDeviceSP originalDevice = original();
     return originalDevice ? originalDevice->exactBounds() : QRect();
-}
-
-
-void KisLayer::setPreviewMask(KisEffectMaskSP mask)
-{
-    m_d->previewMask = mask;
-    m_d->previewMask->setParent(this);
-}
-
-KisEffectMaskSP KisLayer::previewMask() const
-{
-    return m_d->previewMask;
-}
-
-void KisLayer::removePreviewMask()
-{
-    m_d->previewMask = 0;
 }
 
 KisLayerSP KisLayer::parentLayer() const

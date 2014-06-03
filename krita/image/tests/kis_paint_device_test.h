@@ -19,7 +19,7 @@
 #ifndef KIS_PAINT_DEVICE_TESTER_H
 #define KIS_PAINT_DEVICE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisPaintDeviceTest : public QObject
 {
@@ -33,6 +33,7 @@ private slots:
     void testClear();
     void testCrop();
     void testThumbnail();
+    void testThumbnailDeviceWithOffset();
     void testCaching();
     void testRegion();
     void testPixel();
@@ -47,6 +48,18 @@ private slots:
     void testSharedDataManager();
     void testTranslate();
     void testOpacity();
+    void testExactBoundsWeirdNullAlphaCase();
+    void benchmarkExactBoundsNullDefaultPixel();
+
+    void testReadBytesWrapAround();
+    void testWrappedRandomAccessor();
+    void testWrappedHLineIterator();
+    void testWrappedVLineIterator();
+    void testWrappedHLineIteratorReadMoreThanBounds();
+    void testWrappedVLineIteratorReadMoreThanBounds();
+    void testMoveWrapAround();
+
+    void testCacheState();
 };
 
 #endif

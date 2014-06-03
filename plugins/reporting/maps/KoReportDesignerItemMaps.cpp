@@ -26,7 +26,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QBuffer>
 #include <kcodecs.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QPainter>
 #include <kdebug.h>
 #include <klocalizedstring.h>

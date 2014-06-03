@@ -20,7 +20,7 @@
 #ifndef _TEST_KO_COLOR_H_
 #define _TEST_KO_COLOR_H_
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestKoColor : public QObject
 {

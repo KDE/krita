@@ -25,7 +25,7 @@
 
 #include "koodf_export.h"
 
-#include <QtGui/QPrinter>
+#include <QPrinter>
 
 /// The page formats calligra supports
 namespace KoPageFormat
@@ -125,7 +125,12 @@ KOODF_EXPORT QString name(Format format);
 /**
  * Lists the translated names of all the available formats
  */
-KOODF_EXPORT QStringList allFormats();
+KOODF_EXPORT QStringList localizedPageFormatNames();
+
+/**
+ * Lists the non-translated names of all the available formats
+ */
+KOODF_EXPORT QStringList pageFormatNames();
 
 /**
  * Try to find the paper format for the given width and height (in mm).

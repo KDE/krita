@@ -19,7 +19,7 @@
 #ifndef __FREEHAND_STROKE_TEST_H
 #define __FREEHAND_STROKE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 
 class FreehandStrokeTest : public QObject
@@ -30,6 +30,8 @@ private slots:
     void testAutobrushStroke();
     void testHatchingStroke();
     void testColorSmudgeStroke();
+    void testAutoTextured17();
+    void testAutoTextured38();
 };
 
 #endif /* __FREEHAND_STROKE_TEST_H */

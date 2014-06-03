@@ -39,14 +39,14 @@
 **
 ****************************************************************************/
 
-#include <QtCore/qdebug.h>
-#include <KDE/KLocale>
+#include <QDebug>
+#include <klocale.h>
 #include <kstandardaction.h>
-#include <kicon.h>
 #include <kactioncollection.h>
 #include "kundo2stack.h"
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
+#include <KoIcon.h>
 
 #ifndef QT_NO_UNDOCOMMAND
 
@@ -111,11 +111,13 @@
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent)
+KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
+    m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
-    if (parent != 0)
+    if (parent != 0) {
         parent->d->child_list.append(this);
+    }
     setText(text);
 }
 
@@ -129,7 +131,8 @@ KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent)
     \sa ~KUndo2Command()
 */
 
-KUndo2Command::KUndo2Command(KUndo2Command *parent)
+KUndo2Command::KUndo2Command(KUndo2Command *parent):
+    m_hasParent(parent != 0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)
@@ -308,6 +311,11 @@ const KUndo2Command *KUndo2Command::child(int index) const
     if (index < 0 || index >= d->child_list.count())
         return 0;
     return d->child_list.at(index);
+}
+
+bool KUndo2Command::hasParent()
+{
+    return m_hasParent;
 }
 
 #endif // QT_NO_UNDOCOMMAND
@@ -870,7 +878,7 @@ QAction *KUndo2QStack::createRedoAction(QObject *parent) const
     connect(this, SIGNAL(canRedoChanged(bool)),
             result, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(redoTextChanged(QString)),
-            result, SLOT(setPrefixText(QString)));
+            result, SLOT(setPrefixedText(QString)));
     connect(result, SIGNAL(triggered()), this, SLOT(redo()));
     return result;
 }
@@ -1070,7 +1078,7 @@ QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, cons
         action->setObjectName(actionName);
     }
 
-    action->setIcon(KIcon("edit-redo"));
+    action->setIcon(koIcon("edit-redo"));
     action->setIconText(i18n("Redo"));
     action->setShortcuts(KStandardShortcut::redo());
 
@@ -1089,7 +1097,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
         action->setObjectName(actionName);
     }
 
-    action->setIcon(KIcon("edit-undo"));
+    action->setIcon(koIcon("edit-undo"));
     action->setIconText(i18n("Undo"));
     action->setShortcuts(KStandardShortcut::undo());
 

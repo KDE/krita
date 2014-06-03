@@ -20,19 +20,16 @@
 #include "kis_projection_benchmark.h"
 #include "kis_benchmark_values.h"
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
 #include <kis_group_layer.h>
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 
 void KisProjectionBenchmark::initTestCase()
 {
-    
+
 }
 
 void KisProjectionBenchmark::cleanupTestCase()
@@ -54,6 +51,7 @@ void KisProjectionBenchmark::benchmarkLoading()
 {
     QBENCHMARK{
         KisDoc2 doc;
+
         doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     }
 }

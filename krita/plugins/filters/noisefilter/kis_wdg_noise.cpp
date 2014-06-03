@@ -21,7 +21,7 @@
 #include "kis_wdg_noise.h"
 
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <knuminput.h>
 

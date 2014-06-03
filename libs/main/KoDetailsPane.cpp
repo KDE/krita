@@ -56,7 +56,7 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentDa
 
     m_previewLabel->installEventFilter(this);
     m_documentList->installEventFilter(this);
-    m_documentList->setIconSize(QSize(64, 64));
+    m_documentList->setIconSize(QSize(IconExtent, IconExtent));
     m_documentList->setModel(d->m_model);
     m_splitter->setSizes(QList<int>() << 2 << 1);
 

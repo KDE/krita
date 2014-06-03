@@ -25,9 +25,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
-#include <KoColorSpace.h>
 #include <KoPathShape.h>
 
 #include "kis_count_visitor.h"
@@ -60,7 +58,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 
     QDomDocument dom;
     QDomElement image = dom.createElement("IMAGE"); // Legacy!
-    KisSaveXmlVisitor visitor(dom, image, count, true);
+    KisSaveXmlVisitor visitor(dom, image, count, "", true);
 
     Q_ASSERT(doc->image());
 
@@ -75,7 +73,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 
     QCOMPARE((int)visitor.m_count, (int)cv.count());
 
-    delete doc;
+    //delete doc;
 }
 
 QTEST_KDEMAIN(KisKraSaveXmlVisitorTest, GUI)

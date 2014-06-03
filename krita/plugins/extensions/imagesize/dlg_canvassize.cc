@@ -1,6 +1,7 @@
 /*
  *
  *  Copyright (c) 2009 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2013 Juan Palacios <jpalaciosdev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,65 +21,133 @@
 #include "dlg_canvassize.h"
 #include "kcanvaspreview.h"
 
+#include <KoUnit.h>
+#include <KoIcon.h>
+#include <KoSizeGroup.h>
 #include <klocalizedstring.h>
 
-#include <math.h>
+// used to extend KoUnit in comboboxes
+static const QString percentStr(i18n("Percent (%)"));
 
-
-DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
-        : KDialog(parent), m_originalWidth(width), m_originalHeight(height), m_aspectRatio((double)width / height), m_keepAspect(true)
+DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double resolution)
+        : KDialog(parent)
+        , m_keepAspect(true)
+        , m_aspectRatio((double)width / height)
+        , m_resolution(resolution)
+        , m_originalWidth(width)
+        , m_originalHeight(height)
+        , m_newWidth(width)
+        , m_newHeight(height)
+        , m_xOffset(0)
+        , m_yOffset(0)
 {
     setCaption(i18n("Canvas Size"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
     m_page = new WdgCanvasSize(this);
-    m_page->layout()->setMargin(0);
     Q_CHECK_PTR(m_page);
+    m_page->layout()->setMargin(0);
     m_page->setObjectName("canvas_size");
 
+    m_page->newWidth->setValue(width);
+    m_page->newWidth->setFocus();
+    m_page->newHeight->setValue(height);
+
+    m_page->newWidthDouble->setVisible(false);
+    m_page->newHeightDouble->setVisible(false);
+
+    m_page->widthUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->widthUnit->addItem(percentStr);
+    m_page->heightUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->heightUnit->addItem(percentStr);
+
+    const int pixelUnitIndex = KoUnit(KoUnit::Pixel).indexInListForUi();
+    m_page->widthUnit->setCurrentIndex(pixelUnitIndex);
+    m_page->heightUnit->setCurrentIndex(pixelUnitIndex);
+
+    m_page->xOffsetDouble->setVisible(false);
+    m_page->yOffsetDouble->setVisible(false);
+
+    m_page->xOffUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->xOffUnit->addItem(percentStr);
+    m_page->yOffUnit->addItems(KoUnit::listOfUnitNameForUi());
+    m_page->yOffUnit->addItem(percentStr);
+
+    m_page->xOffUnit->setCurrentIndex(pixelUnitIndex);
+    m_page->yOffUnit->setCurrentIndex(pixelUnitIndex);
+
+    m_page->canvasPreview->setImageSize(m_originalWidth, m_originalHeight);
+    m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
+    m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+
+    m_page->aspectRatioBtn->setKeepAspectRatio(true);
+    m_page->aspectRatioCkb->setChecked(true);
+
+    m_group = new QButtonGroup(m_page);
+    m_group->addButton(m_page->topLeft, NORTH_WEST);
+    m_group->addButton(m_page->topCenter, NORTH);
+    m_group->addButton(m_page->topRight, NORTH_EAST);
+
+    m_group->addButton(m_page->middleLeft, WEST);
+    m_group->addButton(m_page->middleCenter, CENTER);
+    m_group->addButton(m_page->middleRight, EAST);
+
+    m_group->addButton(m_page->bottomLeft, SOUTH_WEST);
+    m_group->addButton(m_page->bottomCenter, SOUTH);
+    m_group->addButton(m_page->bottomRight, SOUTH_EAST);
+
+    loadAnchorIcons();
+    m_group->button(CENTER)->setChecked(true);
+    updateAnchorIcons(CENTER);
+
+    KoSizeGroup *labelsGroup = new KoSizeGroup(this);
+    labelsGroup->addWidget(m_page->lblNewWidth);
+    labelsGroup->addWidget(m_page->lblNewHeight);
+    labelsGroup->addWidget(m_page->lblXOff);
+    labelsGroup->addWidget(m_page->lblYOff);
+    labelsGroup->addWidget(m_page->lblAnchor);
+
+    KoSizeGroup *spinboxesGroup = new KoSizeGroup(this);
+    spinboxesGroup->addWidget(m_page->newWidth);
+    spinboxesGroup->addWidget(m_page->newWidthDouble);
+    spinboxesGroup->addWidget(m_page->newHeight);
+    spinboxesGroup->addWidget(m_page->newHeightDouble);
+    spinboxesGroup->addWidget(m_page->xOffset);
+    spinboxesGroup->addWidget(m_page->xOffsetDouble);
+    spinboxesGroup->addWidget(m_page->yOffset);
+    spinboxesGroup->addWidget(m_page->yOffsetDouble);
+
+    KoSizeGroup *comboboxesGroup = new KoSizeGroup(this);
+    comboboxesGroup->addWidget(m_page->widthUnit);
+    comboboxesGroup->addWidget(m_page->heightUnit);
+    comboboxesGroup->addWidget(m_page->xOffUnit);
+    comboboxesGroup->addWidget(m_page->yOffUnit);
+
+    setMainWidget(m_page);
     connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
 
     connect(m_page->newWidth, SIGNAL(valueChanged(int)), this, SLOT(slotWidthChanged(int)));
     connect(m_page->newHeight, SIGNAL(valueChanged(int)), this, SLOT(slotHeightChanged(int)));
+    connect(m_page->newWidthDouble, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
+    connect(m_page->newHeightDouble, SIGNAL(valueChanged(double)), this, SLOT(slotHeightChanged(double)));
+    connect(m_page->widthUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWidthUnitChanged(int)));
+    connect(m_page->heightUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotHeightUnitChanged(int)));
 
     connect(m_page->xOffset, SIGNAL(valueChanged(int)), this, SLOT(slotXOffsetChanged(int)));
     connect(m_page->yOffset, SIGNAL(valueChanged(int)), this, SLOT(slotYOffsetChanged(int)));
+    connect(m_page->xOffsetDouble, SIGNAL(valueChanged(double)), this, SLOT(slotXOffsetChanged(double)));
+    connect(m_page->yOffsetDouble, SIGNAL(valueChanged(double)), this, SLOT(slotYOffsetChanged(double)));
+    connect(m_page->xOffUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotXOffsetUnitChanged(int)));
+    connect(m_page->yOffUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotYOffsetUnitChanged(int)));
 
-    connect(m_page->topLeft, SIGNAL(clicked()), this, SLOT(slotTopLeftClicked()));
-    connect(m_page->topCenter, SIGNAL(clicked()), this, SLOT(slotTopCenterClicked()));
-    connect(m_page->topRight, SIGNAL(clicked()), this, SLOT(slotTopRightClicked()));
-    connect(m_page->middleLeft, SIGNAL(clicked()), this, SLOT(slotMiddleLeftClicked()));
-    connect(m_page->middleCenter, SIGNAL(clicked()), this, SLOT(slotMiddleCenterClicked()));
-    connect(m_page->middleRight, SIGNAL(clicked()), this, SLOT(slotMiddleRightClicked()));
-    connect(m_page->bottomLeft, SIGNAL(clicked()), this, SLOT(slotBottomLeftClicked()));
-    connect(m_page->bottomCenter, SIGNAL(clicked()), this, SLOT(slotBottomCenterClicked()));
-    connect(m_page->bottomRight, SIGNAL(clicked()), this, SLOT(slotBottomRightClicked()));
+    connect(m_page->aspectRatioCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
+    connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
 
-    connect(m_page->comboWidthUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotWidthUnitChanged(QString)));
-    connect(m_page->comboHeightUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotHeightUnitChanged(QString)));
-
-    connect(m_page->aspectRatio, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
-
-    connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), m_page->xOffset, SLOT(setValue(int)));
-    connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), m_page->yOffset, SLOT(setValue(int)));
-
-    m_page->xOffset->setMinimum(-width + 1);
-    m_page->xOffset->setMaximum(width - 1);
-    m_page->yOffset->setMinimum(-height + 1);
-    m_page->yOffset->setMaximum(height - 1);
-
-    m_page->newWidth->setValue(width);
-    m_page->newHeight->setValue(height);
-
-    m_page->canvasPreview->setImageSize(m_originalWidth, m_originalHeight);
-    m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
-    m_page->canvasPreview->setImageOffset(0, 0);
-
-    loadAnchorIcons();
-    updateAnchorIcons(CENTER);
-
-    setMainWidget(m_page);
+    connect(m_group, SIGNAL(buttonClicked(int)), SLOT(slotAnchorButtonClicked(int)));
+    connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), this, SLOT(slotCanvasPreviewXOffsetChanged(int)));
+    connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), this, SLOT(slotCanvasPreviewYOffsetChanged(int)));
 }
 
 DlgCanvasSize::~DlgCanvasSize()
@@ -108,185 +177,356 @@ qint32 DlgCanvasSize::yOffset()
 
 void DlgCanvasSize::slotAspectChanged(bool keep)
 {
+    m_page->aspectRatioBtn->blockSignals(true);
+    m_page->aspectRatioCkb->blockSignals(true);
+
+    m_page->aspectRatioBtn->setKeepAspectRatio(keep);
+    m_page->aspectRatioCkb->setChecked(keep);
+
+    m_page->aspectRatioBtn->blockSignals(false);
+    m_page->aspectRatioCkb->blockSignals(false);
+
     m_keepAspect = keep;
+
+
+    if (keep) {
+        // size values may be out of sync, so we need to reset it to defaults
+        m_newWidth = m_originalWidth;
+        m_newHeight = m_originalHeight;
+        m_xOffset = 0;
+        m_yOffset = 0;
+
+        updateWidthUIValue(m_newWidth);
+        updateHeightUIValue(m_newHeight);
+        updateXOffsetUIValue(m_xOffset);
+        updateYOffsetUIValue(m_yOffset);
+
+        m_page->canvasPreview->blockSignals(true);
+        m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+        m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+        m_page->canvasPreview->blockSignals(false);
+        updateOffset(CENTER);
+        updateButtons(CENTER);
+    }
+}
+
+void DlgCanvasSize::slotAnchorButtonClicked(int id)
+{
+    updateOffset(id);
+    updateButtons(id);
 }
 
 void DlgCanvasSize::slotWidthChanged(int v)
 {
-    QString index = m_page->comboWidthUnit->currentText();
-
-    m_newWidth = v;
-    if (index == i18n("Percent"))
-        m_newWidth = m_page->newWidth->value() / 100.0f * m_originalWidth;
-
-    m_page->xOffset->setMaximum(m_newWidth - 1);
-
-    if (m_keepAspect) {
-        m_newHeight = (qint32)round(m_newWidth / m_aspectRatio);
-
-        m_page->yOffset->setMaximum(m_newHeight - 1);
-
-        m_page->newHeight->blockSignals(true);
-        slotHeightUnitChanged(QString());
-        m_page->newHeight->blockSignals(false);
-    }
-
-    m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+    slotWidthChanged((double) v);
 }
 
 void DlgCanvasSize::slotHeightChanged(int v)
 {
-    QString index = m_page->comboWidthUnit->currentText();
+    slotHeightChanged((double) v);
+}
 
-    m_newHeight = v;
-    if (index == i18n("Percent"))
-        m_newHeight = m_page->newHeight->value() / 100.0f * m_originalHeight;
-
-    if (m_keepAspect) {
-        m_newWidth = (qint32)round(m_newHeight * m_aspectRatio);
-
-        m_page->xOffset->setMaximum(m_newWidth - 1);
-
-        m_page->newWidth->blockSignals(true);
-        slotWidthUnitChanged(QString());
-        m_page->newWidth->blockSignals(false);
+void DlgCanvasSize::slotWidthChanged(double v)
+{
+    if (m_page->widthUnit->currentText() == percentStr) {
+        m_newWidth = qRound((v * m_originalWidth) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->widthUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? v : (v * m_resolution);
+        m_newWidth = qRound(selectedUnit.fromUserValue(resValue));
     }
 
+    if (m_keepAspect) {
+        m_newHeight = qRound(m_newWidth / m_aspectRatio);
+        updateHeightUIValue(m_newHeight);
+    }
+
+    int savedId = m_group->checkedId();
+    m_page->canvasPreview->blockSignals(true);
     m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+    m_page->canvasPreview->blockSignals(false);
+    updateOffset(savedId);
+    updateButtons(savedId);
+}
+
+void DlgCanvasSize::slotHeightChanged(double v)
+{
+    if (m_page->heightUnit->currentText() == percentStr) {
+        m_newHeight = qRound((v * m_originalHeight) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->heightUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? v : (v * m_resolution);
+        m_newHeight = qRound(selectedUnit.fromUserValue(resValue));
+    }
+
+    if (m_keepAspect) {
+        m_newWidth = qRound(m_newHeight * m_aspectRatio);
+        updateWidthUIValue(m_newWidth);
+    }
+
+    int savedId = m_group->checkedId();
+    m_page->canvasPreview->blockSignals(true);
+    m_page->canvasPreview->setCanvasSize(m_newWidth, m_newHeight);
+    m_page->canvasPreview->blockSignals(false);
+    updateOffset(savedId);
+    updateButtons(savedId);
+}
+
+void DlgCanvasSize::slotWidthUnitChanged(int index)
+{
+    updateWidthUIValue(m_newWidth);
+
+    if (m_page->widthUnit->currentText() == percentStr) {
+        m_page->newWidth->setVisible(false);
+        m_page->newWidthDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->newWidth->setVisible(false);
+            m_page->newWidthDouble->setVisible(true);
+        } else {
+            m_page->newWidth->setVisible(true);
+            m_page->newWidthDouble->setVisible(false);
+        }
+    }
+}
+
+void DlgCanvasSize::slotHeightUnitChanged(int index)
+{
+    updateHeightUIValue(m_newHeight);
+
+    if (m_page->heightUnit->currentText() == percentStr) {
+        m_page->newHeight->setVisible(false);
+        m_page->newHeightDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->newHeight->setVisible(false);
+            m_page->newHeightDouble->setVisible(true);
+        } else {
+            m_page->newHeight->setVisible(true);
+            m_page->newHeightDouble->setVisible(false);
+        }
+    }
 }
 
 void DlgCanvasSize::slotXOffsetChanged(int v)
 {
-    m_xOffset = v;
-    m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+    slotXOffsetChanged((double) v);
 }
 
 void DlgCanvasSize::slotYOffsetChanged(int v)
 {
-    m_yOffset = v;
+    slotYOffsetChanged((double) v);
+}
+
+void DlgCanvasSize::slotXOffsetChanged(double v)
+{
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        m_xOffset = qRound((v * m_newWidth) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? v : (v * m_resolution);
+        m_xOffset = qRound(selectedUnit.fromUserValue(resValue));
+    }
+
+    m_page->canvasPreview->blockSignals(true);
     m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+    m_page->canvasPreview->blockSignals(false);
+
+    updateButtons(-1);
 }
 
-void DlgCanvasSize::slotTopLeftClicked()
+void DlgCanvasSize::slotYOffsetChanged(double v)
 {
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue(0);
-
-    updateAnchorIcons(NORTH_WEST);
-}
-
-void DlgCanvasSize::slotTopCenterClicked()
-{
-    m_page->xOffset->setValue((int)((m_newWidth - m_originalWidth) / 2.0));
-    m_page->yOffset->setValue(0);
-
-    updateAnchorIcons(NORTH);
-}
-
-void DlgCanvasSize::slotTopRightClicked()
-{
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue(0);
-
-    updateAnchorIcons(NORTH_EAST);
-}
-
-void DlgCanvasSize::slotMiddleLeftClicked()
-{
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
-
-    updateAnchorIcons(WEST);
-}
-
-void DlgCanvasSize::slotMiddleCenterClicked()
-{
-    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
-
-    updateAnchorIcons(CENTER);
-}
-
-void DlgCanvasSize::slotMiddleRightClicked()
-{
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
-
-    updateAnchorIcons(EAST);
-}
-
-void DlgCanvasSize::slotBottomLeftClicked()
-{
-    m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH_WEST);
-}
-
-void DlgCanvasSize::slotBottomCenterClicked()
-{
-    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH);
-}
-
-void DlgCanvasSize::slotBottomRightClicked()
-{
-    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
-    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
-
-    updateAnchorIcons(SOUTH_EAST);
-}
-
-void DlgCanvasSize::slotWidthUnitChanged(QString)
-{
-    QString index = m_page->comboWidthUnit->currentText();
-    m_page->newWidth->blockSignals(true);
-
-    if (index == i18n("Pixels")) {
-        m_page->newWidth->setSuffix(QString());
-        m_page->newWidth->setValue(m_newWidth);
-    } else if (index == i18n("Percent")) {
-        m_page->newWidth->setSuffix(QString("%"));
-        m_page->newWidth->setValue(round((float)m_newWidth / m_originalWidth * 100));
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        m_yOffset = qRound((v * m_newHeight) / 100.0);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        const double resValue = (selectedUnit == KoUnit(KoUnit::Pixel)) ? v : (v * m_resolution);
+        m_yOffset = qRound(selectedUnit.fromUserValue(resValue));
     }
 
-    m_page->newWidth->blockSignals(false);
+    m_page->canvasPreview->blockSignals(true);
+    m_page->canvasPreview->setImageOffset(m_xOffset, m_yOffset);
+    m_page->canvasPreview->blockSignals(false);
+
+    updateButtons(-1);
 }
 
-void DlgCanvasSize::slotHeightUnitChanged(QString)
+void DlgCanvasSize::slotXOffsetUnitChanged(int index)
 {
-    QString index = m_page->comboHeightUnit->currentText();
-    m_page->newHeight->blockSignals(true);
+    updateXOffsetUIValue(m_xOffset);
 
-    if (index == QString("Pixels")) {
-        m_page->newHeight->setSuffix(QString());
-        m_page->newHeight->setValue(m_newHeight);
-    } else if (index == QString("Percent")) {
-        m_page->newHeight->setSuffix(QString("%"));
-        m_page->newHeight->setValue(round((float)m_newHeight / m_originalHeight * 100));
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        m_page->xOffset->setVisible(false);
+        m_page->xOffsetDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->xOffset->setVisible(false);
+            m_page->xOffsetDouble->setVisible(true);
+        } else {
+            m_page->xOffset->setVisible(true);
+            m_page->xOffsetDouble->setVisible(false);
+        }
     }
+}
 
-    m_page->newHeight->blockSignals(false);
+void DlgCanvasSize::slotYOffsetUnitChanged(int index)
+{
+    updateYOffsetUIValue(m_yOffset);
+
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        m_page->yOffset->setVisible(false);
+        m_page->yOffsetDouble->setVisible(true);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(index);
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->yOffset->setVisible(false);
+            m_page->yOffsetDouble->setVisible(true);
+        } else {
+            m_page->yOffset->setVisible(true);
+            m_page->yOffsetDouble->setVisible(false);
+        }
+    }
+}
+
+void DlgCanvasSize::slotCanvasPreviewXOffsetChanged(int v)
+{
+    // Convert input value to selected x offset unit.
+    // This will be undone later in slotXOffsetChanged (through spinboxes valueChanged signal).
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        m_page->xOffsetDouble->setValue((v * 100.0) / m_newWidth);
+    } else {
+        const KoUnit pixelUnit(KoUnit::Pixel);
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        //const double convertedValue = xOffsetUnit.convertFromUnitToUnit(v, pixelUnit, xOffsetUnit);
+
+        if (selectedUnit != pixelUnit) {
+            m_page->xOffsetDouble->setValue(selectedUnit.toUserValue(v / m_resolution));
+        } else {
+            m_page->xOffset->setValue(v);
+        }
+    }
+}
+
+void DlgCanvasSize::slotCanvasPreviewYOffsetChanged(int v)
+{
+    // Convert input value to selected y offset unit.
+    // This will be undone later in slotYOffsetChanged (through spinboxes valueChanged signal).
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        m_page->yOffsetDouble->setValue((v * 100.0) / m_newHeight);
+    } else {
+        const KoUnit pixelUnit(KoUnit::Pixel);
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        //const double convertedValue = yOffsetUnit.convertFromUnitToUnit(v, pixelUnit, yOffsetUnit);
+
+        if (selectedUnit != pixelUnit) {
+            m_page->yOffsetDouble->setValue(selectedUnit.toUserValue(v / m_resolution));
+        } else {
+            m_page->yOffset->setValue(v);
+        }
+    }
+}
+
+void DlgCanvasSize::updateWidthUIValue(double value)
+{
+    if (m_page->widthUnit->currentText() == percentStr) {
+        m_page->newWidthDouble->blockSignals(true);
+        m_page->newWidthDouble->setValue((value * 100.0) / m_originalWidth);
+        m_page->newWidthDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->widthUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->newWidthDouble->blockSignals(true);
+            m_page->newWidthDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->newWidthDouble->blockSignals(false);
+        } else {
+            m_page->newWidth->blockSignals(true);
+            m_page->newWidth->setValue(selectedUnit.toUserValue(value));
+            m_page->newWidth->blockSignals(false);
+        }
+    }
+}
+
+void DlgCanvasSize::updateHeightUIValue(double value)
+{
+    if (m_page->heightUnit->currentText() == percentStr) {
+        m_page->newHeightDouble->blockSignals(true);
+        m_page->newHeightDouble->setValue((value * 100.0) / m_originalHeight);
+        m_page->newHeightDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->heightUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->newHeightDouble->blockSignals(true);
+            m_page->newHeightDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->newHeightDouble->blockSignals(false);
+        } else {
+            m_page->newHeight->blockSignals(true);
+            m_page->newHeight->setValue(selectedUnit.toUserValue(value));
+            m_page->newHeight->blockSignals(false);
+        }
+    }
+}
+
+void DlgCanvasSize::updateXOffsetUIValue(double value)
+{
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        m_page->xOffsetDouble->blockSignals(true);
+        m_page->xOffsetDouble->setValue((value * 100.0) / m_newWidth);
+        m_page->xOffsetDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->xOffsetDouble->blockSignals(true);
+            m_page->xOffsetDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->xOffsetDouble->blockSignals(false);
+        } else {
+            m_page->xOffset->blockSignals(true);
+            m_page->xOffset->setValue(qRound(selectedUnit.toUserValue(value)));
+            m_page->xOffset->blockSignals(false);
+        }
+    }
+}
+
+void DlgCanvasSize::updateYOffsetUIValue(double value)
+{
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        m_page->yOffsetDouble->blockSignals(true);
+        m_page->yOffsetDouble->setValue((value * 100.0) / m_newHeight);
+        m_page->yOffsetDouble->blockSignals(false);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        if (selectedUnit != KoUnit(KoUnit::Pixel)) {
+            m_page->yOffsetDouble->blockSignals(true);
+            m_page->yOffsetDouble->setValue(selectedUnit.toUserValue(value / m_resolution));
+            m_page->yOffsetDouble->blockSignals(false);
+        } else {
+            m_page->yOffset->blockSignals(true);
+            m_page->yOffset->setValue(qRound(selectedUnit.toUserValue(value)));
+            m_page->yOffset->blockSignals(false);
+        }
+    }
 }
 
 void DlgCanvasSize::loadAnchorIcons()
 {
-    m_anchorIcons[NORTH_WEST] =  KIcon("arrow_north_west.png");
-    m_anchorIcons[NORTH] = KIcon("arrow_north.png");
-    m_anchorIcons[NORTH_EAST] = KIcon("arrow_north_east.png");
-    m_anchorIcons[EAST] = KIcon("arrow_east.png");
-    m_anchorIcons[CENTER] = KIcon("arrow_center.png");
-    m_anchorIcons[WEST] = KIcon("arrow_west.png");
-    m_anchorIcons[SOUTH_WEST] = KIcon("arrow_south_west.png");
-    m_anchorIcons[SOUTH] = KIcon("arrow_south.png");
-    m_anchorIcons[SOUTH_EAST] = KIcon("arrow_south_east.png");
+    m_anchorIcons[NORTH_WEST] =  koIcon("arrow_north_west");
+    m_anchorIcons[NORTH] = koIcon("arrow_north");
+    m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
+    m_anchorIcons[EAST] = koIcon("arrow_east");
+    m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
+    m_anchorIcons[WEST] = koIcon("arrow_west");
+    m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
+    m_anchorIcons[SOUTH] = koIcon("arrow_south");
+    m_anchorIcons[SOUTH_EAST] = koIcon("arrow_south_east");
 }
 
-void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)
+void DlgCanvasSize::updateAnchorIcons(int id)
 {
-    anchor iconLayout[9][9] = { {NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE, NONE, NONE, NONE},
+    anchor iconLayout[10][9] = {
+        {NONE, EAST,  NONE, SOUTH, SOUTH_EAST, NONE, NONE, NONE, NONE},
         {WEST, NONE, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE, NONE, NONE},
         {NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH, NONE, NONE, NONE},
         {NORTH, NORTH_EAST, NONE, NONE, EAST, NONE, SOUTH, SOUTH_EAST, NONE},
@@ -294,27 +534,160 @@ void DlgCanvasSize::updateAnchorIcons(anchor enumAnchor)
         {NONE, NORTH_WEST, NORTH, NONE, WEST, NONE, NONE, SOUTH_WEST, SOUTH},
         {NONE, NONE, NONE, NORTH, NORTH_EAST, NONE, NONE, EAST, NONE},
         {NONE, NONE, NONE, NORTH_WEST, NORTH, NORTH_EAST, WEST, NONE, EAST},
-        {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE}
+        {NONE, NONE, NONE, NONE, NORTH_WEST, NORTH, NONE, WEST, NONE},
+        {NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE}
     };
 
-    setButtonIcon(m_page->topLeft, iconLayout[enumAnchor][NORTH_WEST]);
-    setButtonIcon(m_page->topCenter, iconLayout[enumAnchor][NORTH]);
-    setButtonIcon(m_page->topRight, iconLayout[enumAnchor][NORTH_EAST]);
-    setButtonIcon(m_page->middleLeft, iconLayout[enumAnchor][WEST]);
-    setButtonIcon(m_page->middleCenter, iconLayout[enumAnchor][CENTER]);
-    setButtonIcon(m_page->middleRight, iconLayout[enumAnchor][EAST]);
-    setButtonIcon(m_page->bottomLeft, iconLayout[enumAnchor][SOUTH_WEST]);
-    setButtonIcon(m_page->bottomCenter, iconLayout[enumAnchor][SOUTH]);
-    setButtonIcon(m_page->bottomRight, iconLayout[enumAnchor][SOUTH_EAST]);
+    if (id == -1) {
+        id = SOUTH_EAST + 1;
+    }
+
+    // we are going to swap arrows direction based on width and height shrinking
+    bool shrinkWidth = (m_newWidth < m_originalWidth) ? true : false;
+    bool shrinkHeight = (m_newHeight < m_originalHeight) ? true : false;
+
+    for (int i = NORTH_WEST; i <= SOUTH_EAST; i++) {
+        anchor iconId = iconLayout[id][i];
+
+        // all corner arrows represents shrinking in some direction
+        if (shrinkWidth || shrinkHeight) {
+            switch (iconId) {
+            case NORTH_WEST: iconId = SOUTH_EAST; break;
+            case NORTH_EAST: iconId = SOUTH_WEST; break;
+            case SOUTH_WEST: iconId = NORTH_EAST; break;
+            case SOUTH_EAST: iconId = NORTH_WEST; break;
+            default: break;
+            }
+        }
+
+        if (shrinkWidth) {
+            switch (iconId) {
+            case WEST: iconId = EAST; break;
+            case EAST: iconId = WEST; break;
+            default: break;
+            }
+        }
+
+        if (shrinkHeight) {
+            switch (iconId) {
+            case NORTH: iconId = SOUTH; break;
+            case SOUTH: iconId = NORTH; break;
+            default: break;
+            }
+        }
+
+        QAbstractButton *button = m_group->button(i);
+
+        if (iconId == NONE) {
+            button->setIcon(KIcon());
+        } else {
+            button->setIcon(m_anchorIcons[iconId]);
+        }
+    }
+
 }
 
-void DlgCanvasSize::setButtonIcon(QPushButton *button, anchor enumAnchorIcon)
+void DlgCanvasSize::updateButtons(int forceId)
 {
-    if (enumAnchorIcon == NONE) {
-        button->setIcon(KIcon());
+    int id = m_group->checkedId();
+
+    if (forceId != -1) {
+        m_group->setExclusive(true);
+        m_group->button(forceId)->setChecked(true);
+        updateAnchorIcons(forceId);
+    } else if (id != -1) {
+        double xOffset, yOffset;
+        expectedOffset(id, xOffset, yOffset);
+
+        // convert values to internal unit
+        int internalXOffset = 0;
+        int internalYOffset = 0;
+        if (m_page->xOffUnit->currentText() == percentStr) {
+            internalXOffset = qRound((xOffset * m_newWidth) / 100.0);
+            internalYOffset = qRound((yOffset * m_newHeight) / 100.0);
+        } else {
+            const KoUnit xOffsetUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+            internalXOffset = qRound(xOffsetUnit.fromUserValue(xOffset));
+            const KoUnit yOffsetUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+            internalYOffset = qRound(yOffsetUnit.fromUserValue(yOffset));
+        }
+
+        bool offsetAsExpected =
+            internalXOffset == m_xOffset &&
+            internalYOffset == m_yOffset;
+
+        if (offsetAsExpected) {
+            m_group->setExclusive(true);
+        } else {
+            m_group->setExclusive(false);
+            m_group->button(id)->setChecked(false);
+            id = -1;
+        }
+
+        updateAnchorIcons(id);
     } else {
-        button->setIcon(m_anchorIcons[enumAnchorIcon]);
+        updateAnchorIcons(id);
     }
 }
 
-#include "dlg_canvassize.moc"
+void DlgCanvasSize::updateOffset(int id)
+{
+    if (id == -1) return;
+
+    double xOffset;
+    double yOffset;
+    expectedOffset(id, xOffset, yOffset);
+
+    const KoUnit pixelUnit(KoUnit::Pixel);
+
+    // update spinbox value (other widgets will be autoupdated later through valueChanged signal)
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        m_page->xOffsetDouble->setValue(xOffset);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        if (pixelUnit != selectedUnit) {
+            m_page->xOffsetDouble->setValue(xOffset);
+        } else {
+            m_page->xOffset->setValue(qRound(xOffset));
+        }
+    }
+
+    // update spinbox value (other widgets will be autoupdated later through valueChanged signal)
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        m_page->yOffsetDouble->setValue(yOffset);
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        if (pixelUnit != selectedUnit) {
+            m_page->yOffsetDouble->setValue(yOffset);
+        } else {
+            m_page->yOffset->setValue(qRound(yOffset));
+        }
+    }
+}
+
+void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
+{
+    const double xCoeff = (id % 3) * 0.5;
+    const double yCoeff = (id / 3) * 0.5;
+
+    const int xDiff = m_newWidth - m_originalWidth;
+    const int yDiff = m_newHeight - m_originalHeight;
+
+    // use selected unit to convert expected values (the inverse will be do later)
+    // so output values are now considered as if they were regular user input
+    if (m_page->xOffUnit->currentText() == percentStr) {
+        xOffset = (xDiff * xCoeff * 100.0) / m_newWidth;
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->xOffUnit->currentIndex());
+        const double resXDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? xDiff / m_resolution : xDiff;
+        xOffset = selectedUnit.toUserValue(resXDiff * xCoeff);
+    }
+
+    if (m_page->yOffUnit->currentText() == percentStr) {
+        yOffset = (yDiff * yCoeff * 100.0) / m_newHeight;
+    } else {
+        const KoUnit selectedUnit = KoUnit::fromListForUi(m_page->yOffUnit->currentIndex());
+        const double resYDiff = (selectedUnit != KoUnit(KoUnit::Pixel)) ? yDiff / m_resolution : yDiff;
+        yOffset = selectedUnit.toUserValue(resYDiff * yCoeff);
+    }
+}

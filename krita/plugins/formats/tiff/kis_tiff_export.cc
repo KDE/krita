@@ -27,7 +27,9 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
+#include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
+#include <KoFilterManager.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -61,11 +63,11 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
-    if (!output)
-        return KoFilter::CreationError;
+    KisDoc2 *input = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    if (!input)
+        return KoFilter::NoDocumentCreated;
 
-    const KoColorSpace* cs = output->image()->colorSpace();
+    const KoColorSpace* cs = input->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
         kdb->optionswdg->kComboBoxPredictor->removeItem(1);
@@ -75,11 +77,18 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     if (cs->colorModelId() == CMYKAColorModelID) {
         kdb->optionswdg->alpha->setChecked(false);
+        kdb->optionswdg->alpha->setEnabled(false);
     }
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::UserCancelled;
+        }
+    }
+    else {
+        qApp->processEvents(); // For vector layers to be updated
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::UserCancelled;
     }
+    input->image()->waitForDone();
 
     KisTIFFOptions options = kdb->options();
 
@@ -95,28 +104,28 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KUrl url;
     url.setPath(filename);
 
-    KisImageWSP image;
+    KisImageSP image;
 
     if (options.flatten) {
-        image = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");
-        image->setResolution(output->image()->xRes(), output->image()->yRes());
-        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->image()->projection()));
+        image = new KisImage(0, input->image()->width(), input->image()->height(), input->image()->colorSpace(), "");
+        image->setResolution(input->image()->xRes(), input->image()->yRes());
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*input->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), "projection", OPACITY_OPAQUE_U8, pd));
         image->addNode(KisNodeSP(l.data()), image->rootLayer().data());
-        l->setDirty();
     } else {
-        image = output->image();
+        image = input->image();
     }
 
     image->refreshGraph();
     image->lock();
 
-    KisTIFFConverter ktc(output);
+    KisTIFFConverter ktc(input);
     /*    vKisAnnotationSP_it beginIt = image->beginAnnotations();
         vKisAnnotationSP_it endIt = image->endAnnotations();*/
     KisImageBuilder_Result res;
     if ((res = ktc.buildFile(url, image, options)) == KisImageBuilder_RESULT_OK) {
         dbgFile << "success !";
+        image->unlock();
         return KoFilter::OK;
     }
     image->unlock();

@@ -23,17 +23,78 @@
 #include <QVector>
 #include "krita_export.h"
 #include "kis_types.h"
+#include "kis_group_layer.h"
+
 
 class KoColorSpace;
 class KoColorProfile;
 
-enum KisImageSignalType {
+enum KisImageSignalTypeEnum {
     LayersChangedSignal,
     ModifiedSignal,
     SizeChangedSignal,
     ProfileChangedSignal,
     ColorSpaceChangedSignal,
     ResolutionChangedSignal
+};
+
+/**
+ * A special signal which handles stillPoint capabilities of the image
+ *
+ * \see KisImage::sigSizeChanged()
+ */
+struct ComplexSizeChangedSignal {
+    ComplexSizeChangedSignal() {}
+    ComplexSizeChangedSignal(QPointF _oldStillPoint, QPointF _newStillPoint)
+        : oldStillPoint(_oldStillPoint),
+          newStillPoint(_newStillPoint)
+    {
+    }
+
+    /**
+     * A helper method calculating the still points from image areas
+     * we process. It works as if the source image was "cropped" by \p
+     * portionOfOldImage, and this portion formed the new image of size
+     * \p transformedIntoImageOfSize.
+     *
+     * Note, that \p portionOfTheImage may be equal to the image bounds().
+     */
+    ComplexSizeChangedSignal(const QRect &portionOfOldImage, const QSize &transformedIntoImageOfSize)
+    {
+        oldStillPoint = QRectF(portionOfOldImage).center();
+        newStillPoint = QRectF(QPointF(), QSizeF(transformedIntoImageOfSize)).center();
+    }
+
+    ComplexSizeChangedSignal inverted() const {
+        return ComplexSizeChangedSignal(newStillPoint, oldStillPoint);
+    }
+
+    QPointF oldStillPoint;
+    QPointF newStillPoint;
+};
+
+struct KisImageSignalType {
+    KisImageSignalType() {}
+    KisImageSignalType(KisImageSignalTypeEnum _id)
+    : id(_id)
+    {
+    }
+
+    KisImageSignalType(ComplexSizeChangedSignal signal)
+        : id(SizeChangedSignal),
+          sizeChangedSignal(signal)
+    {
+    }
+
+    KisImageSignalType inverted() const {
+        KisImageSignalType t;
+        t.id = id;
+        t.sizeChangedSignal = sizeChangedSignal.inverted();
+        return t;
+    }
+
+    KisImageSignalTypeEnum id;
+    ComplexSizeChangedSignal sizeChangedSignal;
 };
 
 typedef QVector<KisImageSignalType> KisImageSignalVector;
@@ -49,54 +110,30 @@ public:
     void emitNotification(KisImageSignalType type);
     void emitNotifications(KisImageSignalVector notifications);
 
-    void emitNodeChanged(KisNode *node);
-    void emitAboutToAddANode(KisNode *parent, int index);
+    void emitNodeChanged(KisNodeSP node);
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
-    void emitNodeHasBeenRemoved(KisNode *parent, int index);
-    void emitAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void emitNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-
-private:
-    bool checkSameThread();
 
 private slots:
     void slotNotification(KisImageSignalType type);
 
 signals:
 
-    void __sigNotification(KisImageSignalType type);
-    void __sigNodeChanged(KisNode *node);
-    void __sigAboutToAddANode(KisNode *parent, int index);
-    void __sigNodeHasBeenAdded(KisNode *parent, int index);
-    void __sigAboutToRemoveANode(KisNode *parent, int index);
-    void __sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void __sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void __sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
-
-signals:
-
     void sigNotification(KisImageSignalType type);
 
     // Notifications
-    void sigLayersChanged(KisGroupLayerSP rootLayer);
-    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
-
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
 
-    // Synchronous
-    void sigNodeChanged(KisNode *node);
-    void sigAboutToAddANode(KisNode *parent, int index);
-    void sigNodeHasBeenAdded(KisNode *parent, int index);
-    void sigAboutToRemoveANode(KisNode *parent, int index);
-    void sigNodeHasBeenRemoved(KisNode *parent, int index);
-    void sigAboutToMoveNode(KisNode *parent, int oldIndex, int newIndex);
-    void sigNodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex);
+    // Graph change signals
+    void sigNodeChanged(KisNodeSP node);
+    void sigNodeAddedAsync(KisNodeSP node);
+    void sigRemoveNodeAsync(KisNodeSP node);
+    void sigLayersChangedAsync();
 
 private:
     KisImageWSP m_image;

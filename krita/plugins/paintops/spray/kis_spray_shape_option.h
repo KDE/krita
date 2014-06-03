@@ -41,7 +41,7 @@ public:
 
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
-    
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -50,7 +50,7 @@ private:
     bool m_useAspect;
     qreal m_aspect;
     int m_maxSize;
-    
+
 private:
     void setupBrushPreviewSignals();
     void computeAspect();
@@ -60,35 +60,35 @@ private slots:
     void aspectToggled(bool toggled);
     void updateHeight(int value);
     void updateWidth(int value);
-    
+
     void changeSizeUI(bool proportionalSize);
 };
 
 #include <QImage>
 
-class KisShapeProperties{
+class KisShapeProperties
+{
 public:
     // particle type size
     quint8 shape;
     quint16 width;
     quint16 height;
-    bool enabled;        
+    bool enabled;
     bool proportional;
     // rotation
     QImage image;
-    
+
 public:
-    
-    void loadSettings(const KisPropertiesConfiguration* settings, qreal proportionalWidth, qreal proportionalHeight){
-        enabled = settings->getBool(SPRAYSHAPE_ENABLED,true);
-        
+
+    void loadSettings(const KisPropertiesConfiguration* settings, qreal proportionalWidth, qreal proportionalHeight) {
+        enabled = settings->getBool(SPRAYSHAPE_ENABLED, true);
+
         width = settings->getInt(SPRAYSHAPE_WIDTH);
         height = settings->getInt(SPRAYSHAPE_HEIGHT);
 
         proportional = settings->getBool(SPRAYSHAPE_PROPORTIONAL);
-        
-        if (proportional)
-        {   
+
+        if (proportional) {
             width = (width / 100.0) * proportionalWidth;
             height = (height / 100.0) * proportionalHeight;
         }

@@ -20,11 +20,13 @@
 #include "kis_phong_bumpmap_config_widget.h"
 #include "phong_pixel_processor.h"
 
+#include "kis_debug.h"
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
 #include "KoUpdater.h"
 #include "kis_math_toolbox.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoChannelInfo.h>
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
 #include "kundo2command.h"
@@ -36,14 +38,13 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(true);
 }
 
-void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
-                                    const QRect& applyRect,
-                                    const KisFilterConfiguration *config,
-                                    KoUpdater *progressUpdater
-                                    ) const
+void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
+                                        const QRect& applyRect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                        ) const
 {
     if (!config) return;
 
@@ -68,16 +69,20 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
             m_heightChannel = channel;
         }
     }
+    if (!m_heightChannel) {
+        m_heightChannel = device->colorSpace()->channels().first();
+    }
+    KIS_ASSERT_RECOVER_RETURN(m_heightChannel);
 
     QRect inputArea = applyRect;
+    QRect outputArea = applyRect;
+    
     inputArea.adjust(-1, -1, 1, 1);
-    QRect outputArea = inputArea.adjusted(1, 1, -1, -1);
 
     quint32 posup;
     quint32 posdown;
     quint32 posleft;
     quint32 posright;
-    QRect tileLimits;
     QColor I; //Reflected light
 
     if (progressUpdater) progressUpdater->setProgress(1);
@@ -107,16 +112,16 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         return;
     }
 
-    KisHLineIteratorSP iterator;
+    KisHLineConstIteratorSP iterator;
     quint32 curPixel = 0;
-    iterator = device->createHLineIteratorNG(inputArea.x(),
+    iterator = device->createHLineConstIteratorNG(inputArea.x(),
                                              inputArea.y(),
                                              inputArea.width()
                                              );
 
     for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
         do {
-            const quint8 *data = iterator->rawData();
+            const quint8 *data = iterator->oldRawData();
             tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
             curPixel++;
         }
@@ -148,7 +153,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
-    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace());
+    KUndo2Command *leaker = bumpmapPaintDevice->convertTo(device->colorSpace(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     KisPainter copier(device);
     copier.bitBlt(outputArea.x(), outputArea.y(), bumpmapPaintDevice,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
@@ -161,7 +166,30 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
 KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id(), 2);
+    config->setProperty(PHONG_AMBIENT_REFLECTIVITY, 0.2);
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, 0.5);
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY, 0.3);
+    config->setProperty(PHONG_SHINYNESS_EXPONENT, 2);
+    config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, true);
+    config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, true);
+    // Indexes are off by 1 simply because arrays start at 0 and the GUI naming scheme started at 1
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[0], true);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[1], true);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[2], false);
+    config->setProperty(PHONG_ILLUMINANT_IS_ENABLED[3], false);
+    config->setProperty(PHONG_ILLUMINANT_COLOR[0], QColor(255, 255, 0));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[1], QColor(255, 0, 0));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[2], QColor(0, 0, 255));
+    config->setProperty(PHONG_ILLUMINANT_COLOR[3], QColor(0, 255, 0));
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[0], 50);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[1], 100);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[2], 150);
+    config->setProperty(PHONG_ILLUMINANT_AZIMUTH[3], 200);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[0], 25);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[1], 20);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[2], 30);
+    config->setProperty(PHONG_ILLUMINANT_INCLINATION[3], 40);
     return config;
 }
 
@@ -172,12 +200,12 @@ QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfig
 
 QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
 {
-    return rect.adjusted(-1, -1, 1, 1);
+    return rect;
 }
 
-KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
+KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
-    KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, image, parent);
+    KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, parent);
     return w;
 }
 

@@ -19,8 +19,8 @@
 #ifndef MUSIC_CORE_STAFFSYSTEM_H
 #define MUSIC_CORE_STAFFSYSTEM_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 
 namespace MusicCore {
 
@@ -32,7 +32,7 @@ class StaffSystem : public QObject
 {
     Q_OBJECT
 public:
-    StaffSystem(Sheet* sheet);
+    explicit StaffSystem(Sheet *sheet);
     ~StaffSystem();
 
     qreal top() const;

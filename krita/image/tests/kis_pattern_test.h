@@ -19,14 +19,15 @@
 #ifndef KIS_PATTERN_TEST_H
 #define KIS_PATTERN_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
-class KisPatternTest : public QObject
+class KoPatternTest : public QObject
 {
     Q_OBJECT
 private slots:
 
     void testCreation();
+    void testRoundTripMd5();
 
 };
 

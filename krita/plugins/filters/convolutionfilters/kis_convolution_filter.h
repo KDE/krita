@@ -32,13 +32,10 @@ class KisConvolutionFilter : public KisFilter
 public:
     KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry);
 public:
-    using KisFilter::process;
-
-    void process(KisPaintDeviceSP device,
-                 const QRect& applyRect,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const;
-    virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
+    void processImpl(KisPaintDeviceSP device,
+                     const QRect& applyRect,
+                     const KisFilterConfiguration* config,
+                     KoUpdater* progressUpdater) const;
 protected:
     void setIgnoreAlpha(bool v);
 

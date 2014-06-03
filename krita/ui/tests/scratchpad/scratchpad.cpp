@@ -23,9 +23,9 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-#include <KAboutData>
-#include <KCmdLineArgs>
-#include <KApplication>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 #include <KoColorProfile.h>
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
         }
     }
 
-    const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
+//    const KoColorProfile* profile = KoColorSpaceRegistry::instance()->rgb8()->profile();
 //    scratchpad->setColorSpace(KoColorSpaceRegistry::instance()->rgb16());
 //    scratchpad->setDisplayProfile(profile);
 //    scratchpad->setCanvasColor(Qt::white);

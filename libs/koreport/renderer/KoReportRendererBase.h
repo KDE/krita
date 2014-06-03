@@ -21,7 +21,7 @@
 #ifndef KORENDERERBASE_H
 #define KORENDERERBASE_H
 #include "koreport_export.h"
-#include <KUrl>
+#include <kurl.h>
 
 class QPainter;
 class QPrinter;

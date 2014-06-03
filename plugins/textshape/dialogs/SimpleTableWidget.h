@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,12 +21,15 @@
 
 #include <ui_SimpleTableWidget.h>
 #include <KoListStyle.h>
+#include <KoBorder.h>
 
 #include <QWidget>
 #include <QTextBlock>
 
 class TextTool;
 class KoStyleManager;
+class KoTableCellStyle;
+class KoColor;
 
 class SimpleTableWidget : public QWidget
 {
@@ -36,17 +39,25 @@ public:
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
+    void emitTableBorderDataUpdated(int i=0);
+    void restartPainting();
+    void setBorderColor(const KoColor &);
 
 signals:
     void doneWithFocus();
-    
+    void tableBorderDataUpdated(const KoBorder::BorderData &);
+
 private:
+    void fillBorderButton(const QColor &color);
+
     Ui::SimpleTableWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
+    QList<KoTableCellStyle *> m_cellStyles; // we only fill out the top borderdata for the previews
+    int m_lastStyleEmitted;
 };
 
 #endif

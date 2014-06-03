@@ -18,7 +18,6 @@
 #include "experiment_paintop_plugin.h"
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -37,11 +36,16 @@ K_EXPORT_PLUGIN(ExperimentPaintOpPluginFactory("krita"))
 
 
 ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp, KisExperimentPaintOpSettings, KisExperimentPaintOpSettingsWidget>("experimentbrush", i18n("Experiment brush"), 
-                                                                                                                               KisPaintOpFactory::categoryExperimental(), "krita-experiment.png"));
+    r->add(new KisSimplePaintOpFactory<KisExperimentPaintOp,
+           KisExperimentPaintOpSettings,
+           KisExperimentPaintOpSettingsWidget>("experimentbrush",
+                                               i18n("Shape"),
+                                               KisPaintOpFactory::categoryStable(),
+                                               "krita-experiment.png",
+                                               QString(), QStringList(), 5));
 }
 
 ExperimentPaintOpPlugin::~ExperimentPaintOpPlugin()

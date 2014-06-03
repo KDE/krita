@@ -18,7 +18,7 @@
  */
 
 #include "reportsectiondetailgroup.h"
-#include <qobject.h>
+#include <QObject>
 #include <QDomElement>
 #include <QDomDocument>
 #include "KoReportDesigner.h"

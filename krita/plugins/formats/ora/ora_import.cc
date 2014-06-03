@@ -47,7 +47,7 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -82,7 +82,10 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
             return KoFilter::InternalError;
             break;
         case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage(ib.image());
+            doc->setCurrentImage(ib.image());
+            if (ib.activeNodes().size() > 0) {
+                doc->setPreActivatedNode(ib.activeNodes()[0]);
+            }
             return KoFilter::OK;
         default:
             break;

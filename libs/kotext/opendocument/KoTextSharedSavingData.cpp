@@ -20,7 +20,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KoTextSharedSavingData.h"
 
 #include "KoGenChanges.h"
-#include "KoTextSopranoRdfModel_p.h"
+#include "KoDocumentRdfBase.h"
+
+#ifdef SHOULD_BUILD_RDF
+#include <Soprano/Soprano>
+#endif
+
+#include <QMap>
 
 class KoTextSharedSavingData::Private
 {
@@ -29,7 +35,8 @@ public:
 
     KoGenChanges *changes;
     QMap<QString, QString> m_rdfIdMapping; //< This lets the RDF system know old->new xml:id
-    const Soprano::Model* m_rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
+    QSharedPointer<Soprano::Model> m_rdfModel; //< This is so cut/paste can serialize the relevant RDF to the clipboard
+    QMap<int, QString> styleIdToName;
 };
 
 KoTextSharedSavingData::KoTextSharedSavingData()
@@ -61,13 +68,27 @@ QMap<QString, QString> KoTextSharedSavingData::getRdfIdMapping()
     return d->m_rdfIdMapping;
 }
 
-void KoTextSharedSavingData::setRdfModel(const Soprano::Model* m)
+void KoTextSharedSavingData::setRdfModel(QSharedPointer<Soprano::Model> m)
 {
     d->m_rdfModel = m;
 }
 
-const Soprano::Model* KoTextSharedSavingData::rdfModel() const
+QSharedPointer<Soprano::Model> KoTextSharedSavingData::rdfModel() const
 {
     return d->m_rdfModel;
 }
 
+void KoTextSharedSavingData::setStyleName(int styleId, const QString &name)
+{
+    d->styleIdToName.insert(styleId, name);
+}
+
+QString KoTextSharedSavingData::styleName(int styleId)
+{
+    return d->styleIdToName.value(styleId);
+}
+
+QList<QString> KoTextSharedSavingData::styleNames()
+{
+    return d->styleIdToName.values();
+}

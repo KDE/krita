@@ -29,6 +29,9 @@
 // KDE
 #include <kdebug.h>
 
+// Calligra
+#include <KoIcon.h>
+
 // KChart
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
@@ -56,10 +59,10 @@ void TableEditorDialog::init()
 {
     tableViewContainer->addWidget( m_tableView );
 
-    KIcon insertRowIcon = KIcon( "insert_table_row" );
-    KIcon deleteRowIcon = KIcon( "delete_table_row" );
-    KIcon insertColIcon = KIcon( "insert_table_col" );
-    KIcon deleteColIcon = KIcon( "delete_table_col" );
+    const KIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
+    const KIcon deleteRowIcon(koIconName("edit-table-delete-row"));
+    const KIcon insertColIcon(koIconName("edit-table-insert-column-left"));
+    const KIcon deleteColIcon(koIconName("edit-table-delete-column"));
 
     // Create actions.
     m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );
@@ -80,22 +83,22 @@ void TableEditorDialog::init()
     deleteColumn->setEnabled( false );
 
     // Buttons
-    connect( insertRow,    SIGNAL( pressed() ), this, SLOT( slotInsertRowPressed() ) );
-    connect( insertColumn, SIGNAL( pressed() ), this, SLOT( slotInsertColumnPressed() ) );
-    connect( deleteRow,    SIGNAL( pressed() ), this, SLOT( slotDeleteRowPressed() ) );
-    connect( deleteColumn, SIGNAL( pressed() ), this, SLOT( slotDeleteColumnPressed() ) );
+    connect( insertRow,    SIGNAL(pressed()), this, SLOT(slotInsertRowPressed()) );
+    connect( insertColumn, SIGNAL(pressed()), this, SLOT(slotInsertColumnPressed()) );
+    connect( deleteRow,    SIGNAL(pressed()), this, SLOT(slotDeleteRowPressed()) );
+    connect( deleteColumn, SIGNAL(pressed()), this, SLOT(slotDeleteColumnPressed()) );
 
     // Context Menu Actions
-    connect( m_insertRowsAction,    SIGNAL( triggered() ), this, SLOT( slotInsertRowPressed() ) );
-    connect( m_insertColumnsAction, SIGNAL( triggered() ), this, SLOT( slotInsertColumnPressed() ) );
-    connect( m_deleteRowsAction,    SIGNAL( triggered() ), this, SLOT( slotDeleteRowPressed() ) );
-    connect( m_deleteColumnsAction, SIGNAL( triggered() ), this, SLOT( slotDeleteColumnPressed() ) );
-    connect( m_tableView,  SIGNAL( currentIndexChanged( const QModelIndex& ) ),
-             this,         SLOT( slotCurrentIndexChanged( const QModelIndex& ) ) );
+    connect( m_insertRowsAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowPressed()) );
+    connect( m_insertColumnsAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnPressed()) );
+    connect( m_deleteRowsAction,    SIGNAL(triggered()), this, SLOT(slotDeleteRowPressed()) );
+    connect( m_deleteColumnsAction, SIGNAL(triggered()), this, SLOT(slotDeleteColumnPressed()) );
+    connect( m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)),
+             this,         SLOT(slotCurrentIndexChanged(QModelIndex)) );
     // We only need to connect one of the data direction buttons, since
     // they are mutually exclusive.
-    connect( dataSetsInRows, SIGNAL( toggled( bool ) ),
-             this,           SLOT( slotDataSetsInRowsToggled( bool ) ) );
+    connect( dataSetsInRows, SIGNAL(toggled(bool)),
+             this,           SLOT(slotDataSetsInRowsToggled(bool)) );
 
     // FIXME: QAction to create a separator??
     QAction *separator = new QAction( m_tableView );
@@ -126,8 +129,8 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 
     // Connect the new proxy model.
     if ( m_proxyModel ) {
-        connect( m_proxyModel,       SIGNAL( modelReset() ),
-                 this,               SLOT( slotUpdateDialog() ) );
+        connect( m_proxyModel,       SIGNAL(modelReset()),
+                 this,               SLOT(slotUpdateDialog()) );
     }
 
     slotUpdateDialog();

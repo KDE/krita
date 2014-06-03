@@ -26,6 +26,7 @@
 #include <krita_export.h>
 
 class QImage;
+class QRect;
 
 enum enumPasteBehaviour {
     PASTE_ASSUME_WEB,
@@ -41,6 +42,7 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 {
 
     Q_OBJECT
+    Q_PROPERTY(bool clip READ hasClip NOTIFY clipChanged)
 
 public:
 
@@ -61,15 +63,21 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QPoint& topLeftHint);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup);
 
-    bool hasClip();
+    bool hasClip() const;
 
-    QSize clipSize();
+    QSize clipSize() const;
+
+signals:
+
+    void clipCreated();
+
 
 private slots:
 
     void clipboardDataChanged();
+
 private:
 
     KisClipboard();
@@ -79,6 +87,9 @@ private:
     bool m_hasClip;
 
     bool m_pushedClipboard;
+
+signals:
+    void clipChanged();
 };
 
 #endif // __KIS_CLIPBOARD_H_

@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _DIGITALMIXER_H_
-#define _DIGITALMIXER_H_
+#ifndef _PRESET_DOCKER_H_
+#define _PRESET_DOCKER_H_
 
 #include <QObject>
 #include <QVariant>

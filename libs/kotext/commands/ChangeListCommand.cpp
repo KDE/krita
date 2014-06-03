@@ -24,56 +24,61 @@
 #include <KoTextDocument.h>
 #include <QTextCursor>
 #include <KoParagraphStyle.h>
+#include <KoImageCollection.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
-#define MARGIN_DEFAULT 10 // we consider it the default value
+#define MARGIN_DEFAULT 18 // we consider it the default value
 
-ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
+ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLevelProperties &levelProperties,
                                      KoTextEditor::ChangeListFlags flags, KUndo2Command *parent)
     : KoTextCommandBase(parent),
       m_flags(flags),
       m_first(true),
       m_alignmentMode(false)
 {
-    const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
+    setText(i18nc("(qtundo-format)", "Change List"));
+
+    const bool styleCompletelySetAlready = extractTextBlocks(cursor, levelProperties.level(), levelProperties.style());
     QSet<int> levels = m_levels.values().toSet();
+    KoListStyle::Style style = levelProperties.style();
     KoListStyle listStyle;
 
     // If the style is already completely set, we unset it instead
     if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
         style = KoListStyle::None;
 
-    int margin=MARGIN_DEFAULT;
-
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
         llp.setStyle(style);
+        llp.setListItemPrefix(levelProperties.listItemPrefix());
+        llp.setListItemSuffix(levelProperties.listItemSuffix());
+
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-            llp.setListItemSuffix(".");
+            if (llp.listItemSuffix().isEmpty()) {
+                llp.setListItemSuffix(".");
+            }
         }
         else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
-        }
-        else {
-            llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
-        }
-
-        if(m_alignmentMode) {
-            llp.setAlignmentMode(true); // when creating a new list we create it in this mode
-            llp.setLabelFollowedBy(KoListStyle::ListTab);
-
-            llp.setTabStopPosition(margin*(lev+2));
-            llp.setMargin(margin*(lev+1));
-            llp.setTextIndent(margin);
+            llp.setBulletCharacter(levelProperties.bulletCharacter());
+        } else if (style == KoListStyle::ImageItem) {
+            llp.setBulletImage(levelProperties.bulletImage());
+            llp.setWidth(levelProperties.width());
+            llp.setHeight(levelProperties.height());
         }
 
-        if (lev > 1)
-            llp.setIndent((lev-1) * 20); // make this configurable
+        llp.setAlignmentMode(true); // when creating a new list we create it in this mode
+        llp.setLabelFollowedBy(KoListStyle::ListTab);
+        llp.setDisplayLevel(levelProperties.displayLevel());
+
+        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
+        llp.setMargin(MARGIN_DEFAULT*(lev+2));
+        llp.setTextIndent(- MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
     }
@@ -229,14 +234,20 @@ void ChangeListCommand::redo()
 {
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
-            if (m_actions.value(i) == ChangeListCommand::RemoveList)
+            if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
+            }
         }
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
@@ -248,19 +259,25 @@ void ChangeListCommand::redo()
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
             }
-            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-                userData->setCounterWidth(-1.0);
+            QTextBlock currentBlock = m_blocks.at(i);
+            KoTextBlockData userData(currentBlock);
+            userData.setCounterWidth(-1.0);
         }
     }
     else {
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+                //if the block is not part of a list continue
+                if (!m_blocks.at(i).textList()) {
+                    continue;
+                }
                 KoList::remove(m_blocks.at(i));
             }
             else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
@@ -293,6 +310,10 @@ void ChangeListCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::RemoveList) {
+            //if the block is not part of a list continue
+            if (!m_blocks.at(i).textList()) {
+                continue;
+            }
             m_oldList.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -300,8 +321,9 @@ void ChangeListCommand::undo()
             }
             for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                 if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                        userData->setCounterWidth(-1.0);
+                    QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                    KoTextBlockData userData(currentBlock);
+                    userData.setCounterWidth(-1.0);
                     break;
                 }
             }
@@ -314,8 +336,9 @@ void ChangeListCommand::undo()
             }
             for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                 if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                        userData->setCounterWidth(-1.0);
+                    QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                    KoTextBlockData userData(currentBlock);
+                    userData.setCounterWidth(-1.0);
                     break;
                 }
             }
@@ -329,16 +352,18 @@ void ChangeListCommand::undo()
                 m_oldList.value(i)->updateStoredList(m_blocks.at(i));
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
                     if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
+                        QTextBlock currentBlock = m_blocks.at(i).textList()->item(j);
+                        KoTextBlockData userData(currentBlock);
+                        userData.setCounterWidth(-1.0);
                         break;
                     }
                 }
             }
         }
 
-        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
-            userData->setCounterWidth(-1.0);
+        QTextBlock currentBlock = m_blocks.at(i);
+        KoTextBlockData userData(currentBlock);
+        userData.setCounterWidth(-1.0);
     }
 }
 

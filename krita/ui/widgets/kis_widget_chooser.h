@@ -57,7 +57,7 @@ class KRITAUI_EXPORT KisWidgetChooser: public QFrame
     typedef QList<Data>::const_iterator ConstIterator;
     
 public:
-     KisWidgetChooser(QWidget* parent=0);
+     KisWidgetChooser(int id, QWidget* parent=0);
     ~KisWidgetChooser();
     
     QWidget* chooseWidget(const QString& id);
@@ -75,7 +75,8 @@ public:
     TWidget* getWidget(const QString& id) const {
         return dynamic_cast<TWidget*>(getWidget(id));
     }
-    
+public slots:
+
     void showPopupWidget();
     
 private:
@@ -89,6 +90,7 @@ protected slots:
     void slotWidgetChoosen(int index);
 
 private:
+    int           m_chooserid;
     QIcon         m_acceptIcon;
     QToolButton*  m_arrowButton;
     QButtonGroup* m_buttons;

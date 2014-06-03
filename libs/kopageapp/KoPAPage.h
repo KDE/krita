@@ -47,7 +47,7 @@ public:
     KoPAMasterPage * masterPage() { return m_masterPage; }
 
     /// reimplemented
-    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter );
+    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext );
 
     /// reimplemented
     virtual bool displayMasterShapes();
@@ -88,9 +88,6 @@ protected:
 
     /// Reimplemented from KoPageBase
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
-
-    /// reimplemented
-    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) );
 
     KoPAMasterPage * m_masterPage;
 

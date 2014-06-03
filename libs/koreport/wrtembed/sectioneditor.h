@@ -2,6 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2012 by Friedrich W. H. Kossebau (kossebau@kde.org)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,47 +21,68 @@
 #ifndef SECTIONEDITOR_H
 #define SECTIONEDITOR_H
 
+#include <ui_sectioneditor.h>
+// KDE
+#include <kdialog.h>
+// Qt
+#include <QSet>
+
 class KoReportDesigner;
 class ReportSectionDetail;
-#include <QtGui/QDialog>
+class ReportSectionDetailGroup;
 
-#include <ui_sectioneditor.h>
 
-class SectionEditor : public QDialog, public Ui::SectionEditor
+class SectionEditor : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit SectionEditor(QWidget* parent = 0, Qt::WindowFlags fl = 0);
+    explicit SectionEditor(QWidget* parent = 0);
     ~SectionEditor();
 
-public slots:
-    virtual void cbReportHeader_toggled(bool yes);
-    virtual void cbReportFooter_toggled(bool yes);
-    virtual void cbHeadFirst_toggled(bool yes);
-    virtual void cbHeadLast_toggled(bool yes);
-    virtual void cbHeadEven_toggled(bool yes);
-    virtual void cbHeadOdd_toggled(bool yes);
-    virtual void cbFootFirst_toggled(bool yes);
-    virtual void cbFootLast_toggled(bool yes);
-    virtual void cbFootEven_toggled(bool yes);
-    virtual void cbFootOdd_toggled(bool yes);
-    virtual void init(KoReportDesigner * rd);
-    virtual void cbHeadAny_toggled(bool yes);
-    virtual void cbFootAny_toggled(bool yes);
+public:
+    void init(KoReportDesigner *rd);
 
-    virtual void btnAdd_clicked();
-    virtual void btnEdit_clicked();
-    virtual void btnRemove_clicked();
-    virtual void btnMoveUp_clicked();
-    virtual void brnMoveDown_clicked();
-protected:
-    KoReportDesigner * m_reportDesigner;
-    ReportSectionDetail * m_reportSectionDetail;
+private slots:
+    void cbReportHeader_toggled(bool yes);
+    void cbReportFooter_toggled(bool yes);
+    void cbHeadFirst_toggled(bool yes);
+    void cbHeadLast_toggled(bool yes);
+    void cbHeadEven_toggled(bool yes);
+    void cbHeadOdd_toggled(bool yes);
+    void cbFootFirst_toggled(bool yes);
+    void cbFootLast_toggled(bool yes);
+    void cbFootEven_toggled(bool yes);
+    void cbFootOdd_toggled(bool yes);
+    void cbHeadAny_toggled(bool yes);
+    void cbFootAny_toggled(bool yes);
 
-protected slots:
-    virtual void languageChange();
+    void btnAdd_clicked();
+    void btnEdit_clicked();
+    void btnRemove_clicked();
+    void btnMoveUp_clicked();
+    void brnMoveDown_clicked();
 
+    void updateButtonsForItem(QListWidgetItem *currentItem);
+    void updateButtonsForRow(int row);
+
+private:
+    bool editDetailGroup(ReportSectionDetailGroup *rsdg);
+    void updateAddButton();
+
+    QString columnName(const QString &column) const;
+    QSet<QString> groupingColumns() const;
+
+private:
+    Ui::SectionEditor m_ui;
+    KPushButton *m_btnAdd;
+    KPushButton *m_btnEdit;
+    KPushButton *m_btnRemove;
+    KPushButton *m_btnMoveUp;
+    KPushButton *m_btnMoveDown;
+
+    KoReportDesigner *m_reportDesigner;
+    ReportSectionDetail *m_reportSectionDetail;
 };
 
 #endif // SECTIONEDITOR_H

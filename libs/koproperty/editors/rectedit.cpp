@@ -19,12 +19,12 @@
 
 #include "rectedit.h"
 
-#include <KLocale>
-#include <QtCore/QRect>
+#include <klocale.h>
+#include <QRect>
 
 using namespace KoProperty;
 
-static const char *RECTEDIT_MASK = "%1, %2, %3x%4";
+static const char RECTEDIT_MASK[] = "%1, %2, %3x%4";
 
 QString RectDelegate::displayText( const QVariant& value ) const
 {

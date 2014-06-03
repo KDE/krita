@@ -19,7 +19,7 @@
 #ifndef KIS_NODE_FACADE_TESTER_H
 #define KIS_NODE_FACADE_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_node.h"
 

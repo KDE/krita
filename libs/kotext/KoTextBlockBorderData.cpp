@@ -32,10 +32,11 @@ struct Edge {
 class KoTextBlockBorderData::Private
 {
 public:
-    Private() : refCount(0) {}
+    Private() : refCount(0), mergeWithNext(true) {}
     Edge edges[4];
 
     QAtomicInt refCount;
+    bool mergeWithNext;
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
@@ -53,8 +54,15 @@ KoTextBlockBorderData::~KoTextBlockBorderData()
 KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
         : d(new Private())
 {
+    d->mergeWithNext = other.d->mergeWithNext;
+
     for (int i = Top; i <= Right; i++)
         d->edges[i] = other.d->edges[i];
+}
+
+void KoTextBlockBorderData::setMergeWithNext(bool merge)
+{
+    d->mergeWithNext = merge;
 }
 
 bool KoTextBlockBorderData::hasBorders() const
@@ -71,6 +79,9 @@ bool KoTextBlockBorderData::operator==(const KoTextBlockBorderData &border) cons
 }
 bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) const
 {
+    if (!d->mergeWithNext) {
+        return false;
+    }
     for (int i = Top; i <= Right; i++) {
         if (d->edges[i].outerPen != border.d->edges[i].outerPen)
             return false;

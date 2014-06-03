@@ -16,7 +16,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "KoReportItemField.h"
-#include <KoGlobal.h>
+
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
@@ -69,7 +69,7 @@ KoReportItemField::KoReportItemField(QDomNode & element)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n;
+            kWarning() << "while parsing field element encountered unknow element: " << n;
         }
     }
 }
@@ -186,8 +186,7 @@ void KoReportItemField::setItemDataSource(const QString& t)
     if (m_controlSource->value() != t) {
         m_controlSource->setValue(t);
     }
-
-    kDebug() << "Field: " << entityName() << "is" << itemDataSource();
+    //kDebug() << "Field: " << entityName() << "is" << itemDataSource();
 }
 
 KRLineStyleData KoReportItemField::lineStyle()
@@ -204,7 +203,8 @@ QString KoReportItemField::typeName() const
     return "report:field";
 }
 
-int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemField::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,
+                                        const QVariant &data, KRScriptHandler *script)
 {
     OROTextBox * tb = new OROTextBox();
     tb->setPosition(m_pos.toScene() + offset);

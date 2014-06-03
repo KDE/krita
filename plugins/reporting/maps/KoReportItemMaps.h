@@ -20,7 +20,7 @@
 #include <KoReportASyncItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krpos.h"
 #include "krsize.h"
 #include <koproperty/Property.h>
@@ -29,8 +29,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <MarbleWidget.h>
-#include <RdfForward.h>
+#include <marble/MarbleWidget.h>
 #include <QMap>
 
 class QImage;
@@ -52,12 +51,11 @@ public:
     KoReportItemMaps() {
         createProperties();
     }
-    KoReportItemMaps(QDomNode & element);
+    explicit KoReportItemMaps(QDomNode &element);
     virtual ~KoReportItemMaps();
 
     virtual QString typeName() const;
-    virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
-    using KoReportItemBase::render;
+    virtual int renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset, const QVariant &data, KRScriptHandler *script);
 
     virtual QString itemDataSource() const;
 public slots:

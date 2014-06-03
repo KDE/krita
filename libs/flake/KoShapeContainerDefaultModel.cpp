@@ -123,6 +123,7 @@ void KoShapeContainerDefaultModel::remove(KoShape *child)
     if (relation == 0)
         return;
     d->relations.removeAll(relation);
+    delete relation;
 }
 
 int KoShapeContainerDefaultModel::count() const

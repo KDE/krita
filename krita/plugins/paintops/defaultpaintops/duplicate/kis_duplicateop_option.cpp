@@ -29,7 +29,7 @@ class KisDuplicateOpOptionsWidget: public QWidget, public Ui::DuplicateOpOptions
 {
 public:
     KisDuplicateOpOptionsWidget(QWidget *parent = 0)
-            : QWidget(parent) {
+        : QWidget(parent) {
         setupUi(this);
     }
     KisImageWSP m_image;
@@ -42,7 +42,7 @@ protected:
 
 
 KisDuplicateOpOption::KisDuplicateOpOption()
-        : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
+    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
 {
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();

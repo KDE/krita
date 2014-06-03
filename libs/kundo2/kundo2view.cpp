@@ -63,10 +63,9 @@
 
 #ifndef QT_NO_UNDOVIEW
 
-#include "qundogroup.h"
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/qpointer.h>
-#include <QtGui/qicon.h>
+#include <QAbstractItemModel>
+#include <QPointer>
+#include <QIcon>
 
 
 /*!
@@ -153,8 +152,9 @@ KUndo2View::KUndo2View(KUndo2Group *group, QWidget *parent) : QListView(parent),
     Destroys this view.
 */
 
-KUndo2View::~KUndo2View() {
-
+KUndo2View::~KUndo2View()
+{
+    delete d;
 }
 
 /*!

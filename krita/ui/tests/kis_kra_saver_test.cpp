@@ -24,9 +24,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
-#include <KoColorSpace.h>
 #include <KoPathShape.h>
 
 #include "filter/kis_filter_registry.h"
@@ -51,20 +49,39 @@
 void KisKraSaverTest::testRoundTrip()
 {
     KisDoc2* doc = createCompleteDocument();
+    KoColor bgColor(Qt::red, doc->image()->colorSpace());
+    doc->image()->setDefaultProjectionColor(bgColor);
     doc->saveNativeFormat("roundtriptest.kra");
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    delete doc;
-
     KisDoc2 doc2;
+
     doc2.loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());
     doc2.image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
+
+    // check whether the BG color is saved correctly
+    QCOMPARE(doc2.image()->defaultProjectionColor(), bgColor);
 }
 
+void KisKraSaverTest::testSaveEmpty()
+{
+    KisDoc2* doc = createEmptyDocument();
+    doc->saveNativeFormat("emptytest.kra");
+    QStringList list;
+    KisCountVisitor cv1(list, KoProperties());
+    doc->image()->rootLayer()->accept(cv1);
+
+    KisDoc2 doc2;
+    doc2.loadNativeFormat("emptytest.kra");
+
+    KisCountVisitor cv2(list, KoProperties());
+    doc2.image()->rootLayer()->accept(cv2);
+    QCOMPARE(cv1.count(), cv2.count());
+}
 QTEST_KDEMAIN(KisKraSaverTest, GUI)
 #include "kis_kra_saver_test.moc"

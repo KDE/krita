@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien  <freak@codepimps.org>
- *  Copyright (c) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005-2006 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2004,2006-2007 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_LAB_DARKEN_TRANSFORMATION_H_
-#define _KO_LAB_DARKEN_TRANSFORMATION_H_
+#ifndef _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
+#define _KO_LAB_DARKEN_COLOR_TRANSFORMATION_H_
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {

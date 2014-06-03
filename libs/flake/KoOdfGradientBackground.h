@@ -44,7 +44,7 @@ public:
     /// reimplemented from KoShapeBackground
     virtual bool loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize);
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter& painter, const QPainterPath& fillPath) const;
+    virtual void paint(QPainter& painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath& fillPath) const;
 
 private:
     bool loadOdf(const KoXmlElement &element);
@@ -58,6 +58,7 @@ private:
 
 private:
     Q_DECLARE_PRIVATE(KoOdfGradientBackground)
+    Q_DISABLE_COPY(KoOdfGradientBackground)
 };
 
 #endif

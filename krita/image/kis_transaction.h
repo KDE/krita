@@ -25,9 +25,8 @@
 #include <krita_export.h>
 
 #include "kis_transaction_data.h"
-#include "kis_selection_transaction_data.h"
-#include "kis_selected_transaction_data.h"
 #include "kis_paint_device.h"
+#include "kis_pixel_selection.h"
 
 #include "kis_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
@@ -36,7 +35,7 @@ class KisTransaction
 {
 public:
     KisTransaction(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
-        m_transactionData = new KisTransactionData(name, device, parent);
+        m_transactionData = new KisTransactionData(name, device, true, parent);
     }
 
     virtual ~KisTransaction() {
@@ -70,8 +69,11 @@ public:
         Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
                    "the transaction has been tried to be committed twice");
 
-        m_transactionData->endTransaction();
-        return m_transactionData;
+        KisTransactionData *transactionData = m_transactionData;
+        m_transactionData = 0;
+
+        transactionData->endTransaction();
+        return transactionData;
     }
 
     void end() {
@@ -108,25 +110,16 @@ public:
     }
 
 protected:
-    KisTransaction() {}
+    KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
-};
-
-class KisSelectedTransaction : public KisTransaction
-{
-public:
-    KisSelectedTransaction(const QString& name, KisNodeSP node, KUndo2Command* parent = 0)
-    {
-        m_transactionData = new KisSelectedTransactionData(name, node, parent);
-    }
 };
 
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const QString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, parent);
     }
 };
 

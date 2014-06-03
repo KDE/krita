@@ -22,8 +22,8 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QObject>
+#include <QHash>
 #include "Property.h"
 
 namespace KoProperty
@@ -81,7 +81,7 @@ public:
         //! Creates iterator for @a set set of properties.
         /*!             The properties are sorted by insertion order by default.
             Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
-        Iterator(const Set &set);
+        explicit Iterator(const Set &set);
 
         //! Creates iterator for @a set set of properties.
         /*! @a selector functor is used to iterate only 
@@ -298,7 +298,7 @@ signals:
     void aboutToDeleteProperty(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! Emitted when property set object is about to be cleared (using clear()).
-     This signal is also emmited from destructor before emitting aboutToBeDeleted(). */
+     This signal is also emitted from destructor before emitting aboutToBeDeleted(). */
     void aboutToBeCleared();
 
     /*! Emitted when property set object is about to be deleted.*/
@@ -328,7 +328,7 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const KoProperty::Set& set);
+    explicit Buffer(const KoProperty::Set &set);
 
     /*! Intersects with other Set.*/
     virtual void intersect(const KoProperty::Set& set);
@@ -342,7 +342,7 @@ private:
 };
 
 //! @return property values for set @a set
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
+KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

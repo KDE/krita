@@ -28,11 +28,12 @@ class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
 class KoTextLayoutObstruction;
+class KoAnchorTextRange;
 
 class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
-    FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    FloatingAnchorStrategy(KoAnchorTextRange *anchor, KoTextLayoutRootArea *rootArea);
     ~FloatingAnchorStrategy();
 
     /**
@@ -48,15 +49,15 @@ private:
 
     inline bool countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                    QTextBlock &block, QTextLayout *layout);
-    inline void countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect);
+    inline void countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect);
     inline bool countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                  KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
-    inline void countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect);
+    inline void countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect);
 
     //check the layout evironment and move the shape back to have it within
     inline void checkLayoutEnvironment(QPointF &newPosition, KoTextShapeData *data);
     //check the border of page and move the shape back to have it visible
-    inline void checkPageBorder(QPointF &newPosition, const QRectF &containerBoundingRect);
+    inline void checkPageBorder(QPointF &newPosition);
     //check stacking and reorder to proper position objects according to there z-index
     inline void checkStacking(QPointF &newPosition);
 
@@ -67,6 +68,7 @@ private:
     void updateObstruction(qreal documentOffset);
 
     KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
+    KoAnchorTextRange *m_anchorRange;
 };
 
 #endif // FLOATINGANCHORSTRATEGY_H

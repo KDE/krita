@@ -45,8 +45,8 @@ public:
     ~TableEditorDialog();
 
     void init();
-    void setProxyModel( ChartProxyModel *proxyModel );
-    void setModel( QAbstractItemModel *model );
+    void setProxyModel(ChartProxyModel *proxyModel);
+    void setModel(QAbstractItemModel *model);
 
 protected slots:
     void slotUpdateDialog();
@@ -55,9 +55,9 @@ protected slots:
     void slotInsertColumnPressed();
     void slotDeleteColumnPressed();
 
-    void deleteSelectedRowsOrColumns( Qt::Orientation orientation );
-    void slotCurrentIndexChanged( const QModelIndex &index );
-    void slotDataSetsInRowsToggled( bool enabled );
+    void deleteSelectedRowsOrColumns(Qt::Orientation orientation);
+    void slotCurrentIndexChanged(const QModelIndex &index);
+    void slotDataSetsInRowsToggled(bool enabled);
 
 private:
     ChartProxyModel *m_proxyModel;

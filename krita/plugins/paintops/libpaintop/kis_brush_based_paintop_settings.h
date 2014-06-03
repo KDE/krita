@@ -21,10 +21,14 @@
 
 #include <kis_paintop_settings.h>
 #include <krita_export.h>
+#include <kis_outline_generation_policy.h>
 
-class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisPaintOpSettings
+
+class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
+    KisBrushBasedPaintOpSettings();
+
     ///Reimplemented
     virtual bool paintIncremental();
 
@@ -33,17 +37,12 @@ public:
 
     ///Reimplemented
     virtual int rate() const;
-    
-    ///Reimplemented
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;
-    
-    ///Reimplemented
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const;
-    
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
+
+    using KisPaintOpSettings::brushOutline;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     ///Reimplemented
-    virtual bool isValid();
+    virtual bool isValid() const;
 
     ///Reimplemented
     virtual bool isLoadable();

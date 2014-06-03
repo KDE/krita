@@ -130,7 +130,7 @@ void KoXmlWriter::startElement(const char* tagName, bool indentInside)
 
     // Tell parent that it has children
     bool parentIndent = prepareForChild();
-    
+
     d->tags.push(Tag(tagName, parentIndent && indentInside));
     writeChar('<');
     writeCString(tagName);
@@ -152,8 +152,10 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
     // already open but for writing, and we need to rewind.
     const bool openOk = indev->open(QIODevice::ReadOnly);
     Q_ASSERT(openOk);
-    if (!openOk)
+    if (!openOk) {
+        kWarning() << "Failed to re-open the device! wasOpen=" << wasOpen;
         return;
+    }
 
     static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
     QByteArray buffer;
@@ -340,8 +342,19 @@ char* KoXmlWriter::escapeForXML(const char* source, int length = -1) const
         case 0:
             *destination = '\0';
             return output;
-        default:
+        // Control codes accepted in XML 1.0 documents.
+        case 9:
+        case 10:
+        case 13:
             *destination++ = *src++;
+            continue;
+        default:
+            // Don't add control codes not accepted in XML 1.0 documents.
+            if (*src > 0 && *src < 32) {
+                ++src;
+            } else {
+                *destination++ = *src++;
+            }
             continue;
         }
         ++src;
@@ -481,10 +494,11 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
                 endElement();
                 break;
             // gracefully handle \f form feed in text input.
-            // otherwise the xml will not be valid. 
+            // otherwise the xml will not be valid.
             // \f can be added e.g. in ascii import filter.
             case '\f':
             case '\n':
+            case QChar::LineSeparator:
                 if (!str.isEmpty())
                     addTextNode(str);
                 str.clear();
@@ -531,3 +545,27 @@ QList<const char*> KoXmlWriter::tagHierarchy() const
     return answer;
 }
 
+QString KoXmlWriter::toString() const
+{
+    Q_ASSERT(!d->dev->isSequential());
+    if (d->dev->isSequential())
+        return QString();
+    bool wasOpen = d->dev->isOpen();
+    qint64 oldPos = -1;
+    if (wasOpen) {
+        oldPos = d->dev->pos();
+        if (oldPos > 0)
+            d->dev->seek(0);
+    } else {
+        const bool openOk = d->dev->open(QIODevice::ReadOnly);
+        Q_ASSERT(openOk);
+        if (!openOk)
+            return QString();
+    }
+    QString s = QString::fromUtf8(d->dev->readAll());
+    if (wasOpen)
+        d->dev->seek(oldPos);
+    else
+        d->dev->close();
+    return s;
+}

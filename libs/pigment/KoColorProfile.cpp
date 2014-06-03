@@ -31,7 +31,8 @@ KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
     d->fileName = fileName;
 }
 
-KoColorProfile::KoColorProfile(const KoColorProfile& profile) : d(new Private(*profile.d))
+KoColorProfile::KoColorProfile(const KoColorProfile& profile)
+    : d(new Private(*profile.d))
 {
 }
 
@@ -79,16 +80,4 @@ void KoColorProfile::setName(const QString &name)
 void KoColorProfile::setInfo(const QString &info)
 {
     d->info = info;
-}
-
-QVariant KoColorProfile::property(const QString& _name) const
-{
-    Q_UNUSED(_name);
-    return QVariant();
-}
-
-void KoColorProfile::setProperty(const QString& _name, const QVariant& _variant)
-{
-    Q_UNUSED(_name);
-    Q_UNUSED(_variant);
 }

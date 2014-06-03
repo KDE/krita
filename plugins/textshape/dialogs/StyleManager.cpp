@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2013 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,98 +20,167 @@
 
 #include "StyleManager.h"
 
-#include "StylesWidget.h"
+#include "StylesManagerModel.h"
+#include "StylesSortFilterProxyModel.h"
 
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 
+#include <QListView>
+#include <QModelIndex>
+#include <QTabWidget>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QInputDialog>
+
+#include <kdebug.h>
+
 StyleManager::StyleManager(QWidget *parent)
-        : QWidget(parent),
-        m_styleManager(0),
-        m_selectedParagStyle(0),
-        m_selectedCharStyle(0),
-        m_blockSignals(false)
+        : QWidget(parent)
+        , m_styleManager(0)
+        , m_paragraphStylesModel(new StylesManagerModel(this))
+        , m_characterStylesModel(new StylesManagerModel(this))
+        , m_paragraphProxyModel(new StylesSortFilterProxyModel(this))
+        , m_characterProxyModel(new StylesSortFilterProxyModel(this))
+        , m_thumbnailer(new KoStyleThumbnailer())
+        , m_unappliedStyleChanges(false)
 {
     widget.setupUi(this);
     layout()->setMargin(0);
+    widget.bNew->setToolTip(i18n("Create a new style inheriting the current style"));
 
-    connect(widget.styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setParagraphStyle(KoParagraphStyle*)));
-    connect(widget.styles, SIGNAL(characterStyleSelected(KoCharacterStyle *, bool)), this, SLOT(setCharacterStyle(KoCharacterStyle*,bool)));
+    // Force "Base" background of the style listviews to white, so the background
+    // is consistent with the one of the preview area. Also the usual document text colors
+    // are dark, because made for a white paper background, so with a dark UI
+    // color scheme they are hardly seen.
+    // TODO: update to background color of currently selected/focused shape/page
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, QColor(Qt::white));
+    widget.paragraphStylesListView->setPalette(palette);
+    widget.characterStylesListView->setPalette(palette);
+
+    m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
+    m_characterStylesModel->setStyleThumbnailer(m_thumbnailer);
+    m_paragraphProxyModel->setDynamicSortFilter(true);
+    m_characterProxyModel->setDynamicSortFilter(true);
+    m_paragraphProxyModel->invalidate();
+    m_characterProxyModel->invalidate();
+    m_paragraphProxyModel->setSourceModel(m_paragraphStylesModel);
+    m_characterProxyModel->setSourceModel(m_characterStylesModel);
+    m_paragraphProxyModel->sort(0);
+    m_characterProxyModel->sort(0);
+    //m_paragraphProxyModel->setSortRole(Qt::DisplayRole);
+    //m_characterProxyModel->setSortRole(Qt::DisplayRole);
+    widget.paragraphStylesListView->setModel(m_paragraphProxyModel);
+    widget.characterStylesListView->setModel(m_characterProxyModel);
+
+    connect(widget.paragraphStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
+    connect(widget.characterStylesListView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
 
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
-    connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
+    //connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
+    widget.bDelete->setVisible(false); // TODO make it visible when we can safely delete styles
 
-    connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
-    connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+    connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+
+    connect(widget.paragraphStylePage, SIGNAL(styleChanged()), this, SLOT(currentParagraphStyleChanged()));
+    connect(widget.characterStylePage, SIGNAL(styleChanged()), this, SLOT(currentCharacterStyleChanged()));
+    connect(widget.paragraphStylePage, SIGNAL(nameChanged(QString)), this, SLOT(currentParagraphNameChanged(QString)));
+    connect(widget.characterStylePage, SIGNAL(nameChanged(QString)), this, SLOT(currentCharacterNameChanged(QString)));
 }
 
 StyleManager::~StyleManager()
 {
-    foreach(int styleId, m_alteredParagraphStyles.keys()) {
-        KoParagraphStyle *s = m_alteredParagraphStyles[styleId];
-        delete s;
-    }
-    m_alteredParagraphStyles.clear();
-    foreach(int styleId, m_alteredCharacterStyles.keys()) {
-        KoCharacterStyle *s = m_alteredCharacterStyles[styleId];
-        delete s;
-    }
-    m_alteredCharacterStyles.clear();
+    qDeleteAll(m_modifiedParagraphStyles.keys());
+    qDeleteAll(m_modifiedCharacterStyles.keys());
 }
 
 void StyleManager::setStyleManager(KoStyleManager *sm)
 {
     Q_ASSERT(sm);
     m_styleManager = sm;
-    widget.styles->setStyleManager(sm);
-    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
-    widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
+
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //also updates style combos
+    widget.characterStylePage->setStyleManager(m_styleManager); //also updates style combos
+    widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
+
+    QList<KoCharacterStyle*> styles;
+    QList<KoParagraphStyle *> paragraphStyles = m_styleManager->paragraphStyles();
+    KoParagraphStyle *defaultParagraphStyle = m_styleManager->defaultParagraphStyle();
+    foreach (KoParagraphStyle *style, paragraphStyles) {
+        if (style != defaultParagraphStyle) {
+            styles.append(style);
+        }
+    }
+    m_paragraphStylesModel->setStyles(styles);
+    styles = m_styleManager->characterStyles();
+    styles.removeOne(m_styleManager->defaultCharacterStyle());
+    m_characterStylesModel->setStyles(styles);
+    if (!paragraphStyles.isEmpty()) {
+        widget.paragraphStylesListView->setCurrentIndex(m_paragraphProxyModel->mapFromSource(m_paragraphStylesModel->index(0)));
+    }
+    if (!styles.isEmpty()) {
+        widget.characterStylesListView->setCurrentIndex(m_characterProxyModel->mapFromSource(m_characterStylesModel->index(0)));
+    }
+
+    tabChanged(0);
 }
 
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
-
-    m_selectedCharStyle = 0;
-    m_selectedParagStyle = style;
     widget.characterStylePage->save();
-    widget.characterStylePage->setStyle(0);
     widget.paragraphStylePage->save();
-    KoParagraphStyle * localStyle = style->clone();
+    KoParagraphStyle *localStyle = 0;
 
-    if (!m_alteredParagraphStyles.contains(style->styleId()))
-        m_alteredParagraphStyles.insert(style->styleId(), localStyle);
-    else
-        localStyle = m_alteredParagraphStyles.value(style->styleId());
+    if (style) {
+        QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it = m_modifiedParagraphStyles.find(style);
+        if (it == m_modifiedParagraphStyles.end()) {
+            localStyle = style->clone();
+            m_modifiedParagraphStyles.insert(localStyle, style);
+            m_paragraphStylesModel->replaceStyle(style, localStyle);
+        }
+        else {
+            localStyle = dynamic_cast<KoParagraphStyle *>(it.key());
+        }
 
+        widget.paragraphStylesListView->setCurrentIndex(m_paragraphProxyModel->mapFromSource(m_paragraphStylesModel->styleIndex(localStyle)));
+    }
     widget.paragraphStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
- //   widget.bDelete->setEnabled(canDelete);
-
+    widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
+    widget.paragraphStylesListView->setEnabled(style != 0);
 }
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
-    m_selectedParagStyle = 0;
-    m_selectedCharStyle = style;
+    Q_UNUSED(canDelete);
     widget.paragraphStylePage->save();
-    widget.paragraphStylePage->setStyle(0);
     widget.characterStylePage->save();
+    KoCharacterStyle *localStyle = 0;
 
-    KoCharacterStyle *localStyle = style->clone();
-
-    if (!m_alteredCharacterStyles.contains(style->styleId()))
-        m_alteredCharacterStyles.insert(style->styleId(), localStyle);
-    else
-        localStyle = m_alteredCharacterStyles.value(style->styleId());
-
+    if (style) {
+        QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it = m_modifiedCharacterStyles.find(style);
+        if (it == m_modifiedCharacterStyles.end()) {
+            localStyle = style->clone();
+            m_modifiedCharacterStyles.insert(localStyle, style);
+            m_characterStylesModel->replaceStyle(style, localStyle);
+        }
+        else {
+            localStyle = it.key();
+        }
+        widget.characterStylesListView->setCurrentIndex(m_characterProxyModel->mapFromSource(m_characterStylesModel->styleIndex(localStyle)));
+    }
     widget.characterStylePage->setStyle(localStyle);
     widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
-    widget.bDelete->setEnabled(canDelete);
+    widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
+    widget.characterStylePage->setEnabled(style != 0);
+ //   widget.bDelete->setEnabled(canDelete);
 }
 
 void StyleManager::setUnit(const KoUnit &unit)
@@ -120,100 +190,261 @@ void StyleManager::setUnit(const KoUnit &unit)
 
 void StyleManager::save()
 {
-    m_blockSignals = true;
+    if (!m_unappliedStyleChanges) {
+        return;
+    }
     widget.paragraphStylePage->save();
     widget.characterStylePage->save();
+    widget.paragraphStylePage->setStyle(0);
+    widget.characterStylePage->setStyle(0);
 
-    foreach(int styleId, m_alteredCharacterStyles.keys()) {
-        KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
-        KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
-        delete altered;
+    m_styleManager->beginEdit();
+
+    for (QMap<KoParagraphStyle*, KoParagraphStyle*>::iterator it(m_modifiedParagraphStyles.begin()); it != m_modifiedParagraphStyles.end(); ++it) {
+        if (it.value() == 0) {
+            m_styleManager->add(it.key());
+        }
+        else {
+            KoParagraphStyle *altered = it.key();
+            m_styleManager->alteredStyle(altered);
+            m_paragraphStylesModel->replaceStyle(altered, it.value());
+            delete altered;
+        }
     }
-    m_alteredCharacterStyles.clear();
+    m_modifiedParagraphStyles.clear();
 
-    foreach(int styleId, m_alteredParagraphStyles.keys()) {
-        KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
-        KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
-        orig->copyProperties(altered);
-        m_styleManager->alteredStyle(orig);
-        delete altered;
+    for (QMap<KoCharacterStyle*, KoCharacterStyle*>::iterator it(m_modifiedCharacterStyles.begin()); it != m_modifiedCharacterStyles.end(); ++it) {
+        if (it.value() == 0) {
+            m_styleManager->add(it.key());
+        }
+        else {
+            KoCharacterStyle *altered = it.key();
+            m_styleManager->alteredStyle(altered);
+            m_characterStylesModel->replaceStyle(altered, it.value());
+            delete altered;
+        }
     }
-    m_alteredParagraphStyles.clear();
-//Reset the active style
-    if (m_selectedCharStyle) {
-        KoCharacterStyle *localStyle = m_selectedCharStyle->clone();
+    m_modifiedCharacterStyles.clear();
 
-        if (!m_alteredCharacterStyles.contains(m_selectedCharStyle->styleId()))
-            m_alteredCharacterStyles.insert(m_selectedCharStyle->styleId(), localStyle);
-        else
-            localStyle = m_alteredCharacterStyles.value(m_selectedCharStyle->styleId());
+    m_styleManager->endEdit();
 
-        widget.characterStylePage->setStyle(localStyle);
+    // set the paragraph and character style new so it has a cloned style to work on and we don't change the actual style.
+    KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
+                                                                       StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
+    if (paragraphStyle) {
+        setParagraphStyle(paragraphStyle);
     }
-    else
-        widget.characterStylePage->setStyle(0);
 
-    if (m_selectedParagStyle) {
-        KoParagraphStyle * localStyle = m_selectedParagStyle->clone();
-
-        if (!m_alteredParagraphStyles.contains(m_selectedParagStyle->styleId()))
-            m_alteredParagraphStyles.insert(m_selectedParagStyle->styleId(), localStyle);
-        else
-            localStyle = m_alteredParagraphStyles.value(m_selectedParagStyle->styleId());
-
-        widget.paragraphStylePage->setStyle(localStyle);
+    KoCharacterStyle *characterStyle = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(),
+                                                                   StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+    if (characterStyle) {
+        setCharacterStyle(characterStyle);
     }
-    else
-        widget.paragraphStylePage->setStyle(0);
-    m_blockSignals = false;
+
+    m_unappliedStyleChanges = false;
 }
+
+void StyleManager::currentParagraphStyleChanged()
+{
+    KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
+    if (style) {
+        widget.paragraphStylePage->save();
+        m_paragraphStylesModel->updateStyle(style);
+        m_unappliedStyleChanges = true;
+    }
+}
+
+void StyleManager::currentParagraphNameChanged(const QString &name)
+{
+    KoCharacterStyle *style = m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+    if (style) {
+        style->setName(name);
+        currentParagraphStyleChanged();
+    }
+}
+
+void StyleManager::currentCharacterStyleChanged()
+{
+    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+    if (style) {
+        widget.characterStylePage->save();
+        m_characterStylesModel->updateStyle(style);
+        m_unappliedStyleChanges = true;
+    }
+}
+
+void StyleManager::currentCharacterNameChanged(const QString &name)
+{
+    KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+    if (style) {
+        style->setName(name);
+        currentCharacterStyleChanged();
+    }
+}
+
 
 void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {
-    widget.paragraphStylePage->save();
-    widget.characterStylePage->save();
-    widget.characterStylePage->setStyle(0);
-    widget.paragraphStylePage->setStyle(0);
-
-    if (m_blockSignals) return;
-
-    KoCharacterStyle *cs = style->characterStyle();
-    if (cs->name().isEmpty())
-        cs->setName(style->name());
-    addCharacterStyle(cs);
-
-    m_styleManager->add(style);
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
-    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
+    m_paragraphStylesModel->addStyle(style);
+    setParagraphStyle(style);
+    m_unappliedStyleChanges = true;
 }
 
 void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 {
-    if (m_blockSignals) return;
-
-    m_styleManager->add(style);
-    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
+    widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
+    m_characterStylesModel->addStyle(style);
+    setCharacterStyle(style);
+    m_unappliedStyleChanges = true;
 }
 
 void StyleManager::removeParagraphStyle(KoParagraphStyle* style)
 {
-    if (m_alteredParagraphStyles.contains(style->styleId()))
-        m_alteredParagraphStyles.remove(style->styleId());
-    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    if (m_modifiedParagraphStyles.contains(style)) {
+        m_modifiedParagraphStyles.remove(style);
+        m_paragraphStylesModel->removeStyle(style);
+    }
+    widget.paragraphStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
 void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
 {
-    if (m_alteredCharacterStyles.contains(style->styleId()))
-        m_alteredCharacterStyles.remove(style->styleId());
+    if (m_modifiedCharacterStyles.contains(style)) {
+        m_modifiedCharacterStyles.remove(style);
+        m_characterStylesModel->removeStyle(style);
+    }
+    widget.characterStylePage->setStyleManager(m_styleManager); //updates style combos
 }
 
-/* TODO
-    On new move focus to name text field.
-    Add a connection to the same 'name' text field when I press enter it should press the create button.
-    on 'new' use the currently selected style as a template
-*/
+void StyleManager::slotParagraphStyleSelected(QModelIndex index)
+{
+    if (checkUniqueStyleName()) {
+        KoParagraphStyle *paragraphStyle = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
+        if (paragraphStyle) {
+            setParagraphStyle(paragraphStyle);
+            return;
+        }
+    }
+}
+
+void StyleManager::slotCharacterStyleSelected(QModelIndex index)
+{
+    if (checkUniqueStyleName()) {
+        KoCharacterStyle *characterStyle = m_characterProxyModel->data(index, StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+        if (characterStyle) {
+            setCharacterStyle(characterStyle, false);
+            return;
+        }
+    }
+}
+
+void StyleManager::buttonNewPressed()
+{
+    if (checkUniqueStyleName()) {
+        if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
+            KoParagraphStyle *newStyle = 0;
+            KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
+                                                                      StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
+            if (style) {
+                newStyle = style->clone();
+            }
+            else {
+                newStyle = new KoParagraphStyle();
+            }
+            newStyle->setName(i18n("New Style"));
+            m_modifiedParagraphStyles.insert(newStyle, 0);
+            addParagraphStyle(newStyle);
+            widget.paragraphStylePage->selectName();
+        }
+        else {
+            KoCharacterStyle *newStyle = 0;
+            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+            if (style) {
+                newStyle = style->clone();
+            }
+            else {
+                newStyle = new KoCharacterStyle();
+            }
+            newStyle->setName(i18n("New Style"));
+            m_modifiedCharacterStyles.insert(newStyle, 0);
+            addCharacterStyle(newStyle);
+            widget.characterStylePage->selectName();
+        }
+    }
+}
+
+void StyleManager::tabChanged(int index)
+{
+    int paragraphIndex = widget.tabs->indexOf(widget.paragraphStylesListView);
+    if (!checkUniqueStyleName(paragraphIndex == index ? widget.tabs->indexOf(widget.characterStylesListView) : paragraphIndex)) {
+        // this is needed to not call tab changed during the resetting of the tab as this leads to en endless recursion.
+        disconnect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+        if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
+            widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
+        } else {
+            widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
+        }
+        connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    }
+    else {
+        if (paragraphIndex == index) {
+            KoParagraphStyle *style = dynamic_cast<KoParagraphStyle*>(m_paragraphProxyModel->data(widget.paragraphStylesListView->currentIndex(),
+                        StylesManagerModel::StylePointer).value<KoCharacterStyle*>());
+            setParagraphStyle(style);
+            widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
+        }
+        else {
+            KoCharacterStyle *style = m_characterProxyModel->data(widget.characterStylesListView->currentIndex(), StylesManagerModel::StylePointer).value<KoCharacterStyle*>();
+            setCharacterStyle(style);
+            widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
+        }
+    }
+}
+
+bool StyleManager::unappliedStyleChanges()
+{
+    return m_unappliedStyleChanges;
+}
+
+bool StyleManager::checkUniqueStyleName()
+{
+    return checkUniqueStyleName(widget.tabs->currentIndex());
+}
+
+bool StyleManager::checkUniqueStyleName(int widgetIndex)
+{
+    QModelIndex index;
+    QString styleName;
+    QListView *listView;
+    if (widget.tabs->indexOf(widget.paragraphStylesListView) == widgetIndex) {
+        styleName = widget.paragraphStylePage->styleName();
+        listView = widget.paragraphStylesListView;
+        index = m_paragraphProxyModel->mapFromSource(m_paragraphStylesModel->styleIndex(widget.paragraphStylePage->style()));
+    }
+    else {
+        styleName = widget.characterStylePage->styleName();
+        index = m_characterProxyModel->mapFromSource(m_characterStylesModel->styleIndex(widget.characterStylePage->style()));
+        listView = widget.characterStylesListView;
+    }
+
+    QModelIndexList stylesByName;
+    if (index.isValid()) {
+        stylesByName.append(m_paragraphProxyModel->match(m_paragraphProxyModel->index(0, 0), Qt::DisplayRole, QVariant(styleName), -1, Qt::MatchFlags(Qt::MatchExactly | Qt::MatchWrap)));
+        stylesByName.append(m_characterProxyModel->match(m_characterProxyModel->index(0, 0), Qt::DisplayRole, QVariant(styleName), -1, Qt::MatchFlags(Qt::MatchExactly | Qt::MatchWrap)));
+    }
+
+    bool unique = stylesByName.size() <= 1;
+    if (!unique) {
+        QMessageBox::critical(this, i18n("Warning"), i18n("Another style named '%1' already exist. Please choose another name.", styleName));
+        listView->setCurrentIndex(index);
+        if (widget.tabs->indexOf(widget.paragraphStylesListView) == widgetIndex) {
+            widget.paragraphStylePage->selectName();
+        } else {
+            widget.characterStylePage->selectName();
+        }
+    }
+    return unique;
+}
 
 #include <StyleManager.moc>

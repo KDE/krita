@@ -21,14 +21,15 @@
 #include "KoPathTool.h"
 #include "KoPathShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 KoPathToolFactory::KoPathToolFactory()
         : KoToolFactoryBase("PathToolFactoryId")
 {
-    setToolTip(i18n("Path editing tool"));
+    setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());
-    setIcon("editpath");
+    setIconName(koIconNameCStr("editpath"));
     setPriority(2);
     setActivationShapeId(KoPathShapeId);
 }

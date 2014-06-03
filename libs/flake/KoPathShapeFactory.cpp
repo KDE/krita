@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,10 +19,12 @@
  */
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoImageCollection.h"
+#include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
+#include <KoIcon.h>
 
 #include <klocale.h>
 
@@ -32,7 +35,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
         : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
-    setIcon("pathshape");
+    setIconName(koIconNameCStr("pathshape"));
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
     setXmlElementNames(KoXmlNS::draw, elementNames);
@@ -46,7 +49,7 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setBorder(new KoLineBorder(1.0));
+    path->setStroke(new KoShapeStroke(1.0));
     return path;
 }
 
@@ -76,5 +79,10 @@ void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *m
     if (manager->imageCollection() == 0) {
         KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
+    }
+    // we also need a MarkerCollection so add if it is not there yet
+    if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
+        KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
+        manager->setResource(KoDocumentResourceManager::MarkerCollection, qVariantFromValue(markerCollection));
     }
 }

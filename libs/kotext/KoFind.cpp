@@ -22,16 +22,16 @@
 #include "KoFind.h"
 
 #include <KoCanvasResourceManager.h>
-#include <KActionCollection>
-#include <KAction>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include "KoFind_p.h"
 
-KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *provider, KActionCollection *ac)
+KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac)
         : QObject(parent)
-        , d(new KoFindPrivate(this, provider, parent))
+        , d(new KoFindPrivate(this, canvasResourceManager, parent))
 {
-    connect(provider, SIGNAL(resourceChanged(int, const QVariant&)), this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(canvasResourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)), this, SLOT(resourceChanged(int, const QVariant&)));
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(findActivated()));
     d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT(findNextActivated()));
     d->findNext->setEnabled(false);

@@ -33,7 +33,7 @@ class QString;
 class FLAKE_EXPORT KoPathShapeLoader
 {
 public:
-    KoPathShapeLoader(KoPathShape *path);
+    explicit KoPathShapeLoader(KoPathShape *path);
     ~KoPathShapeLoader();
 
     /**

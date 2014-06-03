@@ -48,37 +48,37 @@ void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& ma
                                             ? KoGenStyle::DefaultType : KoGenStyle::GraphicType;
     switch (brush.style()) {
     case Qt::Dense1Pattern:
-        styleFill.addProperty("draw:transparency", "94%", propertyType);
+        styleFill.addProperty("draw:opacity", "6%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense2Pattern:
-        styleFill.addProperty("draw:transparency", "88%", propertyType);
+        styleFill.addProperty("draw:opacity", "12%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense3Pattern:
-        styleFill.addProperty("draw:transparency", "63%", propertyType);
+        styleFill.addProperty("draw:opacity", "37%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense4Pattern:
-        styleFill.addProperty("draw:transparency", "50%", propertyType);
+        styleFill.addProperty("draw:opacity", "50%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense5Pattern:
-        styleFill.addProperty("draw:transparency", "37%", propertyType);
+        styleFill.addProperty("draw:opacity", "63%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense6Pattern:
-        styleFill.addProperty("draw:transparency", "12%", propertyType);
+        styleFill.addProperty("draw:opacity", "88%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
     case Qt::Dense7Pattern:
-        styleFill.addProperty("draw:transparency", "6%", propertyType);
+        styleFill.addProperty("draw:opacity", "94%", propertyType);
         styleFill.addProperty("draw:fill", "solid", propertyType);
         styleFill.addProperty("draw:fill-color", brush.color().name(), propertyType);
         break;
@@ -219,23 +219,23 @@ QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const 
     if (brush.style() == Qt::RadialGradientPattern) {
         const QRadialGradient *gradient = static_cast<const QRadialGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::RadialGradientStyle /*no family name*/);
-        gradientStyle.addAttribute("svg:cx", QString("%1%").arg(gradient->center().x() * 100));
-        gradientStyle.addAttribute("svg:cy", QString("%1%").arg(gradient->center().y() * 100));
-        gradientStyle.addAttribute("svg:r",  QString("%1%").arg(gradient->radius() * 100));
-        gradientStyle.addAttribute("svg:fx", QString("%1%").arg(gradient->focalPoint().x() * 100));
-        gradientStyle.addAttribute("svg:fy", QString("%1%").arg(gradient->focalPoint().y() * 100));
+        gradientStyle.addAttributePercent("svg:cx", gradient->center().x() * 100);
+        gradientStyle.addAttributePercent("svg:cy", gradient->center().y() * 100);
+        gradientStyle.addAttributePercent("svg:r",  gradient->radius() * 100);
+        gradientStyle.addAttributePercent("svg:fx", gradient->focalPoint().x() * 100);
+        gradientStyle.addAttributePercent("svg:fy", gradient->focalPoint().y() * 100);
     } else if (brush.style() == Qt::LinearGradientPattern) {
         const QLinearGradient *gradient = static_cast<const QLinearGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::LinearGradientStyle /*no family name*/);
-        gradientStyle.addAttribute("svg:x1", QString("%1%").arg(gradient->start().x() * 100));
-        gradientStyle.addAttribute("svg:y1", QString("%1%").arg(gradient->start().y() * 100));
-        gradientStyle.addAttribute("svg:x2", QString("%1%").arg(gradient->finalStop().x() * 100));
-        gradientStyle.addAttribute("svg:y2", QString("%1%").arg(gradient->finalStop().y() * 100));
+        gradientStyle.addAttributePercent("svg:x1", gradient->start().x() * 100);
+        gradientStyle.addAttributePercent("svg:y1", gradient->start().y() * 100);
+        gradientStyle.addAttributePercent("svg:x2", gradient->finalStop().x() * 100);
+        gradientStyle.addAttributePercent("svg:y2", gradient->finalStop().y() * 100);
     } else if (brush.style() == Qt::ConicalGradientPattern) {
         const QConicalGradient * gradient = static_cast<const QConicalGradient*>(brush.gradient());
         gradientStyle = KoGenStyle(KoGenStyle::ConicalGradientStyle /*no family name*/);
-        gradientStyle.addAttribute("svg:cx", QString("%1%").arg(gradient->center().x() * 100));
-        gradientStyle.addAttribute("svg:cy", QString("%1%").arg(gradient->center().y() * 100));
+        gradientStyle.addAttributePercent("svg:cx", gradient->center().x() * 100);
+        gradientStyle.addAttributePercent("svg:cy", gradient->center().y() * 100);
         gradientStyle.addAttribute("draw:angle", QString("%1").arg(gradient->angle()));
     }
     const QGradient * gradient = brush.gradient();

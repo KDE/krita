@@ -42,10 +42,12 @@ namespace MusicCore {
 class MusicRenderer {
 public:
     struct RenderState {
+        RenderState() : clef(0) {}
+
         MusicCore::Clef* clef;
     };
 
-    MusicRenderer(MusicStyle* style);
+    explicit MusicRenderer(MusicStyle *style);
 
     void renderSheet(QPainter& painter, MusicCore::Sheet* sheet, int firstSystem, int lastSystem);
     void renderPart(QPainter& painter, MusicCore::Part* part, int firstBar, int lastBar, const QColor& color = Qt::black);

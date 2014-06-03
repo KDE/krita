@@ -20,9 +20,9 @@
 #include "TestLayout.h"
 #include <qtest_kde.h>
 
-#include <QtTest/QtTest>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
+#include <QtTest>
+#include <QFont>
+#include <QFontMetrics>
 
 #include "AttributeManager.h"
 #include "IdentifierElement.h"

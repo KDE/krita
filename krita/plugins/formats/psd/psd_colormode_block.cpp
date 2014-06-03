@@ -19,13 +19,12 @@
 
 #include "psd.h"
 #include "psd_utils.h"
-#include <QtCore/QByteArray>
-#include <qrgb.h>
+#include <QByteArray>
 #include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
-        : blocksize(0)
-        , colormode(colormode)
+    : blocksize(0)
+    , colormode(colormode)
 {
 }
 
@@ -52,14 +51,14 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
-
-        for (int i=0; i<=767;)
-        {
-          colormap.append(qRgb(data[i],data[i++],data[i++]));
-          //qDebug()<<colormap<<i;
+        int i = 0;
+        while (i <= 767) {
+            colormap.append(qRgb(data[i],data[i + 1],data[i + 2]));
+            i += 2;
         }
-
-
+    }
+    else {
+        duotoneSpecification = data;
     }
     return valid();
 }
@@ -68,14 +67,27 @@ bool PSDColorModeBlock::read(QIODevice* io)
 
 bool PSDColorModeBlock::write(QIODevice* io)
 {
-    Q_UNUSED(io);
-    Q_ASSERT(valid());
     if (!valid()) {
         error = "Cannot write an invalid Color Mode Block";
         return false;
     }
-    qFatal("TODO: implement writing the colormode block");
-    return false;
+    if (colormap.size() > 0 && colormode == Indexed) {
+        error = "Cannot write indexed color data";
+        return false;
+    }
+    else if (duotoneSpecification.size() > 0 && colormode == DuoTone) {
+        quint32 blocksize = duotoneSpecification.size();
+        psdwrite(io, blocksize);
+        if (io->write(duotoneSpecification.constData(), blocksize) != blocksize) {
+            error = "Failed to write duotone specification";
+            return false;
+        }
+    }
+    else {
+        quint32 i = 0;
+        psdwrite(io, i);
+    }
+    return true;
 }
 
 bool PSDColorModeBlock::valid()
@@ -89,7 +101,7 @@ bool PSDColorModeBlock::valid()
         return false;
     }
     if (colormode == DuoTone && blocksize == 0) {
-        error == QString("DuoTone mode, but data block is empty");
+        error = QString("DuoTone mode, but data block is empty");
         return false;
     }
     if ((quint32)data.size() != blocksize) {

@@ -21,8 +21,10 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
+
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_paint_device.h"
 #include "kis_image.h"
@@ -30,9 +32,10 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_clone_info.h"
+#include "kis_paint_layer.h"
 
 
-class KisCloneLayer::Private
+struct KisCloneLayer::Private
 {
 public:
     KisLayerSP copyFrom;
@@ -76,6 +79,18 @@ KisCloneLayer::~KisCloneLayer()
         m_d->copyFrom->unregisterClone(this);
     }
     delete m_d;
+}
+
+KisLayerSP KisCloneLayer::reincarnateAsPaintLayer() const
+{
+    KisPaintDeviceSP newOriginal = new KisPaintDevice(*original());
+    KisPaintLayerSP newLayer = new KisPaintLayer(image(), name(), opacity(), newOriginal);
+    newLayer->setX(newLayer->x() + x());
+    newLayer->setY(newLayer->y() + y());
+    newLayer->setCompositeOp(compositeOpId());
+    newLayer->mergeNodeProperties(nodeProperties());
+
+    return newLayer;
 }
 
 bool KisCloneLayer::allowAsChild(KisNodeSP node) const
@@ -125,9 +140,21 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisCloneLayer::setDirtyOriginal(const QRect &rect)
 {
+    /**
+     * The original will be updated when the clone becomes visible
+     * again.
+     */
+    if (!visible(true)) return;
+
     QRect localRect = rect;
     localRect.translate(m_d->x, m_d->y);
     KisLayer::setDirty(localRect);
+}
+
+void KisCloneLayer::notifyParentVisibilityChanged(bool value)
+{
+    KisLayer::setDirty(image()->bounds());
+    KisLayer::notifyParentVisibilityChanged(value);
 }
 
 qint32 KisCloneLayer::x() const
@@ -149,14 +176,31 @@ void KisCloneLayer::setY(qint32 y)
 
 QRect KisCloneLayer::extent() const
 {
-    KisPaintDeviceSP projectionDevice = projection();
-    return projectionDevice->extent();
+    QRect rect = original()->extent();
+    if(m_d->x || m_d->y) {
+        rect.translate(m_d->x, m_d->y);
+    }
+    return rect | projection()->extent();
 }
 
 QRect KisCloneLayer::exactBounds() const
 {
-    KisPaintDeviceSP projectionDevice = projection();
-    return projectionDevice->exactBounds();
+    QRect rect = original()->exactBounds();
+    if(m_d->x || m_d->y) {
+        rect.translate(m_d->x, m_d->y);
+    }
+    return rect | projection()->exactBounds();
+}
+
+QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
+{
+    QRect resultRect = rect;
+
+    if(pos & (N_FILTHY_PROJECTION | N_FILTHY) && (m_d->x || m_d->y)) {
+        resultRect |= rect.translated(-m_d->x, -m_d->y);
+    }
+
+    return resultRect;
 }
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)
@@ -171,7 +215,15 @@ void KisCloneLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAd
 
 void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer)
 {
+    if (m_d->copyFrom) {
+        m_d->copyFrom->unregisterClone(this);
+    }
+
     m_d->copyFrom = fromLayer;
+
+    if (m_d->copyFrom) {
+        m_d->copyFrom->registerClone(this);
+    }
 }
 
 KisLayerSP KisCloneLayer::copyFrom() const
@@ -202,7 +254,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return KIcon("edit-copy");
+    return koIcon("edit-copy");
 }
 
 KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const

@@ -1,29 +1,30 @@
 /*
  *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Alexander Potashev <aspotashev@gmail.com>
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  You should have received a copy of the GNU Library General Public License
+ *  along with this library; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ *  Boston, MA 02110-1301, USA.
  */
 
-#ifndef __K_UNDO2_MAGIC_STRING_H
-#define __K_UNDO2_MAGIC_STRING_H
+#ifndef KUNDO2MAGICSTRING_H
+#define KUNDO2MAGICSTRING_H
 
 #include <QString>
 #include <klocale.h>
 
 #include "kundo2_export.h"
-#include <boost/operators.hpp>
 
 
 /**
@@ -40,11 +41,11 @@
  * translations with '\n' symbol and the magig string will recognize
  * it.
  *
- * NOTE: KUndo2MagicString will never support concatenation operators,
+ * \note KUndo2MagicString will never support concatenation operators,
  *       because in many languages you cannot combine words without
  *       knowing the proper case.
  */
-class KUNDO2_EXPORT KUndo2MagicString : boost::equality_comparable<KUndo2MagicString>
+class KUNDO2_EXPORT KUndo2MagicString
 {
 public:
     /**
@@ -52,7 +53,7 @@ public:
      * non-empy string without special functions, all the calls to which
      * are processed by xgettext.
      */
-    explicit KUndo2MagicString();
+    KUndo2MagicString();
 
     /**
      * Fetch the main translated string. That is the one that goes to
@@ -73,8 +74,8 @@ public:
      */
     bool isEmpty() const;
 
-    // the != counterpart is provided by boost
     bool operator==(const KUndo2MagicString &rhs) const;
+    bool operator!=(const KUndo2MagicString &rhs) const;
 
 private:
     friend QDebug operator<<(QDebug dbg, const KUndo2MagicString &v);
@@ -289,4 +290,4 @@ template <typename A1, typename A2, typename A3, typename A4>
     return i18ncp(prependContext(ctxt).toLatin1().data(), sing, plur, a1, a2, a3, a4);
 }
 
-#endif /* __K_UNDO2_MAGIC_STRING_H */
+#endif /* KUNDO2MAGICSTRING_H */

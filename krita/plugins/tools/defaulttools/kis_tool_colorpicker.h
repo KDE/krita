@@ -124,7 +124,7 @@ public:
         setPriority(15);
         setIconName(koIconNameCStr("krita_tool_color_picker"));
         setShortcut(KShortcut(Qt::Key_P));
-        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolColorPickerFactory() {}

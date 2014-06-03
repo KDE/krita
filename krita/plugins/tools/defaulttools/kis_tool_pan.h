@@ -75,7 +75,7 @@ public:
             : KoToolFactoryBase(KoPanTool_ID) {
         setToolTip(i18n("Move and rotate your canvas"));
         setToolType(navigationToolType());
-        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
+        setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(5);
         setIconName(koIconNameCStr("krita_tool_pan"));
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );

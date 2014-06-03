@@ -27,9 +27,9 @@ struct KisCanvasDecoration::Private {
     QString name;
 };
 
-KisCanvasDecoration::KisCanvasDecoration(const QString& id, const QString& name, KisView2 * parent) : QObject(parent), d(new Private)
+KisCanvasDecoration::KisCanvasDecoration(const QString& id, const QString& name, KisView2 * parent, bool visible) : QObject(parent), d(new Private)
 {
-    d->visible = false;
+    d->visible = visible;
     d->view = parent;
     d->id = id;
     d->name = name;

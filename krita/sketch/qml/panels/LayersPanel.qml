@@ -250,7 +250,7 @@ Panel {
                             right: parent.right;
                             leftMargin: Constants.DefaultMargin * model.depth;
                         }
-                        height: model.activeLayer ? Constants.GridHeight * 1.5 : Constants.GridHeight;
+                        height: model.activeLayer ? Constants.GridHeight + layerControls.height : Constants.GridHeight;
                         Behavior on height { NumberAnimation { duration: 100; } }
                         radius: 8
                         color: Settings.theme.color("panels/layers/layer/background");
@@ -352,63 +352,62 @@ Panel {
                         }
                     }
                     Row {
+                        id: layerControls;
+
                         anchors {
                             left: layerBgRect.left;
-                            leftMargin: Constants.DefaultMargin;
                             right: layerBgRect.right;
-                            rightMargin: Constants.DefaultMargin;
                             bottom: layerBgRect.bottom;
-//                             bottomMargin: Constants.DefaultMargin;
                         }
-                        height: Constants.GridHeight * 0.5;
+
+                        height: childrenRect.height;
                         opacity: model.activeLayer ? 1.0 : 0.0;
                         Behavior on opacity { NumberAnimation { duration: 100; } }
-                        spacing: Constants.DefaultMargin;
+                        spacing: 0;
                         
                         Button {
                             id: moveUpButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
                             enabled: model.canMoveUp;
-                            image: Settings.theme.icon("up");
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_up");
                             onClicked: layerModel.moveUp();
                             tooltip: "Move Layer Up";
                         }
                         Button {
                             id: moveDownButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
                             enabled: model.canMoveDown;
-                            image: Settings.theme.icon("down");
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_down");
                             onClicked: layerModel.moveDown();
                             tooltip: "Move Layer Down";
                         }
                         Button {
                             id: moveLeftButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
                             enabled: model.canMoveLeft;
-                            image: Settings.theme.icon("back");
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_left");
                             onClicked: layerModel.moveLeft();
                             tooltip: "Move Layer out of Group";
                         }
                         Button {
                             id: moveRightButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
                             enabled: model.canMoveRight;
-                            image: Settings.theme.icon("forward");
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_right");
                             onClicked: layerModel.moveRight();
                             tooltip: "Move Layer into Group";
                         }
                         Button {
                             id: duplicateLayerButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
                             image: Settings.theme.icon("layer_duplicate");
                             onClicked: layerModel.clone();
@@ -416,10 +415,9 @@ Panel {
                         }
                         Button {
                             id: clearLayerButton;
-                            anchors.verticalCenter: parent.verticalCenter;
-                            width: Constants.GridWidth / 4;
+                            width: parent.width / 6;
                             height: width;
-                            image: Settings.theme.icon("erase");
+                            image: Settings.theme.icon("layer_clear");
                             onClicked: layerModel.clear();
                             tooltip: "Clear Layer";
                         }

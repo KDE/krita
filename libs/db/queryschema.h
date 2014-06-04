@@ -408,8 +408,8 @@ public:
     TableSchema::List* tables() const;
 
     /*! Adds \a table schema as one of tables used in a query.
-     if \a alias is not empty, it will be assigned to this table
-     using setTableAlias(position, alias)
+     If \a alias is not empty, it will be assigned to this table
+     using setTableAlias(position, alias).
     */
     void addTable(TableSchema *table, const QByteArray& alias = QByteArray());
 

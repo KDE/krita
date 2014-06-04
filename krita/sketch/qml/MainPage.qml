@@ -169,7 +169,7 @@ Page {
         Connections {
             target: sketchView;
             onFloatingMessageRequested: {
-                if(!message)
+                if(message == undefined || message.startsWith == undefined)
                     return;
 
                 if(message.startsWith("Zoom") || message.startsWith("Rotation"))

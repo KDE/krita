@@ -39,6 +39,8 @@ public:
     void endStroke(KisStrokeId id);
     bool cancelStroke(KisStrokeId id);
 
+    bool tryCancelCurrentStrokeAsync();
+
     void processQueue(KisUpdaterContext &updaterContext, bool externalJobsPending);
     bool needsExclusiveAccess() const;
     bool isEmpty() const;

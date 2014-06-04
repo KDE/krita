@@ -909,6 +909,8 @@ void KisView2::slotLoadingFinished()
      * of displaying the status of the global strokes queue
      */
     image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
+    connect(m_d->statusBar->progress(), SIGNAL(sigCancellationRequested()),
+            image(), SLOT(requestStrokeCancellation()));
 
     m_d->canvas->initializeImage();
 

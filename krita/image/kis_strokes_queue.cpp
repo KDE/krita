@@ -95,6 +95,34 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
     return stroke;
 }
 
+bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
+{
+    bool anythingCanceled = false;
+
+    QMutexLocker locker(&m_d->mutex);
+
+    if (!m_d->strokesQueue.isEmpty()) {
+        KisStrokeSP currentStroke = m_d->strokesQueue.head();
+
+        /**
+         * We cancel only ended strokes. This is done to avoid
+         * handling dangling pointers problem (KisStrokeId). The owner
+         * of a stroke will cancel the stroke itself if needed.
+         */
+        if (currentStroke->isEnded()) {
+            currentStroke->cancelStroke();
+            anythingCanceled = true;
+        }
+    }
+
+    /**
+     * NOTE: We do not touch the openedStrokesCounter here since
+     *       we work with closed id's only here
+     */
+
+    return anythingCanceled;
+}
+
 void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
                                    bool externalJobsPending)
 {

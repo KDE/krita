@@ -37,8 +37,8 @@ struct KisQueuesProgressUpdater::Private
     QMutex mutex;
     QTimer timer;
 
-    QAtomicInt doneSizeMetric;
     int queueSizeMetric;
+    int initialQueueSizeMetric;
 
     QString jobName;
 
@@ -66,16 +66,17 @@ KisQueuesProgressUpdater::~KisQueuesProgressUpdater()
     delete m_d;
 }
 
-void KisQueuesProgressUpdater::notifyJobDone(int sizeMetric)
-{
-    m_d->doneSizeMetric.fetchAndAddOrdered(sizeMetric);
-}
-
 void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString &jobName)
 {
     QMutexLocker locker(&m_d->mutex);
     m_d->queueSizeMetric = queueSizeMetric;
-    m_d->jobName = jobName;
+
+    if (jobName != m_d->jobName ||
+        m_d->queueSizeMetric > m_d->initialQueueSizeMetric) {
+
+        m_d->jobName = jobName;
+        m_d->initialQueueSizeMetric = m_d->queueSizeMetric;
+    }
 
     if(m_d->queueSizeMetric && !m_d->timer.isActive()) {
         m_d->trackingStarted = true;
@@ -85,7 +86,7 @@ void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString
     else if(!m_d->queueSizeMetric && !m_d->timerFiredOnce) {
             m_d->trackingStarted = false;
             m_d->timer.stop();
-            m_d->doneSizeMetric = 0;
+            m_d->initialQueueSizeMetric = 0;
     }
 }
 
@@ -112,12 +113,12 @@ void KisQueuesProgressUpdater::updateProxy()
     if(!m_d->trackingStarted) return;
     m_d->timerFiredOnce = true;
 
-    m_d->progressProxy->setRange(0, m_d->doneSizeMetric + m_d->queueSizeMetric);
-    m_d->progressProxy->setValue(m_d->doneSizeMetric);
+    m_d->progressProxy->setRange(0, m_d->initialQueueSizeMetric);
+    m_d->progressProxy->setValue(m_d->initialQueueSizeMetric - m_d->queueSizeMetric);
     m_d->progressProxy->setFormat(m_d->jobName);
 
     if(!m_d->queueSizeMetric) {
         m_d->timer.stop();
-        m_d->doneSizeMetric = 0;
+        m_d->initialQueueSizeMetric = 0;
     }
 }

@@ -64,6 +64,9 @@ public slots:
     void cancel();
     void correctVisibility(int progressValue);
 
+signals:
+    void sigCancellationRequested();
+
 private:
 
     QToolButton* m_cancelButton;

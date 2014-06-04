@@ -118,18 +118,15 @@ void KisUpdateScheduler::progressUpdate()
             jobName = "Update";
         }
 
-        int sizeMetric = m_d->strokesQueue->sizeMetric() + m_d->updatesQueue->sizeMetric();
+        int sizeMetric = m_d->strokesQueue->sizeMetric();
+        if (!sizeMetric) {
+            sizeMetric = m_d->updatesQueue->sizeMetric();
+        }
+
         m_d->progressUpdater->updateProgress(sizeMetric, jobName);
     }
     else {
         m_d->progressUpdater->hide();
-    }
-}
-
-void KisUpdateScheduler::progressNotifyJobDone()
-{
-    if(m_d->progressUpdater) {
-        m_d->progressUpdater->notifyJobDone(1);
     }
 }
 
@@ -200,6 +197,11 @@ bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
     bool result = m_d->strokesQueue->cancelStroke(id);
     processQueues();
     return result;
+}
+
+bool KisUpdateScheduler::tryCancelCurrentStrokeAsync()
+{
+    return m_d->strokesQueue->tryCancelCurrentStrokeAsync();
 }
 
 bool KisUpdateScheduler::wrapAroundModeSupported() const
@@ -350,7 +352,6 @@ void KisUpdateScheduler::doSomeUsefulWork()
 
 void KisUpdateScheduler::spareThreadAppeared()
 {
-    progressNotifyJobDone();
     processQueues();
 }
 

@@ -34,6 +34,7 @@ private slots:
     void testStrokesOverlapping();
     void testImmediateCancel();
     void testOpenedStrokeCounter();
+    void testAsyncCancelWhileOpenedStroke();
 };
 
 #endif /* __KIS_STROKES_QUEUE_TEST_H */

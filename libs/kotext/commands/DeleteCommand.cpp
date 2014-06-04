@@ -185,8 +185,7 @@ void DeleteCommand::doDelete()
             QList<QVariant> openList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
             foreach (const QVariant &sv, openList) {
-                KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-                curSectionDelimiters.push_back(SectionHandle(sec->name(), true, sv));
+                curSectionDelimiters.push_back(SectionHandle(KoSectionUtils::getSectionStartName(sv), true, sv));
             }
         }
 
@@ -195,11 +194,11 @@ void DeleteCommand::doDelete()
             QList<QVariant> closeList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
             foreach (const QVariant &sv, closeList) {
-                KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-                if (!curSectionDelimiters.empty() && curSectionDelimiters.last().name == sec->name) {
+                QString secName = KoSectionUtils::getSectionEndName(sv);
+                if (!curSectionDelimiters.empty() && curSectionDelimiters.last().name == secName) {
                     curSectionDelimiters.pop_back();
                 } else {
-                    curSectionDelimiters.push_back(SectionHandle(sec->name, false, sv));
+                    curSectionDelimiters.push_back(SectionHandle(secName, false, sv));
                 }
             }
         }

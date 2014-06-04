@@ -75,6 +75,8 @@ struct KOTEXT_EXPORT KoSectionEnd {
 
 namespace KoSectionUtils {
     bool getNextBlock(QTextCursor &cur);
+    QString getSectionStartName(QVariant q);
+    QString getSectionEndName(QVariant q);
 }
 
 Q_DECLARE_METATYPE(KoSection)

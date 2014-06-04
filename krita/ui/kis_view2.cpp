@@ -1604,7 +1604,7 @@ void KisView2::updateIcons()
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
 {
-    if(m_d->showFloatingMessage) {
+    if(m_d->showFloatingMessage && qtMainWindow()) {
         if (m_d->savedFloatingMessage) {
             m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
         } else {

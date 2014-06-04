@@ -178,23 +178,23 @@ void DeleteCommand::doDelete()
     bool hasEntirelyInsideBlock = false;
     QList<SectionHandle> curSectionDelimiters; // helps us delete all sections, lying entirely in selection
     while (cur.position() <= caret->selectionEnd()) {
-        bool beginInside = false;
-        bool endInside = false;
+        bool doesBeginInside = false;
+        bool doesEndInside = false;
         if (cur.block().position() >= caret->selectionStart()) { // begin of the block inside selection
-            beginInside = true;
+            doesBeginInside = true;
             QList<QVariant> openList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
             foreach (const QVariant &sv, openList) {
-                curSectionDelimiters.push_back(SectionHandle(KoSectionUtils::getSectionStartName(sv), true, sv));
+                curSectionDelimiters.push_back(SectionHandle(KoSectionUtils::sectionStartName(sv), true, sv));
             }
         }
 
         if (cur.block().position() + cur.block().length() <= caret->selectionEnd()) { //end of the block inside selection
-            endInside = true;
+            doesEndInside = true;
             QList<QVariant> closeList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
             foreach (const QVariant &sv, closeList) {
-                QString secName = KoSectionUtils::getSectionEndName(sv);
+                QString secName = KoSectionUtils::sectionEndName(sv);
                 if (!curSectionDelimiters.empty() && curSectionDelimiters.last().name == secName) {
                     curSectionDelimiters.pop_back();
                 } else {
@@ -203,11 +203,11 @@ void DeleteCommand::doDelete()
             }
         }
 
-        if (!beginInside && endInside) {
+        if (!doesBeginInside && doesEndInside) {
             startBlockNum = cur.blockNumber();
-        } else if (beginInside && !endInside) {
+        } else if (doesBeginInside && !doesEndInside) {
             endBlockNum = cur.blockNumber();
-        } else if (beginInside && endInside) {
+        } else if (doesBeginInside && doesEndInside) {
             hasEntirelyInsideBlock = true;
         }
 
@@ -239,8 +239,8 @@ void DeleteCommand::doDelete()
                     .blockFormat().property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
 
                 while (!openList.empty() && !closeListEndBlock.empty()
-                    && KoSectionUtils::getSectionStartName(openList.last())
-                    == KoSectionUtils::getSectionEndName(closeListEndBlock.first())) {
+                    && KoSectionUtils::sectionStartName(openList.last())
+                    == KoSectionUtils::sectionEndName(closeListEndBlock.first())) {
                     openList.pop_back();
                     closeListEndBlock.pop_front();
                 }

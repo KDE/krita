@@ -284,7 +284,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, bool pasteMode)
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, LoadBodyMode mode)
 {
     const QTextDocument *document = cursor.block().document();
 
@@ -311,7 +311,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     // we are saving which sections end in current block
     // and put this ends after the inserted text
     QList<QVariant> oldSectionEndings;
-    if (pasteMode) {
+    if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
         if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
             oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
@@ -432,7 +432,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     rootCallChecker--;
 
     // here we put old endings after text insertion
-    if (pasteMode) {
+    if (mode) {
         QTextBlockFormat fmt = cursor.blockFormat();
         if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
             oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)

@@ -85,6 +85,11 @@ public:
     */
     ~KoTextLoader();
 
+    enum LoadBodyMode
+    {
+        UsualMode,
+        PasteMode
+    };
     /**
     * Load the body from the \p element into the \p cursor .
     *
@@ -92,9 +97,10 @@ public:
     * instance likes to load an ODF element.
     *
     * @param element the element to start loadingat
-    * @param cursor the text cursor to insert the body after    *
+    * @param cursor the text cursor to insert the body after
+    * @param mode does special handling of section needed, in case we are pasting text
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, bool pasteMode = false);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor, LoadBodyMode pasteMode = UsualMode);
 
 signals:
 

@@ -74,9 +74,32 @@ struct KOTEXT_EXPORT KoSectionEnd {
 };
 
 namespace KoSectionUtils {
+    /**
+     * Moves the block to the next block within the same QTextFrame
+     * @param cur block to move, modified during call
+     * @return @c false if there is no next block, @c true otherwise
+     */
     bool getNextBlock(QTextCursor &cur);
-    QString getSectionStartName(QVariant q);
-    QString getSectionEndName(QVariant q);
+    /**
+     * Convinient function to get name of a section from QVariant
+     * that is really a KoSection *
+     *
+     * There is no internal check that \p q is a KoSection *
+     *
+     * @param q QVariant version of pointer to a KoSection
+     * @return name of a specified section
+     */
+    QString sectionStartName(QVariant q);
+    /**
+     * Convinient function to get name of a section from QVariant
+     * that is really a KoSectionEnd *
+     *
+     * There is no internal check that \p q is a KoSectionEnd *
+     *
+     * @param q QVariant version of pointer to a KoSectionEnd
+     * @return name of a specified section
+     */
+    QString sectionEndName(QVariant q);
 }
 
 Q_DECLARE_METATYPE(KoSection)

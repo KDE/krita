@@ -139,12 +139,12 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     return true;
 }
 
-QString KoSectionUtils::getSectionStartName(QVariant q)
+QString KoSectionUtils::sectionStartName(QVariant q)
 {
     return static_cast<KoSection *>(q.value<void *>())->name();
 }
 
-QString KoSectionUtils::getSectionEndName(QVariant q)
+QString KoSectionUtils::sectionEndName(QVariant q)
 {
     return static_cast<KoSectionEnd *>(q.value<void *>())->name;
 }

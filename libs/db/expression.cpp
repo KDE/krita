@@ -708,15 +708,12 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     /* taken from parser's addColumn(): */
     KexiDBDbg << "checking variable name: " << name;
-    int dotPos = name.indexOf('.');
     QString tableName, fieldName;
-//TODO: shall we also support db name?
-    if (dotPos > 0) {
-        tableName = name.left(dotPos);
-        fieldName = name.mid(dotPos + 1);
+    if (!KexiDB::splitToTableAndFieldParts(name, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName)) {
+        return false;
     }
+//! @todo shall we also support db name?
     if (tableName.isEmpty()) {//fieldname only
-        fieldName = name;
         if (fieldName == "*") {
 //   querySchema->addAsterisk( new QueryAsterisk(querySchema) );
             return true;

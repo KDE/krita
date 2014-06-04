@@ -226,8 +226,9 @@ void DeleteCommand::doDelete()
             }
         }
 
-        // we're expanding A and B type ends to the end of the start block,
-        // delete all D type, move C to the begin of the next after the endBlock
+        // we're expanding ends in affected blocks to the end of the start block,
+        // delete all entirely in affected blocks sections and move end we have
+        // to the begin of the next after the end block
         if (startBlockNum != -1) {
             QTextBlockFormat fmt = caret->document()->findBlockByNumber(startBlockNum).blockFormat();
             QTextBlockFormat fmt2 = caret->document()->findBlockByNumber(endBlockNum + 1).blockFormat();

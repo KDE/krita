@@ -18,6 +18,7 @@
 
 #include "kis_update_scheduler.h"
 
+#include "klocale.h"
 #include "kis_image_config.h"
 #include "kis_merge_walker.h"
 #include "kis_full_refresh_walker.h"
@@ -115,7 +116,7 @@ void KisUpdateScheduler::progressUpdate()
     if(m_d->progressUpdater && !m_d->strokesQueue->hasOpenedStrokes()) {
         QString jobName = m_d->strokesQueue->currentStrokeName();
         if(jobName.isEmpty()) {
-            jobName = "Update";
+            jobName = i18n("Updating...");
         }
 
         int sizeMetric = m_d->strokesQueue->sizeMetric();

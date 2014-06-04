@@ -36,7 +36,7 @@
 #include <QSplitter>
 #include <QToolButton>
 
-#include <kfiledialog.h>
+#include <kmimetype.h>
 #include <klocale.h>
 
 #ifdef GHNS
@@ -46,6 +46,7 @@
 #endif
 
 #include <KoIcon.h>
+#include <KoFileDialog.h>
 
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
@@ -183,10 +184,17 @@ KoResourceItemChooser::~KoResourceItemChooser()
 
 void KoResourceItemChooser::slotButtonClicked( int button )
 {
-    if( button == Button_Import ) {
+    if (button == Button_Import ) {
         QString extensions = d->model->extensions();
-        QString filter = extensions.replace(QString(":"), QString(" "));
-        QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18nc("@title:window", "Choose File to Add"));
+        QString filter = QString("%1 (%2)")
+                .arg(d->model->serverType())
+                .arg(extensions.replace(QString(":"), QString(" ")));
+
+
+        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+        dialog.setNameFilter(filter);
+        dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
+        QString filename = dialog.url();
 
         d->model->importResourceFile(filename);
     }

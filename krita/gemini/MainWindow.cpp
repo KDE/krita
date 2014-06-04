@@ -336,6 +336,10 @@ void MainWindow::switchToSketch()
         QTimer::singleShot(50, this, SLOT(sketchChange()));
 
     //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(true);
+    }
 }
 
 void MainWindow::sketchChange()
@@ -413,6 +417,10 @@ void MainWindow::switchToDesktop(bool justLoaded)
         qApp->processEvents();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
+    }
+
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(false);
     }
 
     //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();

@@ -43,17 +43,12 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
 {
     m_valid = false;
     init();
-    //bool valid; //used for local unit conversions
-
-    kDebug();
-
+    //kDebug();
     if (elemSource.tagName() != "report:content") {
-        kDebug() << "QDomElement passed to parseReport() was not <report:content> tag";
-        kDebug() << elemSource.text();
+        kWarning() << "QDomElement passed to parseReport() was not <report:content> tag"
+                   << elemSource.text();
         return;
     }
-
-    //qreal d = 0.0;
 
     QDomNodeList sections = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < sections.count(); nodeCounter++) {
@@ -91,15 +86,14 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
                 sec = sectionlist.item(s);
                 if (sec.isElement()) {
                     QString sn = sec.nodeName().toLower();
-                    kDebug() << sn;
+                    //kDebug() << sn;
                     if (sn == "report:section") {
                         KRSectionData * sd = new KRSectionData(sec.toElement(), this);
                         if (!sd->isValid()) {
                             kDebug() << "Invalid section";
                             delete sd;
                         } else {
-                            kDebug() << "Adding section of type " << sd->type();
-
+                            //kDebug() << "Adding section of type " << sd->type();
                             switch (sd->type()) {
                             case KRSectionData::PageHeaderFirst:
                                 m_pageHeaderFirst = sd;
@@ -153,7 +147,7 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
                         }
                     }
                 } else {
-                    kDebug() << "Encountered an unknown Element: "  << elemThis.tagName();
+                    kWarning() << "Encountered an unknown Element: "  << elemThis.tagName();
                 }
             }
         }
@@ -180,7 +174,7 @@ QList<KoReportItemBase*> KoReportReportData::objects() const
     }
 
     if (m_detailSection) {
-        kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
+        //kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
             if (g->m_groupHeader) {
                 obs << g->m_groupHeader->objects();
@@ -193,10 +187,10 @@ QList<KoReportItemBase*> KoReportReportData::objects() const
             obs << m_detailSection->m_detailSection->objects();
     }
 
-    kDebug() << "Object List:";
+    /*kDebug() << "Object List:";
     foreach(KoReportItemBase* o, obs) {
         kDebug() << o->entityName();
-    }
+    }*/
     return obs;
 }
 
@@ -224,7 +218,7 @@ QList<KRSectionData*> KoReportReportData::sections() const
     }
 
     if (m_detailSection) {
-        kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
+        //kDebug() << "Number of groups: " << m_detailSection->m_groupList.count();
         foreach(ORDetailGroupSectionData* g, m_detailSection->m_groupList) {
             if (g->m_groupHeader) {
                 secs << g->m_groupHeader;

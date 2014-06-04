@@ -59,6 +59,7 @@
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
 #include "kis_display_color_converter.h"
+#include "kis_exposure_gamma_correction_interface.h"
 
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
@@ -520,6 +521,16 @@ KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
     return m_d->displayColorConverter;
 }
 
+KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
+{
+    KisDisplayFilterSP displayFilter =
+        m_d->displayColorConverter->displayFilter();
+
+    return displayFilter ?
+        displayFilter->correctionInterface() :
+        KisDumbExposureGammaCorrectionInterface::instance();
+}
+
 void KisCanvas2::startResizingImage()
 {
     KisImageWSP image = this->image();
@@ -827,6 +838,13 @@ bool KisCanvas2::isPopupPaletteVisible()
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        infinityDecoration->setVisible(!value);
+    }
+
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 

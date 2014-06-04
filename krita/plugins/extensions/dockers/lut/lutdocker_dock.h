@@ -32,6 +32,7 @@
 #include "ui_wdglut.h"
 
 #include <OpenColorIO/OpenColorIO.h>
+#include "kis_signal_compressor_with_param.h"
 
 
 namespace OCIO = OCIO_NAMESPACE;
@@ -46,15 +47,10 @@ class KComboBox;
 class QToolButton;
 
 #include "ocio_display_filter.h"
+#include "kis_exposure_gamma_correction_interface.h"
 
-/**
- * Image overview docker
- *
- * _Should_ provide an image thumbnail with a pan rect and a zoom slider, as well
- * as some pertinent information and the exposure slider. Apart from the exposure
- * slider, this has been broken since 2006 :-(
- */
-class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLut
+
+class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLut, public KisExposureGammaCorrectionInterface
 {
     Q_OBJECT
 
@@ -66,6 +62,12 @@ public:
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
+
+    bool canChangeExposureAndGamma() const;
+    qreal currentExposure() const;
+    void setCurrentExposure(qreal value);
+    qreal currentGamma() const;
+    void setCurrentGamma(qreal value);
 
 private slots:
 
@@ -94,6 +96,8 @@ private:
     void enableControls();
     void refillControls();
 
+    void setCurrentExposureImpl(qreal value);
+    void setCurrentGammaImpl(qreal value);
 
 private:
 
@@ -104,6 +108,9 @@ private:
     OcioDisplayFilterSP m_displayFilter;
 
     bool m_draggingSlider;
+
+    QScopedPointer<KisSignalCompressorWithParam<qreal> > m_exposureCompressor;
+    QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;
 };
 
 

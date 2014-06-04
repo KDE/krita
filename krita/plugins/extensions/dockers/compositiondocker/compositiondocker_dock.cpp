@@ -26,7 +26,6 @@
 #include <QThread>
 #include <QAction>
 #include <QDesktopServices>
-#include <QFileDialog>
 #include <QMenu>
 
 #include <klocale.h>
@@ -172,23 +171,17 @@ void CompositionDockerDock::exportClicked()
 {
 	QString path;
 
+    KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/compositiondockerdock");
+    dialog.setCaption(i18n("Select a Directory"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    path = dialog.url();
 
-#ifdef Q_OS_WIN
-	path = QFileDialog::getExistingDirectory(this,
-										     i18n("Select a Directory"),
-											 QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+
     if (path.isNull()) return;
 
     if (!path.endsWith('/')) {
 		path.append('/');
 	}
-#else
-    KDirSelectDialog dialog(KUrl(), true);
-    if (dialog.exec() != KDialog::Accepted) {
-        return;
-    }
-    path = dialog.url().path(KUrl::AddTrailingSlash);
-#endif
 
     KisImageWSP image = m_canvas->view()->image();
     QString filename = m_canvas->view()->document()->localFilePath();

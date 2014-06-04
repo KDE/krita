@@ -27,7 +27,6 @@
 #include <QShowEvent>
 
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>

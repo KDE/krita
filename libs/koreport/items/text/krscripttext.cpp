@@ -183,7 +183,7 @@ void Text::setSize(const QSizeF& s)
 void Text::loadFromFile(const QString &fn)
 {
     QFile file(fn);
-    kDebug() << "Loading from " << fn;
+    //kDebug() << "Loading from" << fn;
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         m_text->m_controlSource->setValue(QVariant("$Unable to read " + fn));
         return;

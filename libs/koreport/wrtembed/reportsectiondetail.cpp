@@ -88,9 +88,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
-
-        kDebug() << n;
-
+        //kDebug() << n;
         if (n == "pagebreak") {
             QDomElement eThis = node.toElement();
             if (eThis.attribute("when") == "at end")
@@ -100,11 +98,11 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
             rsdg->initFromXML( node.toElement() );
             insertGroupSection(groupSectionCount(), rsdg);
         } else if (n == "report:section" && node.toElement().attribute("report:section-type") == "detail") {
-            kDebug() << "Creating detail section";
+            //kDebug() << "Creating detail section";
             m_detail->initFromXML(node);
         } else {
             // unknown element
-            kDebug() << "while parsing section encountered and unknown element: " <<  n;
+            kWarning() << "while parsing section encountered and unknown element: " <<  n;
         }
     }
 

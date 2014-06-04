@@ -46,7 +46,6 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type):
     m_inverseSaturation(false),
     m_relativeLight(false),
     m_light(0.5f),
-    m_lightStripPos(LSP_RIGHT),
     m_selectedColorIsFgColor(true),
     m_clickedRing(-1)
 {
@@ -59,13 +58,6 @@ void KisColorSelector::setColorSpace(KisColor::Type type)
 {
     m_colorSpace    = type;
     m_selectedColor = KisColor(m_selectedColor, m_colorSpace);
-    update();
-}
-
-void KisColorSelector::setLightStripPosition(KisColorSelector::LightStripPos pos)
-{
-    m_lightStripPos = pos;
-    recalculateAreas(quint8(getNumLightPieces()));
     update();
 }
 
@@ -182,10 +174,8 @@ qint8 KisColorSelector::getLightIndex(const QPointF& pt) const
 {
     if (m_lightStripArea.contains(pt.toPoint(), true)) {
         qreal t = (pt.x() - m_lightStripArea.x()) / qreal(m_lightStripArea.width());
-        
-        if (m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-            t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
-        
+        t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
+
         return qint8(t * getNumLightPieces());
     }
     
@@ -215,13 +205,10 @@ qreal KisColorSelector::getLight(const QPointF& pt) const
     qint8 clickedLightPiece = getLightIndex(pt);
     
     if (clickedLightPiece >= 0) {
-        if (getNumLightPieces() > 1)
+        if (getNumLightPieces() > 1) {
             return 1.0 - (qreal(clickedLightPiece) / qreal(getNumLightPieces()-1));
-
-        if (m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-            return 1.0 - (qreal(pt.y()) / qreal(m_lightStripArea.height()));
-        
-        return 1.0 - (qreal(pt.x()) / qreal(m_lightStripArea.width()));
+        }
+        return 1.0 - (qreal(pt.y()) / qreal(m_lightStripArea.height()));
     }
     
     return qreal(0);
@@ -275,39 +262,16 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     int size       = qMin(width, height);
     int stripThick = int(size * LIGHT_STRIP_RATIO);
     
-    if (m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT)
-        width -= stripThick;
-    else
-        height -= stripThick;
-    
+    width -= stripThick;
+
     size = qMin(width, height);
     
     int x = (width  - size) / 2;
     int y = (height - size) / 2;
     
-    switch(m_lightStripPos)
-    {
-    case LSP_LEFT:
-        m_renderArea     = QRect(x+stripThick, y, size, size);
-        m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
-        break;
-        
-    case LSP_RIGHT:
-        m_renderArea     = QRect(x, y, size, size);
-        m_lightStripArea = QRect(QWidget::width()-stripThick, 0, stripThick, QWidget::height());
-        break;
-        
-    case LSP_TOP:
-        m_renderArea     = QRect(x, y+stripThick, size, size);
-        m_lightStripArea = QRect(0, 0, QWidget::width(), stripThick);
-        break;
-        
-    case LSP_BOTTOM:
-        m_renderArea     = QRect(x, y, size, size);
-        m_lightStripArea = QRect(0, QWidget::height()-stripThick, QWidget::width(), stripThick);
-        break;
-    }
-    
+    m_renderArea     = QRect(x+stripThick, y, size, size);
+    m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
+
     m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32);
     m_numLightPieces = numLightPieces;
 }
@@ -474,7 +438,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
 
 void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 {
-    bool     isVertical = (m_lightStripPos == LSP_LEFT || m_lightStripPos == LSP_RIGHT);
+    bool     isVertical = true;
     qreal    penSize    = qreal(qMin(QWidget::width(), QWidget::height())) / 200.0;
     KisColor color(m_selectedColor);
     

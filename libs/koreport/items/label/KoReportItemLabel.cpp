@@ -60,7 +60,7 @@ KoReportItemLabel::KoReportItemLabel(QDomNode & element)
                 m_lineStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing label element encountered unknow element: " << n;
+            kWarning() << "while parsing label element encountered unknow element: " << n;
         }
     }
 }

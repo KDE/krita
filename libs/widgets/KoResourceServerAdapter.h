@@ -63,6 +63,8 @@ public:
     virtual QStringList searchTag(const QString& lineEditText) = 0;
     virtual void configureFilters(int filterType, bool enable) = 0;
 
+    virtual QString serverType() const { return QString(); }
+
 signals:
     void resourceAdded(KoResource*);
     void removingResource(KoResource*);
@@ -97,10 +99,19 @@ public:
         m_resourceFilter.setTagStore(m_resourceServer->tagObject());
     }
 
+
     virtual ~KoResourceServerAdapter()
     {
         if (m_resourceServer)
             m_resourceServer->removeObserver(this);
+    }
+
+    QString serverType() const
+    {
+        if (m_resourceServer) {
+            return m_resourceServer->type();
+        }
+        return KoAbstractResourceServerAdapter::serverType();
     }
 
     virtual void unsetResourceServer()

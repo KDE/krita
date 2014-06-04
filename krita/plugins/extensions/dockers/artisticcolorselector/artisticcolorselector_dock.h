@@ -47,8 +47,6 @@ private slots:
     void slotMenuActionTriggered(QAction* action);
     void slotResetDefaultSettings();
     void slotLightModeChanged(bool setToAbsolute);
-    void slotDockLocationChanged(Qt::DockWidgetArea area);
-    void slotTopLevelChanged(bool topLevel);
     
 private:
     KoCanvasBase*            m_canvas;

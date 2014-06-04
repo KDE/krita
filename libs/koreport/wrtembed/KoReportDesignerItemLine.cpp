@@ -159,7 +159,6 @@ void KoReportDesignerItemLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 QVariant KoReportDesignerItemLine::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    kDebug();
     return QGraphicsItem::itemChange(change, value);
 }
 
@@ -174,9 +173,7 @@ void KoReportDesignerItemLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     int y;
 
     QPointF p = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
-
-    kDebug() << p;
-    
+    //kDebug() << p;
     x = p.x();
     y = p.y();
 

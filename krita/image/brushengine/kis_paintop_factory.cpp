@@ -63,7 +63,7 @@ QString KisPaintOpFactory::pixmap()
 
 QString KisPaintOpFactory::categoryStable()
 {
-    return i18nc("Category of brush engines", "Stable");
+    return i18nc("Category of brush engines", "Brush engines");
 }
 
 void KisPaintOpFactory::setPriority(int newPriority)

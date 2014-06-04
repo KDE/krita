@@ -111,7 +111,7 @@ public:
     ///@name Static API
     //@{
     /**
-     * Suitable for passing to KFileDialog::setMimeFilter. The default mime
+     * Suitable for passing to KoFileDialog::setMimeTypeFilters. The default mime
      * gets set by the "users" of this method, as we do not have enough
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.

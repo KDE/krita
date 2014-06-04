@@ -219,7 +219,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 void ColorSettingsTab::installProfile()
 {
     QStringList mime;
-    mime << "*.icm" <<  "*.icc";
+    mime << "ICM Profile (*.icm(" <<  "ICC Profile (*.icc)";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));

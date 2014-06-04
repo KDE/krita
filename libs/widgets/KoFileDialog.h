@@ -42,67 +42,108 @@ public:
         OpenFile,
         OpenFiles,
         OpenDirectory,
-        OpenDirectories,
         ImportFile,
         ImportFiles,
         ImportDirectory,
-        ImportDirectories,
-        SaveFile,
-        SaveFiles
+        SaveFile
     };
 
     /**
      * @brief constructor
      * @param parent The parent of the file dialog
      * @param dialogType usage of the file dialog
-     * @param uniqueName the name for the file dialog. This will be used to open
+     * @param dialogName the name for the file dialog. This will be used to open
      * the filedialog in the last open location, instead the specified directory.
      *
      * @return The name of the entry user selected in the file dialog
      *
      */
-    KoFileDialog(QWidget *parent = 0,
-                 KoFileDialog::DialogType type = OpenFile,
-                 const QString uniqueName = QString());
+    KoFileDialog(QWidget *parent,
+                 KoFileDialog::DialogType type,
+                 const QString dialogName);
 
     ~KoFileDialog();
 
     void setCaption(const QString &caption);
+
+    /**
+     * @brief setDefaultDir set the default directory to defaultDir
+     *
+     * @param defaultDir a path to a file or directory
+     */
     void setDefaultDir(const QString &defaultDir);
+
+    /**
+     * @brief setOverrideDir override both the default dir and the saved dir found by dialogName
+     * @param overrideDir a path to a file or directory
+     */
+    void setOverrideDir(const QString &overrideDir);
+
+    /**
+     * @brief setImageFilters sets the name filters for the file dialog to all
+     * image formats Qt's QImageReader supports.
+     */
+    void setImageFilters();
+
     void setNameFilter(const QString &filter);
+
+    /**
+     * @brief setNameFilters set a list of description/extension pairs.
+     *
+     * These are not registered mimetypes. In contrast with Qt's filedialog namefilters,
+     * you can only have _one_ pair per line. I.e.
+     *
+     * Gif Image (*gif)
+     * Tiff Image (*tif)
+     *
+     * And NOT Images (*gif *tif)
+     *
+     * @param filterList
+     * @param defaultFilter
+     */
     void setNameFilters(const QStringList &filterList,
-                        const QString &defaultFilter = QString());
+                        QString defaultFilter = QString());
     void setMimeTypeFilters(const QStringList &filterList,
-                            const QString &defaultFilter = QString());
+                            QString defaultFilter = QString());
     void setHideNameFilterDetailsOption();
 
     QStringList urls();
     QString url();
+
+    /**
+     * @brief selectedNameFilter returns the name filter the user selected, either
+     *    directory or by clicking on it.
+     * @return
+     */
     QString selectedNameFilter() const;
 
+    QString selectedMimeType() const;
 
 private slots:
 
     void filterSelected(const QString &filter);
 
 private:
-    enum FilterType {
-        MimeFilter,
-        NameFilter
-    };
+    /**
+     * @brief splitNameFilter take a single line of a QDialog name filter and split it
+     *   into several lines. This is needed because a single line name filter can contain
+     *   more than one mimetype, making it impossible to figure out the correct extension.
+     *
+     *   The methods takes care of some duplicated extensions, like jpeg and jpg.
+     * @param nameFilter the namefilter to be split
+     * @return a stringlist of all name filters.
+     */
+    QStringList splitNameFilter(const QString &nameFilter);
 
     void createFileDialog();
 
     const QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringList(const QStringList &mimeList,
-                                      bool withAllSupportedEntry = false);
+    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
+                                                  bool withAllSupportedEntry = false);
 
-    const QString getFilterString(const QStringList &mimeList,
-                                  bool withAllSupportedEntry = false);
 
-    const QString getFilterString(const QString &defaultMime);
 
     class Private;
     Private * const d;

@@ -88,6 +88,8 @@ struct QTabletDeviceData
 #endif
 
 #ifdef Q_WS_X11
+    bool isTouchWacomTablet;
+
     /**
      * Different tablets have different assignment of axes reported by
      * the XInput subsystem. More than that some of the drivers demand

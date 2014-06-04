@@ -170,7 +170,7 @@ void ReportSection::initFromXML(QDomNode & section)
     m_sectionData->m_height->setValue(h);
     
     h  = POINT_TO_INCH(h) * KoDpi::dpiY();
-    kDebug() << "Section Height: " << h;
+    //kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
     slotResizeBarDragged(0);
 
@@ -198,7 +198,7 @@ void ReportSection::initFromXML(QDomNode & section)
                 }
             }
             else {
-                kDebug() << "Encountered unknown node while parsing section: " << n;
+                kWarning() << "Encountered unknown node while parsing section: " << n;
             }
         }
     }
@@ -248,8 +248,7 @@ void ReportSection::slotSceneClicked()
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s)
-
-    kDebug() << p.name();
+    //kDebug() << p.name();
     
     //Handle Background Color
     if (p.name() == "background-color") {

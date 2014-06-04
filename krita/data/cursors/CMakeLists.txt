@@ -6,6 +6,8 @@ install( FILES
     color-picker_image_foreground.xpm
     color-picker_layer_background.xpm
     color-picker_layer_foreground.xpm
+    exposure-cursor-gesture.xpm
+    gamma-cursor-gesture.xpm
     cursor-triangle_lefthanded.xpm
     cursor-triangle_righthanded.xpm
     rotate_discrete.xpm

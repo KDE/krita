@@ -44,7 +44,7 @@ QColor Section::backgroundColor()
 
 void   Section::setBackgroundColor(const QColor &c)
 {
-    kDebug() << c.name();
+    //kDebug() << c.name();
     m_section->m_backgroundColor->setValue(c);
 }
 
@@ -78,7 +78,7 @@ QObject* Section::objectByNumber(int i)
             }
         }
         else {
-            kDebug() << "Encountered unknown node while parsing section: " << m_section->m_objects[i]->typeName();
+            kWarning() << "Encountered unknown node while parsing section: " << m_section->m_objects[i]->typeName();
         }
     }
 

@@ -51,7 +51,7 @@ QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
     m_store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!m_store) {
-        kDebug() << "Couldn't open the requested file.";
+        kWarning() << "Couldn't open the requested file.";
         return QFile::OpenError;
     }
 
@@ -79,7 +79,7 @@ bool KoSimpleOdsDocument::createContent(KoOdfWriteStore* store)
 
     bool ok = bodyWriter && contentWriter && manifestWriter;
     if (!ok) {
-        kDebug() << "Bad things happened";
+        kWarning() << "Bad things happened";
     }
     if (ok) {
         // OpenDocument spec requires the manifest to include a list of the files in this package

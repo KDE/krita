@@ -35,6 +35,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>
+#include <kmimetype.h>
 
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>

@@ -33,7 +33,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         : QObject(parent), QGraphicsRectItem()
 {
     //TODO setAttribute(Qt::WA_NoBackground);
-    kDebug() << "CREATED PAGE";
+    //kDebug() << "CREATED PAGE";
     m_reportDocument = document;
     m_page = 0;
     int pageWidth = 0;
@@ -53,15 +53,10 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
             pageHeight = m_reportDocument->pageOptions().heightPx();
         }
     }
-
     setRect(0,0,pageWidth, pageHeight);
-
-    kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-
+    //kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
     m_pixmap = new QPixmap(pageWidth, pageHeight);
-
     m_renderer = m_factory.createInstance("screen");
-    
     connect(m_reportDocument, SIGNAL(updated(int)), this, SLOT(pageUpdated(int)));
 
     m_renderTimer = new QTimer();
@@ -100,10 +95,10 @@ void KoReportPage::renderPage(int page)
 
 void KoReportPage::pageUpdated(int pageNo)
 {
-    kDebug() << pageNo << m_page;
+    //kDebug() << pageNo << m_page;
     //Refresh this page if it changes
     if (pageNo == m_page) {
-        kDebug() << "Current page updated";
+        //kDebug() << "Current page updated";
         m_renderTimer->start(100);
     }
 }

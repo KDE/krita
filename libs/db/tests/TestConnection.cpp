@@ -19,9 +19,9 @@
 
 #include "TestConnection.h"
 
-#include <db/drivermanager.h>
 #include <db/driver.h>
 #include <db/connection.h>
+#include <parser.h>
 
 #include <kdebug.h>
 
@@ -34,14 +34,13 @@ KexiDB::Connection *conn = 0;
 
 void TestConnection::initTestCase()
 {
+  db_name = QFile::decodeName(FILES_OUTPUT_DIR "test.kexi");
 }
 
 void TestConnection::testCreateDb()
 {
     QString drv_name = "sqlite3";
-    QString db_name(QFile::decodeName(FILES_OUTPUT_DIR "test.kexi"));
-
-    KexiDB::DriverManager manager;
+    
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
@@ -59,15 +58,12 @@ void TestConnection::testCreateDb()
     QCOMPARE(drv_info.fileBased, true);
 
     //open connection
-    KexiDB::ConnectionData cdata;
     cdata.setFileName(db_name);
     conn = driver->createConnection(cdata);
     kDebug() << driver->errorMsg();
     QVERIFY2(!driver->error() && conn, "Failed to create connection");
 
-    {
-        QScopedPointer<KexiDB::Connection> connGuard(conn);
-
+    {    
         QVERIFY2(conn->connect(), "Failed to connect");
         if (conn->databaseExists(db_name)) {
             QVERIFY2(conn->dropDatabase(db_name), "Failed to drop database");
@@ -79,11 +75,26 @@ void TestConnection::testCreateDb()
 
         QVERIFY2(conn->disconnect(), "Failed to disconnect database");
     }
-    conn = 0;
 }
+
+void TestConnection::testQueries()
+{
+  conn->connect();
+  conn->useDatabase(db_name);
+  
+  KexiDB::Parser *parser = new KexiDB::Parser(conn);
+  
+  QVERIFY2(parser->parse("select * from persons") == true, "Failed to parse valid query");
+  QVERIFY2(parser->parse("select persons.name from persons, persons") == false, "Failed to identify ambiguous query");
+  QVERIFY2(parser->parse("select * from persons, persons") == true, "Failed to parse query with duplicate tables");
+  QVERIFY2(conn->disconnect(), "Failed to disconnect database");
+}
+
 
 void TestConnection::cleanupTestCase()
 {
+    delete conn;
+    conn = 0;
 }
 
 QTEST_MAIN(TestConnection)

@@ -432,7 +432,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     rootCallChecker--;
 
     // here we put old endings after text insertion
-    if (mode) {
+    if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
         if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
             oldSectionEndings = fmt.property(KoParagraphStyle::SectionEndings)

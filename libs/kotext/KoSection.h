@@ -75,8 +75,8 @@ struct KOTEXT_EXPORT KoSectionEnd {
 
 namespace KoSectionUtils {
     /**
-     * Moves the block to the next block within the same QTextFrame
-     * @param cur block to move, modified during call
+     * Moves the cursors to the next block within the same QTextFrame
+     * @param cur cursor to move, modified during call
      * @return @c false if there is no next block, @c true otherwise
      */
     bool getNextBlock(QTextCursor &cur);

@@ -60,20 +60,6 @@ public:
     virtual bool mergeWith(const KUndo2Command *command);
 
 private:
-    //Helper struct for handling sections
-    struct SectionHandle {
-        QString name; // name of the section
-        bool type; // Action: true - open, false - close
-        QVariant data; // QVariant version of pointer to KoSection or KoSectionEnd
-
-        SectionHandle(QString _name, bool _type, QVariant _data)
-        : name(_name)
-        , type(_type)
-        , data(_data)
-        {
-        }
-    };
-
     friend class DeleteVisitor;
 
     QWeakPointer<QTextDocument> m_document;

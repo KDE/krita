@@ -128,10 +128,10 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     bool ok = next.movePosition(QTextCursor::NextBlock);
 
     while (ok && next.currentFrame() != cur.currentFrame()) {
-        ok = next.movePosition(QTextCursor::PreviousBlock);
+        ok = next.movePosition(QTextCursor::NextBlock);
     }
 
-    if (!ok || next.currentFrame() != next.currentFrame()) {
+    if (!ok || next.currentFrame() != cur.currentFrame()) {
         // there is no previous block
         return false;
     }

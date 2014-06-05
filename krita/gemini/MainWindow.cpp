@@ -299,9 +299,6 @@ void MainWindow::switchSketchForced()
 
 void MainWindow::switchToSketch()
 {
-    QTime timer;
-    timer.start();
-
     if (d->toSketch)
     {
         d->toSketch->setEnabled(false);
@@ -334,8 +331,6 @@ void MainWindow::switchToSketch()
     }
     else
         QTimer::singleShot(50, this, SLOT(sketchChange()));
-
-    //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 
     if (view && view->document()) {
         view->document()->setSaveInBatchMode(true);
@@ -374,9 +369,6 @@ void MainWindow::sketchChange()
 
 void MainWindow::switchToDesktop(bool justLoaded)
 {
-    QTime timer;
-    timer.start();
-
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
@@ -422,8 +414,6 @@ void MainWindow::switchToDesktop(bool justLoaded)
     if (view && view->document()) {
         view->document()->setSaveInBatchMode(false);
     }
-
-    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()

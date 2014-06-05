@@ -22,11 +22,17 @@
 
 #include "kowidgets_export.h"
 
+#include "KoResourceServerPolicies.h"
+
+
 /**
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.
  * To receive notifications it needs to be added to the resource server.
  */
-template <class T> class KoResourceServerObserver {
+template <class T, class Policy = PointerStroragePolicy<T> >
+class KoResourceServerObserver
+{
+    typedef typename Policy::PointerType PointerType;
 
 public:
     virtual ~KoResourceServerObserver() {}
@@ -37,19 +43,19 @@ public:
      * Will be called by the resource server after a resource is added
      * @param resource the added resource
      */
-    virtual void resourceAdded(T* resource) = 0;
+    virtual void resourceAdded(PointerType resource) = 0;
 
     /**
      * Will be called by the resource server before a resource will be removed
      * @param resource the resource which is going to be removed
      */
-    virtual void removingResource(T* resource) = 0;
+    virtual void removingResource(PointerType resource) = 0;
 
     /**
      * Will be called by the resource server when a resource is changed
      * @param resource the resource which is going to be removed
      */
-    virtual void resourceChanged(T* resource) = 0;
+    virtual void resourceChanged(PointerType resource) = 0;
 
      /**
      * Will be called by the resource server when resources are added or removed

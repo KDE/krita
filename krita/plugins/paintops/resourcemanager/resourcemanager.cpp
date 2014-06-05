@@ -97,7 +97,7 @@ public:
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     }
 
-    KoResourceServer<KisBrush>* brushServer;
+    KisBrushResourceServer* brushServer;
     KoResourceServer<KisPaintOpPreset>* paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoResourceBundle> *bundleServer;
@@ -262,7 +262,7 @@ void ResourceManager::slotCreateBundle()
 
     QStringList res = dlgCreateBundle.selectedBrushes();
     foreach(const QString &r, res) {
-        KoResource *res = d->brushServer->resourceByFilename(r);
+        KoResource *res = d->brushServer->resourceByFilename(r).data();
         newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
     }
 

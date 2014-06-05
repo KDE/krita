@@ -384,7 +384,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
     case 0:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
@@ -398,7 +398,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Installed));
         break;
     case 2:
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         break;

@@ -255,10 +255,11 @@ bool KoResourceBundle::save()
             }
         }
         else if (resType  == "kis_brushes") {
-            KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
+            KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
             foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = brushServer->resourceByMD5(ref.md5sum);
-                if (!res) res = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+                KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
+                if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+                KoResource *res = brush.data();
                 saveResourceToStore(res, store.data(), "brushes");
             }
         }
@@ -394,9 +395,9 @@ void KoResourceBundle::install()
             }
         }
         else if (resType  == "kis_brushes") {
-            KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
+            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
             foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KisBrush *res = brushServer->createResource(ref.resourcePath);
+                KisBrushSP res = brushServer->createResource(ref.resourcePath);
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                 }
@@ -405,9 +406,9 @@ void KoResourceBundle::install()
                 }
                 brushServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
-                    brushServer->addTag(res, tag);
+                    brushServer->addTag(res.data(), tag);
                 }
-                brushServer->addTag(res, name());
+                brushServer->addTag(res.data(), name());
             }
         }
         else if (resType  == "ko_palettes") {

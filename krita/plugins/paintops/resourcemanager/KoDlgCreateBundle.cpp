@@ -252,8 +252,8 @@ void KoDlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableSelected->clear();
 
     if (resourceType == "brushes") {
-        KoResourceServer<KisBrush>* server = KisBrushServer::instance()->brushServer();
-        foreach(KoResource *res, server->resources()) {
+        KisBrushResourceServer *server = KisBrushServer::instance()->brushServer();
+        foreach(KisBrushSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 

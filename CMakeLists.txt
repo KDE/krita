@@ -285,6 +285,8 @@ calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLI
 # more extras
 calligra_define_product(OKULARGENERATOR_PPT "Plugin for Okular extended with support for PPT" NEEDS OKULARODPGENERATOR FILTER_PPT_TO_ODP)
 calligra_define_product(OKULARGENERATOR_PPTX "Plugin for Okular extended with support for PPTX" NEEDS OKULARODPGENERATOR FILTER_PPTX_TO_ODP)
+calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC" NEEDS OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX" NEEDS OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "cstester " NEEDS SHEETS_PART STAGE_PART WORDS_PART)

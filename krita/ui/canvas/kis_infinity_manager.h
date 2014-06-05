@@ -46,7 +46,7 @@ private:
 private:
     QPainterPath m_decorationPath;
 
-    bool m_filterInstalled;
+    bool m_filteringEnabled;
     bool m_cursorSwitched;
     QCursor m_oldCursor;
     QVector<QTransform> m_handleTransform;

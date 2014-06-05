@@ -838,6 +838,13 @@ bool KisCanvas2::isPopupPaletteVisible()
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
+    KisCanvasDecoration *infinityDecoration =
+        m_d->canvasWidget->decoration(INFINITY_DECORATION_ID);
+
+    if (infinityDecoration) {
+        infinityDecoration->setVisible(!value);
+    }
+
     m_d->canvasWidget->setWrapAroundViewingMode(value);
 }
 

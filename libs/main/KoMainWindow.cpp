@@ -2065,6 +2065,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 
     if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
         d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
+        d->activeView->actionCollection()->addAction("view_newview", actionCollection()->action("view_newview"));
         d->activePart = newPart;
         //kDebug(30003) <<"new active part is" << d->activePart;
 

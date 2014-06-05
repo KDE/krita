@@ -84,6 +84,7 @@ KAboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Øyvind Kolås"), ki18n("Wiseguy"), "pippin@gimp.org", "http://codecave.org/");
     aboutData->addAuthor(ki18n("Patrick Julien"), KLocalizedString(), "freak@codepimps.org");
     aboutData->addAuthor(ki18n("Peter Sikking"), ki18n("Vision master"), "");
+    aboutData->addAuthor(ki18n("Ramon Miranda"), ki18n("Artist, Muses author, brush and preset creator"), "http://www.ramonmiranda.com");
     aboutData->addAuthor(ki18n("Roger Larsson"), KLocalizedString(), "roger.larsson@norran.net");
     aboutData->addAuthor(ki18n("Samy Lange"), KLocalizedString(), "enkithan@free.fr");
     aboutData->addAuthor(ki18n("Silvio Heinrich"), KLocalizedString(), "plassy@web.de");

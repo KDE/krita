@@ -35,8 +35,8 @@
 
 
 KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
-    : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view),
-      m_filterInstalled(false),
+    : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view, true),
+      m_filteringEnabled(false),
       m_cursorSwitched(false)
 {
     connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
@@ -106,14 +106,14 @@ void KisInfinityManager::imagePositionChanged()
         visible = true;
     }
 
-    setVisible(visible);
-
-    if (visible && !m_filterInstalled) {
+    if (visible && !m_filteringEnabled) {
         view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_filteringEnabled = true;
     }
 
-    if (!visible && m_filterInstalled) {
+    if (!visible && m_filteringEnabled) {
         view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
+        m_filteringEnabled = false;
     }
 }
 
@@ -122,6 +122,8 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     Q_UNUSED(updateArea);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
+
+    if (!m_filteringEnabled) return;
 
     gc.save();
     gc.setTransform(QTransform(), false);
@@ -150,6 +152,8 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
 
 bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 {
+    KIS_ASSERT_RECOVER_NOOP(m_filteringEnabled);
+
     bool retval = false;
 
     switch (event->type()) {

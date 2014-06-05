@@ -554,7 +554,7 @@ void OrderByColumnList::appendColumn(QueryColumnInfo& columnInfo, bool ascending
 bool OrderByColumnList::appendColumn(QuerySchema& querySchema, bool ascending, int pos)
 {
     QueryColumnInfo::Vector fieldsExpanded(querySchema.fieldsExpanded());
-    QueryColumnInfo* ci = (pos >= (int)fieldsExpanded.size()) ? 0 : fieldsExpanded[pos];
+    QueryColumnInfo* ci = (pos < 0 || pos >= (int)fieldsExpanded.size()) ? 0 : fieldsExpanded[pos];
     if (!ci)
         return false;
     append(new OrderByColumn(*ci, ascending, pos));
@@ -991,19 +991,14 @@ void QuerySchema::addTable(TableSchema *table, const QByteArray& alias)
     if (!table)
         return;
 
-    //only append table if:
-    //-it has alias
-    //-it has no alias but there is no such table on the list
+    // only append table if: it has alias or it has no alias but there is no such table on the list
     if (alias.isEmpty() && d->tables.contains(table)) {
-        const QString tableNameLower(table->name().toLower());
-        const QString aliasLower(alias.toLower());
         int num = -1;
-        foreach(TableSchema *table, d->tables) {
+        foreach(TableSchema *t, d->tables) {
             num++;
-            if (table->name().toLower() == tableNameLower) {
-                const QString& tAlias = tableAlias(num);
-                if (tAlias == aliasLower) {
-                    KexiDBWarn << "table with" << tAlias << "alias already added!";
+            if (0 == t->name().compare(table->name(), Qt::CaseInsensitive)) {
+                if (tableAlias(num).isEmpty()) {
+                    KexiDBDbg << "table" << table->name() << "without alias already added";
                     return;
                 }
             }

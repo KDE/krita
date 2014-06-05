@@ -179,6 +179,7 @@ var values = {
             layer: {
                 active: Qt.rgba(1.0, 1.0, 1.0, 0.5),
                 inactive: Qt.rgba(1.0, 1.0, 1.0, 0.2),
+                background: "#d7d7d7",
                 text: "#000000",
                 visible: "#ffffff",
                 locked: "#ffffff",

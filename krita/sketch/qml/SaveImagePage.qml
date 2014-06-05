@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import org.krita.sketch 1.0 as Krita
+import org.krita.sketch 1.0
 import org.krita.sketch.components 1.0
 
 Page {
@@ -222,7 +222,7 @@ Page {
     Dialog {
         id: confirmOverwrite;
         title: "File already exists";
-        message: "A file with the name %1 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+        message: "A file with the name %1.%2 already exists in this folder. Do you wish to overwrite?".arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
         buttons: [ "Overwrite", "Cancel" ];
         onButtonClicked: {
             switch(button) {

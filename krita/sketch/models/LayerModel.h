@@ -92,6 +92,8 @@ public:
     Q_INVOKABLE void setVisible(int index, bool newVisible);
     Q_INVOKABLE void setLocked(int index, bool newLocked);
     QImage layerThumbnail(QString layerID) const;
+    Q_INVOKABLE void clear();
+    Q_INVOKABLE void clone();
 
     Q_INVOKABLE void deleteCurrentLayer();
     Q_INVOKABLE void deleteLayer(int index);

@@ -103,12 +103,12 @@ void KoResourceBundleTest::testLoadSave()
         bundle.addResource(patternServer->type(), pattern->filename(), patternServer->tagObject()->assignedTagsList(pattern), pattern->md5());
     }
 
-    KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
+    KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
     QVERIFY(brushServer->resoureCount() > 0);
-    foreach(KisBrush* brush, brushServer->resources()) {
-        brushServer->addTag(brush, QString("testtag: %1").arg(tagCount));
+    foreach(KisBrushSP brush, brushServer->resources()) {
+        brushServer->addTag(brush.data(), QString("testtag: %1").arg(tagCount));
         tagCount++;
-        bundle.addResource(brushServer->type(), brush->filename(), brushServer->tagObject()->assignedTagsList(brush), brush->md5());
+        bundle.addResource(brushServer->type(), brush->filename(), brushServer->tagObject()->assignedTagsList(brush.data()), brush->md5());
     }
 
 

@@ -121,8 +121,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    QSharedPointer<KoResourceServerAdapter<KisBrush> > adapter(new KoResourceServerAdapter<KisBrush>(rServer));
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);

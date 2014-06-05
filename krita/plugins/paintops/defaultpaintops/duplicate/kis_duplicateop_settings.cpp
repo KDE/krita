@@ -39,9 +39,8 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_perspective_grid.h>
 
-KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
-    : m_image(image)
-    , m_isOffsetNotUptodate(false)
+KisDuplicateOpSettings::KisDuplicateOpSettings()
+    : m_isOffsetNotUptodate(false)
 {
 }
 
@@ -72,6 +71,11 @@ QPointF KisDuplicateOpSettings::position() const
 bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers)
 {
     bool ignoreEvent = true;
+
+    if (modifiers == (Qt::ControlModifier | Qt::AltModifier)) {
+        KisPaintOpSettings::setNode(m_activeNode);
+    }
+
     if (modifiers == Qt::ControlModifier) {
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
@@ -91,17 +95,6 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
 
 void KisDuplicateOpSettings::activate()
 {
-    KisDuplicateOpSettingsWidget* options = dynamic_cast<KisDuplicateOpSettingsWidget*>(optionsWidget());
-    if (!options)
-        return;
-
-    if (m_image && m_image->perspectiveGrid()->countSubGrids() != 1) {
-        options->m_duplicateOption->setHealing(false);
-        options->m_duplicateOption->setPerspective(false);
-    }
-    else {
-        options->m_duplicateOption->setPerspective(false);
-    }
 }
 
 void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
@@ -129,13 +122,11 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 {
     KisPaintOpSettingsSP setting = KisPaintOpSettings::clone();
     KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>(setting.data());
-    s->m_image = m_image;
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
     s->m_position = m_position;
 
     return setting;
-
 }
 
 QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
@@ -165,4 +156,14 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     path.lineTo(rect2.bottomLeft());
 
     return path;
+}
+
+void KisDuplicateOpSettings::setNode(KisNodeSP node)
+{
+    if (KisPaintOpSettings::node()) {
+        m_activeNode = node;
+    }
+    else {
+        KisPaintOpSettings::setNode(node);
+    }
 }

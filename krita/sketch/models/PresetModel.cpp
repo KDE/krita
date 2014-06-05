@@ -51,7 +51,7 @@ public:
         KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
         if (!preset->load())
-            preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, view->image());
+            preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);
 
         Q_ASSERT(preset);
         Q_ASSERT(preset->valid());

@@ -63,7 +63,7 @@ public:
         return KisPaintOpFactory::categoryStable();
     }
 
-    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings();
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 
     QList<MyPaintBrushResource*> brushes() const;

@@ -100,8 +100,7 @@ public:
         return op;
     }
 
-    KisPaintOpSettingsSP settings(KisImageWSP image) {
-        Q_UNUSED(image);
+    KisPaintOpSettingsSP settings() {
         KisPaintOpSettingsSP settings = new OpSettings();
         settings->setModelName(m_model);
         return settings;

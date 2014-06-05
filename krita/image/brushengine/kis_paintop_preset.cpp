@@ -127,7 +127,7 @@ bool KisPaintOpPreset::load()
 
     bool res = loadFromDevice(&file);
 
-    return true;
+    return res;
 }
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
@@ -217,7 +217,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
     KoID id(paintopid, "");
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
     if (!settings) {
         setValid(false);
         qWarning() << "Could not load settings for preset" << paintopid;

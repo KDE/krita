@@ -371,7 +371,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             layout->draw(painter, QPointF(0, 0), selections);
 
             //FIXME: Surround this with if to make section viewing optional.
-            decorateParagraphSections(painter, block, sectionLevel );
+            decorateParagraphSections(painter, block, sectionLevel);
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 
             var = block.blockFormat().property(KoParagraphStyle::SectionEndings);
@@ -674,8 +674,8 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
                            KoCharacterStyle::SingleLine,
                            KoCharacterStyle::SolidLine,
                            1 * openList.count(),
-                           sectionLevel * 50,
-                           width(),
+                           layout->lineForTextPosition(0).x(),
+                           layout->lineForTextPosition(0).x() + width(),
                            layout->lineForTextPosition(0).y()
         );
 
@@ -689,8 +689,8 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
                                layout->lineForTextPosition(0),
                                Qt::gray,
                                sectionsDebug,
-                               0,
-                               width()
+                               layout->lineForTextPosition(0).x(),
+                               layout->lineForTextPosition(0).x() + width()
         );
     }
 
@@ -702,8 +702,8 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
                            KoCharacterStyle::SingleLine,
                            KoCharacterStyle::SolidLine,
                            1 * closeList.count(),
-                           sectionLevel * 50,
-                           width(),
+                           layout->lineForTextPosition(0).x(),
+                           layout->lineForTextPosition(0).x() + width(),
                            layout->lineForTextPosition(block.length() - 1).y()
                            + layout->lineForTextPosition(block.length() - 1).height()
         );
@@ -719,8 +719,8 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
                                layout->lineForTextPosition(block.length() - 1),
                                Qt::gray,
                                sectionsDebug,
-                               width() - fm.width(sectionsDebug),
-                               width()
+                               layout->lineForTextPosition(0).x() + width() - fm.width(sectionsDebug),
+                               layout->lineForTextPosition(0).x() + width()
         );
     }
 }

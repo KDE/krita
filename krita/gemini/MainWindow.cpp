@@ -37,6 +37,7 @@
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QDesktopServices>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -54,6 +55,9 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -522,6 +526,20 @@ void MainWindow::setTemporaryFile(bool newValue)
 {
     d->temporaryFile = newValue;
     emit temporaryFileChanged();
+}
+
+QString MainWindow::openImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KService::Ptr service = entry.service();
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+
+    dialog.setHideNameFilterDetailsOption();
+    return dialog.url();
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)

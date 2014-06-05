@@ -307,9 +307,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 
     cursor.beginEditBlock();
 
-    // if we are pasting text, we should handle sections correctly
+    // If we are pasting text, we should handle sections correctly
     // we are saving which sections end in current block
-    // and put this ends after the inserted text
+    // and put their ends after the inserted text.
     QList<QVariant> oldSectionEndings;
     if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
@@ -383,9 +383,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
                         cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                     usedParagraph = true;
 
-                    if (localName == "p") {    // text paragraph
+                    if (localName == "p") { // text paragraph
                         loadParagraph(tag, cursor);
-                    } else if (localName == "h") {  // heading
+                    } else if (localName == "h") { // heading
                         loadHeading(tag, cursor);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                             || localName == "list" || localName == "numbered-paragraph") {  // OASIS
@@ -431,7 +431,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 
     rootCallChecker--;
 
-    // here we put old endings after text insertion
+    // Here we put old endings after text insertion.
     if (mode == PasteMode) {
         QTextBlockFormat fmt = cursor.blockFormat();
         if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
@@ -852,8 +852,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
     loadBody(sectionElem, cursor);
 
     // Close the section on the last block of text we have loaded just now.
-    KoSectionEnd *sectionEnd = new KoSectionEnd();
-    sectionEnd->name = section->name();
+    KoSectionEnd *sectionEnd = new KoSectionEnd(section->name());
     v.setValue<void *>(sectionEnd);
 
     QTextBlock block = cursor.block();

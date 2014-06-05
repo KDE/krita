@@ -58,18 +58,18 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     QTextBlock block = document->findBlock(from);
 
-    // here we are going to detect all sections that
-    // are positioned entirely inside selection
-    // They will stay untouched, and others will be omitted
+    // Here we are going to detect all sections that
+    // are positioned entirely inside selection.
+    // They will stay untouched, and others will be omitted.
 
-    // so we are using stack to detect them, by going though
-    // the selection and finding open/close pairs
+    // So we are using stack to detect them, by going though
+    // the selection and finding open/close pairs.
     QSet<QString> entireWithinSectionNames;
     QStack<QString> sectionNamesStack;
     QTextCursor cur(document);
     cur.setPosition(from);
     while (to == -1 || cur.position() <= to) {
-        if (cur.block().position() >= from) { // begin of the block inside selection
+        if (cur.block().position() >= from) { // Begin of the block is inside selection.
             QList<QVariant> openList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionStartings).value< QList<QVariant> >();
             foreach (const QVariant &sv, openList) {
@@ -78,7 +78,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
-        if (to == -1 || cur.block().position() + cur.block().length() <= to) { //end if the block inside selection
+        if (to == -1 || cur.block().position() + cur.block().length() <= to) { // End of the block is inside selection.
             QList<QVariant> closeList = cur.blockFormat()
                 .property(KoParagraphStyle::SectionEndings).value< QList<QVariant> >();
             foreach (const QVariant &sv, closeList) {
@@ -114,7 +114,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             foreach (const QVariant &sv, sectionStarts) {
                 KoSection* section = static_cast<KoSection *>(sv.value<void*>());
 
-                // we are writing in only sections, that are completely inside selection
+                // We are writing in only sections, that are completely inside selection.
                 if (entireWithinSectionNames.contains(section->name())) {
                     section->saveOdf(context);
                 }
@@ -160,7 +160,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
             foreach (QVariant sv, sectionEndings) {
                 KoSectionEnd *sectionEnd = static_cast<KoSectionEnd *>(sv.value<void *>());
-                // we are writing in only sections, that are completely inside selection
+                // We are writing in only sections, that are completely inside selection.
                 if (entireWithinSectionNames.contains(sectionEnd->name)) {
                     sectionEnd->saveOdf(context);
                 }

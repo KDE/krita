@@ -4,7 +4,7 @@
  * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -92,6 +92,7 @@
 
 #include <kdebug.h>
 #include "KoTextDebug.h"
+#include "KoSection.h"
 
 #include <KoDocumentRdfBase.h>
 
@@ -175,9 +176,9 @@ void KoTextEditor::Private::newLine(KUndo2Command *parent)
     bf.clearProperty(KoParagraphStyle::OutlineLevel);
     bf.clearProperty(KoParagraphStyle::HiddenByTable);
 
-    // We should stay in the same section so we can't start new one
+    // We should stay in the same section so we can't start new one.
     bf.clearProperty(KoParagraphStyle::SectionStartings);
-    // But we move all the current endings to the next paragraph
+    // But we move all the current endings to the next paragraph.
     QTextBlockFormat origin = caret.blockFormat();
     origin.clearProperty(KoParagraphStyle::SectionEndings);
     caret.setBlockFormat(origin);
@@ -1525,6 +1526,45 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
         return b;
     }
     return false;
+}
+
+void KoTextEditor::newSection()
+{
+    if (isEditProtected()) {
+        return;
+    }
+
+    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "New Section"));
+    d->caret.beginEditBlock();
+    newLine();
+
+    KoSection *start = new KoSection();
+    KoSectionEnd *end = new KoSectionEnd(start->name());
+
+    QTextBlockFormat fmt = d->caret.blockFormat();
+
+    QList< QVariant > sectionStartings;
+    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
+        sectionStartings = fmt.property(KoParagraphStyle::SectionStartings)
+            .value< QList<QVariant> >();
+    }
+    QList< QVariant > sectionEndings;
+    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
+        sectionEndings = fmt.property(KoParagraphStyle::SectionEndings)
+            .value< QList<QVariant> >();
+    }
+
+    sectionStartings.append(qVariantFromValue<void *>(static_cast<void *>(start)));
+    sectionEndings.prepend(qVariantFromValue<void *>(static_cast<void *>(end)));
+
+    fmt.setProperty(KoParagraphStyle::SectionStartings, sectionStartings);
+    fmt.setProperty(KoParagraphStyle::SectionEndings, sectionEndings);
+
+    d->caret.setBlockFormat(fmt);
+
+    d->caret.endEditBlock();
+    d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::newLine()

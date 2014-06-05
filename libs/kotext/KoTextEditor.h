@@ -138,6 +138,7 @@ private:
     friend class InsertInlineObjectCommand;
     friend class InsertNoteCommand;
     friend class ParagraphFormattingCommand;
+    friend class ExtractToSectionCommand;
 
     // for unittests
     friend class TestKoInlineTextObjectManager;
@@ -445,7 +446,7 @@ public slots:
      * Inserts the supplied text at the current cursor position. If the second argument is
      * supplied, a link is inserted at the current cursor position with the hRef as given
      * by the user. To test whether the supplied link destination is a web url or a bookmark,
-     * a regular expression ( \\S+://\\S+ ) is used. 
+     * a regular expression ( \\S+://\\S+ ) is used.
      * @param text is the text to be inserted
      * @param hRef if supplied is the Hypertext reference
      */
@@ -456,6 +457,8 @@ public slots:
     void mergeBlockFormat( const QTextBlockFormat &modifier);
 
     bool movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int n = 1);
+
+    void newSection();
 
     void newLine();
 

@@ -370,7 +370,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             layout->draw(painter, QPointF(0, 0), selections);
 
-            //FIXME: surround this with if to make section viewing optional
+            //FIXME: Surround this with if to make section viewing optional.
             decorateParagraphSections(painter, block, sectionLevel );
             decorateParagraph(painter, block, context.showFormattingCharacters, context.showSpellChecking);
 

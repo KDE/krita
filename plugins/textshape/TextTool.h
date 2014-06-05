@@ -175,6 +175,8 @@ signals:
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// inserts new paragraph and includes it into the new section
+    void insertNewSection();
     /// paste text from the clipboard without formatting
     void pasteAsText();
     /// make the selected text bold or not
@@ -361,6 +363,7 @@ private:
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
     KAction *m_actionChangeDirection;
+    KAction *m_actionInsertSection;
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;

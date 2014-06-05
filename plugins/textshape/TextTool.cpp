@@ -214,6 +214,10 @@ void TextTool::createActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
 
+    m_actionInsertSection = new KAction(koIcon("format-text-bold"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    addAction("insert_section", m_actionInsertSection);
+    connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
+
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
@@ -2188,6 +2192,14 @@ void TextTool::stopEditing()
 {
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
+}
+
+void TextTool::insertNewSection()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    textEditor->newSection();
 }
 
 void TextTool::pasteAsText()

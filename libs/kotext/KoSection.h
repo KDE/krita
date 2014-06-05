@@ -70,21 +70,22 @@ private:
 struct KOTEXT_EXPORT KoSectionEnd {
     QString name; //< the name of the section we are closing
 
+    KoSectionEnd(QString name);
     void saveOdf(KoShapeSavingContext &context);
 };
 
 namespace KoSectionUtils {
     /**
-     * Moves the cursors to the next block within the same QTextFrame
+     * Moves the cursors to the next block within the same QTextFrame.
      * @param cur cursor to move, modified during call
      * @return @c false if there is no next block, @c true otherwise
      */
     bool getNextBlock(QTextCursor &cur);
     /**
      * Convinient function to get name of a section from QVariant
-     * that is really a KoSection *
+     * that is really a KoSection *.
      *
-     * There is no internal check that \p q is a KoSection *
+     * There is no internal check that \p q is a KoSection *.
      *
      * @param q QVariant version of pointer to a KoSection
      * @return name of a specified section
@@ -92,9 +93,9 @@ namespace KoSectionUtils {
     QString sectionStartName(QVariant q);
     /**
      * Convinient function to get name of a section from QVariant
-     * that is really a KoSectionEnd *
+     * that is really a KoSectionEnd *.
      *
-     * There is no internal check that \p q is a KoSectionEnd *
+     * There is no internal check that \p q is a KoSectionEnd *.
      *
      * @param q QVariant version of pointer to a KoSectionEnd
      * @return name of a specified section

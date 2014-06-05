@@ -33,8 +33,9 @@
 class KoSection::Private
 {
 public:
-    Private()
-        : sectionStyle(0)
+    Private(QString _name = "New section")
+        : name(_name)
+        , sectionStyle(0)
     {
     }
 
@@ -115,6 +116,11 @@ void KoSection::saveOdf(KoShapeSavingContext &context)
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 }
 
+KoSectionEnd::KoSectionEnd(QString _name)
+    : name(_name)
+{
+}
+
 void KoSectionEnd::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
@@ -132,7 +138,7 @@ bool KoSectionUtils::getNextBlock(QTextCursor &cur)
     }
 
     if (!ok || next.currentFrame() != cur.currentFrame()) {
-        // there is no previous block
+        // There is no previous block.
         return false;
     }
     cur = next;

@@ -80,6 +80,7 @@ private slots:
     void nextKeyFramePressed();
     void prevKeyFramePressed();
     void settingsButtonPressed();
+    void timelineWidthChaged(int width);
 
 signals:
     void canvasModified();

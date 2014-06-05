@@ -62,8 +62,4 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas)
     }
 }
 
-void AnimatorDock::updateNumberOfFrames()
-{
-
-}
 #include "animator_dock.moc"

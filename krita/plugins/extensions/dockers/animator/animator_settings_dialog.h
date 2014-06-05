@@ -31,10 +31,13 @@ public:
 
 private slots:
     void enableAutoFrameBreak(bool enable);
+    void timelineWidthChanged(int width);
 
 private:
     KisAnimation* m_model;
 
+signals:
+    void sigTimelineWithChanged(int);
 };
 
 #endif // ANIMATORSETTINGSDIALOG_H

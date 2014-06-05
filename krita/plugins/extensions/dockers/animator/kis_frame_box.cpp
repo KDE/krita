@@ -32,11 +32,11 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
     m_layers = this->m_dock->getLayerBox()->getLayers();
 
     m_timelineHeader = new KisTimelineHeader(this);
-    m_timelineHeader->setGeometry(QRect(0, 0, 10000, 20));
+    m_timelineHeader->setGeometry(QRect(0, 0, 100000, 20));
 
     KisLayerContents* firstContents = new KisLayerContents(this);
     m_layerContents << firstContents;
-    firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 10000, 20));
+    firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 100000, 20));
 }
 
 void KisFrameBox::onCanvasReady()
@@ -50,7 +50,6 @@ void KisFrameBox::onCanvasReady()
 
 void KisFrameBox::updateUI()
 {
-    kWarning() << "called";
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;
     int y = 0;
@@ -58,10 +57,10 @@ void KisFrameBox::updateUI()
 
     for(int i = 0; i < noLayers - 1; i++) {
         y = m_layerContents.at(i)->geometry().y();
-        m_layerContents.at(i)->setGeometry(QRect(0, y + 20, 10000, 20));
+        m_layerContents.at(i)->setGeometry(QRect(0, y + 20, 100000, 20));
     }
 
-    newContents->setGeometry(QRect(0, 20, 10000, 20));
+    newContents->setGeometry(QRect(0, 20, 100000, 20));
     newContents->show();
 
     dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addPaintLayer();

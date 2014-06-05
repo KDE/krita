@@ -35,9 +35,6 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas(){ m_canvas = 0;}
 
-public slots:
-    void updateNumberOfFrames();
-
 private:
     KisCanvas2 *m_canvas;
     KisAnimation *m_animation;

@@ -26,7 +26,7 @@
 KisLayerContents::KisLayerContents(KisFrameBox *parent)
 {
     this->setFixedHeight(20);
-    this->setFixedWidth(10000);
+    this->setFixedWidth(100000);
 
     this->m_parent = parent;
     this->setParent(parent);
@@ -57,7 +57,7 @@ void KisLayerContents::paintEvent(QPaintEvent *event)
 
    QPainter painter(this);
 
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < 10000; i++) {
         if(i % 10 == 0) {
             painter.setPen(Qt::red);
             painter.drawRect(QRectF(10 * i, 0, 9, height() - 1));

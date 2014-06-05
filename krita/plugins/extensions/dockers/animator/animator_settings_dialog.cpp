@@ -18,6 +18,8 @@
 
 #include "animator_settings_dialog.h"
 #include <QCheckBox>
+#include <QSpinBox>
+#include <QLabel>
 #include <QGridLayout>
 #include <kis_config.h>
 
@@ -32,9 +34,20 @@ AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
     autoFrameBreak->setText("Enable auto frame break");
     autoFrameBreak->setChecked(cfg.defAutoFrameBreakEnabled());
 
+    QLabel* timelineWidthLbl = new QLabel("Timeline width:", this);
+
+    QSpinBox* timelineWidth = new QSpinBox(this);
+    timelineWidth->setMinimum(1);
+    timelineWidth->setMaximum(10000);
+    timelineWidth->setValue(400);
+
     connect(autoFrameBreak, SIGNAL(clicked(bool)), this, SLOT(enableAutoFrameBreak(bool)));
+    connect(timelineWidth, SIGNAL(valueChanged(int)), this, SLOT(timelineWidthChanged(int)));
+
     QGridLayout* mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(autoFrameBreak);
+    mainLayout->addWidget(autoFrameBreak, 0, 0);
+    mainLayout->addWidget(timelineWidthLbl, 1, 0);
+    mainLayout->addWidget(timelineWidth, 1, 1);
 
     this->setLayout(mainLayout);
 }
@@ -42,6 +55,11 @@ AnimatorSettingsDialog::AnimatorSettingsDialog(QWidget *parent) :
 void AnimatorSettingsDialog::enableAutoFrameBreak(bool enable)
 {
     m_model->enableFrameBreaking(enable);
+}
+
+void AnimatorSettingsDialog::timelineWidthChanged(int width)
+{
+    emit sigTimelineWithChanged(width);
 }
 
 void AnimatorSettingsDialog::setModel(KisAnimation *model)

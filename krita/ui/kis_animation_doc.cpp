@@ -386,12 +386,6 @@ QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
 
 QRect KisAnimationDoc::getPreviousKeyFramePosition(int frame, int layer)
 {
-    return QRect();
-}
-
-QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
-{
-    kWarning() << layer;
     QDomNodeList list = d->frameElement.childNodes();
 
     QList<int> frameNumbers;
@@ -404,6 +398,42 @@ QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
         if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
 
             frameNo = node.attributes().namedItem("number").nodeValue().toInt();
+
+            // Add frames to list which come before, including itself
+            if(frameNo <= frame) {
+                frameNumbers.append(frameNo);
+            }
+        }
+    }
+
+    qSort(frameNumbers);
+
+    // If first keyframe
+    if(frameNumbers.length() <= 1) {
+        return QRect(frame, layer, 10, 20);
+    }
+
+    // Return last second of the keyframes before given frame
+    // Because even the given frame is in the list
+    return QRect(frameNumbers.at(frameNumbers.length() - 2), layer, 10, 20);
+}
+
+QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
+{
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    int frameNo;
+
+    for(int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+
+        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
+
+            frameNo = node.attributes().namedItem("number").nodeValue().toInt();
+
+            // Add frames to list which come after
             if(frameNo > frame) {
                 frameNumbers.append(frameNo);
             }

@@ -106,7 +106,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
     }
 
-    int sectionLevel = -1;
+    int sectionLevel = 0;
     int tableAreaIndex = 0;
     int blockIndex = 0;
     int tocIndex = 0;
@@ -665,64 +665,83 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
     QTextLayout *layout = block.layout();
     QTextBlockFormat bf = block.blockFormat();
 
+    QPen penBackup = painter->pen();
+    QPen pen = painter->pen();
+
+    pen.setWidth(1);
+    pen.setColor(Qt::gray);
+    painter->setPen(pen);
+
+    qreal xl = layout->lineForTextPosition(0).x();
+    qreal xr = layout->lineForTextPosition(0).x() + width();
+    qreal yu = layout->lineForTextPosition(0).y();
+    qreal yd = layout->lineForTextPosition(0).y() + QFontMetricsF(painter->font()).height();
+
+    const qreal levelShift = 3;
+
     if (bf.hasProperty(KoParagraphStyle::SectionStartings)) {
         QVariant var = bf.property(KoParagraphStyle::SectionStartings);
         QList<QVariant> openList = var.value< QList<QVariant> >();
 
-        drawDecorationLine(painter,
-                           Qt::green,
-                           KoCharacterStyle::SingleLine,
-                           KoCharacterStyle::SolidLine,
-                           1 * openList.count(),
-                           layout->lineForTextPosition(0).x(),
-                           layout->lineForTextPosition(0).x() + width(),
-                           layout->lineForTextPosition(0).y()
-        );
+        painter->drawLine(xl + (sectionLevel - openList.size()) * levelShift, yu,
+                          xr - (sectionLevel - openList.size()) * levelShift, yu);
 
-        QString sectionsDebug = "Starts :";
-        foreach (const QVariant &sv, openList) {
-            KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-            sectionsDebug += sec->name() + " ";
+        for (int i = 0; i < openList.size(); i++) {
+            painter->drawLine(xl + (sectionLevel - 1 - i) * levelShift, yu,
+                              xl + (sectionLevel - 1 - i) * levelShift, (yu + yd) / 2);
+
+            painter->drawLine(xr - (sectionLevel - 1 - i) * levelShift, yu,
+                              xr - (sectionLevel - 1 - i) * levelShift, (yu + yd) / 2);
         }
 
-        drawDecorationTextOnce(painter,
-                               layout->lineForTextPosition(0),
-                               Qt::gray,
-                               sectionsDebug,
-                               layout->lineForTextPosition(0).x(),
-                               layout->lineForTextPosition(0).x() + width()
-        );
+
+
+//         QString sectionsDebug = "Starts :";
+//         foreach (const QVariant &sv, openList) {
+//             KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
+//             sectionsDebug += sec->name() + " ";
+//         }
+
+//         drawDecorationTextOnce(painter,
+//                                layout->lineForTextPosition(0),
+//                                Qt::gray,
+//                                sectionsDebug,
+//                                layout->lineForTextPosition(0).x(),
+//                                layout->lineForTextPosition(0).x() + width()
+//         );
     }
 
     if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
         QVariant var = bf.property(KoParagraphStyle::SectionEndings);
         QList<QVariant> closeList = var.value< QList<QVariant> >();
-        drawDecorationLine(painter,
-                           Qt::red,
-                           KoCharacterStyle::SingleLine,
-                           KoCharacterStyle::SolidLine,
-                           1 * closeList.count(),
-                           layout->lineForTextPosition(0).x(),
-                           layout->lineForTextPosition(0).x() + width(),
-                           layout->lineForTextPosition(block.length() - 1).y()
-                           + layout->lineForTextPosition(block.length() - 1).height()
-        );
 
-        QString sectionsDebug = "Ends :";
-        foreach (const QVariant &sv, closeList) {
-            KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-            sectionsDebug += sec->name + " ";
+        painter->drawLine(xl + (sectionLevel - closeList.size()) * levelShift, yd,
+                          xr - (sectionLevel - closeList.size()) * levelShift, yd);
+
+        for (int i = 0; i < closeList.size(); i++) {
+            painter->drawLine(xl + (sectionLevel - closeList.size() + i) * levelShift, yd,
+                              xl + (sectionLevel - closeList.size() + i) * levelShift, (yu + yd) / 2);
+
+            painter->drawLine(xr - (sectionLevel - closeList.size() + i) * levelShift, yd,
+                              xr - (sectionLevel - closeList.size() + i) * levelShift, (yu + yd) / 2);
         }
 
-        QFontMetricsF fm(painter->font());
-        drawDecorationTextOnce(painter,
-                               layout->lineForTextPosition(block.length() - 1),
-                               Qt::gray,
-                               sectionsDebug,
-                               layout->lineForTextPosition(0).x() + width() - fm.width(sectionsDebug),
-                               layout->lineForTextPosition(0).x() + width()
-        );
+//         QString sectionsDebug = "Ends :";
+//         foreach (const QVariant &sv, closeList) {
+//             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
+//             sectionsDebug += sec->name + " ";
+//         }
+//
+//         drawDecorationTextOnce(painter,
+//                                layout->lineForTextPosition(block.length() - 1),
+//                                Qt::gray,
+//                                sectionsDebug,
+//                                layout->lineForTextPosition(0).x() + width() - fm.width(sectionsDebug),
+//                                layout->lineForTextPosition(0).x() + width()
+//         );
     }
+
+    painter->setPen(penBackup);
 }
 
 void KoTextLayoutArea::decorateParagraph(QPainter *painter, QTextBlock &block, bool showFormattingCharacters, bool showSpellChecking)

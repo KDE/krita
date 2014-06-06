@@ -64,9 +64,10 @@ KoSegmentGradient::~KoSegmentGradient()
 bool KoSegmentGradient::load()
 {
     QFile file(filename());
-
-    if (!file.open(QIODevice::ReadOnly)) return false;
-
+    if (!file.open(QIODevice::ReadOnly)) {
+        kWarning() << "Can't open file " << filename();
+        return false;
+    }
     bool res = loadFromDevice(&file);
     file.close();
     return res;

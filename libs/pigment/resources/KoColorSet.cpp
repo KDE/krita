@@ -102,7 +102,10 @@ bool KoColorSet::load()
 {
     QFile file(filename());
     if (file.size() == 0) return false;
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        kWarning() << "Can't open file " << filename();
+        return false;
+    }
     bool res =  loadFromDevice(&file);
     file.close();
     return res;

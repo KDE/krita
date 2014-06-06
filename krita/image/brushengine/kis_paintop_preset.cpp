@@ -123,7 +123,12 @@ bool KisPaintOpPreset::load()
     }
 
     QFile file(filename());
+
     if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
 
     bool res = loadFromDevice(&file);
 

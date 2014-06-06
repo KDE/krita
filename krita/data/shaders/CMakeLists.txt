@@ -6,6 +6,9 @@ install( FILES
     matrix_transform.vert
     matrix_transform_legacy.vert
 
+    simple_texture.frag
+    simple_texture_legacy.frag
+
     highq_downscale_preface.frag.inc
     highq_downscale_main.frag.inc
     highq_downscale_main_ocio.frag.inc

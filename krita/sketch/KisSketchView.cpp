@@ -26,6 +26,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QHoverEvent>
 
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -135,6 +136,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     setFlag(QGraphicsItem::ItemHasNoContents, true);
     setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
+    setAcceptHoverEvents(true);
 
     grabGesture(Qt::PanGesture);
     //grabGesture(Qt::PinchGesture);
@@ -518,19 +520,31 @@ bool KisSketchView::sceneEvent(QEvent* event)
             emit interactionStarted();
             return true;
         }
+        case QEvent::GraphicsSceneHoverEnter: {
+            QGraphicsSceneHoverEvent *hevent = static_cast<QGraphicsSceneHoverEvent*>(event);
+            QHoverEvent e(QEvent::Enter, hevent->screenPos(), hevent->lastScreenPos());
+            QApplication::sendEvent(d->canvasWidget, &e);
+            return true;
+        }
+        case QEvent::GraphicsSceneHoverLeave: {
+            QGraphicsSceneHoverEvent *hevent = static_cast<QGraphicsSceneHoverEvent*>(event);
+            QHoverEvent e(QEvent::Leave, hevent->screenPos(), hevent->lastScreenPos());
+            QApplication::sendEvent(d->canvasWidget, &e);
+            return true;
+        }
         case QEvent::TouchBegin: {
             QApplication::sendEvent(d->canvasWidget, event);
             event->accept();
             emit interactionStarted();
             return true;
         }
-		case QEvent::TabletPress:
-		case QEvent::TabletMove:
-		case QEvent::TabletRelease:
-			d->canvas->inputManager()->stopIgnoringEvents();
-			QApplication::sendEvent(d->canvasWidget, event);
-			return true;
-		default:
+        case QEvent::TabletPress:
+        case QEvent::TabletMove:
+        case QEvent::TabletRelease:
+            d->canvas->inputManager()->stopIgnoringEvents();
+            QApplication::sendEvent(d->canvasWidget, event);
+            return true;
+        default:
             if (QApplication::sendEvent(d->canvasWidget, event)) {
                 emit interactionStarted();
                 return true;

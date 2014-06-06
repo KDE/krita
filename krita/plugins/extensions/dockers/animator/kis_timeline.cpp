@@ -248,7 +248,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     this->setLayout(lay);
 
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
-    connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChaged(int)));
+    connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
 }
 
 void KisTimeline::frameSelectionChanged(QRect frame)
@@ -394,7 +394,7 @@ void KisTimeline::stopAnimation()
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->stop();
 }
 
-void KisTimeline::timelineWidthChaged(int width)
+void KisTimeline::timelineWidthChanged(int width)
 {
     m_cells->setFixedWidth(width * 10);
 }

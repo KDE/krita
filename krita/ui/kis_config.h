@@ -339,6 +339,9 @@ public:
     bool lineSmoothingSmoothPressure() const;
     void setLineSmoothingSmoothPressure(bool value);
 
+    bool lineSmoothingScalableDistance() const;
+    void setLineSmoothingScalableDistance(bool value);
+
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
 

@@ -74,12 +74,14 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
         m_chkSmoothPressure->setEnabled(false);
+        m_chkUseScalableDistance->setEnabled(false);
         break;
     case 1:
         m_smoothingOptions.setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
         m_chkSmoothPressure->setEnabled(false);
+        m_chkUseScalableDistance->setEnabled(false);
         break;
     case 2:
     default:
@@ -87,6 +89,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_sliderSmoothnessDistance->setEnabled(true);
         m_sliderTailAggressiveness->setEnabled(true);
         m_chkSmoothPressure->setEnabled(true);
+        m_chkUseScalableDistance->setEnabled(true);
     }
     emit smoothingTypeChanged();
 }
@@ -111,6 +114,17 @@ void KisToolBrush::setSmoothPressure(bool value)
 void KisToolBrush::slotSetMagnetism(int magnetism)
 {
     m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
+}
+
+bool KisToolBrush::useScalableDistance() const
+{
+    return m_smoothingOptions.useScalableDistance();
+}
+
+void KisToolBrush::setUseScalableDistance(bool value)
+{
+    m_smoothingOptions.setUseScalableDistance(value);
+    emit useScalableDistanceChanged();
 }
 
 QWidget * KisToolBrush::createOptionWidget()
@@ -176,6 +190,11 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
     addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
+
+    m_chkUseScalableDistance = new QCheckBox("", optionsWidget);
+    m_chkUseScalableDistance->setChecked(m_smoothingOptions.useScalableDistance());
+    connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
+    addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(i18n("Scalable Distance")));
 
     m_buttonGroup->button((int)m_smoothingOptions.smoothingType())->setChecked(true);
     slotSetSmoothingType((int)m_smoothingOptions.smoothingType());

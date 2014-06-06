@@ -355,7 +355,13 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
-            const qreal sigma = m_d->smoothingOptions.smoothnessDistance() / 3.0; // '3.0' for (3 * sigma) range
+            const qreal effectiveSmoothnessDistance =
+                !m_d->smoothingOptions.useScalableDistance() ?
+                m_d->smoothingOptions.smoothnessDistance() :
+                m_d->smoothingOptions.smoothnessDistance() /
+                m_d->resources->effectiveZoom();
+
+            const qreal sigma = effectiveSmoothnessDistance / 3.0; // '3.0' for (3 * sigma) range
 
             qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
             qreal gaussianWeight2 = sigma * sigma;

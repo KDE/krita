@@ -415,6 +415,12 @@ QPointF KisCoordinatesConverter::widgetCenterPoint() const
 
 void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
+    if(!m_d->image) {
+        *scaleX = 1.0;
+        *scaleY = 1.0;
+        return;
+    }
+
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;
     KoZoomHandler::zoom(&zoomX, &zoomY);

@@ -159,7 +159,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 
     QToolButton* nextKeyFrameButton = new QToolButton(this);
     nextKeyFrameButton->setIcon(koIcon("go-next-content"));
-    nextKeyFrameButton->setToolTip("Previous keyframe");
+    nextKeyFrameButton->setToolTip("Next keyframe");
     nextKeyFrameButton->setFixedSize(15, 15);
 
     navToolBar->addWidget(prevKeyFrameButton);
@@ -404,12 +404,36 @@ void KisTimeline::nextKeyFramePressed()
 {
     kWarning() << "Next keyframe pressed";
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
+
+    QRect nextKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getNextKeyFramePosition(currSelection->x(),
+                                                                                                               currSelection->getParent()->getLayerIndex() * 20);
+    kWarning() << nextKeyFrame.x() << nextKeyFrame.y();
+
+    currSelection->hide();
+
+    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+    newSelection->setGeometry(nextKeyFrame.x(), currSelection->y(), 10, 20);
+
+    this->m_cells->setSelectedFrame(newSelection);
+    newSelection->show();
 }
 
 void KisTimeline::prevKeyFramePressed()
 {
     kWarning() << "Previous keyframe pressed";
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
+
+    QRect prevKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getPreviousKeyFramePosition(currSelection->x(),
+                                                                                                                   currSelection->getParent()->getLayerIndex() * 20);
+    kWarning() << prevKeyFrame.x() << prevKeyFrame.y();
+
+    currSelection->hide();
+
+    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+    newSelection->setGeometry(prevKeyFrame.x(), currSelection->y(), 10, 20);
+
+    this->m_cells->setSelectedFrame(newSelection);
+    newSelection->show();
 }
 
 void KisTimeline::settingsButtonPressed()

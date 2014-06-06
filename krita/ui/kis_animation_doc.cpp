@@ -384,6 +384,43 @@ QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
     return parentFramePos;
 }
 
+QRect KisAnimationDoc::getPreviousKeyFramePosition(int frame, int layer)
+{
+    return QRect();
+}
+
+QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
+{
+    kWarning() << layer;
+    QDomNodeList list = d->frameElement.childNodes();
+
+    QList<int> frameNumbers;
+
+    int frameNo;
+
+    for(int i = 0 ; i < list.length() ; i++) {
+        QDomNode node = list.at(i);
+
+        if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
+
+            frameNo = node.attributes().namedItem("number").nodeValue().toInt();
+            if(frameNo > frame) {
+                frameNumbers.append(frameNo);
+            }
+        }
+    }
+
+    qSort(frameNumbers);
+
+    // If last keyframe
+    if(frameNumbers.length() == 0) {
+        return QRect(frame, layer, 10, 20);
+    }
+
+    // Return minimum of the keyframes after given frame
+    return QRect(frameNumbers.at(0), layer, 10, 20);
+}
+
 QString KisAnimationDoc::getFrameFile(int frame, int layer)
 {
     QRect parentPos = this->getParentFramePosition(frame, layer);

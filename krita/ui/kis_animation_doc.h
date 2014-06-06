@@ -47,6 +47,9 @@ public:
 
     void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store);
 
+    QRect getPreviousKeyFramePosition(int frame, int layer);
+    QRect getNextKeyFramePosition(int frame, int layer);
+
 public slots:
     void play();
     void pause();

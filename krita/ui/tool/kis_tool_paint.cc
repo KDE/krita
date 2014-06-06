@@ -299,8 +299,16 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
     int resource = toForegroundColor ?
         KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
 
-    KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->paintDevice() : image()->projection();
+    KisPaintDeviceSP device;
+    if (fromCurrentNode) {
+        device = currentNode()->projection();
+        if (!device) {
+            device = currentNode()->projection();
+        }
+    }
+    else {
+        device = image()->projection();
+    }
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 

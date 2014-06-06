@@ -357,31 +357,26 @@ QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
 
     QList<int> frameNumbers;
 
+    int frameNo;
+
     for(int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
-            frameNumbers.append(node.attributes().namedItem("number").nodeValue().toInt());
+
+            frameNo = node.attributes().namedItem("number").nodeValue().toInt();
+
+            // Add frames to list which come before, including itself
+            if(frameNo <= frame) {
+                frameNumbers.append(frameNo);
+            }
         }
     }
 
     qSort(frameNumbers);
 
-    if(frameNumbers.contains(frame)) {
-        QRect parentFramePos(frame, layer, 10, 20);
-        return parentFramePos;
-    }
-
-    int frameN;
-    for(int i = 0 ; i < frameNumbers.length() ; i++) {
-        if(frameNumbers.at(i) < frame) {
-            frameN = frameNumbers.at(i);
-        }
-    }
-
-    QRect parentFramePos(frameN, layer, 10, 20);
-
-    return parentFramePos;
+    // Return last of the keyframes in list, which is the parent of frame
+    return QRect(frameNumbers.at(frameNumbers.length() - 1), layer, 10, 20);
 }
 
 QRect KisAnimationDoc::getPreviousKeyFramePosition(int frame, int layer)

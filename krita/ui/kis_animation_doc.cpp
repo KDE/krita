@@ -346,7 +346,7 @@ QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
 
     int frameNo;
 
-    for(int i = 0 ; i < list.length() ; i++) {
+    for(unsigned int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
@@ -374,7 +374,7 @@ QRect KisAnimationDoc::getPreviousKeyFramePosition(int frame, int layer)
 
     int frameNo;
 
-    for(int i = 0 ; i < list.length() ; i++) {
+    for(unsigned int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {
@@ -408,7 +408,7 @@ QRect KisAnimationDoc::getNextKeyFramePosition(int frame, int layer)
 
     int frameNo;
 
-    for(int i = 0 ; i < list.length() ; i++) {
+    for(unsigned int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         if(node.attributes().namedItem("layer").nodeValue().toInt() == layer) {

@@ -258,7 +258,7 @@ void KisTimeline::frameSelectionChanged(QRect frame)
 
 void KisTimeline::resizeEvent(QResizeEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void KisTimeline::setCanvas(KisCanvas2 *canvas)

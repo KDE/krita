@@ -109,8 +109,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_imageTooBig = false;
     m_origDevice = 0;
     m_origSelection = 0;
-    m_handleRadius = 12;
-    m_rotationCenterRadius = 12;
+    m_handleVisualRadius = 12; // size for painting on screed
+    m_rotationCenterVisualRadius = 12;
+    m_handleRadius = 2 * m_handleVisualRadius; // the threshold for a mouse drag
+    m_rotationCenterRadius = 2 * m_rotationCenterVisualRadius;
     m_maxRadius = (m_handleRadius > m_rotationCenterRadius) ? m_handleRadius : m_rotationCenterRadius;
 
 
@@ -509,10 +511,10 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
         // Draw Handles
 
-        qreal d = m_handleRadius / scaleFromAffineMatrix(m_handlesTransform);
+        qreal d = m_handleVisualRadius / scaleFromAffineMatrix(m_handlesTransform);
         QRectF handleRect(-0.5 * d, -0.5 * d, d, d);
 
-        qreal r = m_rotationCenterRadius / scaleFromAffineMatrix(m_handlesTransform);
+        qreal r = m_rotationCenterVisualRadius / scaleFromAffineMatrix(m_handlesTransform);
         QRectF rotationCenterRect(-0.5 * r, -0.5 * r, r, r);
 
         QPainterPath handles;

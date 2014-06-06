@@ -24,12 +24,14 @@ KisSmoothingOptions::KisSmoothingOptions()
     , m_smoothnessDistance(55.0)
     , m_tailAggressiveness(0.15)
     , m_smoothPressure(false)
+    , m_useScalableDistance(true)
 {
     KisConfig cfg;
     m_smoothingType = (SmoothingType)cfg.lineSmoothingType();
     m_smoothnessDistance = cfg.lineSmoothingDistance();
     m_tailAggressiveness = cfg.lineSmoothingTailAggressiveness();
     m_smoothPressure = cfg.lineSmoothingSmoothPressure();
+    m_useScalableDistance = cfg.lineSmoothingScalableDistance();
 }
 
 KisSmoothingOptions::SmoothingType KisSmoothingOptions::smoothingType() const
@@ -80,4 +82,14 @@ void KisSmoothingOptions::setSmoothPressure(bool value)
     m_smoothPressure = value;
 }
 
+bool KisSmoothingOptions::useScalableDistance() const
+{
+    return m_useScalableDistance;
+}
 
+void KisSmoothingOptions::setUseScalableDistance(bool value)
+{
+    KisConfig cfg;
+    cfg.setLineSmoothingScalableDistance(value);
+    m_useScalableDistance = value;
+}

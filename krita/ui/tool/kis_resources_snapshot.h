@@ -69,6 +69,8 @@ public:
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;
 
+    qreal effectiveZoom() const;
+
 private:
     struct Private;
     Private * const m_d;

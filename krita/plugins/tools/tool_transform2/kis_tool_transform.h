@@ -382,6 +382,8 @@ private:
     ToolTransformArgs m_clickArgs;
     int m_handleRadius;
     int m_rotationCenterRadius;
+    int m_handleVisualRadius;
+    int m_rotationCenterVisualRadius;
     int m_maxRadius;
 
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked

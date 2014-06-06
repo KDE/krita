@@ -25,6 +25,7 @@ namespace KisToolUtils {
 
     KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
     {
+        KIS_ASSERT(dev);
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
         pickedColor.setOpacity(OPACITY_OPAQUE_U8);

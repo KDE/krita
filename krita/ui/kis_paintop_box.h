@@ -150,8 +150,6 @@ private:
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
 
-//    KisPaintOpPresetSP  m_activePreset;
-//    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;

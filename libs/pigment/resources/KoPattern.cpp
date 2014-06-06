@@ -90,7 +90,10 @@ bool KoPattern::load()
     if (file.size() == 0) return false;
 
     bool result;
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        kWarning() << "Can't open file " << filename();
+        return false;
+    }
     result = loadFromDevice(&file);
     file.close();
 

@@ -41,7 +41,15 @@ public slots:
     void imagePositionChanged();
 
 private:
-    inline void addDecoration(const QRect &areaRect, const QPointF &handlePoint, qreal angle);
+    enum Side {
+        Right = 0,
+        Bottom,
+        Left,
+        Top,
+
+        NSides
+    };
+    inline void addDecoration(const QRect &areaRect, const QPointF &handlePoint, qreal angle, Side side);
 
 private:
     QPainterPath m_decorationPath;
@@ -50,6 +58,8 @@ private:
     bool m_cursorSwitched;
     QCursor m_oldCursor;
     QVector<QTransform> m_handleTransform;
+
+    QVector<QRect> m_sideRects;
 };
 
 #endif /* __KIS_INFINITY_MANAGER_H */

@@ -693,22 +693,6 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
             painter->drawLine(xr - (sectionLevel - 1 - i) * levelShift, yu,
                               xr - (sectionLevel - 1 - i) * levelShift, (yu + yd) / 2);
         }
-
-
-
-//         QString sectionsDebug = "Starts :";
-//         foreach (const QVariant &sv, openList) {
-//             KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-//             sectionsDebug += sec->name() + " ";
-//         }
-
-//         drawDecorationTextOnce(painter,
-//                                layout->lineForTextPosition(0),
-//                                Qt::gray,
-//                                sectionsDebug,
-//                                layout->lineForTextPosition(0).x(),
-//                                layout->lineForTextPosition(0).x() + width()
-//         );
     }
 
     if (bf.hasProperty(KoParagraphStyle::SectionEndings)) {
@@ -725,20 +709,6 @@ void KoTextLayoutArea::decorateParagraphSections(QPainter *painter, QTextBlock &
             painter->drawLine(xr - (sectionLevel - closeList.size() + i) * levelShift, yd,
                               xr - (sectionLevel - closeList.size() + i) * levelShift, (yu + yd) / 2);
         }
-
-//         QString sectionsDebug = "Ends :";
-//         foreach (const QVariant &sv, closeList) {
-//             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-//             sectionsDebug += sec->name + " ";
-//         }
-//
-//         drawDecorationTextOnce(painter,
-//                                layout->lineForTextPosition(block.length() - 1),
-//                                Qt::gray,
-//                                sectionsDebug,
-//                                layout->lineForTextPosition(0).x() + width() - fm.width(sectionsDebug),
-//                                layout->lineForTextPosition(0).x() + width()
-//         );
     }
 
     painter->setPen(penBackup);

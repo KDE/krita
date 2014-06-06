@@ -48,14 +48,14 @@ struct KisPaintOpPreset::Private {
 
 
 KisPaintOpPreset::KisPaintOpPreset()
-        : KoResource(QString())
-        , m_d(new Private)
+    : KoResource(QString())
+    , m_d(new Private)
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
-        : KoResource(fileName)
-        , m_d(new Private)
+    : KoResource(fileName)
+    , m_d(new Private)
 {
 }
 

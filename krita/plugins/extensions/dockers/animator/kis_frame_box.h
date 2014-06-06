@@ -38,8 +38,10 @@ public:
     KisLayerContents* getFirstLayer();
     QList<KisLayerContents*> getLayerContents();
 
-public slots:
+private slots:
     void updateUI();
+    void paintLayerPressed();
+    void vectorLayerPressed();
 
 private:
     KisTimeline* m_dock;

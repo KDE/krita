@@ -346,6 +346,11 @@ void KisAnimationDoc::addPaintLayer()
     setCurrentImage(d->image);
 }
 
+void KisAnimationDoc::addVectorLayer()
+{
+
+}
+
 QRect KisAnimationDoc::getParentFramePosition(int frame, int layer)
 {
     QDomNodeList list = d->frameElement.childNodes();

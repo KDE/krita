@@ -40,6 +40,7 @@ public:
     void breakFrame(QRect frame, bool blank=false);
 
     void addPaintLayer();
+    void addVectorLayer();
 
     KisAnimationStore* getStore();
     KisAnimation* getAnimation();

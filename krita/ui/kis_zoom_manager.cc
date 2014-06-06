@@ -49,6 +49,8 @@
 #include "kis_statusbar.h"
 #include "kis_config.h"
 #include "krita_utils.h"
+#include "kis_canvas_resource_provider.h"
+
 
 class KisZoomController : public KoZoomController
 {
@@ -230,6 +232,10 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
                   KritaUtils::prettyFormatReal(humanZoom)),
             QIcon(), 500, KisFloatingMessage::Low);
 
+    qreal scaleX, scaleY;
+    m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
+    KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, scaleX);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

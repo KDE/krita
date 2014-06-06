@@ -46,12 +46,15 @@ public:
     bool smoothPressure() const;
     void setSmoothPressure(bool value);
 
+    bool useScalableDistance() const;
+    void setUseScalableDistance(bool value);
 
 private:
     SmoothingType m_smoothingType;
     qreal m_smoothnessDistance;
     qreal m_tailAggressiveness;
     bool m_smoothPressure;
+    bool m_useScalableDistance;
 };
 
 #endif // KIS_SMOOTHING_OPTIONS_H

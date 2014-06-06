@@ -80,7 +80,6 @@ KisAnimationDoc::~KisAnimationDoc()
 
 void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationStore *store)
 {
-    kWarning() << "Laoding animation file";
     d->store = store;
 
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());
@@ -130,7 +129,6 @@ void KisAnimationDoc::frameSelectionChanged(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1;
 
             // Current frame
             if(frame.y() == i * 20) {
@@ -163,8 +161,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
     int x = frame.x();
     int y = frame.y() / 20;
 
-    kWarning() << frame.y();
-
     QString location = "";
     bool hasFile = false;
 
@@ -178,7 +174,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1 << " Frame" << x;
         }
     }
 
@@ -202,7 +197,6 @@ void KisAnimationDoc::addBlankFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1 << " Frame " << x;
         }
     }
 
@@ -231,8 +225,6 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
     int x = frame.x();
     int y = frame.y() / 20;
 
-    kWarning() << frame.y();
-
     QString location = "";
     bool hasFile = false;
 
@@ -246,7 +238,6 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1 << " Frame" << x;
         }
     }
 
@@ -272,7 +263,6 @@ void KisAnimationDoc::addKeyFrame(QRect frame)
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1 << " Frame " << x;
         }
     }
 
@@ -288,11 +278,9 @@ void KisAnimationDoc::breakFrame(QRect frame, bool blank)
 
     if(blank) {
         // Blank frame
-        kWarning() << "Break frame and add blank frame";
         this->addBlankFrame(frame);
     } else {
         // Duplicate frame
-        kWarning() << "Break frame and duplicate frame";
         this->addKeyFrame(frame);
     }
 }
@@ -328,7 +316,6 @@ void KisAnimationDoc::addPaintLayer()
             newLayer->setName("Layer " + QString::number(i + 1));
             d->image->addNode(newLayer.data(), d->image->rootLayer().data());
             d->kranimLoader->loadFrame(newLayer, d->store, location);
-            kWarning() << "Loading layer " << i+1;
         }
     }
 

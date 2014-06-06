@@ -353,8 +353,6 @@ void KisTimeline::breakFrame(QRect position)
         return;
     }
 
-    kWarning() << "Break frame at frame" << position.x() << " layer " << position.y();
-
     KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
     QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
 
@@ -370,8 +368,6 @@ void KisTimeline::breakFrame(QRect position)
 
 void KisTimeline::nextFramePressed()
 {
-    kWarning() << "Next frame pressed";
-
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
     currSelection->hide();
 
@@ -384,7 +380,6 @@ void KisTimeline::nextFramePressed()
 
 void KisTimeline::prevFramePressed()
 {
-    kWarning() << "Previous frame pressed";
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
 
     if(currSelection->x() == 0) {
@@ -402,12 +397,10 @@ void KisTimeline::prevFramePressed()
 
 void KisTimeline::nextKeyFramePressed()
 {
-    kWarning() << "Next keyframe pressed";
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
 
     QRect nextKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getNextKeyFramePosition(currSelection->x(),
                                                                                                                currSelection->getParent()->getLayerIndex() * 20);
-    kWarning() << nextKeyFrame.x() << nextKeyFrame.y();
 
     currSelection->hide();
 
@@ -420,12 +413,10 @@ void KisTimeline::nextKeyFramePressed()
 
 void KisTimeline::prevKeyFramePressed()
 {
-    kWarning() << "Previous keyframe pressed";
     KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
 
     QRect prevKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getPreviousKeyFramePosition(currSelection->x(),
                                                                                                                    currSelection->getParent()->getLayerIndex() * 20);
-    kWarning() << prevKeyFrame.x() << prevKeyFrame.y();
 
     currSelection->hide();
 

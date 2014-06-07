@@ -36,8 +36,8 @@ class KisAnimationLayerBox : public QListWidget
     Q_OBJECT
 public:
     KisAnimationLayerBox(KisTimeline* parent = 0);
-    void onCanvasReady();
     QList<KisAnimationLayer*> getLayers();
+    void addLayerUiUpdate();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -48,11 +48,6 @@ private:
     QPointer<KisNodeManager> m_nodeManager;
     QList<KisAnimationLayer*> m_layers;
 
-private slots:
-    void updateUI();
-
-private:
-    inline void connectActionToButton(QAction *button, const QString &id);
 };
 
 #endif // KIS_ANIMATION_LAYERBOX_H

@@ -41,13 +41,14 @@ public:
     KisAnimationLayerBox* getLayerBox();
     KisFrameBox* getFrameBox();
     void setModel(KisAnimation* animation);
-    bool scrubbing;
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
+private:
+    void addLayerUiUpdate();
+
 public:
-    //QToolButton* m_addLayerButton;
     QAction* m_addPaintLayerAction;
     QAction* m_addVectorLayerAction;
 
@@ -65,7 +66,6 @@ private:
     AnimatorSettingsDialog* m_settingsDialog;
 
 private slots:
-    void updateHeight();
     void blankFramePressed();
     void keyFramePressed();
     void addframePressed();
@@ -81,6 +81,8 @@ private slots:
     void prevKeyFramePressed();
     void settingsButtonPressed();
     void timelineWidthChanged(int width);
+    void paintLayerPressed();
+    void vectorLayerPressed();
 
 signals:
     void canvasModified();

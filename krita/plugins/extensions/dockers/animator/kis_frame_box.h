@@ -32,16 +32,11 @@ class KisFrameBox : public QListWidget
     Q_OBJECT
 public:
     KisFrameBox(KisTimeline* parent = 0);
-    void onCanvasReady();
     void setSelectedFrame(KisAnimationFrame* selectedFrame);
     KisAnimationFrame* getSelectedFrame();
     KisLayerContents* getFirstLayer();
     QList<KisLayerContents*> getLayerContents();
-
-private slots:
-    void updateUI();
-    void paintLayerPressed();
-    void vectorLayerPressed();
+    void addLayerUiUpdate();
 
 private:
     KisTimeline* m_dock;

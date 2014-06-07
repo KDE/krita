@@ -46,26 +46,10 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
     firstLayer->setGeometry(QRect(0,this->m_layers.length()*20, width(), 20));
 }
 
-inline void KisAnimationLayerBox::connectActionToButton(QAction *button, const QString &id)
+void KisAnimationLayerBox::addLayerUiUpdate()
 {
-    Q_ASSERT(m_dock->getCanvas());
+    this->setFixedHeight(this->height()+20);
 
-    KisAction *action = m_dock->getCanvas()->view()->actionManager()->actionByName(id);
-    connect(button, SIGNAL(triggered()), action, SLOT(trigger()));
-    connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
-}
-
-void KisAnimationLayerBox::onCanvasReady()
-{
-    m_dock->m_addPaintLayerAction->disconnect(this);
-    m_dock->m_addVectorLayerAction->disconnect(this);
-
-    connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
-    connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateUI()));
-}
-
-void KisAnimationLayerBox::updateUI()
-{
     KisAnimationLayer* newLayer = new KisAnimationLayer(this);
     m_layers << newLayer;
     int y;

@@ -72,6 +72,10 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 
     m_addPaintLayerAction = new QAction(koIcon("list-add"), "Add Paint Layer", this);
     m_addVectorLayerAction = new QAction(koIcon("list-add"), "Add Vector Layer", this);
+
+    connect(m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(paintLayerPressed()));
+    connect(m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(vectorLayerPressed()));
+
     QMenu* layerMenu = new QMenu("Add Layer", this);
     layerMenu->addAction(m_addPaintLayerAction);
     layerMenu->addAction(m_addVectorLayerAction);
@@ -99,8 +103,6 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     m_list->setFixedWidth(2000);
     leftScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     leftScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(updateHeight()));
-    connect(m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(updateHeight()));
 
     QGridLayout* leftLayout = new QGridLayout();
     leftLayout->addWidget(leftToolBar, 1, 0);
@@ -264,8 +266,6 @@ void KisTimeline::resizeEvent(QResizeEvent *event)
 void KisTimeline::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
-    this->getLayerBox()->onCanvasReady();
-    this->getFrameBox()->onCanvasReady();
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
 }
 
@@ -290,10 +290,22 @@ KisFrameBox* KisTimeline::getFrameBox()
     return m_cells;
 }
 
-void KisTimeline::updateHeight()
+void KisTimeline::addLayerUiUpdate()
 {
-    m_list->setFixedHeight(m_list->height()+20);
-    m_cells->setFixedHeight(m_cells->height()+20);
+    m_list->addLayerUiUpdate();
+    m_cells->addLayerUiUpdate();
+}
+
+void KisTimeline::paintLayerPressed()
+{
+    this->addLayerUiUpdate();
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addPaintLayer();
+}
+
+void KisTimeline::vectorLayerPressed()
+{
+    this->addLayerUiUpdate();
+    dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addVectorLayer();
 }
 
 void KisTimeline::blankFramePressed()

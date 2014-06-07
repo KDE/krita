@@ -39,29 +39,10 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
     firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 100000, 20));
 }
 
-void KisFrameBox::onCanvasReady()
-{
-    m_dock->m_addPaintLayerAction->disconnect(this);
-    m_dock->m_addVectorLayerAction->disconnect(this);
+void KisFrameBox::addLayerUiUpdate()
+{   
+    this->setFixedHeight(this->height()+20);
 
-    connect(m_dock->m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(paintLayerPressed()));
-    connect(m_dock->m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(vectorLayerPressed()));
-}
-
-void KisFrameBox::paintLayerPressed()
-{
-    this->updateUI();
-    dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addPaintLayer();
-}
-
-void KisFrameBox::vectorLayerPressed()
-{
-    this->updateUI();
-    dynamic_cast<KisAnimationDoc*>(this->m_dock->getCanvas()->view()->document())->addVectorLayer();
-}
-
-void KisFrameBox::updateUI()
-{
     KisLayerContents* newContents = new KisLayerContents(this);
     m_layerContents << newContents;
     int y = 0;

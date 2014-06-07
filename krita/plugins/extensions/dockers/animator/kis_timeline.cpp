@@ -45,6 +45,12 @@
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
+    m_initialized = false;
+    m_parent = parent;
+}
+
+void KisTimeline::init()
+{
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
     m_settingsDialog = new AnimatorSettingsDialog();
@@ -237,7 +243,7 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
     rightLayout->setSpacing(0);
     rightWidget->setLayout(rightLayout);
 
-    QSplitter* splitter = new QSplitter(parent);
+    QSplitter* splitter = new QSplitter(m_parent);
     splitter->addWidget(leftWidget);
     splitter->addWidget(rightWidget);
     splitter->setSizes(QList<int>() << 100 << 600);
@@ -251,6 +257,8 @@ KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 
     connect(this->m_cells, SIGNAL(frameSelectionChanged(QRect)), this, SLOT(frameSelectionChanged(QRect)));
     connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
+
+    m_initialized = true;
 }
 
 void KisTimeline::frameSelectionChanged(QRect frame)
@@ -266,6 +274,11 @@ void KisTimeline::resizeEvent(QResizeEvent *event)
 void KisTimeline::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
+
+    if(!m_initialized) {
+        this->init();
+    }
+
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
 }
 

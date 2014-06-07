@@ -47,6 +47,7 @@ protected:
 
 private:
     void addLayerUiUpdate();
+    void init();
 
 public:
     QAction* m_addPaintLayerAction;
@@ -64,6 +65,8 @@ private:
     QRect m_lastBrokenFrame;
     bool m_frameBreakState;
     AnimatorSettingsDialog* m_settingsDialog;
+    bool m_initialized;
+    QWidget* m_parent;
 
 private slots:
     void blankFramePressed();

@@ -42,6 +42,9 @@
 #include <KoPart.h>
 #include <kis_animation.h>
 #include <KFileDialog>
+#include <KActionCollection>
+#include <kis_action_manager.h>
+#include <kis_action.h>
 
 KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
 {
@@ -54,6 +57,9 @@ void KisTimeline::init()
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
     m_settingsDialog = new AnimatorSettingsDialog();
+
+    KActionCollection* actionCollection = m_canvas->view()->actionCollection();
+    KisActionManager* actionManager = m_canvas->view()->actionManager();
 
     this->m_numberOfLayers = 0;
     this->m_lastBrokenFrame = QRect();
@@ -71,30 +77,29 @@ void KisTimeline::init()
 
     QToolBar* layerButtons = new QToolBar(this);
 
-    QToolButton* m_addLayerButton = new QToolButton(this);
-    m_addLayerButton->setIcon(koIcon("list-add"));
-    m_addLayerButton->setFixedSize(15, 15);
-    m_addLayerButton->setToolTip("Add Layer");
+    QToolButton* addLayerButton = new QToolButton(this);
+    addLayerButton->setIcon(koIcon("list-add"));
+    addLayerButton->setToolTip("Add Animation Layer");
 
-    m_addPaintLayerAction = new QAction(koIcon("list-add"), "Add Paint Layer", this);
-    m_addVectorLayerAction = new QAction(koIcon("list-add"), "Add Vector Layer", this);
+    KisAction* addPaintLayerAction = new KisAction(koIcon("list-add"), tr("Add Animation Paint Layer"), this);
+    actionManager->addAction("add_animation_paint_layer", addPaintLayerAction, actionCollection);
+    connect(addPaintLayerAction, SIGNAL(triggered()), this, SLOT(paintLayerPressed()));
 
-    connect(m_addPaintLayerAction, SIGNAL(triggered()), this, SLOT(paintLayerPressed()));
-    connect(m_addVectorLayerAction, SIGNAL(triggered()), this, SLOT(vectorLayerPressed()));
+    KisAction* addVectorLayerAction = new KisAction(koIcon("list-add"), tr("Add Animation Vector Layer"), this);
+    actionManager->addAction("add_animation_vector_layer", addVectorLayerAction, actionCollection);
+    connect(addVectorLayerAction, SIGNAL(triggered()), this, SLOT(vectorLayerPressed()));
 
-    QMenu* layerMenu = new QMenu("Add Layer", this);
-    layerMenu->addAction(m_addPaintLayerAction);
-    layerMenu->addAction(m_addVectorLayerAction);
-    m_addLayerButton->setMenu(layerMenu);
-    m_addLayerButton->setPopupMode(QToolButton::InstantPopup);
+    QMenu* layerMenu = new QMenu("Add Animation Layer", this);
+    layerMenu->addAction(addPaintLayerAction);
+    layerMenu->addAction(addVectorLayerAction);
+    addLayerButton->setMenu(layerMenu);
+    addLayerButton->setPopupMode(QToolButton::InstantPopup);
 
-    QToolButton* removeLayerButton = new QToolButton(this);
-    removeLayerButton->setIcon(koIcon("list-remove"));
-    removeLayerButton->setToolTip("Remove Layer");
-    removeLayerButton->setFixedSize(15, 15);
+    KisAction* removeLayerAction = new KisAction(koIcon("list-remove"), tr("Remove Animation Layer"), this);
+    actionManager->addAction("remove_animation_layer", removeLayerAction, actionCollection);
 
-    layerButtons->addWidget(m_addLayerButton);
-    layerButtons->addWidget(removeLayerButton);
+    layerButtons->addWidget(addLayerButton);
+    layerButtons->addAction(removeLayerAction);
 
     QHBoxLayout* leftToolBarLayout = new QHBoxLayout();
     leftToolBarLayout->setAlignment(Qt::AlignLeft);
@@ -119,100 +124,75 @@ void KisTimeline::init()
 
     QToolBar* frameButtons = new QToolBar(this);
 
-    QToolButton* addFrameButton = new QToolButton(this);
-    addFrameButton->setIcon(koIcon("list-add"));
-    addFrameButton->setToolTip("Insert Frame");
-    addFrameButton->setFixedSize(15, 15);
+    KisAction* addFrameAction = new KisAction(koIcon("list-add"), tr("Insert Frame"), this);
+    actionManager->addAction("insert_frame", addFrameAction, actionCollection);
+    connect(addFrameAction, SIGNAL(triggered()), this, SLOT(addframePressed()));
 
-    QToolButton* addKeyFrameButton = new QToolButton(this);
-    addKeyFrameButton->setIcon(koIcon("list-add"));
-    addKeyFrameButton->setToolTip("Insert key frame");
-    addKeyFrameButton->setFixedSize(15, 15);
+    KisAction* addKeyFrameAction = new KisAction(koIcon("list-add"), tr("Insert Keyframe"), this);
+    actionManager->addAction("insert_key_frame", addKeyFrameAction, actionCollection);
+    connect(addKeyFrameAction, SIGNAL(triggered()), this, SLOT(keyFramePressed()));
 
-    QToolButton* addBlankFrameButton = new QToolButton(this);
-    addBlankFrameButton->setIcon(koIcon("list-add"));
-    addBlankFrameButton->setToolTip("Insert blank frame");
-    addBlankFrameButton->setFixedSize(15, 15);
+    KisAction* addBlankFrameAction = new KisAction(koIcon("list-add"), tr("Insert Blank Frame"), this);
+    actionManager->addAction("insert_blank_frame", addBlankFrameAction, actionCollection);
+    connect(addBlankFrameAction, SIGNAL(triggered()), this, SLOT(blankFramePressed()));
 
-    QToolButton* removeFrameButton = new QToolButton(this);
-    removeFrameButton->setIcon(koIcon("list-remove"));
-    removeFrameButton->setToolTip("Remove frame");
-    removeFrameButton->setFixedSize(15, 15);
+    KisAction* removeFrameAction = new KisAction(koIcon("list-remove"), tr("Remove Frame"), this);
+    actionManager->addAction("remove_frame", removeFrameAction, actionCollection);
 
-    frameButtons->addWidget(addFrameButton);
-    frameButtons->addWidget(addKeyFrameButton);
-    frameButtons->addWidget(addBlankFrameButton);
-    frameButtons->addWidget(removeFrameButton);
-
-    connect(addFrameButton, SIGNAL(pressed()), this, SLOT(addframePressed()));
-    connect(addKeyFrameButton, SIGNAL(pressed()), this, SLOT(keyFramePressed()));
-    connect(addBlankFrameButton, SIGNAL(pressed()), this, SLOT(blankFramePressed()));
+    frameButtons->addAction(addFrameAction);
+    frameButtons->addAction(addKeyFrameAction);
+    frameButtons->addAction(addBlankFrameAction);
+    frameButtons->addAction(removeFrameAction);
 
     QToolBar* navToolBar = new QToolBar(this);
 
-    QToolButton* nextFrameButton = new QToolButton(this);
-    nextFrameButton->setIcon(koIcon("go-next-view"));
-    nextFrameButton->setToolTip("Next frame");
-    nextFrameButton->setFixedSize(15, 15);
+    KisAction* nextFrameAction = new KisAction(koIcon("go-next-view"), tr("Next Frame"), this);
+    actionManager->addAction("next_frame", nextFrameAction, actionCollection);
+    connect(nextFrameAction, SIGNAL(triggered()), this, SLOT(nextFramePressed()));
 
-    QToolButton* prevFrameButton = new QToolButton(this);
-    prevFrameButton->setIcon(koIcon("go-previous-view"));
-    prevFrameButton->setToolTip("Previous frame");
-    prevFrameButton->setFixedSize(15, 15);
+    KisAction* prevFrameAction = new KisAction(koIcon("go-previous-view"), tr("Previous Frame"), this);
+    actionManager->addAction("previous_frame", prevFrameAction, actionCollection);
+    connect(prevFrameAction, SIGNAL(triggered()), this, SLOT(prevFramePressed()));
 
-    QToolButton* prevKeyFrameButton = new QToolButton(this);
-    prevKeyFrameButton->setIcon(koIcon("go-previous-content"));
-    prevKeyFrameButton->setToolTip("Previous keyframe");
-    prevKeyFrameButton->setFixedSize(15, 15);
+    KisAction* prevKeyFrameAction = new KisAction(koIcon("go-previous-content"), tr("Previous Keyframe"), this);
+    actionManager->addAction("previous_key_frame", prevKeyFrameAction, actionCollection);
+    connect(prevKeyFrameAction, SIGNAL(triggered()), this, SLOT(prevKeyFramePressed()));
 
-    QToolButton* nextKeyFrameButton = new QToolButton(this);
-    nextKeyFrameButton->setIcon(koIcon("go-next-content"));
-    nextKeyFrameButton->setToolTip("Next keyframe");
-    nextKeyFrameButton->setFixedSize(15, 15);
+    KisAction* nextKeyFrameAction = new KisAction(koIcon("go-next-content"), tr("Next Keyframe"), this);
+    actionManager->addAction("next_key_frame", nextKeyFrameAction, actionCollection);
+    connect(nextKeyFrameAction, SIGNAL(triggered()), this, SLOT(nextKeyFramePressed()));
 
-    navToolBar->addWidget(prevKeyFrameButton);
-    navToolBar->addWidget(prevFrameButton);
-    navToolBar->addWidget(nextFrameButton);
-    navToolBar->addWidget(nextKeyFrameButton);
-
-    connect(prevFrameButton, SIGNAL(clicked()), this, SLOT(prevFramePressed()));
-    connect(nextFrameButton, SIGNAL(clicked()), this, SLOT(nextFramePressed()));
-    connect(nextKeyFrameButton, SIGNAL(clicked()), this, SLOT(nextKeyFramePressed()));
-    connect(prevKeyFrameButton, SIGNAL(clicked()), this, SLOT(prevKeyFramePressed()));
+    navToolBar->addAction(prevKeyFrameAction);
+    navToolBar->addAction(prevFrameAction);
+    navToolBar->addAction(nextFrameAction);
+    navToolBar->addAction(nextKeyFrameAction);
 
     QToolBar* playerButtons = new QToolBar(this);
 
-    QToolButton* playButton = new QToolButton(this);
-    playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    playButton->setToolTip("Play Animation");
-    playButton->setFixedSize(15, 15);
-    playerButtons->addWidget(playButton);
+    KisAction* playAction = new KisAction((KIcon)style()->standardIcon(QStyle::SP_MediaPlay), tr("Play Animation"), this);
+    actionManager->addAction("play_animation", playAction, actionCollection);
+    connect(playAction, SIGNAL(triggered()), this, SLOT(playAnimation()));
 
-    QToolButton* pauseButton = new QToolButton(this);
-    pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-    pauseButton->setToolTip("Pause Animation");
-    pauseButton->setFixedSize(15, 15);
-    playerButtons->addWidget(pauseButton);
+    KisAction* pauseAction = new KisAction((KIcon)style()->standardIcon(QStyle::SP_MediaPause), tr("Pause Animation"), this);
+    actionManager->addAction("pause_animation", pauseAction, actionCollection);
+    connect(pauseAction, SIGNAL(triggered()), this, SLOT(pauseAnimation()));
 
-    QToolButton* stopButton = new QToolButton(this);
-    stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-    stopButton->setToolTip("Stop Animation");
-    stopButton->setFixedSize(15, 15);
-    playerButtons->addWidget(stopButton);
+    KisAction* stopAction = new KisAction((KIcon)style()->standardIcon(QStyle::SP_MediaStop), tr("Stop Animation"), this);
+    actionManager->addAction("stop_animation", stopAction, actionCollection);
+    connect(stopAction, SIGNAL(triggered()), this, SLOT(stopAnimation()));
 
-    connect(playButton, SIGNAL(clicked()), this, SLOT(playAnimation()));
-    connect(pauseButton, SIGNAL(clicked()), this, SLOT(pauseAnimation()));
-    connect(stopButton, SIGNAL(clicked()), this, SLOT(stopAnimation()));
+    playerButtons->addAction(playAction);
+    playerButtons->addAction(pauseAction);
+    playerButtons->addAction(stopAction);
 
     QToolBar* settingsToolBar = new QToolBar(this);
 
     QCheckBox* frameBreakState = new QCheckBox(this);
-    frameBreakState->setText("Add blank frame ");
+    frameBreakState->setText(tr("Add blank frame "));
 
     QToolButton* settingsButton = new QToolButton(this);
     settingsButton->setIcon(koIcon("configure"));
-    settingsButton->setToolTip("Settings");
-    settingsButton->setFixedSize(15, 15);
+    settingsButton->setToolTip(tr("Settings"));
 
     settingsToolBar->addWidget(frameBreakState);
     settingsToolBar->addWidget(settingsButton);
@@ -230,7 +210,7 @@ void KisTimeline::init()
     QScrollArea* rightScrollArea = new QScrollArea(this);
     rightScrollArea->setBackgroundRole(QPalette::Dark);
     rightScrollArea->setWidget(m_cells);
-    m_cells->setFixedWidth(4000);       //Needs to be varied
+    m_cells->setFixedWidth(4000);
     m_cells->setFixedHeight(45);
     rightScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 

@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QToolButton>
 #include <QScrollArea>
-#include <QAction>
 
 #include "animator_settings_dialog.h"
 
@@ -48,10 +47,6 @@ protected:
 private:
     void addLayerUiUpdate();
     void init();
-
-public:
-    QAction* m_addPaintLayerAction;
-    QAction* m_addVectorLayerAction;
 
 public slots:
     void documentModified();

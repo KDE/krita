@@ -37,6 +37,10 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
     KisLayerContents* firstContents = new KisLayerContents(this);
     m_layerContents << firstContents;
     firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 100000, 20));
+
+    KisAnimationFrame* firstSelection = new KisAnimationFrame(firstContents, KisAnimationFrame::SELECTION, 10);
+    this->setSelectedFrame(firstSelection);
+    firstSelection->show();
 }
 
 void KisFrameBox::addLayerUiUpdate()
@@ -55,6 +59,17 @@ void KisFrameBox::addLayerUiUpdate()
 
     newContents->setGeometry(QRect(0, 20, 100000, 20));
     newContents->show();
+
+    KisAnimationFrame* currSelection = this->getSelectedFrame();
+    currSelection->hide();
+
+    KisAnimationFrame* newSelection = new KisAnimationFrame(newContents, KisAnimationFrame::SELECTION, 10);
+    newSelection->setGeometry(0, 0, 10, 20);
+
+    // Don't call setSelectedFrame here because it will emit frameSelectionChanged
+    // which will lead to crash in KisAnimationDoc
+    this->m_selectedFrame = newSelection;
+    newSelection->show();
 }
 
 void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame)

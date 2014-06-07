@@ -338,17 +338,17 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     return result;
 }
 
-qreal KisPaintInformation::ascension(const KisPaintInformation& info, bool normalize)
+qreal KisPaintInformation::tiltDirection(const KisPaintInformation& info, bool normalize)
 {
     qreal xTilt = info.xTilt();
     qreal yTilt = info.yTilt();
     // radians -PI, PI
-    qreal ascension = atan2(-xTilt, yTilt);
+    qreal tiltDirection = atan2(-xTilt, yTilt);
     // if normalize is true map to 0.0..1.0
-    return normalize ? (ascension / (2 * M_PI) + 0.5) : ascension;
+    return normalize ? (tiltDirection / (2 * M_PI) + 0.5) : tiltDirection;
 }
 
-qreal KisPaintInformation::declination(const KisPaintInformation& info, qreal maxTiltX, qreal maxTiltY, bool normalize)
+qreal KisPaintInformation::tiltElevation(const KisPaintInformation& info, qreal maxTiltX, qreal maxTiltY, bool normalize)
 {
     qreal xTilt = qBound(qreal(-1.0), info.xTilt() / maxTiltX , qreal(1.0));
     qreal yTilt = qBound(qreal(-1.0), info.yTilt() / maxTiltY , qreal(1.0));
@@ -361,9 +361,9 @@ qreal KisPaintInformation::declination(const KisPaintInformation& info, qreal ma
     }
     
     qreal cosAlpha    = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
-    qreal declination = acos(cosAlpha); // in radians in [0, 0.5 * PI]
+    qreal tiltElevation = acos(cosAlpha); // in radians in [0, 0.5 * PI]
     
     // mapping to 0.0..1.0 if normalize is true
-    return normalize ? (declination / (M_PI * qreal(0.5))) : declination;
+    return normalize ? (tiltElevation / (M_PI * qreal(0.5))) : tiltElevation;
 }
 

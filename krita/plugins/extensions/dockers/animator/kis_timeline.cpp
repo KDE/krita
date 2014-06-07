@@ -264,6 +264,9 @@ void KisTimeline::resizeEvent(QResizeEvent *event)
 void KisTimeline::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
+    this->getLayerBox()->onCanvasReady();
+    this->getFrameBox()->onCanvasReady();
+    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
 }
 
 void KisTimeline::setModel(KisAnimation *animation)

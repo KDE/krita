@@ -54,10 +54,7 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas)
         m_animation = dynamic_cast<KisAnimationPart*>(m_canvas->view()->document()->documentPart())->animation();
         if(m_animation) {
             m_mainWidget->setCanvas(m_canvas);
-            m_mainWidget->getLayerBox()->onCanvasReady();
-            m_mainWidget->getFrameBox()->onCanvasReady();
             m_mainWidget->setModel(m_animation);
-            connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), m_mainWidget, SLOT(documentModified()));
         }
     }
 }

@@ -21,12 +21,12 @@
 
 #include <QtTest>
 
-class KisAutogradientResourceTest : public QObject
+class KisResourceServerProviderTest : public QObject
 {
     Q_OBJECT
 private slots:
 
-    void testCreation();
+    void testFetchResource();
 
 };
 

@@ -77,6 +77,16 @@ KisConfig::~KisConfig()
 }
 
 
+bool KisConfig::disableTouchOnCanvas() const
+{
+    return m_cfg.readEntry("disableTouchOnCanvas", false);
+}
+
+void KisConfig::setDisableTouchOnCanvas(bool value) const
+{
+    m_cfg.writeEntry("disableTouchOnCanvas", value);
+}
+
 bool KisConfig::useProjections() const
 {
     return m_cfg.readEntry("useProjections", true);

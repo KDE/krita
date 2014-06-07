@@ -17,8 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QFileDialog>
+#include <KoFileDialog.h>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 #include <QMessageBox>
 #include <QLabel>
 #include <QTimer>
@@ -31,8 +32,9 @@
 #include "KoResourceTaggingManager.h"
 #include "KoDlgCreateBundle.h"
 #include "KoTagChooserWidget.h"
-#include <KoIcon.h>
 
+#include <KoIcon.h>
+#include <KoFilterManager.h>
 
 //TODO KoResourceManagerControl constructor parameter is the number of tabs of the Resource Manager
 KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent)
@@ -252,8 +254,13 @@ void KoResourceManagerWidget::thumbnail()
 {
     QTableView* currentTableView = tableAvailable(m_ui->tabResourceBundles->currentIndex());
     QModelIndex currentIndex = currentTableView->currentIndex();
-    QString fileName = QFileDialog::getOpenFileName(0,
-                       tr("Import Thumbnail"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Image Files (*.jpg)"));
+
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "krita/resourcemanagercontrol");
+    dialog.setCaption(i18n("Import Thumbnail"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import));
+
+    QString fileName = dialog.url();
 
     m_control->thumbnail(currentIndex, fileName, m_ui->tabResourceBundles->currentIndex());
     currentTableView->reset();

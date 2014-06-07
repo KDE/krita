@@ -92,7 +92,9 @@ void Imagesplit::slotImagesplit()
     QStringList listFileType;
     foreach(const QString &tempStr, listMimeFilter) {
         KMimeType::Ptr type = KMimeType::mimeType( tempStr );
-        listFileType.append(type->comment());
+        if (type) {
+            listFileType.append(type->comment());
+        }
     }
 
 

@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QMessageBox>
+#include <QFile>
 
 #include <QGLShaderProgram>
 #include <QGLFramebufferObject>

@@ -89,6 +89,15 @@ inline qreal normalizeAngle(qreal a) {
     return a > 2 * M_PI ? fmod(a, 2 * M_PI) : a;
 }
 
+// converts \p a to [0, 360.0) range
+inline qreal normalizeAngleDegrees(qreal a) {
+    if (a < 0.0) {
+        a = 360.0 + fmod(a, 360.0);
+    }
+
+    return a > 360.0 ? fmod(a, 360.0) : a;
+}
+
 inline qreal shortestAngularDistance(qreal a, qreal b) {
     qreal dist = fmod(qAbs(a - b), 2 * M_PI);
     if (dist > M_PI) dist = 2 * M_PI - dist;

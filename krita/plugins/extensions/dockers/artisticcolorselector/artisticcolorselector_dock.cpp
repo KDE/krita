@@ -94,8 +94,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     connect(m_preferencesUI->bnDefault           , SIGNAL(clicked(bool))                          , SLOT(slotResetDefaultSettings()));
     connect(m_selectorUI->bnAbsLight             , SIGNAL(toggled(bool))                          , SLOT(slotLightModeChanged(bool)));
     connect(m_resetMenu                          , SIGNAL(triggered(QAction*))                    , SLOT(slotMenuActionTriggered(QAction*)));
-    connect(this                                 , SIGNAL(topLevelChanged(bool))                  , SLOT(slotTopLevelChanged(bool)));
-    connect(this                                 , SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(slotDockLocationChanged(Qt::DockWidgetArea)));
     
     setWidget(m_selectorUI);
 }
@@ -201,22 +199,3 @@ void ArtisticColorSelectorDock::slotLightModeChanged(bool setToAbsolute)
     m_selectorUI->colorSelector->setLight(m_selectorUI->colorSelector->getLight(), !setToAbsolute);
 }
 
-void ArtisticColorSelectorDock::slotDockLocationChanged(Qt::DockWidgetArea area)
-{
-    if(area == Qt::AllDockWidgetAreas) {
-        m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_TOP);
-    }
-    else {
-        if(area & Qt::LeftDockWidgetArea)
-            m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_RIGHT);
-
-        if(area & Qt::RightDockWidgetArea)
-            m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_LEFT);
-    }
-}
-
-void ArtisticColorSelectorDock::slotTopLevelChanged(bool topLevel)
-{
-    if(topLevel)
-        m_selectorUI->colorSelector->setLightStripPosition(KisColorSelector::LSP_TOP);
-}

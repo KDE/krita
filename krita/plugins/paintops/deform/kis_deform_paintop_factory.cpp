@@ -44,9 +44,8 @@ KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settin
     return op;
 }
 
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageWSP image)
+KisPaintOpSettingsSP KisDeformPaintOpFactory::settings()
 {
-    Q_UNUSED(image);
     return new KisDeformPaintOpSettings();
 }
 

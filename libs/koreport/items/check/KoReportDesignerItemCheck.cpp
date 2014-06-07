@@ -145,8 +145,7 @@ void KoReportDesignerItemCheck::paint(QPainter* painter, const QStyleOptionGraph
 
 void KoReportDesignerItemCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    kDebug() << endl;
-
+    //kDebug();
     QDomElement entity = doc.createElement("report:check");
 
     //properties

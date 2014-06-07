@@ -49,6 +49,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 # fetch git revision for the current build
 
 set(CALLIGRA_GIT_SHA1_STRING "")
+set(CALLIGRA_GIT_BRANCH_STRING "")
 
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
@@ -178,6 +179,7 @@ calligra_define_product(EXTRA_THUMBNAIL "Plugins for KDE filesystem thumbnailing
 calligra_define_product(EXTRA_QUICKPRINT "Plugin for the filemanager adding a \"Print\" action")
 calligra_define_product(EXTRA_FILEMANAGER_TEMPLATES "File templates for filemanager")
 calligra_define_product(OKULARODPGENERATOR "Plugin for Okular adding support for ODP" NEEDS STAGE_PART)
+calligra_define_product(OKULAR_GENERATOR_ODT "Plugin for Okular adding support for ODT" NEEDS WORDS_PART)
 # more plugins
 calligra_define_product(PLUGIN_COLORENGINES "Colorengine plugins"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_MUSICSHAPE "Music shape plugin"  NEEDS CALLIGRA_LIBS)
@@ -283,6 +285,8 @@ calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLI
 # more extras
 calligra_define_product(OKULARGENERATOR_PPT "Plugin for Okular extended with support for PPT" NEEDS OKULARODPGENERATOR FILTER_PPT_TO_ODP)
 calligra_define_product(OKULARGENERATOR_PPTX "Plugin for Okular extended with support for PPTX" NEEDS OKULARODPGENERATOR FILTER_PPTX_TO_ODP)
+calligra_define_product(OKULAR_GENERATOR_DOC "Plugin for Okular extended with support for DOC" NEEDS OKULAR_GENERATOR_ODT FILTER_DOC_TO_ODT)
+calligra_define_product(OKULAR_GENERATOR_DOCX "Plugin for Okular extended with support for DOCX" NEEDS OKULAR_GENERATOR_ODT FILTER_DOCX_TO_ODT)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
 calligra_define_product(CSTESTER "cstester " NEEDS SHEETS_PART STAGE_PART WORDS_PART)
@@ -982,6 +986,10 @@ endif (NOT QT3SUPPORT)
 
 if(NOT OKULAR_FOUND)
     calligra_disable_product(OKULARODPGENERATOR "Okular devel not found")
+endif(NOT OKULAR_FOUND)
+
+if(NOT OKULAR_FOUND)
+    calligra_disable_product(OKULAR_GENERATOR_ODT "Okular devel not found")
 endif(NOT OKULAR_FOUND)
 
 if (NOT LIBODFGEN_FOUND OR NOT LIBETONYEK_FOUND)

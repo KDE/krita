@@ -50,11 +50,15 @@ public:
         , resourceProvider(0)
         , mirrorHorizontal(false)
         , mirrorVertical(false)
-        , handleSize(32)
+        , handleSize(32.f)
         , xActive(false)
         , yActive(false)
-        , horizontalHandlePosition(30.f)
-        , verticalHandlePosition(30.f)
+        , horizontalHandlePosition(0.f)
+        , verticalHandlePosition(0.f)
+        , sideMargin(10.f)
+        , minHandlePosition(10.f + 32.f)
+        , horizontalContainsCursor(false)
+        , verticalContainsCursor(false)
     { }
 
     void setAxisPosition(float x, float y);
@@ -77,6 +81,10 @@ public:
     bool yActive;
     float horizontalHandlePosition;
     float verticalHandlePosition;
+    float sideMargin;
+    float minHandlePosition;
+    bool horizontalContainsCursor;
+    bool verticalContainsCursor;
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
@@ -96,9 +104,6 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* pare
     int imageHeight = parent->canvasBase()->image()->height();
     QPointF point(imageWidth / 2, imageHeight / 2);
     d->resourceProvider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, point);
-    QPointF handlePos = parent->canvasBase()->coordinatesConverter()->imageToViewport(QPointF(imageWidth / 3, imageHeight / 3));
-    d->horizontalHandlePosition = handlePos.y();
-    d->verticalHandlePosition = handlePos.x();
 
     parent->installEventFilter(this);
     parent->canvasBase()->inputManager()->attachPriorityEventFilter(this);
@@ -122,6 +127,7 @@ void KisMirrorAxis::setHandleSize(float newSize)
         d->verticalIcon = koIcon("symmetry-vertical").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
         d->horizontalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
         d->verticalHandleIcon = koIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+        d->minHandlePosition = d->sideMargin + newSize;
         emit handleSizeChanged();
     }
 }
@@ -130,7 +136,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 {
     Q_UNUSED(updateArea);
 
-    gc.setPen(QPen(Qt::black, 2));
+    gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
@@ -201,22 +207,37 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         QMouseEvent* me = static_cast<QMouseEvent*>(event);
         if(d->xActive) {
             d->setAxisPosition(me->posF().x(), d->axisPosition.y());
-            d->horizontalHandlePosition = qBound<float>(0.f, me->posF().y() - d->handleSize / 2, view()->height() - d->handleSize);
+            d->horizontalHandlePosition = qBound<float>(d->minHandlePosition, me->posF().y() - d->handleSize / 2, view()->height() - d->handleSize);
             event->accept();
             return true;
         }
         if(d->yActive) {
             d->setAxisPosition(d->axisPosition.x(), me->posF().y());
-            d->verticalHandlePosition = qBound<float>(0.f, me->posF().x() - d->handleSize / 2, view()->width() - d->handleSize);
+            d->verticalHandlePosition = qBound<float>(d->minHandlePosition, me->posF().x() - d->handleSize / 2, view()->width() - d->handleSize);
             event->accept();
             return true;
         }
-        if(d->mirrorHorizontal && d->horizontalHandle.contains(me->posF())) {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        } else if(d->mirrorVertical && d->verticalHandle.contains(me->posF())) {
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-        } else {
-            QApplication::restoreOverrideCursor();
+        if(d->mirrorHorizontal) {
+            if(d->horizontalHandle.contains(me->posF())) {
+                if(!d->horizontalContainsCursor) {
+                    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+                    d->horizontalContainsCursor = true;
+                }
+            } else if(d->horizontalContainsCursor) {
+                QApplication::restoreOverrideCursor();
+                d->horizontalContainsCursor = false;
+            }
+        }
+        if(d->mirrorVertical) {
+            if(d->verticalHandle.contains(me->posF())) {
+                if(!d->verticalContainsCursor) {
+                    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+                    d->verticalContainsCursor = true;
+                }
+            } else if(d->verticalContainsCursor) {
+                QApplication::restoreOverrideCursor();
+                d->verticalContainsCursor = false;
+            }
         }
     }
     if(event->type() == QEvent::MouseButtonRelease) {
@@ -236,8 +257,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
     if(target == view() && event->type() == QEvent::Resize) {
         QResizeEvent* re = static_cast<QResizeEvent*>(event);
         if(re->oldSize().width() > 0 && re->oldSize().height() > 0) {
-            d->horizontalHandlePosition = qBound<float>(0.f, (d->horizontalHandlePosition / re->oldSize().height()) * re->size().height(), re->size().height());
-            d->verticalHandlePosition = qBound<float>(0.f, (d->verticalHandlePosition / re->oldSize().width()) * re->size().width(), re->size().width());
+            d->horizontalHandlePosition = qBound<float>(d->minHandlePosition, (d->horizontalHandlePosition / re->oldSize().height()) * re->size().height(), re->size().height());
+            d->verticalHandlePosition = qBound<float>(d->minHandlePosition, (d->verticalHandlePosition / re->oldSize().width()) * re->size().width(), re->size().width());
         }
     }
     return QObject::eventFilter(target, event);

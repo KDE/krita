@@ -97,7 +97,7 @@ public:
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     }
 
-    KoResourceServer<KisBrush>* brushServer;
+    KisBrushResourceServer* brushServer;
     KoResourceServer<KisPaintOpPreset>* paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoResourceBundle> *bundleServer;
@@ -152,20 +152,41 @@ void ResourceManager::slotImport()
     dlg.setCaption(i18n("Add Resources"));
 
     QStringList nameFilters;
-    nameFilters << "Brushes (*.gbr *gih *.abr *png *svg)"
-                << "Brush Presets (*.kpp)"
-                << "Gradients (*.ggr *.svg *.kgr)"
-                << "Resource Bundles (*.bundle)"
-                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
-                << "Palettes (*.gpl *.pal *.act *.aco *.colors)"
-                << "Workspaces (*.kts)";
+    nameFilters << i18n("GIMP Brushes (*.gbr)")
+                << i18n("Imagepipe Brushes (*.gih)")
+                << i18n("Photoshop Brushes (*.abr)")
+                << i18n("PNG Brushes (*.png)")
+                << i18n("SVG Brushes (*.svg)")
+                << i18n("Brush Presets (*.kpp)")
+                << i18n("GIMP Gradients (*.ggr)")
+                << i18n("SVG Gradients (*.svg)")
+                << i18n("Karbon Gradients (*.kgr)")
+                << i18n("Resource Bundles (*.bundle)")
+                << i18n("GIMP Patterns (*.pat)")
+                << i18n("Jpeg Patterns (*.jpg)")
+                << i18n("Gif Patterns (*.gif)")
+                << i18n("PNG Patterns (*.png)")
+                << i18n("Tiff Patterns (*.tif)")
+                << i18n("XPM Patterns (*.xpm)")
+                << i18n("BMP Patterns (*.bmp)")
+                << i18n("Palettes (*.gpl *.pal *.act *.aco *.colors)")
+                << i18n("Workspaces (*.kts)");
 
     dlg.setNameFilters(nameFilters, nameFilters.first());
 
     QStringList resources = dlg.urls();
     QString resourceType = dlg.selectedNameFilter();
+    resourceType = resourceType.left(resourceType.indexOf(" ("));
 
-    switch(nameFilters.indexOf(resourceType)) {
+    int i = -1;
+    foreach(const QString &nf, nameFilters) {
+        i++;
+        if (nf.startsWith(resourceType)) {
+            break;
+        }
+    }
+
+    switch(i) {
     case 0:
     {
         foreach(const QString &res, resources) {
@@ -241,7 +262,7 @@ void ResourceManager::slotCreateBundle()
 
     QStringList res = dlgCreateBundle.selectedBrushes();
     foreach(const QString &r, res) {
-        KoResource *res = d->brushServer->resourceByFilename(r);
+        KoResource *res = d->brushServer->resourceByFilename(r).data();
         newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
     }
 

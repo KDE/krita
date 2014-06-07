@@ -199,6 +199,7 @@ public slots:
     void slotLoadingFinished();
     void slotSavingFinished();
     void showJustTheCanvas(bool toggled);
+    void setShowFloatingMessage(bool show);
 
 signals:
 

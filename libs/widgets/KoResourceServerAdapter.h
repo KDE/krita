@@ -63,6 +63,8 @@ public:
     virtual QStringList searchTag(const QString& lineEditText) = 0;
     virtual void configureFilters(int filterType, bool enable) = 0;
 
+    virtual QString serverType() const { return QString(); }
+
 signals:
     void resourceAdded(KoResource*);
     void removingResource(KoResource*);
@@ -84,10 +86,13 @@ protected:
  * The KoResourceServerAdapter provides adapter to a specific resource server
  * It provides a resource type independent interface to the server.
  */
-template <class T> class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
+template <class T, class Policy = PointerStroragePolicy<T> >
+    class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T, Policy>
 {
+    typedef KoResourceServer<T, Policy> ServerType;
+    typedef typename Policy::PointerType PointerType;
 public:
-    KoResourceServerAdapter(KoResourceServer<T>* resourceServer, QObject *parent = 0)
+    KoResourceServerAdapter(ServerType* resourceServer, QObject *parent = 0)
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
     {
@@ -97,10 +102,19 @@ public:
         m_resourceFilter.setTagStore(m_resourceServer->tagObject());
     }
 
+
     virtual ~KoResourceServerAdapter()
     {
         if (m_resourceServer)
             m_resourceServer->removeObserver(this);
+    }
+
+    QString serverType() const
+    {
+        if (m_resourceServer) {
+            return m_resourceServer->type();
+        }
+        return KoAbstractResourceServerAdapter::serverType();
     }
 
     virtual void unsetResourceServer()
@@ -138,8 +152,9 @@ public:
             return false;
 
         T* res = dynamic_cast<T*>(resource);
-        if (res)
+        if (res) {
             return m_resourceServer->addResource(res);
+        }
 
         return false;
     }
@@ -150,8 +165,9 @@ public:
             return false;
 
         T* res = dynamic_cast<T*>(resource);
-        if (res)
+        if (res) {
             return m_resourceServer->removeResource(res);
+        }
 
         return false;
     }
@@ -172,19 +188,19 @@ public:
         m_resourceServer->removeResourceFile(filename);
     }
 
-    void resourceAdded(T* resource) {
+    void resourceAdded(PointerType resource) {
         serverResourceCacheInvalid(true);
-        emitResourceAdded(resource);
+        emitResourceAdded(Policy::toResourcePointer(resource));
     }
 
-    void removingResource(T* resource) {
+    void removingResource(PointerType resource) {
         serverResourceCacheInvalid(true);
-        emitRemovingResource(resource);
+        emitRemovingResource(Policy::toResourcePointer(resource));
     }
 
-    void resourceChanged(T* resource) {
+    void resourceChanged(PointerType resource) {
         serverResourceCacheInvalid(true);
-        emitResourceChanged(resource);
+        emitResourceChanged(Policy::toResourcePointer(resource));
     }
 
     void syncTaggedResourceView() {
@@ -276,7 +292,7 @@ public:
     }
 
 protected:
-    KoResourceServer<T>* resourceServer() const {
+    ServerType* resourceServer() const {
         return m_resourceServer;
     }
 protected:
@@ -294,16 +310,16 @@ private:
         }
     }
 
-    void cacheServerResources(const QList< T* > &serverResources) {
+    void cacheServerResources(const QList<PointerType> &serverResources) {
         m_serverResources.clear();
 
-        foreach(T * resource, serverResources) {
-            m_serverResources.append(resource);
+        foreach(PointerType resource, serverResources) {
+            m_serverResources.append(Policy::toResourcePointer(resource));
         }
         serverResourceCacheInvalid(false);
     }
 
-    KoResourceServer<T>* m_resourceServer;
+    ServerType* m_resourceServer;
     unsigned int m_changeCounter;
     unsigned int m_oldChangeCounter;
     QList<KoResource*> m_serverResources;

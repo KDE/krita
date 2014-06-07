@@ -35,12 +35,13 @@
 
 static const int LUT3D_EDGE_SIZE = 32;
 
-OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
+OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
     , inputColorSpaceName(0)
     , displayDevice(0)
     , view(0)
     , swizzle(RGBA)
+    , m_interface(interface)
 #ifdef HAVE_OPENGL
     , m_lut3dTexID(0)
 #endif
@@ -49,6 +50,11 @@ OcioDisplayFilter::OcioDisplayFilter(QObject *parent)
 
 OcioDisplayFilter::~OcioDisplayFilter()
 {
+}
+
+KisExposureGammaCorrectionInterface* OcioDisplayFilter::correctionInterface() const
+{
+    return m_interface;
 }
 
 void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)

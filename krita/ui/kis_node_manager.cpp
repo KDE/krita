@@ -21,6 +21,7 @@
 #include <QDesktopServices>
 
 #include <kactioncollection.h>
+#include <kmimetype.h>
 
 #include <KoIcon.h>
 #include <KoSelection.h>
@@ -801,7 +802,7 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile, "krita/savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", node->name()));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));

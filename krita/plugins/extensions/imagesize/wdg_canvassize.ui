@@ -196,7 +196,7 @@
       <item row="0" column="1">
        <widget class="QLabel" name="lblXOff">
         <property name="text">
-         <string>X Offset:</string>
+         <string>X:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -258,7 +258,7 @@
       <item row="1" column="1">
        <widget class="QLabel" name="lblYOff">
         <property name="text">
-         <string>Y Offset:</string>
+         <string>Y:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

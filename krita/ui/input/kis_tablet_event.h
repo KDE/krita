@@ -28,7 +28,10 @@ public:
     enum ExtraEventType {
         TabletMoveEx = QEvent::User,
         TabletPressEx,
-        TabletReleaseEx
+        TabletReleaseEx,
+
+        TouchProximityInEx,
+        TouchProximityOutEx,
     };
 
     enum TabletDevice { NoDevice, Puck, Stylus, Airbrush, FourDMouse,

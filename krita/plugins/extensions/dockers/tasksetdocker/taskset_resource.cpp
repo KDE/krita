@@ -24,6 +24,8 @@
 #include <QByteArray>
 #include <QCryptographicHash>
 
+#include <kis_debug.h>
+
 #define TASKSET_VERSION 1
 
 TasksetResource::TasksetResource(const QString& f)
@@ -54,7 +56,10 @@ bool TasksetResource::load()
  
     QFile file(fn);
     if (file.size() == 0) return false;
-    if (!file.open(QIODevice::ReadOnly)) return false;
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
 
     bool res = loadFromDevice(&file);
 

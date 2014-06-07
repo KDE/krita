@@ -27,22 +27,26 @@
 #include <KoColorSpace.h>
 #include <KoSegmentGradient.h>
 
-#include "kis_autogradient_resource.h"
 #include "kis_debug.h"
 
 #include "widgets/kis_gradient_slider_widget.h"
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QString& caption) : QWidget(parent)
+KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+    : QWidget(parent), m_autogradientResource(gradient)
 {
     setObjectName(name);
     setupUi(this);
     setWindowTitle(caption);
-    m_autogradientResource = new KisAutogradientResource();
-    m_autogradientResource->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white);
     gradientSlider->setGradientResource(m_autogradientResource);
+    nameedit->setText(gradient->name());
+    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    if (segment) {
+        slotSelectedSegment(segment);
+    }
 
+    connect(nameedit, SIGNAL(editingFinished()), this, SLOT(slotChangedName()));
     connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));
     connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment*)), SLOT(slotChangedSegment(KoGradientSegment*)));
     connect(comboBoxColorInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedColorInterpolation(int)));
@@ -158,6 +162,11 @@ void KisAutogradient::slotChangedRightOpacity(int value)
     gradientSlider->repaint();
 
     paramChanged();
+}
+
+void KisAutogradient::slotChangedName()
+{
+    m_autogradientResource->setName(nameedit->text());
 }
 
 void KisAutogradient::paramChanged()

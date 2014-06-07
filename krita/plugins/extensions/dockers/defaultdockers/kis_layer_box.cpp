@@ -194,6 +194,7 @@ KisLayerBox::KisLayerBox()
     m_actions.append(m_removeAction);
 
     KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
+    action->setText(i18n("Move Layer Left"));
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_left");
@@ -201,6 +202,7 @@ KisLayerBox::KisLayerBox()
     m_actions.append(action);
 
     action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
+    action->setText(i18n("Move Layer Right"));
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_right");

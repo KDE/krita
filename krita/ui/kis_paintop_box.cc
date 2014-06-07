@@ -176,6 +176,9 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(30);
+    foreach(KAction *a, m_cmbCompositeOp->blendmodeActions()) {
+        m_view->actionCollection()->addAction(a->text(), a);
+    }
 
     m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
@@ -275,7 +278,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
-    connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
+    connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
@@ -435,7 +438,7 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
     if (!preset->load()) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);
     }
 
     Q_ASSERT(preset);
@@ -660,7 +663,6 @@ void KisPaintopBox::slotSetupDefaultPreset()
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
 {
-    // Deconnect colorspace change of previous node
     if (m_previousNode && m_previousNode->paintDevice())
         disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
@@ -673,9 +675,15 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
         slotColorSpaceChanged(node->colorSpace());
     }
 
-    for(TabletToolMap::iterator itr=m_tabletToolMap.begin(); itr!=m_tabletToolMap.end(); ++itr) {
-        if(itr->preset && itr->preset->settings())
+    for (TabletToolMap::iterator itr = m_tabletToolMap.begin(); itr != m_tabletToolMap.end(); ++itr) {
+
+        if(itr->preset && itr->preset->settings()) {
             itr->preset->settings()->setNode(node);
+        }
+    }
+
+    if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->settings()) {
+        m_resourceProvider->currentPreset()->settings()->setNode(node);
     }
 }
 

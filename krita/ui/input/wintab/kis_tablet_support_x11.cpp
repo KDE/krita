@@ -24,6 +24,7 @@
 #include <QX11Info>
 
 #include "kis_debug.h"
+#include "kis_config.h"
 #include <input/kis_tablet_event.h>
 #include "kis_tablet_support.h"
 #include "wacomcfg.h"
@@ -109,6 +110,8 @@ struct KisX11Data
         AbsTiltX,
         AbsTiltY,
 
+        WacomTouch,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -142,6 +145,9 @@ static const char * kis_x11_atomnames = {
     "Abs Pressure\0"
     "Abs Tilt X\0"
     "Abs Tilt Y\0"
+
+    // Touch capabilities reported by Wacom Intuos tablets
+    "TOUCH\0"
 
 };
 
@@ -232,6 +238,9 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
 
 void kis_x11_init_tablet()
 {
+    KisConfig cfg;
+    bool disableTouchOnCanvas = cfg.disableTouchOnCanvas();
+
     // TODO: free this structure on exit
     KIS_X11 = new KisX11Data;
     KIS_X11->display = QX11Info::display();
@@ -274,6 +283,7 @@ void kis_x11_init_tablet()
         XDevice *dev = 0;
 
         bool needCheckIfItIsReallyATablet;
+        bool touchWacomTabletWorkaround;
 
         if (KIS_X11->ptrXListInputDevices) {
             devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
@@ -290,6 +300,7 @@ void kis_x11_init_tablet()
             gotStylus = false;
             gotEraser = false;
             needCheckIfItIsReallyATablet = false;
+            touchWacomTabletWorkaround = false;
 
 #if defined(Q_OS_IRIX)
 #else
@@ -319,6 +330,14 @@ void kis_x11_init_tablet()
                     deviceType = QTabletEvent::Stylus;
                     gotStylus = true;
                     needCheckIfItIsReallyATablet = true;
+                } else if (disableTouchOnCanvas &&
+                           devs->type == KIS_ATOM(WacomTouch) &&
+                           QString(devs->name).contains("Wacom")) {
+
+                    kis_haveEvdevTablets = true;
+                    deviceType = QTabletEvent::Stylus;
+                    gotStylus = true;
+                    touchWacomTabletWorkaround = true;
                 }
 
 #endif
@@ -343,6 +362,7 @@ void kis_x11_init_tablet()
                 device_data.xinput_button_release = -1;
                 device_data.xinput_proximity_in = -1;
                 device_data.xinput_proximity_out = -1;
+                device_data.isTouchWacomTablet = touchWacomTabletWorkaround;
                 //device_data.widgetToGetPress = 0;
 
                 if (dev->num_classes > 0) {
@@ -620,6 +640,12 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         }
     }
 
+    /**
+     * Touch events from Wacom tablets should not be sent as real
+     * tablet events
+     */
+    if (tablet->isTouchWacomTablet) return false;
+
     fetchWacomToolId(deviceType, uid);
 
     QRect screenArea = qApp->desktop()->rect();
@@ -775,6 +801,50 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
             }
 
             return retval;
+        } else if (event->type == tab.xinput_proximity_in ||
+                   event->type == tab.xinput_proximity_out) {
+
+            const XProximityNotifyEvent *proximity =
+                reinterpret_cast<const XProximityNotifyEvent*>(event);
+            XID device_id = proximity->deviceid;
+
+            QTabletDeviceDataList *tablet_list = qt_tablet_devices();
+            for (int i = 0; i < tablet_list->size(); ++i) {
+                QTabletDeviceData &tab = tablet_list->operator[](i);
+                if (device_id == static_cast<XDevice *>(tab.device)->device_id &&
+                    tab.isTouchWacomTablet) {
+
+                    QWidget *widget = QApplication::activePopupWidget();
+
+                    if (!widget) {
+                        widget = QApplication::activeModalWidget();
+                    }
+
+                    if (!widget) {
+                        widget = QWidget::find((WId)event->xany.window);
+                    }
+
+                    if (widget) {
+                        QPoint curr(proximity->x, proximity->y);
+                        QWidget *child = widget->childAt(curr);
+
+                        if (child) {
+                            widget = child;
+                        }
+
+                        QEvent::Type type = (QEvent::Type)
+                            (event->type == tab.xinput_proximity_in ?
+                             KisTabletEvent::TouchProximityInEx :
+                             KisTabletEvent::TouchProximityOutEx);
+
+                        QEvent e(type);
+                        e.ignore();
+                        QApplication::sendEvent(widget, &e);
+                    }
+
+                    return true;
+                }
+            }
         }
     }
 

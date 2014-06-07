@@ -23,12 +23,16 @@
 #include <QList>
 
 #include <KoResourceServer.h>
+#include <KoResourceServerAdapter.h>
 
 #include "krita_export.h"
 #include "kis_brush.h"
 
 class KoResource;
 class KoResourceLoaderThread;
+
+typedef KoResourceServer<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServer;
+typedef KoResourceServerAdapter<KisBrush, SharedPointerStroragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
 
 /**
  *
@@ -41,11 +45,11 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
 
     virtual ~KisBrushServer();
-    KoResourceServer<KisBrush>* brushServer();
+    KisBrushResourceServer* brushServer();
 
     static KisBrushServer* instance();
 
-private slots:
+public slots:
     void slotRemoveBlacklistedResources();
 
 private:
@@ -54,7 +58,7 @@ private:
     KisBrushServer(const KisBrushServer&);
     KisBrushServer operator=(const KisBrushServer&);
 
-    KoResourceServer<KisBrush>* m_brushServer;
+    KisBrushResourceServer* m_brushServer;
 
 private:
     KoResourceLoaderThread *m_brushThread;

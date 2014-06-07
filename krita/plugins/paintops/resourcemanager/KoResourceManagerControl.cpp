@@ -21,15 +21,17 @@
 #include "KoXmlResourceBundleManifest.h"
 #include "KoResourceTableModel.h"
 #include "KoDlgCreateBundle.h"
-
 #include "KoResourceServerProvider.h"
+
+#include <KoFileDialog.h>
+
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
 #include "kis_paintop_preset.h"
 #include "kis_brush_server.h"
 
-#include <QFileDialog>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 
 #include "resourcemanager.h"
 
@@ -382,7 +384,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
     case 0:
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
@@ -396,7 +398,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Installed));
         break;
     case 2:
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(KisBrushServer::instance()->brushServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         break;
@@ -469,8 +471,16 @@ void KoResourceManagerControl::exportBundle(int type)
             if (currentBundle) {
                 if (!modified) {
                     emit status("Exporting bundle(s)...");
-                    dirPath = QFileDialog::getExistingDirectory(0, tr("Directory"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), QFileDialog::ShowDirsOnly);
-                    dirPath.append("/");
+
+                    KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/resourcemanagercontrol");
+                    dialog.setCaption(i18n("Select a Directory"));
+                    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+                    dirPath = dialog.url();
+
+                    if (!dirPath.endsWith('/')) {
+                        dirPath.append('/');
+                    }
+
                     modified = true;
                 }
                 currentBundle->save();
@@ -495,8 +505,13 @@ void KoResourceManagerControl::exportBundle(int type)
 bool KoResourceManagerControl::importBundle()
 {
     emit status("Importing...");
-    QString filePath = QFileDialog::getOpenFileName(0,
-                       tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Archive Files (*.bundle)"));
+
+    KoFileDialog dialog(0, KoFileDialog::OpenFiles, "krita/resourcemanagercontrol");
+    dialog.setCaption(i18n("Import Bundle"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setNameFilter(i18n("Archive Files (*.bundle)"));
+
+    QString filePath = dialog.url();
 
     if (!filePath.isEmpty()) {
         QFile::copy(filePath, ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation());

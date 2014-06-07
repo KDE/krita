@@ -60,12 +60,9 @@ class KisColorSelector: public QWidget
     };
     
 public:
-    enum LightStripPos { LSP_LEFT, LSP_RIGHT, LSP_TOP, LSP_BOTTOM };
-    
     KisColorSelector(QWidget* parent, KisColor::Type type=KisColor::HSL);
     
     void setColorSpace(KisColor::Type type);
-    void setLightStripPosition(LightStripPos pos);
     void setNumPieces(int num);
     void setNumLightPieces(int num);
     void setNumRings(int num);
@@ -137,7 +134,6 @@ private:
     QImage             m_renderBuffer;
     QRect              m_renderArea;
     QRect              m_lightStripArea;
-    LightStripPos      m_lightStripPos;
     bool               m_mouseMoved;
     bool               m_selectedColorIsFgColor;
     QPointF            m_clickPos;

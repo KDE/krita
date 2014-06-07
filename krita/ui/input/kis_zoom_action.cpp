@@ -43,7 +43,7 @@ public:
     KisZoomAction *q;
     int distance;
     Shortcuts mode;
-    
+
     QPointF lastPosition;
     float lastDistance;
 

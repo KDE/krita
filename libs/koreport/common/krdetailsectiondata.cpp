@@ -37,7 +37,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReport
     m_pageBreak = BreakNone;
     m_detailSection = 0;
     m_valid = false;
-    kDebug() << elemSource.tagName();
+    //kDebug() << elemSource.tagName();
     if (elemSource.tagName() != "report:detail") {
         return;
     }
@@ -102,7 +102,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReport
             } else
                 delete sd;
         } else {
-            kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
+            kWarning() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
         }
     }
     

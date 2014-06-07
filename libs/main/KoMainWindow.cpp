@@ -992,7 +992,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
@@ -1478,7 +1478,7 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
@@ -2065,6 +2065,7 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 
     if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
         d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
+        d->activeView->actionCollection()->addAction("view_newview", actionCollection()->action("view_newview"));
         d->activePart = newPart;
         //kDebug(30003) <<"new active part is" << d->activePart;
 

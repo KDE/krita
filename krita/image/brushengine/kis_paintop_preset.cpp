@@ -48,14 +48,14 @@ struct KisPaintOpPreset::Private {
 
 
 KisPaintOpPreset::KisPaintOpPreset()
-        : KoResource(QString())
-        , m_d(new Private)
+    : KoResource(QString())
+    , m_d(new Private)
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
-        : KoResource(fileName)
-        , m_d(new Private)
+    : KoResource(fileName)
+    , m_d(new Private)
 {
 }
 
@@ -123,11 +123,16 @@ bool KisPaintOpPreset::load()
     }
 
     QFile file(filename());
+
     if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
 
     bool res = loadFromDevice(&file);
 
-    return true;
+    return res;
 }
 
 bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
@@ -217,7 +222,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
     KoID id(paintopid, "");
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
     if (!settings) {
         setValid(false);
         qWarning() << "Could not load settings for preset" << paintopid;

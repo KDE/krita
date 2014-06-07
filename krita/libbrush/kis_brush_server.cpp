@@ -36,61 +36,15 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
-#include <kis_resource_server_provider.h>
 
-class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
+class BrushResourceServer : public KisBrushResourceServer
 {
 
 public:
 
     BrushResourceServer()
-        : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg", false)
+        : KisBrushResourceServer("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg")
     {
-        addObserver(this, true);
-    }
-
-    virtual ~BrushResourceServer()
-    {
-        foreach(KisBrush* brush, m_brushes) {
-            if (!brush->deref()) {
-                delete brush;
-            }
-            m_brushes.removeAll(brush);
-        }
-    }
-
-    virtual void unsetResourceServer()
-    {
-        //...
-    }
-
-    virtual void resourceAdded(KisBrush* brush) {
-        // Hack: This prevents the deletion of brushes in the resource server
-        // Brushes outside the server use shared pointer, but not inside the server
-        brush->ref();
-        m_brushes.append(brush);
-    }
-
-    ///Reimplemented
-    virtual void removingResource(KisBrush* brush) {
-        if (!brush->deref()) {
-            delete brush;
-        }
-        m_brushes.removeAll(brush);
-    }
-
-    virtual void resourceChanged(KisBrush* resource) {
-        Q_UNUSED(resource);
-    }
-
-    virtual void syncTaggedResourceView() {}
-
-    virtual void syncTagAddition(const QString& tag) {
-        Q_UNUSED(tag);
-    }
-
-    virtual void syncTagRemoval(const QString& tag) {
-        Q_UNUSED(tag);
     }
 
     ///Reimplemented
@@ -105,21 +59,21 @@ public:
             if (fileCreation) {
                 QFile::copy(filename, saveLocation() + fi.fileName());
             }
-            QList<KisBrush*> collectionResources = createResources(filename);
-            foreach(KisBrush * brush, collectionResources) {
+            QList<KisBrushSP> collectionResources = createResources(filename);
+            foreach(KisBrushSP brush, collectionResources) {
                 addResource(brush);
             }
         }
         else {
-            KoResourceServer<KisBrush>::importResourceFile(filename, fileCreation);
+            KisBrushResourceServer::importResourceFile(filename, fileCreation);
         }
     }
 
 private:
 
     ///Reimplemented
-    virtual QList<KisBrush*> createResources(const QString & filename) {
-        QList<KisBrush*> brushes;
+    virtual QList<KisBrushSP> createResources(const QString & filename) {
+        QList<KisBrushSP> brushes;
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
         if (fileExtension == "abr") {
@@ -136,11 +90,11 @@ private:
     }
 
     ///Reimplemented
-    virtual KisBrush* createResource(const QString & filename) {
+    virtual KisBrushSP createResource(const QString & filename) {
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();
 
-        KisBrush* brush = 0;
+        KisBrushSP brush;
 
         if (fileExtension == "gbr") {
             brush = new KisGbrBrush(filename);
@@ -156,8 +110,6 @@ private:
         }
         return brush;
     }
-
-    QList<KisBrush*> m_brushes;
 };
 
 KisBrushServer::KisBrushServer()
@@ -172,13 +124,7 @@ KisBrushServer::KisBrushServer()
     }
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
     m_brushThread->start();
-
-    if (qApp->applicationName().toLower().contains("test")) {
-        m_brushThread->wait();
-    }
-
-    connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
-            this, SLOT(slotRemoveBlacklistedResources()));
+    m_brushThread->barrier();
 }
 
 KisBrushServer::~KisBrushServer()
@@ -195,7 +141,7 @@ KisBrushServer* KisBrushServer::instance()
 }
 
 
-KoResourceServer<KisBrush>* KisBrushServer::brushServer()
+KisBrushResourceServer* KisBrushServer::brushServer()
 {
     m_brushThread->barrier();
     return m_brushServer;

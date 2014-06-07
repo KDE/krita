@@ -79,6 +79,8 @@ public:
     void tagCategoryAdded(const QString& tag);
     void tagCategoryRemoved(const QString& tag);
 
+    QString serverType() const;
+
 signals:
     /// XXX: not sure if this is the best place for these
     void tagBoxEntryModified();

@@ -49,7 +49,10 @@ KoStopGradient::~KoStopGradient()
 bool KoStopGradient::load()
 {
     QFile f(filename());
-    f.open(QIODevice::ReadOnly);
+    if (!f.open(QIODevice::ReadOnly)) {
+        kWarning() << "Can't open file " << filename();
+        return false;
+    }
     bool res = loadFromDevice(&f);
     f.close();
     return res;

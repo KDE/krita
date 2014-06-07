@@ -818,17 +818,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
     // check if table or alias is used twice and both have the same column
     // (so the column is ambiguous)
-    int numberOfTheSameFields = 0;
-    foreach(int position, positionsList) {
-        TableSchema *otherTS = parseInfo.querySchema->tables()->at(position);
-        if (otherTS->field(fieldName))
-            numberOfTheSameFields++;
-        if (numberOfTheSameFields > 1) {
-            parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
-            parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
-                                      tableName, fieldName);
-            return false;
-        }
+    if (positionsList.count() > 1) {
+        parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
+        parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
+                                  tableName, fieldName);
+        return false;
     }
     field = realField; //store
     tablePositionForField = tablePosition;

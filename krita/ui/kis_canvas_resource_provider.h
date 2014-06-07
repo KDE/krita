@@ -66,7 +66,8 @@ public:
         Opacity,
         HdrGamma,
         GlobalAlphaLock,
-        PreviousPaintOpPreset
+        PreviousPaintOpPreset,
+        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
     };
 
 

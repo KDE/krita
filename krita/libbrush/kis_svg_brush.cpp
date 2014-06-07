@@ -38,7 +38,10 @@ bool KisSvgBrush::load()
     QFile f(filename());
     if (f.size() == 0) return false;
     if (!f.exists()) return false;
-
+    if (!f.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
     bool res = loadFromDevice(&f);
     f.close();
 

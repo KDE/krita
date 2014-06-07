@@ -46,9 +46,11 @@ KisDuplicateOpOption::KisDuplicateOpOption()
 {
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();
+
     connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_optionWidget->cbSourcePoint, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->chkCloneProjection, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_optionWidget);
 }
@@ -88,11 +90,22 @@ void KisDuplicateOpOption::setMoveSourcePoint(bool move)
     m_optionWidget->cbSourcePoint->setChecked(move);
 }
 
+bool KisDuplicateOpOption::cloneFromProjection() const
+{
+    return m_optionWidget->chkCloneProjection->isChecked();
+}
+
+void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
+{
+    m_optionWidget->chkCloneProjection->setChecked(cloneFromProjection);
+}
+
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty(DUPLICATE_HEALING, healing());
     setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
     setting->setProperty(DUPLICATE_MOVE_SOURCE_POINT, moveSourcePoint());
+    setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, cloneFromProjection());
 }
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -100,6 +113,7 @@ void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* s
     m_optionWidget->cbHealing->setChecked(setting->getBool(DUPLICATE_HEALING, false));
     m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));
     m_optionWidget->cbSourcePoint->setChecked(setting->getBool(DUPLICATE_MOVE_SOURCE_POINT, true));
+    m_optionWidget->chkCloneProjection->setChecked(setting->getBool(DUPLICATE_CLONE_FROM_PROJECTION, false));
     emit sigSettingChanged();
 }
 

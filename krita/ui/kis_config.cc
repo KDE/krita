@@ -1137,6 +1137,16 @@ void KisConfig::setLineSmoothingSmoothPressure(bool value)
     m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
 }
 
+bool KisConfig::lineSmoothingScalableDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingScalableDistance", true);
+}
+
+void KisConfig::setLineSmoothingScalableDistance(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingScalableDistance", value);
+}
+
 int KisConfig::paletteDockerPaletteViewSectionSize() const
 {
     return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);

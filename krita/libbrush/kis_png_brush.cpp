@@ -38,6 +38,10 @@ bool KisPngBrush::load()
     QFile f(filename());
     if (f.size() == 0) return false;
     if (!f.exists()) return false;
+    if (!f.open(QIODevice::ReadOnly)) {
+        warnKrita << "Can't open file " << filename();
+        return false;
+    }
     bool res = loadFromDevice(&f);
     f.close();
     return res;
@@ -46,6 +50,11 @@ bool KisPngBrush::load()
 bool KisPngBrush::loadFromDevice(QIODevice *dev)
 {
     QImageReader reader(dev, "PNG");
+
+    if (!reader.canRead()) {
+      setValid(false);
+      return false;
+    }
 
     if (reader.textKeys().contains("brush_spacing")) {
         setSpacing(reader.text("brush_spacing").toDouble());
@@ -59,7 +68,14 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         setName(info.baseName());
     }
 
-    setBrushTipImage(reader.read());
+    QImage image = reader.read();
+    if (image.isNull()) {
+      kWarning() << "Could not read brush" << filename() << ". Error:" << reader.errorString();
+      setValid(false);
+      return false;
+    }
+
+    setBrushTipImage(image);
     setValid(!brushTipImage().isNull());
 
     if (brushTipImage().isGrayscale()) {

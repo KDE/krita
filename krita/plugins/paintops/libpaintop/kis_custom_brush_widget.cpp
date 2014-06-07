@@ -55,8 +55,8 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisBrush>(rServer));
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
 
     m_brush = 0;
     m_brushCreated = false;

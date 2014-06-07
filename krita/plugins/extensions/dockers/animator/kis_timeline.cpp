@@ -304,16 +304,7 @@ void KisTimeline::vectorLayerPressed()
 void KisTimeline::blankFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
-
-        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
-
-        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-        newSelection->setGeometry(oldSelection->geometry());
-
-        this->m_cells->setSelectedFrame(newSelection);
-        newSelection->show();
-
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
 }
@@ -321,16 +312,7 @@ void KisTimeline::blankFramePressed()
 void KisTimeline::keyFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
-
-        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
-
-        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-        newSelection->setGeometry(oldSelection->geometry());
-
-        this->m_cells->setSelectedFrame(newSelection);
-        newSelection->show();
-
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
     }
 }
@@ -338,15 +320,8 @@ void KisTimeline::keyFramePressed()
 void KisTimeline::addframePressed()
 {
     if(m_cells->getSelectedFrame()) {
-
-        KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
         this->m_cells->getSelectedFrame()->expandWidth();
-
-        KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-        newSelection->setGeometry(oldSelection->geometry());
-
-        this->m_cells->setSelectedFrame(newSelection);
-        newSelection->show();
+        this->m_cells->setSelectedFrame();
     }
 }
 
@@ -361,14 +336,7 @@ void KisTimeline::breakFrame(QRect position)
         return;
     }
 
-    KisAnimationFrame* oldSelection = this->m_cells->getSelectedFrame();
     QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
-
-    KisAnimationFrame* newSelection = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(oldSelection->geometry());
-
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
 
     this->m_lastBrokenFrame = position;
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->m_frameBreakState);
@@ -376,31 +344,12 @@ void KisTimeline::breakFrame(QRect position)
 
 void KisTimeline::nextFramePressed()
 {
-    KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
-    currSelection->hide();
-
-    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(currSelection->geometry().x() + 10, currSelection->geometry().y(), 10, 20);
-
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
+    this->m_cells->setSelectedFrame(m_cells->getSelectedFrame()->geometry().x() + 10);
 }
 
 void KisTimeline::prevFramePressed()
 {
-    KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
-
-    if(currSelection->x() == 0) {
-        return;
-    }
-
-    currSelection->hide();
-
-    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(currSelection->geometry().x() - 10, currSelection->geometry().y(), 10, 20);
-
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
+    this->m_cells->setSelectedFrame(m_cells->getSelectedFrame()->geometry().x() - 10);
 }
 
 void KisTimeline::nextKeyFramePressed()
@@ -409,14 +358,7 @@ void KisTimeline::nextKeyFramePressed()
 
     QRect nextKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getNextKeyFramePosition(currSelection->x(),
                                                                                                                currSelection->getParent()->getLayerIndex() * 20);
-
-    currSelection->hide();
-
-    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(nextKeyFrame.x(), currSelection->y(), 10, 20);
-
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
+    this->m_cells->setSelectedFrame(nextKeyFrame.x());
 }
 
 void KisTimeline::prevKeyFramePressed()
@@ -426,13 +368,7 @@ void KisTimeline::prevKeyFramePressed()
     QRect prevKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getPreviousKeyFramePosition(currSelection->x(),
                                                                                                                    currSelection->getParent()->getLayerIndex() * 20);
 
-    currSelection->hide();
-
-    KisAnimationFrame* newSelection = new KisAnimationFrame(currSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-    newSelection->setGeometry(prevKeyFrame.x(), currSelection->y(), 10, 20);
-
-    this->m_cells->setSelectedFrame(newSelection);
-    newSelection->show();
+    this->m_cells->setSelectedFrame(prevKeyFrame.x());
 }
 
 void KisTimeline::settingsButtonPressed()

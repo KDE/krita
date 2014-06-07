@@ -38,9 +38,7 @@ KisFrameBox::KisFrameBox(KisTimeline *parent)
     m_layerContents << firstContents;
     firstContents->setGeometry(QRect(0, m_layerContents.length()*20, 100000, 20));
 
-    KisAnimationFrame* firstSelection = new KisAnimationFrame(firstContents, KisAnimationFrame::SELECTION, 10);
-    this->setSelectedFrame(firstSelection);
-    firstSelection->show();
+    this->setSelectedFrame(0, firstContents);
 }
 
 void KisFrameBox::addLayerUiUpdate()
@@ -72,17 +70,32 @@ void KisFrameBox::addLayerUiUpdate()
     newSelection->show();
 }
 
-void KisFrameBox::setSelectedFrame(KisAnimationFrame *selectedFrame)
+void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
 {
-    this->m_selectedFrame = selectedFrame;
-    if(this->m_selectedFrame) {
-        int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
-        QRect globalPosition(this->m_selectedFrame->x(),
+    if(x < 0) {
+        x = m_selectedFrame->geometry().x();
+    }
+
+    if(!parent) {
+        parent = m_selectedFrame->getParent();
+    }
+
+    if(m_selectedFrame) {
+        m_selectedFrame->hide();
+        delete m_selectedFrame;
+        m_selectedFrame = 0;
+    }
+
+    this->m_selectedFrame = new KisAnimationFrame(parent, KisAnimationFrame::SELECTION, width);
+    this->m_selectedFrame->setGeometry(x, 0, width, 20);
+    this->m_selectedFrame->show();
+
+    int layerIndex = this->m_selectedFrame->getParent()->getLayerIndex();
+    QRect globalPosition(this->m_selectedFrame->x(),
                              layerIndex * 20,
                              this->m_selectedFrame->width(),
                              this->m_selectedFrame->height());
-        emit frameSelectionChanged(globalPosition);
-    }
+    emit frameSelectionChanged(globalPosition);
 }
 
 KisAnimationFrame* KisFrameBox::getSelectedFrame()

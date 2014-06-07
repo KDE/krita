@@ -129,14 +129,14 @@ QRect KisAnimationFrame::convertSelectionToFrame(int type)
                     newFrameWidth = 10;
                 }
             }
-            //kWarning() << newFrameWidth;
+
             KisAnimationFrame* newFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::BLANKFRAME, newFrameWidth);
             newFrame->setGeometry(this->geometry().x(), 0, newFrameWidth, 20);
             newFrame->show();
             globalGeometry.setRect(this->geometry().x(), this->getParent()->getLayerIndex() * 20, newFrameWidth, 20);
             this->getParent()->mapFrame(this->geometry().x() / 10, newFrame);
             this->getParent()->getParent()->getSelectedFrame()->hide();
-            this->getParent()->getParent()->setSelectedFrame(0);
+            this->getParent()->getParent()->setSelectedFrame();
         }
     }
 
@@ -159,6 +159,6 @@ void KisAnimationFrame::expandWidth()
     }
 
     this->getParent()->getParent()->getSelectedFrame()->hide();
-    this->getParent()->getParent()->setSelectedFrame(0);
     this->getParent()->unmapFrame(this->geometry().x() / 10);
+    this->getParent()->getParent()->setSelectedFrame();
 }

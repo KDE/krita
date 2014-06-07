@@ -74,19 +74,7 @@ void KisLayerContents::mouseReleaseEvent(QMouseEvent *event)
 {
     int x = event->x();
     x = x - (x % 10);
-
-    KisAnimationFrame* selectedFrame = new KisAnimationFrame(this, KisAnimationFrame::SELECTION, 10);
-    selectedFrame->setGeometry(x, 0, 10, 20);
-
-    KisAnimationFrame* previousSelection = this->m_parent->getSelectedFrame();
-
-    if(previousSelection) {
-        previousSelection->hide();
-        delete(previousSelection);
-    }
-
-    this->m_parent->setSelectedFrame(selectedFrame);
-    selectedFrame->show();
+    this->m_parent->setSelectedFrame(x, this);
 }
 
 void KisLayerContents::mapFrame(int frameNumber, KisAnimationFrame *frame)

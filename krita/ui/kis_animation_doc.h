@@ -45,7 +45,7 @@ public:
     KisAnimationStore* getStore();
     KisAnimation* getAnimation();
 
-    void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store);
+    void loadAnimationFile(KisAnimation* animation, KisAnimationStore* store, QDomDocument doc);
 
     QRect getPreviousKeyFramePosition(int frame, int layer);
     QRect getNextKeyFramePosition(int frame, int layer);

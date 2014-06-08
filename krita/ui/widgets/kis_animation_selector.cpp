@@ -140,7 +140,7 @@ void KisAnimationSelector::changeLocation()
 void KisAnimationSelector::selectFile()
 {
     QFileDialog fileSelector;
-    QString location = fileSelector.getOpenFileName();
+    QString location = fileSelector.getExistingDirectory();
     txtOpenFile->setText(location);
 }
 
@@ -153,6 +153,7 @@ void KisAnimationSelector::openAnimation()
 
     KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
+    store->openFileReading("maindoc.xml");
     QByteArray xmlData = store->getDevice("maindoc.xml")->readAll();
 
     QDomDocument doc;
@@ -197,7 +198,7 @@ void KisAnimationSelector::openAnimation()
     }
     emit documentSelected();
 
-    dynamic_cast<KisAnimationDoc*>(m_document)->loadAnimationFile(animation, store);
+    dynamic_cast<KisAnimationDoc*>(m_document)->loadAnimationFile(animation, store, doc);
 }
 
 void KisAnimationSelector::createAnimation()

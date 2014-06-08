@@ -230,7 +230,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
         showFloatingMessage(
             i18nc("floating message about zoom", "Zoom: %1 \%",
                   KritaUtils::prettyFormatReal(humanZoom)),
-            QIcon(), 500, KisFloatingMessage::Low);
+            QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);

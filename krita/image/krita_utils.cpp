@@ -172,8 +172,7 @@ namespace KritaUtils
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
     {
-        int precision = qMax(1, qCeil(log10(value))) + 2;
-        return QString::number(value, 'g', precision);
+        return QString("%1").arg(value, 8, 'f', 1);
     }
 
 }

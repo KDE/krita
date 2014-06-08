@@ -50,7 +50,8 @@ public:
         Low
     };
 
-    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout, Priority priority);
+    explicit KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout,
+                                Priority priority, int alignment = Qt::AlignCenter | Qt::TextWordWrap);
     void showMessage();
 
     /// Show message above parent widget instead of screen
@@ -61,7 +62,8 @@ public:
     void tryOverrideMessage(const QString message,
                             const QIcon& icon,
                             int timeout,
-                            KisFloatingMessage::Priority priority);
+                            KisFloatingMessage::Priority priority,
+                            int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
 protected:
 
@@ -85,6 +87,7 @@ private:
     bool m_showOverParent;
     int m_timeout;
     Priority m_priority;
+    int m_alignment;
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

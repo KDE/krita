@@ -172,7 +172,7 @@ namespace KritaUtils
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
     {
-        return QString("%1").arg(value, 8, 'f', 1);
+        return QString("%1").arg(value, 6, 'f', 1);
     }
 
 }

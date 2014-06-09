@@ -273,7 +273,7 @@ void KoTriangleColorSelector::tellColorChanged()
 {
     d->updateAllowed = false;
     emit(realColorChanged(realColor()));
-    emit(colorChanged(color()));
+    emit(colorChanged(realColor().toQColor()));
     d->updateAllowed = true;
 }
 

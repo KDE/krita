@@ -123,7 +123,7 @@ KoColorPopupAction::~KoColorPopupAction()
 
 void KoColorPopupAction::setCurrentColor( const KoColor &color )
 {
-    d->colorChooser->setQColor( color.toQColor() );
+    d->colorChooser->setRealColor( color );
 
     KoColor minColor( color );
     d->currentColor = minColor;

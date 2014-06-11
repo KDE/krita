@@ -69,6 +69,7 @@ private:
 
 signals:
     void sigFrameModified();
+    void sigImportFinished(QList<QRect>);
 };
 
 #endif // KIS_ANIMATION_DOC_H

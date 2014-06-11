@@ -259,7 +259,9 @@ void KisTimeline::setCanvas(KisCanvas2 *canvas)
         this->init();
     }
 
+    // Connect all the document signals here
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
+    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QList<QRect>)), this, SLOT(importUI(QList<QRect>)));
 }
 
 void KisTimeline::setModel(KisAnimation *animation)
@@ -405,4 +407,10 @@ void KisTimeline::documentModified()
             this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
         }
     }
+}
+
+void KisTimeline::importUI(QList<QRect> timelineMap)
+{
+    kWarning() << "Importing...";
+    kWarning() << timelineMap.size();
 }

@@ -94,11 +94,14 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     QDomNodeList list = d->frameElement.childNodes();
 
     QList<int> layerNumbers;
+    QList<QRect> timelineMap;
 
     for(unsigned int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         int layerNumber = node.attributes().namedItem("layer").nodeValue().toInt();
+
+        timelineMap << QRect(node.attributes().namedItem("number").nodeValue().toInt(), layerNumber, 10, 20);
 
         if(!layerNumbers.contains(layerNumber)) {
             d->noLayers++;
@@ -137,6 +140,8 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     this->updateActiveFrame();
 
     setCurrentImage(d->image);
+
+    emit sigImportFinished(timelineMap);
 }
 
 void KisAnimationDoc::frameSelectionChanged(QRect frame)

@@ -81,6 +81,7 @@ private slots:
     void timelineWidthChanged(int width);
     void paintLayerPressed();
     void vectorLayerPressed();
+    void importUI(QList<QRect> timelineMap);
 
 signals:
     void canvasModified();

@@ -70,6 +70,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
                                                KoColorConversionTransformation::ConversionFlags conversionFlags)
     : m_image(image)
     , m_monitorProfile(monitorProfile)
+    , m_tilesDestinationColorSpace(0)
+    , m_internalColorManagementActive(true)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_checkerTexture(0)

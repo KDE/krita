@@ -230,10 +230,10 @@ calligra_define_product(FILTER_FLOW_EXPORT "All Flow export filters"  WANTS )
 calligra_define_product(FILTER_FLOW "All Flow filters"  WANTS FILTER_FLOW_IMPORT FILTER_FLOW_EXPORT)
 # Stage filters
 calligra_define_product(FILTER_KEY_TO_ODP "Apple Keynote to ODP filter"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(FILTER_KPR_TO_OPD "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(FILTER_KPR_TO_ODP "KPresenter to ODP filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPT_TO_ODP "PPT to OPD filter" NEEDS LIB_MSO CALLIGRA_LIBS)
 calligra_define_product(FILTER_PPTX_TO_ODP "PPTX to ODP filter" NEEDS LIB_KOMSOOXML LIB_KOODF2 CALLIGRA_LIBS)
-calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filters"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_OPD FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
+calligra_define_product(FILTER_STAGE_IMPORT "All Stage import filters"  WANTS FILTER_KEY_TO_ODP FILTER_KPR_TO_ODP FILTER_PPT_TO_ODP FILTER_PPTX_TO_ODP)
 calligra_define_product(FILTER_STAGE_EXPORT "All Stage export filters"  WANTS )
 calligra_define_product(FILTER_STAGE "All Stage filters"  WANTS FILTER_STAGE_IMPORT FILTER_STAGE_EXPORT)
 # Words filters

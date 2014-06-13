@@ -453,6 +453,8 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     Q_ASSERT(parent);
 
     d->isEmpty = true;
+    d->filterManager = new KoFilterManager(this, d->progressUpdater);
+
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
@@ -584,9 +586,6 @@ bool KoDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
-
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph);
@@ -688,17 +687,11 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KoDocument::saveInBatchMode() const
 {
-    if (d->filterManager) {
-        return d->filterManager->getBatchMode();
-    }
-    return true;
+    return d->filterManager->getBatchMode();
 }
 
 void KoDocument::setSaveInBatchMode(const bool batchMode)
 {
-    if (!d->filterManager) {
-        d->filterManager = new KoFilterManager(this, d->progressUpdater);
-    }
     d->filterManager->setBatchMode(batchMode);
 }
 
@@ -1492,8 +1485,6 @@ bool KoDocument::openFile()
     setupOpenFileSubProgress();
 
     if (!isNativeFormat(typeName.toLatin1())) {
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KoFilter::OK) {

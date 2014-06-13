@@ -122,12 +122,13 @@ namespace ShadowEngine
 
 #define OSD_WINDOW_OPACITY 0.74
 
-KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout, Priority priority)
+KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, bool showOverParent, int timeout, Priority priority, int alignment)
     : QWidget(parent)
     , m_message(message)
     , m_showOverParent(showOverParent)
     , m_timeout(timeout)
     , m_priority(priority)
+    , m_alignment(alignment)
 {
     m_icon = koIcon("calligrakrita").pixmap(256, 256).toImage();
 
@@ -146,7 +147,8 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 void KisFloatingMessage::tryOverrideMessage(const QString message,
                                             const QIcon& icon,
                                             int timeout,
-                                            KisFloatingMessage::Priority priority)
+                                            KisFloatingMessage::Priority priority,
+                                            int alignment)
 {
     if ((int)priority > (int)m_priority) return;
 
@@ -154,6 +156,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
     setIcon(icon);
     m_timeout = timeout;
     m_priority = priority;
+    m_alignment = alignment;
     showMessage();
     update();
 }
@@ -198,7 +201,7 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     // The osd cannot be larger than the screen
     QRect rect = fontMetrics().boundingRect(0, 0, max.width() - image.width(), max.height(),
-            Qt::AlignCenter | Qt::TextWordWrap, m_message);
+           m_alignment, m_message);
 
     if (!m_icon.isNull()) {
         const int availableWidth = max.width() - rect.width() - M; //WILL be >= (minImageSize.width() - M)
@@ -254,8 +257,6 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     QRect rect(point, size());
     rect.adjust(0, 0, -1, -1);
 
-    int align = Qt::AlignCenter | Qt::TextWordWrap;
-
     QPainter p(this);
     p.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing );
     p.setClipRect(e->rect());
@@ -286,7 +287,7 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     p2.setFont(font());
     p2.setPen(Qt::white);
     p2.setBrush(Qt::white);
-    p2.drawText(QRect( QPoint( 5, 5 ), rect.size() ), align, m_message);
+    p2.drawText(QRect( QPoint( 5, 5 ), rect.size() ), m_alignment, m_message);
     p2.end();
 
     QColor shadowColor;
@@ -298,7 +299,7 @@ void KisFloatingMessage::paintEvent( QPaintEvent *e )
     p.drawImage(rect.topLeft() - QPoint(5, 5), ShadowEngine::makeShadow(pixmap, shadowColor));
 
     p.setPen( palette().color(QPalette::Active, QPalette::WindowText ));
-    p.drawText(rect, align, m_message);
+    p.drawText(rect, m_alignment, m_message);
 }
 
 void KisFloatingMessage::startFade()

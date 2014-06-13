@@ -182,7 +182,7 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
         showFloatingMessage(
             i18nc("floating message about rotation", "Rotation: %1° ",
                   KritaUtils::prettyFormatReal(rotationAngle)),
-            QIcon(), 500, KisFloatingMessage::Low);
+            QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
 void KisCanvasController::rotateCanvas(qreal angle)

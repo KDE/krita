@@ -1602,13 +1602,13 @@ void KisView2::updateIcons()
 #endif
 }
 
-void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority)
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if(m_d->showFloatingMessage && qtMainWindow()) {
         if (m_d->savedFloatingMessage) {
-            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority);
+            m_d->savedFloatingMessage->tryOverrideMessage(message, icon, timeout, priority, alignment);
         } else {
-            m_d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority);
+            m_d->savedFloatingMessage = new KisFloatingMessage(message, qtMainWindow()->centralWidget(), false, timeout, priority, alignment);
             m_d->savedFloatingMessage->setShowOverParent(true);
             m_d->savedFloatingMessage->setIcon(icon);
             m_d->savedFloatingMessage->showMessage();

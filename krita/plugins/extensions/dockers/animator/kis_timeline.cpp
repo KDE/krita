@@ -263,7 +263,7 @@ void KisTimeline::setCanvas(KisCanvas2 *canvas)
 
     // Connect all the document signals here
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigFrameModified()), this, SLOT(documentModified()));
-    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QList<QRect>)), this, SLOT(importUI(QList<QRect>)));
+    connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
 }
 
 void KisTimeline::setModel(KisAnimation *animation)
@@ -411,20 +411,7 @@ void KisTimeline::documentModified()
     }
 }
 
-void KisTimeline::importUI(QList<QRect> timelineMap)
+void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
 {
-    kWarning() << "Importing...";
-
-    KisAnimationFrame* oldSelection = m_cells->getSelectedFrame();
-    for (int i = 0 ; i < timelineMap.size() ; i++) {
-        // This is a hack since we can not call setSelectedFrame directly
-        // as it will also affect the canvas
-
-        this->m_cells->m_selectedFrame->hide();
-
-        this->m_cells->m_selectedFrame = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
-        this->m_cells->m_selectedFrame->setGeometry(timelineMap.at(i).x(), 0, 10, 20);
-        this->m_cells->getSelectedFrame()->show();
-        this->m_cells->getSelectedFrame()->convertSelectionToFrame();
-    }
+    kWarning() << timelineMap.size();
 }

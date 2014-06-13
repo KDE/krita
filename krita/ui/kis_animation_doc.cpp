@@ -29,6 +29,7 @@
 #include <kranimstore/kis_animation_store.h>
 #include <kis_animation_player.h>
 #include <QList>
+#include <QHash>
 
 #define APP_MIMETYPE "application/x-krita-animation"
 
@@ -93,21 +94,17 @@ void KisAnimationDoc::loadAnimationFile(KisAnimation *animation, KisAnimationSto
     // Calculate number of layers from the xmldoc
     QDomNodeList list = d->frameElement.childNodes();
 
-    QList<int> layerNumbers;
-    QList<QRect> timelineMap;
+    QHash<int, QList<QRect> > timelineMap;
 
     for(unsigned int i = 0 ; i < list.length() ; i++) {
         QDomNode node = list.at(i);
 
         int layerNumber = node.attributes().namedItem("layer").nodeValue().toInt();
 
-        timelineMap << QRect(node.attributes().namedItem("number").nodeValue().toInt(), layerNumber, 10, 20);
-
-        if(!layerNumbers.contains(layerNumber)) {
-            d->noLayers++;
-            layerNumbers.append(layerNumber);
-        }
+        timelineMap[layerNumber] << QRect(node.attributes().namedItem("number").nodeValue().toInt(), layerNumber, 10, 20);
     }
+
+    d->noLayers = timelineMap.size();
 
     // Load the first frame of the animation
     d->image = new KisImage(createUndoStore(), animation->width(), animation->height(), animation->colorSpace(), animation->name());

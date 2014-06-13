@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_animation_part.h"
 #include <./kranimstore/kis_animation_store.h>
+#include <QHash>
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
@@ -69,7 +70,7 @@ private:
 
 signals:
     void sigFrameModified();
-    void sigImportFinished(QList<QRect>);
+    void sigImportFinished(QHash<int, QList<QRect> >);
 };
 
 #endif // KIS_ANIMATION_DOC_H

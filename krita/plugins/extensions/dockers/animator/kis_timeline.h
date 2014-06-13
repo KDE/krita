@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QToolButton>
 #include <QScrollArea>
+#include <QHash>
 
 #include "animator_settings_dialog.h"
 
@@ -81,7 +82,7 @@ private slots:
     void timelineWidthChanged(int width);
     void paintLayerPressed();
     void vectorLayerPressed();
-    void importUI(QList<QRect> timelineMap);
+    void importUI(QHash<int, QList<QRect> > timelineMap);
 
 signals:
     void canvasModified();

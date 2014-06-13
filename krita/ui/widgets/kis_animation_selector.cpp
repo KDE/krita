@@ -153,6 +153,11 @@ void KisAnimationSelector::openAnimation()
 
     KisAnimationStore* store = new KisAnimationStore(txtOpenFile->text());
 
+    if(!store->hasFile("maindoc.xml")) {
+        KMessageBox::error(0, "This file does not appear to be a valid animation file", "Not a valid animation file");
+        return;
+    }
+
     store->openFileReading("maindoc.xml");
     QByteArray xmlData = store->getDevice("maindoc.xml")->readAll();
 

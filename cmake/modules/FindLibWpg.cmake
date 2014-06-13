@@ -11,16 +11,16 @@
 
 include(LibFindMacros)
 libfind_package(LIBWPG LibWpd)
-libfind_pkg_check_modules(LIBWPG_PKGCONF libwpg-0.2)
+libfind_pkg_check_modules(LIBWPG_PKGCONF libwpg-0.3)
 
 find_path(LIBWPG_INCLUDE_DIR
     NAMES libwpg/libwpg.h
     HINTS ${LIBWPG_PKGCONF_INCLUDE_DIRS} ${LIBWPG_PKGCONF_INCLUDEDIR}
-    PATH_SUFFIXES libwpg-0.2
+    PATH_SUFFIXES libwpg-0.3
 )
 
 find_library(LIBWPG_LIBRARY
-    NAMES wpg wpg-0.2
+    NAMES wpg wpg-0.3
     HINTS ${LIBWPG_PKGCONF_LIBRARY_DIRS} ${LIBWPG_PKGCONF_LIBDIR}
 )
 

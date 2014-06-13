@@ -239,8 +239,7 @@ void KisTimeline::init()
     connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
 
     m_initialized = true;
-
-    kWarning() << "Timeline initialized";
+    m_imported = false;
 }
 
 void KisTimeline::frameSelectionChanged(QRect frame)
@@ -309,6 +308,7 @@ void KisTimeline::blankFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+        m_cells->setSelectedFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
 }
@@ -317,6 +317,7 @@ void KisTimeline::keyFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+        m_cells->setSelectedFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
     }
 }
@@ -341,6 +342,7 @@ void KisTimeline::breakFrame(QRect position)
     }
 
     QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+    m_cells->setSelectedFrame();
 
     this->m_lastBrokenFrame = position;
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->m_frameBreakState);
@@ -413,5 +415,44 @@ void KisTimeline::documentModified()
 
 void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
 {
+    if(m_imported) {
+        return;
+    }
+
     kWarning() << timelineMap.size();
+
+    QList<int> layers = timelineMap.keys();
+
+    qSort(layers);
+
+    KisAnimationFrame* oldSelection;
+
+    for(int i = 0 ; i < layers.size() ; i++) {
+        int layer = layers.at(i);
+
+        kWarning() << "Importing layer "  << layer;
+
+        // No layer update UI since for layer 0, UI is already present
+        if(layer != 0) {
+            this->addLayerUiUpdate();
+        }
+
+        // Gets the first frame of the layer which is selected by default
+        oldSelection = m_cells->getSelectedFrame();
+
+        QList<QRect> frames = timelineMap[layer];
+
+        for(int j = 0 ; j < frames.size() ; j++) {
+            m_cells->m_selectedFrame->hide();
+
+            m_cells->m_selectedFrame = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+            m_cells->m_selectedFrame->setGeometry(frames.at(j).x(), 0, 10, 20);
+
+            this->m_cells->getSelectedFrame()->show();
+            this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+
+        }
+    }
+
+    m_imported = true;
 }

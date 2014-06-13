@@ -63,6 +63,7 @@ private:
     AnimatorSettingsDialog* m_settingsDialog;
     bool m_initialized;
     QWidget* m_parent;
+    bool m_imported;
 
 private slots:
     void blankFramePressed();

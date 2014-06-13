@@ -126,7 +126,6 @@ QRect KisAnimationFrame::convertSelectionToFrame()
 
         this->getParent()->mapFrame(this->geometry().x() / 10, newFrame);
         this->getParent()->getParent()->getSelectedFrame()->hide();
-        this->getParent()->getParent()->setSelectedFrame();
     }
 
     return globalGeometry;

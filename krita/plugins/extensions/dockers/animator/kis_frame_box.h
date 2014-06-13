@@ -37,12 +37,12 @@ public:
     KisLayerContents* getFirstLayer();
     QList<KisLayerContents*> getLayerContents();
     void addLayerUiUpdate();
+    KisAnimationFrame* m_selectedFrame;
 
 private:
     KisTimeline* m_dock;
     QList<KisAnimationLayer*> m_layers;
     QList<KisLayerContents*> m_layerContents;
-    KisAnimationFrame* m_selectedFrame;
     KisTimelineHeader* m_timelineHeader;
 
 signals:

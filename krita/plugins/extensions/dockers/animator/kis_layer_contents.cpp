@@ -47,7 +47,7 @@ void KisLayerContents::initialize()
         length = 1;
     }
 
-    KisAnimationFrame* firstFrame = new KisAnimationFrame(this, KisAnimationFrame::BLANKFRAME, length * 10);
+    KisAnimationFrame* firstFrame = new KisAnimationFrame(this, KisAnimationFrame::FRAME, length * 10);
     firstFrame->setGeometry(0, 0, length * 10, 20);
     this->m_frames[0] = firstFrame;
 }

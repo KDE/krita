@@ -31,7 +31,7 @@ public:
     void setWidth(int width);
     int getWidth();
     KisLayerContents* getParent();
-    QRect convertSelectionToFrame(int type);
+    QRect convertSelectionToFrame();
     int getType();
     void setType(int type);
     void expandWidth();
@@ -42,8 +42,7 @@ protected:
 
 public:
     static const int SELECTION = 0;
-    static const int KEYFRAME = 1;
-    static const int BLANKFRAME = 2;
+    static const int FRAME = 1;
 
 private:
     int m_type;

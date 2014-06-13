@@ -239,6 +239,8 @@ void KisTimeline::init()
     connect(this->m_settingsDialog, SIGNAL(sigTimelineWithChanged(int)), this, SLOT(timelineWidthChanged(int)));
 
     m_initialized = true;
+
+    kWarning() << "Timeline initialized";
 }
 
 void KisTimeline::frameSelectionChanged(QRect frame)
@@ -306,7 +308,7 @@ void KisTimeline::vectorLayerPressed()
 void KisTimeline::blankFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
-        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::BLANKFRAME);
+        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addBlankFrame(globalGeometry);
     }
 }
@@ -314,7 +316,7 @@ void KisTimeline::blankFramePressed()
 void KisTimeline::keyFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
-        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+        QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
         dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->addKeyFrame(globalGeometry);
     }
 }
@@ -338,7 +340,7 @@ void KisTimeline::breakFrame(QRect position)
         return;
     }
 
-    QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame(KisAnimationFrame::KEYFRAME);
+    QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
 
     this->m_lastBrokenFrame = position;
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->m_frameBreakState);
@@ -412,5 +414,17 @@ void KisTimeline::documentModified()
 void KisTimeline::importUI(QList<QRect> timelineMap)
 {
     kWarning() << "Importing...";
-    kWarning() << timelineMap.size();
+
+    KisAnimationFrame* oldSelection = m_cells->getSelectedFrame();
+    for (int i = 0 ; i < timelineMap.size() ; i++) {
+        // This is a hack since we can not call setSelectedFrame directly
+        // as it will also affect the canvas
+
+        this->m_cells->m_selectedFrame->hide();
+
+        this->m_cells->m_selectedFrame = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+        this->m_cells->m_selectedFrame->setGeometry(timelineMap.at(i).x(), 0, 10, 20);
+        this->m_cells->getSelectedFrame()->show();
+        this->m_cells->getSelectedFrame()->convertSelectionToFrame();
+    }
 }

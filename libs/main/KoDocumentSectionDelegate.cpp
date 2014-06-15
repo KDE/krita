@@ -164,6 +164,15 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             }
             return true;
         }
+
+        if (mouseEvent->button() == Qt::LeftButton &&
+            mouseEvent->modifiers() == Qt::AltModifier) {
+
+            d->view->setCurrentIndex(index);
+            model->setData(index, true, Model::SpecialActiveRole);
+            return true;
+        }
+
         if (mouseEvent->button() != Qt::LeftButton) {
             d->view->setCurrentIndex(index);
             return false;

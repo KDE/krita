@@ -349,13 +349,26 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
     m_d->commandsAdapter->moveNode(node, parent, aboveThis);
 }
 
+void KisNodeManager::toggleIsolateActiveNode()
+{
+    KisImageWSP image = m_d->view->image();
+    KisNodeSP activeNode = this->activeNode();
+    KIS_ASSERT_RECOVER_RETURN(activeNode);
+
+    if (activeNode == image->isolatedModeRoot()) {
+        toggleIsolateMode(false);
+    } else {
+        toggleIsolateMode(true);
+    }
+}
+
 void KisNodeManager::toggleIsolateMode(bool checked)
 {
     KisImageWSP image = m_d->view->image();
 
     if (checked) {
         KisNodeSP activeNode = this->activeNode();
-        Q_ASSERT(activeNode);
+        KIS_ASSERT_RECOVER_RETURN(activeNode);
 
         image->startIsolatedMode(activeNode);
     } else {

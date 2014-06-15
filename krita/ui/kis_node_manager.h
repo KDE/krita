@@ -137,6 +137,8 @@ public slots:
      */
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
+
+    void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
     void slotUpdateIsolateModeAction();
     void slotTryFinishIsolatedMode();

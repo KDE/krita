@@ -22,13 +22,12 @@
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QButtonGroup>
 
 #include <klocale.h>
 
 #include "kis_cursor.h"
+#include "kis_config.h"
 #include "kis_slider_spin_box.h"
-#include <KoGroupButton.h>
 
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
@@ -40,6 +39,7 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
                       i18nc("(qtundo-format)", "Brush"))
 {
     setObjectName("tool_brush");
+    connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 }
 
 KisToolBrush::~KisToolBrush()
@@ -84,12 +84,19 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_chkUseScalableDistance->setEnabled(false);
         break;
     case 2:
-    default:
         m_smoothingOptions.setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
         m_sliderSmoothnessDistance->setEnabled(true);
         m_sliderTailAggressiveness->setEnabled(true);
         m_chkSmoothPressure->setEnabled(true);
         m_chkUseScalableDistance->setEnabled(true);
+        break;
+    case 3:
+    default:
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::STABILIZER);
+        m_sliderSmoothnessDistance->setEnabled(true);
+        m_sliderTailAggressiveness->setEnabled(false);
+        m_chkSmoothPressure->setEnabled(false);
+        m_chkUseScalableDistance->setEnabled(false);
     }
     emit smoothingTypeChanged();
 }
@@ -121,6 +128,22 @@ bool KisToolBrush::useScalableDistance() const
     return m_smoothingOptions.useScalableDistance();
 }
 
+void KisToolBrush::resetCursorStyle()
+{
+    KisConfig cfg;
+    enumCursorStyle cursorStyle = cfg.cursorStyle();
+
+    // When the stabilizer is in use, we avoid using the brush outline cursor,
+    // because it would hide the real position of the cursor to the user,
+    // yielding unexpected results.
+    if (m_smoothingOptions.smoothingType() == KisSmoothingOptions::STABILIZER
+        && cursorStyle == CURSOR_STYLE_OUTLINE) {
+        useCursor(KisCursor::roundCursor());
+    } else {
+        KisToolFreehand::resetCursorStyle();
+    }
+}
+
 void KisToolBrush::setUseScalableDistance(bool value)
 {
     m_smoothingOptions.setUseScalableDistance(value);
@@ -139,38 +162,14 @@ QWidget * KisToolBrush::createOptionWidget()
     optionsWidget->layout()->addWidget(specialSpacer);
 
     // Line smoothing configuration
-    QWidget* smoothingWidget = new QWidget(optionsWidget);
-    QHBoxLayout* smoothingLayout = new QHBoxLayout(smoothingWidget);
-    smoothingLayout->setSpacing(0);
-    m_buttonGroup = new QButtonGroup(this);
-    m_buttonGroup->setExclusive(true);
-    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotSetSmoothingType(int)));
-
-    KoGroupButton * button = new KoGroupButton(optionsWidget);
-    button->setGroupPosition(KoGroupButton::GroupLeft);
-    button->setText(i18nc("No smoothing enabled", "No"));
-    button->setAutoRaise(true);
-    button->setCheckable(true);
-    smoothingLayout->addWidget(button);
-    m_buttonGroup->addButton(button, KisSmoothingOptions::NO_SMOOTHING);
-
-    button = new KoGroupButton(optionsWidget);
-    button->setGroupPosition(KoGroupButton::GroupCenter);
-    button->setText(i18nc("Basic smoothing enabled", "Basic"));
-    button->setAutoRaise(true);
-    button->setCheckable(true);
-    smoothingLayout->addWidget(button);
-    m_buttonGroup->addButton(button, KisSmoothingOptions::SIMPLE_SMOOTHING);
-
-    button = new KoGroupButton(optionsWidget);
-    button->setGroupPosition(KoGroupButton::GroupRight);
-    button->setText(i18nc("Weighted smoothing enabled", "Weighted"));
-    button->setAutoRaise(true);
-    button->setCheckable(true);
-    smoothingLayout->addWidget(button);
-    m_buttonGroup->addButton(button, KisSmoothingOptions::WEIGHTED_SMOOTHING);
-
-    addOptionWidgetOption(smoothingWidget,  new QLabel(i18nc("Smoothing of the brush", "Smoothing:")));
+    m_cmbSmoothingType = new QComboBox(optionsWidget);
+    m_cmbSmoothingType->addItems(QStringList()
+            << i18n("No Smoothing")
+            << i18n("Basic Smoothing")
+            << i18n("Weighted Smoothing")
+            << i18n("Stabilizer"));
+    connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
+    addOptionWidgetOption(m_cmbSmoothingType);
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
@@ -196,8 +195,8 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(i18n("Scalable Distance")));
 
-    m_buttonGroup->button((int)m_smoothingOptions.smoothingType())->setChecked(true);
     slotSetSmoothingType((int)m_smoothingOptions.smoothingType());
+    m_cmbSmoothingType->setCurrentIndex((int)m_smoothingOptions.smoothingType());
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionsWidget);

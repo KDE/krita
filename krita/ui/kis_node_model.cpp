@@ -393,12 +393,12 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(role == ActiveRole || role == SpecialActiveRole) {
+    if(role == ActiveRole || role == AlternateActiveRole) {
         KisNodeSP activatedNode =
             index.isValid() && value.toBool() ? nodeFromIndex(index) : 0;
         emit nodeActivated(activatedNode);
 
-        if (role == SpecialActiveRole) {
+        if (role == AlternateActiveRole) {
             emit toggleIsolateActiveNode();
         }
 

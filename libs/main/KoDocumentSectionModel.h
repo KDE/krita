@@ -91,8 +91,8 @@ class KoDocumentSectionModel: public QAbstractItemModel
         ProgressRole,
 
         /// Speacial activation role which is emitted when the user Atl-clicks on a section
-        /// The item is first activated with ActiveRole, then a separate SpecialActiveRole comes
-        SpecialActiveRole,
+        /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
+        AlternateActiveRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = 99,

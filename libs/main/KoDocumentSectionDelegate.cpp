@@ -169,7 +169,7 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             mouseEvent->modifiers() == Qt::AltModifier) {
 
             d->view->setCurrentIndex(index);
-            model->setData(index, true, Model::SpecialActiveRole);
+            model->setData(index, true, Model::AlternateActiveRole);
             return true;
         }
 

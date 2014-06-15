@@ -322,6 +322,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), m_nodeManager, SLOT(slotUiActivatedNode(KisNodeSP)));
         connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
 
+        // Connection KisLayerBox -> KisNodeManager (isolate layer)
+        connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()), m_nodeManager, SLOT(toggleIsolateActiveNode()));
+
         // Node manipulation methods are forwarded to the node manager
         connect(m_nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
                 m_nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));

@@ -68,6 +68,7 @@ public:
 signals:
 
     void nodeActivated(KisNodeSP);
+    void toggleIsolateActiveNode();
 
     void requestAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void requestMoveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);

@@ -47,6 +47,7 @@ set(kowidgets_LIB_SRCS
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
+    KoResourceItemChooserSync.cpp
     KoResourceSelector.cpp
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp

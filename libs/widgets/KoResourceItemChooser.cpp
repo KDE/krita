@@ -23,6 +23,8 @@
 */
 #include "KoResourceItemChooser.h"
 
+#include <math.h>
+
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
@@ -35,6 +37,7 @@
 #include <QPainter>
 #include <QSplitter>
 #include <QToolButton>
+#include <QWheelEvent>
 
 #include <kmimetype.h>
 #include <klocale.h>
@@ -54,6 +57,7 @@
 #include "KoResourceModel.h"
 #include "KoResource.h"
 #include "KoResourceTaggingManager.h"
+#include "KoResourceItemChooserSync.h"
 
 class KoResourceItemChooser::Private
 {
@@ -64,6 +68,7 @@ public:
         , buttonGroup(0)
         , tiledPreview(false)
         , grayscalePreview(false)
+        , synced(false)
     {}
     KoResourceModel* model;
     KoResourceTaggingManager* tagManager;
@@ -77,8 +82,7 @@ public:
     QSplitter *splitter;
     bool tiledPreview;
     bool grayscalePreview;
-
-
+    bool synced;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent )
@@ -93,6 +97,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
+    d->view->viewport()->installEventFilter(this);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
             this, SLOT(activated(QModelIndex)));
@@ -497,5 +502,70 @@ QToolButton* KoResourceItemChooser::viewModeButton() const
 {
     return d->viewModeButton;
 }
+
+void KoResourceItemChooser::setSynced(bool sync)
+{
+    if (sync) {
+        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
+        baseLengthChanged(chooserSync->baseLength());
+    }
+    d->synced = sync;
+}
+
+void KoResourceItemChooser::baseLengthChanged(int length)
+{
+    int resourceCount = d->model->resourcesCount();
+    int width = d->view->width();
+    int maxColums = width/length;
+    int cols = width/(2*length) + 1;
+    while(cols <= maxColums) {
+        int size = width/cols;
+        int rows = ceil(resourceCount/(double)cols);
+        if(rows*size < (d->view->height()-5)) {
+            break;
+        }
+        cols++;
+    }
+    setColumnCount(cols);
+    d->view->updateView();
+}
+
+bool KoResourceItemChooser::eventFilter(QObject* object, QEvent* event)
+{
+    if (d->synced && event->type() == QEvent::Wheel) {
+        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        QWheelEvent* qwheel = dynamic_cast<QWheelEvent* >(event);
+        if (qwheel->modifiers() & Qt::ControlModifier) {
+
+            int degrees = qwheel->delta() / 8;
+            int newBaseLength = chooserSync->baseLength() + degrees/15 * 10;
+            chooserSync->setBaseLength(newBaseLength);
+            return true;
+        }
+    }
+    return QObject::eventFilter(object, event);
+}
+
+void KoResourceItemChooser::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    updateView();
+}
+
+void KoResourceItemChooser::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    updateView();
+}
+
+void KoResourceItemChooser::updateView()
+{
+    if (d->synced) {
+        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        baseLengthChanged(chooserSync->baseLength());
+    }
+}
+
 
 #include <KoResourceItemChooser.moc>

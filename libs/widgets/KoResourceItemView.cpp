@@ -39,25 +39,7 @@ KoResourceItemView::KoResourceItemView( QWidget * parent )
 void KoResourceItemView::resizeEvent( QResizeEvent * event )
 {
     QTableView::resizeEvent(event);
-
-    int columnCount = model()->columnCount( QModelIndex() );
-    int rowCount = model()->rowCount( QModelIndex() );
-    int rowHeight, columnWidth;
-
-    if (m_viewMode == FIXED_COLUMS) {
-        columnWidth = viewport()->size().width() / columnCount;
-
-        for( int i = 0; i < columnCount; ++i ) {
-            setColumnWidth( i, columnWidth );
-        }
-    } else if (m_viewMode == FIXED_ROWS) {
-        if (rowCount == 0) return;  // Don't divide by zero
-        rowHeight = viewport()->size().height() / rowCount;
-
-        for( int i = 0; i < rowCount; ++i ) {
-            setRowHeight( i, rowHeight );
-        }
-    }
+    updateView();
 }
 
 bool KoResourceItemView::viewportEvent( QEvent * event )
@@ -93,5 +75,33 @@ void KoResourceItemView::contextMenuEvent( QContextMenuEvent * event)
     QTableView::contextMenuEvent(event);
     emit contextMenuRequested(event->globalPos());
 }
+
+void KoResourceItemView::updateView()
+{
+    int columnCount = model()->columnCount( QModelIndex() );
+    int rowCount = model()->rowCount( QModelIndex() );
+    int rowHeight, columnWidth;
+
+    if (m_viewMode == FIXED_COLUMS) {
+        columnWidth = viewport()->size().width() / columnCount;
+
+        for( int i = 0; i < columnCount; ++i ) {
+            setColumnWidth( i, columnWidth );
+        }
+        if ( columnCount > 1) {
+            for( int i = 0; i < rowCount; ++i ) {
+                setRowHeight( i, columnWidth );
+            }
+        }
+    } else if (m_viewMode == FIXED_ROWS) {
+        if (rowCount == 0) return;  // Don't divide by zero
+        rowHeight = viewport()->size().height() / rowCount;
+
+        for( int i = 0; i < rowCount; ++i ) {
+            setRowHeight( i, rowHeight );
+        }
+    }
+}
+
 
 #include "KoResourceItemView.moc"

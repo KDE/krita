@@ -50,15 +50,13 @@ KoPatternChooser::KoPatternChooser(QWidget *parent)
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->showTaggingBar(true, true);
+    m_itemChooser->setSynced(true);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SLOT(update(KoResource *)));
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
             this, SIGNAL(resourceSelected(KoResource *)));
-
-    connect(m_itemChooser, SIGNAL(splitterMoved()),
-            this, SLOT(updateItemSize()));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -107,24 +105,6 @@ void KoPatternChooser::update(KoResource * resource)
 void KoPatternChooser::setGrayscalePreview(bool grayscale)
 {
     m_itemChooser->setGrayscalePreview(grayscale);
-}
-
-void KoPatternChooser::showEvent(QShowEvent*)
-{
-    updateItemSize();
-}
-
-void KoPatternChooser::updateItemSize()
-{
-    KoPattern* current = static_cast<KoPattern*>(currentResource());
-    int width = m_itemChooser->viewSize().width();
-    int cols = width/50 + 1;
-    m_itemChooser->setRowHeight(floor((double)width/cols));
-    m_itemChooser->setColumnCount(cols);
-    //restore current pattern
-    if(current) {
-        setCurrentPattern(current);
-    }
 }
 
 #include "kis_pattern_chooser.moc"

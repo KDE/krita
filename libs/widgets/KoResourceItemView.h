@@ -53,6 +53,8 @@ public:
 
     void setViewMode(ViewMode mode);
 
+    void updateView();
+
 signals:
 
     void currentResourceChanged(const QModelIndex &);

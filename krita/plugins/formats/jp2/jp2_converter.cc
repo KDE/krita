@@ -231,7 +231,6 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Create the layer
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image->nextLayerName(), OPACITY_OPAQUE_U8);
-    KisTransaction("", layer->paintDevice());
     m_image->addNode(layer.data(), m_image->rootLayer().data());
 
     // Set the data

@@ -122,7 +122,6 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         if (image.isNull()) return KoFilter::CreationError;
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
-        KisTransaction("", layer->paintDevice());
 
         image->addNode(layer, image->rootLayer());
         if (layer.isNull()) return KoFilter::CreationError;

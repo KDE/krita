@@ -87,7 +87,6 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
         KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, "imported from bmp");
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-        KisTransaction(layer->paintDevice());
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
         image->addNode(layer.data(), image->rootLayer().data());
 

@@ -23,6 +23,11 @@
 
 #include <QObject>
 
+/**
+ * KoResourceItemChooserSync is a singleton that sync the size of entries in the
+ * resource item choosers between differnt choosers
+ * To use the syncing it has to be turned on in the KoResourceItemChooser
+ */
 class KoResourceItemChooserSync : public QObject
 {
     Q_OBJECT
@@ -31,11 +36,17 @@ public:
 
     static KoResourceItemChooserSync* instance();
 
+    /// Gets the base length
+    /// @returns the base length of items
     int baseLength();
 
+    /// Set the base length 
+    /// @param length base length for the items, will be clamped if ouside range
     void setBaseLength(int length);
     
 signals:
+    /// Signal is emitted when the base length is changed and will trigger and update in
+    /// the resource item choosers
     void baseLenghtChanged(int length);
     
 private:

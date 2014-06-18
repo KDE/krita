@@ -39,7 +39,6 @@ public:
     ~KisCompositeOpListWidget();
 
     KoID selectedCompositeOp() const;
-    bool hasSelectedCompositeOp() const;
 
 private:
     KisSortedCompositeOpListModel *m_model;
@@ -58,7 +57,6 @@ public:
     void validate(const KoColorSpace *cs);
     void selectCompositeOp(const KoID &op);
     KoID selectedCompositeOp() const;
-    bool hasSelectedCompositeOp() const;
 
     QList<KAction*> blendmodeActions();
 

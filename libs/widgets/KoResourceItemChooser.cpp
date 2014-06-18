@@ -505,29 +505,33 @@ QToolButton* KoResourceItemChooser::viewModeButton() const
 
 void KoResourceItemChooser::setSynced(bool sync)
 {
+    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
         connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
         baseLengthChanged(chooserSync->baseLength());
+    } else {
+        chooserSync->disconnect(this);
     }
     d->synced = sync;
 }
 
 void KoResourceItemChooser::baseLengthChanged(int length)
 {
-    int resourceCount = d->model->resourcesCount();
-    int width = d->view->width();
-    int maxColums = width/length;
-    int cols = width/(2*length) + 1;
-    while(cols <= maxColums) {
-        int size = width/cols;
-        int rows = ceil(resourceCount/(double)cols);
-        if(rows*size < (d->view->height()-5)) {
-            break;
+    if (d->synced) {
+        int resourceCount = d->model->resourcesCount();
+        int width = d->view->width();
+        int maxColums = width/length;
+        int cols = width/(2*length) + 1;
+        while(cols <= maxColums) {
+            int size = width/cols;
+            int rows = ceil(resourceCount/(double)cols);
+            if(rows*size < (d->view->height()-5)) {
+                break;
+            }
+            cols++;
         }
-        cols++;
+        setColumnCount(cols);
     }
-    setColumnCount(cols);
     d->view->updateView();
 }
 

@@ -59,7 +59,7 @@ KisHeightMapExport::~KisHeightMapExport()
 
 KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "HeightMap export! From:" << from << ", To:" << to << "";
+    dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -82,11 +82,6 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
 
     if (inputDoc->image()->colorSpace()->colorModelId() != GrayAColorModelID) {
         inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not grayscale"));
-        return KoFilter::WrongFormat;
-    }
-
-    if (inputDoc->image()->colorSpace()->colorDepthId() != Integer16BitsColorDepthID) {
-        inputDoc->setErrorMessage(i18n("Cannot export this image to a heightmap: it is not 16 bits integer"));
         return KoFilter::WrongFormat;
     }
 
@@ -137,6 +132,15 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     }
     KisConfig().setExportConfiguration("HeightMap", cfg);
 
+    bool downscale = false;
+    if (to == "image/x-r8" && image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+
+        downscale = (QMessageBox::question(0,
+                                                i18n("Downscale Image"),
+                                                i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
+                                                QMessageBox::Yes | QMessageBox::No)
+                          == QMessageBox::Yes);
+    }
 
     image->refreshGraph();
     image->lock();
@@ -149,11 +153,16 @@ KoFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, c
     s.setByteOrder(bo);
 
     KisRandomConstAccessorSP it = pd->createRandomConstAccessorNG(0, 0);
-
+    bool r16 = ((image->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) && !downscale);
     for (int i = 0; i < image->height(); ++i) {
         for (int j = 0; j < image->width(); ++j) {
             it->moveTo(i, j);
-            s << KoGrayU16Traits::gray(const_cast<quint8*>(it->rawDataConst()));
+            if (r16) {
+                s << KoGrayU16Traits::gray(const_cast<quint8*>(it->rawDataConst()));
+            }
+            else {
+                s << KoGrayU8Traits::gray(const_cast<quint8*>(it->rawDataConst()));
+            }
         }
     }
 

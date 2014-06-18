@@ -65,17 +65,29 @@ KisHeightMapImport::~KisHeightMapImport()
 
 KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    Q_UNUSED(from);
-
-    dbgFile << "Importing using HeightMapImport!";
-
-    if (to != "application/x-krita")
-        return KoFilter::BadMimeType;
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
-    if (!doc)
+    if (!doc) {
         return KoFilter::NoDocumentCreated;
+    }
+
+    KoID depthId;
+    if (from == "image/x-r8") {
+        depthId = Integer8BitsColorDepthID;
+    }
+    else if (from == "image/x-r16") {
+        depthId = Integer16BitsColorDepthID;
+    }
+    else {
+        doc->setErrorMessage(i18n("The file is not 8 or 16 bits raw"));
+        return KoFilter::WrongFormat;
+    }
+    dbgFile << "Importing using HeightMapImport!";
+
+    if (to != "application/x-krita") {
+        return KoFilter::BadMimeType;
+    }
 
     QString filename = m_chain -> inputFile();
 
@@ -142,7 +154,7 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
 
     w = h = optionsHeightMap.intSize->value();
 
-    if ((w * h * 2) != f.size()) {
+    if ((w * h * (from == "image/x-r16" ? 2 : 1)) != f.size()) {
         doc->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
         return KoFilter::WrongFormat;
     }
@@ -161,18 +173,28 @@ KoFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, c
     QDataStream s(&f);
     s.setByteOrder(bo);
 
-    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), 0);
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), depthId.id(), 0);
     KisImageSP image = new KisImage(doc->createUndoStore(), w, h, colorSpace, "imported heightmap");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
     KisRandomAccessorSP it = layer->paintDevice()->createRandomAccessorNG(0, 0);
+    bool r16 = (depthId == Integer16BitsColorDepthID);
     for (int i = 0; i < h; ++i) {
         for (int j = 0; j < w; ++j) {
             it->moveTo(i, j);
-            quint16 pixel;
-            s >> pixel;
-            KoGrayU16Traits::setGray(it->rawData(), pixel);
-            KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
+
+            if (r16) {
+                quint16 pixel;
+                s >> pixel;
+                KoGrayU16Traits::setGray(it->rawData(), pixel);
+                KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
+            }
+            else {
+                quint8 pixel;
+                s >> pixel;
+                KoGrayU8Traits::setGray(it->rawData(), pixel);
+                KoGrayU8Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
+            }
         }
     }
 

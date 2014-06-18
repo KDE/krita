@@ -22,10 +22,11 @@
 #define KUNDO2MAGICSTRING_H
 
 #include <QString>
+#include <QDebug>
+
 #include <klocale.h>
 
 #include "kundo2_export.h"
-
 
 /**
  * \class KUndo2MagicString is a special wrapper for a string that is
@@ -76,9 +77,6 @@ public:
 
     bool operator==(const KUndo2MagicString &rhs) const;
     bool operator!=(const KUndo2MagicString &rhs) const;
-
-private:
-    friend QDebug operator<<(QDebug dbg, const KUndo2MagicString &v);
 
 private:
     /**
@@ -138,7 +136,16 @@ private:
     QString m_text;
 };
 
-KUNDO2_EXPORT QDebug operator<<(QDebug dbg, const KUndo2MagicString &v);
+inline QDebug operator<<(QDebug dbg, const KUndo2MagicString &v)
+{
+    if (v.toString() != v.toSecondaryString()) {
+        dbg.nospace() << v.toString() << "(" << v.toSecondaryString() << ")";
+    } else {
+        dbg.nospace() << v.toString();
+    }
+
+    return dbg.space();
+}
 
 
 /**

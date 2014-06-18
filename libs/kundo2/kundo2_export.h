@@ -24,14 +24,11 @@
 #include <kdemacros.h>
 
 #ifndef KUNDO2_EXPORT
-# if defined(KDELIBS_STATIC_LIBS)
-   /* No export/import for static libraries */
-#  define KUNDO2_EXPORT
-# elif defined(MAKE_KUNDO2_LIB)
-   /* We are building this library */ 
+# if defined(MAKE_KUNDO2_LIB)
+/* We are building this library */
 #  define KUNDO2_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KUNDO2_EXPORT KDE_IMPORT
 # endif
 #endif

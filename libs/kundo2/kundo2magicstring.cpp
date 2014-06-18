@@ -20,8 +20,6 @@
 
 #include "kundo2magicstring.h"
 
-#include <QDebug>
-
 
 KUndo2MagicString::KUndo2MagicString()
 {
@@ -57,15 +55,4 @@ bool KUndo2MagicString::operator==(const KUndo2MagicString &rhs) const
 bool KUndo2MagicString::operator!=(const KUndo2MagicString &rhs) const
 {
     return !(*this == rhs);
-}
-
-KUNDO2_EXPORT QDebug operator<<(QDebug dbg, const KUndo2MagicString &v)
-{
-    if (v.toString() != v.toSecondaryString()) {
-        dbg.nospace() << v.toString() << "(" << v.toSecondaryString() << ")";
-    } else {
-        dbg.nospace() << v.toString();
-    }
-
-    return dbg.space();
 }

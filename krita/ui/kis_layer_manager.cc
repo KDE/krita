@@ -858,7 +858,6 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
     QString basePath;
     KUrl url = m_view->document()->url();
-    qDebug() << "url" << url << url.isEmpty();
     if (url.isLocalFile()) {
         basePath = QFileInfo(url.toLocalFile()).absolutePath();
     }

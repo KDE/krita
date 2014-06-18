@@ -368,7 +368,6 @@ calligra_define_productset(AUTHOR "Full Author (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
         PLUGIN_SEMANTICITEMS
         # filters
         FILTERS_WORDS
@@ -389,7 +388,6 @@ calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
-        PLUGIN_VIDEOSHAPE
         PLUGIN_VECTORSHAPE
 )
 calligra_define_productset(FLOW "Full Flow (for Desktop)"
@@ -410,7 +408,6 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
         # filters
         FILTERS_FLOW
 )
@@ -432,7 +429,6 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
         # filters
         FILTERS_KARBON
 )
@@ -490,7 +486,6 @@ calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
         PLUGIN_SHEETS_PIVOTTABLES
         # filters
         FILTERS_SHEETS
@@ -535,7 +530,6 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_FORMULASHAPE
         PLUGIN_VECTORSHAPE
-        PLUGIN_VIDEOSHAPE
         PLUGIN_SEMANTICITEMS
         # filters
         FILTERS_WORDS

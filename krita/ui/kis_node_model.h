@@ -50,6 +50,11 @@ public: // from QAbstractItemModel
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
+    bool showGlobalSelection() const;
+
+public slots:
+    void setShowGlobalSelection(bool value);
+
 public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

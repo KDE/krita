@@ -693,6 +693,16 @@ void KisConfig::setShowRootLayer(bool showRootLayer) const
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }
 
+bool KisConfig::showGlobalSelection() const
+{
+    return m_cfg.readEntry("ShowGlobalSelection", false);
+}
+
+void KisConfig::setShowGlobalSelection(bool showGlobalSelection) const
+{
+    m_cfg.writeEntry("ShowGlobalSelection", showGlobalSelection);
+}
+
 bool KisConfig::showOutlineWhilePainting() const
 {
     return m_cfg.readEntry("ShowOutlineWhilePainting", true);

@@ -76,6 +76,8 @@
 #include "kis_doc2.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
+#include "kis_selection_mask.h"
+#include "kis_config.h"
 
 
 #include "ui_wdglayerbox.h"
@@ -250,6 +252,16 @@ KisLayerBox::KisLayerBox()
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(updateUI()));
+
+    KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
+    showGlobalSelectionMask->setObjectName("show-global-selection-mask");
+    showGlobalSelectionMask->setToolTip(i18nc("@info:tooltip", "Shows global selection as a usual selection mask in <interface>Layers</interface> docker"));
+    showGlobalSelectionMask->setCheckable(true);
+    connect(showGlobalSelectionMask, SIGNAL(triggered(bool)), SLOT(slotEditGlobalSelection(bool)));
+    m_actions.append(showGlobalSelectionMask);
+
+    KisConfig cfg;
+    showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
     m_wdgLayerBox->listLayers->setModel(m_nodeModel);
 }
@@ -651,5 +663,69 @@ void KisLayerBox::slotNodeCollapsedChanged()
     expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
 }
 
+inline bool isSelectionMask(KisNodeSP node)
+{
+    return dynamic_cast<KisSelectionMask*>(node.data());
+}
+
+KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
+{
+    if (isSelectionMask(startNode) &&
+        startNode->parent() &&
+        !startNode->parent()->parent()) {
+
+
+        KisNodeSP node = startNode->prevSibling();
+        while (node && isSelectionMask(node)) {
+            node = node->prevSibling();
+        }
+
+        if (!node) {
+            node = startNode->nextSibling();
+            while (node && isSelectionMask(node)) {
+                node = node->nextSibling();
+            }
+        }
+
+        if (!node) {
+            node = m_image->root()->lastChild();
+            while (node && isSelectionMask(node)) {
+                node = node->prevSibling();
+            }
+        }
+
+        KIS_ASSERT_RECOVER_NOOP(node && "cannot activate any node!");
+        startNode = node;
+    }
+
+    return startNode;
+}
+
+void KisLayerBox::slotEditGlobalSelection(bool showSelections)
+{
+    KisNodeSP lastActiveNode = m_nodeManager->activeNode();
+    KisNodeSP activateNode = lastActiveNode;
+
+    if (!showSelections) {
+        activateNode = findNonHidableNode(activateNode);
+    }
+
+    m_nodeModel->setShowGlobalSelection(showSelections);
+
+    if (showSelections) {
+        KisNodeSP newMask = m_image->rootLayer()->selectionMask();
+        if (newMask) {
+            activateNode = newMask;
+        }
+    }
+
+    if (activateNode) {
+        if (lastActiveNode != activateNode) {
+            m_nodeManager->slotNonUiActivatedNode(activateNode);
+        } else {
+            setCurrentNode(lastActiveNode);
+        }
+    }
+}
 
 #include "kis_layer_box.moc"

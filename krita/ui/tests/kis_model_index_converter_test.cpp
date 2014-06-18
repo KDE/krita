@@ -176,7 +176,7 @@ inline void KisModelIndexConverterTest::checkRowCount(KisNodeSP parent, int rowC
 
 void KisModelIndexConverterTest::testIndexFromDummy()
 {
-    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, false);
 
     checkIndexFromDummy(m_layer1, 3);
     checkIndexFromDummy(m_layer2, 2);
@@ -193,7 +193,7 @@ void KisModelIndexConverterTest::testIndexFromDummy()
 
 void KisModelIndexConverterTest::testIndexFromAddedAllowedDummy()
 {
-    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, false);
 
     checkIndexFromAddedAllowedDummy(m_image->root(), 0, 0, 4, false);
     checkIndexFromAddedAllowedDummy(m_image->root(), 1, 0, 4, false);
@@ -214,7 +214,7 @@ void KisModelIndexConverterTest::testIndexFromAddedAllowedDummy()
 
 void KisModelIndexConverterTest::testIndexFromAddedDeniedDummy()
 {
-    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, false);
 
     checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 0);
     checkInvalidIndexFromAddedDeniedDummy(m_image->root(), 1);
@@ -235,7 +235,7 @@ void KisModelIndexConverterTest::testIndexFromAddedDeniedDummy()
 
 void KisModelIndexConverterTest::testDummyFromRow()
 {
-    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, false);
 
     checkDummyFromRow(m_image->root(), 0, m_layer4);
     checkDummyFromRow(m_image->root(), 1, m_layer3);
@@ -253,10 +253,104 @@ void KisModelIndexConverterTest::testDummyFromRow()
 
 void KisModelIndexConverterTest::testRowCount()
 {
-    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel);
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, false);
 
     checkRowCount(m_image->root(), 4);
     checkRowCount(0, 4);
+
+    checkRowCount(m_layer1, 0);
+    checkRowCount(m_layer2, 0);
+    checkRowCount(m_layer3, 2);
+    checkRowCount(m_layer4, 0);
+}
+
+void KisModelIndexConverterTest::testIndexFromDummyShowGlobalSelection()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, true);
+
+    checkIndexFromDummy(m_sel1,   5);
+    checkIndexFromDummy(m_layer1, 4);
+    checkIndexFromDummy(m_layer2, 3);
+    checkIndexFromDummy(m_sel2,   2);
+    checkIndexFromDummy(m_layer3, 1);
+    checkIndexFromDummy(m_layer4, 0);
+
+    checkIndexFromDummy(m_mask1, 1);
+    checkIndexFromDummy(m_sel3, 0);
+
+    checkInvalidIndexFromDummy(m_image->root());
+}
+
+void KisModelIndexConverterTest::testIndexFromAddedAllowedDummyShowGlobalSelection()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, true);
+
+    checkIndexFromAddedAllowedDummy(m_image->root(), 0, 0, 6, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 1, 0, 5, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 2, 0, 4, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 3, 0, 3, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 4, 0, 2, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 5, 0, 1, false);
+    checkIndexFromAddedAllowedDummy(m_image->root(), 6, 0, 0, false);
+
+    checkIndexFromAddedAllowedDummy(m_layer1, 0, 4, 0, true);
+
+    checkIndexFromAddedAllowedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedAllowedDummy(m_layer3, 2, 1, 0, true);
+
+    checkInvalidIndexFromAddedAllowedDummy(0, 0);
+}
+
+void KisModelIndexConverterTest::testIndexFromAddedDeniedDummyShowGlobalSelection()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, true);
+
+    checkIndexFromAddedDeniedDummy(m_image->root(), 0, 0, 6, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 1, 0, 5, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 2, 0, 4, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 3, 0, 3, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 4, 0, 2, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 5, 0, 1, false);
+    checkIndexFromAddedDeniedDummy(m_image->root(), 6, 0, 0, false);
+
+    checkIndexFromAddedDeniedDummy(m_layer1, 0, 4, 0, true);
+
+    checkIndexFromAddedDeniedDummy(m_layer3, 0, 1, 2, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 1, 1, 1, true);
+    checkIndexFromAddedDeniedDummy(m_layer3, 2, 1, 0, true);
+
+    checkInvalidIndexFromAddedDeniedDummy(0, 0);
+}
+
+void KisModelIndexConverterTest::testDummyFromRowShowGlobalSelection()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, true);
+
+    checkDummyFromRow(m_image->root(), 0, m_layer4);
+    checkDummyFromRow(m_image->root(), 1, m_layer3);
+    checkDummyFromRow(m_image->root(), 2, m_sel2);
+    checkDummyFromRow(m_image->root(), 3, m_layer2);
+    checkDummyFromRow(m_image->root(), 4, m_layer1);
+    checkDummyFromRow(m_image->root(), 5, m_sel1);
+
+    checkDummyFromRow(0, 0, m_layer4);
+    checkDummyFromRow(0, 1, m_layer3);
+    checkDummyFromRow(0, 2, m_sel2);
+    checkDummyFromRow(0, 3, m_layer2);
+    checkDummyFromRow(0, 4, m_layer1);
+    checkDummyFromRow(0, 5, m_sel1);
+
+    checkDummyFromRow(m_layer3, 0, m_sel3);
+    checkDummyFromRow(m_layer3, 1, m_mask1);
+}
+
+void KisModelIndexConverterTest::testRowCountShowGlobalSelection()
+{
+    m_indexConverter = new KisModelIndexConverter(m_dummiesFacade, m_nodeModel, true);
+
+    checkRowCount(m_image->root(), 6);
+    checkRowCount(0, 6);
 
     checkRowCount(m_layer1, 0);
     checkRowCount(m_layer2, 0);

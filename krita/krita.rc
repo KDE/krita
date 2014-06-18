@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="50">
+<kpartgui name="Krita" version="51">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -134,6 +134,7 @@
     <Action name="similar"/>
    <Separator/>
    <Action name="toggle_display_selection"/>
+   <Action name="show-global-selection-mask"/>
 </Menu>
 
 <Menu name="Filter"><text>Filte&amp;r</text>

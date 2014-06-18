@@ -132,6 +132,7 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->setupUi(mainWidget);
 
     m_wdgLayerBox->listLayers->setDefaultDropAction(Qt::MoveAction);
+    m_wdgLayerBox->listLayers->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_wdgLayerBox->listLayers->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     m_wdgLayerBox->listLayers->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -139,6 +140,7 @@ KisLayerBox::KisLayerBox()
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
+    connect(m_wdgLayerBox->listLayers, SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
 
     m_viewModeMenu = new KMenu(this);
     QActionGroup *group = new QActionGroup(this);
@@ -726,6 +728,15 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
             setCurrentNode(lastActiveNode);
         }
     }
+}
+
+void KisLayerBox::selectionChanged(const QModelIndexList selection)
+{
+    QList<KisNodeSP> selectedNodes;
+    foreach(const QModelIndex &idx, selection) {
+        selectedNodes << m_nodeModel->nodeFromIndex(idx);
+    }
+    m_nodeManager->setSelectedNodes(selectedNodes);
 }
 
 #include "kis_layer_box.moc"

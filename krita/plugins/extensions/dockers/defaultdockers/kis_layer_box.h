@@ -107,6 +107,8 @@ private slots:
 
     void slotEditGlobalSelection(bool showSelections);
 
+    void selectionChanged(const QModelIndexList selection);
+
 private:
     inline void connectActionToButton(QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);

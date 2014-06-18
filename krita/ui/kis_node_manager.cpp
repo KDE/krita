@@ -72,6 +72,8 @@ struct KisNodeManager::Private {
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
 
+    QList<KisNodeSP> selectedNodes;
+
     bool activateNodeImpl(KisNodeSP node);
 
     QSignalMapper nodeCreationSignalMapper;
@@ -558,6 +560,11 @@ void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
     m_d->commandsAdapter->setCompositeOp(node, compositeOp);
 }
 
+void KisNodeManager::setSelectedNodes(QList<KisNodeSP> nodes)
+{
+    m_d->selectedNodes = nodes;
+}
+
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
 {
     KisNodeSP node = activeNode();
@@ -651,14 +658,25 @@ bool scanForLastLayer(KisImageWSP image, KisNodeSP nodeToRemove)
     return lastLayer;
 }
 
-void KisNodeManager::removeNode()
+/// Scan whether the node has a parent in the list of nodes
+bool scanForParent(QList<KisNodeSP> nodeList, KisNodeSP node)
 {
-    //do not delete root layer
+    KisNodeSP parent = node->parent();
 
-    KisNodeSP node = activeNode();
+    while (parent) {
+        if (nodeList.contains(parent)) {
+            return true;
+        }
+        parent = parent->parent();
+    }
+    return false;
+}
 
-    if(node->parent()==0)
+void KisNodeManager::removeSingleNode(KisNodeSP node)
+{
+    if (!node->parent()) {
         return;
+    }
 
     if (scanForLastLayer(m_d->view->image(), node)) {
         m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Last Layer"));
@@ -671,6 +689,30 @@ void KisNodeManager::removeNode()
     } else {
         m_d->commandsAdapter->removeNode(node);
     }
+}
+
+void KisNodeManager::removeSelectedNodes()
+{
+    m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Multple Layers and Masks"));
+    foreach(KisNodeSP node, m_d->selectedNodes) {
+        if (!scanForParent(m_d->selectedNodes, node) && node != activeNode()) {
+            removeSingleNode(node);
+        }
+    }
+    removeSingleNode(activeNode());
+    m_d->commandsAdapter->endMacro();
+}
+
+void KisNodeManager::removeNode()
+{
+    //do not delete root layer
+    if (m_d->selectedNodes.count() > 1) {
+        removeSelectedNodes();
+    }
+    else {
+        removeSingleNode(activeNode());
+    }
+
 
 }
 

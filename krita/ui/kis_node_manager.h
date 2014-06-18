@@ -98,6 +98,12 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+    /**
+     * @brief setSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
+     * @param nodes the selected nodes
+     */
+    void setSelectedNodes(QList<KisNodeSP> nodes);
+
 public slots:
 
     /**
@@ -204,6 +210,8 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
+    void removeSelectedNodes();
+    void removeSingleNode(KisNodeSP node);
 
     struct Private;
     Private * const m_d;

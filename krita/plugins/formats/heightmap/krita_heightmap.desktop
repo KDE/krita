@@ -1,0 +1,17 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;Graphics;
+Exec=krita %u
+GenericName=
+Icon=krita
+MimeType=image/x-r16
+Name=Krita
+NoDisplay=true
+StartupNotify=true
+Terminal=false
+Type=Application
+X-KDE-ServiceTypes=Calligra/Application
+X-Calligra-DefaultMimeTypes=image/x-r16
+X-DBUS-ServiceName=org.krita.krita
+X-DBUS-StartupType=multi
+X-KDE-SubstituteUID=false
+X-KDE-Username=

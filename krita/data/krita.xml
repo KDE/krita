@@ -19,4 +19,11 @@
          </magic>
          <glob pattern="*.krassistant"/>
   </mime-type>
+  <mime-type type="image/x-r16">
+         <comment xml:lang="en">r16 heightmap</comment>
+         <magic priority="50">
+             <match type="string" value="r16heightmap" offset="40"/>
+         </magic>
+         <glob pattern="*.r16"/>
+  </mime-type>
 </mime-info>

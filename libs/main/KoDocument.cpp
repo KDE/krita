@@ -1551,14 +1551,8 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
-#ifndef Q_OS_WIN
-                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
+                QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 KMessageBox::error(0, errorMsg);
-#else
-                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
-                KMessageBox::error(0, errorMsg);
-#endif
-
             }
 
             d->isLoading = false;

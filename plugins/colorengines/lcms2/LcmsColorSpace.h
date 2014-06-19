@@ -111,7 +111,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
             qint32 pixelSize = m_colorSpace->pixelSize();
             int index = 0;
             
-            if(cmsAlphaTransform) {
+            if (cmsAlphaTransform) {
                 while (index < nPixels) {
                     alpha[index] = m_colorSpace->opacityF(src);
                     src += pixelSize;
@@ -124,8 +124,7 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                     dst += pixelSize;
                 }
                 
-                delete [] alpha;
-                delete [] dstalpha;
+
             }
             else {
                 while (numPixels > 0) {
@@ -136,8 +135,11 @@ class LcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsInfo
                     numPixels--;
                 }
             }
+
+            delete [] alpha;
+            delete [] dstalpha;
         }
-            
+
         const KoColorSpace* m_colorSpace;
         cmsHPROFILE csProfile;
         cmsHPROFILE profiles[3];

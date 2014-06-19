@@ -132,7 +132,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(m_startPos,
-                                  currentSelection(),
+                                  resources->activeSelection(),
                                   resources,
                                   useFastMode,
                                   m_usePattern,

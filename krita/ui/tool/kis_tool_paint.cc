@@ -301,7 +301,7 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
 
     KisPaintDeviceSP device;
     if (fromCurrentNode) {
-        device = currentNode()->projection();
+        device = currentNode()->paintDevice();
         if (!device) {
             device = currentNode()->projection();
         }

@@ -33,6 +33,9 @@
 #include "kis_paint_layer.h"
 #include "recorder/kis_recorded_paint_action.h"
 #include "kis_default_bounds.h"
+#include "kis_selection.h"
+#include "kis_selection_mask.h"
+
 
 struct KisResourcesSnapshot::Private {
     Private()
@@ -218,6 +221,23 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
 QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
 {
     return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+}
+
+KisSelectionSP KisResourcesSnapshot::activeSelection() const
+{
+    KisSelectionSP selection = m_d->image->globalSelection();
+
+    KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
+    KisSelectionMaskSP mask;
+    if((layer = dynamic_cast<KisLayer*>(m_d->currentNode.data()))) {
+        selection = layer->selection();
+    } else if ((mask = dynamic_cast<KisSelectionMask*>(m_d->currentNode.data())) &&
+               mask->selection() == selection) {
+
+        selection = 0;
+    }
+
+    return selection;
 }
 
 bool KisResourcesSnapshot::needsAirbrushing() const

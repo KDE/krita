@@ -28,6 +28,7 @@ namespace KisToolUtils {
         KIS_ASSERT(dev);
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
+        pickedColor.convertTo(dev->compositionSourceColorSpace());
         pickedColor.setOpacity(OPACITY_OPAQUE_U8);
         return pickedColor;
     }

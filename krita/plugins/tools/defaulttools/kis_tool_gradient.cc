@@ -57,8 +57,8 @@
 #include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <kis_config.h>
-
 #include "kis_resources_snapshot.h"
+
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6))
@@ -143,19 +143,19 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     KisSystemLocker locker(currentNode());
 
     KisPaintDeviceSP device;
+    KisImageSP image = this->image();
 
-    if (currentImage() && (device = currentNode()->paintDevice())) {
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image, 0, this->canvas()->resourceManager());
+
+    if (image && (device = resources->currentNode()->paintDevice())) {
         qApp->setOverrideCursor(Qt::BusyCursor);
 
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
-        KisUndoAdapter *undoAdapter = image()->undoAdapter();
+        KisUndoAdapter *undoAdapter = image->undoAdapter();
         undoAdapter->beginMacro(actionName);
 
-        KisGradientPainter painter(device, currentSelection());
-
-        KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), 0,
-                                     canvas()->resourceManager());
+        KisGradientPainter painter(device, resources->activeSelection());
         resources->setupPainter(&painter);
 
         painter.beginTransaction();
@@ -166,7 +166,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         updater->start(100, i18nc("@info:progress", "Gradient..."));
         painter.setProgress(updater->startSubtask());
 
-        painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, currentImage()->width(), currentImage()->height());
+        painter.paintGradient(m_startPos, m_endPos, m_shape, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
         painter.endTransaction(undoAdapter);
         undoAdapter->endMacro();
 

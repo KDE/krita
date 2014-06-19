@@ -116,13 +116,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP targetDevice = paintDevice;
     bool hasIndirectPainting = needsIndirectPainting();
 
-    KisSelectionSP selection;
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-    if(layer) {
-        selection = layer->selection();
-    } else {
-        selection = m_resources->image()->globalSelection();
-    }
+    KisSelectionSP selection = m_resources->activeSelection();
 
     if (hasIndirectPainting) {
         KisIndirectPaintingSupport *indirect =

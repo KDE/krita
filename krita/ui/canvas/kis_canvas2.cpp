@@ -247,7 +247,7 @@ void KisCanvas2::channelSelectionChanged()
 
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
-    KIS_ASSERT_RECOVER_NOOP(0 && "This method should have been removed! Please report a bug and press Ignore!");
+    // This method exists to support flake-related operations
     m_d->view->koDocument()->addCommand(command);
 }
 

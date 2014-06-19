@@ -742,8 +742,6 @@ void KisLayerManager::mergeLayer()
         image->mergeDown(layer, strategy);
 
     }
-
-
     m_view->updateGUI();
 }
 

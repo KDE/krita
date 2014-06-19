@@ -71,6 +71,7 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
+    KAction *mergeSelectedLayers;
 
     QList<KisNodeSP> selectedNodes;
 
@@ -147,6 +148,10 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
 
     connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
+
+    m_d->mergeSelectedLayers = new KAction(i18n("&Merge Selected Layers"), this);
+    view->actionCollection()->addAction("merge_selected_layers", m_d->mergeSelectedLayers);
+    connect(m_d->mergeSelectedLayers, SIGNAL(triggered()), this, SLOT(mergeLayerDown()));
 
 }
 
@@ -691,15 +696,17 @@ void KisNodeManager::removeSingleNode(KisNodeSP node)
     }
 }
 
-void KisNodeManager::removeSelectedNodes()
+void KisNodeManager::removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive)
 {
     m_d->commandsAdapter->beginMacro(kundo2_i18n("Remove Multple Layers and Masks"));
-    foreach(KisNodeSP node, m_d->selectedNodes) {
-        if (!scanForParent(m_d->selectedNodes, node) && node != activeNode()) {
+    foreach(KisNodeSP node, selectedNodes) {
+        if (!scanForParent(selectedNodes, node) && node != activeNode()) {
             removeSingleNode(node);
         }
     }
-    removeSingleNode(activeNode());
+    if (removeActive) {
+        removeSingleNode(activeNode());
+    }
     m_d->commandsAdapter->endMacro();
 }
 
@@ -707,7 +714,7 @@ void KisNodeManager::removeNode()
 {
     //do not delete root layer
     if (m_d->selectedNodes.count() > 1) {
-        removeSelectedNodes();
+        removeSelectedNodes(m_d->selectedNodes);
     }
     else {
         removeSingleNode(activeNode());
@@ -786,9 +793,81 @@ void KisNodeManager::activatePreviousNode()
     }
 }
 
+QList<KisNodeSP> hideLayers(KisNodeSP root, QList<KisNodeSP> selectedNodes)
+{
+    QList<KisNodeSP> alreadyHidden;
+
+    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
+        if (!selectedNodes.contains(node)) {
+            if (node->visible()) {
+                node->setVisible(false);
+            }
+            else {
+                alreadyHidden << node;
+            }
+        }
+        if (node->childCount() > 0) {
+            hideLayers(node, selectedNodes);
+        }
+    }
+
+    return alreadyHidden;
+}
+
+void showNodes(KisNodeSP root, QList<KisNodeSP> keepHiddenNodes)
+{
+    foreach(KisNodeSP node, root->childNodes(QStringList(), KoProperties())) {
+        if (!keepHiddenNodes.contains(node)) {
+            node->setVisible(true);
+        }
+        if (node->childCount() > 0) {
+            showNodes(node, keepHiddenNodes);
+        }
+    }
+}
+
 void KisNodeManager::mergeLayerDown()
 {
-    m_d->layerManager->mergeLayer();
+    if (m_d->selectedNodes.size() > 1) {
+
+        QList<KisNodeSP> selectedNodes = m_d->selectedNodes;
+        KisLayerSP l = activeLayer();
+
+        // hide every layer that's not in the list of selected nodes
+        QList<KisNodeSP> alreadyHiddenNodes = hideLayers(m_d->doc->image()->root(), selectedNodes);
+
+        // render and copy the projection
+        m_d->doc->image()->refreshGraph();
+        m_d->doc->image()->waitForDone();
+
+        // Copy the projections
+        KisPaintDeviceSP dev = new KisPaintDevice(*m_d->doc->image()->projection().data());
+        // place the projection in a layer
+        KisPaintLayerSP flattenLayer = new KisPaintLayer(m_d->doc->image(), i18n("Merged"), OPACITY_OPAQUE_U8, dev);
+
+        // start a big macro
+        m_d->commandsAdapter->beginMacro(kundo2_i18n("Merge Selected Nodes"));
+
+        // Add the new merged node on top of the active node
+        m_d->commandsAdapter->addNode(flattenLayer, l->parent(), l);
+
+        // remove all nodes in the selection but the active node
+        removeSelectedNodes(selectedNodes, false);
+
+        m_d->commandsAdapter->endMacro();
+
+        // And unhide
+        showNodes(m_d->doc->image()->root(), alreadyHiddenNodes);
+
+        m_d->doc->image()->refreshGraph();
+        m_d->doc->image()->waitForDone();
+        m_d->doc->image()->notifyLayersChanged();
+        m_d->doc->image()->setModified();
+
+    }
+    else {
+        m_d->layerManager->mergeLayer();
+    }
 }
 
 void KisNodeManager::rotate(double radians)

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="51">
+<kpartgui name="Krita" version="52">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -121,6 +121,7 @@
   <Action name="rasterize_layer"/>
   <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
+  <Action name="merge_selected_layers"/>
 </Menu>
 
 <Menu name="Select"><text>&amp;Select</text>

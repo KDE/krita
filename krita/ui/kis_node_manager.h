@@ -195,10 +195,12 @@ public slots:
     void rotateRight90();
 
     void saveNodeAsImage();
-public:
 
     // merges the active layer with the layer below it.
     void mergeLayerDown();
+
+public:
+
     
     void shear(double angleX, double angleY);
 
@@ -210,7 +212,7 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
-    void removeSelectedNodes();
+    void removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive = true);
     void removeSingleNode(KisNodeSP node);
 
     struct Private;

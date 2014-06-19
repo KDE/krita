@@ -103,6 +103,7 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
     node->setX(node->x() + offset.x());
     node->setY(node->y() + offset.y());
+    KisNodeMoveCommand2::tryNotifySelection(node);
 
     KisNodeSP child = node->firstChild();
     while(child) {

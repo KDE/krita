@@ -1569,6 +1569,17 @@ void KisImage::notifySelectionChanged()
      * KisImageSignalRouter
      */
     m_d->legacyUndoAdapter->emitSelectionChanged();
+
+    /**
+     * Editing of selection masks doesn't necessary produce a
+     * setDirty() call, so in the end of the stroke we need to request
+     * direct update of the UI's cache.
+     */
+    if (m_d->isolatedRootNode &&
+        dynamic_cast<KisSelectionMask*>(m_d->isolatedRootNode.data())) {
+
+        notifyProjectionUpdated(bounds());
+    }
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,

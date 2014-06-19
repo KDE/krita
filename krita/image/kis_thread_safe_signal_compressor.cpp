@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@kde.org>
- *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_NODE_MOVE_COMMAND2_H
-#define KIS_NODE_MOVE_COMMAND2_H
 
-#include "kis_move_command_common.h"
+#include "kis_thread_safe_signal_compressor.h"
 
-class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KisMoveCommandCommon<KisNodeSP>
+#include <QApplication>
+
+
+KisThreadSafeSignalCompressor::KisThreadSafeSignalCompressor(int delay, KisSignalCompressor::Mode mode)
+    : m_compressor(new KisSignalCompressor(delay, mode, this))
 {
-public:
-    KisNodeMoveCommand2(KisNodeSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
+    connect(this, SIGNAL(internalRequestSignal()), m_compressor, SLOT(start()), Qt::QueuedConnection);
+    connect(m_compressor, SIGNAL(timeout()), SIGNAL(timeout()));
 
-    void undo();
-    void redo();
+    // due to this line the object *must not* be deleted explicitly!
+    this->moveToThread(QApplication::instance()->thread());
+}
 
-    static void tryNotifySelection(KisNodeSP node);
-};
-
-#endif
+void KisThreadSafeSignalCompressor::start()
+{
+    emit internalRequestSignal();
+}
